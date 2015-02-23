@@ -1,0 +1,41 @@
+<link rel="stylesheet" type="text/css" href="libs/pivot/pivot.css">
+<script type="text/javascript" src="libs/d3/d3.v3.min.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script type="text/javascript" src="libs/pivot/pivot.js"></script>
+<script type="text/javascript" src="libs/pivot/gchart_renderers.js"></script>
+<script type="text/javascript" src="libs/pivot/d3_renderers.js"></script>
+<script type="text/javascript" src="libs/jquery/jquery.ui.touch-punch.min.js"></script>
+
+<div  >
+    Drop the fields in the boxes to structure your report
+
+    <table class="table edit-pivot-grid">
+
+
+             <tr class="first-row">
+                 <td class="no-drop-square"></td>
+                 <td  id="columnObjects" class="column-objects" x-lvl-drop-target="true" x-on-drop='dropped(dragEl, dropEl)'>columns
+                     <ul ui-sortable="sortableOptions" >
+                         <li ng-repeat="item in columns">{{ item }}</li>
+                     </ul>
+                 </td>
+             </tr>
+             <tr class="second-row">
+
+                 <td  id="rowObjects" class="row-objects" x-lvl-drop-target="true" x-on-drop='dropped(dragEl, dropEl)'>rows
+                     <ul ui-sortable="sortableOptions" >
+                         <li ng-repeat="item in rows">{{ item }}</li>
+                     </ul>
+                 </td>
+                 <td  id="metricObjects" class="metric-objects" x-lvl-drop-target="true" x-on-drop='dropped(dragEl, dropEl)'>metrics
+                     <ul ui-sortable >
+                         <li ng-repeat="item in metrics">{{ item }}</li>
+                     </ul>
+                 </td>
+             </tr>
+    </table>
+</div>
+
+
+<div id="pivotOutput" style="margin: 30px;"></div>

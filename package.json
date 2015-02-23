@@ -1,0 +1,26 @@
+{
+  "name": "DataRepublic",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "~4.10.7",
+    "mongoose": "~3.8.21",
+    "connect-redis": "~2.1.0",
+    "express-session": "~1.10.1",
+    "passport": "~0.2.1",
+    "passport-remember-me": "0.0.1",
+    "jade": "~1.8.2",
+    "express-ejs-layouts": "~1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "BSD-2-Clause"
+}
