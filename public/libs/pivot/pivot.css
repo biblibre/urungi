@@ -71,7 +71,7 @@ table.pvtTable tr td {
     content:"&nbsp;";
 }
 
-.pvtAxisContainer li span.pvtAttr {
+td.pvtAxisContainer li span.pvtAttr {
     background-color: #F0F0F0;
     border: 1px solid #ddd;
     padding: 5px 5px;

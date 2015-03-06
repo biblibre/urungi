@@ -797,6 +797,10 @@
             result.appendChild(tr);
             result.setAttribute("data-numrows", rowKeys.length);
             result.setAttribute("data-numcols", colKeys.length);
+
+
+
+
             return result;
         };
 
@@ -963,7 +967,7 @@
                     colList.addClass('pvtHorizList');
                 }
                 _fn = function(c) {
-                    var attrElem, btns, checkContainer, filterItem, filterItemExcluded, hasExcludedItem, keys, showFilterList, triangleLink, updateFilter, v, valueList, _k, _len2, _ref2;
+                    var attrElem, btns, filterItem, filterItemExcluded, hasExcludedItem, keys, showFilterList, triangleLink, updateFilter, v, valueList, _k, _len2, _ref2;
                     keys = (function() {
                         var _results;
                         _results = [];
@@ -1006,47 +1010,10 @@
                                     }
                                 });
                             }));
-                        checkContainer = $("<div>").addClass("pvtCheckContainer").appendTo(valueList);
-                        _ref2 = keys.sort(naturalSort);
-                        for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-                            k = _ref2[_k];
-                            v = axisValues[c][k];
-                            filterItem = $("<label>");
-                            filterItemExcluded = opts.exclusions[c] ? (__indexOf.call(opts.exclusions[c], k) >= 0) : false;
-                            hasExcludedItem || (hasExcludedItem = filterItemExcluded);
-                            $("<input>").attr("type", "checkbox").addClass('pvtFilter').attr("checked", !filterItemExcluded).data("filter", [c, k]).appendTo(filterItem);
-                            filterItem.append($("<span>").html(k));
-                            filterItem.append($("<span>").text(" (" + v + ")"));
-                            checkContainer.append($("<p>").append(filterItem));
-                        }
                     }
-                    updateFilter = function() {
-                        var unselectedCount;
-                        unselectedCount = valueList.find("[type='checkbox']").length - valueList.find("[type='checkbox']:checked").length;
-                        if (unselectedCount > 0) {
-                            attrElem.addClass("pvtFilteredAttribute");
-                        } else {
-                            attrElem.removeClass("pvtFilteredAttribute");
-                        }
-                        if (keys.length > opts.menuLimit) {
-                            return valueList.toggle();
-                        } else {
-                            return valueList.toggle(0, refresh);
-                        }
-                    };
-                    $("<p>").appendTo(valueList).append($("<button>", {
-                        type: "button"
-                    }).text("OK").bind("click", updateFilter));
-                    showFilterList = function(e) {
-                        valueList.css({
-                            left: e.pageX,
-                            top: e.pageY
-                        }).toggle();
-                        valueList.find('.pvtSearch').val('');
-                        return valueList.find('.pvtCheckContainer p').show();
-                    };
+
                     triangleLink = $("<span>").addClass('pvtTriangle').html(" &#x25BE;").bind("click", showFilterList);
-                    attrElem = $("<li>").addClass("axis_" + i).append($("<span>").addClass('pvtAttr').text(c).data("attrName", c).append(triangleLink));
+                    attrElem = $("<li>").addClass("axis_" + i).append($("<span>").addClass('pvtAttr').text(c).data("attrName", c));
                     if (hasExcludedItem) {
                         attrElem.addClass('pvtFilteredAttribute');
                     }
@@ -1109,10 +1076,10 @@
                         numInputsToProcess = (_ref5 = opts.aggregators[aggregator.val()]([])().numInputs) != null ? _ref5 : 0;
                         vals = [];
                         _this.find(".pvtRows li span.pvtAttr").each(function() {
-                            return subopts.rows.push($(this).data("attrName"));
+                            return subopts.rows.push($(this).html());
                         });
                         _this.find(".pvtCols li span.pvtAttr").each(function() {
-                            return subopts.cols.push($(this).data("attrName"));
+                            return subopts.cols.push($(this).html());
                         });
                         _this.find(".pvtVals select.pvtAttrDropdown").each(function() {
                             if (numInputsToProcess === 0) {
@@ -1199,17 +1166,37 @@
                 refresh = (function(_this) {
                     return function() {
                         pivotTable.css("opacity", 0.5);
+                        console.log('pivot-refresh');
                         return setTimeout(refreshDelayed, 10);
                     };
                 })(this);
                 refresh();
-                this.find(".pvtAxisContainer").sortable({
+                /*this.find(".pvtAxisContainer").sortable({
                     update: function(e, ui) {
                         if (ui.sender == null) {
                             return refresh();
                         }
                     },
                     connectWith: this.find(".pvtAxisContainer"),
+                    items: 'li',
+                    placeholder: 'pvtPlaceholder'
+                });*/
+
+                /*$('#pivot-renderer').bind("change", function() {
+                    return refresh();
+                });*/
+                $(document).find(".pvtAxisContainer").sortable({
+                    update: function(e, ui) {
+                        console.log(e);
+                        /*$(e.target).children('li').each(function() {
+                            $(this).children('i').remove();
+                        });*/
+                        if (ui.sender == null) {
+                            console.log('refresh');
+                            return refresh();
+                        }
+                    },
+                    connectWith: $(document).find(".pvtAxisContainer"),
                     items: 'li',
                     placeholder: 'pvtPlaceholder'
                 });

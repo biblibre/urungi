@@ -10,7 +10,7 @@
 'use strict';
 
 var app = angular.module('DataRepublic', [
-        'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs'
+        'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs','angularTreeview','ngDragDrop'
     ]).
     config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
