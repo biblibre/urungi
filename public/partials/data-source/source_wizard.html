@@ -1,0 +1,530 @@
+
+
+<!-- http://themes.laborator.co/xenon/angular/#/app/forms-wizard -->
+
+
+<form role="forl" id="rootwizard" class="form-wizard validate ng-scope ng-pristine ng-valid" novalidate="novalidate">
+
+
+
+<ul class="tabs">
+    <li class="completed ms-hover">
+        <a href="#fwv-1" data-toggle="tab" aria-expanded="false">
+            Personal Info
+            <span>1</span>
+        </a>
+    </li>
+    <li class="ms-hover active">
+        <a href="#fwv-2" data-toggle="tab" aria-expanded="true">
+            Address
+            <span>2</span>
+        </a>
+    </li>
+    <li class="ms-hover">
+        <a href="#fwv-3" data-toggle="tab">
+            Education
+            <span>3</span>
+        </a>
+    </li>
+    <li class="ms-hover">
+        <a href="#fwv-4" data-toggle="tab">
+            Personal Info
+            <span>4</span>
+        </a>
+    </li>
+    <li>
+        <a href="#fwv-5" data-toggle="tab">
+            Register
+            <span>5</span>
+        </a>
+    </li>
+</ul>
+
+<div class="progress-indicator" style="width: 19.8837209302326%;">
+    <span></span>
+</div>
+
+<div class="tab-content no-margin">
+
+<div class="tab-pane with-bg" id="fwv-1">
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label" for="full_name">Full Name</label>
+                <input class="form-control" name="full_name" id="full_name" data-validate="required" placeholder="Your full name" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label" for="birthdate">Date of Birth</label>
+                <input class="form-control" inputmask="" name="birthdate" id="birthdate" data-validate="required" data-mask="date" placeholder="Pre-formatted birth date" novalidate="novalidate" aria-required="true" aria-describedby="birthdate-error" aria-invalid="false"><span id="birthdate-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label" for="about">Write Something About You</label>
+                <textarea class="form-control autogrow" name="about" id="about" data-validate="minlength[10]" rows="5" placeholder="Could be used also as Motivation Letter" novalidate="novalidate" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="tab-pane with-bg active" id="fwv-2">
+
+    <div class="row">
+
+        <div class="col-md-8">
+            <div class="form-group validate-has-error">
+                <label class="control-label" for="street">Street</label>
+                <input class="form-control" name="street" id="street" data-validate="required" placeholder="Enter your street address" novalidate="novalidate" aria-required="true" aria-describedby="street-error" aria-invalid="true"><span id="street-error" class="validate-has-error">This field is required.</span>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="door_no">Door no.</label>
+                <input class="form-control" name="door_no" id="door_no" data-validate="number" placeholder="Numbers only" novalidate="novalidate">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label" for="address_line_2">Address Line 2</label>
+                <input class="form-control" name="address_line_2" id="address_line_2" placeholder="(Optional) Secondary Address">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-5">
+            <div class="form-group validate-has-error">
+                <label class="control-label" for="city">City</label>
+                <input class="form-control" name="city" id="city" data-validate="required" placeholder="Current city" novalidate="novalidate" aria-required="true" aria-describedby="city-error"><span id="city-error" class="validate-has-error">This field is required.</span>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="state">State</label>
+
+                <select name="test" class="selectboxit" style="display: none;">
+                    <optgroup label="United States">
+                        <option value="1">Alabama</option>
+                        <option value="2">Boston</option>
+                        <option value="3">Ohaio</option>
+                        <option value="4">New York</option>
+                        <option value="5">Washington</option>
+                    </optgroup>
+                </select><span id="" class="selectboxit-container selectboxit-container" role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-expanded="false" aria-owns=""><span id="" class="selectboxit selectboxit selectboxit-enabled selectboxit-btn" name="test" tabindex="0" unselectable="on" style="width: 129px;"><span class="selectboxit-option-icon-container"><i id="" class="selectboxit-default-icon selectboxit-option-icon selectboxit-container" unselectable="on"></i></span><span id="" class="selectboxit-text" unselectable="on" data-val="1" aria-live="polite" style="max-width: 36px;">Alabama</span><span id="" class="selectboxit-arrow-container" unselectable="on"><i id="" class="selectboxit-arrow selectboxit-default-arrow" unselectable="on"></i></span></span><ul class="selectboxit-options selectboxit-list" tabindex="-1" role="listbox" aria-hidden="true" style="min-width: 66px;"><span class="selectboxit-optgroup-header undefined" data-disabled="true">United States</span><li data-id="0" data-val="1" data-disabled="false" class="selectboxit-optgroup-option selectboxit-option  selectboxit-option-first selectboxit-selected" role="option"><a class="selectboxit-option-anchor"><span class="selectboxit-option-icon-container"><i class="selectboxit-option-icon  selectboxit-container"></i></span>Alabama</a></li><li data-id="1" data-val="2" data-disabled="false" class="selectboxit-optgroup-option selectboxit-option" role="option"><a class="selectboxit-option-anchor"><span class="selectboxit-option-icon-container"><i class="selectboxit-option-icon  selectboxit-container"></i></span>Boston</a></li><li data-id="2" data-val="3" data-disabled="false" class="selectboxit-optgroup-option selectboxit-option" role="option"><a class="selectboxit-option-anchor"><span class="selectboxit-option-icon-container"><i class="selectboxit-option-icon  selectboxit-container"></i></span>Ohaio</a></li><li data-id="3" data-val="4" data-disabled="false" class="selectboxit-optgroup-option selectboxit-option" role="option"><a class="selectboxit-option-anchor"><span class="selectboxit-option-icon-container"><i class="selectboxit-option-icon  selectboxit-container"></i></span>New York</a></li><li data-id="4" data-val="5" data-disabled="false" class="selectboxit-optgroup-option selectboxit-option  selectboxit-option-last" role="option"><a class="selectboxit-option-anchor"><span class="selectboxit-option-icon-container"><i class="selectboxit-option-icon  selectboxit-container"></i></span>Washington</a></li></ul></span>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group validate-has-error">
+                <label class="control-label" for="zip">Zip</label>
+                <input class="form-control" inputmask="" name="zip" id="zip" data-mask="** *** **" data-validate="required" placeholder="Zip Code" novalidate="novalidate" aria-required="true" aria-describedby="zip-error"><span id="zip-error" class="validate-has-error">This field is required.</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="tab-pane with-bg" id="fwv-3">
+
+    <strong>Primary School</strong>
+    <br>
+    <br>
+
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="prim_subject">Subject</label>
+                <input class="form-control" name="prim_subject" id="prim_subject" data-validate="require" placeholder="Graduation Degree" novalidate="novalidate">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="prim_school">School Name</label>
+                <input class="form-control" name="prim_school" id="prim_school" placeholder="Which school did you attended">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="prim_date_start">Start Date</label>
+                <input class="form-control datepicker" name="prim_date_start" id="prim_date_start" data-start-view="2" placeholder="(Optional)">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="prim_date_end">End Date</label>
+                <input class="form-control datepicker" name="prim_date_end" id="prim_date_end" data-start-view="2" placeholder="(Optional)">
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <strong>Secondary School</strong>
+    <br>
+    <br>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="second_subject">Subject</label>
+                <input class="form-control" name="second_subject" id="second_subject" data-validate="require" placeholder="High School" novalidate="novalidate">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="second_school">School Name</label>
+                <input class="form-control" name="second_school" id="second_school" placeholder="Which school did you attended">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="second_date_start">Start Date</label>
+                <input class="form-control datepicker" name="second_date_start" id="second_date_start" data-start-view="2" placeholder="(Optional)">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="second_date_end">End Date</label>
+                <input class="form-control datepicker" name="second_date_end" id="second_date_end" data-start-view="2" placeholder="(Optional)">
+            </div>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label" for="other_qualifications"><strong>Other Qualifications</strong></label>
+                <textarea class="form-control autogrow" name="other_qualifications" id="other_qualifications" placeholder="List one subject per row" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 86px;"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="tab-pane with-bg" id="fwv-4">
+
+    <strong>Current &amp; Past Jobs</strong>
+    <br>
+    <br>
+
+    <div class="row">
+
+        <div class="col-md-1">
+            <label class="control-label">&nbsp;</label>
+            <p class="text-right">
+                <span class="label label-info">1</span>
+            </p>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label" for="job_position_1">Company Name</label>
+                <input class="form-control" name="job_position_1" id="job_position_1" data-validate="require" placeholder="Your current job" novalidate="novalidate">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="job_position_1">Job Position</label>
+                <input class="form-control" name="job_position_1" id="job_position_1" data-validate="require" placeholder="Your current position" novalidate="novalidate">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="job_position_start_date_1">Start Date</label>
+                <input class="form-control datepicker" name="job_position_start_date_1" id="job_position_start_date_1" placeholder="(Optional)">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="job_position_end_date_1">End Date</label>
+                <input class="form-control datepicker" name="job_position_end_date_1" id="job_position_end_date_1" placeholder="(Optional)">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-1">
+            <label class="control-label">&nbsp;</label>
+            <p class="text-right">
+                <span class="label label-info">2</span>
+            </p>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label" for="job_position_2">Company Name</label>
+                <input class="form-control" name="job_position_2" id="job_position_2" data-validate="require" placeholder="(Optional)" novalidate="novalidate">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="job_position_2">Job Position</label>
+                <input class="form-control" name="job_position_2" id="job_position_2" data-validate="require" placeholder="(Optional)" novalidate="novalidate">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="job_position_start_date_2">Start Date</label>
+                <input class="form-control datepicker" name="job_position_start_date_2" id="job_position_start_date_2" placeholder="(Optional)">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="job_position_end_date_2">End Date</label>
+                <input class="form-control datepicker" name="job_position_end_date_2" id="job_position_end_date_2" placeholder="(Optional)">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-1">
+            <label class="control-label">&nbsp;</label>
+            <p class="text-right">
+                <span class="label label-info">3</span>
+            </p>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label" for="job_position_3">Company Name</label>
+                <input class="form-control" name="job_position_3" id="job_position_3" data-validate="require" placeholder="(Optional)" novalidate="novalidate">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="job_position_3">Job Position</label>
+                <input class="form-control" name="job_position_3" id="job_position_3" data-validate="require" placeholder="(Optional)" novalidate="novalidate">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="job_position_start_date_3">Start Date</label>
+                <input class="form-control datepicker" name="job_position_start_date_3" id="job_position_start_date_3" placeholder="(Optional)">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="job_position_end_date_3">End Date</label>
+                <input class="form-control datepicker" name="job_position_end_date_3" id="job_position_end_date_3" placeholder="(Optional)">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-1">
+            <label class="control-label">&nbsp;</label>
+            <p class="text-right">
+                <span class="label label-info">4</span>
+            </p>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label" for="job_position_4">Company Name</label>
+                <input class="form-control" name="job_position_4" id="job_position_4" data-validate="require" placeholder="(Optional)" novalidate="novalidate">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="job_position_4">Job Position</label>
+                <input class="form-control" name="job_position_4" id="job_position_4" data-validate="require" placeholder="(Optional)" novalidate="novalidate">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="job_position_start_date_4">Start Date</label>
+                <input class="form-control datepicker" name="job_position_start_date_4" id="job_position_start_date_4" placeholder="(Optional)">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="control-label" for="job_position_end_date_4">End Date</label>
+                <input class="form-control datepicker" name="job_position_end_date_4" id="job_position_end_date_4" placeholder="(Optional)">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="tab-pane with-bg" id="fwv-5">
+
+    <div class="form-group">
+        <label class="control-label">Choose Username</label>
+
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="linecons-user"></i>
+            </div>
+
+            <input type="text" class="form-control" name="username" id="username" data-validate="required,minlength[5]" data-message-minlength="Username must have minimum of 5 chars." placeholder="Could also be your email" novalidate="novalidate">
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">Choose Password</label>
+
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="linecons-lock"></i>
+                    </div>
+
+                    <input type="password" class="form-control" name="password" id="password" data-validate="required" placeholder="Enter strong password" novalidate="novalidate">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">Repeat Password</label>
+
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="linecons-lock"></i>
+                    </div>
+
+                    <input type="password" class="form-control" name="password" id="password" data-validate="required,equalTo[#password]" data-message-equal-to="Passwords doesn't match." placeholder="Confirm password" novalidate="novalidate">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">Include Services</label>
+
+                <select multiple="multiple" name="my-select[]" class="form-control multi-select" id="841multiselect" style="position: absolute; left: -9999px;">
+                    <option value="1">Web Builder</option>
+                    <option value="2" selected="">Server Side Scripting</option>
+                    <option value="3">Secure Connection</option>
+                    <option value="4" selected="">Database Access</option>
+                    <option value="5" selected="">Email</option>
+                    <option value="6">eCommerce</option>
+                    <option value="7">Royalty Free Photos</option>
+                    <option value="8">WordPress Installation</option>
+                    <option value="9">Magento Installation</option>
+                    <option value="10">Reseller Account</option>
+                    <option value="11">WHM Client</option>
+                    <option value="12">Nginx</option>
+                </select><div class="ms-container" id="ms-841multiselect"><div class="ms-selectable"><ul class="ms-list ps-container ps-active-x" tabindex="-1"><li class="ms-elem-selectable" id="49-selectable"><span>Web Builder</span></li><li selected="" class="ms-elem-selectable ms-selected" id="50-selectable" style="display: none;"><span>Server Side Scripting</span></li><li class="ms-elem-selectable" id="51-selectable"><span>Secure Connection</span></li><li selected="" class="ms-elem-selectable ms-selected" id="52-selectable" style="display: none;"><span>Database Access</span></li><li selected="" class="ms-elem-selectable ms-selected" id="53-selectable" style="display: none;"><span>Email</span></li><li class="ms-elem-selectable" id="54-selectable"><span>eCommerce</span></li><li class="ms-elem-selectable" id="55-selectable"><span>Royalty Free Photos</span></li><li class="ms-elem-selectable" id="56-selectable"><span>WordPress Installation</span></li><li class="ms-elem-selectable" id="57-selectable"><span>Magento Installation</span></li><li class="ms-elem-selectable" id="1567-selectable"><span>Reseller Account</span></li><li class="ms-elem-selectable" id="1568-selectable"><span>WHM Client</span></li><li class="ms-elem-selectable" id="1569-selectable"><span>Nginx</span></li><div class="ps-scrollbar-x-rail" style="width: 0px; left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: -2px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; right: 2px;"><div class="ps-scrollbar-y" style="top: 0px; height: 0px;"></div></div></ul></div><div class="ms-selection"><ul class="ms-list ps-container ps-active-x" tabindex="-1"><li class="ms-elem-selection" id="49-selection" style="display: none;"><span>Web Builder</span></li><li selected="" class="ms-elem-selection ms-selected" id="50-selection" style=""><span>Server Side Scripting</span></li><li class="ms-elem-selection" id="51-selection" style="display: none;"><span>Secure Connection</span></li><li selected="" class="ms-elem-selection ms-selected" id="52-selection" style=""><span>Database Access</span></li><li selected="" class="ms-elem-selection ms-selected" id="53-selection" style=""><span>Email</span></li><li class="ms-elem-selection" id="54-selection" style="display: none;"><span>eCommerce</span></li><li class="ms-elem-selection" id="55-selection" style="display: none;"><span>Royalty Free Photos</span></li><li class="ms-elem-selection" id="56-selection" style="display: none;"><span>WordPress Installation</span></li><li class="ms-elem-selection" id="57-selection" style="display: none;"><span>Magento Installation</span></li><li class="ms-elem-selection" id="1567-selection" style="display: none;"><span>Reseller Account</span></li><li class="ms-elem-selection" id="1568-selection" style="display: none;"><span>WHM Client</span></li><li class="ms-elem-selection" id="1569-selection" style="display: none;"><span>Nginx</span></li><div class="ps-scrollbar-x-rail" style="width: 0px; left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: -2px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; right: 2px;"><div class="ps-scrollbar-y" style="top: 0px; height: 0px;"></div></div></ul></div></div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label">Gender</label>
+
+                <br>
+
+                <input type="checkbox" class="iswitch iswitch-red" checked="">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Subscribe for Newsletter</label>
+
+                <br>
+
+                <input type="checkbox" class="iswitch iswitch-purple" checked="">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">
+                    Auto-renew Subscription
+                    <span class="label label-warning">Yearly</span>
+                </label>
+
+                <br>
+
+                <input type="checkbox" class="iswitch iswitch-secondary" checked="">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group">
+        <div class="cbr-replaced"><div class="cbr-input"><input type="checkbox" class="cbr cbr-done" name="chk-rules" id="chk-rules" data-validate="required" data-message-message="You must accept rules in order to complete this registration." novalidate="novalidate"></div><div class="cbr-state"><span></span></div></div>
+        <label for="chk-rules">By registering I accept terms and conditions.</label>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Finish Registration</button>
+    </div>
+
+</div>
+
+
+
+<ul class="pager wizard">
+    <li class="previous">
+        <a href=""><i class="entypo-left-open"></i> Previous</a>
+    </li>
+
+    <li class="next">
+        <a href="">Next <i class="entypo-right-open"></i></a>
+    </li>
+</ul>
+
+</div>
+
+</form>

@@ -18,6 +18,8 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
     $scope.quote = "'";
     $scope.dashboardID = $routeParams.dashboardID;
 
+    console.log('loading dashboard controller..');
+
    // $scope.$broadcast('gridster-resized', [width, height]);
 
     $scope.setDesignMode = function() {

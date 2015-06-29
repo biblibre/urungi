@@ -8,16 +8,266 @@
 
 'use strict';
 
-app.controller('reportCtrl', function ($scope, $routeParams, reportModel ) {
+
+/**
+ *
+ * https://github.com/jiren/filter.js
+ *
+ * Filter.js is client-side JSON objects filter and render html elements. Multiple filter criteria can be specified and used in conjunction with each other.
+ */
+
+app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, reportNameModal ) {
 
     $scope.reportID = $routeParams.reportID;
     $scope.metrics = ['Count'];
     $scope.rows = [];
     $scope.columns = [];
+    $scope.loaded = false;
+    $scope.filters = [];
+    $scope.dataSources = [];
+    $scope.preview = false;
+    $scope.filterStringOptions = [
+                                    {value:"equal",label:"equal"},
+                                    {value:"diferentThan",label:"diferent than"},
+                                    {value:"biggerThan",label:"bigger than"},
+                                    {value:"biggerOrEqualThan",label:"bigger or equal than"},
+                                    {value:"lessThan",label:"less than"},
+                                    {value:"lessOrEqualThan",label:"less or equal than"},
+                                    {value:"between",label:"between"},
+                                    {value:"notBetween",label:"not between"},
+                                    {value:"contains",label:"contains"},
+                                    {value:"notContains",label:"not contains"},
+                                    {value:"startWith",label:"start with"},
+                                    {value:"notStartWith",label:"not start with"},
+                                    {value:"endsWith",label:"ends with"},
+                                    {value:"notEndsWith",label:"not ends with"},
+                                    {value:"like",label:"como"},
+                                    {value:"notLike",label:"no como"},
+                                    {value:"null",label:"is null"},
+                                    {value:"notNull",label:"is not null"},
+                                    {value:"in",label:"in"},
+                                    {value:"notIn",label:"not in"}
+                                    ];
+
+    $scope.filterNumberOptions = [
+        {value:"equal",label:"equal"},
+        {value:"diferentThan",label:"diferent than"},
+        {value:"biggerThan",label:"bigger than"},
+        {value:"biggerOrEqualThan",label:"bigger or equal than"},
+        {value:"lessThan",label:"less than"},
+        {value:"lessOrEqualThan",label:"less or equal than"},
+        {value:"between",label:"between"},
+        {value:"notBetween",label:"not between"},
+        {value:"null",label:"is null"},
+        {value:"notNull",label:"is not null"},
+        {value:"in",label:"in"},
+        {value:"notIn",label:"not in"}
+        /* RANKING
+        el (los) primeros
+        el (los) ultimos
+        el (los) primeros %
+        el (los) ultimos %
+
+         */
+
+    ];
+
+
+
+    init();
+
+
+   function init()
+{
+       /* $('#list').sortable({
+            scroll: true,
+            placeholder: 'placeholder',
+            containment: 'parent'
+//axis: 'x'
+        });
+        $('#list').disableSelection();  */
+   /*
+    $('.resize').resizable({
+        handles: 'e'
+    });
+     */
+    //$scope.filters.length
+    if ($routeParams.newReport) {
+        if ($routeParams.newReport == 'true') {
+            $scope._Report = {};
+            $scope._Report.draft = true;
+            $scope._Report.badgeStatus = 0;
+            $scope._Report.exportable = true;
+            $scope._Report.badgeMode = 1;
+
+            $scope.mode = 'add';
+
+            console.log('entering in add mode for reports') ;
+
+            var params = {};
+
+            connection.get('/api/data-sources/find-all', params, function(data) {
+                $scope.errorMsg = (data.result === 0) ? data.msg : false;
+                $scope.page = data.page;
+                $scope.pages = data.pages;
+                $scope.data = data;
+
+                for (var i in $scope.data.items) {
+                    console.log($scope.data.items[i]);
+                    for (var z in $scope.data.items[i].params[0].schema) {
+                        var dts = {};
+                        dts.collection = $scope.data.items[i].params[0].schema[z];
+                        dts.datasourceID = $scope.data.items[i]._id;
+
+
+                        $scope.dataSources.push(dts);
+                    };
+                }
+            });
+        }
+    }
+    };
+
+    $scope.getElementFilterOptions = function(elementType)
+    {
+        console.log(' es un '+elementType);
+
+        if (elementType == 'string')
+           return  $scope.filterStringOptions;
+        if (elementType == 'number')
+            return  $scope.filterNumberOptions;
+    }
+
+    $scope.setFilterType = function(filter, filterOption)
+    {
+        filter.filterType = filterOption.value;
+        filter.filterTypeLabel = filterOption.label;
+
+        //set the appropiate interface or the choosen filter relation
+    }
+
+    $scope.showfilter1 = function(filter)
+    {
+
+
+        if (filter.filterType == 'null' || filter.filterType == 'notNull')
+        {
+            return  false;
+        } else {
+            return  true;
+        }
+    }
+
+    $scope.showfilter2 = function(filter)
+    {
+
+
+        if (filter.filterType == 'between' || filter.filterType == 'notBetween')
+        {
+            return  true;
+        } else {
+            return  false;
+        }
+    }
+
+    $scope.getDistinctValues = function(filter)
+    {
+        var params = {};
+
+        connection.get('/api/reports/get-distinct-values', params, function(data) {
+            $scope.errorMsg = (data.result === 0) ? data.msg : false;
+            $scope.page = data.page;
+            $scope.pages = data.pages;
+            $scope.data = data;
+
+        });
+    }
+
+    $scope.reportName = function () {
+
+
+        var modalOptions    = {
+            container: 'reportName',
+            containerID: '12345',//$scope._Report._id,
+            tracking: true,
+            report: $scope._Report
+        }
+
+
+
+        //$scope.sendHTMLtoEditor(dataset[field])
+
+        reportNameModal.showModal({}, modalOptions).then(function (result) {
+            $scope.save($scope._Report);
+            /*
+            var container = angular.element(document.getElementById(source));
+            container.children().remove();
+            //var theHTML = ndDesignerService.getOutputHTML();
+            theTemplate = $compile(theHTML)($scope);
+            container.append(theTemplate);
+
+
+            dataset[field] = theHTML;
+
+            if ($scope._posts.postURL && $scope._posts.title && $scope._posts.status)
+            {
+                //console.log('saving post');
+                $scope.save($scope._posts, false);
+            }
+            //console.log(theHTML);
+           */
+        });
+
+
+    }
+
+
+    $scope.add = function() {
+
+            $scope._Report = {};
+            $scope._Report.draft = true;
+            $scope._Report.badgeStatus = 0;
+            $scope._Report.exportable = true;
+            $scope._Report.badgeMode = 1;
+
+            $scope.mode = 'add';
+            $scope.subPage= '/partial/custom/Badges/form.html';
+
+    };
+
+    $scope.save = function(data) {
+
+
+        console.log('saving report '+data.reportName);
+
+
+
+        if ($scope.mode == 'add') {
+            connection.post('/api/reports/create', data, function(data) {
+                $scope.items.push(data.item);
+
+                $scope.cancel();
+            });
+        }
+        else {
+            $scope.edit_id = data._id;
+
+            connection.post('/api/reports/update/'+data._id, data, function(result) {
+                if (result.result == 1) {
+                    for (i = 0; i < $scope.items.length; i++) {
+                        if ($scope.items[i]._id == data._id) {
+                            $scope.items[i] = data;
+                        }
+                    }
+                    $scope.cancel();
+                }
+            });
+        }
+    };
 
     $scope.metadata = {
         tables: [
-            {
+            /*{
                 id: "T1",
                 name: "ndcustom_Employees",
                 datasourceID: "SSSS1",
@@ -106,7 +356,7 @@ app.controller('reportCtrl', function ($scope, $routeParams, reportModel ) {
                     }]
             }
 
-            ,
+            , */
             {
                 id: "T4",
                 name: "Fields",
@@ -284,10 +534,34 @@ app.controller('reportCtrl', function ($scope, $routeParams, reportModel ) {
         });
     }
 
+    $scope.getCubes = function()
+    {
+        console.log('entering getCubes');
+        var data = [];
+        var cube = {cubeID:'123456789',cubeName:'cube1',cubeLabel:'cuabe 1',cubeDescription:'Descripción del cubo 1', dimmensions:[
+            {objectName:'nombreCampo',objectLabel:'etiqueta campo 1',objectType:'DIM',collectionID:'theCollection',connectionID:'theConnection',cubeID:'theCube',objectDescription:'the description for the object'},
+            {objectName:'nombreCampo',objectLabel:'etiqueta campo 2',objectType:'DIM',collectionID:'theCollection',connectionID:'theConnection',cubeID:'theCube',objectDescription:'the description for the object'}
+
+        ], measures: [
+            {objectName:'nombreCampo',objectLabel:'measure 1',objectType:'MEA',collectionID:'theCollection',connectionID:'theConnection',cubeID:'theCube',objectDescription:'the description for the object'},
+            {objectName:'nombreCampo',objectLabel:'measure 2',objectType:'MEA',collectionID:'theCollection',connectionID:'theConnection',cubeID:'theCube',objectDescription:'the description for the object'}
+
+        ]};
+        data.push(cube);
+        var cube = {cubeID:'000006789',cubeName:'cube2',cubeLabel:'cuabe 2',cubeDescription:'Descripción del cubo 2'};
+        data.push(cube);
+        $scope.cubes = data;
+    }
+
 
     $scope.getDataObjects = function()
     {
+
+        console.log('entering getDataObjects');
         var data = [];
+
+
+        var data1 = {objectName:'nombreCampo',objectLabel:'etiqueta campo',objectType:'DIM',collectionID:'theCollection',connectionID:'theConnection',cubeID:'theCube',objectDescription:'the description for the object'};
 
         for (var t in $scope.metadata.tables) {
             var table = {label: $scope.metadata.tables[t].name, id: $scope.metadata.tables[t].id, type: 'folder', children: []};
@@ -304,7 +578,10 @@ app.controller('reportCtrl', function ($scope, $routeParams, reportModel ) {
         //Types: String, Object
 
         $scope.treedata = data;
-            /*[
+
+        /*
+        console.log(JSON.stringify(data));
+            [
                 { "label" : "User", "id" : "role1", "children" : [
                     { "label" : "subUser1", "id" : "role11", "children" : [] },
                     { "label" : "subUser2", "id" : "role12", "children" : [
@@ -318,7 +595,7 @@ app.controller('reportCtrl', function ($scope, $routeParams, reportModel ) {
                 { "label" : "Guest", "id" : "role3", "children" : [] }
             ];*/
 
-
+        /*
         $('#myTree').tree({
             dataSource: function(options, callback){
                 setTimeout(function () {
@@ -335,7 +612,8 @@ app.controller('reportCtrl', function ($scope, $routeParams, reportModel ) {
                         { name: 'Province', type: 'item', additionalParameters: { id: 'province' } },
                         { name: 'Party', type: 'item', additionalParameters: { id: 'party' } },
                         { name: 'Gender', type: 'item', additionalParameters: { id: 'gender' } },
-                        { name: 'Age Bin', type: 'item', additionalParameters: { id: 'agebin' } }
+                        { name: 'Age Bin', type: 'item', additionalParameters: { id: 'agebin' } },
+                        { name: 'Name', type: 'item', additionalParameters: { id: 'name' } }
                     ]});
 
                 }, 400);
@@ -344,7 +622,7 @@ app.controller('reportCtrl', function ($scope, $routeParams, reportModel ) {
             cacheItems: true,
             folderSelect: false
         });
-
+        */
 
 
     }
@@ -476,6 +754,17 @@ app.controller('reportCtrl', function ($scope, $routeParams, reportModel ) {
         {
             $scope.columns.push(String(drag[0].innerText).trim());
             console.log($scope.columns);
+            /*
+            $scope.$$apply;
+            //$("#nonFixedSample").colResizable({fixed:false});
+
+            if (!$scope.loaded)
+            {
+            $('.resize').resizable({
+                handles: 'e'
+            });
+                $scope.loaded = true;
+            }*/
         }
 
         if (dropEl == "rowObjects")
@@ -595,7 +884,7 @@ app.controller('reportCtrl', function ($scope, $routeParams, reportModel ) {
                     "Gender Imbalance": function(mp) {
                         return mp["Gender"] == "Male" ? 1 : -1;
                     }
-                },
+                }
             }
         );
 
@@ -608,9 +897,157 @@ app.controller('reportCtrl', function ($scope, $routeParams, reportModel ) {
     $scope.sortableOptions = {
         stop: function(e, ui) {
             // this callback has the changed model
-            $scope.refreshPivot();
-            console.log('despues de ordenar');
+            //$scope.refreshPivot();
+            //console.log('despues de ordenar');
         }
     };
+
+    // Drop handler.
+    $scope.onDrop = function (data, event, type) {
+        // Get custom object data.
+        var customObjectData = data['json/custom-object']; // {foo: 'bar'}
+
+        // Get other attached data.
+        var uriList = data['text/uri-list']; // http://mywebsite.com/..
+        //console.log('soltado uno '+JSON.stringify(customObjectData));
+
+
+        if (type == 'column') {
+            var el = document.getElementById('column-zone');
+            var theTemplate =  $compile('<div class="column-box">'+customObjectData.objectLabel+'</div>')($scope);
+            $scope.columns.push(customObjectData);
+        }
+        if (type == 'filter') {
+            var el = document.getElementById('filter-zone');
+            var theTemplate =  $compile('<div class="filter-box">'+customObjectData.objectLabel+'</div>')($scope);;
+            $scope.filters.push(customObjectData);
+            console.log('the filters '+JSON.stringify($scope.filters));
+
+        }
+
+        processStructure();
+        //angular.element(el).append(theTemplate);
+        // ...
+    };
+
+    // Drag over handler.
+    $scope.onDragOver = function (event) {
+        // ...
+    };
+
+
+    $scope.previewQuery = function()
+    {
+
+        console.log('entering preview');
+        var params = {};
+
+        //console.log(JSON.stringify($scope.columns))
+
+        params.query = $scope.query;
+        //params.filters = $scope.filters;
+
+        connection.post('/api/reports/preview-query', params, function(data) {
+            $scope.errorMsg = (data.result === 0) ? data.msg : false;
+            $scope.page = data.page;
+            $scope.pages = data.pages;
+            $scope.data = data;
+
+            //console.log('the data: '+JSON.stringify(data));
+
+
+
+            $scope.previewData = data;
+            $scope.preview = true;
+            /*
+            for (var i in $scope.data.items) {
+                console.log($scope.data.items[i]);
+                for (var z in $scope.data.items[i].params[0].schema) {
+                    $scope.dataSources.push($scope.data.items[i].params[0].schema[z]);
+                };
+            }
+            */
+        });
+    }
+
+
+    function processStructure()
+    {
+
+        $scope.query = {};
+        $scope.query.datasources = [];
+
+
+        var datasourcesList = [];
+
+        for (var i in $scope.columns) {
+            if (datasourcesList.indexOf($scope.columns[i].datasourceID) == -1)
+                datasourcesList.push($scope.columns[i].datasourceID);
+        }
+
+        for (var i in $scope.filters) {
+            if (datasourcesList.indexOf($scope.filters[i].datasourceID) == -1)
+                datasourcesList.push($scope.filters[i].datasourceID);
+        }
+
+        for (var i in datasourcesList) {
+
+            var dtsObject = {};
+            dtsObject.datasourceID = datasourcesList[i];
+            dtsObject.collections = [];
+
+            var dtsCollections = [];
+
+            for (var z in $scope.columns) {
+                if ($scope.columns[z].datasourceID == datasourcesList[i])
+                {
+                    if (dtsCollections.indexOf($scope.columns[z].collectionID) == -1)
+                        dtsCollections.push($scope.columns[z].collectionID);
+                }
+            }
+
+            for (var z in $scope.filters) {
+                if ($scope.filters[z].datasourceID == datasourcesList[i])
+                {
+                    if (dtsCollections.indexOf($scope.filters[z].collectionID) == -1)
+                        dtsCollections.push($scope.filters[z].collectionID);
+                }
+            }
+
+            for (var n in dtsCollections) {
+
+                var collection = {};
+                collection.collectionID = dtsCollections[n];
+
+                collection.columns = [];
+
+                for (var n1 in $scope.columns) {
+                    if ($scope.columns[n1].collectionID == dtsCollections[n])
+                    {
+                            collection.columns.push($scope.columns[n1]);
+                    }
+                }
+
+
+
+
+                collection.filters = [];
+                for (var n1 in $scope.filters) {
+                    if ($scope.filters[n1].collectionID == dtsCollections[n])
+                    {
+                        collection.filters.push($scope.filters[n1]);
+                    }
+                }
+
+                dtsObject.collections.push(collection);
+
+            }
+            $scope.query.datasources.push(dtsObject);
+        }
+      //console.log(JSON.stringify($scope.query));
+
+        if ($scope.columns.length > 0)
+            $scope.previewQuery();
+    }
 
 });

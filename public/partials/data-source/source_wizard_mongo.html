@@ -1,0 +1,120 @@
+<div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
+    <a href="/#/data-sources" class="btn btn-default pull-left">Cancel</a>
+    <a ng-click="setMongoStep(mongoStep -1)" ng-show='mongoStep > 1' class="btn btn-default pull-left" style="margin-left: 5px;margin-right: 5px;">Previous</a>
+    <a ng-click="testMongoConnection()" class="btn btn-default pull-right" ng-show='mongoStep == 1' style="margin-left: 5px;margin-right: 5px;">Connect</a>
+    <a ng-click="getCollectionsSchema()" class="btn btn-default pull-right" ng-show='mongoStep == 2' style="margin-left: 5px;margin-right: 5px;">Get Schema</a>
+    <a ng-click="saveDatasource()" class="btn btn-success pull-right" ng-show='mongoStep == 3' style="margin-left: 5px;margin-right: 5px;">Save Datasource</a>
+
+</div>
+<div class="container-fluid" ng-show='mongoStep == 1'>
+
+<div class="tab-pane with-bg" id="fwv-1">
+
+    <div class="container-fluid">
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label" for="host">Host</label>
+                <input class="form-control" name="host" id="host" ng-model="_Parameters.host" data-validate="required" placeholder="Insert here your Amazon Key ID" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label" for="port">Port</label>
+                <input class="form-control" name="port" id="port" ng-model="_Parameters.port" data-validate="required" placeholder="Insert here your Amazon Secret Access Key" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label" for="database">Database</label>
+                <input class="form-control" name="database" id="database" ng-model="_Parameters.database" data-validate="required" placeholder="Set here the Amazon S3 bucket to connect" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label" for="userName">User name</label>
+                <input class="form-control" name="userName" id="userName" ng-model="_Parameters.userName" data-validate="required" placeholder="Bucket Region" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label" for="password">Password</label>
+                <input class="form-control" name="password" id="password" ng-model="_Parameters.password" data-validate="required" placeholder="Folder" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+</div>
+
+<div class="container-fluid" style="padding: 5px;">
+
+
+</div>
+
+</div>
+
+<div class="container-fluid" ng-show='mongoStep == 2'>
+
+    <div class="container-fluid" style="padding: 5px;">
+
+
+
+    </div>
+                 {{selectedCollections}}
+
+    <ul>
+            <li ng-repeat="item in items"><input type="checkbox" checklist-model="selectedCollections" checklist-value="item.name" name="item.name" value="item.name"/>    {{item.name}}</li>
+    </ul>
+
+</div>
+
+<div class="container-fluid" ng-show='mongoStep == 3'>
+
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default" ng-repeat="collection in schemas">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+
+                        <table class="table table-striped">
+                            <tr>
+                                <td><h3>{{collection.collectionName}}</h3></td>
+                                <td><input type="checkbox"  ng-model="collection.visible"/></td>
+                                <td><input type="text"  ng-model="collection.collectionLabel"/></td>
+                            </tr>
+                        </table>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+
+                    <table class="table table-striped">
+                        <tr ng-repeat="element in collection.elements">
+                            <td>{{element.elementName}}</td>
+                            <td><select name="elementType" ng-model="element.elementType" ng-options="obj.value as obj.name for obj in elementTypes" ></select></td>
+                            <td><input type="checkbox" ng-model="element.visible"/></td>
+                            <td><input type="text"  ng-model="element.elementLabel"/></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+</div>

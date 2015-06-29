@@ -1,0 +1,70 @@
+<div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
+    <a href="/#/data-sources" class="btn btn-default pull-left">Cancel</a>
+
+
+</div>
+
+<div class="container-fluid" style="padding: 20px;">
+    <h3>Select here the type of source for this data source</h3>
+</div>
+
+<div class="container-fluid ng-scope">
+    <div class="col-sm-3">
+
+        <a ng-click="fileSourceSelected()">
+        <div class="xe-widget xe-vertical-counter xe-vertical-counter-white" style="height: 150px">
+            <div class="xe-icon">
+                <i class="linecons-doc"></i>
+            </div>
+
+            <div class="xe-label">
+                <strong class="num">FILE</strong>
+                <span></span>
+            </div>
+        </div>
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a ng-click="mongoSourceSelected()">
+        <div class="xe-widget xe-vertical-counter xe-vertical-counter-white" style="height: 150px">
+            <div >
+                <img src="images/mongodb.jpeg" class="img-responsive"/>
+            </div>
+
+            <div class="xe-label">
+                <strong class="num"></strong>
+                <span></span>
+            </div>
+        </div>
+        </a>
+    </div>
+    <div class="col-sm-3">
+
+        <div class="xe-widget xe-vertical-counter xe-vertical-counter-white" xe-counter="" data-count=".num" data-from="0" data-to="128" data-duration="4">
+            <div class="xe-icon">
+                <i class="linecons-lightbulb"></i>
+            </div>
+
+            <div class="xe-label">
+                <strong class="num">128</strong>
+                <span>New Topics Published</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-3">
+
+        <div class="xe-widget xe-vertical-counter xe-vertical-counter-primary" xe-counter="" data-count=".num" data-from="0" data-to="442" data-suffix=" TB" data-duration="5">
+            <div class="xe-icon">
+                <i class="linecons-truck"></i>
+            </div>
+
+            <div class="xe-label">
+                <strong class="num">442 TB</strong>
+                <span>Traffic Delivered</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+

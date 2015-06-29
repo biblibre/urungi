@@ -1,0 +1,131 @@
+<script type="text/javascript" src="/libs/angular-vs-repeat/angular-vs-repeat.min.js"></script>
+<!--<script type="text/javascript" src="//libs/colResizable-1.5/colResizable-1.5.min.js"></script>-->
+
+
+<link rel="stylesheet" type="text/css" href="libs/pivot/pivot.css">
+<style>
+    .pvtUnused, td.pvtAxisContainer li i, .pvtAggregator, .pvtAttrDropdown {
+        display: none;
+    }
+    .pvtRows {
+        min-width: 270px;
+    }
+    .pvtMetricsContainer {
+        border: 1px solid #ddd;
+    }
+    .pvtMetricsContainer, .pvtVals {
+        padding: 5px;
+        min-width: 20px;
+        min-height: 20px;
+    }
+    .pvtMetricsContainer li div.pvtAttr {
+        background-color: #F0F0F0;
+        border: 1px solid #ddd;
+        padding: 5px 5px;
+        white-space: nowrap;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        display: inline-block;
+        height: 34px;
+        vertical-align: middle;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+    .ui-grid-header-cell {
+        position: relative;
+        box-sizing: border-box;
+        background-color: inherit;
+        border-right: 1px solid;
+        border-color: #d4d4d4;
+        display: table-cell;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        width: 0;
+    }
+
+    #spacer {
+        height: 100px
+    }
+    #box {
+        height: 40px;
+        width: 500px;
+        float: left;
+    }
+    #list {
+        background-color:blue;
+        white-space:nowrap;
+        overflow-x:scroll;
+        overflow-y:hidden;
+        /*text-align:left;*/
+    }
+    .resize {
+        background-color:darkgray;
+        height:40px;
+        width:100px;
+        margin-right: 2px;
+        cursor:move;
+        display:inline-block;
+    }
+    .placeholder {
+        display:inline-block;
+        height: 1px !important;
+    }
+    .ui-resizable-handle {
+        height:15px;
+        width: 20px;
+        background-color:red;
+        cursor: pointer;
+    }
+
+    .item {
+        width: 200px;
+        padding: 5px 10px;
+
+        border: 2px solid #444;
+        border-radius: 5px;
+        background-color: #EA8A8A;
+
+        font-size: 1.1em;
+        font-weight: bold;
+        text-align: center;
+        cursor: move;
+    }
+
+</style>
+
+<div class="row" style="width: 100%;height: 100%; background-color: #99cc99; padding: 10px;" sizeelement>
+
+<div id="columnObjects" style="height: 50px;" class="pvtMetricsContainer pvtHorizList" ng-model='columns' x-lvl-drop-target="true" x-on-drop='dropped(dragEl, dropEl)'>
+    <!--
+    <table id="nonFixedSample" border="0" cellpadding="0" cellspacing="0" class="JCLRFlex JColResizer" style="width: 529px;">
+        <tbody>
+            <tr>
+            <th ng-repeat="item in columns">
+
+                {{ item }}
+            </th>
+            </tr>
+        </tbody>
+    </table>   -->
+
+
+    <ul ui-sortable ng-model="columns">
+        <li ng-repeat="item in columns" class="item">
+            {{ item }}
+        </li>
+
+    </ul>
+
+</div>
+<div vs-repeat style="width: 100%;height: {{height-50}}px; background-color: #ffffff; overflow: auto; position:relative">
+    <div ng-repeat="item in data" class="pvtMetricsContainer pvtHorizList">
+        <li ng-repeat="colName in columns">
+            <span class="pvtAttr">{{item[colName] }}</span>
+        </li>
+    </div>
+</div>
+</div>
+

@@ -6,7 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.service('reportModel' , function ($http, $q, $filter, ngTableParams) {
+//app.service('reportModel' , function ($http, $q, $filter, ngTableParams) {    TODO: ngTableParams quitado todo por traslado activar
+app.service('reportModel' , function ($http, $q, $filter) {
     this.data = null;
 
     hashCode = function(s){
@@ -1399,7 +1400,7 @@ app.service('reportModel' , function ($http, $q, $filter, ngTableParams) {
                 ////NG TABLE PARAMS
                 if (!$scope.tableParams)
                     $scope.tableParams = [];
-
+                /*
                 $scope.tableParams[hashedID] = new ngTableParams({
                     page: 1,            // show first page
                     count: 1000           // count per page
@@ -1421,7 +1422,7 @@ app.service('reportModel' , function ($http, $q, $filter, ngTableParams) {
                         params.total(orderedData.length); // set total for recalc pagination
                         //$defer.resolve($scope.users);
                     }
-                });
+                }); */
 
                 /////END NGTABLE PARAMS
 
@@ -2467,7 +2468,7 @@ app.service('reportModel' , function ($http, $q, $filter, ngTableParams) {
 
                 if (!$scope.tableParams)
                     $scope.tableParams = [];
-
+               /*
                 $scope.tableParams[hashedID] = new ngTableParams({
                     page: 1,            // show first page
                     count: 1000           // count per page
@@ -2490,7 +2491,7 @@ app.service('reportModel' , function ($http, $q, $filter, ngTableParams) {
                         //$defer.resolve($scope.users);
                     }
                 });
-
+                */
 
                 var htmlCode = '';
 

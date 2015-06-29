@@ -1,66 +1,82 @@
-/**
- * Created with JetBrains WebStorm.
- * User: hermenegildoromero
- * Date: 09/01/15
- * Time: 12:41
- * To change this template use File | Settings | File Templates.
- */
-
 
 'use strict';
 
-var app = angular.module('DataRepublic', [
-        'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs','angularTreeview','ngDragDrop'
+var app = angular.module('WideStage', [
+       //'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs','angularTreeview','ngDragDrop','ui.layout'
+        'ngRoute','ui.sortable','gridster','ui.layout','angularTreeview', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable'
+
     ]).
     config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
 
         $routeProvider.when('/home', {
-            templateUrl: 'js/home/index.html',
+            templateUrl: 'partials/home/index.html',
             controller: 'homeCtrl'
         });
-
-
         $routeProvider.when('/dashboards', {
-            templateUrl: 'js/dashboard/index.html',
+            templateUrl: 'partials/dashboard/list.html',
             controller: 'dashBoardCtrl'
         });
 
         $routeProvider.when('/dashboards/:dashboardID', {
-            templateUrl: 'js/dashboard/view.html',
+            templateUrl: 'partials/dashboard/view.html',
             controller: 'dashBoardCtrl'
         });
 
+        $routeProvider.when('/dashboards/new/:newDashboard/', {
+            templateUrl: 'partials/dashboard/view.html',
+            controller: 'reportCtrl'
+        });
 
+        //http://www.jointjs.com/tutorial
 
         $routeProvider.when('/reports', {
-            templateUrl: 'js/report/list.html',
+            templateUrl: 'partials/report/list.html',
             controller: 'reportCtrl'
         });
 
         $routeProvider.when('/reports/:reportID/', {
-            templateUrl: 'js/report/view.html',
+            templateUrl: 'partials/report/view.html',
             controller: 'reportCtrl'
         });
 
-        $routeProvider.when('/new-report/', {
-            templateUrl: 'js/report/edit.html',
+        $routeProvider.when('/reports/new/:newReport/', {
+            templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
         });
 
-        $routeProvider.when('/clients', {
-            templateUrl: 'js/clients/index.html',
-            controller: 'clientsCtrl'
+        //CUBES
+
+        $routeProvider.when('/cubes', {
+            templateUrl: 'partials/cube/list.html',
+            controller: 'cubeCtrl'
         });
 
-        $routeProvider.when('/clients/:clientID/', {
-            templateUrl: 'js/clients/view.html',
-            controller: 'clientsCtrl'
+        $routeProvider.when('/cubes/:cubeID/', {
+            templateUrl: 'partials/cube/view.html',
+            controller: 'cubeCtrl'
         });
 
-        $routeProvider.when('/new-client/', {
-            templateUrl: 'js/clients/edit.html',
-            controller: 'clientsCtrl'
+        $routeProvider.when('/cubes/new/:newCube/', {
+            templateUrl: 'partials/cube/editNew.html',
+            controller: 'cubeCtrl'
+        });
+
+        //Data sources
+
+        $routeProvider.when('/data-sources', {
+            templateUrl: 'partials/data-source/list.html',
+            controller: 'dataSourceCtrl'
+        });
+
+        $routeProvider.when('/data-sources/:dataSourceID/', {
+            templateUrl: 'partials/data-source/edit.html',
+            controller: 'dataSourceCtrl'
+        });
+
+        $routeProvider.when('/data_sources/new/:newDataSource/', {
+            templateUrl: 'partials/data-source/source_wizard_index.html',
+            controller: 'dataSourceCtrl'
         });
 
     }]);
@@ -78,6 +94,21 @@ var app = angular.module('DataRepublic', ['ngRoute']).
 
     }]);
 */
-function appRun($http, $rootScope, $sce) {
 
+
+app.directive('sizeelement', function ($window) {
+    return{
+        scope:true,
+        priority: 0,
+        link: function (scope, element) {
+            scope.$watch(function(){return $(element).height(); }, function(newValue, oldValue) {
+                scope.height=$(element).height();
+            });
+        }}
+})
+
+
+
+function appRun($http, $rootScope, $sce) {
+       console.log('widestage app running');
 }

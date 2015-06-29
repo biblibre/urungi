@@ -1,0 +1,93 @@
+
+<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
+    <a href="#/reports" class="btn btn-default pull-left">Cancel</a>
+     <a data-ng-click="reportName()" class="btn btn-success pull-right" style="margin-right: 5px">Save Report</a>
+</div>
+
+<div class="container-fluid" style="border-bottom: 2px solid #72A230;">
+     <h3 class="pull-right" >Query design zone</h3>
+</div>
+
+<div class="container-fluid" style="padding:10px" >
+    <!--
+    <div ng-nestable ng-model="filters" style="background-color: #FF0000; min-height: 40px;padding: 5px;">
+        <div style="background-color: #FFFFFF; min-height: 10px;">
+
+            {{$item.objectLabel}}
+            <div class="dropdown">
+                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    {{$item.filterTypeLabel}}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
+                    <li ng-repeat="option in getElementFilterOptions($item.elementType)"><a ng-click="setFilterType($item,option)">{{option.label}}</a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <input type="text" ng-model="$item.filterText1"/>
+            <input type="text" ng-model="$item.filterText2"/>
+        </div>
+    </div>  -->
+
+    <div id="filter-zone" class="container-fluid filter-zone" drop="onDrop($data, $event, 'filter')" drop-effect="copy" drop-accept="'json/custom-object'" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+        <div class="filter-zone-label pull-right" ng-hide="filters.length > 0">Drop here your filters</div>
+        <ul class="ul-drop" ng-model="filters" ui-sortable="sortableOptions" >
+            <li class="filter-box" ng-repeat="filter in filters" >
+                <div class="container-fluid">
+
+
+                    <div class="dropdown" style="vertical-align: middle">
+                        <span style="color:#72A230;font-weight: bold">{{filter.objectLabel}}</span>
+                    <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span style="color:#0000FF;">{{filter.filterTypeLabel}}</span>
+                        <span class="caret" style="color:#0000FF;"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
+                        <li ng-repeat="option in getElementFilterOptions(filter.elementType)"><a ng-click="setFilterType(filter,option)">{{option.label}}</a>
+
+                        </li>
+
+                     </ul>
+                            <input type="text" ng-model="filter.filterText1" ng-show="showfilter1(filter)"/> <a class="btn btn-inverse btn-small" ng-click="getDistinctValues(filter)">search</a>
+                            <span ng-show="showfilter2(filter)"> and <input type="text" ng-model="filter.filterText2" />  </span>
+                    </div>
+
+                </div>
+
+            </li>
+
+        </ul>
+    </div>
+
+    <div  class="container-fluid column-zone" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+        <div class="filter-zone-label pull-right" ng-hide="columns.length > 0">Drop here your columns</div>
+        <!--<div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo1</div>
+        <div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo 2</div>
+        drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept"
+        -->
+        <ul class="ul-drop" ng-model="columns" ui-sortable="sortableOptions" >
+            <li class="column-box" ng-repeat="column in columns" >{{column.objectLabel}}</li>
+
+        </ul>
+    </div>
+</div>
+
+
+<div class="container-fluid" >
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                 <td ng-repeat="column in columns" ><strong>{{column.objectLabel}}</strong></td>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in previewData" >
+                <td ng-repeat="column in columns" >{{row[column.elementName]}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

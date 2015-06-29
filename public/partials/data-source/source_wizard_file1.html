@@ -1,0 +1,52 @@
+<div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
+    <a href="/#/data-sources" class="btn btn-default pull-left">Cancel</a>
+
+
+</div>
+
+<div class="container-fluid" style="padding: 20px;">
+    <h3>Where the file comes from?</h3>
+</div>
+<div class="container-fluid ng-scope">
+    <div class="col-sm-3">
+
+        <a ng-click="fileSourceFileSelected()">
+            <div class="xe-widget xe-vertical-counter xe-vertical-counter-white" style="height: 200px">
+                <div class="xe-icon">
+                    <i class="linecons-doc"></i>
+                </div>
+                <div class="xe-lower">
+                    <div class="xe-label">
+                        <strong class="num">FILE</strong>
+                        <span>The file is uploaded and refreshed manually</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a ng-click="fileSourceS3Selected()">
+
+            <div class="xe-widget xe-vertical-counter xe-vertical-counter-white" style="height: 200px">
+
+                <div class="xe-icon">
+                    <img src="images/amazonS3small.png" class="img-responsive"/>
+                </div>
+
+                <div class="xe-label">
+                    <span>More than one file located in a Amazon S3 Directory</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-3">
+
+
+
+    </div>
+    <div class="col-sm-3">
+
+
+
+    </div>
+</div>

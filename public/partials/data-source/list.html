@@ -1,0 +1,29 @@
+<div class="container-fluid mainArea">
+    <div class="container-fluid">
+
+        <div class="main col-md-3" ng-include="'partials/home/sidebar.html'">
+
+
+        </div>
+        <div class="main col-md-9">
+            <div class="container-fluid">
+
+                <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
+                    <h3 class="pull-left" >Data sources</h3>
+                    <a href="/#/data_sources/new/true" class="btn btn-success pull-right">New Data Source</a>
+                </div>
+
+                <div class="list-group" ng-init="getDataSources(1,'',['type','params.connection.host','params.connection.port','params.connection.database'])">
+                    <a href="/#/data-sources/{{dts._id}}" class="list-group-item" ng-repeat="dts in items">
+                        <h4 class="list-group-item-heading">{{dts.type}}</h4>
+                        <p class="list-group-item-text">
+
+                            <label class="small" style="margin-right: 5px">host: </label>{{dts.params[0].connection.host}}
+                            <label class="small" style="margin-right: 5px">port: </label>{{dts.params[0].connection.port}}
+                            <label class="small" style="margin-right: 5px">database: </label>{{dts.params[0].connection.database}}
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>

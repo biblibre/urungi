@@ -1,0 +1,24 @@
+<div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
+    <a href="/#/data-sources" class="btn btn-default pull-left">Cancel</a>
+    <a  class="btn btn-warning pull-right" style="margin-left: 5px;margin-right: 5px;">Edit</a>
+
+
+</div>
+
+<div class="container-fluid" ng-init="edit()">
+
+       <p>{{_dataSource.type}}</p>
+    <p>{{_dataSource.params[0].connection.host}}</p>
+    <p>{{_dataSource.params[0].connection.port}}</p>
+    <p>{{_dataSource.params[0].connection.database}}</p>
+
+    <ul ng-repeat="collection in _dataSource.params[0].schema">
+        <li>
+            {{collection.collectionName}}
+              <ul ng-repeat="element in collection.elements">
+                  <li>{{element.elementName}}</li>
+              </ul>
+        </li>
+    </ul>
+
+</div>

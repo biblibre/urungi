@@ -1,0 +1,106 @@
+<div class="object-tree" ng-init="getCubes()">
+
+    Listado de objetos
+    <!--
+    <div
+            id="tablesTree"
+            data-angular-treeview="true"
+            data-tree-id="abc"
+            data-tree-model="treedata"
+            data-node-id="id"
+            data-node-label="label"
+            data-node-children="children" >
+    </div>
+    -->
+
+    <!--
+    <div class="tree-cube" ng-repeat="cube in cubes">
+          <div class="tree-cube-label">{{cube.cubeLabel}}</div>
+          <div class="tree-cube-content">
+                <div class="tree-cube-sublabel">Dimmensions</div>
+                <div class="tree-cube-object" ng-repeat="dim in cube.dimmensions" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">{{dim.objectLabel}}</div>
+                <div class="tree-cube-sublabel">Measures</div>
+                <div class="tree-cube-object" ng-repeat="dim in cube.measures" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{foo: 'bar'}">{{dim.objectLabel}}</div>
+          </div>
+    </div>
+    -->
+
+
+
+    <div class="tree-cube" ng-repeat="dsource in dataSources">
+        <div class="tree-cube-label">{{dsource.collection.collectionLabel}}</div>
+        <div class="tree-cube-content">
+            <div class="tree-cube-object" ng-show="element.visible == true" ng-repeat="element in dsource.collection.elements" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{elementName: '{{element.elementName}}',objectLabel: '{{element.elementLabel}}', datasourceID:'{{dsource.datasourceID}}', collectionID:'{{dsource.collection.collectionID}}'  ,elementID: '{{element.elementID}}', elementType: '{{element.elementType}}', filterType:'equal',filterTypeLabel:'equal'}">{{element.elementLabel}}</div>
+        </div>
+    </div>
+
+
+
+<!--<ul class="tree" role="tree" id="myTree" style="height: 100%">
+    <li class="tree-branch hide" data-template="treebranch" role="treeitem" aria-expanded="false">
+        <div class="tree-branch-header" >
+            <button class="tree-branch-name">
+                <span class="glyphicon icon-caret glyphicon-play"></span>
+                <span class="glyphicon icon-folder glyphicon-folder-close"></span>
+                <span class="tree-label"></span>
+            </button>
+        </div>
+        <ul class="tree-branch-children" role="group"></ul>
+        <div class="tree-loader" role="alert">Loading...</div>
+    </li>
+    <li class="tree-item hide" data-template="treeitem" role="treeitem">
+        <div id="" class="tree-item-name" x-lvl-draggable="true" x-lvl-drop-target="false" x-on-select="selected(selectedEl)">
+            <span class="glyphicon icon-item fueluxicon-bullet"></span>
+            <span class="tree-label"></span>
+        </div>
+    </li>
+</ul>
+
+    <div id="Province" x-lvl-draggable="true">
+         Province
+    </div>
+    <div id="Gender" x-lvl-draggable="true">
+        Gender
+    </div>
+    <div id="Age" x-lvl-draggable="true">
+        Age
+    </div>
+    <div id="Party" x-lvl-draggable="true">
+        Party
+    </div>
+    <div id="Age Bin" x-lvl-draggable="true">
+        Age Bin
+    </div>-->
+
+    <style>
+        #metrics-list {
+            list-style: none;
+        }
+        #metrics-list li {
+            margin: 1px;
+            padding: 5px;
+            border: 1px solid black;
+        }
+    </style>
+    <!--
+    Metrics
+    <ul id="metrics-list">
+        <li x-lvl-draggable="true">Count</li>
+        <li x-lvl-draggable="true">Count Unique Values</li>
+        <li x-lvl-draggable="true">List Unique Values</li>
+        <li x-lvl-draggable="true">Sum</li>
+        <li x-lvl-draggable="true">Integer Sum</li>
+        <li x-lvl-draggable="true">Average</li>
+        <li x-lvl-draggable="true">Sum over Sum</li>
+        <li x-lvl-draggable="true">80% Upper Bound</li>
+        <li x-lvl-draggable="true">80% Lower Bound</li>
+        <li x-lvl-draggable="true">Sum as Fraction of Total</li>
+        <li x-lvl-draggable="true">Sum as Fraction of Rows</li>
+        <li x-lvl-draggable="true">Sum as Fraction of Columns</li>
+        <li x-lvl-draggable="true">Count as Fraction of Total</li>
+        <li x-lvl-draggable="true">Count as Fraction of Rows</li>
+        <li x-lvl-draggable="true">Count as Fraction of Columns</li>
+    </ul>
+    -->
+
+</div>
