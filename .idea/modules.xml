@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/DataRepublic.iml" filepath="$PROJECT_DIR$/.idea/DataRepublic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/widestage.iml" filepath="$PROJECT_DIR$/.idea/widestage.iml" />
     </modules>
   </component>
 </project>
