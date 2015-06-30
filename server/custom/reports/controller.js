@@ -277,15 +277,70 @@ function getMongoDBFilters(filters, collection)
     for (var i in filters) {
         //identificar el elemento de la colección
         for (var n in collection.elements) {
-            if (filters[i].elementID == collection.elements[n].elementID)
-            {
+            if (filters[i].elementID == collection.elements[n].elementID) {
+                var thisFilter = {};
                 var filterElementName  =  collection.elements[n].elementName;
-                if (filters[i].filterType == "equal")   //{ _id: 5 }
-                {
-                    if (filters[i].filterText1)
-                    {
-                        var thisFilter = {};
+
+                if (filters[i].filterText1) {
+                    if (filters[i].filterType == "equal") {
                         thisFilter[filterElementName] = filters[i].filterText1;
+                    }
+                    if (filters[i].filterType == "biggerThan") {
+                        thisFilter[filterElementName] = {$gt: filters[i].filterText1};
+                    }
+                    if (filters[i].filterType == "notGreaterThan") {
+                        thisFilter[filterElementName] = {$not: {$gt: filters[i].filterText1}};
+                    }
+                    if (filters[i].filterType == "biggerOrEqualThan") {
+                        thisFilter[filterElementName] = {$gte: filters[i].filterText1};
+                    }
+                    if (filters[i].filterType == "lessThan") {
+                        thisFilter[filterElementName] = {$lt: filters[i].filterText1};
+                    }
+                    if (filters[i].filterType == "lessOrEqualThan") {
+                        thisFilter[filterElementName] = {$lte: filters[i].filterText1};
+                    }
+                    if (filters[i].filterType == "between") {
+                        thisFilter[filterElementName] = {$gt: filters[i].filterText1, $lt: filters[i].filterText2};
+                    }
+                    if (filters[i].filterType == "notBetween") {
+                        thisFilter[filterElementName] = {$not: {$gt: filters[i].filterText1, $lt: filters[i].filterText2}};
+                    }
+                    if (filters[i].filterType == "contains") {
+                        thisFilter[filterElementName] = new RegExp(filters[i].filterText1, "i");
+                    }
+                    if (filters[i].filterType == "notContains") {
+                        thisFilter[filterElementName] = {$ne: new RegExp(filters[i].filterText1, "i")};
+                    }
+                    if (filters[i].filterType == "startWith") {
+                        thisFilter[filterElementName] = new RegExp('/^'+filters[i].filterText1+'/', "i");
+                    }
+                    if (filters[i].filterType == "notStartWith") {
+                        thisFilter[filterElementName] = {$ne: new RegExp('/^'+filters[i].filterText1+'/', "i")};
+                    }
+                    if (filters[i].filterType == "endsWith") {
+                        thisFilter[filterElementName] = new RegExp('/'+filters[i].filterText1+'$/', "i");
+                    }
+                    if (filters[i].filterType == "notEndsWith") {
+                        thisFilter[filterElementName] = {$ne: new RegExp('/'+filters[i].filterText1+'$/', "i")};
+                    }
+                    if (filters[i].filterType == "like") {
+                        thisFilter[filterElementName] = new RegExp('/'+filters[i].filterText1+'/', "i");
+                    }
+                    if (filters[i].filterType == "notLike") {
+                        thisFilter[filterElementName] = {$ne: new RegExp('/'+filters[i].filterText1+'/', "i")};
+                    }
+                    if (filters[i].filterType == "null") {
+                        thisFilter[filterElementName] = null;
+                    }
+                    if (filters[i].filterType == "notNull") {
+                        thisFilter[filterElementName] = {$not: null};
+                    }
+                    if (filters[i].filterType == "in") {
+                        thisFilter[filterElementName] = {$in: [filters[i].filterText1]};
+                    }
+                    if (filters[i].filterType == "notIn") {
+                        thisFilter[filterElementName] = {$nin: [filters[i].filterText1]};
                     }
                 }
 
@@ -340,8 +395,9 @@ function getMongoDBFilters(filters, collection)
 
                 //TODO:Query a Field that Contains an Array
                 //TODO:Subdocuments  http://docs.mongodb.org/manual/reference/method/db.collection.find/
-                if (thisFilter)
+                if (!isEmpty(thisFilter)) {
                     theFilters.push(thisFilter);
+                }
             }
         }
     }
@@ -350,3 +406,86 @@ function getMongoDBFilters(filters, collection)
     return theFilters;
 }
 
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return true;
+}
+
+exports.ReportsGetDistinctValues = function(req, res) {
+    var data = req.query;
+
+    data.group = {};
+    data.sort = {};
+
+    data.fields = [data.elementName];
+
+    data.group[data.elementName] = '$'+data.elementName;
+    data.sort[data.elementName] = 1;
+
+    execOperation('aggregate', data, function(result) {
+        serverResponse(req, res, 200, result);
+    });
+};
+
+function execOperation(operation, params, done) {
+    var DataSources = connection.model('DataSources');
+
+    DataSources.findOne({ _id: params.datasourceID}, function (err, dataSource) {
+        if (dataSource) {
+            for (var n in dataSource.params[0].schema) {
+                if (params.collectionID == dataSource.params[0].schema[n].collectionID) {
+                    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
+
+                    var dbURI = 'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
+
+                    MongoClient.connect(dbURI, function(err, db) {
+                        if(err) { return console.dir(err); }
+
+                        var collection = db.collection(dataSource.params[0].schema[n].collectionName);
+
+                        var fields = {};
+
+                        if (params.fields) {
+                            for (var i in params.fields) {
+                                fields[params.fields] = 1;
+                            }
+                        }
+
+                        if (operation == 'find') {
+                            collection.find({}, fields, {limit: 50}).toArray(function(err, items) {
+                                db.close();
+                                done({result: 1, items: items});
+                            });
+                        }
+                        if (operation == 'aggregate') {
+                            collection.aggregate([
+                                    { $group: { _id: params.group } },
+                                    { $sort: params.sort },
+                                    { $limit: 50 }
+                                ],
+                                function(err, result) {
+                                    var items = [];
+
+                                    for (var i in result) {
+                                        if (result[i]._id[params.elementName]) {
+                                            items.push(result[i]._id[params.elementName]);
+                                        }
+                                    }
+
+                                    db.close();
+                                    done({result: 1, items: items});
+                                }
+                            );
+                        }
+                    });
+                }
+            }
+        } else {
+            done({result: 0, msg: 'DataSource not found.'});
+        }
+    });
+}

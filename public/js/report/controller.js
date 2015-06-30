@@ -17,6 +17,7 @@
  */
 
 app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, reportNameModal ) {
+    $scope.searchModal = 'partials/report/searchModal.html';
 
     $scope.reportID = $routeParams.reportID;
     $scope.metrics = ['Count'];
@@ -72,6 +73,20 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     ];
 
+    $scope.filterDateOptions = [
+        {value:"equal",label:"equal"},
+        {value:"diferentThan",label:"diferent than"},
+        {value:"biggerThan",label:"bigger than"},
+        {value:"biggerOrEqualThan",label:"bigger or equal than"},
+        {value:"lessThan",label:"less than"},
+        {value:"lessOrEqualThan",label:"less or equal than"},
+        {value:"between",label:"between"},
+        {value:"notBetween",label:"not between"},
+        {value:"null",label:"is null"},
+        {value:"notNull",label:"is not null"},
+        {value:"in",label:"in"},
+        {value:"notIn",label:"not in"}
+    ];
 
 
     init();
@@ -119,7 +134,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                         dts.collection = $scope.data.items[i].params[0].schema[z];
                         dts.datasourceID = $scope.data.items[i]._id;
 
-
                         $scope.dataSources.push(dts);
                     };
                 }
@@ -136,6 +150,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
            return  $scope.filterStringOptions;
         if (elementType == 'number')
             return  $scope.filterNumberOptions;
+        if (elementType == 'object')
+            return $scope.filterDateOptions
     }
 
     $scope.setFilterType = function(filter, filterOption)
@@ -172,16 +188,60 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getDistinctValues = function(filter)
     {
-        var params = {};
+        $scope.selectedFilter = filter;
+        $scope.selectedFilter.searchValue = [];
 
-        connection.get('/api/reports/get-distinct-values', params, function(data) {
+        /*
+         collectionID: "914c9508-9e3c-4b4d-bf27-7091c8793d32"datasourceID: "558e47c4163a1102283360ba"elementID: "8924014e-1cba-42c8-98ea-2249b908eb9e"elementName: "employeeCode"elementType: "string"filterType: "equal"filterTypeLabel: "equal"objectLabel: "Código"
+        * */
+
+        $('#searchModal').modal('show');
+
+        connection.get('/api/reports/get-distinct-values', $scope.selectedFilter, function(data) {
+            console.log('data');
+            $scope.searchValues = data.items;
+            console.log($scope.searchValues);
+
             $scope.errorMsg = (data.result === 0) ? data.msg : false;
             $scope.page = data.page;
             $scope.pages = data.pages;
             $scope.data = data;
 
         });
-    }
+    };
+    $scope.selectSearchValue = function(searchValue) {
+        var searchValue = '';
+
+        console.log($scope.selectedFilter.searchValue);
+
+        if ($scope.selectedFilter.filterType == 'in' || $scope.selectedFilter.filterType == 'notIn') {
+            for (var i in $scope.selectedFilter.searchValue) {
+                searchValue += $scope.selectedFilter.searchValue[i];
+
+                if (i < $scope.selectedFilter.searchValue.length-1) {
+                    searchValue += ';';
+                }
+            }
+        }
+        else {
+            searchValue = $scope.selectedFilter.searchValue;
+        }
+
+        $scope.selectedFilter.filterText1 = searchValue;
+
+        $('#searchModal').modal('hide');
+    };
+    $scope.toggleSelection = function toggleSelection(value) {
+        var idx = $scope.selectedFilter.searchValue.indexOf(value);
+
+        if (idx > -1) {
+            $scope.selectedFilter.searchValue.splice(idx, 1);
+        }
+        else {
+            $scope.selectedFilter.searchValue.push(value);
+        }
+    };
+
 
     $scope.reportName = function () {
 
