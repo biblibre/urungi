@@ -1,3 +1,24 @@
+.fullscreen-modal {
+    padding: 0px !important;
+}
+.fullscreen-modal .modal-dialog {
+    margin: 0;
+    width: 100%;
+}
+.fullscreen-modal .modal-body {
+    overflow: overlay;
+}
+
+.new-collections .panel-heading, .new-collection-element {
+    background-color: beige;
+}
+accordion .panel-group {
+    margin-bottom: 5px !important;
+}
+accordion .panel-body {
+    padding: 0px !important;
+}
+
 .sidebar {
     padding: 20px;
     background-color:rgba(0,0,0,0.5);

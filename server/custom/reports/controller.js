@@ -337,10 +337,10 @@ function getMongoDBFilters(filters, collection)
                         thisFilter[filterElementName] = {$not: null};
                     }
                     if (filters[i].filterType == "in") {
-                        thisFilter[filterElementName] = {$in: [filters[i].filterText1]};
+                        thisFilter[filterElementName] = {$in: String(filters[i].filterText1).split(';')};
                     }
                     if (filters[i].filterType == "notIn") {
-                        thisFilter[filterElementName] = {$nin: [filters[i].filterText1]};
+                        thisFilter[filterElementName] = {$nin: String(filters[i].filterText1).split(';')};
                     }
                 }
 

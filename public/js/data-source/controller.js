@@ -43,24 +43,19 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     };
 
     $scope.save = function() {
-
-
-
-        var parameters = {};
-
-        parameters.connection = $scope._Parameters;
-        parameters.schema = $scope.schemas;
-
-        $scope._DataSource.params.push(parameters);
-
-        var data = $scope._DataSource;
-
-
-        console.log('saving data source '+data.reportName);
-
-
-
         if ($scope.mode == 'add') {
+            var parameters = {};
+
+            parameters.connection = $scope._Parameters;
+            parameters.schema = $scope.schemas;
+
+            $scope._DataSource.params.push(parameters);
+
+            var data = $scope._DataSource;
+
+
+            console.log('saving data source '+data.reportName);
+
             connection.post('/api/data-sources/create', data, function(data) {
                 $scope.items.push(data.item);
 
@@ -68,21 +63,47 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             });
         }
         else {
-            $scope.edit_id = data._id;
+            console.log($scope._dataSource);
 
-            connection.post('/api/data-sources/update/'+data._id, data, function(result) {
+            $scope._dataSource.params[0].schema = removeUnselected($scope._dataSource.params[0].schema);
+
+            for (var i in $scope.schemas) {
+                if ($scope.schemas[i].selected) {
+                    $scope._dataSource.params[0].schema.push($scope.schemas[i]);
+                }
+            }
+
+            for (var i in $scope._dataSource.params[0].schema) {
+                $scope._dataSource.params[0].schema[i].elements = removeUnselected($scope._dataSource.params[0].schema[i].elements);
+
+                delete($scope._dataSource.params[0].schema[i].selected);
+                delete($scope._dataSource.params[0].schema[i].isOpen);
+                delete($scope._dataSource.params[0].schema[i].isNew);
+
+                for (var j in $scope._dataSource.params[0].schema[i].elements) {
+                    delete($scope._dataSource.params[0].schema[i].elements[j].selected);
+                    delete($scope._dataSource.params[0].schema[i].elements[j].isNew);
+                }
+            }
+
+            connection.post('/api/data-sources/update/'+$scope._dataSource._id, $scope._dataSource, function(result) {
+                console.log(result);
                 if (result.result == 1) {
-                    for (i = 0; i < $scope.items.length; i++) {
-                        if ($scope.items[i]._id == data._id) {
-                            $scope.items[i] = data;
-                        }
-                    }
-                    $scope.cancel();
+                    window.history.back();
                 }
             });
         }
     };
 
+    function removeUnselected(items) {
+        for (var i in items) {
+            if (!items[i].selected) {
+                items.splice(i, 1);
+                return removeUnselected(items);
+            }
+        }
+        return items;
+    }
 
     $scope.fileSourceSelected  = function()
     {
@@ -277,7 +298,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
     }
 
-    $scope.edit = function() {
+    $scope.view = function() {
         if ($routeParams.dataSourceID)
         {
             connection.get('/api/data-sources/find-one', {id: $routeParams.dataSourceID}, function(data) {
@@ -285,6 +306,9 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 //console.log(JSON.stringify(data.item));
 
                 $scope._dataSource = data.item;
+                console.log($scope._dataSource);
+                //params: Array[1]0: connection: {database: "testIntalligent"host: "54.154.195.107"port: 27017}
+
                 /*
                 if ($scope._Badges.positionID) {
                     $scope.setSelectedPosition($scope._Badges.positionID);
@@ -297,5 +321,119 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         };
     };
 
+    $scope.elementTypes = [
+        {name: 'String', value: 'string'},
+        {name: 'Number', value: 'number'},
+        {name: 'Object', value: 'object'},
+        {name: 'Date', value: 'date'},
+        {name: 'Array', value: 'array'},
+        {name: 'Boolean', value: 'boolean'}
+    ];
+
+    $scope.edit = function() {
+        if ($routeParams.dataSourceID)
+        {
+            connection.get('/api/data-sources/find-one', {id: $routeParams.dataSourceID}, function(data) {
+                $scope._dataSource = data.item;
+                console.log($scope._dataSource);
+
+                //params: Array[1]0: connection: {database: "testIntalligent"host: "54.154.195.107"port: 27017}
+
+                for (var i in $scope._dataSource.params[0].schema) {
+                    $scope._dataSource.params[0].schema[i].selected = true;
+
+                    for (var j in $scope._dataSource.params[0].schema[i].elements) {
+                        $scope._dataSource.params[0].schema[i].elements[j].selected = true;
+                    }
+                }
+
+                connection.post('/api/data-sources/testMongoConnection', $scope._dataSource.params[0].connection, function(result) {
+                    console.log(result);
+
+                    var collections = [];
+
+                    for (var i in result.items) {
+                        collections.push(result.items[i].name);
+                    }
+
+                    var params = {
+                        host: $scope._dataSource.params[0].connection.host,
+                        port: $scope._dataSource.params[0].connection.port,
+                        database: $scope._dataSource.params[0].connection.database,
+                        collections: collections
+                    };
+
+                    $scope.loadingNewCollections = true;
+
+                    connection.post('/api/data-sources/getMongoSchemas', params, function(result) {
+                        console.log(result);
+
+                        $scope.schemas = [];
+
+                        for (var i in result.items) {
+                            var found = false;
+
+                            for (var j in $scope._dataSource.params[0].schema) {
+                                if (result.items[i].collectionName == $scope._dataSource.params[0].schema[j].collectionName) {
+                                    for (var e in result.items[i].elements) {
+                                        var elementFound = false;
+
+                                        for (var ej in $scope._dataSource.params[0].schema[j].elements) {
+                                            if (result.items[i].elements[e].elementName == $scope._dataSource.params[0].schema[j].elements[ej].elementName) {
+                                                elementFound = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (!elementFound) {
+                                            result.items[i].elements[e].isNew = true;
+                                            $scope._dataSource.params[0].schema[j].elements.push(result.items[i].elements[e]);
+                                        }
+                                    }
+
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found) {
+                                result.items[i].isNew = true;
+
+                                for (var e in result.items[i].elements) {
+                                    result.items[i].elements[e].isNew = true;
+                                }
+
+                                $scope.schemas.push(result.items[i]);
+                            }
+                        }
+
+                        $scope.loadingNewCollections = false;
+
+                        //elements: Array[17]0: ObjectelementID: "99181711-971a-453d-be90-8556c5844f8a"elementLabel: "_id"elementName: "_id"elementType: "object"visible: false__proto__: Object1: ObjectelementID: "9641ce17-5c04-412b-bfaf-d5cbfbf4f744"elementLabel: "content"elementName: "content"elementType: "string"visible: true
+
+
+                    });
+                });
+            });
+        }
+    };
+
+    $scope.onCollectionSelectionChange = function(collection) {
+        for (var i in collection.elements) {
+            collection.elements[i].selected = collection.selected;
+        }
+    };
+    $scope.onElementSelectionChange = function(collection) {
+        var selected = false;
+
+        for (var i in collection.elements) {
+            if (collection.elements[i].selected) {
+                selected = true;
+                break;
+            }
+        }
+
+        collection.selected = selected;
+    };
 
 });

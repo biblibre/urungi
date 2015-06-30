@@ -1,12 +1,12 @@
 <!-- Modal -->
-<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="margin: 0;width: 100%;">
+<div class="modal fade fullscreen-modal" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">Select Values</h4>
             </div>
-            <div class="modal-body">
+            <div id="searchModalBody" class="modal-body" ng-init="setHeight('searchModalBody', 'full', -118)">
                 <ul style="list-style: none;">
                     <li ng-repeat="value in searchValues">
                         <div ng-if="selectedFilter.filterType != 'in' && selectedFilter.filterType != 'notIn'">
