@@ -1,0 +1,28 @@
+<!-- Modal -->
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin: 0;width: 100%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Select Values</h4>
+            </div>
+            <div class="modal-body">
+                <ul style="list-style: none;">
+                    <li ng-repeat="value in searchValues">
+                        <div ng-if="selectedFilter.filterType != 'in' && selectedFilter.filterType != 'notIn'">
+                            <input type="radio" name="searchValue" value="{{value}}" ng-model="selectedFilter.searchValue">{{value}}
+                        </div>
+                        <div ng-if="selectedFilter.filterType == 'in' || selectedFilter.filterType == 'notIn'">
+                            <input type="checkbox" name="searchValue[]" value="{{value}}"
+                                   ng-checked="selectedFilter.searchValue.indexOf(value) > -1" ng-click="toggleSelection(value)">{{value}}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a ng-click="selectSearchValue(selectedFilter.searchValue)" class="btn btn-primary">Submit</a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
