@@ -1,0 +1,57 @@
+<div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
+    <a href="/#/data-sources" class="btn btn-default pull-left">Cancel</a>
+    <a href="/#/data-sources/edit/{{_dataSource._id}}/" class="btn btn-warning pull-right" style="margin-left: 5px;margin-right: 5px;">Edit</a>
+</div>
+
+<div class="container-fluid" ng-init="view()">
+
+    <div class="container-fluid" style="margin-bottom: 10px">
+        <h3 class="pull-left">Data Source: {{_dataSource.name}}</h3>
+    </div>
+
+    <div class="list-group" style="margin-bottom: 0px;">
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading">{{_dataSource.type}}</h4>
+            <p class="list-group-item-text ng-binding">
+                <label class="small" style="margin-right: 5px">host: </label>{{_dataSource.params[0].connection.host}}
+                <label class="small" style="margin-right: 5px">port: </label>{{_dataSource.params[0].connection.port}}
+                <label class="small" style="margin-right: 5px">database: </label>{{_dataSource.params[0].connection.database}}
+            </p>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
+        <h3 class="pull-left">Collections</h3>
+    </div>
+
+    <accordion close-others="false">
+        <accordion-group is-open="collection.isOpen" ng-repeat="collection in _dataSource.params[0].schema">
+            <accordion-heading>
+                {{collection.collectionLabel}} - {{collection.collectionName}}
+                <div class="pull-right">
+                    <small>Show Fields</small>
+                    <span class="caret" style="color:#0000FF;"></span>
+                </div>
+            </accordion-heading>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Label</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Visible</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="element in collection.elements">
+                    <td>{{element.elementLabel}}</td>
+                    <td>{{element.elementName}}</td>
+                    <td>{{element.elementType}}</td>
+                    <td>{{element.visible}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </accordion-group>
+    </accordion>
+
+</div>

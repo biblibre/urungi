@@ -242,6 +242,14 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         }
     };
 
+    $scope.setHeight = function(element, height, correction) {
+        var height = (height == 'full') ? $(document).height() : height;
+
+        if (correction) height = height+correction;
+console.log(height);
+        $('#'+element).css('height', height);
+    };
+
 
     $scope.reportName = function () {
 

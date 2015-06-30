@@ -22,6 +22,15 @@ exports.DataSourcesCreate = function(req,res){
 };
 //Pat - 07770966919
 
+exports.DataSourcesUpdate = function(req,res){
+    //req.query.trash = true;
+    //req.query.companyid = true;
+
+    controller.update(req, function(result){
+        serverResponse(req, res, 200, result);
+    });
+};
+
 exports.saveS3Configuration = function(req,res)
 {
 

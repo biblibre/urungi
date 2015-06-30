@@ -1,24 +1,103 @@
 <div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
-    <a href="/#/data-sources" class="btn btn-default pull-left">Cancel</a>
-    <a  class="btn btn-warning pull-right" style="margin-left: 5px;margin-right: 5px;">Edit</a>
-
-
+    <a href="/#/data-sources/{{_dataSource._id}}" class="btn btn-default pull-left">Cancel</a>
+    <a ng-click="save()" class="btn btn-warning pull-right" style="margin-left: 5px;margin-right: 5px;">Save</a>
 </div>
 
 <div class="container-fluid" ng-init="edit()">
 
-       <p>{{_dataSource.type}}</p>
-    <p>{{_dataSource.params[0].connection.host}}</p>
-    <p>{{_dataSource.params[0].connection.port}}</p>
-    <p>{{_dataSource.params[0].connection.database}}</p>
+    <div class="form-group">
+        <label class="control-label">Name</label>
+        <input class="form-control" ng-model="_dataSource.name" required>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Type</label>
+        <input class="form-control" ng-model="_dataSource.type" required>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Host</label>
+        <input class="form-control" ng-model="_dataSource.params[0].connection.host" required>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Port</label>
+        <input class="form-control" ng-model="_dataSource.params[0].connection.port" required>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Database</label>
+        <input class="form-control" ng-model="_dataSource.params[0].connection.database" required>
+    </div>
 
-    <ul ng-repeat="collection in _dataSource.params[0].schema">
-        <li>
-            {{collection.collectionName}}
-              <ul ng-repeat="element in collection.elements">
-                  <li>{{element.elementName}}</li>
-              </ul>
-        </li>
-    </ul>
+    <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
+        <h3 class="pull-left">Collections</h3>
+    </div>
+
+    <accordion close-others="false">
+        <accordion-group is-open="collection.isOpen" ng-repeat="collection in _dataSource.params[0].schema">
+            <accordion-heading>
+                <input type="checkbox" ng-model="collection.selected" onclick="event.stopPropagation()" ng-change="onCollectionSelectionChange(collection)">
+                {{collection.collectionLabel}} - {{collection.collectionName}}
+                <div class="pull-right">
+                    <small>Show Fields</small>
+                    <span class="caret" style="color:#0000FF;"></span>
+                </div>
+            </accordion-heading>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Selected</th>
+                    <th>Label</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Visible</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="element in collection.elements" ng-class="{'new-collection-element': element.isNew}">
+                    <td><input type="checkbox" ng-model="element.selected" ng-change="onElementSelectionChange(collection)"></td>
+                    <td><input class="form-control" ng-model="element.elementLabel" required></td>
+                    <td ng-bind="element.elementName"></td>
+                    <td><select class="form-control" ng-model="element.elementType" ng-options="obj.value as obj.name for obj in elementTypes"></select></td>
+                    <td><input type="checkbox" ng-model="element.visible"></td>
+                </tr>
+                </tbody>
+            </table>
+        </accordion-group>
+    </accordion>
+
+    <accordion class="new-collections" close-others="false">
+        <accordion-group is-open="collection.isOpen" ng-repeat="collection in schemas">
+            <accordion-heading>
+                <input type="checkbox" ng-model="collection.selected" onclick="event.stopPropagation()" ng-change="onCollectionSelectionChange(collection)">
+                {{collection.collectionLabel}} - {{collection.collectionName}}
+                <div class="pull-right">
+                    <small>Show Fields</small>
+                    <span class="caret" style="color:#0000FF;"></span>
+                </div>
+            </accordion-heading>
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Selected</th>
+                    <th>Label</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Visible</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="element in collection.elements" class="new-collection-element">
+                    <td><input type="checkbox" ng-model="element.selected" ng-change="onElementSelectionChange(collection)"></td>
+                    <td><input class="form-control" ng-model="element.elementLabel" required></td>
+                    <td ng-bind="element.elementName"></td>
+                    <td><input class="form-control" ng-model="element.elementType" required></td>
+                    <td><input type="checkbox" ng-model="element.visible"></td>
+                </tr>
+                </tbody>
+            </table>
+        </accordion-group>
+    </accordion>
+
+    <div ng-show="loadingNewCollections" style="text-align: center;padding: 20px;">
+        <span style="font-size: 20px;">Loading new collections...</span> <img src="images/loader.gif" style="width: 50px;">
+    </div>
 
 </div>

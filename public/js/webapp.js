@@ -70,6 +70,11 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/data-sources/:dataSourceID/', {
+            templateUrl: 'partials/data-source/view.html',
+            controller: 'dataSourceCtrl'
+        });
+
+        $routeProvider.when('/data-sources/edit/:dataSourceID/', {
             templateUrl: 'partials/data-source/edit.html',
             controller: 'dataSourceCtrl'
         });
