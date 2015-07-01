@@ -27,10 +27,42 @@
 
 
 
-    <div class="tree-cube" ng-repeat="dsource in dataSources">
+    <!--<div class="tree-cube" ng-repeat="dsource in dataSources">
         <div class="tree-cube-label">{{dsource.collection.collectionLabel}}</div>
         <div class="tree-cube-content">
-            <div class="tree-cube-object" ng-show="element.visible == true" ng-repeat="element in dsource.collection.elements" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{elementName: '{{element.elementName}}',objectLabel: '{{element.elementLabel}}', datasourceID:'{{dsource.datasourceID}}', collectionID:'{{dsource.collection.collectionID}}'  ,elementID: '{{element.elementID}}', elementType: '{{element.elementType}}', filterType:'equal',filterTypeLabel:'equal'}">{{element.elementLabel}}</div>
+            <div class="tree-cube-object" ng-show="element.visible == true"
+                 ng-repeat="element in dsource.collection.elements" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                 draggable-data="{elementName: '{{element.elementName}}',objectLabel: '{{element.elementLabel}}', datasourceID:'{{dsource.datasourceID}}', collectionID:'{{dsource.collection.collectionID}}'  ,elementID: '{{element.elementID}}', elementType: '{{element.elementType}}', filterType:'equal',filterTypeLabel:'equal'}">{{element.elementLabel}}</div>
+        </div>
+    </div>-->
+
+    <div class="list-group data-source-tree" ng-repeat="dsource in dataSources">
+        <a class="list-group-item active">
+            {{dsource.collection.collectionLabel}}
+        </a>
+        <div ng-if="element.visible" ng-repeat="element in dsource.collection.elements">
+            <a class="list-group-item data-source-element" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+               draggable-data="{
+               elementName: element.elementName,
+               objectLabel: element.elementLabel,
+               datasourceID:dsource.datasourceID,
+               collectionID:dsource.collection.collectionID,
+               elementID: element.elementID,
+               elementType: element.elementType,
+               filterType: 'equal',
+               filterTypeLabel:'equal'}">{{element.elementLabel}}</a>
+            <a ng-if="element.elementType == 'number' || element.elementType == 'date'"
+               class="list-group-item data-source-aggregation" ng-repeat="aggregation in fieldsAggregations[element.elementType]"
+               draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
+               elementName: element.elementName,
+               objectLabel: element.elementLabel+' ('+aggregation.name+')',
+               datasourceID:dsource.datasourceID,
+               collectionID:dsource.collection.collectionID,
+               elementID: element.elementID,
+               elementType: element.elementType,
+               filterType: 'equal',
+               filterTypeLabel:'equal',
+               aggregation: aggregation.value}" ng-bind="aggregation.name"></a>
         </div>
     </div>
 

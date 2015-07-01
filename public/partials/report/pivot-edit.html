@@ -31,12 +31,11 @@
         </div>
     </div>  -->
 
-    <div id="filter-zone" class="container-fluid filter-zone" drop="onDrop($data, $event, 'filter')" drop-effect="copy" drop-accept="'json/custom-object'" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+    <div id="filter-zone" class="container-fluid filter-zone no-padding" drop="onDrop($data, $event, 'filter')" drop-effect="copy" drop-accept="'json/custom-object'" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="filters.length > 0">Drop here your filters</div>
-        <ul class="ul-drop" ng-model="filters" ui-sortable="sortableOptions" >
+        <ul class="ul-drop no-padding" ng-model="filters" ui-sortable="sortableOptions">
             <li class="filter-box" ng-repeat="filter in filters" >
                 <div class="container-fluid">
-
 
                     <div class="dropdown" style="vertical-align: middle">
                         <span style="color:#72A230;font-weight: bold">{{filter.objectLabel}}</span>
@@ -50,8 +49,9 @@
                         </li>
 
                      </ul>
-                            <input type="text" ng-model="filter.filterText1" ng-show="showfilter1(filter)"/> <a class="btn btn-inverse btn-small" ng-click="getDistinctValues(filter)">search</a>
-                            <span ng-show="showfilter2(filter)"> and <input type="text" ng-model="filter.filterText2" />  </span>
+                    <input type="text" ng-model="filter.filterText1" ng-show="showfilter1(filter)"/> <a class="btn btn-inverse btn-small" ng-click="getDistinctValues(filter)">search</a>
+                    <span ng-show="showfilter2(filter)"> and <input type="text" ng-model="filter.filterText2" />  </span>
+                    <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFromArray(filters, filter);previewQuery();"></i></span>
                     </div>
 
                 </div>
@@ -61,14 +61,14 @@
         </ul>
     </div>
 
-    <div  class="container-fluid column-zone" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+    <div class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="columns.length > 0">Drop here your columns</div>
         <!--<div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo1</div>
         <div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo 2</div>
         drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept"
         -->
-        <ul class="ul-drop" ng-model="columns" ui-sortable="sortableOptions" >
-            <li class="column-box" ng-repeat="column in columns" >{{column.objectLabel}}</li>
+        <ul class="ul-drop no-padding" ng-model="columns" ui-sortable="sortableOptions">
+            <li class="column-box" ng-repeat="column in columns" >{{column.objectLabel}} <i class="fa fa-times hand-cursor" ng-click="removeFromArray(columns, column);previewQuery();"></i></li>
 
         </ul>
     </div>

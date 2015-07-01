@@ -40,7 +40,7 @@
                     <span class="caret" style="color:#0000FF;"></span>
                 </div>
             </accordion-heading>
-            <table class="table table-condensed">
+            <table class="table table-condensed" style="margin-bottom: 0px;">
                 <thead>
                 <tr>
                     <th>Selected</th>
@@ -54,12 +54,17 @@
                 <tr ng-repeat="element in collection.elements" ng-class="{'new-collection-element': element.isNew}">
                     <td><input type="checkbox" ng-model="element.selected" ng-change="onElementSelectionChange(collection)"></td>
                     <td><input class="form-control" ng-model="element.elementLabel" required></td>
-                    <td ng-bind="element.elementName"></td>
+                    <td><input class="form-control" ng-model="element.elementName" required></td>
                     <td><select class="form-control" ng-model="element.elementType" ng-options="obj.value as obj.name for obj in elementTypes"></select></td>
                     <td><input type="checkbox" ng-model="element.visible"></td>
                 </tr>
                 </tbody>
             </table>
+            <div class="row">
+                <div class="col-md-12" style="text-align: center; padding: 5px; font-size: 20px; font-weight: bold;">
+                    <span class="hand-cursor" ng-click="addNewElement(collection)">+</span>
+                </div>
+            </div>
         </accordion-group>
     </accordion>
 
@@ -73,7 +78,7 @@
                     <span class="caret" style="color:#0000FF;"></span>
                 </div>
             </accordion-heading>
-            <table class="table table-condensed">
+            <table class="table table-condensed" style="margin-bottom: 0px;">
                 <thead>
                 <tr>
                     <th>Selected</th>
@@ -87,12 +92,17 @@
                 <tr ng-repeat="element in collection.elements" class="new-collection-element">
                     <td><input type="checkbox" ng-model="element.selected" ng-change="onElementSelectionChange(collection)"></td>
                     <td><input class="form-control" ng-model="element.elementLabel" required></td>
-                    <td ng-bind="element.elementName"></td>
-                    <td><input class="form-control" ng-model="element.elementType" required></td>
+                    <td><input class="form-control" ng-model="element.elementName" required></td>
+                    <td><select class="form-control" ng-model="element.elementType" ng-options="obj.value as obj.name for obj in elementTypes"></select></td>
                     <td><input type="checkbox" ng-model="element.visible"></td>
                 </tr>
                 </tbody>
             </table>
+            <div class="row">
+                <div class="col-md-12" style="text-align: center; padding: 5px; font-size: 20px; font-weight: bold;">
+                    <span class="hand-cursor" ng-click="addNewElement(collection)">+</span>
+                </div>
+            </div>
         </accordion-group>
     </accordion>
 
