@@ -112,8 +112,12 @@ app.directive('sizeelement', function ($window) {
         }}
 })
 
+app.run(['$rootScope', function($rootScope) {
+    console.log('widestage app running');
 
+    $rootScope.removeFromArray = function(array, item) {
+        var index = array.indexOf(item);
 
-function appRun($http, $rootScope, $sce) {
-       console.log('widestage app running');
-}
+        if (index > -1) array.splice(index, 1);
+    };
+}]);

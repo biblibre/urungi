@@ -74,6 +74,12 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             }
 
             for (var i in $scope._dataSource.params[0].schema) {
+                for (var j in $scope._dataSource.params[0].schema[i].elements) {
+                    if ($scope._dataSource.params[0].schema[i].elements[j].elementLabel == '' || $scope._dataSource.params[0].schema[i].elements[j].elementName == '') {
+                        $scope._dataSource.params[0].schema[i].elements[j].selected = false;
+                    }
+                }
+
                 $scope._dataSource.params[0].schema[i].elements = removeUnselected($scope._dataSource.params[0].schema[i].elements);
 
                 delete($scope._dataSource.params[0].schema[i].selected);
@@ -434,6 +440,18 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         }
 
         collection.selected = selected;
+    };
+    $scope.addNewElement = function(collection) {
+        var element = {
+            selected: true,
+            elementLabel: "",
+            visible: true,
+            elementType: "string",
+            elementName: "",
+            elementID: new ObjectId().toString()
+        };
+        console.log(element);
+        collection.elements.push(element);
     };
 
 });

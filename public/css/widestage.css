@@ -19,6 +19,24 @@ accordion .panel-body {
     padding: 0px !important;
 }
 
+.hand-cursor, .handCursor {
+    cursor: hand;
+    cursor: pointer;
+}
+.no-padding {
+    padding: 0px !important;
+}
+
+.data-source-tree .data-source-element {
+    padding: 5px 0px 5px 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.data-source-tree .data-source-aggregation {
+    padding: 4px 0px 4px 30px;
+    font-size: 10px;
+}
+
 .sidebar {
     padding: 20px;
     background-color:rgba(0,0,0,0.5);
@@ -833,7 +851,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     -webkit-user-select: none;
     user-select: none;
     cursor: move;
-    border:1px solid black;
+    /*border:1px solid black;*/
 }
 /**************/
 
