@@ -34,31 +34,109 @@
     <div id="filter-zone" class="container-fluid filter-zone no-padding" drop="onDrop($data, $event, 'filter')" drop-effect="copy" drop-accept="'json/custom-object'" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="filters.length > 0">Drop here your filters</div>
         <ul class="ul-drop no-padding" ng-model="filters" ui-sortable="sortableOptions">
-            <li class="filter-box" ng-repeat="filter in filters" >
+            <li class="filter-box" ng-repeat="filter in filters">
+
+                <div ng-if="!filter.group" drop="onDropOnFilter($data, $event, filter)" drop-effect="copy" drop-accept="'json/custom-object'">
+                    <div class="container-fluid">
+
+                        <div class="dropdown" style="vertical-align: middle">
+                            <span style="color:#72A230;font-weight: bold">{{filter.objectLabel}}</span>
+                            <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span style="color:#0000FF;">{{filter.filterTypeLabel}}</span>
+                                <span class="caret" style="color:#0000FF;"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
+                                <li ng-repeat="option in getElementFilterOptions(filter.elementType)"><a ng-click="setFilterType(filter,option)">{{option.label}}</a>
+
+                                </li>
+
+                            </ul>
+                            <input type="text" ng-model="filter.filterText1" ng-show="showfilter1(filter)"/> <a class="btn btn-inverse btn-small" ng-click="getDistinctValues(filter)">search</a>
+                            <span ng-show="showfilter2(filter)"> and <input type="text" ng-model="filter.filterText2" />  </span>
+                            <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFromArray(filters, filter);processStructure();"></i></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div ng-if="filter.group" style="padding-left: 50px;">
+                    <p style="position: absolute;left: 20px;color: #72A230;font-weight: bold;top: 15px;" ng-bind="filter.groupLabel">AND</p>
+
+                    <div class="container-fluid" ng-repeat="groupFilter in filter.filters">
+
+                        <div class="dropdown" style="vertical-align: middle">
+                            <span style="color:#72A230;font-weight: bold">{{groupFilter.objectLabel}}</span>
+                            <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span style="color:#0000FF;">{{groupFilter.filterTypeLabel}}</span>
+                                <span class="caret" style="color:#0000FF;"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
+                                <li ng-repeat="option in getElementFilterOptions(groupFilter.elementType)"><a ng-click="setFilterType(groupFilter,option)">{{option.label}}</a>
+
+                                </li>
+
+                            </ul>
+                            <input type="text" ng-model="groupFilter.filterText1" ng-show="showfilter1(groupFilter)"/> <a class="btn btn-inverse btn-small" ng-click="getDistinctValues(groupFilter)">search</a>
+                            <span ng-show="showfilter2(groupFilter)"> and <input type="text" ng-model="groupFilter.filterText2" />  </span>
+                            <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFromArray(filter.filters, groupFilter);processStructure();"></i></span>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </li>
+
+            <!--<li class="filter-box" style="padding-left: 50px;">
+
+                <p style="position: absolute;left: 20px;color: #72A230;font-weight: bold;top: 15px;">AND</p>
+
                 <div class="container-fluid">
 
                     <div class="dropdown" style="vertical-align: middle">
-                        <span style="color:#72A230;font-weight: bold">{{filter.objectLabel}}</span>
-                    <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span style="color:#0000FF;">{{filter.filterTypeLabel}}</span>
-                        <span class="caret" style="color:#0000FF;"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
-                        <li ng-repeat="option in getElementFilterOptions(filter.elementType)"><a ng-click="setFilterType(filter,option)">{{option.label}}</a>
+                        <span style="color:#72A230;font-weight: bold">objectLabel</span>
+                        <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span style="color:#0000FF;">filterTypeLabel</span>
+                            <span class="caret" style="color:#0000FF;"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
+                            <li ng-repeat="option in getElementFilterOptions(filter.elementType)"><a ng-click="setFilterType(filter,option)">{{option.label}}</a>
 
-                        </li>
+                            </li>
 
-                     </ul>
-                    <input type="text" ng-model="filter.filterText1" ng-show="showfilter1(filter)"/> <a class="btn btn-inverse btn-small" ng-click="getDistinctValues(filter)">search</a>
-                    <span ng-show="showfilter2(filter)"> and <input type="text" ng-model="filter.filterText2" />  </span>
-                    <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFromArray(filters, filter);previewQuery();"></i></span>
+                        </ul>
+                        <input type="text" ng-model="filter.filterText1" ng-show="showfilter1(filter)"/> <a class="btn btn-inverse btn-small" ng-click="getDistinctValues(filter)">search</a>
+                        <span ng-show="showfilter2(filter)"> and <input type="text" ng-model="filter.filterText2" />  </span>
+                        <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFromArray(filters, filter);processStructure();"></i></span>
+                    </div>
+
+                </div>
+                <div class="container-fluid">
+
+                    <div class="dropdown" style="vertical-align: middle">
+                        <span style="color:#72A230;font-weight: bold">objectLabel</span>
+                        <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span style="color:#0000FF;">filterTypeLabel</span>
+                            <span class="caret" style="color:#0000FF;"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
+                            <li ng-repeat="option in getElementFilterOptions(filter.elementType)"><a ng-click="setFilterType(filter,option)">{{option.label}}</a>
+
+                            </li>
+
+                        </ul>
+                        <input type="text" ng-model="filter.filterText1" ng-show="showfilter1(filter)"/> <a class="btn btn-inverse btn-small" ng-click="getDistinctValues(filter)">search</a>
+                        <span ng-show="showfilter2(filter)"> and <input type="text" ng-model="filter.filterText2" />  </span>
+                        <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFromArray(filters, filter);processStructure();"></i></span>
                     </div>
 
                 </div>
 
-            </li>
+
+            </li>-->
 
         </ul>
+        <div ng-show="filters.length > 0" style="text-align: center;font-size: 15px;font-weight: bold;padding-bottom: 10px;">Drop new filters here</div>
     </div>
 
     <div class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
@@ -68,9 +146,9 @@
         drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept"
         -->
         <ul class="ul-drop no-padding" ng-model="columns" ui-sortable="sortableOptions">
-            <li class="column-box" ng-repeat="column in columns" >{{column.objectLabel}} <i class="fa fa-times hand-cursor" ng-click="removeFromArray(columns, column);previewQuery();"></i></li>
-
+            <li class="column-box" ng-repeat="column in columns" >{{column.objectLabel}} <i class="fa fa-times hand-cursor" ng-click="removeFromArray(columns, column);processStructure();"></i></li>
         </ul>
+        <span ng-show="columns.length > 0" class="pull-right" style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ng-click="processStructure();"></i></span>
     </div>
 </div>
 
@@ -83,8 +161,14 @@
             </thead>
             <tbody>
             <tr ng-repeat="row in previewData" >
-                <td ng-repeat="column in columns" >{{row[column.elementName]}}</td>
+                <td ng-repeat="column in columns" >
+                    <span ng-if="!column.aggregation">{{row[column.elementName]}}</span>
+                    <span ng-if="column.aggregation">{{row[column.elementName+column.aggregation]}}</span>
+                </td>
             </tr>
+            <!--<tr style="font-weight: bold;">
+                <td ng-repeat="aggregation in aggregations track by $index">{{aggregation}}</td>
+            </tr>-->
             </tbody>
         </table>
     </div>
