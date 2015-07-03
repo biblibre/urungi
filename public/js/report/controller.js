@@ -96,12 +96,12 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             {name: 'Max', value: 'max'}
         ],
         'date': [
-            {name: 'Year', value: 'sum'},
-            {name: 'Month', value: 'avg'},
-            {name: 'Date', value: 'min'},
-            {name: 'Semester', value: 'semester'},
+            {name: 'Year', value: 'year'},
+            {name: 'Month', value: 'month'},
+            {name: 'Date', value: 'date'}
+            /*{name: 'Semester', value: 'semester'},
             {name: 'Quarter', value: 'quarter'},
-            {name: 'Trimester', value: 'trimester'}
+            {name: 'Trimester', value: 'trimester'}*/
         ]
     };
 
@@ -986,8 +986,14 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         }
     };
 
+    var lastDrop = null;
     // Drop handler.
     $scope.onDrop = function (data, event, type) {
+        if (lastDrop && lastDrop == 'onFilter') {
+            lastDrop = null;
+            return;
+        }
+        console.log('en box');
         // Get custom object data.
         var customObjectData = data['json/custom-object']; // {foo: 'bar'}
 
@@ -1009,9 +1015,28 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         }
 
-        processStructure();
+        $scope.processStructure();
         //angular.element(el).append(theTemplate);
         // ...
+    };
+
+    $scope.onDropOnFilter = function (data, event, filter) {
+        lastDrop = 'onFilter';
+
+        var droppedFilter = data['json/custom-object'];
+        console.log('en filtro');
+        console.log(droppedFilter);
+        console.log(filter);
+
+
+        $scope.filters[$scope.filters.indexOf(filter)] = {
+            group: true,
+            groupType: 'and',
+            groupLabel: 'AND',
+            filters: [filter, droppedFilter]
+        };
+
+        console.log($scope.filters);
     };
 
     // Drag over handler.
@@ -1032,10 +1057,11 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         //params.filters = $scope.filters;
 
         connection.post('/api/reports/preview-query', params, function(data) {
-            $scope.errorMsg = (data.result === 0) ? data.msg : false;
-            $scope.page = data.page;
-            $scope.pages = data.pages;
-            $scope.data = data;
+            console.log(data);
+            //$scope.errorMsg = (data.result === 0) ? data.msg : false;
+            //$scope.page = data.page;
+            //$scope.pages = data.pages;
+            //$scope.data = data;
 
             //console.log('the data: '+JSON.stringify(data));
 
@@ -1043,6 +1069,63 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
             $scope.previewData = data;
             $scope.preview = true;
+
+            var aggregations = [];
+
+            for (var i in $scope.columns) {
+                if ($scope.columns[i].aggregation) {
+                    if ($scope.columns[i].elementType == 'number') {
+                        for (var j in data) {
+                            var value = data[j][$scope.columns[i].elementName];
+
+                            if (j == 0) {
+                                var aggregation = value;
+                            }
+                            else {
+                                switch($scope.columns[i].aggregation) {
+                                    case 'sum': case 'avg': aggregation += value;
+                                    break;
+                                    case 'min': if (value < aggregation) aggregation = value;
+                                        break;
+                                    case 'max': if (value > aggregation) aggregation = value;
+                                }
+                            }
+                        }
+
+                        if ($scope.columns[i].aggregation == 'avg') aggregation = aggregation/data.length;
+
+                        if (isNaN(aggregation)) aggregations.push('');
+                        else aggregations.push(Math.round(aggregation*100)/100); //two decimals
+                    }
+                    if ($scope.columns[i].elementType == 'date') {
+                        for (var j in data) {
+                            if (data[j][$scope.columns[i].elementName]) {
+                                var date = new Date(data[j][$scope.columns[i].elementName]);
+
+                                switch($scope.columns[i].aggregation) {
+                                    case 'year': data[j][$scope.columns[i].elementName] = date.getFullYear();
+                                        break;
+                                    case 'month': data[j][$scope.columns[i].elementName] = date.getMonth()+1;
+                                        break;
+                                    case 'date': data[j][$scope.columns[i].elementName] = date.getDate();
+                                        /*break;
+                                    case 'semester': if (value > aggregation) aggregation = value;
+                                        break;
+                                    case 'quarter':
+                                        break;
+                                    case 'trimester':*/
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    aggregations.push('');
+                }
+            }
+
+            $scope.aggregations = aggregations;
+
             /*
             for (var i in $scope.data.items) {
                 console.log($scope.data.items[i]);
@@ -1055,7 +1138,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     }
 
 
-    function processStructure()
+    $scope.processStructure = function()
     {
 
         $scope.query = {};
