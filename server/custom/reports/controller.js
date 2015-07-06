@@ -277,7 +277,7 @@ function processMongoDBCollections(collections, dataSource, done, result, index)
 
     var params = {skip: 0, limit: 10};
 
-    var filters = getCollectionFilters(collection);
+    var filters = getCollectionFilters(collection, collection.filters);
 
     console.log('the Filters');
     debug(filters);
@@ -301,9 +301,7 @@ function processMongoDBCollections(collections, dataSource, done, result, index)
         if(err) { return console.dir(err); }
 
         var col = db.collection(collection.schema.collectionName);
-        var match = (filters.length > 0) ? {$and: filters} : {};
-
-
+        var match = filters; //(filters.length > 0) ? {$and: filters} : {};
 
         var group = {}, fields = {};
 
@@ -320,6 +318,12 @@ function processMongoDBCollections(collections, dataSource, done, result, index)
                             case 'min': group[collection.schema.elements[e].elementName+'min'] = {$min: "$"+collection.schema.elements[e].elementName};
                                 break;
                             case 'max': group[collection.schema.elements[e].elementName+'max'] = {$max: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'year': group[collection.schema.elements[e].elementName+'year'] = {$year: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'month': group[collection.schema.elements[e].elementName+'month'] = {$month: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'day': group[collection.schema.elements[e].elementName+'day'] = {$dayOfMonth: "$"+collection.schema.elements[e].elementName};
                         }
                     }
                     else {
@@ -347,8 +351,6 @@ function processMongoDBCollections(collections, dataSource, done, result, index)
         col.aggregate(params, function(err, docs) {
             console.log(docs);
 
-
-
             for (var i in docs) {
                 var item = {};
 
@@ -373,13 +375,23 @@ debug(result);
     });
 }
 
-function getCollectionFilters(collection) {
+function getCollectionFilters(collection, filters) {
     var theFilters = [];
+console.log('getCollectionFilters');
+    debug(filters);
+    //var match = (filters.length > 0) ? {$and: filters} : {};
 
-    for (var i in collection.filters) {
-        var filter = collection.filters[i];
+    for (var i in filters) {
+        var filter = filters[i];
 
-        if (filter.filterText1 || filter.filterType == 'notNull' || filter.filterType == 'null' ) {
+        if (filter.group) {
+            console.log('es grupo');
+            theFilters.push(getCollectionFilters(collection, filter.filters));
+        }
+        else if (filter.condition) {
+
+        }
+        else if (filter.filterText1 || filter.filterType == 'notNull' || filter.filterType == 'null' ) {
             for (var e in collection.schema.elements) {
                 if (filter.elementID == collection.schema.elements[e].elementID) {
                     var thisFilter = {}, filterValue = filter.filterText1;
@@ -458,7 +470,8 @@ function getCollectionFilters(collection) {
         }
     }
 
-    return theFilters;
+    //return theFilters;
+    return {$and: theFilters};
 }
 
 ////////////////////////////

@@ -98,7 +98,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         'date': [
             {name: 'Year', value: 'year'},
             {name: 'Month', value: 'month'},
-            {name: 'Date', value: 'date'}
+            {name: 'Day', value: 'day'}
             /*{name: 'Semester', value: 'semester'},
             {name: 'Quarter', value: 'quarter'},
             {name: 'Trimester', value: 'trimester'}*/
@@ -988,7 +988,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     var lastDrop = null;
     // Drop handler.
-    $scope.onDrop = function (data, event, type) {
+    $scope.onDrop = function (data, event, type, group) {
+        event.stopPropagation();
         if (lastDrop && lastDrop == 'onFilter') {
             lastDrop = null;
             return;
@@ -1009,10 +1010,18 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         }
         if (type == 'filter') {
             var el = document.getElementById('filter-zone');
-            var theTemplate =  $compile('<div class="filter-box">'+customObjectData.objectLabel+'</div>')($scope);;
+            //var theTemplate =  $compile('<div class="filter-box">'+customObjectData.objectLabel+'</div>')($scope);;
             $scope.filters.push(customObjectData);
             console.log('the filters '+JSON.stringify($scope.filters));
 
+            $scope.filtersUpdated();
+        }
+        if (type == 'group') {
+            group.filters.push(customObjectData);
+            //$scope.filters.push(customObjectData);
+            console.log('the filters '+JSON.stringify($scope.filters));
+
+            $scope.filtersUpdated();
         }
 
         $scope.processStructure();
@@ -1028,15 +1037,131 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         console.log(droppedFilter);
         console.log(filter);
 
+        filter.filters = [jQuery.extend({}, filter), droppedFilter];
+        filter.group = true;
 
-        $scope.filters[$scope.filters.indexOf(filter)] = {
+        $scope.updateConditions(filter.filters);
+
+        delete(filter.collectionID);
+        delete(filter.datasourceID);
+        delete(filter.elementID);
+        delete(filter.elementName);
+        delete(filter.elementType);
+        delete(filter.filterType);
+        delete(filter.filterTypeLabel);
+        delete(filter.objectLabel);
+        delete(filter.filterText1);
+        delete(filter.filterText2);
+
+        /*filter = {
+            group: true,
+            filters: [jQuery.extend({}, filter), droppedFilter]
+        };*/
+
+       /* $scope.filters[$scope.filters.indexOf(filter)] = {
             group: true,
             groupType: 'and',
             groupLabel: 'AND',
             filters: [filter, droppedFilter]
-        };
+        };*/
 
         console.log($scope.filters);
+        event.stopPropagation();
+        return;
+    };
+
+    $scope.filters = [
+        {
+            group: true,
+            filters: []
+        }
+    ];
+
+    $scope.conditionTypes = [
+        {conditionType: 'and', conditionLabel: 'AND'},
+        {conditionType: 'or', conditionLabel: 'OR'},
+        {conditionType: 'andNot', conditionLabel: 'AND NOT'},
+        {conditionType: 'orNot', conditionLabel: 'OR NOT'}
+    ];
+
+    $scope.updateCondition = function(conditionFrom, conditionTo) {
+        conditionFrom.conditionType = conditionTo.conditionType;
+        conditionFrom.conditionLabel = conditionTo.conditionLabel;
+    };
+
+    $scope.filtersUpdated = function(filters, mainFilters) {
+        console.log(filters);
+        var filters = (filters) ? filters : $scope.filters;
+        var mainFilters = (typeof mainFilters === 'undefined') ? true : mainFilters;
+        console.log('filtersUpdated');
+        console.log(filters);
+
+        $scope.updateConditions(filters);
+        $scope.updateGroups(filters, mainFilters);
+
+        for (var i in filters) {
+            if (filters[i].group) {
+                $scope.filtersUpdated(filters[i].filters, false);
+            }
+        }
+
+        console.log('filtersUpdated FINISH');
+        console.log(filters);
+    };
+
+    $scope.updateGroups = function(filters, mainFilters) {
+        var filters = (filters) ? filters : $scope.filters;
+
+        for (var i in filters) {
+            if (filters[i].group && filters[i].filters.length == 0 && !mainFilters) {
+                filters.splice(i, 1);
+                $scope.updateConditions(filters);
+                return $scope.updateGroups(filters, mainFilters);
+            }
+        }
+
+        console.log('updateGroups FINISH');
+        console.log(filters);
+    };
+
+    $scope.updateConditions = function(filters) {
+        var filters = (filters) ? filters : $scope.filters;
+
+        for (var i in filters) {
+            if (i%2) { //must be condition
+                if (!filters[i].condition) {
+                    filters.splice(i, 0, {
+                        condition: true,
+                        conditionType: 'and',
+                        conditionLabel: 'AND'
+                    });
+                    return $scope.updateConditions(filters);
+                }
+                else { //is a condition, next is a filter?
+                    console.log(filters[i]);
+                    console.log(filters[Number(i)+1]);
+                    if (filters[Number(i)+1]) {
+                        if (filters[Number(i)+1].condition) { //if next is a condition
+                            filters.splice(i, 1);
+                            return $scope.updateConditions(filters);
+                        }
+                    }
+                    else {
+                        filters.splice(i, 1);
+                        return $scope.updateConditions(filters);
+                    }
+                }
+            }
+            else { //must not be condition
+                if (filters[i].condition) {
+                    filters.splice(i, 1);
+                    return $scope.updateConditions(filters);
+                }
+            }
+        }
+
+        console.log('updateConditions FINISH');
+        console.log(filters);
     };
 
     // Drag over handler.
@@ -1143,7 +1268,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         $scope.query = {};
         $scope.query.datasources = [];
-
+        
+        var filters = $scope.filters[0].filters;
 
         var datasourcesList = [];
 
@@ -1152,10 +1278,10 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 datasourcesList.push($scope.columns[i].datasourceID);
         }
 
-        for (var i in $scope.filters) {
-            if (datasourcesList.indexOf($scope.filters[i].datasourceID) == -1)
-                datasourcesList.push($scope.filters[i].datasourceID);
-        }
+        /*for (var i in filters) {
+            if (datasourcesList.indexOf(filters[i].datasourceID) == -1)
+                datasourcesList.push(filters[i].datasourceID);
+        }*/
 
         for (var i in datasourcesList) {
 
@@ -1173,13 +1299,13 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 }
             }
 
-            for (var z in $scope.filters) {
-                if ($scope.filters[z].datasourceID == datasourcesList[i])
+            /*for (var z in filters) {
+                if (filters[z].datasourceID == datasourcesList[i])
                 {
-                    if (dtsCollections.indexOf($scope.filters[z].collectionID) == -1)
-                        dtsCollections.push($scope.filters[z].collectionID);
+                    if (dtsCollections.indexOf(filters[z].collectionID) == -1)
+                        dtsCollections.push(filters[z].collectionID);
                 }
-            }
+            }*/
 
             for (var n in dtsCollections) {
 
@@ -1195,16 +1321,15 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     }
                 }
 
-
-
-
-                collection.filters = [];
+                /*collection.filters = [];
                 for (var n1 in $scope.filters) {
                     if ($scope.filters[n1].collectionID == dtsCollections[n])
                     {
                         collection.filters.push($scope.filters[n1]);
                     }
                 }
+                collection.filters = [];*/
+                collection.filters = filters;
 
                 dtsObject.collections.push(collection);
 
@@ -1212,7 +1337,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.query.datasources.push(dtsObject);
         }
       //console.log(JSON.stringify($scope.query));
-
+console.log($scope.query);
         if ($scope.columns.length > 0)
             $scope.previewQuery();
     }
