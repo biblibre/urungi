@@ -34,7 +34,7 @@
     <script type="text/ng-template" id="filtersGroup.html">
         <div class="container-fluid filter-zone no-padding" drop="onDrop($data, $event, 'group', group)" drop-effect="copy" drop-accept="'json/custom-object'" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
             <div class="filter-zone-label pull-right" ng-hide="filters.length > 0">Drop here your filters</div>
-            <ul class="ul-drop no-padding" ng-model="filters" ui-sortable="sortableOptions">
+            <ul class="ul-drop no-padding" ng-model="group.filters" ui-sortable="sortableOptions">
 
                 <div ng-repeat="filter in group.filters">
 

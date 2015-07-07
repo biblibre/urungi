@@ -166,7 +166,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
            return  $scope.filterStringOptions;
         if (elementType == 'number')
             return  $scope.filterNumberOptions;
-        if (elementType == 'object')
+        if (elementType == 'date')
             return $scope.filterDateOptions
     }
 
@@ -885,8 +885,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         return -1;
     }
 
-
-
     $scope.saveData = function(data) {
         data = {
             rows: data.rows,
@@ -904,8 +902,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     var rendered = false;
     $scope.refreshPivot = function()
     {
-
-
         var derivers = $.pivotUtilities.derivers;
 
         var pivotUI = $("#pivotOutput").pivotUI($scope.data , {
@@ -972,9 +968,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             }
         );
 
-
-
-
         //$scope.$apply();
     }
 
@@ -983,6 +976,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             // this callback has the changed model
             //$scope.refreshPivot();
             //console.log('despues de ordenar');
+            $scope.filtersUpdated();
         }
     };
 

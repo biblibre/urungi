@@ -34,8 +34,7 @@ exports.DataSourcesUpdate = function(req,res){
 exports.saveS3Configuration = function(req,res)
 {
 
-}
-
+};
 
 exports.getS3Files = function (req,res){
     var data = req.body;
