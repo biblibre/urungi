@@ -8,5 +8,4 @@ module.exports = function (app) {
     app.post('/api/reports/update/:id', restrict, Reports.ReportsUpdate);
     app.post('/api/reports/delete/:id', restrict, Reports.ReportsDelete);
     app.post('/api/reports/preview-query',restrict, Reports.PreviewQuery);
-    app.get('/api/reports/get-distinct-values', restrict, Reports.ReportsGetDistinctValues);
 };

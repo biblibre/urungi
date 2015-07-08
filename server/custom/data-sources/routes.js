@@ -10,4 +10,5 @@ module.exports = function (app) {
     app.post('/api/data-sources/testS3Connection', restrict, DataSources.getS3Files);
     app.post('/api/data-sources/testMongoConnection', restrict, DataSources.testMongoConnection);
     app.post('/api/data-sources/getMongoSchemas', restrict, DataSources.getMongoSchemas);
+    app.get('/api/data-sources/get-element-distinct-values', restrict, DataSources.getElementDistinctValues);
 };

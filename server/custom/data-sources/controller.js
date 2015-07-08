@@ -146,85 +146,39 @@ s3.listObjects(params, function(err, data) {
 
 }
 
+exports.testMongoConnection = function(req,res) {
+    var mongodb = require('../../core/db/mongodb.js');
 
-exports.testMongoConnection = function(req,res)
-{
-    var data = req.body;
-    var mongoose = require('mongoose');
-
-    var dbURI =  'mongodb://'+data.host+':'+data.port+'/'+data.database;
-    conn = mongoose.createConnection(dbURI,{ server: { poolSize: 5 } });
-
-    conn.on('connected', function () {
-        console.log('Mongoose connection open to ' + dbURI);
-        conn.db.collectionNames(function (err, names) {
-            //console.log(names); // [{ name: 'dbname.myCollection' }]
-            serverResponse(req, res, 200, {result: 1, items: names});
-            conn.close();
-        });
+    mongodb.testConnection(req.body, function(result) {
+        serverResponse(req, res, 200, result);
     });
-    /*
-     mongoose.connection.on('open', function (ref) {
-     console.log('Connected to mongo server.');
-     //trying to get collection names
-     mongoose.connection.db.collectionNames(function (err, names) {
-     console.log(names); // [{ name: 'dbname.myCollection' }]
-     module.exports.Collection = names;
-     });
-     })
-     */
-    conn.on('error',function (err) {
-        console.log('Mongoose default connection error: ' + err);
-        serverResponse(req, res, 200, {result: 0, msg: 'Connection Error'});
+};
+
+exports.getMongoSchemas = function(req,res) {
+    var mongodb = require('../../core/db/mongodb.js');
+
+    mongodb.getSchemas(req.body, function(result) {
+        serverResponse(req, res, 200, result);
     });
+};
 
+exports.getElementDistinctValues = function(req, res) {
+    var data = req.query;
 
-}
+    data.group = {};
+    data.sort = {};
 
+    data.fields = [data.elementName];
 
-exports.getMongoSchemas = function(req,res)
-{
-    //Get the schema for several mongoDB collections... and send back to the client...
-    var data = req.body;
-    var collections = data.collections;
-    var numDocs = data.numDocs; //number of documents scanned for every collection
+    data.group[data.elementName] = '$'+data.elementName;
+    data.sort[data.elementName] = 1;
 
-    //
-    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
+    var mongodb = require('../../core/db/mongodb.js');
 
-    var dbURI =  'mongodb://'+data.host+':'+data.port+'/'+data.database;
-
-        MongoClient.connect(dbURI, function(err, db) {
-            if(err) { return console.dir(err); }
-
-            /*
-            for (i = 0; i < collections.length; i++) {
-                var collectionName = collections[i];
-
-                var collection = db.collection(collectionName);
-
-                collection.find().limit(10).toArray(function(err, results) {
-
-                });
-            }
-            */
-            //console.log(collections);
-
-            var schemas = [];
-
-            getCollectionSchema(db,collections,0,schemas, function() {
-
-                 console.log('--------------- está hecho');
-                 //console.log(schemas);
-                 serverResponse(req, res, 200, {result: 1, items: schemas});
-
-            });
-
-            //en la última iteración db.close();
+    mongodb.execOperation('aggregate', data, function(result) {
+        serverResponse(req, res, 200, result);
     });
-
-
-}
+};
 
 exports.DataSourcesFindAll = function(req,res)
 {
@@ -250,107 +204,6 @@ exports.DataSourcesFindOne = function(req,res){
     });
 };
 
-
-function getCollectionSchema(db,collections,index,schemas, done)
-{
-    if (collections[index] == undefined)
-    {
-        done();
-        return;
-    }
-
-    var uuid = require('node-uuid');
-    var collectionName = collections[index];
-    var collectionID = uuid.v4();
-    var theCollection = {collectionID: collectionID ,collectionName: collectionName,visible:true,collectionLabel:collectionName};
-    theCollection.elements = [];
-
-    console.log('The collection Name '+collectionName);
-    var collection = db.collection(collectionName);
-    collection.find().limit(100).toArray(function(err, results) {
-        //console.log(results);
-
-
-
-        var dbstruc = {};
-        var elements = [];
-        /*
-        for (var key in results[0]) {
-            console.log ('element found ' +key) ;
-
-        }
-        */
-
-        for (i = 0; i < results.length; i++) {
-
-            //getKP(results[i],dbstruc);
-            getElementList(results[i],elements,'');
-
-        }
-
-        //getElementList(results[0],elements,'');
-
-        var names = [];
-
-
-        for (i = 0; i < elements.length; i++) {
-               //console.log(elements[i]);
-               var str = elements[i];
-               if (str)
-               {
-                   if (str != 'undefined')
-                   {
-                       var pos = str.indexOf(":");
-                       var name = str.substring(0,pos);
-                       var type = str.substring(pos+1,str.length);
-
-                       var elementID = uuid.v4();
-
-                       if (name != '_id._bsontype' && name != '_id.id' && name != '__v' )  {
-
-                               if (names.indexOf(name) == -1)
-                               {
-                                   names.push(name);
-                                   var isVisible = true;
-                                   if (type == 'object')
-                                       isVisible = false;
-                                   theCollection.elements.push({elementID:elementID,elementName:name,elementType:type,visible:isVisible,elementLabel:name})
-                                   //var element = {colectionName: collectionName,elementName:name,elementType:type}
-                               } else {
-                                   //el tipo puede cambiar por lo que hay que hacer una comprobación de tipo
-                                   for (n = 0; n < theCollection.elements.length; n++) {
-                                        if (theCollection.elements[n].elementName == name)
-                                        {
-                                          if (theCollection.elements[n].elementType == 'object' && type != 'object')
-                                          {
-                                              theCollection.elements[n].elementType = type;
-                                              theCollection.elements[n].visible = true;
-                                          }
-                                        }
-                                   }
-
-                               }
-
-                        }
-
-
-                    }
-               }
-        }
-
-
-        //{"_id":{"_bsontype":"string","id":"string"},"__v":"number","areas":{},"assessmentScope":{},"assessmentScopeEverybody":"boolean","assessmentTo":{},"assessmentToEverybody":"boolean","autoAssessment":"boolean","canView":{},"canViewEverybody":"boolean","canViewScope":{},"canViewScopeEverybody":"boolean","companyID":"string","draft":"boolean","nd_trash_deleted":"boolean","personalityAssessment":"boolean","positionBrand":{"0":"string"},"positionName":"string","ratingCalculationType":"number","status":"number","nd_trash_deleted_date":{},"positionArea":"string","positionCategory":"string","professionalGroup":"string","topPerformerAlgorithm":"boolean","externalData":{}}
-
-
-        //console.log('dbstruct '+JSON.stringify(dbstruc));
-        schemas.push(theCollection);
-        getCollectionSchema(db,collections,index+1,schemas, done);
-
-
-    });
-
-
-}
 
 function getKP (target,dbstruc) {
     for (var k in target) {

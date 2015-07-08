@@ -453,5 +453,23 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         console.log(element);
         collection.elements.push(element);
     };
+    $scope.addValueToElement = function(element, value, label) {
+        if (!element.values) element.values = [];
+
+        element.values.push({value: value, label: label});
+    };
+    $scope.onElementTypeChange = function(collection, element) {
+        console.log(element);
+
+        var params = {datasourceID: $scope._dataSource._id, collectionID: collection.collectionID, elementName: element.elementName};
+
+        if (element.elementType == 'array') {
+            connection.get('/api/data-sources/get-element-distinct-values', params, function(data) {
+                for (var i in data.items) {
+                    $scope.addValueToElement(element, data.items[i], data.items[i]);
+                }
+            });
+        }
+    };
 
 });

@@ -168,7 +168,7 @@ function processDataSources(dataSources, done, result, index) {
                 case 'MONGODB':
                     var mongodb = require('../../core/db/mongodb.js');
 
-                    mongodb.processMongoDBCollections(dataSource.collections, dts, function(data) {
+                    mongodb.processCollections(dataSource.collections, dts, function(data) {
                         for (var i in data) {
                             result.push(data[i]);
                         }
@@ -508,77 +508,3 @@ function getMongoDBFilters(filters, collection)
     return theFilters;
 }
 
-exports.ReportsGetDistinctValues = function(req, res) {
-    var data = req.query;
-
-    data.group = {};
-    data.sort = {};
-
-    data.fields = [data.elementName];
-
-    data.group[data.elementName] = '$'+data.elementName;
-    data.sort[data.elementName] = 1;
-
-    execOperation('aggregate', data, function(result) {
-        serverResponse(req, res, 200, result);
-    });
-};
-
-function execOperation(operation, params, done) {
-    var DataSources = connection.model('DataSources');
-
-    DataSources.findOne({ _id: params.datasourceID}, function (err, dataSource) {
-        if (dataSource) {
-            for (var n in dataSource.params[0].schema) {
-                if (params.collectionID == dataSource.params[0].schema[n].collectionID) {
-                    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
-
-                    var dbURI = 'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
-
-                    MongoClient.connect(dbURI, function(err, db) {
-                        if(err) { return console.dir(err); }
-
-                        var collection = db.collection(dataSource.params[0].schema[n].collectionName);
-
-                        var fields = {};
-
-                        if (params.fields) {
-                            for (var i in params.fields) {
-                                fields[params.fields] = 1;
-                            }
-                        }
-
-                        if (operation == 'find') {
-                            collection.find({}, fields, {limit: 50}).toArray(function(err, items) {
-                                db.close();
-                                done({result: 1, items: items});
-                            });
-                        }
-                        if (operation == 'aggregate') {
-                            collection.aggregate([
-                                    { $group: { _id: params.group } },
-                                    { $sort: params.sort },
-                                    { $limit: 50 }
-                                ],
-                                function(err, result) {
-                                    var items = [];
-
-                                    for (var i in result) {
-                                        if (result[i]._id[params.elementName]) {
-                                            items.push(result[i]._id[params.elementName]);
-                                        }
-                                    }
-
-                                    db.close();
-                                    done({result: 1, items: items});
-                                }
-                            );
-                        }
-                    });
-                }
-            }
-        } else {
-            done({result: 0, msg: 'DataSource not found.'});
-        }
-    });
-}

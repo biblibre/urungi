@@ -23,6 +23,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.metrics = ['Count'];
     $scope.rows = [];
     $scope.columns = [];
+    $scope.order = [];
     $scope.loaded = false;
     $scope.filters = [];
     $scope.dataSources = [];
@@ -213,7 +214,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         $('#searchModal').modal('show');
 
-        connection.get('/api/reports/get-distinct-values', $scope.selectedFilter, function(data) {
+        connection.get('/api/data-sources/get-element-distinct-values', $scope.selectedFilter, function(data) {
             console.log('data');
             $scope.searchValues = data.items;
             console.log($scope.searchValues);
@@ -1002,6 +1003,9 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             var theTemplate =  $compile('<div class="column-box">'+customObjectData.objectLabel+'</div>')($scope);
             $scope.columns.push(customObjectData);
         }
+        if (type == 'order') {
+            $scope.order.push(customObjectData);
+        }
         if (type == 'filter') {
             var el = document.getElementById('filter-zone');
             //var theTemplate =  $compile('<div class="filter-box">'+customObjectData.objectLabel+'</div>')($scope);;
@@ -1312,6 +1316,15 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     if ($scope.columns[n1].collectionID == dtsCollections[n])
                     {
                             collection.columns.push($scope.columns[n1]);
+                    }
+                }
+
+                collection.order = [];
+
+                for (var n1 in $scope.order) {
+                    if ($scope.order[n1].collectionID == dtsCollections[n])
+                    {
+                        collection.order.push($scope.order[n1]);
                     }
                 }
 

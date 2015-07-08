@@ -116,6 +116,17 @@
 
     <div ng-repeat="group in filters" ng-include="'filtersGroup.html'"></div>
 
+    <div class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+        <div class="filter-zone-label pull-right" ng-hide="order.length > 0">Drop here order by elements</div>
+        <!--<div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo1</div>
+        <div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo 2</div>
+        drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept"
+        -->
+        <ul class="ul-drop no-padding" ng-model="order" ui-sortable="sortableOptions">
+            <li class="column-box" ng-repeat="field in order" >{{field.objectLabel}} <i class="fa fa-times hand-cursor" ng-click="removeFromArray(order, field);processStructure();"></i></li>
+        </ul>
+    </div>
+
     <div class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="columns.length > 0">Drop here your columns</div>
         <!--<div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo1</div>

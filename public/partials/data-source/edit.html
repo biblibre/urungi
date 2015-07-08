@@ -52,11 +52,37 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="element in collection.elements" ng-class="{'new-collection-element': element.isNew}">
-                    <td><input type="checkbox" ng-model="element.selected" ng-change="onElementSelectionChange(collection)"></td>
-                    <td><input class="form-control" ng-model="element.elementLabel" required></td>
-                    <td><input class="form-control" ng-model="element.elementName" required></td>
-                    <td><select class="form-control" ng-model="element.elementType" ng-options="obj.value as obj.name for obj in elementTypes"></select></td>
-                    <td><input type="checkbox" ng-model="element.visible"></td>
+                    <td width="10%"><input type="checkbox" ng-model="element.selected" ng-change="onElementSelectionChange(collection)"></td>
+                    <td width="20%"><input class="form-control" ng-model="element.elementLabel" required></td>
+                    <td width="20%"><input class="form-control" ng-model="element.elementName" required></td>
+                    <td width="40%">
+                        <select class="form-control" ng-model="element.elementType" ng-options="obj.value as obj.name for obj in elementTypes"
+                                ng-change="onElementTypeChange(collection, element)"></select>
+                        <div ng-if="element.elementType == 'array'">
+
+                            <div ng-repeat="value in element.values">
+                                <input class="form-control" ng-model="value.value" placeholder="value" style="width: 47%;float: left;">
+                                <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
+                                <i class="fa fa-times hand-cursor" ng-click="removeFromArray(element.values, value)" style="padding: 9px;"></i>
+                            </div>
+
+                            <div>
+                                <input class="form-control" ng-model="valueValue" placeholder="enter new value" style="width: 47%;float: left;">
+                                <input class="form-control" ng-model="valueLabel" placeholder="enter new label" style="width: 47%;float: left;">
+                                <i class="fa fa-arrow-right hand-cursor" style="padding: 9px;"
+                                   ng-click="addValueToElement(element, valueValue, valueLabel);valueValue='';valueLabel='';"></i>
+                            </div>
+
+                        </div>
+                        <div ng-if="element.elementType == 'number' || element.elementType == 'date'">
+
+                            <div>
+                                <input class="form-control" ng-model="element.format" placeholder="format..." style="width: 100%;">
+                            </div>
+
+                        </div>
+                    </td>
+                    <td width="10%"><input type="checkbox" ng-model="element.visible"></td>
                 </tr>
                 </tbody>
             </table>
