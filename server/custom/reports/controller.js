@@ -97,33 +97,6 @@ exports.PreviewQuery = function(req,res)
     console.log('entering preview query');
     debug(query);
 
-    /*{
-        "datasources": [
-        {
-            "datasourceID": "558e47c4163a1102283360ba",
-            "collections": [
-                {
-                    "collectionID": "914c9508-9e3c-4b4d-bf27-7091c8793d32",
-                    "columns": [
-                        {
-                            "elementName": "topPerformerRating",
-                            "objectLabel": "Top Performer (Sum)",
-                            "datasourceID": "558e47c4163a1102283360ba",
-                            "collectionID": "914c9508-9e3c-4b4d-bf27-7091c8793d32",
-                            "elementID": "55941fa03bd1a31abc000001",
-                            "elementType": "number",
-                            "filterType": "equal",
-                            "filterTypeLabel": "equal",
-                            "aggregation": "sum"
-                        }
-                    ],
-                    "filters": []
-                }
-            ]
-        }
-    ]
-    }*/
-
     processDataSources(query.datasources, function(result) {
         //debug(result);
         serverResponse(req, res, 200, result);
@@ -193,7 +166,9 @@ function processDataSources(dataSources, done, result, index) {
             
             switch (dts.type) {
                 case 'MONGODB':
-                    processMongoDBCollections(dataSource.collections, dts, function(data) {
+                    var mongodb = require('../../core/db/mongodb.js');
+
+                    mongodb.processCollections(dataSource.collections, dts, function(data) {
                         for (var i in data) {
                             result.push(data[i]);
                         }
@@ -261,205 +236,6 @@ function processDataSources(dataSources, done, result, index) {
         });
     });
 }*/
-
-function processMongoDBCollections(collections, dataSource, done, result, index) {
-    var index = (index) ? index : 0;
-    var collection = (collections[index]) ? collections[index] : false;
-    var result = (result) ? result : [];
-
-    if (!collection) {
-        done(result);
-        return;
-    }
-
-    console.log('entering mongoDB collections');
-    var fields = {};
-
-    var params = {skip: 0, limit: 10};
-
-    var filters = getCollectionFilters(collection);
-
-    console.log('the Filters');
-    debug(filters);
-
-    for (var i in collection.columns) {
-        for (var e in collection.schema.elements) {
-            if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
-                fields[collection.schema.elements[e].elementName] = 1;
-            }
-        }
-    }
-
-    console.log('the fields to get');
-    debug(fields);
-
-    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
-
-    var dbURI =  'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
-
-    MongoClient.connect(dbURI, function(err, db) {
-        if(err) { return console.dir(err); }
-
-        var col = db.collection(collection.schema.collectionName);
-        var match = (filters.length > 0) ? {$and: filters} : {};
-
-
-
-        var group = {}, fields = {};
-
-        for (var i in collection.columns) {
-            for (var e in collection.schema.elements) {
-                if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
-
-                    if (collection.columns[i].aggregation) {
-                        switch (collection.columns[i].aggregation) {
-                            case 'sum': group[collection.schema.elements[e].elementName+'sum'] = {$sum: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'avg': group[collection.schema.elements[e].elementName+'avg'] = {$avg: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'min': group[collection.schema.elements[e].elementName+'min'] = {$min: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'max': group[collection.schema.elements[e].elementName+'max'] = {$max: "$"+collection.schema.elements[e].elementName};
-                        }
-                    }
-                    else {
-                        fields[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
-                    }
-                }
-            }
-        }
-
-        group['_id'] = fields;
-
-        //{
-        //$match: {topPerformerRating: {$gt: 5}}
-    //},
-
-        var params = [
-            { $match: match },
-            { $group: group },
-            { $limit: 10 }
-        ];
-
-        console.log('params');
-        debug(params);
-
-        col.aggregate(params, function(err, docs) {
-            console.log(docs);
-
-
-
-            for (var i in docs) {
-                var item = {};
-
-                for(var group in docs[i]) {
-                    if (group == '_id') {
-                        for(var field in docs[i][group]) {
-                            item[field] = docs[i][group][field];
-                        }
-                    }
-                    else {
-                        item[group] = docs[i][group];
-                    }
-                }
-
-                result.push(item);
-            }
-debug(result);
-            db.close();
-
-            processMongoDBCollections(collections, dataSource, done, result, index+1);
-        });
-    });
-}
-
-function getCollectionFilters(collection) {
-    var theFilters = [];
-
-    for (var i in collection.filters) {
-        var filter = collection.filters[i];
-
-        if (filter.filterText1 || filter.filterType == 'notNull' || filter.filterType == 'null' ) {
-            for (var e in collection.schema.elements) {
-                if (filter.elementID == collection.schema.elements[e].elementID) {
-                    var thisFilter = {}, filterValue = filter.filterText1;
-                    var filterElementName = collection.schema.elements[e].elementName;
-
-                    if (collection.schema.elements[e].elementType == 'number') {
-                        filterValue = Number(filterValue);
-                    }
-
-                    if (filter.filterType == "equal") {
-                        thisFilter[filterElementName] = filterValue;
-                    }
-                    if (filter.filterType == "biggerThan") {
-                        thisFilter[filterElementName] = {$gt: filterValue};
-                    }
-                    if (filter.filterType == "notGreaterThan") {
-                        thisFilter[filterElementName] = {$not: {$gt: filterValue}};
-                    }
-                    if (filter.filterType == "biggerOrEqualThan") {
-                        thisFilter[filterElementName] = {$gte: filterValue};
-                    }
-                    if (filter.filterType == "lessThan") {
-                        thisFilter[filterElementName] = {$lt: filterValue};
-                    }
-                    if (filter.filterType == "lessOrEqualThan") {
-                        thisFilter[filterElementName] = {$lte: filterValue};
-                    }
-                    if (filter.filterType == "between") {
-                        thisFilter[filterElementName] = {$gt: filterValue, $lt: filter.filterText2};
-                    }
-                    if (filter.filterType == "notBetween") {
-                        thisFilter[filterElementName] = {$not: {$gt: filterValue, $lt: filter.filterText2}};
-                    }
-                    if (filter.filterType == "contains") {
-                        thisFilter[filterElementName] = new RegExp(filterValue, "i");
-                    }
-                    if (filter.filterType == "notContains") {
-                        thisFilter[filterElementName] = {$ne: new RegExp(filterValue, "i")};
-                    }
-                    if (filter.filterType == "startWith") {
-                        thisFilter[filterElementName] = new RegExp('/^'+filterValue+'/', "i");
-                    }
-                    if (filter.filterType == "notStartWith") {
-                        thisFilter[filterElementName] = {$ne: new RegExp('/^'+filterValue+'/', "i")};
-                    }
-                    if (filter.filterType == "endsWith") {
-                        thisFilter[filterElementName] = new RegExp('/'+filterValue+'$/', "i");
-                    }
-                    if (filter.filterType == "notEndsWith") {
-                        thisFilter[filterElementName] = {$ne: new RegExp('/'+filterValue+'$/', "i")};
-                    }
-                    if (filter.filterType == "like") {
-                        thisFilter[filterElementName] = new RegExp('/'+filterValue+'/', "i");
-                    }
-                    if (filter.filterType == "notLike") {
-                        thisFilter[filterElementName] = {$ne: new RegExp('/'+filterValue+'/', "i")};
-                    }
-                    if (filter.filterType == "null") {
-                        thisFilter[filterElementName] = null;
-                    }
-                    if (filter.filterType == "notNull") {
-                        thisFilter[filterElementName] = {$ne: null};
-                    }
-                    if (filter.filterType == "in") {
-                        thisFilter[filterElementName] = {$in: String(filterValue).split(';')};
-                    }
-                    if (filter.filterType == "notIn") {
-                        thisFilter[filterElementName] = {$nin: String(filterValue).split(';')};
-                    }
-
-                    if (!isEmpty(thisFilter)) {
-                        theFilters.push(thisFilter);
-                    }
-                }
-            }
-        }
-    }
-
-    return theFilters;
-}
 
 ////////////////////////////
 
@@ -722,97 +498,13 @@ function getMongoDBFilters(filters, collection)
 
                 //TODO:Query a Field that Contains an Array
                 //TODO:Subdocuments  http://docs.mongodb.org/manual/reference/method/db.collection.find/
-                if (!isEmpty(thisFilter)) {
+                //if (!isEmpty(thisFilter)) {
                     theFilters.push(thisFilter);
-                }
+                //}
             }
         }
     }
-
 
     return theFilters;
 }
 
-function isEmpty(obj) {
-    for(var prop in obj) {
-        if(obj.hasOwnProperty(prop))
-            return false;
-    }
-
-    return true;
-}
-
-exports.ReportsGetDistinctValues = function(req, res) {
-    var data = req.query;
-
-    data.group = {};
-    data.sort = {};
-
-    data.fields = [data.elementName];
-
-    data.group[data.elementName] = '$'+data.elementName;
-    data.sort[data.elementName] = 1;
-
-    execOperation('aggregate', data, function(result) {
-        serverResponse(req, res, 200, result);
-    });
-};
-
-function execOperation(operation, params, done) {
-    var DataSources = connection.model('DataSources');
-
-    DataSources.findOne({ _id: params.datasourceID}, function (err, dataSource) {
-        if (dataSource) {
-            for (var n in dataSource.params[0].schema) {
-                if (params.collectionID == dataSource.params[0].schema[n].collectionID) {
-                    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
-
-                    var dbURI = 'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
-
-                    MongoClient.connect(dbURI, function(err, db) {
-                        if(err) { return console.dir(err); }
-
-                        var collection = db.collection(dataSource.params[0].schema[n].collectionName);
-
-                        var fields = {};
-
-                        if (params.fields) {
-                            for (var i in params.fields) {
-                                fields[params.fields] = 1;
-                            }
-                        }
-
-                        if (operation == 'find') {
-                            collection.find({}, fields, {limit: 50}).toArray(function(err, items) {
-                                db.close();
-                                done({result: 1, items: items});
-                            });
-                        }
-                        if (operation == 'aggregate') {
-                            collection.aggregate([
-                                    { $group: { _id: params.group } },
-                                    { $sort: params.sort },
-                                    { $limit: 50 }
-                                ],
-                                function(err, result) {
-                                    var items = [];
-
-                                    for (var i in result) {
-                                        if (result[i]._id[params.elementName]) {
-                                            items.push(result[i]._id[params.elementName]);
-                                        }
-                                    }
-
-                                    db.close();
-                                    done({result: 1, items: items});
-                                }
-                            );
-                        }
-                    });
-                }
-            }
-        } else {
-            done({result: 0, msg: 'DataSource not found.'});
-        }
-    });
-}
