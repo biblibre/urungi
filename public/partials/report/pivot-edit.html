@@ -123,7 +123,11 @@
         drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept"
         -->
         <ul class="ul-drop no-padding" ng-model="order" ui-sortable="sortableOptions">
-            <li class="column-box" ng-repeat="field in order" >{{field.objectLabel}} <i class="fa fa-times hand-cursor" ng-click="removeFromArray(order, field);processStructure();"></i></li>
+            <li class="column-box" ng-repeat="field in order" >{{field.objectLabel}}
+                <i ng-show="field.sortType == -1" class="fa fa-chevron-down hand-cursor" ng-click="field.sortType = 1;processStructure();"></i>
+                <i ng-show="field.sortType == 1" class="fa fa-chevron-up hand-cursor" ng-click="field.sortType = -1;processStructure();"></i>
+                <i class="fa fa-times hand-cursor" ng-click="removeFromArray(order, field);processStructure();"></i>
+            </li>
         </ul>
     </div>
 

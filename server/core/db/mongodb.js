@@ -262,7 +262,7 @@ function processCollections(collections, dataSource, done, result, index) {
         for (var i in collection.order) {
             for (var e in collection.schema.elements) {
                 if (collection.order[i].elementID == collection.schema.elements[e].elementID) {
-                    sort[collection.schema.elements[e].elementName] = -1;
+                    sort[collection.schema.elements[e].elementName] = collection.order[i].sortType;
                 }
             }
         }
@@ -282,8 +282,11 @@ function processCollections(collections, dataSource, done, result, index) {
         var match = filters, project = {}, group = {}, fields = {};
 
         for (var i in collection.columns) {
+            var found = false;
+
             for (var e in collection.schema.elements) {
                 if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
+                    found = true;
 
                     if (collection.columns[i].aggregation) {
                         switch (collection.columns[i].aggregation) {
@@ -302,9 +305,19 @@ function processCollections(collections, dataSource, done, result, index) {
                             case 'day': project[collection.schema.elements[e].elementName+'day'] = {$dayOfMonth: "$"+collection.schema.elements[e].elementName};
                         }
                     }
+                    /*else if (collection.columns[i].count) {
+                        group['count'] = { $sum: 1 };
+                    }*/
                     else {
                         fields[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
                     }
+                }
+            }
+debug(collection.columns[i]);
+            console.log(found);
+            if (!found) {
+                if (collection.columns[i].count) {
+                    group['count'] = { $sum: 1 };
                 }
             }
         }
@@ -324,8 +337,6 @@ function processCollections(collections, dataSource, done, result, index) {
         debug(params);
 
         col.aggregate(params, function(err, docs) {
-            console.log(docs);
-
             for (var i in docs) {
                 var item = {};
 
@@ -351,14 +362,12 @@ function processCollections(collections, dataSource, done, result, index) {
                         }
                         if (field == collection.schema.elements[e].elementName && collection.schema.elements[e].format) {
                             if (collection.schema.elements[e].elementType == 'date') {
-                                console.log('date');
                                 var date = new Date(item[field]);
 
                                 item[field] = collection.schema.elements[e].format;
                                 item[field] = String(item[field]).replace('DD', date.getDate());
                                 item[field] = String(item[field]).replace('MM', date.getMonth()+1);
                                 item[field] = String(item[field]).replace('YYYY', date.getFullYear());
-                                console.log(item[field]);
                             }
 
                         }
@@ -367,7 +376,7 @@ function processCollections(collections, dataSource, done, result, index) {
 
                 result.push(item);
             }
-            debug(result);
+            //debug(result);
             db.close();
 
             processCollections(collections, dataSource, done, result, index+1);

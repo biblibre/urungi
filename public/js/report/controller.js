@@ -1004,7 +1004,9 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.columns.push(customObjectData);
         }
         if (type == 'order') {
+            customObjectData.sortType = -1;
             $scope.order.push(customObjectData);
+            console.log($scope.order);
         }
         if (type == 'filter') {
             var el = document.getElementById('filter-zone');
