@@ -1,16 +1,12 @@
 var mongoose = require('mongoose');
 
-var messagesSchema = new mongoose.Schema({
-    messageFrom: {type: String, required: true},
-    messageFromName: {type: String, required: true},
-    message: {type: String},
-    messageDate: {type: Date, default: Date.now},
-    read: {type: Boolean, required: true, default: false}
-});
-
 var ReportsSchema = new mongoose.Schema({
-    companyID: {type: String, required: true},
+    companyID: {type: String},
     reportName: {type: String, required: true},
+    reportType: {type: String},
+    reportSubType: {type: String},
+    properties: {type: Object},
+    query: {type: Object},
     nd_trash_deleted:{type: Boolean},
     nd_trash_deleted_date: {type: Date}
 }, { collection: config.app.customCollectionsPrefix+'Reports' });

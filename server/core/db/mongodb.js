@@ -305,22 +305,20 @@ function processCollections(collections, dataSource, done, result, index) {
                             case 'day': project[collection.schema.elements[e].elementName+'day'] = {$dayOfMonth: "$"+collection.schema.elements[e].elementName};
                         }
                     }
-                    /*else if (collection.columns[i].count) {
-                        group['count'] = { $sum: 1 };
-                    }*/
                     else {
                         fields[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
                     }
                 }
             }
-debug(collection.columns[i]);
-            console.log(found);
+
             if (!found) {
                 if (collection.columns[i].count) {
                     group['count'] = { $sum: 1 };
                 }
             }
         }
+
+        //project['employeeName'] = { $toUpper: "$employeeName" };
 
         group['_id'] = fields;
 

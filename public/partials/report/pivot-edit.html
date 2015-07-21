@@ -4,6 +4,70 @@
      <a data-ng-click="reportName()" class="btn btn-success pull-right" style="margin-right: 5px">Save Report</a>
 </div>
 
+<div class="row">
+
+    <form class="simple-form" role="form" name="reportForm">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Report Type</label>
+                <select class="form-control" name="reportType" ng-model="_Report.reportType"
+                        ng-options="obj.value as obj.label for obj in reportTypes" ng-required="true" required ></select>
+                <span ng-show="reportForm.reportType.$invalid" class="help-inline">This field is required</span>
+            </div>
+            <div class="form-group" ng-show="_Report.reportType == 'chart' || _Report.reportType == 'indicator' || _Report.reportType == 'vectorMap'">
+                <label>Report SubType</label>
+                <select class="form-control" name="reportSubType" ng-model="_Report.reportSubType"
+                        ng-options="obj.value as obj.label for obj in reportSubTypes[_Report.reportType]" ng-required="true" required ></select>
+                <span ng-show="reportForm.reportSubType.$invalid" class="help-inline">This field is required</span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+            <div ng-show="_Report.reportType == 'chart' && (_Report.reportSubType == 'line' || _Report.reportSubType == 'bar' || _Report.reportSubType == 'area')">
+                <div class="form-group">
+                    <label>xkey</label>
+                    <select class="form-control" name="xkey" ng-model="_Report.properties.xkey"
+                            ng-options="obj.elementID as obj.objectLabel for obj in columns" ng-required="true" required ></select>
+                    <span ng-show="reportForm.xkey.$invalid" class="help-inline">This field is required</span>
+                </div>
+                <div class="form-group">
+                    <label>xlabel</label>
+                    <input name="xlabels" type="text" class="form-control" ng-model="_Report.properties.xlabels" ng-required="true" required >
+                    <span ng-show="reportForm.xlabels.$invalid" class="help-inline">This field is required</span>
+                </div>
+                <div class="form-group">
+                    <label>ykey</label>
+                    <select class="form-control" name="ykeys" ng-model="_Report.properties.ykeys"
+                            ng-options="obj.elementID as obj.objectLabel for obj in columns" ng-required="true" required ></select>
+                    <span ng-show="reportForm.ykeys.$invalid" class="help-inline">This field is required</span>
+                </div>
+                <div class="form-group">
+                    <label>ylabel</label>
+                    <input name="labels" type="text" class="form-control" ng-model="_Report.properties.labels" ng-required="true" required >
+                    <span ng-show="reportForm.labels.$invalid" class="help-inline">This field is required</span>
+                </div>
+            </div>
+
+            <div ng-show="_Report.reportType == 'chart' && (_Report.reportSubType == 'donut')">
+                <div class="form-group">
+                    <label>theValueField</label>
+                    <select class="form-control" name="theValueField" ng-model="_Report.properties.theValueField"
+                            ng-options="obj.elementID as obj.objectLabel for obj in columns" ng-required="true" required ></select>
+                    <span ng-show="reportForm.theValueField.$invalid" class="help-inline">This field is required</span>
+                </div>
+                <div class="form-group">
+                    <label>labelField</label>
+                    <input name="labelField" type="text" class="form-control" ng-model="_Report.properties.labelField" ng-required="true" required >
+                    <span ng-show="reportForm.labelField.$invalid" class="help-inline">This field is required</span>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
 <div class="container-fluid" style="border-bottom: 2px solid #72A230;">
      <h3 class="pull-right" >Query design zone</h3>
 </div>

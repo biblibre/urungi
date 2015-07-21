@@ -106,8 +106,49 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         ]
     };
 
-    init();
+    $scope.reportTypes = [
+        {value:"chart",label:"Chart"},
+        {value:"grid",label:"Grid"},
+        {value:"pivot",label:"Pivot"},
+        {value:"indicator",label:"Indicator"},
+        {value:"vectorMap",label:"Vector Map"},
+        {value:"readOnlyForm",label:"Read Only Form"}
+    ];
+    $scope.reportSubTypes = {
+        chart: [
+            {value:"line",label:"Line"},
+            {value:"donut",label:"Donut"},
+            {value:"bar",label:"Bar"},
+            {value:"area",label:"Area"}
+        ],
+        indicator: [
+            {value:"style1",label:"Style 1"},
+            {value:"style2",label:"Style 2"},
+            {value:"style3",label:"Style 3"}
+        ],
+        vectorMap: [
+            {value:"world",label:"World"}
+        ]
+    };
 
+    $scope.filters = [
+        {
+            group: true,
+            filters: []
+        }
+    ];
+
+    $scope.getReports = function(params) {
+        var params = (params) ? params : {};
+
+        connection.get('/api/reports/find-all', params, function(data) {
+            $scope.reports = data;
+            console.log($scope.reports);
+        });
+    };
+
+
+    init();
 
    function init()
 {
@@ -124,8 +165,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     });
      */
     //$scope.filters.length
-    if ($routeParams.newReport) {
-        if ($routeParams.newReport == 'true') {
+    if ($routeParams.reportID) {
+        if ($routeParams.reportID == 'true') {
             $scope._Report = {};
             $scope._Report.draft = true;
             $scope._Report.badgeStatus = 0;
@@ -135,27 +176,46 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.mode = 'add';
 
             console.log('entering in add mode for reports') ;
+        }
+        else {
+            connection.get('/api/reports/find-one', {id: $routeParams.reportID}, function(data) {
+                $scope._Report = data.item;
+                console.log($scope._Report);
 
-            var params = {};
+                for (var i in $scope._Report.query.datasources) {
+                    var dataSource = $scope._Report.query.datasources[i];
 
-            connection.get('/api/data-sources/find-all', params, function(data) {
-                $scope.errorMsg = (data.result === 0) ? data.msg : false;
-                $scope.page = data.page;
-                $scope.pages = data.pages;
-                $scope.data = data;
+                    for (var c in dataSource.collections) {
+                        var collection = dataSource.collections[c];
 
-                for (var i in $scope.data.items) {
-                    console.log($scope.data.items[i]);
-                    for (var z in $scope.data.items[i].params[0].schema) {
-                        var dts = {};
-                        dts.collection = $scope.data.items[i].params[0].schema[z];
-                        dts.datasourceID = $scope.data.items[i]._id;
-
-                        $scope.dataSources.push(dts);
-                    };
+                        $scope.filters[0].filters = collection.filters;
+                        $scope.columns = collection.columns;
+                        $scope.order = collection.order;
+                    }
                 }
+
+                $scope.processStructure();
+
             });
         }
+
+        connection.get('/api/data-sources/find-all', {}, function(data) {
+            $scope.errorMsg = (data.result === 0) ? data.msg : false;
+            $scope.page = data.page;
+            $scope.pages = data.pages;
+            $scope.data = data;
+
+            for (var i in $scope.data.items) {
+                console.log($scope.data.items[i]);
+                for (var z in $scope.data.items[i].params[0].schema) {
+                    var dts = {};
+                    dts.collection = $scope.data.items[i].params[0].schema[z];
+                    dts.datasourceID = $scope.data.items[i]._id;
+
+                    $scope.dataSources.push(dts);
+                };
+            }
+        });
     }
     };
 
@@ -321,30 +381,25 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     };
 
     $scope.save = function(data) {
-
-
         console.log('saving report '+data.reportName);
+        console.log(data);
 
+        $scope.processStructure(false);
+        console.log($scope.query);
 
+        data.query = $scope.query;
 
         if ($scope.mode == 'add') {
             connection.post('/api/reports/create', data, function(data) {
-                $scope.items.push(data.item);
-
-                $scope.cancel();
+                if (data.result == 1) {
+                    $scope.goBack();
+                }
             });
         }
         else {
-            $scope.edit_id = data._id;
-
             connection.post('/api/reports/update/'+data._id, data, function(result) {
                 if (result.result == 1) {
-                    for (i = 0; i < $scope.items.length; i++) {
-                        if ($scope.items[i]._id == data._id) {
-                            $scope.items[i] = data;
-                        }
-                    }
-                    $scope.cancel();
+                    $scope.goBack();
                 }
             });
         }
@@ -1070,13 +1125,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         return;
     };
 
-    $scope.filters = [
-        {
-            group: true,
-            filters: []
-        }
-    ];
-
     $scope.conditionTypes = [
         {conditionType: 'and', conditionLabel: 'AND'},
         {conditionType: 'or', conditionLabel: 'OR'},
@@ -1195,7 +1243,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.previewData = data;
             $scope.preview = true;
 
-            var aggregations = [];
+            /*var aggregations = [];
 
             for (var i in $scope.columns) {
                 if ($scope.columns[i].aggregation) {
@@ -1233,12 +1281,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                                     case 'month': data[j][$scope.columns[i].elementName] = date.getMonth()+1;
                                         break;
                                     case 'date': data[j][$scope.columns[i].elementName] = date.getDate();
-                                        /*break;
-                                    case 'semester': if (value > aggregation) aggregation = value;
-                                        break;
-                                    case 'quarter':
-                                        break;
-                                    case 'trimester':*/
                                 }
                             }
                         }
@@ -1249,7 +1291,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 }
             }
 
-            $scope.aggregations = aggregations;
+            $scope.aggregations = aggregations;*/
 
             /*
             for (var i in $scope.data.items) {
@@ -1263,8 +1305,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     }
 
 
-    $scope.processStructure = function()
-    {
+    $scope.processStructure = function(preview) {
+        var preview = (typeof preview !== 'undefined') ? preview : true;
 
         $scope.query = {};
         $scope.query.datasources = [];
@@ -1346,8 +1388,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.query.datasources.push(dtsObject);
         }
       //console.log(JSON.stringify($scope.query));
-console.log($scope.query);
-        if ($scope.columns.length > 0)
+
+        if ($scope.columns.length > 0 && preview)
             $scope.previewQuery();
     }
 

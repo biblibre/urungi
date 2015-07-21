@@ -40,7 +40,11 @@ var app = angular.module('WideStage', [
             controller: 'reportCtrl'
         });
 
-        $routeProvider.when('/reports/new/:newReport/', {
+        $routeProvider.when('/reports/new/:reportID/', {
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
+        });
+        $routeProvider.when('/reports/edit/:reportID/', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
         });
@@ -133,5 +137,9 @@ app.run(['$rootScope', function($rootScope) {
         var index = array.indexOf(item);
 
         if (index > -1) array.splice(index, 1);
+    };
+
+    $rootScope.goBack = function() {
+        window.history.back();
     };
 }]);

@@ -13,32 +13,18 @@ var controller = new ReportsController(Reports);
 
 exports.ReportsFindAll = function(req,res){
     req.query.trash = true;
-    req.query.companyid = true;
+    //req.query.companyid = true;
 
-    //req.query.sort = 'lastMessageDate';
-    //req.query.sortType = -1;
+    req.query.fields = ['reportName'];
 
-    var Employees = connection.model('Employees');
-
-    Employees.findOne({userID: req.user._id}, {_id: 1}, function(err, employee) {
-        if (err) throw err;
-
-        if (employee) {
-            req.query.find = [{$or: [{employeeFrom: employee._id}, {employeeFrom: employee._id}]}];
-
-            controller.findAll(req, function(result){
-                serverResponse(req, res, 200, result);
-            });
-        }
-        else {
-            serverResponse(req, res, 200, {result: 0, msg: 'Invalid employee'});
-        }
+    controller.findAll(req, function(result){
+        serverResponse(req, res, 200, result);
     });
 };
 
 exports.ReportsFindOne = function(req,res){
     req.query.trash = true;
-    req.query.companyid = true;
+    //req.query.companyid = true;
 
     controller.findOne(req, function(result){
         serverResponse(req, res, 200, result);
