@@ -1,7 +1,41 @@
-<div class="container-fluid mainArea">
+<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
+    <a ng-click="goBack()" class="btn btn-default pull-left">Back</a>
+    <a href="/#/reports/edit/{{reportID}}"  class="btn btn-success pull-right" style="margin-right: 5px">Edit Report</a>
+</div>
+
+<div class="container-fluid" style="border-bottom: 2px solid #72A230;">
+    <h3 class="pull-right" ng-bind="selectedReport.reportName"></h3>
+</div>
+
+<div ng-if="selectedReport.reportType == 'grid'" class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                <td ng-repeat="column in columns" ><strong>{{column.objectLabel}}</strong></td>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in previewData" >
+                    <td ng-repeat="column in columns" >
+                        <span ng-if="!column.aggregation">{{row[column.elementName]}}</span>
+                        <span ng-if="column.aggregation">{{row[column.elementName+column.aggregation]}}</span>
+                    </td>
+                </tr>
+                <!--<tr style="font-weight: bold;">
+                    <td ng-repeat="aggregation in aggregations track by $index">{{aggregation}}</td>
+                </tr>-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div ng-if="selectedReport.reportType != 'grid'" class="container-fluid mainArea" ng-init="getReport()">
 
     <div class="col-md-12"  >
         <div id="reportLayout" class="panel panel-default"   ng-init="getReportDiv()">
+
+
 
         </div>
     </div>

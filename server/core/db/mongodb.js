@@ -308,6 +308,17 @@ function processCollections(collections, dataSource, done, result, index) {
                     else {
                         fields[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
                     }
+
+                    if (collection.columns[i].variable) {
+                        switch (collection.columns[i].variable) {
+                            case 'toUpper': project[collection.schema.elements[e].elementName] = {$toUpper: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'toLower': project[collection.schema.elements[e].elementName] = {$toLower: "$"+collection.schema.elements[e].elementName};
+                        }
+                    }
+                    else { //es necesario añadir todos los campos a project si hay alguna variable, si solo se añaden los campos con variable, el resto no se devuelven en la consulta
+                        project[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
+                    }
                 }
             }
 
@@ -317,8 +328,6 @@ function processCollections(collections, dataSource, done, result, index) {
                 }
             }
         }
-
-        //project['employeeName'] = { $toUpper: "$employeeName" };
 
         group['_id'] = fields;
 

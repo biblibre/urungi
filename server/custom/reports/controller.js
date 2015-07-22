@@ -33,7 +33,7 @@ exports.ReportsFindOne = function(req,res){
 
 exports.ReportsCreate = function(req,res){
     req.query.trash = true;
-    req.query.companyid = true;
+    //req.query.companyid = true;
 
     console.log(req.body);
 
@@ -44,14 +44,7 @@ exports.ReportsCreate = function(req,res){
 
 exports.ReportsUpdate = function(req,res){
     req.query.trash = true;
-    req.query.companyid = true;
-
-    if (req.body.messages) {
-        req.body.lastMessage = req.body.messages[req.body.messages.length-1].message;
-        req.body.lastMessageFrom = req.body.messages[req.body.messages.length-1].messageFrom;
-        req.body.lastMessageFromName = req.body.messages[req.body.messages.length-1].messageFromName;
-        req.body.lastMessageDate = new Date();
-    }
+    //req.query.companyid = true;
 
     controller.update(req, function(result){
         serverResponse(req, res, 200, result);

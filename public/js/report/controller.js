@@ -16,7 +16,7 @@
  * Filter.js is client-side JSON objects filter and render html elements. Multiple filter criteria can be specified and used in conjunction with each other.
  */
 
-app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, reportNameModal ) {
+app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile) {
     $scope.searchModal = 'partials/report/searchModal.html';
 
     $scope.reportID = $routeParams.reportID;
@@ -131,6 +131,11 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         ]
     };
 
+    $scope.stringVariables = [
+        {value:"toUpper",label:"To Upper"},
+        {value:"toLower",label:"To Lower"}
+    ];
+
     $scope.filters = [
         {
             group: true,
@@ -147,31 +152,15 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         });
     };
 
-
-    init();
-
-   function init()
-{
-       /* $('#list').sortable({
-            scroll: true,
-            placeholder: 'placeholder',
-            containment: 'parent'
-//axis: 'x'
-        });
-        $('#list').disableSelection();  */
-   /*
-    $('.resize').resizable({
-        handles: 'e'
-    });
-     */
-    //$scope.filters.length
     if ($routeParams.reportID) {
+        $scope.reportID = $routeParams.reportID;
+
         if ($routeParams.reportID == 'true') {
-            $scope._Report = {};
-            $scope._Report.draft = true;
-            $scope._Report.badgeStatus = 0;
-            $scope._Report.exportable = true;
-            $scope._Report.badgeMode = 1;
+            $scope.selectedReport = {};
+            $scope.selectedReport.draft = true;
+            $scope.selectedReport.badgeStatus = 0;
+            $scope.selectedReport.exportable = true;
+            $scope.selectedReport.badgeMode = 1;
 
             $scope.mode = 'add';
 
@@ -179,11 +168,11 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         }
         else {
             connection.get('/api/reports/find-one', {id: $routeParams.reportID}, function(data) {
-                $scope._Report = data.item;
-                console.log($scope._Report);
+                $scope.selectedReport = data.item;
+                console.log($scope.selectedReport);
 
-                for (var i in $scope._Report.query.datasources) {
-                    var dataSource = $scope._Report.query.datasources[i];
+                for (var i in $scope.selectedReport.query.datasources) {
+                    var dataSource = $scope.selectedReport.query.datasources[i];
 
                     for (var c in dataSource.collections) {
                         var collection = dataSource.collections[c];
@@ -195,7 +184,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 }
 
                 $scope.processStructure();
-
             });
         }
 
@@ -217,7 +205,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             }
         });
     }
-    };
 
     $scope.getElementFilterOptions = function(elementType)
     {
@@ -237,30 +224,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         filter.filterTypeLabel = filterOption.label;
 
         //set the appropiate interface or the choosen filter relation
-    }
-
-    $scope.showfilter1 = function(filter)
-    {
-
-
-        if (filter.filterType == 'null' || filter.filterType == 'notNull')
-        {
-            return  false;
-        } else {
-            return  true;
-        }
-    }
-
-    $scope.showfilter2 = function(filter)
-    {
-
-
-        if (filter.filterType == 'between' || filter.filterType == 'notBetween')
-        {
-            return  true;
-        } else {
-            return  false;
-        }
     }
 
     $scope.getDistinctValues = function(filter)
@@ -327,53 +290,21 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         $('#'+element).css('height', height);
     };
 
-
     $scope.reportName = function () {
-
-
-        var modalOptions    = {
-            container: 'reportName',
-            containerID: '12345',//$scope._Report._id,
-            tracking: true,
-            report: $scope._Report
-        }
-
-
-
-        //$scope.sendHTMLtoEditor(dataset[field])
-
-        reportNameModal.showModal({}, modalOptions).then(function (result) {
-            $scope.save($scope._Report);
-            /*
-            var container = angular.element(document.getElementById(source));
-            container.children().remove();
-            //var theHTML = ndDesignerService.getOutputHTML();
-            theTemplate = $compile(theHTML)($scope);
-            container.append(theTemplate);
-
-
-            dataset[field] = theHTML;
-
-            if ($scope._posts.postURL && $scope._posts.title && $scope._posts.status)
-            {
-                //console.log('saving post');
-                $scope.save($scope._posts, false);
-            }
-            //console.log(theHTML);
-           */
-        });
-
-
-    }
-
+        $('#reportNameModal').modal('show');
+    };
+    $scope.reportNameSave = function () {
+        $('#reportNameModal').modal('hide');
+        $scope.save($scope.selectedReport);
+    };
 
     $scope.add = function() {
 
-            $scope._Report = {};
-            $scope._Report.draft = true;
-            $scope._Report.badgeStatus = 0;
-            $scope._Report.exportable = true;
-            $scope._Report.badgeMode = 1;
+            $scope.selectedReport = {};
+            $scope.selectedReport.draft = true;
+            $scope.selectedReport.badgeStatus = 0;
+            $scope.selectedReport.exportable = true;
+            $scope.selectedReport.badgeMode = 1;
 
             $scope.mode = 'add';
             $scope.subPage= '/partial/custom/Badges/form.html';
@@ -405,225 +336,10 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         }
     };
 
-    $scope.metadata = {
-        tables: [
-            /*{
-                id: "T1",
-                name: "ndcustom_Employees",
-                datasourceID: "SSSS1",
-                fields: [{
-                        id: "F1",
-                        alias: "Employee",
-                        fieldName: "employeeName",
-                        tableID: "T1",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "F1",
-                        visible: true
-
-
-                    },
-                    {
-                        id: "F2",
-                        alias: "Code",
-                        fieldName: "employeeCode",
-                        tableID: "T1",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "F2",
-                        visible: true
-                    },
-                    {
-                        id: "F2",
-                        alias: "idunit",
-                        fieldName: "idunit",
-                        tableID: "T1",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "",
-                        visible: false
-                    }]
-            },
-            {
-                id: "T2",
-                name: "ndcustom_Units",
-                datasourceID: "SSSS1",
-                fields: [{
-                        id: "F3",
-                        alias: "_id",
-                        fieldName: "_id",
-                        tableID: "T2",
-                        type: "Object",
-                        role: "Dimension",
-                        parent: "",
-                        visible: false
-                    },
-                    {
-                        id: "F4",
-                        alias: "brand",
-                        fieldName: "brand",
-                        tableID: "T2",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "",
-                        visible: false
-                    }]
-            }
-            ,
-            {
-                id: "T3",
-                name: "ndcustom_Brands",
-                datasourceID: "SSSS1",
-                fields: [{
-                        id: "F5",
-                        alias: "_id",
-                        fieldName: "_id",
-                        tableID: "T3",
-                        type: "Object",
-                        role: "Dimension",
-                        parent: "YYYYY",
-                        visible: false
-                    },
-                    {
-                        id: "F6",
-                        alias: "brand",
-                        fieldName: "brand",
-                        tableID: "T3",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "F1",
-                        visible: true
-                    }]
-            }
-
-            , */
-            {
-                id: "T4",
-                name: "Fields",
-                datasourceID: "SSS771",
-                fields: [{
-                    id: "F5",
-                    alias: "Province",
-                    fieldName: "Province",
-                    tableID: "T4",
-                    type: "String",
-                    role: "Dimension",
-                    parent: "YYYYY",
-                    visible: false
-                },
-                    {
-                        id: "F5",
-                        alias: "Gender",
-                        fieldName: "Gender",
-                        tableID: "T4",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "YYYYY",
-                        visible: false
-                    },
-                    {
-                        id: "F5",
-                        alias: "Age",
-                        fieldName: "Age",
-                        tableID: "T4",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "YYYYY",
-                        visible: false
-                    },
-                    {
-                        id: "F5",
-                        alias: "Party",
-                        fieldName: "Party",
-                        tableID: "T4",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "YYYYY",
-                        visible: false
-                    },
-                    {
-                        id: "F5",
-                        alias: "Age Bin",
-                        fieldName: "Age Bin",
-                        tableID: "T4",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "YYYYY",
-                        visible: false
-                    }]
-            }
-        ],
-
-        joins: [
-            {
-                id: "J1",
-                leftTableID: "T1",
-                rightTableID: "T2",
-                leftFieldID:"idunit",
-                rightFieldID: "_id",
-                joinType: "inner",
-                cardinality: ""
-            },
-            {
-                id: "J2",
-                leftTableID: "T2",
-                rightTableID: "T3",
-                leftFieldID:"brand",
-                rightFieldID: "_id",   //la conversión del campo se hace por el tipo si String = Object (hay que hacer esa conversión...
-                joinType: "inner",
-                cardinality: ""
-            }
-        ],
-
-        hierarchies: [
-            {
-                id: "XXXXXXXX1",
-                name: "el que sea",
-                fields : ["XXXXXXX1", "XXXXW2","XXXXD4"]
-            },
-            {
-                id: "XXXXXXXX2",
-                name: "el que sea 2",
-                fields : ["XXXXXXX2", "XXXXW3","XXXXD5"]
-            }
-        ],
-
-        dataSources: [
-            {
-                id: "SSSS1",
-                type: "mongoDB",
-                host: "192.168.1.1",
-                port: "27017",
-                username: "username",
-                password: "contraseña"
-            }
-        ],
-
-        folders: [
-            {
-                id:"F1",
-                label: "folder 1",
-                parent: ""
-            },
-            {
-                id:"F2",
-                label: "folder 2",
-                parent: "F1"
-            }
-
-        ]
-
-
-    } ;
-
-    $scope.objectMap = {
-          //debería venir ya anidado folder, campo... como resultado de la consulta con metadata, tiene que venir el alias, el id , el rol, el tipo
-    }
-
     $scope.getReportDiv = function()
     {
 
-        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%" ng-init="getReport()">';
+        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%" ng-init="getReportData()">';
 
         var $div = $(generatedHTML);
         $(reportLayout).append($div);
@@ -633,7 +349,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         });
     }
 
-    $scope.getReport = function()
+    $scope.getReportData = function()
     {
         /*
         var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body" style="heigth=400px;width:100%">';
