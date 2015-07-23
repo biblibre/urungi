@@ -152,8 +152,29 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         });
     };
 
-    if ($routeParams.reportID) {
-        $scope.reportID = $routeParams.reportID;
+    $scope.getReport = function() {
+        connection.get('/api/reports/find-one', {id: $routeParams.reportID}, function(data) {
+            $scope.selectedReport = data.item;
+            console.log($scope.selectedReport);
+
+            for (var i in $scope.selectedReport.query.datasources) {
+                var dataSource = $scope.selectedReport.query.datasources[i];
+
+                for (var c in dataSource.collections) {
+                    var collection = dataSource.collections[c];
+
+                    $scope.filters[0].filters = collection.filters;
+                    $scope.columns = collection.columns;
+                    $scope.order = collection.order;
+                }
+            }
+
+            $scope.processStructure(false);
+        });
+    };
+
+    $scope.initForm = function() {
+        $scope.dataMode = 'preview';
 
         if ($routeParams.reportID == 'true') {
             $scope.selectedReport = {};
@@ -186,7 +207,9 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 $scope.processStructure();
             });
         }
+    };
 
+    $scope.getDataSources = function() {
         connection.get('/api/data-sources/find-all', {}, function(data) {
             $scope.errorMsg = (data.result === 0) ? data.msg : false;
             $scope.page = data.page;
@@ -204,7 +227,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 };
             }
         });
-    }
+    };
 
     $scope.getElementFilterOptions = function(elementType)
     {
@@ -945,7 +968,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         params.query = $scope.query;
         //params.filters = $scope.filters;
 
-        connection.post('/api/reports/preview-query', params, function(data) {
+        connection.get('/api/reports/preview-query', params, function(data) {
             console.log(data);
             //$scope.errorMsg = (data.result === 0) ? data.msg : false;
             //$scope.page = data.page;
@@ -1018,11 +1041,58 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             }
             */
         });
-    }
+    };
+
+    $scope.page = 0;
+    $scope.queryData = [];
+    $scope.busy = false;
+
+    $scope.getData = function() {
+        if ($scope.dataMode == 'preview') {
+            $scope.previewQuery();
+            return;
+        }
+
+        if ($scope.selectedReport.reportType == 'chart') {
+            $scope.getChartData($scope.selectedReport.reportSubType);
+            return;
+        }
+
+        if ($scope.busy) return;
+        $scope.busy = true;
+        $scope.page += 1;
+
+        console.log('entering view query');
+
+        connection.get('/api/reports/get-data', {page: $scope.page, query: $scope.query}, function(data) {
+            console.log(data);
+
+            for (var i in data) {
+                $scope.queryData.push(data[i]);
+            }
+
+            $scope.busy = false;
+        });
+    };
+    $scope.getChartData = function(chartType) {
+        connection.get('/api/reports/get-data', {query: $scope.query}, function(data) {
+            var chartData = [];
+
+            switch (chartType) {
+                case 'bar': case 'donut':
+                for (var i in data) {
+                        chartData.push({value: data[i][$scope.selectedReport.properties.valueField], label: data[i][$scope.selectedReport.properties.labelField]});
+                    }
+            }
+
+            $scope.chartData = chartData;
+        });
+    };
 
 
-    $scope.processStructure = function(preview) {
-        var preview = (typeof preview !== 'undefined') ? preview : true;
+
+    $scope.processStructure = function(execute) {
+        var execute = (typeof execute !== 'undefined') ? execute : true;
 
         $scope.query = {};
         $scope.query.datasources = [];
@@ -1105,8 +1175,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         }
       //console.log(JSON.stringify($scope.query));
 
-        if ($scope.columns.length > 0 && preview)
-            $scope.previewQuery();
+        if ($scope.columns.length > 0 && execute)
+            $scope.getData();
     }
 
 });

@@ -100,8 +100,8 @@ exports.execOperation = function(operation, params, done) {
     });
 };
 
-exports.processCollections = function(collections, dataSource, done) {
-    processCollections(collections, dataSource, done);
+exports.processCollections = function(collections, dataSource, params, done) {
+    processCollections(collections, dataSource, params, done);
 };
 
 function getCollectionSchema(db,collections,index,schemas, done) {
@@ -230,7 +230,7 @@ function getElementList (target,elements,parent) {
     }
 }
 
-function processCollections(collections, dataSource, done, result, index) {
+function processCollections(collections, dataSource, params, done, result, index) {
     var index = (index) ? index : 0;
     var collection = (collections[index]) ? collections[index] : false;
     var result = (result) ? result : [];
@@ -331,19 +331,26 @@ function processCollections(collections, dataSource, done, result, index) {
 
         group['_id'] = fields;
 
-        var params = [{ $match: match }];
+        var aggregation = [{ $match: match }];
 
-        if (!isEmpty(project)) params.push({ $project: project });
+        if (!isEmpty(project)) aggregation.push({ $project: project });
 
-        if (!isEmpty(sort)) params.push({ $sort: sort });
+        if (!isEmpty(sort)) aggregation.push({ $sort: sort });
 
-        params.push({ $group: group });
-        params.push({ $limit: 10 });
+        aggregation.push({ $group: group });
 
-        console.log('params');
-        debug(params);
+        if (params.page) {
+            aggregation.push({ $skip: (params.page-1)*100 });
+            aggregation.push({ $limit: 100 });
+        }
+        else {
+            aggregation.push({ $limit: 10 });
+        }
 
-        col.aggregate(params, function(err, docs) {
+        console.log('aggregation');
+        debug(aggregation);
+
+        col.aggregate(aggregation, function(err, docs) {
             for (var i in docs) {
                 var item = {};
 
@@ -386,7 +393,7 @@ function processCollections(collections, dataSource, done, result, index) {
             //debug(result);
             db.close();
 
-            processCollections(collections, dataSource, done, result, index+1);
+            processCollections(collections, dataSource, params, done, result, index+1);
         });
     });
 }

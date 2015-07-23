@@ -70,13 +70,13 @@ exports.ReportsDelete = function(req,res){
 
 exports.PreviewQuery = function(req,res)
 {
-    var data = req.body;
+    var data = req.query;
     var query = data.query;
 
     console.log('entering preview query');
     debug(query);
 
-    processDataSources(query.datasources, function(result) {
+    processDataSources(query.datasources, {}, function(result) {
         //debug(result);
         serverResponse(req, res, 200, result);
     });
@@ -85,8 +85,20 @@ exports.PreviewQuery = function(req,res)
         debug(result);
         serverResponse(req, res, 200, result);
     });*/
-}
+};
 
+exports.ReportsGetData = function(req, res) {
+    var data = req.query;
+    var query = data.query;
+
+    console.log('entering get report data');
+    debug(query);
+
+    processDataSources(query.datasources, {page: (data.page) ? data.page : 1}, function(result) {
+        //debug(result);
+        serverResponse(req, res, 200, result);
+    });
+};
 
 function processQuery(query, done)
 {
@@ -121,7 +133,7 @@ function processDataSource(datasourceQuery, done)
 
 }
 ///////////////////////////////////////////////////////////
-function processDataSources(dataSources, done, result, index) {
+function processDataSources(dataSources, params, done, result, index) {
     var index = (index) ? index : 0;
     var dataSource = (dataSources[index]) ? dataSources[index] : false;
     var result = (result) ? result : [];
@@ -147,16 +159,16 @@ function processDataSources(dataSources, done, result, index) {
                 case 'MONGODB':
                     var mongodb = require('../../core/db/mongodb.js');
 
-                    mongodb.processCollections(dataSource.collections, dts, function(data) {
+                    mongodb.processCollections(dataSource.collections, dts, params, function(data) {
                         for (var i in data) {
                             result.push(data[i]);
                         }
 
-                        processDataSources(dataSources, done, result, index+1);
+                        processDataSources(dataSources, params, done, result, index+1);
                     });
             }
         } else {
-            processDataSources(dataSources, done, result, index+1);
+            processDataSources(dataSources, params, done, result, index+1);
         }
     });
 }

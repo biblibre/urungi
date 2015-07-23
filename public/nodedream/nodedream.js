@@ -499,6 +499,73 @@ app.directive('ndDonutChart', function($timeout) {
     };
 });
 
+/* chartData: type Array, for each field:
+ * label: label of the area
+ * value: value of the area
+ * */
+app.directive('ndBarChart', function($timeout) {
+    return {
+        restrict: 'E',
+        transclude: true,
+        scope: {
+            chartData: "=",
+            height: "@"
+        },
+        templateUrl: "/nodedream/templates/ndBarChart.html",
+        compile: function (element, attributes) {
+            var elementID = NodeDream.makeID();
+
+            element.children('.chart').attr('id', elementID);
+
+            Morris.Bar.prototype.resizeHandler = function() {
+                if(document.getElementById(this.el[0].id)){
+                    this.timeoutId = null;
+                    this.raphael.setSize(this.el.width(), this.el.height());
+                    return this.redraw();
+                }
+            };
+
+            return function (scope, element, attrs, controller) {
+
+                function createChart() {
+                    var data = scope.chartData;
+                    var height = scope.height;
+
+                    if (height) $('#'+elementID).css({'height': height});
+
+                    $timeout(function () { //If the second parameter is not provided, execute the function after the DOM has completed rendering
+                        if (data.length > 0) {
+                            var labels = [];
+
+                            for (var i in data) {
+                                labels.push('');
+                            }
+
+                            new Morris.Bar({
+                                element: elementID,
+                                data: data,
+                                xkey: 'label',
+                                ykeys: ['value'],
+                                labels: labels,
+                                hideHover: true,
+                                resize: true
+                            });
+                        }
+                    });
+                }
+
+                var refreshIntervalId = setInterval(function() {
+                    if (scope.chartData) {
+                        clearInterval(refreshIntervalId);
+                        createChart();
+                    }
+                }, 60);
+
+            };
+        }
+    };
+});
+
 app.directive('ndModal', function(connection, $timeout) {
     return {
         restrict: 'E',

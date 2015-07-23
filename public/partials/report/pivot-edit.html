@@ -18,7 +18,7 @@
     </div>
 </nd-modal>
 
-<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
+<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
     <a ng-click="goBack()" class="btn btn-default pull-left">Cancel</a>
     <a data-ng-click="reportName()" class="btn btn-success pull-right" style="margin-right: 5px">Save Report</a>
 </div>
@@ -43,7 +43,7 @@
 
         <div class="col-md-6">
 
-            <div ng-show="selectedReport.reportType == 'chart' && (selectedReport.reportSubType == 'line' || selectedReport.reportSubType == 'bar' || selectedReport.reportSubType == 'area')">
+            <div ng-show="selectedReport.reportType == 'chart' && (selectedReport.reportSubType == 'line' || selectedReport.reportSubType == 'area')">
                 <div class="form-group">
                     <label>xkey</label>
                     <select class="form-control" name="xkey" ng-model="selectedReport.properties.xkey"
@@ -68,16 +68,17 @@
                 </div>
             </div>
 
-            <div ng-show="selectedReport.reportType == 'chart' && (selectedReport.reportSubType == 'donut')">
+            <div ng-show="selectedReport.reportType == 'chart' && (selectedReport.reportSubType == 'bar' || selectedReport.reportSubType == 'donut')">
                 <div class="form-group">
-                    <label>theValueField</label>
-                    <select class="form-control" name="theValueField" ng-model="selectedReport.properties.theValueField"
-                            ng-options="obj.elementID as obj.objectLabel for obj in columns" ng-required="true" required ></select>
-                    <span ng-show="reportForm.theValueField.$invalid" class="help-inline">This field is required</span>
+                    <label>Value Field</label>
+                    <select class="form-control" name="valueField" ng-model="selectedReport.properties.valueField"
+                            ng-options="obj.elementName as obj.objectLabel for obj in columns" ng-required="true" required ></select>
+                    <span ng-show="reportForm.valueField.$invalid" class="help-inline">This field is required</span>
                 </div>
                 <div class="form-group">
-                    <label>labelField</label>
-                    <input name="labelField" type="text" class="form-control" ng-model="selectedReport.properties.labelField" ng-required="true" required >
+                    <label>Label Field</label>
+                    <select class="form-control" name="labelField" ng-model="selectedReport.properties.labelField"
+                            ng-options="obj.elementName as obj.objectLabel for obj in columns" ng-required="true" required ></select>
                     <span ng-show="reportForm.labelField.$invalid" class="help-inline">This field is required</span>
                 </div>
             </div>
