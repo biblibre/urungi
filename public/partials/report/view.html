@@ -1,4 +1,4 @@
-<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="getReport()">
+<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
     <a ng-click="goBack()" class="btn btn-default pull-left">Back</a>
     <a href="/#/reports/edit/{{reportID}}"  class="btn btn-success pull-right" style="margin-right: 5px">Edit Report</a>
 </div>
@@ -30,7 +30,7 @@
     </div>
 </div>
 
-<div ng-if="selectedReport.reportType == 'chart' && selectedReport.reportSubType == 'bar'" class="row">
+<!--<div ng-if="selectedReport.reportType == 'chart' && selectedReport.reportSubType == 'bar'" class="row">
     <div class="col-md-12" ng-init="getData()">
         <nd-bar-chart chart-data="chartData" height="400"></nd-bar-chart>
     </div>
@@ -40,9 +40,9 @@
     <div class="col-md-12" ng-init="getData()">
         <nd-donut-chart chart-data="chartData" height="400" stroke-color="#eee"></nd-donut-chart>
     </div>
-</div>
+</div>-->
 
-<!--<div ng-if="selectedReport.reportType != 'grid'" class="container-fluid mainArea">
+<div ng-if="selectedReport.reportType != 'grid'" class="container-fluid mainArea">
 
     <div class="col-md-12"  >
         <div id="reportLayout" class="panel panel-default"   ng-init="getReportDiv()">
@@ -57,4 +57,4 @@
 
     </div>
     -->
-<!--</div>-->
+</div>

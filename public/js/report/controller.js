@@ -153,7 +153,12 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     };
 
     $scope.getReport = function() {
-        connection.get('/api/reports/find-one', {id: $routeParams.reportID}, function(data) {
+
+        reportModel.getReport($scope, $routeParams.reportID, function() {
+            $scope.processStructure(false);
+        });
+
+        /*connection.get('/api/reports/find-one', {id: $routeParams.reportID}, function(data) {
             $scope.selectedReport = data.item;
             console.log($scope.selectedReport);
 
@@ -170,7 +175,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             }
 
             $scope.processStructure(false);
-        });
+        });*/
     };
 
     $scope.initForm = function() {
@@ -188,7 +193,43 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             console.log('entering in add mode for reports') ;
         }
         else {
-            connection.get('/api/reports/find-one', {id: $routeParams.reportID}, function(data) {
+            reportModel.getReport($scope, $routeParams.reportID, function() {
+
+
+                if ($scope.selectedReport.properties) {
+                    if ($scope.selectedReport.properties.xkey) {
+
+                        for (var c in $scope.columns) {
+                            var column = $scope.columns[c].elementName;
+
+                            if ($scope.columns[c].aggregation) column += $scope.columns[c].aggregation;
+
+                            if (column == $scope.selectedReport.properties.xkey) {
+                                $scope.selectedReport.properties.xkey = $scope.columns[c];
+                                break;
+                            }
+                        }
+                    }
+                    if ($scope.selectedReport.properties.ykeys) {
+                        for (var i in $scope.selectedReport.properties.ykeys) {
+                            for (var c in $scope.columns) {
+                                var column = $scope.columns[c].elementName;
+
+                                if ($scope.columns[c].aggregation) column += $scope.columns[c].aggregation;
+
+                                if (column == $scope.selectedReport.properties.ykeys[i].field) {
+                                    $scope.selectedReport.properties.ykeys[i].field = $scope.columns[c];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                $scope.processStructure();
+            });
+            /*connection.get('/api/reports/find-one', {id: $routeParams.reportID}, function(data) {
                 $scope.selectedReport = data.item;
                 console.log($scope.selectedReport);
 
@@ -205,7 +246,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 }
 
                 $scope.processStructure();
-            });
+            });*/
         }
     };
 
@@ -343,6 +384,29 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         data.query = $scope.query;
 
+        if ($scope.selectedReport.properties) {
+            if ($scope.selectedReport.properties.xkey) {
+                var xkey = $scope.selectedReport.properties.xkey.elementName;
+
+                if ($scope.selectedReport.properties.xkey.aggregation) xkey += $scope.selectedReport.properties.xkey.aggregation;
+
+                $scope.selectedReport.properties.xkey = xkey;
+            }
+            if ($scope.selectedReport.properties.ykeys) {
+                var ykeys = [];
+
+                for (var i in $scope.selectedReport.properties.ykeys) {
+                    var field = $scope.selectedReport.properties.ykeys[i].field.elementName;
+
+                    if ($scope.selectedReport.properties.ykeys[i].field.aggregation) field += $scope.selectedReport.properties.ykeys[i].field.aggregation;
+
+                    ykeys.push({field: field, label: $scope.selectedReport.properties.ykeys[i].field.objectLabel});
+                }
+
+                $scope.selectedReport.properties.ykeys = ykeys;
+            }
+        }
+
         if ($scope.mode == 'add') {
             connection.post('/api/reports/create', data, function(data) {
                 if (data.result == 1) {
@@ -365,7 +429,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%" ng-init="getReportData()">';
 
         var $div = $(generatedHTML);
-        $(reportLayout).append($div);
+        $('#reportLayout').append($div);
         angular.element(document).injector().invoke(function($compile) {
             var scope = angular.element($div).scope();
             $compile($div)(scope);
@@ -389,7 +453,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
             if (errorCode != 0)
             {
-                var el = document.getElementById(reportID);
+                var el = document.getElementById($routeParams.reportID);
 
                 var theHTML = '';
                 if (errorCode == 1)
@@ -1043,20 +1107,27 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         });
     };
 
+    $scope.addYKeyField = function() {
+        if (!$scope.selectedReport.properties.ykeys) $scope.selectedReport.properties.ykeys = [];
+console.log($scope.selectedReport.properties.ykeys);
+        $scope.selectedReport.properties.ykeys.push({});
+    };
+
     $scope.page = 0;
     $scope.queryData = [];
     $scope.busy = false;
 
     $scope.getData = function() {
+
         if ($scope.dataMode == 'preview') {
             $scope.previewQuery();
             return;
         }
 
-        if ($scope.selectedReport.reportType == 'chart') {
+        /*if ($scope.selectedReport.reportType == 'chart') {
             $scope.getChartData($scope.selectedReport.reportSubType);
             return;
-        }
+        }*/
 
         if ($scope.busy) return;
         $scope.busy = true;
@@ -1064,7 +1135,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         console.log('entering view query');
 
-        connection.get('/api/reports/get-data', {page: $scope.page, query: $scope.query}, function(data) {
+        reportModel.getReportData($scope.selectedReport._id, {page: $scope.page}, function(data) {
             console.log(data);
 
             for (var i in data) {
@@ -1073,6 +1144,16 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
             $scope.busy = false;
         });
+
+        /*connection.get('/api/reports/get-data', {page: $scope.page, query: $scope.query}, function(data) {
+            console.log(data);
+
+            for (var i in data) {
+                $scope.queryData.push(data[i]);
+            }
+
+            $scope.busy = false;
+        });*/
     };
     $scope.getChartData = function(chartType) {
         connection.get('/api/reports/get-data', {query: $scope.query}, function(data) {

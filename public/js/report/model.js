@@ -7,14 +7,57 @@
  */
 
 //app.service('reportModel' , function ($http, $q, $filter, ngTableParams) {    TODO: ngTableParams quitado todo por traslado activar
-app.service('reportModel' , function ($http, $q, $filter) {
+app.service('reportModel' , function ($http, $q, $filter, connection) {
     this.data = null;
+    this.scope = null;
+    this.selectedReport = null;
 
-    hashCode = function(s){
+    var hashCode = function(s){
         return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
-    }
+    };
+
+    this.getReportData = function(id, params, done) {
+        getReportData(id, params, done);
+    };
+    function getReportData(id, params, done) {
+        console.log('getReportData');
+        console.log(this.selectedReport);
+
+        params.query = this.selectedReport.query;
+
+        connection.get('/api/reports/get-data', params, function(data) {
+            console.log(data);
+            done(data);
+        });
+    };
 
     this.getReport = function($scope, id, done) {
+        this.scope = $scope;
+        console.log('getReport');
+        console.log(id);
+        connection.get('/api/reports/find-one', {id: id}, function(data) {
+            $scope.selectedReport = data.item;
+            this.selectedReport = $scope.selectedReport;
+            console.log($scope.selectedReport);
+
+            for (var i in $scope.selectedReport.query.datasources) {
+                var dataSource = $scope.selectedReport.query.datasources[i];
+
+                for (var c in dataSource.collections) {
+                    var collection = dataSource.collections[c];
+
+                    $scope.filters[0].filters = collection.filters;
+                    $scope.columns = collection.columns;
+                    $scope.order = collection.order;
+                }
+            }
+
+            done($scope.selectedReport);
+        });
+        return;
+
+
+
         /*
         var d = $q.defer();
 
@@ -95,1052 +138,7 @@ app.service('reportModel' , function ($http, $q, $filter) {
 
     };
 
-    function getTheData(id, done)
-    {
-        if (id == "22222a")
-        {
-            done(  [{label: "Clientes Nuevos", value: 78},{label: "Clientes Recurrentes", value: 22}]);
-        }
 
-        if (id == "22222b")
-        {
-            done(  [{label: "Generación propia", value: 12},{label: "Touroperadores", value: 88}]);
-        }
-
-        if (id == "22222c")
-        {
-            done(  [{label: "Download Sales", value: 12},{label: "In-Store Sales", value: 30},{label: "Mail-Order Sales", value: 20}]);
-        }
-
-        if (id == "88888a")
-        {
-            done(  [{value: 6,evolution:12}]);
-        }
-        if (id == "88888b")
-        {
-            done(  [{value: 12,evolution:32}]);
-        }
-        if (id == "99999a")
-        {
-            done(  [{value: 145.32,evolution:2}]);
-        }
-
-        if (id == "55555")
-        {
-            done(  [
-                { nombrecampo1: '2006', nombrecampo2: 100, nombrecampo3: 90, nombrecampo4: "Mene" },
-                { nombrecampo1: '2006', nombrecampo2: 100, nombrecampo3: 90, nombrecampo4: "Mene2" },
-                { nombrecampo1: '2006', nombrecampo2: 100, nombrecampo3: 90, nombrecampo4: "Mene3" },
-                { nombrecampo1: '2006', nombrecampo2: 600, nombrecampo3: 90, nombrecampo4: "Mene4" },
-                { nombrecampo1: '2006', nombrecampo2: 100, nombrecampo3: 90, nombrecampo4: "Mene5" },
-                { nombrecampo1: '2006', nombrecampo2: 100, nombrecampo3: 90, nombrecampo4: "Mene6" },
-                { nombrecampo1: '2006', nombrecampo2: 500, nombrecampo3: 90, nombrecampo4: "Mene7" }
-            ]);
-        }
-
-        if (id == "55555a")
-        {
-            done(  [
-                {
-                    "id": 1000,
-                    "nombre": "Philip Haney",
-                    "nacionalidad": "Saint Lucia",
-                    "fecha": "08/12/2014",
-                    "valor": 4,
-                    "satisfaccion": 5,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1001,
-                    "nombre": "Vanna Camacho",
-                    "nacionalidad": "Tuvalu",
-                    "fecha": "29/12/2014",
-                    "valor": 4,
-                    "satisfaccion": 5,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1002,
-                    "nombre": "Susan Clemons",
-                    "nacionalidad": "Fiji",
-                    "fecha": "05/12/2014",
-                    "valor": 9,
-                    "satisfaccion": 2,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1003,
-                    "nombre": "Briar Richards",
-                    "nacionalidad": "Monaco",
-                    "fecha": "13/01/2015",
-                    "valor": 6,
-                    "satisfaccion": 5,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1004,
-                    "nombre": "Len Acevedo",
-                    "nacionalidad": "Georgia",
-                    "fecha": "29/12/2014",
-                    "valor": 10,
-                    "satisfaccion": 1,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1005,
-                    "nombre": "April Conner",
-                    "nacionalidad": "Estonia",
-                    "fecha": "02/01/2015",
-                    "valor": 9,
-                    "satisfaccion": 4,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1006,
-                    "nombre": "Reese Booth",
-                    "nacionalidad": "Armenia",
-                    "fecha": "14/01/2015",
-                    "valor": 6,
-                    "satisfaccion": 3,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1007,
-                    "nombre": "Nadine Moses",
-                    "nacionalidad": "Burkina Faso",
-                    "fecha": "31/12/2014",
-                    "valor": 3,
-                    "satisfaccion": 2,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1008,
-                    "nombre": "Doris Richardson",
-                    "nacionalidad": "Curaçao",
-                    "fecha": "14/12/2014",
-                    "valor": 6,
-                    "satisfaccion": 2,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1009,
-                    "nombre": "Rylee Cochran",
-                    "nacionalidad": "Madagascar",
-                    "fecha": "12/12/2014",
-                    "valor": 10,
-                    "satisfaccion": 5,
-                    "origen": "web"
-                },
-                {
-                    "id": 1010,
-                    "nombre": "Dara Estes",
-                    "nacionalidad": "Tajikistan",
-                    "fecha": "06/12/2014",
-                    "valor": 5,
-                    "satisfaccion": 1,
-                    "origen": "web"
-                },
-                {
-                    "id": 1011,
-                    "nombre": "Nolan Buckner",
-                    "nacionalidad": "Qatar",
-                    "fecha": "08/12/2014",
-                    "valor": 9,
-                    "satisfaccion": 5,
-                    "origen": "web"
-                },
-                {
-                    "id": 1012,
-                    "nombre": "Rogan Raymond",
-                    "nacionalidad": "Madagascar",
-                    "fecha": "21/12/2014",
-                    "valor": 10,
-                    "satisfaccion": 3,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1013,
-                    "nombre": "Raven Odom",
-                    "nacionalidad": "Trinidad and Tobago",
-                    "fecha": "01/01/2015",
-                    "valor": 1,
-                    "satisfaccion": 2,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1014,
-                    "nombre": "Gretchen Conway",
-                    "nacionalidad": "South Africa",
-                    "fecha": "07/01/2015",
-                    "valor": 5,
-                    "satisfaccion": 1,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1015,
-                    "nombre": "Wynter Dudley",
-                    "nacionalidad": "Puerto Rico",
-                    "fecha": "08/12/2014",
-                    "valor": 3,
-                    "satisfaccion": 2,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1016,
-                    "nombre": "Hadley Hughes",
-                    "nacionalidad": "Japan",
-                    "fecha": "17/12/2014",
-                    "valor": 8,
-                    "satisfaccion": 5,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1017,
-                    "nombre": "Nathan French",
-                    "nacionalidad": "Heard Island and Mcdonald Islands",
-                    "fecha": "10/01/2015",
-                    "valor": 7,
-                    "satisfaccion": 2,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1018,
-                    "nombre": "Veronica Donaldson",
-                    "nacionalidad": "Dominica",
-                    "fecha": "03/12/2014",
-                    "valor": 1,
-                    "satisfaccion": 2,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1019,
-                    "nombre": "Unity Rutledge",
-                    "nacionalidad": "South Sudan",
-                    "fecha": "31/12/2014",
-                    "valor": 1,
-                    "satisfaccion": 4,
-                    "origen": "web"
-                },
-                {
-                    "id": 1020,
-                    "nombre": "Allistair Chandler",
-                    "nacionalidad": "New Caledonia",
-                    "fecha": "03/01/2015",
-                    "valor": 7,
-                    "satisfaccion": 4,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1021,
-                    "nombre": "Halee Allison",
-                    "nacionalidad": "Panama",
-                    "fecha": "17/12/2014",
-                    "valor": 2,
-                    "satisfaccion": 2,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1022,
-                    "nombre": "Olympia Bartlett",
-                    "nacionalidad": "Macedonia",
-                    "fecha": "27/12/2014",
-                    "valor": 8,
-                    "satisfaccion": 2,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1023,
-                    "nombre": "Idona Walsh",
-                    "nacionalidad": "Lebanon",
-                    "fecha": "12/01/2015",
-                    "valor": 1,
-                    "satisfaccion": 3,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1024,
-                    "nombre": "Diana Phillips",
-                    "nacionalidad": "Jamaica",
-                    "fecha": "14/01/2015",
-                    "valor": 3,
-                    "satisfaccion": 4,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1025,
-                    "nombre": "Serina Bright",
-                    "nacionalidad": "Turks and Caicos Islands",
-                    "fecha": "01/01/2015",
-                    "valor": 7,
-                    "satisfaccion": 5,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1026,
-                    "nombre": "Alika Lawson",
-                    "nacionalidad": "French Guiana",
-                    "fecha": "04/12/2014",
-                    "valor": 2,
-                    "satisfaccion": 2,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1027,
-                    "nombre": "Emery Herrera",
-                    "nacionalidad": "Colombia",
-                    "fecha": "03/12/2014",
-                    "valor": 10,
-                    "satisfaccion": 3,
-                    "origen": "web"
-                },
-                {
-                    "id": 1028,
-                    "nombre": "Zenaida Wade",
-                    "nacionalidad": "Holy See (Vatican City State)",
-                    "fecha": "01/12/2014",
-                    "valor": 8,
-                    "satisfaccion": 2,
-                    "origen": "web"
-                },
-                {
-                    "id": 1029,
-                    "nombre": "Ora Benton",
-                    "nacionalidad": "Canada",
-                    "fecha": "30/12/2014",
-                    "valor": 3,
-                    "satisfaccion": 4,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1030,
-                    "nombre": "Nell Hebert",
-                    "nacionalidad": "Tokelau",
-                    "fecha": "13/01/2015",
-                    "valor": 5,
-                    "satisfaccion": 1,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1031,
-                    "nombre": "Quyn Lynch",
-                    "nacionalidad": "Chad",
-                    "fecha": "21/12/2014",
-                    "valor": 2,
-                    "satisfaccion": 2,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1032,
-                    "nombre": "Ima Stout",
-                    "nacionalidad": "Belize",
-                    "fecha": "25/12/2014",
-                    "valor": 7,
-                    "satisfaccion": 2,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1033,
-                    "nombre": "Clarke Martinez",
-                    "nacionalidad": "Qatar",
-                    "fecha": "05/01/2015",
-                    "valor": 2,
-                    "satisfaccion": 4,
-                    "origen": "web"
-                },
-                {
-                    "id": 1034,
-                    "nombre": "Natalie Barron",
-                    "nacionalidad": "Turkmenistan",
-                    "fecha": "06/12/2014",
-                    "valor": 3,
-                    "satisfaccion": 2,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1035,
-                    "nombre": "Brielle Workman",
-                    "nacionalidad": "Bermuda",
-                    "fecha": "23/12/2014",
-                    "valor": 1,
-                    "satisfaccion": 1,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1036,
-                    "nombre": "Colt Goodwin",
-                    "nacionalidad": "Panama",
-                    "fecha": "03/12/2014",
-                    "valor": 3,
-                    "satisfaccion": 2,
-                    "origen": "web"
-                },
-                {
-                    "id": 1037,
-                    "nombre": "Liberty Gillespie",
-                    "nacionalidad": "Serbia",
-                    "fecha": "02/01/2015",
-                    "valor": 10,
-                    "satisfaccion": 5,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1038,
-                    "nombre": "Paula Juarez",
-                    "nacionalidad": "Wallis and Futuna",
-                    "fecha": "09/01/2015",
-                    "valor": 3,
-                    "satisfaccion": 1,
-                    "origen": "web"
-                },
-                {
-                    "id": 1039,
-                    "nombre": "Ocean Mays",
-                    "nacionalidad": "French Polynesia",
-                    "fecha": "03/01/2015",
-                    "valor": 3,
-                    "satisfaccion": 3,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1040,
-                    "nombre": "Scarlet Scott",
-                    "nacionalidad": "Panama",
-                    "fecha": "02/12/2014",
-                    "valor": 3,
-                    "satisfaccion": 4,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1041,
-                    "nombre": "Bruce Riley",
-                    "nacionalidad": "Barbados",
-                    "fecha": "08/01/2015",
-                    "valor": 7,
-                    "satisfaccion": 3,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1042,
-                    "nombre": "Vielka Jenkins",
-                    "nacionalidad": "Latvia",
-                    "fecha": "17/12/2014",
-                    "valor": 6,
-                    "satisfaccion": 5,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1043,
-                    "nombre": "September Sawyer",
-                    "nacionalidad": "Saudi Arabia",
-                    "fecha": "13/12/2014",
-                    "valor": 9,
-                    "satisfaccion": 2,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1044,
-                    "nombre": "Elton Hooper",
-                    "nacionalidad": "Laos",
-                    "fecha": "29/12/2014",
-                    "valor": 1,
-                    "satisfaccion": 2,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1045,
-                    "nombre": "Jenna Waters",
-                    "nacionalidad": "Egypt",
-                    "fecha": "24/12/2014",
-                    "valor": 3,
-                    "satisfaccion": 4,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1046,
-                    "nombre": "TaShya Carroll",
-                    "nacionalidad": "Indonesia",
-                    "fecha": "21/12/2014",
-                    "valor": 7,
-                    "satisfaccion": 3,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1047,
-                    "nombre": "Hamilton Cleveland",
-                    "nacionalidad": "Kuwait",
-                    "fecha": "13/12/2014",
-                    "valor": 6,
-                    "satisfaccion": 2,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1048,
-                    "nombre": "Warren Mccarthy",
-                    "nacionalidad": "Virgin Islands, British",
-                    "fecha": "21/12/2014",
-                    "valor": 2,
-                    "satisfaccion": 3,
-                    "origen": "web"
-                },
-                {
-                    "id": 1049,
-                    "nombre": "Stacy Spencer",
-                    "nacionalidad": "South Africa",
-                    "fecha": "23/12/2014",
-                    "valor": 6,
-                    "satisfaccion": 1,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1050,
-                    "nombre": "Nyssa Morton",
-                    "nacionalidad": "Dominican Republic",
-                    "fecha": "02/01/2015",
-                    "valor": 1,
-                    "satisfaccion": 3,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1051,
-                    "nombre": "Irene Fuller",
-                    "nacionalidad": "Cape Verde",
-                    "fecha": "04/01/2015",
-                    "valor": 8,
-                    "satisfaccion": 1,
-                    "origen": "web"
-                },
-                {
-                    "id": 1052,
-                    "nombre": "Maris Cox",
-                    "nacionalidad": "Northern Mariana Islands",
-                    "fecha": "17/12/2014",
-                    "valor": 4,
-                    "satisfaccion": 3,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1053,
-                    "nombre": "Lunea Suarez",
-                    "nacionalidad": "Estonia",
-                    "fecha": "08/01/2015",
-                    "valor": 6,
-                    "satisfaccion": 5,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1054,
-                    "nombre": "Claire Jordan",
-                    "nacionalidad": "Botswana",
-                    "fecha": "05/12/2014",
-                    "valor": 9,
-                    "satisfaccion": 1,
-                    "origen": "web"
-                },
-                {
-                    "id": 1055,
-                    "nombre": "Armando Haley",
-                    "nacionalidad": "Togo",
-                    "fecha": "03/12/2014",
-                    "valor": 5,
-                    "satisfaccion": 4,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1056,
-                    "nombre": "Orson Tanner",
-                    "nacionalidad": "Wallis and Futuna",
-                    "fecha": "12/01/2015",
-                    "valor": 10,
-                    "satisfaccion": 4,
-                    "origen": "web"
-                },
-                {
-                    "id": 1057,
-                    "nombre": "Joel Foley",
-                    "nacionalidad": "Cayman Islands",
-                    "fecha": "07/01/2015",
-                    "valor": 1,
-                    "satisfaccion": 2,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1058,
-                    "nombre": "Neville French",
-                    "nacionalidad": "Spain",
-                    "fecha": "21/12/2014",
-                    "valor": 8,
-                    "satisfaccion": 5,
-                    "origen": "web"
-                },
-                {
-                    "id": 1059,
-                    "nombre": "Brenda Mann",
-                    "nacionalidad": "Heard Island and Mcdonald Islands",
-                    "fecha": "31/12/2014",
-                    "valor": 1,
-                    "satisfaccion": 2,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1060,
-                    "nombre": "Jada Aguilar",
-                    "nacionalidad": "Equatorial Guinea",
-                    "fecha": "07/12/2014",
-                    "valor": 4,
-                    "satisfaccion": 2,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1061,
-                    "nombre": "Alvin Bowman",
-                    "nacionalidad": "Senegal",
-                    "fecha": "22/12/2014",
-                    "valor": 10,
-                    "satisfaccion": 2,
-                    "origen": "web"
-                },
-                {
-                    "id": 1062,
-                    "nombre": "Nehru Townsend",
-                    "nacionalidad": "Mauritius",
-                    "fecha": "09/12/2014",
-                    "valor": 4,
-                    "satisfaccion": 5,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1063,
-                    "nombre": "Grace Wagner",
-                    "nacionalidad": "Iceland",
-                    "fecha": "30/12/2014",
-                    "valor": 10,
-                    "satisfaccion": 5,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1064,
-                    "nombre": "Cameran Mcconnell",
-                    "nacionalidad": "Bosnia and Herzegovina",
-                    "fecha": "02/01/2015",
-                    "valor": 8,
-                    "satisfaccion": 3,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1065,
-                    "nombre": "Helen Blake",
-                    "nacionalidad": "Dominica",
-                    "fecha": "13/12/2014",
-                    "valor": 8,
-                    "satisfaccion": 1,
-                    "origen": "web"
-                },
-                {
-                    "id": 1066,
-                    "nombre": "Gail Jordan",
-                    "nacionalidad": "Tonga",
-                    "fecha": "09/12/2014",
-                    "valor": 6,
-                    "satisfaccion": 1,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1067,
-                    "nombre": "Sage Villarreal",
-                    "nacionalidad": "Anguilla",
-                    "fecha": "30/12/2014",
-                    "valor": 6,
-                    "satisfaccion": 2,
-                    "origen": "web"
-                },
-                {
-                    "id": 1068,
-                    "nombre": "Maxwell Hall",
-                    "nacionalidad": "Northern Mariana Islands",
-                    "fecha": "03/12/2014",
-                    "valor": 7,
-                    "satisfaccion": 3,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1069,
-                    "nombre": "Lawrence Ratliff",
-                    "nacionalidad": "Swaziland",
-                    "fecha": "03/01/2015",
-                    "valor": 1,
-                    "satisfaccion": 3,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1070,
-                    "nombre": "Joel Beck",
-                    "nacionalidad": "Tokelau",
-                    "fecha": "06/12/2014",
-                    "valor": 6,
-                    "satisfaccion": 1,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1071,
-                    "nombre": "Tyler Dixon",
-                    "nacionalidad": "Montserrat",
-                    "fecha": "16/12/2014",
-                    "valor": 1,
-                    "satisfaccion": 2,
-                    "origen": "web"
-                },
-                {
-                    "id": 1072,
-                    "nombre": "Riley Paul",
-                    "nacionalidad": "Micronesia",
-                    "fecha": "11/01/2015",
-                    "valor": 8,
-                    "satisfaccion": 3,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1073,
-                    "nombre": "Boris Potts",
-                    "nacionalidad": "Belize",
-                    "fecha": "22/12/2014",
-                    "valor": 6,
-                    "satisfaccion": 4,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1074,
-                    "nombre": "Jerome Snyder",
-                    "nacionalidad": "Uzbekistan",
-                    "fecha": "09/01/2015",
-                    "valor": 1,
-                    "satisfaccion": 5,
-                    "origen": "web"
-                },
-                {
-                    "id": 1075,
-                    "nombre": "Cyrus Jenkins",
-                    "nacionalidad": "Bermuda",
-                    "fecha": "12/12/2014",
-                    "valor": 5,
-                    "satisfaccion": 5,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1076,
-                    "nombre": "Stacy Dunlap",
-                    "nacionalidad": "Cook Islands",
-                    "fecha": "06/12/2014",
-                    "valor": 9,
-                    "satisfaccion": 1,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1077,
-                    "nombre": "Janna Warren",
-                    "nacionalidad": "Jamaica",
-                    "fecha": "30/12/2014",
-                    "valor": 8,
-                    "satisfaccion": 4,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1078,
-                    "nombre": "Francesca Kerr",
-                    "nacionalidad": "Cape Verde",
-                    "fecha": "05/01/2015",
-                    "valor": 6,
-                    "satisfaccion": 2,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1079,
-                    "nombre": "Rogan Prince",
-                    "nacionalidad": "Yemen",
-                    "fecha": "13/01/2015",
-                    "valor": 5,
-                    "satisfaccion": 4,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1080,
-                    "nombre": "Phillip Sellers",
-                    "nacionalidad": "Mayotte",
-                    "fecha": "30/12/2014",
-                    "valor": 10,
-                    "satisfaccion": 3,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1081,
-                    "nombre": "Brynne Dunlap",
-                    "nacionalidad": "Cape Verde",
-                    "fecha": "07/01/2015",
-                    "valor": 6,
-                    "satisfaccion": 1,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1082,
-                    "nombre": "Bradley Mathis",
-                    "nacionalidad": "Slovakia",
-                    "fecha": "08/12/2014",
-                    "valor": 8,
-                    "satisfaccion": 3,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1083,
-                    "nombre": "Benedict Michael",
-                    "nacionalidad": "Lesotho",
-                    "fecha": "04/12/2014",
-                    "valor": 6,
-                    "satisfaccion": 4,
-                    "origen": "web"
-                },
-                {
-                    "id": 1084,
-                    "nombre": "Curran Meyers",
-                    "nacionalidad": "Saudi Arabia",
-                    "fecha": "28/12/2014",
-                    "valor": 4,
-                    "satisfaccion": 3,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1085,
-                    "nombre": "Channing Sanchez",
-                    "nacionalidad": "Timor-Leste",
-                    "fecha": "19/12/2014",
-                    "valor": 3,
-                    "satisfaccion": 3,
-                    "origen": "web"
-                },
-                {
-                    "id": 1086,
-                    "nombre": "Dominique Spence",
-                    "nacionalidad": "Nauru",
-                    "fecha": "07/12/2014",
-                    "valor": 8,
-                    "satisfaccion": 5,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1087,
-                    "nombre": "Selma Callahan",
-                    "nacionalidad": "Faroe Islands",
-                    "fecha": "09/01/2015",
-                    "valor": 1,
-                    "satisfaccion": 3,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1088,
-                    "nombre": "Denise Hayden",
-                    "nacionalidad": "Taiwan",
-                    "fecha": "16/12/2014",
-                    "valor": 5,
-                    "satisfaccion": 4,
-                    "origen": "web"
-                },
-                {
-                    "id": 1089,
-                    "nombre": "Melvin Carney",
-                    "nacionalidad": "Nigeria",
-                    "fecha": "11/01/2015",
-                    "valor": 8,
-                    "satisfaccion": 5,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1090,
-                    "nombre": "Calvin Roach",
-                    "nacionalidad": "Lebanon",
-                    "fecha": "29/12/2014",
-                    "valor": 7,
-                    "satisfaccion": 1,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1091,
-                    "nombre": "Shoshana Cantrell",
-                    "nacionalidad": "Virgin Islands, British",
-                    "fecha": "10/01/2015",
-                    "valor": 6,
-                    "satisfaccion": 5,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1092,
-                    "nombre": "Fleur Goodwin",
-                    "nacionalidad": "Papua New Guinea",
-                    "fecha": "08/01/2015",
-                    "valor": 10,
-                    "satisfaccion": 1,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1093,
-                    "nombre": "Acton Mccarty",
-                    "nacionalidad": "Jordan",
-                    "fecha": "14/12/2014",
-                    "valor": 9,
-                    "satisfaccion": 4,
-                    "origen": "Touroperador"
-                },
-                {
-                    "id": 1094,
-                    "nombre": "Meghan Robles",
-                    "nacionalidad": "Burkina Faso",
-                    "fecha": "03/01/2015",
-                    "valor": 5,
-                    "satisfaccion": 1,
-                    "origen": "web"
-                },
-                {
-                    "id": 1095,
-                    "nombre": "Belle Crane",
-                    "nacionalidad": "Qatar",
-                    "fecha": "10/12/2014",
-                    "valor": 1,
-                    "satisfaccion": 4,
-                    "origen": "agencia"
-                },
-                {
-                    "id": 1096,
-                    "nombre": "Kaden Ferguson",
-                    "nacionalidad": "Tanzania",
-                    "fecha": "20/12/2014",
-                    "valor": 2,
-                    "satisfaccion": 3,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1097,
-                    "nombre": "Merrill Owens",
-                    "nacionalidad": "Jamaica",
-                    "fecha": "24/12/2014",
-                    "valor": 4,
-                    "satisfaccion": 3,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1098,
-                    "nombre": "Tanner Obrien",
-                    "nacionalidad": "Thailand",
-                    "fecha": "11/01/2015",
-                    "valor": 2,
-                    "satisfaccion": 3,
-                    "origen": "integrador"
-                },
-                {
-                    "id": 1099,
-                    "nombre": "Shafira Joseph",
-                    "nacionalidad": "Christmas Island",
-                    "fecha": "15/12/2014",
-                    "valor": 1,
-                    "satisfaccion": 4,
-                    "origen": "integrador"
-                }
-            ]);
-        }
-
-        if (id == "101011")
-        {
-            done(  [
-                {
-                    "id": 1013,
-                    "nombre": "Raven Odom",
-                    "nacionalidad": "Trinidad and Tobago",
-                    "fecha": "01/01/2015",
-                    "valor": 6,
-                    "satisfaccion": 4,
-                    "origen": "agencia",
-                    "observaciones": "Al cliente le gusta especialmente que haya flores frescas en su habitación el día de su llegada al hotel"
-                }
-            ]);
-        }
-
-
-
-        if (id == "XXXXXXa")
-        {
-            done(  [
-                {
-                    "fecha": "15/02/2014",
-                    "dias": 8,
-                    "personas": 8,
-                    "habitaciones": 3,
-                    "origen": "agencia",
-                    "pago": "MASTERCARD"
-                },
-                {
-                    "fecha": "02/01/2016",
-                    "dias": 9,
-                    "personas": 3,
-                    "habitaciones": 2,
-                    "origen": "agencia",
-                    "pago": "MASTERCARD"
-                },
-                {
-                    "fecha": "06/10/2014",
-                    "dias": 8,
-                    "personas": 5,
-                    "habitaciones": 1,
-                    "origen": "touroperador",
-                    "pago": "AMEX"
-                }
-            ]);
-        }
-
-        if (id == "XXXXXXb")
-        {
-            done(  [
-                {
-                    "id": 100010,
-                    "fecha": "23/11/2015",
-                    "estado": "pendiente",
-                    "Asunto": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam adipiscing lacus."
-                },
-                {
-                    "id": 100011,
-                    "fecha": "20/03/2014",
-                    "estado": "cerrada",
-                    "Asunto": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam adipiscing lacus. Ut nec"
-                }
-            ]);
-        }
-
-        if (id == "XXXXXXc")
-        {
-            done(  [
-                {
-                    "id": 900010,
-                    "fecha": "16/10/2015",
-                    "importe": "1538€",
-                    "abonado": "CASH"
-                },
-                {
-                    "id": 900011,
-                    "fecha": "25/07/2015",
-                    "importe": "1579€",
-                    "abonado": "AMEX"
-                },
-                {
-                    "id": 900012,
-                    "fecha": "14/06/2014",
-                    "importe": "1979€",
-                    "abonado": "MASTERCARD"
-                },
-                {
-                    "id": 900013,
-                    "fecha": "03/03/2015",
-                    "importe": "1340€",
-                    "abonado": "VISA"
-                }
-            ]);
-        }
-
-    }
 
 
     this.getReportBlock = function($scope, id, done)
@@ -1209,173 +207,137 @@ app.service('reportModel' , function ($http, $q, $filter) {
     }
     */
     function generateChart(id,report,done) {
-        var found = false;
+console.log('generateChart');
+        console.log(report);
+        getReportData(id, {}, function(theData){
+            if (report.reportSubType == 'line') {
+                var chartParams = {
+                    element: id,
+                    data: theData,
+                    xkey: report.properties.xkey,
+                    hideHover: true,
+                    resize: true,
+                    parseTime: false
+                    //dateFormat: function (x) { return ''; }
+                };
 
-        if (report.reportSubType == 'line')
-        {
-            var theData = [
-                {day:'1/1/2014',visitorsCount: 10},
-                {day:'2/1/2014',visitorsCount: 5},
-                {day:'3/1/2014',visitorsCount: 34},
-                {day:'4/1/2014',visitorsCount: 23},
-                {day:'5/1/2014',visitorsCount: 13},
-                {day:'6/1/2014',visitorsCount: 3},
-                {day:'7/1/2014',visitorsCount: 2},
-                {day:'8/1/2014',visitorsCount: 15},
-                {day:'9/1/2014',visitorsCount: 22},
-                {day:'10/1/2014',visitorsCount: 33},
-                {day:'11/1/2014',visitorsCount: 10},
-                {day:'12/1/2014',visitorsCount: 5}
-            ]
+                var ykeys = [], labels = [];
 
+                for (var i in report.properties.ykeys) {
+                    ykeys.push(report.properties.ykeys[i].field);
+                    labels.push(report.properties.ykeys[i].label);
+                }
 
-            if (report.properties[0].colors)
-                var theColors = report.properties[0].colors;
+                chartParams.ykeys = ykeys;
+                chartParams.labels = labels;
 
-            new Morris.Line({
-                element: id,
-                data: theData,
-                xkey: report.properties[0].xkey,
-                ykeys: report.properties[0].ykeys,
-                labels: report.properties[0].labels,
-                xlabels: report.properties[0].xlabels,
-                lineColors: theColors,
-                hideHover: true,
-                resize: true,
-                parseTime: false,
-                dateFormat: function (x) { return ''; }
-            }).on('click', function(i, row){
+                if (report.properties.colors) {
+                    chartParams.lineColors = report.properties.colors;
+                }
+
+                new Morris.Line(chartParams).on('click', function(i, row){
                     console.log(i, row);
                 });
 
+                done(0);
+                return;
+            }
+            else if (report.reportSubType == 'donut') {
 
-            done(0);
-            return;
+                if (theData) {
+                    var data = [];
 
+                    for (var i in theData) {
+                        data.push({label: theData[i][report.properties.labelField], value: theData[i][report.properties.valueField]});
+                    }
 
-        }
-
-        if (report.reportSubType == 'donut')
-        {
-
-            getTheData(id, function(theData){
-
-                if (theData)
-                {
-                    if (report.properties[0].colors)
-                        var theColors = report.properties[0].colors;
-
-                    Morris.Donut({
+                    var chartParams = {
                         element: id,
-                        data: theData,
-                        resize: true,
-                        colors: theColors
-                    }).on('click', function(i, row){
-                            console.log(i, row);
-                        });
+                        data: data,
+                        resize: true
+                    };
+
+                    if (report.properties.colors) {
+                        chartParams.colors = report.properties.colors;
+                    }
+
+                    Morris.Donut(chartParams).on('click', function(i, row){
+                        console.log(i, row);
+                    });
 
                     done(0);
                     return;
                 }
-            });
 
+            }
+            else if (report.reportSubType == 'bar') {
+                var chartParams = {
+                    element: id,
+                    data: theData,
+                    xkey: report.properties.xkey,
+                    hideHover: true,
+                    resize: true
+                };
 
+                var ykeys = [], labels = [];
 
-        }
-
-        if (report.reportSubType == 'bar')
-        {
-
-            var theData = [
-                { y: '2006', a: 100, b: 90 },
-                { y: '2007', a: 75,  b: 65 },
-                { y: '2008', a: 50,  b: 40 },
-                { y: '2009', a: 75,  b: 65 },
-                { y: '2010', a: 50,  b: 40 },
-                { y: '2011', a: 75,  b: 65 },
-                { y: '2012', a: 100, b: 90 }
-            ];
-
-            if (report.properties[0].colors)
-                var theColors = report.properties[0].colors;
-
-            Morris.Bar({
-                element: id,
-                data: theData,
-                xkey: report.properties[0].xkey,
-                ykeys: report.properties[0].ykeys,
-                labels: report.properties[0].labels,
-                resize: true,
-                barColors: theColors
-            }).on('click', function(i, row){
-                    console.log(i, row);
-                });
-
-            done(0);
-            return;
-        }
-
-        if (report.reportSubType == 'area')
-        {
-
-            var theData = [
-                    { y: '2006', a: 100, b: 90 },
-                    { y: '2007', a: 75,  b: 65 },
-                    { y: '2008', a: 50,  b: 40 },
-                    { y: '2009', a: 75,  b: 65 },
-                    { y: '2010', a: 50,  b: 40 },
-                    { y: '2011', a: 75,  b: 65 },
-                    { y: '2012', a: 100, b: 90 }
-                ];
-
-
-
-            if (report.properties[0].colors)
-                theColors = report.properties[0].colors;
-
-            Morris.Area({
-                element: id,
-                data: theData,
-                xkey: report.properties[0].xkey,
-                ykeys: report.properties[0].ykeys,
-                labels: report.properties[0].labels,
-                resize: true,
-                lineColors: theColors
-            }).on('click', function(i, row){
-                    console.log(i, row);
-                });
-
-            done(0);
-            return;
-
-        }
-
-        done(2); //error chart type not found
-
-        /*
-        var params = {};
-
-        params.websiteID = $stateParams.websiteID;
-
-        $q.all([
-                adminModel.getVisitorsLast30(params)
-            ]).then(function(data) {
-                var theData =[];
-
-                for (var i in data[0])
-                {
-                    console.log(JSON.stringify(data[0][i]));
-                    theData.push({day:data[0][i]._id.day+'/'+data[0][i]._id.month+'/'+data[0][i]._id.year,visitorsCount: data[0][i].visitorsCount})
+                for (var i in report.properties.ykeys) {
+                    ykeys.push(report.properties.ykeys[i].field);
+                    labels.push(report.properties.ykeys[i].label);
                 }
 
-                console.log(JSON.stringify(data));
+                chartParams.ykeys = ykeys;
+                chartParams.labels = labels;
 
-                $scope.sentin_chart[id].data = theData;
+                if (report.properties.colors) {
+                    chartParams.barColors = report.properties.colors;
+                }
 
-                done(<linechart params="sentin_chart" ></linechart>);
-            });
-        */
+                new Morris.Bar(chartParams).on('click', function(i, row){
+                    console.log(i, row);
+                });
 
+                done(0);
+                return;
+            }
+            else if (report.reportSubType == 'area') {
+                var chartParams = {
+                    element: id,
+                    data: theData,
+                    xkey: report.properties.xkey,
+                    hideHover: true,
+                    resize: true,
+                    behaveLikeLine: false,
+                    parseTime: false
+                    //dateFormat: function (x) { return ''; }
+                };
+
+                var ykeys = [], labels = [];
+
+                for (var i in report.properties.ykeys) {
+                    ykeys.push(report.properties.ykeys[i].field);
+                    labels.push(report.properties.ykeys[i].label);
+                }
+
+                chartParams.ykeys = ykeys;
+                chartParams.labels = labels;
+
+                if (report.properties.colors) {
+                    chartParams.lineColors = report.properties.colors;
+                }
+
+                new Morris.Area(chartParams).on('click', function(i, row){
+                    console.log(i, row);
+                });
+
+                done(0);
+                return;
+
+            }
+            else {
+                done(2); //error chart type not found
+            }
+        });
     }
 
     function generateGrid($scope,id,report,done) {
@@ -1383,7 +345,7 @@ app.service('reportModel' , function ($http, $q, $filter) {
         var htmlCode = '';
         var quote = "'";
 
-        getTheData(id, function(theData){
+        this.getReportData(id, function(theData){
 
             if (theData)
             {
@@ -1431,11 +393,11 @@ app.service('reportModel' , function ($http, $q, $filter) {
 
                 var rowClickEvent = '';
 
-                for(var i = 0; i < report.properties[0].actions.length; i++)
+                for(var i = 0; i < report.properties.actions.length; i++)
                 {
-                    if (report.properties[0].actions[i].actionEvent == 'onRowClick')
-                        rowClickEvent = ' ng-click="onReportAction('+quote+report.properties[0].actions[i].actionType+quote+','+quote+report.properties[0].actions[i].targetID+quote+','+quote+report.properties[0].actions[i].targetFilters+quote+','+quote+'{{item.'+report.properties[0].idField+'}}'+quote+')"'
-                    //rowClickEvent = ' ng-click="onReportAction('+report.properties[0].actions[i].actionType+','+report.properties[0].actions[i].targetID+','+report.properties[0].actions[i].targetFilters+')"'
+                    if (report.properties.actions[i].actionEvent == 'onRowClick')
+                        rowClickEvent = ' ng-click="onReportAction('+quote+report.properties.actions[i].actionType+quote+','+quote+report.properties.actions[i].targetID+quote+','+quote+report.properties.actions[i].targetFilters+quote+','+quote+'{{item.'+report.properties.idField+'}}'+quote+')"'
+                    //rowClickEvent = ' ng-click="onReportAction('+report.properties.actions[i].actionType+','+report.properties.actions[i].targetID+','+report.properties.actions[i].targetFilters+')"'
 
                 }
 
@@ -1448,9 +410,9 @@ app.service('reportModel' , function ($http, $q, $filter) {
 
                 //htmlCode += '<table class="table">';
                 /*
-                for(var i = 0; i < report.properties[0].fields.length; i++)
+                for(var i = 0; i < report.properties.fields.length; i++)
                 {
-                    htmlCode += '<td>'+report.properties[0].fields[i].fieldAlias+'</td>';
+                    htmlCode += '<td>'+report.properties.fields[i].fieldAlias+'</td>';
                 }
 
                 htmlCode += '</thead><tbody>';
@@ -1461,9 +423,9 @@ app.service('reportModel' , function ($http, $q, $filter) {
 
                 htmlCode += '<tr ng-repeat="item in theData['+hashedID+']"   ng-class="{'+quote+'active'+quote+': item.$selected}" > ';
 
-                    for(var i = 0; i < report.properties[0].fields.length; i++)
+                    for(var i = 0; i < report.properties.fields.length; i++)
                         {
-                            htmlCode += '<td data-title="'+quote+report.properties[0].fields[i].fieldAlias+quote+'" filter="{ '+quote+report.properties[0].fields[i].fieldName+quote+': '+quote+'select'+quote+' }" sortable="'+quote+report.properties[0].fields[i].fieldName+quote+'" ng-class="{ '+quote+'emphasis'+quote+': item.nombrecampo2 > 500}" '+rowClickEvent+'>{{item.'+report.properties[0].fields[i].fieldName+'}}</td>';
+                            htmlCode += '<td data-title="'+quote+report.properties.fields[i].fieldAlias+quote+'" filter="{ '+quote+report.properties.fields[i].fieldName+quote+': '+quote+'select'+quote+' }" sortable="'+quote+report.properties.fields[i].fieldName+quote+'" ng-class="{ '+quote+'emphasis'+quote+': item.nombrecampo2 > 500}" '+rowClickEvent+'>{{item.'+report.properties.fields[i].fieldName+'}}</td>';
                         }
 
                 htmlCode += '</tr></table>';
@@ -1498,7 +460,7 @@ app.service('reportModel' , function ($http, $q, $filter) {
         //https://github.com/kamilkp/angular-vs-repeat
 
         var quote = "'";
-        getTheData(id, function(theData){
+        this.getReportData(id, function(theData){
 
             if (theData)
             {
@@ -1516,9 +478,9 @@ app.service('reportModel' , function ($http, $q, $filter) {
                 htmlCode += '<div vs-repeat>';
                     htmlCode += '<div ng-repeat="item in theData['+hashedID+']" style="position: absolute;z-index: 1;">';
 
-                        for(var i = 0; i < report.properties[0].fields.length; i++)
+                        for(var i = 0; i < report.properties.fields.length; i++)
                         {
-                            htmlCode += '<span>{{item.'+report.properties[0].fields[i].fieldName+'}}</span> ';
+                            htmlCode += '<span>{{item.'+report.properties.fields[i].fieldName+'}}</span> ';
                         }
 
                     htmlCode += '</div>';
@@ -2234,7 +1196,7 @@ app.service('reportModel' , function ($http, $q, $filter) {
     {
         var htmlCode = '';
 
-        getTheData(id, function(theData){
+        this.getReportData(id, function(theData){
 
             if (theData)
             {
@@ -2242,14 +1204,14 @@ app.service('reportModel' , function ($http, $q, $filter) {
          console.log('el valor ' + theData[0].value);
                 var theValue = theData[0].value;
 
-                if (report.properties[0].valueType == 'percentage')
+                if (report.properties.valueType == 'percentage')
                 {
                     theValue = theData[0].value + ' %';
                 }
 
-                if (report.properties[0].valueType == 'currency' && report.properties[0].currencySymbol)
+                if (report.properties.valueType == 'currency' && report.properties.currencySymbol)
                 {
-                    theValue = theData[0].value + ' '+report.properties[0].currencySymbol;
+                    theValue = theData[0].value + ' '+report.properties.currencySymbol;
                 }
 
 
@@ -2272,25 +1234,25 @@ app.service('reportModel' , function ($http, $q, $filter) {
                 //TODO: otros valores currency tienen que tomar la moneda para ponerle el simbolo, mirar formateo por defecto del navegador
 
                 var theBackgroundColor = '#68b828';
-                if (report.properties[0].backgroundColor)
-                    theBackgroundColor = report.properties[0].backgroundColor;
+                if (report.properties.backgroundColor)
+                    theBackgroundColor = report.properties.backgroundColor;
                 var theFontColor = '#fff';
-                if (report.properties[0].fontColor)
-                    theFontColor = report.properties[0].fontColor;
+                if (report.properties.fontColor)
+                    theFontColor = report.properties.fontColor;
 
                 var theAuxFontColor = '#fff'
-                if (report.properties[0].auxFontColor)
-                    theAuxFontColor = report.properties[0].auxFontColor;
+                if (report.properties.auxFontColor)
+                    theAuxFontColor = report.properties.auxFontColor;
 
                 if (report.reportSubType == 'style1')
                 {
                     htmlCode += '<div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">';
                     htmlCode += '   <div class="xe-icon">';
-                    htmlCode += '       <i class="'+report.properties[0].valueIcon+'"></i>';
+                    htmlCode += '       <i class="'+report.properties.valueIcon+'"></i>';
                     htmlCode += '   </div>';
                     htmlCode += '   <div class="xe-label">';
                     htmlCode += '       <strong class="num">'+theValue+'</strong>';
-                    htmlCode += '       <span>'+report.properties[0].valueText+'</span>';
+                    htmlCode += '       <span>'+report.properties.valueText+'</span>';
                     htmlCode += '   </div>';
                     htmlCode += '</div>';
 
@@ -2302,11 +1264,11 @@ app.service('reportModel' , function ($http, $q, $filter) {
                     htmlCode += '<div class="xe-widget xe-counter-block" xe-counter="" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2" style="background-color: '+theBackgroundColor+'">';
                     htmlCode += '   <div class="xe-upper"  style="background-color: '+theBackgroundColor+'">';
                     htmlCode += '       <div class="xe-icon">';
-                    htmlCode += '           <i class="'+report.properties[0].valueIcon+'"></i> ';
+                    htmlCode += '           <i class="'+report.properties.valueIcon+'"></i> ';
                     htmlCode += '       </div>';
                     htmlCode += '       <div class="xe-label">';
                     htmlCode += '           <strong class="num">'+theValue+'</strong>';
-                    htmlCode += '           <span>'+report.properties[0].valueText+'</span> ';
+                    htmlCode += '           <span>'+report.properties.valueText+'</span> ';
                     htmlCode += '       </div> ';
                     htmlCode += '   </div>';
                     htmlCode += '   <div class="xe-lower"> ';
@@ -2324,7 +1286,7 @@ app.service('reportModel' , function ($http, $q, $filter) {
                     htmlCode += '   <div class="chart-item-num" xe-counter="" data-count="this" data-from="0" data-to="98" data-suffix="%" data-duration="2" style="color:'+theFontColor+'">'+theValue+'</div>';
                     htmlCode += '       <div class="chart-item-desc" > ';
                     //htmlCode += '           <p class="col-lg-7">Carriage quitting securing be appetite it declared. High eyes kept so busy feel call in.</p> ';
-                    htmlCode += '           <p style="color:'+theAuxFontColor+'">'+report.properties[0].valueText+'</p> ';
+                    htmlCode += '           <p style="color:'+theAuxFontColor+'">'+report.properties.valueText+'</p> ';
                     htmlCode += '       </div> ';
                    /*
                     htmlCode += '       <div class="chart-item-env"> ';
@@ -2452,7 +1414,7 @@ app.service('reportModel' , function ($http, $q, $filter) {
     {
         var quote = "'";
 
-        getTheData(id, function(theData){
+        this.getReportData(id, function(theData){
 
             if (theData)
             {
@@ -2500,9 +1462,9 @@ app.service('reportModel' , function ($http, $q, $filter) {
                 htmlCode += '<table ng-table="tableParams['+hashedID+']" show-filter="false" class="table">';
 
 
-                for(var i = 0; i < report.properties[0].fields.length; i++)
+                for(var i = 0; i < report.properties.fields.length; i++)
                 {
-                    htmlCode += '<tr ><td class="readOnlyFormFieldAlias" >'+report.properties[0].fields[i].fieldAlias+'</td><td class="readOnlyFormFieldData" >{{theData['+hashedID+'][0].'+report.properties[0].fields[i].fieldName+'}}</td></tr>';
+                    htmlCode += '<tr ><td class="readOnlyFormFieldAlias" >'+report.properties.fields[i].fieldAlias+'</td><td class="readOnlyFormFieldData" >{{theData['+hashedID+'][0].'+report.properties.fields[i].fieldName+'}}</td></tr>';
                 }
 
                 htmlCode += '</table>';

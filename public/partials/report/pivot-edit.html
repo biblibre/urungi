@@ -14,7 +14,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-        <button ng-click="reportNameSave()" ng-disabled="reportForm.$invalid || reportForm.$pristine" class="btn btn-primary submit-btn">Save</button>
+        <button ng-click="reportNameSave()" ng-disabled="reportForm.$invalid" class="btn btn-primary submit-btn">Save</button>
     </div>
 </nd-modal>
 
@@ -43,32 +43,44 @@
 
         <div class="col-md-6">
 
-            <div ng-show="selectedReport.reportType == 'chart' && (selectedReport.reportSubType == 'line' || selectedReport.reportSubType == 'area')">
+            <div ng-show="selectedReport.reportType == 'chart' && (selectedReport.reportSubType == 'bar' || selectedReport.reportSubType == 'line' || selectedReport.reportSubType == 'area')">
                 <div class="form-group">
                     <label>xkey</label>
                     <select class="form-control" name="xkey" ng-model="selectedReport.properties.xkey"
-                            ng-options="obj.elementID as obj.objectLabel for obj in columns" ng-required="true" required ></select>
+                            ng-options="obj as obj.objectLabel for obj in columns" ng-required="true" required ></select>
                     <span ng-show="reportForm.xkey.$invalid" class="help-inline">This field is required</span>
                 </div>
-                <div class="form-group">
-                    <label>xlabel</label>
+                <!--<div class="form-group">
+                    <label>xlabels</label>
                     <input name="xlabels" type="text" class="form-control" ng-model="selectedReport.properties.xlabels" ng-required="true" required >
                     <span ng-show="reportForm.xlabels.$invalid" class="help-inline">This field is required</span>
-                </div>
+                </div>-->
                 <div class="form-group">
-                    <label>ykey</label>
-                    <select class="form-control" name="ykeys" ng-model="selectedReport.properties.ykeys"
-                            ng-options="obj.elementID as obj.objectLabel for obj in columns" ng-required="true" required ></select>
+                    <label>ykeys <i class="fa fa-plus hand-cursor" ng-click="addYKeyField()"></i></label>
+
+                    <div class="row" ng-repeat="key in selectedReport.properties.ykeys">
+                        <div class="col-md-10">
+                            <select class="form-control" name="ykeys" ng-model="key.field"
+                                    ng-options="obj as obj.objectLabel for obj in columns" ng-required="true" required ></select>
+                        </div>
+                        <div class="col-md-2">
+                            <i class="fa fa-times hand-cursor" ng-click="removeFromArray(selectedReport.properties.ykeys, key)"></i>
+                        </div>
+                    </div>
+
+                    <!--<select class="form-control" name="ykeys" ng-model="selectedReport.properties.ykeys"
+                            ng-options="obj.elementName as obj.objectLabel for obj in columns" ng-required="true" required ></select>-->
+
                     <span ng-show="reportForm.ykeys.$invalid" class="help-inline">This field is required</span>
                 </div>
-                <div class="form-group">
-                    <label>ylabel</label>
+                <!--<div class="form-group">
+                    <label>labels</label>
                     <input name="labels" type="text" class="form-control" ng-model="selectedReport.properties.labels" ng-required="true" required >
                     <span ng-show="reportForm.labels.$invalid" class="help-inline">This field is required</span>
-                </div>
+                </div>-->
             </div>
 
-            <div ng-show="selectedReport.reportType == 'chart' && (selectedReport.reportSubType == 'bar' || selectedReport.reportSubType == 'donut')">
+            <div ng-show="selectedReport.reportType == 'chart' && (selectedReport.reportSubType == 'donut')">
                 <div class="form-group">
                     <label>Value Field</label>
                     <select class="form-control" name="valueField" ng-model="selectedReport.properties.valueField"

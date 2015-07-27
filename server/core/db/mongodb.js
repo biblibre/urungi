@@ -262,7 +262,36 @@ function processCollections(collections, dataSource, params, done, result, index
         for (var i in collection.order) {
             for (var e in collection.schema.elements) {
                 if (collection.order[i].elementID == collection.schema.elements[e].elementID) {
-                    sort[collection.schema.elements[e].elementName] = collection.order[i].sortType;
+                    var found = false;
+
+                    for (var i in collection.columns) {
+                        if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
+                            found = true;
+
+                            if (collection.columns[i].aggregation) {
+                                switch (collection.columns[i].aggregation) {
+                                    case 'sum': sort[collection.schema.elements[e].elementName+'sum'] = collection.order[i].sortType;
+                                        break;
+                                    case 'avg': sort[collection.schema.elements[e].elementName+'avg'] = collection.order[i].sortType;
+                                        break;
+                                    case 'min': sort[collection.schema.elements[e].elementName+'min'] = collection.order[i].sortType;
+                                        break;
+                                    case 'max': sort[collection.schema.elements[e].elementName+'max'] = collection.order[i].sortType;
+                                        break;
+                                    case 'year': sort['_id.'+collection.schema.elements[e].elementName+'year'] = collection.order[i].sortType;
+                                        break;
+                                    case 'month': sort['_id.'+collection.schema.elements[e].elementName+'month'] = collection.order[i].sortType;;
+                                        break;
+                                    case 'day': sort['_id.'+collection.schema.elements[e].elementName+'day'] = collection.order[i].sortType;
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        sort[collection.schema.elements[e].elementName] = collection.order[i].sortType;
+                    }
                 }
             }
         }
@@ -299,10 +328,13 @@ function processCollections(collections, dataSource, params, done, result, index
                             case 'max': group[collection.schema.elements[e].elementName+'max'] = {$max: "$"+collection.schema.elements[e].elementName};
                                 break;
                             case 'year': project[collection.schema.elements[e].elementName+'year'] = {$year: "$"+collection.schema.elements[e].elementName};
+                                         fields[collection.schema.elements[e].elementName+'year'] = "$"+collection.schema.elements[e].elementName+'year';
                                 break;
                             case 'month': project[collection.schema.elements[e].elementName+'month'] = {$month: "$"+collection.schema.elements[e].elementName};
+                                          fields[collection.schema.elements[e].elementName+'month'] = "$"+collection.schema.elements[e].elementName+'month';
                                 break;
                             case 'day': project[collection.schema.elements[e].elementName+'day'] = {$dayOfMonth: "$"+collection.schema.elements[e].elementName};
+                                        fields[collection.schema.elements[e].elementName+'day'] = "$"+collection.schema.elements[e].elementName+'day';
                         }
                     }
                     else {
@@ -335,9 +367,9 @@ function processCollections(collections, dataSource, params, done, result, index
 
         if (!isEmpty(project)) aggregation.push({ $project: project });
 
-        if (!isEmpty(sort)) aggregation.push({ $sort: sort });
-
         aggregation.push({ $group: group });
+
+        if (!isEmpty(sort)) aggregation.push({ $sort: sort });
 
         if (params.page) {
             aggregation.push({ $skip: (params.page-1)*100 });
@@ -422,6 +454,9 @@ function getCollectionFilters(collection, filters) {
 
                     if (collection.schema.elements[e].elementType == 'number') {
                         filterValue = Number(filterValue);
+                    }
+                    if (collection.schema.elements[e].elementType == 'date') {
+                        filterValue = new Date(filterValue);
                     }
 
                     if (filter.filterType == "equal") {
