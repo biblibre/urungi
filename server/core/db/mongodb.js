@@ -100,8 +100,8 @@ exports.execOperation = function(operation, params, done) {
     });
 };
 
-exports.processCollections = function(collections, dataSource, done) {
-    processCollections(collections, dataSource, done);
+exports.processCollections = function(collections, dataSource, params, done) {
+    processCollections(collections, dataSource, params, done);
 };
 
 function getCollectionSchema(db,collections,index,schemas, done) {
@@ -230,7 +230,7 @@ function getElementList (target,elements,parent) {
     }
 }
 
-function processCollections(collections, dataSource, done, result, index) {
+function processCollections(collections, dataSource, params, done, result, index) {
     var index = (index) ? index : 0;
     var collection = (collections[index]) ? collections[index] : false;
     var result = (result) ? result : [];
@@ -262,7 +262,36 @@ function processCollections(collections, dataSource, done, result, index) {
         for (var i in collection.order) {
             for (var e in collection.schema.elements) {
                 if (collection.order[i].elementID == collection.schema.elements[e].elementID) {
-                    sort[collection.schema.elements[e].elementName] = -1;
+                    var found = false;
+
+                    for (var i in collection.columns) {
+                        if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
+                            found = true;
+
+                            if (collection.columns[i].aggregation) {
+                                switch (collection.columns[i].aggregation) {
+                                    case 'sum': sort[collection.schema.elements[e].elementName+'sum'] = collection.order[i].sortType;
+                                        break;
+                                    case 'avg': sort[collection.schema.elements[e].elementName+'avg'] = collection.order[i].sortType;
+                                        break;
+                                    case 'min': sort[collection.schema.elements[e].elementName+'min'] = collection.order[i].sortType;
+                                        break;
+                                    case 'max': sort[collection.schema.elements[e].elementName+'max'] = collection.order[i].sortType;
+                                        break;
+                                    case 'year': sort['_id.'+collection.schema.elements[e].elementName+'year'] = collection.order[i].sortType;
+                                        break;
+                                    case 'month': sort['_id.'+collection.schema.elements[e].elementName+'month'] = collection.order[i].sortType;;
+                                        break;
+                                    case 'day': sort['_id.'+collection.schema.elements[e].elementName+'day'] = collection.order[i].sortType;
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        sort[collection.schema.elements[e].elementName] = collection.order[i].sortType;
+                    }
                 }
             }
         }
@@ -282,8 +311,11 @@ function processCollections(collections, dataSource, done, result, index) {
         var match = filters, project = {}, group = {}, fields = {};
 
         for (var i in collection.columns) {
+            var found = false;
+
             for (var e in collection.schema.elements) {
                 if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
+                    found = true;
 
                     if (collection.columns[i].aggregation) {
                         switch (collection.columns[i].aggregation) {
@@ -296,36 +328,61 @@ function processCollections(collections, dataSource, done, result, index) {
                             case 'max': group[collection.schema.elements[e].elementName+'max'] = {$max: "$"+collection.schema.elements[e].elementName};
                                 break;
                             case 'year': project[collection.schema.elements[e].elementName+'year'] = {$year: "$"+collection.schema.elements[e].elementName};
+                                         fields[collection.schema.elements[e].elementName+'year'] = "$"+collection.schema.elements[e].elementName+'year';
                                 break;
                             case 'month': project[collection.schema.elements[e].elementName+'month'] = {$month: "$"+collection.schema.elements[e].elementName};
+                                          fields[collection.schema.elements[e].elementName+'month'] = "$"+collection.schema.elements[e].elementName+'month';
                                 break;
                             case 'day': project[collection.schema.elements[e].elementName+'day'] = {$dayOfMonth: "$"+collection.schema.elements[e].elementName};
+                                        fields[collection.schema.elements[e].elementName+'day'] = "$"+collection.schema.elements[e].elementName+'day';
                         }
                     }
                     else {
                         fields[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
                     }
+
+                    if (collection.columns[i].variable) {
+                        switch (collection.columns[i].variable) {
+                            case 'toUpper': project[collection.schema.elements[e].elementName] = {$toUpper: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'toLower': project[collection.schema.elements[e].elementName] = {$toLower: "$"+collection.schema.elements[e].elementName};
+                        }
+                    }
+                    else { //es necesario añadir todos los campos a project si hay alguna variable, si solo se añaden los campos con variable, el resto no se devuelven en la consulta
+                        project[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
+                    }
+                }
+            }
+
+            if (!found) {
+                if (collection.columns[i].count) {
+                    group['count'] = { $sum: 1 };
                 }
             }
         }
 
         group['_id'] = fields;
 
-        var params = [{ $match: match }];
+        var aggregation = [{ $match: match }];
 
-        if (!isEmpty(project)) params.push({ $project: project });
+        if (!isEmpty(project)) aggregation.push({ $project: project });
 
-        if (!isEmpty(sort)) params.push({ $sort: sort });
+        aggregation.push({ $group: group });
 
-        params.push({ $group: group });
-        params.push({ $limit: 10 });
+        if (!isEmpty(sort)) aggregation.push({ $sort: sort });
 
-        console.log('params');
-        debug(params);
+        if (params.page) {
+            aggregation.push({ $skip: (params.page-1)*100 });
+            aggregation.push({ $limit: 100 });
+        }
+        else {
+            aggregation.push({ $limit: 10 });
+        }
 
-        col.aggregate(params, function(err, docs) {
-            console.log(docs);
+        console.log('aggregation');
+        debug(aggregation);
 
+        col.aggregate(aggregation, function(err, docs) {
             for (var i in docs) {
                 var item = {};
 
@@ -351,14 +408,12 @@ function processCollections(collections, dataSource, done, result, index) {
                         }
                         if (field == collection.schema.elements[e].elementName && collection.schema.elements[e].format) {
                             if (collection.schema.elements[e].elementType == 'date') {
-                                console.log('date');
                                 var date = new Date(item[field]);
 
                                 item[field] = collection.schema.elements[e].format;
                                 item[field] = String(item[field]).replace('DD', date.getDate());
                                 item[field] = String(item[field]).replace('MM', date.getMonth()+1);
                                 item[field] = String(item[field]).replace('YYYY', date.getFullYear());
-                                console.log(item[field]);
                             }
 
                         }
@@ -367,10 +422,10 @@ function processCollections(collections, dataSource, done, result, index) {
 
                 result.push(item);
             }
-            debug(result);
+            //debug(result);
             db.close();
 
-            processCollections(collections, dataSource, done, result, index+1);
+            processCollections(collections, dataSource, params, done, result, index+1);
         });
     });
 }
@@ -399,6 +454,9 @@ function getCollectionFilters(collection, filters) {
 
                     if (collection.schema.elements[e].elementType == 'number') {
                         filterValue = Number(filterValue);
+                    }
+                    if (collection.schema.elements[e].elementType == 'date') {
+                        filterValue = new Date(filterValue);
                     }
 
                     if (filter.filterType == "equal") {

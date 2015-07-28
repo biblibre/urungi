@@ -1,7 +1,53 @@
-<div class="container-fluid mainArea">
+<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
+    <a ng-click="goBack()" class="btn btn-default pull-left">Back</a>
+    <a href="/#/reports/edit/{{reportID}}"  class="btn btn-success pull-right" style="margin-right: 5px">Edit Report</a>
+</div>
+
+<div class="container-fluid" style="border-bottom: 2px solid #72A230;">
+    <h3 class="pull-right" ng-bind="selectedReport.reportName"></h3>
+</div>
+
+<div ng-if="selectedReport.reportType == 'grid'" class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordered" infinite-scroll='getData()' infinite-scroll-distance='2'>
+                <thead>
+                <td ng-repeat="column in columns" ><strong>{{column.objectLabel}}</strong></td>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in queryData" >
+                    <td ng-repeat="column in columns" >
+                        <span ng-if="!column.aggregation">{{row[column.elementName]}}</span>
+                        <span ng-if="column.aggregation">{{row[column.elementName+column.aggregation]}}</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-show="busy" style="text-align: center;padding: 20px;">
+            <span style="font-size: 20px;">Loading data...</span> <img src="images/loader.gif" style="width: 50px;">
+        </div>
+    </div>
+</div>
+
+<!--<div ng-if="selectedReport.reportType == 'chart' && selectedReport.reportSubType == 'bar'" class="row">
+    <div class="col-md-12" ng-init="getData()">
+        <nd-bar-chart chart-data="chartData" height="400"></nd-bar-chart>
+    </div>
+</div>
+
+<div ng-if="selectedReport.reportType == 'chart' && selectedReport.reportSubType == 'donut'" class="row">
+    <div class="col-md-12" ng-init="getData()">
+        <nd-donut-chart chart-data="chartData" height="400" stroke-color="#eee"></nd-donut-chart>
+    </div>
+</div>-->
+
+<div ng-if="selectedReport.reportType != 'grid'" class="container-fluid mainArea">
 
     <div class="col-md-12"  >
         <div id="reportLayout" class="panel panel-default"   ng-init="getReportDiv()">
+
+
 
         </div>
     </div>

@@ -16,7 +16,7 @@
  * Filter.js is client-side JSON objects filter and render html elements. Multiple filter criteria can be specified and used in conjunction with each other.
  */
 
-app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, reportNameModal ) {
+app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile) {
     $scope.searchModal = 'partials/report/searchModal.html';
 
     $scope.reportID = $routeParams.reportID;
@@ -106,57 +106,168 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         ]
     };
 
-    init();
+    $scope.reportTypes = [
+        {value:"chart",label:"Chart"},
+        {value:"grid",label:"Grid"},
+        {value:"pivot",label:"Pivot"},
+        {value:"indicator",label:"Indicator"},
+        {value:"vectorMap",label:"Vector Map"},
+        {value:"readOnlyForm",label:"Read Only Form"}
+    ];
+    $scope.reportSubTypes = {
+        chart: [
+            {value:"line",label:"Line"},
+            {value:"donut",label:"Donut"},
+            {value:"bar",label:"Bar"},
+            {value:"area",label:"Area"}
+        ],
+        indicator: [
+            {value:"style1",label:"Style 1"},
+            {value:"style2",label:"Style 2"},
+            {value:"style3",label:"Style 3"}
+        ],
+        vectorMap: [
+            {value:"world",label:"World"}
+        ]
+    };
 
+    $scope.stringVariables = [
+        {value:"toUpper",label:"To Upper"},
+        {value:"toLower",label:"To Lower"}
+    ];
 
-   function init()
-{
-       /* $('#list').sortable({
-            scroll: true,
-            placeholder: 'placeholder',
-            containment: 'parent'
-//axis: 'x'
+    $scope.filters = [
+        {
+            group: true,
+            filters: []
+        }
+    ];
+
+    $scope.getReports = function(params) {
+        var params = (params) ? params : {};
+
+        connection.get('/api/reports/find-all', params, function(data) {
+            $scope.reports = data;
+            console.log($scope.reports);
         });
-        $('#list').disableSelection();  */
-   /*
-    $('.resize').resizable({
-        handles: 'e'
-    });
-     */
-    //$scope.filters.length
-    if ($routeParams.newReport) {
-        if ($routeParams.newReport == 'true') {
-            $scope._Report = {};
-            $scope._Report.draft = true;
-            $scope._Report.badgeStatus = 0;
-            $scope._Report.exportable = true;
-            $scope._Report.badgeMode = 1;
+    };
+
+    $scope.getReport = function() {
+
+        reportModel.getReport($scope, $routeParams.reportID, function() {
+            $scope.processStructure(false);
+        });
+
+        /*connection.get('/api/reports/find-one', {id: $routeParams.reportID}, function(data) {
+            $scope.selectedReport = data.item;
+            console.log($scope.selectedReport);
+
+            for (var i in $scope.selectedReport.query.datasources) {
+                var dataSource = $scope.selectedReport.query.datasources[i];
+
+                for (var c in dataSource.collections) {
+                    var collection = dataSource.collections[c];
+
+                    $scope.filters[0].filters = collection.filters;
+                    $scope.columns = collection.columns;
+                    $scope.order = collection.order;
+                }
+            }
+
+            $scope.processStructure(false);
+        });*/
+    };
+
+    $scope.initForm = function() {
+        $scope.dataMode = 'preview';
+
+        if ($routeParams.reportID == 'true') {
+            $scope.selectedReport = {};
+            $scope.selectedReport.draft = true;
+            $scope.selectedReport.badgeStatus = 0;
+            $scope.selectedReport.exportable = true;
+            $scope.selectedReport.badgeMode = 1;
 
             $scope.mode = 'add';
 
             console.log('entering in add mode for reports') ;
-
-            var params = {};
-
-            connection.get('/api/data-sources/find-all', params, function(data) {
-                $scope.errorMsg = (data.result === 0) ? data.msg : false;
-                $scope.page = data.page;
-                $scope.pages = data.pages;
-                $scope.data = data;
-
-                for (var i in $scope.data.items) {
-                    console.log($scope.data.items[i]);
-                    for (var z in $scope.data.items[i].params[0].schema) {
-                        var dts = {};
-                        dts.collection = $scope.data.items[i].params[0].schema[z];
-                        dts.datasourceID = $scope.data.items[i]._id;
-
-                        $scope.dataSources.push(dts);
-                    };
-                }
-            });
         }
-    }
+        else {
+            reportModel.getReport($scope, $routeParams.reportID, function() {
+
+
+                if ($scope.selectedReport.properties) {
+                    if ($scope.selectedReport.properties.xkey) {
+
+                        for (var c in $scope.columns) {
+                            var column = $scope.columns[c].elementName;
+
+                            if ($scope.columns[c].aggregation) column += $scope.columns[c].aggregation;
+
+                            if (column == $scope.selectedReport.properties.xkey) {
+                                $scope.selectedReport.properties.xkey = $scope.columns[c];
+                                break;
+                            }
+                        }
+                    }
+                    if ($scope.selectedReport.properties.ykeys) {
+                        for (var i in $scope.selectedReport.properties.ykeys) {
+                            for (var c in $scope.columns) {
+                                var column = $scope.columns[c].elementName;
+
+                                if ($scope.columns[c].aggregation) column += $scope.columns[c].aggregation;
+
+                                if (column == $scope.selectedReport.properties.ykeys[i].field) {
+                                    $scope.selectedReport.properties.ykeys[i].field = $scope.columns[c];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                $scope.processStructure();
+            });
+            /*connection.get('/api/reports/find-one', {id: $routeParams.reportID}, function(data) {
+                $scope.selectedReport = data.item;
+                console.log($scope.selectedReport);
+
+                for (var i in $scope.selectedReport.query.datasources) {
+                    var dataSource = $scope.selectedReport.query.datasources[i];
+
+                    for (var c in dataSource.collections) {
+                        var collection = dataSource.collections[c];
+
+                        $scope.filters[0].filters = collection.filters;
+                        $scope.columns = collection.columns;
+                        $scope.order = collection.order;
+                    }
+                }
+
+                $scope.processStructure();
+            });*/
+        }
+    };
+
+    $scope.getDataSources = function() {
+        connection.get('/api/data-sources/find-all', {}, function(data) {
+            $scope.errorMsg = (data.result === 0) ? data.msg : false;
+            $scope.page = data.page;
+            $scope.pages = data.pages;
+            $scope.data = data;
+
+            for (var i in $scope.data.items) {
+                console.log($scope.data.items[i]);
+                for (var z in $scope.data.items[i].params[0].schema) {
+                    var dts = {};
+                    dts.collection = $scope.data.items[i].params[0].schema[z];
+                    dts.datasourceID = $scope.data.items[i]._id;
+
+                    $scope.dataSources.push(dts);
+                };
+            }
+        });
     };
 
     $scope.getElementFilterOptions = function(elementType)
@@ -177,30 +288,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         filter.filterTypeLabel = filterOption.label;
 
         //set the appropiate interface or the choosen filter relation
-    }
-
-    $scope.showfilter1 = function(filter)
-    {
-
-
-        if (filter.filterType == 'null' || filter.filterType == 'notNull')
-        {
-            return  false;
-        } else {
-            return  true;
-        }
-    }
-
-    $scope.showfilter2 = function(filter)
-    {
-
-
-        if (filter.filterType == 'between' || filter.filterType == 'notBetween')
-        {
-            return  true;
-        } else {
-            return  false;
-        }
     }
 
     $scope.getDistinctValues = function(filter)
@@ -267,53 +354,21 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         $('#'+element).css('height', height);
     };
 
-
     $scope.reportName = function () {
-
-
-        var modalOptions    = {
-            container: 'reportName',
-            containerID: '12345',//$scope._Report._id,
-            tracking: true,
-            report: $scope._Report
-        }
-
-
-
-        //$scope.sendHTMLtoEditor(dataset[field])
-
-        reportNameModal.showModal({}, modalOptions).then(function (result) {
-            $scope.save($scope._Report);
-            /*
-            var container = angular.element(document.getElementById(source));
-            container.children().remove();
-            //var theHTML = ndDesignerService.getOutputHTML();
-            theTemplate = $compile(theHTML)($scope);
-            container.append(theTemplate);
-
-
-            dataset[field] = theHTML;
-
-            if ($scope._posts.postURL && $scope._posts.title && $scope._posts.status)
-            {
-                //console.log('saving post');
-                $scope.save($scope._posts, false);
-            }
-            //console.log(theHTML);
-           */
-        });
-
-
-    }
-
+        $('#reportNameModal').modal('show');
+    };
+    $scope.reportNameSave = function () {
+        $('#reportNameModal').modal('hide');
+        $scope.save($scope.selectedReport);
+    };
 
     $scope.add = function() {
 
-            $scope._Report = {};
-            $scope._Report.draft = true;
-            $scope._Report.badgeStatus = 0;
-            $scope._Report.exportable = true;
-            $scope._Report.badgeMode = 1;
+            $scope.selectedReport = {};
+            $scope.selectedReport.draft = true;
+            $scope.selectedReport.badgeStatus = 0;
+            $scope.selectedReport.exportable = true;
+            $scope.selectedReport.badgeMode = 1;
 
             $scope.mode = 'add';
             $scope.subPage= '/partial/custom/Badges/form.html';
@@ -321,264 +376,67 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     };
 
     $scope.save = function(data) {
-
-
         console.log('saving report '+data.reportName);
+        console.log(data);
 
+        $scope.processStructure(false);
+        console.log($scope.query);
 
+        data.query = $scope.query;
+
+        if ($scope.selectedReport.properties) {
+            if ($scope.selectedReport.properties.xkey) {
+                var xkey = $scope.selectedReport.properties.xkey.elementName;
+
+                if ($scope.selectedReport.properties.xkey.aggregation) xkey += $scope.selectedReport.properties.xkey.aggregation;
+
+                $scope.selectedReport.properties.xkey = xkey;
+            }
+            if ($scope.selectedReport.properties.ykeys) {
+                var ykeys = [];
+
+                for (var i in $scope.selectedReport.properties.ykeys) {
+                    var field = $scope.selectedReport.properties.ykeys[i].field.elementName;
+
+                    if ($scope.selectedReport.properties.ykeys[i].field.aggregation) field += $scope.selectedReport.properties.ykeys[i].field.aggregation;
+
+                    ykeys.push({field: field, label: $scope.selectedReport.properties.ykeys[i].field.objectLabel});
+                }
+
+                $scope.selectedReport.properties.ykeys = ykeys;
+            }
+        }
 
         if ($scope.mode == 'add') {
             connection.post('/api/reports/create', data, function(data) {
-                $scope.items.push(data.item);
-
-                $scope.cancel();
+                if (data.result == 1) {
+                    $scope.goBack();
+                }
             });
         }
         else {
-            $scope.edit_id = data._id;
-
             connection.post('/api/reports/update/'+data._id, data, function(result) {
                 if (result.result == 1) {
-                    for (i = 0; i < $scope.items.length; i++) {
-                        if ($scope.items[i]._id == data._id) {
-                            $scope.items[i] = data;
-                        }
-                    }
-                    $scope.cancel();
+                    $scope.goBack();
                 }
             });
         }
     };
 
-    $scope.metadata = {
-        tables: [
-            /*{
-                id: "T1",
-                name: "ndcustom_Employees",
-                datasourceID: "SSSS1",
-                fields: [{
-                        id: "F1",
-                        alias: "Employee",
-                        fieldName: "employeeName",
-                        tableID: "T1",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "F1",
-                        visible: true
-
-
-                    },
-                    {
-                        id: "F2",
-                        alias: "Code",
-                        fieldName: "employeeCode",
-                        tableID: "T1",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "F2",
-                        visible: true
-                    },
-                    {
-                        id: "F2",
-                        alias: "idunit",
-                        fieldName: "idunit",
-                        tableID: "T1",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "",
-                        visible: false
-                    }]
-            },
-            {
-                id: "T2",
-                name: "ndcustom_Units",
-                datasourceID: "SSSS1",
-                fields: [{
-                        id: "F3",
-                        alias: "_id",
-                        fieldName: "_id",
-                        tableID: "T2",
-                        type: "Object",
-                        role: "Dimension",
-                        parent: "",
-                        visible: false
-                    },
-                    {
-                        id: "F4",
-                        alias: "brand",
-                        fieldName: "brand",
-                        tableID: "T2",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "",
-                        visible: false
-                    }]
-            }
-            ,
-            {
-                id: "T3",
-                name: "ndcustom_Brands",
-                datasourceID: "SSSS1",
-                fields: [{
-                        id: "F5",
-                        alias: "_id",
-                        fieldName: "_id",
-                        tableID: "T3",
-                        type: "Object",
-                        role: "Dimension",
-                        parent: "YYYYY",
-                        visible: false
-                    },
-                    {
-                        id: "F6",
-                        alias: "brand",
-                        fieldName: "brand",
-                        tableID: "T3",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "F1",
-                        visible: true
-                    }]
-            }
-
-            , */
-            {
-                id: "T4",
-                name: "Fields",
-                datasourceID: "SSS771",
-                fields: [{
-                    id: "F5",
-                    alias: "Province",
-                    fieldName: "Province",
-                    tableID: "T4",
-                    type: "String",
-                    role: "Dimension",
-                    parent: "YYYYY",
-                    visible: false
-                },
-                    {
-                        id: "F5",
-                        alias: "Gender",
-                        fieldName: "Gender",
-                        tableID: "T4",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "YYYYY",
-                        visible: false
-                    },
-                    {
-                        id: "F5",
-                        alias: "Age",
-                        fieldName: "Age",
-                        tableID: "T4",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "YYYYY",
-                        visible: false
-                    },
-                    {
-                        id: "F5",
-                        alias: "Party",
-                        fieldName: "Party",
-                        tableID: "T4",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "YYYYY",
-                        visible: false
-                    },
-                    {
-                        id: "F5",
-                        alias: "Age Bin",
-                        fieldName: "Age Bin",
-                        tableID: "T4",
-                        type: "String",
-                        role: "Dimension",
-                        parent: "YYYYY",
-                        visible: false
-                    }]
-            }
-        ],
-
-        joins: [
-            {
-                id: "J1",
-                leftTableID: "T1",
-                rightTableID: "T2",
-                leftFieldID:"idunit",
-                rightFieldID: "_id",
-                joinType: "inner",
-                cardinality: ""
-            },
-            {
-                id: "J2",
-                leftTableID: "T2",
-                rightTableID: "T3",
-                leftFieldID:"brand",
-                rightFieldID: "_id",   //la conversión del campo se hace por el tipo si String = Object (hay que hacer esa conversión...
-                joinType: "inner",
-                cardinality: ""
-            }
-        ],
-
-        hierarchies: [
-            {
-                id: "XXXXXXXX1",
-                name: "el que sea",
-                fields : ["XXXXXXX1", "XXXXW2","XXXXD4"]
-            },
-            {
-                id: "XXXXXXXX2",
-                name: "el que sea 2",
-                fields : ["XXXXXXX2", "XXXXW3","XXXXD5"]
-            }
-        ],
-
-        dataSources: [
-            {
-                id: "SSSS1",
-                type: "mongoDB",
-                host: "192.168.1.1",
-                port: "27017",
-                username: "username",
-                password: "contraseña"
-            }
-        ],
-
-        folders: [
-            {
-                id:"F1",
-                label: "folder 1",
-                parent: ""
-            },
-            {
-                id:"F2",
-                label: "folder 2",
-                parent: "F1"
-            }
-
-        ]
-
-
-    } ;
-
-    $scope.objectMap = {
-          //debería venir ya anidado folder, campo... como resultado de la consulta con metadata, tiene que venir el alias, el id , el rol, el tipo
-    }
-
     $scope.getReportDiv = function()
     {
 
-        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%" ng-init="getReport()">';
+        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%" ng-init="getReportData()">';
 
         var $div = $(generatedHTML);
-        $(reportLayout).append($div);
+        $('#reportLayout').append($div);
         angular.element(document).injector().invoke(function($compile) {
             var scope = angular.element($div).scope();
             $compile($div)(scope);
         });
     }
 
-    $scope.getReport = function()
+    $scope.getReportData = function()
     {
         /*
         var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body" style="heigth=400px;width:100%">';
@@ -595,7 +453,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
             if (errorCode != 0)
             {
-                var el = document.getElementById(reportID);
+                var el = document.getElementById($routeParams.reportID);
 
                 var theHTML = '';
                 if (errorCode == 1)
@@ -1004,7 +862,9 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.columns.push(customObjectData);
         }
         if (type == 'order') {
+            customObjectData.sortType = -1;
             $scope.order.push(customObjectData);
+            console.log($scope.order);
         }
         if (type == 'filter') {
             var el = document.getElementById('filter-zone');
@@ -1067,13 +927,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         event.stopPropagation();
         return;
     };
-
-    $scope.filters = [
-        {
-            group: true,
-            filters: []
-        }
-    ];
 
     $scope.conditionTypes = [
         {conditionType: 'and', conditionLabel: 'AND'},
@@ -1179,7 +1032,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         params.query = $scope.query;
         //params.filters = $scope.filters;
 
-        connection.post('/api/reports/preview-query', params, function(data) {
+        connection.get('/api/reports/preview-query', params, function(data) {
             console.log(data);
             //$scope.errorMsg = (data.result === 0) ? data.msg : false;
             //$scope.page = data.page;
@@ -1193,7 +1046,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.previewData = data;
             $scope.preview = true;
 
-            var aggregations = [];
+            /*var aggregations = [];
 
             for (var i in $scope.columns) {
                 if ($scope.columns[i].aggregation) {
@@ -1231,12 +1084,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                                     case 'month': data[j][$scope.columns[i].elementName] = date.getMonth()+1;
                                         break;
                                     case 'date': data[j][$scope.columns[i].elementName] = date.getDate();
-                                        /*break;
-                                    case 'semester': if (value > aggregation) aggregation = value;
-                                        break;
-                                    case 'quarter':
-                                        break;
-                                    case 'trimester':*/
                                 }
                             }
                         }
@@ -1247,7 +1094,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 }
             }
 
-            $scope.aggregations = aggregations;
+            $scope.aggregations = aggregations;*/
 
             /*
             for (var i in $scope.data.items) {
@@ -1258,11 +1105,75 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             }
             */
         });
-    }
+    };
+
+    $scope.addYKeyField = function() {
+        if (!$scope.selectedReport.properties.ykeys) $scope.selectedReport.properties.ykeys = [];
+console.log($scope.selectedReport.properties.ykeys);
+        $scope.selectedReport.properties.ykeys.push({});
+    };
+
+    $scope.page = 0;
+    $scope.queryData = [];
+    $scope.busy = false;
+
+    $scope.getData = function() {
+
+        if ($scope.dataMode == 'preview') {
+            $scope.previewQuery();
+            return;
+        }
+
+        /*if ($scope.selectedReport.reportType == 'chart') {
+            $scope.getChartData($scope.selectedReport.reportSubType);
+            return;
+        }*/
+
+        if ($scope.busy) return;
+        $scope.busy = true;
+        $scope.page += 1;
+
+        console.log('entering view query');
+
+        reportModel.getReportData($scope.selectedReport._id, {page: $scope.page}, function(data) {
+            console.log(data);
+
+            for (var i in data) {
+                $scope.queryData.push(data[i]);
+            }
+
+            $scope.busy = false;
+        });
+
+        /*connection.get('/api/reports/get-data', {page: $scope.page, query: $scope.query}, function(data) {
+            console.log(data);
+
+            for (var i in data) {
+                $scope.queryData.push(data[i]);
+            }
+
+            $scope.busy = false;
+        });*/
+    };
+    $scope.getChartData = function(chartType) {
+        connection.get('/api/reports/get-data', {query: $scope.query}, function(data) {
+            var chartData = [];
+
+            switch (chartType) {
+                case 'bar': case 'donut':
+                for (var i in data) {
+                        chartData.push({value: data[i][$scope.selectedReport.properties.valueField], label: data[i][$scope.selectedReport.properties.labelField]});
+                    }
+            }
+
+            $scope.chartData = chartData;
+        });
+    };
 
 
-    $scope.processStructure = function()
-    {
+
+    $scope.processStructure = function(execute) {
+        var execute = (typeof execute !== 'undefined') ? execute : true;
 
         $scope.query = {};
         $scope.query.datasources = [];
@@ -1344,9 +1255,9 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.query.datasources.push(dtsObject);
         }
       //console.log(JSON.stringify($scope.query));
-console.log($scope.query);
-        if ($scope.columns.length > 0)
-            $scope.previewQuery();
+
+        if ($scope.columns.length > 0 && execute)
+            $scope.getData();
     }
 
 });

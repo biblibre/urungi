@@ -1,4 +1,4 @@
-<div class="object-tree" ng-init="getCubes()">
+<div class="object-tree" ng-init="getDataSources()">
 
 
     <!--Listado de objetos
@@ -63,6 +63,31 @@
                filterType: 'equal',
                filterTypeLabel:'equal',
                aggregation: aggregation.value}" ng-bind="aggregation.name"></a>
+        </div>
+        <div>
+            <a class="list-group-item data-source-element" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+               draggable-data="{
+               elementName: 'count',
+               objectLabel: 'Count',
+               datasourceID:dsource.datasourceID,
+               collectionID:dsource.collection.collectionID,
+               elementID: 'count',
+               elementType: 'count',
+               filterType: 'equal',
+               filterTypeLabel:'equal',
+               count: true}">Count</a>
+            <!--<a ng-repeat="element in dsource.collection.elements" ng-if="element.visible"
+               class="list-group-item data-source-aggregation"
+               draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
+               elementName: element.elementName+'count',
+               objectLabel: element.elementLabel+' (count)',
+               datasourceID:dsource.datasourceID,
+               collectionID:dsource.collection.collectionID,
+               elementID: element.elementID,
+               elementType: element.elementType,
+               filterType: 'equal',
+               filterTypeLabel:'equal',
+               count: true}">{{element.elementLabel}} (count)</a>-->
         </div>
     </div>
 

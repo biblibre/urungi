@@ -3,8 +3,8 @@
 
 var app = angular.module('WideStage', [
        //'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs','angularTreeview','ngDragDrop','ui.layout'
-        'ngRoute','ui.sortable','gridster','ui.layout','angularTreeview', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable'
-
+        'ngRoute','ui.sortable','gridster','ui.layout','angularTreeview', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
+        'infinite-scroll'
     ]).
     config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
@@ -40,7 +40,11 @@ var app = angular.module('WideStage', [
             controller: 'reportCtrl'
         });
 
-        $routeProvider.when('/reports/new/:newReport/', {
+        $routeProvider.when('/reports/new/:reportID/', {
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
+        });
+        $routeProvider.when('/reports/edit/:reportID/', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
         });
@@ -133,5 +137,9 @@ app.run(['$rootScope', function($rootScope) {
         var index = array.indexOf(item);
 
         if (index > -1) array.splice(index, 1);
+    };
+
+    $rootScope.goBack = function() {
+        window.history.back();
     };
 }]);
