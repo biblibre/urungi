@@ -1,5 +1,17 @@
-<div class="container-fluid mainArea">
-    <div data-gridster style="background-color: {{dashBoardDefinitition.backgroundColor}}" ng-init="generateDashBoard()">
+
+<div class="container-fluid" style="padding-top: 10px;">
+    <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
+        <h3 class="pull-left" >{{dashBoardDefinitition.dashboardName}}</h3>
+
+        <a href="/#/dashboards/edit/{{dashboardID}}"  class="btn btn-success pull-right" style="margin-right: 5px">Edit Dashboard</a>
+        <a ng-click="goBack()" class="btn btn-default pull-right">Back</a>
+    </div>
+
+    <div class="container-fluid " style="padding-top: 5px;">
+
+    <div ng-include src="promptsBlock"></div>
+
+    <div data-gridster style="background-color: {{dashBoardDefinitition.backgroundColor}}" ng-init="generateDashBoard()" >
         <ul>
             <li data-gridster-item data-row="item.position[0]" data-col="item.position[1]" data-sizex="item.size.x" data-sizey="item.size.y" ng-repeat="item in dashBoardDefinitition.items">
                     <!--<div>{{item.reportID}}</div>-->
@@ -10,5 +22,9 @@
             </li>
         </ul>
     </div>
+    </div>
 
 </div>
+
+
+<div ng-include src="searchModal"></div>

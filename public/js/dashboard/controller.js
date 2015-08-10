@@ -8,8 +8,9 @@
 
 'use strict';
 
-app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,function ($scope, reportModel ,$timeout ,$routeParams ) {
-
+app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection', 'promptModel', function ($scope, reportModel ,$timeout ,$routeParams, connection,promptModel) {
+    $scope.searchModal = 'partials/report/searchModal.html';
+    $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.designMode = false;
     $scope.selectedElement != null;
     $scope.reportsModel = reportModel;
@@ -22,6 +23,29 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
    // $scope.$broadcast('gridster-resized', [width, height]);
 
+    $scope.getDashboards = function(params) {
+        var params = (params) ? params : {};
+
+        connection.get('/api/dashboards/find-all', params, function(data) {
+            $scope.dashboards = data;
+            //console.log($scope.reports);
+        });
+    };
+
+    $scope.initForm = function() {
+        $scope.dataMode = 'preview';
+        console.log('initial '+ $routeParams.newDashboard)
+        if ($routeParams.newDashboard == 'true') {
+            $scope.dashBoardDefinitition = {dashboardName:"New Dashboard", backgroundColor:"#999999" ,items:[]};
+            $scope.mode = 'add';
+
+            console.log('entering in add mode for dashboards') ;
+        }
+        else {
+            console.log('el otro')
+        }
+    };
+
     $scope.setDesignMode = function() {
         if ($scope.designMode)
         {
@@ -31,6 +55,63 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             $scope.designMode = true;
             $scope.rowPadding = "10px";
         }
+    }
+
+
+    $scope.selectReport = function()
+    {
+        if (!$scope.reports)
+        {
+            var params = (params) ? params : {};
+
+            connection.get('/api/reports/find-all', params, function(data) {
+                $scope.reports = data;
+                $('#reportListModal').modal('show');
+            });
+
+        } else {
+            $('#reportListModal').modal('show');
+        }
+
+
+        console.log('select report click');
+    }
+
+    $scope.reportSelected = function(reportID,report)
+    {
+        console.log('selected report: '+reportID);
+        $('#reportListModal').modal('hide');
+
+        var theItem = {};
+        theItem.itemType = "reportBlock";
+        theItem.size  = { x: 3, y: 1 };
+        theItem.position = [0,0];
+        theItem.title = 'titulo';
+        theItem.reportID = reportID;
+        theItem.overflowy = "hidden";
+        theItem.overflowx = "hidden";
+
+
+
+        $scope.dashBoardDefinitition.items.push(theItem);
+        $scope.getReport(reportID);
+
+        var index = $scope.reports.items.indexOf(report);
+        $scope.reports.items.splice(index, 1);
+        //$scope.reports.items.remove(report);
+
+
+    }
+
+    $scope.closePromptsBlock = function()
+    {
+        $scope.showPrompts = false;
+    }
+
+    $scope.openPromptsBlock = function()
+    {
+
+        $scope.showPrompts = true;
     }
 
     /*
@@ -121,151 +202,143 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         */
 
         console.log ('este es el dID ' + $scope.dashboardID);
-
-        if ($scope.dashboardID == 'clients')
+        if ($scope.dashboardID)
         {
-            $scope.dashBoardDefinitition = {backgroundColor:"#FFFFFF" ,items:[
-                { itemType: "reportBlock",size: { x: 3, y: 2 }, position: [0, 0],title:"row 4 1",reportID:"101010",overflowy:"hidden",overflowx:"hidden" },
-                { itemType: "reportBlock",size: { x: 1, y: 1 }, position: [0, 3],title:"% Retorno Clientes",reportID:"88888b",overflowy:"hidden",overflowx:"hidden" },
-                { itemType: "reportBlock",size: { x: 1, y: 1 }, position: [0, 4],title:"Columna 2",reportID:"22222a",overflowy:"hidden",overflowx:"hidden" },
-                { itemType: "reportBlock",size: { x: 1, y: 1 }, position: [0, 5],title:"Columna 2",reportID:"22222b",overflowy:"hidden",overflowx:"hidden" },
-                { itemType: "reportBlock",size: { x: 3, y: 1 }, position: [1, 3],title:"Columna 2",reportID:"99999a",overflowy:"hidden",overflowx:"hidden" },
-                { itemType: "reportBlock",size: { x: 3, y: 1 }, position: [2, 3],title:"el titulo 1",reportID:"11111",overflowy:"hidden",overflowx:"hidden" },
+            connection.get('/api/dashboards/get/'+$scope.dashboardID, {id: $scope.dashboardID}, function(data) {
+                $scope.dashBoardDefinitition = data.item;
 
-                { itemType: "reportBlock",size: { x: 3, y: 2 }, position: [2, 0],title:"row 3 1",reportID:"55555a",overflowy:"auto",overflowx:"hidden" }
-               // { size: { x: 1, y: 1 }, position: [3, 4],title:"row 4 1",reportID:"77777",overflowy:"hidden",overflowx:"hidden" },
+                $scope.$apply;
 
-               // { size: { x: 1, y: 1 }, position: [3, 5],title:"row 4 1",reportID:"99999",overflowy:"hidden",overflowx:"hidden" }
+                $scope.prompts = [];
 
-            ]};
+                getPromptsForDashboard($scope.dashBoardDefinitition,0,function(){
+
+                    if ($scope.prompts.length > 0)
+                    {
+                        $scope.showPrompts = true;
+                    } else {
+                        //setReportDiv($routeParams.reportID);
+                        paintReports($scope.dashBoardDefinitition);
+                    }
+                });
+
+                //process prompts
+                /*
+                for (var r in $scope.dashBoardDefinitition.items) {
+                    if ($scope.dashBoardDefinitition.items[r].itemType == 'reportBlock')
+                    {
+                        console.log('uno ');
+                        reportModel.getPrompts($scope,$scope.dashBoardDefinitition.items[r].reportDefinition, function(){});
+                    }
+                    if ($scope.dashBoardDefinitition.items[r].itemType == 'tabBlock')
+                    {
+                        $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
+                    }
+                } */
+
+
+
+
+                /*
+                $timeout(function(){
+                    for (var r in $scope.dashBoardDefinitition.items) {
+                        if ($scope.dashBoardDefinitition.items[r].itemType == 'reportBlock')
+                        {
+                            $scope.getReport2($scope.dashBoardDefinitition.items[r]);
+                        }
+                        if ($scope.dashBoardDefinitition.items[r].itemType == 'tabBlock')
+                        {
+                            $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
+                        }
+                    }
+                },1000);*/
+            });
+
+            /*connection.get('/api/dashboards/find-one', {id: $scope.dashboardID}, function(data) {
+                $scope.dashBoardDefinitition = data.item;
+
+                $scope.$apply;
+
+                $timeout(function(){
+                    for (var r in $scope.dashBoardDefinitition.items) {
+                        if ($scope.dashBoardDefinitition.items[r].itemType == 'reportBlock')
+                        {
+                            $scope.getReport($scope.dashBoardDefinitition.items[r].reportID);
+                        }
+                        if ($scope.dashBoardDefinitition.items[r].itemType == 'tabBlock')
+                        {
+                            $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
+                        }
+                    }
+                },1000);
+            });*/
         }
-
-        if ($scope.dashboardID == '1234567890')
-        {
-        $scope.dashBoardDefinitition = {items:[
-            { itemType: "reportBlock",size: { x: 2, y: 2 }, position: [0, 0],title:"el titulo 1",reportID:"11111",overflowy:"hidden",overflowx:"hidden" },
-
-            { itemType: "reportBlock",size: { x: 2, y: 2 }, position: [0, 2],title:"row 2 1",reportID:"33333",overflowy:"hidden",overflowx:"hidden" },
-            { itemType: "reportBlock",size: { x: 2, y: 2 }, position: [0, 5],title:"row 2 2",reportID:"44444",overflowy:"hidden",overflowx:"hidden" }
-            /*{ itemType: "reportBlock",size: { x: 2, y: 1 }, position: [1, 0],title:"row 3 1",reportID:"55555",overflowy:"auto",overflowx:"hidden" },
-            { itemType: "reportBlock",size: { x: 1, y: 1 }, position: [1, 4],title:"row 4 1",reportID:"66666",overflowy:"auto",overflowx:"auto" },
-            { itemType: "reportBlock",size: { x: 1, y: 1 }, position: [1, 5],title:"row 4 1",reportID:"77777",overflowy:"hidden",overflowx:"hidden" },
-            { itemType: "reportBlock",size: { x: 1, y: 1 }, position: [2, 0],title:"row 4 1",reportID:"88888",overflowy:"hidden",overflowx:"hidden" },
-            { itemType: "reportBlock",size: { x: 1, y: 1 }, position: [2, 1],title:"row 4 1",reportID:"99999",overflowy:"hidden",overflowx:"hidden" }*/
-            ]};
-        }
-
-
-        if ($scope.dashboardID == 'clientDashboard')
-        {
-            $scope.dashBoardDefinitition = {items:[
-                { itemType: "reportBlock",size: { x: 3, y: 2 }, position: [0, 0],title:"row 4 1",reportID:"101011",overflowy:"hidden",overflowx:"hidden" },
-                { itemType: "reportBlock",size: { x: 3, y: 1 }, position: [0, 3],title:"% Retorno Clientes",reportID:"88888a",overflowy:"hidden",overflowx:"hidden" },
-                { itemType: "reportBlock",size: { x: 3, y: 1 }, position: [1, 3],title:"el titulo 1",reportID:"11111",overflowy:"hidden",overflowx:"hidden" },
-
-
-                { itemType: "tabBlock",size: { x: 6, y: 3 }, position: [2, 0],title:"row 3 1",reportID:"XXXXXX",overflowy:"auto",overflowx:"hidden", items:[{itemType: "reportBlock",size: { x: 3, y: 2 }, position: [2, 0],title:"Reservas",reportID:"XXXXXXa",overflowy:"auto",overflowx:"hidden"},{itemType: "reportBlock",size: { x: 3, y: 2 }, position: [2, 0],title:"Incidencias",reportID:"XXXXXXb",overflowy:"auto",overflowx:"hidden"},{itemType: "reportBlock",size: { x: 3, y: 2 }, position: [2, 0],title:"Facturación",reportID:"XXXXXXc",overflowy:"auto",overflowx:"hidden"}] }
-            ]};
-        }
-
-        $scope.$apply;
-
-
-
-        $timeout(function(){
-            for (var r in $scope.dashBoardDefinitition.items) {
-                if ($scope.dashBoardDefinitition.items[r].itemType == 'reportBlock')
-                {
-                    $scope.getReport($scope.dashBoardDefinitition.items[r].reportID);
-                }
-                if ($scope.dashBoardDefinitition.items[r].itemType == 'tabBlock')
-                {
-                    $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
-                }
-            }
-        },1000);
-
 
         $scope.$watch('dashBoardDefinitition.items', function(items){
             // one of the items changed
             console.log('item changed: '+items);
             $(window).trigger('resize');
         }, true);
-        /*
-        $scope.$watch('dashBoardDefinitition.items',function(newValue,oldValue) {
-            if(newValue) {
-                for (var r in $scope.dashBoardDefinitition.items) {
-                    $scope.getReport($scope.dashBoardDefinitition.items[r].reportID);
-                }
-            }
-        });
-          */
 
-       /*
-        for (var r in dashBoardDefinition.rows) {
-
-            generatedHTML += generateRow(dashBoardDefinition,r,'');
-
-        }
-
-        var $div = $(generatedHTML);
-        $(dashBoardLayout).append($div);
-        angular.element(document).injector().invoke(function($compile) {
-            var scope = angular.element($div).scope();
-            $compile($div)(scope);
-        });
-       */
 
     }
 
-    /*
-    PARA ENTRAR EN MODO DISEÑO
-    http://tympanus.net/Development/ButtonComponentMorph/index7.html#
-    PARA HACER PAGINAS DE CONTENIDO
-    http://builder.chillyorange.com/demo/
-    PARA HACER EL DASHBOARD
-    https://github.com/ManifestWebDesign/angular-gridster
-    */
-   /*
-    function generateRow(dashBoardDefinition,index, htmlCode)
+    function paintReports(dashboard)
     {
-        console.log("generating Row");
-       // if (!dashBoardDefinition.rows[index])
-       // {
-            //done(htmlCode);
-       //     return;
-       // } else {
-            var theRowHeight =  dashBoardDefinition.rows[index].rowHeight;
-            var theRowID = 'row'+index;
-            var generatedHTML = htmlCode;
-            generatedHTML += '<div id="'+theRowID+'" class="col-md-12" style="padding: {{rowPadding}};position: relative;" x-lvl-draggable="true" x-lvl-drop-target="true" x-on-select="selected(selectedEl)">';
-
-            var colClass = 'col-md-12';
-
-            if (dashBoardDefinition.rows[index].cols.length == 2)
-                colClass = 'col-md-6';
-            if (dashBoardDefinition.rows[index].cols.length == 3)
-                colClass = 'col-md-4';
-            if (dashBoardDefinition.rows[index].cols.length == 4)
-                colClass = 'col-md-3';
-            if (dashBoardDefinition.rows[index].cols.length == 5)
-                colClass = 'col-md-2';
-            if (dashBoardDefinition.rows[index].cols.length == 6)
-                colClass = 'col-md-2';
+        for (var r in dashboard.items) {
+            if (dashboard.items[r].itemType == 'reportBlock')
+            {
+                $scope.getReport2(dashboard.items[r].reportDefinition);
+            }
+            /*
+            if (dashboard.items[r].itemType == 'tabBlock')
+            {
+                $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
+            }
+            */
+        }
+    }
 
 
-        for (var c in dashBoardDefinition.rows[index].cols) {
-            generatedHTML += generateBlock(dashBoardDefinition.rows[index],c,'',theRowHeight,colClass);
+    function getPromptsForDashboard(dashboard,index, done)
+    {
+        if (!dashboard.items[index])
+        {
+            done();
+            return;
         }
 
-        //generatedHTML += theCode;
-        generatedHTML += '</div>';
+            console.log('processing prompts for report '+dashboard.items[index].reportID);
+
+            if (dashboard.items[index].itemType == 'reportBlock')
+            {
+
+                promptModel.getPrompts($scope,dashboard.items[index].reportDefinition, function(){
+                    getPromptsForDashboard(dashboard,index+1, done);
+                });
+            }  else {
+                getPromptsForDashboard(dashboard,index+1, done);
+            }
+            /*
+            if ($scope.dashBoardDefinitition.items[r].itemType == 'tabBlock')
+            {
+                $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
+            } */
+
+    }
+
+    $scope.selectFilterArrayValue = function(type, filter)
+    {
+        reportModel.selectFilterArrayValue(type, filter);
+    }
 
 
-        return generatedHTML;
-        //}
+    $scope.reportClicked = function(reportID,parameters)
+    {
+       console.log('reportcliced ',reportID,parameters);
+    }
 
-    }  */
+
 
     $scope.getVerticalScroll = function(isVertical)
     {
@@ -307,6 +380,49 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         //}
     }
    */
+
+    $scope.getReport2 = function(report)
+    {
+
+
+        console.log('entering on get report for report ID '+report.reportID) ;
+
+
+        //Process prompts
+
+
+        //reportModel.getReportBlock($scope,reportID, function(errorCode) {
+        reportModel.executeReport($scope,report._id, report, function (errorCode){
+
+
+            if (errorCode != 0)
+            {
+                var el = document.getElementById(reportID);
+
+                var theHTML = '';
+                if (errorCode == 1)
+                    theHTML = '<div class="alert">Report not found!</div>';
+                if (errorCode == 2)
+                    theHTML = '<div class="alert">Chart type not found!</div>';
+                if (errorCode == 3)
+                    theHTML = '<div class="alert">No data Found!</div>';
+
+                if (el)
+                {
+                    console.log(el);
+                    var $div = $(theHTML);
+                    angular.element(el).append($div);
+                    //el.append($div);
+                    angular.element(document).injector().invoke(function($compile) {
+                        var scope = angular.element($div).scope();
+                        $compile($div)(scope);
+                    });
+                }
+            }
+        });
+    }
+
+
     $scope.getReport = function(reportID)
     {
 
@@ -340,6 +456,29 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
              }
             }
         });
+    }
+
+    $scope.saveDashboard = function()
+    {
+        //console.log('saving dashboard '+data.dashboardName);
+        //$scope.dashBoardDefinitition
+
+
+        if ($scope.mode == 'add') {
+
+            connection.post('/api/dashboards/create', $scope.dashBoardDefinitition, function(data) {
+                if (data.result == 1) {
+                    $scope.goBack();
+                }
+            });
+        }
+        else {
+            connection.post('/api/dashboards/update/'+$scope.dashBoardDefinitition._id, $scope.dashBoardDefinitition, function(result) {
+                if (result.result == 1) {
+                    $scope.goBack();
+                }
+            });
+        }
     }
 
     $scope.getTabBlock = function(blockItem)
@@ -448,9 +587,39 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             window.location.hash = '/dashboards/'+targetID; //+'/'+targetFilters+'/'+sourceID;
         }
 
-
-
     }
+
+    $scope.getDistinctValues = function(filter)
+    {
+        promptModel.getDistinctValues($scope, filter);
+    }
+
+    $scope.toggleSelection = function(value)
+    {
+        promptModel.toggleSelection($scope, value);
+    }
+
+    $scope.selectSearchValue = function(searchValue)
+    {
+        promptModel.selectSearchValue($scope);
+    }
+
+    $scope.setHeight = function(element, height, correction) {
+        var height = (height == 'full') ? $(document).height() : height;
+
+        if (correction) height = height+correction;
+
+        $('#'+element).css('height', height);
+    };
+
+    $scope.checkPrompts = function()
+    {
+        promptModel.checkPrompts($scope, function (){
+            paintReports($scope.dashBoardDefinitition);
+        });
+    }
+
+
 
 }]);/*.directive('dashBoardLayout', function($compile) {
         return {

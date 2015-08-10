@@ -97,6 +97,7 @@ Controller.method('findAll', function (req, done) {
 });
 
 Controller.method('findOne', function (req, done) {
+
     if (!req.query.id) {
         done({result: 0, msg: "'id' is required."});
         return;

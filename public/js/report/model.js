@@ -7,6 +7,7 @@
  */
 
 //app.service('reportModel' , function ($http, $q, $filter, ngTableParams) {    TODO: ngTableParams quitado todo por traslado activar
+
 app.service('reportModel' , function ($http, $q, $filter, connection) {
     this.data = null;
     this.scope = null;
@@ -16,20 +17,30 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
         return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
     };
 
-    this.getReportData = function(id, params, done) {
-        getReportData(id, params, done);
+    this.getReportData = function($scope,report,params, done) {
+        getReportData($scope,report, params, done);
     };
-    function getReportData(id, params, done) {
-        console.log('getReportData');
-        console.log(this.selectedReport);
+    function getReportData($scope,report, params, done) {
+        //console.log('getReportData');
 
-        params.query = this.selectedReport.query;
 
+            params.query = report.query;
+
+
+            connection.get('/api/reports/get-data', params, function(data) {
+
+                done(data);
+            });
+
+    };
+
+    this.getData = function($scope,query,params, done) {
+        params.query = query;
         connection.get('/api/reports/get-data', params, function(data) {
-            console.log(data);
+
             done(data);
         });
-    };
+    }
 
     this.getReport = function($scope, id, done) {
         this.scope = $scope;
@@ -45,10 +56,12 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
                 for (var c in dataSource.collections) {
                     var collection = dataSource.collections[c];
-
-                    $scope.filters[0].filters = collection.filters;
-                    $scope.columns = collection.columns;
-                    $scope.order = collection.order;
+                    if ($scope.filters) //only for editing the report
+                    {
+                      $scope.filters[0].filters = collection.filters;
+                      $scope.columns = collection.columns;
+                      $scope.order = collection.order;
+                    }
                 }
             }
 
@@ -80,62 +93,6 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
          */
 
-        if (id == '11111')
-            done({_id:'11111',reportType:"chart",reportSubType:"line",properties:[{xkey:"day",ykeys:["visitorsCount"],labels:["Total Visits"],xlabels:["day"]}],queries:[]});
-        if (id == '22222')
-            done({_id:'22222',reportType:"chart",reportSubType:"donut",properties:[{labelField:"thelabelfield",valueField:"theValueField"}],queries:[]});
-        if (id == '33333')
-            done({_id:'33333',reportType:"chart",reportSubType:"bar",properties:[{xkey:"y",ykeys:["a","b"],labels:["Series A","Series B"]}],queries:[]});
-        if (id == '44444')
-            done({_id:'44444',reportType:"chart",reportSubType:"area",properties:[{xkey:"y",ykeys:["a","b"],labels:["Series A","Series B"],colors:["#FF0000","#ce8483"]}],queries:[]});
-        if (id == '55555')
-            done({_id:'55555',reportType:"grid",reportSubType:"",properties:[{fields:[{fieldName:"nombrecampo1",fieldAlias:"Alias campo 1"},{fieldName:"nombrecampo2",fieldAlias:"Alias campo 2"},{fieldName:"nombrecampo3",fieldAlias:"Alias campo 3"},{fieldName:"nombrecampo4",fieldAlias:"Alias campo 4"}]}]});
-        if (id == '66666')
-            done({_id:'66666',reportType:"pivot",reportSubType:"",properties:[{fields:[{fieldName:"nombrecampo1",fieldAlias:"Alias campo 1"},{fieldName:"nombrecampo2",fieldAlias:"Alias campo 2"},{fieldName:"nombrecampo3",fieldAlias:"Alias campo 3"},{fieldName:"nombrecampo4",fieldAlias:"Alias campo 4"}]}]});
-        if (id == '77777')
-            done({_id:'77777',reportType:"indicator",reportSubType:"style1",properties:[],queries:[]});
-        if (id == '88888')
-            done({_id:'88888',reportType:"indicator",reportSubType:"style2",properties:[],queries:[]});
-        if (id == '99999')
-            done({_id:'99999',reportType:"indicator",reportSubType:"style3",properties:[],queries:[]});
-        if (id == '101010')
-            done({_id:'101010',reportType:"vectorMap",reportSubType:"world",properties:[],queries:[]});
-        if (id == '22222a')
-            done({_id:'22222a',reportType:"chart",reportSubType:"donut",properties:[{labelField:"thelabelfield",valueField:"theValueField"}],queries:[]});
-
-        if (id == '22222b')
-            done({_id:'22222b',reportType:"chart",reportSubType:"donut",properties:[{labelField:"thelabelfield",valueField:"theValueField",colors:['#00ff37','#FF0000']}],queries:[]});
-
-        if (id == '22222c')
-            done({_id:'22222c',reportType:"chart",reportSubType:"donut",properties:[{labelField:"thelabelfield",valueField:"theValueField"}],queries:[]});
-
-        if (id == '22222d')
-            done({_id:'22222d',reportType:"chart",reportSubType:"donut",properties:[{labelField:"thelabelfield",valueField:"theValueField"}],queries:[]});
-
-        if (id == '88888a')
-            done({_id:'88888a',reportType:"indicator",reportSubType:"style2",properties:[{valueText:"Valor de cliente",valueType:"nominal",valueIcon:"li-cloud",backgroundColor:"#68B828",fontColor:"#fff"}],queries:[]});
-        if (id == '88888b')
-            done({_id:'88888b',reportType:"indicator",reportSubType:"style2",properties:[{valueText:"Tasa de retorno de clientes",valueType:"percentage",valueIcon:"li-cloud",backgroundColor:"#68B828",fontColor:"#fff"}],queries:[]});
-
-
-        if (id == '99999a')
-            done({_id:'99999a',reportType:"indicator",reportSubType:"style3",properties:[{valueText:"Gasto medio por cliente / día",valueType:"currency",valueIcon:"li-cloud",currencySymbol:"€",backgroundColor:"#59b0f2",fontColor:"#fff",auxFontColor:"#fff"}],queries:[]});
-
-        if (id == '55555a')
-            done({_id:'55555a',reportType:"grid",reportSubType:"",properties:[{idField:"id",fields:[{fieldName:"nombre",fieldAlias:"Nombre"},{fieldName:"nacionalidad",fieldAlias:"Nacionalidad"},{fieldName:"fecha",fieldAlias:"Ultima visita"},{fieldName:"valor",fieldAlias:"valor"},{fieldName:"satisfaccion",fieldAlias:"Ind. Satisfacción"},{fieldName:"origen",fieldAlias:"Origen"}],actions:[{actionEvent:"onRowClick",actionType:"goToDashBoard",targetID:"clientDashboard",targetFilters:['customerID']}]}]});
-        if (id == '101011')
-            done({_id:'101011',reportType:"readOnlyForm",reportSubType:"",properties:[{idField:"id",fields:[{fieldName:"nombre",fieldAlias:"Nombre"},{fieldName:"nacionalidad",fieldAlias:"Nacionalidad"},{fieldName:"fecha",fieldAlias:"Ultima visita"},{fieldName:"valor",fieldAlias:"valor"},{fieldName:"satisfaccion",fieldAlias:"Ind. Satisfacción"},{fieldName:"origen",fieldAlias:"Origen"},{fieldName:"observaciones",fieldAlias:"Observaciones"}],actions:[{actionEvent:"onRowClick",actionType:"goToDashBoard",targetID:"clientDashboard",targetFilters:['customerID']}]}]});
-
-        if (id == 'XXXXXXa')
-            done({_id:'XXXXXXa',reportType:"grid",reportSubType:"",properties:[{fields:[{fieldName:"fecha",fieldAlias:"Fecha"},{fieldName:"dias",fieldAlias:"Nº Dias"},{fieldName:"personas",fieldAlias:"Nº Personas"},{fieldName:"habitaciones",fieldAlias:"Nº Habitaciones"},{fieldName:"origen",fieldAlias:"Origen"}],actions:[{actionEvent:"onRowClick",actionType:"goToDashBoard",targetID:"clientDashboard",targetFilters:['customerID']}]}]});
-
-        if (id == 'XXXXXXb')
-            done({_id:'XXXXXXb',reportType:"grid",reportSubType:"",properties:[{idField:"id",fields:[{fieldName:"id",fieldAlias:"Nº incidencia"},{fieldName:"fecha",fieldAlias:"Fecha"},{fieldName:"estado",fieldAlias:"Estado"},{fieldName:"asunto",fieldAlias:"Asunto"}],actions:[{actionEvent:"onRowClick",actionType:"goToDashBoard",targetID:"clientDashboard",targetFilters:['customerID']}]}]});
-
-        if (id == 'XXXXXXc')
-            done({_id:'XXXXXXc',reportType:"grid",reportSubType:"",properties:[{fields:[{fieldName:"id",fieldAlias:"Nº Factura"},{fieldName:"fecha",fieldAlias:"Fecha"},{fieldName:"importe",fieldAlias:"Importe"},{fieldName:"abonado",fieldAlias:"Pagado con"}],actions:[{actionEvent:"onRowClick",actionType:"goToDashBoard",targetID:"clientDashboard",targetFilters:['customerID']}]}]});
-
-
     };
 
 
@@ -146,7 +103,108 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
         this.getReport($scope,id, function(report){
 
-            console.log(id);
+
+            if (!report)
+            {
+                done(1);
+                return;
+            }
+
+            //identificar los prompts del informe
+            //no se puede obtener los datos en tanto en cuanto no se tienen los valores para los filtros
+
+            if (!$scope.prompts)
+                 $scope.prompts = [];
+
+            for (var i in report.query.datasources) {
+                var dataSource = report.query.datasources[i];
+
+                for (var c in dataSource.collections) {
+                    var collection = dataSource.collections[c];
+                        for (var f in collection.filters) {
+                            var filter = collection.filters[f];
+                            if (filter.filterPrompt == true)
+                            {
+                                filter.reportID = id;
+                                $scope.prompts.push(filter);
+                            }
+                        }
+                }
+            }
+
+            if ($scope.prompts.length == 0)
+            {
+                this.executeReport($scope,id, report, function (errorCode){
+                        done(errorCode);
+                });
+            } else {
+                if (!$scope.reports)
+                    $scope.reports = [];
+                    $scope.reports.push(report); //several reports in the same scope ie. dashboards
+            }
+
+
+        });
+
+    }
+
+
+
+
+
+
+
+
+
+    this.executeReport = function($scope,id, report, done)
+    {
+        if (report.reportType == "chart-bar")
+            generateChartBar($scope,id,report,function(errorCode) {
+                done(errorCode);
+            });
+        if (report.reportType == "chart-line")
+            generateChartLine($scope,id,report,function(errorCode) {
+                done(errorCode);
+            });
+        if (report.reportType == "chart-donut")
+            generateChartDonut($scope,id,report,function(errorCode) {
+                done(errorCode);
+            });
+        if (report.reportType == "chart-area")
+            generateChartArea($scope,id,report,function(errorCode) {
+                done(errorCode);
+            });
+        if (report.reportType == "grid")
+            generateGrid($scope,id,report,function(errorCode) {
+                //generateRepeater($scope,id,report,function(errorCode) {
+                done(errorCode);
+            });
+        if (report.reportType == "pivot")
+            generatePivot($scope,id,report,function(errorCode) {
+                done(errorCode);
+            });
+        if (report.reportType == "indicator")
+            generateIndicator($scope,id,report,function(errorCode) {
+                done(errorCode);
+            });
+        if (report.reportType == "vectorMap")
+            generateVectorMap($scope,id,report,function(errorCode) {
+                done(errorCode);
+            });
+        if (report.reportType == "readOnlyForm")
+            generateReadOnlyForm($scope,id,report,function(errorCode) {
+                done(errorCode);
+            });
+        if (report.reportType == "gauge")
+            generateGauge($scope,id,report,function(errorCode) {
+                done(errorCode);
+            });
+    }
+
+    /*
+    this.getChart = function($scope,id,done)
+    {
+        this.getReport($scope,id, function(report){
 
             if (!report)
             {
@@ -156,9 +214,53 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
 
             if (report.reportType == "chart")
-                generateChart(id,report,function(errorCode) {
-                   done(errorCode);
+                generateChartHTML(id,report,function(errorCode) {
+                    done(errorCode);
                 });
+
+        });
+
+    }
+    */
+
+    this.getReportBlockForPreview = function($scope, report, id, done)
+    {
+
+           console.log('For Preview '+report);
+
+           this.selectedReport = report;
+
+            console.log(id);
+
+            if (!report)
+            {
+                done(1);
+                return;
+            }
+
+            /*
+            if (report.reportType == "chart")
+                generateChart($scope,id,report,function(errorCode) {
+                    done(errorCode);
+                });
+            */
+            if (report.reportType == "chart-bar")
+                generateChartBar($scope,id,report,function(errorCode) {
+                    done(errorCode);
+                });
+            if (report.reportType == "chart-line")
+                generateChartLine($scope,id,report,function(errorCode) {
+                    done(errorCode);
+                });
+            if (report.reportType == "chart-donut")
+                generateChartDonut($scope,id,report,function(errorCode) {
+                    done(errorCode);
+                });
+            if (report.reportType == "chart-area")
+                generateChartArea($scope,id,report,function(errorCode) {
+                    done(errorCode);
+                });
+
 
             if (report.reportType == "grid")
                 generateGrid($scope,id,report,function(errorCode) {
@@ -181,35 +283,305 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 generateReadOnlyForm($scope,id,report,function(errorCode) {
                     done(errorCode);
                 });
-
-        });
-
-    }
-    /*
-    this.getChart = function($scope,id,done)
-    {
-        this.getReport($scope,id, function(report){
-
-            if (!report)
-            {
-                done(1);
-                return;
-            }
-
-
-            if (report.reportType == "chart")
-                generateChartHTML(id,report,function(errorCode) {
+            if (report.reportType == "gauge")
+                generateGauge($scope,id,report,function(errorCode) {
                     done(errorCode);
                 });
 
-        });
 
     }
-    */
-    function generateChart(id,report,done) {
-console.log('generateChart');
+
+    this.getDistinct = function($scope,attribute) {
+
+
+        var execute = (typeof execute !== 'undefined') ? execute : true;
+
+        var query = {};
+        query.datasources = [];
+
+        //var filters = $scope.filters[0].filters;
+
+        var datasourcesList = [];
+        datasourcesList.push(attribute.datasourceID);
+
+
+
+        for (var i in datasourcesList) {
+
+            var dtsObject = {};
+            dtsObject.datasourceID = datasourcesList[i];
+            dtsObject.collections = [];
+
+            var dtsCollections = [];
+            dtsCollections.push(attribute.collectionID);
+
+
+
+            for (var n in dtsCollections) {
+
+                var collection = {};
+                collection.collectionID = dtsCollections[n];
+
+                collection.columns = [];
+                collection.columns.push(attribute);
+
+
+
+                collection.order = [];
+                collection.order.push(attribute);
+
+                for (var n1 in $scope.order) {
+                    if ($scope.order[n1].collectionID == dtsCollections[n])
+                    {
+                        collection.order.push($scope.order[n1]);
+                    }
+                }
+
+                dtsObject.collections.push(collection);
+
+            }
+            query.datasources.push(dtsObject);
+        }
+
+
+
+
+        this.getData($scope, query, {page: 0}, function(data) {
+            console.log('datos de distinct value ' + JSON.stringify(data));
+            $scope.searchValues = data;
+            $scope.errorMsg = (data.result === 0) ? data.msg : false;
+            $scope.page = data.page;
+            $scope.pages = data.pages;
+            //$scope.data = data;
+        });
+
+
+
+
+    }
+
+
+    function generateChartLine($scope,id,report,done)
+    {
+        getReportData($scope,report,{}, function(theData){
+
+            var theXKey = report.properties.xkeys[0].elementName;
+
+                var chartParams = {
+                    element: id,
+                    data: theData,
+                    xkey: theXKey,
+                    hideHover: true,
+                    resize: true,
+                    parseTime: false
+                    //dateFormat: function (x) { return ''; }
+                };
+
+                var ykeys = [], labels = [];
+
+                for (var i in report.properties.ykeys) {
+                    var theYKey = report.properties.ykeys[i].elementName;
+                    if (report.properties.ykeys[i].aggregation) theYKey += report.properties.ykeys[i].aggregation;
+
+                    ykeys.push(theYKey);
+                    labels.push(report.properties.ykeys[i].objectLabel);
+                }
+
+                chartParams.ykeys = ykeys;
+                chartParams.labels = labels;
+
+                if (report.properties.colors) {
+                    chartParams.lineColors = report.properties.colors;
+                }
+
+                new Morris.Line(chartParams).on('click', function(i, row){
+                    console.log('yeah clicked on: ', i, row);
+                    var params = {};
+                    params.i = i;
+                    params.row = row;
+                    $scope.reportClicked(id,params);
+
+                });
+
+                done(0);
+                return;
+            });
+    }
+
+    function generateChartBar($scope,id,report,done)
+    {
+
+
+        getReportData($scope,report,{}, function(theData){
+
+
+
+            var theXKey = report.properties.xkeys[0].elementName;
+            if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
+
+            //the X key no puede ser un valor agregado??
+            //if ($scope.selectedReport.properties.xkeys[0].aggregation) theXKey += $scope.selectedReport.properties.xkeys[0].aggregation;
+
+            //console.log('The X KEY '+theXKey);
+
+            var chartParams = {
+                element: id,
+                data: theData,
+                xkey: theXKey,
+                hideHover: true,
+                resize: true
+            };
+
+            var ykeys = [], labels = [];
+
+
+
+            console.log(report.properties.ykeys);
+
+            for (var i in report.properties.ykeys) {
+
+                var theYKey = report.properties.ykeys[i].elementName;
+                if (report.properties.ykeys[i].aggregation) theYKey += report.properties.ykeys[i].aggregation;
+
+
+
+                ykeys.push(theYKey);
+                labels.push(report.properties.ykeys[i].objectLabel);
+
+            }
+
+            chartParams.ykeys = ykeys;
+            chartParams.labels = labels;
+
+            if (report.properties.colors) {
+                chartParams.barColors = report.properties.colors;
+            }
+
+            new Morris.Bar(chartParams).on('click', function(i, row){
+                console.log(i, row);
+                var params = {};
+                params.i = i;
+                params.row = row;
+                $scope.reportClicked(id,params);
+            });
+
+            done(0);
+            return;
+        });
+    }
+
+    function generateChartDonut($scope,id,report,done)
+    {
+        console.log('the chart donut');
+
+        getReportData($scope,report,{}, function(theData){
+            if (theData) {
+                var data = [];
+
+                var theYKey = report.properties.ykeys[0].elementName;
+                if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
+
+                var theXKey = report.properties.xkeys[0].elementName;
+                if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
+
+                for (var i in theData) {
+                    //data.push({label: theData[i][report.properties.labelField], value: theData[i][report.properties.valueField]});
+                    data.push({label: theData[i][theXKey], value: theData[i][theYKey]});
+                }
+
+                var chartParams = {
+                    element: id,
+                    data: data,
+                    resize: true
+                };
+
+                if (report.properties.colors) {
+                    chartParams.colors = report.properties.colors;
+                }
+
+                Morris.Donut(chartParams).on('click', function(i, row){
+                    console.log(i, row);
+                    var params = {};
+                    params.i = i;
+                    params.row = row;
+                    $scope.reportClicked(id,params);
+                });
+
+                done(0);
+                return;
+            }
+        });
+    }
+
+    function generateChartArea($scope,id,report,done)
+    {
+        getReportData($scope,report,{}, function(theData){
+
+            var theXKey = report.properties.xkeys[0].elementName;
+            if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
+
+            var chartParams = {
+                element: id,
+                data: theData,
+                xkey: theXKey,
+                hideHover: true,
+                resize: true,
+                behaveLikeLine: false,
+                parseTime: false
+                //dateFormat: function (x) { return ''; }
+            };
+
+            var ykeys = [], labels = [];
+
+            for (var i in report.properties.ykeys) {
+                var theYKey = report.properties.ykeys[i].elementName;
+                if (report.properties.ykeys[i].aggregation) theYKey += report.properties.ykeys[i].aggregation;
+
+                ykeys.push(theYKey);
+                labels.push(report.properties.ykeys[i].objectLabel);
+            }
+
+            chartParams.ykeys = ykeys;
+            chartParams.labels = labels;
+
+            if (report.properties.colors) {
+                chartParams.lineColors = report.properties.colors;
+            }
+
+            new Morris.Area(chartParams).on('click', function(i, row){
+                console.log(i, row);
+                var params = {};
+                params.i = i;
+                params.row = row;
+                $scope.reportClicked(id,params);
+            });
+
+            done(0);
+            return;
+        });
+    }
+
+    this.selectFilterArrayValue = function(type, filter)
+    {
+        if (type == 'multiple')
+        {
+            for (var n1 in filter.filterLabel1) {
+                if (n1 > 0)
+                    filter.filterText1 = filter.filterText1 +';'+ filter.filterLabel1[n1].value;
+                else
+                    filter.filterText1 = filter.filterLabel1[n1].value;
+            }
+        } else {
+            filter.filterText1 = filter.filterLabel1.value;
+        }
+
+
+    }
+   /*
+    function generateChart($scope,id,report,done) {
+        console.log('generateChart');
         console.log(report);
-        getReportData(id, {}, function(theData){
+        getReportData($scope,report,{}, function(theData){
             if (report.reportSubType == 'line') {
                 var chartParams = {
                     element: id,
@@ -236,7 +608,12 @@ console.log('generateChart');
                 }
 
                 new Morris.Line(chartParams).on('click', function(i, row){
-                    console.log(i, row);
+                    console.log('yeah clicked on: ', i, row);
+                    var params = {};
+                    params.i = i;
+                    params.row = row;
+                    $scope.reportClicked(id,params);
+
                 });
 
                 done(0);
@@ -263,6 +640,10 @@ console.log('generateChart');
 
                     Morris.Donut(chartParams).on('click', function(i, row){
                         console.log(i, row);
+                        var params = {};
+                        params.i = i;
+                        params.row = row;
+                        $scope.reportClicked(id,params);
                     });
 
                     done(0);
@@ -295,6 +676,10 @@ console.log('generateChart');
 
                 new Morris.Bar(chartParams).on('click', function(i, row){
                     console.log(i, row);
+                    var params = {};
+                    params.i = i;
+                    params.row = row;
+                    $scope.reportClicked(id,params);
                 });
 
                 done(0);
@@ -328,6 +713,10 @@ console.log('generateChart');
 
                 new Morris.Area(chartParams).on('click', function(i, row){
                     console.log(i, row);
+                    var params = {};
+                    params.i = i;
+                    params.row = row;
+                    $scope.reportClicked(id,params);
                 });
 
                 done(0);
@@ -339,17 +728,19 @@ console.log('generateChart');
             }
         });
     }
-
+       */
     function generateGrid($scope,id,report,done) {
 
         var htmlCode = '';
         var quote = "'";
 
-        this.getReportData(id, function(theData){
+        console.log('generate grid') ;
+
+        getReportData($scope,report,{}, function(theData){
 
             if (theData)
             {
-
+                console.log('generate grid with data');
                 if (!$scope.theData)
                     $scope.theData = [];
 
@@ -392,7 +783,7 @@ console.log('generateChart');
                 //actions:[{actionEvent:"onRowClick",actionType:"goToDashBoard",targetID:"clientDashboard",targetFilters:['customerID'];
 
                 var rowClickEvent = '';
-
+               /*
                 for(var i = 0; i < report.properties.actions.length; i++)
                 {
                     if (report.properties.actions[i].actionEvent == 'onRowClick')
@@ -400,35 +791,54 @@ console.log('generateChart');
                     //rowClickEvent = ' ng-click="onReportAction('+report.properties.actions[i].actionType+','+report.properties.actions[i].targetID+','+report.properties.actions[i].targetFilters+')"'
 
                 }
-
+                 */
                 console.log('the row click event '+rowClickEvent);
 
+                //htmlCode += '<div class="container-fluid" style="height: 100%;width: 100%;overflow-y: scroll">';
+                htmlCode += '    <div class="table-responsive" >';
+                htmlCode += '        <table ng-table="tableParams['+hashedID+']" class="table table-bordered" infinite-scroll="getData()" infinite-scroll-distance="2" > ';
+                htmlCode += '            <thead> ';
 
-                //htmlCode += '<table border="1px"><thead></thead>';
-
-                htmlCode += '<table ng-table="tableParams['+hashedID+']" show-filter="false" class="table">';
-
-                //htmlCode += '<table class="table">';
-                /*
-                for(var i = 0; i < report.properties.fields.length; i++)
+                for(var i = 0; i < report.properties.columns.length; i++)
                 {
-                    htmlCode += '<td>'+report.properties.fields[i].fieldAlias+'</td>';
+                htmlCode += '                <td><strong>'+report.properties.columns[i].objectLabel+'</strong></td>';
                 }
+                htmlCode += '            </thead>';
+                htmlCode += '            <tbody>';
+                htmlCode += '                <tr ng-repeat="row in theData['+hashedID+']" >';
+                for(var i = 0; i < report.properties.columns.length; i++)
+                {
+                htmlCode += '                    <td >';
+                        if (!report.properties.columns[i].aggregation)
+                            htmlCode += '                        <span >{{row.'+report.properties.columns[i].elementName+'}}</span>';
+                        if (report.properties.columns[i].aggregation)
+                            htmlCode += '                        <span >{{row.'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation+'}}</span>';
+                htmlCode += '                    </td>';
+                }
+                htmlCode += '                </tr>';
+                htmlCode += '            </tbody>';
+                htmlCode += '        </table>';
+                htmlCode += '    </div>';
+                //htmlCode += '    <div ng-show="busy" style="text-align: center;padding: 20px;">';
+                //htmlCode += '        <span style="font-size: 20px;">Loading data...</span> <img src="images/loader.gif" style="width: 50px;">';
+                //htmlCode += '    </div>';
+                //htmlCode += '    </div>';
 
-                htmlCode += '</thead><tbody>';
-                */
-
-                //ng-click="item.$selected = !item.$selected; changeSelection(item)"
 
 
-                htmlCode += '<tr ng-repeat="item in theData['+hashedID+']"   ng-class="{'+quote+'active'+quote+': item.$selected}" > ';
 
-                    for(var i = 0; i < report.properties.fields.length; i++)
-                        {
-                            htmlCode += '<td data-title="'+quote+report.properties.fields[i].fieldAlias+quote+'" filter="{ '+quote+report.properties.fields[i].fieldName+quote+': '+quote+'select'+quote+' }" sortable="'+quote+report.properties.fields[i].fieldName+quote+'" ng-class="{ '+quote+'emphasis'+quote+': item.nombrecampo2 > 500}" '+rowClickEvent+'>{{item.'+report.properties.fields[i].fieldName+'}}</td>';
-                        }
+               // htmlCode += '<table ng-table="tableParams['+hashedID+']" show-filter="false" class="table">';
 
-                htmlCode += '</tr></table>';
+
+
+               // htmlCode += '<tr ng-repeat="item in theData['+hashedID+']"   ng-class="{'+quote+'active'+quote+': item.$selected}" > ';
+
+               //     for(var i = 0; i < report.properties.fields.length; i++)
+               //         {
+               //             htmlCode += '<td data-title="'+quote+report.properties.fields[i].fieldAlias+quote+'" filter="{ '+quote+report.properties.fields[i].fieldName+quote+': '+quote+'select'+quote+' }" sortable="'+quote+report.properties.fields[i].fieldName+quote+'" ng-class="{ '+quote+'emphasis'+quote+': item.nombrecampo2 > 500}" '+rowClickEvent+'>{{item.'+report.properties.fields[i].fieldName+'}}</td>';
+               //         }
+
+               // htmlCode += '</tr></table>';
 
 
                 //console.log(htmlCode);
@@ -436,6 +846,7 @@ console.log('generateChart');
                         var el = document.getElementById(id);
                         if (el)
                         {
+                            angular.element(el).empty();
                             var $div = $(htmlCode);
                             angular.element(el).append($div);
                             angular.element(document).injector().invoke(function($compile) {
@@ -447,6 +858,8 @@ console.log('generateChart');
                 return;
             }
         });
+
+
     }
 
 
@@ -460,7 +873,7 @@ console.log('generateChart');
         //https://github.com/kamilkp/angular-vs-repeat
 
         var quote = "'";
-        this.getReportData(id, function(theData){
+        this.getReportData($scope,id, function(theData){
 
             if (theData)
             {
@@ -524,591 +937,7 @@ console.log('generateChart');
                 month : 1,
                 day : 10,
                 amount : 34
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 1,
-                day : 10,
-                amount : 48
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 1,
-                day : 10,
-                amount : 58
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 1,
-                day : 10,
-                amount : 12
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 1,
-                day : 10,
-                amount : 19
-            },
-
-            // Feb
-
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 2,
-                day : 14,
-                amount : 24
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 2,
-                day : 4,
-                amount : 16
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 2,
-                day : 19,
-                amount : 30
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 2,
-                day : 20,
-                amount : 98
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 2,
-                day : 19,
-                amount : 24
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 2,
-                day : 10,
-                amount : 14
-            },
-
-            // Mar
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 3,
-                day : 14,
-                amount : 21
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 3,
-                day : 4,
-                amount : 26
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 3,
-                day : 19,
-                amount : 39
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 3,
-                day : 20,
-                amount : 49
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 3,
-                day : 19,
-                amount : 22
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 3,
-                day : 10,
-                amount : 24
-            },
-
-            // Apr
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 4,
-                day : 14,
-                amount : 10
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 4,
-                day : 4,
-                amount : 29
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 4,
-                day : 19,
-                amount : 27
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 4,
-                day : 20,
-                amount : 29
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 4,
-                day : 19,
-                amount : 32
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 4,
-                day : 10,
-                amount : 34
-            },
-
-
-            // May
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 5,
-                day : 14,
-                amount : 40
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 5,
-                day : 4,
-                amount : 19
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 5,
-                day : 19,
-                amount : 37
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 5,
-                day : 20,
-                amount : 22
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 5,
-                day : 19,
-                amount : 36
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 5,
-                day : 10,
-                amount : 39
-            },
-
-            // Jun
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 6,
-                day : 14,
-                amount : 40
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 6,
-                day : 4,
-                amount : 15
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 6,
-                day : 19,
-                amount : 15
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 6,
-                day : 20,
-                amount : 23
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 6,
-                day : 19,
-                amount : 29
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 6,
-                day : 10,
-                amount : 31
-            },
-
-            // Jul
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 7,
-                day : 14,
-                amount : 38
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 7,
-                day : 4,
-                amount : 26
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 7,
-                day : 19,
-                amount : 13
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 7,
-                day : 20,
-                amount : 21
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 7,
-                day : 19,
-                amount : 45
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 7,
-                day : 10,
-                amount : 20
-            },
-
-            // Aug
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 8,
-                day : 14,
-                amount : 30
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 8,
-                day : 4,
-                amount : 21
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 8,
-                day : 19,
-                amount : 38
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 8,
-                day : 20,
-                amount : 14
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 8,
-                day : 19,
-                amount : 25
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 8,
-                day : 10,
-                amount : 31
-            },
-
-            // Sep
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 9,
-                day : 14,
-                amount : 24
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 9,
-                day : 4,
-                amount : 18
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 9,
-                day : 19,
-                amount : 10
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 9,
-                day : 20,
-                amount : 24
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 9,
-                day : 19,
-                amount : 450000000.12345678
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 9,
-                day : 10,
-                amount : 21
-            },
-
-            // Oct
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 10,
-                day : 14,
-                amount : 26
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 10,
-                day : 4,
-                amount : 46
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 10,
-                day : 19,
-                amount : 48
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 10,
-                day : 20,
-                amount : 17
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 10,
-                day : 19,
-                amount : 20
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 10,
-                day : 10,
-                amount : 3
-            },
-
-            // Nov
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 11,
-                day : 14,
-                amount : 10
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 11,
-                day : 4,
-                amount : 39
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 11,
-                day : 19,
-                amount : 16
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 11,
-                day : 20,
-                amount : 22
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 11,
-                day : 19,
-                amount : 26
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 11,
-                day : 10,
-                amount : 26
-            },
-
-            // Dec
-            {
-                employee : {id:1, label:'John Brown'},
-                department : 1,
-                year : 2013,
-                month : 12,
-                day : 14,
-                amount : 12
-            },
-            {
-                employee : {id:2, label:'Bill Green'},
-                department : 1,
-                year : 2013,
-                month : 12,
-                day : 4,
-                amount : 15
-            },
-            {
-                employee : {id:3, label:'Daniel White'},
-                department : 2,
-                year : 2013,
-                month : 12,
-                day : 19,
-                amount : 18
-            },
-            {
-                employee : {id:4, label:'Bryan Gold'},
-                department : 2,
-                year : 2013,
-                month : 12,
-                day : 20,
-                amount : 13
-            },
-            {
-                employee : {id:5, label:'Suzy Fowler'},
-                department : 3,
-                year : 2013,
-                month : 12,
-                day : 19,
-                amount : 29
-            },
-            {
-                employee : {id:6, label:'Julia Smith'},
-                department : 3,
-                year : 2013,
-                month : 12,
-                day : 10,
-                amount : 12
-            },
+            }
 
         ];
 
@@ -1194,15 +1023,20 @@ console.log('generateChart');
 
     function generateIndicator($scope, id, report,  done)
     {
+        console.log('generating indicator block')
+
         var htmlCode = '';
 
-        this.getReportData(id, function(theData){
+        getReportData($scope,report,{}, function(theData){
 
             if (theData)
             {
 
-         console.log('el valor ' + theData[0].value);
-                var theValue = theData[0].value;
+                var theYKey = report.properties.ykeys[0].elementName;
+                if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
+
+                console.log('el valor ' + theYKey+' the ID '+id+ ' the type '+report.properties.style);
+                var theValue = theData[0][theYKey];
 
                 if (report.properties.valueType == 'percentage')
                 {
@@ -1244,31 +1078,33 @@ console.log('generateChart');
                 if (report.properties.auxFontColor)
                     theAuxFontColor = report.properties.auxFontColor;
 
-                if (report.reportSubType == 'style1')
+                if (report.properties.style == 'style1')
                 {
+                    console.log('this is the report Icon '+report.properties.reportIcon);
+
                     htmlCode += '<div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">';
-                    htmlCode += '   <div class="xe-icon">';
-                    htmlCode += '       <i class="'+report.properties.valueIcon+'"></i>';
+                    htmlCode += '   <div class="xe-icon" >';
+                    htmlCode += '       <i class="fa '+report.properties.reportIcon+'" style="background-color: '+theBackgroundColor+'"></i>';
                     htmlCode += '   </div>';
                     htmlCode += '   <div class="xe-label">';
-                    htmlCode += '       <strong class="num">'+theValue+'</strong>';
-                    htmlCode += '       <span>'+report.properties.valueText+'</span>';
+                    htmlCode += '       <strong class="num" style="color:'+report.properties.mainFontColor+'">'+theValue+'</strong>';
+                    htmlCode += '       <span style="color:'+report.properties.descFontColor+'">'+report.properties.valueText+'</span>';
                     htmlCode += '   </div>';
                     htmlCode += '</div>';
 
                     //TODO: Animation over data-from data-to
                 }
 
-                if (report.reportSubType == 'style2')
+                if (report.properties.style == 'style2')
                 {
                     htmlCode += '<div class="xe-widget xe-counter-block" xe-counter="" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2" style="background-color: '+theBackgroundColor+'">';
                     htmlCode += '   <div class="xe-upper"  style="background-color: '+theBackgroundColor+'">';
                     htmlCode += '       <div class="xe-icon">';
-                    htmlCode += '           <i class="'+report.properties.valueIcon+'"></i> ';
+                    htmlCode += '           <i class="fa '+report.properties.reportIcon+'"></i> ';
                     htmlCode += '       </div>';
                     htmlCode += '       <div class="xe-label">';
-                    htmlCode += '           <strong class="num">'+theValue+'</strong>';
-                    htmlCode += '           <span>'+report.properties.valueText+'</span> ';
+                    htmlCode += '           <strong class="num" style="color:'+report.properties.mainFontColor+'">'+theValue+'</strong>';
+                    htmlCode += '           <span style="color:'+report.properties.descFontColor+'">'+report.properties.valueText+'</span> ';
                     htmlCode += '       </div> ';
                     htmlCode += '   </div>';
                     htmlCode += '   <div class="xe-lower"> ';
@@ -1280,13 +1116,13 @@ console.log('generateChart');
                     htmlCode += '</div> ';
                 }
 
-                if (report.reportSubType == 'style3')
+                if (report.properties.style == 'style3')
                 {
                     htmlCode += '<div class="chart-item-bg-2" style="background-color: '+theBackgroundColor+';color:'+theFontColor+'">';
-                    htmlCode += '   <div class="chart-item-num" xe-counter="" data-count="this" data-from="0" data-to="98" data-suffix="%" data-duration="2" style="color:'+theFontColor+'">'+theValue+'</div>';
+                    htmlCode += '   <div class="chart-item-num" xe-counter="" data-count="this" data-from="0" data-to="98" data-suffix="%" data-duration="2" style="padding: 10px; color:'+report.properties.mainFontColor+'">'+theValue+'</div>';
                     htmlCode += '       <div class="chart-item-desc" > ';
                     //htmlCode += '           <p class="col-lg-7">Carriage quitting securing be appetite it declared. High eyes kept so busy feel call in.</p> ';
-                    htmlCode += '           <p style="color:'+theAuxFontColor+'">'+report.properties.valueText+'</p> ';
+                    htmlCode += '           <p style="color:'+report.properties.descFontColor+'">'+report.properties.valueText+'</p> ';
                     htmlCode += '       </div> ';
                    /*
                     htmlCode += '       <div class="chart-item-env"> ';
@@ -1297,17 +1133,22 @@ console.log('generateChart');
                     htmlCode += '</div>';
                 }
 
+                console.log('the html code '+htmlCode);
 
                 var el = document.getElementById(id);
                 if (el)
                 {
                     var $div = $(htmlCode);
+                    angular.element(el).empty();
                     angular.element(el).append($div);
                     angular.element(document).injector().invoke(function($compile) {
                         var scope = angular.element($div).scope();
                         $compile($div)(scope);
                     });
                 }
+
+
+
                 done(0);
                 return;
 
@@ -1370,11 +1211,11 @@ console.log('generateChart');
     function generateVectorMap($scope, id, report,  done)
     {
         var htmlCode = '';
-        var theData = {"af":"16","al":"11","dz":"158","ao":"85","ag":"1","ar":"351","am":"8","au":"1219","at":"366","az":"52","bs":"7","bh":"21","bd":"105.4","bb":"3.96","by":"52.89","be":"461.33","bz":"1.43","bj":"6.49","bt":"1.4","bo":"19.18","ba":"16.2","bw":"12.5","br":"2023.53","bn":"11.96","bg":"44.84","bf":"8.67","bi":"1.47","kh":"11.36","cm":"21.88","ca":"1563.66","cv":"1.57","cf":"2.11","td":"7.59","cl":"199.18","cn":"5745.13","co":"283.11","km":"0.56","cd":"12.6","cg":"11.88","cr":"35.02","ci":"22.38","hr":"59.92","cy":"22.75","cz":"195.23","dk":"304.56","dj":"1.14","dm":"0.38","do":"50.87","ec":"61.49","eg":"216.83","sv":"21.8","gq":"14.55","er":"2.25","ee":"19.22","et":"30.94","fj":"3.15","fi":"231.98","fr":"2555.44","ga":"12.56","gm":"1.04","ge":"11.23","de":"3305.9","gh":"18.06","gr":"305.01","gd":"0.65","gt":"40.77","gn":"4.34","gw":"0.83","gy":"2.2","ht":"6.5","hn":"15.34","hk":"226.49","hu":"132.28","is":"12.77","in":"1430.02","id":"695.06","ir":"337.9","iq":"84.14","ie":"204.14","il":"201.25","it":"2036.69","jm":"13.74","jp":"5390.9","jo":"27.13","kz":"129.76","ke":"32.42","ki":"0.15","kr":"986.26","undefined":"5.73","kw":"117.32","kg":"4.44","la":"6.34","lv":"23.39","lb":"39.15","ls":"1.8","lr":"0.98","ly":"77.91","lt":"35.73","lu":"52.43","mk":"9.58","mg":"8.33","mw":"5.04","my":"218.95","mv":"1.43","ml":"9.08","mt":"7.8","mr":"3.49","mu":"9.43","mx":"1004.04","md":"5.36","mn":"5.81","me":"3.88","ma":"91","mz":"10","mm":"35","na":"11","np":"15","nl":"770","nz":"138","ni":"6","ne":"5","ng":"206","no":"413","om":"53","pk":"174","pa":"27","pg":"8","py":"17","pe":"153","ph":"189","pl":"438","pt":"223","qa":"126","ro":"158","ru":"1476","rw":"5","ws":"1","st":"1","sa":"434","sn":"12","rs":"39","sc":"1","sl":"2","sg":"217","sk":"86","si":"46","sb":"1","za":"354","es":"1374","lk":"48","kn":"1","lc":"1","vc":"1","sd":"65","sr":"3","sz":"3","se":"444","ch":"522","sy":"59","tw":"426","tj":"5","tz":"22","th":"312","tl":"1","tg":"3","to":"1","tt":"21","tn":"43","tr":"729","tm":0,"ug":"17","ua":"136","ae":"239","gb":"2258","us":"14624","uy":"40","uz":"37","vu":"1","ve":"285","vn":"101","ye":"30","zm":"15","zw":"5"};
+        var theData = {"AF":"16","AL":"11","DZ":"158","ao":"85","ag":"1","ar":"351","am":"8","au":"1219","at":"366","az":"52","bs":"7","bh":"21","bd":"105.4","bb":"3.96","by":"52.89","be":"461.33","bz":"1.43","bj":"6.49","bt":"1.4","bo":"19.18","ba":"16.2","bw":"12.5","br":"2023.53","bn":"11.96","bg":"44.84","bf":"8.67","bi":"1.47","kh":"11.36","cm":"21.88","ca":"1563.66","cv":"1.57","cf":"2.11","td":"7.59","cl":"199.18","cn":"5745.13","co":"283.11","km":"0.56","cd":"12.6","cg":"11.88","cr":"35.02","ci":"22.38","hr":"59.92","cy":"22.75","cz":"195.23","dk":"304.56","dj":"1.14","dm":"0.38","do":"50.87","ec":"61.49","eg":"216.83","sv":"21.8","gq":"14.55","er":"2.25","ee":"19.22","et":"30.94","fj":"3.15","fi":"231.98","fr":"2555.44","ga":"12.56","gm":"1.04","ge":"11.23","de":"3305.9","gh":"18.06","gr":"305.01","gd":"0.65","gt":"40.77","gn":"4.34","gw":"0.83","gy":"2.2","ht":"6.5","hn":"15.34","hk":"226.49","hu":"132.28","is":"12.77","in":"1430.02","id":"695.06","ir":"337.9","iq":"84.14","ie":"204.14","il":"201.25","it":"2036.69","jm":"13.74","jp":"5390.9","jo":"27.13","kz":"129.76","ke":"32.42","ki":"0.15","kr":"986.26","undefined":"5.73","kw":"117.32","kg":"4.44","la":"6.34","lv":"23.39","lb":"39.15","ls":"1.8","lr":"0.98","ly":"77.91","lt":"35.73","lu":"52.43","mk":"9.58","mg":"8.33","mw":"5.04","my":"218.95","mv":"1.43","ml":"9.08","mt":"7.8","mr":"3.49","mu":"9.43","mx":"1004.04","md":"5.36","mn":"5.81","me":"3.88","ma":"91","mz":"10","mm":"35","na":"11","np":"15","nl":"770","nz":"138","ni":"6","ne":"5","ng":"206","no":"413","om":"53","pk":"174","pa":"27","pg":"8","py":"17","pe":"153","ph":"189","pl":"438","pt":"223","qa":"126","ro":"158","ru":"1476","rw":"5","ws":"1","st":"1","sa":"434","sn":"12","rs":"39","sc":"1","sl":"2","sg":"217","sk":"86","si":"46","sb":"1","za":"354","es":"1374","lk":"48","kn":"1","lc":"1","vc":"1","sd":"65","sr":"3","sz":"3","se":"444","ch":"522","sy":"59","tw":"426","tj":"5","tz":"22","th":"312","tl":"1","tg":"3","to":"1","tt":"21","tn":"43","tr":"729","tm":0,"ug":"17","ua":"136","ae":"239","gb":"2258","us":"14624","uy":"40","uz":"37","vu":"1","ve":"285","vn":"101","ye":"30","zm":"15","zw":"5"};
 
 
         htmlCode += '<div id="VMAP_'+id+'" style="width: 600px; height: 400px"></div>';
-
+        //htmlCode += '<div id="VMAP_'+id+'" style="width: 100%; "></div>';
 
         var el = document.getElementById(id);
         if (el)
@@ -1384,7 +1225,19 @@ console.log('generateChart');
             angular.element(document).injector().invoke(function($compile) {
                 var scope = angular.element($div).scope();
                 $compile($div)(scope);
-                $('#VMAP_'+id).vectorMap();
+                $('#VMAP_'+id).vectorMap({
+                    map: 'world_mill_en',
+                    series: {
+                    regions: [{
+                        values: theData,
+                        scale: ['#C8EEFF', '#0071A4'],
+                        normalizeFunction: 'polynomial'
+                    }]
+                },
+                onRegionTipShow: function(e, el, code){
+                    el.html(el.html()+' (GDP - '+gdpData[code]+')');
+                }
+                });
             });
         }
         done(0);
@@ -1414,7 +1267,7 @@ console.log('generateChart');
     {
         var quote = "'";
 
-        this.getReportData(id, function(theData){
+        this.getReportData($scope,id, function(theData){
 
             if (theData)
             {
@@ -1504,6 +1357,129 @@ console.log('generateChart');
 
 
     }
+
+
+   /* function generateGauge($scope, id, report, done)
+    {
+
+        var htmlCode = '<canvas canv-gauge id="'+id+'canvas'+'"></canvas><br/>';
+        var el = document.getElementById(id);
+        if (el)
+        {
+            var $div = $(htmlCode);
+            angular.element(el).append($div);
+            angular.element(document).injector().invoke(function($compile) {
+                var scope = angular.element($div).scope();
+                $compile($div)(scope);
+
+
+                var options =  {
+                    renderTo    : id+'canvas',
+                    width       : '250',
+                    height      : '250',
+                    glow        : true,
+                    units       : "Km/h",
+                    title       : false,
+                    minValue    : 0,
+                    maxValue    : 220,
+                    majorTicks  : ['0','20','40','60','80','100','120','140','160','180','200','220'],
+                    minorTicks  : 2,
+                    strokeTicks : false,
+                    highlights  : [
+                        { from : 0,   to : 50, color : 'rgba(0,   255, 0, .15)' },
+                        { from : 50, to : 100, color : 'rgba(255, 255, 0, .15)' },
+                        { from : 100, to : 150, color : 'rgba(255, 30,  0, .25)' },
+                        { from : 150, to : 200, color : 'rgba(255, 0,  225, .25)' },
+                        { from : 200, to : 220, color : 'rgba(0, 0,  255, .25)' }
+                    ],
+                    colors      : {
+                        plate      : '#222',
+                        majorTicks : '#f5f5f5',
+                        minorTicks : '#ddd',
+                        title      : '#fff',
+                        units      : '#ccc',
+                        numbers    : '#eee',
+                        needle     : { start : 'rgba(240, 128, 128, 1)', end : 'rgba(255, 160, 122, .9)' }
+                    }
+                }
+
+                new Gauge(options).setValue('1200');
+
+
+            });
+        }
+        done(0);
+        return;
+
+    }  */
+
+    function generateGauge($scope, id, report, done)
+    {
+
+        getReportData($scope,report,{}, function(theData){
+
+            if (theData)
+            {
+
+                var theYKey = report.properties.ykeys[0].elementName;
+                if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
+                var theValue = theData[0][theYKey];
+
+                var htmlCode = '<div class="container-fluid" style="width:100%;height: 100%"> <canvas id="'+id+'canvas'+'" style="width:100%"></canvas><br/>';
+                htmlCode += '<div style="    position: absolute;bottom: 0;left: 0;right: 0;padding: 20px;"><h3 style="text-align: center;">'+theValue+'</h3></div></div>'
+                var el = document.getElementById(id);
+                if (el)
+                {
+                    var $div = $(htmlCode);
+                    angular.element(el).append($div);
+                    angular.element(document).injector().invoke(function($compile) {
+                        var scope = angular.element($div).scope();
+                        $compile($div)(scope);
+
+                        var opts = {
+                            lines: report.properties.lines, // The number of lines to draw    12
+                            angle: report.properties.angle/100, // The length of each line
+                            lineWidth: report.properties.lineWidth/100, // The line thickness
+                            pointer: {
+                                length: report.properties.pointerLength/100, // The radius of the inner circle
+                                strokeWidth: report.properties.pointerStrokeWidth/1000, // The rotation offset
+                                color: report.properties.pointerColor // Fill color
+                            },
+                            limitMax: report.properties.limitMax,   // If true, the pointer will not go past the end of the gauge
+                            colorStart: report.properties.colorStart,   // Colors
+                            colorStop: report.properties.colorStop,    // just experiment with them
+                            strokeColor: report.properties.strokeColor,   // to see which ones work best for you
+                            generateGradient: report.properties.generateGradient
+                        };
+                        var target = document.getElementById(id+'canvas'); // your canvas element
+                        var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+                        gauge.maxValue = report.properties.maxValue; // set max gauge value
+                        gauge.minValue = report.properties.minValue;
+                        gauge.animationSpeed = report.properties.animationSpeed; // set animation speed (32 is default value)
+                        gauge.set(theValue); // set actual value
+
+                        //http://bernii.github.io/gauge.js/
+                    });
+                }
+
+            }
+        });
+        done(0);
+        return;
+        /*
+         $scope.my_options = {
+
+         };
+         $scope.my_value = 0;
+         $scope.units = ['Km/h', 'mph'];
+         $scope.setValue = function(value){
+         $scope.my_value = value;
+         }
+         */
+    }
+
+
+
 
 
     //TODO: Incluir sparkline en la rejilla de datos

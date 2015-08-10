@@ -1,13 +1,9 @@
-app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal ) {
+app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal,datasourceModel ) {
 
     $scope.activeForm = 'partials/data-source/source_wizard_index.html';
     $scope.selectedCollections = [];
 
-    $scope.elementTypes = [{name:"object",value:"object"},
-        {name:"string",value:"string"},
-        {name:"number",value:"number"},
-        {name:"boolean",value:"boolean"},
-        {name:"date",value:"date"}];
+
     /*
     $scope.add = function() {
 
@@ -33,9 +29,11 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 $scope._DataSource.status = 1;
                 $scope._DataSource.type = 'MONGODB';
                 //$scope._DataSource.companyID = 'XXXXXX';
+
                 $scope.mode = 'add';
 
-                console.log('entering in add mode for datasource')
+                console.log('entering in add mode for datasource');
+
             }
         } /*else {
             $scope.getDataSources(1,'',['type','params.connection.host']);
@@ -45,28 +43,19 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     $scope.save = function() {
         if ($scope.mode == 'add') {
             var parameters = {};
-
             parameters.connection = $scope._Parameters;
             parameters.schema = $scope.schemas;
-
             $scope._DataSource.params.push(parameters);
-
             var data = $scope._DataSource;
-
-
             console.log('saving data source '+data.reportName);
-
             connection.post('/api/data-sources/create', data, function(data) {
                 $scope.items.push(data.item);
-
                 $scope.cancel();
             });
         }
         else {
             console.log($scope._dataSource);
-
             $scope._dataSource.params[0].schema = removeUnselected($scope._dataSource.params[0].schema);
-
             for (var i in $scope.schemas) {
                 if ($scope.schemas[i].selected) {
                     $scope._dataSource.params[0].schema.push($scope.schemas[i]);
@@ -114,38 +103,33 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     $scope.fileSourceSelected  = function()
     {
         $scope.activeForm = 'partials/data-source/source_wizard_file1.html';
-
     }
 
     $scope.fileSourceFileSelected  = function()
     {
         $scope.activeForm = 'partials/data-source/source_wizard_file1.html';
-
     }
 
     $scope.fileSourceS3Selected  = function()
     {
         $scope.activeForm = 'partials/data-source/source_wizard_file2_s3.html';
-                $scope._Parameters = {};
-                $scope._Parameters.draft = true;
-                $scope._Parameters.badgeStatus = 0;
-                $scope._Parameters.exportable = true;
-                $scope._Parameters.badgeMode = 1;
+        $scope._Parameters = {};
+        $scope._Parameters.draft = true;
+        $scope._Parameters.badgeStatus = 0;
+        $scope._Parameters.exportable = true;
+        $scope._Parameters.badgeMode = 1;
 
     }
 
     $scope.mongoSourceSelected  = function()
     {
-        $scope.activeForm = 'partials/data-source/source_wizard_mongo.html';
+        console.log('mongo selected');
+        $scope.activeForm = '/partials/data-source/source_wizard_mongo.html';
         $scope.mongoStep = 1;
         $scope._Parameters = {};
         $scope._Parameters.port = 27017;
         $scope._Parameters.host = '54.154.195.107';
         $scope._Parameters.database = 'testIntalligent';
-
-
-
-
     }
 
     $scope.setMongoStep = function(step)
@@ -183,7 +167,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         data.userName = $scope._Parameters.userName;
         data.password = $scope._Parameters.password;
 
-
         console.log(data);
 
         connection.post('/api/data-sources/testMongoConnection', data, function(result) {
@@ -199,35 +182,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     }
 
 
-    $scope.getCollectionsSchema = function()
-    {
-        var data = {};
-        data.host = $scope._Parameters.host;
-        data.port = $scope._Parameters.port;
-        data.database = $scope._Parameters.database;
-        data.userName = $scope._Parameters.userName;
-        data.password = $scope._Parameters.password;
-        data.collections = $scope.selectedCollections;
 
-
-        console.log(data);
-
-        connection.post('/api/data-sources/getMongoSchemas', data, function(result) {
-            //console.log(result);
-            if (result.result == 1) {
-
-                $scope.schemas = result.items;
-
-                console.log(JSON.stringify($scope.schemas));
-
-                //var element = {colectionName: collectionName,elementName:name,elementType:type}
-                //console.log(result.items);
-                $scope.mongoStep = 3;
-
-
-            }
-        });
-    }
 
     $scope.saveDatasource = function () {
 
@@ -286,13 +241,20 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
         if (fields) params.fields = fields;
 
+        datasourceModel.getDataSources(params, function(data){
+            $scope.items = data.items;
+            $scope.page = data.page;
+            $scope.pages = data.pages;
+        });
+
+        /*
         connection.get('/api/data-sources/find-all', params, function(data) {
             $scope.items = data.items;
             $scope.page = data.page;
             $scope.pages = data.pages;
 
 
-        });
+        });*/
     };
 
     $scope.getDataSource = function() {
@@ -453,23 +415,104 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         console.log(element);
         collection.elements.push(element);
     };
-    $scope.addValueToElement = function(element, value, label) {
-        if (!element.values) element.values = [];
 
-        element.values.push({value: value, label: label});
+
+
+
+
+
+    function getElement(elementID)
+    {
+
+    }
+
+
+
+
+});
+
+app.directive('postRender', [ '$timeout', function($timeout) {
+    var def = {
+        restrict : 'A',
+        terminal : true,
+        transclude : true,
+        link : function(scope, element, attrs) {
+            $timeout(scope.redraw, 0);  //Calling a scoped method
+        }
     };
-    $scope.onElementTypeChange = function(collection, element) {
-        console.log(element);
+    return def;
+}]);
 
-        var params = {datasourceID: $scope._dataSource._id, collectionID: collection.collectionID, elementName: element.elementName};
 
-        if (element.elementType == 'array') {
-            connection.get('/api/data-sources/get-element-distinct-values', params, function(data) {
-                for (var i in data.items) {
-                    $scope.addValueToElement(element, data.items[i], data.items[i]);
-                }
+//directives link user interactions with $scope behaviours
+//now we extend html with <div plumb-item>, we can define a template <> to replace it with "proper" html, or we can
+//replace it with something more sophisticated, e.g. setting jsPlumb arguments and attach it to a double-click
+//event
+app.directive('plumbItem', function() {
+    return {
+        replace: true,
+        controller: 'PlumbCtrl',
+        link: function (scope, element, attrs) {
+            console.log("Add plumbing for the 'item' element");
+
+            jsPlumb.makeTarget(element, {
+                anchor: 'Continuous',
+                maxConnections: 2,
+            });
+            jsPlumb.draggable(element, {
+                containment: 'parent'
+            });
+
+            // this should actually done by a AngularJS template and subsequently a controller attached to the dbl-click event
+            element.bind('dblclick', function(e) {
+                jsPlumb.detachAllConnections($(this));
+                $(this).remove();
+                // stop event propagation, so it does not directly generate a new state
+                e.stopPropagation();
+                //we need the scope of the parent, here assuming <plumb-item> is part of the <plumbApp>
+                scope.$parent.removeState(attrs.identifier);
+                scope.$parent.$digest();
+            });
+
+        }
+    };
+});
+
+//
+// This directive should allow an element to be dragged onto the main canvas. Then after it is dropped, it should be
+// painted again on its original position, and the full module should be displayed on the dragged to location.
+//
+app.directive('plumbMenuItem', function() {
+    return {
+        replace: true,
+        controller: 'PlumbCtrl',
+        link: function (scope, element, attrs) {
+            console.log("Add plumbing for the 'menu-item' element");
+
+            // jsPlumb uses the containment from the underlying library, in our case that is jQuery.
+            jsPlumb.draggable(element, {
+                containment: element.parent().parent()
             });
         }
     };
+});
 
+app.directive('plumbConnect', function() {
+    return {
+        replace: true,
+        link: function (scope, element, attrs) {
+            console.log("Add plumbing for the 'connect' element");
+
+            jsPlumb.makeSource(element, {
+                parent: $(element).parent(),
+//				anchor: 'Continuous',
+                paintStyle:{
+                    strokeStyle:"#225588",
+                    fillStyle:"transparent",
+                    radius:7,
+                    lineWidth:2
+                },
+            });
+        }
+    };
 });

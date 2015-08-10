@@ -9,6 +9,8 @@ module.exports = function (app) {
     //app.post('/api/data-sources/delete/:id', restrict, DataSources.ReportsDelete);
     app.post('/api/data-sources/testS3Connection', restrict, DataSources.getS3Files);
     app.post('/api/data-sources/testMongoConnection', restrict, DataSources.testMongoConnection);
-    app.post('/api/data-sources/getMongoSchemas', restrict, DataSources.getMongoSchemas);
+
     app.get('/api/data-sources/get-element-distinct-values', restrict, DataSources.getElementDistinctValues);
+    app.get('/api/data-sources/getEntities',restrict, DataSources.getEntities);
+    app.get('/api/data-sources/getEntitySchema', restrict, DataSources.getEntitySchema);
 };

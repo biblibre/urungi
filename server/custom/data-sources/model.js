@@ -6,7 +6,7 @@ var DataSourcesSchema = new mongoose.Schema({
     name: {type: String, required: true},
     type: {type: String, required: true},
     status: {type: Number, required: true},
-    params: [],
+    params:  [],
     nd_trash_deleted:{type: Boolean},
     nd_trash_deleted_date: {type: Date}
 }, { collection: config.app.customCollectionsPrefix+'DataSources' });

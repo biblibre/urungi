@@ -1,0 +1,74 @@
+<nd-modal id="elementModal">
+    <div class="modal-header ng-scope">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-close"></i></button>
+        <h4 class="modal-title">Add element to schema</h4>
+        <h5 class="modal-title">{{selectedElement.elementName}}</h5>
+    </div>
+
+    <div class="modal-body ng-scope" >
+
+        <div class="row">
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label for="field-3" class="control-label">Label</label>
+                    <input id="field-3" class="form-control" ng-model="selectedElement.elementLabel" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="field-4" class="control-label">Type</label>
+                    <select id="field-4" class="form-control" ng-model="selectedElement.elementType" ng-options="obj.value as obj.name for obj in elementTypes"
+                            ng-change="onElementTypeChange(selectedElement)"></select>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="field-5" class="control-label">Description</label>
+                    <textarea ng-model="selectedElement.description" class="form-control autogrow" id="field-5"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div ng-if="selectedElement.elementType == 'array'">
+
+                    <div ng-repeat="value in selectedElement.values">
+                        <input class="form-control" ng-model="value.value" placeholder="value" style="width: 47%;float: left;">
+                        <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
+                        <i class="fa fa-times hand-cursor" ng-click="removeFromArray(selectedElement.values, value)" style="padding: 9px;"></i>
+                    </div>
+
+                    <div>
+                        <input class="form-control" ng-model="valueValue" placeholder="enter new value" style="width: 47%;float: left;">
+                        <input class="form-control" ng-model="valueLabel" placeholder="enter new label" style="width: 47%;float: left;">
+                        <i class="fa fa-arrow-right hand-cursor" style="padding: 9px;"
+                           ng-click="addValueToElement(selectedElement, valueValue, valueLabel);valueValue='';valueLabel='';"></i>
+                    </div>
+
+                </div>
+                <div ng-if="element.elementType == 'number' || element.elementType == 'date'">
+
+                    <div>
+                        <input class="form-control" ng-model="element.format" placeholder="format..." style="width: 100%;">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer ng-scope">
+        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-info"  ng-click="addElementToObjects()">Add to schema</button>
+    </div>
+</nd-modal>

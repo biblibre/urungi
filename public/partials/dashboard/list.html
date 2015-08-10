@@ -1,4 +1,4 @@
-<div class="container-fluid mainArea">
+<div class="container-fluid " ng-init="getDashboards()"  style="padding-top: 10px;">
     <div class="container-fluid">
 
         <div class="main col-md-3" ng-include="'partials/home/sidebar.html'">
@@ -14,13 +14,9 @@
                 </div>
 
                 <div class="list-group">
-                    <a href="/#/dashboards/1234567890" class="list-group-item">
-                        <h4 class="list-group-item-heading">Evolución general de ventas</h4>
-                        <p class="list-group-item-text">Cuadro de mando que muestra la evolución e historico de ventas para todas las áreas de negocio y todos los productos.</p>
-                    </a>
-                    <a href="/#/dashboards/clients" class="list-group-item">
-                        <h4 class="list-group-item-heading">Clientes</h4>
-                        <p class="list-group-item-text">Muestra la evolución de clientes, origen, índice de satisfacción y otros indicadores de facturación, da acceso al cuadro de mando de cliente</p>
+                    <a href="/#/dashboards/{{dashboard._id}}" class="list-group-item" ng-repeat="dashboard in dashboards.items">
+                        <h4 class="list-group-item-heading" ng-bind="dashboard.dashboardName"></h4>
+                        <p class="list-group-item-text" ng-bind="dashboard.dashboardDescription"></p>
                     </a>
 
                 </div>

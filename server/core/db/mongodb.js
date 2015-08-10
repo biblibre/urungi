@@ -19,10 +19,8 @@ exports.testConnection = function(data, done) {
 };
 
 exports.getSchemas = function(data, done) {
-    var collections = data.collections;
-    var numDocs = data.numDocs; //number of documents scanned for every collection
-
-    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
+    var collections = data.entities;
+   var MongoClient = require('mongodb').MongoClient , assert = require('assert');
 
     var dbURI =  'mongodb://'+data.host+':'+data.port+'/'+data.database;
 
@@ -43,59 +41,73 @@ exports.getSchemas = function(data, done) {
 
 exports.execOperation = function(operation, params, done) {
     var DataSources = connection.model('DataSources');
+    var Layers = connection.model('Layers');
 
     DataSources.findOne({ _id: params.datasourceID}, function (err, dataSource) {
         if (dataSource) {
-            for (var n in dataSource.params[0].schema) {
-                if (params.collectionID == dataSource.params[0].schema[n].collectionID) {
-                    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
+            Layers.findOne({ _id: params.layerID}, function (err, layer) {
+                if (layer) {
 
-                    var dbURI = 'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
-
-                    MongoClient.connect(dbURI, function(err, db) {
-                        if(err) { return console.dir(err); }
-
-                        var collection = db.collection(dataSource.params[0].schema[n].collectionName);
-
-                        var fields = {};
-
-                        if (params.fields) {
-                            for (var i in params.fields) {
-                                fields[params.fields] = 1;
+                        var theCollectionName = '';
+                        for (var n in layer.params.schema) {
+                            if (params.collectionID === layer.params.schema[n].collectionID) {
+                                   theCollectionName = layer.params.schema[n].collectionName;
                             }
                         }
+                                var MongoClient = require('mongodb').MongoClient , assert = require('assert');
 
-                        if (operation == 'find') {
-                            collection.find({}, fields, {limit: 50}).toArray(function(err, items) {
-                                db.close();
-                                done({result: 1, items: items});
-                            });
-                        }
-                        if (operation == 'aggregate') {
-                            collection.aggregate([
-                                    { $group: { _id: params.group } },
-                                    { $sort: params.sort },
-                                    { $limit: 50 }
-                                ],
-                                function(err, result) {
-                                    var items = [];
+                                var dbURI = 'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
 
-                                    for (var i in result) {
-                                        if (result[i]._id[params.elementName]) {
-                                            items.push(result[i]._id[params.elementName]);
+                                MongoClient.connect(dbURI, function(err, db) {
+                                    if(err) { return console.dir(err); }
+
+                                    var collection = db.collection(theCollectionName);
+
+                                    //console.log('this is the collction ', theCollectionName,params.collectionID);
+
+                                    var fields = {};
+
+                                    if (params.fields) {
+                                        for (var i in params.fields) {
+                                            fields[params.fields] = 1;
                                         }
                                     }
 
-                                    db.close();
-                                    done({result: 1, items: items});
-                                }
-                            );
-                        }
-                    });
+                                    if (operation == 'find') {
+                                        collection.find({}, fields, {limit: 50}).toArray(function(err, items) {
+                                            db.close();
+                                            done({result: 1, items: items});
+                                        });
+                                    }
+                                    if (operation == 'aggregate') {
+                                        collection.aggregate([
+                                                { $group: { _id: params.group } },
+                                                { $sort: params.sort },
+                                                { $limit: 50 }
+                                            ],
+                                            function(err, result) {
+                                                /*
+                                                var items = [];
+
+                                                for (var i in result) {
+                                                    //if (result[i]._id[params.elementName]) {
+                                                        items.push(result[i]._id[params.elementName]);
+                                                       // console.log('the item  '+result[i]._id[params.elementName]);
+                                                    //}
+                                                } */
+                                                //console.log('the results '+JSON.stringify(result));
+                                                db.close();
+                                                done({result: 1, items: result});
+                                            }
+                                        );
+                                    }
+                                });
+
                 }
-            }
+            });
         } else {
-            done({result: 0, msg: 'DataSource not found.'});
+            done({result: 0, msg: 'DataSource not found: '});
+            console.log('DataSource not found: ',params.datasourceID)
         }
     });
 };
@@ -111,7 +123,7 @@ function getCollectionSchema(db,collections,index,schemas, done) {
     }
 
     var uuid = require('node-uuid');
-    var collectionName = collections[index];
+    var collectionName = collections[index].name;
     var collectionID = uuid.v4();
     var theCollection = {collectionID: collectionID ,collectionName: collectionName,visible:true,collectionLabel:collectionName};
     theCollection.elements = [];

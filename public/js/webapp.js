@@ -4,7 +4,7 @@
 var app = angular.module('WideStage', [
        //'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs','angularTreeview','ngDragDrop','ui.layout'
         'ngRoute','ui.sortable','gridster','ui.layout','angularTreeview', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
-        'infinite-scroll'
+        'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective'
     ]).
     config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
@@ -24,8 +24,12 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/dashboards/new/:newDashboard/', {
-            templateUrl: 'partials/dashboard/view.html',
-            controller: 'reportCtrl'
+            templateUrl: 'partials/dashboard/edit.html',
+            controller: 'dashBoardCtrl'
+        });
+        $routeProvider.when('/dashboards/edit/:dashboardID/', {
+            templateUrl: 'partials/dashboard/edit.html',
+            controller: 'dashBoardCtrl'
         });
 
         //http://www.jointjs.com/tutorial
@@ -84,8 +88,25 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/data_sources/new/:newDataSource/', {
-            templateUrl: 'partials/data-source/source_wizard_index.html',
+            templateUrl: 'partials/data-source/source_wizard.html',
             controller: 'dataSourceCtrl'
+        });
+
+        //layers
+
+        $routeProvider.when('/layers', {
+            templateUrl: 'partials/layer/list.html',
+            controller: 'layerCtrl'
+        });
+
+        $routeProvider.when('/layers/:layerID/', {
+            templateUrl: 'partials/layer/view.html',
+            controller: 'layerCtrl'
+        });
+
+        $routeProvider.when('/layer/edit/:layerID/', {
+            templateUrl: 'partials/layer/edit.html',
+            controller: 'layerCtrl'
         });
 
     }]);

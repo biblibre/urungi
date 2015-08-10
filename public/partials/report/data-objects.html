@@ -50,7 +50,9 @@
                elementID: element.elementID,
                elementType: element.elementType,
                filterType: 'equal',
-               filterTypeLabel:'equal'}">{{element.elementLabel}}</a>
+               filterPrompt: false,
+               filterTypeLabel:'equal',
+               values:element.values}">{{element.elementLabel}}</a>
             <a ng-if="element.elementType == 'number' || element.elementType == 'date'"
                class="list-group-item data-source-aggregation" ng-repeat="aggregation in fieldsAggregations[element.elementType]"
                draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
@@ -61,6 +63,7 @@
                elementID: element.elementID,
                elementType: element.elementType,
                filterType: 'equal',
+               filterPrompt: false,
                filterTypeLabel:'equal',
                aggregation: aggregation.value}" ng-bind="aggregation.name"></a>
         </div>
@@ -74,6 +77,7 @@
                elementID: 'count',
                elementType: 'count',
                filterType: 'equal',
+               filterPrompt: false,
                filterTypeLabel:'equal',
                count: true}">Count</a>
             <!--<a ng-repeat="element in dsource.collection.elements" ng-if="element.visible"

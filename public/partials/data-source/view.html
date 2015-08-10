@@ -1,6 +1,9 @@
+<script src="libs/jsplumb/jquery.jsPlumb-1.7.6-min.js"></script>
+
 <div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
     <a href="/#/data-sources" class="btn btn-default pull-left">Cancel</a>
     <a href="/#/data-sources/edit/{{_dataSource._id}}/" class="btn btn-warning pull-right" style="margin-left: 5px;margin-right: 5px;">Edit</a>
+
 </div>
 
 <div class="container-fluid" ng-init="view()">
@@ -19,6 +22,39 @@
             </p>
         </div>
     </div>
+
+    <div class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan" id="canvas">
+
+
+        <div id="{{collection.collectionID}}" class="window jtk-node  jsplumb-draggable" style="left: 428px; top: 40px;" ng-repeat="collection in _dataSource.params[0].schema">
+            <div class=" jtk-header "><strong>{{collection.collectionName}}</strong></div>
+
+            <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{'flowchart'+element.elementID}}" ng-repeat="element in collection.elements">{{element.elementName}}</div>
+
+            <!--<div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="flowchartWindow3">campo 3</div>
+            <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="flowchartWindow4">campo 4</div> -->
+        </div>
+
+        <!--
+        <div class="window jtk-node  jsplumb-draggable">
+            <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="flowchartWindow2"><strong>1</strong></div>
+        </div>
+
+        <div class="window jtk-node  jsplumb-draggable">
+            <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="flowchartWindow5"><strong>1</strong></div>
+            <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="flowchartWindow6"><strong>1</strong></div>
+            <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="flowchartWindow7"><strong>1</strong></div>
+        </div>
+        -->
+        <!--
+        <div class="window jtk-node _jsPlumb_endpoint_anchor jsplumb-draggable _jsPlumb_connected" id="flowchartWindow2" style="left: 428px; top: 40px;"><strong>2</strong><br><br></div>
+        <div class="window jtk-node _jsPlumb_endpoint_anchor jsplumb-draggable _jsPlumb_connected" id="flowchartWindow3"><strong>3</strong><br><br></div>
+        <div class="window jtk-node _jsPlumb_endpoint_anchor jsplumb-draggable _jsPlumb_connected" id="flowchartWindow4"><strong>4</strong><br><br></div>
+            -->
+    </div>
+
+
+    <span ng-init="erDiagramInit()"></span>
 
     <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
         <h3 class="pull-left">Collections</h3>

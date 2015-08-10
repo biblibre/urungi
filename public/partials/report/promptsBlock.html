@@ -1,0 +1,83 @@
+<div id="promptsModal" ng-show="prompts.length > 0 && showPrompts == true" class="panel ng-scope" >
+    <form role="form" class="form-inline" name="filtersForm">
+        <div class="container-fluid">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="closePromptsBlock()">×</button>
+        </div>
+
+        <div class="panel-body ng-scope">
+
+            <div class="container-fluid" ng-repeat="filter in prompts" style="padding-bottom: 5px;">
+                <div class="col-md-2">
+                    <p ng-show="filter.promptMandatory == true && (!filter.filterText1 || filter.filterText1 == '')" style="color: #cc3f44;">{{filter.objectLabel}} *</p>
+
+
+                    <label ng-show="(filter.promptMandatory == false || !filter.promptMandatory) || (filter.filterText1 && filter.filterText1 != '')" class="control-label">{{filter.objectLabel}}</label>
+                </div>
+
+                <div class="col-md-10">
+
+
+                    <!-- Array -->
+                    <div class="form-group"  ng-show="(filter.values != undefined && filter.elementType == 'array' && (filter.filterType != 'in' && filter.filterType != 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
+
+                        <ui-select id="array" ng-model="filter.filterLabel1" on-select="selectFilterArrayValue('simple', filter)" theme="select2" ng-disabled="disabled" style="width: 300px;">
+                            <ui-select-match placeholder="Select or search a value in the list...">{{$select.selected.label}}</ui-select-match>
+                            <ui-select-choices repeat="value in filter.values | filter: $select.search">
+                                <span ng-bind-html="value.label | highlight: $select.search"></span>
+                                <!--<small ng-bind-html="country.value | highlight: $select.search"></small>-->
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <!-- END Array -->
+
+
+                    <!-- Multiple Array -->
+                    <div class="form-group"  ng-show="(filter.values != undefined && filter.elementType == 'array' && (filter.filterType == 'in' || filter.filterType == 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull') )" >
+
+                        <ui-select id="marray" multiple ng-model="filter.filterLabel1" on-select="selectFilterArrayValue('multiple', filter)" on-remove="selectFilterArrayValue('multiple', filter)" theme="select2" ng-disabled="disabled" style="width: 300px;">
+                            <ui-select-match placeholder="Select multiple values...">{{$item.label}}</ui-select-match>
+                            <ui-select-choices repeat="value in filter.values | filter: $select.search">
+                                <div ng-bind-html="value.lavel | highlight: $select.search"></div>
+                                <small>
+                                    {{value.label}}
+
+                                </small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <!-- END Multiple Array -->
+
+
+                    <!-- TODO: Selector de fecha , tratamiento de los campos de tipo fecha, mes , año, día, dia de la semana, etc... -->
+
+                    <div class="input-group"  ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && ( filter.elementType != 'array')" style="width:300px;">
+                        <input type="text" class="form-control no-right-border form-focus-green" ng-model="filter.filterText1" >
+                        <!--TODO: para el in -not in como select2, pero con los valores introducidos manualmente ver ejemplo en: http://stackoverflow.com/questions/29489821/allow-manually-entered-text-in-ui-select-->
+                        <!--<select multiple="" data-role="tagsinput" style="display: none;"/>  http://timschlechter.github.io/bootstrap-tagsinput/examples/bootstrap-2.3.2.html-->
+
+                                    <span class="input-group-btn">
+
+                                        <button class="btn btn-primary popover-primary ng-scope" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Select distinct values" popover="Click here to select one or more from the distinct values that can currently be found in the database" ng-click="getDistinctValues(filter)"><i class="fa fa-search"></i></button>
+                                    </span>
+                    </div>
+
+                    <!-- TODO: between... -->
+                    <span ng-show="filter.filterType == 'between' || filter.filterType == 'notBetween'"> and <input type="text" ng-model="filter.filterText2" />  </span>
+
+
+                </div>
+
+            </div>
+            <div class="container-fluid" ng-show="promptMessage && promptMessage != ''">
+                <p style="padding: 10px 15px;background-color: #cc3f44;color: #ffffff;">{{promptMessage}}</p>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <button type="button" class="btn btn-info pull-right" ng-click="checkPrompts()" >Execute</button>
+        </div>
+    </form>
+</div>
+<div class="container-fluid" ng-show="prompts.length > 0 && showPrompts == false" style="padding-bottom: 5px;">
+    <button class="btn btn-orange pull-right"  ng-click="openPromptsBlock()" style="width: 100%;padding-bottom: 5px;"><i class="fa fa-filter"></i> Filters</button>
+</div>

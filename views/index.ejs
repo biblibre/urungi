@@ -11,10 +11,24 @@
 <!-- widestage Default CSS -->
 <!--<link href="https://s3.amazonaws.com/widestage/default/css/widestage.css" rel="stylesheet">-->
 
+<!--jquery ui -->
+<link rel="stylesheet" type="text/css" href="libs/jquery/jquery-ui.structure.min.css"/>
+
 
 <link rel="stylesheet" type="text/css" href="css/xenon-components.css"/>
 
-<link rel="stylesheet" type="text/css" href="css/widestage.css"/>
+<link rel="stylesheet" type="text/css" href="css/xenon-forms.css"/>
+
+<!--select-->
+<link rel="stylesheet" type="text/css" href="libs/select/dist/select.min.css"/>
+<link rel="stylesheet" type="text/css" href="libs/select/dist/select2.css"/>
+<!--
+    Selectize theme
+    Less versions are available at https://github.com/brianreavis/selectize.js/tree/master/dist/less
+  -->
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
+
+
 
 <!-- font-awesome -->
 <!--<link href="https://s3.amazonaws.com/widestage/default/css/font-awesome.min.css" rel="stylesheet">-->
@@ -39,7 +53,30 @@
 <!-- nestable -->
 <link rel="stylesheet" href="/libs/jquery.nestable/jquery.nestable.css" />
 
+<!--font awesome icon picker -->
+<link rel="stylesheet" href="/libs/fontawesome-icon-picker/fontawesome-iconpicker.min.css" />
+
+<!--slider-->
+<link rel="stylesheet" href="/libs/bootstrap-sliders/bootstrap-slider.min.css" />
+
+<!--bootstrap tagsinput-->
+<link rel="stylesheet" href="/libs/bootstrap-tagsinput/bootstrap-tagsinput.css" />
+
+<!--angular ui tree
+<link rel="stylesheet" href="/libs/angular-ui-tree/angular-ui-tree.min.css" />
+-->
+
+<!--jsPlumb-->
+<link rel="stylesheet" type="text/css" href="libs/jsplumb/jsPlumb.css"/>
+
 <link rel="stylesheet" type="text/css" href="nodedream/nodedream.css"/>
+
+
+<link rel="stylesheet" type="text/css" href="css/widestage.css"/>
+
+
+
+
 
 
 <!-- ngTable
@@ -56,14 +93,15 @@
 <!-- jquery -->
 <script src="https://s3.amazonaws.com/widestage/default/js/lib/jquery/jquery-2.0.3.min.js"></script>
 <script src="https://s3.amazonaws.com/widestage/default/js/lib/jquery/jquery.validate.min.js"></script>
-<script src="libs/jquery/jquery-ui-1.9.2.custom.min.js"></script>
-
+<!--<script src="libs/jquery/jquery-ui-1.9.2.custom.min.js"></script>-->
+<script src="libs/jquery/jqueryui-1.11/jquery-ui.min.js"></script>
 <!-- bootstrap -->
 <script src="https://s3.amazonaws.com/widestage/default/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
 
 <!-- angular -->
 <script src="https://s3.amazonaws.com/widestage/default/js/lib/angular/angular.min.js"></script>
 <script src="https://s3.amazonaws.com/widestage/default/js/lib/angular/angular-ui-router.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular-sanitize.js"></script>
 
 <!-- ngDragable
 <script src="https://s3.amazonaws.com/widestage/default/js/lib/ngdragable/ngDraggable.js"></script>
@@ -123,6 +161,38 @@
 <!-- Checklist model multiselect -->
 <script src="js/directives/checklist-model.js"></script>
 
+<!--font awesome icon picker -->
+<script src="libs/fontawesome-icon-picker/fontawesome-iconpicker.min.js"></script>
+
+<!--gauge -->
+<script src="libs/gauge/gauge.js"></script>
+<script src="libs/gauge/angular-canv-gauge.js"></script>
+
+<!--gauge -->
+<script src="libs/gauge2/gauge.min.js"></script>
+
+<!-- widestage directives -->
+<script src="js/directives/wst-directives.js"></script>
+
+<!--slider -->
+<script src="libs/bootstrap-sliders/bootstrap-slider.min.js"></script>
+<script src="libs/bootstrap-sliders/angular-bootstrap-slider.js"></script>
+
+<!--select2-->
+<script src="libs/select/dist/select-wst.js"></script>
+
+<!--bootstrap tagsinput-->
+<script src="libs/bootstrap-tagsinput/bootstrap-tagsinput-angular.min.js"></script>
+
+<!--jqsimpleconnect-->
+<script src="libs/jqsimpleconnect/jqSimpleConnect.js"></script>
+
+<!--tg-dynamic-directive-->
+<script src="libs/tg-dynamic-directive/tg.dynamic.directive.js"></script>
+
+<!--angular ui tree
+<script src="libs/angular-ui-tree/angular-ui-tree.min.js"></script>
+-->
 
 
 <!-- angular app -->
@@ -133,15 +203,19 @@
 <script type="text/javascript" src="nodedream/nodedream.js"></script>
 
 <script type="text/javascript" src="js/home/controller.js"></script>
+<script type="text/javascript" src="js/prompts/model.js"></script>
 <script type="text/javascript" src="js/report/model.js"></script>
 <script type="text/javascript" src="js/report/controller.js"></script>
 <script type="text/javascript" src="js/report/services/reportNameModal.js"></script>
 <script type="text/javascript" src="js/dashboard/controller.js"></script>
 <script type="text/javascript" src="js/cube/controller.js"></script>
 <script type="text/javascript" src="js/data-source/controller.js"></script>
+<script type="text/javascript" src="js/data-source/model.js"></script>
 <script type="text/javascript" src="js/data-source/services/dataSourceNameModal.js"></script>
 <script type="text/javascript" src="js/pivot/controller.js"></script>
 <script type="text/javascript" src="js/clients/controller.js"></script>
+<script type="text/javascript" src="js/layer/controller.js"></script>
+
 
 
 

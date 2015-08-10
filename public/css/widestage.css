@@ -305,6 +305,41 @@ img.img-cirlce {
     -ms-user-select: none;
     user-select: none;
 }
+.btn+.btn {
+    margin-left: 5px;
+}
+
+.btn.btn-icon {
+    line-height: 1;
+}
+
+.btn.btn-icon-standalone {
+    padding: 0;
+    border: 0;
+    line-height: 1;
+}
+
+.btn.btn-single {
+    margin-bottom: 0;
+}
+
+
+
+
+.btn.btn-white {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.btn.btn-orange {
+    background-color: #f7aa47;
+    color: #fff;
+}
+
+
+
+
 
 .profile-env .profile-post-form {
     position: relative;
@@ -1106,6 +1141,87 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     float:left;
     cursor: move;
 }
+
+
+.dropAlert {
+    color: #FF0000;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.panel {
+    position: relative;
+    background: #fff;
+    padding: 20px 30px;
+    border: 0;
+    margin-bottom: 30px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.panel .panel-heading {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    background: 0 0;
+    font-size: 17px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f5f5f5;
+}
+
+.panel .panel-heading>.panel-title {
+    float: left;
+    font-size: 17px;
+}
+
+.panel .panel-body {
+    padding: 0;
+    padding-top: 20px;
+    color: #979898;
+}
+
+.slider-selection {
+    background: #FF8282;
+}
+
+.slider-handle {
+    background: red;
+}
+
+.slider-track-high {
+    background: #cccccc;
+}
+
+.indicator-style1-icon {
+
+    background: #68b828;
+    color: #fff;
+    text-align: center;
+    -webkit-border-radius: 50%;
+    -webkit-background-clip: padding-box;
+    -moz-border-radius: 50%;
+    -moz-background-clip: padding;
+    border-radius: 50%;
+    background-clip: padding-box;
+}
+
+.schema-element {
+
+    width: 100%;
+    height: 20px;
+    overflow: hidden;
+    border: solid 1px #999999;
+    margin: 1px;
+    padding-left: 5px;
+    z-index: 0;
+    background-color: #CCC;
+    font-weight: bold;
+    cursor: move;
+
+}
+
+
 
 
 

@@ -146,11 +146,92 @@ s3.listObjects(params, function(err, data) {
 
 }
 
+exports.getEntities = function(req,res)
+{
+    console.log('Entering entities');
+    req.query.companyid = true;
+    req.user = {};
+    req.user.company_id = 'COMPID';
+
+    controller.findOne(req, function(result){
+
+        console.log(JSON.stringify(result));
+        if (result.result == 1)
+        {
+            if (result.item.type == 'MONGODB')
+            {
+                console.log('MONGODB entities');
+                var mongodb = require('../../core/db/mongodb.js');
+                var data = {};
+                data.host = result.item.params[0].connection.host;
+                data.port = result.item.params[0].connection.port;
+                data.database = result.item.params[0].connection.database;
+                console.log(JSON.stringify(data));
+                mongodb.testConnection(data, function(result) {
+                    serverResponse(req, res, 200, result);
+                });
+            }
+        } else {
+           serverResponse(req, res, 200, result);
+        }
+
+
+
+    });
+
+
+}
+
 exports.testMongoConnection = function(req,res) {
     var mongodb = require('../../core/db/mongodb.js');
 
     mongodb.testConnection(req.body, function(result) {
         serverResponse(req, res, 200, result);
+    });
+};
+
+
+exports.getEntitySchema = function(req,res) {
+
+
+    console.log('Entering entities schema');
+    var theDatasourceID = req.query.datasourceID;
+    var theEntities = req.query.entities;
+    req.query = {};
+    req.query.companyid = true;
+    req.query.id = theDatasourceID;
+
+    req.user = {};
+    req.user.company_id = 'COMPID';
+
+
+
+
+    controller.findOne(req, function(result){
+
+        console.log(JSON.stringify(result));
+        if (result.result == 1)
+        {
+            if (result.item.type == 'MONGODB')
+            {
+                console.log('MONGODB entities schema');
+                var mongodb = require('../../core/db/mongodb.js');
+                var data = {};
+                data.host = result.item.params[0].connection.host;
+                data.port = result.item.params[0].connection.port;
+                data.database = result.item.params[0].connection.database;
+                data.entities = theEntities;
+                console.log(JSON.stringify(data));
+                mongodb.getSchemas(data, function(result) {
+                    serverResponse(req, res, 200, result);
+                });
+            }
+        } else {
+            serverResponse(req, res, 200, result);
+        }
+
+
+
     });
 };
 

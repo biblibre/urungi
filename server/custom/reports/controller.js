@@ -150,7 +150,7 @@ function processDataSources(dataSources, params, done, result, index) {
             for (var i in dts.params[0].schema) {
                 for (var j in dataSource.collections) {
                     if (dts.params[0].schema[i].collectionID == dataSource.collections[j].collectionID) {
-                        dataSource.collections[i]['schema'] = dts.params[0].schema[i];
+                        dataSource.collections[j]['schema'] = dts.params[0].schema[i];
                     }
                 }
             }
