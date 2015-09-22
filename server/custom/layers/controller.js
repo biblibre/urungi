@@ -14,7 +14,7 @@ exports.LayersCreate = function(req,res){
     req.query.trash = true;
 
     req.user = {};
-    req.user.company_id = 'COMPID';
+    req.user.companyID = 'COMPID';
     req.query.companyid = true;
     req.body.companyID = 'COMPID';
 
@@ -42,19 +42,35 @@ exports.LayersFindAll = function(req,res)
     req.query.trash = true;
     req.query.companyid = true;
     req.user = {};
-    req.user.company_id = 'COMPID';
+    req.user.companyID = 'COMPID';
 
-            controller.findAll(req, function(result){
-                serverResponse(req, res, 200, result);
-                console.log('getting all layers');
-            });
+    controller.findAll(req, function(result){
+        serverResponse(req, res, 200, result);
+        console.log('getting all layers');
+    });
+}
+
+exports.GetLayers = function(req,res)
+{
+    console.log('getting all layers');
+    req.query.trash = true;
+    req.query.companyid = true;
+    req.user = {};
+    req.user.companyID = 'COMPID';
+
+    req.query.fields = ['name','description','objects','params.joins'];
+
+    controller.findAll(req, function(result){
+        serverResponse(req, res, 200, result);
+        console.log('getting all layers');
+    });
 }
 
 exports.LayersFindOne = function(req,res){
 
     req.query.companyid = true;
     req.user = {};
-    req.user.company_id = 'COMPID';
+    req.user.companyID = 'COMPID';
 
     controller.findOne(req, function(result){
         serverResponse(req, res, 200, result);

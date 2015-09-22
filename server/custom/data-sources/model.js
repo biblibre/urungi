@@ -8,8 +8,10 @@ var DataSourcesSchema = new mongoose.Schema({
     status: {type: Number, required: true},
     params:  [],
     nd_trash_deleted:{type: Boolean},
-    nd_trash_deleted_date: {type: Date}
-}, { collection: config.app.customCollectionsPrefix+'DataSources' });
+    nd_trash_deleted_date: {type: Date},
+    createdBy: {type: String},
+    createdOn: {type: Date}
+}, { collection: 'wst_DataSources' });
 
 var DataSources = connection.model('DataSources', DataSourcesSchema);
 module.exports = DataSources;

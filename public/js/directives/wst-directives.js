@@ -1,3 +1,14 @@
+function attrDefault($el, data_var, default_val)
+{
+    if(typeof $el.data(data_var) != 'undefined')
+    {
+        return $el.data(data_var);
+    }
+
+    return default_val;
+}
+
+
 angular.module('widestage.directives', []).
 /*directive('xeCounter', function(){
 
@@ -136,4 +147,46 @@ directive('xeFillCounter', function(){
             });
         }
     };
+}).directive('datepicker', function(){
+    return {
+        restrict: 'AC',
+        link: function(scope, el, attr)
+        {
+            if( ! jQuery.isFunction(jQuery.fn.datepicker))
+                return false;
+
+            var $this = angular.element(el),
+                opts = {
+                    format: attrDefault($this, 'format', 'mm/dd/yyyy'),
+                    startDate: attrDefault($this, 'startDate', ''),
+                    endDate: attrDefault($this, 'endDate', ''),
+                    daysOfWeekDisabled: attrDefault($this, 'disabledDays', ''),
+                    startView: attrDefault($this, 'startView', 0)
+                },
+                $n = $this.next(),
+                $p = $this.prev();
+
+            $this.datepicker(opts);
+
+            if($n.is('.input-group-addon') && $n.has('a'))
+            {
+                $n.on('click', function(ev)
+                {
+                    ev.preventDefault();
+
+                    $this.datepicker('show');
+                });
+            }
+
+            if($p.is('.input-group-addon') && $p.has('a'))
+            {
+                $p.on('click', function(ev)
+                {
+                    ev.preventDefault();
+
+                    $this.datepicker('show');
+                });
+            }
+        }
+    }
 });

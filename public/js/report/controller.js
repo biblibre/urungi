@@ -16,9 +16,12 @@
  * Filter.js is client-side JSON objects filter and render html elements. Multiple filter criteria can be specified and used in conjunction with each other.
  */
 
-app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, promptModel) {
+app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, promptModel,dashboardModel, $filter) {
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
+    $scope.dateModal = 'partials/report/dateModal.html';
+    $scope.linkModal = 'partials/report/linkModal.html';
+    $scope.repeaterTemplate = 'partials/report/repeater.html';
     $scope.reportID = $routeParams.reportID;
     $scope.metrics = ['Count'];
     $scope.rows = [];
@@ -28,6 +31,80 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.filters = [];
     $scope.dataSources = [];
     $scope.preview = false;
+    $scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
+    $scope.reverse = false;
+
+
+    $scope.changed = function()
+    {
+        console.log('datetimepicket changed')
+    }
+
+    function pad(num, size) {
+        var s = num+"";
+        while (s.length < size) s = "0" + s;
+        return s;
+    }
+
+    $scope.onDateSet = function (newDate, oldDate, filter) {
+
+        //console.log(filter);
+        var year = newDate.getFullYear();
+        var month = pad(newDate.getMonth()+1,2);
+        var day = pad(newDate.getDate(),2);
+
+        var theDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
+
+
+        if (filter.filterType == 'in' || filter.filterType == 'notIn')
+        {
+            if (!filter.filterText1)
+                filter.filterText1 = [];
+            filter.filterText1.push(theDate);
+        } else
+        filter.filterText1 = theDate;
+
+
+
+        console.log(filter.filterText1);
+
+        filter.dateCustomFilterLabel = undefined;
+    }
+
+    $scope.removeItem = function(item, collection)
+    {
+       var id = collection.indexOf(item);
+        collection.splice(id,1);
+    }
+
+    $scope.onDateEndSet = function (newDate, oldDate, filter) {
+
+        //console.log(filter);
+        var year = newDate.getFullYear();
+        var month = pad(newDate.getMonth()+1,2);
+        var day = pad(newDate.getDate(),2);
+
+        var theDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
+
+        filter.filterText2 = theDate;
+        filter.dateCustomFilterLabel = undefined;
+    }
+
+
+
+    $scope.selectDateFilter = function(filter)
+    {
+        console.log('the date modal')
+        $scope.selectedFilter = filter;
+        $('#dateModal').modal('show');
+    }
+
+    $scope.setDateFilter = function() {
+        $scope.selectedFilter.filterText1 = date;
+        $scope.selectedFilter.filterLabel1 = date;
+        $('#dateModal').modal('hide');
+    }
+
     $scope.filterStringOptions = [
                                     {value:"equal",label:"equal"},
                                     {value:"diferentThan",label:"different than"},
@@ -82,6 +159,29 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     ];
 
+    $scope.dateFilters = [
+        {value:"#WST-TODAY#",label:"Today"},
+        {value:"#WST-THISWEEK#",label:"This week"},
+        {value:"#WST-THISMONTH#",label:"This month"},
+        {value:"#WST-THISYEAR#",label:"This year"},
+        {value:"#WST-FIRSTQUARTER#",label:"First quarter"},
+        {value:"#WST-SECONDQUARTER#",label:"Second quarter"},
+        {value:"#WST-THIRDQUARTER#",label:"Third quarter"},
+        {value:"#WST-FOURTHQUARTER#",label:"Fourth quarter"},
+        {value:"#WST-FIRSTSEMESTER#",label:"First semester"},
+        {value:"#WST-SECONDSEMESTER#",label:"Second semester"},
+        {value:"#WST-YESTERDAY#",label:"Yesterday"},
+        {value:"#WST-LASTWEEK#",label:"Last week"},
+        {value:"#WST-LASTMONTH#",label:"Last month"},
+        {value:"#WST-LASTYEAR#",label:"Last year"},
+        {value:"#WST-LYFIRSTQUARTER#",label:"Last year first quarter"},
+        {value:"#WST-LYSECONDQUARTER#",label:"Last year second quarter"},
+        {value:"#WST-LYTHIRDQUARTER#",label:"Last year third quarter"},
+        {value:"#WST-LYFOURTHQUARTER#",label:"Last year fourth quarter"},
+        {value:"#WST-LYFIRSTSEMESTER#",label:"Last year first semester"},
+        {value:"#WST-LYSECONDSEMESTER#",label:"Last year second semester"}
+    ]
+
     $scope.filterDateOptions = [
         {value:"equal",label:"equal"},
         {value:"diferentThan",label:"different than"},
@@ -93,6 +193,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         {value:"notBetween",label:"not between"},
         {value:"null",label:"is null"},
         {value:"notNull",label:"is not null"},
+        //TODO: in , not in or date elements
         {value:"in",label:"in"},
         {value:"notIn",label:"not in"}
     ];
@@ -131,24 +232,30 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.getReports = function(params) {
         var params = (params) ? params : {};
 
+        console.log(params);
+
         connection.get('/api/reports/find-all', params, function(data) {
             $scope.reports = data;
             console.log($scope.reports);
         });
     };
 
+
     $scope.reportClicked = function(reportID,parameters)
     {
         console.log('reportcliced ',reportID,parameters);
     }
-
+    /*
     $scope.getReport = function() {
         //TODO:eliminar por aqui parece que no pasa...
         reportModel.getReport($scope, $routeParams.reportID, function() {
-            $scope.processStructure(false);
+            generateQuery(function(){
+                $scope.processStructure(false);
+            });
+
         });
     };
-
+      */
     $scope.initForm = function() {
         $scope.dataMode = 'preview';
 
@@ -170,19 +277,28 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         }
           else {
             //This executes in edit mode
-            reportModel.getReport($scope, $routeParams.reportID, function() {
-                $scope.processStructure();
+            reportModel.getReport($scope, $routeParams.reportID,'edit', function() {
+                generateQuery(function(){
+                    $scope.processStructure(false);
+                });
             });
         }
     };
 
-    $scope.getDataSources = function() {
-        connection.get('/api/data-sources/find-all', {}, function(data) {
+    $scope.getLayers = function() {
+        connection.get('/api/layers/get-layers', {}, function(data) {
             $scope.errorMsg = (data.result === 0) ? data.msg : false;
             $scope.page = data.page;
             $scope.pages = data.pages;
-            $scope.data = data;
+            //$scope.data = data;
 
+            //console.log(JSON.stringify(data.items));
+
+            //$scope.selectedLayer = data.items[0];
+            $scope.rootItem.elements = data.items[0].objects;
+            $scope.selectedLayer = data.items[0];
+
+            /*
             for (var i in $scope.data.items) {
                 console.log($scope.data.items[i]);
                 for (var z in $scope.data.items[i].params[0].schema) {
@@ -192,9 +308,18 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
                     $scope.dataSources.push(dts);
                 };
-            }
+            } */
         });
     };
+
+    $scope.getView = function (item) {
+        if (item) {
+            return 'nestable_item.html';
+        }
+        return null;
+    };
+
+
 
     $scope.getElementFilterOptions = function(elementType)
     {
@@ -215,7 +340,19 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         filter.filterType = filterOption.value;
         filter.filterTypeLabel = filterOption.label;
 
-        //set the appropiate interface or the choosen filter relation
+        if (filter.filterType == 'in' || filter.filterType == 'notIn')
+        {
+
+            filter.filterText1 = [];
+            filter.filterLabel1 = [];
+        } else {
+            filter.filterText1 = '';
+            filter.filterLabel1 = '';
+            filter.filterText2 = '';
+            filter.filterLabel2 = '';
+        }
+
+        //set the appropiate interface for the choosed filter relation
     }
 
     $scope.getDistinctValues = function(filter)
@@ -290,8 +427,9 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     };
     $scope.reportNameSave = function () {
 
-        $scope.save($scope.selectedReport);
         $('#reportNameModal').modal('hide');
+        $scope.save($scope.selectedReport);
+
     };
 
     $scope.add = function() {
@@ -311,57 +449,60 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         console.log('saving report '+data.reportName);
         console.log(data);
 
-        $scope.processStructure(false);
-        console.log($scope.query);
+        //$scope.processStructure(false);
 
-        data.query = $scope.query;
+        generateQuery(function(){
+                console.log($scope.query);
+                data.query = $scope.query;
 
 
-        /*
-        if ($scope.selectedReport.properties) {
-            if ($scope.selectedReport.properties.xkey) {
-                var xkey = $scope.selectedReport.properties.xkey.elementName;
+                /*
+                if ($scope.selectedReport.properties) {
+                    if ($scope.selectedReport.properties.xkey) {
+                        var xkey = $scope.selectedReport.properties.xkey.elementName;
 
-                if ($scope.selectedReport.properties.xkey.aggregation) xkey += $scope.selectedReport.properties.xkey.aggregation;
+                        if ($scope.selectedReport.properties.xkey.aggregation) xkey += $scope.selectedReport.properties.xkey.aggregation;
 
-                $scope.selectedReport.properties.xkey = xkey;
-            }
-            if ($scope.selectedReport.properties.ykeys) {
-                var ykeys = [];
+                        $scope.selectedReport.properties.xkey = xkey;
+                    }
+                    if ($scope.selectedReport.properties.ykeys) {
+                        var ykeys = [];
 
-                for (var i in $scope.selectedReport.properties.ykeys) {
-                    var field = $scope.selectedReport.properties.ykeys[i].field.elementName;
+                        for (var i in $scope.selectedReport.properties.ykeys) {
+                            var field = $scope.selectedReport.properties.ykeys[i].field.elementName;
 
-                    if ($scope.selectedReport.properties.ykeys[i].field.aggregation) field += $scope.selectedReport.properties.ykeys[i].field.aggregation;
+                            if ($scope.selectedReport.properties.ykeys[i].field.aggregation) field += $scope.selectedReport.properties.ykeys[i].field.aggregation;
 
-                    ykeys.push({field: field, label: $scope.selectedReport.properties.ykeys[i].field.objectLabel});
+                            ykeys.push({field: field, label: $scope.selectedReport.properties.ykeys[i].field.objectLabel});
+                        }
+
+                        $scope.selectedReport.properties.ykeys = ykeys;
+                    }
+                }
+                */
+
+                if ($scope.selectedReport.reportType == 'grid')
+                {
+                    $scope.selectedReport.properties = {};
+                    $scope.selectedReport.properties.columns = $scope.columns;
                 }
 
-                $scope.selectedReport.properties.ykeys = ykeys;
-            }
-        }
-        */
-
-        if ($scope.selectedReport.reportType == 'grid')
-        {
-            $scope.selectedReport.properties = {};
-            $scope.selectedReport.properties.columns = $scope.columns;
-        }
-
-        if ($scope.mode == 'add') {
-            connection.post('/api/reports/create', data, function(data) {
-                if (data.result == 1) {
-                    $scope.goBack();
+                if ($scope.mode == 'add') {
+                    connection.post('/api/reports/create', data, function(data) {
+                        if (data.result == 1) {
+                            $scope.goBack();
+                        }
+                    });
                 }
-            });
+                else {
+                    connection.post('/api/reports/update/'+data._id, data, function(result) {
+                        if (result.result == 1) {
+                            $scope.goBack();
+                        }
+                    });
         }
-        else {
-            connection.post('/api/reports/update/'+data._id, data, function(result) {
-                if (result.result == 1) {
-                    $scope.goBack();
-                }
-            });
-        }
+
+        });
     };
 
 
@@ -380,16 +521,31 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getReportDiv = function()
     {
-        //1st process prompts
-        reportModel.getReport($scope, $routeParams.reportID, function(report) {
+        //1st process prompt
+        reportModel.getReport($scope, $routeParams.reportID,'execute', function(report) {
             promptModel.getPrompts($scope,report, function(){
-                   if ($scope.prompts.length > 0)
-                   {
-                       console.log('loading prompts modal');
-                       $scope.showPrompts = true;
-                   } else {
-                       setReportDiv($routeParams.reportID);
-                   }
+                if ($routeParams.elementID && $routeParams.elementValue)
+                {
+                    for (var p in $scope.prompts)
+                    {
+                        if ($scope.prompts[p].elementID == $routeParams.elementID)
+                        {
+                            $scope.prompts[p].filterText1 = $routeParams.elementValue;
+                        }
+                    }
+
+                    $scope.checkPrompts();
+
+
+                }  else {
+                    if ($scope.prompts.length > 0)
+                    {
+                        //console.log('loading prompts modal');
+                        $scope.showPrompts = true;
+                    } else {
+                        setReportDiv($routeParams.reportID);
+                    }
+                }
             });
         });
 
@@ -400,45 +556,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         promptModel.checkPrompts($scope, function (){
             setReportDiv();
         });
-        /*
-        var emptyFound = [];
-        $scope.promptMessage = '';
-
-        if ($scope.prompts.length > 0)
-        {
-            for (var p in $scope.prompts) {
-
-               if ($scope.prompts[p].promptMandatory == true)
-                   if (!$scope.prompts[p].filterText1 || $scope.prompts[p].filterText1 == '')
-                   {
-
-
-                       emptyFound.push($scope.prompts[p].objectLabel);
-                   }
-            }
-        }  else {
-           setReportDiv();
-        }
-
-
-
-        if (emptyFound.length > 0)
-        {
-
-            var theFilters = '';
-            for (var f in emptyFound) {
-                theFilters += emptyFound[f];
-                if (f < emptyFound.lenght -1)
-                    theFilters += ', ';
-            }
-            if (emptyFound.length == 1)
-                $scope.promptMessage = 'The following filter must be completed: '+theFilters;
-            else
-                $scope.promptMessage = 'The following filters must be completed: '+theFilters;
-        }  else {
-            setReportDiv();
-        } */
-
     }
 
     $scope.closePromptsBlock = function()
@@ -710,6 +827,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     {
         if (type == 'column')
         {
+            $scope.removeFromArray($scope.selectedReport.properties.xkeys, object);
+            $scope.removeFromArray($scope.selectedReport.properties.ykeys, object);
             $scope.removeFromArray($scope.columns, object);
         }
 
@@ -725,6 +844,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.removeFromArray($scope.columns, object);
         }
 
+        detectLayerJoins();
 
     }
 
@@ -1048,8 +1168,13 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
             $scope.filtersUpdated();
         }
+        /*generateQuery(function(){
+            $scope.processStructure();
+        });*/
 
+        detectLayerJoins();
         $scope.processStructure();
+
         //angular.element(el).append(theTemplate);
         // ...
     };
@@ -1190,7 +1315,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.previewQuery = function()
     {
-
+       /*
         console.log('entering preview');
         var params = {};
 
@@ -1201,77 +1326,14 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         connection.get('/api/reports/preview-query', params, function(data) {
             console.log(data);
-            //$scope.errorMsg = (data.result === 0) ? data.msg : false;
-            //$scope.page = data.page;
-            //$scope.pages = data.pages;
-            //$scope.data = data;
-
-            //console.log('the data: '+JSON.stringify(data));
 
 
 
             $scope.previewData = data;
             $scope.preview = true;
 
-            /*var aggregations = [];
 
-            for (var i in $scope.columns) {
-                if ($scope.columns[i].aggregation) {
-                    if ($scope.columns[i].elementType == 'number') {
-                        for (var j in data) {
-                            var value = data[j][$scope.columns[i].elementName];
-
-                            if (j == 0) {
-                                var aggregation = value;
-                            }
-                            else {
-                                switch($scope.columns[i].aggregation) {
-                                    case 'sum': case 'avg': aggregation += value;
-                                    break;
-                                    case 'min': if (value < aggregation) aggregation = value;
-                                        break;
-                                    case 'max': if (value > aggregation) aggregation = value;
-                                }
-                            }
-                        }
-
-                        if ($scope.columns[i].aggregation == 'avg') aggregation = aggregation/data.length;
-
-                        if (isNaN(aggregation)) aggregations.push('');
-                        else aggregations.push(Math.round(aggregation*100)/100); //two decimals
-                    }
-                    if ($scope.columns[i].elementType == 'date') {
-                        for (var j in data) {
-                            if (data[j][$scope.columns[i].elementName]) {
-                                var date = new Date(data[j][$scope.columns[i].elementName]);
-
-                                switch($scope.columns[i].aggregation) {
-                                    case 'year': data[j][$scope.columns[i].elementName] = date.getFullYear();
-                                        break;
-                                    case 'month': data[j][$scope.columns[i].elementName] = date.getMonth()+1;
-                                        break;
-                                    case 'date': data[j][$scope.columns[i].elementName] = date.getDate();
-                                }
-                            }
-                        }
-                    }
-                }
-                else {
-                    aggregations.push('');
-                }
-            }
-
-            $scope.aggregations = aggregations;*/
-
-            /*
-            for (var i in $scope.data.items) {
-                console.log($scope.data.items[i]);
-                for (var z in $scope.data.items[i].params[0].schema) {
-                    $scope.dataSources.push($scope.data.items[i].params[0].schema[z]);
-                };
-            }
-            */
-        });
+        });*/
     };
 
     $scope.addYKeyField = function() {
@@ -1338,26 +1400,35 @@ console.log($scope.selectedReport.properties.ykeys);
     };
 
 
-
-    $scope.processStructure = function(execute) {
-        var execute = (typeof execute !== 'undefined') ? execute : true;
-
+    function generateQuery(done)
+    {
         $scope.query = {};
         $scope.query.datasources = [];
-        
+        $scope.query.order = $scope.order;
+
         var filters = $scope.filters[0].filters;
 
         var datasourcesList = [];
+        var layersList = [];
 
         for (var i in $scope.columns) {
             if (datasourcesList.indexOf($scope.columns[i].datasourceID) == -1)
                 datasourcesList.push($scope.columns[i].datasourceID);
+            if (layersList.indexOf($scope.columns[i].layerID) == -1)
+                layersList.push($scope.columns[i].layerID);
+        }
+
+        for (var i in filters) {
+            if (datasourcesList.indexOf(filters[i].datasourceID) == -1)
+                datasourcesList.push(filters[i].datasourceID);
+            if (layersList.indexOf(filters[i].layerID) == -1)
+                layersList.push(filters[i].layerID);
         }
 
         /*for (var i in filters) {
-            if (datasourcesList.indexOf(filters[i].datasourceID) == -1)
-                datasourcesList.push(filters[i].datasourceID);
-        }*/
+         if (datasourcesList.indexOf(filters[i].datasourceID) == -1)
+         datasourcesList.push(filters[i].datasourceID);
+         }*/
 
         for (var i in datasourcesList) {
 
@@ -1375,13 +1446,110 @@ console.log($scope.selectedReport.properties.ykeys);
                 }
             }
 
-            /*for (var z in filters) {
+            for (var z in filters) {
                 if (filters[z].datasourceID == datasourcesList[i])
                 {
                     if (dtsCollections.indexOf(filters[z].collectionID) == -1)
                         dtsCollections.push(filters[z].collectionID);
                 }
-            }*/
+            }
+
+            for (var n in dtsCollections) {
+
+                var collection = {};
+                collection.collectionID = dtsCollections[n];
+
+                collection.columns = [];
+
+                for (var n1 in $scope.columns) {
+                    if ($scope.columns[n1].collectionID == dtsCollections[n])
+                    {
+                        collection.columns.push($scope.columns[n1]);
+                    }
+                }
+
+                collection.order = [];
+
+                for (var n1 in $scope.order) {
+                    if ($scope.order[n1].collectionID == dtsCollections[n])
+                    {
+                        collection.order.push($scope.order[n1]);
+                    }
+                }
+
+
+                collection.filters = [];
+                 for (var n1 in filters) {
+                    if (filters[n1].collectionID == dtsCollections[n])
+                        {
+                            collection.filters.push(filters[n1]);
+                        }
+                 }
+
+                //collection.filters = filters;
+
+                dtsObject.collections.push(collection);
+
+            }
+            $scope.query.datasources.push(dtsObject);
+            $scope.query.layers = layersList;
+        }
+
+        done();
+    }
+
+
+
+    $scope.processStructure = function(execute) {
+        var execute = (typeof execute !== 'undefined') ? execute : true;
+        /*
+        $scope.query = {};
+        $scope.query.datasources = [];
+        
+        var filters = $scope.filters[0].filters;
+
+        var datasourcesList = [];
+        var layersList = [];
+
+        for (var i in $scope.columns) {
+            if (datasourcesList.indexOf($scope.columns[i].datasourceID) == -1)
+                datasourcesList.push($scope.columns[i].datasourceID);
+            if (layersList.indexOf($scope.columns[i].layerID) == -1)
+                layersList.push($scope.columns[i].layerID);
+        }
+
+        for (var i in filters) {
+            if (datasourcesList.indexOf(filters[i].datasourceID) == -1)
+                datasourcesList.push(filters[i].datasourceID);
+            if (layersList.indexOf(filters[i].layerID) == -1)
+                layersList.push(filters[i].layerID);
+        }
+
+
+
+        for (var i in datasourcesList) {
+
+            var dtsObject = {};
+            dtsObject.datasourceID = datasourcesList[i];
+            dtsObject.collections = [];
+
+            var dtsCollections = [];
+
+            for (var z in $scope.columns) {
+                if ($scope.columns[z].datasourceID == datasourcesList[i])
+                {
+                    if (dtsCollections.indexOf($scope.columns[z].collectionID) == -1)
+                        dtsCollections.push($scope.columns[z].collectionID);
+                }
+            }
+
+            for (var z in filters) {
+                if (filters[z].datasourceID == datasourcesList[i])
+                {
+                    if (dtsCollections.indexOf(filters[z].collectionID) == -1)
+                        dtsCollections.push(filters[z].collectionID);
+                }
+            }
 
             for (var n in dtsCollections) {
 
@@ -1406,27 +1574,22 @@ console.log($scope.selectedReport.properties.ykeys);
                     }
                 }
 
-                /*collection.filters = [];
-                for (var n1 in $scope.filters) {
-                    if ($scope.filters[n1].collectionID == dtsCollections[n])
-                    {
-                        collection.filters.push($scope.filters[n1]);
-                    }
-                }
-                collection.filters = [];*/
                 collection.filters = filters;
 
                 dtsObject.collections.push(collection);
 
             }
             $scope.query.datasources.push(dtsObject);
-        }
+            $scope.query.layers = layersList;
+        }   */
       //console.log(JSON.stringify($scope.query));
         /*$scope.selectedReport.properties.xkeys = [];
         $scope.selectedReport.properties.ykeys = [];
         $scope.selectedReport.properties.columns = [];
         $scope.selectedReport.reportType = 'grid';
           */
+
+        //detectLayerJoins();
 
         $('#reportLayout').empty();
 
@@ -1667,6 +1830,7 @@ console.log($scope.selectedReport.properties.ykeys);
 
         var query = {};
         query.datasources = [];
+        query.order = $scope.order;
 
         //var filters = $scope.filters[0].filters;
 
@@ -1697,14 +1861,9 @@ console.log($scope.selectedReport.properties.ykeys);
 
 
                 collection.order = [];
+                attribute.sortType = 1;
                 collection.order.push(attribute);
 
-                for (var n1 in $scope.order) {
-                    if ($scope.order[n1].collectionID == dtsCollections[n])
-                    {
-                        collection.order.push($scope.order[n1]);
-                    }
-                }
 
                 dtsObject.collections.push(collection);
 
@@ -1751,6 +1910,300 @@ console.log($scope.selectedReport.properties.ykeys);
         */
     }
 
+
+    $scope.selectFilterDateValue = function(filter)
+    {
+
+            filter.filterText1 = filter.filterLabel1.value;
+
+    }
+
+
+    function checkChoosedElements()
+    {
+        if ($scope.columns.length > 1)
+        {
+            for( var e=$scope.columns.length -1;e>=0;e--)
+            {
+                if (thereIsAJoinForMe($scope.columns[e]) == 0)
+                {
+
+                   //is this element in the xkeys?
+                    if ($scope.selectedReport.properties.xkeys.length > 0)
+                    {
+                        for( var x=$scope.selectedReport.properties.xkeys.length -1;x>=0;x--)
+                        {
+                           if ($scope.selectedReport.properties.xkeys[x].elementID == $scope.columns[e].elementID)
+                               $scope.selectedReport.properties.xkeys.splice(x,1);
+                        }
+                    }
+
+                    if ($scope.selectedReport.properties.ykeys.length > 0)
+                    {
+                        for( var y=$scope.selectedReport.properties.ykeys.length -1;y>=0;y--)
+                        {
+                            if ($scope.selectedReport.properties.ykeys[y].elementID == $scope.columns[e].elementID)
+                                $scope.selectedReport.properties.ykeys.splice(y,1);
+                        }
+                    }
+
+                $scope.columns.splice(e,1);
+                }
+            }
+        }
+
+
+    }
+
+    function thereIsAJoinForMe(element)
+    {
+        var found = 0;
+        for (var i in $scope.columns)
+        {
+             if (element.elementID != $scope.columns[i].elementID)
+             {
+                 if (joinExists(element.collectionID,$scope.columns[i].collectionID))
+                    found = found+1;
+             }
+        }
+
+        return found;
+    }
+
+    function joinExists(collection1,collection2)
+    {
+        var found = false;
+
+        if (collection1 != collection2)
+        {
+            for (var j in $scope.selectedLayer.params.joins)
+            {
+                if (($scope.selectedLayer.params.joins[j].sourceCollectionID == collection1 && $scope.selectedLayer.params.joins[j].targetCollectionID == collection2) ||
+                    ($scope.selectedLayer.params.joins[j].sourceCollectionID == collection2 && $scope.selectedLayer.params.joins[j].targetCollectionID == collection1))
+                {
+                    found = true;
+                    console.log('join encontrada');
+                }
+            }
+        } else
+            found = true;
+
+        return found;
+    }
+
+    $scope.detectLayerJoins = function()
+    {
+        detectLayerJoins();
+    }
+
+    function detectLayerJoins()
+    {
+        checkChoosedElements();
+
+        generateQuery(function(){
+
+            //this function enables and disables elements in the layer if there is a join between the elements in the report and the element in the layer...
+            var reportCollections = [];
+            var selectableCollections = [];
+
+            for (var i in $scope.query.datasources) {
+                for (var c in $scope.query.datasources[i].collections) {
+                     reportCollections.push($scope.query.datasources[i].collections[c].collectionID);
+                     selectableCollections.push($scope.query.datasources[i].collections[c].collectionID);
+                }
+            }
+
+            //get the joins for these collections
+
+            for (var j in $scope.selectedLayer.params.joins)
+            {
+                for (var c in reportCollections)
+                {
+                    if ($scope.selectedLayer.params.joins[j].sourceCollectionID == reportCollections[c])
+                    {
+                             if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].sourceCollectionID) == -1)
+                                 selectableCollections.push($scope.selectedLayer.params.joins[j].sourceCollectionID);
+
+                             if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].targetCollectionID) == -1)
+                                 selectableCollections.push($scope.selectedLayer.params.joins[j].targetCollectionID);
+                    }
+
+                    if ($scope.selectedLayer.params.joins[j].targetCollectionID == reportCollections[c])
+                    {
+                        if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].sourceCollectionID) == -1)
+                            selectableCollections.push($scope.selectedLayer.params.joins[j].sourceCollectionID);
+
+                        if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].targetCollectionID) == -1)
+                            selectableCollections.push($scope.selectedLayer.params.joins[j].targetCollectionID);
+                    }
+                }
+            }
+
+            console.log('the selected collections',JSON.stringify(selectableCollections));
+
+            if (selectableCollections.length == 0)
+                enableAllElements($scope.rootItem.elements);
+            else
+                detectLayerJoins4Elements($scope.rootItem.elements,selectableCollections);
+        });
+    }
+
+    function detectLayerJoins4Elements(elements,selectableCollections)
+    {
+        for (var e in elements)
+        {
+            if (elements[e].elementRole != 'folder')
+            {
+                if (selectableCollections.indexOf(elements[e].collectionID) == -1)
+                {
+                    elements[e].enabled = false;
+                } else
+                    elements[e].enabled = true;
+            }
+            if (elements[e].elements)
+                detectLayerJoins4Elements(elements[e].elements,selectableCollections);
+
+        }
+    }
+
+    function enableAllElements(elements)
+    {
+        for (var e in elements)
+        {
+            if (elements[e].elementRole != 'folder')
+            {
+                    elements[e].enabled = true;
+            }
+
+            if (elements[e].elements)
+                enableAllElements(elements[e].elements);
+        }
+    }
+
+
+    $scope.setLinkForColumn = function(column)
+    {
+        var params = (params) ? params : {};
+
+        if (!column.link)
+            $scope.selectedLink = {};
+        else
+            $scope.selectedLink = column.link;
+
+        $scope.linkWizardStep = 1;
+
+        connection.get('/api/reports/find-all', params, function(data) {
+
+            connection.get('/api/dashboards/find-all', params, function(data2) {
+                $scope.dashboards = data2;
+                $scope.reports = data;
+                $scope.selectedColumn = column;
+                $('#linkModal').modal('show');
+            });
+
+
+        });
+
+    }
+
+    $scope.getPromptForLink = function()
+    {
+        if ($scope.selectedLink.type == 'report')
+        {
+            reportModel.getReportDefinition($scope.selectedLink._id, function(report) {
+                promptModel.getPrompts($scope,report,function(){
+                    if ($scope.prompts.length > 0)
+                    {
+
+                    } else {
+
+                    }
+                    $scope.linkWizardStep = 2;
+                });
+            });
+        }
+
+        if ($scope.selectedLink.type == 'dashboard')
+        {
+            dashboardModel.getDashBoard($scope.selectedLink._id, function(dashboard) {
+                dashboardModel.getPromptsForDashboard($scope,dashboard,function(){
+                    if ($scope.prompts.length > 0)
+                    {
+
+                    } else {
+
+                    }
+                    $scope.linkWizardStep = 2;
+                });
+            });
+        }
+    }
+
+    $scope.saveLinkForColumn = function()
+    {
+        $scope.selectedColumn.link = $scope.selectedLink;
+        $('#linkModal').modal('hide');
+    }
+
+    $scope.linkBack = function()
+    {
+        $scope.linkWizardStep = 1;
+    }
+
+    $scope.linkDelete = function()
+    {
+        $scope.selectedColumn.link = undefined;
+        $('#linkModal').modal('hide');
+    }
+
+    $scope.changeColumnFormat = function(columnIndex ,hashedID)
+    {
+        reportModel.changeColumnFormat($scope,columnIndex ,hashedID);
+    }
+
+
+    $scope.orderColumn = function(predicate,hashedID) {
+
+        reportModel.orderColumn($scope, predicate,hashedID);
+
+    };
+
+
+    $scope.columnCalculation = function(operation, columnIndex, hashedID) {
+
+        reportModel.columnCalculation($scope,operation, columnIndex, hashedID);
+
+    }
+
+
+    $scope.getColumnWidthClass = function(column)
+    {
+        return 'col-xs-'+12/$scope.selectedReport.properties.columns.length;
+    }
+
+    $scope.getColumnStyle = function(column)
+    {
+        console.log('entering getColumnStyle' ,column.format );
+
+        var columnFormat = '';
+        if (column.format)
+        {
+            //columnFormat = 'color:'+column.format.color+';';
+
+            for (var key in column.format) {
+                columnFormat += key+':'+column.format[key]+';';
+            }
+        }
+        console.log('getColumnStyle' ,columnFormat );
+        return columnFormat;
+    }
+
+
+    $scope.saveToExcel = function()
+    {
+        //https://github.com/SheetJS/js-xlsx
+        //https://github.com/eligrey/FileSaver.js/
+    }
 
 
 

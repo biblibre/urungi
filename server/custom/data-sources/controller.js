@@ -151,7 +151,7 @@ exports.getEntities = function(req,res)
     console.log('Entering entities');
     req.query.companyid = true;
     req.user = {};
-    req.user.company_id = 'COMPID';
+    req.user.companyID = 'COMPID';
 
     controller.findOne(req, function(result){
 
@@ -202,7 +202,7 @@ exports.getEntitySchema = function(req,res) {
     req.query.id = theDatasourceID;
 
     req.user = {};
-    req.user.company_id = 'COMPID';
+    req.user.companyID = 'COMPID';
 
 
 
@@ -266,7 +266,7 @@ exports.DataSourcesFindAll = function(req,res)
     req.query.trash = true;
     req.query.companyid = true;
     req.user = {};
-    req.user.company_id = 'COMPID';
+    req.user.companyID = 'COMPID';
 
             controller.findAll(req, function(result){
                 serverResponse(req, res, 200, result);
@@ -278,7 +278,7 @@ exports.DataSourcesFindOne = function(req,res){
 
     req.query.companyid = true;
     req.user = {};
-    req.user.company_id = 'COMPID';
+    req.user.companyID = 'COMPID';
 
     controller.findOne(req, function(result){
         serverResponse(req, res, 200, result);

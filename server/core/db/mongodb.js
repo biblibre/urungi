@@ -41,19 +41,15 @@ exports.getSchemas = function(data, done) {
 
 exports.execOperation = function(operation, params, done) {
     var DataSources = connection.model('DataSources');
-    var Layers = connection.model('Layers');
+
 
     DataSources.findOne({ _id: params.datasourceID}, function (err, dataSource) {
         if (dataSource) {
-            Layers.findOne({ _id: params.layerID}, function (err, layer) {
-                if (layer) {
 
                         var theCollectionName = '';
-                        for (var n in layer.params.schema) {
-                            if (params.collectionID === layer.params.schema[n].collectionID) {
-                                   theCollectionName = layer.params.schema[n].collectionName;
-                            }
-                        }
+                        theCollectionName = params.collectionName;
+
+
                                 var MongoClient = require('mongodb').MongoClient , assert = require('assert');
 
                                 var dbURI = 'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
@@ -103,18 +99,22 @@ exports.execOperation = function(operation, params, done) {
                                     }
                                 });
 
-                }
+                    } else {
+                        done({result: 0, msg: 'DataSource not found: '});
+                        console.log('DataSource not found: ',params.datasourceID)
+                    }
+
             });
-        } else {
-            done({result: 0, msg: 'DataSource not found: '});
-            console.log('DataSource not found: ',params.datasourceID)
-        }
-    });
+
+
 };
 
-exports.processCollections = function(collections, dataSource, params, done) {
-    processCollections(collections, dataSource, params, done);
+exports.processCollections = function(collections, dataSource, params,thereAreJoins, done) {
+    processCollections(collections, dataSource, params,thereAreJoins, done);
 };
+
+
+
 
 function getCollectionSchema(db,collections,index,schemas, done) {
     if (collections[index] == undefined) {
@@ -124,7 +124,11 @@ function getCollectionSchema(db,collections,index,schemas, done) {
 
     var uuid = require('node-uuid');
     var collectionName = collections[index].name;
-    var collectionID = uuid.v4();
+    var collectionID = 'WST'+uuid.v4();
+
+
+    collectionID =  collectionID.replace(new RegExp('-', 'g'), '');
+    console.log('new collection ID '+collectionID);
     var theCollection = {collectionID: collectionID ,collectionName: collectionName,visible:true,collectionLabel:collectionName};
     theCollection.elements = [];
 
@@ -242,205 +246,31 @@ function getElementList (target,elements,parent) {
     }
 }
 
-function processCollections(collections, dataSource, params, done, result, index) {
-    var index = (index) ? index : 0;
-    var collection = (collections[index]) ? collections[index] : false;
-    var result = (result) ? result : [];
+/*
+function getFilterJoins(collection, filters) {
+    var theFields = [];
+    for (var i in filters) {
+        var filter = filters[i];
 
-    if (!collection) {
-        done(result);
-        return;
+        if (filter.group) {
+            console.log('es grupo');
+            theFilters.push(getFilterJoins(collection, filter.filters));
+        }
+
+        if filter
     }
 
-    console.log('entering mongoDB collections');
-    var fields = {};
 
-    var filters = getCollectionFilters(collection, collection.filters);
-
-    console.log('the Filters');
-    debug(filters);
-
-    for (var i in collection.columns) {
-        for (var e in collection.schema.elements) {
-            if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
-                fields[collection.schema.elements[e].elementName] = 1;
-            }
-        }
-    }
-
-    var sort = {};
-
-    if (collection.order) {
-        for (var i in collection.order) {
-            for (var e in collection.schema.elements) {
-                if (collection.order[i].elementID == collection.schema.elements[e].elementID) {
-                    var found = false;
-
-                    for (var i in collection.columns) {
-                        if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
-                            found = true;
-
-                            if (collection.columns[i].aggregation) {
-                                switch (collection.columns[i].aggregation) {
-                                    case 'sum': sort[collection.schema.elements[e].elementName+'sum'] = collection.order[i].sortType;
-                                        break;
-                                    case 'avg': sort[collection.schema.elements[e].elementName+'avg'] = collection.order[i].sortType;
-                                        break;
-                                    case 'min': sort[collection.schema.elements[e].elementName+'min'] = collection.order[i].sortType;
-                                        break;
-                                    case 'max': sort[collection.schema.elements[e].elementName+'max'] = collection.order[i].sortType;
-                                        break;
-                                    case 'year': sort['_id.'+collection.schema.elements[e].elementName+'year'] = collection.order[i].sortType;
-                                        break;
-                                    case 'month': sort['_id.'+collection.schema.elements[e].elementName+'month'] = collection.order[i].sortType;;
-                                        break;
-                                    case 'day': sort['_id.'+collection.schema.elements[e].elementName+'day'] = collection.order[i].sortType;
-                                }
-                            }
-
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        sort[collection.schema.elements[e].elementName] = collection.order[i].sortType;
-                    }
-                }
-            }
-        }
-    }
-
-    console.log('the fields to get');
-    debug(fields);
-
-    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
-
-    var dbURI =  'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
-
-    MongoClient.connect(dbURI, function(err, db) {
-        if(err) { return console.dir(err); }
-
-        var col = db.collection(collection.schema.collectionName);
-        var match = filters, project = {}, group = {}, fields = {};
-
-        for (var i in collection.columns) {
-            var found = false;
-
-            for (var e in collection.schema.elements) {
-                if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
-                    found = true;
-
-                    if (collection.columns[i].aggregation) {
-                        switch (collection.columns[i].aggregation) {
-                            case 'sum': group[collection.schema.elements[e].elementName+'sum'] = {$sum: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'avg': group[collection.schema.elements[e].elementName+'avg'] = {$avg: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'min': group[collection.schema.elements[e].elementName+'min'] = {$min: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'max': group[collection.schema.elements[e].elementName+'max'] = {$max: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'year': project[collection.schema.elements[e].elementName+'year'] = {$year: "$"+collection.schema.elements[e].elementName};
-                                         fields[collection.schema.elements[e].elementName+'year'] = "$"+collection.schema.elements[e].elementName+'year';
-                                break;
-                            case 'month': project[collection.schema.elements[e].elementName+'month'] = {$month: "$"+collection.schema.elements[e].elementName};
-                                          fields[collection.schema.elements[e].elementName+'month'] = "$"+collection.schema.elements[e].elementName+'month';
-                                break;
-                            case 'day': project[collection.schema.elements[e].elementName+'day'] = {$dayOfMonth: "$"+collection.schema.elements[e].elementName};
-                                        fields[collection.schema.elements[e].elementName+'day'] = "$"+collection.schema.elements[e].elementName+'day';
-                        }
-                    }
-                    else {
-                        fields[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
-                    }
-
-                    if (collection.columns[i].variable) {
-                        switch (collection.columns[i].variable) {
-                            case 'toUpper': project[collection.schema.elements[e].elementName] = {$toUpper: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'toLower': project[collection.schema.elements[e].elementName] = {$toLower: "$"+collection.schema.elements[e].elementName};
-                        }
-                    }
-                    else { //es necesario añadir todos los campos a project si hay alguna variable, si solo se añaden los campos con variable, el resto no se devuelven en la consulta
-                        project[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
-                    }
-                }
-            }
-
-            if (!found) {
-                if (collection.columns[i].count) {
-                    group['count'] = { $sum: 1 };
-                }
-            }
-        }
-
-        group['_id'] = fields;
-
-        var aggregation = [{ $match: match }];
-
-        if (!isEmpty(project)) aggregation.push({ $project: project });
-
-        aggregation.push({ $group: group });
-
-        if (!isEmpty(sort)) aggregation.push({ $sort: sort });
-
-        if (params.page) {
-            aggregation.push({ $skip: (params.page-1)*100 });
-            aggregation.push({ $limit: 100 });
-        }
-        else {
-            aggregation.push({ $limit: 10 });
-        }
-
-        console.log('aggregation');
-        debug(aggregation);
-
-        col.aggregate(aggregation, function(err, docs) {
-            for (var i in docs) {
-                var item = {};
-
-                for(var group in docs[i]) {
-                    if (group == '_id') {
-                        for(var field in docs[i][group]) {
-                            item[field] = docs[i][group][field];
-                        }
-                    }
-                    else {
-                        item[group] = docs[i][group];
-                    }
-                }
-
-                for (var field in item) {
-                    for (var e in collection.schema.elements) {
-                        if (field == collection.schema.elements[e].elementName && collection.schema.elements[e].values) {
-                            for (var v in collection.schema.elements[e].values) {
-                                if (collection.schema.elements[e].values[v].value == item[field]) {
-                                    item[field] = collection.schema.elements[e].values[v].label;
-                                }
-                            }
-                        }
-                        if (field == collection.schema.elements[e].elementName && collection.schema.elements[e].format) {
-                            if (collection.schema.elements[e].elementType == 'date') {
-                                var date = new Date(item[field]);
-
-                                item[field] = collection.schema.elements[e].format;
-                                item[field] = String(item[field]).replace('DD', date.getDate());
-                                item[field] = String(item[field]).replace('MM', date.getMonth()+1);
-                                item[field] = String(item[field]).replace('YYYY', date.getFullYear());
-                            }
-
-                        }
-                    }
-                }
-
-                result.push(item);
-            }
-            //debug(result);
-            db.close();
-
-            processCollections(collections, dataSource, params, done, result, index+1);
-        });
-    });
 }
+  */
+
+
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
 
 function getCollectionFilters(collection, filters) {
     var theFilters = [], condition = false;
@@ -468,31 +298,39 @@ function getCollectionFilters(collection, filters) {
                         filterValue = Number(filterValue);
                     }
                     if (collection.schema.elements[e].elementType == 'date') {
-                        filterValue = new Date(filterValue);
+
+                        if (filter.filterType == "in" || filter.filterType == "notIn")
+                        {
+                           thisFilter = dateFilter(filterValue,filter);
+                        } else
+                        thisFilter[filterElementName] = dateFilter(filterValue,filter);
                     }
 
-                    if (filter.filterType == "equal") {
+                    if (filter.filterType == "equal" && filter.elementType != 'date') {
                         thisFilter[filterElementName] = filterValue;
                     }
-                    if (filter.filterType == "biggerThan") {
+                    if (filter.filterType == "diferentThan" && filter.elementType != 'date') {
+                        thisFilter[filterElementName] = {$not: filterValue};;
+                    }
+                    if (filter.filterType == "biggerThan" && filter.elementType != 'date' ) {
                         thisFilter[filterElementName] = {$gt: filterValue};
                     }
-                    if (filter.filterType == "notGreaterThan") {
+                    if (filter.filterType == "notGreaterThan" && filter.elementType != 'date') {
                         thisFilter[filterElementName] = {$not: {$gt: filterValue}};
                     }
-                    if (filter.filterType == "biggerOrEqualThan") {
+                    if (filter.filterType == "biggerOrEqualThan" && filter.elementType != 'date') {
                         thisFilter[filterElementName] = {$gte: filterValue};
                     }
-                    if (filter.filterType == "lessThan") {
+                    if (filter.filterType == "lessThan" && filter.elementType != 'date') {
                         thisFilter[filterElementName] = {$lt: filterValue};
                     }
-                    if (filter.filterType == "lessOrEqualThan") {
+                    if (filter.filterType == "lessOrEqualThan" && filter.elementType != 'date') {
                         thisFilter[filterElementName] = {$lte: filterValue};
                     }
-                    if (filter.filterType == "between") {
+                    if (filter.filterType == "between" && filter.elementType != 'date') {
                         thisFilter[filterElementName] = {$gt: filterValue, $lt: filter.filterText2};
                     }
-                    if (filter.filterType == "notBetween") {
+                    if (filter.filterType == "notBetween" && filter.elementType != 'date') {
                         thisFilter[filterElementName] = {$not: {$gt: filterValue, $lt: filter.filterText2}};
                     }
                     if (filter.filterType == "contains") {
@@ -525,10 +363,10 @@ function getCollectionFilters(collection, filters) {
                     if (filter.filterType == "notNull") {
                         thisFilter[filterElementName] = {$ne: null};
                     }
-                    if (filter.filterType == "in") {
-                        thisFilter[filterElementName] = {$in: String(filterValue).split(';')};
+                    if (filter.filterType == "in"  && filter.elementType != 'date') {
+                        thisFilter[filterElementName] = {$in: String(filterValue).split(';')};     //;
                     }
-                    if (filter.filterType == "notIn") {
+                    if (filter.filterType == "notIn" && filter.elementType != 'date') {
                         thisFilter[filterElementName] = {$nin: String(filterValue).split(';')};
                     }
 
@@ -556,6 +394,345 @@ function getCollectionFilters(collection, filters) {
     else return {};
 }
 
+function dateFilter(filterValue, filter)
+{
+    //This is not valid for date-time values... the equal always take the hole day without taking care about the time
+
+
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = pad(today.getMonth()+1,2);
+    var day = pad(today.getDate(),2);
+
+    var found = false;
+
+    if (filterValue == '#WST-TODAY#')
+    {
+        var firstDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
+        var tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate()+1);
+        var year1 = tomorrow.getFullYear();
+        var month1 = pad(tomorrow.getMonth()+1,2);
+        var day1 = pad(tomorrow.getDate(),2);
+
+        var lastDate = new Date(year1+'-'+month1+'-'+day1+'T00:00:00.000Z');
+        found = true;
+
+    }
+
+    if (filterValue == '#WST-YESTERDAY#')
+    {
+        var lastDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
+        var yesterday = new Date(today);
+        yesterday.setDate(today.getDate()-1);
+        var year1 = yesterday.getFullYear();
+        var month1 = pad(yesterday.getMonth()+1,2);
+        var day1 = pad(yesterday.getDate(),2);
+
+        var firstDate = new Date(year1+'-'+month1+'-'+day1+'T00:00:00.000Z');
+        found = true;
+
+    }
+
+    if (filterValue == '#WST-THISWEEK#')
+    {   //TODO: first day monday instead sunday
+        var curr = new Date; // get current date
+        curr.setHours(0, 0, 0, 0);
+        var first = curr.getDate() - (curr.getDay()-1); // First day is the day of the month - the day of the week
+        var last = first + 7; // last day is the first day + 6 one more day 7 because is a less than
+
+        var firstDate = new Date(curr.setDate(first));
+        var lastDate = new Date(curr.setDate(last));
+        found = true;
+
+    }
+
+    if (filterValue == '#WST-LASTWEEK#')
+    {   //TODO: first day monday instead sunday
+        var curr = new Date; // get current date
+        curr.setHours(0, 0, 0, 0);
+        var lwday = new Date(curr);
+        lwday.setDate(curr.getDate()-7);
+
+        var first = lwday.getDate() - (lwday.getDay()-1); // First day is the day of the month - the day of the week
+        var last = first + 7; // last day is the first day + 6 one more day 7 because is a less than
+
+        var firstDate = new Date(curr.setDate(first));
+        var lastDate = new Date(curr.setDate(last));
+        found = true;
+
+    }
+
+    if (filterValue == '#WST-THISMONTH#')
+    {
+
+        var firstDate = new Date(year+'-'+month+'-01T00:00:00.000Z');
+
+        if (month == 12)
+            var lastDate = new Date((year+1)+'-01-01T00:00:00.000Z');
+        else
+        {
+            var month1 = pad(today.getMonth()+2,2);
+            var lastDate = new Date(year+'-'+month1+'-01T00:00:00.000Z');
+        }
+        found = true;
+
+    }
+
+    if (filterValue == '#WST-LASTMONTH#')
+    {
+
+        if (month == 1)
+            var firstDate = new Date((year-1)+'-12-01T00:00:00.000Z');
+        else {
+            var month1 = pad(today.getMonth(),2);
+            var firstDate = new Date(year+'-'+month1+'-01T00:00:00.000Z');
+        }
+
+        var lastDate = new Date(year+'-'+month+'-01T00:00:00.000Z');
+        found = true;
+
+    }
+
+    if (filterValue == '#WST-THISYEAR#')
+    {
+        var firstDate = new Date(year+'-01-01T00:00:00.000Z');
+        var lastDate = new Date((year+1)+'-01-01T00:00:00.000Z');
+        found = true;
+
+    }
+
+    if (filterValue == '#WST-LASTYEAR#')
+    {
+        var firstDate = new Date((year-1)+'-01-01T00:00:00.000Z');
+        var lastDate = new Date((year)+'-01-01T00:00:00.000Z');
+        found = true;
+
+    }
+    if (filterValue == '#WST-FIRSTQUARTER#')
+    {
+        var firstDate = new Date(year+'-01-01T00:00:00.000Z');
+        var lastDate = new Date(year+'-04-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-SECONDQUARTER#')
+    {
+        var firstDate = new Date(year+'-04-01T00:00:00.000Z');
+        var lastDate = new Date(year+'-07-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-THIRDQUARTER#')
+    {
+        var firstDate = new Date(year+'-07-01T00:00:00.000Z');
+        var lastDate = new Date(year+'-10-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-FOURTHQUARTER#')
+    {
+        var firstDate = new Date(year+'-10-01T00:00:00.000Z');
+        var lastDate = new Date((year+1)+'-01-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-FIRSTSEMESTER#')
+    {
+        var firstDate = new Date(year+'-01-01T00:00:00.000Z');
+        var lastDate = new Date(year+'-07-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-SECONDSEMESTER#')
+    {
+        var firstDate = new Date(year+'-07-01T00:00:00.000Z');
+        var lastDate = new Date((year+1)+'-01-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-LYFIRSTQUARTER#')
+    {
+        var firstDate = new Date((year-1)+'-01-01T00:00:00.000Z');
+        var lastDate = new Date((year-1)+'-04-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-LYSECONDQUARTER#')
+    {
+        var firstDate = new Date((year-1)+'-04-01T00:00:00.000Z');
+        var lastDate = new Date((year-1)+'-07-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-LYTHIRDQUARTER#')
+    {
+        var firstDate = new Date((year-1)+'-07-01T00:00:00.000Z');
+        var lastDate = new Date((year-1)+'-10-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-LYFOURTHQUARTER#')
+    {
+        var firstDate = new Date((year-1)+'-10-01T00:00:00.000Z');
+        var lastDate = new Date(year+'-01-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-LYFIRSTSEMESTER#')
+    {
+        var firstDate = new Date((year-1)+'-01-01T00:00:00.000Z');
+        var lastDate = new Date((year-1)+'-07-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (filterValue == '#WST-LYSECONDSEMESTER#')
+    {
+        var firstDate = new Date((year-1)+'-07-01T00:00:00.000Z');
+        var lastDate = new Date(year+'-01-01T00:00:00.000Z');
+        found = true;
+        //return {$gte: firstDate, $lt: lastDate};
+    }
+    if (found == true)
+    {
+        if (filter.filterType == "equal")
+            return {$gte: firstDate, $lt: lastDate};
+        if (filter.filterType == "diferentThan")
+            return {$not: {$gte: firstDate, $lt: lastDate}};
+        if (filter.filterType == "biggerThan")
+            return {$gt: lastDate};
+        if (filter.filterType == "biggerOrEqualThan" )
+            return {$gte: firstDate};
+        if (filter.filterType == "lessThan" )
+            return {$lt: firstDate};
+        if (filter.filterType == "lessOrEqualThan" )
+            return {$lt: lastDate};
+    } else {
+
+        if (filter.filterType == "equal" )
+        {
+            var searchDate = new Date(filterValue);
+            var theNextDay = new Date(searchDate);
+            theNextDay.setDate(searchDate.getDate()+1);
+            return {$gte: searchDate, $lt: theNextDay};
+        }
+
+        if (filter.filterType == "diferentThan" && found == false)
+        {
+            var searchDate = new Date(filterValue);
+            var theNextDay = new Date(searchDate);
+            theNextDay.setDate(searchDate.getDate()+1);
+            return {$not:{$gte: searchDate, $lt: theNextDay}};
+        }
+
+        if (filter.filterType == "biggerThan" )
+        {
+            var searchDate = new Date(filterValue);
+            var theNextDay = new Date(searchDate);
+            theNextDay.setDate(searchDate.getDate()+1);
+            return {$gt: theNextDay}
+
+        }
+
+        if (filter.filterType == "notGreaterThan" )
+        {
+            var searchDate = new Date(filterValue);
+            var theNextDay = new Date(searchDate);
+            theNextDay.setDate(searchDate.getDate()+1);
+            return {$not:{$gt: theNextDay}}
+
+        }
+
+        if (filter.filterType == "biggerOrEqualThan" )
+        {
+            var searchDate = new Date(filterValue);
+            return {$gte: searchDate}
+
+        }
+
+        if (filter.filterType == "lessThan" )
+        {
+            var searchDate = new Date(filterValue);
+            return {$lt: searchDate}
+
+        }
+
+        if (filter.filterType == "lessOrEqualThan" )
+        {
+            var searchDate = new Date(filterValue);
+            var theNextDay = new Date(searchDate);
+            theNextDay.setDate(searchDate.getDate()+1);
+            return {$lt: theNextDay}
+
+        }
+
+        if (filter.filterType == "between" )
+        {
+            var searchDate = new Date(filterValue);
+            //searchDate.setHours(0, 0, 0, 0);
+            var lastDate = new Date(filter.filterText2);
+            /*
+            var theNextDay = new Date(lastDate);
+            theNextDay.setDate(lastDate.getDate()+1);
+            */
+
+            return {$gte: searchDate, $lt: lastDate};
+
+        }
+
+        if (filter.filterType == "notBetween" )
+        {
+            var searchDate = new Date(filterValue);
+            var lastDate = new Date(filter.filterText2);
+            return {$not:{$gte: searchDate, $lt: lastDate}};
+
+        }
+
+        if (filter.filterType == "in" )
+        {
+            var theFilter = [];
+            var dates = String(filterValue).split(',');
+            for (var d in dates)
+            {
+                var theDate = new Date(dates[d]);
+                var theNextDay = new Date(theDate);
+                theNextDay.setDate(theDate.getDate()+1);
+                var theElementName = filter.elementName;
+                var inFilter = {};
+                inFilter[filter.elementName] = {$gte: theDate, $lt: theNextDay};
+                theFilter.push(inFilter);
+            }
+
+            return {$or: theFilter};
+
+        }
+
+        if (filter.filterType == "notIn" )
+        {
+
+            var theFilter = [];
+            var dates = String(filterValue).split(',');
+            for (var d in dates)
+            {
+                var theDate = new Date(dates[d]);
+                var theNextDay = new Date(theDate);
+                theNextDay.setDate(theDate.getDate()+1);
+                var theElementName = filter.elementName;
+                var inFilter = {};
+                inFilter[filter.elementName] = {$gte: theDate, $lt: theNextDay};
+                theFilter.push(inFilter);
+            }
+
+            return {$nor: theFilter};
+
+        }
+
+    }
+
+
+
+}
+
 function isEmpty(obj) {
     for(var prop in obj) {
         if(obj.hasOwnProperty(prop))
@@ -564,3 +741,322 @@ function isEmpty(obj) {
 
     return true;
 }
+
+function processCollections(collections, dataSource, params, thereAreJoins, done,  index) {
+    var index = (index) ? index : 0;
+    var collection = (collections[index]) ? collections[index] : false;
+    var result = (result) ? result : [];
+
+    if (!collection) {
+        done();
+        return;
+
+    }
+
+
+
+    //console.log('entering mongoDB collections these are the joins ',JSON.stringify(collection.joins));
+    var fields = {};
+
+    var filters = getCollectionFilters(collection, collection.filters);
+
+    //console.log('the Filters');
+    //debug(filters);
+
+    //console.log(JSON.stringify(collection));
+
+    for (var i in collection.columns) {
+        for (var e in collection.schema.elements) {
+            if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
+                fields[collection.schema.elements[e].elementName] = 1;
+            }
+        }
+    }
+
+    //ADD the necessary fields for joins
+    for (var i in collection.joins) {
+            if (collection.joins[i].sourceCollectionID == collection.collectionID)
+                fields[collection.joins[i].sourceElementName] = 1;
+            if (collection.joins[i].targetCollectionID == collection.collectionID)
+                fields[collection.joins[i].targetElementName] = 1;
+
+    }
+
+
+    var sort = {};
+
+    if (collection.order) {
+        console.log('there is order');
+        for (var i in collection.order) {
+            console.log('there is order for each');
+            for (var e in collection.schema.elements) {
+                if (collection.order[i] != undefined)
+                {
+                    if (collection.order[i].elementID == collection.schema.elements[e].elementID) {
+                        console.log('there is order founded');
+                        var found = false;
+
+                        for (var c in collection.columns) {
+                            if (collection.columns[c].elementID == collection.schema.elements[e].elementID) {
+
+
+                                console.log('there is order found',collection.schema.elements[e].elementName);
+
+                                console.log('there is order found 2',JSON.stringify(collection.order));
+
+                                if (collection.columns[c].aggregation) {
+                                    found = true;
+                                    switch (collection.columns[c].aggregation) {
+                                        case 'sum': sort[collection.schema.elements[e].elementName+'sum'] = collection.order[i].sortType*-1;
+                                            break;
+                                        case 'avg': sort[collection.schema.elements[e].elementName+'avg'] = collection.order[i].sortType*-1;
+                                            break;
+                                        case 'min': sort[collection.schema.elements[e].elementName+'min'] = collection.order[i].sortType*-1;
+                                            break;
+                                        case 'max': sort[collection.schema.elements[e].elementName+'max'] = collection.order[i].sortType*-1;
+                                            break;
+                                        case 'year': sort['_id.'+collection.schema.elements[e].elementName+'year'] = collection.order[i].sortType*-1;
+                                            break;
+                                        case 'month': sort['_id.'+collection.schema.elements[e].elementName+'month'] = collection.order[i].sortType*-1;
+                                            break;
+                                        case 'day': sort['_id.'+collection.schema.elements[e].elementName+'day'] = collection.order[i].sortType*-1;
+                                    }
+                                }
+
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            if (collection.order[i].sortType)
+                                sort['_id.'+collection.schema.elements[e].elementName] = collection.order[i].sortType*-1;
+                            else
+                                sort['_id.'+collection.schema.elements[e].elementName] = 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    console.log('he salido de order',JSON.stringify(sort));
+
+    //console.log('the fields to get');
+    //debug(fields);
+
+    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
+
+    var dbURI =  'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
+
+    MongoClient.connect(dbURI, function(err, db) {
+        if(err) { return console.dir(err); }
+
+        var col = db.collection(collection.schema.collectionName);
+        var match = filters, project = {}, group = {}, fields = {};
+
+        for (var i in collection.columns) {
+            var found = false;
+
+            //if (collection.columns[i].count) {
+            if (collection.columns[i].elementName == 'WSTcount'+collection.schema.collectionName) {
+                console.log('lleva conteo');
+                group['WSTcount'+collection.schema.collectionName] = { $sum: 1 };
+
+            } else {
+            for (var e in collection.schema.elements) {
+                if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
+                    found = true;
+
+                    if (collection.columns[i].aggregation) {
+                        switch (collection.columns[i].aggregation) {
+                            case 'sum': group[collection.schema.elements[e].elementName+'sum'] = {$sum: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'avg': group[collection.schema.elements[e].elementName+'avg'] = {$avg: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'min': group[collection.schema.elements[e].elementName+'min'] = {$min: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'max': group[collection.schema.elements[e].elementName+'max'] = {$max: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'year': {
+
+                                    if (collection.schema.elements[e].extractFromString == true)
+                                    {
+                                        project[collection.schema.elements[e].elementName+'year'] = {"$substr" : ["$"+collection.schema.elements[e].elementName, collection.schema.elements[e].yearPositionFrom-0, collection.schema.elements[e].yearPositionTo - collection.schema.elements[e].yearPositionFrom]};
+                                        fields[collection.schema.elements[e].elementName+'year'] = "$"+collection.schema.elements[e].elementName+'year';
+                                    } else {
+                                        project[collection.schema.elements[e].elementName+'year'] = {$year: "$"+collection.schema.elements[e].elementName};
+                                        fields[collection.schema.elements[e].elementName+'year'] = "$"+collection.schema.elements[e].elementName+'year';
+                                    }
+                                }
+                                break;
+                            case 'month':
+                                    if (collection.schema.elements[e].extractFromString == true)
+                                    {
+                                        project[collection.schema.elements[e].elementName+'month'] = {"$substr" : ["$"+collection.schema.elements[e].elementName, collection.schema.elements[e].monthPositionFrom-0, collection.schema.elements[e].monthPositionTo - collection.schema.elements[e].monthPositionFrom]};
+                                        fields[collection.schema.elements[e].elementName+'month'] = "$"+collection.schema.elements[e].elementName+'month';
+                                    } else {
+                                        project[collection.schema.elements[e].elementName+'month'] = {$month: "$"+collection.schema.elements[e].elementName};
+                                        fields[collection.schema.elements[e].elementName+'month'] = "$"+collection.schema.elements[e].elementName+'month';
+                                    }
+                                break;
+                            case 'day':
+                                    if (collection.schema.elements[e].extractFromString == true)
+                                    {
+                                        project[collection.schema.elements[e].elementName+'day'] = {"$substr" : ["$"+collection.schema.elements[e].elementName, collection.schema.elements[e].dayPositionFrom-0, collection.schema.elements[e].dayPositionTo - collection.schema.elements[e].dayPositionFrom]};
+                                        fields[collection.schema.elements[e].elementName+'day'] = "$"+collection.schema.elements[e].elementName+'day';
+                                    } else {
+                                        project[collection.schema.elements[e].elementName+'day'] = {$dayOfMonth: "$"+collection.schema.elements[e].elementName};
+                                        fields[collection.schema.elements[e].elementName+'day'] = "$"+collection.schema.elements[e].elementName+'day';
+                                    }
+
+                        }
+                    }
+                    else {
+                        fields[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
+                    }
+
+                    if (collection.columns[i].variable) {
+                        switch (collection.columns[i].variable) {
+                            case 'toUpper': project[collection.schema.elements[e].elementName] = {$toUpper: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'toLower': project[collection.schema.elements[e].elementName] = {$toLower: "$"+collection.schema.elements[e].elementName};
+                        }
+                    }
+                    else { //es necesario añadir todos los campos a project si hay alguna variable, si solo se añaden los campos con variable, el resto no se devuelven en la consulta
+                        project[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
+                    }
+                }
+            }
+
+            }
+            //ADD the necessary fields for joins
+
+            /*
+            if (!found) {
+                if (collection.columns[i].count) {
+                    console.log('lleva conteo');
+                    group['count'] = { $sum: 1 };
+                }
+            } */
+        }
+
+
+        if (collections.length > 1)
+        {
+            for (var i in collection.joins) {
+                if (collection.joins[i].sourceCollectionID == collection.collectionID)
+                {
+                    fields[collection.joins[i].sourceElementName] = "$"+collection.joins[i].sourceElementName;
+                    project[collection.joins[i].sourceElementName] = "$"+collection.joins[i].sourceElementName;
+                }
+                if (collection.joins[i].targetCollectionID == collection.collectionID)
+                {
+                    fields[collection.joins[i].targetElementName] = "$"+collection.joins[i].targetElementName;
+                    project[collection.joins[i].targetElementName] = "$"+collection.joins[i].targetElementName;
+                }
+            }
+        }
+
+
+
+        group['_id'] = fields;
+
+        var aggregation = [{ $match: match }];
+
+        if (!isEmpty(project)) aggregation.push({ $project: project });
+
+        aggregation.push({ $group: group });
+
+        if (!isEmpty(sort)) aggregation.push({ $sort: sort });
+
+        //If there are joins, then we can´t set up limits...
+
+        if (!thereAreJoins)
+        {
+            if (params.page) {
+                aggregation.push({ $skip: (params.page-1)*100 });
+                aggregation.push({ $limit: 100 });
+            }
+            else {
+                aggregation.push({ $limit: 10 });
+            }
+        }
+
+        console.log('aggregation');
+        debug(aggregation);
+
+        col.aggregate(aggregation, function(err, docs) {
+            //debug(docs);
+            for (var i in docs) {
+                var item = {};
+
+                for(var group in docs[i]) {
+                    if (group == '_id') {
+                        for(var field in docs[i][group]) {
+                            item[field] = docs[i][group][field];
+                        }
+                    }
+                    else {
+                        item[group] = docs[i][group];
+                    }
+                }
+
+                for (var field in item) {
+
+                    for (var e in collection.schema.elements) {
+                        if (field == collection.schema.elements[e].elementName && collection.schema.elements[e].values) {
+                            for (var v in collection.schema.elements[e].values) {
+                                if (collection.schema.elements[e].values[v].value == item[field]) {
+                                    item[field] = collection.schema.elements[e].values[v].label;
+                                }
+                            }
+                        }
+
+                        if ((field == collection.schema.elements[e].elementName ||
+                              field == collection.schema.elements[e].elementName+'sum' ||
+                                field == collection.schema.elements[e].elementName+'avg' ||
+                                    field == collection.schema.elements[e].elementName+'min' ||
+                                        field == collection.schema.elements[e].elementName+'max'
+                            )  && collection.schema.elements[e].format) {
+
+                            if (collection.schema.elements[e].elementType == 'date') {
+                                item[field+'_original'] = item[field];
+                                var date = new Date(item[field]);
+                                var moment = require('moment');
+                                item[field] = moment(date).format(collection.schema.elements[e].format);
+
+                            }
+
+                            if (collection.schema.elements[e].elementType == 'number') {
+                                item[field+'_original'] = item[field];
+                                var numeral = require('numeral');
+                                item[field] = numeral(item[field]).format(collection.schema.elements[e].format);
+                            }
+
+                        }
+                    }
+                }
+
+
+                //cambio de nombre añadiendo el nombre de la colección
+
+
+                var finalItem = {};
+                for (var field in item) {
+                    finalItem[collection.schema.collectionID+'_'+field] = item[field];
+                }
+
+
+                //result.push(item);
+                result.push(finalItem);
+            }
+            //debug(result);
+            console.log('this is the collection', collection.schema.collectionName,result.length);
+            collection.result = result;
+            db.close();
+
+            processCollections(collections, dataSource, params,thereAreJoins, done, index+1);
+        });
+    });
+}
+
+

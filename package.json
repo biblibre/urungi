@@ -14,7 +14,10 @@
     "passport": "~0.2.1",
     "passport-remember-me": "0.0.1",
     "jade": "~1.8.2",
-    "express-ejs-layouts": "~1.1.0"
+    "express-ejs-layouts": "~1.1.0",
+    "email-templates": "~2.0.1",
+    "async": "~1.4.2",
+    "nodemailer-wellknown": "~0.1.7"
   },
   "devDependencies": {},
   "scripts": {

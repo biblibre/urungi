@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html id="ng-app" ng-app="widestage-login">
 
 
 <script src="https://s3.amazonaws.com/widestage/default/js/lib/angular/angular.min.js"></script>
@@ -15,36 +15,152 @@
 </script>
 
 
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<body>
+    <link href="https://s3.amazonaws.com/widestage/default/bootstrap-3.3.4-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/css/login.css">
 
-Login
+</head>
 
-<div class="col-md-6 col-md-offset-3" ng-app>
-    <div ng-controller="LoginController">
-    <h2>Login</h2>
-    <div ng-show="vm.error" class="alert alert-danger">{{vm.error}}</div>
-    <form name="form" ng-submit="login()" role="form">
-        <div class="form-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" class="form-control" ng-model="username" required />
-            <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
+
+<body class="page-body ng-scope login-page">
+ <!--
+<div ng-view></div> -->
+
+
+<div class="page-container ng-scope" ng-controller="PublicCtrl">
+    <div class="row">
+        <div class="login-header">
+            <img src="https://s3.amazonaws.com/weelia/uploads/dbteam/55d41d196d5ec0b7122f8570/images/Logo-widestage-icon.55d42b855ca927b8120b02e3.png" alt="" width="80">
+
         </div>
-        <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" class="form-control" ng-model="password" required />
-            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
+    </div>
+
+    <div class="login-container ng-scope">
+
+
+
+        <div class="row">
+
+            <div class="col-sm-6">
+
+
+                <div class="errors-container">
+
+
+                </div>
+
+                <form method="post" role="form" id="login" class="login-form fade-in-effect ng-pristine ng-valid in" novalidate="novalidate">
+                    <div class="form-group">
+                        <!--<label class="control-label" for="username">Username</label>-->
+                        <input type="text" class="form-control input-dark" name="username" placeholder="Username" id="username" ng-model="userName" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <!--<label class="control-label" for="passwd">Password</label>-->
+                        <input type="password" class="form-control input-dark" name="passwd" id="passwd" placeholder="Password" ng-model="password" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <button ng-click="login()" class="btn  btn-block text-left wst-btn">
+                            <i class="fa-lock"></i>
+                            Log In
+                        </button>
+                    </div>
+
+                    <div class="alert alert-danger" ng-if="loginError == true">
+
+                        {{errorLoginMessage}}
+
+                    </div>
+
+                    <div class="login-footer">
+                        <a href="">Forgot your password?</a>
+
+                        <div class="info-links">
+                            <a href="">ToS</a> -
+                            <a href="">Privacy Policy</a>
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+
+            </div>
+
         </div>
-        <div class="form-actions">
-            <button type="submit" ng-disabled="form.$invalid || vm.dataLoading" class="btn btn-primary">Login</button>
-            <img ng-if="vm.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-            <a href="#/register" class="btn btn-link">Register</a>
-        </div>
-    </form>
+
     </div>
 </div>
 
+<div class="page-loading-overlay loaded">
+    <div class="loader-2"></div>
+</div>
 
+
+ <div id="forgot-box" class="forgot-box widget-box no-border">
+     <div class="widget-body">
+         <div class="widget-main">
+             <h4 class="header red lighter bigger">
+                 <i class="fa fa-key"></i>
+                 Retrieve Password
+             </h4>
+
+             <div class="space-6"></div>
+             <p>
+                 Enter your email and to receive instructions
+             </p>
+
+             <form id="remember-password-form" name="remember-password-form" role="form" ng-submit="rememberPassword()">
+                 <fieldset>
+                     <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input name="email" type="email" class="form-control" ng-model="email" placeholder="Email" required/>
+															<i class="fa fa-envelope"></i>
+														</span>
+                     </label>
+
+                     <div class="clearfix">
+                         <button type="submit" class="width-35 pull-right btn btn-sm btn-danger" onclick="show_box('login-box');">
+                             <i class="fa fa-lightbulb"></i>
+                             Send Me!
+                         </button>
+                     </div>
+                 </fieldset>
+             </form>
+         </div><!-- /widget-main -->
+
+         <div class="toolbar center">
+             <a href="#" onclick="show_box('login-box'); return false;" class="back-to-login-link">
+                 Back to login
+                 <i class="fa fa-arrow-right"></i>
+             </a>
+         </div>
+     </div><!-- /widget-body -->
+ </div><!-- /forgot-box -->
+
+<script src="https://s3.amazonaws.com/widestage/default/js/lib/jquery/jquery-2.0.3.min.js"></script>
+<script src="/js/lib/angular/angular.min.js"></script>
+
+ <!-- crypto -->
+ <script src="libs/crypto/aes.js"></script>
+
+<!-- route -->
+<script  src="https://s3.amazonaws.com/widestage/default/js/lib/angular/angular-route.min.js"></script>
+<script  src="https://s3.amazonaws.com/widestage/default/js/lib/angular/angular-ui-router.min.js"></script>
+<script src="/js/login.js"></script>
+
+
+
+<div class="xenon-loading-bar progress-is-hidden">
+    <span data-pct="0" style="width: 0px;"></span>
+</div>
+<textarea tabindex="-1" style="position: absolute; top: -999px; left: 0px; right: auto; bottom: auto; border: 0px; padding: 0px; box-sizing: content-box; word-wrap: break-word; overflow: hidden; transition: none; height: 0px !important; min-height: 0px !important; width: 604px;" class="autosizejs" id="autosizejs"></textarea>
 
 
 </body>

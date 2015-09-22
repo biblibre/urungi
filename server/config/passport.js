@@ -1,13 +1,9 @@
 var mongoose = require('mongoose')
     , LocalStrategy = require('passport-local').Strategy
-    , FacebookStrategy = require('passport-facebook').Strategy
-    , TwitterStrategy = require('passport-twitter').Strategy
-    , GoogleStrategy = require('passport-google').Strategy
     , RememberMeStrategy = require('passport-remember-me').Strategy
-    //, User = mongoose.model('User');
+
 
 var Users = connection.model('Users'); //require('../../models/users');
-var Configurations = connection.model('Configurations'); //require('../../models/configurations');
 
 module.exports = function (passport) {
 
@@ -22,8 +18,7 @@ module.exports = function (passport) {
             if (user) {
                 user = user.toObject();
 
-                if (user.company_id) {
-                    user['companyID'] = user.company_id;
+                if (user.companyID) {
 
                     var Companies = connection.model('Companies');
 
@@ -46,7 +41,7 @@ module.exports = function (passport) {
     });
 
     passport.use(new LocalStrategy({
-            usernameField: 'username',
+            usernameField: 'userName',
             passwordField: 'password'
         },
         function(username, password, done) {
@@ -55,6 +50,7 @@ module.exports = function (passport) {
 
     passport.use(new RememberMeStrategy(
         function(token, done) {
+            console.log('remember me strategy aqui');
             Users.findOne({accessToken: token},{}, function (err, user) {
                 if (err) { return done(err); }
                 if (!user) { return done(null, false); }
@@ -75,67 +71,6 @@ module.exports = function (passport) {
             });
         }
     ));
-    /*passport.use(new FacebookStrategy({
-            clientID: config.facebook.clientID,
-            clientSecret: config.facebook.clientSecret,
-            callbackURL: config.facebook.callbackURL
-        },
-        function(accessToken, refreshToken, profile, done) {
-            Users.findOrCreateFaceBookUser(profile, done);
-        }));*/
-    Configurations.getConfiguration('facebook-client-id', function(configuration){
-        var facebookClientId = configuration.value;
-
-        if (facebookClientId)
-        Configurations.getConfiguration('facebook-client-secret', function(configuration){
-            var facebookClientSecret = configuration.value;
-
-            passport.use(new FacebookStrategy({
-                    clientID: facebookClientId,
-                    clientSecret: facebookClientSecret,
-                    callbackURL: config.facebook.callbackURL
-                },
-                function(accessToken, refreshToken, profile, done) {
-                    Users.findOrCreateFaceBookUser(profile, done);
-                }));
-        });
-    });
-
-    /*passport.use(new TwitterStrategy({
-            consumerKey: config.twitter.consumerKey,
-            consumerSecret: config.twitter.consumerSecret,
-            callbackURL: config.twitter.callbackURL
-        },
-        function(token, tokenSecret, profile, done) {
-            Users.findOrCreateTwitterUser(profile, done);
-        }
-    ));*/
-    Configurations.getConfiguration('twitter-consumer-key', function(configuration){
-        var twitterConsumerKey = configuration.value;
-
-        if (twitterConsumerKey)
-        Configurations.getConfiguration('twitter-consumer-secret', function(configuration){
-            var twitterConsumerSecret = configuration.value;
-
-            passport.use(new TwitterStrategy({
-                    consumerKey: twitterConsumerKey,
-                    consumerSecret: twitterConsumerSecret,
-                    callbackURL: config.twitter.callbackURL
-                },
-                function(token, tokenSecret, profile, done) {
-                    Users.findOrCreateTwitterUser(profile, done);
-                }));
-        });
-    });
-
-    passport.use(new GoogleStrategy({
-            returnURL: config.google.returnURL,
-            realm: config.google.realm
-        },
-        function(identifier, profile, done) {
-            Users.findOrCreateGoogleUser(profile, done);
-        }
-    ));
 }
 
 
@@ -143,7 +78,9 @@ exports.isAuthenticated = function (req, res, next){
     if(req.isAuthenticated()){
         next();
     }else{
+        console.log('the user is not authenticated...redirecting');
         res.redirect("/login");
+
     }
 }
 

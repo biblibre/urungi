@@ -1,40 +1,81 @@
-<div class="object-tree" ng-init="getDataSources()">
+<div class="container-fluid object-tree" ng-init="getLayers()">
+
+    <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">
+    </tg-dynamic-directive>
+
+    <script type="text/ng-template" id="nestable_item.html">
+        <div >
+            <div class="schema-element-report schema-item-report"  ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure') && ngModelItem.enabled != false" >
 
 
-    <!--Listado de objetos
-    <div
-            id="tablesTree"
-            data-angular-treeview="true"
-            data-tree-id="abc"
-            data-tree-model="treedata"
-            data-node-id="id"
-            data-node-label="label"
-            data-node-children="children" >
-    </div>
-    -->
+                <a class="list-group-item data-source-element schema-item-report" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                   draggable-data="{
+                        elementName: ngModelItem.elementName,
+                        objectLabel: ngModelItem.elementLabel,
+                        datasourceID:ngModelItem.datasourceID,
+                        collectionID:ngModelItem.collectionID,
+                        elementID: ngModelItem.elementID,
+                        elementType: ngModelItem.elementType,
+                        layerID: selectedLayer._id,
+                        filterType: 'equal',
+                        filterPrompt: false,
+                        filterTypeLabel:'equal',
+                        format:ngModelItem.format,
+                        values:ngModelItem.values}">
+                        {{ngModelItem.elementLabel}}
+                    <i ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date') && (!ngModelItem.count)" class="fa fa-toggle-down " ng-click="ngModelItem.isAggregateCollapsed = !ngModelItem.isAggregateCollapsed"></i>
+
+                </a>
+
+
+                <div class="schema-aggregate-element-container" ng-if="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date'" collapse="!ngModelItem.isAggregateCollapsed">
+                    <a ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date') && (!ngModelItem.count)"
+                       class="list-group-item data-source-aggregation schema-item-report" ng-repeat="aggregation in fieldsAggregations[ngModelItem.elementType]"
+                       draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
+                       elementName: ngModelItem.elementName,
+                       objectLabel: ngModelItem.elementLabel+' ('+aggregation.name+')',
+                       datasourceID:ngModelItem.datasourceID,
+                       collectionID:ngModelItem.collectionID,
+                       elementID: ngModelItem.elementID,
+                       layerID: selectedLayer._id,
+                       elementType: ngModelItem.elementType,
+                       filterType: 'equal',
+                       filterPrompt: false,
+                       filterTypeLabel:'equal',
+                       format:ngModelItem.format,
+                       aggregation: aggregation.value}" ng-bind="aggregation.name">
+
+                       </a>
+                </div>
+
+            </div>
+
+            <div class="schema-element-report schema-item-report"  ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure') && ngModelItem.enabled == false" >
+                <span class="list-group-item data-source-element schema-item-report element-disabled">{{ngModelItem.elementLabel}}</span>
+            </div>
+
+            <div class="schema-folder-report"  ng-if="ngModelItem.elementRole == 'folder'" >
+                <i ng-if="!ngModelItem.isCollapsed" class="fa fa-plus-square" ng-click="ngModelItem.isCollapsed = !ngModelItem.isCollapsed"></i>
+                <i ng-if="ngModelItem.isCollapsed" class="fa fa-minus-square" ng-click="ngModelItem.isCollapsed = !ngModelItem.isCollapsed"></i>
+                <a role="button" ng-click="ngModelItem.isCollapsed = !ngModelItem.isCollapsed">
+                    {{ngModelItem.elementLabel}}
+                </a>
+            </div>
+            <div collapse="!ngModelItem.isCollapsed && ngModelItem.elementRole != 'root'">
+            <ul ng-if="ngModelItem.elementRole == 'folder' || ngModelItem.elementRole == 'root'" class="schema-container-report list-group" ng-class="">
+                <li class="innerCont list-group-item hand-cursor schema-item-report" ng-repeat="innerItem in ngModelItem.elements">
+                    <tg-dynamic-directive ng-model="innerItem" tg-dynamic-directive-view="getView">
+                    </tg-dynamic-directive>
+                </li>
+            </ul>
+            </div>
+        </div>
+    </script>
+
+
+
 
     <!--
-    <div class="tree-cube" ng-repeat="cube in cubes">
-          <div class="tree-cube-label">{{cube.cubeLabel}}</div>
-          <div class="tree-cube-content">
-                <div class="tree-cube-sublabel">Dimmensions</div>
-                <div class="tree-cube-object" ng-repeat="dim in cube.dimmensions" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">{{dim.objectLabel}}</div>
-                <div class="tree-cube-sublabel">Measures</div>
-                <div class="tree-cube-object" ng-repeat="dim in cube.measures" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{foo: 'bar'}">{{dim.objectLabel}}</div>
-          </div>
-    </div>
-    -->
-
-
-
-    <!--<div class="tree-cube" ng-repeat="dsource in dataSources">
-        <div class="tree-cube-label">{{dsource.collection.collectionLabel}}</div>
-        <div class="tree-cube-content">
-            <div class="tree-cube-object" ng-show="element.visible == true"
-                 ng-repeat="element in dsource.collection.elements" draggable="true" effect-allowed="copy" draggable-type="custom-object"
-                 draggable-data="{elementName: '{{element.elementName}}',objectLabel: '{{element.elementLabel}}', datasourceID:'{{dsource.datasourceID}}', collectionID:'{{dsource.collection.collectionID}}'  ,elementID: '{{element.elementID}}', elementType: '{{element.elementType}}', filterType:'equal',filterTypeLabel:'equal'}">{{element.elementLabel}}</div>
-        </div>
-    </div>-->
 
     <div class="list-group data-source-tree" ng-repeat="dsource in dataSources">
         <a class="list-group-item active">
@@ -80,58 +121,12 @@
                filterPrompt: false,
                filterTypeLabel:'equal',
                count: true}">Count</a>
-            <!--<a ng-repeat="element in dsource.collection.elements" ng-if="element.visible"
-               class="list-group-item data-source-aggregation"
-               draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
-               elementName: element.elementName+'count',
-               objectLabel: element.elementLabel+' (count)',
-               datasourceID:dsource.datasourceID,
-               collectionID:dsource.collection.collectionID,
-               elementID: element.elementID,
-               elementType: element.elementType,
-               filterType: 'equal',
-               filterTypeLabel:'equal',
-               count: true}">{{element.elementLabel}} (count)</a>-->
+
         </div>
     </div>
 
+    -->
 
-
-<!--<ul class="tree" role="tree" id="myTree" style="height: 100%">
-    <li class="tree-branch hide" data-template="treebranch" role="treeitem" aria-expanded="false">
-        <div class="tree-branch-header" >
-            <button class="tree-branch-name">
-                <span class="glyphicon icon-caret glyphicon-play"></span>
-                <span class="glyphicon icon-folder glyphicon-folder-close"></span>
-                <span class="tree-label"></span>
-            </button>
-        </div>
-        <ul class="tree-branch-children" role="group"></ul>
-        <div class="tree-loader" role="alert">Loading...</div>
-    </li>
-    <li class="tree-item hide" data-template="treeitem" role="treeitem">
-        <div id="" class="tree-item-name" x-lvl-draggable="true" x-lvl-drop-target="false" x-on-select="selected(selectedEl)">
-            <span class="glyphicon icon-item fueluxicon-bullet"></span>
-            <span class="tree-label"></span>
-        </div>
-    </li>
-</ul>
-
-    <div id="Province" x-lvl-draggable="true">
-         Province
-    </div>
-    <div id="Gender" x-lvl-draggable="true">
-        Gender
-    </div>
-    <div id="Age" x-lvl-draggable="true">
-        Age
-    </div>
-    <div id="Party" x-lvl-draggable="true">
-        Party
-    </div>
-    <div id="Age Bin" x-lvl-draggable="true">
-        Age Bin
-    </div>-->
 
     <style>
         #metrics-list {

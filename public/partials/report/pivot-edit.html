@@ -261,8 +261,52 @@
                                 <!-- END Multiple Array -->
 
                                 <!-- TODO: Selector de fecha , tratamiento de los campos de tipo fecha, mes , año, día, dia de la semana, etc... -->
+                                <!-- Date -->
+                                <div class="form-group" ng-show="(filter.elementType == 'date' && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
+                                    <span ng-show="(filter.elementType == 'date' && (filter.filterType != 'in' && filter.filterType != 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull'))">{{filter.filterLabel1 | date:'yyyy-MM-dd'}}</span>
+                                    <span ng-show="filter.filterType == 'in' || filter.filterType == 'notIn'">
+                                        <span class="filter-in-list" ng-repeat="oneDate in filter.filterText1">
+                                            {{oneDate | date:'yyyy-MM-dd'}} <i class="fa fa-remove filter-in-list-remove" ng-click="removeItem(oneDate,filter.filterText1)"></i>
+                                        </span>
 
-                                <div class="input-group" ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && (filter.filterPrompt == false) && ( filter.elementType != 'array')" style="width:200px;">
+                                    </span>
+                                    <span class="dropdown" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Select date" popover="Click here to select the date to filter">
+                                        <a class="btn btn-primary popover-primary ng-scope"  id="dropdown1" role="button" data-toggle="dropdown" data-target="#" ><i class="fa fa-calendar"></i></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <datetimepicker ng-model="filter.filterLabel1"  data-on-set-time="onDateSet(newDate, oldDate, filter)" data-datetimepicker-config="{ dropdownSelector: '#dropdown1', startView:'day', minView:'day'  }"/>
+                                        </ul>
+                                    </span>
+
+                                    <!--between for date -->
+                                    <span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'" style="color:#0000FF;"> and </span>
+                                    <span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'"> {{filter.filterLabel2 | date:'yyyy-MM-dd'}} </span>
+                                    <span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'" class="dropdown" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Select date" popover="Click here to select the end date to filter">
+                                        <a class="btn btn-primary popover-primary ng-scope"  id="dropdown2" role="button" data-toggle="dropdown" data-target="#" ><i class="fa fa-calendar"></i></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <datetimepicker ng-model="filter.filterLabel2"  data-on-set-time="onDateEndSet(newDate, oldDate, filter)" data-datetimepicker-config="{ dropdownSelector: '#dropdown2', startView:'day', minView:'day'  }"/>
+                                        </ul>
+                                    </span>
+                                    <!--end between for date -->
+
+
+
+                                    <ui-select ng-show="filter.filterType != 'between' && filter.filterType != 'notBetween' && filter.filterType != 'null' && filter.filterType != 'notNull' && filter.filterType != 'in' && filter.filterType != 'notIn'" ng-model="filter.dateCustomFilterLabel" on-select="filter.filterText1 = filter.dateCustomFilterLabel.value;filter.filterLabel1 = ''" theme="select2" ng-disabled="disabled" style="width: 200px;">
+                                        <ui-select-match placeholder="Select or search a value in the list...">{{$select.selected.label}}</ui-select-match>
+                                        <ui-select-choices repeat="value in dateFilters | filter: $select.search">
+                                            <span ng-bind-html="value.label | highlight: $select.search"></span>
+                                            <!--<small ng-bind-html="country.value | highlight: $select.search"></small>-->
+                                        </ui-select-choices>
+                                    </ui-select>
+
+
+
+
+
+                                </div>
+                                <!-- END Date -->
+
+
+                                <div class="input-group" ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && (filter.filterPrompt == false) && ( filter.elementType != 'array') && ( filter.elementType != 'date')" style="width:200px;">
                                     <input type="text" class="form-control no-right-border form-focus-green" ng-model="filter.filterText1" >
                                     <!--TODO: para el in -not in como select2, pero con los valores introducidos manualmente ver ejemplo en: http://stackoverflow.com/questions/29489821/allow-manually-entered-text-in-ui-select-->
                                     <!--<select multiple="" data-role="tagsinput" style="display: none;"/>  http://timschlechter.github.io/bootstrap-tagsinput/examples/bootstrap-2.3.2.html-->
@@ -285,8 +329,8 @@
                                     </button>
                                 </div>
                                 -->
-                                <span ng-show="filter.filterType == 'between' || filter.filterType == 'notBetween'"> and <input type="text" ng-model="filter.filterText2" />  </span>
-                                <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFromArray(group.filters, filter);filtersUpdated();processStructure();"></i></span>
+                                <span ng-show="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType != 'date'"> and <input type="text" ng-model="filter.filterText2" />  </span>
+                                <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFromArray(group.filters, filter);filtersUpdated();detectLayerJoins();processStructure();"></i></span>
                             </div>
                             </form>
                         </div>
@@ -335,7 +379,7 @@
                 {{field.objectLabel}}
                 <i ng-show="field.sortType == -1" class="fa fa-chevron-down hand-cursor" ng-click="field.sortType = 1;processStructure();"></i>
                 <i ng-show="field.sortType == 1" class="fa fa-chevron-up hand-cursor" ng-click="field.sortType = -1;processStructure();"></i>
-                <i class="fa fa-times hand-cursor" ng-click="removeFromArray(order, field);processStructure();"></i>
+                <i class="fa fa-times hand-cursor" ng-click="removeFromArray(order, field);detectLayerJoins();processStructure();"></i>
             </li>
         </ul>
     </div>
@@ -359,7 +403,8 @@
                             <a ng-click="column.variable = variable.value;column.variableLabel = variable.label;processStructure();">{{variable.label}}</a>
                         </li>
                     </ul>
-                    <i class="fa fa-times hand-cursor" ng-click="removeFromArray(columns, column);processStructure();"></i>
+                    <button class="btn " ng-class="{'btn-info': column.link, 'btn-dark': !column.link}" ng-click="setLinkForColumn(column)"><i class="fa fa-link"></i></button>
+                    <i class="fa fa-times hand-cursor" ng-click="remove(column,'column');processStructure();"></i>
                 </div>
 
             </li>
@@ -631,3 +676,6 @@
 </div>
 
 <div ng-include src="searchModal"></div>
+<div ng-include src="dateModal"></div>
+<div ng-include src="dateFromToModal"></div>
+<div ng-include src="linkModal"></div>

@@ -12,19 +12,66 @@ ReportsController.inherits(Controller);
 var controller = new ReportsController(Reports);
 
 exports.ReportsFindAll = function(req,res){
+
+    /*
+
     req.query.trash = true;
-    //req.query.companyid = true;
+    req.query.companyid = true;
 
     req.query.fields = ['reportName'];
 
     controller.findAll(req, function(result){
         serverResponse(req, res, 200, result);
     });
+
+    */
+
+    var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
+    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{"$or": [{owner: req.user._id},{owner: { $exists: false }}]}]}
+    var fields = {reportName:1,reportType:1};
+    var params = {};
+
+    var Reports = connection.model('Reports');
+    Reports.find(find, fields, params, function(err, items){
+        if(err) throw err;
+        Reports.count(find, function (err, count) {
+            var result = {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count/perPage) : 1), items: items};
+            serverResponse(req, res, 200, result);
+        });
+    });
+};
+
+
+exports.GetReport = function(req,res){
+    req.query.trash = true;
+    req.query.companyid = true;
+
+
+
+    controller.findOne(req, function(result){
+        serverResponse(req, res, 200, result);
+
+        if (req.query.mode == 'execute')
+        {
+
+            //Annotate the execution in statistics
+
+            var statistics = connection.model('statistics');
+            var stat = {};
+            stat.type = 'report';
+            stat.relationedID = result.item._id;
+            stat.relationedName = result.item.reportName;
+            stat.action = 'execute';
+            statistics.save(req, stat, function() {
+
+            });
+        }
+    });
 };
 
 exports.ReportsFindOne = function(req,res){
     req.query.trash = true;
-    //req.query.companyid = true;
+    req.query.companyid = true;
 
     controller.findOne(req, function(result){
         serverResponse(req, res, 200, result);
@@ -33,9 +80,13 @@ exports.ReportsFindOne = function(req,res){
 
 exports.ReportsCreate = function(req,res){
     req.query.trash = true;
-    //req.query.companyid = true;
+    req.query.companyid = true;
+    req.query.userid = true;
 
-    console.log(req.body);
+    if (!req.body.ispublic)
+        req.body.owner = req.user._id;
+
+    console.log('crearint report',req.body);
 
     controller.create(req, function(result){
         serverResponse(req, res, 200, result);
@@ -44,7 +95,8 @@ exports.ReportsCreate = function(req,res){
 
 exports.ReportsUpdate = function(req,res){
     req.query.trash = true;
-    //req.query.companyid = true;
+    req.query.companyid = true;
+
 
     controller.update(req, function(result){
         serverResponse(req, res, 200, result);
@@ -73,10 +125,10 @@ exports.PreviewQuery = function(req,res)
     var data = req.query;
     var query = data.query;
 
-    console.log('entering preview query');
+    console.log('entering preview query ',JSON.stringify(query.layers));
     debug(query);
 
-    processDataSources(query.datasources, {}, function(result) {
+    processDataSources(query.datasources,query.layers, {},query, function(result) {
         //debug(result);
         serverResponse(req, res, 200, result);
     });
@@ -91,10 +143,10 @@ exports.ReportsGetData = function(req, res) {
     var data = req.query;
     var query = data.query;
 
-    console.log('entering get report data');
-    debug(query);
+    console.log('entering get report data',JSON.stringify(query.layers));
+    //debug(query);
 
-    processDataSources(query.datasources, {page: (data.page) ? data.page : 1}, function(result) {
+    processDataSources(query.datasources,query.layers, {page: (data.page) ? data.page : 1},query, function(result) {
         //debug(result);
         serverResponse(req, res, 200, result);
     });
@@ -102,14 +154,11 @@ exports.ReportsGetData = function(req, res) {
 
 function processQuery(query, done)
 {
-
     for (var i in query.datasources) {
         processDataSource(query.datasources[i], function(result){
             done(result);
         });
     }
-
-
 }
 
 function processDataSource(datasourceQuery, done)
@@ -132,8 +181,520 @@ function processDataSource(datasourceQuery, done)
 
 
 }
+
+function processDataSources(dataSources,layers, params,query, done, result, index) {
+    var index = (index) ? index : 0;
+    var dataSource = (dataSources[index]) ? dataSources[index] : false;
+    var result = (result) ? result : [];
+    var thereAreJoins = false;
+
+    if (!dataSource) {
+        //debug(result);
+        done(result);
+        return;
+    }
+
+
+    var Layers = connection.model('Layers');
+    Layers.find({ _id: {$in:layers}},{}, function (err, theLayers) {
+
+        if (theLayers)
+        {
+
+
+        var DataSources = connection.model('DataSources');
+
+            DataSources.findOne({ _id: dataSource.datasourceID}, {}, function (err, dts) {
+                if (dts) {
+
+                    for (var l in theLayers)
+                    {
+                        for (var s in theLayers[l].params.schema)
+                        {
+                            for (var j in dataSource.collections) {
+                                if (theLayers[l].params.schema[s].collectionID == dataSource.collections[j].collectionID) {
+                                    dataSource.collections[j]['schema'] = theLayers[l].params.schema[s];
+                                }
+                            }
+                        }
+
+                       // debug(theLayers[l].params.joins);
+
+                        for (var n in theLayers[l].params.joins)
+                        {
+                            //console.log('layers');
+                            for (var j in dataSource.collections) {
+                                if (theLayers[l].params.joins[n].sourceCollectionID == dataSource.collections[j].collectionID || theLayers[l].params.joins[n].targetCollectionID == dataSource.collections[j].collectionID) {
+                                //if (theLayers[l].params.joins[n].sourceCollectionID == dataSource.collections[j].collectionID ) {
+                                    {
+
+                                        if (theLayers[l].params.joins[n].sourceCollectionID == dataSource.collections[j].collectionID)
+                                            var theOther = theLayers[l].params.joins[n].targetCollectionID;
+                                        if (theLayers[l].params.joins[n].targetCollectionID == dataSource.collections[j].collectionID)
+                                            var theOther = theLayers[l].params.joins[n].sourceCollectionID;
+
+                                        if (isTargetInvolved(dataSource.collections,theOther))
+                                        {
+                                            if (!dataSource.collections[j]['joins'])
+                                               dataSource.collections[j]['joins'] = [];
+
+                                            dataSource.collections[j]['joins'].push(theLayers[l].params.joins[n]);
+                                            console.log('join pushed....');
+                                            thereAreJoins = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                    /*
+                    for (var i in dts.params[0].schema) {
+                        for (var j in dataSource.collections) {
+                            if (dts.params[0].schema[i].collectionID == dataSource.collections[j].collectionID) {
+                                dataSource.collections[j]['schema'] = dts.params[0].schema[i];
+                            }
+                        }
+                    }
+                    */
+
+                    switch (dts.type) {
+                        case 'MONGODB':
+                            var mongodb = require('../../core/db/mongodb.js');
+
+                            mongodb.processCollections(dataSource.collections, dts, params,thereAreJoins, function(data) {
+
+                                /*
+                                for (var i in data) {
+                                    result.push(data[i]);
+                                }
+                                */
+                                //console.log('going to merge');
+                                if (dataSource.collections.length > 1)
+                                {
+                                    //console.log('merging');
+                                    mergeResults(dataSource.collections,query,function(mergedResults){
+                                        //done(mergedResults);
+                                        //return;
+                                        //result.push(mergedResults);
+                                        result = mergedResults;
+                                    });
+                                }  else {
+                                    //console.log('not merged results',JSON.stringify(dataSource.collections[0].result))
+                                        result = dataSource.collections[0].result;
+
+                                }
+
+
+
+                                processDataSources(dataSources,layers, params, query, done, result, index+1);
+                            });
+                    }
+                } else {
+                    processDataSources(dataSources,layers, params, query, done, result, index+1);
+                }
+            });
+        }
+    });
+}
+
+function isTargetInvolved(collections,theOtherID)
+{
+    var found = false;
+
+    for (var collection in collections)
+    {
+        if (collections[collection].collectionID == theOtherID)
+            found = true;
+    }
+
+    return found;
+
+}
+
+
+function mergeResults(collections,query,done){
+    var isLastCollection = false;
+    var lastResults;
+    for (var collection in collections)
+    {
+        if (collection == collections.length -1)
+        {
+            isLastCollection = true;
+            if (isLastCollection && collections[collection].joins.length == 0)
+            {
+                sortMergeResults(lastResults,query, function(){
+                    done(lastResults);
+                    return;
+                });
+            }
+        }
+        for (var join in collections[collection].joins)
+        {
+            var isLast = false;
+            if (join == collections[collection].joins.length -1 && isLastCollection)
+            {
+                isLast = true;
+
+                if (isLast && collections[collection].joins[join].sourceCollectionID != collections[collection].collectionID)
+                    {
+                        sortMergeResults(lastResults,query, function(){
+                            done(lastResults);
+                            return;
+                        });
+                    }
+            }
+
+
+            //sourceCollection
+            if (collections[collection].joins[join].sourceCollectionID == collections[collection].collectionID)
+            {
+            var sourceCollection = collections[collection].joins[join].sourceCollectionID;
+            var sourceElement = collections[collection].joins[join].sourceElementName;
+            var targetCollection = collections[collection].joins[join].targetCollectionID;
+            var targetElement = collections[collection].joins[join].targetElementName;
+
+            console.log('merge two collections ',sourceCollection,targetCollection) ;
+
+
+
+
+            mergeTwoCollections(collections,sourceCollection,sourceElement,targetCollection,targetElement,isLast, function(result){
+
+                if (result.result == 1)
+                {
+                    //console.log('es igual a uno...........')
+                    sortMergeResults(result.results,query, function(){
+                        done(result.results);
+                    });
+
+
+                } else {
+                    //console.log('no es igual a uno...........')
+                    if (result.results)
+                        lastResults = result.results;
+                }
+
+            });
+            }
+        }
+    }
+}
+
+
+function sortMergeResults(tempResults,query,done)
+{
+    //Orderbys
+    console.log('acabo de entrar en sortMergeResults');
+
+    var firstBy = require('thenBy.js');
+
+
+    if (query.order.length == 1)
+    {
+        //console.log(JSON.stringify(query.order));
+        if (query.order[0].aggregation) {
+            var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName+query.order[0].aggregation;
+        } else {
+            var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName;
+        }
+
+        var sortType = -1;
+        if (query.order[0].sortType == 1)  sortType = 1;
+
+        tempResults.sort(
+                firstBy(fieldName0,query.order[0].sortType*-1));
+    }
+
+    if (query.order.length == 2)
+    {
+        if (query.order[0].aggregation) {
+            var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName+query.order[0].aggregation;
+        } else {
+            var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName;
+        }
+
+        if (query.order[1].aggregation) {
+            var fieldName1 = query.order[1].collectionID+'_'+ query.order[1].elementName+query.order[1].aggregation;
+        } else {
+            var fieldName1 = query.order[1].collectionID+'_'+ query.order[1].elementName;
+        }
+
+
+        tempResults.sort(
+            firstBy(fieldName0,query.order[0].sortType*-1)
+                .thenBy(fieldName1,query.order[1].sortType*-1)
+        );
+    }
+
+    if (query.order.length == 3)
+    {
+        if (query.order[0].aggregation) {
+            var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName+query.order[0].aggregation;
+        } else {
+            var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName;
+        }
+
+        if (query.order[1].aggregation) {
+            var fieldName1 = query.order[1].collectionID+'_'+ query.order[1].elementName+query.order[1].aggregation;
+        } else {
+            var fieldName1 = query.order[1].collectionID+'_'+ query.order[1].elementName;
+        }
+
+        if (query.order[2].aggregation) {
+            var fieldName2 = query.order[2].collectionID+'_'+ query.order[2].elementName+query.order[2].aggregation;
+        } else {
+            var fieldName2 = query.order[2].collectionID+'_'+ query.order[2].elementName;
+        }
+
+        tempResults.sort(
+            firstBy(fieldName0)
+                .thenBy(fieldName1)
+                .thenBy(fieldName2)
+        );
+    }
+
+    if (query.order.length == 4)
+    {
+        if (query.order[0].aggregation) {
+            var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName+query.order[0].aggregation;
+        } else {
+            var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName;
+        }
+
+        if (query.order[1].aggregation) {
+            var fieldName1 = query.order[1].collectionID+'_'+ query.order[1].elementName+query.order[1].aggregation;
+        } else {
+            var fieldName1 = query.order[1].collectionID+'_'+ query.order[1].elementName;
+        }
+
+        if (query.order[2].aggregation) {
+            var fieldName2 = query.order[2].collectionID+'_'+ query.order[2].elementName+query.order[2].aggregation;
+        } else {
+            var fieldName2 = query.order[2].collectionID+'_'+ query.order[2].elementName;
+        }
+
+        if (query.order[3].aggregation) {
+            var fieldName3 = query.order[3].collectionID+'_'+ query.order[3].elementName+query.order[3].aggregation;
+        } else {
+            var fieldName3 = query.order[3].collectionID+'_'+ query.order[3].elementName;
+        }
+
+        tempResults.sort(
+            firstBy(fieldName0)
+                .thenBy(fieldName1)
+                .thenBy(fieldName2)
+                .thenBy(fieldName3)
+        );
+    }
+
+    if (query.order.length == 5)
+    {
+        if (query.order[0].aggregation) {
+            var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName+query.order[0].aggregation;
+        } else {
+            var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName;
+        }
+
+        if (query.order[1].aggregation) {
+            var fieldName1 = query.order[1].collectionID+'_'+ query.order[1].elementName+query.order[1].aggregation;
+        } else {
+            var fieldName1 = query.order[1].collectionID+'_'+ query.order[1].elementName;
+        }
+
+        if (query.order[2].aggregation) {
+            var fieldName2 = query.order[2].collectionID+'_'+ query.order[2].elementName+query.order[2].aggregation;
+        } else {
+            var fieldName2 = query.order[2].collectionID+'_'+ query.order[2].elementName;
+        }
+
+        if (query.order[3].aggregation) {
+            var fieldName3 = query.order[3].collectionID+'_'+ query.order[3].elementName+query.order[3].aggregation;
+        } else {
+            var fieldName3 = query.order[3].collectionID+'_'+ query.order[3].elementName;
+        }
+
+        if (query.order[4].aggregation) {
+            var fieldName4 = query.order[4].collectionID+'_'+ query.order[4].elementName+query.order[4].aggregation;
+        } else {
+            var fieldName4 = query.order[4].collectionID+'_'+ query.order[4].elementName;
+        }
+
+        tempResults.sort(
+            firstBy(fieldName0)
+                .thenBy(fieldName1)
+                .thenBy(fieldName2)
+                .thenBy(fieldName3)
+                .thenBy(fieldName4)
+        );
+    }
+
+
+
+
+
+   /*
+   if (query.order.length > 0)
+    {
+
+
+
+    var sort =
+    tempResults.sort(
+        firstBy(function (v1, v2) { return v1[query.order[0].collectionID+'_'+ query.order[0].elementName] - v2[query.order[0].collectionID+'_'+ query.order[0].elementName]; })
+    );
+
+    for (var o in query.order)
+    {
+        if (o>0)
+        {
+            sort.thenBy(function (v1, v2) { return v1[query.order[o].collectionID+'_'+ query.order[o].elementName] - v2[query.order[o].collectionID+'_'+ query.order[o].elementName]; });
+        }
+    }
+    /*
+    for( var o=query.order.length -1;o>=0;o--)
+    {
+        console.log('voy a ordenar',query.order[o].collectionID+'_'+ query.order[o].elementName);
+        var orderElement = query.order[o].collectionID+'_'+ query.order[o].elementName;
+        tempResults.sort(function(a,b) {return (a[orderElement] > b[orderElement]) ? 1 : ((b[orderElement] > a[orderElement]) ? -1 : 0);} );
+    } */
+
+    console.log('acabo de salir de sortMergeResults');
+    done();
+
+}
+
+function mergeTwoCollections(collections,sourceCollection,sourceElement,targetCollection,targetElement,isLast, done )
+{
+    var tempResults = [];
+    /*
+    for (var collection in collections)
+    {
+        console.log(collections[collection].schema.collectionName,collections[collection].result.length)  ;
+
+        if (collections[collection].collectionID == sourceCollection)
+        {
+            var theSourceCollection = collections[collection];
+        }
+
+        if (collections[collection].collectionID == targetCollection)
+        {
+            var theTargetCollection = collections[collection];
+        }
+
+    } */
+
+   // var theSourceCollection = findCollection(collections,sourceCollection);
+  //  var theTargetCollection = findCollection(collections,targetCollection);
+
+
+
+    for (var collection in collections)
+    {
+        if (collections[collection].collectionID == sourceCollection)
+        {
+            var theSourceCollection =   collections[collection];
+        }
+
+        if (collections[collection].collectionID == targetCollection)
+        {
+            var theTargetCollection =   collections[collection];
+        }
+    }
+    if (theSourceCollection && theTargetCollection )
+    if (theSourceCollection.result && theTargetCollection.result )
+    {
+        var largestResult;
+        var shortestResult;
+        var largestElement;
+        var shortestElement;
+
+        if (theSourceCollection.result.length > theTargetCollection.result.length)
+        {
+            largestResult = theSourceCollection.result;
+            largestElement = theSourceCollection.schema.collectionID+'_'+sourceElement;
+            shortestResult = theTargetCollection.result;
+            shortestElement = theTargetCollection.schema.collectionID+'_'+targetElement;
+        } else {
+            largestResult = theTargetCollection.result;
+            largestElement = theTargetCollection.schema.collectionID+'_'+targetElement;
+            shortestResult = theSourceCollection.result;
+            shortestElement = theSourceCollection.schema.collectionID+'_'+sourceElement;
+        }
+
+
+        //console.log('the source collection has ',theSourceCollection.result.length)  ;
+        //debug(theSourceCollection.result);
+        //console.log('the target collection has ',theTargetCollection.result.length);
+        //debug(theTargetCollection.result);
+
+        //console.log('the lasrget element ',largestElement);
+        //console.log('the short element ',shortestElement);
+
+
+        for (var s in largestResult)
+        {
+            for (var t in shortestResult)
+            {
+                if (String(largestResult[s][largestElement]) == String(shortestResult[t][shortestElement]))
+                {
+                    var tempRecord = {};
+                    for (var key in largestResult[s])
+                    {
+                        //if (key != sourceElement)
+                            tempRecord[key] = largestResult[s][key];
+                    }
+
+                    for (var key in shortestResult[t])
+                    {
+                        //if (key != targetElement)
+                            tempRecord[key] = shortestResult[t][key];
+                    }
+                    tempResults.push(tempRecord);
+                }
+            }
+
+        }
+
+        //debug(tempResults);
+
+        if (isLast)
+        {
+            //console.log('the results',tempResults.length);
+            var theResult = {};
+            theResult.result = 1;
+            theResult.results = tempResults;
+            done(theResult);
+        } else {
+            theSourceCollection.result = tempResults;
+            theTargetCollection.result = tempResults;
+            var theResult = {};
+            theResult.result = 0;
+            theResult.results = tempResults;
+            done(theResult);
+        }
+    } else {
+        var theResult = {};
+        theResult.result = 0;
+        theResult.results = undefined;
+
+        done(theResult);
+    } else {
+        var theResult = {};
+        theResult.result = 0;
+        theResult.results = undefined;
+
+        done(theResult);
+    }
+
+
+}
+
+
 ///////////////////////////////////////////////////////////
-function processDataSources(dataSources, params, done, result, index) {
+/*
+function processDataSources_OLD(dataSources, params, done, result, index) {
     var index = (index) ? index : 0;
     var dataSource = (dataSources[index]) ? dataSources[index] : false;
     var result = (result) ? result : [];
@@ -171,7 +732,7 @@ function processDataSources(dataSources, params, done, result, index) {
             processDataSources(dataSources, params, done, result, index+1);
         }
     });
-}
+} */
 
 /*function processMongoDBCollections(collections, dataSource, done, result, index) {
     var index = (index) ? index : 0;

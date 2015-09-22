@@ -13,7 +13,7 @@ var controller = new DashboardsController(Dashboards);
 
 exports.DashboardsFindAll = function(req,res){
     req.query.trash = true;
-    //req.query.companyid = true;
+    req.query.companyid = true;
 
     req.query.fields = ['dashboardName'];
 
@@ -24,6 +24,7 @@ exports.DashboardsFindAll = function(req,res){
 
 exports.DashboardsFindOne = function(req,res){
     req.query.trash = true;
+    req.query.companyid = true;
 
     controller.findOne(req, function(result){
         serverResponse(req, res, 200, result);
@@ -32,7 +33,11 @@ exports.DashboardsFindOne = function(req,res){
 
 exports.DashboardsCreate = function(req,res){
     req.query.trash = true;
-    //req.query.companyid = true;
+    req.query.companyid = true;
+    req.query.userid = true;
+
+    if (!req.body.ispublic)
+        req.body.owner = req.user.id;
 
     console.log(req.body);
 
@@ -43,7 +48,7 @@ exports.DashboardsCreate = function(req,res){
 
 exports.DashboardsUpdate = function(req,res){
     req.query.trash = true;
-    //req.query.companyid = true;
+    req.query.companyid = true;
 
     controller.update(req, function(result){
         serverResponse(req, res, 200, result);
@@ -74,6 +79,21 @@ exports.getDashboard = function(req,res)
 
     controller.findOne(req, function(result){
         //identify reports of the dashboard...
+
+        if (result)
+        {
+            //Annotate the execution in statistics
+
+            var statistics = connection.model('statistics');
+            var stat = {};
+            stat.type = 'dashboard';
+            stat.relationedID = result.item._id;
+            stat.relationedName = result.item.dashboardName;
+            stat.action = 'execute';
+            statistics.save(req, stat, function() {
+
+            });
+
 
             for (var r in result.item.items) {
                 if (result.item.items[r].itemType == 'reportBlock')
@@ -106,11 +126,13 @@ exports.getDashboard = function(req,res)
                 serverResponse(req, res, 200, result);
 
             }  else {
-                //NO REPORTS FOUND
+                //TODO: NO REPORTS FOUND
             }
         });
 
-
+        } else {
+            //TODO: NO DASHBOARD FOUND
+        }
     });
 }
 

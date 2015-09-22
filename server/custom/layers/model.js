@@ -9,8 +9,10 @@ var LayersSchema = new mongoose.Schema({
     params:  {type: Object},
     objects: [],
     nd_trash_deleted:{type: Boolean},
-    nd_trash_deleted_date: {type: Date}
-}, { collection: config.app.customCollectionsPrefix+'Layers' });
+    nd_trash_deleted_date: {type: Date},
+    createdBy: {type: String},
+    createdOn: {type: Date}
+}, { collection: 'wst_Layers' });
 
 var Layers = connection.model('Layers', LayersSchema);
 module.exports = Layers;

@@ -1,26 +1,49 @@
-<div class="list-group">
-    <a href="/#/dashboards/clients" class="list-group-item active">
-         Clientes <span class="badge">2534</span>
+<div class="list-group" ng-init="getCounts()">
+    <div  class="list-group-item active">
+        <a href="/#/users/{{user._id}}/" style="color: #FFFFFF"><i class="fa fa-gear" style="margin-right: 5px"></i>{{user.userName}}<span></span></a>  <a href="/#/logout" class="badge">logout <i class="fa fa-sign-out" style="color:#FF0000"></i></a>
+    </div>
+    <a href="/#/home" class="list-group-item ">
+        <span><i class="fa fa-home"></i></span> Home
     </a>
     <a href="/#/dashboards" class="list-group-item ">
-        <span class="glyphicon glyphicon-camera"></span> Cuadros de mando <span class="badge">2</span>
+        <span><i class="fa fa-dashboard"></i></span> Dashboards <span class="badge">{{counts.dashBoards}}</span>
     </a>
     <a href="/#/reports" class="list-group-item">
-        <span class="glyphicon glyphicon-file"></span> Informes <span class="badge">9</span>
+        <span><i class="fa fa-bar-chart"></i></span> Reports <span class="badge">{{counts.reports}}</span>
     </a>
+    <a href="/#/history" class="list-group-item">
+        <span><i class="fa fa-history"></i></span> History
+    </a>
+    <a  href="/#/users/{{user._id}}/" class="list-group-item">
+        <span><i class="fa fa-gear"></i></span> My profile
+    </a>
+    <!--
     <a href="#" class="list-group-item">
         <span class="glyphicon glyphicon-music"></span> Alertas <span class="badge">50</span>
     </a>
     <a href="#" class="list-group-item">
         <span class="glyphicon glyphicon-film"></span> Notificaciones <span class="badge">8</span>
     </a>
-    <a href="/#/cubes" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
-        <span class="glyphicon glyphicon-film"></span> Cubes  <span class="badge">0</span>
+
+    <a ng-show="isWSTADMIN" href="/#/cubes"  class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
+        <span><i class="fa fa-cubes"></i></span> Cubes  <span class="badge">0</span>
+    </a>  -->
+    <a ng-show="isWSTADMIN" href="/#/public-space" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
+        <span><i class="fa fa-sitemap"></i></span> Public space
     </a>
-    <a href="/#/layers" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
-        <span class="glyphicon glyphicon-film"></span> Layers  <span class="badge">0</span>
+    <a ng-show="isWSTADMIN" href="/#/admin-settings" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
+        <span><i class="fa fa-gears"></i></span> Settings
     </a>
-    <a href="/#/data-sources" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
-        <span class="glyphicon glyphicon-film"></span> Data sources  <span class="badge">0</span>
+    <a ng-show="isWSTADMIN" href="/#/layers" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
+        <span><i class="fa fa-map-o"></i></span> Layers  <span class="badge">{{counts.layers}}</span>
+    </a>
+    <a ng-show="isWSTADMIN" href="/#/data-sources" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
+        <span><i class="fa fa-database"></i></span> Data sources  <span class="badge">{{counts.dataSources}}</span>
+    </a>
+    <a ng-show="isWSTADMIN" href="/#/roles" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
+        <span><i class="fa fa-users"></i></span> Roles  <span class="badge">{{counts.roles}}</span>
+    </a>
+    <a ng-show="isWSTADMIN" href="/#/users" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
+        <span><i class="fa fa-user"></i></span> Users  <span class="badge">{{counts.users}}</span>
     </a>
 </div>

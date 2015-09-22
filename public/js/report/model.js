@@ -28,7 +28,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
 
             connection.get('/api/reports/get-data', params, function(data) {
-
+                //console.log('me he traido los datos',JSON.stringify(data));
                 done(data);
             });
 
@@ -42,11 +42,11 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
         });
     }
 
-    this.getReport = function($scope, id, done) {
+    this.getReport = function($scope, id,mode, done) {
         this.scope = $scope;
-        console.log('getReport');
-        console.log(id);
-        connection.get('/api/reports/find-one', {id: id}, function(data) {
+        console.log('get report');
+        //connection.get('/api/reports/find-one', {id: id}, function(data) {
+        connection.get('/api/reports/get-report/'+id, {id: id, mode: mode}, function(data) {
             $scope.selectedReport = data.item;
             this.selectedReport = $scope.selectedReport;
             console.log($scope.selectedReport);
@@ -95,13 +95,20 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
     };
 
+    this.getReportDefinition = function(id, done) {
+
+        connection.get('/api/reports/find-one', {id: id}, function(data) {
+            done(data.item);
+        });
+    };
+
 
 
 
     this.getReportBlock = function($scope, id, done)
     {
 
-        this.getReport($scope,id, function(report){
+        this.getReport($scope,id,'none', function(report){
 
 
             if (!report)
@@ -175,8 +182,8 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 done(errorCode);
             });
         if (report.reportType == "grid")
-            generateGrid($scope,id,report,function(errorCode) {
-                //generateRepeater($scope,id,report,function(errorCode) {
+            //generateGrid($scope,id,report,function(errorCode) {
+                generateRepeater($scope,id,report,function(errorCode) {
                 done(errorCode);
             });
         if (report.reportType == "pivot")
@@ -263,8 +270,8 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
 
             if (report.reportType == "grid")
-                generateGrid($scope,id,report,function(errorCode) {
-                    //generateRepeater($scope,id,report,function(errorCode) {
+                //generateGrid($scope,id,report,function(errorCode) {
+                    generateRepeater($scope,id,report,function(errorCode) {
                     done(errorCode);
                 });
             if (report.reportType == "pivot")
@@ -301,8 +308,12 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
         //var filters = $scope.filters[0].filters;
 
+        console.log('the filter attribute ', attribute);
+
         var datasourcesList = [];
+        var layersList = [];
         datasourcesList.push(attribute.datasourceID);
+        layersList.push(attribute.layerID);
 
 
 
@@ -343,6 +354,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             query.datasources.push(dtsObject);
         }
 
+        query.layers = layersList;
 
 
 
@@ -380,7 +392,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 var ykeys = [], labels = [];
 
                 for (var i in report.properties.ykeys) {
-                    var theYKey = report.properties.ykeys[i].elementName;
+                    var theYKey = report.properties.ykeys[i].collectionID+'_'+report.properties.ykeys[i].elementName;
                     if (report.properties.ykeys[i].aggregation) theYKey += report.properties.ykeys[i].aggregation;
 
                     ykeys.push(theYKey);
@@ -416,7 +428,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
 
 
-            var theXKey = report.properties.xkeys[0].elementName;
+            var theXKey = report.properties.xkeys[0].collectionID+'_'+report.properties.xkeys[0].elementName;
             if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
 
             //the X key no puede ser un valor agregado??
@@ -440,7 +452,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
             for (var i in report.properties.ykeys) {
 
-                var theYKey = report.properties.ykeys[i].elementName;
+                var theYKey = report.properties.ykeys[i].collectionID+'_'+report.properties.ykeys[i].elementName;
                 if (report.properties.ykeys[i].aggregation) theYKey += report.properties.ykeys[i].aggregation;
 
 
@@ -478,10 +490,10 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             if (theData) {
                 var data = [];
 
-                var theYKey = report.properties.ykeys[0].elementName;
+                var theYKey = report.properties.ykeys[0].collectionID+'_'+report.properties.ykeys[0].elementName;
                 if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
 
-                var theXKey = report.properties.xkeys[0].elementName;
+                var theXKey = report.properties.xkeys[0].collectionID+'_'+report.properties.xkeys[0].elementName;
                 if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
 
                 for (var i in theData) {
@@ -517,7 +529,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
     {
         getReportData($scope,report,{}, function(theData){
 
-            var theXKey = report.properties.xkeys[0].elementName;
+            var theXKey = report.properties.xkeys[0].collectionID+'_'+report.properties.xkeys[0].elementName;
             if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
 
             var chartParams = {
@@ -534,7 +546,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             var ykeys = [], labels = [];
 
             for (var i in report.properties.ykeys) {
-                var theYKey = report.properties.ykeys[i].elementName;
+                var theYKey = report.properties.ykeys[i].collectionID+'_'+report.properties.ykeys[i].elementName;
                 if (report.properties.ykeys[i].aggregation) theYKey += report.properties.ykeys[i].aggregation;
 
                 ykeys.push(theYKey);
@@ -577,6 +589,62 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
 
     }
+
+    this.repaintRepeater = function($scope,id,report,done)
+    {
+        repaintRepeater($scope,id,report,function(){
+            done();
+        });
+    }
+
+    this.changeColumnFormat = function($scope, columnIndex ,hashedID)
+    {
+
+        var report = $scope.reports[hashedID]; //$scope.selectedReport
+
+        report.properties.columns[columnIndex].format = {color:'#99FF99','text-align':'center','background-color':'#ffffcc','font-size':'16px','font-weight': 'bold','font-style': 'italic'};//{color:'#CCFF99'};
+
+
+        var elementName = report.properties.columns[columnIndex].collectionID+'_'+'unit';
+
+
+        this.repaintRepeater($scope,report._id,report,function(){
+
+        });
+        //Esto del orderBy no funciona
+        //$filter('orderBy')($scope.theData[$scope.selectedReport.hashedID], ['WST9831054943614705b5b0b398c0c20d3e_unit']);
+
+    }
+
+    this.orderColumn = function($scope,predicate,hashedID) {
+
+        $scope.reports[hashedID].reverse = ($scope.reports[hashedID].predicate === predicate) ? !$scope.reports[hashedID].reverse : false;
+        $scope.reports[hashedID].predicate = predicate;
+
+    };
+
+    this.columnCalculation = function($scope,operation, columnIndex, hashedID)
+    {
+        console.log('column Calculation')
+        var report = $scope.reports[hashedID];
+
+            if (operation === 1) //SUM
+                report.properties.columns[columnIndex].operationSum = !report.properties.columns[columnIndex].operationSum;
+            if (operation === 2) //COUNT
+                report.properties.columns[columnIndex].operationCount = !report.properties.columns[columnIndex].operationCount;
+            if (operation === 3) //AVG
+                report.properties.columns[columnIndex].operationAvg = !report.properties.columns[columnIndex].operationAvg;
+            if (operation === 4) //MIN
+                report.properties.columns[columnIndex].operationMin = !report.properties.columns[columnIndex].operationMin;
+            if (operation === 5) //MAX
+                report.properties.columns[columnIndex].operationMax = !report.properties.columns[columnIndex].operationMax;
+
+        this.repaintRepeater($scope,report._id,report,function(){
+
+        });
+    };
+
+
    /*
     function generateChart($scope,id,report,done) {
         console.log('generateChart');
@@ -750,6 +818,8 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
                 $scope.theData[hashedID] = theData;
 
+                //console.log('the hased',JSON.stringify($scope.theData[hashedID]))
+
                 ////NG TABLE PARAMS
                 if (!$scope.tableParams)
                     $scope.tableParams = [];
@@ -792,7 +862,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
                 }
                  */
-                console.log('the row click event '+rowClickEvent);
+                //console.log('the row click event '+rowClickEvent,JSON.stringify(report.properties.columns));
 
                 //htmlCode += '<div class="container-fluid" style="height: 100%;width: 100%;overflow-y: scroll">';
                 htmlCode += '    <div class="table-responsive" >';
@@ -810,15 +880,17 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 {
                 htmlCode += '                    <td >';
                         if (!report.properties.columns[i].aggregation)
-                            htmlCode += '                        <span >{{row.'+report.properties.columns[i].elementName+'}}</span>';
+                            htmlCode += '                        <span >{{row.'+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+'}}</span>';
                         if (report.properties.columns[i].aggregation)
-                            htmlCode += '                        <span >{{row.'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation+'}}</span>';
+                            htmlCode += '                        <span >{{row.'+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation+'}}</span>';
                 htmlCode += '                    </td>';
                 }
                 htmlCode += '                </tr>';
                 htmlCode += '            </tbody>';
                 htmlCode += '        </table>';
                 htmlCode += '    </div>';
+
+                //console.log(htmlCode);
                 //htmlCode += '    <div ng-show="busy" style="text-align: center;padding: 20px;">';
                 //htmlCode += '        <span style="font-size: 20px;">Loading data...</span> <img src="images/loader.gif" style="width: 50px;">';
                 //htmlCode += '    </div>';
@@ -868,15 +940,10 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
     function generateRepeater($scope,id,report,done)
     {
-
-
         //https://github.com/kamilkp/angular-vs-repeat
 
         var quote = "'";
-        this.getReportData($scope,id, function(theData){
-
-            if (theData)
-            {
+            getReportData($scope,report,{}, function(theData){
 
                 if (!$scope.theData)
                     $scope.theData = [];
@@ -886,34 +953,402 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 var hashedID = hashCode(id);
                 //$scope.theData[quote+id+quote] = theData;
                 $scope.theData[hashedID] = theData;
-                var htmlCode = '';
 
-                htmlCode += '<div vs-repeat>';
-                    htmlCode += '<div ng-repeat="item in theData['+hashedID+']" style="position: absolute;z-index: 1;">';
+                report.hashedID = hashedID;
 
-                        for(var i = 0; i < report.properties.fields.length; i++)
-                        {
-                            htmlCode += '<span>{{item.'+report.properties.fields[i].fieldName+'}}</span> ';
-                        }
+                if (!$scope.reports)
+                    $scope.reports = {};
 
-                    htmlCode += '</div>';
-                htmlCode += '</div>';
+                $scope.reports[hashedID] = report;
 
-                var el = document.getElementById(id);
-                if (el)
-                {
-                    var $div = $(htmlCode);
-                    angular.element(el).append($div);
-                    angular.element(document).injector().invoke(function($compile) {
-                        var scope = angular.element($div).scope();
-                        $compile($div)(scope);
-                    });
-                }
-                done(0);
-                return;
-            }
+                repaintRepeater($scope,id,report, function(result){
+                   done(result);
+                });
+
         });
 
+    }
+
+    function repaintRepeaterV2($scope,id,report,done)
+    {
+        var htmlCode = '<div class="container-fluid" style="width:100%;padding-left:0px;" ng-include="repeaterTemplate">';
+
+        var el = document.getElementById(id);
+        if (el)
+        {
+            angular.element(el).empty();
+            var $div = $(htmlCode);
+            angular.element(el).append($div);
+            angular.element(document).injector().invoke(function($compile) {
+                var scope = angular.element($div).scope();
+                $compile($div)(scope);
+            });
+        }
+        done(0);
+        return;
+    }
+
+    function repaintRepeater($scope,id,report,done)
+    {
+           var hashedID = report.hashedID;
+            /*
+            if (!$scope.theData)
+                $scope.theData = [];
+
+            //console.log('los datos del grid '+id+' ----->   '+theData);
+
+            var hashedID = hashCode(id);
+            //$scope.theData[quote+id+quote] = theData;
+            $scope.theData[hashedID] = theData;
+
+              */
+            console.log('the data',JSON.stringify($scope.theData[hashedID]));
+
+
+            var htmlCode = '<div class="container-fluid"><input class="pull-right" type="search" ng-model="theFilter" placeholder="Search..." aria-label="Search..." /></div>';
+
+            var colClass = '';
+            var colWidth = '';
+
+            if (report.properties.columns.length == 5 || report.properties.columns.length > 6)
+                colWidth = 'width:'+100/report.properties.columns.length+'%;float:left;';
+            else
+                colClass = 'col-xs-'+12/report.properties.columns.length;
+
+            //header
+            htmlCode += '<div class="container-fluid" style="width:100%;padding-left:0px;background-color:#ccc;">';
+            for(var i = 0; i < report.properties.columns.length; i++)
+            {
+
+                /*if (i == report.properties.columns.length -1) //the last column
+                    htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'">'+report.properties.columns[i].objectLabel+getColumnDropDownHTMLCode(i)+' </div>';
+                else */
+                    var elementName = "'"+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+"'";
+                    if (report.properties.columns[i].aggregation)
+                        elementName = "'"+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation+"'";
+                    htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementName+','+hashedID+')">'+report.properties.columns[i].objectLabel+'</span><span class="sortorder" ng-show="reports['+hashedID+'].predicate === '+elementName+'" ng-class="{reverse:reports['+hashedID+'].reverse}"></span>'+getColumnDropDownHTMLCode(report,i,elementName,hashedID,report.properties.columns[i].elementType)+' </div>';
+            }
+            htmlCode += '</div>';
+
+            //Body
+            htmlCode += '<div vs-repeat style="width:100%;height: 100%;max-height:500px;overflow-y: scroll;border: 1px solid #ccc;">';
+
+                //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
+            var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
+
+            htmlCode += '<div class="repeater-data container-fluid" ng-repeat="item in theData['+hashedID+'] | filter:theFilter | orderBy:reports['+hashedID+'].predicate:reports['+hashedID+'].reverse  " style="width:100%;padding:0px">';
+
+
+            htmlCode += "<style>.customStyle1 {color:#FF9944;} .customStyle2 {color:blue;}</style>"
+
+            //console.log(htmlCode);
+            // POPOVER con HTML https://maxalley.wordpress.com/2014/08/19/bootstrap-3-popover-with-html-content/
+
+            for(var i = 0; i < report.properties.columns.length; i++)
+            {
+                var elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName;
+
+                if (report.properties.columns[i].aggregation)
+                    elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
+
+                var theValue = '<span ng-class="{customStyle1 : {{item.'+elementName+'}} > 0 , customStyle2 : {{item.'+elementName+'}} == 0}"  >{{item.'+elementName+'}}</span>';
+                //var theValue = '<span ng-style="{{item.'+elementName+'}} > 0 ? { '+theStyle+' }"  >{{item.'+elementName+'}}</span>';
+
+
+                if (report.properties.columns[i].link)
+                {
+                    if (report.properties.columns[i].link.type == 'report')
+                    {
+                        theValue = '<a class="columnLink" href="/#/reports/'+report.properties.columns[i].link._id+'/'+report.properties.columns[i].link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
+                    }
+                    if (report.properties.columns[i].link.type == 'dashboard')
+                    {
+                        theValue = '<a class="columnLink" href="/#/dashboards/'+report.properties.columns[i].link._id+'/'+report.properties.columns[i].link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
+                    }
+                }
+
+                var columnFormat = '';
+                if (report.properties.columns[i].format)
+                {
+                    columnFormat = 'color:'+report.properties.columns[i].format.color+';';
+
+                    for (var key in report.properties.columns[i].format) {
+                        columnFormat += key+':'+report.properties.columns[i].format[key]+';';
+                    }
+                }
+
+                var defaultAligment = '';
+                if (report.properties.columns[i].elementType === 'number')
+                    defaultAligment = 'text-align: right;'
+
+               /*
+                if (i == report.properties.columns.length -1) //the last column
+                {
+                    htmlCode += '<div class="'+colClass+' popover-primary" style="'+columnFormat+colWidth+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+report.properties.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
+                }
+                else {*/
+
+                /*
+                if item.'+elementName+' comparador valor1 = {estilo 1}
+                if item.'+elementName+' comparador valor2 = {estilo 1}
+
+                */
+                    htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+columnFormat+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+report.properties.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
+                //}
+            }
+
+            htmlCode += '</div>';
+            htmlCode += '</div>';
+
+            htmlCode += '<div class="repeater-data">';
+                    for(var i in report.properties.columns)
+                    {
+                        var elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName;
+                        if (report.properties.columns[i].aggregation)
+                            elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
+                        htmlCode += '<div class=" calculus-data-column '+colClass+' " style="'+colWidth+'"> '+calculateForColumn($scope,report,i,elementName)+' </div>';
+
+
+
+
+
+                    }
+        htmlCode += '</div>';
+
+            var el = document.getElementById(id);
+            if (el)
+            {
+                angular.element(el).empty();
+                var $div = $(htmlCode);
+                angular.element(el).append($div);
+                angular.element(document).injector().invoke(function($compile) {
+                    var scope = angular.element($div).scope();
+                    $compile($div)(scope);
+                });
+            }
+            done(0);
+            return;
+
+    }
+
+    function calculateForColumn($scope,report,columnIndex,elementName) {
+
+        var htmlCode = '';
+
+        console.log('calculateForColumn');
+
+
+
+
+        if (report.properties.columns[columnIndex].operationSum === true)
+        {
+            htmlCode += '<div  style=""><span class="calculus-label">SUM:</span><span class="calculus-value"> '+calculateSumForColumn($scope,report,columnIndex,elementName)+'</span> </div>';
+        }
+
+        if (report.properties.columns[columnIndex].operationAvg === true)
+        {
+            htmlCode += '<div  style=""><span class="calculus-label">AVG:</span><span class="calculus-value"> '+calculateAvgForColumn($scope,report,columnIndex,elementName)+'</span> </div>';
+        }
+
+        if (report.properties.columns[columnIndex].operationCount === true)
+        {
+            htmlCode += '<div  style=""><span class="calculus-label">COUNT:</span><span class="calculus-value"> '+calculateCountForColumn($scope,report,columnIndex,elementName)+'</span> </div>';
+        }
+
+        if (report.properties.columns[columnIndex].operationMin === true)
+        {
+            htmlCode += '<div  style=""><span class="calculus-label">MIN:</span><span class="calculus-value"> '+calculateMinimumForColumn($scope,report,columnIndex,elementName)+'</span> </div>';
+        }
+        if (report.properties.columns[columnIndex].operationMax === true)
+        {
+            htmlCode += '<div  style=""><span class="calculus-label">MAX:</span><span class="calculus-value"> '+calculateMaximumForColumn($scope,report,columnIndex,elementName)+'</span> </div>';
+        }
+
+
+        return htmlCode;
+
+    }
+
+
+    function calculateSumForColumn($scope,report,columnIndex,elementName)
+    {
+        var value = 0;
+
+        for (var row in $scope.theData[report.hashedID])
+        {
+            var theRow = $scope.theData[report.hashedID][row];
+
+            if (theRow[elementName])
+                if (theRow[elementName] != undefined)
+                    value += Number(theRow[elementName]);
+        }
+
+        return value;
+    }
+
+    function calculateCountForColumn($scope,report,columnIndex,elementName)
+    {
+        var founded = 0;
+
+        for (var row in $scope.theData[report.hashedID])
+        {
+            var theRow = $scope.theData[report.hashedID][row];
+
+            console.log('el valor',elementName,JSON.stringify(theRow));
+            if (theRow[elementName])
+                if (theRow[elementName] != undefined)
+                {
+                    founded += 1;
+                }
+        }
+        return founded;
+
+    }
+
+    function calculateAvgForColumn($scope,report,columnIndex,elementName)
+    {
+
+        var value = 0;
+        var founded = 0;
+
+        for (var row in $scope.theData[report.hashedID])
+        {
+            var theRow = $scope.theData[report.hashedID][row];
+
+            console.log('el valor',elementName,JSON.stringify(theRow));
+            if (theRow[elementName])
+                if (theRow[elementName] != undefined)
+                {
+                    founded += 1;
+                    value += Number(theRow[elementName]);
+                }
+        }
+
+        return value/founded;
+
+    }
+
+    function calculateMinimumForColumn($scope,report,columnIndex,elementName)
+    {
+        var lastValue = undefined;
+
+        for (var row in $scope.theData[report.hashedID])
+        {
+            var theRow = $scope.theData[report.hashedID][row];
+
+            console.log('el valor',elementName,JSON.stringify(theRow));
+            if (theRow[elementName])
+                if (theRow[elementName] != undefined)
+                {
+                    if (lastValue == undefined)
+                        lastValue = theRow[elementName];
+
+                    if (theRow[elementName] < lastValue)
+                        lastValue = theRow[elementName];
+                }
+        }
+        return lastValue;
+
+    }
+
+    function calculateMaximumForColumn($scope,report,columnIndex,elementName)
+    {
+        var lastValue = undefined;
+
+        for (var row in $scope.theData[report.hashedID])
+        {
+            var theRow = $scope.theData[report.hashedID][row];
+
+            console.log('el valor',elementName,JSON.stringify(theRow));
+            if (theRow[elementName])
+                if (theRow[elementName] != undefined)
+                {
+                    if (lastValue == undefined)
+                        lastValue = theRow[elementName];
+
+                    if (theRow[elementName] > lastValue)
+                        lastValue = theRow[elementName];
+                }
+        }
+        return lastValue;
+
+    }
+
+
+    function getColumnDropDownHTMLCode(report, column,elementName,hashedID,columnType)
+    {
+
+        var columnPropertiesBtn = '<div class="btn-group pull-right" dropdown="" > '
+            +'<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+            +' <span class="caret"></span>'
+            +'</button>'
+            +'<ul class="dropdown-menu dropdown-blue multi-level" role="menu">'
+            +'<li class="dropdown-submenu">'
+            +'      <a href="">Ordenar</a>'  //ascendente, descendente
+            +'      <ul class="dropdown-menu">'
+            +'      <li><a ng-click="reverse = true; orderColumn('+elementName+','+hashedID+')">Ascending</a></li>'
+            +'      <li><a ng-click="reverse = false; orderColumn('+elementName+','+hashedID+')">Descending</a></li>'
+            +'      </ul>'
+            +'</li>'
+            +'<li>'
+            +'      <a href="">Filtrar</a>'
+            +'</li>'
+            +'<li>'
+            +'      <a ng-click="changeColumnFormat('+column+','+hashedID+')">Format</a>'
+            +'</li>'
+            +'<li>'
+            +'      <a href="">Create Section</a>'
+            +'</li>'
+            +'<li>'
+            +'      <a href="">Aplicar Ruptura</a>'
+            +'</li>'
+            +'<li class="divider"></li>'
+            +'<li class="dropdown-submenu">'
+            +'      <a tabindex="-1" href="">Calculate</a>' //suma, cuenta, cuenta total, Promedio, mínimo, máximo, porcentaje
+            +'      <ul class="dropdown-menu">';
+
+
+
+        var sumIcon = '';
+        if (report.properties.columns[column].operationSum == true)
+            sumIcon = '<i class="fa fa-check"></i>';
+        var avgIcon = '';
+        if (report.properties.columns[column].operationAvg == true)
+            avgIcon = '<i class="fa fa-check"></i>';
+        var countIcon = '';
+        if (report.properties.columns[column].operationCount == true)
+            countIcon = '<i class="fa fa-check"></i>';
+        var minIcon = '';
+        if (report.properties.columns[column].operationMin == true)
+            minIcon = '<i class="fa fa-check"></i>';
+        var maxIcon = '';
+        if (report.properties.columns[column].operationMax == true)
+            maxIcon = '<i class="fa fa-check"></i>';
+
+        columnPropertiesBtn += '      <li><a ng-click="columnCalculation(2,'+column+','+hashedID+')">'+countIcon+'Count</a></li>';
+
+        if (columnType === 'number')
+        {
+            columnPropertiesBtn += '      <li> <a  ng-click="columnCalculation(1,'+column+','+hashedID+')">'+sumIcon+' Sum</a></li>';
+            columnPropertiesBtn += '      <li><a ng-click="columnCalculation(3,'+column+','+hashedID+')">'+avgIcon+'Average</a></li>';
+            columnPropertiesBtn += '      <li><a ng-click="columnCalculation(4,'+column+','+hashedID+')">'+minIcon+'Minimum</a></li>';
+            columnPropertiesBtn += '      <li><a ng-click="columnCalculation(5,'+column+','+hashedID+')">'+maxIcon+'Maximum</a></li>';
+            columnPropertiesBtn += '      <li><a href="#">Percent</a></li>';
+        }
+
+        columnPropertiesBtn +=
+            '      </ul>'
+            +'</li>'
+            +'<li>'
+            +'      <a href="">Señales</a>'
+            +'</li>'
+            +'<li>'
+            +'      <a href="">Ocultar componentes</a>'
+            +'</li>'
+            +'</ul>'
+            +'</div>';
+
+        return  columnPropertiesBtn;
     }
 
 
@@ -940,8 +1375,6 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             }
 
         ];
-
-
 
         $.each(theData, function(idx, value){
             value.total = 1;
@@ -984,7 +1417,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                         {id:9, label:'Sep'},
                         {id:10, label:'Oct'},
                         {id:11, label:'Nov'},
-                        {id:12, label:'Dec'},
+                        {id:12, label:'Dec'}
                     ];
                 }
             },
@@ -1032,7 +1465,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             if (theData)
             {
 
-                var theYKey = report.properties.ykeys[0].elementName;
+                var theYKey = report.properties.ykeys[0].collectionID+'_'+report.properties.ykeys[0].elementName;
                 if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
 
                 console.log('el valor ' + theYKey+' the ID '+id+ ' the type '+report.properties.style);
@@ -1064,8 +1497,6 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                     trend = 'down';
                     trendLabel = 'menos'; //TODO:traduccion
                     }
-
-                //TODO: otros valores currency tienen que tomar la moneda para ponerle el simbolo, mirar formateo por defecto del navegador
 
                 var theBackgroundColor = '#68b828';
                 if (report.properties.backgroundColor)
@@ -1413,6 +1844,9 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
     }  */
 
+
+
+
     function generateGauge($scope, id, report, done)
     {
 
@@ -1421,12 +1855,17 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             if (theData)
             {
 
-                var theYKey = report.properties.ykeys[0].elementName;
+                var theYKey = report.properties.ykeys[0].collectionID+'_'+report.properties.ykeys[0].elementName;
                 if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
+                var theYKeyLabel = theYKey;
+                if (report.properties.ykeys[0].format)  theYKey += '_original';
+
+
                 var theValue = theData[0][theYKey];
 
+
                 var htmlCode = '<div class="container-fluid" style="width:100%;height: 100%"> <canvas id="'+id+'canvas'+'" style="width:100%"></canvas><br/>';
-                htmlCode += '<div style="    position: absolute;bottom: 0;left: 0;right: 0;padding: 20px;"><h3 style="text-align: center;">'+theValue+'</h3></div></div>'
+                htmlCode += '<div style="    position: absolute;bottom: 0;left: 0;right: 0;padding: 20px;"><h3 style="text-align: center;">'+theData[0][theYKeyLabel]+'</h3></div></div>'
                 var el = document.getElementById(id);
                 if (el)
                 {

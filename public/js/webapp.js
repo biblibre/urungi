@@ -4,9 +4,10 @@
 var app = angular.module('WideStage', [
        //'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs','angularTreeview','ngDragDrop','ui.layout'
         'ngRoute','ui.sortable','gridster','ui.layout','angularTreeview', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
-        'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective'
-    ]).
-    config(['$routeProvider', function($routeProvider) {
+        'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
+        'ui.bootstrap.datetimepicker','ui.tree'
+    ])
+    .config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
 
         $routeProvider.when('/home', {
@@ -19,6 +20,11 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/dashboards/:dashboardID', {
+            templateUrl: 'partials/dashboard/view.html',
+            controller: 'dashBoardCtrl'
+        });
+
+        $routeProvider.when('/dashboards/:dashboardID/:elementID/:elementValue', {
             templateUrl: 'partials/dashboard/view.html',
             controller: 'dashBoardCtrl'
         });
@@ -40,6 +46,11 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/reports/:reportID/', {
+            templateUrl: 'partials/report/view.html',
+            controller: 'reportCtrl'
+        });
+
+        $routeProvider.when('/reports/:reportID/:elementID/:elementValue', {
             templateUrl: 'partials/report/view.html',
             controller: 'reportCtrl'
         });
@@ -109,7 +120,73 @@ var app = angular.module('WideStage', [
             controller: 'layerCtrl'
         });
 
-    }]);
+        //users
+
+        $routeProvider.when('/users', {
+            templateUrl: 'partials/users/list.html',
+            controller: 'AdminUsersCtrl'
+        });
+
+        $routeProvider.when('/users/:userID/', {
+            templateUrl: 'partials/users/view.html',
+            controller: 'AdminUsersCtrl'
+        });
+
+        $routeProvider.when('/users/new/:newUser/', {
+            templateUrl: 'partials/users/edit.html',
+            controller: 'AdminUsersCtrl'
+        });
+
+        $routeProvider.when('/users/edit/:userID/', {
+            templateUrl: 'partials/users/edit.html',
+            controller: 'AdminUsersCtrl'
+        });
+
+        //roles
+
+        $routeProvider.when('/roles', {
+            templateUrl: 'partials/roles/list.html',
+            controller: 'rolesCtrl'
+        });
+
+        $routeProvider.when('/roles/:roleID/', {
+            templateUrl: 'partials/roles/view.html',
+            controller: 'rolesCtrl'
+        });
+
+        $routeProvider.when('/roles/new/:newRole/', {
+            templateUrl: 'partials/roles/editNew.html',
+            controller: 'rolesCtrl'
+        });
+
+        $routeProvider.when('/logout', {
+            templateUrl: 'partials/logout/index.html',
+            controller: 'logOutCtrl'
+        });
+
+        //spaces
+        $routeProvider.when('/public-space', {
+            templateUrl: 'partials/spaces/index.html',
+            controller: 'spacesCtrl'
+        });
+
+    }])
+.factory('$sessionStorage', ['$window', function($window) {
+    return {
+        set: function(key, value) {
+            $window.sessionStorage[key] = value;
+        },
+        get: function(key, defaultValue) {
+            return $window.sessionStorage[key] || defaultValue;
+        },
+        setObject: function(key, value) {
+            $window.sessionStorage[key] = JSON.stringify(value);
+        },
+        getObject: function(key) {
+            return ($window.sessionStorage[key]) ? JSON.parse($window.sessionStorage[key]) : false;
+        }
+    };
+}]);
 /*
 var app = angular.module('DataRepublic', ['ngRoute']).
     config(['$stateProvider','$urlRouterProvider','$locationProvider', function($stateProvider, $urlRouterProvider) {
@@ -151,7 +228,7 @@ app.directive('ngEnter', function() {
     };
 });
 
-app.run(['$rootScope', function($rootScope) {
+app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $sessionStorage, connection) {
     console.log('widestage app running');
 
     $rootScope.removeFromArray = function(array, item) {
@@ -163,4 +240,41 @@ app.run(['$rootScope', function($rootScope) {
     $rootScope.goBack = function() {
         window.history.back();
     };
+
+    $rootScope.user = $sessionStorage.getObject('user');
+
+    if (!$rootScope.user) {
+
+    } else {
+        $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
+
+    }
+
+
+    /*
+    connection.get('/api/company/get-company-data', {}, function(data) {
+        $rootScope.companyData = data.items;
+        console.log('this is the company data',$rootScope.companyData);
+
+        connection.get('/api/get-counts', {}, function(data) {
+            $rootScope.counts = data;
+        });
+    });
+    */
+    connection.get('/api/get-counts', {}, function(data) {
+        $rootScope.counts = data;
+    });
+
 }]);
+
+function isWSTADMIN($rootScope)
+{
+    var found = false;
+    for (var i in $rootScope.user.roles)
+    {
+        if ($rootScope.user.roles[i] == 'WSTADMIN')
+            found = true;
+    }
+
+    return found;
+}

@@ -157,6 +157,55 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
 
     }
 
+    this.getPromptsForReport_new = function(report, done)
+    {
+       console.log('getPromptsForReport');
+        var thePrompts = [];
+
+
+        var duplicatePrompts = [];
+
+        for (var i in report.query.datasources) {
+            var dataSource = report.query.datasources[i];
+
+            for (var c in dataSource.collections) {
+                var collection = dataSource.collections[c];
+                for (var f in collection.filters) {
+                    var filter = collection.filters[f];
+                    if (filter.filterPrompt == true)
+                    {
+                        filter.reportID = report._id;
+                        if (checkIfPromptExists(thePrompts,filter) == true)
+                        {
+                            duplicatePrompts.push(filter);
+                        } else {
+                            thePrompts.push(filter);
+                            console.log(JSON.stringify(filter));
+                        }
+                    }
+                }
+            }
+        }
+
+        done(thePrompts,duplicatePrompts);
+        return;
+
+    }
+
+
+    function checkIfPromptExists_new(prompts,prompt)
+    {
+        console.log('if exits',JSON.stringify(prompts));
+        for (var i in prompts)
+        {
+            if (prompts[i].datasourceID == prompt.datasourceID && prompts[i].collectionID == prompt.collectionID && prompts[i].elementID == prompt.elementID)
+            {
+                return true;
+            }
+        }
+
+    }
+
 
     function checkIfPromptExists($scope,prompt)
     {

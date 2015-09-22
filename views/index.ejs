@@ -15,9 +15,7 @@
 <link rel="stylesheet" type="text/css" href="libs/jquery/jquery-ui.structure.min.css"/>
 
 
-<link rel="stylesheet" type="text/css" href="css/xenon-components.css"/>
 
-<link rel="stylesheet" type="text/css" href="css/xenon-forms.css"/>
 
 <!--select-->
 <link rel="stylesheet" type="text/css" href="libs/select/dist/select.min.css"/>
@@ -32,7 +30,7 @@
 
 <!-- font-awesome -->
 <!--<link href="https://s3.amazonaws.com/widestage/default/css/font-awesome.min.css" rel="stylesheet">-->
-<link rel="stylesheet" type="text/css" href="css/fontawesome/font-awesome.min.css"/>
+<link rel="stylesheet" type="text/css" href="/css/font-awesome-4.4.0/css/font-awesome.min.css"/>
 
 <!-- morris -->
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css"/>
@@ -59,18 +57,28 @@
 <!--slider-->
 <link rel="stylesheet" href="/libs/bootstrap-sliders/bootstrap-slider.min.css" />
 
-<!--bootstrap tagsinput-->
+<!--bootstrap tagsinput
 <link rel="stylesheet" href="/libs/bootstrap-tagsinput/bootstrap-tagsinput.css" />
-
-<!--angular ui tree
-<link rel="stylesheet" href="/libs/angular-ui-tree/angular-ui-tree.min.css" />
 -->
+
+<!--bootstrap ngtagsinput
+<link rel="stylesheet" href="/libs/ng-tags-input/ng-tags-input.bootstrap.min.css" />
+-->
+<!--bootstrap dateTimePicker-->
+<link rel="stylesheet" href="/libs/angular-datetimepicker/datetimepicker.css" />
+
+<!--angular ui tree-->
+<link rel="stylesheet" href="/libs/angular-ui-tree/angular-ui-tree.min.css" />
+
 
 <!--jsPlumb-->
 <link rel="stylesheet" type="text/css" href="libs/jsplumb/jsPlumb.css"/>
 
 <link rel="stylesheet" type="text/css" href="nodedream/nodedream.css"/>
 
+<link rel="stylesheet" type="text/css" href="css/xenon-components.css"/>
+
+<link rel="stylesheet" type="text/css" href="css/xenon-forms.css"/>
 
 <link rel="stylesheet" type="text/css" href="css/widestage.css"/>
 
@@ -100,7 +108,6 @@
 
 <!-- angular -->
 <script src="https://s3.amazonaws.com/widestage/default/js/lib/angular/angular.min.js"></script>
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/angular/angular-ui-router.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular-sanitize.js"></script>
 
 <!-- ngDragable
@@ -181,8 +188,14 @@
 <!--select2-->
 <script src="libs/select/dist/select-wst.js"></script>
 
-<!--bootstrap tagsinput-->
+<!--bootstrap tagsinput
+<script src="libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
 <script src="libs/bootstrap-tagsinput/bootstrap-tagsinput-angular.min.js"></script>
+-->
+
+<!--ng-tags-input
+<script src="libs/ng-tags-input/ng-tags-input.min.js"></script>
+-->
 
 <!--jqsimpleconnect-->
 <script src="libs/jqsimpleconnect/jqSimpleConnect.js"></script>
@@ -190,9 +203,25 @@
 <!--tg-dynamic-directive-->
 <script src="libs/tg-dynamic-directive/tg.dynamic.directive.js"></script>
 
-<!--angular ui tree
+<!--angular uuid-->
+<script src="js/modules/angular-uuid2.js"></script>
+
+<!--vs-repeat-->
+<script src="libs/angular-vs-repeat/angular-vs-repeat.min.js "></script>
+
+<!--bootstrap datepicker-->
+<script src="libs/bootstrap-datepicker/bootstrap-datepicker.js "></script>
+
+<!--angular datetimepicker-->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.min.js"></script>
+<script src="libs/angular-datetimepicker/datetimepicker.js "></script>
+
+<!--numeral-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
+
+<!--angular ui tree -->
 <script src="libs/angular-ui-tree/angular-ui-tree.min.js"></script>
--->
+
 
 
 <!-- angular app -->
@@ -207,6 +236,7 @@
 <script type="text/javascript" src="js/report/model.js"></script>
 <script type="text/javascript" src="js/report/controller.js"></script>
 <script type="text/javascript" src="js/report/services/reportNameModal.js"></script>
+<script type="text/javascript" src="js/dashboard/model.js"></script>
 <script type="text/javascript" src="js/dashboard/controller.js"></script>
 <script type="text/javascript" src="js/cube/controller.js"></script>
 <script type="text/javascript" src="js/data-source/controller.js"></script>
@@ -215,8 +245,15 @@
 <script type="text/javascript" src="js/pivot/controller.js"></script>
 <script type="text/javascript" src="js/clients/controller.js"></script>
 <script type="text/javascript" src="js/layer/controller.js"></script>
-
-
+<script type="text/javascript" src="js/users/controller.js"></script>
+<script type="text/javascript" src="js/roles/controller.js"></script>
+<script type="text/javascript" src="js/logout/controller.js"></script>
+<script type="text/javascript" src="js/spaces/controller.js"></script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 
 
 </html>

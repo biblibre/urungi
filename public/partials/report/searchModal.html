@@ -13,8 +13,8 @@
 
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="searchValue" value="{{value[selectedFilter.elementName]}}" ng-model="selectedFilter.searchValue">
-                                    {{value[selectedFilter.elementName]}}
+                                    <input type="radio" name="searchValue" value="{{value[selectedFilter.collectionID+'_'+selectedFilter.elementName]}}" ng-model="selectedFilter.searchValue">
+                                    {{value[selectedFilter.collectionID+'_'+selectedFilter.elementName]}}
                                 </label>
                             </div>
                             <!--

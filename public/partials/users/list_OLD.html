@@ -1,0 +1,55 @@
+<div ng-include src="submenu"></div>
+
+<aside class="right-side" ng-init="getItems()">
+
+    <section class="content-header">
+        <h1>
+            Users
+            <small>
+                <a href="#/admin/users/add">Add New</a> |
+                <a href="#/admin/users/change-user">Change User</a>
+            </small>
+        </h1>
+        <ol class="breadcrumb" ng-include="breadcrumb"></ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Status</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="table-row" ng-repeat="user in data.users" id="{{user._id}}">
+                <td>{{user._id}}</td>
+                <td>
+                    <span id="{{user._id}}-status-1" ng-show="user.status == 1" class="fa fa-check-square-o hand-cursor" ng-click="setStatus(user._id, 0)"></span>
+                    <span id="{{user._id}}-status-0" ng-show="user.status == 0" class="fa fa-square-o hand-cursor" ng-click="setStatus(user._id, 1)"></span>
+                </td>
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <td class="table-actions-cell">
+                    <a href="#/admin/users/edit/{{user._id}}" class="btn btn-xs btn-info">
+                        <i class="fa fa-edit bigger-120"></i>
+                    </a>
+                    <a class="hand-cursor btn btn-xs btn-danger" ng-click="deleteUser(user._id)">
+                        <i class="fa fa-trash-o bigger-120"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div ng-include src="pagination"></div>
+
+    </section><!-- /.content -->
+</aside><!-- /.right-side -->
+
+<div ng-include src="deleteModal"></div>

@@ -13,6 +13,17 @@ module.exports = {
             enabled: true,
             secret: 'SecretPassphrase'
         },
+        mailer: {
+            service: 'sendgrid', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
+            /*host: 'smtp.db-team.com', // hostname
+            secureConnection: false, // use SSL
+            port: 25, // port for secure SMTP*/
+            auth: {
+                user: 'hermesromero',
+                pass: 'hROMERO{555}'
+            },
+            from: 'no_reply@db-team.com'
+        },
         facebook: {
             clientID: "613248335369791",
             clientSecret: "b76f03e8149a374834efb8317f58eaa8",
@@ -45,6 +56,17 @@ module.exports = {
             enabled: true,
             secret: 'SecretPassphrase'
         },
+        mailer: {
+            service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
+            host: 'smtp.db-team.com', // hostname
+            secureConnection: false, // use SSL
+            port: 25, // port for secure SMTP
+            auth: {
+                user: 'no_reply@db-team.com',
+                pass: 'no_reply_5'
+            },
+            from: 'no_reply@db-team.com'
+        },
         facebook: {
             clientID: "613248335369791",
             clientSecret: "b76f03e8149a374834efb8317f58eaa8",
@@ -76,6 +98,17 @@ module.exports = {
         crypto: {
             enabled: true,
             secret: 'SecretPassphrase'
+        },
+        mailer: {
+            service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
+            host: 'smtp.db-team.com', // hostname
+            secureConnection: false, // use SSL
+            port: 25, // port for secure SMTP
+            auth: {
+                user: 'no_reply@db-team.com',
+                pass: 'no_reply_5'
+            },
+            from: 'no_reply@db-team.com'
         },
         facebook: {
             clientID: "613248335369791",

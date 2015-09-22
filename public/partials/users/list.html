@@ -1,0 +1,24 @@
+<div class="container-fluid " ng-init="getUsers()"  style="padding-top: 10px;">
+    <div class="container-fluid">
+
+        <div class="main col-md-3" ng-include="'partials/home/sidebar.html'">
+
+
+        </div>
+        <div class="main col-md-9">
+            <div class="container-fluid">
+
+                <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
+                    <h3 class="pull-left" >Users</h3>
+                    <a href="/#/users/new/true" class="btn btn-success pull-right">New User</a>
+                </div>
+
+                <div class="list-group">
+                    <a href="/#/users/{{user._id}}" class="list-group-item" ng-repeat="user in users">
+                        <h4 class="list-group-item-heading" ng-bind="user.userName"></h4>
+                        <p class="list-group-item-text" ng-bind="user.name"></p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>

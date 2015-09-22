@@ -1,35 +1,57 @@
-app.controller('homeCtrl', ['$scope' ,function ($scope ) {
+app.controller('homeCtrl', ['$scope', '$rootScope','$sessionStorage','connection' ,function ($scope, $rootScope,$sessionStorage, connection ) {
 
     $scope.dashboardsNbr = 3;
     $scope.reportsNbr = 10;
     $scope.notificationsNbr = 0;
     $scope.alertsNbr = 0;
     $scope.subPage = 'js/report/list.html';
+    //$scope.data = $rootScope.user.companyData.publicSpace;
 
-    $scope.reportsList = [
-                            {_id:"11111",reportName:"Informe 11111", reportDescription:"Esta es la descripción del informe 11111", createdBy:"usuario", createdOn:01/10/2014},
-                            {_id:"22222",reportName:"Informe 22222", reportDescription:"Esta es la descripción del informe 22222", createdBy:"usuario", createdOn:01/10/2014},
-                            {_id:"33333",reportName:"Informe 33333", reportDescription:"Esta es la descripción del informe 33333", createdBy:"usuario", createdOn:01/10/2014},
-                            {_id:"44444",reportName:"Informe 44444", reportDescription:"Esta es la descripción del informe 44444", createdBy:"usuario", createdOn:01/10/2014}
-                         ];
 
-    $scope.dashboardsList = [
-        {_id:"aaaaa",dashboardName:"Informe 11111", dashboardDescription:"Esta es la descripción del cuadro de mando 11111", createdBy:"usuario", createdOn:01/10/2014},
-        {_id:"bbbbb",dashboardName:"Informe 22222", dashboardDescription:"Esta es la descripción del cuadro de mando 22222", createdBy:"usuario", createdOn:01/10/2014}
-    ];
 
-    $scope.reportsList = [
-        {_id:"11111",reportName:"Informe 11111", reportDescription:"Esta es la descripción del informe 11111", createdBy:"usuario", createdOn:01/10/2014},
-        {_id:"11111",reportName:"Informe 22222", reportDescription:"Esta es la descripción del informe 22222", createdBy:"usuario", createdOn:01/10/2014},
-        {_id:"11111",reportName:"Informe 33333", reportDescription:"Esta es la descripción del informe 33333", createdBy:"usuario", createdOn:01/10/2014},
-        {_id:"11111",reportName:"Informe 44444", reportDescription:"Esta es la descripción del informe 44444", createdBy:"usuario", createdOn:01/10/2014}
-    ];
+    connection.get('/api/get-user-objects', {}, function(data) {
+        console.log('the user objects',JSON.stringify(data.items));
+        $scope.data = data.items;
+    });
 
-    $scope.reportsList = [
-        {_id:"11111",reportName:"Informe 11111", reportDescription:"Esta es la descripción del informe 11111", createdBy:"usuario", createdOn:01/10/2014},
-        {_id:"11111",reportName:"Informe 22222", reportDescription:"Esta es la descripción del informe 22222", createdBy:"usuario", createdOn:01/10/2014},
-        {_id:"11111",reportName:"Informe 33333", reportDescription:"Esta es la descripción del informe 33333", createdBy:"usuario", createdOn:01/10/2014},
-        {_id:"11111",reportName:"Informe 44444", reportDescription:"Esta es la descripción del informe 44444", createdBy:"usuario", createdOn:01/10/2014}
-    ];
+    $scope.getReports = function(params) {
+        var params = (params) ? params : {};
+
+        console.log(params);
+
+        connection.get('/api/reports/find-all', params, function(data) {
+            $scope.reports = data;
+            console.log($scope.reports);
+        });
+    };
+
+    $scope.getDashboards = function(params) {
+        var params = (params) ? params : {};
+
+        connection.get('/api/dashboards/find-all', params, function(data) {
+            $scope.dashboards = data;
+            //console.log($scope.reports);
+        });
+    };
+
+    $scope.logOut = function()
+    {
+        console.log('logout clicked')
+        logout();
+    }
+
+    $scope.getCounts = function()
+    {
+       /* connection.get('/api/get-counts', {}, function(data) {
+            $rootScope.counts = data;
+        });*/
+    }
+
+
 
 }]);
+
+
+
+
+

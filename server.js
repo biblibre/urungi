@@ -31,19 +31,30 @@ app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cookieParser());
-app.use(cookieSession({key:"widestage", secret:"HEWÑÑasdfwejñlkjqwernnkkk", httpOnly: true, secure: false, cookie: {maxAge: 60 * 60 * 1000}}));
+app.use(cookieSession({key:"widestage", secret:"HEWÑÑasdfwejñlkjqwernnkkk13134134wer", httpOnly: true, secure: false, cookie: {maxAge: 60 * 60 * 1000}}));
 app.use(session({secret: 'ndwidestagev0', cookie: {httpOnly: true, secure: false}, store: new RedisStore({maxAge: 60 * 60 * 1000}), resave: false, saveUninitialized: true}));
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: '50mb'})); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(passport.authenticate('remember-me'));
+
+var authentication = true;
+
+global.authentication  = authentication;
+
+global.logFailLogin = true;
+global.logSuccessLogin = true;
+
+if (authentication)
+{
+    app.use(passport.initialize());
+    app.use(passport.session());
+    app.use(passport.authenticate('remember-me'));
+}
 
 
-//app.listen(8080);
-//console.log('8080 is the magic port');
+
 
 
 if (cluster.isMaster) {
@@ -74,16 +85,12 @@ if (cluster.isMaster) {
     require('./server/config/passport')(passport);
 
     require('./server/globals');
+    require('./server/config/mailer');
 
-    //require('./server/config/routes')(app, passport);
-    require('./server/config/routes')(app);
+    require('./server/config/routes')(app, passport);
+    //require('./server/config/routes')(app);
 
     var fs = require('fs');
-    /*var routes_dir = __dirname + '/server/routes';
-    fs.readdirSync(routes_dir).forEach(function (file) {
-        if(file[0] === '.') return;
-        require(routes_dir+'/'+ file)(app);
-    });*/
 
     //Custom routes
     var routes_dir = __dirname + '/server/custom';

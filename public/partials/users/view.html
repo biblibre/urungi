@@ -1,0 +1,113 @@
+<div class="main-content-view">
+
+    <!--<div class="page-title full-width" title="Profile" description="User profile and story timeline">   -->
+    <div class="well">
+
+            <h1 class="title">User</h1>
+            <p class="description">User profile and permissions</p>
+
+
+        <div  class="container-fluid " >
+            <a ng-if="_User._id == user._id" href="/#/logout" class="btn btn-danger pull-right">logout</a>
+            <button ng-if="_User._id == user._id" class="btn btn-inverse pull-right">Change my password</button>
+            <button ng-click="editUser()" ng-if="isWSTADMIN" class="btn btn-success pull-right">Edit</button>
+        </div>
+
+    </div>
+
+    <section class="profile-env" ng-init="view()">
+
+        <div class="container-fluid">
+
+            <div class="col-sm-3">
+
+                <div class="user-info-sidebar">
+
+                    <a href="" class="user-img">
+                        <img src="http://themes.laborator.co/xenon/assets/images/user-4.png" alt="user-img" class="img-cirlce img-responsive img-thumbnail">
+                    </a>
+
+                    <a href="" class="user-name">
+                        {{_User.userName}}
+                        <span class="user-status is-active"></span>
+
+
+                    </a>
+
+                            <span class="user-title">
+                                CEO at <strong>Google</strong>
+                            </span>
+
+                    <hr>
+
+                    <ul class="list-unstyled user-info-list">
+                        <li ng-repeat="role in _User.roles">
+                         <i ng-if="isWSTADMIN" class="fa fa-trash-o" style="color: #FF0000" ng-click="_User.roles.splice(_User.roles.indexOf(role),1);save();"></i>   {{getRoleName(role)}}
+                        </li>
+                        <li ng-if="isWSTADMIN" >
+
+                            <select ng-model="selectedRole" placeholder="Add a new role..." ng-class="selectedRole" id="roleSelect" class="form-control" ng-change="selectedRoleChanged = true" ng-options="role._id as role.name for role in getRolesNotInUser()" style="width: 80%;float: left;"></select>
+                            <div ng-show="selectedRoleChanged == true && selectedRole != ''" ng-click="_User.roles.push(selectedRole);save();selectedRole = '';selectedRoleChanged = false;" style="width: 20%;float: left;text-align:center;vertical-align: middle;" ><i class="fa fa-plus" style="color:#00A000;"></i>  </div>
+
+                        </li>
+                    </ul>
+
+
+
+                    <hr>
+
+                    <ul class="list-unstyled user-friends-count">
+                        <li>
+                            <span>643</span>
+                            Published reports
+                        </li>
+                        <li>
+                            <span>108</span>
+                            Published Dashboards
+                        </li>
+                    </ul>
+                    <ul class="list-unstyled user-friends-count">
+                        <li>
+                            <span>643</span>
+                            Private reports
+                        </li>
+                        <li>
+                            <span>108</span>
+                            Private Dashboards
+                        </li>
+                    </ul>
+
+                    <button type="button" class="btn btn-success btn-block text-left">
+                        Following
+                        <i class="fa-check pull-right"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="col-sm-9" style="background-color: #fff;height: 100%;">
+
+                <div class="panel panel-default ng-scope">
+                    <div class="panel-heading hidden-print">Reports</div>
+                    <div class="panel-body">
+
+
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</div>
+<nd-modal id="editUserModal">
+<div ng-include src="editUserModal"></div>
+</nd-modal>

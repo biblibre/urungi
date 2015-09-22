@@ -1,9 +1,26 @@
 /* GLOBAL FUNCTIONS */
 function restrict(req, res, next) {
+
+    if (global.authentication)
+    {
+        if(req.isAuthenticated()){
+
+                console.log("Authentication is ON - Session OK!");
+                next();
+        }else{
+              req.session.error = 'Access denied!';
+              console.log("Authentication is ON - Access denied!");
+              return res.redirect(301,'/login');
+        }
+    } else {
+        console.log("Authentication is OFF");
+        next();
+    }
+
  //   if(req.isAuthenticated()){
 
-        console.log("Session OK!");
-        next();
+       // console.log("Session OK!");
+       // next();
  //   }else{
       //  req.session.error = 'Access denied!';
       //  console.log("Access denied!");
@@ -52,12 +69,9 @@ function stripInvalidChars(obj) {
 
 function restrictRole(roles) {
     return function(req, res, next) {
-        if (typeof roles == 'string') roles = [roles];
-        console.log(typeof roles);
-        // Do whatever you want with myArgument.
-        if(req.isAuthenticated()){
-            console.log("Session OK!");
 
+
+        if(req.isAuthenticated()){
             for (var i in roles) {
                 if (req.user.roles.indexOf(roles[i]) > -1){
                     console.log("Role OK!");
@@ -67,9 +81,12 @@ function restrictRole(roles) {
             }
         }
         req.session.error = 'Access denied!';
-        console.log("Access denied!");
-        res.redirect(301,'/');
-        res.send();
+        //TODO: Log annotation security issue
+        //console.log("Access denied!");
+        res.send(401, {result:0,msg:'You don´t have access to this function'});
+
+        //res.redirect(301,'/');
+        //res.send();
     };
 }
 global.restrictRole = restrictRole;
@@ -187,3 +204,5 @@ function serverResponse(req, res, status, obj) {
     }
 }
 global.serverResponse = serverResponse;
+
+

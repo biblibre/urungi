@@ -9,4 +9,5 @@ module.exports = function (app) {
     app.post('/api/reports/delete/:id', restrict, Reports.ReportsDelete);
     app.get('/api/reports/preview-query',restrict, Reports.PreviewQuery);
     app.get('/api/reports/get-data',restrict, Reports.ReportsGetData);
+    app.get('/api/reports/get-report/:id',restrict, Reports.GetReport);
 };

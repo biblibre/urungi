@@ -8,7 +8,7 @@
 
 'use strict';
 
-app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection', 'promptModel', function ($scope, reportModel ,$timeout ,$routeParams, connection,promptModel) {
+app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection', 'promptModel','dashboardModel', function ($scope, reportModel ,$timeout ,$routeParams, connection,promptModel,dashboardModel) {
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.designMode = false;
@@ -18,6 +18,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
     $scope.orderNbr = 0;
     $scope.quote = "'";
     $scope.dashboardID = $routeParams.dashboardID;
+
 
     console.log('loading dashboard controller..');
 
@@ -204,23 +205,43 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         console.log ('este es el dID ' + $scope.dashboardID);
         if ($scope.dashboardID)
         {
-            connection.get('/api/dashboards/get/'+$scope.dashboardID, {id: $scope.dashboardID}, function(data) {
-                $scope.dashBoardDefinitition = data.item;
+            dashboardModel.getDashBoard($scope.dashboardID, function(dashboard){
+                $scope.dashBoardDefinitition = dashboard;
 
                 $scope.$apply;
 
                 $scope.prompts = [];
 
                 getPromptsForDashboard($scope.dashBoardDefinitition,0,function(){
-
-                    if ($scope.prompts.length > 0)
+                    if ($routeParams.elementID && $routeParams.elementValue)
                     {
-                        $scope.showPrompts = true;
+                        for (var p in $scope.prompts)
+                        {
+                            if ($scope.prompts[p].elementID == $routeParams.elementID)
+                            {
+                                $scope.prompts[p].filterText1 = $routeParams.elementValue;
+                            }
+                        }
+
+                        $scope.checkPrompts();
+
+
                     } else {
-                        //setReportDiv($routeParams.reportID);
-                        paintReports($scope.dashBoardDefinitition);
+
+                        if ($scope.prompts.length > 0)
+                        {
+                            $scope.showPrompts = true;
+                        } else {
+                            //setReportDiv($routeParams.reportID);
+                            paintReports($scope.dashBoardDefinitition);
+                        }
                     }
                 });
+
+            });
+
+
+
 
                 //process prompts
                 /*
@@ -252,7 +273,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
                         }
                     }
                 },1000);*/
-            });
+
 
             /*connection.get('/api/dashboards/find-one', {id: $scope.dashboardID}, function(data) {
                 $scope.dashBoardDefinitition = data.item;
@@ -458,6 +479,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         });
     }
 
+
     $scope.saveDashboard = function()
     {
         //console.log('saving dashboard '+data.dashboardName);
@@ -618,6 +640,17 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             paintReports($scope.dashBoardDefinitition);
         });
     }
+
+    $scope.changeColumnFormat = function(columnIndex ,hashedID)
+    {
+        reportModel.changeColumnFormat($scope,columnIndex ,hashedID);
+    }
+
+    $scope.orderColumn = function(predicate,hashedID) {
+
+        reportModel.orderColumn($scope, predicate,hashedID);
+
+    };
 
 
 

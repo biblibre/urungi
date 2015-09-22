@@ -52,7 +52,7 @@ Controller.method('findAll', function (req, done) {
     if (req.query.companyid == true)
     {
         var companyField = {}
-        companyField['companyID'] = req.user.company_id;
+        companyField['companyID'] = req.user.companyID;
 
         mandatoryFilters.push(companyField);
     }
@@ -87,6 +87,8 @@ Controller.method('findAll', function (req, done) {
     if (mandatoryFilters != [])
         find =  {$and: mandatoryFilters};
 
+    console.log(JSON.stringify(find)) ;
+
     Model.find(find, fields, params, function(err, items){
         if(err) throw err;
 
@@ -105,7 +107,6 @@ Controller.method('findOne', function (req, done) {
 
     var find = generateFindFields(req, req.query.id);
 
-    //this.model.findOne({"_id" : req.query.id},{},function(err, item){
     this.model.findOne(find,{},function(err, item){
         //if(err) throw err; Si no encuentra el id salta el error?
         if (!item) {
@@ -141,14 +142,18 @@ Controller.method('findOneForServer', function (req, done) {
 Controller.method('create', function (req, done) {
     var data = req.body;
 
+    console.log('este es el userid ',req.query.userid);
+
     if (req.query.userid == true)
     {
-        data.user_id = (req.isAuthenticated()) ? req.user.id : null;
+        console.log('estoy dentro ',req.query.userid);
+        data.createdBy = (req.isAuthenticated()) ? req.user._id : null;
+        data.createdOn = new Date();
     }
 
     if (req.query.companyid == true)
     {
-        data.companyID = (req.isAuthenticated()) ? req.user.company_id : null;
+        data.companyID = (req.isAuthenticated()) ? req.user.companyID : null;
     }
 
     if (req.query.trash == true)
@@ -184,11 +189,11 @@ Controller.method('update', function (req, done) {
 
     if (req.query.userid == true)
     {
-        data.user_id = (req.isAuthenticated()) ? req.user.id : null;
+        data.user_id = (req.isAuthenticated()) ? req.user._id : null;
     }
     if (req.query.companyid == true)
     {
-        data.companyID = (req.isAuthenticated()) ? req.user.company_id : null;
+        data.companyID = (req.isAuthenticated()) ? req.user.companyID : null;
     }
 
     var user = (req.isAuthenticated()) ? req.user.username : "unsigned user";
@@ -207,9 +212,9 @@ Controller.method('update', function (req, done) {
 
         if (numAffected>0)
         {
-            done({result: 1, msg: numAffected+" items updated."});
+            done({result: 1, msg: numAffected+" record updated."});
         } else {
-            done({result: 0, msg: "Error updating items, no item have been updated"});
+            done({result: 0, msg: "Error updating record, no record have been updated"});
         }
     });
 });
@@ -263,7 +268,7 @@ function generateFindFields(req, id)
     if (req.query.companyid == true)
     {
         var companyField = {}
-        companyField['companyID'] = req.user.company_id;
+        companyField['companyID'] = req.user.companyID;
 
         mandatoryFilters.push(companyField);
     }
