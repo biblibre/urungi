@@ -3,20 +3,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     $scope.activeForm = 'partials/data-source/source_wizard_index.html';
     $scope.selectedCollections = [];
 
-
-    /*
-    $scope.add = function() {
-
-        $scope._DataSource = {};
-        $scope._DataSource.parameters = {};
-        $scope._DataSource.status = 1;
-
-        $scope.mode = 'add';
-        $scope.subPage= '/partial/custom/Badges/form.html';
-
-    };
-    */
-
     init();
 
     function init()
@@ -26,6 +12,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             if ($routeParams.newDataSource == 'true') {
                 $scope._DataSource = {};
                 $scope._DataSource.params = [];
+                $scope._DataSource.params.push({connection:{}})
                 $scope._DataSource.status = 1;
                 $scope._DataSource.type = 'MONGODB';
                 //$scope._DataSource.companyID = 'XXXXXX';
@@ -35,59 +22,32 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 console.log('entering in add mode for datasource');
 
             }
-        } /*else {
-            $scope.getDataSources(1,'',['type','params.connection.host']);
-        }   */
+        } else {
+             if ($routeParams.dataSourceID)
+             {
+                connection.get('/api/data-sources/find-one', {id: $routeParams.dataSourceID}, function(data) {
+                    $scope._DataSource = data.item;
+                });
+             };
+        }
     };
 
     $scope.save = function() {
         if ($scope.mode == 'add') {
-            var parameters = {};
-            parameters.connection = $scope._Parameters;
-            parameters.schema = $scope.schemas;
-            $scope._DataSource.params.push(parameters);
+
             var data = $scope._DataSource;
-            console.log('saving data source '+data.reportName);
             connection.post('/api/data-sources/create', data, function(data) {
-                $scope.items.push(data.item);
-                $scope.cancel();
+                //$scope.items.push(data.item);
+                window.history.back();
             });
-        }
-        else {
-            console.log($scope._dataSource);
-            $scope._dataSource.params[0].schema = removeUnselected($scope._dataSource.params[0].schema);
-            for (var i in $scope.schemas) {
-                if ($scope.schemas[i].selected) {
-                    $scope._dataSource.params[0].schema.push($scope.schemas[i]);
-                }
-            }
-
-            for (var i in $scope._dataSource.params[0].schema) {
-                for (var j in $scope._dataSource.params[0].schema[i].elements) {
-                    if ($scope._dataSource.params[0].schema[i].elements[j].elementLabel == '' || $scope._dataSource.params[0].schema[i].elements[j].elementName == '') {
-                        $scope._dataSource.params[0].schema[i].elements[j].selected = false;
-                    }
-                }
-
-                $scope._dataSource.params[0].schema[i].elements = removeUnselected($scope._dataSource.params[0].schema[i].elements);
-
-                delete($scope._dataSource.params[0].schema[i].selected);
-                delete($scope._dataSource.params[0].schema[i].isOpen);
-                delete($scope._dataSource.params[0].schema[i].isNew);
-
-                for (var j in $scope._dataSource.params[0].schema[i].elements) {
-                    delete($scope._dataSource.params[0].schema[i].elements[j].selected);
-                    delete($scope._dataSource.params[0].schema[i].elements[j].isNew);
-                }
-            }
-
-            connection.post('/api/data-sources/update/'+$scope._dataSource._id, $scope._dataSource, function(result) {
-                console.log(result);
+        } else {
+            connection.post('/api/data-sources/update/'+$scope._DataSource._id, $scope._dataSource, function(result) {
                 if (result.result == 1) {
                     window.history.back();
                 }
             });
         }
+
     };
 
     function removeUnselected(items) {
@@ -161,68 +121,21 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     $scope.testMongoConnection = function()
     {
         var data = {};
-        data.host = $scope._Parameters.host;
-        data.port = $scope._Parameters.port;
-        data.database = $scope._Parameters.database;
-        data.userName = $scope._Parameters.userName;
-        data.password = $scope._Parameters.password;
-
-        console.log(data);
+        data.host = $scope._DataSource.params[0].connection.host;
+        data.port = $scope._DataSource.params[0].connection.port;
+        data.database = $scope._DataSource.params[0].connection.database;
+        data.userName = $scope._DataSource.params[0].connection.userName;
+        data.password = $scope._DataSource.params[0].connection.password;
 
         connection.post('/api/data-sources/testMongoConnection', data, function(result) {
-            console.log(result);
             if (result.result == 1) {
-
-                $scope.items = result.items;
-                $scope.mongoStep = 2;
-
-
+                $scope.testConnection = {result:1,message:"Successful MongoDB database connection."};
+            } else {
+                $scope.testConnection = {result:0,message:"MongoDB database connection failed."};
             }
         });
     }
 
-
-
-
-    $scope.saveDatasource = function () {
-
-
-        var modalOptions    = {
-            container: 'dataSourceName',
-            containerID: '12345',//$scope._Report._id,
-            tracking: true,
-            dataSource: $scope._DataSource
-        }
-
-
-
-        //$scope.sendHTMLtoEditor(dataset[field])
-
-        dataSourceNameModal.showModal({}, modalOptions).then(function (result) {
-
-
-            $scope.save();
-            /*
-             var container = angular.element(document.getElementById(source));
-             container.children().remove();
-             //var theHTML = ndDesignerService.getOutputHTML();
-             theTemplate = $compile(theHTML)($scope);
-             container.append(theTemplate);
-
-
-             dataset[field] = theHTML;
-
-             if ($scope._posts.postURL && $scope._posts.title && $scope._posts.status)
-             {
-             //console.log('saving post');
-             $scope.save($scope._posts, false);
-             }
-             //console.log(theHTML);
-             */
-        });
-
-
-    }
 
     $scope.getDataSources = function(page, search, fields) {
         var params = {};
@@ -266,28 +179,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
     }
 
-    $scope.view = function() {
-        if ($routeParams.dataSourceID)
-        {
-            connection.get('/api/data-sources/find-one', {id: $routeParams.dataSourceID}, function(data) {
-
-                //console.log(JSON.stringify(data.item));
-
-                $scope._dataSource = data.item;
-                console.log($scope._dataSource);
-                //params: Array[1]0: connection: {database: "testIntalligent"host: "54.154.195.107"port: 27017}
-
-                /*
-                if ($scope._Badges.positionID) {
-                    $scope.setSelectedPosition($scope._Badges.positionID);
-                }
-
-                $scope.mode = 'edit';
-                $scope.subPage= '/partial/custom/Badges/form.html';
-                */
-            });
-        };
-    };
 
     $scope.elementTypes = [
         {name: 'String', value: 'string'},

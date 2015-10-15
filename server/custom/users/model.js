@@ -80,7 +80,7 @@ usersSchema.statics.createUser = function(req, done){
     })
 }
 
-usersSchema.statics.createTheUser = function (userData,done)
+usersSchema.statics.createTheUser = function (req,res,userData,done)
 {
     var User = this;
     console.log('creating the user',userData.userName);
@@ -89,27 +89,29 @@ usersSchema.statics.createTheUser = function (userData,done)
         return;
     }
 
-    User.findOne({"userName" : userData.userName },{},function(err, user){
+    User.findOne({"userName" : userData.userName, companyID: req.user.companyID },{},function(err, user){
         if(err) throw err;
         if (user) {
             done({result: 0, msg: "userName already in use."});
-        }
-        else {
-
-            if (userData.password) {
-
-                hash(userData.password, function(err, salt, hash){
+        } else {
+            console.log('user not found',userData.pwd1);
+            if (userData.pwd1) {
+                console.log('has password',userData.pwd1);
+                hash(userData.pwd1, function(err, salt, hash){
                     if(err) throw err;
                     userData.password = undefined;
                     userData.salt = salt;
                     userData.hash = hash;
+                    userData.companyID = req.user.companyID;
 
                     User.create(userData, function(err, user){
                         if(err) throw err;
-
+                        console.log('creado');
                         done({result: 1, msg: "User created.", user: user});
                     });
                 });
+            } else {
+                done({result: 0, msg: "'No Password set for the new user."});
             }
 
 
@@ -119,23 +121,44 @@ usersSchema.statics.createTheUser = function (userData,done)
 }
 
 usersSchema.statics.setStatus = function(req, done){
-    var data = req.body;
-    if (!data.id || typeof data.status == 'undefined') {
-        done({result: 0, msg: "'id' and 'status' is required."});
-        return;
-    }
-    this.update({
-        "_id" : data.id
-    }, {
-        $set: {
-            "status" : data.status
-        }
-    }, function (err, numAffected) {
-        if(err) throw err;
 
-        done({result: 1, msg: "Status updated.", id: data.id, status: data.status});
-    });
+    if (req.session.isWSTADMIN)
+    {
+        console.log('entrando aqui 1');
+
+        var userID = req.body.userID;
+        var userStatus = req.body.status;
+
+        if (!userID || typeof userID == 'undefined') {
+            done({result: 0, msg: "'id' and 'status' are required."});
+            return;
+        }
+        this.findOne({"_id" : userID,"companyID": req.user.companyID}, function (err, findUser) {
+            console.log('entrando aqui 2');
+                if (findUser)
+                {
+                    console.log('entrando aqui 3');
+                    Users.update({
+                        "_id" : userID
+                    }, {
+                        $set: {
+                            "status" : userStatus
+                        }
+                    }, function (err, numAffected) {
+                        if(err) throw err;
+
+                        done({result: 1, msg: "Status updated."});
+                    });
+                } else {
+                    done({result: 0, msg: "No user found for this company, can´t update the user status"});
+                }
+
+
+        });
+
+    }
 }
+
 
 usersSchema.statics.isValidUserPassword = function(username, password, done) {
     //console.log('entering is valid',password);

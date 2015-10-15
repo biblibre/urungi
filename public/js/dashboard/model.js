@@ -1,12 +1,3 @@
-/**
- * Created with JetBrains WebStorm.
- * User: hermenegildoromero
- * Date: 18/08/15
- * Time: 11:24
- * To change this template use File | Settings | File Templates.
- */
-
-
 app.service('dashboardModel',  function ($http, $q, connection, promptModel) {
 
 

@@ -16,12 +16,16 @@
  * Filter.js is client-side JSON objects filter and render html elements. Multiple filter criteria can be specified and used in conjunction with each other.
  */
 
-app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, promptModel,dashboardModel, $filter) {
+app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, promptModel,dashboardModel, $filter, $rootScope) {
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.dateModal = 'partials/report/dateModal.html';
     $scope.linkModal = 'partials/report/linkModal.html';
     $scope.repeaterTemplate = 'partials/report/repeater.html';
+    $scope.publishModal  = 'partials/report/publishModal.html';
+    $scope.columnFormatModal = 'partials/report/columnFormatModal.html';
+    $scope.columnSignalsModal = 'partials/report/columnSignalsModal.html';
+
     $scope.reportID = $routeParams.reportID;
     $scope.metrics = ['Count'];
     $scope.rows = [];
@@ -34,10 +38,47 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
     $scope.reverse = false;
 
+    $scope.textAlign = [
+        {name: 'left', value: 'left'},
+        {name: 'right', value: 'right'},
+        {name: 'center', value: 'center'}
+    ];
+
+    $scope.fontSizes = [
+        {name: '8px', value: '8px'},
+        {name: '9px', value: '9px'},
+        {name: '10px', value: '10px'},
+        {name: '11px', value: '11px'},
+        {name: '12px', value: '12px'},
+        {name: '13px', value: '13px'},
+        {name: '14px', value: '14px'},
+        {name: '15px', value: '15px'},
+        {name: '16px', value: '16px'},
+        {name: '17px', value: '17px'},
+        {name: '18px', value: '18px'},
+        {name: '19px', value: '19px'},
+        {name: '20px', value: '20px'}
+    ];
+
+    $scope.fontWeights = [
+        {name: 'normal', value: 'normal'},
+        {name: 'bold', value: 'bold'},
+        {name: 'bolder', value: 'bolder'},
+        {name: 'lighter', value: 'lighter'}
+    ];
+
+    $scope.fontStyles = [
+        {name: 'normal', value: 'normal'},
+        {name: 'italic', value: 'italic'},
+        {name: 'oblique', value: 'oblique'}
+    ];
+
+
+
 
     $scope.changed = function()
     {
-        console.log('datetimepicket changed')
+
     }
 
     function pad(num, size) {
@@ -157,6 +198,17 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
          */
 
+    ];
+
+    $scope.signalOptions = [
+        {value:"equal",label:"equal"},
+        {value:"diferentThan",label:"different than"},
+        {value:"biggerThan",label:"bigger than"},
+        {value:"biggerOrEqualThan",label:"bigger or equal than"},
+        {value:"lessThan",label:"less than"},
+        {value:"lessOrEqualThan",label:"less or equal than"},
+        {value:"between",label:"between"},
+        {value:"notBetween",label:"not between"}
     ];
 
     $scope.dateFilters = [
@@ -335,6 +387,29 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             return $scope.filterDateOptions
     }
 
+    $scope.publishReport = function()
+    {
+        $scope.objectToPublish = selectedReport;
+        $('#publishModal').modal('show');
+    }
+
+    $scope.unPublish = function()
+    {
+        connection.post('/api/reports/unpublish', {_id:selectedReport._id}, function(data) {
+            selectedReport.isPublic = false;
+            $('#publishModal').modal('hide');
+        });
+    }
+
+    $scope.selectThisFolder = function(folderID)
+    {
+        connection.post('/api/reports/publish-report', {_id:selectedReport._id,parentFolder:folderID}, function(data) {
+            selectedReport.parentFolder = folderID;
+            selectedReport.isPublic = true;
+            $('#publishModal').modal('hide');
+        });
+    }
+
     $scope.setFilterType = function(filter, filterOption)
     {
         filter.filterType = filterOption.value;
@@ -357,62 +432,24 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getDistinctValues = function(filter)
     {
-        /*
-        $scope.selectedFilter = filter;
-        $scope.selectedFilter.searchValue = [];
-
-
-        $('#searchModal').modal('show');
-
-
-        $scope.getDistinct(filter);
-        */
-
         promptModel.getDistinctValues($scope, filter);
     };
 
 
-    $scope.selectSearchValue = function(searchValue) {
-
+    $scope.selectSearchValue = function(searchValue)
+    {
         promptModel.selectSearchValue($scope);
-        /*
-        var searchValue = '';
-
-        //console.log($scope.selectedFilter.searchValue);
-        if ($scope.selectedFilter.filterType == 'in' || $scope.selectedFilter.filterType == 'notIn') {
-            for (var i in $scope.selectedFilter.searchValue) {
-                searchValue += $scope.selectedFilter.searchValue[i][$scope.selectedFilter.elementName];
-
-                if (i < $scope.selectedFilter.searchValue.length-1) {
-                    searchValue += ';';
-                }
-            }
-        }
-        else {
-            searchValue = $scope.selectedFilter.searchValue;
-        }
-
-        $scope.selectedFilter.filterText1 = searchValue;
-
-        $('#searchModal').modal('hide');
-        */
     };
 
-    $scope.toggleSelection = function toggleSelection(value) {
-
-
+    $scope.toggleSelection = function toggleSelection(value)
+    {
         promptModel.toggleSelection($scope,value);
-        /*
-        var idx = $scope.selectedFilter.searchValue.indexOf(value);
-
-        if (idx > -1) {
-            $scope.selectedFilter.searchValue.splice(idx, 1);
-        }
-        else {
-            $scope.selectedFilter.searchValue.push(value);
-        }
-        */
     };
+
+    $scope.isValueSelected = function(value)
+    {
+        promptModel.isValueSelected($scope,value);
+    }
 
     $scope.setHeight = function(element, height, correction) {
         var height = (height == 'full') ? $(document).height() : height;
@@ -429,6 +466,37 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         $('#reportNameModal').modal('hide');
         $scope.save($scope.selectedReport);
+
+    };
+
+    $scope.delete = function (reportID, reportName) {
+        $scope.modalOptions = {};
+        $scope.modalOptions.headerText = 'Confirm delete report'
+        $scope.modalOptions.bodyText = 'Are you sure you want to delete the report:'+' '+reportName;
+        $scope.modalOptions.ID = reportID;
+        $('#deleteModal').modal('show');
+    };
+
+    $scope.deleteConfirmed = function (reportID) {
+
+
+        connection.post('/api/reports/delete/'+reportID, {id:reportID}, function(result) {
+            if (result.result == 1) {
+                $('#deleteModal').modal('hide');
+
+                var nbr = -1;
+                for (var i in $scope.reports.items)
+                {
+                    if ($scope.reports.items[i]._id === reportID)
+                        nbr = i;
+                }
+
+                if (nbr > -1)
+                    $scope.reports.items.splice(nbr,1);
+            }
+        });
+
+
 
     };
 
@@ -454,32 +522,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         generateQuery(function(){
                 console.log($scope.query);
                 data.query = $scope.query;
-
-
-                /*
-                if ($scope.selectedReport.properties) {
-                    if ($scope.selectedReport.properties.xkey) {
-                        var xkey = $scope.selectedReport.properties.xkey.elementName;
-
-                        if ($scope.selectedReport.properties.xkey.aggregation) xkey += $scope.selectedReport.properties.xkey.aggregation;
-
-                        $scope.selectedReport.properties.xkey = xkey;
-                    }
-                    if ($scope.selectedReport.properties.ykeys) {
-                        var ykeys = [];
-
-                        for (var i in $scope.selectedReport.properties.ykeys) {
-                            var field = $scope.selectedReport.properties.ykeys[i].field.elementName;
-
-                            if ($scope.selectedReport.properties.ykeys[i].field.aggregation) field += $scope.selectedReport.properties.ykeys[i].field.aggregation;
-
-                            ykeys.push({field: field, label: $scope.selectedReport.properties.ykeys[i].field.objectLabel});
-                        }
-
-                        $scope.selectedReport.properties.ykeys = ykeys;
-                    }
-                }
-                */
 
                 if ($scope.selectedReport.reportType == 'grid')
                 {
@@ -509,7 +551,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     function setReportDiv(id)
     {
         $('#reportLayout').empty();
-        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%" ng-init="getReportData2()">';
+        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%;height:500px;display: flex;flex-direction: column;" ng-init="getReportData2()">';
 
         var $div = $(generatedHTML);
         $('#reportLayout').append($div);
@@ -521,32 +563,34 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getReportDiv = function()
     {
-        //1st process prompt
         reportModel.getReport($scope, $routeParams.reportID,'execute', function(report) {
-            promptModel.getPrompts($scope,report, function(){
-                if ($routeParams.elementID && $routeParams.elementValue)
-                {
-                    for (var p in $scope.prompts)
+            if (report)
+            {
+                promptModel.getPrompts($scope,report, function(){
+                    if ($routeParams.elementID && $routeParams.elementValue)
                     {
-                        if ($scope.prompts[p].elementID == $routeParams.elementID)
+                        for (var p in $scope.prompts)
                         {
-                            $scope.prompts[p].filterText1 = $routeParams.elementValue;
+                            if ($scope.prompts[p].elementID == $routeParams.elementID)
+                            {
+                                $scope.prompts[p].filterText1 = $routeParams.elementValue;
+                            }
+                        }
+
+                        $scope.checkPrompts();
+
+
+                    }  else {
+                        if ($scope.prompts.length > 0)
+                        {
+                            //console.log('loading prompts modal');
+                            $scope.showPrompts = true;
+                        } else {
+                            setReportDiv($routeParams.reportID);
                         }
                     }
-
-                    $scope.checkPrompts();
-
-
-                }  else {
-                    if ($scope.prompts.length > 0)
-                    {
-                        //console.log('loading prompts modal');
-                        $scope.showPrompts = true;
-                    } else {
-                        setReportDiv($routeParams.reportID);
-                    }
-                }
-            });
+                });
+            }
         });
 
     }
@@ -827,21 +871,28 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     {
         if (type == 'column')
         {
-            $scope.removeFromArray($scope.selectedReport.properties.xkeys, object);
-            $scope.removeFromArray($scope.selectedReport.properties.ykeys, object);
-            $scope.removeFromArray($scope.columns, object);
+            if ($scope.selectedReport.properties.xkeys)
+                $scope.removeFromArray($scope.selectedReport.properties.xkeys, object);
+            if ($scope.selectedReport.properties.ykeys)
+                $scope.removeFromArray($scope.selectedReport.properties.ykeys, object);
+            if ($scope.columns)
+                $scope.removeFromArray($scope.columns, object);
         }
 
         if (type == 'xkey')
         {
-            $scope.removeFromArray($scope.selectedReport.properties.xkeys, object);
-            $scope.removeFromArray($scope.columns, object);
+            if ($scope.selectedReport.properties.xkeys)
+                $scope.removeFromArray($scope.selectedReport.properties.xkeys, object);
+            if ($scope.columns)
+                $scope.removeFromArray($scope.columns, object);
         }
 
         if (type == 'ykey')
         {
-            $scope.removeFromArray($scope.selectedReport.properties.ykeys, object);
-            $scope.removeFromArray($scope.columns, object);
+            if ($scope.selectedReport.properties.ykeys)
+                $scope.removeFromArray($scope.selectedReport.properties.ykeys, object);
+            if ($scope.columns)
+                $scope.removeFromArray($scope.columns, object);
         }
 
         detectLayerJoins();
@@ -955,19 +1006,11 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         if (dropEl == "columnObjects")
         {
+            if (!$scope.columns)
+                $scope.columns = [];
             $scope.columns.push(String(drag[0].innerText).trim());
-            console.log($scope.columns);
-            /*
-            $scope.$$apply;
-            //$("#nonFixedSample").colResizable({fixed:false});
 
-            if (!$scope.loaded)
-            {
-            $('.resize').resizable({
-                handles: 'e'
-            });
-                $scope.loaded = true;
-            }*/
+
         }
 
         if (dropEl == "rowObjects")
@@ -1119,19 +1162,29 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         if (type == 'column') {
             var el = document.getElementById('column-zone');
             var theTemplate =  $compile('<div class="column-box">'+customObjectData.objectLabel+'</div>')($scope);
+            if (!$scope.columns)
+                $scope.columns = [];
             $scope.columns.push(customObjectData);
             //Add to x and y keys to prevent reportType change
             if (customObjectData.elementType == 'count' || customObjectData.elementType == 'number')
             {
+                if (!$scope.selectedReport.properties.ykeys)
+                    $scope.selectedReport.properties.ykeys = [];
                 $scope.selectedReport.properties.ykeys.push(customObjectData);
             } else {
+                if (!$scope.selectedReport.properties.xkeys)
+                    $scope.selectedReport.properties.xkeys = [];
                 $scope.selectedReport.properties.xkeys.push(customObjectData);
             }
         }
         if (type == 'xkey') {
             var el = document.getElementById('xkey-zone');
             var theTemplate =  $compile('<div class="column-box">'+customObjectData.objectLabel+'</div>')($scope);
+            if (!$scope.columns)
+                $scope.columns = [];
             $scope.columns.push(customObjectData);
+            if (!$scope.selectedReport.properties.xkeys)
+                $scope.selectedReport.properties.xkeys = [];
             $scope.selectedReport.properties.xkeys.push(customObjectData);
         }
         if (type == 'ykey') {
@@ -1139,7 +1192,11 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             {
                 var el = document.getElementById('ykey-zone');
                 var theTemplate =  $compile('<div class="column-box">'+customObjectData.objectLabel+'</div>')($scope);
+                if (!$scope.columns)
+                    $scope.columns = [];
                 $scope.columns.push(customObjectData);
+                if (!$scope.selectedReport.properties.ykeys)
+                    $scope.selectedReport.properties.ykeys = [];
                 $scope.selectedReport.properties.ykeys.push(customObjectData);
                 $scope.onlyNumericValuesAlert = false;
             } else {
@@ -1338,7 +1395,9 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.addYKeyField = function() {
         if (!$scope.selectedReport.properties.ykeys) $scope.selectedReport.properties.ykeys = [];
-console.log($scope.selectedReport.properties.ykeys);
+
+        if (!$scope.selectedReport.properties.ykeys)
+            $scope.selectedReport.properties.ykeys = [];
         $scope.selectedReport.properties.ykeys.push({});
     };
 
@@ -1822,7 +1881,7 @@ console.log($scope.selectedReport.properties.ykeys);
         $('#filterPromptsModal').modal('show');
     };
 
-
+    /*
     $scope.getDistinct = function(attribute) {
 
 
@@ -1886,7 +1945,7 @@ console.log($scope.selectedReport.properties.ykeys);
 
 
 
-    }
+    } */
 
     $scope.selectFilterArrayValue = function(type, filter)
     {
@@ -2156,9 +2215,62 @@ console.log($scope.selectedReport.properties.ykeys);
         $('#linkModal').modal('hide');
     }
 
-    $scope.changeColumnFormat = function(columnIndex ,hashedID)
+    $scope.changeColumnStyle = function(columnIndex ,hashedID)
     {
-        reportModel.changeColumnFormat($scope,columnIndex ,hashedID);
+
+        $scope.selectedColumn = $scope.selectedReport.properties.columns[columnIndex];
+        $scope.selectedColumnHashedID  = hashedID;
+        $scope.selectedColumnIndex  = columnIndex;
+
+        console.log('el formato 1',JSON.stringify($scope.selectedColumn.columnStyle));
+        if (!$scope.selectedColumn.columnStyle)
+            $scope.selectedColumn.columnStyle = {color:'#000','background-color':'#EEEEEE','text-align':'left','font-size':"12px",'font-weight':"normal",'font-style':"normal"};
+
+        console.log('el formato',JSON.stringify($scope.selectedColumn.columnStyle));
+
+        $('#columnFormatModal').modal('show');
+
+
+    }
+
+    $scope.changeColumnColor = function(color)
+    {
+        if ($scope.selectedColumn.columnStyle)
+        $scope.selectedColumn.columnStyle.color = color;
+    }
+
+    $scope.changeColumnBackgroundColor = function(color)
+    {
+        if ($scope.selectedColumn.columnStyle)
+        $scope.selectedColumn.columnStyle['background-color'] = color;
+    }
+
+    $scope.setColumnFormat = function()
+    {
+        console.log('aqui 1',$scope.selectedColumnHashedID);
+        reportModel.changeColumnStyle($scope,$scope.selectedColumnIndex ,$scope.selectedColumnHashedID);
+    }
+
+    $scope.changeColumnSignals = function(columnIndex ,hashedID)
+    {
+
+        $scope.selectedColumn = $scope.selectedReport.properties.columns[columnIndex];
+        $scope.selectedColumnHashedID  = hashedID;
+        $scope.selectedColumnIndex  = columnIndex;
+
+        if (!$scope.selectedColumn.signals)
+            $scope.selectedColumn.signals = [];
+
+
+        $('#columnSignalsModal').modal('show');
+
+
+    }
+
+
+    $scope.setColumnSignals = function()
+    {
+        reportModel.changeColumnSignals($scope,$scope.selectedColumnIndex ,$scope.selectedColumnHashedID);
     }
 
 
@@ -2199,10 +2311,9 @@ console.log($scope.selectedReport.properties.ykeys);
     }
 
 
-    $scope.saveToExcel = function()
+    $scope.saveToExcel = function(reportHash)
     {
-        //https://github.com/SheetJS/js-xlsx
-        //https://github.com/eligrey/FileSaver.js/
+        reportModel.saveToExcel($scope,reportHash) ;
     }
 
 
@@ -2712,7 +2823,7 @@ console.log($scope.selectedReport.properties.ykeys);
     {name:"fa-youtube-square",value:"fa-youtube-square"}];
 
 
-    $scope.colors = [
+    $rootScope.colors = [
         "#000000",
         "#000033",
         "#000066",

@@ -1020,9 +1020,11 @@ function processCollections(collections, dataSource, params, thereAreJoins, done
 
                             if (collection.schema.elements[e].elementType == 'date') {
                                 item[field+'_original'] = item[field];
+
                                 var date = new Date(item[field]);
                                 var moment = require('moment');
                                 item[field] = moment(date).format(collection.schema.elements[e].format);
+
 
                             }
 

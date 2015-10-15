@@ -1148,11 +1148,12 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
 
     $scope.getCollectionElements = function(collectionID)
     {
-        for (var e in $scope._Layer.params.schema)
-        {
-            if ($scope._Layer.params.schema[e].collectionID == collectionID)
-                return $scope._Layer.params.schema[e].elements;
-        }
+        if ($scope._Layer)
+            for (var e in $scope._Layer.params.schema)
+            {
+                if ($scope._Layer.params.schema[e].collectionID == collectionID)
+                    return $scope._Layer.params.schema[e].elements;
+            }
 
 
     }

@@ -10,17 +10,29 @@
 
                 <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
                     <h3 class="pull-left" >Reports</h3>
-                    <a href="/#/reports/new/true" class="btn btn-success pull-right">New Report</a>
+                    <a ng-if="user.reportsCreate" href="/#/reports/new/true" class="btn btn-success pull-right">New Report</a>
                 </div>
 
                 <div class="list-group">
-                    <a href="/#/reports/{{report._id}}" class="list-group-item" ng-repeat="report in reports.items">
-                        <h4 class="list-group-item-heading" ng-bind="report.reportName"></h4>
-                        <p class="list-group-item-text" ng-bind="report.reportDescription"></p>
-                    </a>
+
+                    <div class="list-group-item" ng-repeat="report in reports.items">
+                        <a href="" class="pull-right" ng-click="delete(report._id,report.reportName)" style="color:#FF0000;font-size: 16px;margin-right: 5px">
+                            <i class="fa fa-trash-o "  ></i>
+                        </a>
+                        <a  class="pull-right" href="/#/reports/edit/{{report._id}}" style="color:#000080; font-size: 16px;margin-right: 3px;">
+                            <i class="fa fa-pencil" ></i>
+                        </a>
+                        <span ng-if="report.isPublic" class="badge badge-success pull-right" style="margin-right: 5px">published</span>
+
+                        <a href="/#/reports/{{report._id}}">
+                            <h4 class="list-group-item-heading" ng-bind="report.reportName"></h4>
+                            <p class="list-group-item-text" ng-bind="report.reportDescription"></p>
+                        </a>
+                    </div>
                 </div>
         </div>
     </div>
 </div>
 
+<div ng-include src="'partials/deleteModal.html'"></div>
 

@@ -90,7 +90,7 @@
 <div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
 
     <a data-ng-click="reportName()" class="btn btn-success pull-right" style="margin-right: 5px">Save Report</a>
-    <a ng-click="goBack()" class="btn btn-default pull-right">Back</a>
+    <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
 </div>
 
 
@@ -236,6 +236,7 @@
                                 -->
                                 <!-- Array -->
                                 <div class="form-group" ng-show="(filter.values != undefined && filter.elementType == 'array' && (filter.filterType != 'in' && filter.filterType != 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
+
                                     <ui-select ng-model="filter.filterLabel1" on-select="selectFilterArrayValue('simple', filter)" theme="select2" ng-disabled="disabled" style="width: 200px;">
                                         <ui-select-match placeholder="Select or search a value in the list...">{{$select.selected.label}}</ui-select-match>
                                         <ui-select-choices repeat="value in filter.values | filter: $select.search">
@@ -247,6 +248,7 @@
                                 <!-- END Array -->
                                 <!-- Multiple Array -->
                                 <div class="form-group" ng-show="(filter.values != undefined && filter.elementType == 'array' && (filter.filterType == 'in' || filter.filterType == 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull') )" >
+
                                     <ui-select multiple ng-model="filter.filterLabel1" on-select="selectFilterArrayValue('multiple', filter)" on-remove="selectFilterArrayValue('multiple', filter)" theme="select2" ng-disabled="disabled" style="width: 200px;">
                                         <ui-select-match placeholder="Select multiple values...">{{$item.label}}</ui-select-match>
                                         <ui-select-choices repeat="value in filter.values | filter: $select.search">
@@ -679,3 +681,5 @@
 <div ng-include src="dateModal"></div>
 <div ng-include src="dateFromToModal"></div>
 <div ng-include src="linkModal"></div>
+<div ng-include src="columnFormatModal"></div>
+<div ng-include src="columnSignalsModal"></div>

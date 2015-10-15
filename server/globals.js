@@ -16,16 +16,6 @@ function restrict(req, res, next) {
         console.log("Authentication is OFF");
         next();
     }
-
- //   if(req.isAuthenticated()){
-
-       // console.log("Session OK!");
-       // next();
- //   }else{
-      //  req.session.error = 'Access denied!';
-      //  console.log("Access denied!");
-      //  return res.redirect(301,'/login');
- //   }
 }
 global.restrict = restrict;
 

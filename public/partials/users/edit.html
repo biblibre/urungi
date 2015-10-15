@@ -1,7 +1,8 @@
 
     <div class="modal-header ng-scope">
-        <button type="button" class="close" ng-click="goBack()" aria-hidden="true"><i class="fa fa-close"></i></button>
-        <h4 class="modal-title">New User</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-close"></i></button>
+        <h4 ng-if="mode == 'new'" class="modal-title">New User</h4>
+        <h4 ng-if="mode != 'new'" class="modal-title">Edit User</h4>
     </div>
 
     <div class="modal-body ng-scope" ng-init="tabbed_panel_active = 1">
@@ -16,6 +17,7 @@
                         <li ng-class="{'active': tabbed_panel_active == 1}" class="active">
                             <a  ng-click="tabbed_panel_active = 1">General</a>
                         </li>
+                        <!--
                         <li  ng-class="{'active': tabbed_panel_active == 2}" class="">
                             <a  ng-click="tabbed_panel_active = 2">Custom filters</a>
                         </li>
@@ -23,7 +25,7 @@
                         <li ng-class="{'active': tabbed_panel_active == 3}" class="">
                             <a  ng-click="tabbed_panel_active = 3">Advanced</a>
                         </li>
-
+                        -->
                     </ul>
 
                 </div>
@@ -37,7 +39,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="username" class="control-label">User Nick</label>
-                                    <input id="username" class="form-control" ng-model="_User.userName" required>
+                                    <input id="username"  ng-disabled="mode != 'new'" class="form-control" ng-model="_User.userName" required>
                                     <div role="alert"><span class="error" ng-show="myForm.username.$error.required">User Nick is required</span> </div>
 
                                 </div>
@@ -170,11 +172,11 @@
                 </div> -->  <!--tab pane 3-->
         </div> <!--tab content-->
 
-        <div ng-if="elementEditingWarning && elementEditingWarning != ''" class="alert-block">{{elementEditingWarning}}</div>
+        <div ng-if="alertMessage && alertMessage != ''" class="alert-block">{{alertMessage}}</div>
 
         <div class="container-fluid">
             <button type="button" class="btn btn-info ng-pristine ng-valid pull-right"  ng-click="checkForNewUser()">Save</button>
-            <button type="button" class="btn btn-white pull-right" ng-click="goBack()">Close</button>
+            <button type="button" class="btn btn-white pull-right" data-dismiss="modal">Close</button>
 
         </div>
         </form>

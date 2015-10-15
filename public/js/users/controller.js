@@ -6,8 +6,9 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window,$routeParams) {
+app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window,$routeParams,$rootScope) {
     $scope.deleteModal = '/partial/private/deleteModal.html';
+    $scope.changePasswordModal  = '/partials/users/changePassword.html';
     $scope.page = null;
     $scope.data = null;
     $scope.search = null;
@@ -22,6 +23,8 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
     ];
 
 
+
+
     init();
 
     function init()
@@ -29,6 +32,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
         console.log('entering init');
         if ($routeParams.newUser) {
             if ($routeParams.newUser == 'true') {
+                /*
                 $scope._User = {};
                 $scope._User.roles = [];
                 $scope._User.status = 'active';
@@ -37,7 +41,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
                 $scope.mode = 'new';
 
                 console.log('entering in add mode for user');
-
+                */
             }
         }
     };
@@ -45,6 +49,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
     $scope.checkForNewUser = function()
     {
         var isOk = true;
+        $scope.alertMessage = '';
 
         if (!$scope._User.userName)
         {
@@ -53,17 +58,19 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             return;
         }
 
+        console.log('sendpass',$scope._User.sendPassword);
+
         if ($scope._User.sendPassword == false)
         {
             if (!$scope._User.pwd1)
             {
-                    $scope.passwordMessage = 'You have to introduce a password';
+                    $scope.alertMessage = 'You have to introduce a password';
                     isOk = false;
                     return;
             } else {
                 if ($scope._User.pwd1 != $scope._User.pwd2)
                 {
-                    $scope.passwordMessage = 'Passwords do not match';
+                    $scope.alertMessage = 'Passwords do not match';
                     isOk = false;
                     return;
                 }
@@ -77,21 +84,10 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             }
         }
 
-        if ($scope._User.pwd1)
-        {
-            if ($scope._User.pwd1 != $scope._User.pwd2)
-            {
-                $scope.passwordMessage = 'Passwords do not match';
-                isOk = false;
-                return;
-            }
-        }
-
         if (isOk == true)
         {
             $scope.save();
         }
-
     }
 
     $scope.checkForDuplicateUserNick = function()
@@ -104,6 +100,42 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
        //TODO:
     }
 
+    $scope.changeMyPassword = function()
+    {
+
+
+        $('#changePasswordModal').modal('show');
+    }
+
+    $scope.sendNewMyPassword = function()
+    {
+
+        console.log('the passwords',$scope._User.pwd1,$scope._User.pwd2)
+
+        var isOk = false;
+
+        if ($scope._User.pwd1.length < 8)
+        {
+            $scope.passwordAlertMsg = "Your password must be at least 8 characters long";
+        }
+
+        if ($scope._User.pwd1 != $scope._User.pwd2)
+        {
+            $scope.passwordAlertMsg = "Enter the same password in both text areas";
+        }
+
+        if ($scope._User.pwd1.length >= 8 && $scope._User.pwd1 == $scope._User.pwd2)
+          isOk = true;
+
+        if (isOk == true)
+        {
+            connection.post('/api/change-my-password', {pwd1:$scope._User.pwd1,pwd2:$scope._User.pwd2}, function(data) {
+                $('#changePasswordModal').modal('hide');
+            });
+        }
+
+    }
+
     $scope.view = function() {
         if ($routeParams.userID)
         {
@@ -113,10 +145,21 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             connection.get('/api/admin/users/find-one', {id: $routeParams.userID}, function(data) {
                 $scope._User = data.item;
                 $scope.mode = 'edit';
+            });
 
-                console.log('founded one user',JSON.stringify(data),$routeParams.userID);
+            connection.get('/api/get-user-counts/'+$routeParams.userID, {userID:$routeParams.userID}, function(data) {
+                $scope.userCounts = data;
+                console.log('user counts',JSON.stringify(data));
+            });
 
+            connection.get('/api/get-user-reports/'+$routeParams.userID, {userID:$routeParams.userID}, function(data) {
+                $scope.userReports = data.items;
+                console.log('user reports',JSON.stringify($scope.userReports));
+            });
 
+            connection.get('/api/get-user-dashboards/'+$routeParams.userID, {userID:$routeParams.userID}, function(data) {
+                $scope.userDashboards = data.items;
+                console.log('user dashboards',JSON.stringify($scope.userDashboards));
             });
         };
     };
@@ -126,11 +169,30 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
         if ($scope.mode == 'new')
         {
             connection.post('/api/admin/users/create', $scope._User, function(data) {
-
+                    $('#editUserModal').modal('hide');
+                    $scope.users.push($scope._User);
             });
         } else {
             connection.post('/api/admin/users/update/'+$scope._User._id, $scope._User, function(data) {
+                    $('#editUserModal').modal('hide');
+            });
+        }
+    }
 
+    $scope.changeUserStatus = function(user)
+    {
+        if ($rootScope.isWSTADMIN)
+        {
+
+            if (user.status == 'active')
+                var newStatus = 'Not active';
+            if (user.status == 'Not active')
+                var newStatus = 'active';
+
+            var data = {userID: user._id, status: newStatus}
+
+            connection.post('/api/admin/users/change-user-status', data, function(result) {
+                user.status = newStatus;
             });
         }
     }
@@ -228,11 +290,17 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
 
 
     $scope.editUser = function () {
-
-
         $('#editUserModal').modal('show');
+    }
 
+    $scope.newUser = function() {
+        $scope._User = {};
+        $scope._User.roles = [];
+        $scope._User.status = 'active';
+        $scope._User.sendPassword = true;
 
+        $scope.mode = 'new';
+        $('#editUserModal').modal('show');
     }
 
     function getFilters() {
@@ -264,16 +332,6 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
         });
     };
 
-    $scope.setStatus = function(id, status) {
-        var data = {id: id, status: status};
-
-        connection.post('/api/admin/users/set-status', data, function(data) {
-            if (data.result == 1) {
-                $("#"+data.id+"-status-"+data.status).removeClass("ng-hide");
-                $("#"+data.id+"-status-"+((data.status === 0) ? 1 : 0)).addClass("ng-hide");
-            }
-        });
-    };
 
     $scope.changeUser = function(data) {
         connection.post('/api/login?s=change-user', {userName: data.userName}, function(data) {

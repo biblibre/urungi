@@ -3,7 +3,6 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
     $scope.roleModal = 'partials/roles/roleModal.html';
 
     $scope.publicSpace = $rootScope.user.companyData.publicSpace;
-    $scope.grants = [];
 
     $scope.newRole = function ()
     {
@@ -13,6 +12,7 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
         $scope._Role.reportsPublish = false;
         $scope._Role.dashboardsCreate = false;
         $scope._Role.dashboardsPublish = false;
+        $scope._Role.grants = [];
         $scope.mode = 'add';
         $('#roleModal').modal('show');
     }
@@ -23,6 +23,9 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
             connection.get('/api/roles/find-one', {id: roleID}, function(data) {
                 $scope._Role = data.item;
                 $scope.mode == 'edit';
+                console.log('the public space',$scope.publicSpace);
+                $scope.clearNodes($scope.publicSpace);
+                $scope.checkForNode($scope.publicSpace);
                 $('#roleModal').modal('show');
             });
         };
@@ -30,7 +33,7 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
 
 
     $scope.save = function() {
-        $scope._Role.grants = $scope.grants;
+        //$scope._Role.grants = $scope.grants;
         if ($scope.mode == 'add') {
             var data = $scope._Role;
 
@@ -101,11 +104,11 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
     $scope.clickedExecuteReportsForTheNode = function(node)
     {
 
-        setGrant($scope.grants,node);
+        setGrant(node);
         for (var i in node.nodes)
         {
             node.nodes[i].executeReports = node.executeReports;
-            setGrant($scope.grants,node.nodes[i]);
+            setGrant(node.nodes[i]);
             if (node.nodes[i].nodes.length > 0)
                 $scope.clickedExecuteReportsForTheNode(node.nodes[i]);
         }
@@ -116,11 +119,11 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
 
     $scope.clickedExecuteDashboardsForTheNode = function(node)
     {
-        setGrant($scope.grants,node);
+        setGrant(node);
         for (var i in node.nodes)
         {
             node.nodes[i].executeDashboards = node.executeDashboards;
-            setGrant($scope.grants,node.nodes[i]);
+            setGrant(node.nodes[i]);
             if (node.nodes[i].nodes.length > 0)
                 $scope.clickedExecuteDashboardsForTheNode(node.nodes[i]);
         }
@@ -129,11 +132,11 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
 
     $scope.clickedPublishReportsForTheNode = function(node)
     {
-        setGrant($scope.grants,node);
+        setGrant(node);
         for (var i in node.nodes)
         {
             node.nodes[i].publishReports = node.publishReports;
-            setGrant($scope.grants,node.nodes[i]);
+            setGrant(node.nodes[i]);
             if (node.nodes[i].nodes.length > 0)
                 $scope.clickedPublishReportsForTheNode(node.nodes[i]);
         }
@@ -141,8 +144,13 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
 
     }
 
-    function setGrant(grants,node)
+    function setGrant(node)
     {
+      if (!$scope._Role.grants)
+          $scope._Role.grants = [];
+
+      var grants = $scope._Role.grants;
+
       var found = false;
 
       for (var i in grants)
@@ -150,6 +158,7 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
             if (grants[i].folderID == node.id)
             {
                 found = true;
+
                 grants[i].executeReports = node.executeReports;
                 grants[i].executeDashboards = node.executeDashboards;
                 grants[i].publishReports = node.publishReports;
@@ -166,7 +175,51 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
           });
       }
 
-        console.log('the grants', JSON.stringify(grants));
+        //console.log('the grants', JSON.stringify(grants));
+    }
+
+    $scope.clearNodes = function(nodes)
+    {
+        for (var n in nodes)
+        {
+            console.log('nodo',n)
+
+            var node = nodes[n];
+            if (node.nodes)
+                if (node.nodes.length > 0)
+                    $scope.clearNodes(node.nodes)
+
+            node.executeReports = undefined;
+            node.executeDashboards = undefined;
+            node.publishReports = undefined;
+        }
+    }
+
+    $scope.checkForNode = function(nodes)
+    {
+        console.log('entrando en checkForNode',JSON.stringify(nodes))
+
+        var grants = $scope._Role.grants;
+
+        for (var n in nodes)
+        {
+            console.log('nodo',n)
+
+            var node = nodes[n];
+            if (node.nodes)
+                if (node.nodes.length > 0)
+                    $scope.checkForNode(node.nodes)
+
+            for (var i in grants)
+             {
+                 if (node.id == grants[i].folderID)
+                 {
+                     node.executeReports = grants[i].executeReports;
+                     node.executeDashboards = grants[i].executeDashboards;
+                     node.publishReports = grants[i].publishReports;
+                 }
+             }
+        }
     }
 
 

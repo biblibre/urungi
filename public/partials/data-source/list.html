@@ -13,9 +13,10 @@
                     <a href="/#/data_sources/new/true" class="btn btn-success pull-right">New Data Source</a>
                 </div>
 
-                <div class="list-group" ng-init="getDataSources(1,'',['type','params.connection.host','params.connection.port','params.connection.database'])">
+                <div class="list-group" ng-init="getDataSources(1,'',['name','type','params.connection.host','params.connection.port','params.connection.database'])">
                     <a href="/#/data-sources/{{dts._id}}" class="list-group-item" ng-repeat="dts in items">
-                        <h4 class="list-group-item-heading">{{dts.type}}</h4>
+                        <span class="pull-right" style="color:#72A230">{{dts.type}}</span>
+                        <h4 class="list-group-item-heading">{{dts.name}} </h4>
                         <p class="list-group-item-text">
 
                             <label class="small" style="margin-right: 5px">host: </label>{{dts.params[0].connection.host}}

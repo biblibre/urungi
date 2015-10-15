@@ -29,6 +29,10 @@ var app = express();
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'bower_components')));
+
+//app.use("/public", express.static(__dirname + "/public"));
+//app.use("/public", express.static(__dirname + "/bower_components"));
 
 app.use(cookieParser());
 app.use(cookieSession({key:"widestage", secret:"HEWÑÑasdfwejñlkjqwernnkkk13134134wer", httpOnly: true, secure: false, cookie: {maxAge: 60 * 60 * 1000}}));

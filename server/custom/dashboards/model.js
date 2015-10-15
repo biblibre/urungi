@@ -12,6 +12,7 @@ var DashboardsSchema = new mongoose.Schema({
     nd_trash_deleted_date: {type: Date},
     owner: {type: String},
     parentFolder: {type: String},
+    isPublic:{type: Boolean},
     createdBy: {type: String},
     createdOn: {type: Date}
 }, { collection: 'wst_Dashboards' });

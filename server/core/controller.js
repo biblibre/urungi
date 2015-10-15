@@ -226,9 +226,6 @@ Controller.method('remove', function (req, done) {
     }
 
     var find = generateFindFields(req, req.params.id);
-
-    //this.model.remove({"_id" : req.params.id}, function (err, numAffected) {
-    console.log(find);
     this.model.remove(find, function (err, numAffected) {
         if(err) throw err;
 

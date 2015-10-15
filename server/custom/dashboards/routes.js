@@ -8,4 +8,6 @@ module.exports = function (app) {
     app.post('/api/dashboards/update/:id', restrict, Dashboards.DashboardsUpdate);
     app.post('/api/dashboards/delete/:id', restrict, Dashboards.DashboardsDelete);
     app.get('/api/dashboards/get/:id', restrict, Dashboards.getDashboard);
+    app.post('/api/dashboards/publish-dashboard', restrict, Dashboards.PublishDashboard);
+    app.post('/api/dashboards/unpublish', restrict, Dashboards.UnpublishDashboard);
 };

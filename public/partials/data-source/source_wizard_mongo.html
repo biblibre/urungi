@@ -1,12 +1,8 @@
 <div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
-    <a href="/#/data-sources" class="btn btn-default pull-left">Cancel</a>
-    <a ng-click="setMongoStep(mongoStep -1)" ng-show='mongoStep > 1' class="btn btn-default pull-left" style="margin-left: 5px;margin-right: 5px;">Previous</a>
-    <a ng-click="testMongoConnection()" class="btn btn-default pull-right" ng-show='mongoStep == 1' style="margin-left: 5px;margin-right: 5px;">Connect</a>
-    <a ng-click="getCollectionsSchema()" class="btn btn-default pull-right" ng-show='mongoStep == 2' style="margin-left: 5px;margin-right: 5px;">Get Schema</a>
-    <a ng-click="saveDatasource()" class="btn btn-success pull-right" ng-show='mongoStep == 3' style="margin-left: 5px;margin-right: 5px;">Save Datasource</a>
-
+    <a ng-click="save()" ng-disabled="!_DataSource.name || !_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database" class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;">Save Datasource</a>
+    <a href="/#/data-sources" class="btn btn-default  pull-right">Cancel</a>
 </div>
-<div class="container-fluid" ng-show='mongoStep == 1'>
+<div class="container-fluid">
 
 <div class="tab-pane with-bg" id="fwv-1">
 
@@ -14,40 +10,52 @@
 
         <div class="col-md-12">
             <div class="form-group">
+                <label class="control-label" for="name">Name</label>
+                <input class="form-control" name="name" id="name" ng-model="_DataSource.name" data-validate="required" placeholder="Insert here the name for this connection" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
                 <label class="control-label" for="host">Host</label>
-                <input class="form-control" name="host" id="host" ng-model="_Parameters.host" data-validate="required" placeholder="Insert here your Amazon Key ID" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="host" id="host" ng-model="_DataSource.params[0].connection.host" data-validate="required" placeholder="Insert here your Host address or IP" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label" for="port">Port</label>
-                <input class="form-control" name="port" id="port" ng-model="_Parameters.port" data-validate="required" placeholder="Insert here your Amazon Secret Access Key" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="port" id="port" ng-model="_DataSource.params[0].connection.port" data-validate="required" placeholder="Insert here the port to access the MongoDB instance" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label" for="database">Database</label>
-                <input class="form-control" name="database" id="database" ng-model="_Parameters.database" data-validate="required" placeholder="Set here the Amazon S3 bucket to connect" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="database" id="database" ng-model="_DataSource.params[0].connection.database" data-validate="required" placeholder="Set here the name of the MongoDB Database to connect" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label" for="userName">User name</label>
-                <input class="form-control" name="userName" id="userName" ng-model="_Parameters.userName" data-validate="required" placeholder="Bucket Region" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="userName" id="userName" ng-model="_DataSource.params[0].connection.userName" data-validate="required" placeholder="Set here the username to access the database" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label" for="password">Password</label>
-                <input class="form-control" name="password" id="password" ng-model="_Parameters.password" data-validate="required" placeholder="Folder" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" type="password" name="password" id="password" ng-model="_DataSource.params[0].connection.password" data-validate="required" placeholder="Set here the username password to access the database" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
-
+        <div class="col-md-12" style="padding: 5px;">
+        <a ng-click="testMongoConnection()" ng-disabled="!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database" class="btn btn-default pull-right" style="margin-left: 5px;margin-right: 5px;">Test Connection</a>
+        <div ng-if="testConnection.message" class="row alert" ng-class="{'alert-success': testConnection.result == 1,'alert-danger': testConnection.result != 1}" >
+            {{testConnection.message}}
+        </div>
+        </div>
     </div>
 
 

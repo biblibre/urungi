@@ -1,5 +1,5 @@
 <script type="text/ng-template" id="role_grant_renderer.html">
-    <div ui-tree-handle class="tree-node tree-node-content">
+    <div data-nodrag  ui-tree-handle class="tree-node tree-node-content">
         <a class="btn btn-white btn-xs btn-round" ng-if="node.nodes && node.nodes.length > 0" data-nodrag ng-click="toggle(this)"><span
                 class="fa"
                 ng-class="{
@@ -9,15 +9,15 @@
         {{node.title}}
 
         <div class="pull-right" >
-
+                                   <!--ng-checked="checkIfChecked(node,'reports')" -->
             <input type="checkbox" ng-model="node.executeReports" class="pull-right" style="width:60px" ng-click="clickedExecuteReportsForTheNode(node)">
-            <input type="checkbox" ng-model="node.executeDashboards" class="pull-right" style="width:60px" ng-click="clickedExecuteDashboardsForTheNode(node)">
-            <input type="checkbox" ng-model="node.publishReports" class="pull-right" style="width:60px" ng-click="clickedPublishReportsForTheNode(node)">
+            <input type="checkbox" ng-model="node.executeDashboards"  class="pull-right" style="width:60px" ng-click="clickedExecuteDashboardsForTheNode(node)">
+            <input type="checkbox" ng-model="node.publishReports"  class="pull-right" style="width:60px" ng-click="clickedPublishReportsForTheNode(node)">
 
         </div>
     </div>
-    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
-        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'role_grant_renderer.html'">
+    <ol data-nodrag ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+        <li data-nodrag  ng-repeat="node in node.nodes" ui-tree-node ng-include="'role_grant_renderer.html'">
         </li>
     </ol>
 </script>
@@ -36,14 +36,23 @@
                 <h3 class="panel-title"></h3>
 
                 <div class="panel-options">
+                    <ul class="nav nav-tabs">
+                        <li ng-class="{'active': tabbed_panel_active == 1}" class="active">
+                            <a  ng-click="tabbed_panel_active = 1">General</a>
+                        </li>
+                        <li  ng-class="{'active': tabbed_panel_active == 2}" class="">
+                            <a  ng-click="tabbed_panel_active = 2">Public space permissions</a>
+                        </li>
 
+                    </ul>
 
 
                 </div>
             </div>
         <div class="panel-body">
 
-
+            <div class="tab-content" >
+                <div class="tab-pane " ng-class="{'active': tabbed_panel_active == 1}">
                 <div class="container-fluid" >
 
                         <div class="row">
@@ -82,19 +91,16 @@
                                             <tr>
                                                 <th></th>
                                                 <th>Create</th>
-                                                <th>Publish</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <th>Reports</th>
                                                 <td style="text-align: center"><input type="checkbox" ng-model="_Role.reportsCreate"></td>
-                                                <td style="text-align: center"><input type="checkbox" ng-model="_Role.reportsPublish"></td>
                                             </tr>
                                             <tr>
                                                 <th>Dashboards</th>
                                                 <td style="text-align: center"><input type="checkbox" ng-model="_Role.dashboardsCreate"></td>
-                                                <td style="text-align: center"><input type="checkbox" ng-model="_Role.dashboardsPublish"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -108,6 +114,12 @@
 
                             </div>
                         </div>
+
+                </div>  <!--container-fluid-->
+
+            </div>  <!--tab 1-->
+
+                <div   class="tab-pane" ng-class="{'active': tabbed_panel_active == 2}">
                     <div class="row tree-node-content">
                         <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden">Execute reports</span>
                         <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden">Execute dashboards</span>
@@ -118,17 +130,18 @@
                             <li ng-repeat="node in publicSpace" ui-tree-node ng-include="'role_grant_renderer.html'"></li>
                         </ol>
                     </div>
+                </div> <!--tab 2-->
 
 
-
-                </div> <!--container-fluid-->
+            </div> <!--tab content-->
         </div> <!--body-->
     </div><!--panel-->
 
     <div ng-if="roleEditingWarning && roleEditingWarning != ''" class="alert-block">{{roleEditingWarning}}</div>
 
     <div class="modal-footer ng-scope">
-        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-info"  ng-click="save()">Save</button>
+        <button type="button" class="btn btn-info pull-right"  ng-click="save()" style="margin-right: 3px">Save</button>
+        <button type="button" class="btn btn-white  pull-right" data-dismiss="modal" style="margin-right: 3px">Close</button>
+
     </div>
 </nd-modal>

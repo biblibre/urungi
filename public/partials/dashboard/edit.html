@@ -1,7 +1,7 @@
 <div class="container-fluid" style="padding-top: 10px;" ng-init="initForm()">
     <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px;padding-bottom: 10px;">
         <a ng-click="saveDashboard()" class="btn btn-success pull-right">Save Dashboard</a>
-        <a ng-click="goBack()" class="btn btn-default pull-right">Back</a>
+        <a ng-click="goBack()" class="btn btn-default pull-right" style="margin-right: 5px;">Cancel</a>
         <form class="form-inline">
             <div class="form-group">
                 <label for="dashboardName">Dashboard name</label>
@@ -16,7 +16,6 @@
     <div data-gridster style="background-color: {{dashBoardDefinitition.backgroundColor}}" ng-init="generateDashBoard()">
         <ul>
             <li data-gridster-item data-row="item.position[0]" data-col="item.position[1]" data-sizex="item.size.x" data-sizey="item.size.y" ng-repeat="item in dashBoardDefinitition.items">
-                <!--<div>{{item.reportID}}</div>-->
                 <div id="{{item.reportID}}" class="panel-body dashboard"  style=" background-color:#FFFFFF;height:100%;width: 100%;overflow-x:{{item.overflowx}};overflow-y: {{item.overflowy}}">
 
                 </div>
@@ -30,10 +29,10 @@
 
 
 <nd-modal id="reportListModal">
-    <!--<div class="modal-header">
+    <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3></h3>
-    </div>-->
+        <h4>Choose a report</h4>
+    </div>
     <div class="modal-body">
         <div class="list-group">
             <a ng-click="reportSelected(report._id, report)" class="list-group-item" ng-repeat="report in reports.items">

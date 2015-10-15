@@ -11,7 +11,8 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
     this.getDistinctValues = function($scope, filter)
     {
         $scope.selectedFilter = filter;
-        $scope.selectedFilter.searchValue = [];
+        if (!$scope.selectedFilter.searchValue)
+            $scope.selectedFilter.searchValue = [];
 
         $('#searchModal').modal('show');
 
@@ -20,7 +21,6 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
 
     this.toggleSelection = function toggleSelection($scope,value) {
         var idx = $scope.selectedFilter.searchValue.indexOf(value);
-
         if (idx > -1) {
             $scope.selectedFilter.searchValue.splice(idx, 1);
         }
@@ -31,12 +31,9 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
 
     this.selectSearchValue = function($scope) {
         var searchValue = '';
-        console.log('selected values '+searchValue);
-        //console.log($scope.selectedFilter.searchValue);
         if ($scope.selectedFilter.filterType == 'in' || $scope.selectedFilter.filterType == 'notIn') {
             for (var i in $scope.selectedFilter.searchValue) {
-                searchValue += $scope.selectedFilter.searchValue[i][$scope.selectedFilter.elementName];
-
+                searchValue += $scope.selectedFilter.searchValue[i][$scope.selectedFilter.collectionID+'_'+$scope.selectedFilter.elementName];
                 if (i < $scope.selectedFilter.searchValue.length-1) {
                     searchValue += ';';
                 }
@@ -50,6 +47,24 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
 
         $('#searchModal').modal('hide');
     };
+
+    this.isValueSelected = function($scope,value)
+    {
+        //console.log('checking if is selected this value',value);
+
+        var found = false;
+        if ($scope.selectedFilter.filterType == 'in' || $scope.selectedFilter.filterType == 'notIn') {
+            for (var i in $scope.selectedFilter.searchValue) {
+                if (value == $scope.selectedFilter.searchValue[i][$scope.selectedFilter.collectionID+'_'+$scope.selectedFilter.elementName])
+                {
+                  found = true;
+                    console.log('este valor esta seleccionado',value);
+                }
+            }
+        }
+
+        return found;
+    }
 
 
     this.checkPrompts = function($scope, done)

@@ -29,7 +29,13 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
             connection.get('/api/reports/get-data', params, function(data) {
                 //console.log('me he traido los datos',JSON.stringify(data));
-                done(data);
+                prepareData($scope,report,data, function(result)
+                {
+                    done(result);
+                    //console.log('resultados',JSON.stringify(result));
+                });
+
+                //done(data);
             });
 
     };
@@ -42,56 +48,78 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
         });
     }
 
-    this.getReport = function($scope, id,mode, done) {
-        this.scope = $scope;
-        console.log('get report');
-        //connection.get('/api/reports/find-one', {id: id}, function(data) {
-        connection.get('/api/reports/get-report/'+id, {id: id, mode: mode}, function(data) {
-            $scope.selectedReport = data.item;
-            this.selectedReport = $scope.selectedReport;
-            console.log($scope.selectedReport);
+    function prepareData($scope,report,data,done)
+    {
+         /*for (var r in data)
+         {
+             for(var i = 0; i < report.properties.columns.length; i++)
+             {
+                 if (report.properties.columns[i].columnType == 'date')
+                 {
 
-            for (var i in $scope.selectedReport.query.datasources) {
-                var dataSource = $scope.selectedReport.query.datasources[i];
+                 }
+             }
+         } */
 
-                for (var c in dataSource.collections) {
-                    var collection = dataSource.collections[c];
-                    if ($scope.filters) //only for editing the report
-                    {
-                      $scope.filters[0].filters = collection.filters;
-                      $scope.columns = collection.columns;
-                      $scope.order = collection.order;
-                    }
+        var dateTimeReviver = function (key, value) {
+            var a;
+            if (typeof value === 'string') {
+                a = /\/Date\((\d*)\)\//.exec(value);
+                if (a) {
+                    return new Date(+a[1]);
                 }
             }
+            return value;
+        }
 
-            done($scope.selectedReport);
+        done(JSON.parse(JSON.stringify(data),dateTimeReviver));
+
+
+    }
+
+    this.getReport = function($scope, id,mode, done) {
+        this.scope = $scope;
+        connection.get('/api/reports/get-report/'+id, {id: id, mode: mode}, function(data) {
+            if (data.item)
+            {
+                $scope.columns = [];
+                $scope.selectedReport = data.item;
+                this.selectedReport = $scope.selectedReport;
+                for (var i in $scope.selectedReport.query.datasources) {
+                    var dataSource = $scope.selectedReport.query.datasources[i];
+
+                    for (var c in dataSource.collections) {
+                        var collection = dataSource.collections[c];
+                        if ($scope.filters) //only for editing the report
+                        {
+                                for (var f2 in collection.filters)
+                                {
+                                    $scope.filters[0].filters.push(collection.filters[f2]);// = collection.columns;
+                                }
+
+                              for (var c2 in collection.columns)
+                              {
+                                $scope.columns.push(collection.columns[c2]);// = collection.columns;
+                              }
+
+                            for (var o2 in collection.order)
+                            {
+                                $scope.order.push(collection.order[o2]);// = collection.columns;
+                            }
+                        }
+                    }
+                }
+
+                done($scope.selectedReport);
+            } else {
+
+                noReportBlock(id);
+
+                done(null);
+            }
         });
         return;
 
-
-
-        /*
-        var d = $q.defer();
-
-        $http({method: 'GET', url: '/api/get_report', params: {id: id}})
-            .success(angular.bind(this, function (data) {
-                d.resolve(data);
-                if (data.result == 0) {
-                    noty({text: data.msg,  timeout: 2000, type: 'error'});
-                    return;
-                }
-
-                done(data.item);
-            }))
-            .error(angular.bind(this, function (data) {
-                this.data = null;
-            }));
-
-        return d.promise;
-
-
-         */
 
     };
 
@@ -102,23 +130,36 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
         });
     };
 
-
+    function noReportBlock(id)
+    {
+        var htmlCode = '<div ng-if="!selectedReport" class="alert alert-danger">Report not found!</div>';
+        var el = document.getElementById(id);
+        if (!el)
+            el = document.getElementById('reportLayout');
+        if (el)
+        {
+            angular.element(el).empty();
+            var $div = $(htmlCode);
+            angular.element(el).append($div);
+            angular.element(document).injector().invoke(function($compile) {
+                var scope = angular.element($div).scope();
+                $compile($div)(scope);
+            });
+        }
+    }
 
 
     this.getReportBlock = function($scope, id, done)
     {
-
         this.getReport($scope,id,'none', function(report){
-
 
             if (!report)
             {
+                noReportBlock(id);
+
                 done(1);
                 return;
             }
-
-            //identificar los prompts del informe
-            //no se puede obtener los datos en tanto en cuanto no se tienen los valores para los filtros
 
             if (!$scope.prompts)
                  $scope.prompts = [];
@@ -147,12 +188,9 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             } else {
                 if (!$scope.reports)
                     $scope.reports = [];
-                    $scope.reports.push(report); //several reports in the same scope ie. dashboards
+                    $scope.reports.push(report);
             }
-
-
         });
-
     }
 
 
@@ -182,7 +220,6 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 done(errorCode);
             });
         if (report.reportType == "grid")
-            //generateGrid($scope,id,report,function(errorCode) {
                 generateRepeater($scope,id,report,function(errorCode) {
                 done(errorCode);
             });
@@ -208,27 +245,6 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             });
     }
 
-    /*
-    this.getChart = function($scope,id,done)
-    {
-        this.getReport($scope,id, function(report){
-
-            if (!report)
-            {
-                done(1);
-                return;
-            }
-
-
-            if (report.reportType == "chart")
-                generateChartHTML(id,report,function(errorCode) {
-                    done(errorCode);
-                });
-
-        });
-
-    }
-    */
 
     this.getReportBlockForPreview = function($scope, report, id, done)
     {
@@ -300,13 +316,10 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
     this.getDistinct = function($scope,attribute) {
 
-
         var execute = (typeof execute !== 'undefined') ? execute : true;
 
         var query = {};
         query.datasources = [];
-
-        //var filters = $scope.filters[0].filters;
 
         console.log('the filter attribute ', attribute);
 
@@ -359,7 +372,6 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
 
         this.getData($scope, query, {page: 0}, function(data) {
-            console.log('datos de distinct value ' + JSON.stringify(data));
             $scope.searchValues = data;
             $scope.errorMsg = (data.result === 0) ? data.msg : false;
             $scope.page = data.page;
@@ -597,22 +609,25 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
         });
     }
 
-    this.changeColumnFormat = function($scope, columnIndex ,hashedID)
+    this.changeColumnStyle = function($scope, columnIndex ,hashedID)
     {
 
-        var report = $scope.reports[hashedID]; //$scope.selectedReport
-
-        report.properties.columns[columnIndex].format = {color:'#99FF99','text-align':'center','background-color':'#ffffcc','font-size':'16px','font-weight': 'bold','font-style': 'italic'};//{color:'#CCFF99'};
-
-
-        var elementName = report.properties.columns[columnIndex].collectionID+'_'+'unit';
-
+        var report = $scope.reports[hashedID];
 
         this.repaintRepeater($scope,report._id,report,function(){
 
         });
-        //Esto del orderBy no funciona
-        //$filter('orderBy')($scope.theData[$scope.selectedReport.hashedID], ['WST9831054943614705b5b0b398c0c20d3e_unit']);
+
+    }
+
+    this.changeColumnSignals = function($scope, columnIndex ,hashedID)
+    {
+
+        var report = $scope.reports[hashedID];
+
+        this.repaintRepeater($scope,report._id,report,function(){
+
+        });
 
     }
 
@@ -1002,10 +1017,10 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             $scope.theData[hashedID] = theData;
 
               */
-            console.log('the data',JSON.stringify($scope.theData[hashedID]));
+            //console.log('the data',JSON.stringify($scope.theData[hashedID]));
 
-
-            var htmlCode = '<div class="container-fluid"><input class="pull-right" type="search" ng-model="theFilter" placeholder="Search..." aria-label="Search..." /></div>';
+        //console.log('the columns',JSON.stringify(report.properties.columns));
+            var htmlCode = '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel('+hashedID+')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Find..." aria-label="Find..." /></div>';
 
             var colClass = '';
             var colWidth = '';
@@ -1026,20 +1041,26 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                     var elementName = "'"+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+"'";
                     if (report.properties.columns[i].aggregation)
                         elementName = "'"+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation+"'";
-                    htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementName+','+hashedID+')">'+report.properties.columns[i].objectLabel+'</span><span class="sortorder" ng-show="reports['+hashedID+'].predicate === '+elementName+'" ng-class="{reverse:reports['+hashedID+'].reverse}"></span>'+getColumnDropDownHTMLCode(report,i,elementName,hashedID,report.properties.columns[i].elementType)+' </div>';
+
+                    var elementNameAux = elementName;
+                    if (report.properties.columns[i].elementType === 'date')
+                        elementNameAux = "'"+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+'_original'+"'";
+
+
+                    htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementNameAux+','+hashedID+')">'+report.properties.columns[i].objectLabel+'</span><span class="sortorder" ng-show="reports['+hashedID+'].predicate === '+elementName+'" ng-class="{reverse:reports['+hashedID+'].reverse}"></span>'+getColumnDropDownHTMLCode(report,report.properties.columns[i],i,elementName,hashedID,report.properties.columns[i].elementType)+' </div>';
             }
             htmlCode += '</div>';
 
             //Body
-            htmlCode += '<div vs-repeat style="width:100%;height: 100%;max-height:500px;overflow-y: scroll;border: 1px solid #ccc;">';
+            htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;">';
 
                 //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
-            var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
+            //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
 
             htmlCode += '<div class="repeater-data container-fluid" ng-repeat="item in theData['+hashedID+'] | filter:theFilter | orderBy:reports['+hashedID+'].predicate:reports['+hashedID+'].reverse  " style="width:100%;padding:0px">';
 
 
-            htmlCode += "<style>.customStyle1 {color:#FF9944;} .customStyle2 {color:blue;}</style>"
+
 
             //console.log(htmlCode);
             // POPOVER con HTML https://maxalley.wordpress.com/2014/08/19/bootstrap-3-popover-with-html-content/
@@ -1051,8 +1072,61 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 if (report.properties.columns[i].aggregation)
                     elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
 
-                var theValue = '<span ng-class="{customStyle1 : {{item.'+elementName+'}} > 0 , customStyle2 : {{item.'+elementName+'}} == 0}"  >{{item.'+elementName+'}}</span>';
-                //var theValue = '<span ng-style="{{item.'+elementName+'}} > 0 ? { '+theStyle+' }"  >{{item.'+elementName+'}}</span>';
+
+                var theValue = '<span>{{item.'+elementName+'}}</span>';
+
+                if (report.properties.columns[i].signals)
+                {
+                    //htmlCode += "<style>.customStyle1_"+i+" {color:#FF9944;} .customStyle2_"+i+" {color:blue;}</style>"
+                    var theStyle = '<style>';
+                    var theClass = '';
+                    for (var s in report.properties.columns[i].signals)
+                    {
+                        theStyle += ' .customStyle'+s+'_'+i+'{color:'+report.properties.columns[i].signals[s].color+';background-color:'+report.properties.columns[i].signals[s]['background-color']+';font-size:'+report.properties.columns[i].signals[s]['font-size']+';font-weight:'+report.properties.columns[i].signals[s]['font-weight']+';font-style:'+report.properties.columns[i].signals[s]['font-style']+';}';
+                        var theComma = '';
+                        if (s > 0)
+                            theComma = ' , ';
+
+                        var operator = '>'
+
+                        switch(report.properties.columns[i].signals[s].filter) {
+                            case "equal":
+                                operator = ' == ' + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "diferentThan":
+                                operator = ' != '  + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "biggerThan":
+                                operator = ' > '  + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "biggerOrEqualThan":
+                                operator = ' >= '  + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "lessThan":
+                                operator = ' < '  + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "lessOrEqualThan":
+                                operator = ' <= ' + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "between":
+                                operator = ' >= ' + report.properties.columns[i].signals[s].value1 + ' && {{item.'+elementName+'}} <= ' + report.properties.columns[i].signals[s].value2
+                                break;
+                            case "notBetween":
+                                operator = ' < ' + report.properties.columns[i].signals[s].value1 + ' || {{item.'+elementName+'}}  > ' + report.properties.columns[i].signals[s].value2
+                                break;
+                        }
+
+
+
+
+                        theClass += theComma+ 'customStyle'+s+'_'+i+' : {{item.'+elementName+'}} '+operator;
+                    }
+                    htmlCode += theStyle +'</style>'
+                    //theValue = '<span ng-class="{customStyle1_'+i+' : {{item.'+elementName+'}} > 0 , customStyle2_'+i+' : {{item.'+elementName+'}} == 0}"  >{{item.'+elementName+'}}</span>';
+                    theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+'}}</span>';
+
+                }
+
 
 
                 if (report.properties.columns[i].link)
@@ -1067,13 +1141,13 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                     }
                 }
 
-                var columnFormat = '';
-                if (report.properties.columns[i].format)
+                var columnStyle = '';
+                if (report.properties.columns[i].columnStyle)
                 {
-                    columnFormat = 'color:'+report.properties.columns[i].format.color+';';
+                    columnStyle = 'color:'+report.properties.columns[i].columnStyle.color+';';
 
-                    for (var key in report.properties.columns[i].format) {
-                        columnFormat += key+':'+report.properties.columns[i].format[key]+';';
+                    for (var key in report.properties.columns[i].columnStyle) {
+                        columnStyle += key+':'+report.properties.columns[i].columnStyle[key]+';';
                     }
                 }
 
@@ -1093,7 +1167,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 if item.'+elementName+' comparador valor2 = {estilo 1}
 
                 */
-                    htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+columnFormat+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+report.properties.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
+                    htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+report.properties.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
                 //}
             }
 
@@ -1116,6 +1190,11 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
         htmlCode += '</div>';
 
             var el = document.getElementById(id);
+
+            if (!el)
+                el = document.getElementById('XXXXXXXXXX');  //this is for the report designer...
+
+
             if (el)
             {
                 angular.element(el).empty();
@@ -1275,33 +1354,39 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
     }
 
 
-    function getColumnDropDownHTMLCode(report, column,elementName,hashedID,columnType)
+    function getColumnDropDownHTMLCode(report,columnObject, column,elementName,hashedID,columnType)
     {
 
+        if (columnObject.elementType == 'date')
+        {
+            elementName = "'"+columnObject.collectionID+'_'+columnObject.elementName+'_original'+"'";
+        }
+
+
         var columnPropertiesBtn = '<div class="btn-group pull-right" dropdown="" > '
-            +'<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+            +'<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom: 0px;">'
             +' <span class="caret"></span>'
             +'</button>'
             +'<ul class="dropdown-menu dropdown-blue multi-level" role="menu">'
             +'<li class="dropdown-submenu">'
-            +'      <a href="">Ordenar</a>'  //ascendente, descendente
+            +'      <a href="">Sort</a>'  //ascendente, descendente
             +'      <ul class="dropdown-menu">'
             +'      <li><a ng-click="reverse = true; orderColumn('+elementName+','+hashedID+')">Ascending</a></li>'
             +'      <li><a ng-click="reverse = false; orderColumn('+elementName+','+hashedID+')">Descending</a></li>'
             +'      </ul>'
             +'</li>'
+            /*+'<li>'
+            +'      <a href="">Filter</a>'
+            +'</li>'*/
             +'<li>'
-            +'      <a href="">Filtrar</a>'
+            +'      <a ng-click="changeColumnStyle('+column+','+hashedID+')">Format</a>'
             +'</li>'
-            +'<li>'
-            +'      <a ng-click="changeColumnFormat('+column+','+hashedID+')">Format</a>'
-            +'</li>'
-            +'<li>'
+            /*+'<li>'
             +'      <a href="">Create Section</a>'
             +'</li>'
             +'<li>'
-            +'      <a href="">Aplicar Ruptura</a>'
-            +'</li>'
+            +'      <a href="">Apply Break</a>'
+            +'</li>'*/
             +'<li class="divider"></li>'
             +'<li class="dropdown-submenu">'
             +'      <a tabindex="-1" href="">Calculate</a>' //suma, cuenta, cuenta total, Promedio, mínimo, máximo, porcentaje
@@ -1340,11 +1425,11 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             '      </ul>'
             +'</li>'
             +'<li>'
-            +'      <a href="">Señales</a>'
+            +'      <a ng-click="changeColumnSignals('+column+','+hashedID+')">Signals</a>'
             +'</li>'
-            +'<li>'
-            +'      <a href="">Ocultar componentes</a>'
-            +'</li>'
+            /*+'<li>'
+            +'      <a href="">Hide components</a>'
+            +'</li>'*/
             +'</ul>'
             +'</div>';
 
@@ -1528,7 +1613,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
                 if (report.properties.style == 'style2')
                 {
-                    htmlCode += '<div class="xe-widget xe-counter-block" xe-counter="" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2" style="background-color: '+theBackgroundColor+'">';
+                    htmlCode += '<div class="xe-widget xe-counter-block" xe-counter="" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2" style="background-color: '+theBackgroundColor+';height:100%;margin-bottom:0px;">';
                     htmlCode += '   <div class="xe-upper"  style="background-color: '+theBackgroundColor+'">';
                     htmlCode += '       <div class="xe-icon">';
                     htmlCode += '           <i class="fa '+report.properties.reportIcon+'"></i> ';
@@ -1540,8 +1625,8 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                     htmlCode += '   </div>';
                     htmlCode += '   <div class="xe-lower"> ';
                     htmlCode += '       <div class="border"></div> ';
-                    htmlCode += '           <span>Resultado</span> ';
-                    htmlCode += '           <strong>'+theEvolution+'  '+trendLabel+'</strong> ';
+                    //htmlCode += '           <span>Resultado</span> ';
+                    //htmlCode += '           <strong>'+theEvolution+'  '+trendLabel+'</strong> ';
                     htmlCode += '       </div> ';
                     htmlCode += '   </div> ';
                     htmlCode += '</div> ';
@@ -1549,7 +1634,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
                 if (report.properties.style == 'style3')
                 {
-                    htmlCode += '<div class="chart-item-bg-2" style="background-color: '+theBackgroundColor+';color:'+theFontColor+'">';
+                    htmlCode += '<div class="chart-item-bg-2" style="background-color: '+theBackgroundColor+';color:'+theFontColor+';height:100%;">';
                     htmlCode += '   <div class="chart-item-num" xe-counter="" data-count="this" data-from="0" data-to="98" data-suffix="%" data-duration="2" style="padding: 10px; color:'+report.properties.mainFontColor+'">'+theValue+'</div>';
                     htmlCode += '       <div class="chart-item-desc" > ';
                     //htmlCode += '           <p class="col-lg-7">Carriage quitting securing be appetite it declared. High eyes kept so busy feel call in.</p> ';
@@ -1865,7 +1950,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
 
                 var htmlCode = '<div class="container-fluid" style="width:100%;height: 100%"> <canvas id="'+id+'canvas'+'" style="width:100%"></canvas><br/>';
-                htmlCode += '<div style="    position: absolute;bottom: 0;left: 0;right: 0;padding: 20px;"><h3 style="text-align: center;">'+theData[0][theYKeyLabel]+'</h3></div></div>'
+                htmlCode += '<div style="    position: relative;bottom: 0;left: 0;right: 0;padding: 5px;"><h3 style="text-align: center;">'+theData[0][theYKeyLabel]+'</h3></div></div>'
                 var el = document.getElementById(id);
                 if (el)
                 {
@@ -1993,6 +2078,118 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                     </table>
 
                     */
+
+
+    this.saveToExcel = function($scope,reportHash)
+    {
+        //https://github.com/SheetJS/js-xlsx
+        //https://github.com/eligrey/FileSaver.js/
+
+        /* bookType can be 'xlsx' or 'xlsm' or 'xlsb' */
+        var wopts = { bookType:'xlsx', bookSST:false, type:'binary' };
+
+        //var ws_name = $scope.selectedReport.reportName;
+        var ws_name = $scope.reports[reportHash].reportName;
+
+        var wb = new Workbook(), ws = sheet_from_array_of_arrays($scope,reportHash);
+
+        /* add ranges to worksheet */
+        //ws['!merges'] = ranges;
+
+        /* add worksheet to workbook */
+        wb.SheetNames.push(ws_name);
+        wb.Sheets[ws_name] = ws;
+
+
+
+
+        var wbout = XLSX.write(wb,wopts);
+
+        function s2ab(s) {
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+            for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        /* the saveAs call downloads a file on the local machine */
+        saveAs(new Blob([s2ab(wbout)],{type:""}), ws_name+".xlsx")
+
+
+    }
+
+    function Workbook() {
+        if(!(this instanceof Workbook)) return new Workbook();
+        this.SheetNames = [];
+        this.Sheets = {};
+    }
+
+    function sheet_from_array_of_arrays($scope,reportHash) {
+        var data = $scope.theData[reportHash];
+        var report = $scope.reports[reportHash];
+        var ws = {};
+        var range = {s: {c:10000000, r:10000000}, e: {c:0, r:0 }};
+        //col titles
+        for(var i = 0; i < report.properties.columns.length; i++)
+        {
+            if(range.s.r > 0) range.s.r = 0;
+            if(range.s.c > i) range.s.c = i;
+            if(range.e.r < 0) range.e.r = 0;
+            if(range.e.c < i) range.e.c = i;
+
+
+            var cell = {v: report.properties.columns[i].objectLabel };
+            var cell_ref = XLSX.utils.encode_cell({c:i,r:0});
+            if(typeof cell.v === 'number') cell.t = 'n';
+            else if(typeof cell.v === 'boolean') cell.t = 'b';
+            else if(cell.v instanceof Date) {
+                cell.t = 'n'; cell.z = XLSX.SSF._table[14];
+                cell.v = datenum(cell.v);
+            }
+            else cell.t = 's';
+
+            ws[cell_ref] = cell;
+        }
+
+        //data
+
+        for(var R = 0; R != data.length; ++R) {
+
+            for(var i = 0; i < report.properties.columns.length; i++)
+            {
+                var elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName;
+                if (report.properties.columns[i].aggregation)
+                    elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
+                if(range.s.r > R+1) range.s.r = R+1;
+                if(range.s.c > i) range.s.c = i;
+                if(range.e.r < R+1) range.e.r = R+1;
+                if(range.e.c < i) range.e.c = i;
+
+                if (report.properties.columns[i].elementType == 'number' && data[R][elementName])
+                {
+                    var cell = {v: Number(data[R][elementName]) };
+                } else {
+                    var cell = {v: data[R][elementName] };
+                }
+                var cell_ref = XLSX.utils.encode_cell({c:i,r:R+1});
+                if(typeof cell.v === 'number') cell.t = 'n';
+                else if(typeof cell.v === 'boolean') cell.t = 'b';
+                else if(cell.v instanceof Date) {
+                    cell.t = 'n'; cell.z = XLSX.SSF._table[14];
+                    cell.v = datenum(cell.v);
+                }
+                else cell.t = 's';
+
+                cell.s = {fill: { fgColor: { rgb: "FFFF0000"}}};
+
+                ws[cell_ref] = cell;
+            }
+        }
+        if(range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+
+        return ws;
+
+    }
 
 
     return this;

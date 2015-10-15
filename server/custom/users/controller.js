@@ -17,15 +17,16 @@ exports.UsersCreate = function(req,res){
     {
         var generatePassword = require('password-generator');
         var thePassword = generatePassword();
+        req.body.pwd1 = thePassword;
+        req.body.userPassword = thePassword;
     }
 
-    req.body.password = thePassword;
-    req.body.userPassword = thePassword;
+
     req.body.status = 'active';
     req.body.nd_trash_deleted = false;
 
     var Users = connection.model('Users');
-    Users.createTheUser(req.body,function(result){
+    Users.createTheUser(req,res,req.body,function(result){
 
         if (req.body.sendPassword == true && thePassword != undefined)
         {
@@ -108,7 +109,6 @@ exports.UsersFindAll = function(req,res)
 
             controller.findAll(req, function(result){
                 serverResponse(req, res, 200, result);
-                console.log('getting all users');
             });
 }
 
@@ -121,14 +121,9 @@ exports.UsersFindOne = function(req,res){
     });
 };
 
-exports.UsersSetStatus = function(req,res){
-    Users.setStatus(req, function(result){
-        serverResponse(req, res, 200, result);
-    });
-};
 
 exports.logout = function(req,res){
- console.log('logout');
+
     //cache.close();
     //req.session.destroy();
     req.logOut();
@@ -154,9 +149,9 @@ exports.rememberPassword = function(req,res){
     });
 };
 
-exports.changePassword = function(req,res){
-    var body = req.body;
+exports.changeMyPassword = function(req,res){
 
+   /*
     Users.findOne({ hash_change_password: body.hash }, function (err, findUser) {
         if(findUser){
             Users.changePassword(req, function(result){
@@ -166,7 +161,37 @@ exports.changePassword = function(req,res){
             res.send(200, {result: 0, msg: 'Invalid hash'});
         }
     });
+
+    */
+
+
+    if (req.body.pwd1 && req.body.pwd2)
+    {
+        if (req.body.pwd1 == req.body.pwd2)
+        {
+            var hash = require('../../util/hash');
+            hash(req.body.pwd1, function(err, salt, hash){
+                if(err) throw err;
+                Users.update({_id:req.user._id},{salt:salt,hash:hash}, function(result){
+                    var result = {result: 1, msg: "Password changed"};
+                    serverResponse(req, res, 200, result);
+                });
+
+            });
+        } else {
+            var result = {result: 0, msg: "Passwords do not match"};
+            serverResponse(req, res, 200, result);
+        }
+    }
 };
+
+exports.changeUserStatus = function(req,res){
+
+    Users.setStatus(req,function(result){
+        serverResponse(req, res, 200, result);
+    });
+
+}
 
 exports.getCounts = function(req,res){
     var body = req.body;
@@ -194,27 +219,27 @@ exports.getCounts = function(req,res){
     {
         //get all reports
         var Reports = connection.model('Reports');
-        Reports.count({companyID: companyID}, function (err, reportCount) {
+        Reports.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, reportCount) {
             theCounts.reports = reportCount;
             //get all dashboards
             var Dashboards = connection.model('Dashboards');
-            Dashboards.count({companyID: companyID}, function (err, dashCount) {
+            Dashboards.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, dashCount) {
                 theCounts.dashBoards = dashCount;
                 //get all datasources
                 var DataSources = connection.model('DataSources');
-                DataSources.count({companyID: companyID}, function (err, dtsCount) {
+                DataSources.count({companyID: companyID,nd_trash_deleted:false}, function (err, dtsCount) {
                     theCounts.dataSources = dtsCount;
                     //get all layers
                     var Layers = connection.model('Layers');
-                    Layers.count({companyID: companyID}, function (err, layersCount) {
+                    Layers.count({companyID: companyID,nd_trash_deleted:false}, function (err, layersCount) {
                         theCounts.layers = layersCount;
                         //get all users
                         var Users = connection.model('Users');
-                        Users.count({companyID: companyID}, function (err, usersCount) {
+                        Users.count({companyID: companyID,nd_trash_deleted:false}, function (err, usersCount) {
                             theCounts.users = usersCount;
                             //get all roles
                             var Roles = connection.model('Roles');
-                            Roles.count({companyID: companyID}, function (err, rolesCount) {
+                            Roles.count({companyID: companyID,nd_trash_deleted:false}, function (err, rolesCount) {
                                 theCounts.roles = rolesCount;
                                 //send the response
                                 serverResponse(req, res, 200, theCounts);
@@ -227,9 +252,71 @@ exports.getCounts = function(req,res){
             });
         });
 
+    } else {
+        //get all reports
+        var Reports = connection.model('Reports');
+        Reports.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, reportCount) {
+            theCounts.reports = reportCount;
+            //get all dashboards
+            var Dashboards = connection.model('Dashboards');
+            Dashboards.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, dashCount) {
+                theCounts.dashBoards = dashCount;
+                    serverResponse(req, res, 200, theCounts);
+            });
+        });
     }
 
 };
+
+exports.getCountsForUser = function(req,res){
+    var userID = req.query.userID;
+    var companyID = req.user.companyID;
+    var theCounts = {};
+
+        //get all reports
+        var Reports = connection.model('Reports');
+        Reports.count({companyID: companyID,owner:userID,isPublic:true,nd_trash_deleted:false}, function (err, reportCount) {
+            theCounts.publishedReports = reportCount;
+            //get all dashboards
+            var Dashboards = connection.model('Dashboards');
+            Dashboards.count({companyID: companyID,owner:userID,isPublic:true,nd_trash_deleted:false}, function (err, dashCount) {
+                theCounts.publishedDashBoards = dashCount;
+
+                Reports.count({companyID: companyID,owner:userID,isPublic:false,nd_trash_deleted:false}, function (err, privateReportCount) {
+                    theCounts.privateReports = privateReportCount;
+
+                    var Dashboards = connection.model('Dashboards');
+                    Dashboards.count({companyID: companyID,owner:userID,isPublic:false,nd_trash_deleted:false}, function (err, privateDashCount) {
+                        theCounts.privateDashBoards = privateDashCount;
+                        serverResponse(req, res, 200, theCounts);
+                    });
+                });
+
+            });
+        });
+
+
+};
+
+exports.getUserReports = function(req,res){
+    var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
+    var userID = req.query.userID;
+    var companyID = req.user.companyID;
+    var Reports = connection.model('Reports');
+    Reports.find({companyID: companyID,owner:userID,nd_trash_deleted:false},{reportName:1,parentFolder:1,isPublic:1,reportType:1,reportDescription:1,status:1}, function (err, reports) {
+        serverResponse(req, res, 200, {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count/perPage) : 1), items: reports});
+    });
+}
+
+exports.getUserDashboards = function(req,res){
+    var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
+    var userID = req.query.userID;
+    var companyID = req.user.companyID;
+    var Dashboards = connection.model('Dashboards');
+    Dashboards.find({companyID: companyID,owner:userID,nd_trash_deleted:false},{dashboardName:1,parentFolder:1,isPublic:1,dashboardDescription:1,status:1}, function (err, privateDashCount) {
+        serverResponse(req, res, 200, {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count/perPage) : 1), items: privateDashCount});
+    });
+}
 
 exports.getUserData = function(req,res){
     var Companies = connection.model('Companies');
@@ -238,18 +325,49 @@ exports.getUserData = function(req,res){
 
         req.user.companyData = company;
         req.session.companyData = company;
-        console.log('this is the company Data',JSON.stringify(req.user.companyData));
+        //console.log('this is the company Data',JSON.stringify(req.user.companyData));
+
+        var createReports = false;
+        var createDashboards = false;
+        var isWSTADMIN = false;
+
+        if(req.isAuthenticated()){
+            for (var i in req.user.roles) {
+                if (req.user.roles[i] == 'WSTADMIN'){
+                    isWSTADMIN = true;
+                    createReports = true;
+                    createDashboards = true;
+                    req.session.reportsCreate = createReports;
+                    req.session.dashboardsCreate = createDashboards;
+                    req.session.isWSTADMIN = isWSTADMIN;
+                }
+            }
+        }
+
 
         if (req.user.roles.length > 0)
         {
             var Roles = connection.model('Roles');
             Roles.find({ _id : { $in : req.user.roles} },{},function(err, roles){
                 req.session.rolesData = roles;
-                serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:roles}});
+
+                for (var i in roles)
+                {
+                    if (roles[i].reportsCreate == true)
+                        createReports = true;
+                    if (roles[i].dashboardsCreate == true)
+                        createDashboards = true;
+                }
+
+                req.session.reportsCreate = createReports;
+                req.session.dashboardsCreate = createDashboards;
+                req.session.isWSTADMIN = isWSTADMIN;
+
+                serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:roles, reportsCreate: createReports, dashboardsCreate: createDashboards}});
             });
 
         } else {
-          serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company}});
+          serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:[], reportsCreate: createReports, dashboardsCreate: createDashboards, isWSTADMIN: isWSTADMIN}});
         }
 
     });
@@ -262,43 +380,77 @@ exports.getUserObjects = function(req, res){
 
         var folders = company.publicSpace;
 
-        if (req.user.roles.length > 0)
+
+        if (req.session.isWSTADMIN)
         {
-            var Roles = connection.model('Roles');
-            Roles.find({ _id : { $in : req.user.roles} },{},function(err, roles){
+            getFolderStructureForWSTADMIN(folders,0,true,function(){
 
-                navigateRoles(folders,roles,function(){
-                    console.log('the folders',JSON.stringify(folders))
+                getNoFolderReports(function(reports){
 
-                    getNoFolderReports(function(reports){
-
-                       getNoFolderDashboards(function(dashboards){
-                           for (var d in dashboards)
-                               folders.push(dashboards[d]);
-                           for (var r in reports)
-                               folders.push(reports[r]);
-                           serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: folders});
-                       })
-                    });
-
-
-
+                    getNoFolderDashboards(function(dashboards){
+                        for (var d in dashboards)
+                            folders.push(dashboards[d]);
+                        for (var r in reports)
+                            folders.push(reports[r]);
+                        serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: folders});
+                    })
                 });
 
 
-            }).lean();
+
+            });
 
         } else {
-            //Has no access to any folder
-            serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: []});
+        if (req.user.roles.length > 0)
+            {
+                var Roles = connection.model('Roles');
+                var find = { _id : { $in : req.user.roles},companyID:req.user.companyID };
+                if (req.session.isWSTADMIN)
+                    find = {companyID:req.user.companyID };
+                Roles.find(find,{},function(err, roles){
+
+                    navigateRoles(req,folders,roles,function(canPublish){
+                        console.log('puede publicar?',canPublish);
+
+                        getNoFolderReports(function(reports){
+
+                           getNoFolderDashboards(function(dashboards){
+                               for (var d in dashboards)
+                                   folders.push(dashboards[d]);
+                               for (var r in reports)
+                                   folders.push(reports[r]);
+                               serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: folders, userCanPublish: canPublish});
+                           })
+                        });
+                    });
+                }).lean();
+
+            } else {
+                //Has no access to any folder
+                getNoFolderReports(function(reports){
+
+                    getNoFolderDashboards(function(dashboards){
+                        for (var d in dashboards)
+                            folders.push(dashboards[d]);
+                        for (var r in reports)
+                            folders.push(reports[r]);
+                        serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: folders, userCanPublish: false});
+                    })
+                });
+                //serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: []});
+            }
         }
 
     });
 }
 
 
-function navigateRoles(folders,rolesData,done)
+function navigateRoles(req,folders,rolesData,done)
 {
+    var canPublish = false;
+
+    var roleFound = false;
+
     for (var r in rolesData)
     {
         if (!rolesData[r].grants)
@@ -316,67 +468,147 @@ function navigateRoles(folders,rolesData,done)
     {
         for (var g in rolesData[r].grants)
         {
-            setGrantsToFolder_old(folders,rolesData[r].grants[g],r,g, function(roleIndex,grantIndex){
-                console.log('he recogido el ',grantIndex,'del role',roleIndex)
+            roleFound = true;
 
+            var theGrant = rolesData[r].grants[g];
+
+
+            setGrantsToFolder_old(req,folders,theGrant,r,g, function(roleIndex,grantIndex,publish){
+                //console.log('he recogido el ',grantIndex,'del role',roleIndex)
+            if (publish == true) canPublish = true;
             if (roleIndex == rolesData.length -1 && grantIndex == rolesData[roleIndex].grants.length -1)
-                done();
+                done(canPublish);
             });
         }
     }
+    console.log('navegando los roles',JSON.stringify(rolesData));
+    if (roleFound === false)
+        done(false);
 }
 
-function setGrantsToFolder_old(folders, grant,roleIndex,grantIndex, done)
+function setGrantsToFolder_old(req,folders, grant,roleIndex,grantIndex, done)
 {
+    var publish = false;
+
     for (var i in folders)
     {
-        if (folders[i].id == grant.folderID)
+        if ((folders[i].id == grant.folderID))
         {
             folders[i].grants = grant;
 
-            if (grant.executeReports == true)
+            if (grant.publishReports == true)
+            {
+                publish = true;
+            }
+
+            if (grant.executeReports == true )
             {
                 getReportsForFolder(grant.folderID,folders[i],function(reports,folder){
                     //folder.reports = reports;
                     for (var n in reports)
                             folder.nodes.push(reports[n]);
-                    console.log('therpeors',JSON.stringify(reports));
+
                     if (grant.executeDashboards == true)
                     {
                         getDashboardsForFolder(grant.folderID,folder,function(dashboards,folder){
                             //folder.dashboards = dashboards;
                             for (var n in dashboards)
                                 folder.nodes.push(dashboards[n]);
-                            done(roleIndex,grantIndex);
+                            done(roleIndex,grantIndex,publish);
                         });
                     } else {
-                       done(roleIndex,grantIndex);
+                       done(roleIndex,grantIndex,publish);
                     }
 
                 });
             } else {
-                if (grant.executeDashboards == true)
+                if (grant.executeDashboards == true )
                 {
                     getDashboardsForFolder(grant.folderID,folders[i],function(dashboards,folder){
                         //folder.dashboards = dashboards;
                         for (var n in dashboards)
                             folder.nodes.push(dashboards[n]);
-                        done(roleIndex,grantIndex);
+                        done(roleIndex,grantIndex,publish);
                     });
                 }
             }
 
-            if (grant.executeDashboards == false && grant.executeReports == false)
+            if (grant.executeDashboards == false && grant.executeReports == false )
             {
-                done(roleIndex,grantIndex);
+                done(roleIndex,grantIndex,publish);
                 return;
             }
+
+            if (!grant.executeDashboards && !grant.executeReports)
+            {
+                done(roleIndex,grantIndex,publish);
+                return;
+            }
+
         } else {
             if (folders[i].nodes)
                 if (folders[i].nodes.length > 0)
-                    setGrantsToFolder_old(folders[i].nodes,grant,roleIndex,grantIndex,done);
+                    setGrantsToFolder_old(req,folders[i].nodes,grant,roleIndex,grantIndex,done);
         }
     }
+
+}
+
+function getFolderStructureForWSTADMIN(folders,index,firstRound, done) {
+
+    var sec = 0;
+    var i = index;
+
+    if (folders[i] == undefined)
+    {
+       if (firstRound)
+       {
+            done();
+       }
+      return;
+
+    } else {
+
+    //for (var i in folders)
+    //{
+      //  sec += 1;
+
+            if (folders[i].nodes)
+                if (folders[i].nodes.length > 0)
+                    getFolderStructureForWSTADMIN(folders[i].nodes,0,false,done);
+
+
+            var theFolder = folders[i];
+            theFolder.grants = {folderID:theFolder.id, executeDashboards: true,executeReports:true ,publishReports:true};
+
+            getReportsForFolder(theFolder.id,theFolder,function(reports,folder){
+
+                    folder = Object(folder);
+
+                    for (var n in reports)
+                    {
+                        if (folder.nodes)
+                            folder.nodes.push(reports[n]);
+                    }
+
+                    getDashboardsForFolder(folder.id,folder,function(dashboards,folder){
+                            for (var n in dashboards)
+                            {
+                                if (folder.nodes)
+                                folder.nodes.push(dashboards[n]);
+                            }
+                        getFolderStructureForWSTADMIN(folders,i+1,firstRound,done);
+
+
+
+                    });
+
+
+                });
+    }
+
+    //}
+
 
 }
 
@@ -388,7 +620,7 @@ function getReportsForFolder(idfolder,folder,done)
 
         var Reports = connection.model('Reports');
 
-        var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{parentFolder:idfolder},{"$or": [{owner: undefined},{owner: { $exists: false }}]}]}
+        var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{parentFolder:idfolder},{isPublic:true}]}
         var fields = {reportName:1,reportType:1,reportDescription:1};
 
         Reports.find(find,fields,{},function(err, reports){
@@ -407,7 +639,7 @@ function getDashboardsForFolder(idfolder,folder,done)
 {
     var Dashboards = connection.model('Dashboards');
 
-        var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{parentFolder:idfolder},{"$or": [{owner: undefined},{owner: { $exists: false }}]}]}
+        var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{parentFolder:idfolder},{isPublic:true}]}
         var fields = {dashboardName:1,dashboardDescription:1};
 
     Dashboards.find(find,fields,{},function(err, dashboards){
@@ -428,7 +660,7 @@ function getNoFolderReports(done)
 
     var Reports = connection.model('Reports');
 
-    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{"$or": [{owner: undefined},{owner: { $exists: false }}]},{"$or": [{parentFolder: undefined},{parentFolder: { $exists: false }}]}]}
+    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{isPublic:true},{parentFolder: 'root'}]}
     var fields = {reportName:1,reportType:1,reportDescription:1};
 
     Reports.find(find,fields,{},function(err, reports){
@@ -447,7 +679,7 @@ function getNoFolderDashboards(done)
 {
     var Dashboards = connection.model('Dashboards');
 
-    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{"$or": [{owner: undefined},{owner: { $exists: false }}]},{"$or": [{parentFolder: undefined},{parentFolder: { $exists: false }}]}]}
+    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{isPublic:true},{parentFolder: 'root'}]}
     var fields = {dashboardName:1,dashboardDescription:1};
 
     Dashboards.find(find,fields,{},function(err, dashboards){
@@ -460,6 +692,63 @@ function getNoFolderDashboards(done)
 
         done(nodes)
     });
+}
+
+exports.getUserLastExecutions = function(req, res){
+    var statistics = connection.model('statistics');
+
+
+    if (req.session.isWSTADMIN)
+    {
+        var find = {action:"execute"};
+    } else {
+        var find = {"$and":[{userID:''+req.user._id+''},{action:"execute"}]}
+    }
+
+    //ultimas ejecuciones
+
+    statistics.aggregate([
+        { $match: find},
+        { $group: {
+            _id: {relationedID:"$relationedID",
+                type: "$type",
+                relationedName: "$relationedName",
+                action: "$action"},
+            lastDate: { $max: "$createdOn"}
+        }},
+        { $sort : { lastDate : -1 } }
+    ], function (err, lastExecutions) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log('resultado agregación',JSON.stringify(lastExecutions));
+
+
+        //mas ejecuciones
+        statistics.aggregate([
+            { $match: find},
+            { $group: {
+                _id: {relationedID:"$relationedID",
+                    type: "$type",
+                    relationedName: "$relationedName",
+                    action: "$action"},
+                count: { $sum: 1 }
+            }},
+            { $sort : { count : -1 } }
+        ], function (err, mostExecuted) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log('resultado agregación',JSON.stringify(mostExecuted));
+            var mergeResults = {theLastExecutions : lastExecutions, theMostExecuted: mostExecuted };
+            serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: mergeResults});
+        });
+
+    });
+
+
 }
 
 

@@ -3,9 +3,10 @@
 
 var app = angular.module('WideStage', [
        //'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs','angularTreeview','ngDragDrop','ui.layout'
-        'ngRoute','ui.sortable','gridster','ui.layout','angularTreeview', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
+        'ngRoute','ui.sortable','gridster','ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
         'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
         'ui.bootstrap.datetimepicker','ui.tree'
+        //'angularTreeview',
     ])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
@@ -64,22 +65,6 @@ var app = angular.module('WideStage', [
             controller: 'reportCtrl'
         });
 
-        //CUBES
-
-        $routeProvider.when('/cubes', {
-            templateUrl: 'partials/cube/list.html',
-            controller: 'cubeCtrl'
-        });
-
-        $routeProvider.when('/cubes/:cubeID/', {
-            templateUrl: 'partials/cube/view.html',
-            controller: 'cubeCtrl'
-        });
-
-        $routeProvider.when('/cubes/new/:newCube/', {
-            templateUrl: 'partials/cube/editNew.html',
-            controller: 'cubeCtrl'
-        });
 
         //Data sources
 
@@ -89,7 +74,7 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/data-sources/:dataSourceID/', {
-            templateUrl: 'partials/data-source/view.html',
+            templateUrl: 'partials/data-source/source_wizard_mongo.html',
             controller: 'dataSourceCtrl'
         });
 
@@ -99,7 +84,7 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/data_sources/new/:newDataSource/', {
-            templateUrl: 'partials/data-source/source_wizard.html',
+            templateUrl: 'partials/data-source/source_wizard_mongo.html',
             controller: 'dataSourceCtrl'
         });
 
@@ -250,19 +235,14 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
 
     }
 
-
-    /*
-    connection.get('/api/company/get-company-data', {}, function(data) {
-        $rootScope.companyData = data.items;
-        console.log('this is the company data',$rootScope.companyData);
-
-        connection.get('/api/get-counts', {}, function(data) {
-            $rootScope.counts = data;
-        });
-    });
-    */
     connection.get('/api/get-counts', {}, function(data) {
         $rootScope.counts = data;
+    });
+
+    connection.get('/api/get-user-objects', {}, function(data) {
+        //console.log('the user objects',JSON.stringify(data.items));
+        $rootScope.userObjects = data.items;
+        $rootScope.user.canPublish = data.userCanPublish;
     });
 
 }]);

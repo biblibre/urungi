@@ -10,16 +10,29 @@
 
                 <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
                     <h3 class="pull-left" >Dashboards</h3>
-                    <a href="/#/dashboards/new/true" class="btn btn-success pull-right">New Dashboard</a>
+                    <a ng-if="user.dashboardsCreate" href="/#/dashboards/new/true" class="btn btn-success pull-right">New Dashboard</a>
                 </div>
 
                 <div class="list-group">
-                    <a href="/#/dashboards/{{dashboard._id}}" class="list-group-item" ng-repeat="dashboard in dashboards.items">
-                        <h4 class="list-group-item-heading" ng-bind="dashboard.dashboardName"></h4>
-                        <p class="list-group-item-text" ng-bind="dashboard.dashboardDescription"></p>
-                    </a>
+                    <div  class="list-group-item" ng-repeat="dashboard in dashboards.items">
 
+                        <a href="" class="pull-right" ng-click="delete(dashboard._id,dashboard.dashboardName)" style="color:#FF0000;font-size: 16px;margin-right: 5px">
+                            <i class="fa fa-trash-o "  ></i>
+                        </a>
+                        <a  class="pull-right" href="/#/dashboards/edit/{{dashboard._id}}" style="color:#000080; font-size: 16px;margin-right: 3px;">
+                            <i class="fa fa-pencil" ></i>
+                        </a>
+                        <span ng-if="dashboard.isPublic" class="badge badge-success pull-right" style="margin-right: 5px;">published</span>
+
+                        <a href="/#/dashboards/{{dashboard._id}}" >
+                            <h4 class="list-group-item-heading" ng-bind="dashboard.dashboardName"></h4>
+                            <p class="list-group-item-text" ng-bind="dashboard.dashboardDescription"></p>
+                        </a>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div ng-include src="'partials/deleteModal.html'"></div>

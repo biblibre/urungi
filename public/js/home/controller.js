@@ -9,10 +9,33 @@ app.controller('homeCtrl', ['$scope', '$rootScope','$sessionStorage','connection
 
 
 
-    connection.get('/api/get-user-objects', {}, function(data) {
-        console.log('the user objects',JSON.stringify(data.items));
-        $scope.data = data.items;
+
+
+    connection.get('/api/get-user-last-executions', {}, function(data) {
+        //console.log('the user last executions',JSON.stringify(data.items));
+        $scope.lastExecutions = [];
+        $scope.mostExecutions = [];
+
+        for ( var l in data.items.theLastExecutions)
+            {
+                if (l < 10)
+                {
+                    data.items.theLastExecutions[l]._id['lastDate'] =  moment(data.items.theLastExecutions[l].lastDate).fromNow();
+                    $scope.lastExecutions.push(data.items.theLastExecutions[l]._id);
+                }
+            }
+        for ( var m in data.items.theMostExecuted)
+            {
+                if (m < 10)
+                {
+                    data.items.theMostExecuted[m]._id['count'] =  data.items.theMostExecuted[m].count;
+                    $scope.mostExecutions.push(data.items.theMostExecuted[m]._id);
+                }
+            }
+
+        //console.log('the user most executions',JSON.stringify($scope.mostExecutions));
     });
+
 
     $scope.getReports = function(params) {
         var params = (params) ? params : {};
@@ -45,6 +68,18 @@ app.controller('homeCtrl', ['$scope', '$rootScope','$sessionStorage','connection
        /* connection.get('/api/get-counts', {}, function(data) {
             $rootScope.counts = data;
         });*/
+    }
+
+    $scope.refreshHome = function()
+    {
+        connection.get('/api/get-user-objects', {}, function(data) {
+            $rootScope.userObjects = data.items;
+            $rootScope.user.canPublish = data.userCanPublish;
+        });
+
+        connection.get('/api/get-counts', {}, function(data) {
+            $rootScope.counts = data;
+        });
     }
 
 

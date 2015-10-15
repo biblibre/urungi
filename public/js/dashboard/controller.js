@@ -11,6 +11,7 @@
 app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection', 'promptModel','dashboardModel', function ($scope, reportModel ,$timeout ,$routeParams, connection,promptModel,dashboardModel) {
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
+    $scope.publishModal  = 'partials/report/publishModal.html';
     $scope.designMode = false;
     $scope.selectedElement != null;
     $scope.reportsModel = reportModel;
@@ -18,11 +19,46 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
     $scope.orderNbr = 0;
     $scope.quote = "'";
     $scope.dashboardID = $routeParams.dashboardID;
+    /*
+    $scope.gridsterOpts = {
+        columns: 6, // the width of the grid, in columns
+        pushing: true, // whether to push other items out of the way on move or resize
+        floating: true, // whether to automatically float items up so they stack (you can temporarily disable if you are adding unsorted items with ng-repeat)
+        swapping: false, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
+        width: 'auto', // can be an integer or 'auto'. 'auto' scales gridster to be the full width of its containing element
+        colWidth: 'auto', // can be an integer or 'auto'.  'auto' uses the pixel width of the element divided by 'columns'
+        rowHeight: 'match', // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.
+        margins: [10, 10], // the pixel distance between each widget
+        outerMargin: true, // whether margins apply to outer edges of the grid
+        isMobile: false, // stacks the grid items if true
+        mobileBreakPoint: 600, // if the screen is not wider that this, remove the grid layout and stack the items
+        mobileModeEnabled: true, // whether or not to toggle mobile mode when screen width is less than mobileBreakPoint
+        minColumns: 1, // the minimum columns the grid must have
+        minRows: 2, // the minimum height of the grid, in rows
+        maxRows: 100,
+        defaultSizeX: 2, // the default width of a gridster item, if not specifed
+        defaultSizeY: 1, // the default height of a gridster item, if not specified
+        minSizeX: 1, // minimum column width of an item
+        maxSizeX: null, // maximum column width of an item
+        minSizeY: 1, // minumum row height of an item
+        maxSizeY: null, // maximum row height of an item
+        resizable: {
+            enabled: false,
+            handles: ['n', 'e', 's', 'w', 'ne', 'se', 'sw', 'nw'],
+            start: function(event, $element, widget) {}, // optional callback fired when resize is started,
+            resize: function(event, $element, widget) {}, // optional callback fired when item is resized,
+            stop: function(event, $element, widget) {} // optional callback fired when item is finished resizing
+        },
+        draggable: {
+            enabled: false, // whether dragging items is supported
+            handle: '.my-class', // optional selector for resize handle
+            start: function(event, $element, widget) {}, // optional callback fired when drag is started,
+            drag: function(event, $element, widget) {}, // optional callback fired when item is moved,
+            stop: function(event, $element, widget) {} // optional callback fired when item is finished dragging
+        }
+    }; */
 
-
-    console.log('loading dashboard controller..');
-
-   // $scope.$broadcast('gridster-resized', [width, height]);
+    $scope.gridsterOpts = {resizable:{enabled:false},draggable:{enabled:false}};
 
     $scope.getDashboards = function(params) {
         var params = (params) ? params : {};
@@ -80,7 +116,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.reportSelected = function(reportID,report)
     {
-        console.log('selected report: '+reportID);
         $('#reportListModal').modal('hide');
 
         var theItem = {};
@@ -115,94 +150,33 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         $scope.showPrompts = true;
     }
 
-    /*
-    $scope.insertCode = function() {
-        var $div = $('<div class="dashBoardItem"><div class="panel panel-default"><div class="panel-body">Basic panel example</div></div></div>');
-        //$(document.body).append($div);
-        $(dashBoardLayout).append($div);
-
-
-            angular.element(document).injector().invoke(function($compile) {
-            var scope = angular.element($div).scope();
-            $compile($div)(scope);
-        });
-    } */
-
-     /*
-    $scope.generateDashBoard0 = function() {
-      var generatedHTML = '';
-      var dashBoardDefinition = {rows:[{rowHeight:"200px",cols:[{title:"el titulo 1",reportID:"11111"},{title:"Columna 2",reportID:"22222"}]},
-                                        {rowHeight:"200px",cols:[{title:"row 2 1",reportID:"33333"},{title:"row 2 2",reportID:44444}]},
-                                        {rowHeight:"200px",cols:[{title:"row 3 1",reportID:"55555"}]},
-                                        {rowHeight:"400px",cols:[{title:"row 4 1",reportID:"66666"}]}
-                                        ]};
-        for (var r in dashBoardDefinition.rows) {
-
-            var theRowHeight =  dashBoardDefinition.rows[r].rowHeight;
-            var theRowID = 'row'+r;
-
-                        //generatedHTML += '<div class="col-md-12" style="height: '+theRowHeight+';padding: {{rowPadding}}">';
-            generatedHTML += '<div  class="col-md-12" style="padding: {{rowPadding}};position: relative;" x-lvl-draggable="true" x-lvl-drop-target="true" x-on-select="selected(selectedEl)">';
-
-            var colClass = 'col-md-12';
-
-            if (dashBoardDefinition.rows[r].cols.length == 2)
-                colClass = 'col-md-6';
-            if (dashBoardDefinition.rows[r].cols.length == 3)
-                colClass = 'col-md-4';
-            if (dashBoardDefinition.rows[r].cols.length == 4)
-                colClass = 'col-md-3';
-            if (dashBoardDefinition.rows[r].cols.length == 5)
-                colClass = 'col-md-2';
-            if (dashBoardDefinition.rows[r].cols.length == 6)
-                colClass = 'col-md-2';
-
-
-            for (var c in dashBoardDefinition.rows[r].cols) {
-                generatedHTML += '<div class="'+colClass+'"  style="height: '+theRowHeight+';" x-lvl-draggable="true" x-lvl-drop-target="false" x-on-select="selected(selectedEl)"><div class="panel panel-default"  style="height: '+theRowHeight+';"><div class="panel-body">';
-                //generatedHTML += '<div class="'+colClass+'"  ><div class="panel panel-default"><div class="panel-body">';
-
-                //generación del componente
-               // generatedHTML += dashBoardDefinition.rows[r].cols[c].title;
-
-                reportsModel.getReportHTML($scope,'11111', function(theHTML) {
-                    generatedHTML += theHTML;
-                });
-
-                generatedHTML += '</div></div></div>';
-
-            }
-
-            generatedHTML += '<div class="col-md-12 addNewRow" ng-show="designMode"><small>Add New Row</small></div>';
-            generatedHTML += '</div>';
-
-
-
-        }
-
-        var $div = $(generatedHTML);
-        $(dashBoardLayout).append($div);
-        angular.element(document).injector().invoke(function($compile) {
-            var scope = angular.element($div).scope();
-            $compile($div)(scope);
-        });
-
+    $scope.publishDashboard = function()
+    {
+        $scope.objectToPublish = $scope.dashBoardDefinitition;
+        $('#publishModal').modal('show');
     }
-        */
+
+    $scope.unPublish = function()
+    {
+        connection.post('/api/dashboards/unpublish', {_id:$scope.dashBoardDefinitition._id}, function(data) {
+            $scope.dashBoardDefinitition.isPublic = false;
+            $('#publishModal').modal('hide');
+        });
+    }
+
+    $scope.selectThisFolder = function(folderID)
+    {
+        connection.post('/api/dashboards/publish-dashboard', {_id:$scope.dashBoardDefinitition._id,parentFolder:folderID}, function(data) {
+            $scope.dashBoardDefinitition.parentFolder = folderID;
+            $scope.dashBoardDefinitition.isPublic = true;
+            $('#publishModal').modal('hide');
+        });
+    }
+
     $scope.generateDashBoard = function() {
         $scope.orderNbr = 0;
         var generatedHTML = '';
 
-        /*
-        var dashBoardDefinition = {rows:[
-            {rowHeight:"200px",cols:[{title:"el titulo 1",reportID:"11111"},{title:"Columna 2",reportID:"22222"}]},
-            {rowHeight:"200px",cols:[{title:"row 2 1",reportID:"33333"},{title:"row 2 2",reportID:44444}]},
-            {rowHeight:"200px",cols:[{title:"row 3 1",reportID:"55555",verticalScroll:"yes"}]},
-            {rowHeight:"200px",cols:[{title:"row 4 1",reportID:"66666",verticalScroll:"yes",horizontalScroll:"yes"}]}
-        ]} ;
-        */
-
-        console.log ('este es el dID ' + $scope.dashboardID);
         if ($scope.dashboardID)
         {
             dashboardModel.getDashBoard($scope.dashboardID, function(dashboard){
@@ -232,7 +206,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
                         {
                             $scope.showPrompts = true;
                         } else {
-                            //setReportDiv($routeParams.reportID);
                             paintReports($scope.dashBoardDefinitition);
                         }
                     }
@@ -241,63 +214,9 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             });
 
 
-
-
-                //process prompts
-                /*
-                for (var r in $scope.dashBoardDefinitition.items) {
-                    if ($scope.dashBoardDefinitition.items[r].itemType == 'reportBlock')
-                    {
-                        console.log('uno ');
-                        reportModel.getPrompts($scope,$scope.dashBoardDefinitition.items[r].reportDefinition, function(){});
-                    }
-                    if ($scope.dashBoardDefinitition.items[r].itemType == 'tabBlock')
-                    {
-                        $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
-                    }
-                } */
-
-
-
-
-                /*
-                $timeout(function(){
-                    for (var r in $scope.dashBoardDefinitition.items) {
-                        if ($scope.dashBoardDefinitition.items[r].itemType == 'reportBlock')
-                        {
-                            $scope.getReport2($scope.dashBoardDefinitition.items[r]);
-                        }
-                        if ($scope.dashBoardDefinitition.items[r].itemType == 'tabBlock')
-                        {
-                            $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
-                        }
-                    }
-                },1000);*/
-
-
-            /*connection.get('/api/dashboards/find-one', {id: $scope.dashboardID}, function(data) {
-                $scope.dashBoardDefinitition = data.item;
-
-                $scope.$apply;
-
-                $timeout(function(){
-                    for (var r in $scope.dashBoardDefinitition.items) {
-                        if ($scope.dashBoardDefinitition.items[r].itemType == 'reportBlock')
-                        {
-                            $scope.getReport($scope.dashBoardDefinitition.items[r].reportID);
-                        }
-                        if ($scope.dashBoardDefinitition.items[r].itemType == 'tabBlock')
-                        {
-                            $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
-                        }
-                    }
-                },1000);
-            });*/
         }
 
         $scope.$watch('dashBoardDefinitition.items', function(items){
-            // one of the items changed
-            console.log('item changed: '+items);
             $(window).trigger('resize');
         }, true);
 
@@ -311,12 +230,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             {
                 $scope.getReport2(dashboard.items[r].reportDefinition);
             }
-            /*
-            if (dashboard.items[r].itemType == 'tabBlock')
-            {
-                $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
-            }
-            */
         }
     }
 
@@ -329,22 +242,14 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             return;
         }
 
-            console.log('processing prompts for report '+dashboard.items[index].reportID);
-
             if (dashboard.items[index].itemType == 'reportBlock')
             {
-
                 promptModel.getPrompts($scope,dashboard.items[index].reportDefinition, function(){
                     getPromptsForDashboard(dashboard,index+1, done);
                 });
             }  else {
                 getPromptsForDashboard(dashboard,index+1, done);
             }
-            /*
-            if ($scope.dashBoardDefinitition.items[r].itemType == 'tabBlock')
-            {
-                $scope.getTabBlock($scope.dashBoardDefinitition.items[r]);
-            } */
 
     }
 
@@ -378,41 +283,10 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
         return vscroll;
     }
- /*
-    function generateBlock(row,index, htmlCode, theRowHeight,colClass)
-    {
 
-            var generatedHTML = htmlCode;
-            var quote = "'";
-
-            var vscroll = 'overflow-y: hidden;';
-            if (row.cols[index].verticalScroll == 'yes')
-                vscroll = 'overflow-y: scroll;';
-
-            var hscroll = 'overflow-x: hidden;';
-            if (row.cols[index].horizontalScroll == 'yes')
-                hscroll = 'overflow-x: scroll;';
-
-            generatedHTML += '<div class="'+colClass+'">El titulo</div>';
-
-            generatedHTML += '<div class="'+colClass+'"  style="height: '+theRowHeight+';" x-lvl-draggable="true" x-lvl-drop-target="false" x-on-select="selected(selectedEl)"><div class="panel panel-default"  style="height: '+theRowHeight+';"><div id="'+row.cols[index].reportID+'" class="panel-body" ng-init="getReport('+quote+row.cols[index].reportID+quote+')" style="height: '+theRowHeight+';'+vscroll+hscroll+'">';
-                generatedHTML += '</div></div></div>';
-           return generatedHTML;
-        //}
-    }
-   */
 
     $scope.getReport2 = function(report)
     {
-
-
-        console.log('entering on get report for report ID '+report.reportID) ;
-
-
-        //Process prompts
-
-
-        //reportModel.getReportBlock($scope,reportID, function(errorCode) {
         reportModel.executeReport($scope,report._id, report, function (errorCode){
 
 
@@ -447,9 +321,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
     $scope.getReport = function(reportID)
     {
 
-
-        console.log('entering on get report for report ID '+reportID)
-
         reportModel.getReportBlock($scope,reportID, function(errorCode) {
 
             if (errorCode != 0)
@@ -482,8 +353,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.saveDashboard = function()
     {
-        //console.log('saving dashboard '+data.dashboardName);
-        //$scope.dashBoardDefinitition
+
 
 
         if ($scope.mode == 'add') {
@@ -505,41 +375,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.getTabBlock = function(blockItem)
     {
-
-        /*<tabset>
-            <tab heading="Static title">Static content</tab>
-            <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
-      {{tab.content}}
-            </tab>
-            <tab select="alertMe()">
-                <tab-heading>
-                    <i class="glyphicon glyphicon-bell"></i> Alert!
-                </tab-heading>
-            I've got an HTML heading, and a select callback. Pretty cool!
-            </tab>
-        </tabset>*/
-
-
-        /*
-        var theHTML = '<ul class="nav nav-tabs" style="width="100%">';
-
-        for (var r in blockItem.items) {
-            if (r == 0)
-                theHTML += '<li class="active"><a href="#one-normal" data-toggle="tab"><i class="fa fa-camera"></i> One</a></li>';
-            else
-                theHTML += '<li><a href="#one-normal" data-toggle="tab"><i class="fa fa-camera"></i> One</a></li>';
-        }
-
-        theHTML += '</ul><div class="tab-content">';
-        for (var r in blockItem.items) {
-            if (r == 0)
-                theHTML += '<div id="'+blockItem.items[r].reportID+'" class="tab-pane active" id="two-normal" ng-init="getReport('+blockItem.items[r].reportID+')"></div>';
-            else
-                theHTML += '<div id="'+blockItem.items[r].reportID+'" class="tab-pane" id="two-normal" ng-init="getReport('+blockItem.items[r].reportID+')"></div>';
-        }
-
-        theHTML += '</div>';
-        */
 
         var theHTML = '<tabset>';
 
@@ -571,42 +406,16 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
 
     $scope.selected = function(selectedEl) {
-        /*
-        console.log('entering selected '+$scope.selectedElement + selectedEl)
-        var theElement = angular.element(selectedEl);
-
-        if ($scope.selectedElement != null)
-        {
-            console.log('removing selected ');
-            $scope.selectedElement.removeClass('selected');
-            theElement.addClass('style="background-color:#000000"');
-            //$scope.selectedElement.attr("contenteditable", "false");
-        }
-
-        //$scope.selectedElement = angular.element(selectedEl);
-        $scope.selectedElement = theElement;
-
-        //angular.element(selectedEl).addClass('selected');
-        theElement.addClass('selected');
-        $scope.isSelected = true;
-        //console.log('element selected bc '+selectedElement.attr('id'));
-        */
 
         return true;
-        //$scope.getElementProperties();
 
     }
 
     $scope.onReportAction = function(actionType,targetID,targetFilters,sourceID)
     {
-        console.log('estamos entrando en la accion del informe '+ actionType);
-        console.log('/dashboards/'+targetID+'/'+targetFilters+'/'+sourceID);
-
-        //actions:[{actionEvent:"onRowClick",actionType:"goToDashBoard",targetID:"clientDashboard",targetFilters:['customerID'];
         if (actionType == 'goToDashBoard')
         {
-            //window.location.href="/home/#/my-employee-profile";
-            window.location.hash = '/dashboards/'+targetID; //+'/'+targetFilters+'/'+sourceID;
+            window.location.hash = '/dashboards/'+targetID;
         }
 
     }
@@ -619,6 +428,11 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
     $scope.toggleSelection = function(value)
     {
         promptModel.toggleSelection($scope, value);
+    }
+
+    $scope.isValueSelected = function(value)
+    {
+        promptModel.isValueSelected($scope,value);
     }
 
     $scope.selectSearchValue = function(searchValue)
@@ -652,25 +466,35 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     };
 
+    $scope.saveToExcel = function(reportHash)
+    {
+        reportModel.saveToExcel($scope,reportHash) ;
+    }
 
+    $scope.delete = function (dashboardID, dashboardName) {
+        $scope.modalOptions = {};
+        $scope.modalOptions.headerText = 'Confirm delete dashboard'
+        $scope.modalOptions.bodyText = 'Are you sure you want to delete the dashboard:'+' '+dashboardName;
+        $scope.modalOptions.ID = dashboardID;
+        $('#deleteModal').modal('show');
+    };
 
-}]);/*.directive('dashBoardLayout', function($compile) {
-        return {
-            template: '<div><label>{{input.label}}: </label></div>',
-            replace: true,
-            link: function(scope, element) {
-                var el = angular.element('<span/>');
-                switch(scope.input.inputType) {
-                    case 'checkbox':
-                        el.append('<input type="checkbox" ng-model="input.checked"/><button ng-if="input.checked" ng-click="input.checked=false; doSomething()">X</button>');
-                        break;
-                    case 'text':
-                        el.append('<input type="text" ng-model="input.value"/><button ng-if="input.value" ng-click="input.value=\'\'; doSomething()">X</button>');
-                        break;
+    $scope.deleteConfirmed = function (dashboardID) {
+        connection.post('/api/dashboards/delete/'+dashboardID, {id:dashboardID}, function(result) {
+            if (result.result == 1) {
+                $('#deleteModal').modal('hide');
+                var nbr = -1;
+                for (var i in $scope.dashboards.items)
+                {
+                    if ($scope.dashboards.items[i]._id === dashboardID)
+                        nbr = i;
                 }
-                $compile(el)(scope);
-                element.append(el);
+                if (nbr > -1)
+                    $scope.dashboards.items.splice(nbr,1);
             }
-        }
-    });
- */
+        });
+    };
+
+
+
+}]);

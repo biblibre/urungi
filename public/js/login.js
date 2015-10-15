@@ -154,7 +154,7 @@ var app = angular.module('widestage-login', ['ui.router']).
                         $scope.loginError = false;
 
                         //console.log('success',JSON.stringify(data));
-                        $rootScope.user = data.user;
+
 
                         var theUser = data.user;
                         //console.log('the user',JSON.stringify($rootScope.user))
@@ -163,8 +163,11 @@ var app = angular.module('widestage-login', ['ui.router']).
                         connection.get('/api/get-user-data', {}, function(data) {
                             theUser.companyData = data.items.companyData;
                             theUser.rolesData = data.items.rolesData;
-                            console.log('this is the company data',theUser.companyData);
-                            console.log('this is the roles data',theUser.rolesData);
+                            theUser.reportsCreate = data.items.reportsCreate;
+                            theUser.dashboardsCreate = data.items.dashboardsCreate;
+                            theUser.isWSTADMIN = data.items.isWSTADMIN;
+                            console.log('this is the user',JSON.stringify(theUser));
+                            $rootScope.user = theUser;
                             $sessionStorage.setObject('user', theUser);
                             $rootScope.loginRedirect();
 

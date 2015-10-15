@@ -5,15 +5,17 @@
     <a href="/#/home" class="list-group-item ">
         <span><i class="fa fa-home"></i></span> Home
     </a>
-    <a href="/#/dashboards" class="list-group-item ">
+    <a ng-if="user.dashboardsCreate || counts.dashBoards > 0" href="/#/dashboards" class="list-group-item ">
         <span><i class="fa fa-dashboard"></i></span> Dashboards <span class="badge">{{counts.dashBoards}}</span>
     </a>
-    <a href="/#/reports" class="list-group-item">
+    <a ng-if="user.reportsCreate || counts.reports > 0" href="/#/reports" class="list-group-item">
         <span><i class="fa fa-bar-chart"></i></span> Reports <span class="badge">{{counts.reports}}</span>
     </a>
+    <!--
     <a href="/#/history" class="list-group-item">
         <span><i class="fa fa-history"></i></span> History
     </a>
+    -->
     <a  href="/#/users/{{user._id}}/" class="list-group-item">
         <span><i class="fa fa-gear"></i></span> My profile
     </a>
@@ -31,9 +33,9 @@
     <a ng-show="isWSTADMIN" href="/#/public-space" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
         <span><i class="fa fa-sitemap"></i></span> Public space
     </a>
-    <a ng-show="isWSTADMIN" href="/#/admin-settings" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
+    <!--<a ng-show="isWSTADMIN" href="/#/admin-settings" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
         <span><i class="fa fa-gears"></i></span> Settings
-    </a>
+    </a> -->
     <a ng-show="isWSTADMIN" href="/#/layers" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
         <span><i class="fa fa-map-o"></i></span> Layers  <span class="badge">{{counts.layers}}</span>
     </a>

@@ -44,13 +44,13 @@ module.exports = function (mongoose, done) {
 
 
     var fs = require('fs');
-
+    /*
     var models_dir = __dirname + '/../base';
     fs.readdirSync(models_dir).forEach(function (file) {
         if(file[0] === '.') return;
         require(models_dir+'/'+ file+'/model.js');
     });
-
+    */
 
     //Custom models
     var models_dir = __dirname + '/../custom';

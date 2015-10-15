@@ -10,4 +10,6 @@ module.exports = function (app) {
     app.get('/api/reports/preview-query',restrict, Reports.PreviewQuery);
     app.get('/api/reports/get-data',restrict, Reports.ReportsGetData);
     app.get('/api/reports/get-report/:id',restrict, Reports.GetReport);
+    app.post('/api/reports/publish-report', restrict, Reports.PublishReport);
+    app.post('/api/reports/unpublish', restrict, Reports.UnpublishReport);
 };

@@ -26,9 +26,26 @@ exports.ReportsFindAll = function(req,res){
 
     */
 
+    /*
+    var isWSTADMIN = false;
+
+    if(req.isAuthenticated()){
+        for (var i in req.user.roles) {
+            if (req.user.roles[i] == 'WSTADMIN'){
+                isWSTADMIN = true;
+            }
+        }
+    } */
+
+
     var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
-    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{"$or": [{owner: req.user._id},{owner: { $exists: false }}]}]}
-    var fields = {reportName:1,reportType:1};
+    /*
+    if (isWSTADMIN)
+        var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"}]}
+        else */
+        var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{owner: req.user._id}]}
+    //var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{"$or": [{owner: req.user._id},{owner: { $exists: false }}]}]}
+    var fields = {reportName:1,reportType:1,owner:1,isPublic:1};
     var params = {};
 
     var Reports = connection.model('Reports');
@@ -51,7 +68,7 @@ exports.GetReport = function(req,res){
     controller.findOne(req, function(result){
         serverResponse(req, res, 200, result);
 
-        if (req.query.mode == 'execute')
+        if (req.query.mode == 'execute' && result.item)
         {
 
             //Annotate the execution in statistics
@@ -79,29 +96,125 @@ exports.ReportsFindOne = function(req,res){
 };
 
 exports.ReportsCreate = function(req,res){
-    req.query.trash = true;
-    req.query.companyid = true;
-    req.query.userid = true;
 
-    if (!req.body.ispublic)
+    if (!req.session.reportsCreate && !req.session.isWSTADMIN)
+    {
+        serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to create reports"});
+    } else {
+
+        req.query.trash = true;
+        req.query.companyid = true;
+        req.query.userid = true;
+
         req.body.owner = req.user._id;
+        req.body.isPublic = false;
 
-    console.log('crearint report',req.body);
-
-    controller.create(req, function(result){
-        serverResponse(req, res, 200, result);
-    });
+        controller.create(req, function(result){
+            serverResponse(req, res, 200, result);
+        });
+    }
 };
 
 exports.ReportsUpdate = function(req,res){
+
     req.query.trash = true;
     req.query.companyid = true;
+    var data = req.body;
 
+    if (!req.session.isWSTADMIN)
+    {
+        var Reports = connection.model('Reports');
+        Reports.findOne({_id:data._id,owner:req.user._id,companyID:req.user.companyID}, {_id:1}, {}, function(err, item){
+            if(err) throw err;
+            if (item) {
+                controller.update(req, function(result){
+                    serverResponse(req, res, 200, result);
+                })
+            } else {
+                serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to update this report, or this report do not exists"});
+            }
+        });
+    } else {
+        controller.update(req, function(result){
+            serverResponse(req, res, 200, result);
+        })
+    }
 
-    controller.update(req, function(result){
-        serverResponse(req, res, 200, result);
-    })
 };
+
+exports.PublishReport = function(req,res)
+{
+    var data = req.body;
+    var parentFolder = data.parentFolder;
+
+    //tiene el usuario conectado permisos para publicar?
+    var Reports = connection.model('Reports');
+    var find = {_id:data._id,owner:req.user._id,companyID:req.user.companyID};
+
+    if (req.session.isWSTADMIN)
+        find = {_id:data._id,companyID:req.user.companyID};
+
+    console.log('entrando en publish',JSON.stringify(find));
+
+    Reports.findOne(find, {}, {}, function(err, report){
+        if(err) throw err;
+        if (report) {
+            report.parentFolder = parentFolder;
+            report.isPublic = true;
+
+
+            Reports.update({_id:data._id}, {$set: report.toObject() }, function (err, numAffected) {
+                if(err) throw err;
+
+                if (numAffected>0)
+                {
+                    serverResponse(req, res, 200, {result: 1, msg: numAffected+" report published."});
+                } else {
+                    serverResponse(req, res, 200, {result: 0, msg: "Error publishing report, no report have been published"});
+                }
+            });
+        } else {
+            console.log('no encontrado',JSON.stringify(report));
+            serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to publish this report, or this report do not exists"});
+        }
+
+    });
+
+}
+
+
+exports.UnpublishReport = function(req,res)
+{
+    var data = req.body;
+
+    //TODO:tiene el usuario conectado permisos para publicar?
+    var Reports = connection.model('Reports');
+    var find = {_id:data._id,owner:req.user._id,companyID:req.user.companyID};
+
+    if (req.session.isWSTADMIN)
+        find = {_id:data._id,companyID:req.user.companyID};
+
+    Reports.findOne(find, {}, {}, function(err, report){
+        if(err) throw err;
+        if (report) {
+            report.isPublic = false;
+            Reports.update({_id:data._id}, {$set: report.toObject() }, function (err, numAffected) {
+                if(err) throw err;
+
+                if (numAffected>0)
+                {
+                    serverResponse(req, res, 200, {result: 1, msg: numAffected+" report unpublished."});
+                } else {
+                    serverResponse(req, res, 200, {result: 0, msg: "Error unpublishing report, no report have been unpublished"});
+                }
+            });
+        } else {
+            serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to unpublish this report, or this report do not exists"});
+        }
+
+    });
+
+}
 
 exports.ReportsDelete = function(req,res){
     var data = req.body;
@@ -115,9 +228,25 @@ exports.ReportsDelete = function(req,res){
 
     req.body = data;
 
-    controller.update(req, function(result){
-        serverResponse(req, res, 200, result);
-    });
+    if (!req.session.isWSTADMIN)
+    {
+        var Reports = connection.model('Reports');
+        Reports.findOne({_id:data._id,owner:req.user._id}, {_id:1}, {}, function(err, item){
+            if(err) throw err;
+            if (item) {
+                controller.remove(req, function(result){
+                    serverResponse(req, res, 200, result);
+                });
+            } else {
+                serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to delete this report"});
+            }
+        });
+
+    } else {
+        controller.remove(req, function(result){
+            serverResponse(req, res, 200, result);
+        });
+    }
 };
 
 exports.PreviewQuery = function(req,res)

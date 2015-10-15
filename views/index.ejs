@@ -1,95 +1,45 @@
 <!DOCTYPE html>
 <html ng-app="WideStage">
 
-<!-- Bootstrap
-<link href="https://d1n9b09i8u5mpj.cloudfront.net/bootstrap-3.3.4-dist/css/bootstrap.min.css" rel="stylesheet">
--->
-<link href="https://s3.amazonaws.com/widestage/default/bootstrap-3.3.4-dist/css/bootstrap.min.css" rel="stylesheet">
-
-<link href="https://s3.amazonaws.com/widestage/default/css/bootstrap-custom.css" rel="stylesheet">
-
-<!-- widestage Default CSS -->
-<!--<link href="https://s3.amazonaws.com/widestage/default/css/widestage.css" rel="stylesheet">-->
-
+<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap-custom.css" rel="stylesheet">
 <!--jquery ui -->
 <link rel="stylesheet" type="text/css" href="libs/jquery/jquery-ui.structure.min.css"/>
-
-
-
-
 <!--select-->
 <link rel="stylesheet" type="text/css" href="libs/select/dist/select.min.css"/>
 <link rel="stylesheet" type="text/css" href="libs/select/dist/select2.css"/>
-<!--
-    Selectize theme
-    Less versions are available at https://github.com/brianreavis/selectize.js/tree/master/dist/less
-  -->
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
-
-
-
 <!-- font-awesome -->
-<!--<link href="https://s3.amazonaws.com/widestage/default/css/font-awesome.min.css" rel="stylesheet">-->
 <link rel="stylesheet" type="text/css" href="/css/font-awesome-4.4.0/css/font-awesome.min.css"/>
-
 <!-- morris -->
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css"/>
-
 <!-- gridster -->
-<link rel="stylesheet" href="https://s3.amazonaws.com/widestage/default/js/lib/angular-gridster/dist/angular-gridster.min.css" />
-
-<!-- fuelux
-<link href="//www.fuelcdn.com/fuelux/3.7.2/css/fuelux.min.css" rel="stylesheet">
--->
-
+<link rel="stylesheet" href="angular-gridster/dist/angular-gridster.min.css" />
 <!-- ui-layout -->
-<link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/widestage/default/js/lib/angular-ui-layout/ui-layout.css"/>
-
+<link rel="stylesheet" type="text/css" href="angular-ui-layout/src/ui-layout.css"/>
 <!-- angular.treeview -->
-<link rel="stylesheet" href="https://s3.amazonaws.com/widestage/default/js/lib/angular.treeview/css/angular.treeview.css" />
-
+<link rel="stylesheet" href="angular-treeview/css/angular.treeview.css" />
 <!-- nestable -->
 <link rel="stylesheet" href="/libs/jquery.nestable/jquery.nestable.css" />
-
 <!--font awesome icon picker -->
 <link rel="stylesheet" href="/libs/fontawesome-icon-picker/fontawesome-iconpicker.min.css" />
-
 <!--slider-->
 <link rel="stylesheet" href="/libs/bootstrap-sliders/bootstrap-slider.min.css" />
-
-<!--bootstrap tagsinput
-<link rel="stylesheet" href="/libs/bootstrap-tagsinput/bootstrap-tagsinput.css" />
--->
-
-<!--bootstrap ngtagsinput
-<link rel="stylesheet" href="/libs/ng-tags-input/ng-tags-input.bootstrap.min.css" />
--->
 <!--bootstrap dateTimePicker-->
 <link rel="stylesheet" href="/libs/angular-datetimepicker/datetimepicker.css" />
-
 <!--angular ui tree-->
-<link rel="stylesheet" href="/libs/angular-ui-tree/angular-ui-tree.min.css" />
-
-
+<link rel="stylesheet" href="angular-ui-tree/dist/angular-ui-tree.min.css" />
 <!--jsPlumb-->
 <link rel="stylesheet" type="text/css" href="libs/jsplumb/jsPlumb.css"/>
 
 <link rel="stylesheet" type="text/css" href="nodedream/nodedream.css"/>
 
-<link rel="stylesheet" type="text/css" href="css/xenon-components.css"/>
+<link rel="stylesheet" type="text/css" href="css/components.css"/>
 
-<link rel="stylesheet" type="text/css" href="css/xenon-forms.css"/>
+<link rel="stylesheet" type="text/css" href="css/forms.css"/>
 
 <link rel="stylesheet" type="text/css" href="css/widestage.css"/>
 
-
-
-
-
-
-<!-- ngTable
-<script data-require="ng-table@*" data-semver="0.3.0" src="http://bazalt-cms.com/assets/ng-table/0.3.0/ng-table.js"></script>
--->
 <body>
 
 <div ng-view></div>
@@ -99,138 +49,94 @@
 </body>
 
 <!-- jquery -->
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/jquery/jquery-2.0.3.min.js"></script>
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/jquery/jquery.validate.min.js"></script>
-<!--<script src="libs/jquery/jquery-ui-1.9.2.custom.min.js"></script>-->
-<script src="libs/jquery/jqueryui-1.11/jquery-ui.min.js"></script>
+<script src="jquery/dist/jquery.min.js"></script>
+<script src="jquery-validate/dist/jquery.validate.min.js"></script>
+<script src="jquery-ui/jquery-ui.min.js"></script>
 <!-- bootstrap -->
-<script src="https://s3.amazonaws.com/widestage/default/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
-
+<script src="bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- angular -->
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/angular/angular.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular-sanitize.js"></script>
-
-<!-- ngDragable
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/ngdragable/ngDraggable.js"></script>
-   -->
-<script src="js/angular-draganddrop.min.js"></script>
-
+<script src="angular/angular.min.js"></script>
+<script src="angular-sanitize/angular-sanitize.js"></script>
+<script src="angular-draganddrop/angular-draganddrop.min.js"></script>
 <!-- route -->
-<script  src="https://s3.amazonaws.com/widestage/default/js/lib/angular/angular-route.min.js"></script>
-<script  src="https://s3.amazonaws.com/widestage/default/js/lib/angular/angular-ui-router.min.js"></script>
-
-<!-- sortable -->
-<script  src="https://s3.amazonaws.com/widestage/default/js/lib/ui-sortable/sortable.js"></script>
-
+<script  src="angular-route/angular-route.min.js"></script>
+<script  src="angular-ui-router/release/angular-ui-router.min.js"></script>
 <!-- gridster -->
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/angular-gridster/dist/angular-gridster.min.js"></script>
+<script src="angular-gridster/dist/angular-gridster.min.js"></script>
+<!-- morris raphael 2.1.0 -->
+<script src="raphael/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<!-- nestable -->
+<script src="jquery-nestable/jquery.nestable.js"></script>
+<script src="/libs/jquery.nestable/angular-nestable.js"></script>
+<!-- uilayout -->
+<script src="angular-ui-layout/src/ui-layout.js"></script>
+<!-- angular.treeview  -->
+<script src="angular-treeview/angular.treeview.min.js"></script>
+<!-- noty -->
+<script src="noty/js/noty/jquery.noty.js"></script>
+<script src="noty/js/noty/layouts/top.js"></script>
+<script src="noty/js/noty/themes/default.js"></script>
+<!-- Checklist model multiselect -->
+<script src="checklist-model/checklist-model.js"></script>
+<!--slider -->
+<script src="seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+<script src="angular-bootstrap-slider/slider.js"></script>
+<!--tg-dynamic-directive-->
+<script src="tg-dynamic-directive/src/tg.dynamic.directive.js"></script>
+<!--angular uuid-->
+<script src="angular-uuid2/dist/angular-uuid2.min.js"></script>
+<!--vs-repeat-->
+<script src="angular-vs-repeat/src/angular-vs-repeat.min.js"></script>
+<!--bootstrap datepicker-->
+<script src="bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<!--angular datetimepicker-->
+<script src="moment/min/moment.min.js"></script>
+<script src="angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+<!--numeral-->
+<script src="numeral/min/numeral.min.js"></script>
+<!--angular ui tree -->
+<script src="angular-ui-tree/dist/angular-ui-tree.min.js"></script>
+<!--excel export -->
+<script src="js-xlsx/dist/xlsx.core.min.js"></script>
+<!--file saver -->
+<script src="file-saver/FileSaver.min.js"></script>
+<!--angular-csv-import.js-->
+<script src="angular-csv-import/dist/angular-csv-import.min.js"></script>
 
+
+<!-- vector map
+<script src="libs/vector-map/jquery.vmap.min.js"></script>
+<script src="libs/vector-map/jquery.vmap.world.js"></script>
+     -->
+<!-- angular ui bootstrap -->
+<script src="libs/ui-bootstrap/ui-bootstrap-tpls-0.13.0.min.js"></script>
 <!-- ngInfiniteScroll -->
 <script src="libs/ngInfiniteScroll/ng-infinite-scroll.min.js"></script>
-
-<!-- morris -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-
-<!-- vector map -->
-<!--<script src="http://themes.laborator.co/xenon/assets/js/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="http://themes.laborator.co/xenon/assets/js/toastr/toastr.min.js"></script>-->
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/vector-map/jquery.vmap.min.js"></script>
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/vector-map/jquery.vmap.world.js"></script>
-
-<!-- nestable -->
-<script src="/libs/jquery.nestable/jquery.nestable.js"></script>
-<script src="/libs/jquery.nestable/angular-nestable.js"></script>
-
-<!-- fuelux
-<script src="//www.fuelcdn.com/fuelux/3.7.2/js/fuelux.min.js"></script>
--->
-<!-- uilayout -->
-<script type="text/javascript" src="https://s3.amazonaws.com/widestage/default/js/lib/angular-ui-layout/ui-layout.js"></script>
-
-<!-- angular ui bootstrap -->
-<script type="text/javascript" src="https://s3.amazonaws.com/widestage/default/js/lib/ui-bootstrap/ui-bootstrap-tpls-0.13.0.min.js"></script>
-
-<!-- angular.treeview -->
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/angular.treeview/angular.treeview.js"></script>
-
-<!-- noty -->
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/noty/jquery.noty.js"></script>
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/noty/layouts/top.js"></script>
-<script src="https://s3.amazonaws.com/widestage/default/js/lib/noty/themes/default.js"></script>
-
+<!-- sortable-->
+<script  src="libs/ui-sortable/sortable.js"></script>
 <!-- crypto -->
 <script src="libs/crypto/aes.js"></script>
-
 <!-- Objectid -->
 <script src="libs/objectId/Objectid.js"></script>
-
-<!-- Checklist model multiselect -->
-<script src="js/directives/checklist-model.js"></script>
-
+<!--select2-->
+<script src="libs/select/dist/select-wst.js"></script>
 <!--font awesome icon picker -->
 <script src="libs/fontawesome-icon-picker/fontawesome-iconpicker.min.js"></script>
-
 <!--gauge -->
 <script src="libs/gauge/gauge.js"></script>
 <script src="libs/gauge/angular-canv-gauge.js"></script>
-
 <!--gauge -->
 <script src="libs/gauge2/gauge.min.js"></script>
-
 <!-- widestage directives -->
 <script src="js/directives/wst-directives.js"></script>
-
-<!--slider -->
-<script src="libs/bootstrap-sliders/bootstrap-slider.min.js"></script>
-<script src="libs/bootstrap-sliders/angular-bootstrap-slider.js"></script>
-
-<!--select2-->
-<script src="libs/select/dist/select-wst.js"></script>
-
-<!--bootstrap tagsinput
-<script src="libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
-<script src="libs/bootstrap-tagsinput/bootstrap-tagsinput-angular.min.js"></script>
--->
-
-<!--ng-tags-input
-<script src="libs/ng-tags-input/ng-tags-input.min.js"></script>
--->
-
-<!--jqsimpleconnect-->
-<script src="libs/jqsimpleconnect/jqSimpleConnect.js"></script>
-
-<!--tg-dynamic-directive-->
-<script src="libs/tg-dynamic-directive/tg.dynamic.directive.js"></script>
-
-<!--angular uuid-->
-<script src="js/modules/angular-uuid2.js"></script>
-
-<!--vs-repeat-->
-<script src="libs/angular-vs-repeat/angular-vs-repeat.min.js "></script>
-
-<!--bootstrap datepicker-->
-<script src="libs/bootstrap-datepicker/bootstrap-datepicker.js "></script>
-
-<!--angular datetimepicker-->
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.min.js"></script>
-<script src="libs/angular-datetimepicker/datetimepicker.js "></script>
-
-<!--numeral-->
-<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
-
-<!--angular ui tree -->
-<script src="libs/angular-ui-tree/angular-ui-tree.min.js"></script>
 
 
 
 <!-- angular app -->
 <script type="text/javascript" src="js/webapp.js"></script>
-<script type="text/javascript" src="libs/angular-csv-import/angular-csv-import.js"></script>
 <script type="text/javascript" src="js/services.js"></script>
-
 <script type="text/javascript" src="nodedream/nodedream.js"></script>
-
 <script type="text/javascript" src="js/home/controller.js"></script>
 <script type="text/javascript" src="js/prompts/model.js"></script>
 <script type="text/javascript" src="js/report/model.js"></script>
@@ -238,12 +144,10 @@
 <script type="text/javascript" src="js/report/services/reportNameModal.js"></script>
 <script type="text/javascript" src="js/dashboard/model.js"></script>
 <script type="text/javascript" src="js/dashboard/controller.js"></script>
-<script type="text/javascript" src="js/cube/controller.js"></script>
 <script type="text/javascript" src="js/data-source/controller.js"></script>
 <script type="text/javascript" src="js/data-source/model.js"></script>
 <script type="text/javascript" src="js/data-source/services/dataSourceNameModal.js"></script>
 <script type="text/javascript" src="js/pivot/controller.js"></script>
-<script type="text/javascript" src="js/clients/controller.js"></script>
 <script type="text/javascript" src="js/layer/controller.js"></script>
 <script type="text/javascript" src="js/users/controller.js"></script>
 <script type="text/javascript" src="js/roles/controller.js"></script>
