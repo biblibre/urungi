@@ -1,28 +1,50 @@
 {
-  "name": "DataRepublic",
-  "version": "0.0.0",
-  "description": "",
+  "name": "widestage",
+  "version": "0.9.0",
+  "description": "the first open source reporting tool for mongodb",
   "main": "server.js",
   "directories": {
     "test": "test"
   },
   "dependencies": {
-    "express": "~4.10.7",
-    "mongoose": "~3.8.21",
-    "connect-redis": "~2.1.0",
-    "express-session": "~1.10.1",
-    "passport": "~0.2.1",
-    "passport-remember-me": "0.0.1",
-    "jade": "~1.8.2",
-    "express-ejs-layouts": "~1.1.0",
-    "email-templates": "~2.0.1",
+    "append": "~0.1.1",
     "async": "~1.4.2",
-    "nodemailer-wellknown": "~0.1.7"
+    "aws-sdk": "~2.1.34",
+    "body-parser": "~1.14.1",
+    "connect-redis": "~2.1.0",
+    "cookie-parser": "~1.4.0",
+    "cookie-session": "~2.0.0-alpha.1",
+    "email-templates": "~2.0.1",
+    "express": "~4.10.8",
+    "ejs": "~2.3.4",
+    "crypto-js": "~3.1.5",
+    "express-session": "~1.10.4",
+    "moment": "~2.10.6",
+    "jade": "~1.8.2",
+    "node-uuid": "~1.4.3",
+    "mongoose": "~3.8.28",
+    "express-ejs-layouts": "~1.1.0",
+    "mongodb": "~2.0.46",
+    "nodemailer": "~1.8.0",
+    "nodemailer-wellknown": "~0.1.7",
+    "passport-facebook": "~2.0.0",
+    "password-generator": "~2.0.1",
+    "passport": "~0.2.2",
+    "passport-local": "~1.0.0",
+    "passport-google": "~0.3.0",
+    "numeral": "~1.5.3",
+    "passport-twitter": "~1.0.3",
+    "passport-remember-me": "~0.0.1",
+    "thenBy.js": "~1.1.0"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://hermenegildoromero@bitbucket.org/bigbase/widestage.git"
   },
   "author": "",
   "license": "BSD-2-Clause"
