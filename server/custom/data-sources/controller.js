@@ -182,12 +182,26 @@ exports.getEntities = function(req,res)
 
 }
 
-exports.testMongoConnection = function(req,res) {
-    var mongodb = require('../../core/db/mongodb.js');
-
-    mongodb.testConnection(req.body, function(result) {
-        serverResponse(req, res, 200, result);
-    });
+exports.testConnection = function(req,res) {
+    
+    console.log('entering test connection',req.body.type);
+    if (req.body.type == 'MONGODB')
+    {
+        var mongodb = require('../../core/db/mongodb.js');
+    
+        mongodb.testConnection(req.body, function(result) {
+            serverResponse(req, res, 200, result);
+        });
+    }
+    if (req.body.type == 'MySQL')
+    {
+        console.log('mysql test connection');
+        var mysql = require('../../core/db/mysql.js');
+    
+        mysql.testConnection(req.body, function(result) {
+            serverResponse(req, res, 200, result);
+        });
+    }
 };
 
 

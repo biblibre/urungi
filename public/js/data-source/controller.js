@@ -118,20 +118,22 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     }
 
 
-    $scope.testMongoConnection = function()
+    $scope.testConnection = function()
     {
+        console.log('entering test connection')
         var data = {};
+        data.type = $scope._DataSource.type;
         data.host = $scope._DataSource.params[0].connection.host;
         data.port = $scope._DataSource.params[0].connection.port;
         data.database = $scope._DataSource.params[0].connection.database;
         data.userName = $scope._DataSource.params[0].connection.userName;
         data.password = $scope._DataSource.params[0].connection.password;
 
-        connection.post('/api/data-sources/testMongoConnection', data, function(result) {
+        connection.post('/api/data-sources/testConnection', data, function(result) {
             if (result.result == 1) {
-                $scope.testConnection = {result:1,message:"Successful MongoDB database connection."};
+                $scope.testConnection = {result:1,message:"Successful database connection."};
             } else {
-                $scope.testConnection = {result:0,message:"MongoDB database connection failed."};
+                $scope.testConnection = {result:0,message:"Database connection failed."};
             }
         });
     }

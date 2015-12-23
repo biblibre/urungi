@@ -103,8 +103,11 @@ if (cluster.isMaster) {
         require(routes_dir+'/'+ file+'/routes.js')(app);
     });
 
-    var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-    var port    = process.env.OPENSHIFT_NODEJS_PORT || config.port;
+    //var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+    //var port    = process.env.OPENSHIFT_NODEJS_PORT || config.port;
+    
+    var ipaddr  = process.env.IP || "127.0.0.1";
+    var port    = process.env.PORT  || config.port;
 
     app.listen(port, ipaddr);
 

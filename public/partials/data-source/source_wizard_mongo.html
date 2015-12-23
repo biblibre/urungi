@@ -7,7 +7,12 @@
 <div class="tab-pane with-bg" id="fwv-1">
 
     <div class="container-fluid">
-
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Connection Type</label>
+                <select ng-model="_DataSource.type" placeholder="Select a datasource type..." id="type" class="form-control" ng-change="selectedRoleChanged = true"><option label="MONGODB" value="MONGODB">MONGODB</option><option label="MySQL" value="MySQL">MySQL</option></select>
+            </div>
+        </div>
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label" for="name">Name</label>
@@ -51,7 +56,7 @@
         </div>
 
         <div class="col-md-12" style="padding: 5px;">
-        <a ng-click="testMongoConnection()" ng-disabled="!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database" class="btn btn-default pull-right" style="margin-left: 5px;margin-right: 5px;">Test Connection</a>
+        <a ng-click="testConnection()" ng-disabled="!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database" class="btn btn-default pull-right" style="margin-left: 5px;margin-right: 5px;">Test Connection</a>
         <div ng-if="testConnection.message" class="row alert" ng-class="{'alert-success': testConnection.result == 1,'alert-danger': testConnection.result != 1}" >
             {{testConnection.message}}
         </div>
@@ -74,8 +79,6 @@
 <div class="container-fluid" ng-show='mongoStep == 2'>
 
     <div class="container-fluid" style="padding: 5px;">
-
-
 
     </div>
                  {{selectedCollections}}
