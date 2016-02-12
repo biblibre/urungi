@@ -343,7 +343,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                                                                         type:'line',
                                                                         color:'#000000'};
 
-                                    data hay que meterlo en el chart para que quede claro de donde recibe los datos
+                                    //data hay que meterlo en el chart para que quede claro de donde recibe los datos
 
 
 
