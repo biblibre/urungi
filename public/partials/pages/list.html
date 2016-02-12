@@ -1,0 +1,38 @@
+<div class="container-fluid " ng-init="getPages()"  style="padding-top: 10px;">
+    <div class="container-fluid">
+
+        <div class="main col-md-3" ng-include="'partials/home/sidebar.html'">
+
+
+        </div>
+        <div class="main col-md-9">
+            <div class="container-fluid">
+
+                <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
+                    <h3 class="pull-left" >Pages</h3>
+                    <a ng-if="user.dashboardsCreate" href="/#/pages/new/true" class="btn btn-success pull-right">New Page</a>
+                </div>
+
+                <div class="list-group">
+                    <div  class="list-group-item" ng-repeat="page in pages.items">
+
+                        <a href="" class="pull-right" ng-click="delete(page._id,page.pageName)" style="color:#FF0000;font-size: 16px;margin-right: 5px">
+                            <i class="fa fa-trash-o "  ></i>
+                        </a>
+                        <a  class="pull-right" href="/#/pages/edit/{{page._id}}" style="color:#000080; font-size: 16px;margin-right: 3px;">
+                            <i class="fa fa-pencil" ></i>
+                        </a>
+                        <span ng-if="dashboard.isPublic" class="badge badge-success pull-right" style="margin-right: 5px;">published</span>
+
+                        <a href="/#/pages/{{page._id}}" >
+                            <h4 class="list-group-item-heading" ng-bind="page.pageName"></h4>
+                            <p class="list-group-item-text" ng-bind="page.pageDescription"></p>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-include src="'partials/deleteModal.html'"></div>

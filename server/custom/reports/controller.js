@@ -272,7 +272,7 @@ exports.ReportsGetData = function(req, res) {
     var data = req.query;
     var query = data.query;
 
-    console.log('entering get report data',JSON.stringify(query.layers));
+    //console.log('entering get report data',JSON.stringify(query.layers));
     //debug(query);
 
     processDataSources(query.datasources,query.layers, {page: (data.page) ? data.page : 1},query, function(result) {
@@ -416,6 +416,18 @@ function processDataSources(dataSources,layers, params,query, done, result, inde
                                 }
 
 
+
+                                processDataSources(dataSources,layers, params, query, done, result, index+1);
+                            });
+
+                        case 'POSTGRE':
+                            var postgre = require('../../core/db/postgresql.js');
+
+                            postgre.processCollections(query,dataSource.collections, dts, params,thereAreJoins, function(data) {
+
+
+                               //console.log('not merged results',JSON.stringify(dataSource.collections[0].result))
+                                result = data;
 
                                 processDataSources(dataSources,layers, params, query, done, result, index+1);
                             });

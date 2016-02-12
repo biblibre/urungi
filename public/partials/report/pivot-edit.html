@@ -89,12 +89,13 @@
 
 <div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
 
-    <a data-ng-click="reportName()" class="btn btn-success pull-right" style="margin-right: 5px">Save Report</a>
+    <a data-ng-click="reportName()" class="btn btn-success pull-right"  ng-hide="queryID" style="margin-right: 5px">Save Report</a>
+    <a data-ng-click="saveQuery()" class="btn btn-success pull-right"  ng-hide="reportID" style="margin-right: 5px">Save Query</a>
     <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
 </div>
 
 
-<div class="container-fluid">
+<div class="container-fluid" ng-hide="queryID">
     <!-- TYPE OF REPORT SELECTION -->
 
     <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'grid', 'btn-default': selectedReport.reportType != 'grid'}" ng-click="changeReportType('grid')"><img src="/images/grid.png"></a>
@@ -179,7 +180,7 @@
     </form>
 </div> -->
 
-<div class="container-fluid" style="border-bottom: 2px solid #72A230;">
+<div class="container-fluid" style="border-bottom: 2px solid #72A230; padding: 10px;">
      <h3 class="pull-right" >Query design zone</h3>
 </div>
 

@@ -33,7 +33,7 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
         var searchValue = '';
         if ($scope.selectedFilter.filterType == 'in' || $scope.selectedFilter.filterType == 'notIn') {
             for (var i in $scope.selectedFilter.searchValue) {
-                searchValue += $scope.selectedFilter.searchValue[i][$scope.selectedFilter.collectionID+'_'+$scope.selectedFilter.elementName];
+                searchValue += $scope.selectedFilter.searchValue[i][$scope.selectedFilter.collectionID.toLowerCase()+'_'+$scope.selectedFilter.elementName];
                 if (i < $scope.selectedFilter.searchValue.length-1) {
                     searchValue += ';';
                 }
@@ -55,10 +55,10 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
         var found = false;
         if ($scope.selectedFilter.filterType == 'in' || $scope.selectedFilter.filterType == 'notIn') {
             for (var i in $scope.selectedFilter.searchValue) {
-                if (value == $scope.selectedFilter.searchValue[i][$scope.selectedFilter.collectionID+'_'+$scope.selectedFilter.elementName])
+                if (value == $scope.selectedFilter.searchValue[i][$scope.selectedFilter.collectionID.toLowerCase()+'_'+$scope.selectedFilter.elementName])
                 {
                   found = true;
-                    console.log('este valor esta seleccionado',value);
+
                 }
             }
         }
@@ -87,8 +87,6 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
             return;
 
         }
-
-
 
         if (emptyFound.length > 0)
         {
@@ -136,7 +134,7 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
     }
 
 
-    this.getPrompts = function($scope,report, done)
+    this.getPromptsV0 = function($scope,report, done)
     {
         if (!$scope.prompts)
             $scope.prompts = [];
@@ -161,11 +159,44 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
                             $scope.prompts.push(filter);
                         }
 
-                        //console.log('added for '+report._id);
                     }
                 }
             }
         }
+
+        done(0);
+        return;
+
+    }
+
+    this.getPrompts = function($scope,report, done)
+    {
+        if (!$scope.prompts)
+            $scope.prompts = [];
+            //TODO: Duplicate prompts
+
+                for (var g in report.query.groupFilters) {
+
+                    for (var f in report.query.groupFilters[g].filters)
+                       {
+                            var filter = report.query.groupFilters[g].filters[f];
+                            if (filter.filterPrompt == true)
+                            {
+                                filter.reportID = report._id;
+                                if (checkIfPromptExists($scope,filter) == true)
+                                {
+                                    if (!$scope.duplicatePrompts)
+                                        $scope.duplicatePrompts = [];
+                                    $scope.duplicatePrompts.push(filter);
+                                    console.log('ADD a duplicate prompt');
+                                } else {
+                                    $scope.prompts.push(filter);
+                                }
+
+                            }
+                        }
+                }
+
 
         done(0);
         return;

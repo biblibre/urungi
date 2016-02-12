@@ -5,7 +5,7 @@ var app = angular.module('WideStage', [
        //'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs','angularTreeview','ngDragDrop','ui.layout'
         'ngRoute','ui.sortable','gridster','ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
         'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
-        'ui.bootstrap.datetimepicker','ui.tree'
+        'ui.bootstrap.datetimepicker','ui.tree','page.block','gridshore.c3js.chart','vAccordion'
         //'angularTreeview',
     ])
     .config(['$routeProvider', function($routeProvider) {
@@ -155,6 +155,38 @@ var app = angular.module('WideStage', [
             controller: 'spacesCtrl'
         });
 
+        //pages
+        $routeProvider.when('/pages', {
+            templateUrl: 'partials/pages/list.html',
+            controller: 'pagesCtrl'
+        });
+
+        $routeProvider.when('/pages/:pageID', {
+            templateUrl: 'partials/pages/view.html',
+            controller: 'pagesCtrl'
+        });
+
+        $routeProvider.when('/pages/edit/:pageID/', {
+            templateUrl: 'partials/pages/edit.html',
+            controller: 'pagesCtrl'
+        });
+
+        $routeProvider.when('/pages/new/:newPage/', {
+            templateUrl: 'partials/pages/edit.html',
+            controller: 'pagesCtrl'
+        });
+
+        //queries
+
+        $routeProvider.when('/query/new/:queryID', {
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
+        });
+        $routeProvider.when('/query/edit/:queryID', {
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
+        });
+
     }])
 .factory('$sessionStorage', ['$window', function($window) {
     return {
@@ -211,6 +243,24 @@ app.directive('ngEnter', function() {
             }
         });
     };
+});
+
+app.service('queryService', function() {
+  var theQuery = {};
+
+  var addQuery = function(newObj) {
+      theQuery = newObj;
+  };
+
+  var getQuery = function(){
+      return theQuery;
+  };
+
+  return {
+    addQuery: addQuery,
+    getQuery: getQuery
+  };
+
 });
 
 app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $sessionStorage, connection) {

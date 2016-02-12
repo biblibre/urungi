@@ -4,6 +4,7 @@ var DashboardsSchema = new mongoose.Schema({
     companyID: {type: String , required: true},
     dashboardName: {type: String, required: true},
     dashboardDescription: {type: String},
+    dashboardType: {type: String},
     items: [],
     backgroundColor: {type: String},
     properties: {type: Object},

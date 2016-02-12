@@ -87,8 +87,8 @@ module.exports = {
     },
     local: {
         url: 'http://localhost:8080/',
-        port: 8080,
-        db: 'localhost:27017/projecti',
+        port: 8081,
+        db: 'localhost:27017/widestage_development',
         app: {
             name: 'NodeDream',
             contactEmail: 'jmalarcon.dbteam@gmail.com,hromero@db-team.com',

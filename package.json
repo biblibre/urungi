@@ -36,7 +36,8 @@
     "passport-remember-me": "~0.0.1",
     "passport-twitter": "~1.0.3",
     "password-generator": "~2.0.1",
-    "thenBy.js": "~1.1.0"
+    "pg": "^4.4.3",
+    "thenBy.js": "git+https://git@github.com/Teun/thenBy.js.git"
   },
   "devDependencies": {},
   "scripts": {

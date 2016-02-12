@@ -10,20 +10,34 @@
         </form>
 
     </div>
-    <div class="container-fluid" style="padding-bottom: 5px;">
+
+
+
+
+
+
+    <div  class="container-fluid" style="padding-bottom: 5px;">
         <a ng-click="selectReport()" class="btn btn-default">Add Report</a>
     </div>
-    <div data-gridster style="background-color: {{dashBoardDefinitition.backgroundColor}}" ng-init="generateDashBoard()">
+    <div  data-gridster style="background-color: {{dashBoardDefinitition.backgroundColor}}" ng-init="generateDashBoard()">
         <ul>
             <li data-gridster-item data-row="item.position[0]" data-col="item.position[1]" data-sizex="item.size.x" data-sizey="item.size.y" ng-repeat="item in dashBoardDefinitition.items">
                 <div id="{{item.reportID}}" class="panel-body dashboard"  style=" background-color:#FFFFFF;height:100%;width: 100%;overflow-x:{{item.overflowx}};overflow-y: {{item.overflowy}}">
-
                 </div>
-
             </li>
-
         </ul>
     </div>
+
+
+
+    <!-- SIDEBAR -->
+
+
+
+
+
+
+
 
 </div>
 
@@ -45,3 +59,5 @@
         <button type="button" class="btn" data-dismiss="modal">Cancel</button>
     </div>
 </nd-modal>
+
+

@@ -1,0 +1,549 @@
+<section ng-show="!queryInterface" id="designMainMenu" style="padding-top:5px;">
+    <!--<button class="btn" ng-click="savePage()">Save..</button>-->
+
+
+    <a ng-disabled="columns.length <=0" data-ng-click="savePage()" class="btn btn-success pull-right" style="margin-right: 5px">Save Page</a>
+    <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
+</section>
+
+<section ng-show="!queryInterface" id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'data'" class="ng-scope">
+    <!--<menu>
+        <li id="searchTabButton" class="search">
+            <a ng-click="showTab(1)">Settings</a></li>
+        <li id="layoutTabButton" class="layout on" ng-show="service.parameters.layouts"><a ng-click="showTab(2)">Layouts</a></li>
+        <li id="textTabButton" class="text"><a ng-click="showTab(3)">Text</a></li>
+        <li id="backgroundsTabButton" class="backgrounds"><a ng-click="showTab(4)">Bkground</a></li>
+        <li id="uploadsTabButton" class="uploads"><a ng-click="showTab(5)">Uploads</a></li>
+    </menu>-->
+
+
+        <menu>
+            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'data'}"><a ng-click="tabs.selected = 'data'">Data</a></li>
+            <li id="layoutTabButton" class="layout hand-cursor on" ng-class="{'on': tabs.selected == 'layouts'}" ><a ng-click="tabs.selected = 'layouts'">Layouts</a></li>
+            <li id="textTabButton" class="text hand-cursor" ng-class="{'on': tabs.selected == 'text'}" ><a ng-click="tabs.selected = 'text'">Elements</a></li>
+            <li id="backgroundsTabButton" class="backgrounds hand-cursor" ng-class="{'on': tabs.selected == 'backgrounds'}" ><a ng-click="tabs.selected = 'backgrounds'">Backgrounds</a></li>
+            <li id="uploadsTabButton" class="uploads hand-cursor" ng-class="{'on': tabs.selected == 'uploads'}"><a ng-click="tabs.selected = 'uploads'">Uploads</a></li>
+        </menu>
+
+
+
+    <section class="content">
+        <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
+        <section class="layer scrollPane">
+            <div >
+                <button class="btn btn-danger" ng-click="deleteSelected()"><i class="fa fa-trash"></i></button>
+            </div>
+            <div >
+                <div class="btn-group" style="width:100%"> <!--background color-->
+                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Background Color</button>
+                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="height:32px" ng-style="{color: (BackgroundColor == '#ffffff') ? '#000000' : '#ffffff'}" aria-expanded="false">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
+                                                        <div class="iconpicker-items">
+                                                            <a role="button" ng-click="changeBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
+                                                        </div></div></div></div></div>
+                </div>
+            </div>
+            <div >
+                <div class="btn-group" style="width:100%"> <!--background color-->
+                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (FontColor == '#ffffff' || FontColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': FontColor}">Font Color</button>
+                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="height:32px" ng-style="{color: (FontColor == '#ffffff') ? '#000000' : '#ffffff'}" aria-expanded="false">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
+                                                        <div class="iconpicker-items">
+                                                            <a role="button" ng-click="changeFontColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
+                                                        </div></div></div></div></div>
+                </div>
+            </div>
+
+            <form role="form" class="form-horizontal">
+                    <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectHeight">Height</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectHeight" ng-model='objectHeight' placeholder="Height" ng-change="changeHeight(objectHeight)">
+						</div>
+					</div>
+            </form>
+
+
+
+<!-- -->
+
+<v-accordion class="vAccordion--default" multiple>
+  <v-pane >
+    <v-pane-header>
+      Margin
+    </v-pane-header>
+
+    <v-pane-content>
+        <form role="form" class="form-horizontal">
+                    <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectMargin">Margin</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectMargin" ng-model='objectMargin' placeholder="margin" ng-change="changeCSS('margin',objectMargin)">
+						</div>
+					</div>
+        <div ng-if="objectMargin == undefined || objectMargin == ''">
+            <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectMarginLeft">Margin left</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectMarginLeft" ng-model='objectMarginLeft' placeholder="margin left" ng-change="changeCSS('margin-left',objectMarginLeft)">
+						</div>
+					</div>
+            <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectMarginRight">Margin right</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectMarginRight" ng-model='objectMarginRight' placeholder="margin right" ng-change="changeCSS('margin-right',objectMarginRight)">
+						</div>
+					</div>
+             <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectMarginTop">Margin top</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectMarginTop" ng-model='objectMarginTop' placeholder="margin top" ng-change="changeCSS('margin-top',objectMarginTop)">
+						</div>
+					</div>
+            <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectMarginBottom">Margin bottom</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectMarginBottom" ng-model='objectMarginBottom' placeholder="margin bottom" ng-change="changeCSS('margin-bottom',objectMarginBottom)">
+						</div>
+					</div>
+            </div>
+            </form>
+    </v-pane-content>
+  </v-pane>
+  <v-pane >
+    <v-pane-header>
+      Padding
+    </v-pane-header>
+
+    <v-pane-content>
+        <form role="form" class="form-horizontal">
+                    <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectPadding">Padding</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectPadding" ng-model='objectPadding' placeholder="Padding" ng-change="changeCSS('padding',objectPadding)">
+						</div>
+					</div>
+        <div ng-if="objectPadding == undefined || objectPadding == ''">
+            <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectPaddingLeft">Padding left</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectPaddingLeft" ng-model='objectPaddingLeft' placeholder="Padding left" ng-change="changeCSS('padding-left',objectPaddingLeft)">
+						</div>
+					</div>
+            <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectPaddingRight">Padding right</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectPaddingRight" ng-model='objectPaddingRight' placeholder="Padding right" ng-change="changeCSS('padding-right',objectPaddingRight)">
+						</div>
+					</div>
+             <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectPaddingTop">Padding top</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectPaddingTop" ng-model='objectPaddingTop' placeholder="Padding top" ng-change="changeCSS('padding-top',objectPaddingTop)">
+						</div>
+					</div>
+            <div class="form-group">
+						<label class="col-sm-4 control-label" for="objectPaddingBottom">Padding bottom</label>
+
+						<div class="col-sm-8">
+							<input type="number" class="form-control" id="objectPaddingBottom" ng-model='objectPaddingBottom' placeholder="Padding bottom" ng-change="changeCSS('padding-bottom',objectPaddingBottom)">
+						</div>
+					</div>
+            </div>
+            </form>
+    </v-pane-content>
+  </v-pane>
+
+  <v-pane ng-if="selectedElementType == 'c3Chart'">
+      <v-pane-header>
+      Chart Elements
+    </v-pane-header>
+
+    <v-pane-content>
+            <table>
+                <tr ng-repeat="column in selectedChart.dataColumns">
+                    <td style="width:80%;overflow:hidden;"> {{column.elementLabel}}</td>
+                    <td style="width:10%"><button class="btn btn-danger btn-xs" ng-click="deleteChartColumn(column)"><i class="fa fa-trash"></i></button></td>
+                    <td style="width:10%"><button class="btn btn-info btn-xs" ng-click="changeChartColumnType(column)"><i class="fa fa-bar-chart"></i></button></td>
+                </tr>
+             </table>
+    </v-pane-content>
+
+  </v-pane>
+
+    <v-pane ng-if="selectedElementType == 'repeaterGrid'">
+      <v-pane-header>
+      Grid Elements
+    </v-pane-header>
+
+    <v-pane-content>
+            <table>
+                <tr ng-repeat="column in selectedChart.dataColumns">
+                    <td style="width:80%;overflow:hidden;"> {{column.elementLabel}}</td>
+                    <td style="width:10%"><button class="btn btn-danger btn-xs" ng-click="deleteChartColumn(column)"><i class="fa fa-trash"></i></button></td>
+                    <td style="width:10%"><button class="btn btn-info btn-xs" ng-click="changeChartColumnType(column)"><i class="fa fa-bar-chart"></i></button></td>
+                </tr>
+             </table>
+    </v-pane-content>
+
+  </v-pane>
+
+  <v-pane ng-if="selectedElementType == 'repeaterGrid'">
+      <v-pane-header>
+      Header
+    </v-pane-header>
+
+    <v-pane-content>
+                <div class="btn-group" style="width:100%"> <!--background color-->
+                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;" ng-style="{color: (BackgroundColor == '#FFFFFF') ? '#000000' : '#FFFFFF'}">Header Color</button>
+                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="height:32px" ng-style="{color: (BackgroundColor == '#FFFFFF') ? '#000000' : '#FFFFFF'}" aria-expanded="false">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
+                                                        <div class="iconpicker-items">
+                                                            <a role="button" ng-click="changeHeaderColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
+                                                        </div></div></div></div></div>
+                </div>
+    </v-pane-content>
+
+  </v-pane>
+
+    <v-pane ng-if="selectedElementType == 'repeaterGrid'">
+      <v-pane-header>
+      Body
+    </v-pane-header>
+
+    <v-pane-content>
+
+    </v-pane-content>
+
+  </v-pane>
+
+</v-accordion>
+<!-- -->
+        </section>
+        <div class="scrollTrack vScrollTrack">
+            <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
+        </div>
+        <div class="scrollTrack hScrollTrack">
+            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+        </div>
+    </section>
+    <section id="resultsSearch" class="results infinite ng-hide" ng-show="tabs.selected == 'data'">
+        <section class="layer scrollPane">
+
+            <button class="button buttonBlock fileUploadButton" ng-click="newQuery()">New Query</button>
+
+
+            <v-accordion class="vAccordion--default" multiple ng-repeat="query in queries">
+                <v-pane >
+                    <v-pane-header >
+                      <a ng-click="loadQS(query)" style="color:#fff;">{{query.name}}</a>
+                    </v-pane-header>
+
+                    <v-pane-content>
+                        <div ng-repeat="column in query.columns" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
+                               elementName: column.elementName,
+                               elementType: column.elementType,
+                               name: (column.collectionID+'_'+column.elementName+column.aggregation).toLowerCase(),
+                               objectType: 'queryColumn',
+                               objectLabel: column.objectLabel,
+                               datasourceID:column.datasourceID,
+                               collectionID:column.collectionID,
+                               queryName:query.name,
+                               elementID: column.elementID}">
+                            <i class="fa fa-cube" ng-show="column.elementType != 'number' && column.elementType != 'count'"></i>
+                            <i class="fa fa-list-ol" ng-show="column.elementType == 'number' || column.elementType == 'count'"></i>
+                            {{column.objectLabel}}
+                        </div>
+
+                    </v-pane-content>
+                </v-pane >
+            </v-accordion>
+            <!--  ---------
+
+            <ul >
+                <li ng-repeat="query in queries">
+                 <a ng-click="loadQS(query)">
+                     {{query.name}}
+                    </a>
+
+                    <ul>
+                        <li ng-repeat="column in query.columns" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
+                               elementName: column.elementName,
+                               elementType: column.elementType,
+                               name: (column.collectionID+'_'+column.elementName+column.aggregation).toLowerCase(),
+                               objectType: 'queryColumn',
+                               objectLabel: column.objectLabel,
+                               datasourceID:column.datasourceID,
+                               collectionID:column.collectionID,
+                               queryName:query.name,
+                               elementID: column.elementID}">
+                            <i class="fa fa-cube" ng-show="column.elementType != 'number' && column.elementType != 'count'"></i>
+                            <i class="fa fa-list-ol" ng-show="column.elementType == 'number' || column.elementType == 'count'"></i>
+                            {{column.objectLabel}}
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>-->
+
+        </section>
+        <div class="scrollTrack vScrollTrack">
+            <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
+        </div>
+        <div class="scrollTrack hScrollTrack">
+            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+        </div>
+    </section>
+    <section id="resultsLayout" class="results infinite twoCol" ng-show="tabs.selected == 'layouts'">
+        <section class="layoutsTabContainer tabContainer">
+            <section class="tab">
+                <section class="layer scrollPane">
+                    <div class="inner">
+                        <div class="searchLoaderHolder"></div>
+                        <div class="searchGroup hasContent" style="height: 2872px;">
+                            <div class="row gallery infoPanelGallery templateGallery laidOut">
+
+                                <!--<div draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{type: 'jumbotron'}"
+                                     drag-start="onDragStart()" drag-end="onDragEnd()">
+                                    <img   src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_jumbotron.png" width="200" height="50" style="height: 50px;">
+                                </div>-->
+
+                                <!--<div  x-lvl-draggable="true" data-color="navbar" style="margin-bottom: 5px">
+                                    <img   src="modules/designer/images/layout_navbar.png" width="200" height="16" style="height: 16px;">
+                                </div>-->
+
+
+                                <div data-color="jumbotron" effect-allowed="copy"  style="margin-bottom: 5px" draggable="true" draggable-type="custom-object" id="5c025c3c-2dcb-a4b4-488a-01dbf3e54fbc" draggable-data="{
+                                    objectType: 'jumbotron'}">
+                                    <img src="images/layout_jumbotron.png" width="200" height="50" style="height: 50px;">
+                                </div>
+                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: '3colscta'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c0" class="">
+
+                                    <img src="images/layout_3cols_cta.png" width="200" height="50" style="height: 50px;">
+                                </div>
+                                <div x-lvl-draggable="true" data-color="3colsImageCircle" style="margin-bottom: 5px" draggable="true" id="f14c9845-8159-ce5d-2ca0-4a0a10567283" class="">
+
+                                    <img src="images/layout_3colsImages.png" width="200" height="50" style="height: 50px;">
+                                </div>
+                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'imageTextLarge'}"  style="margin-bottom: 5px"  id="953bd17f-45d8-9daf-3bde-92f4809bdf07" class="">
+
+                                    <img src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px;">
+                                </div>
+                                <div style="margin-bottom: 5px" id="b512bcc4-dd1d-2a33-2246-69671ae9430d">
+
+                                    <img src="images/layout_block_text_image_large.png" width="200" height="50">
+                                </div>
+                                <div x-lvl-draggable="true" data-color="featureteDivider" style="margin-bottom: 5px" draggable="true" id="4f8c0bca-7d8f-9bad-2354-309b48a37764">
+
+                                    <img src="images/layout_featurete_divider.png" width="200" height="50">
+                                </div>
+                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'tabs'}"  style="margin-bottom: 5px"  id="953bd17f-d45d8-9daf-3bde-92f4809bdf07" class="">
+
+                                    <img src="images/tabs.png" width="200" height="50" style="height: 50px;">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="scrollTrack vScrollTrack">
+                    <div class="scrollThumb" style="height: 15px; transform: translateY(0px);"></div>
+                </div>
+                <div class="scrollTrack hScrollTrack">
+                    <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+                </div>
+            </section>
+        </section>
+    </section>
+    <section id="resultsText" class="results infinite ng-hide" ng-show="tabs.selected == 'text'">
+        <section class="layoutsTabContainer scrollPane">
+            <div class="inner">
+                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'repeaterGrid'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c01" class="">
+
+                 <img src="images/repeater_grid.png" width="200"  style="height: 50px;">
+                </div>
+                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'chart'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c02" class="">
+
+                 <img src="images/line_chart.png" width="200" style="height: 50px;">
+                </div>
+                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'chart'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c03" class="">
+
+                 <img src="images/pie_chart.png" width="200"  style="height: 50px;">
+                </div>
+                <div x-lvl-draggable="true" data-color="h1" style="margin-bottom: 5px" draggable="true" id="11ca87e8-f335-9a72-03aa-c56c51f5106b">
+
+                    <h1>Header 1</h1>
+                </div>
+                <div x-lvl-draggable="true" data-color="h2" style="margin-bottom: 5px" draggable="true" id="36485b41-197c-06ec-ea37-ca46b4a45a9d">
+
+                    <h2>Header 2</h2>
+                </div>
+                <div x-lvl-draggable="true" data-color="h3" style="margin-bottom: 5px" draggable="true" id="b6e7ec7f-f2f4-a334-4f29-b5bc7c75a62c">
+
+                    <h3>Header 3</h3>
+                </div>
+                <div x-lvl-draggable="true" data-color="h4" style="margin-bottom: 5px" draggable="true" id="8e0d4e90-b9d3-96cd-b1be-566686c324e7">
+
+                    <h4>Header 4</h4>
+                </div>
+                <div x-lvl-draggable="true" data-color="h5" style="margin-bottom: 5px" draggable="true" id="6ab0437c-1cb3-82ad-6444-0f06b51dd32d">
+
+                    <h5>Header 5</h5>
+                </div>
+                <div x-lvl-draggable="true" data-color="h6" style="margin-bottom: 5px" draggable="true" id="dc0bf5ee-c08d-35bd-871f-e540be4b2590">
+
+                    <h6>Header 6</h6>
+                </div>
+                <div x-lvl-draggable="true" data-color="p" style="margin-bottom: 5px" draggable="true" id="6b66e962-3e2e-ee62-6950-69d8317b7011">
+                    <p>Paragraph</p>
+                </div>
+                <div x-lvl-draggable="true" data-color="lead" style="margin-bottom: 5px" draggable="true" id="01d3c2ae-8847-f895-f902-32eeb0594fd8">
+                    <p class="lead">Lead</p>
+                </div>
+
+                <div x-lvl-draggable="true" data-color="button" style="margin-bottom: 5px" draggable="true" id="60bf5c53-fc96-bb15-a711-bfb1b4cb9921">
+
+                    <button class="btn btn-default btn-large" width="200" height="50">Button</button>
+                </div>
+            </div>
+        </section>
+        <div class="scrollTrack vScrollTrack">
+            <div class="scrollThumb" style="height: 42px; transform: translateY(0px);"></div>
+        </div>
+        <div class="scrollTrack hScrollTrack">
+            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+        </div>
+    </section>
+    <section id="resultsBackground" class="results infinite ng-hide" ng-show="tabs.selected == 'backgrounds'">
+        <section class="layer scrollPane">
+            <ul id="photoGallery" class="galleryUploads infoPanelGallery photoGallery" ng-init="getCatalogImages()">
+
+                    <li ng-repeat="catalogImage in catalogImages">
+                        <img x-lvl-draggable="true" data-color="image" data-id="{{catalogImage.source1400}}" ng-src="{{catalogImage.url}}" width="70px" />
+                    </li>
+
+                </ul>
+        </section>
+        <div class="scrollTrack vScrollTrack">
+            <div class="scrollThumb" style="height: 26px; transform: translateY(0px);"></div>
+        </div>
+        <div class="scrollTrack hScrollTrack">
+            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+        </div>
+    </section>
+    <section id="resultsUpload" class="results infinite ng-hide" ng-show="tabs.selected == 'uploads'" ng-init="getUploads()">
+        <section id="normalUploads" class="layer scrollPane">
+            <div class="inner">
+                <section class="uploadButtonAndMessage">
+                    <button id="SelectFile" class="button buttonBlock fileUploadButton">Upload your own images</button>
+                    <!--<p>...or just drag them from your desktop.</p> -->
+                    <div class="progress-striped active progress ng-isolate-scope ng-hide" ng-show="uploads.uploadingFile" max="100" value="100" type="danger">
+  <div class="progress-bar progress-bar-danger" ng-class="type &amp;&amp; 'progress-bar-' + type" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" ng-style="{width: (percent < 100 ? percent : 100) + '%'}" aria-valuetext="100%" ng-transclude="" style="width: 100%;"><i class="ng-scope">uploading...</i></div>
+</div>
+                </section>
+                <!--<div class="browseCategories folderExpanded" style="height: 131px;">
+                    <ul class="gallery photoGallery albumGallery categories laidOut">
+                        <li class="folderExpanded" style="width: 109px; left: 0px; top: 0px;"><a href="#" data-query="uploads" title="Uploads" class="uploads"><span class="page on"></span><span class="page on"></span><img src="upload_folder_thumbnail.png" width="200" height="200" alt="Upload folder thumbnail" style="height: 81px;"><span class="text">Uploads</span></a></li>
+                        <li style="width: 109px; left: 109px; top: 0px;"><a href="#" data-query="facebook" title="Facebook" class="facebook"><span class="page on"></span><span class="page on"></span><img src="upload_folder_facebook.png" width="200" height="200" alt="Facebook folder thumbnail" style="height: 81px;"><span class="text">Facebook</span></a></li>
+                        <li style="width: 109px; left: 218px; top: 0px;"><a href="#" data-query="google" title="Google Drive" class="google"><span class="page on"></span><span class="page on"></span><img src="upload_folder_google_drive.png" width="200" height="200" alt="Google folder thumbnail" style="height: 81px;"><span class="text">Google Drive</span></a></li>
+                    </ul>
+                </div>
+                <div class="inlineFolderPointer" style="left: 84.5px;"></div>
+                <div class="inlineFolderGroup searchGroup end hasContent fetched" style="height: 78px;">
+                    <ul class="gallery infoPanelGallery photoGallery laidOut">
+                        <li class="" style="width: 102px; left: 0px; top: 0px;">
+                            <a href="#"><img  src="thumbnail.jpg?Expires=1427270510&amp;Signature=IgvQOZs2Y2AJqtfMbST~QJ1PNdUy1NMVm6xlp8C6qFK-frJZaHvQOhbIdZaUna8b5~~YTfG7bNBsils6u0hsamYLwz~OsRDSohuBBX4FPYhMHt2zoofzFqtOIJ~OwyF4fI6YC5OFBUUhql2efsBrvLnphLycSW6Lr6LnkhbDvXo~b1Xx4Fm7jA-Ow1HLkF5eBwDGJmX3Hzik1AlmrTivl0ANr~08y9GlVCcmOxEOsMzriKV~D-VCBDur6XBqwBwIVQNW6B0bCxmaKmB078bQx1TrYKq7vDuI2DTKJ8aJQ8cTTVC2VBmvz3D2lgJ27NLzKs9LfLf4mEji1dmsWDrLCg__&amp;Key-Pair-Id=APKAI6F2W6P23R2UF5NQ" width="200" height="150" style="height: 72px;"><span class="price free">Free</span><span class="info"><span class="price">Free</span> <span class="moreInfo" title="Show more info">i</span></span>
+                            </a>
+                        </li>
+                        <li class="" style="width: 102px; left: 102px; top: 0px;">
+                            <a href="#"><img  src="thumbnail.png?Expires=1427270510&amp;Signature=jcc2wOWQhv5aoYlYYNEtvkTSY7ywztpcrRrcKF8J~xW2cUg~CWVm5Q1Ohij8xuI8stVuINIIjBcfcNsjZBQyVtvb5enXPzK4HMCQxzUq5wxTm-teeHbkQhvJXpz9gGvKrTt-ZCEEuSMQccU7bxZXLDC8HZWGkKwo2sZgcFRuCO1Lr1c5HuKDzlM0LU4AuGFmFa-nR49jLNUHdCcQ-5clfCbqoW7rzbMYX7oaWQ3UPtz~xtj~~AUJIEeOVFq2yFX4XLdgCnw9suSG-1~mtenephxwJW9uHI7NJE-m9VdOskm9kj92CN5xhQkKoqnk6qI8pvCfIVIQNwPGx1KfBBF24w__&amp;Key-Pair-Id=APKAI6F2W6P23R2UF5NQ" width="200" height="61" style="height: 29.28px;"><span class="price free">Free</span><span class="info"><span class="price">Free</span> <span class="moreInfo" title="Show more info">i</span></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>-->
+                <div class="spacer" style="height: 0px;"></div>
+                <div class="searchGroup">
+                    <!--<nd-drop-zone url="/api/custom/Designer/upload"></nd-drop-zone>-->
+
+
+                    <style>
+
+                        /*.designer-dropzone {
+                            position: fixed;
+                            top: 0px;
+                            left: 0px;
+                            width: 100%;
+                            background: rgba(0,0,0,0.5) !important;
+                            z-index: 9999;
+                            height: 100%;
+                            text-align: center;
+                        }*/
+                    </style>
+
+                    <ul id="photoGallery" class="galleryUploads infoPanelGallery photoGallery">
+
+                        <!-- ngRepeat: file in uploads.files -->
+
+                    </ul>
+
+                    <!-- Esto da problemas con el resto de drag and drop <form class="dropzone designer-dropzone" id="dropzone" ng-init="initDropzone()"></form> -->
+                    <!--<form class="dropzone designer-dropzone" id="dropzone" ng-init="initDropzone()"></form>-->
+
+                </div>
+
+            </div>
+        </section>
+        <div class="scrollTrack vScrollTrack">
+            <div class="scrollThumb" style="height: 80px; transform: translateY(0px);"></div>
+        </div>
+        <div class="scrollTrack hScrollTrack">
+            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+        </div>
+    </section>
+    </section>
+
+    </section>
+
+
+<section ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
+
+    </section>
+
+    <div id="previewContainer" ng-show="false">
+
+    </div>
+
+
+
+
+ <div ng-show="queryInterface" id="queryModal" ng-controller="queryCtrl" ng-include src="reportModal"></div>
+
+
+
+<div ng-include src="chartModal"></div>
+
+
+
+
+
+
+

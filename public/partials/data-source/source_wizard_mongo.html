@@ -10,7 +10,11 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label">Connection Type</label>
-                <select ng-model="_DataSource.type" placeholder="Select a datasource type..." id="type" class="form-control" ng-change="selectedRoleChanged = true"><option label="MONGODB" value="MONGODB">MONGODB</option><option label="MySQL" value="MySQL">MySQL</option></select>
+                <select ng-model="_DataSource.type" placeholder="Select a datasource type..." id="type" class="form-control" ng-change="selectedRoleChanged = true">
+                    <option label="MONGODB" value="MONGODB">MONGODB</option>
+                    <option label="MySQL" value="MySQL">MySQL</option>
+                    <option label="PostgreSql" value="POSTGRE">PostgreSql</option>
+                </select>
             </div>
         </div>
         <div class="col-md-12">

@@ -1,0 +1,115 @@
+<section id="objectPanel" data-num-cols="4" style="background: #3f4652;padding: 15px;">
+
+    <div class="row">
+
+        <div class="col-md-12" style="text-align: right;">
+            <div class="btn-group" uib-dropdown is-open="status.isopen">
+                <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                    Add Page <span class="caret" style="margin-top: 0px;"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                    <li role="menuitem"><a class="hand-cursor" ng-click="addPage(pageType.value)" ng-repeat="pageType in pageTypes" ng-bind="pageType.label"></a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!--<div class="row" style="margin-top: 10px;">
+
+        <div class="col-md-12">
+
+            <ul class="list-group">
+                <li class="list-group-item hand-cursor" ng-repeat="page in pages" ng-click="selectPage(page)" ng-bind="page.name" style="color: #000;"></li>
+            </ul>
+
+        </div>
+
+    </div>-->
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-12">
+
+            <tg-dynamic-directive ng-model="pages" tg-dynamic-directive-view="getView">
+            </tg-dynamic-directive>
+
+            <script type="text/ng-template" id="nestable_item.html">
+                <div>
+                    <div ng-click="selectPage(ngModelItem)">{{ngModelItem.name}}</div>
+                    <ul class="pages-container list-group" ui-sortable="sortableOptions" ng-model="ngModelItem.items"
+                            ng-class="{'pages-container-placeholder': onDrag, 'pages-container-default': !onDrag}">
+                        <li class="innerCont list-group-item hand-cursor" ng-repeat="innerItem in ngModelItem.items"
+                                ng-style="{'background-color': (innerItem == selectedPage) ? 'beige' : 'white'}">
+                            <tg-dynamic-directive ng-model="innerItem" tg-dynamic-directive-view="getView">
+                            </tg-dynamic-directive>
+                        </li>
+                    </ul>
+                </div>
+            </script>
+        </div>
+    </div>
+
+</section>
+
+<section class="scrollPane multiPage rendered">
+
+    <div id="mainContainer" ndType="mainContainer" ng-hide="previewMode" class="container-fluid" style="padding: 10px 20px;
+  position: absolute;
+  left: 300px;
+  right: 0px;
+  top: 50px;
+  bottom: 0px;
+  box-sizing: border-box;
+  background-color: #FFFFFF;">
+
+        <div class="row" ng-show="selectedPage">
+
+            <div class="col-md-12">
+
+                <form class="simple-form" role="form" name="Pages_form">
+
+                    <fieldset>
+
+                        <div class="form-group">
+                            <label ng-bind="getTranslation('Type')"></label>
+                            <select class="form-control" name="type" ng-model="selectedPage.type" ng-options="obj.value as obj.label for obj in pageTypes"></select>
+                        </div>
+
+                        <div class="form-group" ng-show="selectedPage.type == 'link'">
+                            <label ng-bind="getTranslation('Link')"></label>
+                            <select class="form-control" name="link" ng-model="selectedPage.link" ng-options="obj.link as obj.text for obj in service.links"></select>
+                        </div>
+
+                        <div class="form-group" ng-class="{'has-error':Pages_form.name.$invalid}">
+                            <label ng-bind="getTranslation('Name')"></label>
+                            <input type="text" class="form-control" name="name" placeholder="" ng-model="selectedPage.name" ng-required="true" required>
+                            <span ng-show="Pages_form.name.$invalid" class="help-inline" ng-bind="getTranslation('This field is required')"></span>
+                        </div>
+
+                        <div class="form-group" ng-show="selectedPage.type == 'url'">
+                            <label ng-bind="getTranslation('URL')"></label>
+                            <input type="text" class="form-control" name="url" placeholder="" ng-model="selectedPage.url">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="checkbox" name="showInMenu" ng-model="selectedPage.showInMenu">
+                            <label ng-bind="getTranslation('Show in menu')"></label>
+                        </div>
+
+                        <!--<button ng-disabled="Trainings_form.$invalid || Trainings_form.$pristine" id="btnSave" class="btn btn-primary pull-right" ng-click="savePage()">
+                            {{getTranslation("Save")}}
+                        </button>-->
+
+                        <button id="btnSave" class="btn btn-danger pull-right" ng-click="deletePage(selectedPage)" style="margin-right: 10px;">
+                            {{getTranslation("Delete")}}
+                        </button>
+
+                    </fieldset>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>

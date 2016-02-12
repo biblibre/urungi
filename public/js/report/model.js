@@ -13,6 +13,15 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
     this.scope = null;
     this.selectedReport = null;
 
+    this.hierarchy1 = {
+        elements: [ {elementName:"region",datasourceID:"5680fe4f6b0828080e955509",collectionID:"WSTbf7bf050a3fa4f9a95c2a33686f2bb79",elementID:"3f8dc4dc-aca6-4508-9edc-d3ad7c5d2458"},
+                    {elementName:"market",datasourceID:"5680fe4f6b0828080e955509",collectionID:"WSTbf7bf050a3fa4f9a95c2a33686f2bb79",elementID:"fe9a25a7-c4ee-4cdb-a745-5d1c77ac8a47"},
+                    {elementName:"campaign_name",datasourceID:"5680fe4f6b0828080e955509",collectionID:"WSTbf7bf050a3fa4f9a95c2a33686f2bb79",elementID:"ac1f3aff-403f-4932-b6e4-44473cc58bf6"}
+
+        ]
+
+    }
+
     var hashCode = function(s){
         return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
     };
@@ -43,7 +52,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
     this.getData = function($scope,query,params, done) {
         params.query = query;
         connection.get('/api/reports/get-data', params, function(data) {
-
+            //console.log(data);
             done(data);
         });
     }
@@ -147,6 +156,40 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             });
         }
     }
+
+function clone(obj) {
+    var copy;
+
+    // Handle the 3 simple types, and null or undefined
+    if (null == obj || "object" != typeof obj) return obj;
+
+    // Handle Date
+    if (obj instanceof Date) {
+        copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
+    }
+
+    // Handle Array
+    if (obj instanceof Array) {
+        copy = [];
+        for (var i = 0, len = obj.length; i < len; i++) {
+            copy[i] = clone(obj[i]);
+        }
+        return copy;
+    }
+
+    // Handle Object
+    if (obj instanceof Object) {
+        copy = {};
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+        }
+        return copy;
+    }
+
+    throw new Error("Unable to copy obj! Its type isn't supported.");
+}
 
 
     this.getReportBlock = function($scope, id, done)
@@ -284,7 +327,6 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                     done(errorCode);
                 });
 
-
             if (report.reportType == "grid")
                 //generateGrid($scope,id,report,function(errorCode) {
                     generateRepeater($scope,id,report,function(errorCode) {
@@ -314,6 +356,303 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
     }
 
+    this.getHierarchy = function($scope,hashID,row,elementID,element,row,nextElement,parent)
+    {
+        //Identify the query of the report
+        var report = clone($scope.reports[hashID]);
+        var query  = report.query;
+
+        //TODO: Only if the nextElement is not yet included in the actual grid
+
+        //identify the next element and collection it belongs to in the Hierarchy
+
+        //manipulate the query to:
+            //remove the actual column and add the next column in the hierarchy
+            //add a filter using the value of the actual column
+
+        //1.- remove the actual column from the query...
+
+        for (var d in query.datasources)
+            {
+                for (var c in query.datasources[d].collections)
+                 {
+                    var columnFound = -1;
+                    for (var col in  query.datasources[d].collections[c].columns)
+                        {
+                            if (query.datasources[d].collections[c].columns[col].elementID == elementID)
+                                {
+                                columnFound = col;
+                                }
+                        }
+
+                    if (columnFound > -1)
+                        query.datasources[d].collections[c].columns.splice(columnFound, 1);
+
+                 }
+            }
+
+        //2.- remove the actual column from the report
+        var columnFound = -1;
+        for (var c in report.columns)
+            {
+                if (report.columns[c].elementID == elementID)
+                   {
+                    columnFound = c;
+                   }
+            }
+
+        if (columnFound > -1)
+            report.columns.splice(columnFound, 1);
+
+        //3.- Check if the new column's collection is in the query...
+        var targetCollectionFound = false;
+        for (var d in query.datasources)
+            {
+                if (query.datasources[d].datasourceID == nextElement.datasourceID)
+                {
+                    for (var c in query.datasources[d].collections)
+                     {
+                        if (query.datasources[d].collections[c].collectionID == nextElement.collectionID)
+                            {
+                                targetCollectionFound = true;
+                                //add here the new column
+                                query.datasources[d].collections[c].columns.push(nextElement);
+                            }
+
+                     }
+                 }
+            }
+
+        if (targetCollectionFound == false)
+            {
+             //add the collection along with the column to the query & required datasource
+             for (var d in query.datasources)
+                {
+                    if (query.datasources[d].datasourceID == nextElement.datasourceID)
+                        {
+                            var theCollection = {collectionID:nextElement.collectionID,objects:[]}
+                            theCollection.objects.push(nextElement);
+                            query.datasources[d].collections.push(theCollection);
+                        }
+                }
+            }
+
+        //3.2 Remove the previous hierarchy filter if any
+        var previousHierarchyFilter = -1;
+        for (var g in query.groupFilters)
+                {
+                   for (var gf in query.groupFilters[g].filters)
+                   {
+                    if (query.groupFilters[g].filters[gf].source == 'HIERARCHY')
+                        {
+                            previousHierarchyFilter = gf;
+                            query.groupFilters[g].filters[gf].elementName = element.elementName;
+                            query.groupFilters[g].filters[gf].objectLabel = '';
+                            query.groupFilters[g].filters[gf].datasourceID = element.datasourceID;
+                            query.groupFilters[g].filters[gf].collectionID = element.collectionID;
+                            query.groupFilters[g].filters[gf].elementID = element.elementID;
+                            query.groupFilters[g].filters[gf].elementType = 'string';
+                            query.groupFilters[g].filters[gf].layerID = '56824c6b0c60fc6217b41be1';
+                            query.groupFilters[g].filters[gf].filterType = 'equal';
+                            query.groupFilters[g].filters[gf].filterPrompt = false;
+                            query.groupFilters[g].filters[gf].filterTypeLabel = 'equal';
+                            query.groupFilters[g].filters[gf].promptTitle = '';
+                            query.groupFilters[g].filters[gf].promptInstructions = '';
+                            query.groupFilters[g].filters[gf].reportID = '56ba33c7651656ad5921e876';
+                            query.groupFilters[g].filters[gf].searchValue = row[element.collectionID.toLowerCase()+'_'+element.elementName];
+                            query.groupFilters[g].filters[gf].filterText1 = row[element.collectionID.toLowerCase()+'_'+element.elementName];
+                        }
+                   }
+                }
+        if (previousHierarchyFilter == -1)
+            {
+
+        //4.-Add the actual value as a filter
+
+                    //add the actual value as a filter to the query
+                    var theFilter = {};
+                            theFilter.source = 'HIERARCHY';
+                            theFilter.elementName = element.elementName;
+                            theFilter.objectLabel = '';
+                            theFilter.datasourceID = element.datasourceID;
+                            theFilter.collectionID = element.collectionID;
+                            theFilter.elementID = element.elementID;
+                            theFilter.elementType = 'string';
+                            theFilter.layerID = '56824c6b0c60fc6217b41be1';
+                            theFilter.filterType = 'equal';
+                            theFilter.filterPrompt = false;
+                            theFilter.filterTypeLabel = 'equal';
+                            theFilter.promptTitle = '';
+                            theFilter.promptInstructions = '';
+                            theFilter.reportID = '56ba33c7651656ad5921e876';
+                            theFilter.searchValue = row[element.collectionID.toLowerCase()+'_'+element.elementName];
+                            theFilter.filterText1 = row[element.collectionID.toLowerCase()+'_'+element.elementName];
+                    var theGroup = {group: true,filters:[]};
+                        theGroup.filters.push(theFilter);
+                        //query.groupFilters.push(theGroup);
+                        query.groupFilters[0].filters.push(theFilter);
+                        console.log('i am going to push this filter',theFilter);
+            }
+
+        //.- Add the column to the report
+        for (var col in report.properties.columns)
+        {
+            if (report.properties.columns[col].elementID == element.elementID)
+            {
+                report.properties.columns[col].elementID = nextElement.elementID;
+                report.properties.columns[col].elementName = nextElement.elementName;
+                report.properties.columns[col].datasourceID = nextElement.datasourceID;
+                report.properties.columns[col].collectionID = nextElement.collectionID;
+                report.properties.columns[col].link = {};
+            }
+
+        }
+
+        console.log('the report',report);
+
+        var hashedID = hashCode(nextElement.elementID+row[element.collectionID.toLowerCase()+'_'+element.elementName]);
+        $scope.reports[hashedID] = report;
+
+        this.getData($scope, query, {page: 0}, function(data) {
+            console.log('this is the data that I get',data,element.collectionID+'_'+element.elementName);
+
+
+            $scope.theData[hashedID] = data;
+
+            var htmlCode = '<div class="container-fluid" style="border-bottom:1px solid #cccccc;">';
+            htmlCode += getHierarchyGrid(report,hashedID,element,nextElement);
+            htmlCode += '</div>';
+
+                var $div = $(htmlCode);
+                var host = angular.element(parent);
+                host.append($div);
+                angular.element(document).injector().invoke(function($compile) {
+                    var scope = angular.element($div).scope();
+                    $compile($div)(scope);
+                });
+        });
+
+
+
+    }
+
+
+    function getHierarchyGrid(report,hashedID,parentElement,childElement)
+    {
+
+
+            var colClass = '';
+            var colWidth = '';
+
+            if (report.properties.columns.length == 5 || report.properties.columns.length > 6)
+                colWidth = 'width:'+100/report.properties.columns.length+'%;float:left;';
+            else
+                colClass = 'col-xs-'+12/report.properties.columns.length;
+
+
+
+       var htmlCode = '<div class="repeater-data container-fluid" ng-repeat="item in theData['+hashedID+'] | filter:theFilter | orderBy:reports['+hashedID+'].predicate:reports['+hashedID+'].reverse  " style="width:100%;padding:0px">';
+
+       for(var i = 0; i < report.properties.columns.length; i++)
+            {
+                var elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName;
+                var elementID = report.properties.columns[i].elementID;
+
+                if (report.properties.columns[i].aggregation)
+                    elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
+
+
+                var theValue = '<span>{{item.'+elementName+'}}</span>';
+
+                if (report.properties.columns[i].signals)
+                {
+                    //htmlCode += "<style>.customStyle1_"+i+" {color:#FF9944;} .customStyle2_"+i+" {color:blue;}</style>"
+                    var theStyle = '<style>';
+                    var theClass = '';
+                    for (var s in report.properties.columns[i].signals)
+                    {
+                        theStyle += ' .customStyle'+s+'_'+i+'{color:'+report.properties.columns[i].signals[s].color+';background-color:'+report.properties.columns[i].signals[s]['background-color']+';font-size:'+report.properties.columns[i].signals[s]['font-size']+';font-weight:'+report.properties.columns[i].signals[s]['font-weight']+';font-style:'+report.properties.columns[i].signals[s]['font-style']+';}';
+                        var theComma = '';
+                        if (s > 0)
+                            theComma = ' , ';
+
+                        var operator = '>'
+
+                        switch(report.properties.columns[i].signals[s].filter) {
+                            case "equal":
+                                operator = ' == ' + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "diferentThan":
+                                operator = ' != '  + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "biggerThan":
+                                operator = ' > '  + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "biggerOrEqualThan":
+                                operator = ' >= '  + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "lessThan":
+                                operator = ' < '  + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "lessOrEqualThan":
+                                operator = ' <= ' + report.properties.columns[i].signals[s].value1
+                                break;
+                            case "between":
+                                operator = ' >= ' + report.properties.columns[i].signals[s].value1 + ' && {{item.'+elementName+'}} <= ' + report.properties.columns[i].signals[s].value2
+                                break;
+                            case "notBetween":
+                                operator = ' < ' + report.properties.columns[i].signals[s].value1 + ' || {{item.'+elementName+'}}  > ' + report.properties.columns[i].signals[s].value2
+                                break;
+                        }
+
+                        theClass += theComma+ 'customStyle'+s+'_'+i+' : {{item.'+elementName+'}} '+operator;
+                    }
+                    htmlCode += theStyle +'</style>'
+                    theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+'}}</span>';
+                }
+/*
+                if (report.properties.columns[i].link)
+                {
+                    if (report.properties.columns[i].link.type == 'report')
+                    {
+                        theValue = '<a class="columnLink" href="/#/reports/'+report.properties.columns[i].link._id+'/'+report.properties.columns[i].link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
+                    }
+                    if (report.properties.columns[i].link.type == 'dashboard')
+                    {
+                        theValue = '<a class="columnLink" href="/#/dashboards/'+report.properties.columns[i].link._id+'/'+report.properties.columns[i].link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
+                    }
+                }
+*/
+                var columnStyle = '';
+                if (report.properties.columns[i].columnStyle)
+                {
+                    columnStyle = 'color:'+report.properties.columns[i].columnStyle.color+';';
+
+                    for (var key in report.properties.columns[i].columnStyle) {
+                        columnStyle += key+':'+report.properties.columns[i].columnStyle[key]+';';
+                    }
+                }
+
+                var defaultAligment = '';
+                if (report.properties.columns[i].elementType === 'number')
+                    defaultAligment = 'text-align: right;'
+
+                htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+report.properties.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick('+hashedID+',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
+            }
+
+            htmlCode += '</div>';
+
+    return htmlCode;
+
+    }
+
+
+
+
+
+
+
+
     this.getDistinct = function($scope,attribute) {
 
         var execute = (typeof execute !== 'undefined') ? execute : true;
@@ -327,7 +666,6 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
         var layersList = [];
         datasourcesList.push(attribute.datasourceID);
         layersList.push(attribute.layerID);
-
 
 
         for (var i in datasourcesList) {
@@ -372,11 +710,17 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
 
         this.getData($scope, query, {page: 0}, function(data) {
+
+            if (data.items)
+                data = data.items;
+
             $scope.searchValues = data;
+            console.log('The data: ',data);
             $scope.errorMsg = (data.result === 0) ? data.msg : false;
             $scope.page = data.page;
             $scope.pages = data.pages;
             //$scope.data = data;
+
         });
 
 
@@ -404,7 +748,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 var ykeys = [], labels = [];
 
                 for (var i in report.properties.ykeys) {
-                    var theYKey = report.properties.ykeys[i].collectionID+'_'+report.properties.ykeys[i].elementName;
+                    var theYKey = report.properties.ykeys[i].collectionID.toLowerCase()+'_'+report.properties.ykeys[i].elementName;
                     if (report.properties.ykeys[i].aggregation) theYKey += report.properties.ykeys[i].aggregation;
 
                     ykeys.push(theYKey);
@@ -440,7 +784,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
 
 
-            var theXKey = report.properties.xkeys[0].collectionID+'_'+report.properties.xkeys[0].elementName;
+            var theXKey = report.properties.xkeys[0].collectionID.toLowerCase()+'_'+report.properties.xkeys[0].elementName;
             if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
 
             //the X key no puede ser un valor agregado??
@@ -464,7 +808,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
             for (var i in report.properties.ykeys) {
 
-                var theYKey = report.properties.ykeys[i].collectionID+'_'+report.properties.ykeys[i].elementName;
+                var theYKey = report.properties.ykeys[i].collectionID.toLowerCase()+'_'+report.properties.ykeys[i].elementName;
                 if (report.properties.ykeys[i].aggregation) theYKey += report.properties.ykeys[i].aggregation;
 
 
@@ -502,10 +846,10 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             if (theData) {
                 var data = [];
 
-                var theYKey = report.properties.ykeys[0].collectionID+'_'+report.properties.ykeys[0].elementName;
+                var theYKey = report.properties.ykeys[0].collectionID.toLowerCase()+'_'+report.properties.ykeys[0].elementName;
                 if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
 
-                var theXKey = report.properties.xkeys[0].collectionID+'_'+report.properties.xkeys[0].elementName;
+                var theXKey = report.properties.xkeys[0].collectionID.toLowerCase()+'_'+report.properties.xkeys[0].elementName;
                 if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
 
                 for (var i in theData) {
@@ -541,7 +885,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
     {
         getReportData($scope,report,{}, function(theData){
 
-            var theXKey = report.properties.xkeys[0].collectionID+'_'+report.properties.xkeys[0].elementName;
+            var theXKey = report.properties.xkeys[0].collectionID.toLowerCase()+'_'+report.properties.xkeys[0].elementName;
             if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
 
             var chartParams = {
@@ -558,7 +902,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             var ykeys = [], labels = [];
 
             for (var i in report.properties.ykeys) {
-                var theYKey = report.properties.ykeys[i].collectionID+'_'+report.properties.ykeys[i].elementName;
+                var theYKey = report.properties.ykeys[i].collectionID.toLowerCase()+'_'+report.properties.ykeys[i].elementName;
                 if (report.properties.ykeys[i].aggregation) theYKey += report.properties.ykeys[i].aggregation;
 
                 ykeys.push(theYKey);
@@ -895,9 +1239,9 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 {
                 htmlCode += '                    <td >';
                         if (!report.properties.columns[i].aggregation)
-                            htmlCode += '                        <span >{{row.'+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+'}}</span>';
+                            htmlCode += '                        <span >{{row.'+report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+'}}</span>';
                         if (report.properties.columns[i].aggregation)
-                            htmlCode += '                        <span >{{row.'+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation+'}}</span>';
+                            htmlCode += '                        <span >{{row.'+report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation+'}}</span>';
                 htmlCode += '                    </td>';
                 }
                 htmlCode += '                </tr>';
@@ -987,7 +1331,6 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
     function repaintRepeaterV2($scope,id,report,done)
     {
         var htmlCode = '<div class="container-fluid" style="width:100%;padding-left:0px;" ng-include="repeaterTemplate">';
-
         var el = document.getElementById(id);
         if (el)
         {
@@ -1007,20 +1350,19 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
     {
            var hashedID = report.hashedID;
             /*
-            if (!$scope.theData)
-                $scope.theData = [];
-
-            //console.log('los datos del grid '+id+' ----->   '+theData);
-
-            var hashedID = hashCode(id);
-            //$scope.theData[quote+id+quote] = theData;
-            $scope.theData[hashedID] = theData;
-
-              */
+                if (!$scope.theData)
+                    $scope.theData = [];
+                //console.log('los datos del grid '+id+' ----->   '+theData);
+                var hashedID = hashCode(id);
+                //$scope.theData[quote+id+quote] = theData;
+                $scope.theData[hashedID] = theData;
+             */
             //console.log('the data',JSON.stringify($scope.theData[hashedID]));
 
-        //console.log('the columns',JSON.stringify(report.properties.columns));
-            var htmlCode = '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel('+hashedID+')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Find..." aria-label="Find..." /></div>';
+            //console.log('the columns',JSON.stringify(report.properties.columns));
+
+
+            var htmlCode = '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel('+hashedID+')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." /></div>';
 
             var colClass = '';
             var colWidth = '';
@@ -1038,13 +1380,13 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 /*if (i == report.properties.columns.length -1) //the last column
                     htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'">'+report.properties.columns[i].objectLabel+getColumnDropDownHTMLCode(i)+' </div>';
                 else */
-                    var elementName = "'"+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+"'";
+                    var elementName = "'"+report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+"'";
                     if (report.properties.columns[i].aggregation)
-                        elementName = "'"+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation+"'";
+                        elementName = "'"+report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation+"'";
 
                     var elementNameAux = elementName;
                     if (report.properties.columns[i].elementType === 'date')
-                        elementNameAux = "'"+report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+'_original'+"'";
+                        elementNameAux = "'"+report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+'_original'+"'";
 
 
                     htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementNameAux+','+hashedID+')">'+report.properties.columns[i].objectLabel+'</span><span class="sortorder" ng-show="reports['+hashedID+'].predicate === '+elementName+'" ng-class="{reverse:reports['+hashedID+'].reverse}"></span>'+getColumnDropDownHTMLCode(report,report.properties.columns[i],i,elementName,hashedID,report.properties.columns[i].elementType)+' </div>';
@@ -1067,10 +1409,11 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
             for(var i = 0; i < report.properties.columns.length; i++)
             {
-                var elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName;
+                var elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName;
+                var elementID = report.properties.columns[i].elementID;
 
                 if (report.properties.columns[i].aggregation)
-                    elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
+                    elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
 
 
                 var theValue = '<span>{{item.'+elementName+'}}</span>';
@@ -1167,7 +1510,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 if item.'+elementName+' comparador valor2 = {estilo 1}
 
                 */
-                    htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+report.properties.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
+                    htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+report.properties.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick('+hashedID+',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
                 //}
             }
 
@@ -1177,9 +1520,9 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             htmlCode += '<div class="repeater-data">';
                     for(var i in report.properties.columns)
                     {
-                        var elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName;
+                        var elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName;
                         if (report.properties.columns[i].aggregation)
-                            elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
+                            elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
                         htmlCode += '<div class=" calculus-data-column '+colClass+' " style="'+colWidth+'"> '+calculateForColumn($scope,report,i,elementName)+' </div>';
 
 
@@ -1281,12 +1624,10 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 }
         }
         return founded;
-
     }
 
     function calculateAvgForColumn($scope,report,columnIndex,elementName)
     {
-
         var value = 0;
         var founded = 0;
 
@@ -1350,18 +1691,15 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                 }
         }
         return lastValue;
-
     }
 
 
     function getColumnDropDownHTMLCode(report,columnObject, column,elementName,hashedID,columnType)
     {
-
         if (columnObject.elementType == 'date')
         {
-            elementName = "'"+columnObject.collectionID+'_'+columnObject.elementName+'_original'+"'";
+            elementName = "'"+columnObject.collectionID.toLowerCase()+'_'+columnObject.elementName+'_original'+"'";
         }
-
 
         var columnPropertiesBtn = '<div class="btn-group pull-right" dropdown="" > '
             +'<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom: 0px;">'
@@ -1550,7 +1888,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             if (theData)
             {
 
-                var theYKey = report.properties.ykeys[0].collectionID+'_'+report.properties.ykeys[0].elementName;
+                var theYKey = report.properties.ykeys[0].collectionID.toLowerCase()+'_'+report.properties.ykeys[0].elementName;
                 if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
 
                 console.log('el valor ' + theYKey+' the ID '+id+ ' the type '+report.properties.style);
@@ -1662,17 +2000,10 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                         $compile($div)(scope);
                     });
                 }
-
-
-
                 done(0);
                 return;
-
             }
-
         });
-
-
 
         //Style 1
         /*
@@ -1940,7 +2271,7 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
             if (theData)
             {
 
-                var theYKey = report.properties.ykeys[0].collectionID+'_'+report.properties.ykeys[0].elementName;
+                var theYKey = report.properties.ykeys[0].collectionID.toLowerCase()+'_'+report.properties.ykeys[0].elementName;
                 if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
                 var theYKeyLabel = theYKey;
                 if (report.properties.ykeys[0].format)  theYKey += '_original';
@@ -2157,9 +2488,9 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
             for(var i = 0; i < report.properties.columns.length; i++)
             {
-                var elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName;
+                var elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName;
                 if (report.properties.columns[i].aggregation)
-                    elementName = report.properties.columns[i].collectionID+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
+                    elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
                 if(range.s.r > R+1) range.s.r = R+1;
                 if(range.s.c > i) range.s.c = i;
                 if(range.e.r < R+1) range.e.r = R+1;

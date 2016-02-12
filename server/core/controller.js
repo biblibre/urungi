@@ -142,11 +142,9 @@ Controller.method('findOneForServer', function (req, done) {
 Controller.method('create', function (req, done) {
     var data = req.body;
 
-    console.log('este es el userid ',req.query.userid);
 
     if (req.query.userid == true)
     {
-        console.log('estoy dentro ',req.query.userid);
         data.createdBy = (req.isAuthenticated()) ? req.user._id : null;
         data.createdOn = new Date();
     }
@@ -170,6 +168,8 @@ Controller.method('create', function (req, done) {
         user_companyID : (req.isAuthenticated()) ? req.user.companyID : null,
         user_companyName : (req.isAuthenticated()) ? req.user.companyName : null
     });
+
+
 
     this.model.create(data, function(err, item){
         if(err) throw err;

@@ -1,5 +1,9 @@
 <div class="container-fluid object-tree" ng-init="getLayers()">
 
+    <div class="row" ng-if="layers.length > 1" style="padding:5px;">
+    <select id="selectLayer" class="form-control" ng-model="selectedLayerID" ng-options="obj._id as obj.name for obj in layers"
+                                            ng-change="changeLayer(selectedLayerID)"></select>
+    </div>
     <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">
     </tg-dynamic-directive>
 

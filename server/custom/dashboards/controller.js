@@ -1,5 +1,7 @@
 var Dashboards = connection.model('Dashboards');
 
+
+
 require('../../core/controller.js');
 
 function DashboardsController(model) {

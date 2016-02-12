@@ -12,6 +12,10 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
+    $scope.columnFormatModal = 'partials/report/columnFormatModal.html';
+    $scope.columnSignalsModal = 'partials/report/columnSignalsModal.html';
+
+    $scope.queryInterface = false;
     $scope.designMode = false;
     $scope.selectedElement != null;
     $scope.reportsModel = reportModel;
@@ -69,6 +73,8 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         });
     };
 
+
+
     $scope.initForm = function() {
         $scope.dataMode = 'preview';
         console.log('initial '+ $routeParams.newDashboard)
@@ -94,6 +100,27 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         }
     }
 
+    $scope.setColumnSignals = function()
+    {
+        reportModel.changeColumnSignals($scope,$scope.selectedColumnIndex ,$scope.selectedColumnHashedID);
+    }
+
+    $scope.changeColumnSignals = function(columnIndex ,hashedID)
+    {
+
+        //TODO: Error $scope.selectedReport = undefined
+        $scope.selectedColumn = $scope.selectedReport.properties.columns[columnIndex];
+        $scope.selectedColumnHashedID  = hashedID;
+        $scope.selectedColumnIndex  = columnIndex;
+
+        if (!$scope.selectedColumn.signals)
+            $scope.selectedColumn.signals = [];
+
+
+        $('#columnSignalsModal').modal('show');
+
+
+    }
 
     $scope.selectReport = function()
     {
@@ -135,7 +162,11 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         var index = $scope.reports.items.indexOf(report);
         $scope.reports.items.splice(index, 1);
         //$scope.reports.items.remove(report);
+    }
 
+    $scope.cellClick = function(hashID,value)
+    {
+        console.log('cell click',hashID,value);
 
     }
 
@@ -494,7 +525,5 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             }
         });
     };
-
-
 
 }]);

@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h3>{{mediaModalOptions.headerText}} {{mediaModalOptions.container}}</h3>
+</div>
+<div class="modal-body">
+    <form class="simple-form" role="form" name="linksForm">
+    <div class="form-group" ng-class="{'has-error':linksForm.url.$invalid}">
+        <label ng-bind="getTranslation('Frame code')"></label>
+        <textarea name="frameCode" type="text" class="form-control" ng-model="setFrameCode" ng-required="true" required> </textarea>
+        <span ng-show="linksForm.url.$invalid" class="help-inline">{{getTranslation("This is required")}}</span>
+    </div>
+    </form>
+    {{mediaModalOptions.headerText}}
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn"
+            data-ng-click="mediaModalOptions.close()">{{mediaModalOptions.closeButtonText}}</button>
+    <button class="btn btn-primary"
+            data-ng-click="mediaModalOptions.ok(setFrameCode);">{{mediaModalOptions.actionButtonText}}</button>
+</div>

@@ -1,0 +1,153 @@
+<nav class="frame" id="panelToolbar" role="navigation">
+
+    <div class="buttons pull-right">
+
+        <a class="hand-cursor" data-ng-click="modalOptions.close()" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Premium Templates"><i style="color: #F34D59" class="fa fa-times fa-lg"></i></a>
+
+    </div>
+
+</nav>
+
+<section id="objectPanel" data-num-cols="4" ng-init="initDesignSection();selectedTab = (service.parameters.themes) ? 'themes' : 'fonts'">
+
+    <menu>
+        <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': selectedTab == 'themes'}"
+            ng-show="service.parameters.themes"><a ng-click="selectedTab = 'themes'">Themes</a></li>
+        <li id="textTabButton" class="text hand-cursor" ng-class="{'on': selectedTab == 'fonts'}"><a ng-click="selectedTab = 'fonts'">Fonts</a></li>
+        <li id="backgroundsTabButton" class="backgrounds hand-cursor" ng-class="{'on': selectedTab == 'backgrounds'}"><a ng-click="selectedTab = 'backgrounds'">Backgrounds</a></li>
+    </menu>
+
+    <section class="content">
+        <section id="resultsLayout" class="results infinite twoCol" ng-show="selectedTab == 'themes'">
+            <section class="layoutsTabContainer tabContainer">
+                <section class="tab">
+                    <section class="layer scrollPane">
+                        <div class="inner">
+                            <div class="searchLoaderHolder"></div>
+                            <div class="searchGroup hasContent" style="height: 2872px;">
+                                <div class="row gallery infoPanelGallery templateGallery laidOut">
+
+                                    <div class="hand-cursor" ng-click="changeTheme(theme)" style="margin-bottom: 5px;position: relative;" ng-repeat="theme in themes">
+                                        <img ng-src="{{theme.previewImage}}" style="width: 200px;height: 150px;">
+                                        <p ng-show="selectedCompany.themeID == theme._id"
+                                           style="position: absolute;top: 0px;z-index: 9999;background-color: rgba(0, 169, 0, 0.81);padding: 2px 5px;">selected</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="scrollTrack vScrollTrack">
+                        <div class="scrollThumb" style="height: 15px; transform: translateY(0px);"></div>
+                    </div>
+                    <div class="scrollTrack hScrollTrack">
+                        <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+                    </div>
+                </section>
+            </section>
+        </section>
+        <section id="resultsText" class="results infinite" ng-show="selectedTab == 'fonts'">
+            <section class="layer scrollPane">
+                <div class="inner">
+                    <div  x-lvl-draggable="true" data-color="h1" style="margin-bottom: 5px">
+
+                        <h1>Header 1</h1>
+                    </div>
+                    <div  x-lvl-draggable="true" data-color="h2" style="margin-bottom: 5px">
+
+                        <h2>Header 2</h2>
+                    </div>
+                    <div  x-lvl-draggable="true" data-color="h3" style="margin-bottom: 5px">
+
+                        <h3>Header 3</h3>
+                    </div>
+                    <div  x-lvl-draggable="true" data-color="h4" style="margin-bottom: 5px">
+
+                        <h4>Header 4</h4>
+                    </div>
+                    <div  x-lvl-draggable="true" data-color="h5" style="margin-bottom: 5px">
+
+                        <h5>Header 5</h5>
+                    </div>
+                    <div  x-lvl-draggable="true" data-color="h6" style="margin-bottom: 5px">
+
+                        <h6>Header 6</h6>
+                    </div>
+                    <div  x-lvl-draggable="true" data-color="p" style="margin-bottom: 5px">
+                        <p>Paragraph</p>
+                    </div>
+                    <div  x-lvl-draggable="true" data-color="lead" style="margin-bottom: 5px">
+                        <p class="lead">Lead</p>
+                    </div>
+
+                    <div  x-lvl-draggable="true" data-color="button" style="margin-bottom: 5px">
+
+                        <button class="btn btn-default btn-large" width="200" height="50" >Button</button>
+                    </div>
+                </div>
+            </section>
+            <div class="scrollTrack vScrollTrack">
+                <div class="scrollThumb" style="height: 42px; transform: translateY(0px);"></div>
+            </div>
+            <div class="scrollTrack hScrollTrack">
+                <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+            </div>
+        </section>
+        <section id="resultsBackground" class="results infinite" ng-show="selectedTab == 'backgrounds'">
+            <section class="layer scrollPane">
+                <div class="inner">
+                    <div  x-lvl-draggable="true" data-color="youtube" style="margin-bottom: 5px;background-color: #FFFFFF;text-align: center">
+                        <img   src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/youtube.png"  style="height: 50px;">
+                    </div>
+                    <div  x-lvl-draggable="true" data-color="vimeo" style="margin-bottom: 5px;background-color: #F0F1F4;text-align: center">
+                        <img   src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/vimeo.png"  style="height: 50px;">
+                    </div>
+                    <div  x-lvl-draggable="true" data-color="slideshare" style="margin-bottom: 5px;background-color: #313131;text-align: center">
+                        <img   src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/slideshare.png"  style="height: 50px;">
+                    </div>
+                </div>
+                <ul id="photoGallery" class="galleryUploads infoPanelGallery photoGallery" ng-init="getCatalogImages()">
+
+                    <li ng-repeat="catalogImage in catalogImages">
+                        <img x-lvl-draggable="true" data-color="image" data-id="{{catalogImage.source1400}}" ng-src="{{catalogImage.url}}" width="80px" />
+                    </li>
+
+                </ul>
+            </section>
+            <div class="scrollTrack vScrollTrack">
+                <div class="scrollThumb" style="height: 26px; transform: translateY(0px);"></div>
+            </div>
+            <div class="scrollTrack hScrollTrack">
+                <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+            </div>
+        </section>
+
+    </section>
+
+</section>
+
+<section class="scrollPane multiPage rendered">
+
+    <div id="mainContainer" ndType="mainContainer" ng-hide="previewMode" class="container-fluid" style="padding: 0px;
+  position: absolute;
+  left: 300px;
+  right: 0px;
+  top: 50px;
+  bottom: 0px;
+  box-sizing: border-box;
+  background-color: #FFFFFF;">
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <iframe id="themePreviewFrame" style="width: 100%;
+  min-height: 950px;
+  border: 0px;"></iframe>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>

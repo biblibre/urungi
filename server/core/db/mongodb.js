@@ -1044,7 +1044,7 @@ function processCollections(collections, dataSource, params, thereAreJoins, done
 
                 var finalItem = {};
                 for (var field in item) {
-                    finalItem[collection.schema.collectionID+'_'+field] = item[field];
+                    finalItem[collection.schema.collectionID.toLowerCase()+'_'+field] = item[field];
                 }
 
 

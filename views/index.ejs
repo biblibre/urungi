@@ -31,6 +31,11 @@
 <link rel="stylesheet" href="angular-ui-tree/dist/angular-ui-tree.min.css" />
 <!--jsPlumb-->
 <link rel="stylesheet" type="text/css" href="libs/jsplumb/jsPlumb.css"/>
+<!-- Load c3.css -->
+<link href="c3/c3.css" rel="stylesheet" type="text/css">
+<!--v-accordion -->
+<link href="v-accordion/dist/v-accordion.min.css" rel="stylesheet" />
+
 
 <link rel="stylesheet" type="text/css" href="nodedream/nodedream.css"/>
 
@@ -39,6 +44,8 @@
 <link rel="stylesheet" type="text/css" href="css/forms.css"/>
 
 <link rel="stylesheet" type="text/css" href="css/widestage.css"/>
+
+<link rel="stylesheet" type="text/css" href="modules/designer/ndDesigner.css"/>
 
 <body>
 
@@ -105,6 +112,8 @@
 <script src="angular-csv-import/dist/angular-csv-import.min.js"></script>
 
 
+
+
 <!-- vector map
 <script src="libs/vector-map/jquery.vmap.min.js"></script>
 <script src="libs/vector-map/jquery.vmap.world.js"></script>
@@ -130,8 +139,21 @@
 <script src="libs/gauge2/gauge.min.js"></script>
 <!-- widestage directives -->
 <script src="js/directives/wst-directives.js"></script>
+<!--v-accordion -->
+<script src="angular-animate/angular-animate.min.js"></script>
+<script src="v-accordion/dist/v-accordion.min.js"></script>
 
 
+<!-- Load d3.js and c3.js -->
+<script src="d3/d3.min.js" charset="utf-8"></script>
+<script src="c3/c3.min.js"></script>
+<script src="c3-angular/c3-angular.min.js"></script>
+
+
+<!--
+<script src="modules/designer/directives/lvl-uuid.js"></script>
+<script src="modules/designer/directives/lvl-drag-drop.js"></script>
+-->
 
 <!-- angular app -->
 <script type="text/javascript" src="js/webapp.js"></script>
@@ -153,6 +175,24 @@
 <script type="text/javascript" src="js/roles/controller.js"></script>
 <script type="text/javascript" src="js/logout/controller.js"></script>
 <script type="text/javascript" src="js/spaces/controller.js"></script>
+<script type="text/javascript" src="js/pages/controller.js"></script>
+<script type="text/javascript" src="js/query/model.js"></script>
+<script type="text/javascript" src="js/query/controller.js"></script>
+<script type="text/javascript" src="js/pages/page_block.js"></script>
+<script type="text/javascript" src="js/widgets/grid.js"></script>
+<script type="text/javascript" src="js/widgets/c3Charts.js"></script>
+
+
+
+
+<!--
+<script src="modules/designer/ndDesigner.js"></script>
+
+<script src="modules/designer/services/ndDesignerService.js"></script>
+<script src="modules/designer/services/ndMediaModal.js"></script>
+<script src="modules/designer/services/ndURLModal.js"></script>
+<script src="modules/designer/services/ndDesignerModal.js"></script>
+-->
 <script>
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();

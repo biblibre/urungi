@@ -1,0 +1,953 @@
+
+
+    <nav class="frame" id="panelToolbar" role="navigation">
+            <!--
+            <button class="btn"  data-ng-click="modalOptions.close()" style="width: 100px">Cancel</button>
+            <button class="btn" data-ng-click="modalOptions.ok(getHTML())"  style="width: 100px">Save</button>
+            <button class="btn" ng-click="clear()"  style="width: 100px">Clear</button>
+            -->
+            <!--<button class="btn" style="width: 50%" ng-click="prepareHTML()">prepare</button>-->
+
+
+        <div class="buttons pull-right">
+            <a class="first hidden-xs hand-cursor" id="display-full" data-ng-click="modalOptions.ok(getHTML())" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Display Desktop - full width"><i class="fa fa-download fa-lg"></i></a>
+            <a class="hidden-xs hand-cursor" id="display-940" ng-click="clear()" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Display Tablet - 940px"><i class="fa fa-eraser fa-lg"></i></a>
+            <a class="hidden-xs hand-cursor" id="display-480" ng-click="setPreviewMode()" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Display Phone - 480px"><i class="fa fa-eye fa-lg"></i></a>
+            <a class="hidden-xs hand-cursor" id="viewHTML" ng-click="viewHTML()" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="View HTML code">HTML</a>
+            <a class="hand-cursor" data-ng-click="modalOptions.close()" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Premium Templates"><i style="color: #F34D59" class="fa fa-times fa-lg"></i></a>
+        </div>
+
+    </nav>
+
+
+    <section id="objectPanel" data-num-cols="4" ng-init="tabs.selected = (service.parameters.layouts) ? 'layouts' : 'settings'">
+
+    <!--<menu>
+        <li id="searchTabButton" class="search">
+            <a ng-click="showTab(1)">Settings</a></li>
+        <li id="layoutTabButton" class="layout on" ng-show="service.parameters.layouts"><a ng-click="showTab(2)">Layouts</a></li>
+        <li id="textTabButton" class="text"><a ng-click="showTab(3)">Text</a></li>
+        <li id="backgroundsTabButton" class="backgrounds"><a ng-click="showTab(4)">Bkground</a></li>
+        <li id="uploadsTabButton" class="uploads"><a ng-click="showTab(5)">Uploads</a></li>
+    </menu>-->
+        <menu>
+            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'settings'}"><a ng-click="tabs.selected = 'settings'">Settings</a></li>
+            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'layouts'}"
+                ng-show="service.parameters.layouts"><a ng-click="tabs.selected = 'layouts'">Layouts</a></li>
+            <li id="textTabButton" class="text hand-cursor" ng-class="{'on': tabs.selected == 'text'}"
+                ng-show="service.parameters.text"><a ng-click="tabs.selected = 'text'">Text</a></li>
+            <li id="backgroundsTabButton" class="backgrounds hand-cursor" ng-class="{'on': tabs.selected == 'background'}"
+                ng-show="service.parameters.backgroundImages"><a ng-click="tabs.selected = 'background'">Backgrounds</a></li>
+            <li id="uploadsTabButton" class="uploads hand-cursor" ng-class="{'on': tabs.selected == 'uploads'}"><a ng-click="tabs.selected = 'uploads'">Uploads</a></li>
+        </menu>
+
+    <section id="trashcan"> <span>Delete</span> </section>
+
+    <section class="content">
+    <section id="resultsSearch" class="results infinite" ng-show="tabs.selected == 'settings'">
+        <section class="layer scrollPane">
+            <div class="inner">
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px">
+                    <div class="btn-group"  ng-show="isSelected">
+                        <button class="btn btn-danger" ng-click="deleteSelected()" style="width:100px;"><i class='fa fa-trash-o'></i></button>
+
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="width:100px;">
+                            Hidden in  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" style="color: #000000;padding: 5px;">
+                            <li><label>
+                                <input type="checkbox" ng-model="hiddenLG" ng-change="changeVisibility()">
+                                Large Desktop</label>
+                            </li>
+                            <li><label>
+                                <input type="checkbox" ng-model="hiddenMD" ng-change="changeVisibility()">
+                                Desktop
+                            </label></li>
+                            <li><label>
+                                <input type="checkbox" ng-model="hiddenSM" ng-change="changeVisibility()">
+                                Tablet
+                            </label></li>
+                            <li><label>
+                                <input type="checkbox" ng-model="hiddenXS" ng-change="changeVisibility()">
+                                Phone
+                            </label></li>
+                            <li><label>
+                                <input type="checkbox" ng-model="hiddenPrint" ng-change="changeVisibility()">
+                                Printer
+                            </label></li>
+                        </ul>
+                    </div>
+                </div>
+
+                        <div class="row" style="width:200px;text-align: center;padding-bottom: 3px">
+                            <div class="btn-group " role="group" ng-show="editMode && isSelected">
+                                <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="setBoldSelection()" title="CTRL+B"><i class='fa fa-bold'></i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="setItalicSelection()" title="CTRL+I"><i class='fa fa-italic'></i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="setUnderlineSelection()" title="CTRL+U"><i class='fa fa-underline'></i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="setRemoveFormatSelection()" title="CTRL+X"><i class='fa fa-eraser'></i></button>
+
+                            </div>
+                        </div>
+
+                        <div class="row" style="width:200px;text-align: center;padding-bottom: 3px">
+                            <div class="btn-group " role="group" ng-show="editMode && isSelected">
+                                <button not-focus-button class="btn btn-default"  style="width:100px;" ng-mousedown="setInsertOrderedListSelection()" title="CTRL+O"><i class='fa fa-list-ol'></i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:100px;" ng-mousedown="setInsertUnorderedListSelection()" title="CTRL+E"><i class='fa fa-list-ul'></i></button>
+                            </div>
+                        </div>
+                        <div class="row" style="width:200px;text-align: center;padding-bottom: 3px">
+                            <div class="btn-group " role="group" ng-show="editMode && isSelected">
+                                <button not-focus-button class="btn btn-default"  style="width:40px;" ng-mousedown="setHSelection(1)" title="CTRL+B">H1</i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:40px;" ng-mousedown="setHSelection(2)" title="CTRL+I">H2</i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:40px;" ng-mousedown="setHSelection(3)" title="CTRL+U">H3</i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:40px;" ng-mousedown="setHSelection(4)" title="CTRL+O">H4</i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:40px;" ng-mousedown="setHSelection(5)" title="CTRL+E">H5</i></button>
+
+                            </div>
+                        </div>
+                        <!--
+                        <div class="row" style="width:200px;text-align: center;padding-bottom: 3px">
+                            <div class="btn-group " ng-show="editMode && isSelected">
+                                <button not-focus-button  class="btn btn-default" style="width:50px;" ng-mousedown="setJustifyLeftSelection()" title="CTRL+L"><i class='fa fa-align-left'></i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="setJustifyRightSelection()" title="CTRL+R"><i class='fa fa-align-right'></i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="setJustifyCenterSelection()" title="CTRL+C"><i class='fa fa-align-center'></i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="setRemoveFormatSelection()" title="CTRL+X"><i class='fa fa-eraser'></i></button>
+                            </div>
+                        </div>
+                        -->
+                        <div class="row" style="width:200px;text-align: center;padding-bottom: 3px">
+                            <div class="btn-group " ng-show="isSelected">
+                                <button not-focus-button  class="btn btn-default" style="width:50px;" ng-mousedown="setStyleJustifyLeftSelection()" title="CTRL+L"><i class='fa fa-align-left'></i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="setStyleJustifyRightSelection()" title="CTRL+R"><i class='fa fa-align-right'></i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="setStyleJustifyCenterSelection()" title="CTRL+C"><i class='fa fa-align-center'></i></button>
+                                <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="setStyleRemoveFormatSelection()" title="CTRL+X"><i class='fa fa-eraser'></i></button>
+                            </div>
+                        </div>
+
+                        <div class="row" style="width:200px;text-align: center;padding-bottom: 3px">
+                            <div class="btn-group " ng-show="editMode && isSelected">
+                            </div>
+                        </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="editMode && isSelected">
+                    <div id="hsvflat-fontColor"></div>
+                </div>
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isSelected">
+
+                    <div class="form-group  designer_form_group row">
+                        <label for="colorPopup" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Bkg color:</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <input type="text" class="form-control designer_control cp-preventtouchkeyboardonshow" id="colorPopup" value="#FFFFFF" data-color-format="hex" tabindex="-1" style="color: rgb(0, 0, 0); background: rgb(255, 255, 255);" data-original-title="Background color" title="Background color" readonly="">
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isSelected">
+                    <div class="form-group  designer_form_group row">
+                        <label for="elementID" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">{{elementType}} ID:</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <input type="text" class="form-control designer_control" id="elementID" ng-model='selectedID' />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isSelected">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="selClass" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Extra Classes:</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <input type="text" class="form-control  designer_control" id="selClass" ng-model='selectedClasses' />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" style="width:200px;padding-bottom: 3px" ng-show="isSelected">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Floating</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select id="floatEdit" ng-model="float" class="form-control designer_control" ng-change="changeFloat()">
+                                <option>None</option>
+                                <option>Left</option>
+                                <option>Right</option>
+                                <option>Center</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isColumn">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Size Large</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select id="largeColumnSize" ng-model="largeColumnSize" class="form-control designer_control" ng-change="changeColumnSize(largeColumnSize,'large')">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isColumn">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Size Medium</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select id="mediumColumnSize" ng-model="mediumColumnSize" class="form-control designer_control" ng-change="changeColumnSize(mediumColumnSize,'medium')">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isColumn">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Size Small</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select id="smallColumnSize" ng-model="smallColumnSize" class="form-control designer_control" ng-change="changeColumnSize(smallColumnSize,'small')">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isColumn">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Offset Large</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select id="largeOffsetSize" ng-model="largeOffsetSize" class="form-control designer_control" ng-change="changeOffsetSize(largeOffsetSize,'large')">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isColumn">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Offset Medium</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select id="mediumOffsetSize" ng-model="mediumOffsetSize" class="form-control designer_control" ng-change="changeOffsetSize(mediumOffsetSize,'medium')">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isColumn">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Offset Small</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select id="smallOffsetSize" ng-model="smallOffsetSize" class="form-control designer_control" ng-change="changeOffsetSize(smallOffsetSize,'small')">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isImage || isBGImage">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Blur</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <input class="sliderInput" ng-model="imageFilters.blur" type="range" step="1" min="0" max="10" value="0" ng-change="changeImageFilter()">
+                        </div>
+                    </div>
+                    <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Grayscale</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                               <input class="sliderInput" ng-model="imageFilters.grayscale" type="range" step="1" min="0" max="100" value="0" ng-change="changeImageFilter()">
+                            </div>
+
+                    </div>
+                    <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Sepia</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input class="sliderInput" ng-model="imageFilters.sepia" type="range" step="1" min="0" max="100" value="0" ng-change="changeImageFilter()">
+                            </div>
+                    </div>
+                    <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Brightness</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input class="sliderInput" ng-model="imageFilters.brightness" type="range" step="1" min="0" max="200" value="100" ng-change="changeImageFilter()">
+                            </div>
+                    </div>
+                    <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Contrast</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input class="sliderInput" ng-model="imageFilters.contrast" type="range" step="1" min="0" max="200" value="100" ng-change="changeImageFilter()">
+                            </div>
+                    </div>
+                    <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Opacity</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input class="sliderInput" ng-model="imageFilters.opacity" type="range" step="1" min="0" max="100" value="100" ng-change="changeImageFilter()">
+                            </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isColumn">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Size xSmall</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select id="xsmallColumnSize" ng-model="xsmallColumnSize" class="form-control designer_control" ng-change="changeColumnSize(xsmallColumnSize,'xsmall')">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isImage">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="imageSource" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Source</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <input type="text" class="form-control  designer_control" id="imageSource" ng-model='imageSource' />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isButton">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Type</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select id="buttonType" class="form-control designer_control" ng-model="buttonType" ng-change="changeButtonType(buttonType)">
+                                <option>Default</option>
+                                <option>Primary</option>
+                                <option>Info</option>
+                                <option>Success</option>
+                                <option>Warning</option>
+                                <option>Danger</option>
+                                <option>Link</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isButton">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Size</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select id="buttonSize" class="form-control designer_control" ng-model="buttonSize" ng-change="changeButtonSize(buttonSize)">
+                                <option>Default</option>
+                                <option>Large</option>
+                                <option>Small</option>
+                                <option>Xtra small</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isButton">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Link</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <button class="btn btn-sm" ng-click="setLink()" style="width:100%">link...</button>
+                            <!--setCommandLink() para texto -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isCarousell">
+
+                    <div class="btn-group " >
+                        <button not-focus-button  class="btn btn-default" style="width:50px;" ng-mousedown="" title="CTRL+L"><i class='fa '></i></button>
+                        <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="carouselPause()" title="CTRL+R"><i class='fa fa-pause'></i></button>
+                        <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="carouselNext()" title="CTRL+C"><i class='fa fa-chevron-circle-right'></i></button>
+                        <button not-focus-button class="btn btn-default"  style="width:50px;" ng-mousedown="" title="CTRL+X"><i class='fa '></i></button>
+                    </div>
+
+                </div>
+
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isParagraph || isHeader">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Font size</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <input type="text" class="form-control  designer_control" id="paragraphSize" ng-model='paragraphSize' ng-change="changeParagraphFontSize(paragraphSize)" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isParagraph || isHeader">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Font color</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <input type="text" class="form-control  designer_control" id="paragraphFontColor" ng-model='paragraphFontColor' ng-change="changeParagraphFontColor(paragraphFontColor)" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isPhotoHeader">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Height</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <input type="text" class="form-control  designer_control" id="objectHeight" ng-model='objectHeight' ng-change="changeHeight(objectHeight)" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="width:200px;text-align: center;padding-bottom: 3px" ng-show="isVimeo">
+
+                    <div class="form-group designer_form_group row">
+                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Link</label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                            <button class="btn btn-sm" ng-click="setMedia()" style="width:100%">Frame...</button>
+                            <!--setCommandLink() para texto -->
+                        </div>
+                    </div>
+
+                </div>
+
+                    <div class="toolbar" ng-show="isSelected">
+
+                        <!--
+                        <b ng-show="isRow">layout</b>
+                        <select ng-model="layout" ng-change="changeLayout()" ng-show="isRow">
+                            <option>4-4-4</option>
+                            <option>6-6</option>
+                            <option>4-8</option>
+                            <option>8-4</option>
+                            <option>3-3-3-3</option>
+                            <option>2-10</option>
+                            <option>10-2</option>
+                            <option>3-9</option>
+                            <option>9-3</option>
+                            <option>2-2-2-2-2-2</option>
+                        </select>
+                        -->
+                        <b ng-show="isHeader">Size</b>
+                        <select ng-model="headerSize" ng-change="changeHeaderSize(headerSize)" ng-show="isHeader">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                        </select>
+
+
+                        <!--
+                        <b ng-show="isButton">Size</b>
+                        <select ng-model="buttonSize" ng-change="changeButtonSize(buttonSize)" ng-show="isButton">
+                            <option>Default</option>
+                            <option>Large</option>
+                            <option>Small</option>
+                            <option>Xtra small</option>
+                        </select>
+                        <b ng-show="isButton">Type</b>
+                        <select ng-model="buttonType" ng-change="changeButtonType(buttonType)" ng-show="isButton">
+                            <option>Default</option>
+                            <option>Primary</option>
+                            <option>Info</option>
+                            <option>Success</option>
+                            <option>Warning</option>
+                            <option>Danger</option>
+                            <option>Link</option>
+                        </select>
+                        -->
+                        <div class="checkbox hidden" >
+                            <label>
+                                <input type="checkbox" ng-model="hidden" ng-change="changeHidden()">
+                                Hide
+                            </label>
+                        </div> <br/>
+
+                    </div>
+                    <!--<div class="col-md-1 col-md-offset-1" ng-show="isSelected">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="visibleLG" ng-change="changeVisibility()">
+                                Visible on Large Desktop
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="visibleMD" ng-change="changeVisibility()">
+                                Visible on Desktop
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="visibleSM" ng-change="changeVisibility()">
+                                Visible on Tablet
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="visibleXS" ng-change="changeVisibility()">
+                                Visible on Phone
+                            </label>
+                        </div>
+                    </div>-->
+                <button class="btn btn-default" ng-click="injectCSS(1)" style="width: 100%;padding-bottom: 3px">CSS</button>
+                <button class="btn btn-default" ng-click="getContentHTML()" style="width: 100%;padding-bottom: 3px">HTML</button>
+
+
+            </div>
+        </section>
+        <div class="scrollTrack vScrollTrack">
+            <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
+        </div>
+        <div class="scrollTrack hScrollTrack">
+            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+        </div>
+    </section>
+    <section id="resultsLayout" class="results infinite twoCol" ng-show="tabs.selected == 'layouts'">
+        <section class="layoutsTabContainer tabContainer">
+            <section class="tab">
+                <section class="layer scrollPane">
+                    <div class="inner">
+                        <div class="searchLoaderHolder"></div>
+                        <div class="searchGroup hasContent" style="height: 2872px;">
+                            <div class="row gallery infoPanelGallery templateGallery laidOut">
+
+                                <!--<div draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{type: 'jumbotron'}"
+                                     drag-start="onDragStart()" drag-end="onDragEnd()">
+                                    <img   src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_jumbotron.png" width="200" height="50" style="height: 50px;">
+                                </div>-->
+
+                                <!--<div  x-lvl-draggable="true" data-color="navbar" style="margin-bottom: 5px">
+                                    <img   src="modules/designer/images/layout_navbar.png" width="200" height="16" style="height: 16px;">
+                                </div>-->
+
+                                <div  x-lvl-draggable="true" data-color="jumbotron" style="margin-bottom: 5px">
+                                    <img   src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_jumbotron.png" width="200" height="50" style="height: 50px;">
+                                </div>
+
+                                <div  x-lvl-draggable="true" data-color="gridrow" style="margin-bottom: 5px">
+
+                                      <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_3cols.png" width="200" height="50" style="height: 50px;">
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="3colscta" style="margin-bottom: 5px">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_3cols_cta.png" width="200" height="50" style="height: 50px;">
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="3colsImageCircle" style="margin-bottom: 5px">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_3colsImages.png" width="200" height="50" style="height: 50px;">
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="imageTextLarge" style="margin-bottom: 5px">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_block_image_text_large.png" width="200" height="50" style="height: 50px;">
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="textImageLarge" style="margin-bottom: 5px">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_block_text_image_large.png" width="200" height="50" >
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="featureteDivider" style="margin-bottom: 5px">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_featurete_divider.png" width="200" height="50" >
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="carousell" style="margin-bottom: 5px">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_carousell.png" width="200" height="50" >
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="accordion" style="margin-bottom: 5px">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_accordion.png" width="200" height="50" style="height: 50px;">
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="blogPost" style="margin-bottom: 5px;">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_blogpost.png" width="200" height="50" style="height: 50px;">
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="photoHeader" style="margin-bottom: 5px">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_photoheader.png" width="200" height="50" >
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="worksGrid" style="margin-bottom: 5px">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_worksgrid_4cols.png" width="200" height="50" >
+                                </div>
+                                <div  x-lvl-draggable="true" data-color="team" style="margin-bottom: 5px">
+
+                                    <img  src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_team.png" width="200" height="50" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="scrollTrack vScrollTrack">
+                    <div class="scrollThumb" style="height: 15px; transform: translateY(0px);"></div>
+                </div>
+                <div class="scrollTrack hScrollTrack">
+                    <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+                </div>
+            </section>
+        </section>
+    </section>
+    <section id="resultsText" class="results infinite" ng-show="tabs.selected == 'text'">
+        <section class="layer scrollPane">
+            <div class="inner">
+                <div  x-lvl-draggable="true" data-color="h1" style="margin-bottom: 5px">
+
+                    <h1>Header 1</h1>
+                </div>
+                <div  x-lvl-draggable="true" data-color="h2" style="margin-bottom: 5px">
+
+                    <h2>Header 2</h2>
+                </div>
+                <div  x-lvl-draggable="true" data-color="h3" style="margin-bottom: 5px">
+
+                    <h3>Header 3</h3>
+                </div>
+                <div  x-lvl-draggable="true" data-color="h4" style="margin-bottom: 5px">
+
+                    <h4>Header 4</h4>
+                </div>
+                <div  x-lvl-draggable="true" data-color="h5" style="margin-bottom: 5px">
+
+                    <h5>Header 5</h5>
+                </div>
+                <div  x-lvl-draggable="true" data-color="h6" style="margin-bottom: 5px">
+
+                    <h6>Header 6</h6>
+                </div>
+                <div  x-lvl-draggable="true" data-color="p" style="margin-bottom: 5px">
+                    <p>Paragraph</p>
+                </div>
+                <div  x-lvl-draggable="true" data-color="lead" style="margin-bottom: 5px">
+                    <p class="lead">Lead</p>
+                </div>
+
+                <div  x-lvl-draggable="true" data-color="button" style="margin-bottom: 5px">
+
+                    <button class="btn btn-default btn-large" width="200" height="50" >Button</button>
+                </div>
+            </div>
+        </section>
+        <div class="scrollTrack vScrollTrack">
+            <div class="scrollThumb" style="height: 42px; transform: translateY(0px);"></div>
+        </div>
+        <div class="scrollTrack hScrollTrack">
+            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+        </div>
+    </section>
+    <section id="resultsBackground" class="results infinite" ng-show="tabs.selected == 'backgrounds'">
+        <section class="layer scrollPane">
+            <div class="inner">
+                <div  x-lvl-draggable="true" data-color="youtube" style="margin-bottom: 5px;background-color: #FFFFFF;text-align: center">
+                    <img   src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/youtube.png"  style="height: 50px;">
+                </div>
+                <div  x-lvl-draggable="true" data-color="vimeo" style="margin-bottom: 5px;background-color: #F0F1F4;text-align: center">
+                    <img   src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/vimeo.png"  style="height: 50px;">
+                </div>
+                <div  x-lvl-draggable="true" data-color="slideshare" style="margin-bottom: 5px;background-color: #313131;text-align: center">
+                    <img   src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/slideshare.png"  style="height: 50px;">
+                </div>
+            </div>
+            <ul id="photoGallery" class="galleryUploads infoPanelGallery photoGallery" ng-init="getCatalogImages()">
+
+                <li ng-repeat="catalogImage in catalogImages">
+                    <img x-lvl-draggable="true" data-color="image" data-id="{{catalogImage.source1400}}" ng-src="{{catalogImage.url}}" width="80px" />
+                </li>
+
+            </ul>
+        </section>
+        <div class="scrollTrack vScrollTrack">
+            <div class="scrollThumb" style="height: 26px; transform: translateY(0px);"></div>
+        </div>
+        <div class="scrollTrack hScrollTrack">
+            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+        </div>
+    </section>
+    <section id="resultsUpload" class="results infinite" ng-show="tabs.selected == 'uploads'" ng-init="getUploads()">
+        <section id="normalUploads" class="layer scrollPane">
+            <div class="inner">
+                <section class="uploadButtonAndMessage">
+                    <button id="SelectFile" class="button buttonBlock fileUploadButton">Upload your own images</button>
+                    <!--<p>...or just drag them from your desktop.</p> -->
+                    <progressbar ng-show="uploads.uploadingFile" class="progress-striped active" max="100" value="100" type="danger"><i>uploading...</i></progressbar>
+                </section>
+                <!--<div class="browseCategories folderExpanded" style="height: 131px;">
+                    <ul class="gallery photoGallery albumGallery categories laidOut">
+                        <li class="folderExpanded" style="width: 109px; left: 0px; top: 0px;"><a href="#" data-query="uploads" title="Uploads" class="uploads"><span class="page on"></span><span class="page on"></span><img src="upload_folder_thumbnail.png" width="200" height="200" alt="Upload folder thumbnail" style="height: 81px;"><span class="text">Uploads</span></a></li>
+                        <li style="width: 109px; left: 109px; top: 0px;"><a href="#" data-query="facebook" title="Facebook" class="facebook"><span class="page on"></span><span class="page on"></span><img src="upload_folder_facebook.png" width="200" height="200" alt="Facebook folder thumbnail" style="height: 81px;"><span class="text">Facebook</span></a></li>
+                        <li style="width: 109px; left: 218px; top: 0px;"><a href="#" data-query="google" title="Google Drive" class="google"><span class="page on"></span><span class="page on"></span><img src="upload_folder_google_drive.png" width="200" height="200" alt="Google folder thumbnail" style="height: 81px;"><span class="text">Google Drive</span></a></li>
+                    </ul>
+                </div>
+                <div class="inlineFolderPointer" style="left: 84.5px;"></div>
+                <div class="inlineFolderGroup searchGroup end hasContent fetched" style="height: 78px;">
+                    <ul class="gallery infoPanelGallery photoGallery laidOut">
+                        <li class="" style="width: 102px; left: 0px; top: 0px;">
+                            <a href="#"><img  src="thumbnail.jpg?Expires=1427270510&amp;Signature=IgvQOZs2Y2AJqtfMbST~QJ1PNdUy1NMVm6xlp8C6qFK-frJZaHvQOhbIdZaUna8b5~~YTfG7bNBsils6u0hsamYLwz~OsRDSohuBBX4FPYhMHt2zoofzFqtOIJ~OwyF4fI6YC5OFBUUhql2efsBrvLnphLycSW6Lr6LnkhbDvXo~b1Xx4Fm7jA-Ow1HLkF5eBwDGJmX3Hzik1AlmrTivl0ANr~08y9GlVCcmOxEOsMzriKV~D-VCBDur6XBqwBwIVQNW6B0bCxmaKmB078bQx1TrYKq7vDuI2DTKJ8aJQ8cTTVC2VBmvz3D2lgJ27NLzKs9LfLf4mEji1dmsWDrLCg__&amp;Key-Pair-Id=APKAI6F2W6P23R2UF5NQ" width="200" height="150" style="height: 72px;"><span class="price free">Free</span><span class="info"><span class="price">Free</span> <span class="moreInfo" title="Show more info">i</span></span>
+                            </a>
+                        </li>
+                        <li class="" style="width: 102px; left: 102px; top: 0px;">
+                            <a href="#"><img  src="thumbnail.png?Expires=1427270510&amp;Signature=jcc2wOWQhv5aoYlYYNEtvkTSY7ywztpcrRrcKF8J~xW2cUg~CWVm5Q1Ohij8xuI8stVuINIIjBcfcNsjZBQyVtvb5enXPzK4HMCQxzUq5wxTm-teeHbkQhvJXpz9gGvKrTt-ZCEEuSMQccU7bxZXLDC8HZWGkKwo2sZgcFRuCO1Lr1c5HuKDzlM0LU4AuGFmFa-nR49jLNUHdCcQ-5clfCbqoW7rzbMYX7oaWQ3UPtz~xtj~~AUJIEeOVFq2yFX4XLdgCnw9suSG-1~mtenephxwJW9uHI7NJE-m9VdOskm9kj92CN5xhQkKoqnk6qI8pvCfIVIQNwPGx1KfBBF24w__&amp;Key-Pair-Id=APKAI6F2W6P23R2UF5NQ" width="200" height="61" style="height: 29.28px;"><span class="price free">Free</span><span class="info"><span class="price">Free</span> <span class="moreInfo" title="Show more info">i</span></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>-->
+                <div class="spacer" style="height: 0px;"></div>
+                <div class="searchGroup">
+                    <!--<nd-drop-zone url="/api/custom/Designer/upload"></nd-drop-zone>-->
+
+
+                    <style>
+                        #photoGallery li {
+                            display: inline;
+                        }
+                        .galleryUploads img {
+                            display: inline;
+                            width: 90px;
+                            height: 90px;
+                        }
+                        /*.designer-dropzone {
+                            position: fixed;
+                            top: 0px;
+                            left: 0px;
+                            width: 100%;
+                            background: rgba(0,0,0,0.5) !important;
+                            z-index: 9999;
+                            height: 100%;
+                            text-align: center;
+                        }*/
+                    </style>
+
+                    <ul id="photoGallery" class="galleryUploads infoPanelGallery photoGallery">
+
+                        <li ng-repeat="file in uploads.files">
+                            <img x-lvl-draggable="true" data-color="image" data-id="{{file.url}}" ng-src="{{file.previewURL}}" />
+                        </li>
+
+                    </ul>
+
+                    <!-- Esto da problemas con el resto de drag and drop <form class="dropzone designer-dropzone" id="dropzone" ng-init="initDropzone()"></form> -->
+                    <!--<form class="dropzone designer-dropzone" id="dropzone" ng-init="initDropzone()"></form>-->
+
+                </div>
+
+            </div>
+        </section>
+        <div class="scrollTrack vScrollTrack">
+            <div class="scrollThumb" style="height: 80px; transform: translateY(0px);"></div>
+        </div>
+        <div class="scrollTrack hScrollTrack">
+            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+        </div>
+    </section>
+    </section>
+
+    </section>
+
+
+    <!--
+    <div class="sidebar sidebar-fixed" style="top:0px;" >
+        <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+            <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+                <button class="btn btn-success" ng-click="setSidebarView('1')">
+                    <i class="icon-signal"></i>
+                </button>
+
+                <button class="btn btn-info"  ng-click="setSidebarView('2')">
+                    <i class="fa fa-suitcase"></i>
+                </button>
+
+                <button class="btn btn-warning"  ng-click="setSidebarView('3')">
+                    <i class="icon-group"></i>
+                </button>
+
+                <button class="btn btn-danger">
+                    <i class="icon-cogs"></i>
+                </button>
+            </div>
+
+
+            <button class="btn btn-inverse" ng-click="setPreviewMode(true)" ng-show="!previewMode">Preview Mode</button>
+            <button class="btn btn-inverse" ng-click="setPreviewMode(false)" ng-show="previewMode">Design Mode</button>
+        </div>
+
+
+        <div  ng-hide="!viewWidgets" style="background-color: #CCCCCC;">
+            <p>Click and drag a widget onto the design area to the right</p>
+
+            <div class="list-group">
+                <div class="list-group-item" x-lvl-draggable="true" data-color="jumbotron">jumbotron</div>
+                <div class="list-group-item" x-lvl-draggable="true" data-color="well">Well</div>
+                <div class="list-group-item" x-lvl-draggable="true" data-color="p">Paragraph</div>
+                <div class="list-group-item" x-lvl-draggable="true" data-color="gridrow">Grid Row</div>
+                <div class="list-group-item" x-lvl-draggable="true" data-color="button">Button</div>
+                <div class="list-group-item" x-lvl-draggable="true" data-color="buttongroup">Button Group</div>
+                <div class="list-group-item" x-lvl-draggable="true" data-color="panel">Panel</div>
+                <div class="list-group-item" x-lvl-draggable="true" data-color="form">Form</div>
+                <div class="list-group-item" x-lvl-draggable="true" data-color="input">input</div>
+            </div>
+        </div>
+
+
+        <div
+                data-angular-treeview="true"
+                data-tree-id="mytree"
+                data-tree-model="elementsList"
+                data-node-id="id"
+                data-node-label="type"
+                data-node-children="children"  ng-hide="!viewTree">
+        </div>
+
+        <div  ng-hide="!viewController" ng-controller="controllerCtrl">
+
+            <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#myModal">New Field</button>
+
+        </div>
+
+
+
+        <div class="sidebar-collapse" id="sidebar-collapse">
+            <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+        </div>
+
+
+    </div>
+
+    -->
+
+    <section  id="designArea" class="scrollPane multiPage rendered" >
+
+
+
+        <div ng-init="loadHTMLtoEditor()" id="mainContainer" ndType="mainContainer" ng-hide="previewMode || htmlMode"
+             class="container-fluid" x-lvl-drop-target="true" x-on-drop="dropped(dragEl, dropEl)" style="padding-right: 0px;padding-left: 0px;min-height: 200px; padding-bottom: 50px;background-color: #FFFFFF;margin-left: 10px;margin-right: 0px;border:5px solid #999999">
+
+
+        </div>
+        <!--<div ng-init="loadHTMLtoEditor()" id="mainContainer" ndType="mainContainer"
+             ng-hide="previewMode" class="container-fluid" style="padding-right: 0px;padding-left: 0px;min-height: 200px; padding-bottom: 50px;background-color: #FFFFFF;margin-left: 10px;margin-right: 0px;border:5px solid #999999"
+
+             drop="testOnDrop($data, $event, {})" drop-effect="copy" drop-accept="'json/custom-object'">
+
+
+        </div>-->
+
+
+        <div class="container-fluid main-content" style="min-height: 100%;background-color: #FFFFFF;padding-right: 0px;padding-left: 0px;" id="previewContainer" ng-show="previewMode">
+
+        </div>
+
+        <style>
+            #htmlContainer {
+                position: absolute;
+                width: 100%;
+                height: 400px;
+            }
+        </style>
+
+        <div class="container-fluid main-content" style="min-height: 100%;background-color: #FFFFFF;padding-right: 0px;padding-left: 0px;" id="htmlContainer" ng-show="htmlMode">
+
+            <!--<textarea style="width:100%;min-height: 600px;" ng-model="htmlCode"></textarea>-->
+
+        </div>
+
+
+
+    </section>
+
+    <!---->
+
+

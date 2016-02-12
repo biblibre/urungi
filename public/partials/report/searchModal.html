@@ -18,8 +18,8 @@
 
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="searchValue" value="{{value[selectedFilter.collectionID+'_'+selectedFilter.elementName]}}" ng-model="selectedFilter.searchValue">
-                                    {{value[selectedFilter.collectionID+'_'+selectedFilter.elementName]}}
+                                    <input type="radio" name="searchValue" value="{{value[selectedFilter.collectionID.toLowerCase()+'_'+selectedFilter.elementName]}}" ng-model="selectedFilter.searchValue">
+                                    {{value[selectedFilter.collectionID.toLowerCase()+'_'+selectedFilter.elementName]}}
                                 </label>
                             </div>
                             <!--
@@ -27,8 +27,8 @@
                             -->
                         </div>
                         <div ng-if="selectedFilter.filterType == 'in' || selectedFilter.filterType == 'notIn'">
-                            <input type="checkbox" name="searchValue[]" value="{{value[selectedFilter.collectionID+'_'+selectedFilter.elementName]}}"
-                                   ng-checked="isValueSelected('{{value[selectedFilter.collectionID+'_'+selectedFilter.elementName]}}')" ng-click="toggleSelection(value)" style="margin-right: 5px;">{{value[selectedFilter.collectionID+'_'+selectedFilter.elementName]}}
+                            <input type="checkbox" name="searchValue[]" value="{{value[selectedFilter.collectionID.toLowerCase()+'_'+selectedFilter.elementName]}}"
+                                   ng-checked="isValueSelected('{{value[selectedFilter.collectionID.toLowerCase()+'_'+selectedFilter.elementName]}}')" ng-click="toggleSelection(value)" style="margin-right: 5px;">{{value[selectedFilter.collectionID.toLowerCase()+'_'+selectedFilter.elementName]}}
                         </div>
                     </li>
                 </ul>

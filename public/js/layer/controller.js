@@ -21,7 +21,7 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
     $scope.newLayer = function ()
     {
         $scope._Layer = {};
-        $scope._Layer.params = [];
+        $scope._Layer.params = {};
         $scope._Layer.status = 1;
         $scope.mode = 'add';
         $('#layerModal').modal('show');
@@ -41,9 +41,7 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
                 if ($scope._Layer.params)
 
                 {
-
-                        $scope.erDiagramInit();
-
+                    $scope.erDiagramInit();
                 }
                 else {
                     $scope._Layer.params = {};
@@ -71,22 +69,28 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
             });
 
         } else {
-            //clean parameters just for the view...
-            for (var collection in $scope._Layer.params.schema)
-            {
-                for (var element in $scope._Layer.params.schema[collection].elements)
-                {
-                    if ($scope._Layer.params.schema[collection].elements[element].painted)
 
-                        $scope._Layer.params.schema[collection].elements[element].painted = false;
+        var theLayer = $scope._Layer;
+            //clean parameters just for the view...
+
+            for (var collection in theLayer.params.schema)
+            {
+                console.log('uno',theLayer.params.schema[collection].collectionName);
+                for (var element in theLayer.params.schema[collection].elements)
+                {
+                    console.log('dos');
+                    if (theLayer.params.schema[collection].elements[element].painted)
+
+                        theLayer.params.schema[collection].elements[element].painted = false;
 
 
 
                 }
             }
 
+            console.log('before save',JSON.stringify(theLayer));
 
-            connection.post('/api/layers/update/'+$scope._Layer._id, $scope._Layer, function(result) {
+            connection.post('/api/layers/update/'+theLayer._id, theLayer, function(result) {
                 console.log(result);
                 if (result.result == 1) {
                     window.history.back();
@@ -166,9 +170,12 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
 
                 if (result.result == 1)
                 {
+                console.log('uno');
 
                     for (i in result.items)
                     {
+                        console.log('dos',result.items[i]);
+
                         result.items[i].datasourceID = $scope.selectedDts.id;
 
                         for (e in result.items[i].elements)
@@ -285,6 +292,8 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
                             join.sourceElementID = $scope._Layer.params.schema[collection].elements[element].elementID;
                             join.sourceElementName = $scope._Layer.params.schema[collection].elements[element].elementName;
                             join.sourceCollectionID = $scope._Layer.params.schema[collection].collectionID;
+                            join.sourceCollectionName = $scope._Layer.params.schema[collection].collectionName;
+                            console.log('the collection name',$scope._Layer.params.schema[collection].collectionName);
                         }
 
                         if ($scope._Layer.params.schema[collection].elements[element].elementID == targetID)
@@ -292,6 +301,8 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
                             join.targetElementID = $scope._Layer.params.schema[collection].elements[element].elementID;
                             join.targetElementName = $scope._Layer.params.schema[collection].elements[element].elementName;
                             join.targetCollectionID = $scope._Layer.params.schema[collection].collectionID;
+                            join.targetCollectionName = $scope._Layer.params.schema[collection].collectionName;
+                            console.log('the collection name 2',$scope._Layer.params.schema[collection].collectionName);
                         }
                     }
                 }

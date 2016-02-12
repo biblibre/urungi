@@ -11,6 +11,9 @@
     <a ng-if="user.reportsCreate || counts.reports > 0" href="/#/reports" class="list-group-item">
         <span><i class="fa fa-bar-chart"></i></span> Reports <span class="badge">{{counts.reports}}</span>
     </a>
+    <a ng-if="user.reportsCreate || counts.pages > 0" href="/#/pages" class="list-group-item">
+        <span><i class="fa fa-newspaper-o"></i></span> Pages <span class="badge">1</span>
+    </a>
     <!--
     <a href="/#/history" class="list-group-item">
         <span><i class="fa fa-history"></i></span> History

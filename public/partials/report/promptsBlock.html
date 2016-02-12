@@ -37,7 +37,7 @@
                         <ui-select id="marray" multiple ng-model="filter.filterLabel1" on-select="selectFilterArrayValue('multiple', filter)" on-remove="selectFilterArrayValue('multiple', filter)" theme="select2" ng-disabled="disabled" style="width: 300px;">
                             <ui-select-match placeholder="Select multiple values...">{{$item.label}}</ui-select-match>
                             <ui-select-choices repeat="value in filter.values | filter: $select.search">
-                                <div ng-bind-html="value.lavel | highlight: $select.search"></div>
+                                <div ng-bind-html="value.label | highlight: $select.search"></div>
                                 <small>
                                     {{value.label}}
 
