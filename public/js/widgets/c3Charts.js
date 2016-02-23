@@ -3,6 +3,8 @@ app.service('c3Charts' , function () {
 
 this.rebuildChart = function(chart)
     {
+        console.log('rebuilding chart');
+
         var theValues = [];
         var theNames = {};
 
@@ -13,6 +15,82 @@ this.rebuildChart = function(chart)
             axisField = chart.dataAxis.id;
 
             console.log('axisfield',axisField);
+
+        var axisIsInQuery = false;
+
+        //Is the axis field in the query
+        if (chart.dataAxis)
+            for (var qc in chart.query.columns)
+                {
+                    var elementName = chart.query.columns[qc].collectionID.toLowerCase()+'_'+chart.query.columns[qc].elementName;
+
+                    if (chart.query.columns[qc].aggregation)
+                        elementName = chart.query.columns[qc].collectionID.toLowerCase()+'_'+chart.query.columns[qc].elementName+chart.query.columns[qc].aggregation;
+
+
+                    if (elementName == chart.dataAxis.id)
+                    {
+                        axisIsInQuery = true;
+                    }
+                }
+
+        if (axisIsInQuery == false)
+        {
+            axisField = null;
+            if (chart.dataAxis)
+                chart.dataAxis.id = null;
+        }
+
+
+        var columnsForDelete = [];
+
+        for (var i in chart.dataColumns)
+        {
+            var columnFound = false;
+
+            //remove column if not in query
+            for (var qc in chart.query.columns)
+            {
+                var elementName = chart.query.columns[qc].collectionID.toLowerCase()+'_'+chart.query.columns[qc].elementName;
+
+                if (chart.query.columns[qc].aggregation)
+                        elementName = chart.query.columns[qc].collectionID.toLowerCase()+'_'+chart.query.columns[qc].elementName+chart.query.columns[qc].aggregation;
+
+                console.log('column id',elementName,chart.dataColumns[i].id)
+                if (chart.dataColumns[i].id == elementName)
+                {
+                    columnFound = true; //columnsForDelete.push(i);
+                    console.log('column found',elementName);
+                }
+
+            }
+
+            if (columnFound == false)
+               {
+                columnsForDelete.push(i);
+                console.log('pushing a column for delete',i)
+                }
+        }
+
+        console.log('there are ',columnsForDelete.length,'columns for delete');
+
+        for (var cfd in columnsForDelete)
+        {
+           chart.dataColumns.splice(columnsForDelete[cfd],1);
+           console.log('deleting ',columnsForDelete)
+        }
+
+        //remove query if not dataColumns and not data Axis
+
+        if (axisIsInQuery == false && chart.dataColumns.length)
+        {
+            chart.query = null;
+            chart.queryName = null;
+        }
+
+
+        console.log('the data columns ',chart.dataColumns);
+
 
         for (var i in chart.dataColumns)
         {
@@ -25,44 +103,61 @@ this.rebuildChart = function(chart)
             }
         }
 
-        console.log('the values', chartCode ,theValues);
 
-        if (!chart.height)
-            chart.height = 300;
+        if (chart.query)
+        {
+            var theChartCode = '#'+chart.chartID;
+                console.log('the values',theChartCode ,theValues, chart.query.data);
 
-        var theChartCode = '#'+chart.chartCode;
-        var chartCanvas = c3.generate({
-            bindto: theChartCode,
-            data: {
-                json: chart.data,
-                keys: {
-                    x: axisField,
-                    value: theValues
-                },
-                names: theNames
-            },
-            axis: {
-                x: {
-                    type: 'category'
-                }
-            },
-             size: {
-                height:chart.height
-             }
-        });
+                if (!chart.height)
+                    chart.height = 300;
 
-        chart.chartCanvas = chartCanvas;
+
+                var chartCanvas = c3.generate({
+                    bindto: theChartCode,
+                    data: {
+                        json: chart.query.data,
+                        keys: {
+                            x: axisField,
+                            value: theValues
+                        },
+                        names: theNames
+                    },
+                    axis: {
+                        x: {
+                            type: 'category'
+                        }
+                    },
+                     size: {
+                        height:chart.height
+                     }
+                });
+
+            chart.chartCanvas = chartCanvas;
+        }
+
+        for (var c in chart.dataColumns)
+        {
+            if (chart.dataColumns[c].type != 'line')
+                chart.chartCanvas.transform(chart.dataColumns[c].type, chart.dataColumns[c].id);
+
+        }
+
 
     }
 
 
     this.deleteChartColumn = function(chart,column)
     {
+
+        console.log('deleting chart column',chart,column);
+
         var index = chart.dataColumns.indexOf(column);
+        console.log('The column index is: ',index);
         if (index > -1) {
 
             chart.dataColumns.splice(index, 1);
-/*
+            /*
             var theValues = [];
             var theNames = {};
 
@@ -81,9 +176,13 @@ this.rebuildChart = function(chart)
                 },
                 names: theNames
 
-            });*/
-            rebuildChart(chart);
+            });
+            */
 
+            this.rebuildChart(chart);
+
+        } else {
+        //seems that this chart has a query that changed and the column cant be found in
         }
     }
 
@@ -92,7 +191,7 @@ this.rebuildChart = function(chart)
         //if (column == '')
         //var index = $scope.selectedChart.dataColumns.indexOf(column);
         //spline, bar , line, area, area-spline, scatter , pie, donut
-        console.log('column Type',column.type);
+        console.log('column Type',column.type,column);
 
         if (column.type == 'line')
         {
@@ -203,7 +302,7 @@ this.rebuildChart = function(chart)
         var chart = c3.generate({
         bindto: '#chart1',
         data: {
-            json: $scope.queries[0].data,
+            json: $scope.selectedChart.query.data,
             keys: {
                 x: 'wst5883cbeb81db4ae3b1d75e8371097e9a_device_name', // it's possible to specify 'x' when category axis
                 value: theValues,
@@ -252,6 +351,8 @@ this.rebuildChart = function(chart)
 
     this.onChartPropertiesChanged = function($scope,object)
     {
+
+    /*
         for (var i in $scope.queries)
         {
             if ($scope.queries[i].name == $scope.selectedChart.query)
@@ -260,6 +361,7 @@ this.rebuildChart = function(chart)
             }
 
         }
+    */
 
     //$scope.selectedChart.datax = $scope.chartModal.dataxObject.object.elementName;
     //$scope.selectedChart.dataPoints = $scope.chartModal.dataxObject.query.data;

@@ -285,8 +285,6 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
                 {
                     for (var element in $scope._Layer.params.schema[collection].elements)
                     {
-
-
                         if ($scope._Layer.params.schema[collection].elements[element].elementID == sourceID)
                         {
                             join.sourceElementID = $scope._Layer.params.schema[collection].elements[element].elementID;
@@ -382,10 +380,6 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
 
             instance.registerConnectionType("right", rightJoinType);
             instance.registerConnectionType("left", leftJoinType);
-
-
-
-
 
             var connectorPaintStyle = {
                     lineWidth: 4,

@@ -17,14 +17,11 @@ app.service('queryModel' , function ($http, $q, $filter, connection) {
 
 
             connection.get('/api/reports/get-data', params, function(data) {
-                //console.log('me he traido los datos',JSON.stringify(data));
                 prepareData($scope,query,data, function(result)
                 {
                     done(result);
-                    //console.log('resultados',JSON.stringify(result));
                 });
 
-                //done(data);
             });
 
     };
@@ -115,11 +112,11 @@ app.service('queryModel' , function ($http, $q, $filter, connection) {
             if (data.items)
                 data = data.items;
 
-            $scope.searchValues = data;
+            attribute.data = data;
             console.log('The data: ',JSON.stringify(data));
             $scope.errorMsg = (data.result === 0) ? data.msg : false;
-            $scope.page = data.page;
-            $scope.pages = data.pages;
+            attribute.page = data.page;
+            attribute.pages = data.pages;
             //$scope.data = data;
         });
 

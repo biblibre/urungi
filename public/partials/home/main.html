@@ -33,6 +33,7 @@
                                 <div class="last-executed-item">
                                     <a ng-if="execution.type == 'report'" href="/#/reports/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                     <a ng-if="execution.type == 'dashboard'" href="/#/dashboards/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                    <a ng-if="execution.type == 'page'" href="/#/pages/{{execution.relationedID}}"><i class="fa fa-newspaper-o" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                     <span class="pull-right">{{execution.lastDate}}</span>
                                 </div>
                             </li>
@@ -54,6 +55,8 @@
                                 <div class="most-executed-item">
                                     <a ng-if="execution.type == 'report'" href="/#/reports/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                     <a ng-if="execution.type == 'dashboard'" href="/#/dashboards/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                    <a ng-if="execution.type == 'page'" href="/#/pages/{{execution.relationedID}}"><i class="fa fa-newspaper-o" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+
                                     <span class="badge pull-right">{{execution.count}}</span>
                                 </div>
                             </li>
@@ -79,6 +82,10 @@
 
     <div data-nodrag class="tree-node tree-node-item" ng-if="node.nodeType == 'dashboard'">
         <i class="fa fa-dashboard"></i><a data-nodrag  href="/#/dashboards/{{node.id}}">{{node.title}}</a>
+    </div>
+
+    <div data-nodrag class="tree-node tree-node-item" ng-if="node.nodeType == 'page'">
+        <i class="fa fa-newspaper-o"></i><a data-nodrag  href="/#/pages/{{node.id}}">{{node.title}}</a>
     </div>
 
     <ol ng-if="node.nodes" data-nodrag ui-tree-nodes="" data-nodrop-enabled ng-model="node.nodes" ng-class="{hidden: collapsed}">

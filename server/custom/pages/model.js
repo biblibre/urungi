@@ -8,6 +8,7 @@ var PagesSchema = new mongoose.Schema({
     html: {type: String},
     items: [],
     backgroundColor: {type: String},
+    backgroundImage: {type: String},
     properties: {type: Object},
     history: [],
     nd_trash_deleted:{type: Boolean},

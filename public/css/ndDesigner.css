@@ -313,6 +313,7 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
     color: #00d4db!important;
     -webkit-transform: none;
     transform: none;
+    background-color: #3f4652;
 }
 
 #objectPanel>menu .layout a:hover, #objectPanel>menu .layout.on a {
@@ -348,6 +349,12 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
     color: #fff;
     text-decoration: none;
     transition: all .15s linear,opacity 0s linear;
+}
+
+#objectPanel>menu .layout a {
+    padding-top: 42px;
+    background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_layouts.png);
+    background-size: 18px 19px;
 }
 
 #objectPanel>menu .text a {

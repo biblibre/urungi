@@ -21,6 +21,7 @@ module.exports = function (app) {
     app.get('/api/get-user-counts/:id',restrict, users.getCountsForUser);
     app.get('/api/get-user-reports/:id',restrict, users.getUserReports);
     app.get('/api/get-user-dashboards/:id',restrict, users.getUserDashboards);
+    app.get('/api/get-user-pages/:id',restrict, users.getUserPages);
     app.get('/api/get-user-data',restrict, users.getUserData);
     app.get('/api/get-user-objects',restrict, users.getUserObjects);
     app.get('/api/get-user-last-executions',restrict, users.getUserLastExecutions);

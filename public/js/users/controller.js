@@ -22,9 +22,6 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
         {label: 'Users'}
     ];
 
-
-
-
     init();
 
     function init()
@@ -365,6 +362,8 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             var adminRole = {_id:'WSTADMIN',name:"Widestage Administrator"};
             $scope.roles.push(adminRole);
 
+            console.log('these are the roles',$scope.roles);
+
             if (typeof callLater != 'undefined')
                 callLater();
         });
@@ -396,6 +395,31 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             $(this).parent().children('.list-filter').show();
         });
     }
+
+    $scope.deleteRole = function (roleID) {
+
+        if ($scope._User.userName == 'administrator' && roleID == 'WSTADMIN')
+        {
+            noty({text: "The role 'Widestage Administrator' can't be removed from the user administrator",  timeout: 6000, type: 'warning'});
+        } else {
+            var roleName = $scope.getRoleName(roleID);
+            $scope.modalOptions = {};
+            $scope.modalOptions.headerText = 'Confirm delete role'
+            $scope.modalOptions.bodyText = 'Are you sure you want to remove this role from the user:'+' '+roleName;
+            $scope.modalOptions.ID = roleID;
+            $('#deleteModal').modal('show');
+        }
+    };
+
+    $scope.deleteConfirmed = function (roleID) {
+
+        $scope._User.roles.splice($scope._User.roles.indexOf(roleID),1);
+
+        $scope.save();
+        $('#deleteModal').modal('hide');
+
+
+    };
 });
 
 

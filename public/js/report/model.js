@@ -714,6 +714,7 @@ function clone(obj) {
             if (data.items)
                 data = data.items;
 
+            attribute.data = data;
             $scope.searchValues = data;
             console.log('The data: ',data);
             $scope.errorMsg = (data.result === 0) ? data.msg : false;

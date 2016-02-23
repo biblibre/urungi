@@ -267,8 +267,85 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
     }
 
 
+    this.getPromptsForQuery = function($scope,query)
+    {
+        if (!$scope.prompts)
+            $scope.prompts = [];
+            scanFilters4Prompt($scope,query.filters,query.id);
+    }
+
+    function scanFilters4Prompt($scope,filters,queryID)
+    {
+            for (var g in filters) {
+                            var filter = filters[g];//.filters[f];
+
+                            if (filter.filterPrompt == true)
+                            {
+                                filter.queryID = queryID;
+                                if (checkIfPromptExists($scope,filter) == true)
+                                {
+                                    if (!$scope.duplicatePrompts)
+                                        $scope.duplicatePrompts = [];
+                                    $scope.duplicatePrompts.push(filter);
+
+                                } else {
+                                    $scope.prompts.push(filter);
+                                }
+
+                            }
+
+                            if (filter.group == true)
+                            {
+
+                                scanFilters4Prompt($scope,filter.filters,queryID)
+                            }
+
+                }
+
+    }
 
 
+    this.updatePromptsForQuery = function($scope,query,prompt,done)
+    {
+            scanFilters4Prompt($scope,query.filters,prompt);
+
+            for (var d in query.query.datasources)
+            {
+                for (var c in query.query.datasources[d].collections)
+                    {
+                    scanFilters4Prompt($scope,query.query.datasources[d].collections[c].filters,prompt);
+
+                    }
+            }
+
+            done();
+    }
+
+    function updateFilters4Prompt($scope,filters,prompt)
+    {
+            for (var g in filters) {
+                            var filter = filters[g];//.filters[f];
+
+                            if (filter.filterPrompt == true)
+                            {
+                                if (prompt.elementID == filter.elementID)
+                                    {
+                                    filter.filterText1 = prompt.filterText1;
+                                    filter.searchValue = prompt.searchValue;
+                                    console.log('updated filter',filter);
+                                    }
+
+                            }
+
+                            if (filter.group == true)
+                            {
+
+                                updateFilters4Prompt($scope,filter.filters,queryID)
+                            }
+
+                }
+
+    }
 
     return this;
 

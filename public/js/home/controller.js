@@ -75,6 +75,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope','$sessionStorage','connection
         connection.get('/api/get-user-objects', {}, function(data) {
             $rootScope.userObjects = data.items;
             $rootScope.user.canPublish = data.userCanPublish;
+            console.log('user objects',data.items);
         });
 
         connection.get('/api/get-counts', {}, function(data) {

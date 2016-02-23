@@ -4,9 +4,11 @@
     <div class="well">
 
         <div  class="pull-right" >
+            <button ng-click="goBack()" class="btn btn-default">Cancel</button>
             <a ng-if="_User._id == user._id" href="/#/logout" class="btn btn-danger">logout</a>
             <button ng-if="_User._id == user._id" class="btn btn-inverse" ng-click="changeMyPassword()">Change my password</button>
             <button ng-click="editUser()" ng-if="isWSTADMIN" class="btn btn-success">Edit</button>
+
         </div>
             <h1 class="title">User</h1>
             <p class="description">User profile and permissions</p>
@@ -58,9 +60,9 @@
 
                     <ul class="list-unstyled user-info-list">
                         <li ng-repeat="role in _User.roles" style="color:#000">
-                         <i ng-if="isWSTADMIN" class="fa fa-trash-o" style="color: #FF0000" ng-click="_User.roles.splice(_User.roles.indexOf(role),1);save();"></i>   {{getRoleName(role)}}
+                         <i ng-if="isWSTADMIN" class="fa fa-trash-o" style="color: #FF0000" ng-click="deleteRole(role)"></i>   {{getRoleName(role)}}
                         </li>
-                        <li ng-if="isWSTADMIN" >
+                        <li ng-if="isWSTADMIN" style="margin-top:10px;">
                             <span>Add role</span>
                             <select ng-model="selectedRole" placeholder="Add a new role..." ng-class="selectedRole" id="roleSelect" class="form-control" ng-change="selectedRoleChanged = true" ng-options="role._id as role.name for role in getRolesNotInUser()" style="width: 80%;float: left;"></select>
                             <div ng-show="selectedRoleChanged == true && selectedRole != ''" ng-click="_User.roles.push(selectedRole);save();selectedRole = '';selectedRoleChanged = false;" style="width: 20%;float: left;text-align:center;vertical-align: middle;" ><i class="fa fa-plus" style="color:#00A000;"></i>  </div>
@@ -165,3 +167,5 @@
 
 
 <div ng-if="_User._id == user._id" ng-include src="changePasswordModal"></div>
+
+<div ng-include src="'partials/deleteModal.html'"></div>

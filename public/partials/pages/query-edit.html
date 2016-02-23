@@ -69,6 +69,7 @@
 
 <div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
     <a ng-disabled="columns.length <=0" data-ng-click="saveQueryStructure(); saveQuery2(); initQuery();" class="btn btn-success pull-right" style="margin-right: 5px">Save Query</a>
+    <a ng-if="editingQuery != null" ng-click="deleteQuery();" class="btn btn-danger pull-right">Delete</a>
     <a ng-click="cancelQuery(); initQuery();" class="btn btn-default pull-right">Cancel</a>
 </div>
 
