@@ -35,6 +35,25 @@ var app = angular.module('widestage-login', ['ui.router']).
                 return ($window.sessionStorage[key]) ? JSON.parse($window.sessionStorage[key]) : false;
             }
         };
+    }])
+    .factory('$localStorage', ['$window', function($window) {
+        return {
+            set: function(key, value) {
+                $window.localStorage[key] = value;
+            },
+            get: function(key, defaultValue) {
+                return $window.localStorage[key] || defaultValue;
+            },
+            setObject: function(key, value) {
+                $window.localStorage[key] = JSON.stringify(value);
+            },
+            getObject: function(key) {
+                return ($window.localStorage[key]) ? JSON.parse($window.localStorage[key]) : false;
+            },
+            removeObject: function(key) {
+                delete($window.localStorage[key]);
+            }
+        };
     }]).service('connection' , function ($http, Constants) {
 
         this.get = function(url, params, done, options) {
@@ -123,11 +142,12 @@ var app = angular.module('widestage-login', ['ui.router']).
         };
 
         return this;
-    }).controller('PublicCtrl', function ($scope,$http,$rootScope, $sessionStorage, connection) {
+    }).controller('PublicCtrl', function ($scope,$http,$rootScope, $sessionStorage, $localStorage, connection) {
+        var user = $localStorage.getObject('user');
+
         $scope.loginError = false;
         $scope.errorLoginMessage = '';
         $scope.login = function() {
-
 
             var user = {"userName": $scope.userName, "password": $scope.password, "remember_me": $scope.rememberMe, "companyID": $('#companyID').attr('value')};
 
@@ -137,10 +157,13 @@ var app = angular.module('widestage-login', ['ui.router']).
 
                         $scope.loginError = false;
 
-
                         var theUser = data.user;
 
                         connection.get('/api/get-user-data', {}, function(data) {
+                            if ($scope.rememberMe) {
+                                $localStorage.setObject('user', user);
+                            }
+
                             theUser.companyData = data.items.companyData;
                             theUser.rolesData = data.items.rolesData;
                             theUser.reportsCreate = data.items.reportsCreate;
@@ -163,6 +186,14 @@ var app = angular.module('widestage-login', ['ui.router']).
                     });
             }
         };
+
+        if (user) {
+            $scope.userName = user.userName;
+            $scope.password = user.password;
+            $scope.rememberMe = user.remember_me;
+
+            $scope.login();
+        }
 
         $scope.rememberPassword = function() {
             var data = {"email": $scope.email};

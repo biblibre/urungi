@@ -201,6 +201,28 @@ var app = angular.module('WideStage', [
         },
         getObject: function(key) {
             return ($window.sessionStorage[key]) ? JSON.parse($window.sessionStorage[key]) : false;
+        },
+        removeObject: function(key) {
+            delete($window.sessionStorage[key]);
+        }
+    };
+}])
+.factory('$localStorage', ['$window', function($window) {
+    return {
+        set: function(key, value) {
+            $window.localStorage[key] = value;
+        },
+        get: function(key, defaultValue) {
+            return $window.localStorage[key] || defaultValue;
+        },
+        setObject: function(key, value) {
+            $window.localStorage[key] = JSON.stringify(value);
+        },
+        getObject: function(key) {
+            return ($window.localStorage[key]) ? JSON.parse($window.localStorage[key]) : false;
+        },
+        removeObject: function(key) {
+            delete($window.localStorage[key]);
         }
     };
 }]);
@@ -265,7 +287,7 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
 
     if (!$rootScope.user) {
         console.log('there is no user in the session storage');
-        $window.location.href="/login";
+        window.location.href="/login";
     } else {
         $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
 
