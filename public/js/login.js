@@ -4,22 +4,6 @@ var app = angular.module('widestage-login', ['ui.router']).
     config(['$stateProvider','$urlRouterProvider','$locationProvider', function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/");
 
-        /*$stateProvider
-            .state('login',{
-                url:'/',
-                templateUrl : 'partial/login/index',
-                controller : PublicCtrl
-            })
-            .state('verify',{
-                url:'/verify/:hash/:email',
-                templateUrl : 'partial/public/verify',
-                controller : PublicCtrl
-            })
-            .state('change-password',{
-                url:'/change-password/:hash',
-                templateUrl : 'partial/public/changePassword',
-                controller : ChangePwdCtrl
-            });*/
     }]).service('Constants' , function () {
 
         var constants = {
@@ -153,18 +137,16 @@ var app = angular.module('widestage-login', ['ui.router']).
 
                         $scope.loginError = false;
 
-                        //console.log('success',JSON.stringify(data));
-
 
                         var theUser = data.user;
-                        //console.log('the user',JSON.stringify($rootScope.user))
-                        //obtener compañía y roles del usuario
 
                         connection.get('/api/get-user-data', {}, function(data) {
                             theUser.companyData = data.items.companyData;
                             theUser.rolesData = data.items.rolesData;
                             theUser.reportsCreate = data.items.reportsCreate;
                             theUser.dashboardsCreate = data.items.dashboardsCreate;
+                            theUser.pagesCreate = data.items.pagesCreate;
+                            theUser.exploreData = data.items.exploreData;
                             theUser.isWSTADMIN = data.items.isWSTADMIN;
                             console.log('this is the user',JSON.stringify(theUser));
                             $rootScope.user = theUser;
@@ -173,26 +155,9 @@ var app = angular.module('widestage-login', ['ui.router']).
 
                         });
 
-
-
-                        /*
-                        $http.get('/api/init-data')
-                            .success(angular.bind(this, function (data) {
-                                $rootScope.user = data.user;
-                                $rootScope.configurations = data.configurations;
-
-                                $sessionStorage.setObject('user', data.user);
-
-                                $rootScope.loginRedirect();
-                            }))
-                            .error(angular.bind(this, function (data) {
-                                noty({text: data,  timeout: 2000, type: 'error'});
-                            }));
-                        */
                     }).
                     error(function(data, status, headers, config) {
-                        //console.log('error in login',JSON.stringify(data));
-                        //noty({text: data,  timeout: 2000, type: 'error'});
+
                         $scope.errorLoginMessage = data;
                         $scope.loginError = true;
                     });
@@ -219,10 +184,6 @@ var app = angular.module('widestage-login', ['ui.router']).
 
 angular.module('widestage-login').run(['$http', '$rootScope', '$sce', '$sessionStorage', 'connection',
     function($http, $rootScope, $sce, $sessionStorage, connection) {
-
-    //appRun($http, $rootScope, $sce, $sessionStorage, connection);
-
-
 
     $rootScope.loginRedirect = function() {
         var host = $('#host').attr('value');

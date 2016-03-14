@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.service('promptModel', ['reportModel' , function ( reportModel) {
+app.service('promptModel', ['queryModel' , function (queryModel) {
 
     this.getDistinctValues = function($scope, filter)
     {
@@ -16,7 +16,7 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
 
         $('#searchModal').modal('show');
 
-        reportModel.getDistinct($scope,filter);
+        queryModel.getDistinct($scope,filter);
     };
 
     this.toggleSelection = function toggleSelection($scope,value) {
@@ -33,6 +33,7 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
         var searchValue = '';
         if ($scope.selectedFilter.filterType == 'in' || $scope.selectedFilter.filterType == 'notIn') {
             for (var i in $scope.selectedFilter.searchValue) {
+                console.log('multiple values',$scope.selectedFilter.searchValue);
                 searchValue += $scope.selectedFilter.searchValue[i][$scope.selectedFilter.collectionID.toLowerCase()+'_'+$scope.selectedFilter.elementName];
                 if (i < $scope.selectedFilter.searchValue.length-1) {
                     searchValue += ';';
@@ -269,8 +270,7 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
 
     this.getPromptsForQuery = function($scope,query)
     {
-        if (!$scope.prompts)
-            $scope.prompts = [];
+
             scanFilters4Prompt($scope,query.filters,query.id);
     }
 
@@ -307,32 +307,37 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
 
     this.updatePromptsForQuery = function($scope,query,prompt,done)
     {
-            scanFilters4Prompt($scope,query.filters,prompt);
+            updateFilters4Prompt($scope,query.filters,prompt);
+
+            updateFilters4Prompt($scope,query.query.groupFilters,prompt);
 
             for (var d in query.query.datasources)
             {
                 for (var c in query.query.datasources[d].collections)
                     {
-                    scanFilters4Prompt($scope,query.query.datasources[d].collections[c].filters,prompt);
+                    updateFilters4Prompt($scope,query.query.datasources[d].collections[c].filters,prompt);
 
                     }
             }
 
-            done();
+            done(query);
     }
 
     function updateFilters4Prompt($scope,filters,prompt)
     {
+
+        var hasPrompts = false;
+
             for (var g in filters) {
-                            var filter = filters[g];//.filters[f];
+                            var filter = filters[g];
 
                             if (filter.filterPrompt == true)
                             {
                                 if (prompt.elementID == filter.elementID)
                                     {
+                                    console.log('we are here',prompt.searchValue,prompt);
                                     filter.filterText1 = prompt.filterText1;
                                     filter.searchValue = prompt.searchValue;
-                                    console.log('updated filter',filter);
                                     }
 
                             }
@@ -340,7 +345,7 @@ app.service('promptModel', ['reportModel' , function ( reportModel) {
                             if (filter.group == true)
                             {
 
-                                updateFilters4Prompt($scope,filter.filters,queryID)
+                                updateFilters4Prompt($scope,filter.filters,prompt)
                             }
 
                 }

@@ -86,9 +86,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         {name: 'oblique', value: 'oblique'}
     ];
 
-
-
-
     $scope.changed = function()
     {
 
@@ -119,10 +116,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         } else
         filter.filterText1 = theDate;
 
-
-
-        console.log(filter.filterText1);
-
         filter.dateCustomFilterLabel = undefined;
     }
 
@@ -133,14 +126,10 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     }
 
     $scope.onDateEndSet = function (newDate, oldDate, filter) {
-
-        //console.log(filter);
         var year = newDate.getFullYear();
         var month = pad(newDate.getMonth()+1,2);
         var day = pad(newDate.getDate(),2);
-
         var theDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
-
         filter.filterText2 = theDate;
         filter.dateCustomFilterLabel = undefined;
     }
@@ -175,8 +164,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                                     {value:"notStartWith",label:"not start with"},
                                     {value:"endsWith",label:"ends with"},
                                     {value:"notEndsWith",label:"not ends with"},
-                                    {value:"like",label:"como"},
-                                    {value:"notLike",label:"no como"},
+                                    {value:"like",label:"like"},
+                                    {value:"notLike",label:"not like"},
                                     {value:"null",label:"is null"},
                                     {value:"notNull",label:"is not null"},
                                     {value:"in",label:"in"},
@@ -311,17 +300,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     {
         console.log('reportcliced ',reportID,parameters);
     }
-    /*
-    $scope.getReport = function() {
-        //TODO:eliminar por aqui parece que no pasa...
-        reportModel.getReport($scope, $routeParams.reportID, function() {
-            generateQuery(function(){
-                $scope.processStructure(false);
-            });
 
-        });
-    };
-      */
     $scope.initForm = function() {
         $scope.dataMode = 'preview';
         if ($routeParams.reportID)
@@ -343,8 +322,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             }
               else {
                 //This executes in edit mode
-                //console.log('no reportID');
-                reportModel.getReport($scope, $routeParams.reportID,'edit', function() {
+                reportModel.getReport($scope, $routeParams.reportID,'edit',false, function() {
                     generateQuery(function(){
                         $scope.processStructure(false);
                     });
@@ -364,7 +342,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 $scope.selectedReport.properties.columns = [];
                 $scope.selectedReport.reportType = 'grid';
                 $scope.mode = 'add';
-                console.log('entering in add mode for query') ;
             }
 
     };
@@ -511,12 +488,14 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     };
 
     $scope.reportName = function () {
-        $('#reportNameModal').modal('show');
+        $('#theReportNameModal').modal('show');
     };
     $scope.reportNameSave = function () {
 
-        $('#reportNameModal').modal('hide');
+        $('#theReportNameModal').modal('hide');
         $scope.save($scope.selectedReport);
+
+        $('modal-backdrop').remove();
 
     };
 
@@ -565,13 +544,12 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     };
 
     $scope.save = function(data) {
-        console.log('saving report '+data.reportName);
-        console.log(data);
 
-        //$scope.processStructure(false);
+        $('#reportNameModal').modal('hide');
+
 
         generateQuery(function(){
-                console.log($scope.query);
+
                 data.query = $scope.query;
 
                 if ($scope.selectedReport.reportType == 'grid')
@@ -583,14 +561,20 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 if ($scope.mode == 'add') {
                     connection.post('/api/reports/create', data, function(data) {
                         if (data.result == 1) {
+                           setTimeout(function () {
                             $scope.goBack();
+                            }, 400);
                         }
                     });
                 }
                 else {
                     connection.post('/api/reports/update/'+data._id, data, function(result) {
                         if (result.result == 1) {
+
+                            //$scope.goBack();
+                            setTimeout(function () {
                             $scope.goBack();
+                            }, 400);
                         }
                     });
         }
@@ -602,7 +586,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     function setReportDiv(id)
     {
         $('#reportLayout').empty();
-        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%;height:500px;display: flex;flex-direction: column;" ng-init="getReportData2()">';
+        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%;height:500px;" ng-init="getReportData2()">';
 
         var $div = $(generatedHTML);
         $('#reportLayout').append($div);
@@ -614,7 +598,13 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getReportDiv = function()
     {
-        reportModel.getReport($scope, $routeParams.reportID,'execute', function(report) {
+        var isLinked = false;
+
+        if ($routeParams.elementID && $routeParams.elementValue)
+               isLinked = true;
+
+
+        reportModel.getReport($scope, $routeParams.reportID,'execute',isLinked, function(report) {
             if (report)
             {
                 promptModel.getPrompts($scope,report, function(){
@@ -748,7 +738,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         $scope.selectedReport.query = $scope.query;
 
-        var generatedHTML = '<div id="XXXXXXXXXX" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%" ng-init="getReportDataForPreview()">';
+        var generatedHTML = '<div id="XXXXXXXXXX" class="panel-body reportPageBlockDesktop" style="max-height:500px;width:100%;position:relative;" ng-init="getReportDataForPreview()">';
 
         var $div = $(generatedHTML);
         $('#reportLayout').append($div);

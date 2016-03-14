@@ -59,10 +59,11 @@ exports.GetLayers = function(req,res)
     req.user.companyID = 'COMPID';
 
     req.query.fields = ['name','description','objects','params.joins'];
+    req.query.find = [];
+    req.query.find.push({status:'active'});
 
     controller.findAll(req, function(result){
         serverResponse(req, res, 200, result);
-        console.log('getting all layers');
     });
 }
 
@@ -94,5 +95,13 @@ exports.LayersDelete = function(req,res){
         serverResponse(req, res, 200, result);
     });
 };
+
+exports.changeLayerStatus = function(req,res){
+
+    Layers.setStatus(req,function(result){
+        serverResponse(req, res, 200, result);
+    });
+
+}
 
 

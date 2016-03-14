@@ -79,13 +79,10 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         $scope.dataMode = 'preview';
         console.log('initial '+ $routeParams.newDashboard)
         if ($routeParams.newDashboard == 'true') {
-            $scope.dashBoardDefinitition = {dashboardName:"New Dashboard", backgroundColor:"#999999" ,items:[]};
+            $scope.dashBoardDefinitition = {dashboardName:"New Dashboard", backgroundColor:"#ccc" ,items:[]};
             $scope.mode = 'add';
 
             console.log('entering in add mode for dashboards') ;
-        }
-        else {
-            console.log('el otro')
         }
     };
 
@@ -107,7 +104,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.changeColumnSignals = function(columnIndex ,hashedID)
     {
-
         //TODO: Error $scope.selectedReport = undefined
         $scope.selectedColumn = $scope.selectedReport.properties.columns[columnIndex];
         $scope.selectedColumnHashedID  = hashedID;
@@ -115,11 +111,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
         if (!$scope.selectedColumn.signals)
             $scope.selectedColumn.signals = [];
-
-
         $('#columnSignalsModal').modal('show');
-
-
     }
 
     $scope.selectReport = function()
@@ -210,7 +202,12 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
         if ($scope.dashboardID)
         {
-            dashboardModel.getDashBoard($scope.dashboardID, function(dashboard){
+            var isLinked = false;
+            //is called by another report using a link
+            if ($routeParams.elementID && $routeParams.elementValue)
+                isLinked = true;
+
+            dashboardModel.getDashBoard($scope.dashboardID, isLinked, function(dashboard){
                 $scope.dashBoardDefinitition = dashboard;
 
                 $scope.$apply;
@@ -227,10 +224,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
                                 $scope.prompts[p].filterText1 = $routeParams.elementValue;
                             }
                         }
-
                         $scope.checkPrompts();
-
-
                     } else {
 
                         if ($scope.prompts.length > 0)

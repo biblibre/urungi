@@ -66,11 +66,11 @@
 
             </div>
             <div class="modal-footer">
-                <button ng-if="linkWizardStep == 1" class="btn btn-danger" ng-click="linkDelete()">Delete Link</button>
-                <button ng-if="linkWizardStep == 1" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button ng-if="linkWizardStep == 2" class="btn btn-default" ng-click="linkBack()">Back</button>
-                <a ng-if="linkWizardStep == 1" ng-click="getPromptForLink()"  class="btn btn-primary">Next</a>
-                <a ng-if="linkWizardStep == 2" ng-click="saveLinkForColumn()" class="btn btn-primary">Set Link</a>
+                <a ng-if="linkWizardStep == 2" ng-click="saveLinkForColumn()" class="btn btn-primary pull-right">Set Link</a>
+                <a ng-if="linkWizardStep == 1" ng-click="getPromptForLink()"  class="btn btn-primary pull-right">Next</a>
+                <button ng-if="linkWizardStep == 2" class="btn btn-default pull-right" ng-click="linkBack()">Back</button>
+                <button ng-if="linkWizardStep == 1" type="button" class="btn btn-default pull-right" data-dismiss="modal">Cancel</button>
+                <button ng-if="linkWizardStep == 1" class="btn btn-danger pull-right" ng-click="linkDelete()">Delete Link</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

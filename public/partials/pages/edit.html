@@ -13,15 +13,18 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-        <button ng-click="pageNameSave()" ng-disabled="reportForm.$invalid" class="btn btn-primary submit-btn">Save</button>
+        <button ng-click="pageNameSave()" ng-disabled="reportForm.$invalid" class="btn btn-primary submit-btn pull-right">Save</button>
+        <button type="button" class="btn pull-right" data-dismiss="modal">Cancel</button>
     </div>
 </nd-modal>
 
 
 <section ng-show="!queryInterface" id="designMainMenu" style="padding-top:5px;">
     <!--<button class="btn" ng-click="savePage()">Save..</button>-->
+
+
     <a ng-disabled="columns.length <=0" data-ng-click="pageName()" class="btn btn-success pull-right" style="margin-right: 5px">Save Page</a>
+    <a ng-disabled="columns.length <=0" data-ng-click="copyPage()" class="btn btn-primary pull-right" style="margin-right: 5px">Copy</a>
     <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
 </section>
 
@@ -43,7 +46,9 @@
             <!--
             <li id="backgroundsTabButton" class="backgrounds hand-cursor" ng-class="{'on': tabs.selected == 'backgrounds'}" ><a ng-click="tabs.selected = 'backgrounds'">Backgrounds</a></li>
             -->
+            <!--
             <li id="uploadsTabButton" class="uploads hand-cursor" ng-class="{'on': tabs.selected == 'uploads'}"><a ng-click="tabs.selected = 'uploads'">Uploads</a></li>
+            -->
         </menu>
 
 
@@ -88,9 +93,9 @@
             </div>
 
 
-            <!--
-            <div class="row" style="width:200px;text-align: center;padding: 10px;padding-left:15px;" >
 
+            <div class="row" style="width:200px;text-align: center;padding: 10px;padding-left:15px;" >
+<!--
                     <div class="form-group designer_form_group row">
                         <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Blur</label>
                         <div class="col-md-8 col-sm-8 col-xs-8">
@@ -122,14 +127,15 @@
                                 <input class="sliderInput" ng-model="imageFilters.contrast" type="range" step="1" min="0" max="200" value="100" ng-change="changeBackgroundFilter()">
                             </div>
                     </div>
+                -->
                     <div class="form-group designer_form_group row">
                             <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Opacity</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
-                                <input class="sliderInput" ng-model="imageFilters.opacity" type="range" step="1" min="0" max="100" value="100" ng-change="changeBackgroundFilter()">
+                                <input class="sliderInput" ng-model="imageFilters.opacity" type="range" step="1" min="0" max="10" value="10" ng-change="changeOpacity()">
                             </div>
                     </div>
 
-                </div>-->
+                </div>
 
 
 
@@ -220,6 +226,21 @@
 						</div>
 					</div>
             </form>
+
+
+            <table ng-if="canMoveSelectedElement">
+                <tr>
+                    <td>
+                      <button class="btn btn-info btn-small"  ng-click="moveElementUp()" style="width:90px;"><i class="fa fa-arrow-up"></i> Up</button>
+                    </td>
+                    <td>
+                      <button class="btn btn-info btn-small" ng-click="moveElementDown()" style="width:90px;"><i class="fa fa-arrow-down"></i> Down</button>
+                    </td>
+                </tr>
+
+            </table>
+
+
 
 
 
@@ -328,16 +349,28 @@
     </v-pane-header>
 
     <v-pane-content>
+            <div><strong>   Axis</strong></div>
+            <table>
+                <tr>
+                    <td style="width:80%;overflow:hidden;"> {{selectedChart.dataAxis.elementLabel}}</td>
+                    <td style="width:10%"></td>
+                    <td style="width:10%"></td>
+                </tr>
+             </table>
+            <div><strong>   Data</strong></div>
             <table>
                 <tr ng-repeat="column in selectedChart.dataColumns">
                     <td style="width:80%;overflow:hidden;"> {{column.elementLabel}}</td>
-                    <td style="width:10%"><button class="btn btn-danger btn-xs" ng-click="deleteChartColumn(selectedChart,column)"><i class="fa fa-trash"></i></button></td>
-                    <td style="width:10%"><button class="btn btn-info btn-xs" ng-click="changeChartColumnType(selectedChart,column)"><i class="fa fa-bar-chart"></i></button></td>
+                    <td style="width:10%"><button ng-if="selectedChart.type != 'pie' && selectedChart.type != 'donut'" class="btn btn-danger btn-xs" ng-click="deleteChartColumn(selectedChart,column)"><i class="fa fa-trash"></i></button></td>
+                    <td style="width:10%"><button ng-if="selectedChart.type != 'pie' && selectedChart.type != 'donut'" class="btn btn-info btn-xs" ng-click="changeChartColumnType(selectedChart,column)"><i class="fa fa-bar-chart"></i></button></td>
+                    <td style="width:10%"><button class="btn btn-default btn-xs" ng-click="changeChartColumnColor(selectedChart,column,'#ff0000')"><i class="fa fa-sun-o"></i></button></td>
                 </tr>
              </table>
     </v-pane-content>
 
   </v-pane>
+
+    <grid-properties ng-if="selectedElementType == 'repeaterGrid'"></grid-properties>
 
     <v-pane ng-if="selectedElementType == 'tabsContainer'">
       <v-pane-header>
@@ -369,54 +402,8 @@
 
   </v-pane>
 
-    <v-pane ng-if="selectedElementType == 'repeaterGrid'">
-      <v-pane-header>
-      Grid Elements
-    </v-pane-header>
 
-    <v-pane-content>
-            <table>
-                <tr ng-repeat="column in selectedChart.dataColumns">
-                    <td style="width:80%;overflow:hidden;"> {{column.elementLabel}}</td>
-                    <td style="width:10%"><button class="btn btn-danger btn-xs" ng-click="deleteChartColumn(column)"><i class="fa fa-trash"></i></button></td>
-                    <td style="width:10%"><button class="btn btn-info btn-xs" ng-click="changeChartColumnType(column)"><i class="fa fa-bar-chart"></i></button></td>
-                </tr>
-             </table>
-    </v-pane-content>
 
-  </v-pane>
-
-  <v-pane ng-if="selectedElementType == 'repeaterGrid'">
-      <v-pane-header>
-      Header
-    </v-pane-header>
-
-    <v-pane-content>
-                <div class="btn-group" style="width:100%"> <!--background color-->
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;" ng-style="{color: (BackgroundColor == '#FFFFFF') ? '#000000' : '#FFFFFF'}">Header Color</button>
-                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="height:32px" ng-style="{color: (BackgroundColor == '#FFFFFF') ? '#000000' : '#FFFFFF'}" aria-expanded="false">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
-                                                        <div class="iconpicker-items">
-                                                            <a role="button" ng-click="changeHeaderColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
-                                                        </div></div></div></div></div>
-                </div>
-    </v-pane-content>
-
-  </v-pane>
-
-    <v-pane ng-if="selectedElementType == 'repeaterGrid'">
-      <v-pane-header>
-      Body
-    </v-pane-header>
-
-    <v-pane-content>
-
-    </v-pane-content>
-
-  </v-pane>
 
 </v-accordion>
 <!-- -->
@@ -436,7 +423,7 @@
             <div ng-if="prompts.length > 0" style="padding-top;5px;padding-bottom:5px;">
             <div style="border-bottom:2px solid #fff">Filters</div>
 
-                <div ng-repeat="filter in prompts" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
+                <div class="filter_element" ng-repeat="filter in prompts" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
                                elementName: filter.elementName,
                                elementType: filter.elementType,
                                name: (filter.collectionID+'_'+filter.elementName+filter.aggregation).toLowerCase(),
@@ -447,18 +434,29 @@
                                queryName:query.name,
                                elementID: filter.elementID}">
                             <i class="fa fa-filter"></i>
-                            {{filter.promptTitle}}ddd
+                            {{filter.promptTitle}}
                 </div>
             </div>
 
             <v-accordion class="vAccordion--default" multiple ng-repeat="query in queries">
                 <v-pane >
-                    <v-pane-header >
-                      <a ng-click="loadQS(query)" style="color:#fff;">{{query.name}}</a>
-
+                    <v-pane-header style="margin-bottom:2px;">
+                      <!--<a ng-click="loadQS(query)" style="color:#fff;">{{query.name}}</a>-->
+                        {{query.name}}
                     </v-pane-header>
 
                     <v-pane-content>
+                        <table>
+                            <tr>
+                                <td>
+                                  <button class="btn btn-danger btn-xs"  ng-click="deleteQuery(query)" style="width:90px;"><i class="fa fa-trash"></i> Delete</button>
+                                </td>
+                                <td>
+                                  <button class="btn btn-primary btn-xs" ng-click="loadQS(query)" style="width:90px;"><i class="fa fa-pencil"></i> Edit</button>
+                                </td>
+                            </tr>
+
+                        </table>
                         <div ng-repeat="column in query.columns" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
                                elementName: column.elementName,
                                elementType: column.elementType,
@@ -519,19 +517,24 @@
                                     objectType: 'jumbotron'}">
                                     <img src="images/layout_jumbotron.png" width="200" height="50" style="height: 50px;">
                                 </div>
+                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: '4colscta'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c0" class="">
+
+                                    <img src="images/layout_4cols_cta.png" width="200" >
+                                </div>
+
                                 <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: '3colscta'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c0" class="">
 
-                                    <img src="images/layout_3cols_cta.png" width="200" height="50" style="height: 50px;">
+                                    <img src="images/layout_3cols_cta.png" width="200" >
                                 </div>
-                                <div x-lvl-draggable="true" data-color="3colsImageCircle" style="margin-bottom: 5px" draggable="true" id="f14c9845-8159-ce5d-2ca0-4a0a10567283" class="">
+                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: '2colscta'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4dd" class="">
 
-                                    <img src="images/layout_3colsImages.png" width="200" height="50" style="height: 50px;">
+                                    <img src="images/layout_2cols_cta.png" width="200" >
                                 </div>
                                 <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'imageTextLarge'}"  style="margin-bottom: 5px"  id="953bd17f-45d8-9daf-3bde-92f4809bdf07" class="">
 
                                     <img src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px;">
                                 </div>
-                                <div style="margin-bottom: 5px" id="b512bcc4-dd1d-2a33-2246-69671ae9430d">
+                                <div draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'textImageLarge'}" style="margin-bottom: 5px" id="b512bcc4-dd1d-2a33-2246-69671ae9430d">
 
                                     <img src="images/layout_block_text_image_large.png" width="200" height="50">
                                 </div>
@@ -561,10 +564,30 @@
         <section class="layoutsTabContainer scrollPane">
             <section class="tab">
                 <section class="layer scrollPane">
-                    <div class="inner">
+
+
+                    <!--<div class="inner">
                         <div class="searchLoaderHolder"></div>
                         <div class="searchGroup hasContent" style="height: 2872px;">
                             <div class="row gallery infoPanelGallery templateGallery laidOut">
+                          -->  <ul id="photoGallery" class="galleryUploads infoPanelGallery photoGallery"  ng-init="getCatalogImages()">
+                                    <li >
+                                        <img style="background-color:#fff;width:70px;height:70px;margin:5px;padding:5px;" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'repeaterGrid'}"   ng-src="images/grid.png" width="70px" />
+                                    </li>
+                                    <li >
+                                        <img style="background-color:#fff;width:70px;height:70px;margin:5px;padding:5px;" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'chart'}"   ng-src="images/chart_line.png" width="70px" />
+                                    </li>
+                                    <li >
+                                        <img style="background-color:#fff;width:70px;height:70px;margin:5px;padding:5px;" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'donutChart'}"   ng-src="images/chart_donut.png" width="70px" />
+                                    </li>
+                                    <li >
+                                        <img style="background-color:#fff;width:70px;height:70px;margin:5px;padding:5px;" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'gauge'}"   ng-src="images/gauge.png" width="70px" />
+                                    </li>
+                                    <li >
+                                        <img style="background-color:#fff;width:70px;height:70px;margin:5px;padding:5px;" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'indicator'}"   ng-src="images/indicator.png" width="70px" />
+                                    </li>
+                                </ul>
+                                <!--
                                 <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'repeaterGrid'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c01" class="">
 
                                  <img src="images/repeater_grid.png" width="200"  style="height: 50px;">
@@ -573,10 +596,11 @@
 
                                  <img src="images/line_chart.png" width="200" style="height: 50px;">
                                 </div>
-                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'chart'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c03" class="">
+                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'pieChart'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c03" class="">
 
                                  <img src="images/pie_chart.png" width="200"  style="height: 50px;">
                                 </div>
+                                -->
                                <!--
                                 <div x-lvl-draggable="true" data-color="h1" style="margin-bottom: 5px" draggable="true" id="11ca87e8-f335-9a72-03aa-c56c51f5106b">
 
@@ -614,9 +638,9 @@
                                     <button class="btn btn-default btn-large" width="200" height="50">Button</button>
                                 </div>
                                 -->
-                            </div>
+                           <!-- </div>
                         </div>
-                    </div>
+                    </div> -->
                 </section>
             </section>
         </section>

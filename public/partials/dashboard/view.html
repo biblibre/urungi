@@ -13,7 +13,7 @@
 
     <div gridster="gridsterOpts"  style="background-color: {{dashBoardDefinitition.backgroundColor}};height: 1000px" ng-init="generateDashBoard()" >
         <ul>
-            <li data-gridster-item data-row="item.position[0]" data-col="item.position[1]" data-sizex="item.size.x" data-sizey="item.size.y" ng-repeat="item in dashBoardDefinitition.items">
+            <li data-gridster-item data-row="item.position[0]" data-col="item.position[1]" data-sizex="item.size.x" data-sizey="item.size.y" ng-repeat="item in dashBoardDefinitition.items" style="background-color:#fff">
                     <!--<div>{{item.reportID}}</div>-->
                     <div id="{{item.reportID}}" class="panel-body dashboard"  style=" background-color:#FFFFFF;height:100%;width: 100%;overflow-x:{{item.overflowx}};overflow-y: {{item.overflowy}};display: flex;flex-direction: column;">
 

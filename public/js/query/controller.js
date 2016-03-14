@@ -1,4 +1,4 @@
-app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, queryService, promptModel) {
+app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, queryService, promptModel, grid, bsLoadingOverlayService,uuid2) {
 
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
@@ -12,11 +12,9 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
     $scope.filters = [];
     $scope.dataSources = [];
     $scope.queryStructure = queryService.getQuery;
-    $scope.theData = [];
+    $scope.queries = [];
 
     $scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
-
-
     $scope.filterStringOptions = [
                                     {value:"equal",label:"equal"},
                                     {value:"diferentThan",label:"different than"},
@@ -32,8 +30,8 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                                     {value:"notStartWith",label:"not start with"},
                                     {value:"endsWith",label:"ends with"},
                                     {value:"notEndsWith",label:"not ends with"},
-                                    {value:"like",label:"como"},
-                                    {value:"notLike",label:"no como"},
+                                    {value:"like",label:"like"},
+                                    {value:"notLike",label:"not like"},
                                     {value:"null",label:"is null"},
                                     {value:"notNull",label:"is not null"},
                                     {value:"in",label:"in"},
@@ -147,7 +145,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         $scope.order = [];
         $scope.filters = [];
         $scope.dataSources = [];
-        $scope.theData = [];
+        $scope.queries = [];
         detectLayerJoins();
         $scope.processStructure();
     }
@@ -160,7 +158,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         $scope.order = theQuery.order;
         $scope.filters = theQuery.filters;
         $scope.dataSources = theQuery.dataSources;
-        $scope.theData = [];
+        $scope.queries = [];
         detectLayerJoins();
         $scope.processStructure();
     });
@@ -202,6 +200,9 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
             $scope.rootItem.elements = data.items[0].objects;
             $scope.selectedLayer = data.items[0];
             $scope.selectedLayerID = data.items[0]._id;
+            calculateIdForAllElements($scope.rootItem.elements);
+            console.log('the elements',$scope.rootItem.elements);
+
         });
     };
 
@@ -214,13 +215,44 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                 $scope.rootItem.elements = $scope.layers[i].objects;
                 $scope.selectedLayer = $scope.layers[i];
                 $scope.selectedLayerID = $scope.layers[i]._id;
+                calculateIdForAllElements($scope.rootItem.elements);
             }
+        }
+    }
+
+    function calculateIdForAllElements(elements)
+    {
+        for (var e in elements)
+        {
+                if (elements[e].collectionID)
+                {
+                var elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName;
+                /*
+                if (elements[e].aggregation)
+                    elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName+elements[e].aggregation;
+                if (elements[e].defaultAggregation)
+                    elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName+elements[e].defaultAggregation;
+                */
+                elements[e].id = elementID;
+                }
+
+            if (elements[e].elements)
+                calculateIdForAllElements(elements[e].elements);
         }
     }
 
     $scope.detectLayerJoins = function()
     {
         detectLayerJoins();
+    }
+
+    $scope.getQuery = function(queryID)
+    {
+        for (var q in $scope.queries)
+        {
+            if ($scope.queries[q].id == queryID)
+                return $scope.queries[q]
+        }
     }
 
     function detectLayerJoins()
@@ -266,8 +298,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                 }
             }
 
-            console.log('the selected collections',JSON.stringify(selectableCollections));
-
             if (selectableCollections.length == 0)
                 enableAllElements($scope.rootItem.elements);
             else
@@ -302,6 +332,14 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                     elements[e].enabled = true;
             }
 
+            if (elements[e].id = undefined)
+            {
+                var elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName;
+                if (elements[e].aggregation)
+                  elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName+elements[e].aggregation;
+                elements[e].id = elementID;
+            }
+
             if (elements[e].elements)
                 enableAllElements(elements[e].elements);
         }
@@ -317,30 +355,57 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
     $scope.processStructure = function(execute) {
         var execute = (typeof execute !== 'undefined') ? execute : true;
+        $scope.wrongFilters = [];
+        checkFilters($scope.filters);
 
-        $('#reportLayout').empty();
-            if ($scope.columns.length > 0 && execute)
-                $scope.getDataForPreview();
+
+            if ($scope.wrongFilters.length == 0)
+                {
+                    $('#reportLayout').empty();
+                    if ($scope.columns.length > 0 && execute)
+                        $scope.getDataForPreview();
+
+                } else {
+                    //var errorMsg = 'There are incomplete filters'
+                    //noty({text: errorMsg,  timeout: 6000, type: 'error'});
+                }
+
+    }
+
+    function checkFilters(filters)
+    {
+            for (var g in filters) {
+                            var filter = filters[g];
+
+                            if ((filter.searchValue == undefined || filter.searchValue == '') && filter.filterPrompt == false)
+                                $scope.wrongFilters.push(filter);
+
+                            if (filter.group == true)
+                            {
+
+                                checkFilters(filter.filters)
+                            }
+
+                }
+
+
     }
 
     $scope.getDataForPreview = function()
     {
 
-        console.log('the query',$scope.query);
+        bsLoadingOverlayService.start({referenceId: 'reportLayout'});
+
+        $scope.query.id = uuid2.newguid();
+        $scope.queries = [];
+        $scope.queries.push($scope.query);
         queryModel.getQueryData($scope,$scope.query, function(data){
 
-        console.log(JSON.stringify(data));
+                $scope.queries[0].data = data;
 
-                var hashedID = hashCode($scope.queryStructure.name);
-                $scope.theData[hashedID] = data;
-
-                $scope.query.hashedID = hashedID;
-
-                repaintRepeater($scope,$scope.query.name,$scope.query,function(){
-
+                grid.simpleGrid($scope.columns,$scope.query.name,$scope.query,false,function(){
+                        bsLoadingOverlayService.stop({referenceId: 'reportLayout'});
                 });
-
-
         });
 
     }
@@ -367,13 +432,12 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
             lastDrop = null;
             return;
         }
-        console.log('en box');
+
         // Get custom object data.
         var customObjectData = data['json/custom-object']; // {foo: 'bar'}
 
         // Get other attached data.
         var uriList = data['text/uri-list']; // http://mywebsite.com/..
-        //console.log('soltado uno '+JSON.stringify(customObjectData));
 
 
         if (type == 'column') {
@@ -439,10 +503,9 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         }
         if (type == 'group') {
         //This is the real filter...
-            console.log('pushing filter group',customObjectData);
+            //console.log('pushing filter group',customObjectData);
             group.filters.push(customObjectData);
-            //$scope.filters.push(customObjectData);
-            console.log('the filters group'+JSON.stringify($scope.filters));
+            //console.log('the filters group'+JSON.stringify($scope.filters));
 
             $scope.filtersUpdated();
         }
@@ -461,11 +524,15 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         lastDrop = 'onFilter';
 
         var droppedFilter = data['json/custom-object'];
-        console.log('en filtro');
+        //console.log('en filtro');
         console.log(droppedFilter);
-        console.log(filter);
+        //console.log(filter);
 
         filter.filters = [jQuery.extend({}, filter), droppedFilter];
+        //if (filter.filters == undefined)
+          //  filter.filters = [];
+
+        //filter.filters.push(droppedFilter);
         filter.group = true;
 
         $scope.updateConditions(filter.filters);
@@ -481,19 +548,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         delete(filter.filterText1);
         delete(filter.filterText2);
 
-        /*filter = {
-            group: true,
-            filters: [jQuery.extend({}, filter), droppedFilter]
-        };*/
-
-       /* $scope.filters[$scope.filters.indexOf(filter)] = {
-            group: true,
-            groupType: 'and',
-            groupLabel: 'AND',
-            filters: [filter, droppedFilter]
-        };*/
-
-        //console.log($scope.filters);
         event.stopPropagation();
         return;
     };
@@ -505,17 +559,16 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         {conditionType: 'orNot', conditionLabel: 'OR NOT'}
     ];
 
-    $scope.updateCondition = function(conditionFrom, conditionTo) {
-        conditionFrom.conditionType = conditionTo.conditionType;
-        conditionFrom.conditionLabel = conditionTo.conditionLabel;
+    $scope.updateCondition = function(filter, condition) {
+        filter.conditionType = condition.conditionType;
+        filter.conditionLabel = condition.conditionLabel;
+        $scope.processStructure();
     };
 
+
     $scope.filtersUpdated = function(filters, mainFilters) {
-        //console.log(filters);
         var filters = (filters) ? filters : $scope.filters;
         var mainFilters = (typeof mainFilters === 'undefined') ? true : mainFilters;
-        //console.log('filtersUpdated');
-        //console.log(filters);
 
         $scope.updateConditions(filters);
         $scope.updateGroups(filters, mainFilters);
@@ -525,9 +578,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                 $scope.filtersUpdated(filters[i].filters, false);
             }
         }
-
-        console.log('filtersUpdated FINISH');
-        console.log(filters);
     };
 
     $scope.updateGroups = function(filters, mainFilters) {
@@ -540,8 +590,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                 return $scope.updateGroups(filters, mainFilters);
             }
         }
-
-        console.log('updateGroups FINISH',filters);
     };
 
     $scope.updateConditions = function(filters) {
@@ -558,8 +606,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                     return $scope.updateConditions(filters);
                 }
                 else { //is a condition, next is a filter?
-                    //console.log(filters[i]);
-                    //console.log(filters[Number(i)+1]);
                     if (filters[Number(i)+1]) {
                         if (filters[Number(i)+1].condition) { //if next is a condition
                             filters.splice(i, 1);
@@ -629,6 +675,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
     $scope.selectSearchValue = function(searchValue)
     {
         promptModel.selectSearchValue($scope);
+        $scope.processStructure();
     };
 
     $scope.toggleSelection = function toggleSelection(value)
@@ -669,7 +716,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                     ($scope.selectedLayer.params.joins[j].sourceCollectionID == collection2 && $scope.selectedLayer.params.joins[j].targetCollectionID == collection1))
                 {
                     found = true;
-                    console.log('join encontrada');
                 }
             }
         } else
@@ -688,6 +734,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                 if (thereIsAJoinForMe($scope.columns[e]) == 0)
                 {
 
+                   /*
                    //is this element in the xkeys?
                     if ($scope.selectedReport.properties.xkeys.length > 0)
                     {
@@ -706,6 +753,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                                 $scope.selectedReport.properties.ykeys.splice(y,1);
                         }
                     }
+                    */
 
                 $scope.columns.splice(e,1);
                 }
@@ -722,7 +770,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         $scope.query.datasources = [];
         $scope.query.order = $scope.order;
 
-        //var filters = $scope.filters[0].filters;
 
         var filters = $scope.filters;
 
@@ -737,7 +784,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         }
 
         for (var i in filters) {
-            //console.log('the filter datasource:',filters);
+
             for (var z in filters[i].filters)
             {
                 if (datasourcesList.indexOf(filters[i].filters[z].datasourceID) == -1)
@@ -748,11 +795,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
             }
 
         }
-
-        /*for (var i in filters) {
-         if (datasourcesList.indexOf(filters[i].datasourceID) == -1)
-         datasourcesList.push(filters[i].datasourceID);
-         }*/
 
         for (var i in datasourcesList) {
 
@@ -769,230 +811,96 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                         dtsCollections.push($scope.columns[z].collectionID);
                 }
             }
+            //console.log('these are the filters:',filters);
 
-            for (var z in filters) {
-                for (var ff in filters[z].filters)
-                {
-                    if (filters[z].filters[ff].datasourceID)
-                        if (filters[z].filters[ff].datasourceID == datasourcesList[i])
-                        {
-                                if (dtsCollections.indexOf(filters[z].filters[ff].collectionID) == -1)
+            getFiltersCollections(filters,dtsCollections,datasourcesList[i], function(){
+
+                        for (var n in dtsCollections) {
+
+                            var collection = {};
+                            collection.collectionID = dtsCollections[n];
+
+                            collection.columns = [];
+
+                            for (var n1 in $scope.columns) {
+                                if ($scope.columns[n1].collectionID == dtsCollections[n])
                                 {
-                                    dtsCollections.push(filters[z].filters[ff].collectionID);
-                                    console.log('found collection in the filter',filters[z].filters[ff].collectionID, filters[z].filters[ff])
+                                    collection.columns.push($scope.columns[n1]);
                                 }
-                        }
-                }
-            }
-
-            for (var n in dtsCollections) {
-
-                var collection = {};
-                collection.collectionID = dtsCollections[n];
-
-                collection.columns = [];
-
-                for (var n1 in $scope.columns) {
-                    if ($scope.columns[n1].collectionID == dtsCollections[n])
-                    {
-                        collection.columns.push($scope.columns[n1]);
-                    }
-                }
-
-                collection.order = [];
-
-                for (var n1 in $scope.order) {
-                    if ($scope.order[n1].collectionID == dtsCollections[n])
-                    {
-                        collection.order.push($scope.order[n1]);
-                    }
-                }
-
-
-                collection.filters = [];
-                 for (var n1 in filters) {
-                    for (var n1f in filters[n1].filters)
-                    {
-                    if (filters[n1].filters[n1f].collectionID)
-                        if (filters[n1].filters[n1f].collectionID == dtsCollections[n])
-                            {
-                                collection.filters.push(filters[n1].filters[n1f]);
                             }
-                    }
-                 }
 
-                //collection.filters = filters;
+                            collection.order = [];
 
-                dtsObject.collections.push(collection);
+                            for (var n1 in $scope.order) {
+                                if ($scope.order[n1].collectionID == dtsCollections[n])
+                                {
+                                    collection.order.push($scope.order[n1]);
+                                }
+                            }
 
-            }
-            $scope.query.datasources.push(dtsObject);
-            $scope.query.layers = layersList;
+
+                            collection.filters = [];
+                             for (var n1 in filters) {
+                                for (var n1f in filters[n1].filters)
+                                {
+                                if (filters[n1].filters[n1f].collectionID)
+                                    if (filters[n1].filters[n1f].collectionID == dtsCollections[n])
+                                        {
+                                            collection.filters.push(filters[n1].filters[n1f]);
+                                        }
+                                }
+                             }
+
+                            dtsObject.collections.push(collection);
+
+                        }
+                        $scope.query.datasources.push(dtsObject);
+                        $scope.query.layers = layersList;
+
+            });
+
         }
 
         $scope.query.groupFilters = $scope.filters;
-        console.log('done generateQuery');
 
         done();
     }
 
-
-    function repaintRepeater($scope,id,query,done)
+    function getFiltersCollections(filters,dtsCollections,dtsID,done)
     {
-           var hashedID = query.hashedID;
 
-            var htmlCode = '<div class="container-fluid repeater-tool-container"></div>';
-
-            var colClass = '';
-            var colWidth = '';
-
-            if ($scope.columns.length == 5 || $scope.columns.length > 6)
-                colWidth = 'width:'+100/$scope.columns.length+'%;float:left;';
-            else
-                colClass = 'col-xs-'+12/$scope.columns.length;
-
-            //header
-            htmlCode += '<div class="container-fluid" style="width:100%;padding-left:0px;background-color:#ccc;">';
-            for(var i = 0; i < $scope.columns.length; i++)
-            {
-
-                    var elementName = "'"+$scope.columns[i].collectionID.toLowerCase()+'_'+$scope.columns[i].elementName+"'";
-                    if ($scope.columns[i].aggregation)
-                        elementName = "'"+$scope.columns[i].collectionID.toLowerCase()+'_'+$scope.columns[i].elementName+$scope.columns[i].aggregation+"'";
-
-                    var elementNameAux = elementName;
-                    if ($scope.columns[i].elementType === 'date')
-                        elementNameAux = "'"+$scope.columns[i].collectionID.toLowerCase()+'_'+$scope.columns[i].elementName+'_original'+"'";
-
-
-                    //htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementNameAux+','+hashedID+')">'+$scope.columns[i].objectLabel+'</span><span class="sortorder" ng-show="reports['+hashedID+'].predicate === '+elementName+'" ng-class="{reverse:reports['+hashedID+'].reverse}"></span>'+getColumnDropDownHTMLCode(report,$scope.columns[i],i,elementName,hashedID,$scope.columns[i].elementType)+' </div>';
-                htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementNameAux+','+hashedID+')">'+$scope.columns[i].objectLabel+'</span><span class="sortorder" ng-show="reports['+hashedID+'].predicate === '+elementName+'" ng-class="{reverse:reports['+hashedID+'].reverse}"></span> </div>';
-
-            }
-            htmlCode += '</div>';
-
-            //Body
-            htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;">';
-
-                //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
-            //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
-
-            htmlCode += '<div class="repeater-data container-fluid" ng-repeat="item in theData['+hashedID+'] | filter:theFilter | orderBy:reports['+hashedID+'].predicate:reports['+hashedID+'].reverse  " style="width:100%;padding:0px">';
-
-            // POPOVER con HTML https://maxalley.wordpress.com/2014/08/19/bootstrap-3-popover-with-html-content/
-
-            for(var i = 0; i < $scope.columns.length; i++)
-            {
-                var elementName = $scope.columns[i].collectionID.toLowerCase()+'_'+$scope.columns[i].elementName;
-
-                if ($scope.columns[i].aggregation)
-                    elementName = $scope.columns[i].collectionID.toLowerCase()+'_'+$scope.columns[i].elementName+$scope.columns[i].aggregation;
-
-
-                var theValue = '<span>{{item.'+elementName+'}}</span>';
-
-                if ($scope.columns[i].signals)
-                {
-                    var theStyle = '<style>';
-                    var theClass = '';
-                    for (var s in $scope.columns[i].signals)
-                    {
-                        theStyle += ' .customStyle'+s+'_'+i+'{color:'+$scope.columns[i].signals[s].color+';background-color:'+$scope.columns[i].signals[s]['background-color']+';font-size:'+$scope.columns[i].signals[s]['font-size']+';font-weight:'+$scope.columns[i].signals[s]['font-weight']+';font-style:'+$scope.columns[i].signals[s]['font-style']+';}';
-                        var theComma = '';
-                        if (s > 0)
-                            theComma = ' , ';
-
-                        var operator = '>'
-
-                        switch($scope.columns[i].signals[s].filter) {
-                            case "equal":
-                                operator = ' == ' + $scope.columns[i].signals[s].value1
-                                break;
-                            case "diferentThan":
-                                operator = ' != '  + $scope.columns[i].signals[s].value1
-                                break;
-                            case "biggerThan":
-                                operator = ' > '  + $scope.columns[i].signals[s].value1
-                                break;
-                            case "biggerOrEqualThan":
-                                operator = ' >= '  + $scope.columns[i].signals[s].value1
-                                break;
-                            case "lessThan":
-                                operator = ' < '  + $scope.columns[i].signals[s].value1
-                                break;
-                            case "lessOrEqualThan":
-                                operator = ' <= ' + $scope.columns[i].signals[s].value1
-                                break;
-                            case "between":
-                                operator = ' >= ' + $scope.columns[i].signals[s].value1 + ' && {{item.'+elementName+'}} <= ' + $scope.columns[i].signals[s].value2
-                                break;
-                            case "notBetween":
-                                operator = ' < ' + $scope.columns[i].signals[s].value1 + ' || {{item.'+elementName+'}}  > ' + $scope.columns[i].signals[s].value2
-                                break;
-                        }
-
-
-
-
-                        theClass += theComma+ 'customStyle'+s+'_'+i+' : {{item.'+elementName+'}} '+operator;
-                    }
-                    htmlCode += theStyle +'</style>'
-                    theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+'}}</span>';
-
-                }
-
-
-
-
-
-                var columnStyle = '';
-                if ($scope.columns[i].columnStyle)
-                {
-                    columnStyle = 'color:'+$scope.columns[i].columnStyle.color+';';
-
-                    for (var key in $scope.columns[i].columnStyle) {
-                        columnStyle += key+':'+$scope.columns[i].columnStyle[key]+';';
-                    }
-                }
-
-                var defaultAligment = '';
-                if ($scope.columns[i].elementType === 'number')
-                    defaultAligment = 'text-align: right;'
-
-                    htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+$scope.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
-            }
-
-            htmlCode += '</div>';
-            htmlCode += '</div>';
-
-            htmlCode += '<div class="repeater-data">';
-                    for(var i in $scope.columns)
-                    {
-                        var elementName = $scope.columns[i].collectionID.toLowerCase()+'_'+$scope.columns[i].elementName;
-                        if ($scope.columns[i].aggregation)
-                            elementName = $scope.columns[i].collectionID.toLowerCase()+'_'+$scope.columns[i].elementName+$scope.columns[i].aggregation;
-                        //htmlCode += '<div class=" calculus-data-column '+colClass+' " style="'+colWidth+'"> '+calculateForColumn($scope,report,i,elementName)+' </div>';
-                    }
-        htmlCode += '</div>';
-
-            var el = document.getElementById(id);
-
-            if (!el)
-                el = document.getElementById('reportLayout');
-
-
-            if (el)
-            {
-                angular.element(el).empty();
-                var $div = $(htmlCode);
-                angular.element(el).append($div);
-                angular.element(document).injector().invoke(function($compile) {
-                    var scope = angular.element($div).scope();
-                    $compile($div)(scope);
+        for (var z in filters) {
+                getGroupCollections(filters[z].filters,dtsCollections,dtsID,true,function(){
+                    done();
                 });
             }
-            done(0);
-            return;
+    }
+
+    function getGroupCollections(theGroup,dtsCollections,dtsID,isRoot,done)
+    {
+            for (var ff in theGroup)
+                {
+                    if (theGroup[ff].datasourceID)
+                      {
+                        if (theGroup[ff].datasourceID == dtsID)
+                            {
+                                    if (dtsCollections.indexOf(theGroup[ff].collectionID) == -1)
+                                    {
+                                        dtsCollections.push(theGroup[ff].collectionID);
+                                    }
+                            }
+                        }
+                        var well = theGroup[ff];
+
+                       if (theGroup[ff].group == true)
+                        {
+                            getGroupCollections(theGroup[ff].filters,dtsCollections,false,done);
+                        }
+
+                }
+
+            if (isRoot == true)
+                done();
 
     }
 

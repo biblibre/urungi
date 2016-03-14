@@ -14,14 +14,18 @@
                 </div>
 
                 <div class="list-group" ng-init="getLayers(1,'',['name','status','description'])">
-                    <a href="/#/layers/{{layer._id}}" class="list-group-item" ng-repeat="layer in items">
-                        <h4 class="list-group-item-heading">{{layer.name}}</h4>
-                        <p class="list-group-item-text">
+                    <div href="/#/layers/{{layer._id}}" class="list-group-item" ng-repeat="layer in items">
+                        <a class="badge pull-right" ng-class="{'badge-success': layer.status == 'active', 'badge-danger': layer.status == 'Not active'}" ng-click="changeLayerStatus(layer)">{{layer.status}}</a>
+                        <a href="/#/layers/{{layer._id}}">
+                            <h4 class="list-group-item-heading">{{layer.name}}</h4>
+                        </a>
+                            <p class="list-group-item-text">
 
-                            <label class="small" style="margin-right: 5px"></label>{{layer.description}}
+                                <label class="small" style="margin-right: 5px"></label>{{layer.description}}
 
-                        </p>
-                    </a>
+                            </p>
+
+                    </div>
                 </div>
             </div>
         </div>

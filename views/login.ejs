@@ -8,7 +8,7 @@
     function LoginController($scope) {
         $scope.login = function()
         {
-            console.log('doing login');
+            //console.log('doing login');
         }
     }
 
@@ -19,10 +19,8 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="/css/login.css">
-
 </head>
 
 
@@ -32,9 +30,9 @@
 
 
 <div class="page-container ng-scope" ng-controller="PublicCtrl">
-    <div class="row">
+    <div class="container">
         <div class="login-header">
-            <img src="images/Logo-widestage-icon.55d42b855ca927b8120b02e3.png" alt="" width="80">
+            <a href="http://widestage.com"><img src="images/Logo-widestage-icon.55d42b855ca927b8120b02e3.png" alt="" width="80"></a>
 
         </div>
     </div>
@@ -77,15 +75,6 @@
 
                     </div>
 
-                    <div class="login-footer">
-                        <a href="">Forgot your password?</a>
-
-                        <div class="info-links">
-                            <a href="">ToS</a> -
-                            <a href="">Privacy Policy</a>
-                        </div>
-
-                    </div>
 
                 </form>
 
@@ -103,46 +92,7 @@
 </div>
 
 
- <div id="forgot-box" class="forgot-box widget-box no-border">
-     <div class="widget-body">
-         <div class="widget-main">
-             <h4 class="header red lighter bigger">
-                 <i class="fa fa-key"></i>
-                 Retrieve Password
-             </h4>
 
-             <div class="space-6"></div>
-             <p>
-                 Enter your email and to receive instructions
-             </p>
-
-             <form id="remember-password-form" name="remember-password-form" role="form" ng-submit="rememberPassword()">
-                 <fieldset>
-                     <label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input name="email" type="email" class="form-control" ng-model="email" placeholder="Email" required/>
-															<i class="fa fa-envelope"></i>
-														</span>
-                     </label>
-
-                     <div class="clearfix">
-                         <button type="submit" class="width-35 pull-right btn btn-sm btn-danger" onclick="show_box('login-box');">
-                             <i class="fa fa-lightbulb"></i>
-                             Send Me!
-                         </button>
-                     </div>
-                 </fieldset>
-             </form>
-         </div><!-- /widget-main -->
-
-         <div class="toolbar center">
-             <a href="#" onclick="show_box('login-box'); return false;" class="back-to-login-link">
-                 Back to login
-                 <i class="fa fa-arrow-right"></i>
-             </a>
-         </div>
-     </div><!-- /widget-body -->
- </div><!-- /forgot-box -->
 
 <script src="jquery/dist/jquery.min.js"></script>
 

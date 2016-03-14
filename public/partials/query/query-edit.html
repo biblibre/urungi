@@ -34,26 +34,15 @@
                         </label>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
-
-
         <div class="row">
             <div class="col-md-12">
-
                         <div class="form-group no-margin">
                             <label for="field-7" class="control-label">Prompt Instructions</label>
 
                             <textarea ng-model="selectedFilter.promptInstructions" class="form-control autogrow" id="field-7"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
                         </div>
-
-
-
-
-
             </div>
         </div>
 
@@ -67,11 +56,7 @@
 </nd-modal>
 
 
-<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
-    <a ng-disabled="columns.length <=0" data-ng-click="saveQueryStructure(); saveQuery2(); initQuery();" class="btn btn-success pull-right" style="margin-right: 5px">Save Query</a>
-    <a ng-if="editingQuery != null" ng-click="deleteQuery();" class="btn btn-danger pull-right">Delete</a>
-    <a ng-click="cancelQuery(); initQuery();" class="btn btn-default pull-right">Cancel</a>
-</div>
+
 
 
 <div class="container-fluid" style="border-bottom: 2px solid #72A230; padding: 10px;">
@@ -84,11 +69,11 @@
     <script type="text/ng-template" id="filtersGroup.html">
         <div class="container-fluid filter-zone no-padding" drop="onDrop($data, $event, 'group', group)" drop-effect="copy" drop-accept="'json/custom-object'" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
             <div class="filter-zone-label pull-right" ng-hide="filters.length > 0">Drop here your filters</div>
-            <ul class="ul-drop no-padding" ng-model="group.filters" ui-sortable="sortableOptions">
+            <ul class="ul-drop no-padding" ng-model="group.filters"  > <!--ui-sortable="sortableOptions"-->
 
                 <div ng-repeat="filter in group.filters">
 
-                    <li class="filter-box" ng-if="!filter.group && !filter.condition" style="margin-left: 90px;"
+                    <li class="filter-box" ng-class="{'incomplete-filter': (filter.searchValue == '' || filter.searchValue == undefined)}" ng-if="!filter.group && !filter.condition" style="margin-left: 90px;"
                         drop="onDropOnFilter($data, $event, filter)" drop-effect="copy" drop-accept="'json/custom-object'">
 
                         <div class="container-fluid">
@@ -218,7 +203,7 @@
                                 <span class="caret" style="color:#0000FF;"></span>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
-                                <li ng-repeat="condition in conditionTypes"><a ng-click="updateCondition(filter, condition)" ng-bind="condition.conditionLabel"></a></li>
+                                <li ng-repeat="theCondition in conditionTypes"><a ng-click="updateCondition(filter,theCondition)" ng-bind="theCondition.conditionLabel"></a></li>
                             </ul>
                         </div>
 
@@ -284,20 +269,20 @@
 
             </li>
         </ul>
-        <span ng-show="columns.length > 0" class="pull-right" style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ng-click="processStructure();"></i></span>
     </div>
-
-
-
-
-
 </div>
 
+
+<div ng-show="columns.length > 0" class="container-fluid" style="border-bottom: 2px solid #72A230; padding: 3px;margin-bottom:5px;">
+    <button class="btn btn-success" ng-show="columns.length > 0" class="pull-right" ng-click="processStructure();"  style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ></i> Refresh data</button>
+    <h4 class="pull-right" >Query results</h4>
+</div>
+
+
 <div class="container-fluid" >
+    <div ng-if="wrongFilters.length > 0 && columns.length > 0" class="alert alert-danger" role="alert"><i class="fa fa-warning fa-2" style="margin-right:10px;"></i>  <strong>Warning:</strong>     There are incomplete filters!!</div>
 
-    <div id="reportLayout" class="panel panel-default">
-
-
+    <div ng-if="wrongFilters.length == 0" id="reportLayout" bs-loading-overlay bs-loading-overlay-reference-id="reportLayout" style="min-height:100px">
 
     </div>
 

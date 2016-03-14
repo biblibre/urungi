@@ -5,48 +5,112 @@ app.service('htmlWidgets' , function () {
     {
 
                 return '<div page-block class="jumbotron" ndType="jumbotron">'+
-                '<div class="container-fluid module" ndType="none"   style="height: 100%;width: 100%;top:0px;left:0px;z-index: 10;position:absolute;"></div>'+
                         '<h1 page-block  class="editable" ndType="header" contenteditable="false">  A header text H1 ddd </h1>'+
                         '<p page-block  class="editable" contenteditable="false" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
                         /*'<a page-block  class="editable btn btn-default" ndType="button"  role="button">My button</a>'+*/
                         '</div>';
     }
 
+    this.get4colsctaHTML = function()
+    {
+                return '<div page-block class="container-fluid ndContainer" ndType="container">'+
+                    '<div  page-block class="col-md-3 ndContainer" ndtype="column" >'+
+                        '<h3  page-block class="editable" ndType="header" >  A header text H3 </h3>'+
+                        '<p page-block class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
+                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'+
+                    '</div>'+
+                    '<div class="col-md-3 ndContainer" ndtype="column">'+
+                        '<h3 page-block  class="editable"  ndType="header" >  A header text H3 </h3>'+
+                        '<p page-block  class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
+                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'+
+                    '</div>'+
+                    '<div class="col-md-3 ndContainer" ndtype="column" >'+
+                        '<h3  page-block  class="editable" ndType="header" >  A header text H3 </h3>'+
+                        '<p page-block  class="editable"  ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
+                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'+
+                    '</div>'+
+                    '<div class="col-md-3 ndContainer" ndtype="column">'+
+                        '<h3  page-block  class="editable" ndType="header" >  A header text H3 </h3>'+
+                        '<p page-block  class="editable"  ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
+                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'+
+                    '</div>'+
+                '</div>';
+    }
+
     this.get3colsctaHTML = function()
     {
-                return '<div page-block class="container-fluid ndContainer" ndType="container" on-select="selected(selectedEl)">'+
-                '<div class="container-fluid module" ndType="none"   style="height: 100%;width: 100%;top:0px;left:0px;z-index: 10;position:absolute;"></div>'+
-                    '<div  page-block class="col-md-4 ndContainer" ndtype="column" on-select="selected(selectedEl)">'+
-                    '<h3  page-block class="editable" x-on-select="selected(selectedEl)" ndType="header" contenteditable="false">  A header text H3 </h3>'+
-                    '<p page-block class="editable" x-element-draggable="false" x-element-drop-target="true" contenteditable="false" x-on-select="selected(selectedEl)" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
-                    '<a page-block class="editable btn btn-default" x-element-draggable="true" x-element-drop-target="true" x-on-select="selected(selectedEl)" ndType="button"  role="button">My button</a>'+
+                return '<div page-block class="container-fluid ndContainer" ndType="container">'+
+                    '<div  page-block class="col-md-4 ndContainer" ndtype="column" >'+
+                        '<h3  page-block class="editable" ndType="header" >  A header text H3 </h3>'+
+                        '<p page-block class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
+                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'+
                     '</div>'+
-                    '<div class="col-md-4 ndContainer" x-element-draggable="false" x-element-drop-target="true" ndtype="column" x-on-select="selected(selectedEl)">'+
-                    '<h3  class="editable" x-element-draggable="true" x-element-drop-target="true" x-on-select="selected(selectedEl)" ndType="header" contenteditable="false">  A header text H3 </h3>'+
-                    '<p class="editable" x-element-draggable="false" x-element-drop-target="true" contenteditable="false" x-on-select="selected(selectedEl)" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
-                    '<a class="editable btn btn-default" x-element-draggable="true" x-element-drop-target="true" x-on-select="selected(selectedEl)" ndType="button"  role="button">My button</a>'+
+                    '<div class="col-md-4 ndContainer" ndtype="column">'+
+                        '<h3 page-block  class="editable"  ndType="header" >  A header text H3 </h3>'+
+                        '<p page-block  class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
+                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'+
                     '</div>'+
-                    '<div class="col-md-4 ndContainer" x-element-draggable="false" x-element-drop-target="true" ndtype="column" x-on-select="selected(selectedEl)">'+
-                    '<h3  class="editable" x-element-draggable="true" x-element-drop-target="true" x-on-select="selected(selectedEl)" ndType="header" contenteditable="false">  A header text H3 </h3>'+
-                    '<p class="editable" x-element-draggable="false" x-element-drop-target="true" contenteditable="false" x-on-select="selected(selectedEl)" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
-                    '<a class="editable btn btn-default" x-element-draggable="true" x-element-drop-target="true" x-on-select="selected(selectedEl)" ndType="button"  role="button">My button</a>'+
+                    '<div class="col-md-4 ndContainer" ndtype="column">'+
+                        '<h3  page-block  class="editable" ndType="header" >  A header text H3 </h3>'+
+                        '<p page-block  class="editable"  ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
+                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'+
                     '</div>'+
-                    '</div>';
+                '</div>';
+
+    }
+
+    this.get2colsctaHTML = function()
+    {
+                return '<div page-block class="container-fluid ndContainer" ndType="container">'+
+                    '<div  page-block class="col-md-6 ndContainer" ndtype="column" >'+
+                        '<h3  page-block class="editable" ndType="header" >  A header text H3 </h3>'+
+                        '<p page-block class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
+                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'+
+                    '</div>'+
+                    '<div class="col-md-6 ndContainer" ndtype="column">'+
+                        '<h3 page-block  class="editable"  ndType="header" >  A header text H3 </h3>'+
+                        '<p page-block  class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
+                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'+
+                    '</div>'+
+                '</div>';
 
     }
 
     this.getImageTextLargeHTML = function()
     {
                 return  '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
-                        '<div class="container-fluid module" ndType="none"   style="height: 100%;width: 100%;top:0px;left:0px;z-index: 10;position:absolute;"></div>'+
-                        '<div page-block class="col-md-7 col-md-push-5 ndContainer" ndtype="column"  ndType="col" >'+
-                        '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">Oh yeah, it is that good. <span class="text-muted">See for yourself.</span></h2>'+
-                        '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>'+
-                        '</div>'+
-                        '<div page-block class="col-md-5 col-md-pull-7 ndContainer" ndtype="column">'+
-                        //'<img page-block ndType="image" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="500x500" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxkZWZzLz48cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE5MC4zMTI1IiB5PSIyNTAiIHN0eWxlPSJmaWxsOiNBQUFBQUE7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LWZhbWlseTpBcmlhbCwgSGVsdmV0aWNhLCBPcGVuIFNhbnMsIHNhbnMtc2VyaWYsIG1vbm9zcGFjZTtmb250LXNpemU6MjNwdDtkb21pbmFudC1iYXNlbGluZTpjZW50cmFsIj41MDB4NTAwPC90ZXh0PjwvZz48L3N2Zz4=" data-holder-rendered="true">'+
-                        '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'
-                        '</div>'+
+                            '<div page-block class="col-md-7 col-md-push-5 ndContainer" ndtype="column"  ndType="col" >'+
+                                '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">Oh yeah, it is that good. <span class="text-muted">See for yourself.</span></h2>'+
+                                '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>'+
+                            '</div>'+
+                            '<div page-block class="col-md-5 col-md-pull-7 ndContainer" ndtype="column">'+
+                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'
+                            '</div>'+
+                        '</div>';
+
+    }
+
+    this.getTextImageLargeHTML = function()
+    {
+                return  '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
+                            '<div page-block class="col-md-7 ndContainer" ndtype="column"  ndType="col" >'+
+                                '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">Oh yeah, it is that good. <span class="text-muted">See for yourself.</span></h2>'+
+                                '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>'+
+                            '</div>'+
+                            '<div page-block class="col-md-5 ndContainer" ndtype="column">'+
+                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'
+                            '</div>'+
+                        '</div>';
+
+    }
+
+    this.getTextLargeHTML = function()
+    {
+                return  '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
+                                '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">Oh yeah, it is that good. <span class="text-muted">See for yourself.</span></h2>'+
+                                '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>'+
+                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>'
+                                '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>'+
                         '</div>';
 
     }
@@ -54,8 +118,7 @@ app.service('htmlWidgets' , function () {
     this.getTabsHTML = function(id,tabs)
     {
         var theHTML =  '<div page-block id="'+id+'" class="container-fluid ndContainer"  ndType="tabsContainer" >'+
-                            '<div class="container-fluid module" ndType="none"   style="height: 100%;width: 100%;top:0px;left:0px;z-index: 10;position:absolute;"></div>'+
-                           '<div class="nav-tabs-justified ng-isolate-scope">'+
+                            '<div class="nav-tabs-justified ng-isolate-scope">'+
                                 '<ul id="'+id+'_HEADER" class="nav nav-tabs" ng-class="{\'nav-stacked\': vertical, \'nav-justified\': justified}">';
                 for (var t in tabs)
                         {

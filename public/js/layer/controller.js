@@ -1,4 +1,4 @@
-app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceModel,uuid2 ) {
+app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,datasourceModel,uuid2 ) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';
@@ -11,6 +11,14 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
         {name:"date",value:"date"},
         {name:"array",value:"array"}
     ];
+
+    $scope.numberDefaultAggregation = [{name:"original value",value:"value"},
+        {name:"SUM",value:"sum"},
+        {name:"AVG",value:"avg"},
+        {name:"MIN",value:"min"},
+        {name:"MAX",value:"max"}
+    ];
+
     $scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
 
     $scope.deletingJoin = false;
@@ -22,9 +30,27 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
     {
         $scope._Layer = {};
         $scope._Layer.params = {};
-        $scope._Layer.status = 1;
+        $scope._Layer.status = 'Not active';
         $scope.mode = 'add';
         $('#layerModal').modal('show');
+    }
+
+    $scope.changeLayerStatus = function(layer)
+    {
+        if ($rootScope.isWSTADMIN)
+        {
+
+            if (layer.status == 'active')
+                var newStatus = 'Not active';
+            if (layer.status == 'Not active')
+                var newStatus = 'active';
+
+            var data = {layerID: layer._id, status: newStatus}
+
+            connection.post('/api/layers/change-layer-status', data, function(result) {
+                layer.status = newStatus;
+            });
+        }
     }
 
     $scope.view = function() {
@@ -58,10 +84,6 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
         if ($scope.mode == 'add') {
             $scope._Layer.objects = $scope.rootItem.elements;
             var data = $scope._Layer;
-
-
-
-            console.log('saving layer '+$scope._Layer.name);
             connection.post('/api/layers/create', data, function(data) {
                 $scope.items.push(data.item);
                 $scope.cancel();
@@ -75,10 +97,10 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
 
             for (var collection in theLayer.params.schema)
             {
-                console.log('uno',theLayer.params.schema[collection].collectionName);
+
                 for (var element in theLayer.params.schema[collection].elements)
                 {
-                    console.log('dos');
+
                     if (theLayer.params.schema[collection].elements[element].painted)
 
                         theLayer.params.schema[collection].elements[element].painted = false;
@@ -87,8 +109,6 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
 
                 }
             }
-
-            console.log('before save',JSON.stringify(theLayer));
 
             connection.post('/api/layers/update/'+theLayer._id, theLayer, function(result) {
                 console.log(result);
@@ -375,8 +395,6 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
                 ]
 
             };
-
-
 
             instance.registerConnectionType("right", rightJoinType);
             instance.registerConnectionType("left", leftJoinType);
@@ -749,6 +767,8 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
                                 $scope.layerSelectedElement.elementRole = element.elementRole;
                                 $scope.layerSelectedElement.elementType = element.elementType;
                                 $scope.layerSelectedElement.elementLabel = element.elementLabel;
+                                if (element.defaultAggregation)
+                                    $scope.layerSelectedElement.defaultAggregation = element.defaultAggregation;
                                 if (element.values)
                                     $scope.layerSelectedElement.values = element.values;
                                 if (element.format)
@@ -874,51 +894,22 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
 
         for (var collection in $scope._Layer.params.schema)
         {
-            //var theTop = $($scope._Layer.params.schema[collection].collectionID).position.top;
-            //var theLeft = $($scope._Layer.params.schema[collection].collectionID).position.left;
             var theID = $scope._Layer.params.schema[collection].collectionID;
             console.log('the ID '+theID);
             var p = $(theID);
             var position = p.parent().position();
             var theLeft = position.left;
                 console.log('the left '+theLeft);
-            //$($scope._Layer.params.schema[collection].collectionID).position({ left: theLeft+leftCorrection, top: theTop});
             $($scope._Layer.params.schema[collection].collectionID).css('left', theLeft+leftCorrection+'px');
-
-
         }
 
-        //$scope.$apply();
-
-        //setTimeout(function () {
             for (var collection in $scope._Layer.params.schema)
             {
-
-
                 for (var element in $scope._Layer.params.schema[collection].elements)
                 {
-                    //if ($scope._Layer.params.schema[collection].elements[element].painted)
-
-                    //  $scope._Layer.params.schema[collection].elements[element].painted = false;
-
                     instance.revalidate($scope._Layer.params.schema[collection].elements[element].elementID);
-
                 }
             }
-
-        //},100);
-
-
-        //instance.reset();
-       // instance.deleteEveryEndpoint();
-       // instance.detachEveryConnection();
-       // instance.repaint(this);
-
-
-        //$scope.$apply();
-        //$scope.erDiagramInit();
-       // instance.draggable($(".window"));
-
     }
 
     var setZoom = function(z, el) {
@@ -1040,9 +1031,8 @@ app.controller('layerCtrl', function ($scope,connection,$routeParams,datasourceM
     }
 
     $scope.onElementTypeChange = function(element) {
-        console.log(element);
 
-        var params = {datasourceID: element.datasourceID,layerID: $scope._Layer._id, collectionID: element.collectionID,collectionName: element.collectionName, elementName: element.elementName};
+        var params = {datasourceID: element.datasourceID,layerID: $scope._Layer._id, collectionID: element.collectionID,collectionName: element.collectionName, elementName: element.elementName, defaultAggregation: element.defaultAggregation};
 
         if (element.elementType == 'array') {
             connection.get('/api/data-sources/get-element-distinct-values', params, function(data) {

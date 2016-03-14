@@ -5,7 +5,7 @@
  * Time: 11:53
  * To change this template use File | Settings | File Templates.
  */
-
+/*
 app.service('reportNameModal', ['$modal', function($modal) {
 
     var modalDefaults = {
@@ -58,5 +58,5 @@ app.service('reportNameModal', ['$modal', function($modal) {
     };
 
 
-}]);
+}]);*/
 

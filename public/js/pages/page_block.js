@@ -24,11 +24,6 @@ module.directive('pageBlock', ['$rootScope',  '$compile','$parse', function($roo
                         $(el).addClass('selected');
                         scope.selectedElement = $(el);
 
-                        //console.log('page-block selected bind click'+ scope.selectedElement);
-
-
-
-
                         if ($(el).hasClass("editable"))
                         {
                             scope.$apply(function () {
@@ -41,23 +36,8 @@ module.directive('pageBlock', ['$rootScope',  '$compile','$parse', function($roo
                             $(el).attr("contenteditable", "false");
                         }
                         $rootScope.$emit("SELECTED");
-                        //var invoker = $parse(attrs.onSelect);
-                        //invoker(scope, {selectedEl: $(el)} );
                         scope.$apply();
-
-
-
-                        //scope.isSelected = true;
-                        //scope.showTab(1);
-                        //scope.$apply(function () {
-
-                        //});
-                        //console.log('element selected bc '+selectedElement.attr('id'));
                         scope.getElementProperties($(el));
-                   // } else {
-                       // scope.editMode = false;
-                        //console.log('edit mode =TRUE '+ scope.selectedElement);
-                   // }
 
                 });
 

@@ -1,9 +1,9 @@
 app.service('dashboardModel',  function ($http, $q, connection, promptModel) {
 
 
-    this.getDashBoard = function(dashboardID, done)
+    this.getDashBoard = function(dashboardID, isLinked, done)
     {
-        connection.get('/api/dashboards/get/'+dashboardID, {id: dashboardID}, function(data) {
+        connection.get('/api/dashboards/get/'+dashboardID, {id: dashboardID,linked:isLinked}, function(data) {
             done(data.item);
         });
     }

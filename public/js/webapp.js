@@ -5,7 +5,7 @@ var app = angular.module('WideStage', [
        //'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs','angularTreeview','ngDragDrop','ui.layout'
         'ngRoute','ui.sortable','gridster','ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
         'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
-        'ui.bootstrap.datetimepicker','ui.tree','page.block','gridshore.c3js.chart','vAccordion'
+        'ui.bootstrap.datetimepicker','ui.tree','page.block','gridshore.c3js.chart','vAccordion','bsLoadingOverlay'
         //'angularTreeview',
     ])
     .config(['$routeProvider', function($routeProvider) {
@@ -126,9 +126,7 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/users/edit.html',
             controller: 'AdminUsersCtrl'
         });
-
         //roles
-
         $routeProvider.when('/roles', {
             templateUrl: 'partials/roles/list.html',
             controller: 'rolesCtrl'
@@ -143,18 +141,15 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/roles/editNew.html',
             controller: 'rolesCtrl'
         });
-
         $routeProvider.when('/logout', {
             templateUrl: 'partials/logout/index.html',
             controller: 'logOutCtrl'
         });
-
         //spaces
         $routeProvider.when('/public-space', {
             templateUrl: 'partials/spaces/index.html',
             controller: 'spacesCtrl'
         });
-
         //pages
         $routeProvider.when('/pages', {
             templateUrl: 'partials/pages/list.html',
@@ -175,7 +170,6 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/pages/edit.html',
             controller: 'pagesCtrl'
         });
-
         //queries
 
         $routeProvider.when('/query/new/:queryID', {
@@ -185,6 +179,12 @@ var app = angular.module('WideStage', [
         $routeProvider.when('/query/edit/:queryID', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
+        });
+
+        //explore
+        $routeProvider.when('/explore', {
+            templateUrl: 'partials/query/exploreIndex.html',
+            controller: 'queryCtrl'
         });
 
     }])
@@ -204,20 +204,6 @@ var app = angular.module('WideStage', [
         }
     };
 }]);
-/*
-var app = angular.module('DataRepublic', ['ngRoute']).
-    config(['$stateProvider','$urlRouterProvider','$locationProvider', function($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise("/home")
-
-        $stateProvider
-            .state('home',{
-                url:'/home',
-                templateUrl : 'partial/mainDashboard',
-                controller : 'mainDashboardCtrl'
-            })
-
-    }]);
-*/
 
 
 app.directive('sizeelement', function ($window) {
@@ -265,7 +251,6 @@ app.service('queryService', function() {
 
 app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $sessionStorage, connection) {
     console.log('widestage app running');
-
     $rootScope.removeFromArray = function(array, item) {
         var index = array.indexOf(item);
 
@@ -279,23 +264,35 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
     $rootScope.user = $sessionStorage.getObject('user');
 
     if (!$rootScope.user) {
-
+        console.log('there is no user in the session storage');
+        $window.location.href="/login";
     } else {
         $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
 
+
+        connection.get('/api/get-counts', {}, function(data) {
+            $rootScope.counts = data;
+        });
+
+        connection.get('/api/get-user-objects', {}, function(data) {
+            //console.log('the user objects',JSON.stringify(data.items));
+            $rootScope.userObjects = data.items;
+            $rootScope.user.canPublish = data.userCanPublish;
+        });
+
     }
 
-    connection.get('/api/get-counts', {}, function(data) {
-        $rootScope.counts = data;
-    });
 
-    connection.get('/api/get-user-objects', {}, function(data) {
-        //console.log('the user objects',JSON.stringify(data.items));
-        $rootScope.userObjects = data.items;
-        $rootScope.user.canPublish = data.userCanPublish;
-    });
 
 }]);
+
+app.run(function (bsLoadingOverlayService) {
+  bsLoadingOverlayService.setGlobalConfig({
+    delay: 0, // Minimal delay to hide loading overlay in ms.
+    activeClass: undefined, // Class that is added to the element where bs-loading-overlay is applied when the overlay is active.
+    templateUrl: 'partials/loading-overlay-template.html' // Template url for overlay element. If not specified - no overlay element is created.
+  });
+});
 
 function isWSTADMIN($rootScope)
 {

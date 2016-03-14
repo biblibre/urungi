@@ -33,6 +33,8 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     };
 
     $scope.save = function() {
+
+
         if ($scope.mode == 'add') {
 
             var data = $scope._DataSource;
@@ -41,7 +43,8 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 window.history.back();
             });
         } else {
-            connection.post('/api/data-sources/update/'+$scope._DataSource._id, $scope._dataSource, function(result) {
+        console.log($scope._dataSource);
+            connection.post('/api/data-sources/update/'+$scope._DataSource._id, $scope._DataSource, function(result) {
                 if (result.result == 1) {
                     window.history.back();
                 }

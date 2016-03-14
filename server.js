@@ -89,7 +89,7 @@ if (cluster.isMaster) {
     require('./server/config/passport')(passport);
 
     require('./server/globals');
-    require('./server/config/mailer');
+    //require('./server/config/mailer');
 
     require('./server/config/routes')(app, passport);
     //require('./server/config/routes')(app);

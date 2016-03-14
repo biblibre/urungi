@@ -167,7 +167,10 @@ exports.getDashboard = function(req,res)
             stat.type = 'dashboard';
             stat.relationedID = result.item._id;
             stat.relationedName = result.item.dashboardName;
-            stat.action = 'execute';
+            if (req.query.linked == true)
+                stat.action = 'execute link';
+                else
+                stat.action = 'execute';
             statistics.save(req, stat, function() {
 
             });

@@ -902,3 +902,46 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
       height: 75px;
       margin: 2px;
 }
+
+.filter_element {
+
+    border: 1px solid #fff;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+
+}
+
+.prompt-description {
+    color: #999999;
+    font-style: italic;
+
+}
+
+.prompt-label {
+    font-weight: bold;
+}
+
+.absolute-center {
+
+/* Internet Explorer 10 */
+display:-ms-flexbox;
+-ms-flex-pack:center;
+-ms-flex-align:center;
+
+/* Firefox */
+display:-moz-box;
+-moz-box-pack:center;
+-moz-box-align:center;
+
+/* Safari, Opera, and Chrome */
+display:-webkit-box;
+-webkit-box-pack:center;
+-webkit-box-align:center;
+
+/* W3C */
+display:box;
+box-pack:center;
+box-align:center;
+
+}

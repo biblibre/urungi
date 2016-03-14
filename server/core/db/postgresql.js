@@ -35,8 +35,8 @@ exports.testConnection = function(data, setresult) {
     });
 };
 
-exports.processCollections = function(query,collections, dataSource, params,thereAreJoins, done) {
-    processCollections(query,collections, dataSource, params,thereAreJoins, done);
+exports.processCollections = function(req,query,collections, dataSource, params,thereAreJoins, done) {
+    processCollections(req,query,collections, dataSource, params,thereAreJoins, done);
 };
 
 exports.getSchemas = function(data, setresult) {
@@ -242,10 +242,12 @@ function getElementList (target,elements,parent) {
     }
 }
 
-function processCollections(query,collections, dataSource, params, thereAreJoins, setresult,  index) {
+function processCollections(req,query,collections, dataSource, params, thereAreJoins, setresult,  index) {
     //console.log(JSON.stringify(query));
 
     // https://hiddentao.github.io/squel/
+
+    console.log('process collections',params,query);
 
 
     var from = [];
@@ -313,7 +315,7 @@ function processCollections(query,collections, dataSource, params, thereAreJoins
                strJoin = strJoin + ')';
                }
 
-    }
+            }
 
         if (processedCollections.indexOf(table.collectionID) == -1)
             from.push(table.schema.collectionName +' '+table.collectionID + strJoin);
@@ -424,7 +426,8 @@ function processCollections(query,collections, dataSource, params, thereAreJoins
                 SQLstring = SQLstring + groupBy[f]+', ';
         }
 
-        //TODO: Order By's
+
+
 
 
         if (havings.length > 0)
@@ -432,6 +435,64 @@ function processCollections(query,collections, dataSource, params, thereAreJoins
 
         for (var h in havings)
                 SQLstring += havings[h];
+
+        //TODO: Order By's
+
+        console.log('the order',query.order);
+
+        if (query.order)
+            if (query.order.length > 0)
+               {
+                var theOrderByString = '';//SQLstring = SQLstring + ' ORDER BY ';
+
+                for (var f in query.order)
+                {
+
+                    var theOrderField = query.order[f];
+                    var theOrderFieldName = '';
+
+                    if (theOrderField.aggregation) {
+                                    found = true;
+                                    switch (theOrderField.aggregation) {
+                                        case 'sum': theOrderFieldName = ('SUM('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName+'sum');
+                                            break;
+                                        case 'avg': theOrderFieldName = ('AVG('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName+'avg');
+                                            break;
+                                        case 'min': theOrderFieldName = ('MIN('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName+'min');
+                                            break;
+                                        case 'max': theOrderFieldName = ('MAX('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName+'max');
+                                            break;
+                                        case 'count': theOrderFieldName = ('COUNT('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName+'count');
+                                    }
+                                } else {
+                                    theOrderFieldName = (theOrderField.collectionID+'.'+theOrderField.elementName + ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName);
+
+                                }
+                    //console.log('order by index',fields.indexOf(query.order[f].collectionID+'.'+query.order[f].elementName));
+                    var theIndex = fields.indexOf(theOrderFieldName);
+                    if (theIndex >= 0)
+                    {
+                    var sortType = '';
+                    if (query.order[f].sortType == 1)
+                        sortType = ' DESC';
+                        if (theOrderByString == '')
+                            theOrderByString += (theIndex +1)+ sortType;
+                        else
+                            theOrderByString += ', '+(theIndex +1) + sortType;
+                    }
+                }
+
+                if (theOrderByString != '')
+                    SQLstring += ' ORDER BY ' + theOrderByString;
+
+            }
+
+
+
+        //pages only for POSTGRESS
+        SQLstring += ' LIMIT 500 OFFSET ' + ((params.page -1 )*500);
+
+        //LIMIT { number | ALL }] [OFFSET number]
 
 
         console.log(SQLstring);
@@ -449,14 +510,20 @@ function processCollections(query,collections, dataSource, params, thereAreJoins
 
           console.log('Connected to ',conString);
           client.query(SQLstring, function(err, result) {
-             done();
-             //console.log(result.rows);
-             //setresult({result: 1, items: result.rows});
-             if (result)
-                setresult(result.rows);
-                else
-                setresult([]);
-             client.end();
+            if (err) {
+                    console.log(err);
+                    setresult({result: 0, msg: 'Generated SQL Error'});
+                    saveToLog(req, 'SQL Error: '+err+' ('+SQLstring+')      QUERY: ('+JSON.stringify(query)+')', 110);
+                    done();
+                    client.end();
+            } else {
+                 done();
+                 if (result)
+                    setresult(result.rows);
+                    else
+                    setresult([]);
+                 client.end();
+             }
           });
         });
 
@@ -482,7 +549,7 @@ function processCollections(query,collections, dataSource, params, thereAreJoins
 
 }
 
-
+/*
 function getFiltersV2(collections,done)
 {
    //console.log(JSON.stringify(query.groupFilters));
@@ -540,11 +607,13 @@ function getFiltersV2(collections,done)
     done(filters,havings);
 
    //return theFilter;
-}
+}*/
 
-function getFilters(query,done)
+/*
+
+function getFiltersV3(query)
 {
-   console.log(JSON.stringify(query.groupFilters));
+
    var theFilter = '';
    var filters = [];
    var havings = [];
@@ -552,12 +621,49 @@ function getFilters(query,done)
 
    for (var g in query.groupFilters) {
 
-        for (var f in query.groupFilters[g].filters)
+        var processFilterGroup = function(query.groupFilters[g])
+
+          {
+
+
+          }
+
+
+   }
+
+
+
+}
+*/
+
+function getFilters(query,done)
+{
+   //console.log('in get filters',JSON.stringify(query.groupFilters));
+
+
+
+   var theFilter = '';
+   var filters = [];
+   var havings = [];
+   var previousRelational = '';
+
+   if (query.groupFilters == undefined)
+        done(filters,havings);
+
+   for (var g in query.groupFilters) {
+
+        processFilterGroup(query.groupFilters[g],filters,havings,true,function(finalFilters,finalHavings){
+
+            done(finalFilters,finalHavings);
+       // console.log('han llegado',filters);
+        });
+
+        /*for (var f in query.groupFilters[g].filters)
         {
             if (query.groupFilters[g].filters[f].condition)
                     {
-                        theFilter = theFilter + ' '+query.groupFilters[g].filters[f].conditionType+' ';
-                        previousRelational = ' '+query.groupFilters[g].filters[f].conditionType+' ';
+                        theFilter = theFilter + ' '+query.groupFilters[g].filters[f].conditionLabel+' ';
+                        previousRelational = ' '+query.groupFilters[g].filters[f].conditionLabel+' ';
                     }
 
             if (!query.groupFilters[g].filters[f].condition)
@@ -578,10 +684,18 @@ function getFilters(query,done)
                         havings.push(filterSQL);
                     }
 
+                     if (query.groupFilters[g].filters[f].group == true)
+                            {
+
+                                updateFilters4Prompt($scope,filter.filters,prompt)
+                            }
+
             }
 
             theFilter = theFilter + getFilterSQL(query.groupFilters[g].filters[f]);
-        }
+
+
+        }*/
 
    }
    //if (theFilter != '' && isHaving == false)
@@ -590,9 +704,70 @@ function getFilters(query,done)
    //if (theFilter != '' && isHaving == true)
      //       theFilter = ' HAVING '+theFilter;
 
-    done(filters,havings);
+
 
    //return theFilter;
+}
+
+
+function processFilterGroup(group,filters,havings,isRoot,done)
+{
+    //var getGroup = function() {
+//console.log('processing filter 0',group);
+    if (isRoot == false)
+        filters.push("(");
+    for (var f in group.filters)
+        {
+            //console.log('processing filter');
+            if (group.filters[f].condition)
+                    {
+                       // theFilter = theFilter + ' '+group.filters[f].conditionLabel+' ';
+                        previousRelational = ' '+group.filters[f].conditionLabel+' ';
+                    }
+
+            if (!group.filters[f].condition)
+            {
+               var filterSQL = getFilterSQL(group.filters[f]);
+
+
+               if (!group.filters[f].aggregation)
+                    {
+                        if (f > 0)
+                            filterSQL = previousRelational + filterSQL;
+
+                        filters.push(filterSQL);
+                        //console.log('pushing filter');
+                    } else {
+                        if (havings.length > 0)
+                            filterSQL = previousRelational + filterSQL;
+
+                        havings.push(filterSQL);
+                    }
+
+                     if (group.filters[f].group == true)
+                            {
+
+                            console.log('recursive call');
+                            var recursive =  processFilterGroup(group.filters[f],filters,havings,false,done);
+
+
+                            }
+
+            }
+
+            //theFilter = theFilter + getFilterSQL(query.groupFilters[g].filters[f]);
+
+        }
+        //}
+
+
+        if (isRoot == true)
+        {
+            done(filters,havings);
+            //console.log('han llegado 1',filters);
+        } else {
+            filters.push(")");
+        }
 }
 
 
@@ -707,10 +882,39 @@ function getFilterSQL(filter,isHaving)
                         result = (filterElementName +' IS NOT NULL ');
                     }
                     if (filter.filterType == "in"  && filter.elementType != 'date') {
-                        result = (filterElementName +' IN '+'('+String(filterValue).split(';')+')');
+                        if (filter.elementType == 'number')
+                        {
+                            result = (filterElementName +' IN '+'('+String(filterValue).split(';')+')');
+                        } else {
+                            var theSplit = filterValue.split(';');
+                            var filterSTR = '';
+                            for (var s in theSplit)
+                                {
+                                 if (s == 0)
+                                    filterSTR += "'"+theSplit[s]+"'";
+                                    else
+                                    filterSTR += ",'"+theSplit[s]+"'";
+                                }
+                            result = (filterElementName +' IN '+'('+filterSTR+')');
+                        }
+
                     }
                     if (filter.filterType == "notIn" && filter.elementType != 'date') {
-                        result = (filterElementName +' NOT IN '+'('+String(filterValue).split(';')+')');
+                        if (filter.elementType == 'number')
+                        {
+                            result = (filterElementName +' NOT IN '+'('+String(filterValue).split(';')+')');
+                        } else {
+                            var theSplit = filterValue.split(';');
+                            var filterSTR = '';
+                            for (var s in theSplit)
+                                {
+                                 if (s == 0)
+                                    filterSTR += "'"+theSplit[s]+"'";
+                                    else
+                                    filterSTR += ",'"+theSplit[s]+"'";
+                                }
+                            result = (filterElementName +' NOT IN '+'('+filterSTR+')');
+                        }
                     }
         }
 
@@ -721,7 +925,6 @@ function getFilterSQL(filter,isHaving)
 
 function getJoins(collectionID,collections,processedCollections)
 {
-console.log('entering');
 var fromSQL = '';
 
     for (var c in collections) {
@@ -839,157 +1042,6 @@ function getOrderBys(collection)
     console.log('he salido de order',JSON.stringify(sort));
     }
 
-
-function getCollectionFilters(collection) {
-    var theFilters = [], condition = false;
-    filters = collection.filters;
-
-    console.log('getCollectionFilters',filters);
-
-    for (var i in filters) {
-        var filter = filters[i];
-
-        console.log('un filtro',JSON.stringify(filter));
-
-        if (filter.group) {
-            console.log('es grupo');
-            theFilters.push(getCollectionFilters(collection, filter.filters));
-        }
-        else if (filter.condition) {
-            if (!condition) condition = filter.conditionType;
-        }
-        else if (filter.filterText1 || filter.filterType == 'notNull' || filter.filterType == 'null' ) {
-            for (var e in collection.schema.elements) {
-                if (filter.elementID == collection.schema.elements[e].elementID) {
-                    var thisFilter = {}, filterValue = filter.filterText1;
-                    var filterElementName = collection.schema.elements[e].elementName;
-
-                    if (collection.schema.elements[e].elementType == 'number') {
-                        filterValue = Number(filterValue);
-                    }
-                    if (collection.schema.elements[e].elementType == 'date') {
-
-                        if (filter.filterType == "in" || filter.filterType == "notIn")
-                        {
-                           thisFilter = dateFilter(filterValue,filter);
-                        } else
-                        thisFilter[filterElementName] = dateFilter(filterValue,filter);
-                    }
-
-                    if (filter.filterType == "equal" && filter.elementType != 'date') {
-                        if (filter.elementType == 'number')
-                            console.log(filterElementName +' = '+filterValue);
-                            else
-                            console.log(filterElementName +' = '+'\''+filterValue+'\'');
-                    }
-                    if (filter.filterType == "diferentThan" && filter.elementType != 'date') {
-                        if (filter.elementType == 'number')
-                                console.log(filterElementName +' <> '+filterValue);
-                                else
-                                console.log(filterElementName +' <> '+'\''+filterValue+'\'');
-                    }
-                    if (filter.filterType == "biggerThan" && filter.elementType != 'date' ) {
-                            if (filter.elementType == 'number')
-                                console.log(filterElementName +' > '+filterValue);
-                                else
-                                console.log(filterElementName +' > '+'\''+filterValue+'\'');
-                    }
-                    if (filter.filterType == "notGreaterThan" && filter.elementType != 'date') {
-                        if (filter.elementType == 'number')
-                                console.log(filterElementName +' <= '+filterValue);
-                                else
-                                console.log(filterElementName +' <= '+'\''+filterValue+'\'');
-                    }
-                    if (filter.filterType == "biggerOrEqualThan" && filter.elementType != 'date') {
-                        if (filter.elementType == 'number')
-                                console.log(filterElementName +' >= '+filterValue);
-                                else
-                                console.log(filterElementName +' >= '+'\''+filterValue+'\'');
-                    }
-                    if (filter.filterType == "lessThan" && filter.elementType != 'date') {
-                        if (filter.elementType == 'number')
-                                console.log(filterElementName +' < '+filterValue);
-                                else
-                                console.log(filterElementName +' < '+'\''+filterValue+'\'');
-                    }
-                    if (filter.filterType == "lessOrEqualThan" && filter.elementType != 'date') {
-                        if (filter.elementType == 'number')
-                                console.log(filterElementName +' <= '+filterValue);
-                                else
-                                console.log(filterElementName +' <= '+'\''+filterValue+'\'');
-                    }
-                    if (filter.filterType == "between" && filter.elementType != 'date') {
-                        if (filter.elementType == 'number')
-                                console.log('BETWEEN '+filterValue+' AND '+filter.filterText2);
-                                else
-                                console.log('BETWEEN '+'\''+filterValue+'\''+' AND '+'\''+filter.filterText2+'\'');
-                    }
-                    if (filter.filterType == "notBetween" && filter.elementType != 'date') {
-                        if (filter.elementType == 'number')
-                                console.log('NOT BETWEEN '+filterValue+' AND '+filter.filterText2);
-                                else
-                                console.log('NOT BETWEEN '+'\''+filterValue+'\''+' AND '+'\''+filter.filterText2+'\'');
-                    }
-                    if (filter.filterType == "contains") {
-                        console.log(filterElementName +' LIKE '+'\'%'+filterValue+'%\'');
-                    }
-                    if (filter.filterType == "notContains") {
-                        console.log(filterElementName +' NOT LIKE '+'\'%'+filterValue+'%\'');
-                    }
-                    if (filter.filterType == "startWith") {
-                        console.log(filterElementName +' LIKE '+'\''+filterValue+'%\'');
-                    }
-                    if (filter.filterType == "notStartWith") {
-                        console.log(filterElementName +' NOT LIKE '+'\''+filterValue+'%\'');
-                    }
-                    if (filter.filterType == "endsWith") {
-                        console.log(filterElementName +' LIKE '+'\'%'+filterValue+'\'');
-                    }
-                    if (filter.filterType == "notEndsWith") {
-                        console.log(filterElementName +' NOT LIKE '+'\'%'+filterValue+'\'');
-                    }
-                    if (filter.filterType == "like") {
-                        console.log(filterElementName +' LIKE '+'\'%'+filterValue+'%\'');
-                    }
-                    if (filter.filterType == "notLike") {
-                        console.log(filterElementName +' NOT LIKE '+'\'%'+filterValue+'%\'');
-                    }
-                    if (filter.filterType == "null") {
-                        console.log(filterElementName +' IS NULL ');
-                    }
-                    if (filter.filterType == "notNull") {
-                        console.log(filterElementName +' IS NOT NULL ');
-                    }
-                    if (filter.filterType == "in"  && filter.elementType != 'date') {
-                        console.log(filterElementName +' IN '+'('+String(filterValue).split(';')+')');
-                    }
-                    if (filter.filterType == "notIn" && filter.elementType != 'date') {
-                        console.log(filterElementName +' NOT IN '+'('+String(filterValue).split(';')+')');
-                    }
-
-                    if (!isEmpty(thisFilter)) {
-                        theFilters.push(thisFilter);
-                    }
-                }
-            }
-        }
-    }
-
-    if (theFilters.length > 0) {
-        switch(condition) {
-            case 'and': return {$and: theFilters};
-                break;
-            case 'or': return {$or: theFilters};
-                break;
-            case 'andNot': return {$not: theFilters};
-                break;
-            case 'orNot': return {$nor: theFilters};
-                break;
-            default: return {$and: theFilters};
-        }
-    }
-    else return {};
-}
 
 
 function dateFilter(filterValue, filter)

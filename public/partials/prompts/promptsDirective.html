@@ -1,0 +1,11 @@
+<div class="row">
+    <div class="col-sm-12 prompt-label">{{label}}</div>
+    <div class="col-sm-12">
+        <select class="form-control" ng-model="selectedValue" ng-change="promptChanged(elementId)">
+            <option value="{{record[valueField]}}" ng-repeat="record in getPrompt(elementId).data">{{record[showField]}}</option>
+        </select>
+    </div>
+    <div ng-if="description != undefined" class="col-sm-12">
+        <p  class="prompt-description" ng-model="description"></p>
+    </div>
+</div>

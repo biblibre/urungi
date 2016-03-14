@@ -14,6 +14,9 @@
     <a ng-if="user.pagesCreate || counts.pages > 0" href="/#/pages" class="list-group-item">
         <span><i class="fa fa-newspaper-o"></i></span> Pages <span class="badge">{{counts.pages}}</span>
     </a>
+    <a ng-if="user.exploreData" href="/#/explore" class="list-group-item">
+        <span><i class="fa fa-sun-o"></i></span> Explore
+    </a>
     <!--
     <a href="/#/history" class="list-group-item">
         <span><i class="fa fa-history"></i></span> History
@@ -50,5 +53,8 @@
     </a>
     <a ng-show="isWSTADMIN" href="/#/users" class="list-group-item" style="background-color: #72A230;color: #FFFFFF">
         <span><i class="fa fa-user"></i></span> Users  <span class="badge">{{counts.users}}</span>
+    </a>
+    <a href="http://www.widestage.com" class="list-group-item" style="background-color: #000;color: #FFFFFF;text-align: center">
+        <img src="images/logowidestage.png"/>
     </a>
 </div>

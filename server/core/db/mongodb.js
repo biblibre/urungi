@@ -109,8 +109,8 @@ exports.execOperation = function(operation, params, done) {
 
 };
 
-exports.processCollections = function(collections, dataSource, params,thereAreJoins, done) {
-    processCollections(collections, dataSource, params,thereAreJoins, done);
+exports.processCollections = function(req,collections, dataSource, params,thereAreJoins, done) {
+    processCollections(req,collections, dataSource, params,thereAreJoins, done);
 };
 
 
@@ -742,7 +742,7 @@ function isEmpty(obj) {
     return true;
 }
 
-function processCollections(collections, dataSource, params, thereAreJoins, done,  index) {
+function processCollections(req,collections, dataSource, params, thereAreJoins, done,  index) {
     var index = (index) ? index : 0;
     var collection = (collections[index]) ? collections[index] : false;
     var result = (result) ? result : [];
@@ -786,23 +786,19 @@ function processCollections(collections, dataSource, params, thereAreJoins, done
     var sort = {};
 
     if (collection.order) {
-        console.log('there is order');
+
         for (var i in collection.order) {
-            console.log('there is order for each');
+
             for (var e in collection.schema.elements) {
                 if (collection.order[i] != undefined)
                 {
                     if (collection.order[i].elementID == collection.schema.elements[e].elementID) {
-                        console.log('there is order founded');
+
                         var found = false;
 
                         for (var c in collection.columns) {
                             if (collection.columns[c].elementID == collection.schema.elements[e].elementID) {
 
-
-                                console.log('there is order found',collection.schema.elements[e].elementName);
-
-                                console.log('there is order found 2',JSON.stringify(collection.order));
 
                                 if (collection.columns[c].aggregation) {
                                     found = true;
@@ -1056,7 +1052,7 @@ function processCollections(collections, dataSource, params, thereAreJoins, done
             collection.result = result;
             db.close();
 
-            processCollections(collections, dataSource, params,thereAreJoins, done, index+1);
+            processCollections(req,collections, dataSource, params,thereAreJoins, done, index+1);
         });
     });
 }

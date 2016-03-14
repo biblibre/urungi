@@ -31,10 +31,18 @@
                         <ol>
                             <li ng-repeat="execution in lastExecutions">
                                 <div class="last-executed-item">
+
                                     <a ng-if="execution.type == 'report'" href="/#/reports/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                     <a ng-if="execution.type == 'dashboard'" href="/#/dashboards/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                     <a ng-if="execution.type == 'page'" href="/#/pages/{{execution.relationedID}}"><i class="fa fa-newspaper-o" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+
+                                    <!--
+                                    <a ng-if="execution.type == 'report'" ><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                    <a ng-if="execution.type == 'dashboard'" ><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                    <a ng-if="execution.type == 'page'" ><i class="fa fa-newspaper-o" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                    -->
                                     <span class="pull-right">{{execution.lastDate}}</span>
+
                                 </div>
                             </li>
                         </ol>
@@ -53,9 +61,16 @@
                         <ol>
                             <li ng-repeat="execution in mostExecutions">
                                 <div class="most-executed-item">
+
                                     <a ng-if="execution.type == 'report'" href="/#/reports/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                     <a ng-if="execution.type == 'dashboard'" href="/#/dashboards/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                     <a ng-if="execution.type == 'page'" href="/#/pages/{{execution.relationedID}}"><i class="fa fa-newspaper-o" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+
+                                    <!--
+                                    <a ng-if="execution.type == 'report'" ><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                    <a ng-if="execution.type == 'dashboard'" ><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                    <a ng-if="execution.type == 'page'" ><i class="fa fa-newspaper-o" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                    -->
 
                                     <span class="badge pull-right">{{execution.count}}</span>
                                 </div>
@@ -72,7 +87,6 @@
 
 <script type="text/ng-template" id="nodes_renderer.html">
     <div data-nodrag ui-tree-handle data-nodrop-enabled class="tree-node tree-node-content tree-node-folder" ng-if="((node.grants.executeReports == true || node.grants.executeDashboards == true) && node.nodeType != 'report' && node.nodeType != 'dashboard')  "> <!--&& node.nodes.length > 0 -->
-        <!--<a class="btn btn-white btn-xs btn-round" ng-if="node.nodes && node.nodes.length > 0" data-nodrag ng-click="toggle(this)"></a>-->
         <span class="fa" ng-class="{'fa-folder': collapsed,'fa-folder-open-o': !collapsed}" ng-click="toggle(this)"></span><span data-nodrag ng-click="toggle(this)" style="padding-left: 5px;">{{node.title}}</span>
     </div>
 
@@ -93,55 +107,4 @@
         </li>
     </ol>
 </script>
-
-<!--
-<div ui-tree class="angular-ui-tree">
-    <ol ui-tree-nodes="" ng-model="list" >
-        <li ng-repeat="node in list" ui-tree-node ng-include="'/partials/spaces/tree-item.html'">
-
-            <div ui-tree-handle>
-                <div ui-tree-handle="" class="tree-node tree-node-content ng-scope ng-binding angular-ui-tree-handle">
-                    <a class="btn btn-success btn-xs ng-scope" ng-if="node.nodes && node.nodes.length > 0" data-nodrag="" ng-click="toggle(this)"><span class="glyphicon glyphicon-chevron-down" ng-class="{'glyphicon-chevron-right': collapsed,'glyphicon-chevron-down': !collapsed}"></span></a>
-                    {{node.title}}
-                    <a class="pull-right btn btn-danger btn-xs" data-nodrag="" ng-click="remove(this)"><span class="fa fa-remove"></span></a>
-                    <a class="pull-right btn btn-primary btn-xs" data-nodrag="" ng-click="newSubItem(this)" style="margin-right: 8px;"><span class="fa fa-plus"></span></a>
-                </div>
-            </div>
-            <ol ui-tree-nodes="" ng-model="node.nodes" >
-                <li ng-repeat="node in node.nodes" ui-tree-node class="angular-ui-tree-node">
-                    <div ui-tree-handle>
-
-                        <div ui-tree-handle="" class="tree-node tree-node-content ng-scope ng-binding angular-ui-tree-handle">
-                            <a class="btn btn-success btn-xs ng-scope" ng-if="node.nodes && node.nodes.length > 0" data-nodrag="" ng-click="toggle(this)"><span class="glyphicon glyphicon-chevron-down" ng-class="{'glyphicon-chevron-right': collapsed,'glyphicon-chevron-down': !collapsed}"></span></a>
-                            {{subItem.title}}
-                            <a class="pull-right btn btn-danger btn-xs" data-nodrag="" ng-click="remove(this)"><span class="fa fa-remove"></span></a>
-                            <a class="pull-right btn btn-primary btn-xs" data-nodrag="" ng-click="newSubItem(this)" style="margin-right: 8px;"><span class="fa fa-plus"></span></a>
-                        </div>
-                    </div>
-                </li>
-            </ol>
-        </li>
-    </ol>
-</div> -->
-
-       <!--
-<script type="text/ng-template" id="nodes_renderer.html" >
-    <div ui-tree class="tree-node tree-node-content">
-        <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" data-nodrag ng-click="toggle(this)"><span
-                class="fa"
-                ng-class="{
-          'fa-chevron-right': collapsed,
-          'fa-chevron-down': !collapsed
-        }"></span></a>
-        {{node.title}}
-        <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this)"><span
-                class="glyphicon glyphicon-remove"></span></a>
-        <a class="pull-right btn btn-primary btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span
-                class="glyphicon glyphicon-plus"></span></a>
-    </div>
-    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
-        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
-        </li>
-    </ol>
-</script>  -->
 

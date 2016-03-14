@@ -1907,6 +1907,12 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     margin-left: 0px;
 }
 
+.incomplete-filter {
+    border: 1px solid #ff0000;
+    background-color: #f2dada;
+
+}
+
 
 
 

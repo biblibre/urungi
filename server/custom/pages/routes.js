@@ -5,6 +5,7 @@ module.exports = function (app) {
     app.get('/api/pages/find-all', restrict, Pages.PagesFindAll);
     app.get('/api/pages/find-one', restrict, Pages.PagesFindOne);
     app.post('/api/pages/create', restrict, Pages.PagesCreate);
+    app.post('/api/pages/duplicate', restrict, Pages.PagesDuplicate);
     app.post('/api/pages/update/:id', restrict, Pages.PagesUpdate);
     app.post('/api/pages/delete/:id', restrict, Pages.PagesDelete);
     app.get('/api/pages/get/:id', restrict, Pages.getPage);

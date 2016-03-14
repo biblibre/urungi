@@ -29,22 +29,18 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
     this.getReportData = function($scope,report,params, done) {
         getReportData($scope,report, params, done);
     };
+
     function getReportData($scope,report, params, done) {
-        //console.log('getReportData');
 
 
             params.query = report.query;
 
 
             connection.get('/api/reports/get-data', params, function(data) {
-                //console.log('me he traido los datos',JSON.stringify(data));
                 prepareData($scope,report,data, function(result)
                 {
                     done(result);
-                    //console.log('resultados',JSON.stringify(result));
                 });
-
-                //done(data);
             });
 
     };
@@ -86,9 +82,9 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
     }
 
-    this.getReport = function($scope, id,mode, done) {
+    this.getReport = function($scope, id,mode,isLinked, done) {
         this.scope = $scope;
-        connection.get('/api/reports/get-report/'+id, {id: id, mode: mode}, function(data) {
+        connection.get('/api/reports/get-report/'+id, {id: id, mode: mode, linked:isLinked}, function(data) {
             if (data.item)
             {
                 $scope.columns = [];
@@ -194,7 +190,7 @@ function clone(obj) {
 
     this.getReportBlock = function($scope, id, done)
     {
-        this.getReport($scope,id,'none', function(report){
+        this.getReport($scope,id,'none',false, function(report){
 
             if (!report)
             {
@@ -660,8 +656,6 @@ function clone(obj) {
         var query = {};
         query.datasources = [];
 
-        console.log('the filter attribute ', attribute);
-
         var datasourcesList = [];
         var layersList = [];
         datasourcesList.push(attribute.datasourceID);
@@ -706,6 +700,8 @@ function clone(obj) {
         }
 
         query.layers = layersList;
+        query.order = [];
+        query.order.push(attribute);
 
 
 
@@ -720,7 +716,6 @@ function clone(obj) {
             $scope.errorMsg = (data.result === 0) ? data.msg : false;
             $scope.page = data.page;
             $scope.pages = data.pages;
-            //$scope.data = data;
 
         });
 
@@ -764,14 +759,12 @@ function clone(obj) {
                 }
 
                 new Morris.Line(chartParams).on('click', function(i, row){
-                    console.log('yeah clicked on: ', i, row);
                     var params = {};
                     params.i = i;
                     params.row = row;
                     $scope.reportClicked(id,params);
 
                 });
-
                 done(0);
                 return;
             });
@@ -787,11 +780,6 @@ function clone(obj) {
 
             var theXKey = report.properties.xkeys[0].collectionID.toLowerCase()+'_'+report.properties.xkeys[0].elementName;
             if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
-
-            //the X key no puede ser un valor agregado??
-            //if ($scope.selectedReport.properties.xkeys[0].aggregation) theXKey += $scope.selectedReport.properties.xkeys[0].aggregation;
-
-            //console.log('The X KEY '+theXKey);
 
             var chartParams = {
                 element: id,
@@ -1418,6 +1406,8 @@ function clone(obj) {
 
 
                 var theValue = '<span>{{item.'+elementName+'}}</span>';
+                if (report.properties.columns[i].elementType === 'number')
+                     theValue = '<span>{{item.'+elementName+' | number}}</span>';
 
                 if (report.properties.columns[i].signals)
                 {
@@ -1467,6 +1457,9 @@ function clone(obj) {
                     }
                     htmlCode += theStyle +'</style>'
                     //theValue = '<span ng-class="{customStyle1_'+i+' : {{item.'+elementName+'}} > 0 , customStyle2_'+i+' : {{item.'+elementName+'}} == 0}"  >{{item.'+elementName+'}}</span>';
+                    if (report.properties.columns[i].elementType === 'number')
+                    theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+' | number}}</span>';
+                    else
                     theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+'}}</span>';
 
                 }
@@ -1477,10 +1470,16 @@ function clone(obj) {
                 {
                     if (report.properties.columns[i].link.type == 'report')
                     {
+                       if (report.properties.columns[i].elementType === 'number')
+                       theValue = '<a class="columnLink" href="/#/reports/'+report.properties.columns[i].link._id+'/'+report.properties.columns[i].link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+' | number}}</a>'
+                       else
                         theValue = '<a class="columnLink" href="/#/reports/'+report.properties.columns[i].link._id+'/'+report.properties.columns[i].link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
                     }
                     if (report.properties.columns[i].link.type == 'dashboard')
                     {
+                        if (report.properties.columns[i].elementType === 'number')
+                        theValue = '<a class="columnLink" href="/#/dashboards/'+report.properties.columns[i].link._id+'/'+report.properties.columns[i].link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+' | number}}</a>'
+                        else
                         theValue = '<a class="columnLink" href="/#/dashboards/'+report.properties.columns[i].link._id+'/'+report.properties.columns[i].link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
                     }
                 }
@@ -1499,18 +1498,6 @@ function clone(obj) {
                 if (report.properties.columns[i].elementType === 'number')
                     defaultAligment = 'text-align: right;'
 
-               /*
-                if (i == report.properties.columns.length -1) //the last column
-                {
-                    htmlCode += '<div class="'+colClass+' popover-primary" style="'+columnFormat+colWidth+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+report.properties.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
-                }
-                else {*/
-
-                /*
-                if item.'+elementName+' comparador valor1 = {estilo 1}
-                if item.'+elementName+' comparador valor2 = {estilo 1}
-
-                */
                     htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+report.properties.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick('+hashedID+',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
                 //}
             }
@@ -1558,35 +1545,30 @@ function clone(obj) {
 
         var htmlCode = '';
 
-        console.log('calculateForColumn');
-
-
-
 
         if (report.properties.columns[columnIndex].operationSum === true)
         {
-            htmlCode += '<div  style=""><span class="calculus-label">SUM:</span><span class="calculus-value"> '+calculateSumForColumn($scope,report,columnIndex,elementName)+'</span> </div>';
+            htmlCode += '<div  style=""><span class="calculus-label">SUM:</span><span class="calculus-value"> '+numeral(calculateSumForColumn($scope,report,columnIndex,elementName)).format('0,0.00')+'</span> </div>';
         }
 
         if (report.properties.columns[columnIndex].operationAvg === true)
         {
-            htmlCode += '<div  style=""><span class="calculus-label">AVG:</span><span class="calculus-value"> '+calculateAvgForColumn($scope,report,columnIndex,elementName)+'</span> </div>';
+            htmlCode += '<div  style=""><span class="calculus-label">AVG:</span><span class="calculus-value"> '+numeral(calculateAvgForColumn($scope,report,columnIndex,elementName)).format('0,0.00')+'</span> </div>';
         }
 
         if (report.properties.columns[columnIndex].operationCount === true)
         {
-            htmlCode += '<div  style=""><span class="calculus-label">COUNT:</span><span class="calculus-value"> '+calculateCountForColumn($scope,report,columnIndex,elementName)+'</span> </div>';
+            htmlCode += '<div  style=""><span class="calculus-label">COUNT:</span><span class="calculus-value"> '+numeral(calculateCountForColumn($scope,report,columnIndex,elementName)).format('0,0.00')+'</span> </div>';
         }
 
         if (report.properties.columns[columnIndex].operationMin === true)
         {
-            htmlCode += '<div  style=""><span class="calculus-label">MIN:</span><span class="calculus-value"> '+calculateMinimumForColumn($scope,report,columnIndex,elementName)+'</span> </div>';
+            htmlCode += '<div  style=""><span class="calculus-label">MIN:</span><span class="calculus-value"> '+numeral(calculateMinimumForColumn($scope,report,columnIndex,elementName)).format('0,0.00')+'</span> </div>';
         }
         if (report.properties.columns[columnIndex].operationMax === true)
         {
-            htmlCode += '<div  style=""><span class="calculus-label">MAX:</span><span class="calculus-value"> '+calculateMaximumForColumn($scope,report,columnIndex,elementName)+'</span> </div>';
+            htmlCode += '<div  style=""><span class="calculus-label">MAX:</span><span class="calculus-value"> '+numeral(calculateMaximumForColumn($scope,report,columnIndex,elementName)).format('0,0.00')+'</span> </div>';
         }
-
 
         return htmlCode;
 
@@ -1764,7 +1746,7 @@ function clone(obj) {
             '      </ul>'
             +'</li>'
             +'<li>'
-            +'      <a ng-click="changeColumnSignals('+column+','+hashedID+')">Signals</a>'
+            +'      <a ng-click="changeColumnSignals('+column+','+hashedID+')">Conditional format</a>'
             +'</li>'
             /*+'<li>'
             +'      <a href="">Hide components</a>'
@@ -1893,18 +1875,25 @@ function clone(obj) {
                 if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
 
                 console.log('el valor ' + theYKey+' the ID '+id+ ' the type '+report.properties.style);
-                var theValue = theData[0][theYKey];
+                var theValue = '{{'+theData[0][theYKey] +'| number}}';
+
+
 
                 if (report.properties.valueType == 'percentage')
                 {
-                    theValue = theData[0].value + ' %';
+                    theValue = '{{'+theData[0].value +'| number}} %';
                 }
 
                 if (report.properties.valueType == 'currency' && report.properties.currencySymbol)
                 {
-                    theValue = theData[0].value + ' '+report.properties.currencySymbol;
+                    theValue = '{{'+theData[0].value +'| number}}'+ ' '+report.properties.currencySymbol;
+
                 }
 
+                var theValueText = '';
+
+                if (report.properties.valueText != undefined)
+                    theValueText = report.properties.valueText;
 
                 var theEvolution = theData[0].evolution + ' %';
 
@@ -1943,7 +1932,7 @@ function clone(obj) {
                     htmlCode += '   </div>';
                     htmlCode += '   <div class="xe-label">';
                     htmlCode += '       <strong class="num" style="color:'+report.properties.mainFontColor+'">'+theValue+'</strong>';
-                    htmlCode += '       <span style="color:'+report.properties.descFontColor+'">'+report.properties.valueText+'</span>';
+                    htmlCode += '       <span style="color:'+report.properties.descFontColor+'">'+theValueText+'</span>';
                     htmlCode += '   </div>';
                     htmlCode += '</div>';
 

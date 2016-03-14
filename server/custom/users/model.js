@@ -124,7 +124,6 @@ usersSchema.statics.setStatus = function(req, done){
 
     if (req.session.isWSTADMIN)
     {
-        console.log('entrando aqui 1');
 
         var userID = req.body.userID;
         var userStatus = req.body.status;
@@ -134,10 +133,8 @@ usersSchema.statics.setStatus = function(req, done){
             return;
         }
         this.findOne({"_id" : userID,"companyID": req.user.companyID}, function (err, findUser) {
-            console.log('entrando aqui 2');
                 if (findUser)
                 {
-                    console.log('entrando aqui 3');
                     Users.update({
                         "_id" : userID
                     }, {
@@ -161,24 +158,19 @@ usersSchema.statics.setStatus = function(req, done){
 
 
 usersSchema.statics.isValidUserPassword = function(username, password, done) {
-    //console.log('entering is valid',password);
+
     this.findOne({$or:[ {'userName': username}, {'email': username} ],status:'active'}, function(err, user){
         if(err) return done(err);
         if(!user) return done(null, false, { message : 'User'+' '+username+' '+'does not exists or is inactive' });
         if(user.status == 0) return done(null, false, { message : 'User not verified '+username });
 
-        //if (user)
-          //  console.log('user found',JSON.stringify(user));
         hash(password, user.salt, function(err, hash){
             if(err) return done(err);
-            //console.log('checking hash');
             if(hash == user.hash || password == user.hash+user.salt) {
-               // console.log('password match');
                 return done(null, user);
 
             }
             else {
-                //console.log('password not match');
                 done(null, false, { message : 'Password do not match' });
 
             }

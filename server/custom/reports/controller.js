@@ -70,15 +70,17 @@ exports.GetReport = function(req,res){
 
         if (req.query.mode == 'execute' && result.item)
         {
-
-            //Annotate the execution in statistics
-
+            //Note the execution in statistics
             var statistics = connection.model('statistics');
             var stat = {};
             stat.type = 'report';
             stat.relationedID = result.item._id;
             stat.relationedName = result.item.reportName;
-            stat.action = 'execute';
+
+            if (req.query.linked == true)
+                stat.action = 'execute link';
+                else
+                stat.action = 'execute';
             statistics.save(req, stat, function() {
 
             });
@@ -275,7 +277,7 @@ exports.ReportsGetData = function(req, res) {
     //console.log('entering get report data',JSON.stringify(query.layers));
     //debug(query);
 
-    processDataSources(query.datasources,query.layers, {page: (data.page) ? data.page : 1},query, function(result) {
+    processDataSources(req,query.datasources,query.layers, {page: (data.page) ? data.page : 1},query, function(result) {
         //debug(result);
         serverResponse(req, res, 200, result);
     });
@@ -311,7 +313,7 @@ function processDataSource(datasourceQuery, done)
 
 }
 
-function processDataSources(dataSources,layers, params,query, done, result, index) {
+function processDataSources(req,dataSources,layers, params,query, done, result, index) {
     var index = (index) ? index : 0;
     var dataSource = (dataSources[index]) ? dataSources[index] : false;
     var result = (result) ? result : [];
@@ -392,7 +394,7 @@ function processDataSources(dataSources,layers, params,query, done, result, inde
                         case 'MONGODB':
                             var mongodb = require('../../core/db/mongodb.js');
 
-                            mongodb.processCollections(dataSource.collections, dts, params,thereAreJoins, function(data) {
+                            mongodb.processCollections(req,dataSource.collections, dts, params,thereAreJoins, function(data) {
 
                                 /*
                                 for (var i in data) {
@@ -417,23 +419,23 @@ function processDataSources(dataSources,layers, params,query, done, result, inde
 
 
 
-                                processDataSources(dataSources,layers, params, query, done, result, index+1);
+                                processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                             });
 
                         case 'POSTGRE':
                             var postgre = require('../../core/db/postgresql.js');
 
-                            postgre.processCollections(query,dataSource.collections, dts, params,thereAreJoins, function(data) {
+                            postgre.processCollections(req,query,dataSource.collections, dts, params,thereAreJoins, function(data) {
 
 
                                //console.log('not merged results',JSON.stringify(dataSource.collections[0].result))
                                 result = data;
 
-                                processDataSources(dataSources,layers, params, query, done, result, index+1);
+                                processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                             });
                     }
                 } else {
-                    processDataSources(dataSources,layers, params, query, done, result, index+1);
+                    processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                 }
             });
         }

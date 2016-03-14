@@ -3,18 +3,13 @@ app.service('c3Charts' , function () {
 
 this.rebuildChart = function(chart)
     {
-        console.log('rebuilding chart');
 
         var theValues = [];
         var theNames = {};
 
-        //console.log('axisfield',chart.dataAxis.id)
-
         var axisField = '';
         if (chart.dataAxis)
             axisField = chart.dataAxis.id;
-
-            console.log('axisfield',axisField);
 
         var axisIsInQuery = false;
 
@@ -56,11 +51,11 @@ this.rebuildChart = function(chart)
                 if (chart.query.columns[qc].aggregation)
                         elementName = chart.query.columns[qc].collectionID.toLowerCase()+'_'+chart.query.columns[qc].elementName+chart.query.columns[qc].aggregation;
 
-                console.log('column id',elementName,chart.dataColumns[i].id)
+              //  console.log('column id',elementName,chart.dataColumns[i].id)
                 if (chart.dataColumns[i].id == elementName)
                 {
                     columnFound = true; //columnsForDelete.push(i);
-                    console.log('column found',elementName);
+                //    console.log('column found',elementName);
                 }
 
             }
@@ -68,16 +63,16 @@ this.rebuildChart = function(chart)
             if (columnFound == false)
                {
                 columnsForDelete.push(i);
-                console.log('pushing a column for delete',i)
+                //console.log('pushing a column for delete',i)
                 }
         }
 
-        console.log('there are ',columnsForDelete.length,'columns for delete');
+        //console.log('there are ',columnsForDelete.length,'columns for delete');
 
         for (var cfd in columnsForDelete)
         {
            chart.dataColumns.splice(columnsForDelete[cfd],1);
-           console.log('deleting ',columnsForDelete)
+          // console.log('deleting ',columnsForDelete)
         }
 
         //remove query if not dataColumns and not data Axis
@@ -89,7 +84,7 @@ this.rebuildChart = function(chart)
         }
 
 
-        console.log('the data columns ',chart.dataColumns);
+       // console.log('the data columns ',chart.dataColumns);
 
 
         for (var i in chart.dataColumns)
@@ -107,31 +102,61 @@ this.rebuildChart = function(chart)
         if (chart.query)
         {
             var theChartCode = '#'+chart.chartID;
-                console.log('the values',theChartCode ,theValues, chart.query.data);
 
                 if (!chart.height)
                     chart.height = 300;
 
+                if (chart.type == 'pie' || chart.type == 'donut')
+                {
 
-                var chartCanvas = c3.generate({
-                    bindto: theChartCode,
-                    data: {
-                        json: chart.query.data,
-                        keys: {
-                            x: axisField,
-                            value: theValues
-                        },
-                        names: theNames
-                    },
-                    axis: {
-                        x: {
-                            type: 'category'
+                    var theColumns = [];
+                    if (axisField && theValues)
+                    {
+                        for (var i in chart.query.data)
+                        {
+                            var groupField = chart.query.data[i][axisField];
+                            var valueField = chart.query.data[i][theValues[0]];
+                            theColumns.push([chart.query.data[i][axisField],chart.query.data[i][theValues[0]]]);
                         }
-                    },
-                     size: {
-                        height:chart.height
-                     }
-                });
+                    }
+
+
+                    var chartCanvas = c3.generate({
+                        bindto: theChartCode,
+                        data: {
+                             columns: theColumns,
+                            type : chart.type
+                        },
+
+                         size: {
+                            height:chart.height
+                         }
+                    });
+                } else {
+
+                    var chartCanvas = c3.generate({
+                        bindto: theChartCode,
+                        data: {
+                            json: chart.query.data,
+                            keys: {
+                                x: axisField,
+                                value: theValues
+                            },
+                            names: theNames
+                        },
+                        axis: {
+                            x: {
+                                type: 'category'
+                            }
+                        },
+                         size: {
+                            height:chart.height
+                         }
+                    });
+
+                }
+
+
 
             chart.chartCanvas = chartCanvas;
         }
@@ -142,18 +167,100 @@ this.rebuildChart = function(chart)
                 chart.chartCanvas.transform(chart.dataColumns[c].type, chart.dataColumns[c].id);
 
         }
+    }
+
+    this.refreshChartData = function(chart)
+    {
+            console.log('refreshing data for chart',chart.query.data);
+
+            //chart.chartCanvas.load.json = chart.query.data;
 
 
+            if (chart.dataAxis)
+            axisField = chart.dataAxis.id;
+
+            var theValues = [];
+            var theNames = [];
+
+            for (var i in chart.dataColumns)
+                {
+                    if (chart.dataColumns[i].id != undefined)
+                    {
+                        theValues.push(chart.dataColumns[i].id);
+                        var valueName = chart.dataColumns[i].id;
+
+                        theNames[valueName] = chart.dataColumns[i].elementLabel;
+                    }
+                }
+
+            if (chart.type == 'pie' || chart.type == 'donut')
+                {
+                    var theColumns = [];
+                    if (axisField && theValues)
+                    {
+                        for (var i in chart.query.data)
+                        {
+                            var groupField = chart.query.data[i][axisField];
+                            var valueField = chart.query.data[i][theValues[0]];
+                            theColumns.push([chart.query.data[i][axisField],chart.query.data[i][theValues[0]]]);
+                        }
+                    }
+
+                    chart.chartCanvas.data({
+                             columns: theColumns,
+                            type : chart.type
+                        });
+
+
+                } else {
+                    chart.chartCanvas.data({
+                            json: chart.query.data,
+                            keys: {
+                                x: axisField,
+                                value: theValues
+                            },
+                            names: theNames
+                    });
+
+                }
+
+
+
+
+            /*
+            .load({
+        json: [
+            {name: 'www.site1.com', upload: 800, download: 500, total: 400},
+            {name: 'www.site2.com', upload: 600, download: 600, total: 400},
+            {name: 'www.site3.com', upload: 400, download: 800, total: 500},
+            {name: 'www.site4.com', upload: 400, download: 700, total: 500},
+        ],
+        keys: {
+            value: ['upload', 'download'],
+        }*/
+
+            /*
+            var chartCanvas = c3.generate({
+                        bindto: theChartCode,
+                        data: {
+                            json: chart.query.data,
+                            keys: {
+                                x: axisField,
+                                value: theValues
+                            },
+                            names: theNames
+                        }
+            */
     }
 
 
     this.deleteChartColumn = function(chart,column)
     {
 
-        console.log('deleting chart column',chart,column);
+        //console.log('deleting chart column',chart,column);
 
         var index = chart.dataColumns.indexOf(column);
-        console.log('The column index is: ',index);
+        //console.log('The column index is: ',index);
         if (index > -1) {
 
             chart.dataColumns.splice(index, 1);
@@ -191,7 +298,7 @@ this.rebuildChart = function(chart)
         //if (column == '')
         //var index = $scope.selectedChart.dataColumns.indexOf(column);
         //spline, bar , line, area, area-spline, scatter , pie, donut
-        console.log('column Type',column.type,column);
+        //console.log('column Type',column.type,column);
 
         if (column.type == 'line')
         {
@@ -221,12 +328,14 @@ this.rebuildChart = function(chart)
                             if (column.type == 'scatter')
                             {
                                 column.type = 'pie';
-                                chart.chartCanvas.transform('pie', column.id);
+                                //chart.chartCanvas.transform('pie', column.id);
+                                chart.chartCanvas.transform('pie');
                             } else
                             if (column.type == 'pie')
                             {
                                 column.type = 'donut';
-                                chart.chartCanvas.transform('donut', column.id);
+                                //chart.chartCanvas.transform('donut', column.id);
+                                chart.chartCanvas.transform('donut');
                             } else
                             if (column.type == 'donut')
                             {
@@ -236,31 +345,43 @@ this.rebuildChart = function(chart)
 
     }
 
+    this.changeChartColumnColor = function(chart,column,color)
+    {
+        console.log('changign color',color,column.id);
+        //chart.chartCanvas.data.colors[column.id] = color;
+        var column = "'"+column.id+"'";
+        chart.chartCanvas.data.colors[column] = d3.rgb('#ff0000').darker(1)
+    }
+
     this.getChartHTML = function (theChartID)
     {
-        //return '<div>hola chart</div>';
-        /*$scope.lastChartID = $scope.lastChartID+1;
-        var theChartID = 'chart'+$scope.lastChartID;
-        $scope.charts.push({charID:theChartID,dataPoints:[],dataColumns:[],datax:{},height:300});*/
-        //return '<c3chart page-block ndType="c3Chart"  bindto-id="'+theChartID+'" chart-data="charts['+$scope.lastChartID+'].dataPoints" chart-columns="charts['+$scope.lastChartID+'].datacolumns" chart-x="charts['+$scope.lastChartID+'].datax">'+
-        //return '<div ndType="c3Chart" id="'+theChartID+'" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']"><c3chart page-block  bindto-id="'+theChartID+'" >'+
-        return '<c3chart page-block  bindto-id="'+theChartID+'" ndType="c3Chart" id="'+theChartID+'" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']">'+
-
-                   //' <chart-column column-id="data-1"'+
-                   //'    column-values="30,200,100,400,150,250" '+
-                   //'   column-type="line"/>  '+
-
+        /*
+        return '<div ng-if="!getChartDataAxis(\''+theChartID+'\')" class="alert alert-warning" style="top:0px;">No selected dimension for this chart, please, drop one Dimension!!</div>'+
+               '<div ng-if="!getChartDataColumns(\''+theChartID+'\')" class="alert alert-warning" style="top:100px;">No selected metrics for this chart, please, drop at least one metric!!</div>'+
+        */
+        return     '<c3chart page-block  bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="'+theChartID+'" ndType="c3Chart" id="'+theChartID+'" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']">'+
                    '<chart-axis>'+
                     '<chart-axis-x axis-id="x" axis-type="timeseries" axis-x-format="%Y-%m-%d %H:%M:%S">'+
                         '<chart-axis-x-tick tick-format-time="%H:%m:%s"/>'+
-                    '</chart-axis-x>'+
-                '</chart-axis>'+
+                        '</chart-axis-x>'+
+                    '</chart-axis>'+
                    '</c3chart>';
+    }
+
+/*
+    this.getChartLayerHTML = function (theChartID)
+    {
+        return     '<div class="container chart-temporary-layer" id="'+theChartID+'" ndType="c3ChartLayer" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']">'+
+                        '<div ng-if="!getChartDataAxis(\''+theChartID+'\')" class="alert alert-warning">No selected dimension for this chart, please, drop one Dimension!!</div>'+
+                        '<div ng-if="!getChartDataColumns(\''+theChartID+'\')" class="alert alert-warning">No selected metrics for this chart, please, drop at least one metric!!</div>'+
+                   '</div>';
 
 
 
 
     }
+*/
+
 
    this.applyChartSettings = function($scope)
     {
@@ -284,7 +405,7 @@ this.rebuildChart = function(chart)
 
         for (var i in $scope.selectedChart.dataColumns)
         {
-           console.log(JSON.stringify($scope.selectedChart.dataColumns[i]));
+          // console.log(JSON.stringify($scope.selectedChart.dataColumns[i]));
 
             theValues.push($scope.selectedChart.dataColumns[i].object.elementName);
             theNames.push($scope.selectedChart.dataColumns[i].object.elementLabel);
@@ -367,6 +488,48 @@ this.rebuildChart = function(chart)
     //$scope.selectedChart.dataPoints = $scope.chartModal.dataxObject.query.data;
     //console.log('data selected',JSON.stringify($scope.chartModal.dataxObject.query));
     //console.log('This chart properties have changed',JSON.stringify($scope.selectedChart));
+
+    }
+
+
+    this.applyChartSettings4Pie = function($scope)
+    {
+
+        var theValues = [];
+        var theNames = [];
+
+        for (var i in $scope.selectedChart.dataColumns)
+        {
+          // console.log(JSON.stringify($scope.selectedChart.dataColumns[i]));
+
+            theValues.push($scope.selectedChart.dataColumns[i].object.elementName);
+            theNames.push($scope.selectedChart.dataColumns[i].object.elementLabel);
+        }
+
+
+        $scope.vm = {};
+
+
+        var chart = c3.generate({
+        bindto: '#chart1',
+        data: {
+            json: $scope.selectedChart.query.data,
+            keys: {
+                x: 'wst5883cbeb81db4ae3b1d75e8371097e9a_device_name', // it's possible to specify 'x' when category axis
+                value: theValues,
+            },
+            names: theNames
+        },
+        axis: {
+            x: {
+                type: 'category'
+            }
+        } /*,
+        legend: {
+            show:false
+        }*/
+    });
+
 
     }
 

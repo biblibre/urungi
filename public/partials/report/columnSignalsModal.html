@@ -3,10 +3,10 @@
 
 
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>Signals for column</h4>
+        <h4>Conditional formating for column</h4>
     </div>
     <div class="modal-body">
-        <button class="btn" ng-click="selectedColumn.signals.push({filter:'biggerThan',filterLabel:signalOptions[2].label,color:'#000','background-color':'#EEEEEE','text-align':'left','font-size':'12px','font-weight':'normal','font-style':'normal'})">add new signal</button>
+        <button class="btn" ng-click="selectedColumn.signals.push({filter:'biggerThan',filterLabel:signalOptions[2].label,color:'#000','background-color':'#EEEEEE','text-align':'left','font-size':'12px','font-weight':'normal','font-style':'normal'})">add new format</button>
         <span>for <span style="color:#72A230;font-weight: bold">{{selectedColumn.objectLabel}}</span></span>
         <div class="container-fluid">
             <div class="container-fluid" ng-repeat="signal in selectedColumn.signals" style="border: 1px #ccc solid;margin-bottom: 5px;">
@@ -96,8 +96,9 @@
 
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-        <a ng-click="setColumnSignals()" class="btn btn-primary">Apply</a>
+        <a ng-click="setColumnSignals()" class="btn btn-primary pull-right">Apply</a>
+        <button type="button" class="btn pull-right" data-dismiss="modal">Cancel</button>
+
 
     </div>
 </nd-modal>

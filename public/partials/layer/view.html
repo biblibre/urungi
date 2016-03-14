@@ -1,30 +1,21 @@
 <script src="libs/jsplumb/jquery.jsPlumb-1.7.6-min.js"></script>
 
-<div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
-    <a href="/#/layers" class="btn btn-default pull-left">Cancel</a>
-    <a ng-click="save()" class="btn btn-warning pull-right" style="margin-left: 5px;margin-right: 5px;">Save</a>
+<div class="container-fluid" style="padding-left:25px;padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
+    <h3 class="pull-left">{{_Layer.name}}</h3>
+    <a ng-click="save()" class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;">Save layer</a>
+    <a href="/#/layers" class="btn btn-default pull-right">Cancel</a>
+
 
 </div>
 
 <div class="container-fluid" ng-init="view()">
     <div class="col-md-12">
         <div class="container-fluid" style="margin-bottom: 10px">
-            <h3 class="pull-left">{{_Layer.name}}</h3>
+            <a ng-click="addFolder()" class="btn btn-info btn-small pull-left" style="margin-left: 5px;margin-right: 5px;">Add new folder</a>
             <a ng-click="addDataset()" class="btn btn-info pull-right" style="margin-left: 5px;margin-right: 5px;">Add new dataset</a>
         </div>
     </div>
-    <div class="col-md-4" style="border: 1px solid #ccc;background-color: #ffffff;height: 500px">
-        <div class="container-fluid" style="margin-bottom: 3px;margin-top: 3px">
-            <a ng-click="addFolder()" class="btn btn-info btn-small pull-right" style="margin-left: 5px;margin-right: 5px;">Add new folder</a>
-        </div>
-        <!--
-
-        <div ng-if="element.elementRole == 'dimension' || element.elementRole == 'measure' " ng-repeat="element in  _Layer.objects">
-            <a class="list-group-item schema-element" draggable="true" effect-allowed="copy" draggable-type="custom-object"
-               draggable-data="{theElement: element}">{{element.elementLabel}}</a>
-        </div>
-            -->
-
+    <div class="col-md-4" style="border: 1px solid #ccc;background-color: #ffffff;height: 500px;overflow-y: auto;">
         <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">
         </tg-dynamic-directive>
 
@@ -62,32 +53,9 @@
                 </ul>
             </div>
         </script>
-
-
-        <!--
-        <div class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'ykey')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
-            <ul class="ul-drop no-padding" ng-model="_Layer.objects" ui-sortable="sortableOptions">
-                <li  ng-repeat="element in _Layer.objects">
-                    <div ng-if="element.elementRole == 'dimension' || element.elementRole == 'measure' " class="schema-element">{{element.elementLabel}} </div>
-                    <div ng-if="element.elementRole == 'folder'" class="container-fluid column-zone no-padding" drop-effect="copy" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
-                        <ul class="ul-drop no-padding" ng-model="element.elements" ui-sortable="sortableOptions">
-                            <li  ng-repeat="element2 in element.elements">
-                                <div ng-if="element.elementRole == 'dimension' || element.elementRole == 'measure' " class="schema-element">{{element.elementLabel}} </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-            <div class="dropAlert" ng-show="onlyNumericValuesAlert == true"> <i class="fa fa-exclamation-triangle"></i> Only numeric values are allowed here !</div>
-        </div>-->
-
-
-
     </div>
     <div class="col-md-8">
     <div class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan" id="canvas">
-
-
         <div id="{{collection.collectionID}}"  class="window jtk-node  jsplumb-draggable" style=" left: {{collection.left}}px; top: {{collection.top}}px;" ng-repeat="collection in _Layer.params.schema">
             <div class=" jtk-header " style="overflow: hidden">
 

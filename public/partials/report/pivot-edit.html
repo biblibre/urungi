@@ -1,22 +1,24 @@
-<nd-modal id="reportNameModal">
+
+<nd-modal id="theReportNameModal">
     <!--<div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3></h3>
     </div>-->
     <div class="modal-body">
-        <form class="simple-form" role="form" name="reportForm">
+        <form class="simple-form" role="form" name="reportNameForm">
             <div class="form-group">
                 <label>Report Name</label>
                 <input name="reportName" type="text" class="form-control" ng-model="selectedReport.reportName" ng-required="true" required >
-                <span ng-show="reportForm.reportName.$invalid" class="help-inline">This field is required</span>
+                <span ng-show="reportNameForm.reportName.$invalid" class="help-inline">The report name is a required field</span>
             </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-        <button ng-click="reportNameSave()" ng-disabled="reportForm.$invalid" class="btn btn-primary submit-btn">Save</button>
+        <button ng-click="reportNameSave()" ng-disabled="reportNameForm.$invalid" class="btn btn-primary submit-btn pull-right">Save</button>
+        <button type="button" class="btn pull-right" data-dismiss="modal">Cancel</button>
     </div>
 </nd-modal>
+
 
 
 <nd-modal id="filterPromptsModal">
@@ -54,26 +56,16 @@
                         </label>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
 
 
         <div class="row">
             <div class="col-md-12">
-
                         <div class="form-group no-margin">
                             <label for="field-7" class="control-label">Prompt Instructions</label>
-
                             <textarea ng-model="selectedFilter.promptInstructions" class="form-control autogrow" id="field-7"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
                         </div>
-
-
-
-
-
             </div>
         </div>
 
@@ -88,7 +80,6 @@
 
 
 <div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
-
     <a data-ng-click="reportName()" class="btn btn-success pull-right"  ng-hide="queryID" style="margin-right: 5px">Save Report</a>
     <a data-ng-click="saveQuery()" class="btn btn-success pull-right"  ng-hide="reportID" style="margin-right: 5px">Save Query</a>
     <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
@@ -106,117 +97,27 @@
     <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'indicator', 'btn-default': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="/images/indicator.png"></a>
     <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'gauge', 'btn-default': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="/images/gauge.png"></a>
 
-    <!--
-    <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'vectorMap', 'btn-default': selectedReport.reportType != 'vectorMap'}" ng-click="changeReportType('vectorMap')"><img src="/images/chart_donut.png"></a>
-    <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'pivot', 'btn-default': selectedReport.reportType != 'pivot'}" ng-click="changeReportType('pivot')"><img src="/images/chart_donut.png"></a>
-    -->
 </div>
 
-<!-- <div class="row">
 
-    <form class="simple-form" role="form" name="reportForm">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label>Report Type</label>
-                <select class="form-control" name="reportType" ng-model="selectedReport.reportType"
-                        ng-options="obj.value as obj.label for obj in reportTypes" ng-required="true" required ></select>
-                <span ng-show="reportForm.reportType.$invalid" class="help-inline">This field is required</span>
-            </div>
-            <div class="form-group" ng-show="selectedReport.reportType == 'chart' || selectedReport.reportType == 'indicator' || selectedReport.reportType == 'vectorMap'">
-                <label>Report SubType</label>
-                <select class="form-control" name="reportSubType" ng-model="selectedReport.reportSubType"
-                        ng-options="obj.value as obj.label for obj in reportSubTypes[selectedReport.reportType]" ng-required="true" required ></select>
-                <span ng-show="reportForm.reportSubType.$invalid" class="help-inline">This field is required</span>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-
-            <div ng-show="selectedReport.reportType == 'chart' && (selectedReport.reportSubType == 'bar' || selectedReport.reportSubType == 'line' || selectedReport.reportSubType == 'area')">
-                <div class="form-group">
-                    <label>xkey</label>
-                    <select class="form-control" name="xkey" ng-model="selectedReport.properties.xkey"
-                            ng-options="obj as obj.objectLabel for obj in columns" ng-required="true" required ></select>
-                    <span ng-show="reportForm.xkey.$invalid" class="help-inline">This field is required</span>
-                </div>
-
-                <div class="form-group">
-                    <label>ykeys <i class="fa fa-plus hand-cursor" ng-click="addYKeyField()"></i></label>
-
-                    <div class="row" ng-repeat="key in selectedReport.properties.ykeys">
-                        <div class="col-md-10">
-                            <select class="form-control" name="ykeys" ng-model="key.field"
-                                    ng-options="obj as obj.objectLabel for obj in columns" ng-required="true" required ></select>
-                        </div>
-                        <div class="col-md-2">
-                            <i class="fa fa-times hand-cursor" ng-click="removeFromArray(selectedReport.properties.ykeys, key)"></i>
-                        </div>
-                    </div>
-
-
-
-                    <span ng-show="reportForm.ykeys.$invalid" class="help-inline">This field is required</span>
-                </div>
-
-            </div>
-
-            <div ng-show="selectedReport.reportType == 'chart' && (selectedReport.reportSubType == 'donut')">
-                <div class="form-group">
-                    <label>Value Field</label>
-                    <select class="form-control" name="valueField" ng-model="selectedReport.properties.valueField"
-                            ng-options="obj.elementName as obj.objectLabel for obj in columns" ng-required="true" required ></select>
-                    <span ng-show="reportForm.valueField.$invalid" class="help-inline">This field is required</span>
-                </div>
-                <div class="form-group">
-                    <label>Label Field</label>
-                    <select class="form-control" name="labelField" ng-model="selectedReport.properties.labelField"
-                            ng-options="obj.elementName as obj.objectLabel for obj in columns" ng-required="true" required ></select>
-                    <span ng-show="reportForm.labelField.$invalid" class="help-inline">This field is required</span>
-                </div>
-            </div>
-
-        </div>
-
-    </form>
-</div> -->
 
 <div class="container-fluid" style="border-bottom: 2px solid #72A230; padding: 10px;">
      <h3 class="pull-right" >Query design zone</h3>
 </div>
 
 <div class="container-fluid" style="padding:10px" >
-    <!--
-    <div ng-nestable ng-model="filters" style="background-color: #FF0000; min-height: 40px;padding: 5px;">
-        <div style="background-color: #FFFFFF; min-height: 10px;">
 
-            {{$item.objectLabel}}
-            <div class="dropdown">
-                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    {{$item.filterTypeLabel}}
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
-                    <li ng-repeat="option in getElementFilterOptions($item.elementType)"><a ng-click="setFilterType($item,option)">{{option.label}}</a>
-
-                    </li>
-
-                </ul>
-            </div>
-            <input type="text" ng-model="$item.filterText1"/>
-            <input type="text" ng-model="$item.filterText2"/>
-        </div>
-    </div>  -->
 
     <script type="text/ng-template" id="filtersGroup.html">
         <div class="container-fluid filter-zone no-padding" drop="onDrop($data, $event, 'group', group)" drop-effect="copy" drop-accept="'json/custom-object'" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
             <div class="filter-zone-label pull-right" ng-hide="filters.length > 0">Drop here your filters</div>
-            <ul class="ul-drop no-padding" ng-model="group.filters" ui-sortable="sortableOptions">
+            <ul class="ul-drop no-padding" ng-model="group.filters" >
 
                 <div ng-repeat="filter in group.filters">
 
-                    <li class="filter-box" ng-if="!filter.group && !filter.condition" style="margin-left: 90px;"
-                        drop="onDropOnFilter($data, $event, filter)" drop-effect="copy" drop-accept="'json/custom-object'">
-
+                    <!--<li class="filter-box" ng-if="!filter.group && !filter.condition" style="margin-left: 90px;"
+                        drop="onDropOnFilter($data, $event, filter)" drop-effect="copy" drop-accept="'json/custom-object'">-->
+                    <li class="filter-box" ng-if="!filter.group && !filter.condition" style="margin-left: 90px;">
                         <div class="container-fluid">
                             <form role="form" class="form-inline">
                             <div class="dropdown" style="vertical-align: middle">
@@ -229,12 +130,7 @@
                                     <li ng-repeat="option in getElementFilterOptions(filter.elementType)"><a ng-click="setFilterType(filter,option)">{{option.label}}</a>
 
                                     </li>
-
                                 </ul>
-                                <!--
-                                <input type="text" class="" ng-model="filter.filterText1" ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull')"/>
-                                <button class="btn btn-icon btn-primary btn-sm" ng-click="getDistinctValues(filter)"><i class="fa fa-search"></i></button>
-                                -->
                                 <!-- Array -->
                                 <div class="form-group" ng-show="(filter.values != undefined && filter.elementType == 'array' && (filter.filterType != 'in' && filter.filterType != 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
 

@@ -31,7 +31,6 @@ exports.UsersCreate = function(req,res){
         if (req.body.sendPassword == true && thePassword != undefined)
         {
             var recipients = [];
-            //recipients.push({userEmail:'hromero@db-team.com',userFirstName:'mene',userNick:'meneNick',userPassword:thePassword});
             recipients.push(req.body);
             sendEmailTemplate('newUserAndPassword',recipients,'email','welcome to widestage');
         }
@@ -39,24 +38,7 @@ exports.UsersCreate = function(req,res){
         serverResponse(req, res, 200, result);
     });
 
-   /*
-    controller.create(req, function(result){
-        //generate and send password if need
-        console.log('before sending password',JSON.stringify(req.body));
-        console.log('the password',thePassword);
-        if (req.body.sendPassword == true && thePassword != undefined)
-        {
-            console.log('sending pass',JSON.stringify(result));
-            //{"result":1,"msg":"Item created","item":{"__v":0,"status":"active","username":"mene5","name":"mene5","email":"qwerqerqer","companyID":"COMPID","nd_trash_deleted":false,"_id":"55e6ab3a5248aeaa20251091","startDate":"2015-09-02T07:54:34.973Z","filters":[],"roles":[]}}
 
-            var recipients = [];
-            recipients.push({userEmail:'hromero@db-team.com',userFirstName:'mene',userNick:'meneNick',userPassword:thePassword});
-
-            sendEmailTemplate('newUserAndPassword',recipients,'userEmail','welcome to widestage');
-        }
-
-        serverResponse(req, res, 200, result);
-    }); */
 };
 
 
@@ -126,8 +108,6 @@ exports.UsersFindOne = function(req,res){
 
 exports.logout = function(req,res){
 
-    //cache.close();
-    //req.session.destroy();
     req.logOut();
     res.clearCookie('remember_me');
     req.session.loggedIn = false;
@@ -152,19 +132,6 @@ exports.rememberPassword = function(req,res){
 };
 
 exports.changeMyPassword = function(req,res){
-
-   /*
-    Users.findOne({ hash_change_password: body.hash }, function (err, findUser) {
-        if(findUser){
-            Users.changePassword(req, function(result){
-                serverResponse(req, res, 200, result);
-            });
-        }else{
-            res.send(200, {result: 0, msg: 'Invalid hash'});
-        }
-    });
-
-    */
 
 
     if (req.body.pwd1 && req.body.pwd2)
@@ -200,11 +167,6 @@ exports.getCounts = function(req,res){
     var userID = req.user.id;
     var companyID = req.user.companyID;
     var theCounts = {};
-
-    //Get all reports for the user
-
-    //Get all dashboards for the user
-
 
     //Only for WSTADMIN - these counts are only for the WSTADMIN role
     var isWSTADMIN = false;
@@ -269,7 +231,12 @@ exports.getCounts = function(req,res){
             var Dashboards = connection.model('Dashboards');
             Dashboards.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, dashCount) {
                 theCounts.dashBoards = dashCount;
+                //get all pages
+                var Pages = connection.model('Pages');
+                Pages.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, pageCount) {
+                    theCounts.pages = pageCount;
                     serverResponse(req, res, 200, theCounts);
+                });
             });
         });
     }
@@ -348,7 +315,9 @@ exports.getUserData = function(req,res){
 
         var createReports = false;
         var createDashboards = false;
+        var createPages = false;
         var isWSTADMIN = false;
+        var exploreData = false;
 
         if(req.isAuthenticated()){
             for (var i in req.user.roles) {
@@ -356,8 +325,11 @@ exports.getUserData = function(req,res){
                     isWSTADMIN = true;
                     createReports = true;
                     createDashboards = true;
+                    createPages = true;
+                    exploreData = true;
                     req.session.reportsCreate = createReports;
                     req.session.dashboardsCreate = createDashboards;
+                    req.session.pagesCreate = createPages;
                     req.session.isWSTADMIN = isWSTADMIN;
                 }
             }
@@ -376,17 +348,23 @@ exports.getUserData = function(req,res){
                         createReports = true;
                     if (roles[i].dashboardsCreate == true)
                         createDashboards = true;
+                    if (roles[i].pagesCreate == true)
+                        createPages = true;
+                    if (roles[i].exploreData == true)
+                        exploreData = true;
                 }
 
                 req.session.reportsCreate = createReports;
                 req.session.dashboardsCreate = createDashboards;
+                req.session.pagesCreate = createPages;
+                req.session.exploreData = exploreData;
                 req.session.isWSTADMIN = isWSTADMIN;
 
-                serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:roles, reportsCreate: createReports, dashboardsCreate: createDashboards}});
+                serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData}});
             });
 
         } else {
-          serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:[], reportsCreate: createReports, dashboardsCreate: createDashboards, isWSTADMIN: isWSTADMIN}});
+          serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:[], reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages,exploreData: exploreData, isWSTADMIN: isWSTADMIN}});
         }
 
     });
@@ -394,8 +372,6 @@ exports.getUserData = function(req,res){
 
 
 exports.getUserObjects = function(req, res){
-
-console.log('entering get user objects');
 
     var Companies = connection.model('Companies');
     Companies.findOne({companyID:req.user.companyID,nd_trash_deleted: false},{},function(err, company){
@@ -405,15 +381,15 @@ console.log('entering get user objects');
 
         if (req.session.isWSTADMIN)
         {
-        console.log('menos uno');
+
             getFolderStructureForWSTADMIN(folders,0,true,function(){
-console.log('uno');
+
                 getNoFolderReports(function(reports){
-console.log('dos');
+
                     getNoFolderDashboards(function(dashboards){
-console.log('tres');
+
                         getNoFolderPages(function(pages){
-console.log('cuatro');
+
                             for (var d in dashboards)
                                 folders.push(dashboards[d]);
                             for (var r in reports)
@@ -432,7 +408,7 @@ console.log('cuatro');
             });
 
         } else {
-        console.log('cero');
+
         if (req.user.roles.length > 0)
             {
                 var Roles = connection.model('Roles');
@@ -442,7 +418,6 @@ console.log('cuatro');
                 Roles.find(find,{},function(err, roles){
 
                     navigateRoles(req,folders,roles,function(canPublish){
-                        console.log('puede publicar?',canPublish);
 
                         getNoFolderReports(function(reports){
 
@@ -518,105 +493,15 @@ function navigateRoles(req,folders,rolesData,done)
 
             setGrantsToFolder_v2(req,folders,theGrant,r,g, function(roleIndex,grantIndex,publish){
             //setGrantsToFolder_old(req,folders,theGrant,r,g, function(roleIndex,grantIndex,publish){
-                //console.log('he recogido el ',grantIndex,'del role',roleIndex)
             if (publish == true) canPublish = true;
             if (roleIndex == rolesData.length -1 && grantIndex == rolesData[roleIndex].grants.length -1)
                 done(canPublish);
             });
         }
     }
-    console.log('navegando los roles',JSON.stringify(rolesData));
     if (roleFound === false)
         done(false);
 }
-
-/*function setGrantsToFolder_old(req,folders, grant,roleIndex,grantIndex, done)
-{
-   console.log('yes is entering here...');
-
-    var publish = false;
-
-    for (var i in folders)
-    {
-        if ((folders[i].id == grant.folderID))
-        {
-            folders[i].grants = grant;
-
-            if (grant.publishReports == true)
-            {
-                publish = true;
-            }
-
-            if (grant.executeReports == true )
-            {
-                getReportsForFolder(grant.folderID,folders[i],function(reports,folder){
-                    //folder.reports = reports;
-                    for (var n in reports)
-                            folder.nodes.push(reports[n]);
-
-                    if (grant.executeDashboards == true)
-                    {
-                        getDashboardsForFolder(grant.folderID,folder,function(dashboards,folder){
-                            //folder.dashboards = dashboards;
-                            for (var n in dashboards)
-                                folder.nodes.push(dashboards[n]);
-
-                                if (grant.executePages == true)
-                                {
-                                    getPagesForFolder(grant.folderID,folder,function(pages,folder){
-                                        for (var p in pages)
-                                            folder.nodes.push(pages[n]);
-
-                                        done(roleIndex,grantIndex,publish);
-                                    });
-
-
-                                } else {
-                                    done(roleIndex,grantIndex,publish);
-                                }
-
-
-                        });
-                    } else {
-                       done(roleIndex,grantIndex,publish);
-                    }
-
-                });
-            } else {
-                if (grant.executeDashboards == true )
-                {
-                    getDashboardsForFolder(grant.folderID,folders[i],function(dashboards,folder){
-                        //folder.dashboards = dashboards;
-                        for (var n in dashboards)
-                            folder.nodes.push(dashboards[n]);
-
-
-                        done(roleIndex,grantIndex,publish);
-                    });
-                }
-            }
-
-            if (grant.executeDashboards == false && grant.executeReports == false )
-            {
-                done(roleIndex,grantIndex,publish);
-                return;
-            }
-
-            if (!grant.executeDashboards && !grant.executeReports)
-            {
-                done(roleIndex,grantIndex,publish);
-                return;
-            }
-
-        } else {
-            if (folders[i].nodes)
-                if (folders[i].nodes.length > 0)
-                    setGrantsToFolder_old(req,folders[i].nodes,grant,roleIndex,grantIndex,done);
-        }
-    }
-
-}*/
-
 
 
 function setGrantsToFolder_v2(req,folders, grant,roleIndex,grantIndex, done)
@@ -683,10 +568,6 @@ function getFolderStructureForWSTADMIN(folders,index,firstRound, done) {
 
     } else {
 
-    //for (var i in folders)
-    //{
-      //  sec += 1;
-
             if (folders[i].nodes)
                 if (folders[i].nodes.length > 0)
                     getFolderStructureForWSTADMIN(folders[i].nodes,0,false,done);
@@ -734,7 +615,6 @@ function getFolderStructureForWSTADMIN(folders,index,firstRound, done) {
                 });
     }
 
-    //}
 
 
 }

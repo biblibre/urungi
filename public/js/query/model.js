@@ -20,6 +20,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection) {
                 prepareData($scope,query,data, function(result)
                 {
                     done(result);
+                    //console.log('new data has come...');
+
                 });
 
             });
@@ -29,7 +31,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection) {
     this.getData = function($scope,query, params,  done) {
         params.query = query;
         connection.get('/api/reports/get-data', params, function(data) {
-            console.log(data);
+            //console.log(data);
             done(data);
         });
     }
@@ -87,6 +89,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection) {
                 collection.columns = [];
                 collection.columns.push(attribute);
 
+
+
                 collection.order = [];
                 collection.order.push(attribute);
 
@@ -104,6 +108,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection) {
         }
 
         query.layers = layersList;
+        query.order = [];
+        query.order.push(attribute);
 
 
 
@@ -113,11 +119,13 @@ app.service('queryModel' , function ($http, $q, $filter, connection) {
                 data = data.items;
 
             attribute.data = data;
-            console.log('The data: ',JSON.stringify(data));
+            $scope.searchValues = data;
+            console.log('The data: ',data);
             $scope.errorMsg = (data.result === 0) ? data.msg : false;
-            attribute.page = data.page;
-            attribute.pages = data.pages;
+            $scope.page = data.page;
+            $scope.pages = data.pages;
             //$scope.data = data;
+
         });
 
 
