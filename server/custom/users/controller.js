@@ -89,8 +89,6 @@ exports.UsersFindAll = function(req,res)
     req.query.trash = true;
     req.query.companyid = true;
 
-    //console.log('El usuario',JSON.stringify(req.user));
-
             controller.findAll(req, function(result){
                 serverResponse(req, res, 200, result);
             });
@@ -311,7 +309,6 @@ exports.getUserData = function(req,res){
 
         req.user.companyData = company;
         req.session.companyData = company;
-        //console.log('this is the company Data',JSON.stringify(req.user.companyData));
 
         var createReports = false;
         var createDashboards = false;
@@ -456,7 +453,7 @@ exports.getUserObjects = function(req, res){
                         });
                     });
                 });
-                //serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: []});
+
             }
         }
 
@@ -603,20 +600,9 @@ function getFolderStructureForWSTADMIN(folders,index,firstRound, done) {
                                         getFolderStructureForWSTADMIN(folders,i+1,firstRound,done);
                                     });
 
-
-
-
-
-
-
                     });
-
-
                 });
     }
-
-
-
 }
 
 
@@ -766,7 +752,7 @@ exports.getUserLastExecutions = function(req, res){
         var find = {"$and":[{userID:''+req.user._id+''},{action:"execute"}]}
     }
 
-    //ultimas ejecuciones
+    //Last executions
 
     statistics.aggregate([
         { $match: find},
@@ -784,7 +770,7 @@ exports.getUserLastExecutions = function(req, res){
             return;
         }
 
-        //mas ejecuciones
+
         statistics.aggregate([
             { $match: find},
             { $group: {

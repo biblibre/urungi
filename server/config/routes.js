@@ -28,14 +28,11 @@ module.exports = function (app, passport) {
             if (c == 0)
             {
                 console.log('no records in the users model, this is the initial setup!');
-
                 var theCompany = {};
-                //theCompany._id = 'COMPID';
                 theCompany.companyID = 'COMPID';
                 theCompany.createdBy = 'widestage setup';
                 theCompany.nd_trash_deleted = false;
                 Companies.create(theCompany,function(result){
-
                 });
 
                 var adminUser = {};
@@ -50,7 +47,6 @@ module.exports = function (app, passport) {
                     authenticate(passport,Users,req, res, next);
                 });
 
-                //TODO: create the company record...
             } else {
                 authenticate(passport,Users,req, res, next);
             }
@@ -85,8 +81,6 @@ function authenticate(passport, Users, req, res, next)
                     res.cookie('remember_me', token, { path: '/', httpOnly: true, maxAge: 604800000 }); // 7 days
                 }
 
-            //console.log('This is the user info',JSON.stringify(user));
-
             //insert the company's Data into the user to avoid a 2nd server query'
             var Companies = connection.model('Companies');
 
@@ -120,50 +114,6 @@ function authenticate(passport, Users, req, res, next)
 
             });
 
-
-
         }
     })(req, res, next);
 }
-
-
-/*
-module.exports = function (app, passport) {
-    //var server = require('../index.js');
-    var api = require('../api.js');
-
-    // Routes
-    app.get('/', server.login);
-    app.get('/login', function(req, res, next) {
-        res.writeHead(301,
-            {Location: '/'}
-        );
-        res.end();
-    });
-    app.get('/public', server.index);
-    app.get('/register', server.register);
-    app.get('/home', restrict, server.webapp);
-
-
-// use res.render to load up an ejs view file
-// index page
-    app.get('/', function(req, res) {
-        res.render('index');
-    });
-
-// about page
-    app.get('/about', function(req, res) {
-        res.render('pages/about');
-    });
-
-    app.get('/api/get-cubes', function(req, res){
-        var cubes = [];
-        var cube = {cubeID:'123456789',cubeName:'cube1',cubeLabel:'cuabe 1',cubeDescription:'Descripción del cubo 1'};
-        cubes.push(cube);
-        var cube = {cubeID:'000006789',cubeName:'cube2',cubeLabel:'cuabe 2',cubeDescription:'Descripción del cubo 2'};
-        cubes.push(cube);
-
-        res.send(cubes);
-    });
-
-}  */

@@ -57,10 +57,6 @@ if (authentication)
     app.use(passport.authenticate('remember-me'));
 }
 
-
-
-
-
 if (cluster.isMaster) {
     var numCPUs = require('os').cpus().length;
 
@@ -89,10 +85,9 @@ if (cluster.isMaster) {
     require('./server/config/passport')(passport);
 
     require('./server/globals');
-    //require('./server/config/mailer');
+    require('./server/config/mailer');
 
     require('./server/config/routes')(app, passport);
-    //require('./server/config/routes')(app);
 
     var fs = require('fs');
 
@@ -102,9 +97,6 @@ if (cluster.isMaster) {
         if(file[0] === '.') return;
         require(routes_dir+'/'+ file+'/routes.js')(app);
     });
-
-    //var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-    //var port    = process.env.OPENSHIFT_NODEJS_PORT || config.port;
     
     var ipaddr  = process.env.IP || "127.0.0.1";
     var port    = process.env.PORT  || config.port;
