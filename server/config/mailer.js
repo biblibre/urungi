@@ -1,18 +1,18 @@
 function sendEmail(emailSubject, emailMessage, emailTo) {
-    var nodemailer = require("nodemailer");
 
+    var nodemailer = require("nodemailer");
     var transportSMTP = nodemailer.createTransport("SMTP", {
-        host: 'smtp.yourserver.com', // hostname
-        secureConnection: false, // use SSL
-        port: 25, // port for secure SMTP
+        host: config.mailer.host, // hostname
+        secureConnection: config.mailer.secureConnection, // use SSL
+        port: config.mailer.port, // port for secure SMTP
         auth: {
-            user: 'no_reply@yourserver.com',
-            pass: 'yourpassword'
+            user: config.mailer.auth.user,
+            pass: config.mailer.auth.pass
         }
     });
 
     var mailOptions = {
-        from: "Widestage <no_reply@yourserver.com>", // sender address
+        from: config.mailer.from, // sender address
         to: emailTo, // list of receivers
         subject: emailSubject, // Subject line
         html: emailMessage // html body
@@ -25,7 +25,8 @@ function sendEmail(emailSubject, emailMessage, emailTo) {
             console.log(response);
         }
 
-        transportSMTP.close(); // shut down the connection pool, no more messages
+    transportSMTP.close(); // shut down the connection pool, no more messages
+    
     });
 }
 global.sendEmail = sendEmail;
@@ -34,12 +35,11 @@ global.sendEmail = sendEmail;
 
 function sendEmailTemplate(theEmailTemplate,recipients,emailField,subject)
 {
-
-var path = require('path')
-var EmailTemplate = require('email-templates').EmailTemplate;
-var nodemailer = require('nodemailer')
-var wellknown = require('nodemailer-wellknown')
-var async = require('async')
+    var path = require('path')
+    var EmailTemplate = require('email-templates').EmailTemplate;
+    var nodemailer = require('nodemailer')
+    var wellknown = require('nodemailer-wellknown')
+    var async = require('async')
 
 
 var templatesDir = path.resolve(__dirname, '../../', 'email_templates/'+theEmailTemplate)
