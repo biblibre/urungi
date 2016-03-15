@@ -13,6 +13,17 @@ module.exports = {
             enabled: true,
             secret: 'SecretPassphrase'
         },
+        mailer: {
+            service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
+            host: 'smtp.db-team.com', // hostname
+            secureConnection: false, // use SSL
+            port: 25, // port for secure SMTP
+            auth: {
+                user: 'no_reply@db-team.com',
+                pass: 'no_reply_5'
+            },
+            from: 'no_reply@db-team.com'
+        },
         pagination: {
             itemsPerPage: 10
         }
@@ -31,6 +42,17 @@ module.exports = {
             enabled: true,
             secret: 'SecretPassphrase'
         },
+        mailer: {
+            service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
+            host: 'smtp.db-team.com', // hostname
+            secureConnection: false, // use SSL
+            port: 25, // port for secure SMTP
+            auth: {
+                user: 'no_reply@db-team.com',
+                pass: 'no_reply_5'
+            },
+            from: 'no_reply@db-team.com'
+        },
         pagination: {
             itemsPerPage: 10
         }
@@ -48,6 +70,17 @@ module.exports = {
         crypto: {
             enabled: true,
             secret: 'SecretPassphrase'
+        },
+        mailer: {
+            service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
+            host: 'smtp.db-team.com', // hostname
+            secureConnection: false, // use SSL
+            port: 25, // port for secure SMTP
+            auth: {
+                user: 'no_reply@db-team.com',
+                pass: 'no_reply_5'
+            },
+            from: 'no_reply@db-team.com'
         },
         pagination: {
             itemsPerPage: 10
