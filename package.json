@@ -24,7 +24,7 @@
     "moment": "~2.10.6",
     "mongodb": "~2.0.46",
     "mongoose": "~3.8.28",
-    "mysql": "^2.10.0",
+    "mysql": "~2.10.2",
     "node-uuid": "~1.4.3",
     "nodemailer": "~1.8.0",
     "nodemailer-wellknown": "~0.1.7",

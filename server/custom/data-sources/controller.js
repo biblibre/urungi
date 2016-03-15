@@ -171,6 +171,21 @@ exports.getEntities = function(req,res)
                     serverResponse(req, res, 200, result);
                 });
             }
+            if (result.item.type == 'MySQL')
+            {
+                console.log('MySQL entities');
+                var mysql = require('../../core/db/mysql.js');
+                var data = {};
+                data.host = result.item.params[0].connection.host;
+                data.port = result.item.params[0].connection.port;
+                data.userName = result.item.params[0].connection.userName;
+                data.password = result.item.params[0].connection.password;
+                data.database = result.item.params[0].connection.database;
+                console.log(JSON.stringify(data));
+                mysql.testConnection(data, function(result) {
+                    serverResponse(req, res, 200, result);
+                });
+            }
             if (result.item.type == 'POSTGRE')
             {
                 console.log('POSTGRE entities');
@@ -262,6 +277,25 @@ exports.getEntitySchema = function(req,res) {
                 data.entities = theEntities;
                 console.log(JSON.stringify(data));
                 mongodb.getSchemas(data, function(result) {
+                    serverResponse(req, res, 200, result);
+                });
+            }
+            if (result.item.type == 'MySQL')
+            {
+                console.log(result.item.type+' entities schema');
+                var sql = require('../../core/db/sql.js');
+                var data = {
+                    type: result.item.type,
+                    db: 'mysql',
+                    host: result.item.params[0].connection.host,
+                    port: result.item.params[0].connection.port,
+                    userName: result.item.params[0].connection.userName,
+                    password: result.item.params[0].connection.password,
+                    database: result.item.params[0].connection.database,
+                    entities: theEntities
+                };
+                console.log(JSON.stringify(data));
+                sql.getSchemas(data, function(result) {
                     serverResponse(req, res, 200, result);
                 });
             }
