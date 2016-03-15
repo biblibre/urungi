@@ -26,7 +26,7 @@ function sendEmail(emailSubject, emailMessage, emailTo) {
         }
 
     transportSMTP.close(); // shut down the connection pool, no more messages
-    
+
     });
 }
 global.sendEmail = sendEmail;
