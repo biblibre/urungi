@@ -1,4 +1,4 @@
-var env = process.env.NODE_ENV || 'development';
+var env = process.env.NODE_ENV || 'production';
 // Application Params
 process.argv.forEach(function(val, index, array) {
     if (index == 2) env = val;
@@ -7,7 +7,7 @@ global.env = env;
 
 // production only
 if (env == 'production') {
-    //require('newrelic');
+
 };
 
 
@@ -31,8 +31,6 @@ app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 
-//app.use("/public", express.static(__dirname + "/public"));
-//app.use("/public", express.static(__dirname + "/bower_components"));
 
 app.use(cookieParser());
 app.use(cookieSession({key:"widestage", secret:"HEWÑÑasdfwejñlkjqwernnkkk13134134wer", httpOnly: true, secure: false, cookie: {maxAge: 60 * 60 * 1000}}));
@@ -98,7 +96,7 @@ if (cluster.isMaster) {
         require(routes_dir+'/'+ file+'/routes.js')(app);
     });
     
-    var ipaddr  = process.env.IP || "127.0.0.1";
+    var ipaddr  = process.env.IP || config.ip;
     var port    = process.env.PORT  || config.port;
 
     app.listen(port, ipaddr);

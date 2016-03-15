@@ -21,7 +21,7 @@ module.exports = function (app, passport) {
 
     app.post('/api/login', function(req, res, next) {
         var Users = connection.model('Users');
-        //var Companies = connection.model('Companies');
+        var Companies = connection.model('Companies');
 
         Users.count({}, function(err, c)
         {
