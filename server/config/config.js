@@ -4,7 +4,7 @@ module.exports = {
         port: 8080,
         db: 'mongodb://localhost:27017/widestage_development',
         app: {
-            name: 'NodeDream',
+            name: 'WideStage',
             contactEmail: '',
             collectionsPrefix: 'nd_',
             customCollectionsPrefix: 'wst_'
@@ -15,14 +15,14 @@ module.exports = {
         },
         mailer: {
             service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
-            host: 'smtp.db-team.com', // hostname
+            host: 'smtp.yourserver.com', // hostname
             secureConnection: false, // use SSL
             port: 25, // port for secure SMTP
             auth: {
-                user: 'no_reply@db-team.com',
-                pass: 'no_reply_5'
+                user: 'no_reply@yourserver.com',
+                pass: 'yourpassword'
             },
-            from: 'no_reply@db-team.com'
+            from: 'no_reply@yourserver.com'
         },
         pagination: {
             itemsPerPage: 10
@@ -33,7 +33,7 @@ module.exports = {
         port: 80,
         db: 'mongodb://localhost:27017/widestage',
         app: {
-            name: 'NodeDream',
+            name: 'WideStage',
             contactEmail: '',
             collectionsPrefix: 'nd_',
             customCollectionsPrefix: 'wst_'
@@ -44,14 +44,14 @@ module.exports = {
         },
         mailer: {
             service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
-            host: 'smtp.db-team.com', // hostname
+            host: 'smtp.yourserver.com', // hostname
             secureConnection: false, // use SSL
             port: 25, // port for secure SMTP
             auth: {
-                user: 'no_reply@db-team.com',
-                pass: 'no_reply_5'
+                user: 'no_reply@yourserver.com',
+                pass: 'yourpassword'
             },
-            from: 'no_reply@db-team.com'
+            from: 'no_reply@yourserver.com'
         },
         pagination: {
             itemsPerPage: 10
@@ -62,7 +62,7 @@ module.exports = {
         port: 8081,
         db: 'localhost:27017/widestage_development',
         app: {
-            name: 'NodeDream',
+            name: 'WideStage',
             contactEmail: '',
             collectionsPrefix: 'nd_',
             customCollectionsPrefix: 'wst_'
@@ -73,14 +73,14 @@ module.exports = {
         },
         mailer: {
             service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
-            host: 'smtp.db-team.com', // hostname
+            host: 'smtp.yourserver.com', // hostname
             secureConnection: false, // use SSL
             port: 25, // port for secure SMTP
             auth: {
-                user: 'no_reply@db-team.com',
-                pass: 'no_reply_5'
+                user: 'no_reply@yourserver.com',
+                pass: 'yourpassword'
             },
-            from: 'no_reply@db-team.com'
+            from: 'no_reply@yourserver.com'
         },
         pagination: {
             itemsPerPage: 10
