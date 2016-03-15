@@ -15,14 +15,14 @@ module.exports = {
         },
         mailer: {
             service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
-            host: 'smtp.db-team.com', // hostname
-            secureConnection: false, // use SSL
-            port: 25, // port for secure SMTP
+            host: 'smtp.1and1.es', // hostname
+            secureConnection: true, // use SSL
+            port: 587, // port for secure SMTP
             auth: {
-                user: 'no_reply@db-team.com',
+                user: 'noreply@db-team.com',
                 pass: 'no_reply_5'
             },
-            from: 'no_reply@db-team.com'
+            from: 'noreply@db-team.com'
         },
         pagination: {
             itemsPerPage: 10
@@ -44,14 +44,14 @@ module.exports = {
         },
         mailer: {
             service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
-            host: 'smtp.db-team.com', // hostname
-            secureConnection: false, // use SSL
-            port: 25, // port for secure SMTP
+            host: 'smtp.1and1.es', // hostname
+            secureConnection: true, // use SSL
+            port: 587, // port for secure SMTP
             auth: {
-                user: 'no_reply@db-team.com',
+                user: 'noreply@db-team.com',
                 pass: 'no_reply_5'
             },
-            from: 'no_reply@db-team.com'
+            from: 'noreply@db-team.com'
         },
         pagination: {
             itemsPerPage: 10
@@ -73,14 +73,14 @@ module.exports = {
         },
         mailer: {
             service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
-            host: 'smtp.db-team.com', // hostname
-            secureConnection: false, // use SSL
-            port: 25, // port for secure SMTP
+            host: 'smtp.1and1.es', // hostname
+            secureConnection: true, // use SSL
+            port: 587, // port for secure SMTP
             auth: {
-                user: 'no_reply@db-team.com',
+                user: 'noreply@db-team.com',
                 pass: 'no_reply_5'
             },
-            from: 'no_reply@db-team.com'
+            from: 'noreply@db-team.com'
         },
         pagination: {
             itemsPerPage: 10

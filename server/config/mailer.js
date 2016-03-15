@@ -44,10 +44,10 @@ var async = require('async')
 
 
 var templatesDir = path.resolve(__dirname, '../../', 'email_templates/'+theEmailTemplate)
-    //console.log('the template dir',templatesDir);
-    console.log('the template dir',path.join(templatesDir, theEmailTemplate));
+    console.log('the template dir',templatesDir);
+    //console.log('the template dir',path.join(templatesDir, theEmailTemplate));
 var template = new EmailTemplate(templatesDir);
-    var template = new EmailTemplate(templatesDir);
+    //var template = new EmailTemplate(templatesDir);
 //console.log('the template',JSON.stringify(template));
 
 // Prepare nodemailer transport object
