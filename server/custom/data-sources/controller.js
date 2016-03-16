@@ -280,13 +280,12 @@ exports.getEntitySchema = function(req,res) {
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'MySQL')
+            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL')
             {
                 console.log(result.item.type+' entities schema');
                 var sql = require('../../core/db/sql.js');
                 var data = {
                     type: result.item.type,
-                    db: 'mysql',
                     host: result.item.params[0].connection.host,
                     port: result.item.params[0].connection.port,
                     userName: result.item.params[0].connection.userName,
@@ -294,12 +293,12 @@ exports.getEntitySchema = function(req,res) {
                     database: result.item.params[0].connection.database,
                     entities: theEntities
                 };
-                console.log(JSON.stringify(data));
+                //console.log(JSON.stringify(data));
                 sql.getSchemas(data, function(result) {
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'POSTGRE')
+            /*if (result.item.type == 'POSTGRE')
             {
                 console.log('POSTGRE entities schema');
                 var postgre = require('../../core/db/postgresql.js');
@@ -314,7 +313,7 @@ exports.getEntitySchema = function(req,res) {
                 postgre.getSchemas(data, function(result) {
                     serverResponse(req, res, 200, result);
                 });
-            }
+            }*/
         } else {
             serverResponse(req, res, 200, result);
         }

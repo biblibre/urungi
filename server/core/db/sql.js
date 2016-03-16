@@ -1,42 +1,15 @@
-
-
-exports.testConnection = function(data, setresult) {
-    var mysql = require('mysql');
-
-    var connection = mysql.createConnection({
-        host     : data.host,
-        user     : data.userName,
-        password : data.password,
-        database : data.database
-    });
-
-    connection.connect(function(err) {
-        if (err) {
-            console.log('MySQL connection error: '+ err.stack);
-            setresult({result: 0, msg: 'Connection Error: '+err.stack});
-            return console.error('Connection Error: '+err.stack);
-        }
-
-        console.log('Connected to '+data.host+' as id '+connection.threadId+', getting table names');
-
-        connection.query("select table_schema, table_name as name from information_schema.tables where table_schema not in ('information_schema','mysql','performance_schema')", function(err, rows, fields) {
-            if (err) throw err;
-
-            console.log(rows);
-            setresult({result: 1, items: rows});
-            connection.end();
-        });
-
-        connection.end();
-    });
-};
-
 exports.processCollections = function(req,query,collections, dataSource, params,thereAreJoins, done) {
     processCollections(req,query,collections, dataSource, params,thereAreJoins, done);
 };
 
 exports.getSchemas = function(data, setresult) {
-    var dbController = require('./'+data.db+'.js');
+    switch (data.type) {
+        case 'MySQL': var db = 'mysql';
+            break;
+        case 'POSTGRE': var db = 'postgresql';
+    }
+
+    var dbController = require('./'+db+'.js');
 
     var db = new dbController.db();
 
@@ -76,8 +49,15 @@ exports.getSchemas = function(data, setresult) {
          }*/
 
         for (var i in collections) {
-            var schema = collections[i].table_schema;
-            var table = collections[i].name;
+            if (String(collections[i].name).indexOf(".") > -1) {
+                var res = String(collections[i].name).split('.');
+                var schema = res[0];
+                var table = res[1];
+            }
+            else {
+                var schema = collections[i].table_schema;
+                var table = collections[i].name;
+            }
 
             if (schemas.indexOf(schema) == -1)
                 schemas.push(schema);
@@ -102,109 +82,18 @@ exports.getSchemas = function(data, setresult) {
         db.query("SELECT table_schema, table_name, column_name, data_type FROM information_schema.columns WHERE table_schema in ("+newSchemas +") AND table_name   in ("+ newTables+")", function(err, result) {
             console.log(result.rows);
             var schemas = [];
-            /*for (var s = 0; s < schemasTables.length; s++)
-             {
-             getCollectionSchema(schemasTables[s],result.rows, function(resultCollection){
-             schemas.push(resultCollection);
-             });
-             }*/
-
-            setresult({result: 1, items: schemas});
-            client.end();
-        });
-    });
-
-
-
-
-
-
-
-
-
-
-
-    return;
-
-
-
-    var db = require('./'+data.db+'.js');
-
-    db.connect(data, function(err, connection) {
-        if(err) {
-            console.log(data.type+' default connection error: ', err);
-            setresult({result: 0, msg: 'Connection Error: '+ err});
-            return console.error('Connection Error: ', err);
-        }
-
-        var collections = data.entities;
-
-        //get schemas
-        var schemas = [];
-        var tables = [];
-        var schemasTables = [];
-
-        /*for (var i in collections) {
-            var table_name = collections[i].name;
-            console.log('table name:',table_name);
-            var res = table_name.split('.');
-
-            var schema = res[0];
-            var table = res[1];
-
-            if (schemas.indexOf(schema) == -1)
-                schemas.push(schema);
-            if (tables.indexOf(table) == -1)
-                tables.push(table);
-
-            if (schemasTables.indexOf(schema+'.'+table) == -1)
-            {
-                var stable = {name: schema+'.'+table, schema:schema, table:table};
-                schemasTables.push(stable);
-            }
-
-        }*/
-
-        for (var i in collections) {
-            var schema = collections[i].table_schema;
-            var table = collections[i].name;
-
-            if (schemas.indexOf(schema) == -1)
-                schemas.push(schema);
-            if (tables.indexOf(table) == -1)
-                tables.push(table);
-
-            if (schemasTables.indexOf(schema+'.'+table) == -1)
-            {
-                var stable = {name: schema+'.'+table, schema:schema, table:table};
-                schemasTables.push(stable);
-            }
-
-        }
-
-        var newSchemas = schemas.length === 0 ? "" : "'" + schemas.join("','") + "'";
-        var newTables = tables.length === 0 ? "" : "'" + tables.join("','") + "'";
-
-        console.log(newSchemas,newTables);
-
-        console.log('Connected to '+data.type+' getting table names');
-
-        db.query("SELECT table_schema, table_name, column_name, data_type FROM information_schema.columns WHERE table_schema in ("+newSchemas +") AND table_name   in ("+ newTables+")", connection, function(err, result) {
-            console.log(result.rows);
-            var schemas = [];
-            /*for (var s = 0; s < schemasTables.length; s++)
-            {
-                getCollectionSchema(schemasTables[s],result.rows, function(resultCollection){
+            for (var s = 0; s < schemasTables.length; s++) {
+                getCollectionSchema(schemasTables[s], result.rows, function (resultCollection) {
                     schemas.push(resultCollection);
                 });
-            }*/
-
+            }
+            console.log(schemas);
             setresult({result: 1, items: schemas});
-            client.end();
+
+            db.end();
         });
     });
 };
-
 
 function getCollectionSchema(collection,queryResults, done) {
 
@@ -591,47 +480,46 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
             }
 
+        switch (dataSource.type) {
+            case 'MySQL': var dbController = require('./mysql.js');
+                break;
+            case 'POSTGRE': var dbController = require('./postgresql.js');
+        }
 
+        var db = new dbController.db();
 
         //pages only for POSTGRESS
-        SQLstring += ' LIMIT 500 OFFSET ' + ((params.page -1 )*500);
+        //SQLstring += ' LIMIT 500 OFFSET ' + ((params.page -1 )*500);
+        SQLstring += ' '+db.getLimitString(500, ((params.page -1 )*500));
 
         //LIMIT { number | ALL }] [OFFSET number]
 
-
         console.log(SQLstring);
 
-
-        var pg = require('pg');
-        var conString = 'postgres://'+dataSource.params[0].connection.userName+':'+dataSource.params[0].connection.password+'@'+dataSource.params[0].connection.host+'/'+dataSource.params[0].connection.database;
-
-        pg.connect(conString, function(err, client, done) {
+        db.connect(dataSource.params[0].connection, function(err, connection) {
             if(err) {
-                console.log('Postgresql default connection error: ',conString, err);
+                console.log(dataSource.type+' default connection error: ', err);
                 setresult({result: 0, msg: 'Connection Error: '+ err});
                 return console.error('Connection Error: ', err);
             }
 
-            console.log('Connected to ',conString);
-            client.query(SQLstring, function(err, result) {
+            console.log('Connected to '+dataSource.type);
+
+            db.query(SQLstring, function(err, result) {
                 if (err) {
                     console.log(err);
                     setresult({result: 0, msg: 'Generated SQL Error'});
                     saveToLog(req, 'SQL Error: '+err+' ('+SQLstring+')      QUERY: ('+JSON.stringify(query)+')', 110);
-                    done();
-                    client.end();
+                    db.end();
                 } else {
-                    done();
                     if (result)
                         setresult(result.rows);
                     else
                         setresult([]);
-                    client.end();
+                    db.end();
                 }
             });
         });
-
-
     });
 
     //SQLstring = SQLstring + getFilters(query,false);

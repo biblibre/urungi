@@ -421,7 +421,19 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
 
                                 processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                             });
+                        break;
+                        case 'MySQL':
+                            var sql = require('../../core/db/sql.js');
 
+                            sql.processCollections(req,query,dataSource.collections, dts, params,thereAreJoins, function(data) {
+
+
+                                //console.log('not merged results',JSON.stringify(dataSource.collections[0].result))
+                                result = data;
+console.log('processDataSources');
+                                processDataSources(req,dataSources,layers, params, query, done, result, index+1);
+                            });
+                        break;
                         case 'POSTGRE':
                             var postgre = require('../../core/db/postgresql.js');
 
