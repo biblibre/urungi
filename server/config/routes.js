@@ -56,7 +56,7 @@ module.exports = function (app, passport) {
                             //done({result: 1, msg: "User created.", user: user});
                             authenticate(passport,Users,req, res, next);
                         });
-                }
+                });
                 /*Users.createTheUser(req,res,adminUser,function(result){
                     authenticate(passport,Users,req, res, next);
                 });*/
