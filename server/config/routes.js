@@ -38,14 +38,28 @@ module.exports = function (app, passport) {
                 var adminUser = {};
                 adminUser.userName = 'administrator';
                 adminUser.companyID = 'COMPID';
-                adminUser.password = 'widestage';
+
                 adminUser.roles = [];
                 adminUser.roles.push('WSTADMIN');
                 adminUser.status = 'active';
                 adminUser.nd_trash_deleted = false;
-                Users.createTheUser(req,res,adminUser,function(result){
+
+                hash('widestage', function(err, salt, hash){
+                    if(err) throw err;
+
+                    adminUser.salt = salt;
+                    adminUser.hash = hash;
+
+
+                    User.create(adminUser, function(err, user){
+                            if(err) throw err;
+                            //done({result: 1, msg: "User created.", user: user});
+                            authenticate(passport,Users,req, res, next);
+                        });
+                }
+                /*Users.createTheUser(req,res,adminUser,function(result){
                     authenticate(passport,Users,req, res, next);
-                });
+                });*/
 
             } else {
                 authenticate(passport,Users,req, res, next);

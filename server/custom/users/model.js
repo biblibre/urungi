@@ -89,12 +89,8 @@ usersSchema.statics.createTheUser = function (req,res,userData,done)
         return;
     }
 
-    if (req.user)
-        var theCompanyID = req.user.companyID;
-        else
-        var theCompanyID = userData.companyID;
 
-    User.findOne({"userName" : userData.userName, companyID: theCompanyID },{},function(err, user){
+    User.findOne({"userName" : userData.userName, companyID: req.user.companyID },{},function(err, user){
         if(err) throw err;
         if (user) {
             done({result: 0, msg: "userName already in use."});
