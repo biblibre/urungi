@@ -89,7 +89,7 @@ usersSchema.statics.createTheUser = function (req,res,userData,done)
         return;
     }
 
-    if (req.user.companyID)
+    if (req.user)
         var theCompanyID = req.user.companyID;
         else
         var theCompanyID = userData.companyID;
