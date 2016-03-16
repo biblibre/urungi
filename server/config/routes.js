@@ -43,7 +43,7 @@ module.exports = function (app, passport) {
                 adminUser.roles.push('WSTADMIN');
                 adminUser.status = 'active';
                 adminUser.nd_trash_deleted = false;
-                Users.createTheUser(adminUser,function(result){
+                Users.createTheUser(req,res,adminUser,function(result){
                     authenticate(passport,Users,req, res, next);
                 });
 
