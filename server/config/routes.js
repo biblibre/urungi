@@ -39,7 +39,6 @@ module.exports = function (app, passport) {
                 var adminUser = {};
                 adminUser.userName = 'administrator';
                 adminUser.companyID = 'COMPID';
-
                 adminUser.roles = [];
                 adminUser.roles.push('WSTADMIN');
                 adminUser.status = 'active';
@@ -54,13 +53,9 @@ module.exports = function (app, passport) {
 
                     User.create(adminUser, function(err, user){
                             if(err) throw err;
-                            //done({result: 1, msg: "User created.", user: user});
                             authenticate(passport,Users,req, res, next);
                         });
                 });
-                /*Users.createTheUser(req,res,adminUser,function(result){
-                    authenticate(passport,Users,req, res, next);
-                });*/
 
             } else {
                 authenticate(passport,Users,req, res, next);
@@ -75,7 +70,6 @@ module.exports = function (app, passport) {
 function authenticate(passport, Users, req, res, next)
 {
     passport.authenticate('local', function(err, user, info) {
-        console.log(info);
         if (err) { return next(err); }
 
         if (!user) {

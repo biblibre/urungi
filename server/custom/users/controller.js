@@ -45,7 +45,6 @@ exports.UsersCreate = function(req,res){
 exports.UsersUpdate = function(req,res){
     req.query.trash = true;
     req.query.companyid = true;
-    console.log('updating user');
 
     if (req.body.pwd1 && req.body.pwd2)
     {
@@ -67,7 +66,6 @@ exports.UsersUpdate = function(req,res){
             serverResponse(req, res, 200, result);
         }
     } else {
-    console.log('updating user');
         controller.update(req, function(result){
             serverResponse(req, res, 200, result);
         });
