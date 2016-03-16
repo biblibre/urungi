@@ -50,7 +50,7 @@ module.exports = function (app, passport) {
 
                     adminUser.salt = salt;
                     adminUser.hash = hash;
-
+                    var User = connection.model('Users');
 
                     User.create(adminUser, function(err, user){
                             if(err) throw err;
