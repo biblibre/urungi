@@ -4,8 +4,6 @@ function restrict(req, res, next) {
     if (global.authentication)
     {
         if(req.isAuthenticated()){
-
-                console.log("Authentication is ON - Session OK!");
                 next();
         }else{
               req.session.error = 'Access denied!';
@@ -13,7 +11,6 @@ function restrict(req, res, next) {
               return res.redirect(301,'/login');
         }
     } else {
-        console.log("Authentication is OFF");
         next();
     }
 }
@@ -64,7 +61,6 @@ function restrictRole(roles) {
         if(req.isAuthenticated()){
             for (var i in roles) {
                 if (req.user.roles.indexOf(roles[i]) > -1){
-                    console.log("Role OK!");
                     next();
                     return;
                 }
@@ -72,7 +68,7 @@ function restrictRole(roles) {
         }
         req.session.error = 'Access denied!';
         //TODO: Log annotation security issue
-        //console.log("Access denied!");
+        console.log("Access denied!");
         res.send(401, {result:0,msg:'You don´t have access to this function'});
 
         //res.redirect(301,'/');
@@ -117,7 +113,7 @@ function sendCommunication(data) {
     var Communications = connection.model('Communications');
 
     Communications.sendEmail(data, function(result){
-        console.log(result);
+
     });
 };
 global.sendCommunication = sendCommunication;
@@ -172,7 +168,7 @@ function isAllowed(req, area) {
 global.isAllowed = isAllowed;
 
 function debug(obj) {
-    console.log(JSON.stringify(obj, null, 2));
+
 }
 global.debug = debug;
 
