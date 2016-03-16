@@ -1,5 +1,5 @@
 module.exports = function (app, passport) {
-    var hash = require('../../util/hash');
+    var hash = require('../util/hash');
     var api = require('../api.js');
 
 
