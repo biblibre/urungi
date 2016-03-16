@@ -116,8 +116,6 @@ usersSchema.statics.createTheUser = function (req,res,userData,done)
             } else {
                 done({result: 0, msg: "'No Password set for the new user."});
             }
-
-
         }
     });
 
