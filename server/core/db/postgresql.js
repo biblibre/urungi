@@ -5,7 +5,6 @@ exports.testConnection = function(data, setresult) {
 
     var pg = require('pg');
     var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host+'/'+data.database;
-//var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host;
 
     //this initializes a connection pool
     //it will keep idle connections open for a (configurable) 30 seconds
@@ -17,20 +16,13 @@ exports.testConnection = function(data, setresult) {
             return console.error('Connection Error: ', err);
       }
 
-      console.log('Connected to ',conString, 'getting table names');
       client.query("SELECT table_schema || '.' || table_name as name  from information_schema.tables where table_schema not in ('pg_catalog','information_schema')", function(err, result) {
          done();
-         console.log(result.rows);
          setresult({result: 1, items: result.rows});
          client.end();
 
 
-       /* if(err) {
-          return console.error('error running query', err);
-        }
-        console.log(result.rows[0].number);
-        */
-        //output: 1
+
       });
     });
 };
@@ -59,7 +51,6 @@ exports.getSchemas = function(data, setresult) {
 
       for (var i in collections) {
            var table_name = collections[i].name;
-           console.log('table name:',table_name)
            var res = table_name.split('.');
 
            var schema = res[0];
@@ -81,12 +72,9 @@ exports.getSchemas = function(data, setresult) {
         var newSchemas = schemas.length === 0 ? "" : "'" + schemas.join("','") + "'";
         var newTables = tables.length === 0 ? "" : "'" + tables.join("','") + "'";
 
-        console.log(newSchemas,newTables);
-
       console.log('Connected to ',conString, 'getting table names');
       client.query("SELECT table_schema, table_name, column_name, data_type, udt_name FROM information_schema.columns WHERE table_schema in ("+newSchemas +") AND table_name   in ("+ newTables+")", function(err, result) {
          done();
-         console.log(result.rows);
          var schemas = [];
          for (var s = 0; s < schemasTables.length; s++)
          {
@@ -112,8 +100,6 @@ function getCollectionSchema(collection,queryResults, done) {
     collectionID =  collectionID.replace(new RegExp('-', 'g'), '');
     var theCollection = {collectionID: collectionID ,collectionName: collectionName,visible:true,collectionLabel:collectionName};
     theCollection.elements = [];
-
-    console.log('The collection Name', collectionName, collection.schema, collection.table);
 
 
     for (var d = 0; d < queryResults.length; d++) {
@@ -203,10 +189,8 @@ function getElementList (target,elements,parent) {
                 } else {
                     if (parent != '')
                     {
-                        //console.log(parent+'.'+k+':'+typeof target[k]);
                         var node = parent+'.'+k+':'+typeof target[k];
                     } else {
-                        //console.log(k+':'+typeof target[k]);
                         var node = k+':'+typeof target[k];
                     }
 
@@ -217,8 +201,7 @@ function getElementList (target,elements,parent) {
             }
         } else {
             if (target[k] && target[k][0] == 0) {
-                //es un array
-                console.log('SOY UN ARRAY');
+
             }
 
             if (parseInt(k) != k) {
@@ -235,7 +218,6 @@ function getElementList (target,elements,parent) {
 
             if (elements.indexOf(nodeDesc) == -1) {
                 elements.push(nodeDesc);
-                console.log(nodeDesc);
             }
             getElementList(target[k],elements,node);
         }
@@ -243,12 +225,8 @@ function getElementList (target,elements,parent) {
 }
 
 function processCollections(req,query,collections, dataSource, params, thereAreJoins, setresult,  index) {
-    //console.log(JSON.stringify(query));
 
     // https://hiddentao.github.io/squel/
-
-    console.log('process collections',params,query);
-
 
     var from = [];
     var fields = [];
@@ -287,8 +265,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         }
 
     }
-
-    //console.log('lead table is: ',JSON.stringify(leadTable));
 
 
     for (var c in collections) {
@@ -378,30 +354,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
     SQLstring = SQLstring + ' FROM '+ leadTable.schema.collectionName + ' '+ leadTable.collectionID + getJoins(leadTable.collectionID,collections,[]);
 
-    //FILTERS
-    /*
-    for (var c in collections) {
-            var table = collections[c];
-            getCollectionFilters(table);
-            //console.log(JSON.stringify(table));
-            //console.log(getCollectionFilters(table));
-    }
-    */
-/*
-    for (var coll in collections)
-    {
-
-       var table = collections[coll];
-       //console.log('table filters', table);
-        query.groupFilters = [];
-
-        for (var fil in table.filters)
-        {
-            query.groupFilters.push(table.filters[fil]);
-            console.log('added filter', table.filters[fil]);
-        }
-
-    }*/
 
     var havings = [];
 
@@ -438,7 +390,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
         //TODO: Order By's
 
-        console.log('the order',query.order);
 
         if (query.order)
             if (query.order.length > 0)
@@ -468,7 +419,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                                     theOrderFieldName = (theOrderField.collectionID+'.'+theOrderField.elementName + ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName);
 
                                 }
-                    //console.log('order by index',fields.indexOf(query.order[f].collectionID+'.'+query.order[f].elementName));
                     var theIndex = fields.indexOf(theOrderFieldName);
                     if (theIndex >= 0)
                     {
@@ -495,7 +445,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         //LIMIT { number | ALL }] [OFFSET number]
 
 
-        console.log(SQLstring);
 
 
         var pg = require('pg');
@@ -508,7 +457,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                 return console.error('Connection Error: ', err);
           }
 
-          console.log('Connected to ',conString);
           client.query(SQLstring, function(err, result) {
             if (err) {
                     console.log(err);
@@ -549,96 +497,12 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
 }
 
-/*
-function getFiltersV2(collections,done)
-{
-   //console.log(JSON.stringify(query.groupFilters));
-   var theFilter = '';
-   var filters = [];
-   var havings = [];
-   var previousRelational = '';
 
 
-   for (var coll in collections) {
-   var table = collections[coll];
-
-   for (var g in table.filters) {
-
-       console.log('table filters',table.filters);
-
-
-            if (table.filters[g].condition)
-                    {
-                        theFilter = theFilter + ' '+table.filters[g].conditionType+' ';
-                        previousRelational = ' '+table.filters[g].conditionType+' ';
-                    }
-
-            if (!table.filters[g].condition)
-            {
-               var filterSQL = getFilterSQL(table.filters[g]);
-
-
-               if (!table.filters[g].aggregation)
-                    {
-                        if (filters.length > 0)
-                            filterSQL = previousRelational + filterSQL;
-
-                        filters.push(filterSQL);
-                    } else {
-                        if (havings.length > 0)
-                            filterSQL = previousRelational + filterSQL;
-
-                        havings.push(filterSQL);
-                    }
-
-            }
-
-            theFilter = theFilter + getFilterSQL(table.filters[g]);
-
-
-   }
-   }
-   //if (theFilter != '' && isHaving == false)
-     //       theFilter = ' WHERE '+theFilter;
-
-   //if (theFilter != '' && isHaving == true)
-     //       theFilter = ' HAVING '+theFilter;
-
-    done(filters,havings);
-
-   //return theFilter;
-}*/
-
-/*
-
-function getFiltersV3(query)
-{
-
-   var theFilter = '';
-   var filters = [];
-   var havings = [];
-   var previousRelational = '';
-
-   for (var g in query.groupFilters) {
-
-        var processFilterGroup = function(query.groupFilters[g])
-
-          {
-
-
-          }
-
-
-   }
-
-
-
-}
-*/
 
 function getFilters(query,done)
 {
-   //console.log('in get filters',JSON.stringify(query.groupFilters));
+
 
 
 
@@ -653,75 +517,23 @@ function getFilters(query,done)
    for (var g in query.groupFilters) {
 
         processFilterGroup(query.groupFilters[g],filters,havings,true,function(finalFilters,finalHavings){
-
             done(finalFilters,finalHavings);
-       // console.log('han llegado',filters);
         });
-
-        /*for (var f in query.groupFilters[g].filters)
-        {
-            if (query.groupFilters[g].filters[f].condition)
-                    {
-                        theFilter = theFilter + ' '+query.groupFilters[g].filters[f].conditionLabel+' ';
-                        previousRelational = ' '+query.groupFilters[g].filters[f].conditionLabel+' ';
-                    }
-
-            if (!query.groupFilters[g].filters[f].condition)
-            {
-               var filterSQL = getFilterSQL(query.groupFilters[g].filters[f]);
-
-
-               if (!query.groupFilters[g].filters[f].aggregation)
-                    {
-                        if (filters.length > 0)
-                            filterSQL = previousRelational + filterSQL;
-
-                        filters.push(filterSQL);
-                    } else {
-                        if (havings.length > 0)
-                            filterSQL = previousRelational + filterSQL;
-
-                        havings.push(filterSQL);
-                    }
-
-                     if (query.groupFilters[g].filters[f].group == true)
-                            {
-
-                                updateFilters4Prompt($scope,filter.filters,prompt)
-                            }
-
-            }
-
-            theFilter = theFilter + getFilterSQL(query.groupFilters[g].filters[f]);
-
-
-        }*/
-
    }
-   //if (theFilter != '' && isHaving == false)
-     //       theFilter = ' WHERE '+theFilter;
 
-   //if (theFilter != '' && isHaving == true)
-     //       theFilter = ' HAVING '+theFilter;
-
-
-
-   //return theFilter;
 }
 
 
 function processFilterGroup(group,filters,havings,isRoot,done)
 {
-    //var getGroup = function() {
-//console.log('processing filter 0',group);
+
     if (isRoot == false)
         filters.push("(");
     for (var f in group.filters)
         {
-            //console.log('processing filter');
+
             if (group.filters[f].condition)
                     {
-                       // theFilter = theFilter + ' '+group.filters[f].conditionLabel+' ';
                         previousRelational = ' '+group.filters[f].conditionLabel+' ';
                     }
 
@@ -736,7 +548,6 @@ function processFilterGroup(group,filters,havings,isRoot,done)
                             filterSQL = previousRelational + filterSQL;
 
                         filters.push(filterSQL);
-                        //console.log('pushing filter');
                     } else {
                         if (havings.length > 0)
                             filterSQL = previousRelational + filterSQL;
@@ -746,25 +557,16 @@ function processFilterGroup(group,filters,havings,isRoot,done)
 
                      if (group.filters[f].group == true)
                             {
-
-                            console.log('recursive call');
                             var recursive =  processFilterGroup(group.filters[f],filters,havings,false,done);
-
-
                             }
-
             }
-
-            //theFilter = theFilter + getFilterSQL(query.groupFilters[g].filters[f]);
-
         }
-        //}
+
 
 
         if (isRoot == true)
         {
             done(filters,havings);
-            //console.log('han llegado 1',filters);
         } else {
             filters.push(")");
         }
@@ -932,10 +734,6 @@ var fromSQL = '';
         {
         var table = collections[c];
         processedCollections.push(collectionID);
-        console.log('pushed collection',collectionID);
-
-
-
             for (var j in table.joins) {
                     var join = table.joins[j];
 
@@ -987,23 +785,19 @@ function getOrderBys(collection)
     var sort = {};
 
     if (collection.order) {
-        console.log('there is order');
+
         for (var i in collection.order) {
-            console.log('there is order for each');
+
             for (var e in collection.schema.elements) {
                 if (collection.order[i] != undefined)
                 {
                     if (collection.order[i].elementID == collection.schema.elements[e].elementID) {
-                        console.log('there is order founded');
+
                         var found = false;
 
                         for (var c in collection.columns) {
                             if (collection.columns[c].elementID == collection.schema.elements[e].elementID) {
 
-
-                                console.log('there is order found',collection.schema.elements[e].elementName);
-
-                                console.log('there is order found 2',JSON.stringify(collection.order));
 
                                 if (collection.columns[c].aggregation) {
                                     found = true;
@@ -1039,7 +833,6 @@ function getOrderBys(collection)
         }
     }
 
-    console.log('he salido de order',JSON.stringify(sort));
     }
 
 
@@ -1321,10 +1114,6 @@ function dateFilter(filterValue, filter)
             var searchDate = new Date(filterValue);
             //searchDate.setHours(0, 0, 0, 0);
             var lastDate = new Date(filter.filterText2);
-            /*
-            var theNextDay = new Date(lastDate);
-            theNextDay.setDate(lastDate.getDate()+1);
-            */
 
             return {$gte: searchDate, $lt: lastDate};
 
@@ -1392,318 +1181,4 @@ function isEmpty(obj) {
     return true;
 }
 
-
-/*
-function processCollections(collections, dataSource, params, thereAreJoins, done,  index) {
-    var index = (index) ? index : 0;
-    var collection = (collections[index]) ? collections[index] : false;
-    var result = (result) ? result : [];
-
-    if (!collection) {
-        done();
-        return;
-
-    }
-
-
-
-    //console.log('entering mongoDB collections these are the joins ',JSON.stringify(collection.joins));
-    var fields = {};
-
-    var filters = getCollectionFilters(collection, collection.filters);
-
-    //console.log('the Filters');
-    //debug(filters);
-
-    //console.log(JSON.stringify(collection));
-
-    for (var i in collection.columns) {
-        for (var e in collection.schema.elements) {
-            if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
-                fields[collection.schema.elements[e].elementName] = 1;
-            }
-        }
-    }
-
-    //ADD the necessary fields for joins
-    for (var i in collection.joins) {
-            if (collection.joins[i].sourceCollectionID == collection.collectionID)
-                fields[collection.joins[i].sourceElementName] = 1;
-            if (collection.joins[i].targetCollectionID == collection.collectionID)
-                fields[collection.joins[i].targetElementName] = 1;
-
-    }
-
-
-    var sort = {};
-
-    if (collection.order) {
-        console.log('there is order');
-        for (var i in collection.order) {
-            console.log('there is order for each');
-            for (var e in collection.schema.elements) {
-                if (collection.order[i] != undefined)
-                {
-                    if (collection.order[i].elementID == collection.schema.elements[e].elementID) {
-                        console.log('there is order founded');
-                        var found = false;
-
-                        for (var c in collection.columns) {
-                            if (collection.columns[c].elementID == collection.schema.elements[e].elementID) {
-
-
-                                console.log('there is order found',collection.schema.elements[e].elementName);
-
-                                console.log('there is order found 2',JSON.stringify(collection.order));
-
-                                if (collection.columns[c].aggregation) {
-                                    found = true;
-                                    switch (collection.columns[c].aggregation) {
-                                        case 'sum': sort[collection.schema.elements[e].elementName+'sum'] = collection.order[i].sortType*-1;
-                                            break;
-                                        case 'avg': sort[collection.schema.elements[e].elementName+'avg'] = collection.order[i].sortType*-1;
-                                            break;
-                                        case 'min': sort[collection.schema.elements[e].elementName+'min'] = collection.order[i].sortType*-1;
-                                            break;
-                                        case 'max': sort[collection.schema.elements[e].elementName+'max'] = collection.order[i].sortType*-1;
-                                            break;
-                                        case 'year': sort['_id.'+collection.schema.elements[e].elementName+'year'] = collection.order[i].sortType*-1;
-                                            break;
-                                        case 'month': sort['_id.'+collection.schema.elements[e].elementName+'month'] = collection.order[i].sortType*-1;
-                                            break;
-                                        case 'day': sort['_id.'+collection.schema.elements[e].elementName+'day'] = collection.order[i].sortType*-1;
-                                    }
-                                }
-
-                                break;
-                            }
-                        }
-                        if (!found) {
-                            if (collection.order[i].sortType)
-                                sort['_id.'+collection.schema.elements[e].elementName] = collection.order[i].sortType*-1;
-                            else
-                                sort['_id.'+collection.schema.elements[e].elementName] = 1;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    console.log('he salido de order',JSON.stringify(sort));
-
-    //console.log('the fields to get');
-    //debug(fields);
-
-    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
-
-    var dbURI =  'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
-
-    MongoClient.connect(dbURI, function(err, db) {
-        if(err) { return console.dir(err); }
-
-        var col = db.collection(collection.schema.collectionName);
-        var match = filters, project = {}, group = {}, fields = {};
-
-        for (var i in collection.columns) {
-            var found = false;
-
-            //if (collection.columns[i].count) {
-            if (collection.columns[i].elementName == 'WSTcount'+collection.schema.collectionName) {
-                console.log('lleva conteo');
-                group['WSTcount'+collection.schema.collectionName] = { $sum: 1 };
-
-            } else {
-            for (var e in collection.schema.elements) {
-                if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
-                    found = true;
-
-                    if (collection.columns[i].aggregation) {
-                        switch (collection.columns[i].aggregation) {
-                            case 'sum': group[collection.schema.elements[e].elementName+'sum'] = {$sum: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'avg': group[collection.schema.elements[e].elementName+'avg'] = {$avg: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'min': group[collection.schema.elements[e].elementName+'min'] = {$min: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'max': group[collection.schema.elements[e].elementName+'max'] = {$max: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'year': {
-
-                                    if (collection.schema.elements[e].extractFromString == true)
-                                    {
-                                        project[collection.schema.elements[e].elementName+'year'] = {"$substr" : ["$"+collection.schema.elements[e].elementName, collection.schema.elements[e].yearPositionFrom-0, collection.schema.elements[e].yearPositionTo - collection.schema.elements[e].yearPositionFrom]};
-                                        fields[collection.schema.elements[e].elementName+'year'] = "$"+collection.schema.elements[e].elementName+'year';
-                                    } else {
-                                        project[collection.schema.elements[e].elementName+'year'] = {$year: "$"+collection.schema.elements[e].elementName};
-                                        fields[collection.schema.elements[e].elementName+'year'] = "$"+collection.schema.elements[e].elementName+'year';
-                                    }
-                                }
-                                break;
-                            case 'month':
-                                    if (collection.schema.elements[e].extractFromString == true)
-                                    {
-                                        project[collection.schema.elements[e].elementName+'month'] = {"$substr" : ["$"+collection.schema.elements[e].elementName, collection.schema.elements[e].monthPositionFrom-0, collection.schema.elements[e].monthPositionTo - collection.schema.elements[e].monthPositionFrom]};
-                                        fields[collection.schema.elements[e].elementName+'month'] = "$"+collection.schema.elements[e].elementName+'month';
-                                    } else {
-                                        project[collection.schema.elements[e].elementName+'month'] = {$month: "$"+collection.schema.elements[e].elementName};
-                                        fields[collection.schema.elements[e].elementName+'month'] = "$"+collection.schema.elements[e].elementName+'month';
-                                    }
-                                break;
-                            case 'day':
-                                    if (collection.schema.elements[e].extractFromString == true)
-                                    {
-                                        project[collection.schema.elements[e].elementName+'day'] = {"$substr" : ["$"+collection.schema.elements[e].elementName, collection.schema.elements[e].dayPositionFrom-0, collection.schema.elements[e].dayPositionTo - collection.schema.elements[e].dayPositionFrom]};
-                                        fields[collection.schema.elements[e].elementName+'day'] = "$"+collection.schema.elements[e].elementName+'day';
-                                    } else {
-                                        project[collection.schema.elements[e].elementName+'day'] = {$dayOfMonth: "$"+collection.schema.elements[e].elementName};
-                                        fields[collection.schema.elements[e].elementName+'day'] = "$"+collection.schema.elements[e].elementName+'day';
-                                    }
-
-                        }
-                    }
-                    else {
-                        fields[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
-                    }
-
-                    if (collection.columns[i].variable) {
-                        switch (collection.columns[i].variable) {
-                            case 'toUpper': project[collection.schema.elements[e].elementName] = {$toUpper: "$"+collection.schema.elements[e].elementName};
-                                break;
-                            case 'toLower': project[collection.schema.elements[e].elementName] = {$toLower: "$"+collection.schema.elements[e].elementName};
-                        }
-                    }
-                    else { //es necesario añadir todos los campos a project si hay alguna variable, si solo se añaden los campos con variable, el resto no se devuelven en la consulta
-                        project[collection.schema.elements[e].elementName] = "$"+collection.schema.elements[e].elementName;
-                    }
-                }
-            }
-
-            }
-            //ADD the necessary fields for joins
-
-
-        }
-
-
-        if (collections.length > 1)
-        {
-            for (var i in collection.joins) {
-                if (collection.joins[i].sourceCollectionID == collection.collectionID)
-                {
-                    fields[collection.joins[i].sourceElementName] = "$"+collection.joins[i].sourceElementName;
-                    project[collection.joins[i].sourceElementName] = "$"+collection.joins[i].sourceElementName;
-                }
-                if (collection.joins[i].targetCollectionID == collection.collectionID)
-                {
-                    fields[collection.joins[i].targetElementName] = "$"+collection.joins[i].targetElementName;
-                    project[collection.joins[i].targetElementName] = "$"+collection.joins[i].targetElementName;
-                }
-            }
-        }
-
-
-
-        group['_id'] = fields;
-
-        var aggregation = [{ $match: match }];
-
-        if (!isEmpty(project)) aggregation.push({ $project: project });
-
-        aggregation.push({ $group: group });
-
-        if (!isEmpty(sort)) aggregation.push({ $sort: sort });
-
-        //If there are joins, then we can´t set up limits...
-
-        if (!thereAreJoins)
-        {
-            if (params.page) {
-                aggregation.push({ $skip: (params.page-1)*100 });
-                aggregation.push({ $limit: 100 });
-            }
-            else {
-                aggregation.push({ $limit: 10 });
-            }
-        }
-
-        console.log('aggregation');
-        debug(aggregation);
-
-        col.aggregate(aggregation, function(err, docs) {
-            //debug(docs);
-            for (var i in docs) {
-                var item = {};
-
-                for(var group in docs[i]) {
-                    if (group == '_id') {
-                        for(var field in docs[i][group]) {
-                            item[field] = docs[i][group][field];
-                        }
-                    }
-                    else {
-                        item[group] = docs[i][group];
-                    }
-                }
-
-                for (var field in item) {
-
-                    for (var e in collection.schema.elements) {
-                        if (field == collection.schema.elements[e].elementName && collection.schema.elements[e].values) {
-                            for (var v in collection.schema.elements[e].values) {
-                                if (collection.schema.elements[e].values[v].value == item[field]) {
-                                    item[field] = collection.schema.elements[e].values[v].label;
-                                }
-                            }
-                        }
-
-                        if ((field == collection.schema.elements[e].elementName ||
-                              field == collection.schema.elements[e].elementName+'sum' ||
-                                field == collection.schema.elements[e].elementName+'avg' ||
-                                    field == collection.schema.elements[e].elementName+'min' ||
-                                        field == collection.schema.elements[e].elementName+'max'
-                            )  && collection.schema.elements[e].format) {
-
-                            if (collection.schema.elements[e].elementType == 'date') {
-                                item[field+'_original'] = item[field];
-
-                                var date = new Date(item[field]);
-                                var moment = require('moment');
-                                item[field] = moment(date).format(collection.schema.elements[e].format);
-
-
-                            }
-
-                            if (collection.schema.elements[e].elementType == 'number') {
-                                item[field+'_original'] = item[field];
-                                var numeral = require('numeral');
-                                item[field] = numeral(item[field]).format(collection.schema.elements[e].format);
-                            }
-
-                        }
-                    }
-                }
-
-
-                //cambio de nombre añadiendo el nombre de la colección
-
-
-                var finalItem = {};
-                for (var field in item) {
-                    finalItem[collection.schema.collectionID+'_'+field] = item[field];
-                }
-
-
-                //result.push(item);
-                result.push(finalItem);
-            }
-            //debug(result);
-            console.log('this is the collection', collection.schema.collectionName,result.length);
-            collection.result = result;
-            db.close();
-
-            processCollections(collections, dataSource, params,thereAreJoins, done, index+1);
-        });
-    });
-}*/
 
