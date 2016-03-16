@@ -1,11 +1,9 @@
 var Pages = connection.model('Pages');
 
-console.log('This is the model 1:   ',JSON.stringify(connection.model('Pages')));
 
 require('../../core/controller.js');
 
 function PagesController(model) {
-    console.log('This is the model:   ',JSON.stringify(model));
     this.model = model;
     this.searchFields = [];
 }
@@ -67,7 +65,6 @@ exports.PagesCreate = function(req,res){
 
     req.body.owner = req.user._id;
     req.body.isPublic = false;
-console.log('estoy por aqui...');
     controller.create(req, function(result){
         serverResponse(req, res, 200, result);
     });
@@ -88,7 +85,6 @@ exports.PagesDuplicate = function(req,res){
     req.body.pageName = 'Copy of '+req.body.pageName;
     req.body.owner = req.user._id;
     req.body.isPublic = false;
-console.log('estoy por aqui...');
     controller.create(req, function(result){
         serverResponse(req, res, 200, result);
     });

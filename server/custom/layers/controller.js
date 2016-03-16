@@ -10,7 +10,6 @@ var controller = new LayersController(Layers);
 
 
 exports.LayersCreate = function(req,res){
-    console.log('creating layer');
     req.query.trash = true;
 
     req.user = {};
@@ -18,17 +17,12 @@ exports.LayersCreate = function(req,res){
     req.query.companyid = true;
     req.body.companyID = 'COMPID';
 
-    //console.log(req.body);
-
     controller.create(req, function(result){
         serverResponse(req, res, 200, result);
     });
 };
-//Pat - 07770966919
 
 exports.LayersUpdate = function(req,res){
-    //req.query.trash = true;
-    //req.query.companyid = true;
 
     controller.update(req, function(result){
         serverResponse(req, res, 200, result);
@@ -38,7 +32,6 @@ exports.LayersUpdate = function(req,res){
 
 exports.LayersFindAll = function(req,res)
 {
-    console.log('finding all layers');
     req.query.trash = true;
     req.query.companyid = true;
     req.user = {};
@@ -46,13 +39,11 @@ exports.LayersFindAll = function(req,res)
 
     controller.findAll(req, function(result){
         serverResponse(req, res, 200, result);
-        console.log('getting all layers');
     });
 }
 
 exports.GetLayers = function(req,res)
 {
-    console.log('getting all layers');
     req.query.trash = true;
     req.query.companyid = true;
     req.user = {};
