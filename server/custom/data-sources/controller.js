@@ -268,7 +268,6 @@ function getElementList (target,elements,parent) {
         {
             if (target.hasOwnProperty(k) )
             {
-
                 if (k >= 0)
                 {
 
@@ -279,10 +278,8 @@ function getElementList (target,elements,parent) {
                     } else {
                         var node = k+':'+typeof target[k];
                     }
-
                     if (elements.indexOf(node) == -1)
                         elements.push(node);
-
                 }
 
             }
