@@ -89,14 +89,18 @@ usersSchema.statics.createTheUser = function (req,res,userData,done)
         return;
     }
 
-    User.findOne({"userName" : userData.userName, companyID: req.user.companyID },{},function(err, user){
+    if (req.user.companyID)
+        var theCompanyID = req.user.companyID;
+        else
+        var theCompanyID = userData.companyID;
+
+    User.findOne({"userName" : userData.userName, companyID: theCompanyID },{},function(err, user){
         if(err) throw err;
         if (user) {
             done({result: 0, msg: "userName already in use."});
         } else {
-            console.log('user not found',userData.pwd1);
+
             if (userData.pwd1) {
-                console.log('has password',userData.pwd1);
                 hash(userData.pwd1, function(err, salt, hash){
                     if(err) throw err;
                     userData.password = undefined;
@@ -106,7 +110,6 @@ usersSchema.statics.createTheUser = function (req,res,userData,done)
 
                     User.create(userData, function(err, user){
                         if(err) throw err;
-                        console.log('creado');
                         done({result: 1, msg: "User created.", user: user});
                     });
                 });
