@@ -437,15 +437,8 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
             }
 
-
-
         //pages only for POSTGRESS
         SQLstring += ' LIMIT 500 OFFSET ' + ((params.page -1 )*500);
-
-        //LIMIT { number | ALL }] [OFFSET number]
-
-
-
 
         var pg = require('pg');
         var conString = 'postgres://'+dataSource.params[0].connection.userName+':'+dataSource.params[0].connection.password+'@'+dataSource.params[0].connection.host+'/'+dataSource.params[0].connection.database;
@@ -471,29 +464,11 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                     else
                     setresult([]);
                  client.end();
-             }
+            }
           });
         });
 
-
     });
-
-    //SQLstring = SQLstring + getFilters(query,false);
-
-    /*
-    for (var f in joins)
-    {
-        if (f == 0)
-            SQLstring = SQLstring + ' WHERE ' + joins[f];
-        else
-            SQLstring = SQLstring + ' AND ' + joins[f];
-    }*/
-
-
-
-
-    //SQLstring = SQLstring + getFilters(query,true); //filters for HAVING
-
 
 }
 
@@ -502,10 +477,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
 function getFilters(query,done)
 {
-
-
-
-
    var theFilter = '';
    var filters = [];
    var havings = [];

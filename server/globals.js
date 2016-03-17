@@ -56,8 +56,6 @@ function stripInvalidChars(obj) {
 
 function restrictRole(roles) {
     return function(req, res, next) {
-
-
         if(req.isAuthenticated()){
             for (var i in roles) {
                 if (req.user.roles.indexOf(roles[i]) > -1){
@@ -70,15 +68,11 @@ function restrictRole(roles) {
         //TODO: Log annotation security issue
         console.log("Access denied!");
         res.send(401, {result:0,msg:'You don´t have access to this function'});
-
-        //res.redirect(301,'/');
-        //res.send();
     };
 }
 global.restrictRole = restrictRole;
 
 function saveToLog(req, text, type) {
-    //var Logs = require('./models/logs');
     var Logs = connection.model('Logs');
 
     Logs.saveToLog(req, {text: text, type: type});
@@ -100,7 +94,7 @@ function getNextSequence(name) {
 global.getNextSequence = getNextSequence;
 
 function sendNotification(req, user_id, text, type, communication_id, accept_url) {
-    //var Notifications = require('./models/notifications');
+
     var Notifications = connection.model('Notifications');
 
     var data = {user_id: user_id, sender_id: req.user.id, text: text, type: type, communication_id: communication_id, accept_url: accept_url};

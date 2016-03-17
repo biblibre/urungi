@@ -199,6 +199,8 @@ function repaintRepeater($scope,id,report,done)
              //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
             //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
 
+            htmlCode += '<div ng-if="theData[\''+hashedID+'\'].length == 0" >No data found</div>';
+
             htmlCode += '<div class="repeater-data container-fluid" ng-repeat="item in theData[\''+hashedID+'\'] | filter:theFilter | orderBy:reports[\''+hashedID+'\'].predicate:reports[\''+hashedID+'\'].reverse  " style="width:100%;padding:0px">';
 
             //console.log(htmlCode);
