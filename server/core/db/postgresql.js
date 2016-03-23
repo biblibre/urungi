@@ -27,7 +27,7 @@ db.prototype.connect = function(data, done) {
     });
 };
 
-db.prototype.end = function(data, done) {
+db.prototype.end = function() {
     this.connection.end();
 };
 
@@ -40,6 +40,10 @@ db.prototype.query = function(query, done) {
 
         done(false, {rows: result.rows});
     });
+};
+
+db.prototype.getSchemaQuery = function(newSchemas, newTables) {
+    return "SELECT table_schema, table_name, column_name, data_type FROM information_schema.columns WHERE table_schema in ("+newSchemas+") AND table_name in ("+newTables+")";
 };
 
 db.prototype.getLimitString = function(limit, offset) {

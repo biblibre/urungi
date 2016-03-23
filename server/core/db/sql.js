@@ -7,6 +7,10 @@ exports.getSchemas = function(data, setresult) {
         case 'MySQL': var db = 'mysql';
             break;
         case 'POSTGRE': var db = 'postgresql';
+            break;
+        case 'ORACLE': var db = 'oracle';
+            break;
+        case 'MSSQL': var db = 'mssql';
     }
 
     var dbController = require('./'+db+'.js');
@@ -79,15 +83,16 @@ exports.getSchemas = function(data, setresult) {
 
         console.log('Connected to '+data.type+' getting table names');
 
-        db.query("SELECT table_schema, table_name, column_name, data_type FROM information_schema.columns WHERE table_schema in ("+newSchemas +") AND table_name   in ("+ newTables+")", function(err, result) {
-            console.log(result.rows);
+        var query = db.getSchemaQuery(newSchemas, newTables);
+
+        db.query(query, function(err, result) {
             var schemas = [];
             for (var s = 0; s < schemasTables.length; s++) {
                 getCollectionSchema(schemasTables[s], result.rows, function (resultCollection) {
                     schemas.push(resultCollection);
                 });
             }
-            console.log(schemas);
+            debug({result: 1, items: schemas});
             setresult({result: 1, items: schemas});
 
             db.end();
@@ -484,6 +489,10 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             case 'MySQL': var dbController = require('./mysql.js');
                 break;
             case 'POSTGRE': var dbController = require('./postgresql.js');
+                break;
+            case 'ORACLE': var dbController = require('./oracle.js');
+                break;
+            case 'MSSQL': var dbController = require('./mssql.js');
         }
 
         var db = new dbController.db();
