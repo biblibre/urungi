@@ -53,7 +53,7 @@ db.prototype.getSchemaQuery = function(newSchemas, newTables) {
 };
 
 db.prototype.getLimitString = function(limit, offset) {
-    return "";//'LIMIT '+offset+', '+limit;
+    return "OFFSET "+offset+" ROWS FETCH NEXT "+limit+" ROWS ONLY";
 };
 
 exports.db = db;
