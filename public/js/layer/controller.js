@@ -101,16 +101,18 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
 
 
-                    var isDragging = false;
+                    /*var isDragging = false;
                     var pageX = 0, pageY = 0;
 
                     $("#collections")
-                        .mousedown(function() {
-                            isDragging = true;
-                            console.log($scope._Layer.params.schema);
+                        .mousedown(function(event) {
+                            if (event.target.id == 'collections' || event.target.id == 'canvas') {
+                                isDragging = true;
+                                console.log($scope._Layer.params.schema);
+                            }
                         })
                         .mousemove(function(event) {
-                            if (isDragging && (event.target.id == 'collections' || event.target.id == 'canvas')) {
+                            if (isDragging) {
                                 console.log('dragging');
 
                                 if (!pageX && !pageY) {
@@ -125,14 +127,14 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                                 console.log('movementY '+movementY);
 
                                 for (var i in $scope._Layer.params.schema) {
+                                    if (!$scope._Layer.params.schema[i].left) $scope._Layer.params.schema[i].left = 0;
+                                    if (!$scope._Layer.params.schema[i].top) $scope._Layer.params.schema[i].top = 0;
+
                                     $scope.$apply(function () {
                                         $scope._Layer.params.schema[i].left += movementX;
                                         $scope._Layer.params.schema[i].top += movementY;
                                     });
-
                                 }
-
-
 
                                 pageX = event.pageX;
                                 pageY = event.pageY;
@@ -142,7 +144,11 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                         .mouseup(function() {
                             isDragging = false;
                             console.log($scope._Layer.params.schema);
-                        });
+                        })
+                        .mouseout(function() {
+                            isDragging = false;
+                            console.log($scope._Layer.params.schema);
+                        });*/
 
                 });
 
