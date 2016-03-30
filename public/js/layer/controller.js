@@ -75,6 +75,89 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
                 }
 
+
+
+                var currentZoom = 1.0;
+                var onZoom = false;
+
+                $(document).ready(function () {
+                    $('#collections').bind('mousewheel DOMMouseScroll', function(e){
+                        e.preventDefault();
+
+                        if (onZoom) return;
+
+                        onZoom = true;
+
+                        if(e.originalEvent.wheelDelta /120 > 0) {
+                            $('#canvas').animate({ 'zoom': currentZoom += .1 }, 250, function() {
+                                onZoom = false;
+                            });
+                        }
+                        else{
+                            $('#canvas').animate({ 'zoom': currentZoom -= .1 }, 250, function() {
+                                onZoom = false;
+                            });
+                        }
+                    });
+
+
+
+
+                    /*var isDragging = false;
+                    var pageX = 0, pageY = 0;
+
+                    $("#collections")
+                        .mousedown(function(event) {
+                            if (event.target.id == 'collections' || event.target.id == 'canvas') {
+                                isDragging = true;
+                                console.log($scope._Layer.params.schema);
+                            }
+                        })
+                        .mousemove(function(event) {
+                            if (isDragging) {
+                                console.log('dragging');
+
+                                if (!pageX && !pageY) {
+                                    pageX = event.pageX;
+                                    pageY = event.pageY;
+                                }
+
+                                var movementX = pageX-event.pageX;
+                                var movementY = pageY-event.pageY;
+
+                                console.log('movementX '+movementX);
+                                console.log('movementY '+movementY);
+
+                                for (var i in $scope._Layer.params.schema) {
+                                    if (!$scope._Layer.params.schema[i].left) $scope._Layer.params.schema[i].left = 0;
+                                    if (!$scope._Layer.params.schema[i].top) $scope._Layer.params.schema[i].top = 0;
+
+                                    $scope.$apply(function () {
+                                        $scope._Layer.params.schema[i].left += movementX;
+                                        $scope._Layer.params.schema[i].top += movementY;
+                                    });
+                                }
+
+                                pageX = event.pageX;
+                                pageY = event.pageY;
+                            }
+
+                        })
+                        .mouseup(function() {
+                            isDragging = false;
+                            console.log($scope._Layer.params.schema);
+                        })
+                        .mouseout(function() {
+                            isDragging = false;
+                            console.log($scope._Layer.params.schema);
+                        });*/
+
+                });
+
+
+
+
+
             });
         };
     };
@@ -118,7 +201,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             });
         }
     };
-
 
     $scope.getLayers = function(page, search, fields) {
         var params = {};

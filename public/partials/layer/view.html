@@ -54,44 +54,49 @@
             </div>
         </script>
     </div>
+
     <div class="col-md-8">
-    <div class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan" id="canvas">
-        <div id="{{collection.collectionID}}"  class="window jtk-node  jsplumb-draggable" style=" left: {{collection.left}}px; top: {{collection.top}}px;" ng-repeat="collection in _Layer.params.schema">
-            <div class=" jtk-header " style="overflow: hidden">
+
+        <div id="collections" style="height: 500px;overflow: scroll;background-color: white;cursor: -webkit-grab;">
+            <div class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan" id="canvas" style="overflow: visible !important;border: 0px;">
+                <div id="{{collection.collectionID}}"  class="window jtk-node  jsplumb-draggable" ng-style="{'left': collection.left, 'top': collection.top}" ng-repeat="collection in _Layer.params.schema">
+                    <div class=" jtk-header " style="overflow: hidden">
 
 
 
-                <strong class="jtk-header-label" ng-click="collectionClicked(collection)" style="overflow: hidden">{{collection.collectionName}}</strong>
+                        <strong class="jtk-header-label" ng-click="collectionClicked(collection)" style="overflow: hidden">{{collection.collectionName}}</strong>
+
+                    </div>
+                    <!--
+                    <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{'flowchart'+element.elementID}}" ng-repeat="element in collection.elements" popover-trigger="mouseenter" popover-placement="bottom" popover-title="{{element.elementName}}" popover="..." title="<h1><b>Another</b> <em>one</em> here too</h1>" data-html="true" rel="tooltip">{{element.elementName}}</div>
+                    -->
+                    <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{element.elementID}}" ng-repeat="element in collection.elements"  title="<h1><b>Another</b> <em>one</em> here too</h1>" data-html="true" rel="tooltip">
+                        <table style="border: 0px;">
+                            <tr>
+                                <!--
+                                <td class="jtk-field-icon"><i ng-show="isNotInObjects(element.elementID)" class="fa fa-plus-square" ng-click="elementAdd(element)" ></i></td>
+                                <td class="jtk-field-selected"><i ng-show="!isNotInObjects(element.elementID)" class="fa fa-minus-square"  ></i></td>
+                                -->
+                                <td class="jtk-field-icon"><i ng-show="!element.elementRole" class="fa fa-plus-square" ng-click="elementAdd(element)" ></i></td>
+                                <td class="jtk-field-icon"><i ng-show="element.count" class="fa fa-superscript element-variable"  ></i></td>
+                                <td class="jtk-field-selected"><i ng-show="element.elementRole" class="fa fa-minus-square"  ></i></td>
+
+                                <td class="jtk-field-label">{{element.elementName}}</td>
+                            </tr>
+
+                        </table>
+
+
+
+                    </div>
+                    <!--//popover con html http://plnkr.co/edit/VhYAD04ETQsJ2dY3Uum3?p=preview -->
+
+                </div>
+
 
             </div>
-            <!--
-            <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{'flowchart'+element.elementID}}" ng-repeat="element in collection.elements" popover-trigger="mouseenter" popover-placement="bottom" popover-title="{{element.elementName}}" popover="..." title="<h1><b>Another</b> <em>one</em> here too</h1>" data-html="true" rel="tooltip">{{element.elementName}}</div>
-            -->
-            <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{element.elementID}}" ng-repeat="element in collection.elements"  title="<h1><b>Another</b> <em>one</em> here too</h1>" data-html="true" rel="tooltip">
-                <table style="border: 0px;">
-                    <tr>
-                        <!--
-                        <td class="jtk-field-icon"><i ng-show="isNotInObjects(element.elementID)" class="fa fa-plus-square" ng-click="elementAdd(element)" ></i></td>
-                        <td class="jtk-field-selected"><i ng-show="!isNotInObjects(element.elementID)" class="fa fa-minus-square"  ></i></td>
-                        -->
-                        <td class="jtk-field-icon"><i ng-show="!element.elementRole" class="fa fa-plus-square" ng-click="elementAdd(element)" ></i></td>
-                        <td class="jtk-field-icon"><i ng-show="element.count" class="fa fa-superscript element-variable"  ></i></td>
-                        <td class="jtk-field-selected"><i ng-show="element.elementRole" class="fa fa-minus-square"  ></i></td>
-
-                        <td class="jtk-field-label">{{element.elementName}}</td>
-                    </tr>
-
-                </table>
-
-
-
-            </div>
-            <!--//popover con html http://plnkr.co/edit/VhYAD04ETQsJ2dY3Uum3?p=preview -->
-
         </div>
 
-
-    </div>
     </div>
 
 
