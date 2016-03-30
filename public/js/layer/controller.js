@@ -81,7 +81,9 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 var onZoom = false;
 
                 $(document).ready(function () {
-                    $('#collections').bind('mousewheel', function(e){
+                    $('#collections').bind('mousewheel DOMMouseScroll', function(e){
+                        e.preventDefault();
+
                         if (onZoom) return;
 
                         onZoom = true;

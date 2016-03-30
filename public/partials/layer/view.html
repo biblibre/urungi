@@ -57,7 +57,7 @@
 
     <div class="col-md-8">
 
-        <div id="collections" style="height: 500px;overflow: hidden;background-color: white;cursor: -webkit-grab;">
+        <div id="collections" style="height: 500px;overflow: scroll;background-color: white;cursor: -webkit-grab;">
             <div class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan" id="canvas" style="overflow: visible !important;border: 0px;">
                 <div id="{{collection.collectionID}}"  class="window jtk-node  jsplumb-draggable" ng-style="{'left': collection.left, 'top': collection.top}" ng-repeat="collection in _Layer.params.schema">
                     <div class=" jtk-header " style="overflow: hidden">
