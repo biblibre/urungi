@@ -16,16 +16,6 @@ module.exports = {
         },
         mailer: {
             service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
-<<<<<<< HEAD
-            host: 'smtp.1and1.es', // hostname
-            secureConnection: true, // use SSL
-            port: 587, // port for secure SMTP
-            auth: {
-                user: 'noreply@db-team.com',
-                pass: 'no_reply_5'
-            },
-            from: 'noreply@db-team.com'
-=======
             host: 'smtp.yourserver.com', // hostname
             secureConnection: false, // use SSL
             port: 25, // port for secure SMTP
@@ -34,7 +24,6 @@ module.exports = {
                 pass: 'yourpassword'
             },
             from: 'no_reply@yourserver.com'
->>>>>>> 455740930a702e05dfb736b5cae857304584f614
         },
         pagination: {
             itemsPerPage: 10
@@ -57,16 +46,6 @@ module.exports = {
         },
         mailer: {
             service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
-<<<<<<< HEAD
-            host: 'smtp.1and1.es', // hostname
-            secureConnection: true, // use SSL
-            port: 587, // port for secure SMTP
-            auth: {
-                user: 'noreply@db-team.com',
-                pass: 'no_reply_5'
-            },
-            from: 'noreply@db-team.com'
-=======
             host: 'smtp.yourserver.com', // hostname
             secureConnection: false, // use SSL
             port: 25, // port for secure SMTP
@@ -75,7 +54,6 @@ module.exports = {
                 pass: 'yourpassword'
             },
             from: 'no_reply@yourserver.com'
->>>>>>> 455740930a702e05dfb736b5cae857304584f614
         },
         pagination: {
             itemsPerPage: 10
@@ -98,16 +76,6 @@ module.exports = {
         },
         mailer: {
             service: 'SMTP', //SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
-<<<<<<< HEAD
-            host: 'smtp.1and1.es', // hostname
-            secureConnection: true, // use SSL
-            port: 587, // port for secure SMTP
-            auth: {
-                user: 'noreply@db-team.com',
-                pass: 'no_reply_5'
-            },
-            from: 'noreply@db-team.com'
-=======
             host: 'smtp.yourserver.com', // hostname
             secureConnection: false, // use SSL
             port: 25, // port for secure SMTP
@@ -116,7 +84,6 @@ module.exports = {
                 pass: 'yourpassword'
             },
             from: 'no_reply@yourserver.com'
->>>>>>> 455740930a702e05dfb736b5cae857304584f614
         },
         pagination: {
             itemsPerPage: 10

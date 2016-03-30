@@ -94,7 +94,6 @@ exports.getEntities = function(req,res)
             }
             if (result.item.type == 'MySQL' || result.item.type == 'POSTGRE' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL')
             {
-<<<<<<< HEAD
                 console.log(result.item.type+' entities');
                 switch(result.item.type) {
                     case 'MySQL': var db = require('../../core/db/mysql.js');
@@ -114,16 +113,6 @@ exports.getEntities = function(req,res)
                 };
                 console.log(JSON.stringify(data));
                 db.testConnection(data, function(result) {
-=======
-                var postgre = require('../../core/db/postgresql.js');
-                var data = {};
-                data.host = result.item.params[0].connection.host;
-                data.port = result.item.params[0].connection.port;
-                data.userName = result.item.params[0].connection.userName;
-                data.password = result.item.params[0].connection.password;
-                data.database = result.item.params[0].connection.database;
-                postgre.testConnection(data, function(result) {
->>>>>>> 455740930a702e05dfb736b5cae857304584f614
                     serverResponse(req, res, 200, result);
                 });
             }
@@ -161,7 +150,6 @@ exports.testConnection = function(req,res) {
         var postgre = require('../../core/db/postgresql.js');
 
         postgre.testConnection(req.body, function(result) {
-<<<<<<< HEAD
         console.log('devolviendo datos...');
             serverResponse(req, res, 200, result);
         });
@@ -183,8 +171,6 @@ exports.testConnection = function(req,res) {
 
         mssql.testConnection(req.body, function(result) {
             console.log('devolviendo datos...');
-=======
->>>>>>> 455740930a702e05dfb736b5cae857304584f614
             serverResponse(req, res, 200, result);
         });
     }
