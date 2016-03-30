@@ -1,4 +1,5 @@
 module.exports = function (app, passport) {
+    var hash = require('../util/hash');
     var api = require('../api.js');
 
 
@@ -21,7 +22,7 @@ module.exports = function (app, passport) {
 
     app.post('/api/login', function(req, res, next) {
         var Users = connection.model('Users');
-        //var Companies = connection.model('Companies');
+        var Companies = connection.model('Companies');
 
         Users.count({}, function(err, c)
         {
@@ -38,13 +39,22 @@ module.exports = function (app, passport) {
                 var adminUser = {};
                 adminUser.userName = 'administrator';
                 adminUser.companyID = 'COMPID';
-                adminUser.password = 'widestage';
                 adminUser.roles = [];
                 adminUser.roles.push('WSTADMIN');
                 adminUser.status = 'active';
                 adminUser.nd_trash_deleted = false;
-                Users.createTheUser(adminUser,function(result){
-                    authenticate(passport,Users,req, res, next);
+
+                hash('widestage', function(err, salt, hash){
+                    if(err) throw err;
+
+                    adminUser.salt = salt;
+                    adminUser.hash = hash;
+                    var User = connection.model('Users');
+
+                    User.create(adminUser, function(err, user){
+                            if(err) throw err;
+                            authenticate(passport,Users,req, res, next);
+                        });
                 });
 
             } else {
@@ -60,7 +70,6 @@ module.exports = function (app, passport) {
 function authenticate(passport, Users, req, res, next)
 {
     passport.authenticate('local', function(err, user, info) {
-        console.log(info);
         if (err) { return next(err); }
 
         if (!user) {

@@ -1,11 +1,9 @@
 var Pages = connection.model('Pages');
 
-console.log('This is the model 1:   ',JSON.stringify(connection.model('Pages')));
 
 require('../../core/controller.js');
 
 function PagesController(model) {
-    console.log('This is the model:   ',JSON.stringify(model));
     this.model = model;
     this.searchFields = [];
 }
@@ -67,7 +65,6 @@ exports.PagesCreate = function(req,res){
 
     req.body.owner = req.user._id;
     req.body.isPublic = false;
-console.log('estoy por aqui...');
     controller.create(req, function(result){
         serverResponse(req, res, 200, result);
     });
@@ -79,19 +76,17 @@ exports.PagesDuplicate = function(req,res){
     {
         serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to create Pages"});
     } else {
+        req.query.trash = true;
+        req.query.companyid = true;
+        req.query.userid = true;
 
-    req.query.trash = true;
-    req.query.companyid = true;
-    req.query.userid = true;
-
-    delete(req.body._id);
-    req.body.pageName = 'Copy of '+req.body.pageName;
-    req.body.owner = req.user._id;
-    req.body.isPublic = false;
-console.log('estoy por aqui...');
-    controller.create(req, function(result){
-        serverResponse(req, res, 200, result);
-    });
+        delete(req.body._id);
+        req.body.pageName = 'Copy of '+req.body.pageName;
+        req.body.owner = req.user._id;
+        req.body.isPublic = false;
+        controller.create(req, function(result){
+            serverResponse(req, res, 200, result);
+        });
     }
 };
 

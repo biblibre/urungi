@@ -4,8 +4,6 @@ function restrict(req, res, next) {
     if (global.authentication)
     {
         if(req.isAuthenticated()){
-
-                console.log("Authentication is ON - Session OK!");
                 next();
         }else{
               req.session.error = 'Access denied!';
@@ -13,7 +11,6 @@ function restrict(req, res, next) {
               return res.redirect(301,'/login');
         }
     } else {
-        console.log("Authentication is OFF");
         next();
     }
 }
@@ -59,12 +56,9 @@ function stripInvalidChars(obj) {
 
 function restrictRole(roles) {
     return function(req, res, next) {
-
-
         if(req.isAuthenticated()){
             for (var i in roles) {
                 if (req.user.roles.indexOf(roles[i]) > -1){
-                    console.log("Role OK!");
                     next();
                     return;
                 }
@@ -72,17 +66,13 @@ function restrictRole(roles) {
         }
         req.session.error = 'Access denied!';
         //TODO: Log annotation security issue
-        //console.log("Access denied!");
+        console.log("Access denied!");
         res.send(401, {result:0,msg:'You don´t have access to this function'});
-
-        //res.redirect(301,'/');
-        //res.send();
     };
 }
 global.restrictRole = restrictRole;
 
 function saveToLog(req, text, type) {
-    //var Logs = require('./models/logs');
     var Logs = connection.model('Logs');
 
     Logs.saveToLog(req, {text: text, type: type});
@@ -104,7 +94,7 @@ function getNextSequence(name) {
 global.getNextSequence = getNextSequence;
 
 function sendNotification(req, user_id, text, type, communication_id, accept_url) {
-    //var Notifications = require('./models/notifications');
+
     var Notifications = connection.model('Notifications');
 
     var data = {user_id: user_id, sender_id: req.user.id, text: text, type: type, communication_id: communication_id, accept_url: accept_url};
@@ -117,7 +107,7 @@ function sendCommunication(data) {
     var Communications = connection.model('Communications');
 
     Communications.sendEmail(data, function(result){
-        console.log(result);
+
     });
 };
 global.sendCommunication = sendCommunication;
@@ -172,7 +162,7 @@ function isAllowed(req, area) {
 global.isAllowed = isAllowed;
 
 function debug(obj) {
-    console.log(JSON.stringify(obj, null, 2));
+
 }
 global.debug = debug;
 

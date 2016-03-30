@@ -66,7 +66,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
     };
 
     $scope.initForm = function() {
-    console.log('the page definition 0');
+
         $scope.dataMode = 'preview';
         if ($routeParams.newPage == 'true') {
             $scope.selectedPage = {pageName:"New PAGE", backgroundColor:"#999999" ,items:[],properties:{},pageType:'DEFAULT'};
@@ -114,7 +114,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
 
                     getQueryData($scope,0,function(){
-                        //console.log('before rebuild charts');
                         rebuildCharts();
                         rebuildRepeaters();
                     });
@@ -130,6 +129,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                     });
 
                     cleanAllSelected();
+
                     $scope.getPrompts();
                 });
             }
@@ -820,10 +820,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
         var elementType = theElement.attr('ndType');
 
-        console.log('the element type',elementType);
-
         $scope.selectedElementType = elementType;
-
 
         //visibility Properties
             if ($scope.selectedElement.hasClass('hidden-lg') == true )
@@ -902,6 +899,17 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
         if (elementType == 'repeaterGrid')
         {
+            var gridID = theElement.attr('id');
+
+            for (var g in $scope.repeaters)
+            {
+                if ($scope.repeaters[g].id == gridID)
+                    {
+                        $scope.selectedRepeater = $scope.repeaters[g];
+                        console.log('selected repeater',$scope.repeaters[g]);
+                    }
+            }
+
 
         }
 
@@ -915,6 +923,8 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     $scope.changeBackgroundColor = function(color)
     {
+        var elementID = $scope.selectedElement.attr('id');
+
         var alpha = $scope.imageFilters.opacity /10;
         var hex = hexToRgb(color);
         if (hex)
@@ -928,7 +938,13 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
         if ($scope.selectedElementType == 'page')
             $scope.selectedPage.backgroundColor = color;
+
+        if ($scope.selectedElementType == 'gridHeaderColumn')
+            grid.savePropertyForGridColumn($scope.repeaters,'backgroundColor',elementID,'rgba('+r+','+g+','+b+',' + alpha + ')');
+
     }
+
+
 
     $scope.changeOpacity = function()
     {
@@ -1390,7 +1406,11 @@ $scope.changeVisibility = function() {
             if (elementType == 'ndPrompt')
                 {
                 $(theElement.childNodes[i]).children().remove();
-                console.log('is a prompt')
+                }
+
+            if (elementType == 'repeaterGrid')
+                {
+                $(theElement.childNodes[i]).children().remove();
                 }
 
             if (theElement.childNodes[i].hasChildNodes() == true)
@@ -1570,8 +1590,6 @@ $scope.changeVisibility = function() {
     function savePage()
     {
 
-        //var page = preparePageToSave;
-
         //Put all charts in loading mode...
         for (var c in $scope.charts)
         {
@@ -1643,7 +1661,6 @@ $scope.changeVisibility = function() {
         console.log('saving edit');
             connection.post('/api/pages/update/'+$scope.pageID, page, function(result) {
                 if (result.result == 1) {
-                    //console.log('saved',page);
                     for (var c in $scope.charts)
                         {
 
@@ -1674,15 +1691,12 @@ $scope.changeVisibility = function() {
                 $scope.queries[index].data = data;
                     $scope.queries[index].loadingData= false;
                     $scope.theData[$scope.queries[index].hashedID] = data;
-                    //$scope.setQueryLoadedData($scope.queries[index].id);
-                    //console.log('new data is comming',data);
                 getQueryData($scope,index+1,done);
             });
     }
 
     function rebuildCharts()
     {
-        console.log('entering in rebuild charts');
         for (var i in $scope.charts)
         {
            if ($scope.charts[i] != undefined)
@@ -1691,16 +1705,11 @@ $scope.changeVisibility = function() {
             //found the query for the chart
             for (var q in $scope.queries)
             {
-                //console.log('the query name...',$scope.queries[q].name,theChart.query);
-                //console.log('query names',$scope.queries[q].name,theChart)
-                //var queryName = $scope.queries[q].ddname;
                 if ($scope.queries[q].name == theChart.query.name)
                     {
-                    //console.log('the query is set...');
                     theChart.query = $scope.queries[q];
                     }
             }
-            //console.log('rebuilding chart',theChart.chartID)
             $scope.showOverlay('OVERLAY_'+theChart.chartID);
             c3Charts.rebuildChart(theChart);
             $scope.hideOverlay('OVERLAY_'+theChart.chartID);

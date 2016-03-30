@@ -11,13 +11,14 @@ this.simpleGrid = function(columns,id,query,designerMode,done)
             var colClass = '';
             var colWidth = '';
 
+
             if (columns.length == 5 || columns.length > 6)
                 colWidth = 'width:'+100/columns.length+'%;float:left;';
             else
                 colClass = 'col-xs-'+12/columns.length;
 
-            //header
-            htmlCode += '<div page-block ndType="gridHeader" class="container-fluid" style="width:100%;padding:2px;background-color:#ccc;">';
+            //header  page-block  ndType="gridHeader"
+            htmlCode += '<div class="container-fluid" id="HEADER_'+id+'" style="width:100%;padding:2px;background-color:#ccc;">';
             for(var i = 0; i < columns.length; i++)
             {
                     var elementName = "'"+columns[i].id+"'";
@@ -28,8 +29,8 @@ this.simpleGrid = function(columns,id,query,designerMode,done)
                     if (columns[i].elementType === 'date')
                         elementNameAux = "'"+columns[i].id+'_original'+"'"; //"'"+columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName+'_original'+"'";
 
-
-                    htmlCode += '<div page-block ndType="gridHeaderColumn" class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" >'+columns[i].elementLabel+'</span> </div>';
+                       // page-block  ndType="gridHeaderColumn"
+                    htmlCode += '<div id="HEADERCOL_'+columns[i].id+'['+i+']"  class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" >'+columns[i].elementLabel+'</span> </div>';
 
             }
 
@@ -37,7 +38,7 @@ this.simpleGrid = function(columns,id,query,designerMode,done)
 
 
             //Body
-            htmlCode += '<div vs-repeat style="max-height:500px;width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;">';
+            htmlCode += '<div vs-repeat style="max-height:460px;width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;">';
 
                 //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
             //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
@@ -129,9 +130,10 @@ this.simpleGrid = function(columns,id,query,designerMode,done)
 
                 var defaultAligment = '';
                 if (columns[i].elementType === 'number')
-                    defaultAligment = 'text-align: right;'
+                    defaultAligment = 'text-align: right;';
 
-                    htmlCode += '<div page-block ndType="gridDataColumn" class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+columns[i].objectLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
+                    //page-block ndType="gridDataColumn"
+                    htmlCode += '<div   class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+columns[i].objectLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
             }
 
             htmlCode += '</div>';
@@ -196,6 +198,8 @@ function repaintRepeater($scope,id,report,done)
 
              //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
             //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
+
+            htmlCode += '<div ng-if="theData[\''+hashedID+'\'].length == 0" >No data found</div>';
 
             htmlCode += '<div class="repeater-data container-fluid" ng-repeat="item in theData[\''+hashedID+'\'] | filter:theFilter | orderBy:reports[\''+hashedID+'\'].predicate:reports[\''+hashedID+'\'].reverse  " style="width:100%;padding:0px">';
 
@@ -587,6 +591,20 @@ function repaintRepeater($scope,id,report,done)
 
     }
 
+    this.savePropertyForGridColumn = function(grids,property,columnID,value)
+    {
+       // HEADERCOL_'+columns[i].id+'['+i+']"
+
+       for (var g in grids)
+           {
+               for (var c in gridColumns)
+               {
+                    grids[g].gridColumns[c].header[property] = value;
+               }
+           }
+    }
+
+
 });
 
 app.directive('gridProperties',['$compile','colors', function($compile,colors) {
@@ -605,7 +623,7 @@ return {
     restrict: 'E',
     // linking method
     link: function($scope, element, attrs) {
-    $scope.colors = colors.colors;
+    $scope.grid = grid;
         switch (attrs['type']) {
             case "text":
                 // append input field to "template"
@@ -629,6 +647,12 @@ return {
 	        $scope.onChange(elementId,$scope.selectedValue);
 
         };
+
+      $scope.changeHeaderBackgroundColor = function(color) {
+        $scope.grid.headerBackgroundColor = color;
+        $('#'+$scope.grid.id).css({'background-color': color});
+
+      }
 
 
     }

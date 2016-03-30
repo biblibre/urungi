@@ -1,10 +1,5 @@
 <div>
-  <v-pane>
-      <v-pane-header>
-      Grid header
-    </v-pane-header>
 
-    <v-pane-content>
             <div >
                 <div class="btn-group" style="width:100%">
                                                     <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Header Background Color</button>
@@ -14,24 +9,17 @@
                                                     </button>
                                                     <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
                                                         <div class="iconpicker-items">
-                                                            <a role="button" ng-click="changeBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
+                                                            <a role="button" ng-click="changeHeaderBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
                                                         </div></div></div></div>
                                                     </div>
                 </div>
             </div>
-    </v-pane-content>
 
-  </v-pane>
 
-    <v-pane>
-      <v-pane-header>
-      Grid body
-    </v-pane-header>
 
-    <v-pane-content>
             <div >
                 <div class="btn-group" style="width:100%">
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Header Background Color</button>
+                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Data row Color</button>
                                                     <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
                                                         <span class="caret"></span>
                                                         <span class="sr-only">Toggle Dropdown</span>
@@ -44,8 +32,8 @@
                 </div>
             </div>
         <div >
-                <div class="btn-group" style="width:100%">
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Header Background Color</button>
+        <div class="btn-group" style="width:100%">
+                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Alternate data row color</button>
                                                     <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
                                                         <span class="caret"></span>
                                                         <span class="sr-only">Toggle Dropdown</span>
@@ -53,13 +41,14 @@
                                                     <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
                                                         <div class="iconpicker-items">
                                                             <a role="button" ng-click="changeBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
-                                                        </div></div></div></div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
                                                     </div>
                 </div>
-            </div>
-    </v-pane-content>
+        </div>
 
-  </v-pane>
 
 
   <v-pane>
@@ -69,10 +58,12 @@
 
     <v-pane-content>
             <table>
-                <tr ng-repeat="column in selectedChart.dataColumns">
-                    <td style="width:80%;overflow:hidden;"> {{column.elementLabel}}</td>
-                    <td style="width:10%"><button class="btn btn-danger btn-xs" ng-click="deleteChartColumn(column)"><i class="fa fa-trash"></i></button></td>
-                    <td style="width:10%"><button class="btn btn-info btn-xs" ng-click="changeChartColumnType(column)"><i class="fa fa-bar-chart"></i></button></td>
+
+                <tr ng-repeat="column in grid.dataColumns">
+
+                    <td style="width:80%;overflow:hidden;">{{column.elementLabel}}</td>
+                    <td style="width:10%"><button class="btn btn-danger btn-xs" ng-click="deleteGridColumn(column)"><i class="fa fa-trash"></i></button></td>
+                    <td style="width:10%"><button class="btn btn-info btn-xs" ng-click="changeGridColumnType(column)"><i class="fa fa-bar-chart"></i></button></td>
                 </tr>
              </table>
     </v-pane-content>
