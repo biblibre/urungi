@@ -171,18 +171,27 @@ exports.getEntities = function(req,res)
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'POSTGRE')
+            if (result.item.type == 'MySQL' || result.item.type == 'POSTGRE' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL')
             {
-                console.log('POSTGRE entities');
-                var postgre = require('../../core/db/postgresql.js');
-                var data = {};
-                data.host = result.item.params[0].connection.host;
-                data.port = result.item.params[0].connection.port;
-                data.userName = result.item.params[0].connection.userName;
-                data.password = result.item.params[0].connection.password;
-                data.database = result.item.params[0].connection.database;
+                console.log(result.item.type+' entities');
+                switch(result.item.type) {
+                    case 'MySQL': var db = require('../../core/db/mysql.js');
+                        break;
+                    case 'POSTGRE': var db = require('../../core/db/postgresql.js');
+                        break;
+                    case 'ORACLE': var db = require('../../core/db/oracle.js');
+                        break;
+                    case 'MSSQL': var db = require('../../core/db/mssql.js');
+                }
+                var data = {
+                    host: result.item.params[0].connection.host,
+                    port: result.item.params[0].connection.port,
+                    userName:result.item.params[0].connection.userName,
+                    password: result.item.params[0].connection.password,
+                    database: result.item.params[0].connection.database
+                };
                 console.log(JSON.stringify(data));
-                postgre.testConnection(data, function(result) {
+                db.testConnection(data, function(result) {
                     serverResponse(req, res, 200, result);
                 });
             }
@@ -223,7 +232,27 @@ exports.testConnection = function(req,res) {
         var postgre = require('../../core/db/postgresql.js');
 
         postgre.testConnection(req.body, function(result) {
-        console.log('devloviendo datos...');
+        console.log('devolviendo datos...');
+            serverResponse(req, res, 200, result);
+        });
+    }
+    if (req.body.type == 'ORACLE')
+    {
+        console.log('ORACLE test connection');
+        var oracle = require('../../core/db/oracle.js');
+
+        oracle.testConnection(req.body, function(result) {
+            console.log('devolviendo datos...');
+            serverResponse(req, res, 200, result);
+        });
+    }
+    if (req.body.type == 'MSSQL')
+    {
+        console.log('MSSQL test connection');
+        var mssql = require('../../core/db/mssql.js');
+
+        mssql.testConnection(req.body, function(result) {
+            console.log('devolviendo datos...');
             serverResponse(req, res, 200, result);
         });
     }
@@ -265,7 +294,25 @@ exports.getEntitySchema = function(req,res) {
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'POSTGRE')
+            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL')
+            {
+                console.log(result.item.type+' entities schema');
+                var sql = require('../../core/db/sql.js');
+                var data = {
+                    type: result.item.type,
+                    host: result.item.params[0].connection.host,
+                    port: result.item.params[0].connection.port,
+                    userName: result.item.params[0].connection.userName,
+                    password: result.item.params[0].connection.password,
+                    database: result.item.params[0].connection.database,
+                    entities: theEntities
+                };
+                //console.log(JSON.stringify(data));
+                sql.getSchemas(data, function(result) {
+                    serverResponse(req, res, 200, result);
+                });
+            }
+            /*if (result.item.type == 'POSTGRE')
             {
                 console.log('POSTGRE entities schema');
                 var postgre = require('../../core/db/postgresql.js');
@@ -280,7 +327,7 @@ exports.getEntitySchema = function(req,res) {
                 postgre.getSchemas(data, function(result) {
                     serverResponse(req, res, 200, result);
                 });
-            }
+            }*/
         } else {
             serverResponse(req, res, 200, result);
         }

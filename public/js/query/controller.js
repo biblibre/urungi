@@ -273,7 +273,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
             }
 
             //get the joins for these collections
-
+            if ($scope.selectedLayer.params && $scope.selectedLayer.params.joins)
             for (var j in $scope.selectedLayer.params.joins)
             {
                 for (var c in reportCollections)
@@ -707,6 +707,8 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
     function joinExists(collection1,collection2)
     {
         var found = false;
+
+        if (!$scope.selectedLayer.params || !$scope.selectedLayer.params.joins) return false;
 
         if (collection1 != collection2)
         {
