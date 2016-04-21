@@ -16,7 +16,7 @@
  * Filter.js is client-side JSON objects filter and render html elements. Multiple filter criteria can be specified and used in conjunction with each other.
  */
 
-app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, promptModel,queryService, dashboardModel, $filter, $rootScope) {
+app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, promptModel,queryService, dashboardModel, $filter, $rootScope, bsLoadingOverlayService) {
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.dateModal = 'partials/report/dateModal.html';
@@ -97,10 +97,22 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         while (s.length < size) s = "0" + s;
         return s;
     }
+    
+    
+    $scope.showOverlay = function (referenceId) {
+        bsLoadingOverlayService.start({
+            referenceId: referenceId
+        });
+    };
+
+    $scope.hideOverlay = function (referenceId) {
+        bsLoadingOverlayService.stop({
+            referenceId: referenceId
+        });
+    };
 
     $scope.onDateSet = function (newDate, oldDate, filter) {
 
-        //console.log(filter);
         var year = newDate.getFullYear();
         var month = pad(newDate.getMonth()+1,2);
         var day = pad(newDate.getDate(),2);
@@ -138,7 +150,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.selectDateFilter = function(filter)
     {
-        console.log('the date modal')
         $scope.selectedFilter = filter;
         $('#dateModal').modal('show');
     }
@@ -194,11 +205,10 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         {value:"in",label:"in"},
         {value:"notIn",label:"not in"}
         /* RANKING
-        el (los) primeros
-        el (los) ultimos
-        el (los) primeros %
-        el (los) ultimos %
-
+        the first
+        the last
+        the first %
+        the last %
          */
 
     ];
@@ -264,9 +274,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             {name: 'Year', value: 'year'},
             {name: 'Month', value: 'month'},
             {name: 'Day', value: 'day'}
-            /*{name: 'Semester', value: 'semester'},
-            {name: 'Quarter', value: 'quarter'},
-            {name: 'Trimester', value: 'trimester'}*/
         ]
     };
 
@@ -287,18 +294,16 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.getReports = function(params) {
         var params = (params) ? params : {};
 
-        console.log(params);
 
         connection.get('/api/reports/find-all', params, function(data) {
             $scope.reports = data;
-            console.log($scope.reports);
         });
     };
 
 
     $scope.reportClicked = function(reportID,parameters)
     {
-        console.log('reportcliced ',reportID,parameters);
+        
     }
 
     $scope.initForm = function() {
@@ -318,7 +323,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
                 $scope.mode = 'add';
 
-                console.log('entering in add mode for reports') ;
             }
               else {
                 //This executes in edit mode
@@ -356,26 +360,10 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.page = data.page;
             $scope.pages = data.pages;
             $scope.layers = data.items;
-            //$scope.data = data;
 
-            //console.log(JSON.stringify(data.items));
-
-            //$scope.selectedLayer = data.items[0];
             $scope.rootItem.elements = data.items[0].objects;
             $scope.selectedLayer = data.items[0];
             $scope.selectedLayerID = data.items[0]._id;
-
-            /*
-            for (var i in $scope.data.items) {
-                console.log($scope.data.items[i]);
-                for (var z in $scope.data.items[i].params[0].schema) {
-                    var dts = {};
-                    dts.collection = $scope.data.items[i].params[0].schema[z];
-                    dts.datasourceID = $scope.data.items[i]._id;
-
-                    $scope.dataSources.push(dts);
-                };
-            } */
         });
     };
 
@@ -403,7 +391,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getElementFilterOptions = function(elementType)
     {
-        //console.log(' es un '+elementType);
 
         if (elementType == 'array')
             return  $scope.filterArrayOptions;
@@ -571,7 +558,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     connection.post('/api/reports/update/'+data._id, data, function(result) {
                         if (result.result == 1) {
 
-                            //$scope.goBack();
+                            
                             setTimeout(function () {
                             $scope.goBack();
                             }, 400);
@@ -586,7 +573,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     function setReportDiv(id)
     {
         $('#reportLayout').empty();
-        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%;height:500px;" ng-init="getReportData2()">';
+        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body reportPageBlockDesktop" style="min-height=400px;width:100%;height:500px;" ng-init="getReportData2()"  bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+$routeParams.reportID+'">';
 
         var $div = $(generatedHTML);
         $('#reportLayout').append($div);
@@ -624,7 +611,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     }  else {
                         if ($scope.prompts.length > 0)
                         {
-                            //console.log('loading prompts modal');
                             $scope.showPrompts = true;
                         } else {
                             setReportDiv($routeParams.reportID);
@@ -645,8 +631,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.cellClick = function(hashID,row,elementID,elementName)
     {
-        //console.log('cell click',row,elementID,elementName,reportModel.hierarchy1.elements);
-
         //TODO: If has been expanded before, no click then...
         if (!row.expandedHierarchy || row.expandedHierarchy == false)
         {
@@ -663,7 +647,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     hasChild = true;
                     nextElement = reportModel.hierarchy1.elements[parseInt(h)+1];
                     element = reportModel.hierarchy1.elements[h];
-                    console.log('this is the next element',h,h+1,reportModel.hierarchy1.elements[h+1],reportModel.hierarchy1.elements[h]);
                 }
             }
 
@@ -692,7 +675,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getReportData2 = function()
     {
-
+            $scope.showOverlay('OVERLAY_'+$scope.selectedReport._id);
+            
             reportModel.getReportBlockForPreview($scope,$scope.selectedReport,$scope.selectedReport._id, function(errorCode) {
 
                 if (errorCode != 0)
@@ -700,13 +684,16 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     var el = document.getElementById($scope.selectedReport._id);
 
                     var theHTML = '';
+                    
                     if (errorCode == 1)
                         theHTML = '<div class="alert">Report not found!</div>';
+                    
                     if (errorCode == 2)
                         theHTML = '<div class="alert">Chart type not found!</div>';
+                    
                     if (errorCode == 3)
                         theHTML = '<div class="alert">No data Found!</div>';
-
+                    
                     if (el)
                     {
                         var $div = $(theHTML);
@@ -717,7 +704,11 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                             $compile($div)(scope);
                         });
                     }
+                    
                 }
+                
+                $scope.hideOverlay('OVERLAY_'+$scope.selectedReport._id);
+               
             });
 
 
@@ -738,7 +729,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         $scope.selectedReport.query = $scope.query;
 
-        var generatedHTML = '<div id="XXXXXXXXXX" class="panel-body reportPageBlockDesktop" style="max-height:500px;width:100%;position:relative;" ng-init="getReportDataForPreview()">';
+        var generatedHTML = '<div id="XXXXXXXXXX" class="panel-body reportPageBlockDesktop" style="max-height:500px;width:100%;position:relative;" ng-init="getReportDataForPreview()" bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_XXXXXXXXXX">';
 
         var $div = $(generatedHTML);
         $('#reportLayout').append($div);
@@ -751,17 +742,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getReportDataForPreview = function()
     {
-        /*
-         var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body" style="heigth=400px;width:100%">';
-
-         var $div = $(generatedHTML);
-         $(reportLayout).append($div);
-         angular.element(document).injector().invoke(function($compile) {
-         var scope = angular.element($div).scope();
-         $compile($div)(scope);
-         });
-         */
-
+        $scope.showOverlay('OVERLAY_XXXXXXXXXX');
         reportModel.getReportBlockForPreview($scope,$scope.selectedReport,'XXXXXXXXXX', function(errorCode) {
 
             if (errorCode != 0)
@@ -787,21 +768,12 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     });
                 }
             }
+            $scope.hideOverlay('OVERLAY_XXXXXXXXXX');
         });
     }
 
     $scope.getReportData = function()
     {
-        /*
-        var generatedHTML = '<div id="'+$routeParams.reportID+'" class="panel-body" style="heigth=400px;width:100%">';
-
-        var $div = $(generatedHTML);
-        $(reportLayout).append($div);
-        angular.element(document).injector().invoke(function($compile) {
-            var scope = angular.element($div).scope();
-            $compile($div)(scope);
-        });
-        */
 
         reportModel.getReportBlock($scope,$routeParams.reportID, function(errorCode) {
 
@@ -833,7 +805,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getCubes = function()
     {
-        console.log('entering getCubes');
         var data = [];
         var cube = {cubeID:'123456789',cubeName:'cube1',cubeLabel:'cuabe 1',cubeDescription:'Descripción del cubo 1', dimmensions:[
             {objectName:'nombreCampo',objectLabel:'etiqueta campo 1',objectType:'DIM',collectionID:'theCollection',connectionID:'theConnection',cubeID:'theCube',objectDescription:'the description for the object'},
@@ -854,7 +825,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.getDataObjects = function()
     {
 
-        console.log('entering getDataObjects');
         var data = [];
 
 
@@ -872,66 +842,14 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             data.push(table);
         }
 
-        //Types: String, Object
-
         $scope.treedata = data;
-
-        /*
-        console.log(JSON.stringify(data));
-            [
-                { "label" : "User", "id" : "role1", "children" : [
-                    { "label" : "subUser1", "id" : "role11", "children" : [] },
-                    { "label" : "subUser2", "id" : "role12", "children" : [
-                        { "label" : "subUser2-1", "id" : "role121", "children" : [
-                            { "label" : "subUser2-1-1", "id" : "role1211", "children" : [] },
-                            { "label" : "subUser2-1-2", "id" : "role1212", "children" : [] }
-                        ]}
-                    ]}
-                ]},
-                { "label" : "Admin", "id" : "role2", "children" : [] },
-                { "label" : "Guest", "id" : "role3", "children" : [] }
-            ];*/
-
-        /*
-        $('#myTree').tree({
-            dataSource: function(options, callback){
-                setTimeout(function () {
-
-                    callback({ data: [
-                        { name: 'Test Folder 1', type: 'folder', additionalParameters: { id: 'F1' },
-                            data: [
-                                { name: 'Test Sub Folder 1', type: 'folder', additionalParameters: { id: 'FF1' } },
-                                { name: 'Test Sub Folder 2', type: 'folder', additionalParameters: { id: 'FF2' } },
-                                { name: 'Test Item 2 in Folder 1', type: 'item', additionalParameters: { id: 'FI2' } }
-                            ]
-                        },
-                        { name: 'Test Folder 2', type: 'folder', additionalParameters: { id: 'F2' } },
-                        { name: 'Province', type: 'item', additionalParameters: { id: 'province' } },
-                        { name: 'Party', type: 'item', additionalParameters: { id: 'party' } },
-                        { name: 'Gender', type: 'item', additionalParameters: { id: 'gender' } },
-                        { name: 'Age Bin', type: 'item', additionalParameters: { id: 'agebin' } },
-                        { name: 'Name', type: 'item', additionalParameters: { id: 'name' } }
-                    ]});
-
-                }, 400);
-            },
-            multiSelect: true,
-            cacheItems: true,
-            folderSelect: false
-        });
-        */
-
 
     }
 
     $scope.onReportAction = function(actionType,targetID,targetFilters)
     {
-        console.log('estamos entrando en la accion del informe');
-
-        //actions:[{actionEvent:"onRowClick",actionType:"goToDashBoard",targetID:"clientDashboard",targetFilters:['customerID'];
         if (actionType == 'goToDashboard')
         {
-            //window.location.href="/home/#/my-employee-profile";
             window.location.hash = '/dashboards/'+targetID;
         }
 
@@ -939,7 +857,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.horiz = function()
     {
-        console.log('soy horiz');
+
     }
 
     $scope.remove = function(object,type)
@@ -975,83 +893,19 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     }
 
 
-    //};
-
-    /*$scope.dropped = function(dragEl, dropEl) {
-        // this is your application logic, do whatever makes sense
-       // var drag = angular.element(dragEl);
-       // var drop = angular.element(dropEl);
-
-        var drop = angular.element(document.getElementById(dropEl));
-        var drag = angular.element(document.getElementById(dragEl));
-
-        //console.log(drop);
-        console.log(drag[0].innerText);
-        console.log("The element " + drag.attr('id') + " has been dropped on " + drop.attr("id") + "!");
-
-       /* if (dragEl == 'unoid')
-        {
-            var generatedHTML = '<div > HELLO </div>';
-
-            var $div = $(generatedHTML);
-            //$(dropEl).append($div);
-            drop.append($div);
-            angular.element(document).injector().invoke(function($compile) {
-                var scope = angular.element($div).scope();
-                $compile($div)(scope);
-            });
-        }*/
-
-        /*if (dropEl == "metricObjects")
-        {
-            $scope.metrics.push('guau'+$scope.metrics.length);
-            console.log($scope.metrics);
-            $scope.refreshPivot();
-            $scope.$apply();
-        }
-
-        if (dropEl == "columnObjects")
-        {
-            //$scope.columns.push(dragEl);
-            $scope.columns.push(String(drag[0].innerText).trim());
-            console.log($scope.columns);
-            $scope.refreshPivot();
-            //$("#pivotOutput").pivot().refreshPivot();
-            $scope.$apply();
-        }
-
-        if (dropEl == "rowObjects")
-        {
-            //$scope.rows.push(dragEl);
-            $scope.rows.push(String(drag[0].innerText).trim());
-            console.log($scope.rows);
-            $scope.refreshPivot();
-            $scope.$apply();
-
-        }
-    };*/
-
-
     $scope.dropped = function(dragEl, dropEl) {
-        // this is your application logic, do whatever makes sense
-        // var drag = angular.element(dragEl);
-        // var drop = angular.element(dropEl);
 
         var drop = angular.element(document.getElementById(dropEl));
         var drag = angular.element(document.getElementById(dragEl));
 
-        console.log("The element " + drag.attr('id') + " has been dropped on " + drop.attr("id") + "!");
-
+       
         if (dropEl == "metricObjects")
         {
-            //$scope.metrics.push('guau'+$scope.metrics.length);
             $scope.metrics = [];
             $scope.metrics.push(String(drag.context.innerHTML).trim());
 
             $('#pivotOutput').find('.pvtAggregator').val($scope.metrics[0]);
             $('#pivotOutput').find('.pvtAggregator').trigger( "change" );
-
-            console.log($scope.metrics);
         }
 
         if (dropEl == "columnObjects")
@@ -1066,7 +920,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         if (dropEl == "rowObjects")
         {
             $scope.rows.push(String(drag[0].innerText).trim());
-            console.log($scope.rows);
         }
 
         $scope.$apply();
@@ -1104,8 +957,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             renderer: data.rendererName,
             metric: data.aggregatorName
         };
-        console.log('saveData');
-        console.log(data);
         $scope.jsonDataPreview = JSON.stringify(data, undefined, 2);
 
         $scope.$apply();
@@ -1134,29 +985,10 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     var config_copy = JSON.parse(JSON.stringify(config));
 
                     if (!rendered) {
-                        //var treeNode = $('<li><i class="collapsed fa fa-folder"></i><span>Fields</span><div><ul><table><td class="pvtAxisContainer pvtHorizList pvtCols ui-sortable ng-isolate-scope"></td></table></ul></div></li>');
-
-                        /*$('#pivotOutput').find('.pvtUnused').hide();
-                        $('#pivotOutput').find('.pvtUnused').children('li').each(function() {
-
-                            //$(this).attr("x-lvl-draggable", true);
-                            //treeNode.find('td').append($(this));
-                            $("#pivotDesigner").find('.pvtCols').append($(this));
-                        });*/
-
-                        /*var clone = $("#pivotDesigner").find('.pvtCols').clone();
-                         $("#pivotOutput").find('.pvtCols').replaceWith(clone);
-                         $scope.$apply();*/
-
-                        //$('#tablesTree').children('ul').append(treeNode);
 
                         $('#pivot-renderer').append($("#pivotOutput").find('.pvtRenderer'));
 
                         $('#pivotOutput').find('tbody').append($('#metrics-row'));
-
-                        /*$('#pivot-renderer').on('change', function() {
-                            $("#pivotOutput").find('.pvtRenderer').val(this.value);
-                        });*/
 
                     }
 
@@ -1185,28 +1017,21 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.sortableOptions = {
         stop: function(e, ui) {
-            // this callback has the changed model
-            //$scope.refreshPivot();
-            //console.log('despues de ordenar');
             $scope.filtersUpdated();
         }
     };
 
     var lastDrop = null;
-    // Drop handler.
     $scope.onDrop = function (data, event, type, group) {
         event.stopPropagation();
         if (lastDrop && lastDrop == 'onFilter') {
             lastDrop = null;
             return;
         }
-        console.log('en box');
-        // Get custom object data.
+
         var customObjectData = data['json/custom-object']; // {foo: 'bar'}
 
-        // Get other attached data.
-        var uriList = data['text/uri-list']; // http://mywebsite.com/..
-        //console.log('soltado uno '+JSON.stringify(customObjectData));
+        var uriList = data['text/uri-list']; 
 
 
         if (type == 'column') {
@@ -1257,42 +1082,28 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         if (type == 'order') {
             customObjectData.sortType = -1;
             $scope.order.push(customObjectData);
-            console.log($scope.order);
         }
         if (type == 'filter') {
             var el = document.getElementById('filter-zone');
 
             //var theTemplate =  $compile('<div class="filter-box">'+customObjectData.objectLabel+'</div>')($scope);;
             $scope.filters.push(customObjectData);
-            console.log('the filters '+JSON.stringify($scope.filters));
-
             $scope.filtersUpdated();
         }
         if (type == 'group') {
             group.filters.push(customObjectData);
-            //$scope.filters.push(customObjectData);
-            console.log('the filters '+JSON.stringify($scope.filters));
-
             $scope.filtersUpdated();
         }
-        /*generateQuery(function(){
-            $scope.processStructure();
-        });*/
 
         detectLayerJoins();
         $scope.processStructure();
 
-        //angular.element(el).append(theTemplate);
-        // ...
     };
 
     $scope.onDropOnFilter = function (data, event, filter) {
         lastDrop = 'onFilter';
 
         var droppedFilter = data['json/custom-object'];
-        console.log('en filtro');
-        console.log(droppedFilter);
-        console.log(filter);
 
         filter.filters = [jQuery.extend({}, filter), droppedFilter];
         filter.group = true;
@@ -1310,19 +1121,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         delete(filter.filterText1);
         delete(filter.filterText2);
 
-        /*filter = {
-            group: true,
-            filters: [jQuery.extend({}, filter), droppedFilter]
-        };*/
-
-       /* $scope.filters[$scope.filters.indexOf(filter)] = {
-            group: true,
-            groupType: 'and',
-            groupLabel: 'AND',
-            filters: [filter, droppedFilter]
-        };*/
-
-        console.log($scope.filters);
+       
         event.stopPropagation();
         return;
     };
@@ -1340,11 +1139,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     };
 
     $scope.filtersUpdated = function(filters, mainFilters) {
-        console.log(filters);
         var filters = (filters) ? filters : $scope.filters;
         var mainFilters = (typeof mainFilters === 'undefined') ? true : mainFilters;
-        console.log('filtersUpdated');
-        console.log(filters);
 
         $scope.updateConditions(filters);
         $scope.updateGroups(filters, mainFilters);
@@ -1354,9 +1150,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 $scope.filtersUpdated(filters[i].filters, false);
             }
         }
-
-        console.log('filtersUpdated FINISH');
-        console.log(filters);
     };
 
     $scope.updateGroups = function(filters, mainFilters) {
@@ -1369,9 +1162,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 return $scope.updateGroups(filters, mainFilters);
             }
         }
-
-        console.log('updateGroups FINISH');
-        console.log(filters);
     };
 
     $scope.updateConditions = function(filters) {
@@ -1388,8 +1178,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     return $scope.updateConditions(filters);
                 }
                 else { //is a condition, next is a filter?
-                    console.log(filters[i]);
-                    console.log(filters[Number(i)+1]);
                     if (filters[Number(i)+1]) {
                         if (filters[Number(i)+1].condition) { //if next is a condition
                             filters.splice(i, 1);
@@ -1409,9 +1197,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 }
             }
         }
-
-        console.log('updateConditions FINISH');
-        console.log(filters);
     };
 
     // Drag over handler.
@@ -1422,17 +1207,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.previewQuery = function()
     {
-       /*
-        console.log('entering preview');
-        var params = {};
-        //console.log(JSON.stringify($scope.columns))
-        params.query = $scope.query;
-        //params.filters = $scope.filters;
-        connection.get('/api/reports/preview-query', params, function(data) {
-            console.log(data);
-            $scope.previewData = data;
-            $scope.preview = true;
-        });*/
+
     };
 
     $scope.addYKeyField = function() {
@@ -1454,19 +1229,11 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             return;
         }
 
-        /*if ($scope.selectedReport.reportType == 'chart') {
-            $scope.getChartData($scope.selectedReport.reportSubType);
-            return;
-        }*/
-
         if ($scope.busy) return;
         $scope.busy = true;
         $scope.page += 1;
 
-        console.log('entering view query');
-
         reportModel.getReportData($scope.selectedReport._id, {page: $scope.page}, function(data) {
-            console.log(data);
 
             for (var i in data) {
                 $scope.queryData.push(data[i]);
@@ -1475,15 +1242,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.busy = false;
         });
 
-        /*connection.get('/api/reports/get-data', {page: $scope.page, query: $scope.query}, function(data) {
-            console.log(data);
-
-            for (var i in data) {
-                $scope.queryData.push(data[i]);
-            }
-
-            $scope.busy = false;
-        });*/
     };
     $scope.getChartData = function(chartType) {
         connection.get('/api/reports/get-data', {query: $scope.query}, function(data) {
@@ -1526,10 +1284,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 layersList.push(filters[i].layerID);
         }
 
-        /*for (var i in filters) {
-         if (datasourcesList.indexOf(filters[i].datasourceID) == -1)
-         datasourcesList.push(filters[i].datasourceID);
-         }*/
 
         for (var i in datasourcesList) {
 
@@ -1604,94 +1358,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.processStructure = function(execute) {
         var execute = (typeof execute !== 'undefined') ? execute : true;
-        /*
-        $scope.query = {};
-        $scope.query.datasources = [];
-        
-        var filters = $scope.filters[0].filters;
-
-        var datasourcesList = [];
-        var layersList = [];
-
-        for (var i in $scope.columns) {
-            if (datasourcesList.indexOf($scope.columns[i].datasourceID) == -1)
-                datasourcesList.push($scope.columns[i].datasourceID);
-            if (layersList.indexOf($scope.columns[i].layerID) == -1)
-                layersList.push($scope.columns[i].layerID);
-        }
-
-        for (var i in filters) {
-            if (datasourcesList.indexOf(filters[i].datasourceID) == -1)
-                datasourcesList.push(filters[i].datasourceID);
-            if (layersList.indexOf(filters[i].layerID) == -1)
-                layersList.push(filters[i].layerID);
-        }
-
-
-
-        for (var i in datasourcesList) {
-
-            var dtsObject = {};
-            dtsObject.datasourceID = datasourcesList[i];
-            dtsObject.collections = [];
-
-            var dtsCollections = [];
-
-            for (var z in $scope.columns) {
-                if ($scope.columns[z].datasourceID == datasourcesList[i])
-                {
-                    if (dtsCollections.indexOf($scope.columns[z].collectionID) == -1)
-                        dtsCollections.push($scope.columns[z].collectionID);
-                }
-            }
-
-            for (var z in filters) {
-                if (filters[z].datasourceID == datasourcesList[i])
-                {
-                    if (dtsCollections.indexOf(filters[z].collectionID) == -1)
-                        dtsCollections.push(filters[z].collectionID);
-                }
-            }
-
-            for (var n in dtsCollections) {
-
-                var collection = {};
-                collection.collectionID = dtsCollections[n];
-
-                collection.columns = [];
-
-                for (var n1 in $scope.columns) {
-                    if ($scope.columns[n1].collectionID == dtsCollections[n])
-                    {
-                            collection.columns.push($scope.columns[n1]);
-                    }
-                }
-
-                collection.order = [];
-
-                for (var n1 in $scope.order) {
-                    if ($scope.order[n1].collectionID == dtsCollections[n])
-                    {
-                        collection.order.push($scope.order[n1]);
-                    }
-                }
-
-                collection.filters = filters;
-
-                dtsObject.collections.push(collection);
-
-            }
-            $scope.query.datasources.push(dtsObject);
-            $scope.query.layers = layersList;
-        }   */
-      //console.log(JSON.stringify($scope.query));
-        /*$scope.selectedReport.properties.xkeys = [];
-        $scope.selectedReport.properties.ykeys = [];
-        $scope.selectedReport.properties.columns = [];
-        $scope.selectedReport.reportType = 'grid';
-          */
-
-        //detectLayerJoins();
 
         $('#reportLayout').empty();
 
@@ -1806,7 +1472,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         if (newReportType == 'indicator')
         {
             $scope.selectedReport.reportType = 'indicator';
-            console.log('indicator type selected')
             if (!$scope.selectedReport.properties.style)
                 $scope.selectedReport.properties.style = 'style1';
             if (!$scope.selectedReport.properties.backgroundColor)
@@ -1891,7 +1556,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.changeReportIcon  = function(newReportIcon)
     {
-        console.log('this is the report Icon selected '+newReportIcon);
         $scope.selectedReport.properties.reportIcon = newReportIcon;
         $scope.processStructure();
     }
@@ -1950,92 +1614,11 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         $('#filterPromptsModal').modal('show');
     };
 
-    /*
-    $scope.getDistinct = function(attribute) {
 
-
-        var execute = (typeof execute !== 'undefined') ? execute : true;
-
-        var query = {};
-        query.datasources = [];
-        query.order = $scope.order;
-
-        //var filters = $scope.filters[0].filters;
-
-        var datasourcesList = [];
-        datasourcesList.push(attribute.datasourceID);
-
-
-
-        for (var i in datasourcesList) {
-
-            var dtsObject = {};
-            dtsObject.datasourceID = datasourcesList[i];
-            dtsObject.collections = [];
-
-            var dtsCollections = [];
-            dtsCollections.push(attribute.collectionID);
-
-
-
-            for (var n in dtsCollections) {
-
-                var collection = {};
-                collection.collectionID = dtsCollections[n];
-
-                collection.columns = [];
-                collection.columns.push(attribute);
-
-
-
-                collection.order = [];
-                attribute.sortType = 1;
-                collection.order.push(attribute);
-
-
-                dtsObject.collections.push(collection);
-
-            }
-            query.datasources.push(dtsObject);
-        }
-
-
-
-
-        reportModel.getData($scope, query, {page: 0}, function(data) {
-            console.log('datos de distinct value ' + JSON.stringify(data));
-            $scope.searchValues = data;
-            $scope.errorMsg = (data.result === 0) ? data.msg : false;
-            $scope.page = data.page;
-            $scope.pages = data.pages;
-            //$scope.data = data;
-        });
-
-
-
-
-    } */
 
     $scope.selectFilterArrayValue = function(type, filter)
     {
         reportModel.selectFilterArrayValue(type, filter);
-
-        /*
-        if (type == 'multiple')
-        {
-            for (var n1 in filter.filterLabel1) {
-                if (n1 > 0)
-                    filter.filterText1 = filter.filterText1 +';'+ filter.filterLabel1[n1].value;
-                else
-                    filter.filterText1 = filter.filterLabel1[n1].value;
-            }
-        } else {
-            filter.filterText1 = filter.filterLabel1.value;
-        }
-
-        //filter.filterText1 = item.value;
-        // Filter.filterLabel1 = item.label;
-        */
     }
 
 
@@ -2110,7 +1693,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     ($scope.selectedLayer.params.joins[j].sourceCollectionID == collection2 && $scope.selectedLayer.params.joins[j].targetCollectionID == collection1))
                 {
                     found = true;
-                    console.log('join encontrada');
                 }
             }
         } else
@@ -2166,8 +1748,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     }
                 }
             }
-
-            console.log('the selected collections',JSON.stringify(selectableCollections));
 
             if (selectableCollections.length == 0)
                 enableAllElements($scope.rootItem.elements);
@@ -2291,12 +1871,10 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         $scope.selectedColumnHashedID  = hashedID;
         $scope.selectedColumnIndex  = columnIndex;
 
-        console.log('el formato 1',JSON.stringify($scope.selectedColumn.columnStyle));
         if (!$scope.selectedColumn.columnStyle)
             $scope.selectedColumn.columnStyle = {color:'#000','background-color':'#EEEEEE','text-align':'left','font-size':"12px",'font-weight':"normal",'font-style':"normal"};
 
-        console.log('el formato',JSON.stringify($scope.selectedColumn.columnStyle));
-
+        
         $('#columnFormatModal').modal('show');
 
 
@@ -2316,7 +1894,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.setColumnFormat = function()
     {
-        console.log('aqui 1',$scope.selectedColumnHashedID);
         reportModel.changeColumnStyle($scope,$scope.selectedColumnIndex ,$scope.selectedColumnHashedID);
     }
 
@@ -2364,8 +1941,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getColumnStyle = function(column)
     {
-        console.log('entering getColumnStyle' ,column.format );
-
+        
         var columnFormat = '';
         if (column.format)
         {
@@ -2375,7 +1951,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 columnFormat += key+':'+column.format[key]+';';
             }
         }
-        console.log('getColumnStyle' ,columnFormat );
+
         return columnFormat;
     }
 

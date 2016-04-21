@@ -20,7 +20,12 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
     };
 
     this.toggleSelection = function toggleSelection($scope,value) {
+        if( typeof $scope.selectedFilter.searchValue === 'string' ) {
+            $scope.selectedFilter.searchValue = [];
+        }
+        
         var idx = $scope.selectedFilter.searchValue.indexOf(value);
+        
         if (idx > -1) {
             $scope.selectedFilter.searchValue.splice(idx, 1);
         }

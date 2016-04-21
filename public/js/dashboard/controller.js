@@ -8,7 +8,7 @@
 
 'use strict';
 
-app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection', 'promptModel','dashboardModel', function ($scope, reportModel ,$timeout ,$routeParams, connection,promptModel,dashboardModel) {
+app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection', 'promptModel','dashboardModel', 'bsLoadingOverlayService', function ($scope, reportModel ,$timeout ,$routeParams, connection,promptModel,dashboardModel,bsLoadingOverlayService) {
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
@@ -69,7 +69,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
         connection.get('/api/dashboards/find-all', params, function(data) {
             $scope.dashboards = data;
-            //console.log($scope.reports);
         });
     };
 
@@ -77,13 +76,22 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.initForm = function() {
         $scope.dataMode = 'preview';
-        console.log('initial '+ $routeParams.newDashboard)
         if ($routeParams.newDashboard == 'true') {
             $scope.dashBoardDefinitition = {dashboardName:"New Dashboard", backgroundColor:"#ccc" ,items:[]};
             $scope.mode = 'add';
-
-            console.log('entering in add mode for dashboards') ;
         }
+    };
+    
+    $scope.showOverlay = function (referenceId) {
+        bsLoadingOverlayService.start({
+            referenceId: referenceId
+        });
+    };
+
+    $scope.hideOverlay = function (referenceId) {
+        bsLoadingOverlayService.stop({
+            referenceId: referenceId
+        });
     };
 
     $scope.setDesignMode = function() {
@@ -128,9 +136,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         } else {
             $('#reportListModal').modal('show');
         }
-
-
-        console.log('select report click');
     }
 
     $scope.reportSelected = function(reportID,report)
@@ -153,12 +158,10 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
         var index = $scope.reports.items.indexOf(report);
         $scope.reports.items.splice(index, 1);
-        //$scope.reports.items.remove(report);
     }
 
     $scope.cellClick = function(hashID,value)
     {
-        console.log('cell click',hashID,value);
 
     }
 
@@ -286,7 +289,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.reportClicked = function(reportID,parameters)
     {
-       console.log('reportcliced ',reportID,parameters);
+        
     }
 
 
@@ -312,8 +315,10 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.getReport2 = function(report)
     {
+        $scope.showOverlay('OVERLAY_'+report._id);
+            
         reportModel.executeReport($scope,report._id, report, function (errorCode){
-
+         
 
             if (errorCode != 0)
             {
@@ -329,23 +334,22 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
                 if (el)
                 {
-                    console.log(el);
                     var $div = $(theHTML);
                     angular.element(el).append($div);
-                    //el.append($div);
                     angular.element(document).injector().invoke(function($compile) {
                         var scope = angular.element($div).scope();
                         $compile($div)(scope);
                     });
                 }
             }
+            
+             $scope.hideOverlay('OVERLAY_'+report._id);
         });
     }
 
 
     $scope.getReport = function(reportID)
     {
-
         reportModel.getReportBlock($scope,reportID, function(errorCode) {
 
             if (errorCode != 0)
@@ -362,10 +366,8 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
              if (el)
              {
-                 console.log(el);
                  var $div = $(theHTML);
                  angular.element(el).append($div);
-                 //el.append($div);
                  angular.element(document).injector().invoke(function($compile) {
                      var scope = angular.element($div).scope();
                      $compile($div)(scope);
@@ -378,18 +380,13 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.saveDashboard = function()
     {
-
-
-
         if ($scope.mode == 'add') {
-
             connection.post('/api/dashboards/create', $scope.dashBoardDefinitition, function(data) {
                 if (data.result == 1) {
                     $scope.goBack();
                 }
             });
-        }
-        else {
+        } else {
             connection.post('/api/dashboards/update/'+$scope.dashBoardDefinitition._id, $scope.dashBoardDefinitition, function(result) {
                 if (result.result == 1) {
                     $scope.goBack();
@@ -400,13 +397,10 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.getTabBlock = function(blockItem)
     {
-
         var theHTML = '<tabset>';
 
         for (var r in blockItem.items) {
-
                 theHTML += '<tab heading="'+blockItem.items[r].title+'"><div id="'+blockItem.items[r].reportID+'"></div></tab>';
-
         }
         theHTML += '</tabset>';
 
@@ -414,7 +408,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
         var $div = $(theHTML);
         angular.element(el).append($div);
-        //el.append($div);
         angular.element(document).injector().invoke(function($compile) {
             var scope = angular.element($div).scope();
             $compile($div)(scope);

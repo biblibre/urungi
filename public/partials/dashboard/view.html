@@ -5,6 +5,7 @@
 
         <a ng-if="(dashBoardDefinitition.owner == user._id) || user.isWSTADMIN" href="/#/dashboards/edit/{{dashboardID}}"  class="btn btn-success pull-right" style="margin-right: 5px">Edit Dashboard</a>
         <a ng-if="(selectedReport.owner == user._id && user.canPublish) || isWSTADMIN" ng-click="publishDashboard()"  class="btn btn-success pull-right" style="margin-right: 5px">Publish</a>
+        <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
     </div>
 
     <div class="container-fluid" style="padding-top: 5px;">
@@ -15,7 +16,7 @@
         <ul>
             <li data-gridster-item data-row="item.position[0]" data-col="item.position[1]" data-sizex="item.size.x" data-sizey="item.size.y" ng-repeat="item in dashBoardDefinitition.items" style="background-color:#fff">
                     <!--<div>{{item.reportID}}</div>-->
-                    <div id="{{item.reportID}}" class="panel-body dashboard"  style=" background-color:#FFFFFF;height:100%;width: 100%;overflow-x:{{item.overflowx}};overflow-y: {{item.overflowy}};display: flex;flex-direction: column;">
+                    <div id="{{item.reportID}}" bs-loading-overlay bs-loading-overlay-reference-id="{{'OVERLAY_'+item.reportID}}" class="panel-body dashboard"  style=" background-color:#FFFFFF;height:100%;width: 100%;overflow-x:{{item.overflowx}};overflow-y: {{item.overflowy}};display: flex;flex-direction: column;">
 
                     </div>
 

@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-//app.service('reportModel' , function ($http, $q, $filter, ngTableParams) {    TODO: ngTableParams quitado todo por traslado activar
+
 
 app.service('reportModel' , function ($http, $q, $filter, connection) {
     this.data = null;
@@ -48,23 +48,14 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
     this.getData = function($scope,query,params, done) {
         params.query = query;
         connection.get('/api/reports/get-data', params, function(data) {
-            //console.log(data);
+           
             done(data);
         });
     }
 
     function prepareData($scope,report,data,done)
     {
-         /*for (var r in data)
-         {
-             for(var i = 0; i < report.properties.columns.length; i++)
-             {
-                 if (report.properties.columns[i].columnType == 'date')
-                 {
 
-                 }
-             }
-         } */
 
         var dateTimeReviver = function (key, value) {
             var a;
@@ -99,17 +90,17 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
                         {
                                 for (var f2 in collection.filters)
                                 {
-                                    $scope.filters[0].filters.push(collection.filters[f2]);// = collection.columns;
+                                    $scope.filters[0].filters.push(collection.filters[f2]);
                                 }
 
                               for (var c2 in collection.columns)
                               {
-                                $scope.columns.push(collection.columns[c2]);// = collection.columns;
+                                $scope.columns.push(collection.columns[c2]);
                               }
 
                             for (var o2 in collection.order)
                             {
-                                $scope.order.push(collection.order[o2]);// = collection.columns;
+                                $scope.order.push(collection.order[o2]);
                             }
                         }
                     }
@@ -288,24 +279,15 @@ function clone(obj) {
     this.getReportBlockForPreview = function($scope, report, id, done)
     {
 
-           console.log('For Preview '+report);
 
            this.selectedReport = report;
 
-            console.log(id);
 
             if (!report)
             {
                 done(1);
                 return;
             }
-
-            /*
-            if (report.reportType == "chart")
-                generateChart($scope,id,report,function(errorCode) {
-                    done(errorCode);
-                });
-            */
             if (report.reportType == "chart-bar")
                 generateChartBar($scope,id,report,function(errorCode) {
                     done(errorCode);
@@ -324,7 +306,6 @@ function clone(obj) {
                 });
 
             if (report.reportType == "grid")
-                //generateGrid($scope,id,report,function(errorCode) {
                     generateRepeater($scope,id,report,function(errorCode) {
                     done(errorCode);
                 });
@@ -485,9 +466,8 @@ function clone(obj) {
                             theFilter.filterText1 = row[element.collectionID.toLowerCase()+'_'+element.elementName];
                     var theGroup = {group: true,filters:[]};
                         theGroup.filters.push(theFilter);
-                        //query.groupFilters.push(theGroup);
                         query.groupFilters[0].filters.push(theFilter);
-                        console.log('i am going to push this filter',theFilter);
+
             }
 
         //.- Add the column to the report
@@ -504,13 +484,11 @@ function clone(obj) {
 
         }
 
-        console.log('the report',report);
 
         var hashedID = hashCode(nextElement.elementID+row[element.collectionID.toLowerCase()+'_'+element.elementName]);
         $scope.reports[hashedID] = report;
 
         this.getData($scope, query, {page: 0}, function(data) {
-            console.log('this is the data that I get',data,element.collectionID+'_'+element.elementName);
 
 
             $scope.theData[hashedID] = data;
@@ -562,8 +540,7 @@ function clone(obj) {
 
                 if (report.properties.columns[i].signals)
                 {
-                    //htmlCode += "<style>.customStyle1_"+i+" {color:#FF9944;} .customStyle2_"+i+" {color:blue;}</style>"
-                    var theStyle = '<style>';
+                   var theStyle = '<style>';
                     var theClass = '';
                     for (var s in report.properties.columns[i].signals)
                     {
@@ -606,19 +583,7 @@ function clone(obj) {
                     htmlCode += theStyle +'</style>'
                     theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+'}}</span>';
                 }
-/*
-                if (report.properties.columns[i].link)
-                {
-                    if (report.properties.columns[i].link.type == 'report')
-                    {
-                        theValue = '<a class="columnLink" href="/#/reports/'+report.properties.columns[i].link._id+'/'+report.properties.columns[i].link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
-                    }
-                    if (report.properties.columns[i].link.type == 'dashboard')
-                    {
-                        theValue = '<a class="columnLink" href="/#/dashboards/'+report.properties.columns[i].link._id+'/'+report.properties.columns[i].link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
-                    }
-                }
-*/
+
                 var columnStyle = '';
                 if (report.properties.columns[i].columnStyle)
                 {
@@ -641,13 +606,6 @@ function clone(obj) {
     return htmlCode;
 
     }
-
-
-
-
-
-
-
 
     this.getDistinct = function($scope,attribute) {
 
@@ -712,7 +670,6 @@ function clone(obj) {
 
             attribute.data = data;
             $scope.searchValues = data;
-            console.log('The data: ',data);
             $scope.errorMsg = (data.result === 0) ? data.msg : false;
             $scope.page = data.page;
             $scope.pages = data.pages;
@@ -729,7 +686,9 @@ function clone(obj) {
     {
         getReportData($scope,report,{}, function(theData){
 
-            var theXKey = report.properties.xkeys[0].elementName;
+            var theXKey = report.properties.xkeys[0].collectionID.toLowerCase()+'_'+report.properties.xkeys[0].elementName;
+            if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
+
 
                 var chartParams = {
                     element: id,
@@ -738,7 +697,7 @@ function clone(obj) {
                     hideHover: true,
                     resize: true,
                     parseTime: false
-                    //dateFormat: function (x) { return ''; }
+                    
                 };
 
                 var ykeys = [], labels = [];
@@ -749,8 +708,9 @@ function clone(obj) {
 
                     ykeys.push(theYKey);
                     labels.push(report.properties.ykeys[i].objectLabel);
+            
                 }
-
+     
                 chartParams.ykeys = ykeys;
                 chartParams.labels = labels;
 
@@ -791,10 +751,6 @@ function clone(obj) {
 
             var ykeys = [], labels = [];
 
-
-
-            console.log(report.properties.ykeys);
-
             for (var i in report.properties.ykeys) {
 
                 var theYKey = report.properties.ykeys[i].collectionID.toLowerCase()+'_'+report.properties.ykeys[i].elementName;
@@ -815,7 +771,7 @@ function clone(obj) {
             }
 
             new Morris.Bar(chartParams).on('click', function(i, row){
-                console.log(i, row);
+        
                 var params = {};
                 params.i = i;
                 params.row = row;
@@ -829,7 +785,6 @@ function clone(obj) {
 
     function generateChartDonut($scope,id,report,done)
     {
-        console.log('the chart donut');
 
         getReportData($scope,report,{}, function(theData){
             if (theData) {
@@ -842,7 +797,6 @@ function clone(obj) {
                 if (report.properties.xkeys[0].aggregation) theXKey += report.properties.xkeys[0].aggregation;
 
                 for (var i in theData) {
-                    //data.push({label: theData[i][report.properties.labelField], value: theData[i][report.properties.valueField]});
                     data.push({label: theData[i][theXKey], value: theData[i][theYKey]});
                 }
 
@@ -857,7 +811,7 @@ function clone(obj) {
                 }
 
                 Morris.Donut(chartParams).on('click', function(i, row){
-                    console.log(i, row);
+                    
                     var params = {};
                     params.i = i;
                     params.row = row;
@@ -885,7 +839,6 @@ function clone(obj) {
                 resize: true,
                 behaveLikeLine: false,
                 parseTime: false
-                //dateFormat: function (x) { return ''; }
             };
 
             var ykeys = [], labels = [];
@@ -906,7 +859,7 @@ function clone(obj) {
             }
 
             new Morris.Area(chartParams).on('click', function(i, row){
-                console.log(i, row);
+               
                 var params = {};
                 params.i = i;
                 params.row = row;
@@ -973,7 +926,7 @@ function clone(obj) {
 
     this.columnCalculation = function($scope,operation, columnIndex, hashedID)
     {
-        console.log('column Calculation')
+     
         var report = $scope.reports[hashedID];
 
             if (operation === 1) //SUM
@@ -993,226 +946,28 @@ function clone(obj) {
     };
 
 
-   /*
-    function generateChart($scope,id,report,done) {
-        console.log('generateChart');
-        console.log(report);
-        getReportData($scope,report,{}, function(theData){
-            if (report.reportSubType == 'line') {
-                var chartParams = {
-                    element: id,
-                    data: theData,
-                    xkey: report.properties.xkey,
-                    hideHover: true,
-                    resize: true,
-                    parseTime: false
-                    //dateFormat: function (x) { return ''; }
-                };
 
-                var ykeys = [], labels = [];
-
-                for (var i in report.properties.ykeys) {
-                    ykeys.push(report.properties.ykeys[i].field);
-                    labels.push(report.properties.ykeys[i].label);
-                }
-
-                chartParams.ykeys = ykeys;
-                chartParams.labels = labels;
-
-                if (report.properties.colors) {
-                    chartParams.lineColors = report.properties.colors;
-                }
-
-                new Morris.Line(chartParams).on('click', function(i, row){
-                    console.log('yeah clicked on: ', i, row);
-                    var params = {};
-                    params.i = i;
-                    params.row = row;
-                    $scope.reportClicked(id,params);
-
-                });
-
-                done(0);
-                return;
-            }
-            else if (report.reportSubType == 'donut') {
-
-                if (theData) {
-                    var data = [];
-
-                    for (var i in theData) {
-                        data.push({label: theData[i][report.properties.labelField], value: theData[i][report.properties.valueField]});
-                    }
-
-                    var chartParams = {
-                        element: id,
-                        data: data,
-                        resize: true
-                    };
-
-                    if (report.properties.colors) {
-                        chartParams.colors = report.properties.colors;
-                    }
-
-                    Morris.Donut(chartParams).on('click', function(i, row){
-                        console.log(i, row);
-                        var params = {};
-                        params.i = i;
-                        params.row = row;
-                        $scope.reportClicked(id,params);
-                    });
-
-                    done(0);
-                    return;
-                }
-
-            }
-            else if (report.reportSubType == 'bar') {
-                var chartParams = {
-                    element: id,
-                    data: theData,
-                    xkey: report.properties.xkey,
-                    hideHover: true,
-                    resize: true
-                };
-
-                var ykeys = [], labels = [];
-
-                for (var i in report.properties.ykeys) {
-                    ykeys.push(report.properties.ykeys[i].field);
-                    labels.push(report.properties.ykeys[i].label);
-                }
-
-                chartParams.ykeys = ykeys;
-                chartParams.labels = labels;
-
-                if (report.properties.colors) {
-                    chartParams.barColors = report.properties.colors;
-                }
-
-                new Morris.Bar(chartParams).on('click', function(i, row){
-                    console.log(i, row);
-                    var params = {};
-                    params.i = i;
-                    params.row = row;
-                    $scope.reportClicked(id,params);
-                });
-
-                done(0);
-                return;
-            }
-            else if (report.reportSubType == 'area') {
-                var chartParams = {
-                    element: id,
-                    data: theData,
-                    xkey: report.properties.xkey,
-                    hideHover: true,
-                    resize: true,
-                    behaveLikeLine: false,
-                    parseTime: false
-                    //dateFormat: function (x) { return ''; }
-                };
-
-                var ykeys = [], labels = [];
-
-                for (var i in report.properties.ykeys) {
-                    ykeys.push(report.properties.ykeys[i].field);
-                    labels.push(report.properties.ykeys[i].label);
-                }
-
-                chartParams.ykeys = ykeys;
-                chartParams.labels = labels;
-
-                if (report.properties.colors) {
-                    chartParams.lineColors = report.properties.colors;
-                }
-
-                new Morris.Area(chartParams).on('click', function(i, row){
-                    console.log(i, row);
-                    var params = {};
-                    params.i = i;
-                    params.row = row;
-                    $scope.reportClicked(id,params);
-                });
-
-                done(0);
-                return;
-
-            }
-            else {
-                done(2); //error chart type not found
-            }
-        });
-    }
-       */
     function generateGrid($scope,id,report,done) {
 
         var htmlCode = '';
         var quote = "'";
 
-        console.log('generate grid') ;
 
         getReportData($scope,report,{}, function(theData){
 
             if (theData)
             {
-                console.log('generate grid with data');
                 if (!$scope.theData)
                     $scope.theData = [];
-
-                //console.log('los datos del grid '+id+' ----->   '+theData);
 
                 var hashedID = hashCode(id);
 
                 $scope.theData[hashedID] = theData;
 
-                //console.log('the hased',JSON.stringify($scope.theData[hashedID]))
-
-                ////NG TABLE PARAMS
                 if (!$scope.tableParams)
                     $scope.tableParams = [];
-                /*
-                $scope.tableParams[hashedID] = new ngTableParams({
-                    page: 1,            // show first page
-                    count: 1000           // count per page
-                }, {
-                    counts: [], // hide page counts control
-                    total: theData.length,  // length of data
-
-                    getData: function($defer, params) {
-                        // use build-in angular filter
-                        var orderedData = params.sorting ?
-                            $filter('orderBy')(theData, params.orderBy()) :
-                            theData;
-                        orderedData = params.filter ?
-                            $filter('filter')(orderedData, params.filter()) :
-                            orderedData;
-
-                        //$scope.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-                        params.total(orderedData.length); // set total for recalc pagination
-                        //$defer.resolve($scope.users);
-                    }
-                }); */
-
-                /////END NGTABLE PARAMS
-
-
-                //actions:[{actionEvent:"onRowClick",actionType:"goToDashBoard",targetID:"clientDashboard",targetFilters:['customerID'];
 
                 var rowClickEvent = '';
-               /*
-                for(var i = 0; i < report.properties.actions.length; i++)
-                {
-                    if (report.properties.actions[i].actionEvent == 'onRowClick')
-                        rowClickEvent = ' ng-click="onReportAction('+quote+report.properties.actions[i].actionType+quote+','+quote+report.properties.actions[i].targetID+quote+','+quote+report.properties.actions[i].targetFilters+quote+','+quote+'{{item.'+report.properties.idField+'}}'+quote+')"'
-                    //rowClickEvent = ' ng-click="onReportAction('+report.properties.actions[i].actionType+','+report.properties.actions[i].targetID+','+report.properties.actions[i].targetFilters+')"'
-
-                }
-                 */
-                //console.log('the row click event '+rowClickEvent,JSON.stringify(report.properties.columns));
-
-                //htmlCode += '<div class="container-fluid" style="height: 100%;width: 100%;overflow-y: scroll">';
                 htmlCode += '    <div class="table-responsive" >';
                 htmlCode += '        <table ng-table="tableParams['+hashedID+']" class="table table-bordered" infinite-scroll="getData()" infinite-scroll-distance="2" > ';
                 htmlCode += '            <thead> ';
@@ -1238,31 +993,6 @@ function clone(obj) {
                 htmlCode += '        </table>';
                 htmlCode += '    </div>';
 
-                //console.log(htmlCode);
-                //htmlCode += '    <div ng-show="busy" style="text-align: center;padding: 20px;">';
-                //htmlCode += '        <span style="font-size: 20px;">Loading data...</span> <img src="images/loader.gif" style="width: 50px;">';
-                //htmlCode += '    </div>';
-                //htmlCode += '    </div>';
-
-
-
-
-               // htmlCode += '<table ng-table="tableParams['+hashedID+']" show-filter="false" class="table">';
-
-
-
-               // htmlCode += '<tr ng-repeat="item in theData['+hashedID+']"   ng-class="{'+quote+'active'+quote+': item.$selected}" > ';
-
-               //     for(var i = 0; i < report.properties.fields.length; i++)
-               //         {
-               //             htmlCode += '<td data-title="'+quote+report.properties.fields[i].fieldAlias+quote+'" filter="{ '+quote+report.properties.fields[i].fieldName+quote+': '+quote+'select'+quote+' }" sortable="'+quote+report.properties.fields[i].fieldName+quote+'" ng-class="{ '+quote+'emphasis'+quote+': item.nombrecampo2 > 500}" '+rowClickEvent+'>{{item.'+report.properties.fields[i].fieldName+'}}</td>';
-               //         }
-
-               // htmlCode += '</tr></table>';
-
-
-                //console.log(htmlCode);
-
                         var el = document.getElementById(id);
                         if (el)
                         {
@@ -1282,13 +1012,8 @@ function clone(obj) {
 
     }
 
-
-
-
-
     function generateRepeater($scope,id,report,done)
     {
-        //https://github.com/kamilkp/angular-vs-repeat
 
         var quote = "'";
             getReportData($scope,report,{}, function(theData){
@@ -1296,10 +1021,7 @@ function clone(obj) {
                 if (!$scope.theData)
                     $scope.theData = [];
 
-                //console.log('los datos del grid '+id+' ----->   '+theData);
-
                 var hashedID = hashCode(id);
-                //$scope.theData[quote+id+quote] = theData;
                 $scope.theData[hashedID] = theData;
 
                 report.hashedID = hashedID;
@@ -1337,20 +1059,7 @@ function clone(obj) {
 
     function repaintRepeater($scope,id,report,done)
     {
-           var hashedID = report.hashedID;
-            /*
-                if (!$scope.theData)
-                    $scope.theData = [];
-                //console.log('los datos del grid '+id+' ----->   '+theData);
-                var hashedID = hashCode(id);
-                //$scope.theData[quote+id+quote] = theData;
-                $scope.theData[hashedID] = theData;
-             */
-            //console.log('the data',JSON.stringify($scope.theData[hashedID]));
-
-            //console.log('the columns',JSON.stringify(report.properties.columns));
-
-
+            var hashedID = report.hashedID;
             var htmlCode = '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel('+hashedID+')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." /></div>';
 
             var colClass = '';
@@ -1361,14 +1070,10 @@ function clone(obj) {
             else
                 colClass = 'col-xs-'+12/report.properties.columns.length;
 
-            //header
             htmlCode += '<div class="container-fluid" style="width:100%;padding-left:0px;background-color:#ccc;">';
             for(var i = 0; i < report.properties.columns.length; i++)
             {
 
-                /*if (i == report.properties.columns.length -1) //the last column
-                    htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'">'+report.properties.columns[i].objectLabel+getColumnDropDownHTMLCode(i)+' </div>';
-                else */
                     var elementName = "'"+report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+"'";
                     if (report.properties.columns[i].aggregation)
                         elementName = "'"+report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation+"'";
@@ -1382,19 +1087,12 @@ function clone(obj) {
             }
             htmlCode += '</div>';
 
-            //Body
             htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;">';
-
-                //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
-            //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
 
             htmlCode += '<div class="repeater-data container-fluid" ng-repeat="item in theData['+hashedID+'] | filter:theFilter | orderBy:reports['+hashedID+'].predicate:reports['+hashedID+'].reverse  " style="width:100%;padding:0px">';
 
 
 
-
-            //console.log(htmlCode);
-            // POPOVER con HTML https://maxalley.wordpress.com/2014/08/19/bootstrap-3-popover-with-html-content/
 
             for(var i = 0; i < report.properties.columns.length; i++)
             {
@@ -1411,7 +1109,6 @@ function clone(obj) {
 
                 if (report.properties.columns[i].signals)
                 {
-                    //htmlCode += "<style>.customStyle1_"+i+" {color:#FF9944;} .customStyle2_"+i+" {color:blue;}</style>"
                     var theStyle = '<style>';
                     var theClass = '';
                     for (var s in report.properties.columns[i].signals)
@@ -1456,7 +1153,6 @@ function clone(obj) {
                         theClass += theComma+ 'customStyle'+s+'_'+i+' : {{item.'+elementName+'}} '+operator;
                     }
                     htmlCode += theStyle +'</style>'
-                    //theValue = '<span ng-class="{customStyle1_'+i+' : {{item.'+elementName+'}} > 0 , customStyle2_'+i+' : {{item.'+elementName+'}} == 0}"  >{{item.'+elementName+'}}</span>';
                     if (report.properties.columns[i].elementType === 'number')
                     theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+' | number}}</span>';
                     else
@@ -1499,7 +1195,6 @@ function clone(obj) {
                     defaultAligment = 'text-align: right;'
 
                     htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+report.properties.columns[i].objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick('+hashedID+',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
-                //}
             }
 
             htmlCode += '</div>';
@@ -1512,11 +1207,6 @@ function clone(obj) {
                         if (report.properties.columns[i].aggregation)
                             elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
                         htmlCode += '<div class=" calculus-data-column '+colClass+' " style="'+colWidth+'"> '+calculateForColumn($scope,report,i,elementName)+' </div>';
-
-
-
-
-
                     }
         htmlCode += '</div>';
 
@@ -1599,7 +1289,7 @@ function clone(obj) {
         {
             var theRow = $scope.theData[report.hashedID][row];
 
-            console.log('el valor',elementName,JSON.stringify(theRow));
+            
             if (theRow[elementName])
                 if (theRow[elementName] != undefined)
                 {
@@ -1618,7 +1308,7 @@ function clone(obj) {
         {
             var theRow = $scope.theData[report.hashedID][row];
 
-            console.log('el valor',elementName,JSON.stringify(theRow));
+           
             if (theRow[elementName])
                 if (theRow[elementName] != undefined)
                 {
@@ -1639,7 +1329,6 @@ function clone(obj) {
         {
             var theRow = $scope.theData[report.hashedID][row];
 
-            console.log('el valor',elementName,JSON.stringify(theRow));
             if (theRow[elementName])
                 if (theRow[elementName] != undefined)
                 {
@@ -1662,7 +1351,6 @@ function clone(obj) {
         {
             var theRow = $scope.theData[report.hashedID][row];
 
-            console.log('el valor',elementName,JSON.stringify(theRow));
             if (theRow[elementName])
                 if (theRow[elementName] != undefined)
                 {
@@ -1690,27 +1378,18 @@ function clone(obj) {
             +'</button>'
             +'<ul class="dropdown-menu dropdown-blue multi-level" role="menu">'
             +'<li class="dropdown-submenu">'
-            +'      <a href="">Sort</a>'  //ascendente, descendente
+            +'      <a href="">Sort</a>'  
             +'      <ul class="dropdown-menu">'
             +'      <li><a ng-click="reverse = true; orderColumn('+elementName+','+hashedID+')">Ascending</a></li>'
             +'      <li><a ng-click="reverse = false; orderColumn('+elementName+','+hashedID+')">Descending</a></li>'
             +'      </ul>'
             +'</li>'
-            /*+'<li>'
-            +'      <a href="">Filter</a>'
-            +'</li>'*/
             +'<li>'
             +'      <a ng-click="changeColumnStyle('+column+','+hashedID+')">Format</a>'
             +'</li>'
-            /*+'<li>'
-            +'      <a href="">Create Section</a>'
-            +'</li>'
-            +'<li>'
-            +'      <a href="">Apply Break</a>'
-            +'</li>'*/
             +'<li class="divider"></li>'
             +'<li class="dropdown-submenu">'
-            +'      <a tabindex="-1" href="">Calculate</a>' //suma, cuenta, cuenta total, Promedio, mínimo, máximo, porcentaje
+            +'      <a tabindex="-1" href="">Calculate</a>' //sum, count, total count, average, min, max, percentage
             +'      <ul class="dropdown-menu">';
 
 
@@ -1748,9 +1427,6 @@ function clone(obj) {
             +'<li>'
             +'      <a ng-click="changeColumnSignals('+column+','+hashedID+')">Conditional format</a>'
             +'</li>'
-            /*+'<li>'
-            +'      <a href="">Hide components</a>'
-            +'</li>'*/
             +'</ul>'
             +'</div>';
 
@@ -1837,10 +1513,6 @@ function clone(obj) {
             }
         };
 
-
-        //var el = document.getElementById(id);
-        //if (el)
-        //{
         $(document).ready(function(){
             $("#66666").cypivot({
             data : $scope.theData[id],
@@ -1854,7 +1526,7 @@ function clone(obj) {
             resizableHeight : false
             });
         });
-        //}
+
 
         done(0);
         return;
@@ -1862,7 +1534,7 @@ function clone(obj) {
 
     function generateIndicator($scope, id, report,  done)
     {
-        console.log('generating indicator block')
+       
 
         var htmlCode = '';
 
@@ -1874,7 +1546,6 @@ function clone(obj) {
                 var theYKey = report.properties.ykeys[0].collectionID.toLowerCase()+'_'+report.properties.ykeys[0].elementName;
                 if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
 
-                console.log('el valor ' + theYKey+' the ID '+id+ ' the type '+report.properties.style);
                 var theValue = '{{'+theData[0][theYKey] +'| number}}';
 
 
@@ -1898,17 +1569,17 @@ function clone(obj) {
                 var theEvolution = theData[0].evolution + ' %';
 
                 var trend = 'same';
-                var trendLabel = 'igual'; //TODO:traduccion
+                var trendLabel = 'same'; 
 
                 if (theData[0].evolution > 0)
                     {
                       trend = 'up';
-                      trendLabel = 'incremento'; //TODO:traduccion
+                      trendLabel = 'increase'; 
                     }
                 if (theData[0].evolution < 0)
                     {
                     trend = 'down';
-                    trendLabel = 'menos'; //TODO:traduccion
+                    trendLabel = 'decrement'; 
                     }
 
                 var theBackgroundColor = '#68b828';
@@ -1924,7 +1595,7 @@ function clone(obj) {
 
                 if (report.properties.style == 'style1')
                 {
-                    console.log('this is the report Icon '+report.properties.reportIcon);
+                    
 
                     htmlCode += '<div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">';
                     htmlCode += '   <div class="xe-icon" >';
@@ -1935,8 +1606,6 @@ function clone(obj) {
                     htmlCode += '       <span style="color:'+report.properties.descFontColor+'">'+theValueText+'</span>';
                     htmlCode += '   </div>';
                     htmlCode += '</div>';
-
-                    //TODO: Animation over data-from data-to
                 }
 
                 if (report.properties.style == 'style2')
@@ -1953,8 +1622,6 @@ function clone(obj) {
                     htmlCode += '   </div>';
                     htmlCode += '   <div class="xe-lower"> ';
                     htmlCode += '       <div class="border"></div> ';
-                    //htmlCode += '           <span>Resultado</span> ';
-                    //htmlCode += '           <strong>'+theEvolution+'  '+trendLabel+'</strong> ';
                     htmlCode += '       </div> ';
                     htmlCode += '   </div> ';
                     htmlCode += '</div> ';
@@ -1965,19 +1632,11 @@ function clone(obj) {
                     htmlCode += '<div class="chart-item-bg-2" style="background-color: '+theBackgroundColor+';color:'+theFontColor+';height:100%;">';
                     htmlCode += '   <div class="chart-item-num" xe-counter="" data-count="this" data-from="0" data-to="98" data-suffix="%" data-duration="2" style="padding: 10px; color:'+report.properties.mainFontColor+'">'+theValue+'</div>';
                     htmlCode += '       <div class="chart-item-desc" > ';
-                    //htmlCode += '           <p class="col-lg-7">Carriage quitting securing be appetite it declared. High eyes kept so busy feel call in.</p> ';
                     htmlCode += '           <p style="color:'+report.properties.descFontColor+'">'+report.properties.valueText+'</p> ';
                     htmlCode += '       </div> ';
-                   /*
-                    htmlCode += '       <div class="chart-item-env"> ';
-                    htmlCode += '           <div id="doughnut-1" style="width: 200px; -webkit-user-select: none;" class="dx-visibility-change-handler"></div>';
-                    htmlCode += '       </div>';
-                   */
                     htmlCode += '   </div>';
                     htmlCode += '</div>';
                 }
-
-                console.log('the html code '+htmlCode);
 
                 var el = document.getElementById(id);
                 if (el)
@@ -1995,54 +1654,7 @@ function clone(obj) {
             }
         });
 
-        //Style 1
-        /*
-        <div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">
-            <div class="xe-icon">
-                <i class="linecons-camera"></i>
-            </div>
-            <div class="xe-label">
-                <strong class="num">2,470</strong>
-                <span>New Daily Photos</span>
-            </div>
-        </div>
-        */
-
-        //Style 2
-        /*
-        <div class="xe-widget xe-counter-block" xe-counter="" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
-            <div class="xe-upper">
-
-                <div class="xe-icon">
-                    <i class="linecons-cloud"></i>
-                </div>
-                <div class="xe-label">
-                    <strong class="num">99.9%</strong>
-                    <span>Server uptime</span>
-                </div>
-
-            </div>
-            <div class="xe-lower">
-                <div class="border"></div>
-
-                <span>Result</span>
-                <strong>78% Increase</strong>
-            </div>
-        </div>
-        */
-
-        //Style 3
-        /*
-        <div class="chart-item-bg-2">
-            <div class="chart-item-num" xe-counter="" data-count="this" data-from="0" data-to="98" data-suffix="%" data-duration="2">98%</div>
-            <div class="chart-item-desc">
-                <p class="col-lg-7">Carriage quitting securing be appetite it declared. High eyes kept so busy feel call in.</p>
-            </div>
-            <div class="chart-item-env">
-                <div id="doughnut-1" style="width: 200px; -webkit-user-select: none;" class="dx-visibility-change-handler"><svg width="200" height="130" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" stroke="none" stroke-width="0" fill="none" class="dxc dxc-chart" direction="ltr" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); display: block; overflow: hidden;"><defs><clipPath id="DevExpress_93"><rect x="0" y="0" width="200" height="130" rx="0" ry="0" fill="none" stroke="none" stroke-width="0"></rect></clipPath><pattern id="DevExpress_94" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#68b828" opacity="0.75"></rect><path stroke-width="4" stroke="#68b828" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_95" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#68b828" opacity="0.5"></rect><path stroke-width="4" stroke="#68b828" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_96" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#7c38bc" opacity="0.75"></rect><path stroke-width="4" stroke="#7c38bc" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_97" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#7c38bc" opacity="0.5"></rect><path stroke-width="4" stroke="#7c38bc" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_98" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#0e62c7" opacity="0.75"></rect><path stroke-width="4" stroke="#0e62c7" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_99" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#0e62c7" opacity="0.5"></rect><path stroke-width="4" stroke="#0e62c7" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_100" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#fcd036" opacity="0.75"></rect><path stroke-width="4" stroke="#fcd036" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_101" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#fcd036" opacity="0.5"></rect><path stroke-width="4" stroke="#fcd036" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_102" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#4fcdfc" opacity="0.75"></rect><path stroke-width="4" stroke="#4fcdfc" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_103" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#4fcdfc" opacity="0.5"></rect><path stroke-width="4" stroke="#4fcdfc" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_104" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#00b19d" opacity="0.75"></rect><path stroke-width="4" stroke="#00b19d" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_105" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#00b19d" opacity="0.5"></rect><path stroke-width="4" stroke="#00b19d" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_106" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#ff6264" opacity="0.75"></rect><path stroke-width="4" stroke="#ff6264" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_107" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#ff6264" opacity="0.5"></rect><path stroke-width="4" stroke="#ff6264" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_108" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#f7aa47" opacity="0.75"></rect><path stroke-width="4" stroke="#f7aa47" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_109" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#f7aa47" opacity="0.5"></rect><path stroke-width="4" stroke="#f7aa47" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_110" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#9aea5a" opacity="0.75"></rect><path stroke-width="4" stroke="#9aea5a" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_111" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#9aea5a" opacity="0.5"></rect><path stroke-width="4" stroke="#9aea5a" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_112" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#ae6aee" opacity="0.75"></rect><path stroke-width="4" stroke="#ae6aee" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><pattern id="DevExpress_113" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="10" height="10" rx="0" ry="0" fill="#ae6aee" opacity="0.5"></rect><path stroke-width="4" stroke="#ae6aee" d="M 5 -5 L -5 5M 0 10 L 10 0 M 15 5 L 5 15"></path></pattern><filter id="DevExpress_114" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" result="gaussianBlurResult" stdDeviation="2"></feGaussianBlur><feOffset in="gaussianBlurResult" result="offsetResult" dx="0" dy="4"></feOffset><feFlood result="floodResult" flood-color="#000000" flood-opacity="0.4"></feFlood><feComposite in="floodResult" in2="offsetResult" operator="in" result="compositeResult"></feComposite><feComposite in="SourceGraphic" in2="compositeResult" operator="over"></feComposite></filter></defs><g class="dxc-legend" clip-path="url(#DevExpress_93)"></g><g class="dxc-series-group"><g class="dxc-series"><g class="dxc-markers"><path stroke-linejoin="round" fill="#68b828" stroke="#ffffff" stroke-width="0" d="M 42.45253929419554 95.22068441173845 A 65 65 0 0 0 165 65.00000000000001 L 132 65.00000000000001 A 32 32 0 0 1 71.6689424217578 79.877875402702 Z"></path><path stroke-linejoin="round" fill="#7c38bc" stroke="#ffffff" stroke-width="0" d="M 35.9371217445065 54.00238072936612 A 65 65 0 0 0 42.45253929419554 95.22068441173845 L 71.6689424217578 79.877875402702 A 32 32 0 0 1 68.46135224344935 59.585787435995634 Z"></path><path stroke-linejoin="round" fill="#0e62c7" stroke="#ffffff" stroke-width="0" d="M 39.931580671694995 40.16484347947625 A 65 65 0 0 0 35.9371217445065 54.00238072936612 L 68.46135224344935 59.585787435995634 A 32 32 0 0 1 70.42785509991138 52.773461405280614 Z"></path><path stroke-linejoin="round" fill="#fcd036" stroke="#ffffff" stroke-width="0" d="M 53.48679482995417 19.596016201117095 A 65 65 0 0 0 39.931580671694995 40.16484347947625 L 70.42785509991138 52.773461405280614 A 32 32 0 0 1 77.10119130090051 42.64726951439611 Z"></path><path stroke-linejoin="round" fill="#4fcdfc" stroke="#ffffff" stroke-width="0" d="M 79.03913209598424 3.472428808619455 A 65 65 0 0 0 53.48679482995417 19.596016201117095 L 77.10119130090051 42.64726951439611 A 32 32 0 0 1 89.68080349340762 34.709503413474195 Z"></path><path stroke-linejoin="round" fill="#00b19d" stroke="#ffffff" stroke-width="0" d="M 80.43798988447506 3.0134872715031733 A 65 65 0 0 0 79.03913209598424 3.472428808619455 L 89.68080349340762 34.709503413474195 A 32 32 0 0 1 90.36947194312619 34.48356296443233 Z"></path><path stroke-linejoin="round" fill="#ff6264" stroke="#ffffff" stroke-width="0" d="M 110.57568745559664 0.8661178873324786 A 65 65 0 0 0 80.43798988447506 3.0134872715031733 L 90.36947194312619 34.48356296443233 A 32 32 0 0 1 105.2064922858322 33.42639649837906 Z"></path><path stroke-linejoin="round" fill="#f7aa47" stroke="#ffffff" stroke-width="0" d="M 138.42830559945935 12.5760996419137 A 65 65 0 0 0 110.57568745559664 0.8661178873324786 L 105.2064922858322 33.42639649837906 A 32 32 0 0 1 118.91855044896461 39.19131059294213 Z"></path><path stroke-linejoin="round" fill="#9aea5a" stroke="#ffffff" stroke-width="0" d="M 157.97775376799646 35.613267142848755 A 65 65 0 0 0 138.42830559945935 12.5760996419137 L 118.91855044896461 39.19131059294213 A 32 32 0 0 1 128.54289416270595 50.53268536263323 Z"></path><path stroke-linejoin="round" fill="#ae6aee" stroke="#ffffff" stroke-width="0" d="M 165 65 A 65 65 0 0 0 157.97775376799646 35.613267142848755 L 128.54289416270595 50.53268536263323 A 32 32 0 0 1 132 65 Z"></path></g></g></g><g class="dxc-labels-group"></g><g class="dxc-labels" visibility="hidden" opacity="1"></g><g class="dxc-tooltip"><path d="M 0 0 Z" filter="url(#DevExpress_114)" stroke-width="1" stroke="#d3d3d3" visibility="hidden"></path><g text-anchor="middle" visibility="hidden" style="font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana; font-weight: 400; font-size: 12px; fill: rgb(35, 35, 35); cursor: default;"><text x="0" y="0" style="font-size: 12px;"></text></g></g><g class="dxc-trackers" opacity="0.0001" stroke="gray" fill="gray"><g class="dxc-crosshair-trackers" stroke="none" fill="grey"></g><g class="dxc-series-trackers"></g><g class="dxc-markers-trackers" stroke="none" fill="grey"><g><path stroke-linejoin="round" d="M 42.45253929419554 95.22068441173845 A 65 65 0 0 0 165 65.00000000000001 L 132 65.00000000000001 A 32 32 0 0 1 71.6689424217578 79.877875402702 Z"></path><path stroke-linejoin="round" d="M 35.9371217445065 54.00238072936612 A 65 65 0 0 0 42.45253929419554 95.22068441173845 L 71.6689424217578 79.877875402702 A 32 32 0 0 1 68.46135224344935 59.585787435995634 Z"></path><path stroke-linejoin="round" d="M 39.931580671694995 40.16484347947625 A 65 65 0 0 0 35.9371217445065 54.00238072936612 L 68.46135224344935 59.585787435995634 A 32 32 0 0 1 70.42785509991138 52.773461405280614 Z"></path><path stroke-linejoin="round" d="M 53.48679482995417 19.596016201117095 A 65 65 0 0 0 39.931580671694995 40.16484347947625 L 70.42785509991138 52.773461405280614 A 32 32 0 0 1 77.10119130090051 42.64726951439611 Z"></path><path stroke-linejoin="round" d="M 79.03913209598424 3.472428808619455 A 65 65 0 0 0 53.48679482995417 19.596016201117095 L 77.10119130090051 42.64726951439611 A 32 32 0 0 1 89.68080349340762 34.709503413474195 Z"></path><path stroke-linejoin="round" d="M 80.43798988447506 3.0134872715031733 A 65 65 0 0 0 79.03913209598424 3.472428808619455 L 89.68080349340762 34.709503413474195 A 32 32 0 0 1 90.36947194312619 34.48356296443233 Z"></path><path stroke-linejoin="round" d="M 110.57568745559664 0.8661178873324786 A 65 65 0 0 0 80.43798988447506 3.0134872715031733 L 90.36947194312619 34.48356296443233 A 32 32 0 0 1 105.2064922858322 33.42639649837906 Z"></path><path stroke-linejoin="round" d="M 138.42830559945935 12.5760996419137 A 65 65 0 0 0 110.57568745559664 0.8661178873324786 L 105.2064922858322 33.42639649837906 A 32 32 0 0 1 118.91855044896461 39.19131059294213 Z"></path><path stroke-linejoin="round" d="M 157.97775376799646 35.613267142848755 A 65 65 0 0 0 138.42830559945935 12.5760996419137 L 118.91855044896461 39.19131059294213 A 32 32 0 0 1 128.54289416270595 50.53268536263323 Z"></path><path stroke-linejoin="round" d="M 165 65 A 65 65 0 0 0 157.97775376799646 35.613267142848755 L 128.54289416270595 50.53268536263323 A 32 32 0 0 1 132 65 Z"></path></g></g></g><g></g></svg></div>
-            </div>
-        </div>
-        */
+ 
     }
 
     function generateVectorMap($scope, id, report,  done)
@@ -2052,8 +1664,6 @@ function clone(obj) {
 
 
         htmlCode += '<div id="VMAP_'+id+'" style="width: 600px; height: 400px"></div>';
-        //htmlCode += '<div id="VMAP_'+id+'" style="width: 100%; "></div>';
-
         var el = document.getElementById(id);
         if (el)
         {
@@ -2080,24 +1690,6 @@ function clone(obj) {
         done(0);
         return;
 
-        /*
-         $('#world-map').vectorMap({
-         map: 'world-map',
-         series: {
-         regions: [{
-         values: sample_data,
-         scale: ['#C8EEFF', '#0071A4'],
-         normalizeFunction: 'polynomial'
-         }]
-         },
-         onRegionTipShow: function(e, el, code){
-         el.html(el.html()+' (GDP - '+gdpData[code]+')');
-         }
-         });
-         */
-
-
-
     }
 
     function generateReadOnlyForm($scope, id, report,  done)
@@ -2120,35 +1712,9 @@ function clone(obj) {
 
                 if (!$scope.tableParams)
                     $scope.tableParams = [];
-               /*
-                $scope.tableParams[hashedID] = new ngTableParams({
-                    page: 1,            // show first page
-                    count: 1000           // count per page
-                }, {
-                    counts: [], // hide page counts control
-                    total: theData.length,  // length of data
-
-                    getData: function($defer, params) {
-                        // use build-in angular filter
-                        var orderedData = params.sorting ?
-                            $filter('orderBy')(theData, params.orderBy()) :
-                            theData;
-                        orderedData = params.filter ?
-                            $filter('filter')(orderedData, params.filter()) :
-                            orderedData;
-
-                        //$scope.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-                        params.total(orderedData.length); // set total for recalc pagination
-                        //$defer.resolve($scope.users);
-                    }
-                });
-                */
 
                 var htmlCode = '';
 
-
-               // htmlCode += '<table class"table readOnlyForm"></div>';
                 htmlCode += '<table ng-table="tableParams['+hashedID+']" show-filter="false" class="table">';
 
 
@@ -2175,82 +1741,7 @@ function clone(obj) {
             }
         });
 
-        /*
-         $('#world-map').vectorMap({
-         map: 'world-map',
-         series: {
-         regions: [{
-         values: sample_data,
-         scale: ['#C8EEFF', '#0071A4'],
-         normalizeFunction: 'polynomial'
-         }]
-         },
-         onRegionTipShow: function(e, el, code){
-         el.html(el.html()+' (GDP - '+gdpData[code]+')');
-         }
-         });
-         */
-
-
-
     }
-
-
-   /* function generateGauge($scope, id, report, done)
-    {
-
-        var htmlCode = '<canvas canv-gauge id="'+id+'canvas'+'"></canvas><br/>';
-        var el = document.getElementById(id);
-        if (el)
-        {
-            var $div = $(htmlCode);
-            angular.element(el).append($div);
-            angular.element(document).injector().invoke(function($compile) {
-                var scope = angular.element($div).scope();
-                $compile($div)(scope);
-
-
-                var options =  {
-                    renderTo    : id+'canvas',
-                    width       : '250',
-                    height      : '250',
-                    glow        : true,
-                    units       : "Km/h",
-                    title       : false,
-                    minValue    : 0,
-                    maxValue    : 220,
-                    majorTicks  : ['0','20','40','60','80','100','120','140','160','180','200','220'],
-                    minorTicks  : 2,
-                    strokeTicks : false,
-                    highlights  : [
-                        { from : 0,   to : 50, color : 'rgba(0,   255, 0, .15)' },
-                        { from : 50, to : 100, color : 'rgba(255, 255, 0, .15)' },
-                        { from : 100, to : 150, color : 'rgba(255, 30,  0, .25)' },
-                        { from : 150, to : 200, color : 'rgba(255, 0,  225, .25)' },
-                        { from : 200, to : 220, color : 'rgba(0, 0,  255, .25)' }
-                    ],
-                    colors      : {
-                        plate      : '#222',
-                        majorTicks : '#f5f5f5',
-                        minorTicks : '#ddd',
-                        title      : '#fff',
-                        units      : '#ccc',
-                        numbers    : '#eee',
-                        needle     : { start : 'rgba(240, 128, 128, 1)', end : 'rgba(255, 160, 122, .9)' }
-                    }
-                }
-
-                new Gauge(options).setValue('1200');
-
-
-            });
-        }
-        done(0);
-        return;
-
-    }  */
-
-
 
 
     function generateGauge($scope, id, report, done)
@@ -2302,8 +1793,6 @@ function clone(obj) {
                         gauge.minValue = report.properties.minValue;
                         gauge.animationSpeed = report.properties.animationSpeed; // set animation speed (32 is default value)
                         gauge.set(theValue); // set actual value
-
-                        //http://bernii.github.io/gauge.js/
                     });
                 }
 
@@ -2311,113 +1800,19 @@ function clone(obj) {
         });
         done(0);
         return;
-        /*
-         $scope.my_options = {
 
-         };
-         $scope.my_value = 0;
-         $scope.units = ['Km/h', 'mph'];
-         $scope.setValue = function(value){
-         $scope.my_value = value;
-         }
-         */
     }
 
 
 
 
-
-    //TODO: Incluir sparkline en la rejilla de datos
-    //TODO: Incluir indicadores únicos como en la plantilla ACE
-
-    //Cynteka pivot table http://ukman.github.io/
-
-
-
-
-
-        /*
-
-         http://ngmodules.org/modules/ng-table
-         crear una hoja de calculo
-
-         http://thomasstreet.com/blog/legacy/spreadsheet.html
-
-
-         <table>
-         <tr ng-repeat="row in rows">
-         <td ng-repeat="column in columns">
-         <div>
-         <input ng-model="cells[column+row]"></input>
-         <div ng-bind="compute(column+row)"
-         class="output"></div>
-         </div>
-         </td>
-         </tr>
-         </table>
-
-  --------------------
-  PIVOTTABLE
-
-         https://github.com/nicolaskruchten/pivottable/issues/208
-
-
-         -------------------
-
-        <div class="box-body table-responsive no-padding"   ng-init="getVisitorsByDate()">
-            <table class="table table-striped table-hover table-bordered" >
-                <thead>
-                    <tr>
-
-                        <td>IP</td>
-                        <td>date</td>
-                        <td>Profile</td>
-                        <td>language</td>
-                        <td>Country</td>
-                        <td>City</td>
-                        <td>Referer</td>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="table-row" ng-repeat="theItem in visitors" id="{{theItem._id}}">
-                        <td>{{theItem.ip}}</td>
-                        <td>{{theItem.date}}</td>
-                        <td>{{theItem.visitorProfile}}</td>
-                        <td>{{theItem.language}}</td>
-                        <td>{{theItem.country}}</td>
-                        <td>{{theItem.city}}</td>
-                        <td>
-                            <a href="{{theItem.referer}}">{{theItem.referer}}</a>
-                            <br>
-                                <b>Asking for page: </b>{{theItem.requestedPage}}
-                                <br>
-                                    <small>{{theItem.userAgent}}</small>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    */
-
-
     this.saveToExcel = function($scope,reportHash)
     {
-        //https://github.com/SheetJS/js-xlsx
-        //https://github.com/eligrey/FileSaver.js/
-
-        /* bookType can be 'xlsx' or 'xlsm' or 'xlsb' */
         var wopts = { bookType:'xlsx', bookSST:false, type:'binary' };
-
-        //var ws_name = $scope.selectedReport.reportName;
         var ws_name = $scope.reports[reportHash].reportName;
 
         var wb = new Workbook(), ws = sheet_from_array_of_arrays($scope,reportHash);
 
-        /* add ranges to worksheet */
-        //ws['!merges'] = ranges;
-
-        /* add worksheet to workbook */
         wb.SheetNames.push(ws_name);
         wb.Sheets[ws_name] = ws;
 
@@ -2433,7 +1828,6 @@ function clone(obj) {
             return buf;
         }
 
-        /* the saveAs call downloads a file on the local machine */
         saveAs(new Blob([s2ab(wbout)],{type:""}), ws_name+".xlsx")
 
 
@@ -2450,7 +1844,6 @@ function clone(obj) {
         var report = $scope.reports[reportHash];
         var ws = {};
         var range = {s: {c:10000000, r:10000000}, e: {c:0, r:0 }};
-        //col titles
         for(var i = 0; i < report.properties.columns.length; i++)
         {
             if(range.s.r > 0) range.s.r = 0;
@@ -2472,7 +1865,6 @@ function clone(obj) {
             ws[cell_ref] = cell;
         }
 
-        //data
 
         for(var R = 0; R != data.length; ++R) {
 

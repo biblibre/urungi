@@ -78,7 +78,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                     $scope.selectedPage = data.item;
                     if (!$scope.selectedPage.properties.containers)
                             $scope.selectedPage.properties.containers = [];
-                    //console.log('the page definition',  JSON.stringify($scope.selectedPage));
 
                     $scope.queries = $scope.selectedPage.properties.queries;
 
@@ -157,9 +156,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                         }
                         }
                     }
-
-
-
+            
                     getQueryData($scope,0,function(){
                         rebuildCharts();
                         rebuildRepeaters();
@@ -178,10 +175,9 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                         $compile($div)($scope);
                     });
                     $scope.getPrompts();
+    
     });
     };
-
-
 
 
     $scope.showOverlay = function (referenceId) {
@@ -228,7 +224,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                             $scope.theData[qstructure.hashedID] = data;
                     });
         } else {
-
             for (var q in $scope.queries)
             {
                 if ($scope.queries[q].name == $scope.editingQuery)
@@ -255,7 +250,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     $scope.getQuery = function(queryID)
     {
-
         for (var q in $scope.queries)
         {
             if ($scope.queries[q].id == queryID)
@@ -270,7 +264,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         //identify the charts that are using this query...
         for (var c in $scope.charts)
         {
-            //console.log('the query is loading in chart',$scope.charts[c].query.id,queryID)
             if ($scope.charts[c] != undefined)
                 if ($scope.charts[c].query.id == queryID)
                     $scope.showOverlay('OVERLAY_'+$scope.charts[c].chartID);
@@ -623,12 +616,9 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                                                                         type:'line',
                                                                         color:'#000000'};
 
-                                    //data hay que meterlo en el chart para que quede claro de donde recibe los datos
-
-
-                                    //$scope.showOverlay('OVERLAY_'+$scope.charts[i].chartID);
+                                    
                                     c3Charts.rebuildChart($scope.charts[i]);
-                                    //$scope.hideOverlay('OVERLAY_'+$scope.charts[i].chartID);
+
 
 
                             } else {
@@ -1582,7 +1572,7 @@ $scope.changeVisibility = function() {
 
             connection.post('/api/pages/duplicate', page, function(data) {
                 if (data.result == 1) {
-                    //$scope.goBack();
+                    
                 }
             });
     }
@@ -1653,7 +1643,7 @@ $scope.changeVisibility = function() {
         if ($scope.mode == 'add') {
             connection.post('/api/pages/create', page, function(data) {
                 if (data.result == 1) {
-                    //$scope.goBack();
+
                 }
             });
 

@@ -257,34 +257,10 @@ this.rebuildChart = function(chart)
     this.deleteChartColumn = function(chart,column)
     {
 
-        //console.log('deleting chart column',chart,column);
-
         var index = chart.dataColumns.indexOf(column);
-        //console.log('The column index is: ',index);
         if (index > -1) {
 
             chart.dataColumns.splice(index, 1);
-            /*
-            var theValues = [];
-            var theNames = {};
-
-            for (var i in $scope.selectedChart.dataColumns)
-                {
-                    theValues.push($scope.selectedChart.dataColumns[i].id);
-                    var valueName = $scope.selectedChart.dataColumns[i].id;
-                    theNames[valueName] = $scope.selectedChart.dataColumns[i].elementLabel;
-                }
-
-            $scope.selectedChart.chartCanvas.load({
-
-                json: $scope.queries[0].data,
-                keys: {
-                    value: theValues
-                },
-                names: theNames
-
-            });
-            */
 
             this.rebuildChart(chart);
 
@@ -295,11 +271,6 @@ this.rebuildChart = function(chart)
 
     this.changeChartColumnType = function(chart,column)
     {
-        //if (column == '')
-        //var index = $scope.selectedChart.dataColumns.indexOf(column);
-        //spline, bar , line, area, area-spline, scatter , pie, donut
-        //console.log('column Type',column.type,column);
-
         if (column.type == 'line')
         {
             column.type = 'spline';
@@ -347,18 +318,12 @@ this.rebuildChart = function(chart)
 
     this.changeChartColumnColor = function(chart,column,color)
     {
-        console.log('changign color',color,column.id);
-        //chart.chartCanvas.data.colors[column.id] = color;
         var column = "'"+column.id+"'";
         chart.chartCanvas.data.colors[column] = d3.rgb('#ff0000').darker(1)
     }
 
     this.getChartHTML = function (theChartID)
     {
-        /*
-        return '<div ng-if="!getChartDataAxis(\''+theChartID+'\')" class="alert alert-warning" style="top:0px;">No selected dimension for this chart, please, drop one Dimension!!</div>'+
-               '<div ng-if="!getChartDataColumns(\''+theChartID+'\')" class="alert alert-warning" style="top:100px;">No selected metrics for this chart, please, drop at least one metric!!</div>'+
-        */
         return     '<c3chart page-block  bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="'+theChartID+'" ndType="c3Chart" id="'+theChartID+'" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']">'+
                    '<chart-axis>'+
                     '<chart-axis-x axis-id="x" axis-type="timeseries" axis-x-format="%Y-%m-%d %H:%M:%S">'+
@@ -368,57 +333,23 @@ this.rebuildChart = function(chart)
                    '</c3chart>';
     }
 
-/*
-    this.getChartLayerHTML = function (theChartID)
-    {
-        return     '<div class="container chart-temporary-layer" id="'+theChartID+'" ndType="c3ChartLayer" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']">'+
-                        '<div ng-if="!getChartDataAxis(\''+theChartID+'\')" class="alert alert-warning">No selected dimension for this chart, please, drop one Dimension!!</div>'+
-                        '<div ng-if="!getChartDataColumns(\''+theChartID+'\')" class="alert alert-warning">No selected metrics for this chart, please, drop at least one metric!!</div>'+
-                   '</div>';
 
-
-
-
-    }
-*/
 
 
    this.applyChartSettings = function($scope)
     {
-        /*
-        $scope.selectedChart.dataPoints
-        $scope.selectedChart.dataColumns
-        $scope.selectedChart.datax
-
-
-
-        $scope.selectedChart.dataColumns = [];
-
-        */
-
-        //datacolumn.type
-        //datacolumn.
-        //datacolumn.color
 
         var theValues = [];
         var theNames = [];
 
         for (var i in $scope.selectedChart.dataColumns)
         {
-          // console.log(JSON.stringify($scope.selectedChart.dataColumns[i]));
-
             theValues.push($scope.selectedChart.dataColumns[i].object.elementName);
             theNames.push($scope.selectedChart.dataColumns[i].object.elementLabel);
         }
 
 
         $scope.vm = {};
-
-        //{"id": "top-1", "type": "line", "name": "Top one"}
-        //$scope.vm.datacolumns = [{id:'linea1',type:'line',name:'linea1'}];
-        //$scope.vm.datax = {"id": "etiq"};
-        //$scope.vm.datapoints = [{linea1:123,etiq:'one'},{linea1:234,etiq:'dos'},{linea1:345,etiq:'tres'}];
-        //console.log(JSON.stringify($scope.queries[0].data));
 
         var chart = c3.generate({
         bindto: '#chart1',
@@ -441,53 +372,15 @@ this.rebuildChart = function(chart)
     });
 
 
-       /* var chart = c3.generate({
-        bindto: '#chart1',
-        data: {
-            json: $scope.queries[0].data,
-            keys: {
-                x: 'wst5883cbeb81db4ae3b1d75e8371097e9a_device_name', // it's possible to specify 'x' when category axis
-                value: ['wst6058ffeae3444af58d72004e58cc4998_clickssum', 'wst6058ffeae3444af58d72004e58cc4998_impressionssum','wst6058ffeae3444af58d72004e58cc4998_conversionssum'],
-            },
-            names: {
-                wst6058ffeae3444af58d72004e58cc4998_clickssum: 'clicks',
-                wst6058ffeae3444af58d72004e58cc4998_impressionssum: 'impressions',
-                wst6058ffeae3444af58d72004e58cc4998_conversionssum: 'conversions'
-            }
-        },
-        axis: {
-            x: {
-                type: 'category'
-            }
-        } ,
-        legend: {
-        show:false
-    }
-    });*/
 
-    //wst5883cbeb81db4ae3b1d75e8371097e9a_device_name":"Mobile","wst6058ffeae3444af58d72004e58cc4998_clickssum":"11325412","wst6058ffeae3444af58d72004e58cc4998_impressionssum":"10835247981","wst6058ffeae3444af58d72004e58cc4998_average_positionsum":null,"wst6058ffeae3444af58d72004e58cc4998_conversionssum":96,"wst6058ffeae3444af58d72004e58cc4998_spendsum":16296400
 
+    
 
     }
 
     this.onChartPropertiesChanged = function($scope,object)
     {
 
-    /*
-        for (var i in $scope.queries)
-        {
-            if ($scope.queries[i].name == $scope.selectedChart.query)
-            {
-                $scope.selectedChart.dataPoints = $scope.queries[i].data;
-            }
-
-        }
-    */
-
-    //$scope.selectedChart.datax = $scope.chartModal.dataxObject.object.elementName;
-    //$scope.selectedChart.dataPoints = $scope.chartModal.dataxObject.query.data;
-    //console.log('data selected',JSON.stringify($scope.chartModal.dataxObject.query));
-    //console.log('This chart properties have changed',JSON.stringify($scope.selectedChart));
 
     }
 
@@ -500,8 +393,6 @@ this.rebuildChart = function(chart)
 
         for (var i in $scope.selectedChart.dataColumns)
         {
-          // console.log(JSON.stringify($scope.selectedChart.dataColumns[i]));
-
             theValues.push($scope.selectedChart.dataColumns[i].object.elementName);
             theNames.push($scope.selectedChart.dataColumns[i].object.elementLabel);
         }

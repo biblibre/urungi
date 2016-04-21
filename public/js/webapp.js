@@ -2,11 +2,9 @@
 'use strict';
 
 var app = angular.module('WideStage', [
-       //'ngRoute','ui.sortable','lvl.directives.dragdrop','ngTable','gridster' , 'sparkline','vs-repeat','ui.bootstrap.tabs','angularTreeview','ngDragDrop','ui.layout'
         'ngRoute','ui.sortable','gridster','ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
         'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
         'ui.bootstrap.datetimepicker','ui.tree','page.block','gridshore.c3js.chart','vAccordion','bsLoadingOverlay'
-        //'angularTreeview',
     ])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
@@ -38,8 +36,6 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/dashboard/edit.html',
             controller: 'dashBoardCtrl'
         });
-
-        //http://www.jointjs.com/tutorial
 
         $routeProvider.when('/reports', {
             templateUrl: 'partials/report/list.html',
