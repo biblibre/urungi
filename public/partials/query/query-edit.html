@@ -67,7 +67,7 @@
 
 
     <script type="text/ng-template" id="filtersGroup.html">
-        <div class="container-fluid filter-zone no-padding" drop="onDrop($data, $event, 'group', group)" drop-effect="copy" drop-accept="'json/custom-object'" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+        <div  class="container-fluid filter-zone no-padding" drop="onDrop($data, $event, 'group', group)" drop-effect="copy" drop-accept="'json/custom-object'" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
             <div class="filter-zone-label pull-right" ng-hide="filters.length > 0">Drop here your filters</div>
             <ul class="ul-drop no-padding" ng-model="group.filters"  > <!--ui-sortable="sortableOptions"-->
 
@@ -166,8 +166,6 @@
 
                                 <div class="input-group" ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && (filter.filterPrompt == false) && ( filter.elementType != 'array') && ( filter.elementType != 'date')" style="width:200px;">
                                     <input type="text" class="form-control no-right-border form-focus-green" ng-model="filter.filterText1" >
-                                    <!--TODO: para el in -not in como select2, pero con los valores introducidos manualmente ver ejemplo en: http://stackoverflow.com/questions/29489821/allow-manually-entered-text-in-ui-select-->
-                                    <!--<select multiple="" data-role="tagsinput" style="display: none;"/>  http://timschlechter.github.io/bootstrap-tagsinput/examples/bootstrap-2.3.2.html-->
 
 
                                     <span class="input-group-btn">
@@ -176,17 +174,10 @@
                                     </span>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn popover-primary ng-scope" ng-class="{'btn-info': filter.filterPrompt == true, 'btn-white': filter.filterPrompt == false}" ng-click="filterPromptsClick(filter)" popover-trigger="mouseenter" popover-placement="top" popover-title="Filter prompt" popover="{{getButtonFilterPromptMessage(filter)}}">
-                                        <i class="fa fa-question-circle"></i>
+                                    <button class="btn popover-primary ng-scope" ng-class="{'btn-black': filter.filterPrompt == true, 'btn-white': filter.filterPrompt == false}" ng-click="filterPromptsClick(filter)" popover-trigger="mouseenter" popover-placement="top" popover-title="Filter prompt" popover="{{getButtonFilterPromptMessage(filter)}}">
+                                        <i class="fa fa-filter"></i><i class="fa fa-question"></i>
                                     </button>
                                 </div>
-                                <!--
-                                <div class="form-group">
-                                    <button class="btn btn-white popover-primary ng-scope" ng-click="filterPropertiesClick(filter)" popover-trigger="mouseenter" popover-placement="top" popover-title="Filter properties" popover="Click here to access the advanced properties for this filter">
-                                        <i class="fa fa-gear"></i>
-                                    </button>
-                                </div>
-                                -->
                                 <span ng-show="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType != 'date'"> and <input type="text" ng-model="filter.filterText2" />  </span>
                                 <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFromArray(group.filters, filter);filtersUpdated();detectLayerJoins();processStructure();"></i></span>
                             </div>
@@ -222,9 +213,9 @@
         </div>
     </script>
 
-    <div ng-repeat="group in filters" ng-include="'filtersGroup.html'"></div>
+    <div id="filtersPanel" ng-repeat="group in filters" ng-include="'filtersGroup.html'"></div>
 
-    <div ng-show="selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+    <div id="orderByPanel" ng-show="selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="order.length > 0">Drop here order by elements</div>
         <!--<div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo1</div>
         <div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo 2</div>
@@ -242,7 +233,7 @@
         </ul>
     </div>
 
-    <div class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+    <div id="columnsPanel"  class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="columns.length > 0">Drop here your columns</div>
         <ul class="ul-drop no-padding" ng-model="columns" ui-sortable="sortableOptions">
             <li class="column-box" ng-repeat="column in columns">
@@ -273,16 +264,17 @@
 </div>
 
 
-<div ng-show="columns.length > 0" class="container-fluid" style="border-bottom: 2px solid #72A230; padding: 3px;margin-bottom:5px;">
-    <button class="btn btn-success" ng-show="columns.length > 0" class="pull-right" ng-click="processStructure();"  style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ></i> Refresh data</button>
+
+<div ng-if="columns.length > 0" class="container-fluid" style="border-bottom: 2px solid #72A230; padding: 3px;margin-bottom:5px;">
+    <button  id="queryRefresh" class="btn btn-success" ng-show="columns.length > 0" class="pull-right" ng-click="processStructure();"  style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ></i> Refresh data</button>
     <h4 class="pull-right" >Query results</h4>
 </div>
 
 
-<div class="container-fluid" >
+<div id="reportLayout" class="container-fluid" >
     <div ng-if="wrongFilters.length > 0 && columns.length > 0" class="alert alert-danger" role="alert"><i class="fa fa-warning fa-2" style="margin-right:10px;"></i>  <strong>Warning:</strong>     There are incomplete filters!!</div>
 
-    <div ng-if="wrongFilters.length == 0" id="reportLayout" bs-loading-overlay bs-loading-overlay-reference-id="reportLayout" style="min-height:100px">
+    <div ng-if="wrongFilters.length == 0"  bs-loading-overlay bs-loading-overlay-reference- style="min-height:100px">
 
     </div>
 

@@ -1,23 +1,30 @@
-<div class="container-fluid" style="height: 100%">
+<!--<div ng-intro-options="IntroOptions" ng-intro-method="CallMe"
+		     ng-intro-oncomplete="CompletedEvent" ng-intro-onexit="ExitEvent"
+		     ng-intro-onchange="ChangeEvent" ng-intro-onbeforechange="BeforeChangeEvent"
+		     ng-intro-onafterchange="AfterChangeEvent"
+		     ng-intro-autostart="ShouldAutoStart">-->
 
-    <!--
-    <div class="row" style="height: 100px">
 
-    </div>
-    -->
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions" id="queryEdit" class="container-fluid" style="height: 100%;padding-left:0px;padding-right:0px;">
+    <!-- <div class="row" style="height: 100px">
+
+    </div> -->
 <div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
-    <a ng-disabled="columns.length <=0" data-ng-click="saveQueryStructure(); saveQuery2(); initQuery();" class="btn btn-success pull-right" style="margin-right: 5px">Save Query</a>
-    <a ng-click="cancelQuery(); initQuery();" class="btn btn-default pull-right">Cancel</a>
+    <a id="saveQueryForPageBtn" ng-disabled="columns.length <=0" data-ng-click="saveQueryStructure(); saveQuery2(); initQuery();" class="btn btn-success pull-right" style="margin-right: 5px" tooltip="Click here to save the current query and back to the page design" tooltip-placement="bottom">Save Query</a>
+    <a ng-click="cancelQuery(); initQuery();" class="btn btn-default pull-right" style="margin-right: 5px" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
+    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for data explorer" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
 </div>
 
     <div class="row" style="height: 100%">
-            <div class="col-md-3" style="height: 100%" ng-include="'partials/query/data-objects.html'">
+            <div id="dataObjects" class="col-md-3" style="height: 100%" ng-include="'partials/query/data-objects.html'">
 
             </div>
-            <div class="col-md-9" style="height: 100%;border-left:1px solid #000000;" ng-include="'partials/query/query-edit.html'">
+            <div id="dropZone" class="col-md-9" style="height: 100%;border-left:1px solid #000000;" ng-include="'partials/query/query-edit.html'">
 
             </div>
     </div>
+
+
 <!--
     <div ui-layout  >
 

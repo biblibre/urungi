@@ -19,6 +19,8 @@ var usersSchema = new mongoose.Schema({
     change_password: Boolean,
     roles: [],
     filters: [],
+    contextHelp: [],
+    dialogs: [],
     accessToken: String,
     startDate: {type: Date, default: Date.now },
     endDate: {type: Date},
@@ -114,6 +116,47 @@ usersSchema.statics.createTheUser = function (req,res,userData,done)
             }
         }
     });
+
+}
+
+usersSchema.statics.setViewedContextHelp = function(req,done)
+{
+    var userID = req.user._id;
+    console.log('the user context name',userID,req.query.contextHelpName,req);
+
+    this.findOne({"_id" : userID}, function (err, findUser) {
+                if (findUser)
+                {
+
+                    if (!findUser.contextHelp)
+                        findUser.contextHelp = [];
+                    var found = false;
+                    for (var i in findUser.contextHelp)
+                        {
+                            if (findUser.contextHelp == req.query.contextHelpName)
+                                found = true;
+                        }
+
+                    if (found == false)
+                        findUser.contextHelp.push(req.query.contextHelpName);
+
+                    Users.update({
+                        "_id" : userID
+                    }, {
+                        $set: {
+                            "contextHelp" : findUser.contextHelp
+                        }
+                    }, function (err, numAffected) {
+                        if(err) throw err;
+
+                        done({result: 1, msg: "context Help dialogs updated.", items: findUser.contextHelp});
+                    });
+                } else {
+                    done({result: 0, msg: "No user found, can´t update the user context help"});
+                }
+
+
+        });
 
 }
 

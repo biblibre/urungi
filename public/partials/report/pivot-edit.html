@@ -79,23 +79,42 @@
 </nd-modal>
 
 
-<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
-    <a data-ng-click="reportName()" class="btn btn-success pull-right"  ng-hide="queryID" style="margin-right: 5px">Save Report</a>
-    <a data-ng-click="saveQuery()" class="btn btn-success pull-right"  ng-hide="reportID" style="margin-right: 5px">Save Query</a>
-    <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
+<div class="row">
+    <div ng-if="getUserContextHelp('reportDesigner')" class="col-md-12">
+        <div class="alert alert-info">
+                <h3>Getting started with single query report design?</h3>
+                <span>Take the guided tour to familiarize yourself...</span>
+                <br/>
+                <br/>
+                <br/>
+                <span style="color:#000;"> Do not show this block again <input type="checkbox" ng-click="setUserContextHelpViewed('reportDesigner')"></span>
+                <a class="btn btn-white pull-right" ng-click="showIntro()">Start guided tour</a>
+        </div>
+    </div>
 </div>
 
 
-<div class="container-fluid" ng-hide="queryID">
+<div  class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
+    <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-hide="queryID" style="margin-right: 5px" tooltip="Click here to save the report" tooltip-placement="bottom">Save Report</a>
+    <a data-ng-click="saveQuery()" class="btn btn-success pull-right"  ng-hide="reportID" style="margin-right: 5px">Save Query</a>
+    <a ng-click="goBack()" class="btn btn-default pull-right" tooltip="Click here to cancel and get back" tooltip-placement="bottom">Cancel</a>
+    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour to design a single query reports" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+
+</div>
+
+
+
+
+<div id="reportType" class="container-fluid" ng-hide="queryID">
     <!-- TYPE OF REPORT SELECTION -->
 
-    <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'grid', 'btn-default': selectedReport.reportType != 'grid'}" ng-click="changeReportType('grid')"><img src="/images/grid.png"></a>
-    <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'chart-bar', 'btn-default': selectedReport.reportType != 'chart-bar'}" ng-click="changeReportType('chart-bar')"><img src="/images/chart_bar.png"></a>
-    <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'chart-area', 'btn-default': selectedReport.reportType != 'chart-area'}" ng-click="changeReportType('chart-area')"><img src="/images/chart_area.png"></a>
-    <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'chart-line', 'btn-default': selectedReport.reportType != 'chart-line'}" ng-click="changeReportType('chart-line')"><img src="/images/chart_line.png"></a>
-    <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'chart-donut', 'btn-default': selectedReport.reportType != 'chart-donut'}" ng-click="changeReportType('chart-donut')"><img src="/images/chart_donut.png"></a>
-    <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'indicator', 'btn-default': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="/images/indicator.png"></a>
-    <a class="btn" ng-class="{'btn-info': selectedReport.reportType == 'gauge', 'btn-default': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="/images/gauge.png"></a>
+    <a id="reportTypeGrid" class="btn" ng-class="{'btn-info': selectedReport.reportType == 'grid', 'btn-default': selectedReport.reportType != 'grid'}" ng-click="changeReportType('grid')"><img src="/images/grid.png"></a>
+    <a id="reportTypeChartBar" class="btn" ng-class="{'btn-info': selectedReport.reportType == 'chart-bar', 'btn-default': selectedReport.reportType != 'chart-bar'}" ng-click="changeReportType('chart-bar')"><img src="/images/chart_bar.png"></a>
+    <a id="reportTypeChartArea" class="btn" ng-class="{'btn-info': selectedReport.reportType == 'chart-area', 'btn-default': selectedReport.reportType != 'chart-area'}" ng-click="changeReportType('chart-area')"><img src="/images/chart_area.png"></a>
+    <a id="reportTypeChartLine" class="btn" ng-class="{'btn-info': selectedReport.reportType == 'chart-line', 'btn-default': selectedReport.reportType != 'chart-line'}" ng-click="changeReportType('chart-line')"><img src="/images/chart_line.png"></a>
+    <a id="reportTypeChartDonut" class="btn" ng-class="{'btn-info': selectedReport.reportType == 'chart-donut', 'btn-default': selectedReport.reportType != 'chart-donut'}" ng-click="changeReportType('chart-donut')"><img src="/images/chart_donut.png"></a>
+    <a id="reportTypeIndicator" class="btn" ng-class="{'btn-info': selectedReport.reportType == 'indicator', 'btn-default': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="/images/indicator.png"></a>
+    <a id="reportTypeGauge" class="btn" ng-class="{'btn-info': selectedReport.reportType == 'gauge', 'btn-default': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="/images/gauge.png"></a>
 
 </div>
 
@@ -110,7 +129,7 @@
 
     <script type="text/ng-template" id="filtersGroup.html">
         <div class="container-fluid filter-zone no-padding" drop="onDrop($data, $event, 'group', group)" drop-effect="copy" drop-accept="'json/custom-object'" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
-            <div class="filter-zone-label pull-right" ng-hide="filters.length > 0">Drop here your filters</div>
+            <div class="filter-zone-label pull-right" ng-hide="group.filters.length > 0">Drop here your filters</div>
             <ul class="ul-drop no-padding" ng-model="group.filters" >
 
                 <div ng-repeat="filter in group.filters">
@@ -207,8 +226,6 @@
 
                                 <div class="input-group" ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && (filter.filterPrompt == false) && ( filter.elementType != 'array') && ( filter.elementType != 'date')" style="width:200px;">
                                     <input type="text" class="form-control no-right-border form-focus-green" ng-model="filter.filterText1" >
-                                    <!--TODO: para el in -not in como select2, pero con los valores introducidos manualmente ver ejemplo en: http://stackoverflow.com/questions/29489821/allow-manually-entered-text-in-ui-select-->
-                                    <!--<select multiple="" data-role="tagsinput" style="display: none;"/>  http://timschlechter.github.io/bootstrap-tagsinput/examples/bootstrap-2.3.2.html-->
 
 
                                     <span class="input-group-btn">
@@ -217,17 +234,10 @@
                                     </span>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn popover-primary ng-scope" ng-class="{'btn-info': filter.filterPrompt == true, 'btn-white': filter.filterPrompt == false}" ng-click="filterPromptsClick(filter)" popover-trigger="mouseenter" popover-placement="top" popover-title="Filter prompt" popover="{{getButtonFilterPromptMessage(filter)}}">
-                                        <i class="fa fa-question-circle"></i>
+                                    <button class="btn popover-primary ng-scope" ng-class="{'btn-black': filter.filterPrompt == true, 'btn-white': filter.filterPrompt == false}" ng-click="filterPromptsClick(filter)" popover-trigger="mouseenter" popover-placement="top" popover-title="Filter prompt" popover="{{getButtonFilterPromptMessage(filter)}}">
+                                        <i class="fa fa-filter"></i><i class="fa fa-question"></i>
                                     </button>
                                 </div>
-                                <!--
-                                <div class="form-group">
-                                    <button class="btn btn-white popover-primary ng-scope" ng-click="filterPropertiesClick(filter)" popover-trigger="mouseenter" popover-placement="top" popover-title="Filter properties" popover="Click here to access the advanced properties for this filter">
-                                        <i class="fa fa-gear"></i>
-                                    </button>
-                                </div>
-                                -->
                                 <span ng-show="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType != 'date'"> and <input type="text" ng-model="filter.filterText2" />  </span>
                                 <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFromArray(group.filters, filter);filtersUpdated();detectLayerJoins();processStructure();"></i></span>
                             </div>
@@ -263,9 +273,9 @@
         </div>
     </script>
 
-    <div ng-repeat="group in filters" ng-include="'filtersGroup.html'"></div>
+    <div id="filtersPanel" ng-repeat="group in filters" ng-include="'filtersGroup.html'"></div>
 
-    <div ng-show="selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+    <div id="orderByPanel" ng-if="selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="order.length > 0">Drop here order by elements</div>
         <!--<div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo1</div>
         <div class="column-box" draggable="true" effect-allowed="move" draggable-type="column" draggable-data="{objectLabel: '{{dim.objectLabel}}',objectID: '123456'}">campo 2</div>
@@ -283,7 +293,7 @@
         </ul>
     </div>
 
-    <div ng-show="selectedReport.reportType == 'grid' "class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+    <div id="columnsPanel" ng-if="selectedReport.reportType == 'grid' "class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="columns.length > 0">Drop here your columns</div>
         <ul class="ul-drop no-padding" ng-model="columns" ui-sortable="sortableOptions">
             <li class="column-box" ng-repeat="column in columns">
@@ -308,10 +318,10 @@
 
             </li>
         </ul>
-        <span ng-show="columns.length > 0" class="pull-right" style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ng-click="processStructure();"></i></span>
+
     </div>
     <!--xkey for charts -->
-    <div ng-show="selectedReport.reportType == 'chart-bar' || selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'chart-line' || selectedReport.reportType == 'chart-donut' " class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'xkey')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+    <div ng-if="selectedReport.reportType == 'chart-bar' || selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'chart-line' || selectedReport.reportType == 'chart-donut' " class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'xkey')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="selectedReport.properties.xkeys.length > 0">Drop here the x key field</div>
         <ul class="ul-drop no-padding" ng-model="selectedReport.properties.xkeys" ui-sortable="sortableOptions">
             <li class="column-box" ng-repeat="xkey in selectedReport.properties.xkeys">
@@ -338,7 +348,7 @@
         </ul>
     </div>
     <!--ykey for charts -->
-    <div ng-show="selectedReport.reportType == 'chart-bar' || selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'chart-line' || selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'indicator' || selectedReport.reportType == 'gauge'" class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'ykey')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+    <div ng-if="selectedReport.reportType == 'chart-bar' || selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'chart-line' || selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'indicator' || selectedReport.reportType == 'gauge'" class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'ykey')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="selectedReport.properties.ykeys.length > 0">Drop here your value fields</div>
         <ul class="ul-drop no-padding" ng-model="selectedReport.properties.ykeys" ui-sortable="sortableOptions">
             <li class="column-box" ng-repeat="ykey in selectedReport.properties.ykeys">
@@ -547,9 +557,14 @@
 
 </div>
 
+<div ng-show="columns.length > 0" class="container-fluid" style="border-bottom: 2px solid #72A230; padding: 3px;margin-bottom:5px;">
+    <button id="queryRefresh" class="btn btn-success" ng-if="columns.length > 0" class="pull-right" ng-click="processStructure();"  style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ></i> Refresh data</button>
+    <h4 class="pull-right" >Query results</h4>
+</div>
+
 <div class="container-fluid" >
 
-    <div id="reportLayout" class="panel panel-default">
+    <div id="reportLayout" class="panel panel-default" style="background-color:transparent;padding:5px;">
 
 
 

@@ -1,0 +1,7 @@
+{
+    "jscodehints.detectedExclusions": [
+        "/Users/hermesromero/projects/widestage/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.bg.min.js",
+        "/Users/hermesromero/projects/widestage/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.ar.min.js",
+        "/Users/hermesromero/projects/widestage/bower_components/bootstrap/js/tab.js"
+    ]
+}

@@ -6,8 +6,8 @@
 <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="css/bootstrap-custom.css" rel="stylesheet">
 <!--select-->
-<link rel="stylesheet" type="text/css" href="libs/select/dist/select.min.css"/>
-<link rel="stylesheet" type="text/css" href="libs/select/dist/select2.css"/>
+<!--<link rel="stylesheet" type="text/css" href="libs/select/dist/select.min.css"/>
+<link rel="stylesheet" type="text/css" href="libs/select/dist/select2.css"/>-->
 <link rel="stylesheet" href="libs/selectize.js/dist/css/selectize.default.css">
 <!-- font-awesome -->
 <link rel="stylesheet" type="text/css" href="/css/font-awesome-4.4.0/css/font-awesome.min.css"/>
@@ -24,7 +24,7 @@
 <!--font awesome icon picker -->
 <link rel="stylesheet" href="/libs/fontawesome-icon-picker/fontawesome-iconpicker.min.css" />
 <!--slider-->
-<link rel="stylesheet" href="seiyria-bootstrap-slider/css/bootstrap-slider.css" />
+<link rel="stylesheet" href="seiyria-bootstrap-slider/dist/css/bootstrap-slider.css" />
 <!--bootstrap dateTimePicker-->
 <link rel="stylesheet" href="angular-bootstrap-datetimepicker/src/css/datetimepicker.css" />
 <!--angular ui tree-->
@@ -35,6 +35,8 @@
 <link href="c3/c3.css" rel="stylesheet" type="text/css">
 <!--v-accordion -->
 <link href="v-accordion/dist/v-accordion.min.css" rel="stylesheet" />
+<!--intro js -->
+<!--<link href="intro.js/minified/introjs.min.css" rel="stylesheet" />-->
 
 
 <link rel="stylesheet" type="text/css" href="nodedream/nodedream.css"/>
@@ -49,7 +51,7 @@
 
 <body>
 
-<div ng-view></div>
+<div ng-view  ng-intro-options="IntroOptions" ng-intro-method="CallMe">
 <!-- Angular will place here page content -->
 </div>
 
@@ -110,6 +112,8 @@
 <script src="file-saver/FileSaver.min.js"></script>
 <!--angular-csv-import.js-->
 <script src="angular-csv-import/dist/angular-csv-import.min.js"></script>
+<!--introhelp-->
+<script src="js/modules/intro-help.js"></script>
 
 
 
@@ -156,6 +160,12 @@
 
 <!-- loading overlay -->
 <script src="angular-loading-overlay/dist/angular-loading-overlay.js" charset="utf-8"></script>
+
+<!--Intro js -->
+<!--
+<script type="text/javascript" src="intro.js/minified/intro.min.js"></script>
+<script type="text/javascript" src="angular-intro.js/build/angular-intro.min.js"></script>
+-->
 
 <!--
 <script src="modules/designer/directives/lvl-uuid.js"></script>

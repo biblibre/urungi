@@ -66,10 +66,10 @@ exports.testConnection = function(data, setresult) {
             return console.error('Connection Error: ', err);
         }
 
-        console.log('Connected to ',conString, 'getting table names');
+        //console.log('Connected to ',conString, 'getting table names');
         client.query("SELECT table_schema || '.' || table_name as name  from information_schema.tables where table_schema not in ('pg_catalog','information_schema')", function(err, result) {
             done();
-            console.log(result.rows);
+
             setresult({result: 1, items: result.rows});
             client.end();
 

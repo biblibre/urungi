@@ -47,9 +47,26 @@
                                                     </div>
                                                     </div>
                 </div>
+
+
+                <div class="btn-group" style="width:100%">
+                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Cell border color</button>
+                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
+                                                        <div class="iconpicker-items">
+                                                            <a role="button" ng-click="changeCellBorderColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                </div>
         </div>
 
-
+        <a class="btn btn-default" ng-click="changeRowHeight(50)">height</a>
 
   <v-pane>
       <v-pane-header>

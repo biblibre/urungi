@@ -1,4 +1,4 @@
-<div class="container-fluid "  style="padding-top: 10px;">
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions" class="container-fluid "  style="padding-top: 10px;">
     <div class="container-fluid">
 
         <div class="main col-md-3" ng-include="'partials/home/sidebar.html'">
@@ -10,18 +10,19 @@
 
                 <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
                     <h3 class="pull-left" >Layers</h3>
-                    <a ng-click="newLayer()" class="btn btn-success pull-right">New Layer</a>
+                    <a id="newLayerBtn" ng-click="newLayer()" class="btn btn-success pull-right" tooltip="Click here to create a new layer" tooltip-placement="bottom">New Layer</a>
+                    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for layers" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
                 </div>
 
-                <div class="list-group" ng-init="getLayers(1,'',['name','status','description'])">
-                    <div href="/#/layers/{{layer._id}}" class="list-group-item" ng-repeat="layer in items">
-                        <a class="badge pull-right" ng-class="{'badge-success': layer.status == 'active', 'badge-danger': layer.status == 'Not active'}" ng-click="changeLayerStatus(layer)">{{layer.status}}</a>
-                        <a href="/#/layers/{{layer._id}}">
-                            <h4 class="list-group-item-heading">{{layer.name}}</h4>
+                <div id="layerList" class="list-group" ng-init="getLayers(1,'',['name','status','description'])">
+                    <div id="layerListItem" href="/#/layers/{{layer._id}}" class="list-group-item" ng-repeat="layer in items">
+                        <a id="layerListItemStatus" class="badge pull-right" ng-class="{'badge-success': layer.status == 'active', 'badge-danger': layer.status == 'Not active'}" ng-click="changeLayerStatus(layer)" tooltip="Click here to change the status of the layer" tooltip-placement="left">{{layer.status}}</a>
+                        <a href="/#/layers/{{layer._id}}" tooltip="Click here to view/modify the layer" tooltip-placement="top">
+                            <h4 id="layerListItemName" class="list-group-item-heading">{{layer.name}}</h4>
                         </a>
-                            <p class="list-group-item-text">
+                            <p id="layerListItemDetails" class="list-group-item-text">
 
-                                <label class="small" style="margin-right: 5px"></label>{{layer.description}}
+                                <label  class="small" style="margin-right: 5px"></label>{{layer.description}}
 
                             </p>
 

@@ -158,6 +158,13 @@ exports.changeUserStatus = function(req,res){
 
 }
 
+exports.setViewedContextHelp = function(req,res)
+{
+    Users.setViewedContextHelp(req,function(result){
+        serverResponse(req, res, 200, result);
+    });
+}
+
 exports.getCounts = function(req,res){
     var body = req.body;
     var userID = req.user.id;
@@ -364,6 +371,14 @@ exports.getUserData = function(req,res){
 
     });
 };
+
+exports.getUserOtherData = function(req, res)
+{
+    var Users = connection.model('Users');
+    Users.findOne({_id:req.user._id},{},function(err, user){
+            serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: user});
+    });
+}
 
 
 exports.getUserObjects = function(req, res){

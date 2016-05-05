@@ -17,6 +17,8 @@ module.exports = function (app) {
     app.get('/api/get-user-data',restrict, users.getUserData);
     app.get('/api/get-user-objects',restrict, users.getUserObjects);
     app.get('/api/get-user-last-executions',restrict, users.getUserLastExecutions);
+    app.get('/api/set-viewed-context-help',restrict,users.setViewedContextHelp);
+    app.get('/api/get-user-other-data',restrict,users.getUserOtherData);
 }
 
 

@@ -1,8 +1,9 @@
-app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,datasourceModel,uuid2 ) {
+app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,datasourceModel,uuid2,$timeout ) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';
     $scope.datasetPropertiesModal  = 'partials/layer/datasetPropertiesModal.html';
+    $scope.ReadOnlyDataSourceSelector = false;
     $scope.items =  [];
     $scope.elementTypes = [{name:"object",value:"object"},
         {name:"string",value:"string"},
@@ -23,6 +24,89 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
     $scope.deletingJoin = false;
     $scope.elementEditing = false;
+
+    if ($routeParams.extra == 'intro') {
+            $timeout(function(){$scope.showIntro()}, 1000);
+    }
+
+
+    $scope.IntroOptions = {
+            //IF width > 300 then you will face problems with mobile devices in responsive mode
+                steps:[
+                    {
+                        element: '#parentIntro',
+                        html: '<div><h3>Layers</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Layers define the interface for your users to access the data.</span><br/><br/><span>Layers allow your users to create reports dragging and droping familiar elements that points in the background to the fields contained in tables in your data surces.</span><br/><br/><span>Here you can create and manage the layers that later will be used by your users to create reports or explore data.</span><br/><br/><span>You can create several layers depending on your necessities, but you have to define one at least.</span></div>',
+                        width: "500px",
+                        objectArea: false,
+                        verticalAlign: "top",
+                        height: "300px"
+                    },
+                    {
+                        element: '#newLayerBtn',
+                        html: '<div><h3>New Layer</h3><span style="font-weight:bold;">Click here to create a new layer.</span><br/><span></span></div>',
+                        width: "300px",
+                        height: "150px",
+                        areaColor: 'transparent',
+                        horizontalAlign: "right",
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#layerList',
+                        html: '<div><h3>Layers list</h3><span style="font-weight:bold;">Here all the layers are listed.</span><br/><span>You can edit the layer to configure the tables, elements and joins between tables.<br/><br/>You can also activate or deactivate layers.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        verticalAlign: "top",
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#layerListItem',
+                        html: '<div><h3>Layer</h3><span style="font-weight:bold;">This is one layer.</span><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#72A230',
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#layerListItemName',
+                        html: '<div><h3>Layer name</h3><span style="font-weight:bold;">The name for the layer.</span><br/><br/><span>You can setup the name you want for your layer, but think about make it descriptive enough, specially if users will have to choose between several layers.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#layerListItemDetails',
+                        html: '<div><h3>Layer description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using the layer.</span><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#layerListItemStatus',
+                        html: '<div><h3>Layer status</h3><span style="font-weight:bold;">The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data.</span><br/><br/><span>You can change the status of the layer simply clicking over this label</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#parentIntro',
+                        html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Design your company public space</span><br/><br/>The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/public-space/intro">Go to the public space definition and continue tour</a></span></div>',
+                        width: "500px",
+                        objectArea: false,
+                        verticalAlign: "top",
+                        height: "250px"
+                    }
+                ]
+            }
 
 
 
@@ -59,8 +143,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             connection.get('/api/layers/find-one', {id: $routeParams.layerID}, function(data) {
                 $scope._Layer = data.item;
                 $scope.mode == 'edit';
-                //$scope.$apply();
-                //console.log('me he traido el layer...'+ JSON.stringify($scope._Layer));
                 $scope.rootItem.elements = $scope._Layer.objects;
 
 
@@ -100,63 +182,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                         }
                     });
 
-
-
-
-                    /*var isDragging = false;
-                    var pageX = 0, pageY = 0;
-
-                    $("#collections")
-                        .mousedown(function(event) {
-                            if (event.target.id == 'collections' || event.target.id == 'canvas') {
-                                isDragging = true;
-                                console.log($scope._Layer.params.schema);
-                            }
-                        })
-                        .mousemove(function(event) {
-                            if (isDragging) {
-                                console.log('dragging');
-
-                                if (!pageX && !pageY) {
-                                    pageX = event.pageX;
-                                    pageY = event.pageY;
-                                }
-
-                                var movementX = pageX-event.pageX;
-                                var movementY = pageY-event.pageY;
-
-                                console.log('movementX '+movementX);
-                                console.log('movementY '+movementY);
-
-                                for (var i in $scope._Layer.params.schema) {
-                                    if (!$scope._Layer.params.schema[i].left) $scope._Layer.params.schema[i].left = 0;
-                                    if (!$scope._Layer.params.schema[i].top) $scope._Layer.params.schema[i].top = 0;
-
-                                    $scope.$apply(function () {
-                                        $scope._Layer.params.schema[i].left += movementX;
-                                        $scope._Layer.params.schema[i].top += movementY;
-                                    });
-                                }
-
-                                pageX = event.pageX;
-                                pageY = event.pageY;
-                            }
-
-                        })
-                        .mouseup(function() {
-                            isDragging = false;
-                            console.log($scope._Layer.params.schema);
-                        })
-                        .mouseout(function() {
-                            isDragging = false;
-                            console.log($scope._Layer.params.schema);
-                        });*/
-
                 });
-
-
-
-
 
             });
         };
@@ -194,7 +220,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             }
 
             connection.post('/api/layers/update/'+theLayer._id, theLayer, function(result) {
-                console.log(result);
                 if (result.result == 1) {
                     window.history.back();
                 }
@@ -230,7 +255,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
     $scope.getDatasources = function()
     {
-        console.log('getting datasources');
 
         var params = {};
 
@@ -245,9 +269,19 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
     $scope.addDataset = function ()
     {
-        console.log('add dataset');
         $scope.selectedDts = {};
         $scope.selectedEntities = [];
+        $scope.datasetEntities = [];
+
+        if ($scope._Layer.params)
+            if ($scope._Layer.params.schema)
+                if ($scope._Layer.params.schema.length > 0)
+                    {
+                      $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
+                      $scope.ReadOnlyDataSourceSelector = true;
+                      $scope.getDatasetsForDts();
+                    }
+
         $('#datasetModal').modal('show');
     }
 
@@ -272,11 +306,11 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
                 if (result.result == 1)
                 {
-                console.log('uno');
+
 
                     for (i in result.items)
                     {
-                        console.log('dos',result.items[i]);
+
 
                         result.items[i].datasourceID = $scope.selectedDts.id;
 
@@ -308,12 +342,8 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
                         $scope._Layer.params.schema.push(result.items[i]);
 
-
-
-                        //console.log('añadido uno');
-
                     }
-                    //$scope.$apply();
+
                     $('#datasetModal').modal('hide');
                     $scope.erDiagramInit();
 
@@ -324,11 +354,9 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
     $scope.getDatasetsForDts = function (_id)
     {
-        console.log('The selected datasource  '+$scope.selectedDts.id);
-        console.log('The selected id  '+_id);
         connection.get('/api/data-sources/getEntities', {id: $scope.selectedDts.id}, function(data) {
             $scope.datasetEntities = data.items;
-            console.log('entities '+JSON.stringify($scope.datasetEntities));
+
         });
     }
 
@@ -374,7 +402,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             if ($scope._Layer.params.joins[j].sourceElementID == sourceID && $scope._Layer.params.joins[j].targetElementID == targetID)
             {
                 found = true;
-                //console.log('previous join founded');
+
             }
         }
 
@@ -393,7 +421,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                             join.sourceElementName = $scope._Layer.params.schema[collection].elements[element].elementName;
                             join.sourceCollectionID = $scope._Layer.params.schema[collection].collectionID;
                             join.sourceCollectionName = $scope._Layer.params.schema[collection].collectionName;
-                            console.log('the collection name',$scope._Layer.params.schema[collection].collectionName);
+
                         }
 
                         if ($scope._Layer.params.schema[collection].elements[element].elementID == targetID)
@@ -402,18 +430,17 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                             join.targetElementName = $scope._Layer.params.schema[collection].elements[element].elementName;
                             join.targetCollectionID = $scope._Layer.params.schema[collection].collectionID;
                             join.targetCollectionName = $scope._Layer.params.schema[collection].collectionName;
-                            console.log('the collection name 2',$scope._Layer.params.schema[collection].collectionName);
+
                         }
                     }
                 }
 
-               // console.log('the join',JSON.stringify(join));
 
                 if (join.sourceElementID && join.sourceCollectionID && join.targetElementID && join.targetCollectionID)
                 {
                     join.joinType = 'default';
                     $scope._Layer.params.joins.push(join);
-                    //console.log('join pushed');
+
                 }
         }
 
@@ -433,7 +460,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             {
                 found = true;
                 $scope._Layer.params.joins.splice(j,1);
-                console.log('join deleted');
+
             }
         }
     }
@@ -539,14 +566,14 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                  _addEndpoints = function (toId, sourceAnchors, targetAnchors) {
                     for (var i = 0; i < sourceAnchors.length; i++) {
                         var sourceUUID = toId + sourceAnchors[i];
-                        //console.log('the sourceID',sourceUUID)
+
                         instance.addEndpoint( toId, sourceEndpoint, {
                             anchor: sourceAnchors[i], uuid: sourceUUID
                         });
                     }
                     for (var j = 0; j < targetAnchors.length; j++) {
                         var targetUUID = toId + targetAnchors[j];
-                        //console.log('the targetID',targetUUID);
+
                         instance.addEndpoint( toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID });
                     }
                  },
@@ -621,37 +648,11 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                                 }
                             }
 
-                            console.log('se ha movido',pos_x,pos_y,id);
                         }
                     }
                 });
 
-                /*
-                $(".window").draggable({
-                    drag:function(e){
-                        // Your code comes here
-                        //jsPlumb.repaint($(this));
-                    },
-                    stop: function(e){
-                        // Your code for capturing dragged element position.
-                        console.log($(this).offset());
-                    }
-                })*/
 
-                // THIS DEMO ONLY USES getSelector FOR CONVENIENCE. Use your library's appropriate selector
-                // method, or document.querySelectorAll:
-                //jsPlumb.draggable(document.querySelectorAll(".window"), { grid: [20, 20] });
-
-                // connect a few up
-                /*
-                 instance.connect({uuids: ["Window2BottomCenter", "Window3TopCenter"], editable: true});
-                 instance.connect({uuids: ["Window2LeftMiddle", "Window4LeftMiddle"], editable: true});
-                 instance.connect({uuids: ["Window4TopCenter", "Window4RightMiddle"], editable: true});
-                 instance.connect({uuids: ["Window3RightMiddle", "Window2RightMiddle"], editable: true});
-                 instance.connect({uuids: ["Window4BottomCenter", "Window1TopCenter"], editable: true});
-                 instance.connect({uuids: ["Window3BottomCenter", "Window1BottomCenter"], editable: true});
-                 */
-                //
 
 
                 for (var j in $scope._Layer.params.joins)
@@ -663,9 +664,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 // listen for clicks on connections, and offer to delete connections on click.
                 //
                 instance.bind("click", function (conn, originalEvent) {
-                    // if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-                    //   instance.detach(conn);
-                    //console.log('the connection has this type: ',conn.getType());
                     var joinType = '';
                     if (conn.hasType("right") == true)
                     {
@@ -689,54 +687,39 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                             $scope._Layer.params.joins[j].joinType = joinType;
                     }
 
-                    //conn.endpoint
-                    //var e = jsPlumb.addEndpoint("someElement");
-                    //conn.endpoints[0].addOverlay([ "Arrow", { width:10, height:10, id:"arrow" }]);
 
-                    //conn.endpoints[1].paintStyle = { fillStyle: "#778899", radius: 8 };
                 });
 
                 instance.bind("connectionDrag", function (connection) {
-                    console.log("connection " + connection.id + " is being dragged. suspendedElement is ", connection.suspendedElement, " of type ", connection.suspendedElementType);
-                });
-                /*
-                instance.bind("connectionDragStop", function (params) {
-                    console.log("connection " + params.id + " was dragged ", params.sourceId , 'to', params.targetId);
 
-                    if ($scope.deletingJoin == false)
-                        makeJoin(params.sourceId,params.targetId);
-                    //params.scope
-                    //params.connection
-                    //params.dropEndPoint
-                    //params.dropEndPoint
-                });*/
+                });
+
 
                 instance.bind("dblclick", function (connection, originalEvent){
-                    console.log('double clicked...',connection.sourceId);
+
                 });
 
                 instance.bind("click", function (connection, originalEvent){
-                    console.log(' clicked...',connection.sourceId);
+
                 });
 
                 instance.bind("beforeDrop", function (info){
-                    console.log(' dropped...',info.sourceId);
                     //Here we can control if we are going to accept the join or not...
                     return true;
                 });
 
 
                 instance.bind("connectionMoved", function (params) {
-                    console.log("connection " + params.connection.id + " was moved");
+
                 });
 
                 instance.bind("connectionDetached", function (info,originalEvent) {
-                    console.log("connection ",info.sourceId,info.targetId , " was detached");
+
                     deleteJoin(info.sourceId,info.targetId);
                 });
 
                 instance.bind("connection", function (info,originalEvent) {
-                    console.log("connection ",info.sourceId,info.targetId , " was made");
+
                     makeJoin(info.sourceId,info.targetId);
                 });
             });
@@ -744,51 +727,8 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             jsPlumb.fire("jsPlumbDemoLoaded", instance);
 
             $scope.instance = instance;
-            /*
 
-             jsPlumb.connect({
-             source:"flowchartWindow1",
-             target:"flowchartWindow2",
-             endpoint:"Rectangle"
-             });
-
-             jsPlumb.connect({
-             source:"flowchartWindow1",
-             target:"flowchartWindow3",
-             endpoint:"Rectangle"
-             });
-
-             jsPlumb.bind("ready", function() {
-             console.log("Set up jsPlumb listeners (should be only done once)");
-             jsPlumb.bind("connection", function (info) {
-             $scope.$apply(function () {
-             console.log("Possibility to push connection into array");
-             });
-             });
-             });
-             */
         },100);
-        /*
-        for (var c in $scope._Layer.params.schema)
-        {
-            console.log('registering ',$scope._Layer.params.schema[c].collectionID)
-
-            $( $scope._Layer.params.schema[c].collectionID ).draggable({
-                containment: $('canvas'),
-                drag:function(e){
-                    // Your code comes here
-                    jsPlumb.repaint($(this)); // Note that it will only repaint the dragged element
-                },
-                stop: function(event, ui) {
-                    var pos_x = ui.offset.left;
-                    var pos_y = ui.offset.top;
-                    var need = ui.helper.data("need");
-
-                    console.log('se ha movido');
-                }
-            });
-        } */
-
 
     }
 
@@ -797,7 +737,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         $scope.selectedCollection = collection;
         $('#datasetPropertiesModal').modal('show');
 
-        console.log('collection clicked');
     }
 
     $scope.elementAdd = function (element)
@@ -880,14 +819,14 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             {
                 if (!element.yearPositionFrom ) //|| !angular.isNumber(element.yearPositionFrom))
                 {
-                    console.log ('no 1')
+
                     isOk = false;
                     message = 'You have to setup a valid "FROM" position number to extract the year from the string';
                 }
 
                 if (angular.isNumber(element.yearPositionFrom))
                 {
-                    console.log ('no 2')
+
                     isOk = false;
                     message = 'You have to setup a valid "FROM" position number to extract the year from the string';
                 }
@@ -977,11 +916,11 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         for (var collection in $scope._Layer.params.schema)
         {
             var theID = $scope._Layer.params.schema[collection].collectionID;
-            console.log('the ID '+theID);
+
             var p = $(theID);
             var position = p.parent().position();
             var theLeft = position.left;
-                console.log('the left '+theLeft);
+
             $($scope._Layer.params.schema[collection].collectionID).css('left', theLeft+leftCorrection+'px');
         }
 
@@ -1070,10 +1009,9 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
         for (var i in elements)
         {
-            console.log('checking---',elementID,elements[i].elementID,JSON.stringify(elements[i]));
+
             if (elements[i].elementID == elementID)
             {
-                //console.log('founded');
                 unassingElementRole(elements[i]);
                 elements.splice(i,1);
                 return;
@@ -1118,7 +1056,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
         if (element.elementType == 'array') {
             connection.get('/api/data-sources/get-element-distinct-values', params, function(data) {
-                //console.log(JSON.stringify(data));
                 for (var i in data.items) {
                     $scope.addValueToElement(element, data.items[i]["_id"][element.elementName], data.items[i]["_id"][element.elementName]);
                 }
@@ -1172,34 +1109,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
         $('#datasetPropertiesModal').modal('hide');
         $scope.selectedCollection = undefined;
-
-        /*
-        for (var j in $scope._Layer.params.joins)
-        {
-            if ($scope._Layer.params.joins[j].sourceCollectionID == theCollectionID || $scope._Layer.params.joins[j].targetCollectionID == theCollectionID)
-                $scope._Layer.params.joins.splice(j, 1);
-            //instance.detach(theCollectionID);
-        } */
-
-
-
-        //instance.repaint();
-        //jsPlumb.deleteEndpoint(ep);
-        //$scope.erDiagramInit();
-        //jsPlumb.repaint($(this));
-        //instance.reset();
-        /*
-        for (var collection in $scope._Layer.params.schema)
-        {
-            for (var element in $scope._Layer.params.schema[collection].elements)
-            {
-                $scope._Layer.params.schema[collection].elements[element].painted = false;
-            }
-        } */
-        //$scope.erDiagramInit();
-
-        //instance.deleteEveryEndpoint();
-        //instance.detachEveryConnection();
 
     }
 

@@ -10,14 +10,9 @@
             <div class="col-md-12">
 
                 <div class="form-group">
-                    <label for="field-3" class="control-label">Choose a data source</label>
+                    <label ng-if="!ReadOnlyDataSourceSelector" for="field-3" class="control-label">1.- Choose a data source</label>
 
-                    <!--
-                    <select class="form-control" ng-model="selectedDts" ng-options="dts.name as dts.name for dts in datasources"
-                            ng-change="getDatasetsForDts(dts._id)"></select>
-                            -->
-
-                    <select class="form-control" ng-change="getDatasetsForDts()" ng-model="selectedDts.id">
+                    <select ng-if="!ReadOnlyDataSourceSelector" class="form-control" ng-change="getDatasetsForDts()" ng-model="selectedDts.id">
 
                         <option value="{{dts._id}}" ng-repeat="dts in datasources">
 
@@ -41,14 +36,18 @@
 
         </div>
 
+        <div class="container-fluid">
+            <label class="control-label">2.- Click on the datasets you want to add to the layer</label>
+        </div>
 
-        <div class="row">
-            <div class="col-md-12">
+        <div class="container-fluid" style="height:200px;overflow-y:scroll;border: 1px solid #ccc">
+            <!--<div class="col-md-12">-->
+
 
                 <button class="btn " ng-class="{'btn-info': selectedEntities.indexOf(entity) >= 0, 'btn-default': selectedEntities.indexOf(entity) == -1}"  ng-click="setSelectedEntity(entity)"  style="width: 100%;text-align: left" ng-repeat="entity in datasetEntities">{{entity.name}}</button>
 
                 <!--<input type="checkbox" ng-model="datasetEntities.selected" ng-repeat="entity in datasetEntities">{{entity.name}}-->
-            </div>
+            <!--</div>-->
         </div>
 
     </div>

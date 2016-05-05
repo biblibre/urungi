@@ -16,7 +16,7 @@
  * Filter.js is client-side JSON objects filter and render html elements. Multiple filter criteria can be specified and used in conjunction with each other.
  */
 
-app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, promptModel,queryService, dashboardModel, $filter, $rootScope, bsLoadingOverlayService) {
+app.controller('reportCtrl', function ($scope, connection, $routeParams, reportModel, $compile, promptModel,queryService, dashboardModel, $filter, $rootScope, bsLoadingOverlayService, $timeout) {
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.dateModal = 'partials/report/dateModal.html';
@@ -98,6 +98,250 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         return s;
     }
     
+    if ($routeParams.extra == 'intro') {
+            $timeout(function(){$scope.showIntro()}, 1000);
+    }
+
+
+    $scope.IntroOptions = {
+            //IF width > 300 then you will face problems with mobile devices in responsive mode
+                steps:[
+                    {
+                        element: '#parentIntro',
+                        html: '<div><h3>Single query reports</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">In here you can create and execute reports based on single queries.</span><br/><br/><span>Define your query using filters and dragging and dropping from different layers.</span><br/><br/><span>After you define the query to get the data, define then how to explore it, you can use a data grid or a short of different chart styles.</span><br/><br/><span></span></div>',
+                        width: "500px",
+                        objectArea: false,
+                        verticalAlign: "top",
+                        height: "300px"
+                    },
+                    {
+                        element: '#newReportBtn',
+                        html: '<div><h3>New SQ Report</h3><span style="font-weight:bold;">Click here to create a new single query report.</span><br/><span></span></div>',
+                        width: "300px",
+                        height: "150px",
+                        areaColor: 'transparent',
+                        horizontalAlign: "right",
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportList',
+                        html: '<div><h3>SQ Reports list</h3><span style="font-weight:bold;">Here all your single query reports are listed.</span><br/><span>Click over a report\'s name to execute it.<br/><br/>You can also modify or drop the report.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        verticalAlign: "top",
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#reportListItem',
+                        html: '<div><h3>SQ Report</h3><span style="font-weight:bold;">This is one of your single query reports.</span><br/><span>On every line (SQ report) you can edit or drop it. If the report is published a label with the word "published" will appear.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#72A230',
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#reportListItemName',
+                        html: '<div><h3>SQ report name</h3><span style="font-weight:bold;">The name for the SQ report.</span><br/><br/><span>You can setup the name you want for your report, but think about make it descriptive enough, and take care about not duplicating names across the company for the reports, specially if the report is going to be published.</span><br/><br/><span>You can click here to execute the report.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        height: "250px"
+
+                    },
+                    {
+                        element: '#reportListItemDetails',
+                        html: '<div><h3>SQ report description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using this report.</span><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#reportListItemEditBtn',
+                        html: '<div><h3>SQ report edit</h3><span style="font-weight:bold;">Click here to modify the SQ report.</span><br/><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#reportListItemDeleteBtn',
+                        html: '<div><h3>SQ report delete</h3><span style="font-weight:bold;">click here to delete the report.</span><br/><br/><span>Once deleted the report will not be recoverable again.</span><br/><br/><span>Requires 2 step confirmation.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#reportListItemPublished',
+                        html: '<div><h3>SQ report published</h3><span style="font-weight:bold;">This label indicates that this report is public.</span><br/><br/><span>If you drop or modify a published report, it will have and impact on other users, think about it prior to make any updates on the report.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    }
+                ]
+            }
+
+    if ($rootScope.user.dashboardsCreate || $rootScope.counts.dashBoards > 0)
+            {
+            $scope.IntroOptions.steps.push({
+                    element: '#parentIntro',
+                    html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Dashboards</span><br/><br/>See how to create dashboards composed with a set of single query reports<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/dashboard/intro">Go to dashboards and continue tour</a></span></div>',
+                    width: "500px",
+                    objectArea: false,
+                    verticalAlign: "top",
+                    height: "250px"
+                });
+            }
+
+
+        $scope.IntroDesignerOptions = {
+            //IF width > 300 then you will face problems with mobile devices in responsive mode
+                steps:[
+                    {
+                        element: '#layerObjects',
+                        html: '<div><h3>The layer catalog</h3><span style="font-weight:bold;">Access here the different data elements of every layer that you have access on</span><br/><span>Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)</span></div>',
+                        width: "300px",
+                        height: "250px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#8DC63F'
+
+                    },
+                    {
+                        element: '#selectLayer',
+                        html: '<div><h3>The layer selector</h3><span style="font-weight:bold;">Select here the layer where your query will be based on.</span><br/><span>One query can only be baes in just one layer, you can not mix elements from different layers in the same query</span></div>',
+                        width: "300px",
+                        height: "250px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#8DC63F'
+
+                    },
+                    {
+                        element: '#columnsPanel',
+                        html: '<div><h3>Columns / results drop zone</h3><span style="font-weight:bold;">Drop here the elements you want to have in the results of the query</span><br/><span>A query must hold at least one element here to be executed</span></div>',
+                        width: "300px",
+                        height: "180px"
+                    },
+                    {
+                        element: '#orderByPanel',
+                        html: '<div><h3>Order By drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;"> Drop here the elements that you want to use to order the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results</span></div>',
+                        width: "300px",
+                        height: "250px"
+                    },
+                    {
+                        element: '#filtersPanel',
+                        html: '<div><h3>Filters drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Drop here the elements that you want to use to filter the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results</span></div>',
+                        width: "300px",
+                        height: "250px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportLayout',
+                        html: '<div><h3>Results area</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">As you define the query draging and droping in the areas above, the results of the query will appear here</span><br/><span></span></div>',
+                        width: "300px",
+                        height: "150px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#queryRefresh',
+                        html: '<div><h3>Query refresh</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Use this button to refresh the results</span><br/><span>The query will be sent again to the server an executed to get the most up to date data</span></div>',
+                        width: "300px",
+                        height: "150px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportType',
+                        html: '<div><h3>Report Type</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Choose here the type of output for your data.</span><br/><span></span></div>',
+                        width: "300px",
+                        height: "200px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportTypeGrid',
+                        html: '<div><h3>Grid report Type</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Choose this option to show your data in a row/column format typical for data grids.</span><br/><span></span></div>',
+                        width: "300px",
+                        height: "200px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportTypeChartBar',
+                        html: '<div><h3>Chart bar report Type</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">This option will show your data in a bar chart.</span><br/><span>You need at least one field to group your data and a numeric field holding the value to be shown by every bar.</span></div>',
+                        width: "300px",
+                        height: "200px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportTypeChartArea',
+                        html: '<div><h3>Chart area report Type</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">This option will show your data in a area chart.</span><br/><span>You need at least one field to group your data and a numeric field holding the value to be shown by every area.</span></div>',
+                        width: "300px",
+                        height: "200px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportTypeChartLine',
+                        html: '<div><h3>Chart line report Type</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">This option will show your data in a line chart.</span><br/><span>You need at least one field to group your data and a numeric field holding the value to be shown by every line.</span></div>',
+                        width: "300px",
+                        height: "200px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportTypeChartDonut',
+                        html: '<div><h3>Donut Chart style report</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">This option will show your data in a donut style chart.</span><br/><span>You need at least one field to group your data and a numeric field holding the value to be shown by every segment.</span></div>',
+                        width: "300px",
+                        height: "200px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportTypeIndicator',
+                        html: '<div><h3>Indicator report</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">This option will show your data in a panel ready to hold unique indicators.</span><br/><span>You can choose between different templates to show your unique indicator, add a description, etc...</span></div>',
+                        width: "300px",
+                        height: "200px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportTypeGauge',
+                        html: '<div><h3>Gauge report</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">This option will show your data in a gauge chart.</span><br/><span>Choose this type of chart to show unique indicators that represents a  percentage</span></div>',
+                        width: "300px",
+                        height: "200px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#saveReportBtn',
+                        html: '<div><h3>Save report</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Once you complete your report, click this button to save the report</span><br/><span>An emerging dialog will ask you for a name for the report</span></div>',
+                        width: "300px",
+                        height: "200px",
+                        horizontalAlign: "right",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    }
+
+                ]
+            }
+
+
+
     
     $scope.showOverlay = function (referenceId) {
         bsLoadingOverlayService.start({
@@ -320,13 +564,14 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 $scope.selectedReport.properties.ykeys = [];
                 $scope.selectedReport.properties.columns = [];
                 $scope.selectedReport.reportType = 'grid';
-
+                $scope.getLayers();
                 $scope.mode = 'add';
 
             }
               else {
                 //This executes in edit mode
                 reportModel.getReport($scope, $routeParams.reportID,'edit',false, function() {
+                    $scope.getLayers();
                     generateQuery(function(){
                         $scope.processStructure(false);
                     });
@@ -360,10 +605,29 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             $scope.page = data.page;
             $scope.pages = data.pages;
             $scope.layers = data.items;
+            if ($scope.selectedReport.selectedLayerID)
+                $scope.selectedLayerID = $scope.selectedReport.selectedLayerID;
 
-            $scope.rootItem.elements = data.items[0].objects;
-            $scope.selectedLayer = data.items[0];
-            $scope.selectedLayerID = data.items[0]._id;
+            if ($scope.selectedLayerID)
+                {
+                  $scope.selectedReport.selectedLayerID = $scope.selectedLayerID;
+                    for (var i in data.items)
+                      {
+                          if (data.items[i]._id == $scope.selectedReport.selectedLayerID)
+                              {
+                                    $scope.rootItem.elements = data.items[i].objects;
+                                    $scope.selectedLayer = data.items[i];
+                              }
+                      }
+                } else {
+                    $scope.rootItem.elements = data.items[0].objects;
+                    $scope.selectedLayer = data.items[0];
+                    $scope.selectedReport.selectedLayerID = data.items[0]._id;
+                    $scope.selectedLayerID = data.items[0]._id;
+                }
+            /*
+
+            */
         });
     };
 
@@ -375,7 +639,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             {
                 $scope.rootItem.elements = $scope.layers[i].objects;
                 $scope.selectedLayer = $scope.layers[i];
-                $scope.selectedLayerID = $scope.layers[i]._id;
+                $scope.selectedReport.selectedLayerID = $scope.layers[i]._id;
             }
         }
     }
@@ -1673,7 +1937,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         {
              if (element.elementID != $scope.columns[i].elementID)
              {
-                 if (joinExists(element.collectionID,$scope.columns[i].collectionID))
+                 if (joinExists(element.collectionID,$scope.columns[i].collectionID) || (element.collectionID == $scope.columns[i].collectionID))
                     found = found+1;
              }
         }
@@ -1724,30 +1988,30 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             }
 
             //get the joins for these collections
-
-            for (var j in $scope.selectedLayer.params.joins)
-            {
-                for (var c in reportCollections)
+            if ($scope.selectedLayer.params)
+                for (var j in $scope.selectedLayer.params.joins)
                 {
-                    if ($scope.selectedLayer.params.joins[j].sourceCollectionID == reportCollections[c])
+                    for (var c in reportCollections)
                     {
-                             if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].sourceCollectionID) == -1)
-                                 selectableCollections.push($scope.selectedLayer.params.joins[j].sourceCollectionID);
+                        if ($scope.selectedLayer.params.joins[j].sourceCollectionID == reportCollections[c])
+                        {
+                                 if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].sourceCollectionID) == -1)
+                                     selectableCollections.push($scope.selectedLayer.params.joins[j].sourceCollectionID);
 
-                             if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].targetCollectionID) == -1)
-                                 selectableCollections.push($scope.selectedLayer.params.joins[j].targetCollectionID);
-                    }
+                                 if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].targetCollectionID) == -1)
+                                     selectableCollections.push($scope.selectedLayer.params.joins[j].targetCollectionID);
+                        }
 
-                    if ($scope.selectedLayer.params.joins[j].targetCollectionID == reportCollections[c])
-                    {
-                        if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].sourceCollectionID) == -1)
-                            selectableCollections.push($scope.selectedLayer.params.joins[j].sourceCollectionID);
+                        if ($scope.selectedLayer.params.joins[j].targetCollectionID == reportCollections[c])
+                        {
+                            if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].sourceCollectionID) == -1)
+                                selectableCollections.push($scope.selectedLayer.params.joins[j].sourceCollectionID);
 
-                        if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].targetCollectionID) == -1)
-                            selectableCollections.push($scope.selectedLayer.params.joins[j].targetCollectionID);
+                            if (selectableCollections.indexOf($scope.selectedLayer.params.joins[j].targetCollectionID) == -1)
+                                selectableCollections.push($scope.selectedLayer.params.joins[j].targetCollectionID);
+                        }
                     }
                 }
-            }
 
             if (selectableCollections.length == 0)
                 enableAllElements($scope.rootItem.elements);

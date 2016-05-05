@@ -62,10 +62,13 @@
         </div>
 
         <div class="col-md-12" style="padding: 5px;">
-        <a ng-click="testConnection()" ng-disabled="!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database" class="btn btn-default pull-right" style="margin-left: 5px;margin-right: 5px;">Test Connection</a>
-        <div ng-if="testConnection.message" class="row alert" ng-class="{'alert-success': testConnection.result == 1,'alert-danger': testConnection.result != 1}" >
-            {{testConnection.message}}
-        </div>
+            <a ng-click="doTestConnection()" ng-disabled="!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database || testingConnection" class="btn btn-default pull-right" style="margin-left: 5px;margin-right: 5px;">Test Connection</a>
+            <div ng-if="testConnection.message" class="row alert" ng-class="{'alert-success': testConnection.result == 1,'alert-danger': testConnection.result != 1}" >
+                {{testConnection.message}}
+            </div>
+            <div ng-if="testConnection.errorMessage" style="font-size:11px;color:#ccc">
+                {{testConnection.errorMessage}}
+            </div>
         </div>
     </div>
 

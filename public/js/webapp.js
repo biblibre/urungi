@@ -5,6 +5,7 @@ var app = angular.module('WideStage', [
         'ngRoute','ui.sortable','gridster','ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
         'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
         'ui.bootstrap.datetimepicker','ui.tree','page.block','gridshore.c3js.chart','vAccordion','bsLoadingOverlay'
+    ,'intro.help'
     ])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
@@ -14,6 +15,10 @@ var app = angular.module('WideStage', [
             controller: 'homeCtrl'
         });
         $routeProvider.when('/dashboards', {
+            templateUrl: 'partials/dashboard/list.html',
+            controller: 'dashBoardCtrl'
+        });
+        $routeProvider.when('/dashboard/:extra', {
             templateUrl: 'partials/dashboard/list.html',
             controller: 'dashBoardCtrl'
         });
@@ -38,6 +43,10 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/reports', {
+            templateUrl: 'partials/report/list.html',
+            controller: 'reportCtrl'
+        });
+        $routeProvider.when('/report/:extra', {
             templateUrl: 'partials/report/list.html',
             controller: 'reportCtrl'
         });
@@ -69,6 +78,11 @@ var app = angular.module('WideStage', [
             controller: 'dataSourceCtrl'
         });
 
+        $routeProvider.when('/datasources/:extra', {
+            templateUrl: 'partials/data-source/list.html',
+            controller: 'dataSourceCtrl'
+        });
+
         $routeProvider.when('/data-sources/:dataSourceID/', {
             templateUrl: 'partials/data-source/source_wizard_mongo.html',
             controller: 'dataSourceCtrl'
@@ -84,9 +98,19 @@ var app = angular.module('WideStage', [
             controller: 'dataSourceCtrl'
         });
 
+        $routeProvider.when('/datasources/new/:newDataSource/:extra', {
+            templateUrl: 'partials/data-source/source_wizard_mongo.html',
+            controller: 'dataSourceCtrl'
+        });
+
         //layers
 
         $routeProvider.when('/layers', {
+            templateUrl: 'partials/layer/list.html',
+            controller: 'layerCtrl'
+        });
+
+        $routeProvider.when('/layer/:extra', {
             templateUrl: 'partials/layer/list.html',
             controller: 'layerCtrl'
         });
@@ -146,8 +170,16 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/spaces/index.html',
             controller: 'spacesCtrl'
         });
+        $routeProvider.when('/public-space/:extra', {
+            templateUrl: 'partials/spaces/index.html',
+            controller: 'spacesCtrl'
+        });
         //pages
         $routeProvider.when('/pages', {
+            templateUrl: 'partials/pages/list.html',
+            controller: 'pagesCtrl'
+        });
+        $routeProvider.when('/page/:extra', {
             templateUrl: 'partials/pages/list.html',
             controller: 'pagesCtrl'
         });
@@ -179,6 +211,10 @@ var app = angular.module('WideStage', [
 
         //explore
         $routeProvider.when('/explore', {
+            templateUrl: 'partials/query/exploreIndex.html',
+            controller: 'queryCtrl'
+        });
+        $routeProvider.when('/explore/:extra', {
             templateUrl: 'partials/query/exploreIndex.html',
             controller: 'queryCtrl'
         });
@@ -279,7 +315,36 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
         window.history.back();
     };
 
+    $rootScope.getUserContextHelp = function(contextHelpName)
+    {
+        var found = false;
+
+        if ($rootScope.user.contextHelp)
+            {
+                for (var i in $rootScope.user.contextHelp)
+                    {
+                        if ($rootScope.user.contextHelp[i] == contextHelpName)
+                            {
+                                found = true;
+                            }
+                    }
+            }
+
+        return !found;
+    }
+
+    $rootScope.setUserContextHelpViewed = function(contextHelpName)
+    {
+        var params = (params) ? params : {};
+        params.contextHelpName = contextHelpName;
+        connection.get('/api/set-viewed-context-help', params, function(data) {
+            $rootScope.user.contextHelp = data.items;
+        });
+
+    }
+
     $rootScope.user = $sessionStorage.getObject('user');
+    console.log('user loaded from session storage',$sessionStorage.getObject('user'));
 
     if (!$rootScope.user) {
         console.log('there is no user in the session storage');
@@ -288,9 +353,7 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
         $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
 
 
-        connection.get('/api/get-counts', {}, function(data) {
-            $rootScope.counts = data;
-        });
+
 
         connection.get('/api/get-user-objects', {}, function(data) {
             //console.log('the user objects',JSON.stringify(data.items));

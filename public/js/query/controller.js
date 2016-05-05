@@ -1,4 +1,4 @@
-app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, queryService, promptModel, grid, bsLoadingOverlayService,uuid2) {
+app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, queryService, promptModel, grid, bsLoadingOverlayService,uuid2,$routeParams,$timeout,$rootScope) {
 
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
@@ -9,7 +9,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
     $scope.rows = [];
     $scope.columns = [];
     $scope.order = [];
-    $scope.filters = [];
+    $scope.filters = [{group: true,filters: []}];
     $scope.dataSources = [];
     $scope.queryStructure = queryService.getQuery;
     $scope.queries = [];
@@ -134,6 +134,10 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         ]
     };
 
+
+
+
+
     var hashCode = function(s){
         return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
     };
@@ -143,24 +147,36 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         $scope.rows = [];
         $scope.columns = [];
         $scope.order = [];
-        $scope.filters = [];
+        $scope.filters = [
+        {
+            group: true,
+            filters: []
+        }
+        ];
         $scope.dataSources = [];
         $scope.queries = [];
         detectLayerJoins();
         $scope.processStructure();
+        console.log('init query');
     }
 
+    $scope.$on("newQuery", function (event, args) {
+        $scope.initQuery();
+    });
+
     $scope.$on("loadQueryStructure", function (event, args) {
-     var theQuery = args.query;
+        var theQuery = args.query;
         $scope.query = theQuery.query;
         $scope.rows = theQuery.rows;
         $scope.columns = theQuery.columns;
         $scope.order = theQuery.order;
         $scope.filters = theQuery.filters;
         $scope.dataSources = theQuery.dataSources;
+        $scope.selectedLayer = theQuery.selectedLayer;
         $scope.queries = [];
         detectLayerJoins();
         $scope.processStructure();
+        console.log('load query strucuture');
     });
 
     $scope.saveQueryStructure = function() {
@@ -171,25 +187,25 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         queryStructure.order = $scope.order;
         queryStructure.filters = $scope.filters;
         queryStructure.dataSources = $scope.dataSources;
+        queryStructure.selectedLayer = $scope.selectedLayer;
         queryService.addQuery(queryStructure);
     }
-
-
-
 
     $scope.stringVariables = [
         {value:"toUpper",label:"To Upper"},
         {value:"toLower",label:"To Lower"}
     ];
 
-    $scope.filters = [
-        {
-            group: true,
-            filters: []
+
+
+    if ($routeParams.extra == 'intro') {
+            $timeout(function(){$scope.showIntro()}, 1000);
         }
-    ];
 
 
+    $scope.initForm = function() {
+        $scope.getLayers();
+    }
 
     $scope.getLayers = function() {
         connection.get('/api/layers/get-layers', {}, function(data) {
@@ -197,14 +213,131 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
             $scope.page = data.page;
             $scope.pages = data.pages;
             $scope.layers = data.items;
-            $scope.rootItem.elements = data.items[0].objects;
-            $scope.selectedLayer = data.items[0];
-            $scope.selectedLayerID = data.items[0]._id;
+            if ($scope.selectedLayerID)
+                {
+                  for (var i in data.items)
+                      {
+                          if (data.items[i]._id == $scope.selectedLayerID)
+                              {
+                                    $scope.rootItem.elements = data.items[i].objects;
+                                    $scope.selectedLayer = data.items[i];
+                              }
+                      }
+                } else {
+                    $scope.rootItem.elements = data.items[0].objects;
+                    $scope.selectedLayer = data.items[0];
+                    $scope.selectedLayerID = data.items[0]._id;
+                }
+
             calculateIdForAllElements($scope.rootItem.elements);
-            console.log('the elements',$scope.rootItem.elements);
 
         });
     };
+
+
+    $scope.IntroOptions = {
+            //IF width > 300 then you will face problems with mobile devices in responsive mode
+                steps:[
+                    {
+                        element: '#dataObjects',
+                        html: '<div><h3>The layer catalog</h3><span style="font-weight:bold;">Access here the different data elements of every layer that you have access on</span><br/><span>Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)</span></div>',
+                        width: "300px",
+                        height: "250px"
+                    },
+                    {
+                        element: '#selectLayer',
+                        html: '<div><h3>The layer selector</h3><span style="font-weight:bold;">Select here the layer where your query will be based on.</span><br/><span>One query can only be baes in just one layer, you can not mix elements from different layers in the same query</span></div>',
+                        width: "300px",
+                        height: "250px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#8DC63F'
+
+                    },
+                    {
+                        element: '#columnsPanel',
+                        html: '<div><h3>Columns / results drop zone</h3><span style="font-weight:bold;">Drop here the elements you want to have in the results of the query</span><br/><span>A query must hold at least one element here to be executed</span></div>',
+                        width: "300px",
+                        height: "180px"
+                    },
+                    {
+                        element: '#orderByPanel',
+                        html: '<div><h3>Order By drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;"> Drop here the elements that you want to use to order the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results</span></div>',
+                        width: "300px",
+                        height: "250px"
+                    },
+                    {
+                        element: '#filtersPanel',
+                        html: '<div><h3>Filters drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Drop here the elements that you want to use to filter the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results</span></div>',
+                        width: "300px",
+                        height: "250px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportLayout',
+                        html: '<div><h3>Results area</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">As you define the query draging and droping in the areas above, the results of the query will appear here</span><br/><span></span></div>',
+                        width: "300px",
+                        height: "150px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#queryRefresh',
+                        html: '<div><h3>Query refresh</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Use this button to refresh the results</span><br/><span>The query will be sent again to the server an executed to get the most up to date data</span></div>',
+                        width: "300px",
+                        height: "150px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#saveQueryForPageBtn',
+                        html: '<div><h3>Save query for page report</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Once you complete your query, click this button to save the query and back to the page report design</span><br/><span>The results of the query will be then used in the page report to create charts and data grids across the page.</span></div>',
+                        width: "300px",
+                        height: "200px",
+                        horizontalAlign: "right",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff'
+                    }
+
+                ]
+            }
+
+            if ($rootScope.user.pagesCreate || $rootScope.counts.pages > 0)
+                {
+                $scope.IntroOptions.steps.push({
+                        element: '#parentIntro',
+                        html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Page reports</span><br/><br/>See how you can create customized web pages that shows your data using charts and data grids along with HTML components<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/page/intro">Go to pages designer and continue tour</a></span></div>',
+                        width: "500px",
+                        objectArea: false,
+                        verticalAlign: "top",
+                        height: "250px"
+                    });
+                } else {
+                    if ($rootScope.user.reportsCreate || $rootScope.counts.reports > 0)
+                        {
+                        $scope.IntroOptions.steps.push({
+                                element: '#parentIntro',
+                                html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Single query reports</span><br/><br/>See how you can create single query reports that shows your data using charts and data grids<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">Go to single query report designer and continue tour</a></span></div>',
+                                width: "500px",
+                                objectArea: false,
+                                verticalAlign: "top",
+                                height: "250px"
+                            });
+                        } else {
+                            if ($rootScope.user.dashboardsCreate || $rootScope.counts.dashBoards > 0)
+                                {
+                                $scope.IntroOptions.steps.push({
+                                        element: '#parentIntro',
+                                        html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Dashboards</span><br/><br/>See how to create dashboards composed with a set of single query reports<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/dashboard/intro">Go to dashboards and continue tour</a></span></div>',
+                                        width: "500px",
+                                        objectArea: false,
+                                        verticalAlign: "top",
+                                        height: "250px"
+                                    });
+                                }
+                        }
+
+                }
 
     $scope.changeLayer = function(selectedLayerID)
     {
@@ -332,12 +465,16 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                     elements[e].enabled = true;
             }
 
-            if (elements[e].id = undefined)
+            if (elements[e].id == undefined)
             {
-                var elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName;
-                if (elements[e].aggregation)
-                  elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName+elements[e].aggregation;
-                elements[e].id = elementID;
+                if (elements[e].collectionID)
+                    {
+                       var elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName;
+                        if (elements[e].aggregation)
+                          elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName+elements[e].aggregation;
+                        elements[e].id = elementID;
+                    }
+
             }
 
             if (elements[e].elements)
@@ -399,11 +536,17 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         $scope.query.id = uuid2.newguid();
         $scope.queries = [];
         $scope.queries.push($scope.query);
+
+        console.log('getting data for query',$scope.query);
+
         queryModel.getQueryData($scope,$scope.query, function(data){
 
                 $scope.queries[0].data = data;
 
-                grid.simpleGrid($scope.columns,$scope.query.name,$scope.query,false,function(){
+                var gridProperties = {rowHeight:20,
+                                     cellBorderColor:'#000'};
+
+                grid.simpleGrid($scope.columns,$scope.query.name,$scope.query,false,gridProperties,function(){
                         bsLoadingOverlayService.stop({referenceId: 'reportLayout'});
                 });
         });
@@ -412,7 +555,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
     $scope.getElementFilterOptions = function(elementType)
     {
-        //console.log(' es un '+elementType);
 
         if (elementType == 'array')
             return  $scope.filterArrayOptions;
@@ -445,46 +587,8 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
             var theTemplate =  $compile('<div class="column-box">'+customObjectData.objectLabel+'</div>')($scope);
             if (!$scope.columns)
                 $scope.columns = [];
-                $scope.columns.push(customObjectData);
-
-            //Add to x and y keys to prevent reportType change
-            /*if (customObjectData.elementType == 'count' || customObjectData.elementType == 'number')
-            {
-                if (!$scope.selectedReport.properties.ykeys)
-                    $scope.selectedReport.properties.ykeys = [];
-                $scope.selectedReport.properties.ykeys.push(customObjectData);
-            } else {
-                if (!$scope.selectedReport.properties.xkeys)
-                    $scope.selectedReport.properties.xkeys = [];
-                $scope.selectedReport.properties.xkeys.push(customObjectData);
-            }*/
-        }
-        /*if (type == 'xkey') {
-            var el = document.getElementById('xkey-zone');
-            var theTemplate =  $compile('<div class="column-box">'+customObjectData.objectLabel+'</div>')($scope);
-            if (!$scope.columns)
-                $scope.columns = [];
             $scope.columns.push(customObjectData);
-            if (!$scope.selectedReport.properties.xkeys)
-                $scope.selectedReport.properties.xkeys = [];
-            $scope.selectedReport.properties.xkeys.push(customObjectData);
         }
-        if (type == 'ykey') {
-            if (customObjectData.elementType == 'count' || customObjectData.elementType == 'number')
-            {
-                var el = document.getElementById('ykey-zone');
-                var theTemplate =  $compile('<div class="column-box">'+customObjectData.objectLabel+'</div>')($scope);
-                if (!$scope.columns)
-                    $scope.columns = [];
-                $scope.columns.push(customObjectData);
-                if (!$scope.selectedReport.properties.ykeys)
-                    $scope.selectedReport.properties.ykeys = [];
-                $scope.selectedReport.properties.ykeys.push(customObjectData);
-                $scope.onlyNumericValuesAlert = false;
-            } else {
-                $scope.onlyNumericValuesAlert = true;
-            }
-        }*/
 
         if (type == 'order') {
             customObjectData.sortType = -1;
@@ -493,46 +597,31 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         }
         if (type == 'filter') {
             var el = document.getElementById('filter-zone');
-            console.log('the dropped filter',customObjectData);
-
-            //var theTemplate =  $compile('<div class="filter-box">'+customObjectData.objectLabel+'</div>')($scope);;
             $scope.filters.push(customObjectData);
-            //console.log('the filters '+JSON.stringify($scope.filters));
-
             $scope.filtersUpdated();
         }
         if (type == 'group') {
-        //This is the real filter...
-            //console.log('pushing filter group',customObjectData);
-            group.filters.push(customObjectData);
-            //console.log('the filters group'+JSON.stringify($scope.filters));
 
+            group.filters.push(customObjectData);
             $scope.filtersUpdated();
         }
-        /*generateQuery(function(){
-            $scope.processStructure();
-        });*/
+
 
         detectLayerJoins();
         $scope.processStructure();
 
-        //angular.element(el).append(theTemplate);
-        // ...
+
     };
 
     $scope.onDropOnFilter = function (data, event, filter) {
         lastDrop = 'onFilter';
 
         var droppedFilter = data['json/custom-object'];
-        //console.log('en filtro');
+
         console.log(droppedFilter);
-        //console.log(filter);
 
         filter.filters = [jQuery.extend({}, filter), droppedFilter];
-        //if (filter.filters == undefined)
-          //  filter.filters = [];
 
-        //filter.filters.push(droppedFilter);
         filter.group = true;
 
         $scope.updateConditions(filter.filters);
@@ -625,11 +714,9 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                 }
             }
         }
-
-        console.log('updateConditions FINISH',filters);
     };
 
-    // Drag over handler.
+
     $scope.onDragOver = function (event) {
         // ...
     };
@@ -696,7 +783,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         {
              if (element.elementID != $scope.columns[i].elementID)
              {
-                 if (joinExists(element.collectionID,$scope.columns[i].collectionID))
+                 if (joinExists(element.collectionID,$scope.columns[i].collectionID) || (element.collectionID == $scope.columns[i].collectionID))
                     found = found+1;
              }
         }
@@ -736,38 +823,15 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                 if (thereIsAJoinForMe($scope.columns[e]) == 0)
                 {
 
-                   /*
-                   //is this element in the xkeys?
-                    if ($scope.selectedReport.properties.xkeys.length > 0)
-                    {
-                        for( var x=$scope.selectedReport.properties.xkeys.length -1;x>=0;x--)
-                        {
-                           if ($scope.selectedReport.properties.xkeys[x].elementID == $scope.columns[e].elementID)
-                               $scope.selectedReport.properties.xkeys.splice(x,1);
-                        }
-                    }
-
-                    if ($scope.selectedReport.properties.ykeys.length > 0)
-                    {
-                        for( var y=$scope.selectedReport.properties.ykeys.length -1;y>=0;y--)
-                        {
-                            if ($scope.selectedReport.properties.ykeys[y].elementID == $scope.columns[e].elementID)
-                                $scope.selectedReport.properties.ykeys.splice(y,1);
-                        }
-                    }
-                    */
-
                 $scope.columns.splice(e,1);
                 }
             }
         }
-
-
     }
 
     function generateQuery(done)
     {
-       console.log('entering generateQuery');
+        console.log('entering generating query');
         $scope.query = {};
         $scope.query.datasources = [];
         $scope.query.order = $scope.order;
@@ -799,6 +863,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         }
 
         for (var i in datasourcesList) {
+            console.log('entering generating query datasources');
 
             var dtsObject = {};
             dtsObject.datasourceID = datasourcesList[i];
@@ -813,7 +878,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                         dtsCollections.push($scope.columns[z].collectionID);
                 }
             }
-            //console.log('these are the filters:',filters);
+
 
             getFiltersCollections(filters,dtsCollections,datasourcesList[i], function(){
 
@@ -856,6 +921,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                             dtsObject.collections.push(collection);
 
                         }
+
                         $scope.query.datasources.push(dtsObject);
                         $scope.query.layers = layersList;
 

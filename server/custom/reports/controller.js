@@ -156,7 +156,7 @@ exports.PublishReport = function(req,res)
     if (req.session.isWSTADMIN)
         find = {_id:data._id,companyID:req.user.companyID};
 
-    console.log('entrando en publish',JSON.stringify(find));
+
 
     Reports.findOne(find, {}, {}, function(err, report){
         if(err) throw err;
@@ -176,7 +176,7 @@ exports.PublishReport = function(req,res)
                 }
             });
         } else {
-            console.log('no encontrado',JSON.stringify(report));
+
             serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to publish this report, or this report do not exists"});
         }
 
@@ -256,7 +256,7 @@ exports.PreviewQuery = function(req,res)
     var data = req.query;
     var query = data.query;
 
-    console.log('entering preview query ',JSON.stringify(query.layers));
+
     debug(query);
 
     processDataSources(query.datasources,query.layers, {},query, function(result) {
@@ -273,9 +273,6 @@ exports.PreviewQuery = function(req,res)
 exports.ReportsGetData = function(req, res) {
     var data = req.query;
     var query = data.query;
-
-    //console.log('entering get report data',JSON.stringify(query.layers));
-    //debug(query);
 
     processDataSources(req,query.datasources,query.layers, {page: (data.page) ? data.page : 1},query, function(result) {
         //debug(result);
@@ -370,7 +367,7 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
                                                dataSource.collections[j]['joins'] = [];
 
                                             dataSource.collections[j]['joins'].push(theLayers[l].params.joins[n]);
-                                            console.log('join pushed....');
+
                                             thereAreJoins = true;
                                         }
                                     }
@@ -430,7 +427,7 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
 
                                 //console.log('not merged results',JSON.stringify(dataSource.collections[0].result))
                                 result = data;
-console.log('processDataSources');
+
                                 processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                             });
                     }
@@ -498,7 +495,7 @@ function mergeResults(collections,query,done){
             var targetCollection = collections[collection].joins[join].targetCollectionID;
             var targetElement = collections[collection].joins[join].targetElementName;
 
-            console.log('merge two collections ',sourceCollection,targetCollection) ;
+            //console.log('merge two collections ',sourceCollection,targetCollection) ;
 
 
 
@@ -529,7 +526,6 @@ function mergeResults(collections,query,done){
 function sortMergeResults(tempResults,query,done)
 {
     //Orderbys
-    console.log('acabo de entrar en sortMergeResults');
 
     var firstBy = require('thenBy.js');
 
@@ -703,7 +699,7 @@ function sortMergeResults(tempResults,query,done)
         tempResults.sort(function(a,b) {return (a[orderElement] > b[orderElement]) ? 1 : ((b[orderElement] > a[orderElement]) ? -1 : 0);} );
     } */
 
-    console.log('acabo de salir de sortMergeResults');
+
     done();
 
 }
@@ -948,7 +944,7 @@ function executeDataSourceQuery(datasourceQuery,datasource,done)
 
 function executeMongoDBQuery(datasourceQuery,datasource,done)
 {
-    console.log('entering mongoDB query');
+
 
 
     var collections = [];
@@ -977,7 +973,7 @@ function executeMongoDBQuery(datasourceQuery,datasource,done)
 
 function executeMongoDBCollection(queryCollection,datasource,collection,done)
 {
-    console.log('entering mongoDB collection');
+
     var fieldsToGet = {};
 
     var params = {};
@@ -1009,7 +1005,7 @@ function executeMongoDBCollection(queryCollection,datasource,collection,done)
      */
     var filters = getMongoDBFilters(queryCollection.filters, collection);
 
-    console.log('the Filters '+JSON.stringify(filters));
+    //console.log('the Filters '+JSON.stringify(filters));
 
 
 
@@ -1033,12 +1029,12 @@ function executeMongoDBCollection(queryCollection,datasource,collection,done)
     MongoClient.connect(dbURI, function(err, db) {
         if(err) { return console.dir(err); }
 
-        console.log('the fields to get :  '+fieldsToGet);
+        //console.log('the fields to get :  '+fieldsToGet);
 
         var col = db.collection(collection.collectionName);
         // Find some documents
         col.find({$and:filters},fieldsToGet,params).toArray(function(err, docs) {
-            console.log(docs);
+
             done(docs);
 
             db.close();

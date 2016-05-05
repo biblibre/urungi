@@ -1,7 +1,14 @@
-
 app.service('grid' , function () {
 
-this.simpleGrid = function(columns,id,query,designerMode,done)
+this.refresh = function(columns,id,query,designerMode, properties)
+    {
+        this.simpleGrid(columns,id,query,designerMode,properties, function(){
+
+        });
+
+    }
+
+this.simpleGrid = function(columns,id,query,designerMode,properties,done)
     {
             var hashedID = query.id;
 
@@ -18,7 +25,7 @@ this.simpleGrid = function(columns,id,query,designerMode,done)
                 colClass = 'col-xs-'+12/columns.length;
 
             //header  page-block  ndType="gridHeader"
-            htmlCode += '<div class="container-fluid" id="HEADER_'+id+'" style="width:100%;padding:2px;background-color:#ccc;">';
+            htmlCode += '<div page-block ndtype="gridHeader" class="container-fluid" id="HEADER_'+id+'" style="width:100%;padding:2px;background-color:#ccc;">';
             for(var i = 0; i < columns.length; i++)
             {
                     var elementName = "'"+columns[i].id+"'";
@@ -27,8 +34,8 @@ this.simpleGrid = function(columns,id,query,designerMode,done)
 
                     var elementNameAux = elementName;
                     if (columns[i].elementType === 'date')
-                        elementNameAux = "'"+columns[i].id+'_original'+"'"; //"'"+columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName+'_original'+"'";
-
+                        elementNameAux = "'"+columns[i].id+'_original'+"'";
+                        //"'"+columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName+'_original'+"'";
                        // page-block  ndType="gridHeaderColumn"
                     htmlCode += '<div id="HEADERCOL_'+columns[i].id+'['+i+']"  class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" >'+columns[i].elementLabel+'</span> </div>';
 
@@ -38,12 +45,9 @@ this.simpleGrid = function(columns,id,query,designerMode,done)
 
 
             //Body
-            htmlCode += '<div vs-repeat style="max-height:460px;width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;">';
+            htmlCode += '<div page-block ndtype="gridBody" vs-repeat style="max-height:460px;width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;">';
 
-                //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
-            //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
-
-            htmlCode += '<div class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data" style="width:100%;padding:0px">';
+            htmlCode += '<div  class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data" style="width:100%;padding:0px">';
 
             // POPOVER con HTML https://maxalley.wordpress.com/2014/08/19/bootstrap-3-popover-with-html-content/
             htmlCode += '<div ng-if="getQuery(\''+hashedID+'\').data.length == 0">No data</div>';
@@ -53,8 +57,6 @@ this.simpleGrid = function(columns,id,query,designerMode,done)
                 var elementName = columns[i].id;
                 if (columns[i].aggregation)
                     elementName = elementName+columns[i].aggregation;
-
-
                 var theValue = '<span>{{item.'+elementName+'}}</span>';
 
                 if (columns[i].elementType === 'number')
@@ -128,12 +130,28 @@ this.simpleGrid = function(columns,id,query,designerMode,done)
                     }
                 }
 
+                var rowHeight = 20;
+                var cellBorderColor = '#000';
+                if (properties)
+                    rowHeight = properties.rowHeight;
+                    cellBorderColor = properties.cellBorderColor;
+
                 var defaultAligment = '';
                 if (columns[i].elementType === 'number')
                     defaultAligment = 'text-align: right;';
 
+                var borderRight = 'border-right: 1px solid '+cellBorderColor+';';
+                var borderBottom = 'border-bottom: 1px solid '+cellBorderColor+';';
+                var borderLeft = '';
+                if (i == 0)
+                    borderLeft = 'border-left: 1px solid '+cellBorderColor+';';
+                var cellHeight = 'height:'+rowHeight+'px;';
+                var cellPadding = 'padding:2px;';
+                var theCellStyle = columnStyle+colWidth+defaultAligment+cellHeight+'overflow:hidden;'+cellPadding+borderRight+borderBottom+borderLeft;
+
+
                     //page-block ndType="gridDataColumn"
-                    htmlCode += '<div   class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+columns[i].objectLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
+                    htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+theCellStyle+'" popover-trigger="mouseenter" popover-placement="top" popover-title="'+columns[i].elementLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
             }
 
             htmlCode += '</div>';
@@ -208,7 +226,7 @@ function repaintRepeater($scope,id,report,done)
 
             for(var i = 0; i < report.properties.columns.length; i++)
             {
-                htmlCode += getDataCell(report.properties.columns[i]);
+                htmlCode += getDataCell(report.properties.columns[i],id);
 
             }
 
@@ -262,7 +280,7 @@ function repaintRepeater($scope,id,report,done)
     }
 
 
-    function getDataCell(column)
+    function getDataCell(column,gridID)
     {
             var htmlCode = '';
 
@@ -361,7 +379,7 @@ function repaintRepeater($scope,id,report,done)
                 if (column.elementType === 'number')
                     defaultAligment = 'text-align: right;'
 
-                    htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+column.objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick(\''+hashedID+'\',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
+                    htmlCode += '<div id="ROW_'+gridID+'" class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+column.objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick(\''+hashedID+'\',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
 
         return htmlCode;
 
@@ -607,7 +625,7 @@ function repaintRepeater($scope,id,report,done)
 
 });
 
-app.directive('gridProperties',['$compile','colors', function($compile,colors) {
+app.directive('gridProperties',['$compile','colors','grid', function($compile,colors,grid) {
 return {
     transclude: true,
     scope: {
@@ -623,7 +641,10 @@ return {
     restrict: 'E',
     // linking method
     link: function($scope, element, attrs) {
-    $scope.grid = grid;
+    $scope.colors = colors.colors;
+
+
+
         switch (attrs['type']) {
             case "text":
                 // append input field to "template"
@@ -638,21 +659,36 @@ return {
             {
             if ($scope.prompts[p].elementID == elementID)
                 return $scope.prompts[p];
-
             }
-
         }
 
       $scope.promptChanged = function(elementId) {
 	        $scope.onChange(elementId,$scope.selectedValue);
-
         };
 
       $scope.changeHeaderBackgroundColor = function(color) {
         $scope.grid.headerBackgroundColor = color;
-        $('#'+$scope.grid.id).css({'background-color': color});
-
+        $('#HEADER_'+$scope.grid.id).css({'background-color': color});
       }
+
+      $scope.changeRowHeight = function(newHeight)
+      {
+        //$('#ROW_'+$scope.grid.id).css({'height': newHeight});
+          console.log('applied');
+
+          $scope.grid.properties.rowHeight = newHeight;
+
+          grid.refresh($scope.grid.dataColumns,$scope.grid.id,$scope.grid.queryReference,true,$scope.grid.properties);
+      }
+
+      $scope.changeCellBorderColor = function(newColor)
+      {
+          $scope.grid.properties.cellBorderColor = newColor;
+          grid.refresh($scope.grid.dataColumns,$scope.grid.id,$scope.grid.queryReference,true,$scope.grid.properties);
+      }
+
+
+
 
 
     }

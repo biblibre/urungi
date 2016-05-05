@@ -62,6 +62,109 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         }
     }; */
 
+    if ($routeParams.extra == 'intro') {
+            $timeout(function(){$scope.showIntro()}, 1000);
+    }
+
+
+    $scope.IntroOptions = {
+            //IF width > 300 then you will face problems with mobile devices in responsive mode
+                steps:[
+                    {
+                        element: '#parentIntro',
+                        html: '<div><h3>Dashboards</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">In here you can create and execute dashboards using different single query reports together.</span><br/><br/><span>Just add the single query reports you want to use for your dashboard and resize and place them appropriately.</span><br/><br/><span></span><br/><br/><span></span></div>',
+                        width: "500px",
+                        objectArea: false,
+                        verticalAlign: "top",
+                        height: "300px"
+                    },
+                    {
+                        element: '#newDashboardBtn',
+                        html: '<div><h3>New Dashboard</h3><span style="font-weight:bold;">Click here to create a new dashboard.</span><br/><span></span></div>',
+                        width: "300px",
+                        height: "150px",
+                        areaColor: 'transparent',
+                        horizontalAlign: "right",
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#dashboardList',
+                        html: '<div><h3>Dashboards list</h3><span style="font-weight:bold;">Here all your dashboards are listed.</span><br/><span>Click over a dashboard\'s name to execute it.<br/><br/>You can also modify or drop the dashboard.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        verticalAlign: "top",
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#dashboardListItem',
+                        html: '<div><h3>Dashboard</h3><span style="font-weight:bold;">This is one of your dashboards.</span><br/><span>On every line (dashboard) you can edit or drop it. If the dashboard is published a label with the word "published" will appear.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#72A230',
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#dashboardListItemName',
+                        html: '<div><h3>Dashboard name</h3><span style="font-weight:bold;">The name for the dashboard.</span><br/><br/><span>You can setup the name you want for your dashboard, but think about make it descriptive enought, and take care about not duplicating names across the company, specially if the dashboard is going to be published.</span><br/><br/><span>You can click here to execute the dashboard.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        height: "250px"
+
+                    },
+                    {
+                        element: '#dashboardListItemDetails',
+                        html: '<div><h3>Dashboard description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using this dashboard.</span><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#dashboardListItemEditBtn',
+                        html: '<div><h3>Dashboard edit</h3><span style="font-weight:bold;">Click here to modify the dashboard.</span><br/><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#dashboardListItemDeleteBtn',
+                        html: '<div><h3>Dashboard delete</h3><span style="font-weight:bold;">Click here to delete the dashboard.</span><br/><br/><span>Once deleted, the dashboard will not be recoverable again.</span><br/><br/><span>Requires 2 step confirmation.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#dashboardListItemPublished',
+                        html: '<div><h3>Dashboard published</h3><span style="font-weight:bold;">This label indicates that this dashboard is public.</span><br/><br/><span>If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on this dashboard.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#parentIntro',
+                        html: '<div><h3>THE END</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Single query reports</span><br/><br/>Single query reports allows you to create a simple report based on just one single query.<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/public-space/intro">Go to single query reports and continue tour</a></span></div>',
+                        width: "500px",
+                        objectArea: false,
+                        verticalAlign: "top",
+                        height: "250px"
+                    }
+                ]
+            }
+
     $scope.gridsterOpts = {resizable:{enabled:false},draggable:{enabled:false}};
 
     $scope.getDashboards = function(params) {

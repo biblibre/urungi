@@ -1,4 +1,4 @@
-app.controller('pagesCtrl', function ($scope, queryService, connection, $routeParams, queryModel, grid, c3Charts,uuid2, icons,colors,htmlWidgets,promptModel, grid,bsLoadingOverlayService ) {
+app.controller('pagesCtrl', function ($scope, queryService, connection, $routeParams, queryModel, grid, c3Charts,uuid2, icons,colors,htmlWidgets,promptModel, grid,bsLoadingOverlayService,$timeout,$rootScope ) {
     $scope.reportModal = 'partials/query/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
@@ -59,11 +59,134 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
     $scope.newQuery = function() {
         $scope.queryInterface = true;
         $scope.editingQuery = null;
+        $scope.$broadcast("newQuery",{});
     }
 
-    var hashCode = function(s){
+    var hashCode = function(s) {
         return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
     };
+
+    if ($routeParams.extra == 'intro') {
+            $timeout(function(){$scope.showIntro()}, 1000);
+    }
+
+
+    $scope.IntroOptions = {
+            //IF width > 300 then you will face problems with mobile devices in responsive mode
+                steps:[
+                    {
+                        element: '#parentIntro',
+                        html: '<div><h3>Page reports</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">In here you can create and execute reports like html web pages.</span><br/><br/><span>Define several queries using filters and dragging and dropping from different layers.</span><br/><br/><span>After you define the query/es to get the data, you can drag and drop different html elements, and put your data in, using different formats to show it.</span><br/><br/><span></span></div>',
+                        width: "500px",
+                        objectArea: false,
+                        verticalAlign: "top",
+                        height: "300px"
+                    },
+                    {
+                        element: '#newReportBtn',
+                        html: '<div><h3>New Page Report</h3><span style="font-weight:bold;">Click here to create a new page report.</span><br/><span></span></div>',
+                        width: "300px",
+                        height: "150px",
+                        areaColor: 'transparent',
+                        horizontalAlign: "right",
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportList',
+                        html: '<div><h3>Reports list</h3><span style="font-weight:bold;">Here all your reports are listed.</span><br/><span>Click over a report\'s name to execute it.<br/><br/>You can also modify or drop the report.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        verticalAlign: "top",
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#reportListItem',
+                        html: '<div><h3>Report</h3><span style="font-weight:bold;">This is one of your reports.</span><br/><span>On every line (report) you can edit or drop it. If the report is published a label with the word "published" will appear.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#72A230',
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#reportListItemName',
+                        html: '<div><h3>Report name</h3><span style="font-weight:bold;">The name for the report.</span><br/><br/><span>You can setup the name you want for your report, but think about make it descriptive enought, and take care about not duplicating names across the company, specially if the report is going to be published.</span><br/><br/><span>You can click here to execute the report.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        height: "250px"
+
+                    },
+                    {
+                        element: '#reportListItemDetails',
+                        html: '<div><h3>Report description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using this report.</span><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#reportListItemEditBtn',
+                        html: '<div><h3>Report edit</h3><span style="font-weight:bold;">Click here to modify the report.</span><br/><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#reportListItemDeleteBtn',
+                        html: '<div><h3>Report delete</h3><span style="font-weight:bold;">Click here to delete the report.</span><br/><br/><span>Once deleted the report will not be recoverable again.</span><br/><br/><span>Requires 2 step confirmation.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#reportListItemPublished',
+                        html: '<div><h3>Report published</h3><span style="font-weight:bold;">This label indicates that this report is public.</span><br/><br/><span>If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    }
+                ]
+            }
+
+
+            if ($rootScope.user.reportsCreate || $rootScope.counts.reports > 0)
+                {
+                $scope.IntroOptions.steps.push({
+                        element: '#parentIntro',
+                        html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Single query reports</span><br/><br/>See how you can create single query reports that shows your data using charts and data grids<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">Go to single query report designer and continue tour</a></span></div>',
+                        width: "500px",
+                        objectArea: false,
+                        verticalAlign: "top",
+                        height: "250px"
+                    });
+                } else {
+                    if ($rootScope.user.dashboardsCreate || $rootScope.counts.dashBoards > 0)
+                        {
+                        $scope.IntroOptions.steps.push({
+                                element: '#parentIntro',
+                                html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Dashboards</span><br/><br/>See how to create dashboards composed with a set of single query reports<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/dashboard/intro">Go to dashboards and continue tour</a></span></div>',
+                                width: "500px",
+                                objectArea: false,
+                                verticalAlign: "top",
+                                height: "250px"
+                            });
+                        }
+                }
+
+
 
     $scope.initForm = function() {
 
@@ -90,7 +213,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                         $scope.queries[q].hashedID = hashedID;
                     }
 
-
                     $scope.charts = $scope.selectedPage.properties.charts;
                     //Assign the correct query to every chart
 
@@ -111,13 +233,13 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                     if ($scope.selectedPage.backgroundColor)
                         $('#designArea').css({ 'background-color': $scope.selectedPage.backgroundColor}) ;
 
-
                     getQueryData($scope,0,function(){
                         rebuildCharts();
                         rebuildRepeaters();
                     });
 
                     getAllPageColumns();
+
 
                     var $div = $($scope.selectedPage.properties.designerHTML);
                     var el = angular.element(document.getElementById('designArea'));
@@ -206,7 +328,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     $scope.saveQuery2 = function()
     {
-        console.log('saving query...')
+
         var qstructure = queryService.getQuery();
 
         if ($scope.editingQuery == null)
@@ -214,13 +336,11 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
             qstructure.name = 'query'+($scope.queries.length +1);
             qstructure.id = uuid2.newguid();
             $scope.queries.push(qstructure);
-            //$scope.queries[qstructure.id] = qstructure;
             queryModel.getQueryData($scope,qstructure.query, function(data)
                     {
                             qstructure.data = data;
                             qstructure.loadingData= false;
                             $scope.setQueryLoadedData(qstructure.id);
-                            console.log('the data',data);
                             $scope.theData[qstructure.hashedID] = data;
                     });
         } else {
@@ -235,7 +355,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                             $scope.queries[q].data = data;
                             $scope.queries[q].loadingData= false;
                             $scope.setQueryLoadedData($scope.queries[q].id);
-                            console.log('the data',data);
                             $scope.theData[$scope.queries[q].hashedID] = data;
                     });
                 }
@@ -282,7 +401,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     $scope.loadQS = function(query)
     {
-        console.log('loading existing query: '+query.name)
         $scope.queryInterface = true;
         $scope.editingQuery = query.name;
         $scope.$broadcast("loadQueryStructure", {query: query});
@@ -292,66 +410,76 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         event.stopPropagation();
         var customObjectData = data['json/custom-object'];
 
-        console.log('on drop entered...',customObjectData);
-
         if (customObjectData.objectType == 'jumbotron') {
-            console.log('jumbotron added');
             var html = getJumbotronHTML();
             createOnDesignArea(html,function(){});
         }
 
         if (customObjectData.objectType == '4colscta') {
-            console.log('4colscta added');
             var html = get4colsctaHTML();
             createOnDesignArea(html,function(){});
         }
 
         if (customObjectData.objectType == '3colscta') {
-            console.log('3colscta added');
             var html = get3colsctaHTML();
             createOnDesignArea(html,function(){});
         }
 
         if (customObjectData.objectType == '2colscta') {
-            console.log('2colscta added');
             var html = get2colsctaHTML();
             createOnDesignArea(html,function(){});
         }
 
 
         if (customObjectData.objectType == 'divider') {
-            console.log('divider added');
             var html = htmlWidgets.getDivider();
             createOnDesignArea(html,function(){});
         }
 
         if (customObjectData.objectType == 'imageTextLarge') {
-            console.log('imageTextLarge added');
             var html = getImageTextLargeHTML();
             createOnDesignArea(html,function(){});
         }
 
         if (customObjectData.objectType == 'textImageLarge') {
-            console.log('textImageLarge added');
             var html = getTextImageLargeHTML();
             createOnDesignArea(html,function(){});
         }
 
         if (customObjectData.objectType == 'chart') {
-            console.log('chart added');
-            var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("normal")+'</div>';
+
+            var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
+                            '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
+                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" >'+getChartHTML("normal")+'</div>'
+                            '</div>'+
+                        '</div>';
+
+            //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+ getChartHTML("normal")
+
+            //+'</div>';
             createOnDesignArea(html,function(){});
         }
 
         if (customObjectData.objectType == 'pieChart') {
-            console.log('chart added');
-            var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("pie")+'</div>';
+
+            var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
+                            '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
+                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" >'+getChartHTML("pie")+'</div>'
+                            '</div>'+
+                        '</div>';
+
+            //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("pie")+'</div>';
             createOnDesignArea(html,function(){});
         }
 
         if (customObjectData.objectType == 'donutChart') {
-            console.log('chart added');
-            var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("donut")+'</div>';
+            var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
+                            '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
+                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" >'+getChartHTML("donut")+'</div>'
+                            '</div>'+
+                        '</div>';
+
+            //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("donut")+'</div>';
             createOnDesignArea(html,function(){});
         }
 
@@ -361,7 +489,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         }
 
         if (customObjectData.objectType == 'tabs') {
-            console.log('tabs added');
             var theid = 'TABS_'+uuid2.newguid();
             var theTabs = [{label:'tab1',active:true,id:uuid2.newguid()},{label:'tab2',active:false,id:uuid2.newguid()},{label:'tab3',active:false,id:uuid2.newguid()},{label:'tab4',active:false,id:uuid2.newguid()}]
             var tabsElement = {id:theid,type:'tabs',properties:{tabs:theTabs}};
@@ -377,10 +504,12 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         }
 
         if (customObjectData.objectType == 'queryColumn') {
-            //console.log('repeater grid added');
             $scope.lastElementID = $scope.lastElementID + 1;
 
-            var repeater = {id:'repeater'+$scope.lastElementID,dataColumns:[],query:undefined}
+            var repeater = {id:'repeater'+$scope.lastElementID,dataColumns:[],query:undefined,properties:defaultGridProperties()};
+
+            var gridProperties =
+
             $scope.repeaters.push(repeater);
 
             var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getRepeaterHTML(repeater.id)+'</div>'
@@ -391,15 +520,29 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         }
 
         if (customObjectData.objectType == 'repeaterGrid') {
-            console.log('repeater grid added');
             $scope.lastElementID = $scope.lastElementID + 1;
-            var repeater = {id:'repeater'+$scope.lastElementID,dataColumns:[],query:undefined}
+            var repeater = {id:'repeater'+$scope.lastElementID,dataColumns:[],query:undefined,properties:defaultGridProperties()}
             $scope.repeaters.push(repeater);
 
-            var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getRepeaterHTML(repeater.id)+'</div>';
+            var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
+                            '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
+                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" >'+getRepeaterHTML(repeater.id)+'</div>'
+                            '</div>'+
+                        '</div>';
+
+            //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getRepeaterHTML(repeater.id)+'</div>';
             createOnDesignArea(html,function(){});
         }
     };
+
+    function defaultGridProperties()
+    {
+        return {
+                rowHeight:20,
+                cellBorderColor:'#000'
+        };
+
+    }
 
 
     $scope.getDistinctValues = function(elementID)
@@ -417,14 +560,11 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         {
         if ($scope.prompts[p].elementID == elementID)
             return $scope.prompts[p];
-
         }
-
     }
 
     $scope.promptChanged = function(elementID,selectedValue)
     {
-        console.log('selected value',$scope.lastPromptSelectedValue,selectedValue);
 
         for (var p in $scope.prompts)
             {
@@ -433,7 +573,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
                     $scope.prompts[p].searchValue = selectedValue;
                     $scope.prompts[p].filterText1 = selectedValue;
-                    console.log('selected value is ',$scope.lastPromptSelectedValue,$scope.prompts[p].searchValue);
 
                     for (var q in $scope.selectedPage.properties.queries)
                     {
@@ -464,7 +603,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                 {
                     var dropID = $(src).attr("data-id");
                     var destType = $(dest).attr("ndType");
-                    console.log('source is an image and destiny is ' +destType);
 
                     if (destType == 'ndContainer')
                     {
@@ -475,19 +613,17 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                     } else {
                         if (destType == 'homeFull')
                         {
-                            console.log('destiny is a homeFull '+ $(src).attr("data-id"));
                             dest.style.backgroundImage = "url('"+ $(src).attr("data-id") +"')";
 
                         } else {
                             if (destType == 'image')
                             {
-                                console.log('destiny is a image '+ $(src).attr("data-id"));
                                 theTemplate = $compile($(dest).attr("src", $(src).attr("data-id")))(scope);
 
                             } else {
                                 if (destType == 'carousell')
                                 {
-                                     console.log('voy al carousell ....bien!!')
+
                                 } else
                                 theTemplate = $compile('<div class="container-fluid image ndContainer" x-lvl-draggable="false" x-lvl-drop-target="true" ndType="container" x-on-select="selected(selectedEl)" > <div class="embed-responsive embed-responsive-16by9 ndContainer" ndType="none" ><img  x-lvl-draggable="false" x-lvl-drop-target="true" ndType="image" x-on-select="selected(selectedEl)" src="'+dropID+'"  allowfullscreen></img></div></div>')(scope);
                             }
@@ -513,26 +649,21 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
         event.stopPropagation();
         var customObjectData = data['json/custom-object'];
-        console.log('on drop entered...',customObjectData);
         if (customObjectData.objectType == 'chart') {
-            console.log('chart added');
             var html = getChartHTML("chart");
         }
 
         if (customObjectData.objectType == 'pieChart') {
-            console.log('pieChart added');
             var html = getChartHTML("pie");
         }
 
         if (customObjectData.objectType == 'donutChart') {
-            console.log('donutChart added');
             var html = getChartHTML("donut");
         }
 
         if (customObjectData.objectType == 'repeaterGrid') {
-            console.log('repeater grid added');
             $scope.lastElementID = $scope.lastElementID + 1;
-            var repeater = {id:'repeater'+$scope.lastElementID,dataColumns:[],query:undefined}
+            var repeater = {id:'repeater'+$scope.lastElementID,dataColumns:[],query:undefined,properties:defaultGridProperties()}
             $scope.repeaters.push(repeater);
 
             var html = getRepeaterHTML(repeater.id);
@@ -545,7 +676,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         if (customObjectData.objectType == 'image') {
 
         }
-
         if (html)
         {
             var $div = $(html);
@@ -556,7 +686,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                 $compile($div)(scope);
             });
         }
-
     };
 
     function setBackgroundImage()
@@ -568,39 +697,30 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         event.stopPropagation();
         var customObjectData = data['json/custom-object'];
 
-        console.log('on drop entered...',customObjectData);
 
         if (customObjectData.objectType == 'queryColumn') {
-            console.log('query column added',chartCode,customObjectData.queryName);
                 for (var i in $scope.charts)
                 {
                     if ($scope.charts[i] != undefined)
                       if ($scope.charts[i].chartID == chartCode)
                         {
-                        console.log('initializing chart 0',$scope.charts[i]);
                         if ((!$scope.charts[i].dataColumns || $scope.charts[i].dataColumns.length == 0))
                             {
-                                console.log('initializing chart for query',customObjectData.queryName);
                                 $scope.charts[i].dataColumns = [];
 
                                 for (var q in $scope.queries)
                                     {
-                            console.log('looking for query',$scope.queries[q].name,customObjectData.queryName);
                                     var theQuery = $scope.queries[q];
                                     if (theQuery.name == customObjectData.queryName)
                                         {
-                                        //$scope.charts[i].data = $scope.queries[q].data;
                                         $scope.charts[i].query = theQuery;
                                         $scope.charts[i].queryName = customObjectData.queryName;
-                                        console.log('query assigned to chart...',$scope.charts[i],theQuery);
                                         }
                                     }
                             }
 
-                            console.log('adding element to chart',$scope.charts[i].queryName,customObjectData);
                             if ($scope.charts[i].queryName == customObjectData.queryName)
                             {
-                                    console.log('query column',$scope.charts[i].query,$scope.charts[i].data);
                                     if (customObjectData.elementType == 'number')
                                         $scope.charts[i].dataColumns.push({elementName:customObjectData.elementName,
                                                                         queryName:customObjectData.queryName,
@@ -614,22 +734,18 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                                                                         elementLabel:customObjectData.objectLabel,
                                                                         id:customObjectData.name,
                                                                         type:'line',
-                                                                        color:'#000000'};
+                                                                        color:'#000000'}
 
-                                    
                                     c3Charts.rebuildChart($scope.charts[i]);
 
-
-
                             } else {
-                                var errorMsg = 'This element is not allowed here...is not in the same query, please select an element that belongs to the same query or reinit the chart prior to assign this element.';
-                                console.log(errorMsg);
-                                noty({text: errorMsg,  timeout: 6000, type: 'error'});
-                            }
 
+                                var errorMsg = 'This element is not allowed here...is not in the same query, please select an element that belongs to the same query or reinit the chart prior to assign this element.';
+                                noty({text: errorMsg,  timeout: 6000, type: 'error'});
+
+                            }
                         }
                 }
-
         }
     };
 
@@ -653,7 +769,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                                     //var queryScopeReference = 'queries['+q+'].data';
                                     {
                                     var queryScopeReference = $scope.queries[q];
-
+                                    $scope.repeaters[i].queryReference = $scope.queries[q];
                                     }
                             }
 
@@ -668,8 +784,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                                                             color:'#000000'});
 
 
-
-                                        grid.simpleGrid($scope.repeaters[i].dataColumns,repeaterCode,queryScopeReference,true,function(){
+                                        grid.simpleGrid($scope.repeaters[i].dataColumns,repeaterCode,queryScopeReference,true,$scope.repeaters[i].properties,function(){
 
 
                                         });
@@ -755,7 +870,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     $scope.changeMargin = function(newMargin)
     {
-           console.log('changig margin',newMargin)
             if (newMargin == '')
                         $scope.selectedElement.css("margin","");
                         else
@@ -764,7 +878,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     $scope.changeCSS = function(cssProperty,value)
     {
-                console.log('changing', cssProperty,value)
                 if (cssProperty == '')
                         $scope.selectedElement.css(cssProperty,"");
                         else
@@ -777,133 +890,137 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         $scope.tabs.selected = 'settings';
         $scope.selectedElementType = '';
 
-        if ($scope.selectedElement.css('background-color') != 'rgba(0, 0, 0, 0)') {
-                $scope.BackgroundColor = rgb2hex($scope.selectedElement.css('background-color'));
-            } else {
-                $scope.BackgroundColor = 'Transparent';
-            }
-
-        if ($scope.selectedElement.css('color') != 'rgba(0, 0, 0, 0)') {
-                $scope.FontColor = rgb2hex($scope.selectedElement.css('color'));
-            } else {
-                $scope.FontColor = 'Transparent';
-            }
-
-
-        $scope.objectHeight = parseInt($scope.selectedElement.css('height'));
-
-        $scope.objectMargin = parseInt($scope.selectedElement.css('margin'));
-        $scope.objectMarginLeft = parseInt($scope.selectedElement.css('margin-left'));
-        $scope.objectMarginRight= parseInt($scope.selectedElement.css('margin-right'));
-        $scope.objectMarginTop = parseInt($scope.selectedElement.css('margin-top'));
-        $scope.objectMarginBottom = parseInt($scope.selectedElement.css('margin-bottom'));
-
-        $scope.objectPadding = parseInt($scope.selectedElement.css('padding'));
-        $scope.objectPaddingLeft = parseInt($scope.selectedElement.css('padding-left'));
-        $scope.objectPaddingRight= parseInt($scope.selectedElement.css('padding-right'));
-        $scope.objectPaddingTop = parseInt($scope.selectedElement.css('padding-top'));
-        $scope.objectPaddingBottom = parseInt($scope.selectedElement.css('padding-bottom'));
-
-        console.log('The height',$scope.selectedElement.css('height'));
-
         $scope.selectedElement = theElement;
 
-        var elementType = theElement.attr('ndType');
-
-        $scope.selectedElementType = elementType;
-
-        //visibility Properties
-            if ($scope.selectedElement.hasClass('hidden-lg') == true )
+        if ($scope.selectedElement)
             {
-                $scope.hiddenLG = true;
-            } else {
-                $scope.hiddenLG = false;
-            }
-            if ($scope.selectedElement.hasClass('hidden-md') == true )
-            {
-                $scope.hiddenMD = true;
-            } else {
-                $scope.hiddenMD = false;
-            }
-            if ($scope.selectedElement.hasClass('hidden-sm') == true )
-            {
-                $scope.hiddenSM = true;
-            } else {
-                $scope.hiddenSM = false;
-            }
-            if ($scope.selectedElement.hasClass('hidden-xs') == true )
-            {
-                $scope.hiddenXS = true;
-            } else {
-                $scope.hiddenXS = false;
-            }
-            if ($scope.selectedElement.hasClass('hidden-print') == true )
-            {
-                $scope.hiddenPrint = true;
-            } else {
-                $scope.hiddenPrint = false;
-            }
-
-        if (elementType == 'ndContainer' || elementType == 'ndPrompt' || elementType == 'tabsContainer' || elementType == 'container' || elementType == 'jumbotron')
-        {
-            $scope.canMoveSelectedElement = true;
-        } else
-            $scope.canMoveSelectedElement = false;
-
-        if (elementType === 'page')
-        {
-
-
-        }
-
-        if (elementType === 'c3Chart')
-        {
-
-            var chartID = theElement.attr('bindto-id');
-            for (var i in $scope.charts)
-            {
-                if ($scope.charts[i] != undefined)
-                    if ($scope.charts[i].chartID == chartID)
-                        {
-                            $scope.selectedChart = $scope.charts[i];
-                            $scope.objectHeight = $scope.selectedChart.height;
-                        }
-            }
-        }
-
-        if (elementType === 'tabsContainer')
-        {
-
-            var tabsContainerID = theElement.attr('id');
-
-            for (var i in $scope.selectedPage.properties.containers)
-            {
-                if ($scope.selectedPage.properties.containers[i].id == tabsContainerID)
-                    {
-                        $scope.selectedTabContainer = $scope.selectedPage.properties.containers[i];
-                        $scope.objectHeight = $scope.selectedTabContainer.height;
-
+                if ($scope.selectedElement.css('background-color') != 'rgba(0, 0, 0, 0)') {
+                        $scope.BackgroundColor = rgb2hex($scope.selectedElement.css('background-color'));
+                    } else {
+                        $scope.BackgroundColor = 'Transparent';
                     }
-            }
-        }
 
-        if (elementType == 'repeaterGrid')
-        {
-            var gridID = theElement.attr('id');
-
-            for (var g in $scope.repeaters)
-            {
-                if ($scope.repeaters[g].id == gridID)
-                    {
-                        $scope.selectedRepeater = $scope.repeaters[g];
-                        console.log('selected repeater',$scope.repeaters[g]);
+                if ($scope.selectedElement.css('color') != 'rgba(0, 0, 0, 0)') {
+                        $scope.FontColor = rgb2hex($scope.selectedElement.css('color'));
+                    } else {
+                        $scope.FontColor = 'Transparent';
                     }
+
+
+                $scope.objectHeight = parseInt($scope.selectedElement.css('height'));
+
+                $scope.objectMargin = parseInt($scope.selectedElement.css('margin'));
+                $scope.objectMarginLeft = parseInt($scope.selectedElement.css('margin-left'));
+                $scope.objectMarginRight= parseInt($scope.selectedElement.css('margin-right'));
+                $scope.objectMarginTop = parseInt($scope.selectedElement.css('margin-top'));
+                $scope.objectMarginBottom = parseInt($scope.selectedElement.css('margin-bottom'));
+
+                $scope.objectPadding = parseInt($scope.selectedElement.css('padding'));
+                $scope.objectPaddingLeft = parseInt($scope.selectedElement.css('padding-left'));
+                $scope.objectPaddingRight= parseInt($scope.selectedElement.css('padding-right'));
+                $scope.objectPaddingTop = parseInt($scope.selectedElement.css('padding-top'));
+                $scope.objectPaddingBottom = parseInt($scope.selectedElement.css('padding-bottom'));
+
+
+
+
+                var elementType = theElement.attr('ndType');
+
+                $scope.selectedElementType = elementType;
+
+                //visibility Properties
+                    if ($scope.selectedElement.hasClass('hidden-lg') == true )
+                    {
+                        $scope.hiddenLG = true;
+                    } else {
+                        $scope.hiddenLG = false;
+                    }
+                    if ($scope.selectedElement.hasClass('hidden-md') == true )
+                    {
+                        $scope.hiddenMD = true;
+                    } else {
+                        $scope.hiddenMD = false;
+                    }
+                    if ($scope.selectedElement.hasClass('hidden-sm') == true )
+                    {
+                        $scope.hiddenSM = true;
+                    } else {
+                        $scope.hiddenSM = false;
+                    }
+                    if ($scope.selectedElement.hasClass('hidden-xs') == true )
+                    {
+                        $scope.hiddenXS = true;
+                    } else {
+                        $scope.hiddenXS = false;
+                    }
+                    if ($scope.selectedElement.hasClass('hidden-print') == true )
+                    {
+                        $scope.hiddenPrint = true;
+                    } else {
+                        $scope.hiddenPrint = false;
+                    }
+
+                if (elementType == 'ndContainer' || elementType == 'ndPrompt' || elementType == 'tabsContainer' || elementType == 'container' || elementType == 'jumbotron')
+                {
+                    $scope.canMoveSelectedElement = true;
+                } else
+                    $scope.canMoveSelectedElement = false;
+
+                if (elementType === 'page')
+                {
+
+
+                }
+
+                if (elementType === 'c3Chart')
+                {
+
+                    var chartID = theElement.attr('bindto-id');
+                    for (var i in $scope.charts)
+                    {
+                        if ($scope.charts[i] != undefined)
+                            if ($scope.charts[i].chartID == chartID)
+                                {
+                                    $scope.selectedChart = $scope.charts[i];
+                                    $scope.objectHeight = $scope.selectedChart.height;
+                                }
+                    }
+                }
+
+                if (elementType === 'tabsContainer')
+                {
+
+                    var tabsContainerID = theElement.attr('id');
+
+                    for (var i in $scope.selectedPage.properties.containers)
+                    {
+                        if ($scope.selectedPage.properties.containers[i].id == tabsContainerID)
+                            {
+                                $scope.selectedTabContainer = $scope.selectedPage.properties.containers[i];
+                                $scope.objectHeight = $scope.selectedTabContainer.height;
+
+                            }
+                    }
+                }
+
+                if (elementType == 'repeaterGrid')
+                {
+                    var gridID = theElement.attr('id');
+
+                    for (var g in $scope.repeaters)
+                    {
+                        if ($scope.repeaters[g].id == gridID)
+                            {
+                                $scope.selectedRepeater = $scope.repeaters[g];
+
+                            }
+                    }
+
+
+                }
+
+                $scope.$apply();
             }
-
-
-        }
-
-        $scope.$apply();
     }
 
     $scope.deleteChartColumn = function(chart,column)
@@ -970,7 +1087,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     $scope.changeChartColumnColor = function(chart,column,color)
     {
-    console.log('changign color 0',color);
         c3Charts.changeChartColumnColor(chart,column,hexToRgb(color));
     }
 
@@ -998,7 +1114,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     $scope.overChartDragging = function ()
     {
-        console.log('dragging');
+
     }
 
     $scope.savePage = function()
@@ -1135,9 +1251,9 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     function getRepeaterHTML(theRepeaterID)
     {
-        return  '<div page-block ndType="repeaterGrid" id="'+theRepeaterID+'" drop="onDropOnRepeater($data, $event, \''+theRepeaterID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" style="height:500px;overflow:hidden;">'+
-        '<div style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(255,255,255,0.7);" class="ng-scope" >'+
-        '<h1 class="absolute-center" style=" height: 100%;text-align: center;font-weight: bold;color: gainsboro;">DROP HERE YOUR DATA COLUMNS</h1>'
+        return  '<div page-block ndType="repeaterGrid" id="'+theRepeaterID+'" drop="onDropOnRepeater($data, $event, \''+theRepeaterID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" style="height:500px;overflow:hidden;padding:2px;">'+
+        '<div style="position: relative; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(255,255,255,0.7);" class="ng-scope" >'+
+        '<h1 class="absolute-center" style=" height: 100%;text-align: center;font-weight: bold;color: gainsboro;">DROP HERE THE DATA COLUMNS</h1>'
         '</div>'
         '</div>';
     }
@@ -1146,8 +1262,27 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
     {
         var theChartID = 'Chart'+uuid2.newguid();
         $scope.charts.push({chartID:theChartID,dataPoints:[],dataColumns:[],datax:{},height:300,type:chartType,query:null,queryName:null});
+        var htmlCode = '<div ng-if="!isChartCompleted(\''+theChartID+'\')" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(255,255,255,0.9);z-index: 400;border: 5px dotted #000;" class="ng-scope" drop="onDropQueryElement($data, $event, \''+theChartID+'\')">'+
+        '<h1 class="absolute-center" style=" height: 100%;text-align: center;font-weight: bold;color: gainsboro;">DROP HERE THE DATA CATEGORIES TO BE COMPARED</h1>'+
+        '</div>';
+        return htmlCode + c3Charts.getChartHTML(theChartID);
+    }
 
-        return c3Charts.getChartHTML(theChartID);
+    $scope.isChartCompleted = function(chartID)
+    {
+        var found = false;
+        for (var i in $scope.charts)
+            {
+                if ($scope.charts[i].chartID == chartID)
+                    {
+                        if ($scope.charts[i].dataAxis && $scope.charts[i].dataColumns)
+                            if ($scope.charts[i].dataAxis && $scope.charts[i].dataColumns.length >0)
+                                {
+                                    found = true;
+                                }
+                    }
+            }
+        return found;
     }
 
     $scope.getChartDataAxis = function(chartID)
@@ -1160,9 +1295,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                     {
                     if ($scope.charts[c].dataAxix != undefined)
                         result = true;
-
                     }
-
              }
     return result;
     }
@@ -1191,8 +1324,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     }
 
-
-
     $scope.elementDblClick = function(theElement)
     {
         var elementType = theElement.attr('ndType');
@@ -1203,17 +1334,14 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         c3Charts.applyChartSettings($scope);
     }
 
-
     $scope.onChartSelectedObjectChanged = function(datacolumn)
     {
          //dataColumn.object = $scope.selectedObject;
     }
 
-
     $scope.onChartPropertiesChanged = function(object)
     {
         c3Charts.onChartPropertiesChanged($scope,object);
-
     }
 
     $scope.getCatalogImages = function()
@@ -1247,7 +1375,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         if ($scope.selectedElementType == 'page')
             $scope.selectedPage.backgroundImage = backgroundImage.source1400;
 
-         //console.log('background image changed',backgroundImage.source1400);
+
 
     }
 
@@ -1287,7 +1415,6 @@ $scope.changeVisibility = function() {
 
     if($scope.selectedElementType != 'page')
     {
-    console.log('Change visibility')
     //visibility properties
 
     if ($scope.visibleXS == true)
@@ -1409,6 +1536,7 @@ $scope.changeVisibility = function() {
     }
 
     function cleanAllSelected() {
+
         var root = document.getElementById('designArea');
 
         if (root != undefined)
@@ -1434,8 +1562,7 @@ $scope.changeVisibility = function() {
 
         for (var i in  $scope.queries)
             {
-           // console.log('query columns',JSON.stringify($scope.queries[i].columns));
-            for (var c in  $scope.queries[i].columns)
+          for (var c in  $scope.queries[i].columns)
                 {
                   $scope.allPageColumns.push({label: $scope.queries[i].name +'.'+$scope.queries[i].columns[c].objectLabel,object:$scope.queries[i].columns[c],query:$scope.queries[i]});
                     if ($scope.queries[i].columns[c].elementType == 'number' || $scope.queries[i].columns[c].elementType == 'count')
@@ -1448,12 +1575,13 @@ $scope.changeVisibility = function() {
 
     function preparePageToSave()
     {
-    //Put all charts in loading mode...
+
+        //Put all charts in loading mode...
         for (var c in $scope.charts)
-        {
+            {
                 if ($scope.charts[c] != undefined)
                     $scope.showOverlay('OVERLAY_'+$scope.charts[c].chartID);
-        }
+            }
 
         cleanAllSelected();
         var page = $scope.selectedPage;
@@ -1506,7 +1634,6 @@ $scope.changeVisibility = function() {
         page.html = previewContainer.html();
 
         return page;
-
     }
 
     $scope.copyPage = function()
@@ -1579,7 +1706,6 @@ $scope.changeVisibility = function() {
 
     function savePage()
     {
-
         //Put all charts in loading mode...
         for (var c in $scope.charts)
         {
@@ -1648,12 +1774,11 @@ $scope.changeVisibility = function() {
             });
 
         } else {
-        console.log('saving edit');
+
             connection.post('/api/pages/update/'+$scope.pageID, page, function(result) {
                 if (result.result == 1) {
                     for (var c in $scope.charts)
                         {
-
                            if ($scope.charts[c] != undefined)
                            $scope.hideOverlay('OVERLAY_'+$scope.charts[c].chartID);
                         }
@@ -1709,7 +1834,7 @@ $scope.changeVisibility = function() {
 
     function rebuildRepeaters()
     {
-    for (var rp in $scope.repeaters)
+            for (var rp in $scope.repeaters)
                     {
 
                         for (var q in $scope.queries)
@@ -1720,8 +1845,8 @@ $scope.changeVisibility = function() {
 
                                     }
                             }
-                        grid.simpleGrid($scope.repeaters[rp].dataColumns,$scope.repeaters[rp].id,queryScopeReference,true,function(){
 
+                        grid.simpleGrid($scope.repeaters[rp].dataColumns,$scope.repeaters[rp].id,queryScopeReference,true,$scope.repeaters[rp].properties,function(){
 
                         });
                     }
@@ -1729,7 +1854,6 @@ $scope.changeVisibility = function() {
 
     function rebuildCharts4Query(queryID)
     {
-        console.log('rebuild for query',queryID);
         for (var i in $scope.charts)
         {
             if ($scope.charts[i] != undefined)

@@ -1,4 +1,4 @@
-<div class="container-fluid " ng-init="getPages()"  style="padding-top: 10px;">
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions" class="container-fluid " ng-init="getPages()"  style="padding-top: 10px;">
     <div class="container-fluid">
 
         <div class="main col-md-3" ng-include="'partials/home/sidebar.html'">
@@ -9,24 +9,25 @@
             <div class="container-fluid">
 
                 <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
-                    <h3 class="pull-left" >Pages</h3>
-                    <a ng-if="user.dashboardsCreate" href="/#/pages/new/true" class="btn btn-success pull-right">New Page</a>
+                    <h3 class="pull-left" >Page reports</h3>
+                    <a id="newReportBtn" ng-if="user.dashboardsCreate" href="/#/pages/new/true" class="btn btn-success pull-right" tooltip="Click here to create a new page report" tooltip-placement="bottom">New Report</a>
+                    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to start the guided tour for page reports" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
                 </div>
 
-                <div class="list-group">
-                    <div  class="list-group-item" ng-repeat="page in pages.items">
+                <div id="reportList" class="list-group">
+                    <div  id="reportListItem" class="list-group-item" ng-repeat="page in pages.items">
 
-                        <a href="" class="pull-right" ng-click="delete(page._id,page.pageName)" style="color:#FF0000;font-size: 16px;margin-right: 5px">
+                        <a id="reportListItemDeleteBtn" href="" class="pull-right" ng-click="delete(page._id,page.pageName)" style="color:#FF0000;font-size: 16px;margin-right: 5px" tooltip="Click here to delete this report" tooltip-placement="bottom">
                             <i class="fa fa-trash-o "  ></i>
                         </a>
-                        <a  class="pull-right" href="/#/pages/edit/{{page._id}}" style="color:#000080; font-size: 16px;margin-right: 3px;">
+                        <a id="reportListItemEditBtn" class="pull-right" href="/#/pages/edit/{{page._id}}" style="color:#000080; font-size: 16px;margin-right: 3px;" tooltip="Click here to modify this report" tooltip-placement="bottom">
                             <i class="fa fa-pencil" ></i>
                         </a>
-                        <span ng-if="page.isPublic" class="badge badge-success pull-right" style="margin-right: 5px;">published</span>
+                        <span id="reportListItemPublished" ng-if="page.isPublic" class="badge badge-success pull-right" style="margin-right: 5px;">published</span>
 
-                        <a href="/#/pages/{{page._id}}" >
-                            <h4 class="list-group-item-heading" ng-bind="page.pageName"></h4>
-                            <p class="list-group-item-text" ng-bind="page.pageDescription"></p>
+                        <a href="/#/pages/{{page._id}}" tooltip="Click here to execute this report" tooltip-placement="bottom">
+                            <h4 id="reportListItemName" class="list-group-item-heading" ng-bind="page.pageName"></h4>
+                            <p id="reportListItemDetails" class="list-group-item-text" ng-bind="page.pageDescription"></p>
                         </a>
 
                     </div>
