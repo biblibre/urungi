@@ -11,7 +11,7 @@ var db = function () {
 db.prototype.connect = function(data, done) {
     var DB = this;
 
-    var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host+'/'+data.database;
+    var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host+':'+data.port+'/'+data.database;
 
     var client = new pg.Client(conString);
 

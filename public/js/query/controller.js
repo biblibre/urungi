@@ -172,7 +172,8 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         $scope.order = theQuery.order;
         $scope.filters = theQuery.filters;
         $scope.dataSources = theQuery.dataSources;
-        $scope.selectedLayer = theQuery.selectedLayer;
+        $scope.selectedLayerID = theQuery.selectedLayerID;
+        $scope.changeLayer($scope.selectedLayerID);
         $scope.queries = [];
         detectLayerJoins();
         $scope.processStructure();
@@ -187,7 +188,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         queryStructure.order = $scope.order;
         queryStructure.filters = $scope.filters;
         queryStructure.dataSources = $scope.dataSources;
-        queryStructure.selectedLayer = $scope.selectedLayer;
+        queryStructure.selectedLayerID = $scope.selectedLayerID;
         queryService.addQuery(queryStructure);
     }
 

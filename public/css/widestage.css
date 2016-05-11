@@ -1978,10 +1978,22 @@ div.callout {
 	border-top: 10px solid #fff;
 }
 
+.callout.bottom-left::before {
+	left: 7px;
+	top: -20px;
+	border-bottom: 10px solid #fff;
+}
+
 .callout.top-right::before {
 	right: 7px;
 	bottom: -20px;
 	border-top: 10px solid #fff;
+}
+
+.callout.bottom-right::before {
+	right: 7px;
+	top: -20px;
+	border-bottom: 10px solid #fff;
 }
 
 .introjs-overlay {

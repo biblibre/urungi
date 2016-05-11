@@ -33,11 +33,11 @@ module.directive('introHelp', ['$rootScope',  '$compile', '$parse','$window', fu
 
 
                 var strElm = '<div id="introHelpOverlay"  class="introjs-overlay"></div>'+
-                                '<div id="introHelpCallout" class="panel callout bottom">{{intro}}<div id="introHelpCalloutContent"></div>'+
+                                '<div id="introHelpCallout" class="panel callout bottom-left">{{intro}}<div id="introHelpCalloutContent"></div>'+
                                     '<div style="position: absolute;bottom: 0;left: 0;width:100%;padding:3px;border-top:1px #999 solid">'+
                                         '<a class="btn btn-primary btn-xs" ng-click="exit()">Close</a>'+
-                                        '<a id="introHelpNextBtn" class="btn btn-success btn-xs pull-right"  ng-click="goNext()">Next</a>'+
-                                        '<a id="introHelpPreviousBtn" class="btn btn-success btn-xs pull-right"  ng-click="goPrevious()">Previous</a>'+
+                                        '<a id="introHelpNextBtn" class="btn btn-info btn-xs pull-right"  ng-click="goNext()">Next</a>'+
+                                        '<a id="introHelpPreviousBtn" class="btn btn-info btn-xs pull-right"  ng-click="goPrevious()">Previous</a>'+
                                     '</div>'+
                                 '</div>'+
                                 '<div id="introHelpObjectArea" style="display:none;position:absolute"></div>'
