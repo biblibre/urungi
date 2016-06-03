@@ -8,7 +8,7 @@ function restrict(req, res, next) {
         }else{
               req.session.error = 'Access denied!';
               console.log("Authentication is ON - Access denied!");
-              return res.redirect(301,'/login');
+              return res.redirect(302,'/login');
         }
     } else {
         next();
