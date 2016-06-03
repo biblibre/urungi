@@ -11,6 +11,15 @@ app.service('datasourceModel' , function ($http, $q, $filter, connection) {
         });
     }
 
+    this.getReverseEngineering = function(datasourceID, done){
+        var data = {};
+        data.datasourceID = datasourceID;
+
+        connection.get('/api/data-sources/getReverseEngineering', data, function(result) {
+            done(result);
+        });
+    };
+
 
     this.getEntitiesSchema = function(datasourceID,entities,done)
     {

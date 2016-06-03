@@ -177,6 +177,59 @@ exports.testConnection = function(req,res) {
 };
 
 
+exports.getReverseEngineering = function(req,res)
+{
+    var theDatasourceID = req.query.datasourceID;
+    req.query = {};
+    req.query.companyid = true;
+    req.query.id = theDatasourceID;
+
+    req.user = {};
+    req.user.companyID = 'COMPID';
+
+
+        controller.findOne(req, function(result){
+
+        if (result.result == 1)
+        {
+            if (result.item.type == 'MONGODB')
+            {
+                var mongodb = require('../../core/db/mongodb.js');
+                var data = {};
+                data.host = result.item.params[0].connection.host;
+                data.port = result.item.params[0].connection.port;
+                data.database = result.item.params[0].connection.database;
+                mongodb.getReverseEngineering(data, function(result) {
+                    serverResponse(req, res, 200, result);
+                });
+            }
+            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL')
+            {
+                var sql = require('../../core/db/sql.js');
+                var data = {
+                    type: result.item.type,
+                    host: result.item.params[0].connection.host,
+                    port: result.item.params[0].connection.port,
+                    userName: result.item.params[0].connection.userName,
+                    password: result.item.params[0].connection.password,
+                    database: result.item.params[0].connection.database,
+
+                };
+                sql.getReverseEngineering(result.item._id,data, function(result) {
+                    serverResponse(req, res, 200, result);
+                });
+            }
+
+        } else {
+            serverResponse(req, res, 200, result);
+        }
+
+
+
+    });
+
+}
+
 exports.getEntitySchema = function(req,res) {
 
     var theDatasourceID = req.query.datasourceID;

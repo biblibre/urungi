@@ -46,6 +46,27 @@ db.prototype.getSchemaQuery = function(newSchemas, newTables) {
     return "SELECT table_schema, table_name, column_name, data_type FROM information_schema.columns WHERE table_schema in ("+newSchemas+") AND table_name in ("+newTables+")";
 };
 
+db.prototype.getTables = function() {
+    return "SELECT table_name, table_schema FROM information_schema.tables where table_schema not in ('pg_catalog','information_schema') and table_type='BASE TABLE'";
+}
+
+db.prototype.getColumns = function ()
+{
+    return "SELECT table_schema, table_name, column_name, data_type,is_nullable, cols.character_maximum_length as length, cols.numeric_precision as precission, cols.numeric_scale as scale FROM information_schema.columns cols where table_schema not in ('pg_catalog','information_schema') order by table_name, ordinal_position";
+}
+
+db.prototype.getTableJoins = function()
+{
+    return "SELECT tc.constraint_name, tc.table_schema, tc.table_name, kcu.column_name, ccu.table_schema as foreign_table_schema, ccu.table_name AS foreign_table_name, ccu.column_name AS foreign_column_name FROM  information_schema.table_constraints AS tc JOIN information_schema.key_column_usage AS kcu ON tc.constraint_name = kcu.constraint_name JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = tc.constraint_name WHERE constraint_type = 'FOREIGN KEY'";
+}
+
+db.prototype.getPKs = function()
+{
+    return "select tc.table_schema, tc.table_name, kc.column_name, kc.position_in_unique_constraint from   information_schema.table_constraints tc,  information_schema.key_column_usage kc  where  tc.constraint_type = 'PRIMARY KEY'  and kc.table_name = tc.table_name and kc.table_schema = tc.table_schema and kc.constraint_name = tc.constraint_name order by 1, 2";
+}
+
+
+
 db.prototype.getLimitString = function(limit, offset) {
     return 'LIMIT '+limit+' OFFSET '+offset;
 };

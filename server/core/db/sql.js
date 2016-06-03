@@ -2,6 +2,10 @@ exports.processCollections = function(req,query,collections, dataSource, params,
     processCollections(req,query,collections, dataSource, params,thereAreJoins, done);
 };
 
+function generateShortUID() {
+    return ("0000" + (Math.random()*Math.pow(36,4) << 0).toString(36)).slice(-4)
+}
+
 exports.getSchemas = function(data, setresult) {
     switch (data.type) {
         case 'MySQL': var db = 'mysql';
@@ -31,26 +35,6 @@ exports.getSchemas = function(data, setresult) {
         var tables = [];
         var schemasTables = [];
 
-        /*for (var i in collections) {
-         var table_name = collections[i].name;
-         console.log('table name:',table_name);
-         var res = table_name.split('.');
-
-         var schema = res[0];
-         var table = res[1];
-
-         if (schemas.indexOf(schema) == -1)
-         schemas.push(schema);
-         if (tables.indexOf(table) == -1)
-         tables.push(table);
-
-         if (schemasTables.indexOf(schema+'.'+table) == -1)
-         {
-         var stable = {name: schema+'.'+table, schema:schema, table:table};
-         schemasTables.push(stable);
-         }
-
-         }*/
 
         for (var i in collections) {
             if (String(collections[i].name).indexOf(".") > -1) {
@@ -87,25 +71,242 @@ exports.getSchemas = function(data, setresult) {
 
         db.query(query, function(err, result) {
             var schemas = [];
-            for (var s = 0; s < schemasTables.length; s++) {
+            for (var s = 0; s < result.rows.length; s++) {
                 getCollectionSchema(schemasTables[s], result.rows, function (resultCollection) {
                     schemas.push(resultCollection);
                 });
             }
             debug({result: 1, items: schemas});
             setresult({result: 1, items: schemas});
-
             db.end();
+
         });
+    });
+};
+
+exports.getReverseEngineering = function(datasourceID, data, setresult) {
+    //var uuid = require('node-uuid');
+
+    switch (data.type) {
+        case 'MySQL': var db = 'mysql';
+            break;
+        case 'POSTGRE': var db = 'postgresql';
+            break;
+        case 'ORACLE': var db = 'oracle';
+            break;
+        case 'MSSQL': var db = 'mssql';
+    }
+
+    var dbController = require('./'+db+'.js');
+
+    var db = new dbController.db();
+
+    db.connect(data, function(err, connection) {
+        if(err) {
+            console.log(data.type+' default connection error: ', err);
+            setresult({result: 0, msg: 'Connection Error: '+ err});
+            return console.error('Connection Error: ', err);
+        }
+
+        var schemas = [];
+        var tables = [];
+        var processedSchemas = [];
+
+        var query = db.getTables();
+            //get tables
+            db.query(query, function(err, result) {
+
+                //get all schemas
+                for (var d = 0; d < result.rows.length; d++) {
+                    if (processedSchemas.indexOf(result.rows[d].table_schema) == -1)
+                        {
+                            schemas.push({schema_name:result.rows[d].table_schema,datasourceID:datasourceID});
+                            processedSchemas.push(result.rows[d].table_schema);
+                            console.log('schema pushed',result.rows[d].table_schema);
+                        }
+
+                };
+
+                //tables
+                for (var d = 0; d < result.rows.length; d++) {
+
+                    for (var s = 0; s < schemas.length; s++)
+                        {
+                            if (schemas[s].schema_name == result.rows[d].table_schema)
+                                {
+                                    var table = {};
+                                    table.table_name = result.rows[d].table_name;
+                                    if (result.rows[d].table_schema)
+                                        table.element_name = result.rows[d].table_schema+'.'+result.rows[d].table_name;
+                                    else
+                                        table.element_name = result.rows[d].table_name;
+
+                                    table.schema_name = result.rows[d].table_schema;
+                                    table.table_columns = [];
+                                    table.datasourceID = datasourceID;
+                                    //table.collectionID = uuid.v4();
+                                    table.collectionID = generateShortUID();
+                                    //schemas[s].schema_tables.push(table);
+                                    tables.push(table);
+                                }
+                        }
+                };
+
+                //columns
+                var queryColumns = db.getColumns();
+                db.query(queryColumns, function(err, result2) {
+
+                    for (var d = 0; d < result2.rows.length; d++) {
+
+                                    for (var t = 0; t < tables.length; t++)
+                                    {
+                                        if (tables[t].table_name == result2.rows[d].table_name)
+                                            {
+                                                var column = {};
+                                                column.column_name = result2.rows[d].column_name;
+                                                if (result2.rows[d].table_schema)
+                                                    column.element_name = result2.rows[d].table_schema+'.'+result2.rows[d].column_name;
+                                                    else
+                                                    column.element_name = result2.rows[d].column_name;
+
+                                                column.data_type = result2.rows[d].data_type;
+                                                column.is_nullable = result2.rows[d].is_nullable;
+                                                column.length = result2.rows[d].length;
+                                                column.precission = result2.rows[d].precission;
+                                                column.scale = result2.rows[d].scale;
+                                                column.table_schema = result2.rows[d].table_schema;
+                                                column.table_name = result2.rows[d].table_name;
+                                                column.collectionID = tables[t].collectionID;
+                                                column.isPK = false;
+                                                //column.elementID = uuid.v4();
+                                                column.elementID = generateShortUID();
+                                                column.datasourceID = datasourceID;
+                                                tables[t].table_columns.push(column);
+                                            }
+                                    }
+
+                    }
+
+
+
+
+                        var queryJoins = db.getTableJoins();
+                        db.query(queryJoins, function(err, result3) {
+
+                            var tempJoins = [];
+
+                            for (var d = 0; d < result3.rows.length; d++) {
+
+                                            for (var t = 0; t < tables.length; t++)
+                                            {
+                                                    if (tables[t].table_name == result3.rows[d].table_name
+                                                        &&
+                                                        tables[t].schema_name == result3.rows[d].table_schema)
+                                                        {
+                                                            for (var c = 0; c < tables[t].table_columns.length; c++)
+                                                            {
+                                                                      if (tables[t].table_columns[c].column_name == result3.rows[d].column_name)
+                                                                          {
+                                                                                var join = {};
+                                                                                join.schema_name = tables[t].schema_name;
+                                                                                join.table_name = tables[t].table_name;
+                                                                                join.collectionID = tables[t].collectionID;
+                                                                                join.column_name = tables[t].table_columns[c].column_name;
+                                                                                join.elementID = tables[t].table_columns[c].elementID;
+                                                                                join.datasourceID = datasourceID;
+                                                                                join.isNative = true;
+                                                                                join.joinID = generateShortUID();
+                                                                                tempJoins.push(join);
+
+                                                                          }
+                                                            }
+                                                        }
+                                            }
+                            }
+
+                            //referenced column
+
+                            for (var d = 0; d < result3.rows.length; d++) {
+
+                                            for (var t = 0; t < tables.length; t++)
+                                            {
+                                                    if (tables[t].table_name == result3.rows[d].foreign_table_name
+                                                        &&
+                                                        tables[t].schema_name == result3.rows[d].foreign_table_schema)
+                                                        {
+                                                            for (var c = 0; c < tables[t].table_columns.length; c++)
+                                                            {
+                                                                      if (tables[t].table_columns[c].column_name == result3.rows[d].foreign_column_name)
+                                                                          {
+
+                                                                               for (var j in tempJoins)
+                                                                                   {
+                                                                                       if (tempJoins[j].schema_name == result3.rows[d].table_schema &&  tempJoins[j].table_name == result3.rows[d].table_name && tempJoins[j].column_name == result3.rows[d].column_name)
+                                                                                           {
+                                                                                               tempJoins[j].foreign_table_schema = result3.rows[d].foreign_table_schema;
+                                                                                               tempJoins[j].foreign_table_name = result3.rows[d].foreign_table_name;
+                                                                                               tempJoins[j].foreign_column_name = result3.rows[d].foreign_column_name;
+                                                                                               tempJoins[j].foreign_elementID = tables[t].table_columns[c].elementID;
+                                                                                               tempJoins[j].foreign_collectionID = tables[t].table_columns[c].collectionID;
+                                                                                           }
+                                                                                   }
+                                                                          }
+                                                            }
+                                                        }
+                                            }
+                            }
+
+                            //Primary keys
+                            var querypks = db.getPKs();
+                            db.query(querypks, function(err, result4) {
+
+                                for (var d = 0; d < result4.rows.length; d++) {
+
+                                    for (var t = 0; t < tables.length; t++)
+                                            {
+                                                    if (tables[t].table_name == result4.rows[d].table_name
+                                                        &&
+                                                        tables[t].schema_name == result4.rows[d].table_schema)
+                                                        {
+                                                            for (var c = 0; c < tables[t].table_columns.length; c++)
+                                                            {
+                                                                      if (tables[t].table_columns[c].column_name == result4.rows[d].column_name)
+                                                                          {
+                                                                              tables[t].table_columns[c].isPK = true;
+                                                                              tables[t].table_columns[c].pkPosition = result4.rows[d].position_in_unique_constraint;
+                                                                          }
+                                                            }
+                                                        }
+                                            }
+
+                                }
+
+
+
+                                var model = {schemas: schemas,tables:tables,joins:tempJoins};
+                                debug({result: 1, items: model});
+                                setresult({result: 1, items: model});
+                                db.end();
+                            });
+
+                        });
+
+
+
+                });
+
+
+            });
+
     });
 };
 
 function getCollectionSchema(collection,queryResults, done) {
 
-    var uuid = require('node-uuid');
+    //var uuid = require('node-uuid');
     var collectionName = collection.name;
-    var collectionID = 'WST'+uuid.v4();
-
+    //var collectionID = 'WST'+uuid.v4();
+    var collectionID = 'WST'+generateShortUID();
 
     collectionID =  collectionID.replace(new RegExp('-', 'g'), '');
     var theCollection = {collectionID: collectionID ,collectionName: collectionName,visible:true,collectionLabel:collectionName};
@@ -154,7 +355,8 @@ function getCollectionSchema(collection,queryResults, done) {
 
 
 
-            var elementID = uuid.v4();
+            //var elementID = uuid.v4();
+            var elementID = generateShortUID();
             var isVisible = true;
             theCollection.elements.push({elementID:elementID,elementName:name,elementType:type,visible:isVisible,elementLabel:name})
 

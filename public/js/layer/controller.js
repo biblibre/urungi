@@ -306,12 +306,8 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
                 if (result.result == 1)
                 {
-
-
                     for (i in result.items)
                     {
-
-
                         result.items[i].datasourceID = $scope.selectedDts.id;
 
                         for (e in result.items[i].elements)
@@ -1089,8 +1085,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         var theCollectionID = collection.collectionID;
 
         deleteAllCollectionElements($scope.rootItem.elements,theCollectionID);
-
-
 
         for (var c in $scope._Layer.params.schema)
         {

@@ -2019,9 +2019,105 @@ div.callout {
           transition: all 0.3s ease-out;
 }
 
+#objectPanel.catalogSidebar
+{
+    top: 75px;
+    width: 250px;
+}
 
+.jtk-field
+{
+    /*width: 180px;
+    margin-left: 10px;*/
+}
 
+.jtk-node {
+    background-color: #D5D5D5;
+}
 
+.isPK {
+    /*background-color: #aaa;
+    border: 1px solid #aaa;
+    */
+    font-weight: bolder;
+}
+
+.jtk-field-selected {
+    width: 15px;
+    height: 15px;
+}
+
+.selectedElement {
+    background-color: #72A230;
+}
+
+.canvas-er-toolbar {
+   position: absolute;
+    top: 75px;
+    left: 260px;
+    height: 35px:
+}
+
+.canvas-parent {
+    background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDguNSBMIDM0IDguNSBNIDguNSAwIEwgOC41IDM0IE0gMCAxNyBMIDM0IDE3IE0gMTcgMCBMIDE3IDM0IE0gMCAyNS41IEwgMzQgMjUuNSBNIDI1LjUgMCBMIDI1LjUgMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDM0IDAgTCAwIDAgMCAzNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=&quot;);
+    background-position: -25px -1px;
+    position: absolute;
+    top: 110px;
+    left: 260px;
+    overflow: scroll;
+    cursor: -webkit-grab;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background-color: white;
+}
+
+.canvas-er {
+    height:2000px;
+    width:2000px;
+    overflow: visible !important;
+    border: 0px;
+    background-color: transparent;
+}
+
+._jsPlumb_connector {
+    z-index: 100;
+}
+
+.business-object {
+    padding: 16px;
+    position: absolute;
+    z-index: 4;
+    border: 1px solid #2e6f9a;
+    box-shadow: 2px 2px 19px #e0e0e0;
+    -o-box-shadow: 2px 2px 19px #e0e0e0;
+    -webkit-box-shadow: 2px 2px 19px #e0e0e0;
+    -moz-box-shadow: 2px 2px 19px #e0e0e0;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    opacity: 0.8;
+    cursor: move;
+    background-color: white;
+    font-size: 11px;
+    -webkit-transition: background-color 0.25s ease-in;
+    -moz-transition: background-color 0.25s ease-in;
+    transition: background-color 0.25s ease-in;
+}
+
+.business-object:hover {
+    background-color: #5c96bc;
+    color: white;
+}
+
+.btn.btn-gray:hover {
+    background-color: #e1e1e1;
+    text-color: #333;
+}
+
+.btn.btn-gray {
+    background-color: #eeeeee;
+    color: #333;
+}
 
 
 

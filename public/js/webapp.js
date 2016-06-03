@@ -5,7 +5,7 @@ var app = angular.module('WideStage', [
         'ngRoute','ui.sortable','gridster','ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
         'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
         'ui.bootstrap.datetimepicker','ui.tree','page.block','gridshore.c3js.chart','vAccordion','bsLoadingOverlay'
-    ,'intro.help'
+    ,'intro.help','ngTagsInput'
     ])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
@@ -217,6 +217,16 @@ var app = angular.module('WideStage', [
         $routeProvider.when('/explore/:extra', {
             templateUrl: 'partials/query/exploreIndex.html',
             controller: 'queryCtrl'
+        });
+
+        //catalog
+        $routeProvider.when('/catalog', {
+            templateUrl: 'partials/catalog/view.html',
+            controller: 'catalogCtrl'
+        });
+        $routeProvider.when('/catalog/:extra', {
+            templateUrl: 'partials/catalog/view.html',
+            controller: 'catalogCtrl'
         });
 
     }])
