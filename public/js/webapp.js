@@ -314,7 +314,6 @@ app.service('queryService', function() {
 });
 
 app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $sessionStorage, connection) {
-    console.log('widestage app running');
     $rootScope.removeFromArray = function(array, item) {
         var index = array.indexOf(item);
 
@@ -354,10 +353,8 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
     }
 
     $rootScope.user = $sessionStorage.getObject('user');
-    console.log('user loaded from session storage',$sessionStorage.getObject('user'));
 
     if (!$rootScope.user) {
-        console.log('there is no user in the session storage');
         window.location.href="/login";
     } else {
         $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
@@ -366,7 +363,6 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
 
 
         connection.get('/api/get-user-objects', {}, function(data) {
-            //console.log('the user objects',JSON.stringify(data.items));
             $rootScope.userObjects = data.items;
             $rootScope.user.canPublish = data.userCanPublish;
         });
