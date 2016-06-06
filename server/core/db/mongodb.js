@@ -5,7 +5,6 @@ exports.testConnection = function(data, done) {
     var conn = mongoose.createConnection(dbURI,{ server: { poolSize: 5 } });
 
     conn.on('connected', function () {
-        console.log('Mongoose connection open to ' + dbURI);
         conn.db.collectionNames(function (err, names) {
             done({result: 1, items: names});
             conn.close();
@@ -30,8 +29,6 @@ exports.getSchemas = function(data, done) {
         var schemas = [];
 
         getCollectionSchema(db,collections,0,schemas, function() {
-            console.log('--------------- está hecho');
-            //console.log(schemas);
             done({result: 1, items: schemas});
         });
 
@@ -58,8 +55,6 @@ exports.execOperation = function(operation, params, done) {
                                     if(err) { return console.dir(err); }
 
                                     var collection = db.collection(theCollectionName);
-
-                                    //console.log('this is the collction ', theCollectionName,params.collectionID);
 
                                     var fields = {};
 
@@ -88,10 +83,9 @@ exports.execOperation = function(operation, params, done) {
                                                 for (var i in result) {
                                                     //if (result[i]._id[params.elementName]) {
                                                         items.push(result[i]._id[params.elementName]);
-                                                       // console.log('the item  '+result[i]._id[params.elementName]);
+
                                                     //}
                                                 } */
-                                                //console.log('the results '+JSON.stringify(result));
                                                 db.close();
                                                 done({result: 1, items: result});
                                             }
@@ -101,7 +95,6 @@ exports.execOperation = function(operation, params, done) {
 
                     } else {
                         done({result: 0, msg: 'DataSource not found: '});
-                        console.log('DataSource not found: ',params.datasourceID)
                     }
 
             });
@@ -128,11 +121,9 @@ function getCollectionSchema(db,collections,index,schemas, done) {
 
 
     collectionID =  collectionID.replace(new RegExp('-', 'g'), '');
-    console.log('new collection ID '+collectionID);
     var theCollection = {collectionID: collectionID ,collectionName: collectionName,visible:true,collectionLabel:collectionName};
     theCollection.elements = [];
 
-    console.log('The collection Name '+collectionName);
     var collection = db.collection(collectionName);
     collection.find().limit(100).toArray(function(err, results) {
         var dbstruc = {};
@@ -146,7 +137,7 @@ function getCollectionSchema(db,collections,index,schemas, done) {
         var names = [];
 
         for (i = 0; i < elements.length; i++) {
-            //console.log(elements[i]);
+
             var str = elements[i];
             if (str) {
                 if (str != 'undefined') {
@@ -197,20 +188,16 @@ function getElementList (target,elements,parent) {
                     /*
                      if (parent != '')
                      {
-                     //console.log(parent+'.'+k+':'+typeof target[k]);
                      var node = parent+'.'+k+':array';
                      } else {
-                     //console.log(k+':'+typeof target[k]);
                      var node = k+':array';
                      }
                      */
                 } else {
                     if (parent != '')
                     {
-                        //console.log(parent+'.'+k+':'+typeof target[k]);
                         var node = parent+'.'+k+':'+typeof target[k];
                     } else {
-                        //console.log(k+':'+typeof target[k]);
                         var node = k+':'+typeof target[k];
                     }
 
@@ -221,8 +208,7 @@ function getElementList (target,elements,parent) {
             }
         } else {
             if (target[k] && target[k][0] == 0) {
-                //es un array
-                console.log('SOY UN ARRAY');
+
             }
 
             if (parseInt(k) != k) {
@@ -239,7 +225,7 @@ function getElementList (target,elements,parent) {
 
             if (elements.indexOf(nodeDesc) == -1) {
                 elements.push(nodeDesc);
-                console.log(nodeDesc);
+
             }
             getElementList(target[k],elements,node);
         }
@@ -253,7 +239,7 @@ function getFilterJoins(collection, filters) {
         var filter = filters[i];
 
         if (filter.group) {
-            console.log('es grupo');
+
             theFilters.push(getFilterJoins(collection, filter.filters));
         }
 
@@ -275,14 +261,13 @@ function pad(num, size) {
 function getCollectionFilters(collection, filters) {
     var theFilters = [], condition = false;
 
-    console.log('getCollectionFilters');
     debug(filters);
 
     for (var i in filters) {
         var filter = filters[i];
 
         if (filter.group) {
-            console.log('es grupo');
+
             theFilters.push(getCollectionFilters(collection, filter.filters));
         }
         else if (filter.condition) {
@@ -755,15 +740,10 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
 
 
 
-    //console.log('entering mongoDB collections these are the joins ',JSON.stringify(collection.joins));
-    var fields = {};
+   var fields = {};
 
     var filters = getCollectionFilters(collection, collection.filters);
 
-    //console.log('the Filters');
-    //debug(filters);
-
-    //console.log(JSON.stringify(collection));
 
     for (var i in collection.columns) {
         for (var e in collection.schema.elements) {
@@ -834,10 +814,7 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
         }
     }
 
-    console.log('he salido de order',JSON.stringify(sort));
 
-    //console.log('the fields to get');
-    //debug(fields);
 
     var MongoClient = require('mongodb').MongoClient , assert = require('assert');
 
@@ -852,9 +829,8 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
         for (var i in collection.columns) {
             var found = false;
 
-            //if (collection.columns[i].count) {
+
             if (collection.columns[i].elementName == 'WSTcount'+collection.schema.collectionName) {
-                console.log('lleva conteo');
                 group['WSTcount'+collection.schema.collectionName] = { $sum: 1 };
 
             } else {
@@ -929,7 +905,7 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
             /*
             if (!found) {
                 if (collection.columns[i].count) {
-                    console.log('lleva conteo');
+
                     group['count'] = { $sum: 1 };
                 }
             } */
@@ -977,7 +953,6 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
             }
         }
 
-        console.log('aggregation');
         debug(aggregation);
 
         col.aggregate(aggregation, function(err, docs) {
@@ -1043,12 +1018,8 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
                     finalItem[collection.schema.collectionID.toLowerCase()+'_'+field] = item[field];
                 }
 
-
-                //result.push(item);
                 result.push(finalItem);
             }
-            //debug(result);
-            console.log('this is the collection', collection.schema.collectionName,result.length);
             collection.result = result;
             db.close();
 
