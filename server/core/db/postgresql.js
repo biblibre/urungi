@@ -74,8 +74,8 @@ db.prototype.getLimitString = function(limit, offset) {
 exports.db = db;
 
 exports.testConnection = function(data, setresult) {
-    var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host+'/'+data.database;
-    //var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host;
+    //var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host+'/'+data.database;
+    var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host+':'+data.port+'/'+data.database;
 
     //this initializes a connection pool
     //it will keep idle connections open for a (configurable) 30 seconds

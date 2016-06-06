@@ -27,6 +27,9 @@ module.exports = {
         },
         pagination: {
             itemsPerPage: 10
+        },
+        query: {
+            defaultRecordsPerPage: 500
         }
     },
     production: {
@@ -57,6 +60,9 @@ module.exports = {
         },
         pagination: {
             itemsPerPage: 10
+        },
+        query: {
+            defaultRecordsPerPage: 500
         }
     },
     local: {
@@ -87,6 +93,9 @@ module.exports = {
         },
         pagination: {
             itemsPerPage: 10
+        },
+        query: {
+            defaultRecordsPerPage: 500
         }
     }
 }

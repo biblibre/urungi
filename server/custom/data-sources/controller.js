@@ -150,7 +150,7 @@ exports.testConnection = function(req,res) {
         var postgre = require('../../core/db/postgresql.js');
 
         postgre.testConnection(req.body, function(result) {
-        console.log('devolviendo datos...');
+
             serverResponse(req, res, 200, result);
         });
     }
@@ -160,7 +160,7 @@ exports.testConnection = function(req,res) {
         var oracle = require('../../core/db/oracle.js');
 
         oracle.testConnection(req.body, function(result) {
-            console.log('devolviendo datos...');
+
             serverResponse(req, res, 200, result);
         });
     }
@@ -170,7 +170,7 @@ exports.testConnection = function(req,res) {
         var mssql = require('../../core/db/mssql.js');
 
         mssql.testConnection(req.body, function(result) {
-            console.log('devolviendo datos...');
+
             serverResponse(req, res, 200, result);
         });
     }

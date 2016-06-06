@@ -70,10 +70,11 @@ exports.getSchemas = function(data, setresult) {
         var query = db.getSchemaQuery(newSchemas, newTables);
 
         db.query(query, function(err, result) {
+            console.log('schemas result',schemasTables, query);
             var schemas = [];
-            for (var s = 0; s < result.rows.length; s++) {
+            for (var s in schemasTables) {
                 getCollectionSchema(schemasTables[s], result.rows, function (resultCollection) {
-                    schemas.push(resultCollection);
+                   schemas.push(resultCollection);
                 });
             }
             debug({result: 1, items: schemas});
@@ -303,17 +304,12 @@ exports.getReverseEngineering = function(datasourceID, data, setresult) {
 
 function getCollectionSchema(collection,queryResults, done) {
 
-    //var uuid = require('node-uuid');
     var collectionName = collection.name;
-    //var collectionID = 'WST'+uuid.v4();
     var collectionID = 'WST'+generateShortUID();
 
     collectionID =  collectionID.replace(new RegExp('-', 'g'), '');
     var theCollection = {collectionID: collectionID ,collectionName: collectionName,visible:true,collectionLabel:collectionName};
     theCollection.elements = [];
-
-    console.log('The collection Name', collectionName, collection.schema, collection.table);
-
 
     for (var d = 0; d < queryResults.length; d++) {
         var dbstruc = {};
@@ -700,21 +696,18 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         var db = new dbController.db();
 
         //pages only for POSTGRESS
-        //SQLstring += ' LIMIT 500 OFFSET ' + ((params.page -1 )*500);
-        SQLstring += ' '+db.getLimitString(500, ((params.page -1 )*500));
+        if (config.query.defaultRecordsPerPage > 1)
+            {
+            SQLstring += ' '+db.getLimitString(config.query.defaultRecordsPerPage, ((params.page -1 )*config.query.defaultRecordsPerPage));
+            }
 
-        //LIMIT { number | ALL }] [OFFSET number]
-
-        console.log(SQLstring);
+        console.log('The sql:', SQLstring);
 
         db.connect(dataSource.params[0].connection, function(err, connection) {
             if(err) {
-                console.log(dataSource.type+' default connection error: ', err);
                 setresult({result: 0, msg: 'Connection Error: '+ err});
                 return console.error('Connection Error: ', err);
             }
-
-            console.log('Connected to '+dataSource.type);
 
             db.query(SQLstring, function(err, result) {
                 if (err) {
