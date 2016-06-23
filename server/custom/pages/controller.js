@@ -54,7 +54,7 @@ exports.PagesFindOne = function(req,res){
 };
 
 exports.PagesCreate = function(req,res){
-    if (!req.session.PagesCreate && !req.session.isWSTADMIN)
+    if (!req.session.pagesCreate && !req.session.isWSTADMIN)
     {
         serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to create Pages"});
     } else {
@@ -72,7 +72,7 @@ exports.PagesCreate = function(req,res){
 };
 
 exports.PagesDuplicate = function(req,res){
-    if (!req.session.PagesCreate && !req.session.isWSTADMIN)
+    if (!req.session.pagesCreate && !req.session.isWSTADMIN)
     {
         serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to create Pages"});
     } else {
