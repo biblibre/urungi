@@ -122,15 +122,20 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
             {name: 'Sum', value: 'sum'},
             {name: 'Avg', value: 'avg'},
             {name: 'Min', value: 'min'},
-            {name: 'Max', value: 'max'}
+            {name: 'Max', value: 'max'},
+            {name: 'Count', value: 'count'}
         ],
         'date': [
             {name: 'Year', value: 'year'},
             {name: 'Month', value: 'month'},
-            {name: 'Day', value: 'day'}
+            {name: 'Day', value: 'day'},
+            {name: 'Count', value: 'count'}
             /*{name: 'Semester', value: 'semester'},
             {name: 'Quarter', value: 'quarter'},
             {name: 'Trimester', value: 'trimester'}*/
+        ],
+        'string': [
+            {name: 'Count', value: 'count'}
         ]
     };
 
@@ -495,15 +500,18 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         var execute = (typeof execute !== 'undefined') ? execute : true;
         $scope.wrongFilters = [];
         checkFilters($scope.filters);
+        console.log('cheching wrong filters',$scope.wrongFilters)
 
 
             if ($scope.wrongFilters.length == 0)
                 {
+
                     $('#reportLayout').empty();
                     if ($scope.columns.length > 0 && execute)
                         $scope.getDataForPreview();
 
                 } else {
+
                     //var errorMsg = 'There are incomplete filters'
                     //noty({text: errorMsg,  timeout: 6000, type: 'error'});
                 }
@@ -610,8 +618,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
         detectLayerJoins();
         $scope.processStructure();
-
-
     };
 
     $scope.onDropOnFilter = function (data, event, filter) {
@@ -832,13 +838,17 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
     function generateQuery(done)
     {
-        console.log('entering generating query');
+        $scope.processStructure();
+        console.log('entering generating query',$scope.wrongFilters);
         $scope.query = {};
         $scope.query.datasources = [];
         $scope.query.order = $scope.order;
 
 
         var filters = $scope.filters;
+
+        $scope.query.wrongFilters = $scope.wrongFilters;
+
 
         var datasourcesList = [];
         var layersList = [];

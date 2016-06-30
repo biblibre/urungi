@@ -17,7 +17,11 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         {name:"SUM",value:"sum"},
         {name:"AVG",value:"avg"},
         {name:"MIN",value:"min"},
-        {name:"MAX",value:"max"}
+        {name:"MAX",value:"max"},
+        {name:"COUNT",value:"count"}
+    ];
+    $scope.stringDefaultAggregation = [{name:"original value",value:"value"},
+        {name:"COUNT",value:"count"}
     ];
 
     $scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
@@ -206,16 +210,10 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
             for (var collection in theLayer.params.schema)
             {
-
                 for (var element in theLayer.params.schema[collection].elements)
                 {
-
                     if (theLayer.params.schema[collection].elements[element].painted)
-
                         theLayer.params.schema[collection].elements[element].painted = false;
-
-
-
                 }
             }
 
@@ -318,6 +316,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                         }
 
                         //Add the count element
+                        /*
                         var theCountElement = {};
                         theCountElement.elementName = 'WSTcount'+result.items[i].collectionName;
                         theCountElement.elementLabel = 'Count'+' '+result.items[i].collectionLabel;
@@ -326,10 +325,11 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                         theCountElement.collectionName = result.items[i].collectionName;
                         theCountElement.elementID = result.items[i].collectionID+'#count#',
                         theCountElement.elementType = 'number';
+                        theCountElement.aggregation = 'count'
                         theCountElement.count = true;
 
                         result.items[i].elements.unshift(theCountElement);
-
+*/
 
                         if (!$scope._Layer.params)
                             $scope._Layer.params = {};

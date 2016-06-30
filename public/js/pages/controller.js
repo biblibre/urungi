@@ -331,18 +331,27 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
         var qstructure = queryService.getQuery();
 
+        console.log('query structure in savequery2', qstructure);
+
         if ($scope.editingQuery == null)
         {
             qstructure.name = 'query'+($scope.queries.length +1);
             qstructure.id = uuid2.newguid();
             $scope.queries.push(qstructure);
-            queryModel.getQueryData($scope,qstructure.query, function(data)
+            //tiene prompts sin valores???
+            console.log('the wrong filters',qstructure.query.wrongFilters);
+            //if (qstructure.query.wrongFilters.length == 0)
+              //  {
+                queryModel.getQueryData($scope,qstructure.query, function(data)
                     {
                             qstructure.data = data;
                             qstructure.loadingData= false;
                             $scope.setQueryLoadedData(qstructure.id);
                             $scope.theData[qstructure.hashedID] = data;
                     });
+                //} else {
+                  //  console.log('query imcomplete');
+                //}
         } else {
             for (var q in $scope.queries)
             {
@@ -350,13 +359,21 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                 {
                     qstructure.name = $scope.editingQuery;
                     $scope.queries[q] = qstructure;
-                    queryModel.getQueryData($scope,$scope.queries[q].query, function(data)
-                    {
-                            $scope.queries[q].data = data;
-                            $scope.queries[q].loadingData= false;
-                            $scope.setQueryLoadedData($scope.queries[q].id);
-                            $scope.theData[$scope.queries[q].hashedID] = data;
-                    });
+                    //tiene prompts sin valores???
+                    filters.filters.filtertext1
+                    console.log('the wrong filters',$scope.queries[q].query.wrongFilters);
+                  //  if ($scope.queries[q].query.wrongFilters.length == 0)
+                    //    {
+                            queryModel.getQueryData($scope,$scope.queries[q].query, function(data)
+                            {
+                                    $scope.queries[q].data = data;
+                                    $scope.queries[q].loadingData= false;
+                                    $scope.setQueryLoadedData($scope.queries[q].id);
+                                    $scope.theData[$scope.queries[q].hashedID] = data;
+                            });
+                      //  } else {
+                        //    console.log('query imcomplete');
+                        //}
                 }
             }
 
@@ -366,6 +383,9 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         getAllPageColumns();
         $scope.getPrompts();
     }
+
+
+
 
     $scope.getQuery = function(queryID)
     {

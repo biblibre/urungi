@@ -506,6 +506,9 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             var field = table.columns[e];
             elements.push(field);
             //TODO: Count test
+            console.log('thefield',field);
+            //SELECT WSTx4fz.WSTcountedm.etl_log as wstx4fz_WSTcountedm.etl_log FROM edm.etl_log WSTx4fz GROUP BY WSTx4fz.WSTcountedm.etl_log LIMIT 500 OFFSET 0
+
 
             if (field.aggregation) {
                 found = true;
@@ -671,6 +674,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             SQLstring += ' '+db.getLimitString(config.query.defaultRecordsPerPage, ((params.page -1 )*config.query.defaultRecordsPerPage));
             }
 
+        console.log(SQLstring);
 
         db.connect(dataSource.params[0].connection, function(err, connection) {
             if(err) {

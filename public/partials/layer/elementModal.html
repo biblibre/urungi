@@ -67,6 +67,20 @@
                             </div>
                         </div>
 
+                        <div class="row" ng-if="selectedElement.elementType == 'string'">
+                            <div class="col-md-6">
+
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="field-4b" class="control-label">Default aggregation</label>
+                                    <select id="field-4b" class="form-control" ng-model="selectedElement.defaultAggregation" ng-options="obj.value as obj.name for obj in stringDefaultAggregation"></select>
+                                </div>
+
+                            </div>
+                        </div>
+
 
                         <div class="row">
                             <div class="col-md-12">

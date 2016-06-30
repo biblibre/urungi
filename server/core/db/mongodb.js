@@ -791,6 +791,8 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
                                             break;
                                         case 'max': sort[collection.schema.elements[e].elementName+'max'] = collection.order[i].sortType*-1;
                                             break;
+                                        case 'count': sort[collection.schema.elements[e].elementName+'count'] = collection.order[i].sortType*-1;
+                                            break;
                                         case 'year': sort['_id.'+collection.schema.elements[e].elementName+'year'] = collection.order[i].sortType*-1;
                                             break;
                                         case 'month': sort['_id.'+collection.schema.elements[e].elementName+'month'] = collection.order[i].sortType*-1;
@@ -847,6 +849,8 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
                             case 'min': group[collection.schema.elements[e].elementName+'min'] = {$min: "$"+collection.schema.elements[e].elementName};
                                 break;
                             case 'max': group[collection.schema.elements[e].elementName+'max'] = {$max: "$"+collection.schema.elements[e].elementName};
+                                break;
+                            case 'count': group[collection.schema.elements[e].elementName+'count'] = {$sum: 1};
                                 break;
                             case 'year': {
 
@@ -986,7 +990,8 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
                               field == collection.schema.elements[e].elementName+'sum' ||
                                 field == collection.schema.elements[e].elementName+'avg' ||
                                     field == collection.schema.elements[e].elementName+'min' ||
-                                        field == collection.schema.elements[e].elementName+'max'
+                                        field == collection.schema.elements[e].elementName+'max' ||
+                                            field == collection.schema.elements[e].elementName+'count'
                             )  && collection.schema.elements[e].format) {
 
                             if (collection.schema.elements[e].elementType == 'date') {

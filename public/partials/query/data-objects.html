@@ -11,7 +11,7 @@
         <div id="layerObjects">
             <div class="schema-element-report schema-item-report"  ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure') && ngModelItem.enabled != false" >
 
-                <a class="list-group-item data-source-element schema-item-report" ng-if="ngModelItem.elementType != 'number' || (ngModelItem.elementType == 'number' && (!ngModelItem.defaultAggregation || ngModelItem.defaultAggregation == 'value'))" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType != 'number' && !ngModelItem.defaultAggregation) || (ngModelItem.elementType == 'number' && (!ngModelItem.defaultAggregation || ngModelItem.defaultAggregation == 'value'))" draggable="true" effect-allowed="copy" draggable-type="custom-object"
                    draggable-data="{
                         elementName: ngModelItem.elementName,
                         objectLabel: ngModelItem.elementLabel,
@@ -27,15 +27,15 @@
                         filterTypeLabel:'equal',
                         format:ngModelItem.format,
                         values:ngModelItem.values}">
-                            <i class="fa fa-cube" ng-show="ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count'" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)"></i>
-                            <i class="fa fa-list-ol" ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count'" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
+                            <i class="fa fa-cube" ng-show="ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count' && (!ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)"></i>
+                            <i class="fa fa-reorder" ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
 
 
                         {{ngModelItem.elementLabel}}
-                    <i ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date') && (!ngModelItem.count)" class="fa fa-toggle-down " ng-click="ngModelItem.isAggregateCollapsed = !ngModelItem.isAggregateCollapsed"></i>
+                    <i ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date' || ngModelItem.elementType == 'string') && (!ngModelItem.count)" class="fa fa-toggle-down pull-right" ng-click="ngModelItem.isAggregateCollapsed = !ngModelItem.isAggregateCollapsed" style="color:#72A230;"></i>
                 </a>
 
-                <a class="list-group-item data-source-element schema-item-report" ng-if="ngModelItem.elementType == 'number' &&  ngModelItem.defaultAggregation && ngModelItem.defaultAggregation != 'value' " draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'string') &&  ngModelItem.defaultAggregation && ngModelItem.defaultAggregation != 'value' " draggable="true" effect-allowed="copy" draggable-type="custom-object"
                    draggable-data="{
                         elementName: ngModelItem.elementName,
                         objectLabel: ngModelItem.elementLabel+' ('+ngModelItem.defaultAggregation+')',
@@ -52,16 +52,16 @@
                         format:ngModelItem.format,
                         values:ngModelItem.values,
                         aggregation: ngModelItem.defaultAggregation}">
-                            <i class="fa fa-cube" ng-show="ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count'" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)"></i>
-                            <i class="fa fa-list-ol" ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count'" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
+                            <i class="fa fa-cube" ng-show="ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count' && (!ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)"></i>
+                            <i class="fa fa-reorder" ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
 
                         {{ngModelItem.elementLabel +' ('+ngModelItem.defaultAggregation+')'}}
-                    <i ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date') && (!ngModelItem.count)" class="fa fa-toggle-down " ng-click="ngModelItem.isAggregateCollapsed = !ngModelItem.isAggregateCollapsed"></i>
+                    <i ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date' || ngModelItem.elementType == 'string') && (!ngModelItem.count)" class="fa fa-toggle-down pull-right" ng-click="ngModelItem.isAggregateCollapsed = !ngModelItem.isAggregateCollapsed" style="color:#72A230;"></i>
                 </a>
 
 
-                <div class="schema-aggregate-element-container" ng-if="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date'" collapse="!ngModelItem.isAggregateCollapsed">
-                    <a ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date') && (!ngModelItem.count)"
+                <div class="schema-aggregate-element-container" ng-if="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date' || ngModelItem.elementType == 'string'" collapse="!ngModelItem.isAggregateCollapsed">
+                    <a ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date' || ngModelItem.elementType == 'string') && (!ngModelItem.count)"
                        class="list-group-item data-source-aggregation schema-item-report" ng-repeat="aggregation in fieldsAggregations[ngModelItem.elementType]"
                        draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
                        elementName: ngModelItem.elementName,
