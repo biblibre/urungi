@@ -271,8 +271,11 @@
     <h4 class="pull-right" >Query results</h4>
 </div>
 
+<div class="container-fluid" ng-if="gettingData == true">
+    <h3><img src="/images/loader.gif" width="32px" height="32px"/>   getting data ....</h3>
+</div>
 
-<div id="reportLayout" class="container-fluid" >
+<div id="reportLayout" class="container-fluid">
     <div ng-if="wrongFilters.length > 0 && columns.length > 0" class="alert alert-danger" role="alert"><i class="fa fa-warning fa-2" style="margin-right:10px;"></i>  <strong>Warning:</strong>     There are incomplete filters!!</div>
 
     <div ng-if="wrongFilters.length == 0"  bs-loading-overlay bs-loading-overlay-reference- style="min-height:100px">

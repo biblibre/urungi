@@ -4,6 +4,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.dateModal = 'partials/report/dateModal.html';
     $scope.linkModal = 'partials/report/linkModal.html';
+    $scope.gettingData = false;
 
     $scope.rows = [];
     $scope.rows = [];
@@ -162,7 +163,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         $scope.queries = [];
         detectLayerJoins();
         $scope.processStructure();
-        console.log('init query');
+
     }
 
     function pad(num, size) {
@@ -543,10 +544,11 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
 
     $scope.processStructure = function(execute) {
+        $scope.gettingData = false;
+
         var execute = (typeof execute !== 'undefined') ? execute : true;
         $scope.wrongFilters = [];
         checkFilters($scope.filters);
-        console.log('cheching wrong filters',$scope.wrongFilters)
 
 
             if ($scope.wrongFilters.length == 0)
@@ -555,6 +557,8 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
                     $('#reportLayout').empty();
                     if ($scope.columns.length > 0 && execute)
                         $scope.getDataForPreview();
+
+
 
                 } else {
 
@@ -586,6 +590,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
     $scope.getDataForPreview = function()
     {
 
+        $scope.gettingData = true;
         bsLoadingOverlayService.start({referenceId: 'reportLayout'});
 
         if (!$scope.query)
@@ -607,6 +612,8 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
                 grid.simpleGrid($scope.columns,$scope.query.name,$scope.query,false,gridProperties,function(){
                         bsLoadingOverlayService.stop({referenceId: 'reportLayout'});
+                        $scope.gettingData = false;
+
                 });
         });
 
@@ -888,8 +895,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
     function generateQuery(done)
     {
-        $scope.processStructure();
-        console.log('entering generating query',$scope.wrongFilters);
+        //$scope.processStructure();
         $scope.query = {};
         $scope.query.datasources = [];
         $scope.query.order = $scope.order;
@@ -924,7 +930,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         }
 
         for (var i in datasourcesList) {
-            console.log('entering generating query datasources');
 
             var dtsObject = {};
             dtsObject.datasourceID = datasourcesList[i];

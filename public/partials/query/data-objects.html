@@ -1,4 +1,4 @@
-<div class="container-fluid object-tree" >
+<div class="container-fluid object-tree" style="padding-left: 0px;padding-right: 0px;" >
 
     <div  class="row"  ng-if="layers.length > 1" style="padding:5px;">
     <span>Choose a layer:</span>
@@ -96,7 +96,7 @@
                     {{ngModelItem.elementLabel}}
                 </a>
             </div>
-            <div collapse="!ngModelItem.isCollapsed && ngModelItem.elementRole != 'root'">
+            <div collapse="!ngModelItem.isCollapsed && ngModelItem.elementRole != 'root'" style="padding-left=10px">
             <ul ng-if="ngModelItem.elementRole == 'folder' || ngModelItem.elementRole == 'root'" class="schema-container-report list-group" ng-class="">
                 <li class="innerCont list-group-item hand-cursor schema-item-report" ng-repeat="innerItem in ngModelItem.elements">
                     <tg-dynamic-directive ng-model="innerItem" tg-dynamic-directive-view="getView">
