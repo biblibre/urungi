@@ -210,7 +210,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             //IF width > 300 then you will face problems with mobile devices in responsive mode
                 steps:[
                     {
-                        element: '#layerObjects',
+                        element: '#dataObjectsIntroBlock',
                         html: '<div><h3>The layer catalog</h3><span style="font-weight:bold;">Access here the different data elements of every layer that you have access on</span><br/><span>Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)</span></div>',
                         width: "300px",
                         height: "250px",
@@ -512,12 +512,17 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
             {name: 'Sum', value: 'sum'},
             {name: 'Avg', value: 'avg'},
             {name: 'Min', value: 'min'},
-            {name: 'Max', value: 'max'}
+            {name: 'Max', value: 'max'},
+            {name: 'Count', value: 'count'}
         ],
         'date': [
             {name: 'Year', value: 'year'},
             {name: 'Month', value: 'month'},
-            {name: 'Day', value: 'day'}
+            {name: 'Day', value: 'day'},
+            {name: 'Count', value: 'count'}
+        ],
+        'string': [
+            {name: 'Count', value: 'count'}
         ]
     };
 
