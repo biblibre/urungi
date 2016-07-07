@@ -1,6 +1,6 @@
 <!--<div  class="container-fluid mainArea" >  -->
 
-    <div id="parentIntro" class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
+    <div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroDesignerOptions" class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
         <h3 class="pull-left">Single query report</h3>
         <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-hide="queryID" style="margin-right: 5px" tooltip="Click here to save the report" tooltip-placement="bottom">Save Report</a>
         <a data-ng-click="saveQuery()" class="btn btn-success pull-right"  ng-hide="reportID" style="margin-right: 5px">Save Query</a>
