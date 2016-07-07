@@ -1,7 +1,8 @@
 <div class="container-fluid object-tree" >
 
-    <div  class="row"  style="padding:5px;">
-    <select id="selectLayer" ng-if="layers.length > 1" ng-disabled="columns.length > 0 || order.length > 0 || group.filters" class="form-control" ng-model="selectedLayerID" ng-options="obj._id as obj.name for obj in layers"
+    <div  class="row"  ng-if="layers.length > 1" style="padding:5px;">
+    <span>Choose a layer:</span>
+    <select id="selectLayer" ng-disabled="columns.length > 0 || order.length > 0 || group.filters" class="form-control" ng-model="selectedLayerID" ng-options="obj._id as obj.name for obj in layers"
                                             ng-change="changeLayer(selectedLayerID)"></select>
     </div>
     <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">
@@ -85,7 +86,7 @@
             </div>
 
             <div class="schema-element-report schema-item-report"  ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure') && ngModelItem.enabled == false" >
-                <span class="list-group-item data-source-element schema-item-report element-disabled">{{ngModelItem.elementLabel}}</span>
+                <span class="list-group-item data-source-element schema-item-report element-disabled" style="color: #85878c;">{{ngModelItem.elementLabel}}</span>
             </div>
 
             <div class="schema-folder-report"  ng-if="ngModelItem.elementRole == 'folder'" >

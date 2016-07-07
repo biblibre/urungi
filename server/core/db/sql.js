@@ -831,9 +831,11 @@ function getFilterSQL(filter,isHaving)
 
             if (filter.filterType == "in" || filter.filterType == "notIn")
             {
-                thisFilter = dateFilter(filterValue,filter);
+                //thisFilter = dateFilter(filterValue,filter);
+                result = dateFilter(filterElementName,filterValue,filter);
             } else
-                thisFilter[filterElementName] = dateFilter(filterValue,filter);
+                //thisFilter[filterElementName] = dateFilter(filterValue,filter);
+                result = dateFilter(filterElementName,filterValue,filter);
         }
 
         if (filter.filterType == "equal" && filter.elementType != 'date') {
@@ -1071,19 +1073,26 @@ function getOrderBys(collection)
     }
 }
 
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    while (s.length < size) s = "0" + s;
+    return s;
+}
 
-
-function dateFilter(filterValue, filter)
+function dateFilter(filterElementName,filterValue, filter)
 {
     //This is not valid for date-time values... the equal always take the hole day without taking care about the time
-
+    console.log('checking date filter',filterValue);
 
     var today = new Date();
     var year = today.getFullYear();
     var month = pad(today.getMonth()+1,2);
     var day = pad(today.getDate(),2);
 
+
     var found = false;
+
 
     if (filterValue == '#WST-TODAY#')
     {
@@ -1265,6 +1274,7 @@ function dateFilter(filterValue, filter)
         found = true;
         //return {$gte: firstDate, $lt: lastDate};
     }
+
     if (filterValue == '#WST-LYSECONDSEMESTER#')
     {
         var firstDate = new Date((year-1)+'-07-01T00:00:00.000Z');
@@ -1272,6 +1282,7 @@ function dateFilter(filterValue, filter)
         found = true;
         //return {$gte: firstDate, $lt: lastDate};
     }
+
     if (found == true)
     {
         if (filter.filterType == "equal")
@@ -1288,121 +1299,101 @@ function dateFilter(filterValue, filter)
             return {$lt: lastDate};
     } else {
 
+        var searchDate = new Date(filterValue);
+        var theNextDay = new Date(searchDate);
+        theNextDay.setDate(searchDate.getDate()+1);
+        var qyear = searchDate.getFullYear();
+        var qmonth = pad(searchDate.getMonth()+1,2);
+        var qday = pad(searchDate.getDate(),2);
+
+        if (filter.filterText2)
+        {
+            var lastDate = new Date(filter.filterText2);
+            var qlyear = lastDate.getFullYear();
+            var qlmonth = pad(lastDate.getMonth()+1,2);
+            var qlday = pad(lastDate.getDate(),2);
+            var queryLastDate = qlyear+'/'+qlmonth+'/'+qlday;
+        }
+
+        var querySearchDate = qyear+'/'+qmonth+'/'+qday;
+
+
         if (filter.filterType == "equal" )
         {
-            var searchDate = new Date(filterValue);
-            var theNextDay = new Date(searchDate);
-            theNextDay.setDate(searchDate.getDate()+1);
-            return {$gte: searchDate, $lt: theNextDay};
+            return filterElementName + " = '"+ querySearchDate+"'";
         }
 
         if (filter.filterType == "diferentThan" && found == false)
         {
-            var searchDate = new Date(filterValue);
-            var theNextDay = new Date(searchDate);
-            theNextDay.setDate(searchDate.getDate()+1);
-            return {$not:{$gte: searchDate, $lt: theNextDay}};
+            return filterElementName + " <> '"+ querySearchDate+"'";
         }
 
         if (filter.filterType == "biggerThan" )
         {
-            var searchDate = new Date(filterValue);
-            var theNextDay = new Date(searchDate);
-            theNextDay.setDate(searchDate.getDate()+1);
-            return {$gt: theNextDay}
+            return filterElementName + " > '"+ querySearchDate+"'";
 
         }
 
         if (filter.filterType == "notGreaterThan" )
         {
-            var searchDate = new Date(filterValue);
-            var theNextDay = new Date(searchDate);
-            theNextDay.setDate(searchDate.getDate()+1);
-            return {$not:{$gt: theNextDay}}
+            return filterElementName + " <= '"+ querySearchDate+"'";
 
         }
 
         if (filter.filterType == "biggerOrEqualThan" )
         {
-            var searchDate = new Date(filterValue);
-            return {$gte: searchDate}
+            return filterElementName + " >= '"+ querySearchDate+"'";
 
         }
 
         if (filter.filterType == "lessThan" )
         {
-            var searchDate = new Date(filterValue);
-            return {$lt: searchDate}
+            return filterElementName + " < '"+ querySearchDate+"'";
 
         }
 
         if (filter.filterType == "lessOrEqualThan" )
         {
-            var searchDate = new Date(filterValue);
-            var theNextDay = new Date(searchDate);
-            theNextDay.setDate(searchDate.getDate()+1);
-            return {$lt: theNextDay}
+            return filterElementName + " <= '"+ querySearchDate+"'";
 
         }
 
         if (filter.filterType == "between" )
         {
-            var searchDate = new Date(filterValue);
-            //searchDate.setHours(0, 0, 0, 0);
-            var lastDate = new Date(filter.filterText2);
-            /*
-             var theNextDay = new Date(lastDate);
-             theNextDay.setDate(lastDate.getDate()+1);
-             */
-
-            return {$gte: searchDate, $lt: lastDate};
-
+            return filterElementName + " >= '"+ querySearchDate+"' AND "+filterElementName + " <= "+queryLastDate;
         }
 
         if (filter.filterType == "notBetween" )
         {
-            var searchDate = new Date(filterValue);
-            var lastDate = new Date(filter.filterText2);
-            return {$not:{$gte: searchDate, $lt: lastDate}};
+            return filterElementName + " < '"+ querySearchDate+"' OR "+filterElementName + " > "+queryLastDate;
 
         }
 
-        if (filter.filterType == "in" )
+        if (filter.filterType == "in" || filter.filterType == "notIn")
         {
-            var theFilter = [];
+            var theFilter = filterElementName ;
+            if (filter.filterType == "in")
+                theFilter = theFilter +  ' IN (';
+            if (filter.filterType == "notIn")
+                theFilter = theFilter +  ' NOT IN (';
+
+
             var dates = String(filterValue).split(',');
             for (var d in dates)
             {
+                console.log('one date ',dates[d]);
                 var theDate = new Date(dates[d]);
-                var theNextDay = new Date(theDate);
-                theNextDay.setDate(theDate.getDate()+1);
-                var theElementName = filter.elementName;
-                var inFilter = {};
-                inFilter[filter.elementName] = {$gte: theDate, $lt: theNextDay};
-                theFilter.push(inFilter);
+                var Inyear = theDate.getFullYear();
+                var Inmonth = pad(theDate.getMonth()+1,2);
+                var Inday = pad(theDate.getDate(),2);
+                var InquerySearchDate = Inyear+'/'+Inmonth+'/'+Inday;
+
+                theFilter = theFilter + "'" + InquerySearchDate  + "'";
+                if (d < dates.length -1 )
+                    theFilter = theFilter + ', ';
             }
 
-            return {$or: theFilter};
-
-        }
-
-        if (filter.filterType == "notIn" )
-        {
-
-            var theFilter = [];
-            var dates = String(filterValue).split(',');
-            for (var d in dates)
-            {
-                var theDate = new Date(dates[d]);
-                var theNextDay = new Date(theDate);
-                theNextDay.setDate(theDate.getDate()+1);
-                var theElementName = filter.elementName;
-                var inFilter = {};
-                inFilter[filter.elementName] = {$gte: theDate, $lt: theNextDay};
-                theFilter.push(inFilter);
-            }
-
-            return {$nor: theFilter};
+            return theFilter + ")";
 
         }
 

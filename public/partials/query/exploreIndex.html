@@ -1,4 +1,4 @@
-<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid" style="height: 100%">
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid" style="height: 100%;border-bottom: 2px solid #72A230;">
 
     <!--
     <div class="row" style="height: 100px">
@@ -6,11 +6,12 @@
     </div>
     -->
 <div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
-
+    <h3 class="pull-left">Explore</h3>
     <a ng-click="goBack();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
     <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for data explorer" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
 </div>
 
+    <!--
     <div class="row" style="height: 100%">
             <div id="dataObjects" class="col-md-3" style="height: 100%" ng-include="'partials/query/data-objects.html'">
 
@@ -19,6 +20,18 @@
 
             </div>
     </div>
+    -->
+
+    <section id="dataObjects">
+        <div id="dataObjectsIntroBlock"></div>
+        <section id="dataObjectsInner" class="layer scrollPane" ng-include="'partials/query/data-objects.html'">
+
+        </section>
+
+    </section>
+    <section id="dropZone" class="scrollPane multiPage rendered ng-scope" style="padding:10px;" ng-include="'partials/query/query-edit.html'">
+
+    </section>
 <!--
     <div ui-layout  >
 

@@ -312,7 +312,8 @@ function processDataSource(datasourceQuery, done)
 
 function processDataSources(req,dataSources,layers, params,query, done, result, index) {
     var index = (index) ? index : 0;
-    var dataSource = (dataSources[index]) ? dataSources[index] : false;
+    if (dataSources)
+        var dataSource = (dataSources[index]) ? dataSources[index] : false;
     var result = (result) ? result : [];
     var thereAreJoins = false;
 

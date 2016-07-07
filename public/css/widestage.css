@@ -1395,6 +1395,10 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
 
 }
 
+.schema-folder-report a {
+     color:#ffffff;
+}
+
 .schema-element-container-default {
     color: #000000;
 }
@@ -1421,6 +1425,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     padding-left: 10px;
     margin-bottom: -1px;
     border: 0px solid #ddd;
+    color:white;
 }
 
 .delete-schema-element-btn {
@@ -1445,7 +1450,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
 .element-disabled {
     cursor: not-allowed;
     font-style: italic;
-    color:#999999;
+    color:#85878c;
 }
 
 .delete-schema-dataset-btn {
@@ -2117,6 +2122,51 @@ div.callout {
 .btn.btn-gray {
     background-color: #eeeeee;
     color: #333;
+}
+
+#dataObjects {
+    position: absolute;
+    top: 50px;
+    right: -18px;
+    left: 0;
+    bottom: 0;
+    overflow-x: hidden;
+    z-index: 100;
+    width: 300px;
+    box-sizing: border-box;
+    /*padding: 15px 30px 15px 100px; */
+    color: #fff;
+    background-color: #3F4652;
+    /*background: linear-gradient(to right,#272c33 0,#272c33 71px,#ebeced 71px,#ebeced 100%); */
+    -webkit-transform: translate3d(0,0,0);
+}
+
+#dropZone {
+    position: absolute;
+    left: 300px;
+    right: 0px;
+    top: 50px;
+    bottom: 0px;
+    padding: 0 18px 18px 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /*background-color: #CCCCCC;*/
+}
+
+.layer {
+    position: absolute;
+    left: 0;
+    right: -18px;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    padding: 20px 20px 20px 30px;
+    transition: all .3s linear;
 }
 
 

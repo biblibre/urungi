@@ -165,6 +165,52 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         console.log('init query');
     }
 
+    function pad(num, size) {
+        var s = num+"";
+        while (s.length < size) s = "0" + s;
+        while (s.length < size) s = "0" + s;
+        return s;
+    }
+
+    $scope.onDateSet = function (newDate, oldDate, filter) {
+
+        var year = newDate.getFullYear();
+        var month = pad(newDate.getMonth()+1,2);
+        var day = pad(newDate.getDate(),2);
+
+        var theDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
+
+
+        if (filter.filterType == 'in' || filter.filterType == 'notIn')
+        {
+            if (!filter.filterText1)
+                filter.filterText1 = [];
+            filter.filterText1.push(theDate);
+        } else
+            filter.filterText1 = theDate;
+
+        filter.searchValue = theDate;
+        filter.filterValue = theDate;
+        filter.dateCustomFilterLabel = undefined;
+
+        console.log('date value set',filter.searchValue);
+    }
+
+    $scope.onDateEndSet = function (newDate, oldDate, filter) {
+        var year = newDate.getFullYear();
+        var month = pad(newDate.getMonth()+1,2);
+        var day = pad(newDate.getDate(),2);
+        var theDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
+        filter.filterText2 = theDate;
+        filter.dateCustomFilterLabel = undefined;
+    }
+
+    $scope.removeItem = function(item, collection)
+    {
+        var id = collection.indexOf(item);
+        collection.splice(id,1);
+    }
+
     $scope.$on("newQuery", function (event, args) {
         $scope.initQuery();
     });
@@ -245,7 +291,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
             //IF width > 300 then you will face problems with mobile devices in responsive mode
                 steps:[
                     {
-                        element: '#dataObjects',
+                        element: '#dataObjectsIntroBlock',
                         html: '<div><h3>The layer catalog</h3><span style="font-weight:bold;">Access here the different data elements of every layer that you have access on</span><br/><span>Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)</span></div>',
                         width: "300px",
                         height: "250px"
@@ -542,11 +588,15 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
         bsLoadingOverlayService.start({referenceId: 'reportLayout'});
 
+        if (!$scope.query)
+            $scope.query = {};
+
+
         $scope.query.id = uuid2.newguid();
         $scope.queries = [];
         $scope.queries.push($scope.query);
 
-        console.log('getting data for query',$scope.query);
+        //console.log('getting data for query',$scope.query);
 
         queryModel.getQueryData($scope,$scope.query, function(data){
 

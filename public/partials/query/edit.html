@@ -5,24 +5,35 @@
 		     ng-intro-autostart="ShouldAutoStart">-->
 
 
-<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions" id="queryEdit" class="container-fluid" style="height: 100%;padding-left:0px;padding-right:0px;">
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions" id="queryEdit" class="container-fluid" style="height: 100%;padding-left:0px;padding-right:0px;border-bottom: 2px solid #72A230;">
     <!-- <div class="row" style="height: 100px">
 
     </div> -->
-<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
+
+<section class="container-fluid" style="margin-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
+    <h3 class="pull-left">Query design</h3>
     <a id="saveQueryForPageBtn" ng-disabled="columns.length <=0" data-ng-click="saveQueryStructure(); saveQuery2(); initQuery();" class="btn btn-success pull-right" style="margin-right: 5px" tooltip="Click here to save the current query and back to the page design" tooltip-placement="bottom">Save Query</a>
     <a ng-click="cancelQuery(); initQuery();" class="btn btn-default pull-right" style="margin-right: 5px" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
     <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for data explorer" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
-</div>
+</section>
 
-    <div class="row" style="height: 100%">
-            <div id="dataObjects" class="col-md-3" style="height: 100%" ng-include="'partials/query/data-objects.html'">
+   <!-- <div class="row" style="height: 100%">  -->
+    <section id="dataObjects">
+        <div id="dataObjectsIntroBlock"></div>
+            <section class="layer scrollPane" ng-include="'partials/query/data-objects.html'">
+            <!--<div id="dataObjects" class="col-md-3" style="height: 100%" ng-include="'partials/query/data-objects.html'"> -->
 
-            </div>
-            <div id="dropZone" class="col-md-9" style="height: 100%;border-left:1px solid #000000;" ng-include="'partials/query/query-edit.html'">
+            </section>
 
-            </div>
-    </div>
+    </section>
+        <section id="dropZone" class="scrollPane multiPage rendered ng-scope" style="padding:10px;" ng-include="'partials/query/query-edit.html'">
+
+        <!--<div id="dropZone" class="col-md-9" style="height: 100%;border-left:1px solid #000000;" ng-include="'partials/query/query-edit.html'">
+
+            </div> -->
+        </section>
+
+    <!--</div>-->
 
 
 <!--
