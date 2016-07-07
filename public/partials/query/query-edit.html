@@ -139,7 +139,7 @@
                                     <!--between for date -->
                                     <span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'" style="color:#0000FF;"> and </span>
                                     <span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'"> {{filter.filterLabel2 | date:'yyyy-MM-dd'}} </span>
-                                    <span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'" class="dropdown" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Select date" popover="Click here to select the end date to filter">
+                                    <span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'" class="dropdown" popover-trigger="mouseenter" popover-placement="top" popover="Click here to select the end date to filter">
                                         <a class="btn btn-primary popover-primary ng-scope"  id="dropdown2" role="button" data-toggle="dropdown" data-target="#" ><i class="fa fa-calendar"></i></a>
                                         <ul class="dropdown-menu" role="menu">
                                             <datetimepicker ng-model="filter.filterLabel2"  data-on-set-time="onDateEndSet(newDate, oldDate, filter)" data-datetimepicker-config="{ dropdownSelector: '#dropdown2', startView:'day', minView:'day'  }"/>

@@ -1360,12 +1360,12 @@ function dateFilter(filterElementName,filterValue, filter)
 
         if (filter.filterType == "between" )
         {
-            return filterElementName + " >= '"+ querySearchDate+"' AND "+filterElementName + " <= "+queryLastDate;
+            return filterElementName + " >= '"+ querySearchDate+"' AND "+filterElementName + " <= '"+queryLastDate+"'";
         }
 
         if (filter.filterType == "notBetween" )
         {
-            return filterElementName + " < '"+ querySearchDate+"' OR "+filterElementName + " > "+queryLastDate;
+            return filterElementName + " < '"+ querySearchDate+"' OR "+filterElementName + " > '"+queryLastDate+"'";
 
         }
 
