@@ -12,6 +12,7 @@ Hola
             <option label="MONGODB" value="MONGODB">MONGODB</option>
             <option label="MySQL" value="MySQL">MySQL</option>
             <option label="PostgreSql" value="POSTGRE">PostgreSql</option>
+            <option label="Google Big query" value="BIGQUERY">Google Big query</option>
         </select>
     </div>
     <div class="form-group">
@@ -23,15 +24,15 @@ Hola
         <input class="form-control" ng-model="_dataSource.type" required>
     </div>
     <div class="form-group">
-        <label class="control-label">Host</label>
+        <label class="control-label"  ng-if="_DataSource.type != 'BIGQUERY'">Host</label>
         <input class="form-control" ng-model="_dataSource.params[0].connection.host" required>
     </div>
     <div class="form-group">
-        <label class="control-label">Port</label>
+        <label class="control-label"  ng-if="_DataSource.type != 'BIGQUERY'">Port</label>
         <input class="form-control" ng-model="_dataSource.params[0].connection.port" required>
     </div>
     <div class="form-group">
-        <label class="control-label">Database</label>
+        <label class="control-label"  ng-if="_DataSource.type != 'BIGQUERY'">Database</label>
         <input class="form-control" ng-model="_dataSource.params[0].connection.database" required>
     </div>
 

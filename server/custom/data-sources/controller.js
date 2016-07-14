@@ -92,7 +92,7 @@ exports.getEntities = function(req,res)
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'MySQL' || result.item.type == 'POSTGRE' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL')
+            if (result.item.type == 'MySQL' || result.item.type == 'POSTGRE' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'BIGQUERY')
             {
                 console.log(result.item.type+' entities');
                 switch(result.item.type) {
@@ -103,6 +103,8 @@ exports.getEntities = function(req,res)
                     case 'ORACLE': var db = require('../../core/db/oracle.js');
                         break;
                     case 'MSSQL': var db = require('../../core/db/mssql.js');
+                        break;
+                    case 'BIGQUERY': var db = require('../../core/db/bigQuery.js');
                 }
                 var data = {
                     host: result.item.params[0].connection.host,
@@ -170,6 +172,16 @@ exports.testConnection = function(req,res) {
         var mssql = require('../../core/db/mssql.js');
 
         mssql.testConnection(req.body, function(result) {
+
+            serverResponse(req, res, 200, result);
+        });
+    }
+    if (req.body.type == 'BIGQUERY')
+    {
+        console.log('BIG QUERY test connection');
+        var bigQuery = require('../../core/db/bigQuery.js');
+
+        bigQuery.testConnection(req.body, function(result) {
 
             serverResponse(req, res, 200, result);
         });
@@ -273,11 +285,30 @@ exports.getEntitySchema = function(req,res) {
                     database: result.item.params[0].connection.database,
                     entities: theEntities
                 };
-                //console.log(JSON.stringify(data));
+
                 sql.getSchemas(data, function(result) {
                     serverResponse(req, res, 200, result);
                 });
             }
+            if (result.item.type == 'BIGQUERY')
+            {
+                console.log(result.item.type+'big query entities schema');
+                var bquery = require('../../core/db/bigQuery.js');
+                var data = {
+                    type: result.item.type,
+                    host: result.item.params[0].connection.host,
+                    port: result.item.params[0].connection.port,
+                    userName: result.item.params[0].connection.userName,
+                    password: result.item.params[0].connection.password,
+                    database: result.item.params[0].connection.database,
+                    entities: theEntities
+                };
+
+                bquery.getSchemas(data, function(result) {
+                    serverResponse(req, res, 200, result);
+                });
+            }
+
             /*if (result.item.type == 'POSTGRE')
             {
                 var postgre = require('../../core/db/postgresql.js');
@@ -417,6 +448,39 @@ function getElementList (target,elements,parent) {
                 getElementList(target[k],elements,node);
         }
     }
-}
+};
+
+
+exports.uploadBigqueryAutorizationJson = function(req,res){
+    if (!req.files.file) {
+        res.status(200).send({result: 0, msg: "'file' is required."});
+        return;
+    }
+
+    var file = req.files.file;
+    var data = req.body;
+    debug(data);
+
+    var path = 'server/keys/COMPID/bigQuery';
+
+    fileUpload(file, path, function(result) {
+        if (result.result == 1) {
+            res.status(200).send({result: 1, msg: "File loaded", file: result.file});
+        }
+        else {
+            res.status(200).send(result);
+        }
+    });
+
+    /*
+     fs.readFile(req.files.displayImage.path, function (err, data) {
+     // ...
+     var newPath = __dirname + "/uploads/uploadedFileName";
+     fs.writeFile(newPath, data, function (err) {
+     res.redirect("back");
+     });
+     });
+     */
+};
 
 

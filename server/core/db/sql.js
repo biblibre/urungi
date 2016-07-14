@@ -91,6 +91,8 @@ exports.getReverseEngineering = function(datasourceID, data, setresult) {
         case 'ORACLE': var db = 'oracle';
             break;
         case 'MSSQL': var db = 'mssql';
+            break;
+        case 'BIGQUERY': var db = 'bigQuery';
     }
 
     var dbController = require('./'+db+'.js');
@@ -506,7 +508,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             var field = table.columns[e];
             elements.push(field);
             //TODO: Count test
-            console.log('thefield',field);
             //SELECT WSTx4fz.WSTcountedm.etl_log as wstx4fz_WSTcountedm.etl_log FROM edm.etl_log WSTx4fz GROUP BY WSTx4fz.WSTcountedm.etl_log LIMIT 500 OFFSET 0
 
 
@@ -525,7 +526,10 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                 }
             } else {
                 fields.push(table.collectionID+'.'+field.elementName + ' as '+table.collectionID.toLowerCase()+'_'+field.elementName);
-                groupBy.push(table.collectionID+'.'+field.elementName);
+                if (dataSource.type != 'BIGQUERY')
+                    groupBy.push(table.collectionID+'.'+field.elementName);
+                    else
+                    groupBy.push(table.collectionID.toLowerCase()+'_'+field.elementName);
             }
         }
 
@@ -599,10 +603,10 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
         for (var f in groupBy)
         {
-            if (f == groupBy.length -1)
-                SQLstring = SQLstring + groupBy[f];
-            else
-                SQLstring = SQLstring + groupBy[f]+', ';
+                if (f == groupBy.length -1)
+                    SQLstring = SQLstring + groupBy[f];
+                else
+                    SQLstring = SQLstring + groupBy[f]+', ';
         }
 
         if (havings.length > 0)
@@ -665,6 +669,8 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             case 'ORACLE': var dbController = require('./oracle.js');
                 break;
             case 'MSSQL': var dbController = require('./mssql.js');
+                break;
+            case 'BIGQUERY': var dbController = require('./bigQuery.js');
         }
 
         var db = new dbController.db();
@@ -674,8 +680,10 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             SQLstring += ' '+db.getLimitString(config.query.defaultRecordsPerPage, ((params.page -1 )*config.query.defaultRecordsPerPage));
             }
 
-        console.log(SQLstring);
+        //console.log(SQLstring);
 
+        if (dataSource.type != 'BIGQUERY')
+        {
         db.connect(dataSource.params[0].connection, function(err, connection) {
             if(err) {
                 setresult({result: 0, msg: 'Connection Error: '+ err});
@@ -690,17 +698,28 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                     db.end();
                 } else {
                     if (result)
-
                         getFormatedResult(elements,result.rows,function(finalResults){
                             setresult(finalResults);
                         });
-                        //setresult(result.rows);
                     else
                         setresult([]);
                     db.end();
                 }
             });
         });
+
+        }  else {
+            db.executeSQLQuery(dataSource.params[0].connection,SQLstring,function (result) {
+                if (result)
+
+                    getFormatedResult(elements,result,function(finalResults){
+                        setresult(finalResults);
+                    });
+                //setresult(result.rows);
+                else
+                    setresult([]);
+            });
+        }
     });
 }
 
@@ -1082,8 +1101,8 @@ function pad(num, size) {
 
 function dateFilter(filterElementName,filterValue, filter)
 {
-    //This is not valid for date-time values... the equal always take the hole day without taking care about the time
-    console.log('checking date filter',filterValue);
+    //NOTE:This is not valid for date-time values... the equal always take the whole day without taking care about the time
+
 
     var today = new Date();
     var year = today.getFullYear();
@@ -1381,7 +1400,6 @@ function dateFilter(filterElementName,filterValue, filter)
             var dates = String(filterValue).split(',');
             for (var d in dates)
             {
-                console.log('one date ',dates[d]);
                 var theDate = new Date(dates[d]);
                 var Inyear = theDate.getFullYear();
                 var Inmonth = pad(theDate.getMonth()+1,2);

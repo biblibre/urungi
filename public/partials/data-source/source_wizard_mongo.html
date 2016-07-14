@@ -1,5 +1,5 @@
 <div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
-    <a ng-click="save()" ng-disabled="!_DataSource.name || !_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database" class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;">Save Datasource</a>
+    <a ng-click="save()" ng-disabled="(!_DataSource.params[0].type == 'BIGQUERY' && (!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database || testingConnection)) || (_DataSource.params[0].type == 'BIGQUERY' && (!_DataSource.params[0].connection.database) || testingConnection) " class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;">Save Datasource</a>
     <a href="/#/data-sources" class="btn btn-default  pull-right">Cancel</a>
 </div>
 <div class="container-fluid">
@@ -9,13 +9,14 @@
     <div class="container-fluid">
         <div class="col-md-12">
             <div class="form-group">
-                <label class="control-label">Connection Type</label>
+                <label class="control-label">Connection Type II</label>
                 <select ng-model="_DataSource.type" placeholder="Select a datasource type..." id="type" class="form-control" ng-change="selectedRoleChanged = true">
                     <option label="MONGODB" value="MONGODB">MONGODB</option>
                     <option label="MySQL" value="MySQL">MySQL</option>
                     <option label="PostgreSql" value="POSTGRE">PostgreSql</option>
                     <!--<option label="Oracle" value="ORACLE">Oracle</option>-->
                     <option label="MSSQL" value="MSSQL">MSSQL</option>
+                    <option label="Google Big query" value="BIGQUERY">Google Big query</option>
                 </select>
             </div>
         </div>
@@ -26,14 +27,14 @@
             </div>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-12" ng-if="_DataSource.type != 'BIGQUERY'">
             <div class="form-group">
                 <label class="control-label" for="host">Host</label>
                 <input class="form-control" name="host" id="host" ng-model="_DataSource.params[0].connection.host" data-validate="required" placeholder="Insert here your Host address or IP" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-12"  ng-if="_DataSource.type != 'BIGQUERY'">
             <div class="form-group">
                 <label class="control-label" for="port">Port</label>
                 <input class="form-control" name="port" id="port" ng-model="_DataSource.params[0].connection.port" data-validate="required" placeholder="Insert here the port to access the MongoDB instance" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
@@ -42,19 +43,27 @@
 
         <div class="col-md-12">
             <div class="form-group">
-                <label class="control-label" for="database">Database</label>
+                <label class="control-label" for="database" ng-if="_DataSource.type != 'BIGQUERY'">Database</label>
+                <label class="control-label" for="database" ng-if="_DataSource.type == 'BIGQUERY'">Project ID</label>
                 <input class="form-control" name="database" id="database" ng-model="_DataSource.params[0].connection.database" data-validate="required" placeholder="Set here the name of the MongoDB Database to connect" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-12"  ng-if="_DataSource.type == 'BIGQUERY'">
+            <div class="form-group">
+                <label class="control-label" for="userName">Google Cloud JSON authorization file</label>
+                <input type="file" class="form-control" id="file">
+            </div>
+        </div>
+
+        <div class="col-md-12"  ng-if="_DataSource.type != 'BIGQUERY'">
             <div class="form-group">
                 <label class="control-label" for="userName">User name</label>
                 <input class="form-control" name="userName" id="userName" ng-model="_DataSource.params[0].connection.userName" data-validate="required" placeholder="Set here the username to access the database" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-12"  ng-if="_DataSource.type != 'BIGQUERY'">
             <div class="form-group">
                 <label class="control-label" for="password">Password</label>
                 <input class="form-control" type="password" name="password" id="password" ng-model="_DataSource.params[0].connection.password" data-validate="required" placeholder="Set here the username password to access the database" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
@@ -62,7 +71,7 @@
         </div>
 
         <div class="col-md-12" style="padding: 5px;">
-            <a ng-click="doTestConnection()" ng-disabled="!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database || testingConnection" class="btn btn-default pull-right" style="margin-left: 5px;margin-right: 5px;">Test Connection</a>
+            <a ng-click="doTestConnection()" ng-disabled="(!_DataSource.params[0].type == 'BIGQUERY' && (!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database || testingConnection)) || (_DataSource.params[0].type == 'BIGQUERY' && (!_DataSource.params[0].connection.database) || testingConnection) " class="btn btn-default pull-right" style="margin-left: 5px;margin-right: 5px;">Test Connection</a>
             <div ng-if="testConnection.message" class="row alert" ng-class="{'alert-success': testConnection.result == 1,'alert-danger': testConnection.result != 1}" >
                 {{testConnection.message}}
             </div>

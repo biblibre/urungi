@@ -42,6 +42,8 @@ var app = angular.module('WideStage', [
             controller: 'dashBoardCtrl'
         });
 
+        //reports
+
         $routeProvider.when('/reports', {
             templateUrl: 'partials/report/list.html',
             controller: 'reportCtrl'
@@ -227,6 +229,35 @@ var app = angular.module('WideStage', [
         $routeProvider.when('/catalog/:extra', {
             templateUrl: 'partials/catalog/view.html',
             controller: 'catalogCtrl'
+        });
+
+        //reports V2
+        $routeProvider.when('/reports_v2', {
+            templateUrl: 'partials/report_v2/list.html',
+            controller: 'report_v2Ctrl'
+        });
+        $routeProvider.when('/report_v2/:extra', {
+            templateUrl: 'partials/report_v2/list.html',
+            controller: 'report_v2Ctrl'
+        });
+
+        $routeProvider.when('/reports_v2/:reportID/', {
+            templateUrl: 'partials/report_v2/view.html',
+            controller: 'report_v2Ctrl'
+        });
+
+        $routeProvider.when('/reports_v2/:reportID/:elementID/:elementValue', {
+            templateUrl: 'partials/report_v2/view.html',
+            controller: 'report_v2Ctrl'
+        });
+
+        $routeProvider.when('/reports_v2/new/:reportID/', {
+            templateUrl: 'partials/report_v2/edit.html',
+            controller: 'report_v2Ctrl'
+        });
+        $routeProvider.when('/reports_v2/edit/:reportID/', {
+            templateUrl: 'partials/report_v2/edit.html',
+            controller: 'report_v2Ctrl'
         });
 
     }])

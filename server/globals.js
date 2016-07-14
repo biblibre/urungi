@@ -186,3 +186,22 @@ function serverResponse(req, res, status, obj) {
 global.serverResponse = serverResponse;
 
 
+function fileUpload(file,path,done)
+{
+    var fs = require('fs');
+
+    fs.readFile(file.path, function(err, data) {
+        if(err) throw err;
+
+        fs.writeFile(path, data, function (err) {
+            if(err) throw err;
+            done({result: 1, msg: "File uploaded", file: file.toObject()});
+
+        });
+    });
+
+
+
+}
+
+

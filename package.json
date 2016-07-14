@@ -41,7 +41,9 @@
     "passport-twitter": "~1.0.3",
     "password-generator": "~2.0.1",
     "pg": "^4.4.3",
-    "thenBy.js": "git+https://git@github.com/Teun/thenBy.js.git"
+    "thenBy.js": "git+https://git@github.com/Teun/thenBy.js.git",
+    "bigquery": "0.0.6",
+    "node-gyp": "~3.4.0"
   },
   "devDependencies": {},
   "scripts": {

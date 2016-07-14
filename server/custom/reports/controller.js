@@ -420,7 +420,7 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
                                 processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                             });
                         break;
-                        case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL':
+                        case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL': case 'BIGQUERY':
                             var sql = require('../../core/db/sql.js');
 
                             sql.processCollections(req,query,dataSource.collections, dts, params,thereAreJoins, function(data) {
