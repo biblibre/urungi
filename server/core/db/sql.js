@@ -756,7 +756,7 @@ function getFilters(query,done)
     var theFilter = '';
     var filters = [];
     var havings = [];
-    var previousRelational = '';
+    //var previousRelational = '';
 
     if (query.groupFilters == undefined)
         done(filters,havings);
@@ -777,6 +777,8 @@ function getFilters(query,done)
 
 function processFilterGroup(group,filters,havings,isRoot,done)
 {
+   var previousRelational = '';
+
     if (isRoot == false)
         filters.push("(");
     for (var f in group.filters)

@@ -1,6 +1,9 @@
 
 /*
 
+SEE http://stackoverflow.com/questions/19757638/how-to-pivot-a-table-with-d3-js
+SEE https://github.com/agershun/alasql
+
 transform the json data into a multidimensional array like Pandas, then create the grid
 
 
