@@ -50,6 +50,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.preview = false;
     $scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
     $scope.reverse = false;
+    $scope.showSQL = false;
 
     $scope.textAlign = [
         {name: 'left', value: 'left'},
@@ -837,6 +838,11 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         });
     };
+
+    $scope.getSQLPanel = function()
+    {
+        $scope.showSQL = !$scope.showSQL;
+    }
 
 
     function setReportDiv(id)
