@@ -37,10 +37,17 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
 
 
             connection.get('/api/reports/get-data', params, function(data) {
-                prepareData($scope,report,data, function(result)
+                $scope.sql = data.sql;
+                if (data.result == 0)
                 {
-                    done(result);
-                });
+                    noty({text: data.msg,  timeout: 2000, type: 'error'});
+                    done([]);
+                } else {
+                    prepareData($scope,report,data.data, function(result)
+                    {
+                        done(result);
+                    });
+                }
             });
 
     };
@@ -48,8 +55,14 @@ app.service('reportModel' , function ($http, $q, $filter, connection) {
     this.getData = function($scope,query,params, done) {
         params.query = query;
         connection.get('/api/reports/get-data', params, function(data) {
-           
-            done(data);
+            $scope.sql = data.sql;
+            if (data.result == 0)
+                {
+                    noty({text: data.msg,  timeout: 2000, type: 'error'});
+                    done([]);
+                } else {
+                    done(data.data);
+                }
         });
     }
 

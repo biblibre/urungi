@@ -329,9 +329,11 @@ exports.getUserData = function(req,res){
                     createDashboards = true;
                     createPages = true;
                     exploreData = true;
+                    viewSQL = true;
                     req.session.reportsCreate = createReports;
                     req.session.dashboardsCreate = createDashboards;
                     req.session.pagesCreate = createPages;
+                    req.session.viewSQL = viewSQL;
                     req.session.isWSTADMIN = isWSTADMIN;
                 }
             }
@@ -354,19 +356,22 @@ exports.getUserData = function(req,res){
                         createPages = true;
                     if (roles[i].exploreData == true)
                         exploreData = true;
+                    if (roles[i].viewSQL == true)
+                        viewSQL = true;
                 }
 
                 req.session.reportsCreate = createReports;
                 req.session.dashboardsCreate = createDashboards;
                 req.session.pagesCreate = createPages;
                 req.session.exploreData = exploreData;
+                req.session.viewSQL = viewSQL;
                 req.session.isWSTADMIN = isWSTADMIN;
 
-                serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData}});
+                serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL}});
             });
 
         } else {
-          serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:[], reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages,exploreData: exploreData, isWSTADMIN: isWSTADMIN}});
+          serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {companyData:company, rolesData:[], reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages,exploreData: exploreData, viewSQL: viewSQL, isWSTADMIN: isWSTADMIN}});
         }
 
     });

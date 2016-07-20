@@ -5,6 +5,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
     $scope.dateModal = 'partials/report/dateModal.html';
     $scope.linkModal = 'partials/report/linkModal.html';
     $scope.gettingData = false;
+    $scope.showSQL = false;
 
     $scope.rows = [];
     $scope.rows = [];
@@ -171,6 +172,11 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         while (s.length < size) s = "0" + s;
         while (s.length < size) s = "0" + s;
         return s;
+    }
+
+    $scope.getSQLPanel = function()
+    {
+        $scope.showSQL = !$scope.showSQL;
     }
 
     $scope.onDateSet = function (newDate, oldDate, filter) {

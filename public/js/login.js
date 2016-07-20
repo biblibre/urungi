@@ -173,6 +173,7 @@ var app = angular.module('widestage-login', ['ui.router']).
                             theUser.isWSTADMIN = data.items.isWSTADMIN;
                             theUser.contextHelp = data.items.contextHelp;
                             theUser.dialogs = data.items.dialogs;
+                            theUser.viewSQL = data.items.viewSQL;
                             $rootScope.user = theUser;
                             $sessionStorage.setObject('user', theUser);
                             $rootScope.loginRedirect();

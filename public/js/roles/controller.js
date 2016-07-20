@@ -12,6 +12,7 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
         $scope._Role.reportsPublish = false;
         $scope._Role.dashboardsCreate = false;
         $scope._Role.dashboardsPublish = false;
+        $scope._Role.viewSQL = false;
         $scope._Role.grants = [];
         $scope.mode = 'add';
         $('#roleModal').modal('show');

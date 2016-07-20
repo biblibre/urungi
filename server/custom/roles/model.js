@@ -12,6 +12,7 @@ var RolesSchema = new mongoose.Schema({
     reportsPublish: {type: Boolean},
     dashboardsCreate: {type: Boolean},
     exploreData: {type: Boolean},
+    viewSQL: {type: Boolean},
     dashboardsPublish: {type: Boolean},
     nd_trash_deleted:{type: Boolean},
     nd_trash_deleted_date: {type: Date},

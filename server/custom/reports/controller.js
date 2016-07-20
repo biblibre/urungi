@@ -311,6 +311,7 @@ function processDataSource(datasourceQuery, done)
 }
 
 function processDataSources(req,dataSources,layers, params,query, done, result, index) {
+
     var index = (index) ? index : 0;
     if (dataSources)
         var dataSource = (dataSources[index]) ? dataSources[index] : false;
@@ -318,9 +319,8 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
     var thereAreJoins = false;
 
     if (!dataSource) {
-        //debug(result);
-        done(result);
-        return;
+            done(result);
+            return;
     }
 
 
@@ -335,7 +335,6 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
 
             DataSources.findOne({ _id: dataSource.datasourceID}, {}, function (err, dts) {
                 if (dts) {
-
                     for (var l in theLayers)
                     {
                         for (var s in theLayers[l].params.schema)
@@ -351,7 +350,7 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
 
                         for (var n in theLayers[l].params.joins)
                         {
-                            //console.log('layers');
+
                             for (var j in dataSource.collections) {
                                 if (theLayers[l].params.joins[n].sourceCollectionID == dataSource.collections[j].collectionID || theLayers[l].params.joins[n].targetCollectionID == dataSource.collections[j].collectionID) {
                                 //if (theLayers[l].params.joins[n].sourceCollectionID == dataSource.collections[j].collectionID ) {
@@ -394,23 +393,15 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
 
                             mongodb.processCollections(req,dataSource.collections, dts, params,thereAreJoins, function(data) {
 
-                                /*
-                                for (var i in data) {
-                                    result.push(data[i]);
-                                }
-                                */
-                                //console.log('going to merge');
+
                                 if (dataSource.collections.length > 1)
                                 {
-                                    //console.log('merging');
+
                                     mergeResults(dataSource.collections,query,function(mergedResults){
-                                        //done(mergedResults);
-                                        //return;
-                                        //result.push(mergedResults);
+
                                         result = mergedResults;
                                     });
                                 }  else {
-                                    //console.log('not merged results',JSON.stringify(dataSource.collections[0].result))
                                         result = dataSource.collections[0].result;
 
                                 }
@@ -426,13 +417,13 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
                             sql.processCollections(req,query,dataSource.collections, dts, params,thereAreJoins, function(data) {
 
 
-                                //console.log('not merged results',JSON.stringify(dataSource.collections[0].result))
                                 result = data;
 
                                 processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                             });
                     }
                 } else {
+                    result = {result: 0, msg: 'Datasource is not working!'};
                     processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                 }
             });
@@ -496,23 +487,15 @@ function mergeResults(collections,query,done){
             var targetCollection = collections[collection].joins[join].targetCollectionID;
             var targetElement = collections[collection].joins[join].targetElementName;
 
-            //console.log('merge two collections ',sourceCollection,targetCollection) ;
-
-
-
 
             mergeTwoCollections(collections,sourceCollection,sourceElement,targetCollection,targetElement,isLast, function(result){
 
                 if (result.result == 1)
                 {
-                    //console.log('es igual a uno...........')
                     sortMergeResults(result.results,query, function(){
                         done(result.results);
                     });
-
-
                 } else {
-                    //console.log('no es igual a uno...........')
                     if (result.results)
                         lastResults = result.results;
                 }
@@ -533,7 +516,7 @@ function sortMergeResults(tempResults,query,done)
 
     if (query.order.length == 1)
     {
-        //console.log(JSON.stringify(query.order));
+
         if (query.order[0].aggregation) {
             var fieldName0 = query.order[0].collectionID+'_'+ query.order[0].elementName+query.order[0].aggregation;
         } else {
@@ -670,37 +653,6 @@ function sortMergeResults(tempResults,query,done)
         );
     }
 
-
-
-
-
-   /*
-   if (query.order.length > 0)
-    {
-
-
-
-    var sort =
-    tempResults.sort(
-        firstBy(function (v1, v2) { return v1[query.order[0].collectionID+'_'+ query.order[0].elementName] - v2[query.order[0].collectionID+'_'+ query.order[0].elementName]; })
-    );
-
-    for (var o in query.order)
-    {
-        if (o>0)
-        {
-            sort.thenBy(function (v1, v2) { return v1[query.order[o].collectionID+'_'+ query.order[o].elementName] - v2[query.order[o].collectionID+'_'+ query.order[o].elementName]; });
-        }
-    }
-    /*
-    for( var o=query.order.length -1;o>=0;o--)
-    {
-        console.log('voy a ordenar',query.order[o].collectionID+'_'+ query.order[o].elementName);
-        var orderElement = query.order[o].collectionID+'_'+ query.order[o].elementName;
-        tempResults.sort(function(a,b) {return (a[orderElement] > b[orderElement]) ? 1 : ((b[orderElement] > a[orderElement]) ? -1 : 0);} );
-    } */
-
-
     done();
 
 }
@@ -708,25 +660,6 @@ function sortMergeResults(tempResults,query,done)
 function mergeTwoCollections(collections,sourceCollection,sourceElement,targetCollection,targetElement,isLast, done )
 {
     var tempResults = [];
-    /*
-    for (var collection in collections)
-    {
-        console.log(collections[collection].schema.collectionName,collections[collection].result.length)  ;
-
-        if (collections[collection].collectionID == sourceCollection)
-        {
-            var theSourceCollection = collections[collection];
-        }
-
-        if (collections[collection].collectionID == targetCollection)
-        {
-            var theTargetCollection = collections[collection];
-        }
-
-    } */
-
-   // var theSourceCollection = findCollection(collections,sourceCollection);
-  //  var theTargetCollection = findCollection(collections,targetCollection);
 
 
 
@@ -764,14 +697,6 @@ function mergeTwoCollections(collections,sourceCollection,sourceElement,targetCo
         }
 
 
-        //console.log('the source collection has ',theSourceCollection.result.length)  ;
-        //debug(theSourceCollection.result);
-        //console.log('the target collection has ',theTargetCollection.result.length);
-        //debug(theTargetCollection.result);
-
-        //console.log('the lasrget element ',largestElement);
-        //console.log('the short element ',shortestElement);
-
 
         for (var s in largestResult)
         {
@@ -797,11 +722,11 @@ function mergeTwoCollections(collections,sourceCollection,sourceElement,targetCo
 
         }
 
-        //debug(tempResults);
+
 
         if (isLast)
         {
-            //console.log('the results',tempResults.length);
+
             var theResult = {};
             theResult.result = 1;
             theResult.results = tempResults;
@@ -874,60 +799,7 @@ function processDataSources_OLD(dataSources, params, done, result, index) {
     });
 } */
 
-/*function processMongoDBCollections(collections, dataSource, done, result, index) {
-    var index = (index) ? index : 0;
-    var collection = (collections[index]) ? collections[index] : false;
-    var result = (result) ? result : [];
 
-    if (!collection) {
-        done(result);
-        return;
-    }
-    
-    console.log('entering mongoDB collections');
-    var fields = {};
-
-    var params = {skip: 0, limit: 10};
-    
-    var filters = getCollectionFilters(collection);
-
-    console.log('the Filters');
-    debug(filters);
-
-    for (var i in collection.columns) {
-        for (var e in collection.schema.elements) {
-            if (collection.columns[i].elementID == collection.schema.elements[e].elementID) {
-                fields[collection.schema.elements[e].elementName] = 1;
-            }
-        }
-    }
-
-    console.log('the fields to get');
-    debug(fields);
-
-    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
-
-    var dbURI =  'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
-
-    MongoClient.connect(dbURI, function(err, db) {
-        if(err) { return console.dir(err); }
-
-        var col = db.collection(collection.schema.collectionName);
-        var find = (filters.length > 0) ? {$and:filters} : {};
-
-        col.find(find, fields, params).toArray(function(err, docs) {
-            //console.log(docs);
-
-            for (var i in docs) {
-                result.push(docs[i]);
-            }
-
-            db.close();
-
-            processMongoDBCollections(collections, dataSource, done, result, index+1);
-        });
-    });
-}*/
 
 ////////////////////////////
 
@@ -981,32 +853,8 @@ function executeMongoDBCollection(queryCollection,datasource,collection,done)
     params['skip'] = 0;
     params['limit'] = 10;
 
-    /*
-     if (req.query.page) {
-     params['skip'] = (page-1)*perPage;
-     params['limit'] = perPage;
-     }
-
-     if (req.query.limit) {
-     params['limit'] = perPage;
-     }
-
-     if (req.query.sort) {
-     if (typeof fieldsToGet == 'string') {
-     var sortField = {};
-
-     sortField[req.query.sort] = (req.query.sortType) ? req.query.sortType : 1;
-
-     params['sort'] = sortField;
-     }
-     else {
-     params['sort'] = req.query.sort;
-     }
-     }
-     */
     var filters = getMongoDBFilters(queryCollection.filters, collection);
 
-    //console.log('the Filters '+JSON.stringify(filters));
 
 
 
@@ -1030,10 +878,9 @@ function executeMongoDBCollection(queryCollection,datasource,collection,done)
     MongoClient.connect(dbURI, function(err, db) {
         if(err) { return console.dir(err); }
 
-        //console.log('the fields to get :  '+fieldsToGet);
 
         var col = db.collection(collection.collectionName);
-        // Find some documents
+
         col.find({$and:filters},fieldsToGet,params).toArray(function(err, docs) {
 
             done(docs);
@@ -1042,25 +889,6 @@ function executeMongoDBCollection(queryCollection,datasource,collection,done)
         });
     });
 
-   /*
-    conn.on('connected', function () {
-        console.log('Mongoose connection open to ' + dbURI);
-
-        var collection = conn.db.collection('documents');
-        // Find some documents
-        collection.find(filters,fieldsToGet).toArray(function(err, docs) {
-            console.log(docs);
-            done(docs);
-
-            conn.close();
-        });
-    });
-
-    conn.on('error',function (err) {
-        console.log('Mongoose default connection error: ' + err);
-        serverResponse(req, res, 200, {result: 0, msg: 'Connection Error'});
-    });
-    */
 
 }
 
@@ -1070,7 +898,7 @@ function getMongoDBFilters(filters, collection)
     var theFilters = [];
 
     for (var i in filters) {
-        //identificar el elemento de la colección
+
         for (var n in collection.elements) {
             if (filters[i].elementID == collection.elements[n].elementID) {
                 var thisFilter = {};

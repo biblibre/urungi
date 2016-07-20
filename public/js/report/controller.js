@@ -1515,11 +1515,12 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.getChartData = function(chartType) {
         connection.get('/api/reports/get-data', {query: $scope.query}, function(data) {
             var chartData = [];
+            $scope.sql = data.sql;
 
             switch (chartType) {
                 case 'bar': case 'donut':
-                for (var i in data) {
-                        chartData.push({value: data[i][$scope.selectedReport.properties.valueField], label: data[i][$scope.selectedReport.properties.labelField]});
+                for (var i in data.data) {
+                        chartData.push({value: data.data[i][$scope.selectedReport.properties.valueField], label: data.data[i][$scope.selectedReport.properties.labelField]});
                     }
             }
 

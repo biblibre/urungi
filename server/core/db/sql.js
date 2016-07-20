@@ -553,38 +553,11 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         else
             SQLstring = SQLstring + fields[f]+', ';
     }
-    /*
-     SQLstring = SQLstring + ' FROM ';
-     for (var f in from)
-     {
-     if (f == from.length -1)
-     SQLstring = SQLstring + from[f];
-     else
-     SQLstring = SQLstring + from[f]+', ';
-     }*/
+
 
     SQLstring = SQLstring + ' FROM '+ leadTable.schema.collectionName + ' '+ leadTable.collectionID + getJoins(leadTable.collectionID,collections,[]);
 
-    //FILTERS
-    /*
-     for (var c in collections) {
-     var table = collections[c];
-     getCollectionFilters(table);
-     }
-     */
-    /*
-     for (var coll in collections)
-     {
 
-     var table = collections[coll];
-     query.groupFilters = [];
-
-     for (var fil in table.filters)
-     {
-     query.groupFilters.push(table.filters[fil]);
-     }
-
-     }*/
 
     var havings = [];
 
@@ -618,7 +591,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         if (query.order)
             if (query.order.length > 0)
             {
-                var theOrderByString = '';//SQLstring = SQLstring + ' ORDER BY ';
+                var theOrderByString = '';
 
                 for (var f in query.order)
                 {
@@ -690,6 +663,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                 return console.error('Connection Error: ', err);
             }
 
+
             db.query(SQLstring, function(err, result) {
                 if (err) {
                     console.log(err);
@@ -699,10 +673,12 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                 } else {
                     if (result)
                         getFormatedResult(elements,result.rows,function(finalResults){
-                            setresult(finalResults);
+                            setresult({result: 1, data:finalResults,sql:SQLstring});
                         });
-                    else
-                        setresult([]);
+                    else {
+                        setresult({result: 1, data:[],sql:SQLstring});
+                    }
+
                     db.end();
                 }
             });

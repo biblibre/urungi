@@ -74,12 +74,9 @@ db.prototype.getLimitString = function(limit, offset) {
 exports.db = db;
 
 exports.testConnection = function(data, setresult) {
-    //var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host+'/'+data.database;
+
     var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host+':'+data.port+'/'+data.database;
 
-    //this initializes a connection pool
-    //it will keep idle connections open for a (configurable) 30 seconds
-    //and set a limit of 20 (also configurable)
     pg.connect(conString, function(err, client, done) {
         if(err) {
             console.log('Postgresql default connection error: ',conString, err);
@@ -87,20 +84,12 @@ exports.testConnection = function(data, setresult) {
             return console.error('Connection Error: ', err);
         }
 
-        //console.log('Connected to ',conString, 'getting table names');
+
         client.query("SELECT table_schema || '.' || table_name as name  from information_schema.tables where table_schema not in ('pg_catalog','information_schema')", function(err, result) {
             done();
 
             setresult({result: 1, items: result.rows});
             client.end();
-
-
-            /* if(err) {
-             return console.error('error running query', err);
-             }
-             console.log(result.rows[0].number);
-             */
-            //output: 1
         });
     });
 };
