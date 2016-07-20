@@ -657,7 +657,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         //console.log(SQLstring);
         //Fix for filters with having and normal filters
         SQLstring = SQLstring.replace("WHERE  AND", "WHERE");
-        console.log(SQLstring);
+        //console.log(SQLstring);
 
         if (dataSource.type != 'BIGQUERY')
         {
@@ -671,7 +671,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             db.query(SQLstring, function(err, result) {
                 if (err) {
                     console.log(err);
-                    setresult({result: 0, msg: 'Generated SQL Error'});
+                    setresult({result: 0, msg: 'Generated SQL Error: '+SQLstring,sql:SQLstring});
                     saveToLog(req, 'SQL Error: '+err+' ('+SQLstring+')      QUERY: ('+JSON.stringify(query)+')', 110);
                     db.end();
                 } else {
@@ -696,7 +696,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                             setresult({result: 1, data:finalResults,sql:SQLstring});
                             //setresult(finalResults);
                         });
-                //setresult(result.rows);
                     } else {
                         setresult({result: 1, data:[],sql:SQLstring});
                     }
