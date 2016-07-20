@@ -208,8 +208,9 @@ db.prototype.executeSQLQuery = function(connection,sql,done){
     });
 
     bq.job.query(connection.database, sql, function(e,r,d){
-        if(e) console.log(e);
-
+        if(e) {
+                console.log(e);
+              }
         var jsonObj = JSON.parse(JSON.stringify(d));
 
         var results = [];

@@ -565,6 +565,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
         if (filtersResult.length > 0)
             SQLstring += ' WHERE ';
+
         for (var fr in filtersResult)
             SQLstring += filtersResult[fr];
         havings = havingsResult;
@@ -654,6 +655,9 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             }
 
         //console.log(SQLstring);
+        //Fix for filters with having and normal filters
+        SQLstring = SQLstring.replace("WHERE  AND", "WHERE");
+        console.log(SQLstring);
 
         if (dataSource.type != 'BIGQUERY')
         {

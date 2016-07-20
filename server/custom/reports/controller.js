@@ -149,7 +149,7 @@ exports.PublishReport = function(req,res)
     var data = req.body;
     var parentFolder = data.parentFolder;
 
-    //tiene el usuario conectado permisos para publicar?
+    //have the connected user permissions to publish?
     var Reports = connection.model('Reports');
     var find = {_id:data._id,owner:req.user._id,companyID:req.user.companyID};
 
@@ -311,14 +311,13 @@ function processDataSource(datasourceQuery, done)
 }
 
 function processDataSources(req,dataSources,layers, params,query, done, result, index) {
-
     var index = (index) ? index : 0;
     if (dataSources)
         var dataSource = (dataSources[index]) ? dataSources[index] : false;
     var result = (result) ? result : [];
     var thereAreJoins = false;
 
-    if (!dataSource) {
+    if (!dataSource || dataSource.datasourceID == undefined) {
             done(result);
             return;
     }
@@ -423,7 +422,7 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
                             });
                     }
                 } else {
-                    result = {result: 0, msg: 'Datasource is not working!'};
+                    result = {result: 0, msg: 'Datasource is not working! '+dataSource.datasourceID};
                     processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                 }
             });
