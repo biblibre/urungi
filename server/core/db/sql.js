@@ -687,13 +687,15 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         }  else {
             db.executeSQLQuery(dataSource.params[0].connection,SQLstring,function (result) {
                 if (result)
-
-                    getFormatedResult(elements,result,function(finalResults){
-                        setresult(finalResults);
-                    });
+                    {
+                        getFormatedResult(elements,result,function(finalResults){
+                            setresult({result: 1, data:finalResults,sql:SQLstring});
+                            //setresult(finalResults);
+                        });
                 //setresult(result.rows);
-                else
-                    setresult([]);
+                    } else {
+                        setresult({result: 1, data:[],sql:SQLstring});
+                    }
             });
         }
     });
