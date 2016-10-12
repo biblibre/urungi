@@ -11,61 +11,96 @@
 <div class="container-fluid" ng-init="view()">
     <div class="col-md-12">
         <div class="container-fluid" style="margin-bottom: 10px">
-            <a ng-click="addFolder()" class="btn btn-info btn-small pull-left" style="margin-left: 5px;margin-right: 5px;">Add new folder</a>
+
             <a ng-click="addDataset()" class="btn btn-info pull-right" style="margin-left: 5px;margin-right: 5px;">Add new dataset</a>
         </div>
     </div>
-    <div class="col-md-4" style="border: 1px solid #ccc;background-color: #ffffff;height: 500px;overflow-y: auto;">
-        <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">
-        </tg-dynamic-directive>
+    <div class="container-fluid">
+    <section id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'elements'" class="catalogSidebar" style="top: 53px;width: 350px;">
+        <menu>
+            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'elements'}"><a ng-click="tabs.selected = 'elements'">Elements</a></li>
+            <!--<li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'properties'}"><a ng-click="tabs.selected = 'properties'">Properties</a></li>-->
+        </menu>
 
-        <script type="text/ng-template" id="nestable_item.html">
-            <div>
-                <!--
-                <div class="schema-root"  ng-if="ngModelItem.elementRole == 'root'" >
+        <section class="content">
+            <section id="propertiesTab" class="results infinite ng-hide" ng-show="tabs.selected == 'properties'" style="padding:5px;">
+
+
+            </section>
+
+            <section id="elementsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'elements'">
+                <section class="layer scrollPane">
+                    <div class="container-fluid"  style="background-color: white; padding-top:3px">
                     <a ng-click="addFolder()" class="btn btn-info btn-small pull-right" style="margin-left: 5px;margin-right: 5px;">Add new folder</a>
-                </div>
-                -->
-                <div class="schema-element"  ng-if="ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure'" >
-                     {{ngModelItem.elementLabel}}
-                    <div class="delete-schema-element-btn pull-right" ng-click="deleteSchemaElement(ngModelItem)" style="cursor:hand"><i class="fa fa-trash-o"></i></div>
-                    <div class="edit-schema-element-btn pull-right" ng-click="editElement(ngModelItem)" style="cursor:hand"><i class="fa fa-pencil"></i></div>
-
-                </div>
-
-                <div class="schema-folder"  ng-if="ngModelItem.elementRole == 'folder'" >
-                   <i class="fa fa-plus-square"></i>
-                    <span ng-if="!ngModelItem.editing == true" class="">{{ngModelItem.elementLabel}}</span>
-                    <span ng-if="ngModelItem.editing == true" class=""><input type="text" ng-model="ngModelItem.elementLabel" style="width:100px"></span>
-                    <div ng-if="!ngModelItem.editing == true" class="delete-schema-element-btn pull-right" ng-click="deleteSchemaElement(ngModelItem)" style="cursor:hand"><i class="fa fa-trash-o"></i></div>
-                    <div ng-if="!ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = true" style="cursor:hand"><i class="fa fa-pencil"></i></div>
-                    <div ng-if="ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o"></i></div>
-                </div>
-                <!--
-                <div ng-class="{'schema-folder': ngModelItem.elementRole == 'folder', 'schema-element': (ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure' )}" class="schema-element" ng-click="selectPage(ngModelItem)">{{ngModelItem.elementLabel}}</div>
-                    -->
-                <ul ng-if="ngModelItem.elementRole == 'folder' || ngModelItem.elementRole == 'root'" class="schema-container list-group" ui-sortable="sortableOptions" ng-model="ngModelItem.elements"
-                    ng-class="{'schema-element-container-placeholder': onDrag, 'schema-element-container-default': !onDrag}">
-                    <li class="innerCont list-group-item hand-cursor" ng-repeat="innerItem in ngModelItem.elements" >
-                        <tg-dynamic-directive ng-model="innerItem" tg-dynamic-directive-view="getView">
+                    </div>
+                    <div class="container-fluid"     style="min-height:100%;background-color: white;">
+                        <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">
                         </tg-dynamic-directive>
-                    </li>
-                </ul>
-            </div>
-        </script>
-    </div>
 
-    <div class="col-md-8">
+                        <script type="text/ng-template" id="nestable_item.html">
+                            <div>
+                                <!--
+                                <div class="schema-root"  ng-if="ngModelItem.elementRole == 'root'" >
+                                    <a ng-click="addFolder()" class="btn btn-info btn-small pull-right" style="margin-left: 5px;margin-right: 5px;">Add new folder</a>
+                                </div>
+                                -->
+                                <div class="schema-element"  ng-if="ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure'" >
+                                     {{ngModelItem.elementLabel}}
+                                    <div class="delete-schema-element-btn pull-right" ng-click="deleteSchemaElement(ngModelItem)" style="cursor:hand"><i class="fa fa-trash-o"></i></div>
+                                    <div class="edit-schema-element-btn pull-right" ng-click="editElement(ngModelItem)" style="cursor:hand"><i class="fa fa-pencil"></i></div>
 
-        <div id="collections" style="height: 500px;overflow: scroll;background-color: white;cursor: -webkit-grab;">
+                                </div>
+
+                                <div class="schema-folder"  ng-if="ngModelItem.elementRole == 'folder'" >
+                                   <i class="fa fa-plus-square"></i>
+                                    <span ng-if="!ngModelItem.editing == true" class="">{{ngModelItem.elementLabel}}</span>
+                                    <span ng-if="ngModelItem.editing == true" class=""><input type="text" ng-model="ngModelItem.elementLabel" style="width:100px"></span>
+                                    <div ng-if="!ngModelItem.editing == true" class="delete-schema-element-btn pull-right" ng-click="deleteSchemaElement(ngModelItem)" style="cursor:hand"><i class="fa fa-trash-o"></i></div>
+                                    <div ng-if="!ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = true" style="cursor:hand"><i class="fa fa-pencil"></i></div>
+                                    <div ng-if="ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o"></i></div>
+                                </div>
+                                <!--
+                                <div ng-class="{'schema-folder': ngModelItem.elementRole == 'folder', 'schema-element': (ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure' )}" class="schema-element" ng-click="selectPage(ngModelItem)">{{ngModelItem.elementLabel}}</div>
+                                    -->
+                                <ul ng-if="ngModelItem.elementRole == 'folder' || ngModelItem.elementRole == 'root'" class="schema-container list-group" ui-sortable="sortableOptions" ng-model="ngModelItem.elements"
+                                    ng-class="{'schema-element-container-placeholder': onDrag, 'schema-element-container-default': !onDrag}">
+                                    <li class="innerCont list-group-item hand-cursor" ng-repeat="innerItem in ngModelItem.elements" >
+                                        <tg-dynamic-directive ng-model="innerItem" tg-dynamic-directive-view="getView">
+                                        </tg-dynamic-directive>
+                                    </li>
+                                </ul>
+                            </div>
+                        </script>
+                     </div>
+                </section>
+                <div class="scrollTrack vScrollTrack">
+                    <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
+                </div>
+                <div class="scrollTrack hScrollTrack">
+                    <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+                </div>
+            </section>
+
+
+        </section>
+    </section>
+
+
+
+
+    <div id="collections" class="canvas-parent" ng-click="selectedCanvas($event)" style="left: 360px;background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDguNSBMIDM0IDguNSBNIDguNSAwIEwgOC41IDM0IE0gMCAxNyBMIDM0IDE3IE0gMTcgMCBMIDE3IDM0IE0gMCAyNS41IEwgMzQgMjUuNSBNIDI1LjUgMCBMIDI1LjUgMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDM0IDAgTCAwIDAgMCAzNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=&quot;);
+    ">
             <div class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan" id="canvas" style="overflow: visible !important;border: 0px;">
                 <div id="{{collection.collectionID}}"  class="window jtk-node  jsplumb-draggable" ng-style="{'left': collection.left, 'top': collection.top}" ng-repeat="collection in _Layer.params.schema">
-                    <div class=" jtk-header " style="overflow: hidden">
+                    <div class=" jtk-header " style="overflow: hidden;padding-left:2px">
 
+                        <table style="border: 0px;">
+                            <tr>
+                                <td class="jtk-field-icon" style="color:white;marging-left:2px;margin-right:2px;"><i ng-show="!element.elementRole" class="fa fa-gear" ng-click="collectionClicked(collection)" ></i></td>
 
-
-                        <strong class="jtk-header-label" ng-click="collectionClicked(collection)" style="overflow: hidden">{{collection.collectionName}}</strong>
-
+                                <td class="jtk-header-label"  style="overflow: hidden;padding-left:2px">{{collection.collectionName}}</td>
+                            </tr>
+                        </table>
                     </div>
                     <!--
                     <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{'flowchart'+element.elementID}}" ng-repeat="element in collection.elements" popover-trigger="mouseenter" popover-placement="bottom" popover-title="{{element.elementName}}" popover="..." title="<h1><b>Another</b> <em>one</em> here too</h1>" data-html="true" rel="tooltip">{{element.elementName}}</div>
@@ -97,9 +132,9 @@
             </div>
         </div>
 
+    <!--</div>-->
+
     </div>
-
-
     <!--<span ng-init="erDiagramInit()"></span>-->
 
 
