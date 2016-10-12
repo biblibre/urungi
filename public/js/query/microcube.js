@@ -63,15 +63,7 @@ app.service('microcube' , function ($http, $q, $filter, connection) {
 
                 }
             }
-
-
         done(tempResults);
-
-
         };
-
-
-
-
 
 });

@@ -8,7 +8,7 @@
 
 'use strict';
 
-app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection', 'promptModel','dashboardModel', 'bsLoadingOverlayService', function ($scope, reportModel ,$timeout ,$routeParams, connection,promptModel,dashboardModel,bsLoadingOverlayService) {
+app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection', 'promptModel','dashboardModel', 'bsLoadingOverlayService','report_v2Model', function ($scope, reportModel ,$timeout ,$routeParams, connection,promptModel,dashboardModel,bsLoadingOverlayService,report_v2Model) {
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
@@ -23,6 +23,9 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
     $scope.orderNbr = 0;
     $scope.quote = "'";
     $scope.dashboardID = $routeParams.dashboardID;
+
+
+    $scope.optionsFromQuery = ['grooo', 'wowowowow', 'lakakalakakl', 'yadayada', 'insight', 'delve', 'synergy'];
     /*
     $scope.gridsterOpts = {
         columns: 6, // the width of the grid, in columns
@@ -175,12 +178,10 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         });
     };
 
-
-
     $scope.initForm = function() {
         $scope.dataMode = 'preview';
         if ($routeParams.newDashboard == 'true') {
-            $scope.dashBoardDefinitition = {dashboardName:"New Dashboard", backgroundColor:"#ccc" ,items:[]};
+            $scope.dashBoardDefinitition = {dashboardName:"New Dashboard", backgroundColor:"transparent" ,items:[]};
             $scope.mode = 'add';
         }
     };
@@ -254,8 +255,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         theItem.overflowy = "hidden";
         theItem.overflowx = "hidden";
 
-
-
         $scope.dashBoardDefinitition.items.push(theItem);
         $scope.getReport(reportID);
 
@@ -312,7 +311,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             //is called by another report using a link
             if ($routeParams.elementID && $routeParams.elementValue)
                 isLinked = true;
-
             dashboardModel.getDashBoard($scope.dashboardID, isLinked, function(dashboard){
                 $scope.dashBoardDefinitition = dashboard;
 
@@ -332,10 +330,10 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
                         }
                         $scope.checkPrompts();
                     } else {
-
                         if ($scope.prompts.length > 0)
                         {
                             $scope.showPrompts = true;
+                            paintReports($scope.dashBoardDefinitition);
                         } else {
                             paintReports($scope.dashBoardDefinitition);
                         }
@@ -367,6 +365,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     function getPromptsForDashboard(dashboard,index, done)
     {
+       /*
         if (!dashboard.items[index])
         {
             done();
@@ -381,7 +380,11 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             }  else {
                 getPromptsForDashboard(dashboard,index+1, done);
             }
-
+        */
+        promptModel.getPromptsForReportsV2(dashboard.items,function(prompts){
+           $scope.prompts = prompts;
+            done();
+        });
     }
 
     $scope.selectFilterArrayValue = function(type, filter)
@@ -418,6 +421,11 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.getReport2 = function(report)
     {
+
+        report_v2Model.getReport(report,report._id,function(){
+
+        });
+        /*
         $scope.showOverlay('OVERLAY_'+report._id);
             
         reportModel.executeReport($scope,report._id, report, function (errorCode){
@@ -447,7 +455,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             }
             
              $scope.hideOverlay('OVERLAY_'+report._id);
-        });
+        }); */
     }
 
 
@@ -538,12 +546,23 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         {
             window.location.hash = '/dashboards/'+targetID;
         }
+    }
 
+    $scope.funcAsync = function(filter, search)
+    {
+        promptModel.funcAsync(filter,search,function(result){
+
+        });
     }
 
     $scope.getDistinctValues = function(filter)
     {
         promptModel.getDistinctValues($scope, filter);
+    }
+
+    $scope.getFilterValues = function(filter)
+    {
+        promptModel.getFilterValues(filter);
     }
 
     $scope.toggleSelection = function(value)
@@ -582,9 +601,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
     }
 
     $scope.orderColumn = function(predicate,hashedID) {
-
         reportModel.orderColumn($scope, predicate,hashedID);
-
     };
 
     $scope.saveToExcel = function(reportHash)

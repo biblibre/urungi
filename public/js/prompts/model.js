@@ -19,6 +19,18 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
         queryModel.getDistinct($scope,filter);
     };
 
+
+    this.getFilterValues = function(filter,done)
+    {
+
+        queryModel.getFilterValues(filter,function(data,sql){
+           //console.log('the data',data);
+           filter.data = data;
+            console.log('getting values for filter',filter);
+           done();
+       });
+    }
+
     this.toggleSelection = function toggleSelection($scope,value) {
         if( typeof $scope.selectedFilter.searchValue === 'string' ) {
             $scope.selectedFilter.searchValue = [];
@@ -185,7 +197,8 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
 
                     for (var f in report.query.groupFilters[g].filters)
                        {
-                            var filter = report.query.groupFilters[g].filters[f];
+
+                           var filter = report.query.groupFilters[g].filters[f];
                             if (filter.filterPrompt == true)
                             {
                                 filter.reportID = report._id;
@@ -200,6 +213,7 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
                                 }
 
                             }
+
                         }
                 }
 
@@ -209,9 +223,133 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
 
     }
 
+
+
+    this.getPromptsForReportsV2 = function(reports,done)
+    {
+        //clean it up the environment for prompts
+        prompts = [];
+        duplicatePrompts = [];
+
+        //1st get all prompts and common prompts over all the reports
+        for (var r in reports)
+            {
+                getPromptsV2(reports[r].reportDefinition);
+            }
+
+        for (var p in prompts)
+            {
+                this.getFilterValues(prompts[p],function(){
+
+                });
+            }
+
+        done(prompts);
+
+    }
+
+
+
+    var prompts = [];
+    var duplicatePrompts = [];
+    var promptMessage = '';
+
+    function getPromptsV2(report)
+    {
+                for (var g in report.query.groupFilters) {
+
+                    for (var f in report.query.groupFilters[g].filters)
+                       {
+                            var filter = report.query.groupFilters[g].filters[f];
+                            if (filter.filterPrompt == true)
+                            {
+                                filter.reportID = report._id;
+                                if (checkIfPromptExistsV2(prompts,filter) == true)
+                                {
+                                    duplicatePrompts.push(filter);
+                                } else {
+                                    prompts.push(filter);
+                                }
+
+                            }
+                        }
+                }
+        return;
+    }
+
+function checkIfPromptExistsV2(promptslist,prompt)
+    {
+
+        for (var i in promptslist)
+        {
+            if (promptslist[i].datasourceID == prompt.datasourceID && promptslist[i].collectionID == prompt.collectionID && promptslist[i].elementID == prompt.elementID)
+            {
+                return true;
+            }
+        }
+
+    }
+
+ this.checkPromptsV2 = function()
+    {
+        var emptyFound = [];
+        promptMessage = '';
+
+        if (prompts.length > 0)
+        {
+            for (var p in prompts) {
+
+                if (prompts[p].promptMandatory == true)
+                    if (!prompts[p].filterText1 || prompts[p].filterText1 == '')
+                    {
+                        emptyFound.push(prompts[p].objectLabel);
+                    }
+            }
+        }  else {
+            return;
+        }
+
+        if (emptyFound.length > 0)
+        {
+            var theFilters = '';
+            for (var f in emptyFound) {
+                theFilters += emptyFound[f];
+                if (f < emptyFound.length -1)
+                    theFilters += ', ';
+            }
+            if (emptyFound.length == 1)
+                promptMessage = 'The following filter must be completed: '+theFilters;
+            else
+                promptMessage = 'The following filters must be completed: '+theFilters;
+        }  else {
+            this.completeDuplicatePromptsV2();
+        }
+
+    }
+
+
+ this.completeDuplicatePromptsV2 = function ()
+    {
+        for (var d in duplicatePrompts)
+        {
+            prompt = duplicatePrompts[d];
+
+            for (var i in prompts)
+            {
+                if (prompts[i].datasourceID == prompt.datasourceID && prompts[i].collectionID == prompt.collectionID && prompts[i].elementID == prompt.elementID)
+                {
+                    prompt.filterText1 = prompts[i].filterText1;
+                    prompt.filterText2 = prompts[i].filterText2;
+                }
+            }
+        }
+
+        return;
+    }
+
+
     this.getPromptsForReport_new = function(report, done)
     {
-       console.log('getPromptsForReport');
         var thePrompts = [];
 
 
@@ -247,7 +385,7 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
 
     function checkIfPromptExists_new(prompts,prompt)
     {
-        console.log('if exits',JSON.stringify(prompts));
+
         for (var i in prompts)
         {
             if (prompts[i].datasourceID == prompt.datasourceID && prompts[i].collectionID == prompt.collectionID && prompts[i].elementID == prompt.elementID)
@@ -271,6 +409,8 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
         }
 
     }
+
+
 
 
     this.getPromptsForQuery = function($scope,query)
@@ -344,7 +484,6 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
                                     filter.filterText1 = prompt.filterText1;
                                     filter.searchValue = prompt.searchValue;
                                     }
-
                             }
 
                             if (filter.group == true)
@@ -357,6 +496,24 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
 
     }
 
+
+    this.funcAsync = function(filter, search,done) //SELECT2
+    {
+        funcAsync(filter,search,done);
+    }
+
+    function funcAsync(filter,search, done) {   //SELECT2
+
+        queryModel.getDistinctFiltered(filter,search, function(data,sql){
+            console.log('The result',data);
+            var values = ['one','two','three'];
+            filter.values = values;
+            done(values);
+        });
+    }
+
     return this;
 
 }]);
+
+

@@ -199,7 +199,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             var data = $scope._Layer;
             connection.post('/api/layers/create', data, function(data) {
                 $scope.items.push(data.item);
-                $scope.cancel();
+                //$scope.cancel();
                 $('#layerModal').modal('hide');
             });
 

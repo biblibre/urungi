@@ -17,13 +17,13 @@
                 <div id="reportList" class="list-group">
 
                     <div id="reportListItem" class="list-group-item" ng-repeat="report in reports.items">
-                        <a id="reportListItemDeleteBtn" href="" class="pull-right" ng-click="delete(report._id,report.reportName)" style="color:#FF0000;font-size: 16px;margin-right: 5px" tooltip="Click here to delete this report" tooltip-placement="bottom">
+                        <a id="reportListItemDeleteBtn" href="" class="pull-right list-delete-button" ng-click="delete(report._id,report.reportName)" tooltip="Click here to delete this report" tooltip-placement="bottom">
                             <i class="fa fa-trash-o "  ></i>
                         </a>
-                        <a id="reportListItemEditBtn" class="pull-right" href="/#/reports/edit/{{report._id}}" style="color:#000080; font-size: 16px;margin-right: 3px;" tooltip="Click here to modify the SQ report" tooltip-placement="bottom">
+                        <a id="reportListItemEditBtn" class="pull-right list-edit-button" href="/#/reports/edit/{{report._id}}"  tooltip="Click here to modify the SQ report" tooltip-placement="bottom">
                             <i class="fa fa-pencil" ></i>
                         </a>
-                        <span id="reportListItemPublished" ng-if="report.isPublic" class="badge badge-success pull-right" style="margin-right: 5px">published</span>
+                        <span id="reportListItemPublished" ng-if="report.isPublic" class="badge badge-success pull-right published-tag">published</span>
 
                         <a href="/#/reports/{{report._id}}" tooltip="Click here to execute the report" tooltip-placement="bottom">
                             <h4 id="reportListItemName" class="list-group-item-heading" ng-bind="report.reportName"></h4>

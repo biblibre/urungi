@@ -57,9 +57,12 @@
     "ui-select": "angular-ui-select#~0.14.9",
     "angular-daterangepicker": "~0.2.2",
     "angular-intro.js": "~2.0.1",
-    "ng-tags-input": "3.0.0"
+    "ng-tags-input": "3.0.0",
+    "angular-ui-grid": "~3.2.1",
+    "angular-chosen-localytics": "~1.4.3",
+    "angular-ui-select": "~0.19.4"
   },
   "resolutions": {
-    "angular": "1.4.7"
+    "angular": "1.5.5"
   }
 }

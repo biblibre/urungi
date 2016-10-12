@@ -5,9 +5,19 @@ exports.testConnection = function(data, done) {
     var conn = mongoose.createConnection(dbURI,{ server: { poolSize: 5 } });
 
     conn.on('connected', function () {
-        conn.db.collectionNames(function (err, names) {
-            done({result: 1, items: names});
-            conn.close();
+        console.log('mongodb connected, getting collection names');
+        //conn.db.collectionNames(function(err, names) {
+        conn.db.listCollections().toArray(function (err, names) {
+            if (err)
+                {
+                    console.log(err);
+                    done({result:0, msg: err});
+                    conn.close();
+                } else {
+                    console.log('collection names',names);
+                    done({result: 1, items: names});
+                    conn.close();
+                }
         });
     });
 

@@ -1,24 +1,83 @@
-<div class="container-fluid" style="padding-top: 10px;" ng-init="initForm()">
-    <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px;padding-bottom: 10px;">
-        <a ng-click="saveDashboard()" class="btn btn-success pull-right">Save Dashboard</a>
-        <a ng-click="goBack()" class="btn btn-default pull-right" style="margin-right: 5px;">Cancel</a>
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="dashboardName">Dashboard name</label>
-                <input type="text" class="form-control" id="dashboardName" ng-model="dashBoardDefinitition.dashboardName" required>
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid" style="height: 100%;border-bottom: 2px solid #72A230;">
+<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
+    <h3 class="pull-left">Dashboard</h3>
+    <a id="saveDashboardBtn" data-ng-click="dashboardName()" class="btn btn-success pull-right"  ng-if="mode == 'edit'" style="margin-left: 5px" tooltip="Click here to save the dashboard changes" tooltip-placement="bottom">Save</a>
+
+    <a ng-click="goBack();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
+    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for dashboards" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+</div>
+
+
+    <section id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'reports'" class="ng-scope">
+        <menu>
+            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'reports'}"><a ng-click="tabs.selected = 'reports'">Reports</a></li>
+            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'prompts'}" ><a ng-click="tabs.selected = 'prompts'">Run time Filters</a></li>
+        </menu>
+    <section class="content">
+        <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
+            <section class="layer scrollPane">
+
+            </section>
+            <div class="scrollTrack vScrollTrack">
+                <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
             </div>
-        </form>
+            <div class="scrollTrack hScrollTrack">
+                <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+            </div>
+        </section>
+        <section id="reportsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'reports'">
+            <section class="layer scrollPane">
+                <button class="button buttonBlock fileUploadButton" ng-click="newReport()" style="height:54px;">Add New Report</button>
+                <!--<ul>
+                    <li ng-repeat="item in dashBoardDefinitition.items">{{item.reportDefinition.reportName}}</li>
+                </ul>-->
+                <div ng-repeat="item in dashBoardDefinitition.items" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'imageTextLarge'}" style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " id="953bd17f-45d8-9daf-3bde-92f4809bdf07" class="">
+                    <!--background-image: url(images/chart_donut.png);background-size: contain;background-repeat: no-repeat;background-position-x: center;-->
+                    <span style="padding: 2px;border-right: 2px white solid;margin-right: 5px;background-color: white;">
+                        <img ng-if="item.reportDefinition.reportType == 'grid'" src="images/grid.png" data-pin-nopin="true">
+                        <img ng-if="item.reportDefinition.reportType == 'chart-donut'" src="images/chart_donut.png" data-pin-nopin="true">
+                        <img ng-if="item.reportDefinition.reportType == 'chart-bar'" src="images/chart_bar.png" data-pin-nopin="true">
+                        <img ng-if="item.reportDefinition.reportType == 'indicator'" src="images/indicator.png" data-pin-nopin="true">
+                        <img ng-if="item.reportDefinition.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
+                    </span>
+                    <span style="color: white; font-size: 10px; width:100%;text-align: left">{{item.reportDefinition.reportName}}</span>
+                       <!-- <img src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px;" data-pin-nopin="true"> -->
+                </div>
 
-    </div>
+            </section>
+            <div class="scrollTrack vScrollTrack">
+                <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
+            </div>
+            <div class="scrollTrack hScrollTrack">
+                <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+            </div>
+        </section>
+        <section id="promptsTab" class="results infinite twoCol" ng-show="tabs.selected == 'prompts'">
+            <section class="layoutsTabContainer tabContainer">
+                <section class="tab">
+                    <section class="layer scrollPane">
+                        <ul>
+                            <li ng-repeat="prompt in prompts">{{prompt.objectLabel}}</li> <!--reportType-->
+                        </ul>
+                    </section>
+                    <div class="scrollTrack vScrollTrack">
+                        <div class="scrollThumb" style="height: 15px; transform: translateY(0px);"></div>
+                    </div>
+                    <div class="scrollTrack hScrollTrack">
+                        <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+                    </div>
+                </section>
+            </section>
+        </section>
 
+    </section>
 
+    </section>
 
+    <section id="dropZone" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
 
+    <div ng-include src="promptsBlock" class=" prompts-block"></div>
 
-
-    <div  class="container-fluid" style="padding-bottom: 5px;">
-        <a ng-click="selectReport()" class="btn btn-default">Add Report</a>
-    </div>
     <div  data-gridster style="background-color: {{dashBoardDefinitition.backgroundColor}}" ng-init="generateDashBoard()">
         <ul>
             <li data-gridster-item data-row="item.position[0]" data-col="item.position[1]" data-sizex="item.size.x" data-sizey="item.size.y" ng-repeat="item in dashBoardDefinitition.items">
@@ -29,35 +88,6 @@
     </div>
 
 
-
-    <!-- SIDEBAR -->
-
-
-
-
-
-
-
+    </section>
 
 </div>
-
-
-<nd-modal id="reportListModal">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>Choose a report</h4>
-    </div>
-    <div class="modal-body">
-        <div class="list-group">
-            <a ng-click="reportSelected(report._id, report)" class="list-group-item" ng-repeat="report in reports.items">
-                <h4 class="list-group-item-heading" ng-bind="report.reportName"></h4>
-                <p class="list-group-item-text" ng-bind="report.reportDescription"></p>
-            </a>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-    </div>
-</nd-modal>
-
-

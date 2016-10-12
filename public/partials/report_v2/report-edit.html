@@ -1,0 +1,80 @@
+
+
+
+
+
+<!--
+<div class="container-fluid" style="border-top: 2px solid #72A230; padding: 10px;">
+     <h3 class="pull-right" >Query design zone</h3>
+</div>
+-->
+<div ng-include src="filterPromptModal"></div>
+
+<div class="container-fluid" style="padding:10px" ng-include src="dropArea">
+</div>
+
+
+<!--choose a widget to see your data-->
+<div id="reportType" class="container-fluid" ng-hide="queryID">
+    <!-- TYPE OF REPORT SELECTION -->
+    <a id="reportTypeGrid" class="btn report-type-button" ng-class="{'btn-info': selectedReport.reportType == 'grid', 'btn-default': selectedReport.reportType != 'grid'}" ng-click="changeReportType('grid')"><img src="/images/grid.png"></a>
+    <a id="reportTypeChartLine" class="btn report-type-button" ng-class="{'btn-info': selectedReport.reportType == 'chart-line', 'btn-default': selectedReport.reportType != 'chart-line'}" ng-click="changeReportType('chart-line')"><img src="/images/chart_line.png"></a>
+    <a id="reportTypeChartDonut" class="btn report-type-button" ng-class="{'btn-info': selectedReport.reportType == 'chart-donut', 'btn-default': selectedReport.reportType != 'chart-donut'}" ng-click="changeReportType('chart-donut')"><img src="/images/chart_donut.png"></a>
+    <a id="reportTypeIndicator" class="btn report-type-button" ng-class="{'btn-info': selectedReport.reportType == 'indicator', 'btn-default': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="/images/indicator.png"></a>
+    <a id="reportTypeGauge" class="btn report-type-button" ng-class="{'btn-info': selectedReport.reportType == 'gauge', 'btn-default': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="/images/gauge.png"></a>
+</div>
+
+
+<div ng-if="columns.length > 0" class="container-fluid" style="border-bottom: 2px solid #72A230; padding: 3px;margin-bottom:5px;">
+    <button  id="queryRefresh" class="btn btn-success" ng-show="columns.length > 0" class="pull-right" ng-click="processStructure();"  style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ></i> Refresh data</button>
+    <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
+
+    <h4 class="pull-right" >Query results</h4>
+</div>
+
+<div class="container-fluid" ng-show="sql && mode =='add'">
+    <button class="btn btn-success pull-right" ng-if="user.reportsCreate" ng-click="reportName()" style="margin-left:5px;">Save as a report</button>
+    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" style="margin-left:5px;">Push it to a Dashboard</button>
+    <button class="btn btn-success pull-right" ng-if="user.pagesCreate" style="margin-left:5px;">Push it to a Page</button>
+</div>
+
+
+<div ng-show="showSQL" class="panel panel-default">
+            <div class="panel-heading">
+				<h3 class="panel-title">SQL query</h3>
+
+				<div class="panel-options">
+                    <a ng-click="getSQLPanel();" data-toggle="remove">
+						x
+					</a>
+				</div>
+			</div>
+
+			<div class="panel-body">
+				<p>{{sql}}</p>
+			</div>
+</div>
+
+
+<div class="container-fluid" ng-if="gettingData == true">
+    <h3><img src="/images/loader.gif" width="32px" height="32px"/>   getting data ....</h3>
+</div>
+
+
+<div id="reportLayout" class="container-fluid" style="min-height:200px;position:relative;" bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_reportLayout">
+    <div ng-if="wrongFilters.length > 0 && columns.length > 0" class="alert alert-danger" role="alert"><i class="fa fa-warning fa-2" style="margin-right:10px;"></i>  <strong>Warning:</strong>     There are incomplete filters!!</div>
+
+    <div ng-if="wrongFilters.length == 0"  bs-loading-overlay bs-loading-overlay-reference- style="min-height:100px">
+
+    </div>
+
+</div>
+
+
+<div ng-include src="searchModal"></div>
+<div ng-include src="dateModal"></div>
+<div ng-include src="dateFromToModal"></div>
+<div ng-include src="linkModal"></div>
+<div ng-include src="columnFormatModal"></div>
+<div ng-include src="columnSignalsModal"></div>
+<div ng-include src="reportNameModal"></div>

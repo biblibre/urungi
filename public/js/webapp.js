@@ -5,7 +5,7 @@ var app = angular.module('WideStage', [
         'ngRoute','ui.sortable','gridster','ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
         'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
         'ui.bootstrap.datetimepicker','ui.tree','page.block','gridshore.c3js.chart','vAccordion','bsLoadingOverlay'
-    ,'intro.help','ngTagsInput'
+    ,'intro.help','ngTagsInput','ui.grid'
     ])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
@@ -42,6 +42,36 @@ var app = angular.module('WideStage', [
             controller: 'dashBoardCtrl'
         });
 
+        //dashboards v2
+
+         $routeProvider.when('/dashboardsv2', {
+            templateUrl: 'partials/dashboardv2/list.html',
+            controller: 'dashBoardv2Ctrl'
+        });
+        $routeProvider.when('/dashboardv2/:extra', {
+            templateUrl: 'partials/dashboardv2/list.html',
+            controller: 'dashBoardv2Ctrl'
+        });
+
+        $routeProvider.when('/dashboardsv2/:dashboardID', {
+            templateUrl: 'partials/dashboardv2/view.html',
+            controller: 'dashBoardv2Ctrl'
+        });
+
+        $routeProvider.when('/dashboardsv2/:dashboardID/:elementID/:elementValue', {
+            templateUrl: 'partials/dashboardv2/view.html',
+            controller: 'dashBoardv2Ctrl'
+        });
+
+        $routeProvider.when('/dashboardsv2/new/:newDashboard/', {
+            templateUrl: 'partials/dashboardv2/edit.html',
+            controller: 'dashBoardv2Ctrl'
+        });
+        $routeProvider.when('/dashboardsv2/edit/:dashboardID/', {
+            templateUrl: 'partials/dashboardv2/edit.html',
+            controller: 'dashBoardv2Ctrl'
+        });
+
         //reports
 
         $routeProvider.when('/reports', {
@@ -54,8 +84,8 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/reports/:reportID/', {
-            templateUrl: 'partials/report/view.html',
-            controller: 'reportCtrl'
+            templateUrl: 'partials/report-view/view.html',
+            controller: 'report_viewCtrl'
         });
 
         $routeProvider.when('/reports/:reportID/:elementID/:elementValue', {
@@ -64,15 +94,17 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/reports/new/:reportID/', {
-            templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl'
+            /*templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'*/
+            templateUrl: 'partials/report_v2/edit.html',
+            controller: 'report_v2Ctrl'
         });
         $routeProvider.when('/reports/edit/:reportID/', {
-            templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl'
+            /*templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'*/
+            templateUrl: 'partials/report_v2/edit.html',
+            controller: 'report_v2Ctrl'
         });
-
-
         //Data sources
 
         $routeProvider.when('/data-sources', {
@@ -213,8 +245,10 @@ var app = angular.module('WideStage', [
 
         //explore
         $routeProvider.when('/explore', {
-            templateUrl: 'partials/query/exploreIndex.html',
-            controller: 'queryCtrl'
+            //templateUrl: 'partials/query/exploreIndex.html',
+            //controller: 'queryCtrl'
+            templateUrl: 'partials/report_v2/edit.html',
+            controller: 'report_v2Ctrl'
         });
         $routeProvider.when('/explore/:extra', {
             templateUrl: 'partials/query/exploreIndex.html',
@@ -232,30 +266,31 @@ var app = angular.module('WideStage', [
         });
 
         //reports V2
-        $routeProvider.when('/reports_v2', {
+        /*
+        $routeProvider.when('/reports-v2', {
             templateUrl: 'partials/report_v2/list.html',
             controller: 'report_v2Ctrl'
         });
-        $routeProvider.when('/report_v2/:extra', {
+        $routeProvider.when('/reports-v2/:extra', {
             templateUrl: 'partials/report_v2/list.html',
             controller: 'report_v2Ctrl'
+        });*/
+
+        $routeProvider.when('/reports-v2/:reportID/', {
+            templateUrl: 'partials/report-view/view.html',
+            controller: 'report_viewCtrl'
         });
 
-        $routeProvider.when('/reports_v2/:reportID/', {
+        $routeProvider.when('/reports-v2/:reportID/:elementID/:elementValue', {
             templateUrl: 'partials/report_v2/view.html',
             controller: 'report_v2Ctrl'
         });
 
-        $routeProvider.when('/reports_v2/:reportID/:elementID/:elementValue', {
-            templateUrl: 'partials/report_v2/view.html',
-            controller: 'report_v2Ctrl'
-        });
-
-        $routeProvider.when('/reports_v2/new/:reportID/', {
+        $routeProvider.when('/reports-v2/new/:reportID/', {
             templateUrl: 'partials/report_v2/edit.html',
             controller: 'report_v2Ctrl'
         });
-        $routeProvider.when('/reports_v2/edit/:reportID/', {
+        $routeProvider.when('/reports-v2/edit/:reportID/', {
             templateUrl: 'partials/report_v2/edit.html',
             controller: 'report_v2Ctrl'
         });

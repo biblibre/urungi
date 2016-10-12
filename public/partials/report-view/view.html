@@ -1,0 +1,25 @@
+<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
+    <a ng-if="selectedReport && ((selectedReport.owner == user._id) || isWSTADMIN)" href="/#/reports/edit/{{selectedReport._id}}"  class="btn btn-success pull-right" style="margin-right: 5px">Edit Report</a>
+    <a ng-if="selectedReport && ((selectedReport.owner == user._id) || isWSTADMIN)" ng-click="publishReport()"  class="btn btn-success pull-right" style="margin-right: 5px">Publish</a>
+    <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
+</div>
+
+<div class="container-fluid" style="border-bottom: 2px solid #72A230;">
+    <h3 ng-bind="selectedReport.reportName"></h3>
+</div>
+
+<div class="container-fluid " style="padding-top: 5px;">
+    <div ng-include src="promptsBlock" class=" prompts-block"></div>
+
+    <div class="container-fluid">
+        <div id="reportLayout" ng-init="getReportDiv()" class="container-fluid" style="min-height:200px;position:relative;" bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_reportLayout">
+
+        </div>
+    </div>
+
+</div>
+
+<div ng-include src="searchModal"></div>
+<div ng-include src="publishModal"></div>
+<div ng-include src="columnFormatModal"></div>
+<div ng-include src="columnSignalsModal"></div>

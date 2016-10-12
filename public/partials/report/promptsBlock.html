@@ -9,8 +9,6 @@
             <div class="container-fluid" ng-repeat="filter in prompts" style="padding-bottom: 5px;">
                 <div class="col-md-2">
                     <p ng-show="filter.promptMandatory == true && (!filter.filterText1 || filter.filterText1 == '')" style="color: #cc3f44;">{{filter.objectLabel}} *</p>
-
-
                     <label ng-show="(filter.promptMandatory == false || !filter.promptMandatory) || (filter.filterText1 && filter.filterText1 != '')" class="control-label">{{filter.objectLabel}}</label>
                 </div>
 
@@ -52,14 +50,26 @@
 
                     <div class="input-group"  ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && ( filter.elementType != 'array')" style="width:300px;">
                         <input type="text" class="form-control no-right-border form-focus-green" ng-model="filter.filterText1" >
-                        <!--TODO: para el in -not in como select2, pero con los valores introducidos manualmente ver ejemplo en: http://stackoverflow.com/questions/29489821/allow-manually-entered-text-in-ui-select-->
-                        <!--<select multiple="" data-role="tagsinput" style="display: none;"/>  http://timschlechter.github.io/bootstrap-tagsinput/examples/bootstrap-2.3.2.html-->
-
                                     <span class="input-group-btn">
 
                                         <button class="btn btn-primary popover-primary ng-scope" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Select distinct values" popover="Click here to select one or more from the distinct values that can currently be found in the database" ng-click="getDistinctValues(filter)"><i class="fa fa-search"></i></button>
                                     </span>
                     </div>
+
+                    <span ng-repeat="value in filter.data" ></span>
+
+                      <ui-select multiple  ng-model="filter.filterText1" theme="bootstrap" ng-disabled="disabled" style="width: 300px;">
+                        <ui-select-match placeholder="Select colors...">{{$item}}</ui-select-match>
+                        <ui-select-choices refresh="funcAsync(filter,$select.search)" refresh-delay="0" repeat="value in filter.values | filter:$select.search">
+                          {{value}}
+                            <!--<div ng-bind-html="person.name | highlight: $select.search"></div>
+                          <small>
+                            email: {{person.email}}
+                            age: <span ng-bind-html="''+person.age | highlight: $select.search"></span>
+                          </small>-->
+                        </ui-select-choices>
+                      </ui-select>
+
 
                     <!-- TODO: between... -->
                     <span ng-show="filter.filterType == 'between' || filter.filterType == 'notBetween'"> and <input type="text" ng-model="filter.filterText2" />  </span>

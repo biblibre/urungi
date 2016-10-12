@@ -1,11 +1,12 @@
 app.service('c3Charts' , function () {
 
 
-this.rebuildChart = function(chart)
+this.rebuildChart = function(query,chart)
     {
-
         var theValues = [];
         var theNames = {};
+
+
 
         var axisField = '';
         if (chart.dataAxis)
@@ -13,20 +14,24 @@ this.rebuildChart = function(chart)
 
         var axisIsInQuery = false;
 
-        //Is the axis field in the query
         if (chart.dataAxis)
-            for (var qc in chart.query.columns)
+            for (var d in query.datasources)
                 {
-                    var elementName = chart.query.columns[qc].collectionID.toLowerCase()+'_'+chart.query.columns[qc].elementName;
+                    for (var c in query.datasources[d].collections)
+                        {
+                            for (var qc in query.datasources[d].collections[c].columns)
+                                {
+                                    var elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName;
 
-                    if (chart.query.columns[qc].aggregation)
-                        elementName = chart.query.columns[qc].collectionID.toLowerCase()+'_'+chart.query.columns[qc].elementName+chart.query.columns[qc].aggregation;
+                                    if (query.datasources[d].collections[c].columns[qc].aggregation)
+                                        elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName+query.datasources[d].collections[c].columns[qc].aggregation;
 
-
-                    if (elementName == chart.dataAxis.id)
-                    {
-                        axisIsInQuery = true;
-                    }
+                                    if (elementName == chart.dataAxis.id)
+                                    {
+                                        axisIsInQuery = true;
+                                    }
+                                }
+                        }
                 }
 
         if (axisIsInQuery == false)
@@ -34,6 +39,7 @@ this.rebuildChart = function(chart)
             axisField = null;
             if (chart.dataAxis)
                 chart.dataAxis.id = null;
+            console.log('ERROR - No dataAxis defined for chart, or that column does not exists in query results');
         }
 
 
@@ -42,45 +48,44 @@ this.rebuildChart = function(chart)
         for (var i in chart.dataColumns)
         {
             var columnFound = false;
-
             //remove column if not in query
-            for (var qc in chart.query.columns)
+            for (var qc in query.columns)
             {
-                var elementName = chart.query.columns[qc].collectionID.toLowerCase()+'_'+chart.query.columns[qc].elementName;
+                var elementName = query.columns[qc].collectionID.toLowerCase()+'_'+query.columns[qc].elementName;
 
-                if (chart.query.columns[qc].aggregation)
-                        elementName = chart.query.columns[qc].collectionID.toLowerCase()+'_'+chart.query.columns[qc].elementName+chart.query.columns[qc].aggregation;
-
-              //  console.log('column id',elementName,chart.dataColumns[i].id)
+                if (query.columns[qc].aggregation)
+                    {
+                        elementName = query.columns[qc].collectionID.toLowerCase()+'_'+query.columns[qc].elementName+query.columns[qc].aggregation;
+                        query.columns[qc].id = elementName;
+                    }
                 if (chart.dataColumns[i].id == elementName)
                 {
                     columnFound = true; //columnsForDelete.push(i);
-                //    console.log('column found',elementName);
                 }
 
             }
 
+
             if (columnFound == false)
                {
-                columnsForDelete.push(i);
-                //console.log('pushing a column for delete',i)
+                ////columnsForDelete.push(i);
                 }
         }
 
-        //console.log('there are ',columnsForDelete.length,'columns for delete');
 
         for (var cfd in columnsForDelete)
         {
            chart.dataColumns.splice(columnsForDelete[cfd],1);
-          // console.log('deleting ',columnsForDelete)
+
         }
 
         //remove query if not dataColumns and not data Axis
 
         if (axisIsInQuery == false && chart.dataColumns.length)
         {
-            chart.query = null;
-            chart.queryName = null;
+            //this is not suitable for gauge as there is not dataColumns, only metrics, so I comented the 2 lines below
+            //chart.query = null;
+            //chart.queryName = null;
         }
 
 
@@ -94,12 +99,12 @@ this.rebuildChart = function(chart)
                 theValues.push(chart.dataColumns[i].id);
                 var valueName = chart.dataColumns[i].id;
 
-                theNames[valueName] = chart.dataColumns[i].elementLabel;
+
             }
+            theNames[valueName] = chart.dataColumns[i].elementLabel;
         }
 
-
-        if (chart.query)
+        if (query)
         {
             var theChartCode = '#'+chart.chartID;
 
@@ -112,11 +117,11 @@ this.rebuildChart = function(chart)
                     var theColumns = [];
                     if (axisField && theValues)
                     {
-                        for (var i in chart.query.data)
+                        for (var i in query.data)
                         {
-                            var groupField = chart.query.data[i][axisField];
-                            var valueField = chart.query.data[i][theValues[0]];
-                            theColumns.push([chart.query.data[i][axisField],chart.query.data[i][theValues[0]]]);
+                            var groupField = query.data[i][axisField];
+                            var valueField = query.data[i][theValues[0]];
+                            theColumns.push([query.data[i][axisField],query.data[i][theValues[0]]]);
                         }
                     }
 
@@ -134,47 +139,74 @@ this.rebuildChart = function(chart)
                     });
                 } else {
 
-                    var chartCanvas = c3.generate({
+                    if (chart.type == 'gauge')
+                        {
+                        var chartCanvas = c3.generate({
                         bindto: theChartCode,
                         data: {
-                            json: chart.query.data,
-                            keys: {
-                                x: axisField,
-                                value: theValues
+                             columns: [theValues[0], query.data[0][theValues[0]]],
+                            type : chart.type
+                        },
+                        gauge: {
+                        //        label: {
+                        //            format: function(value, ratio) {
+                        //                return value;
+                        //            },
+                        //            show: false // to turn off the min/max labels.
+                        //        },
+                        //    min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
+                        //    max: (query.data[0][theValues[0]]*2), // 100 is default
+                        //    units: '' //' %',
+                        //    width: 39 // for adjusting arc thickness
                             },
-                            names: theNames
-                        },
-                        axis: {
-                            x: {
-                                type: 'category'
-                            }
-                        },
+
                          size: {
                             height:chart.height
                          }
-                    });
+                        });
 
+                        } else {
+                            var chartCanvas = c3.generate({
+                                bindto: theChartCode,
+                                data: {
+                                    json: query.data,
+                                    keys: {
+                                        x: axisField,
+                                        value: theValues
+                                    },
+                                    names: theNames
+                                },
+                                axis: {
+                                    x: {
+                                        type: 'category'
+                                    }
+                                },
+                                 size: {
+                                    height:chart.height
+                                 }
+                            });
+                        }
                 }
-
-
-
             chart.chartCanvas = chartCanvas;
+            //console.log('chart canvas assigned',chart,query);
         }
 
+        if (chart.type != 'line')
         for (var c in chart.dataColumns)
         {
-            if (chart.dataColumns[c].type != 'line')
-                chart.chartCanvas.transform(chart.dataColumns[c].type, chart.dataColumns[c].id);
+            //if (chart.dataColumns[c].type != 'line')
+               // {
+                   //chart.chartCanvas.transform(chart.dataColumns[c].type, chart.type);
+
+               // }
+
 
         }
     }
 
     this.refreshChartData = function(chart)
     {
-            console.log('refreshing data for chart',chart.query.data);
-
-            //chart.chartCanvas.load.json = chart.query.data;
-
+            //chart.chartCanvas.load.json = query.data;
 
             if (chart.dataAxis)
             axisField = chart.dataAxis.id;
@@ -198,11 +230,11 @@ this.rebuildChart = function(chart)
                     var theColumns = [];
                     if (axisField && theValues)
                     {
-                        for (var i in chart.query.data)
+                        for (var i in query.data)
                         {
-                            var groupField = chart.query.data[i][axisField];
-                            var valueField = chart.query.data[i][theValues[0]];
-                            theColumns.push([chart.query.data[i][axisField],chart.query.data[i][theValues[0]]]);
+                            var groupField = query.data[i][axisField];
+                            var valueField = query.data[i][theValues[0]];
+                            theColumns.push([query.data[i][axisField],query.data[i][theValues[0]]]);
                         }
                     }
 
@@ -214,43 +246,15 @@ this.rebuildChart = function(chart)
 
                 } else {
                     chart.chartCanvas.data({
-                            json: chart.query.data,
+                            json: query.data,
                             keys: {
                                 x: axisField,
                                 value: theValues
                             },
                             names: theNames
                     });
-
                 }
 
-
-
-
-            /*
-            .load({
-        json: [
-            {name: 'www.site1.com', upload: 800, download: 500, total: 400},
-            {name: 'www.site2.com', upload: 600, download: 600, total: 400},
-            {name: 'www.site3.com', upload: 400, download: 800, total: 500},
-            {name: 'www.site4.com', upload: 400, download: 700, total: 500},
-        ],
-        keys: {
-            value: ['upload', 'download'],
-        }*/
-
-            /*
-            var chartCanvas = c3.generate({
-                        bindto: theChartCode,
-                        data: {
-                            json: chart.query.data,
-                            keys: {
-                                x: axisField,
-                                value: theValues
-                            },
-                            names: theNames
-                        }
-            */
     }
 
 
@@ -265,13 +269,14 @@ this.rebuildChart = function(chart)
             this.rebuildChart(chart);
 
         } else {
-        //seems that this chart has a query that changed and the column cant be found in
+            //seems that this chart has a query that changed and the column cant be found in
+
         }
     }
 
     this.changeChartColumnType = function(chart,column)
     {
-        if (column.type == 'line')
+        if (column.type == 'line' || column.type == undefined)
         {
             column.type = 'spline';
             chart.chartCanvas.transform('spline', column.id);
@@ -298,7 +303,7 @@ this.rebuildChart = function(chart)
                         } else
                             if (column.type == 'scatter')
                             {
-                                column.type = 'pie';
+                            /*    column.type = 'pie';
                                 //chart.chartCanvas.transform('pie', column.id);
                                 chart.chartCanvas.transform('pie');
                             } else
@@ -309,7 +314,7 @@ this.rebuildChart = function(chart)
                                 chart.chartCanvas.transform('donut');
                             } else
                             if (column.type == 'donut')
-                            {
+                            {*/
                                 column.type = 'line';
                                 chart.chartCanvas.transform('line', column.id);
                             }
@@ -322,19 +327,23 @@ this.rebuildChart = function(chart)
         chart.chartCanvas.data.colors[column] = d3.rgb('#ff0000').darker(1)
     }
 
-    this.getChartHTML = function (theChartID)
+    this.getChartHTML = function (theChartID,mode)
     {
-        return     '<c3chart page-block  bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="'+theChartID+'" ndType="c3Chart" id="'+theChartID+'" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']">'+
-                   '<chart-axis>'+
+        var html = '';
+        if (mode == 'design')
+            html = '<c3chart page-block  bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="'+theChartID+'" ndType="c3Chart" id="'+theChartID+'" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']">';
+            else
+            html = '<c3chart bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="'+theChartID+'" id="'+theChartID+'" >';
+            /*
+            html = html + '<chart-axis>'+
                     '<chart-axis-x axis-id="x" axis-type="timeseries" axis-x-format="%Y-%m-%d %H:%M:%S">'+
                         '<chart-axis-x-tick tick-format-time="%H:%m:%s"/>'+
                         '</chart-axis-x>'+
-                    '</chart-axis>'+
-                   '</c3chart>';
+                    '</chart-axis>'+*/
+            html = html +       '</c3chart>';
+
+        return html;
     }
-
-
-
 
    this.applyChartSettings = function($scope)
     {
@@ -421,6 +430,62 @@ this.rebuildChart = function(chart)
         }*/
     });
 
+
+    }
+
+
+    this.setChartData = function(data,dimension,metrics,type)
+    {
+
+
+
+            if (dimension)
+            axisField = dimension.id;
+
+            var theValues = [];
+            var theNames = [];
+
+            for (var i in metrics)
+                {
+                    if (metrics[i].id != undefined)
+                    {
+                        theValues.push(metrics[i].id);
+                        var valueName = metrics[i].id;
+
+                        theNames[valueName] = metrics[i].elementLabel;
+                    }
+                }
+
+            if (type == 'pie' || type == 'donut')
+                {
+                    var theColumns = [];
+                    if (axisField && theValues)
+                    {
+                        for (var i in data)
+                        {
+                            var groupField = data[i][axisField];
+                            var valueField = data[i][theValues[0]];
+                            theColumns.push([data[i][axisField],data[i][theValues[0]]]);
+                        }
+                    }
+
+
+                    chart.chartCanvas.data({
+                             columns: theColumns,
+                            type : chart.type
+                        });
+
+
+                } else {
+                    chart.chartCanvas.data({
+                            json: query.data,
+                            keys: {
+                                x: axisField,
+                                value: theValues
+                            },
+                            names: theNames
+                    });
+                }
 
     }
 

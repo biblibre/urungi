@@ -1451,8 +1451,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                         conditionLabel: 'AND'
                     });
                     return $scope.updateConditions(filters);
-                }
-                else { //is a condition, next is a filter?
+                } else { //is a condition, next is a filter?
                     if (filters[Number(i)+1]) {
                         if (filters[Number(i)+1].condition) { //if next is a condition
                             filters.splice(i, 1);
@@ -2171,6 +2170,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.setColumnFormat = function()
     {
         reportModel.changeColumnStyle($scope,$scope.selectedColumnIndex ,$scope.selectedColumnHashedID);
+
+
     }
 
     $scope.changeColumnSignals = function(columnIndex ,hashedID)

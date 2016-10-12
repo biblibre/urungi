@@ -422,7 +422,7 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
                             });
                     }
                 } else {
-                    result = {result: 0, msg: 'Datasource is not working! '+dataSource.datasourceID};
+                    result = {result: 0, msg: 'This Datasource does not exists anymore! '+dataSource.datasourceID};
                     processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                 }
             });

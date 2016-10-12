@@ -53,6 +53,11 @@ exports.testConnection = function(data, setresult) {
         if (d)
         {
 
+            getBigqueryDataset(bq,data.database,jsonObj,0,rows,function(){
+                setresult({result: 1, items: rows});
+            });
+
+            /*
             for (var i in jsonObj.datasets)
             {
                 console.log('getting datasetID ',jsonObj.datasets[i].datasetReference.datasetId);
@@ -60,6 +65,8 @@ exports.testConnection = function(data, setresult) {
                 bq.table.list(data.database, jsonObj.datasets[i].datasetReference.datasetId, function(e,r,d){
                     if(e) console.log(e);
                     var jsonObj2 = JSON.parse(d);
+
+                    console.log('the tables',jsonObj2.tables);
                     for (var z in jsonObj2.tables)
                     {
                         rows.push({name:jsonObj2.tables[z].id});
@@ -69,14 +76,14 @@ exports.testConnection = function(data, setresult) {
 
                     //if (i == jsonObj.datasets.length -1)
                     //{
-                        console.log(JSON.stringify(rows));
+                        console.log('the tables',JSON.stringify(rows));
                         setresult({result: 1, items: rows});
                     //}
 
 
                 });
 
-            }
+            }*/
         }
 
     });
@@ -93,13 +100,47 @@ exports.testConnection = function(data, setresult) {
     });*/
 };
 
+function getBigqueryDataset(bq,database,jsonObj,index,rows,done)
+{
+    if (jsonObj.datasets[index] == undefined)
+        {
+          done();
+
+        } else {
+
+
+            bq.table.list(database, jsonObj.datasets[index].datasetReference.datasetId, function(e,r,d){
+                    if(e) console.log(e);
+                    var jsonObj2 = JSON.parse(d);
+
+                    for (var z in jsonObj2.tables)
+                    {
+                        rows.push({name:jsonObj2.tables[z].id});
+                    }
+
+
+                    getBigqueryDataset(bq,database,jsonObj,index+1,rows,done);
+
+                    //if (i == jsonObj.datasets.length -1)
+                    //{
+                    //    console.log('the tables',JSON.stringify(rows));
+                    //    setresult({result: 1, items: rows});
+                    //}
+
+
+                });
+
+        }
+
+}
+
 
 exports.getSchemas = function(data, setresult) {
 
 
         var collections = data.entities;
 
-        console.log(JSON.stringify(collections));
+        //console.log(JSON.stringify(collections));
 
         //get schemas
         var projects = [];
@@ -132,7 +173,7 @@ exports.getSchemas = function(data, setresult) {
         }
 
 
-        console.log(JSON.stringify(schemasTables));
+        //console.log(JSON.stringify(schemasTables));
 
         getTableFields(schemasTables,0,[],function(fields){
             setresult({result: 1, items: fields});
@@ -163,12 +204,12 @@ function getTableFields(tables,index,fields, done)
         bq.init({
             json_file: jsonFile
         });
-        console.log('before getting fields');
+        //console.log('before getting fields');
 
         bq.table.get(tables[index].project, tables[index].dataset, tables[index].table, function(e,r,d){
             if(e) console.log(e);
             var jsonObj = JSON.parse(d);
-            console.log('after getting fields',jsonObj.schema.fields);
+            //console.log('after getting fields',jsonObj.schema.fields);
             for (var i in jsonObj.schema.fields)
             {
                 //fields.push({name:jsonObj.schema.fields[i].name,type:jsonObj.schema.fields[i].type})
@@ -211,25 +252,78 @@ db.prototype.executeSQLQuery = function(connection,sql,done){
         if(e) {
                 console.log(e);
               }
-        var jsonObj = JSON.parse(JSON.stringify(d));
+        //console.log(JSON.stringify(d));
+        if (d.jobComplete)
+            {
+                var jsonObj = JSON.parse(JSON.stringify(d));
 
-        var results = [];
+                var results = [];
 
-        for (var r in jsonObj.rows)
-        {
-                var theRow = {};
-                for (var field in jsonObj.schema.fields)
+                for (var r in jsonObj.rows)
                 {
-                    theRow[jsonObj.schema.fields[field].name] = jsonObj.rows[r].f[field].v;
-                }
-                results.push(theRow);
+                        var theRow = {};
+                        for (var field in jsonObj.schema.fields)
+                        {
+                            theRow[jsonObj.schema.fields[field].name] = jsonObj.rows[r].f[field].v;
+                        }
+                        results.push(theRow);
 
-        }
-        done(results);
+                }
+                done(results);
+            } else {
+                /*console.log('big query retrieve query results',connection.database,d.jobReference.jobId);
+                bq.job.getQueryResults(connection.database, d.jobReference.jobId, function(e,r,d){
+                        var jsonObj = JSON.parse(JSON.stringify(d));
+                        console.log('The result',JSON.stringify(d));
+                        var results = [];
+
+                        for (var r in jsonObj.rows)
+                        {
+                                var theRow = {};
+                                for (var field in jsonObj.schema.fields)
+                                {
+                                    theRow[jsonObj.schema.fields[field].name] = jsonObj.rows[r].f[field].v;
+                                }
+                                results.push(theRow);
+
+                        }
+                        done(results);
+                });*/
+
+                getQueryResults(connection,d.jobReference.jobId,function(){
+                    done(results);
+                });
+
+            }
     });
 }
 
+function getQueryResults(connection,jobId,done){
 
+    var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-392992cba62f.json';
+    bq.init({
+        json_file: jsonFile
+    });
+
+    //console.log('big query retrieve query results',connection.database,jobId);
+                bq.job.getQueryResults(connection.database,jobId, function(e,r,d){
+                        var jsonObj = JSON.parse(JSON.stringify(d));
+                        //console.log('The result',JSON.stringify(d));
+                        var results = [];
+
+                        for (var r in jsonObj.rows)
+                        {
+                                var theRow = {};
+                                for (var field in jsonObj.schema.fields)
+                                {
+                                    theRow[jsonObj.schema.fields[field].name] = jsonObj.rows[r].f[field].v;
+                                }
+                                results.push(theRow);
+
+                        }
+                        done(results);
+                });
+}
 
 
 /*

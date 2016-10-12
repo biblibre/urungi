@@ -1,82 +1,20 @@
-<div ng-init="initForm()" class="container-fluid" id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroDesignerOptions">
-<section ng-show="!queryInterface" id="designMainMenu" style="padding-top:5px;">
-    <a ng-disabled="columns.length <=0" data-ng-click="pageName()" class="btn btn-success pull-right" style="margin-right: 5px" tooltip="Click here to save the report" tooltip-placement="bottom">Save Report</a>
-    <a ng-if="!mode == 'add'" ng-disabled="columns.length <=0" data-ng-click="copyPage()" class="btn btn-primary pull-right" style="margin-right: 5px" tooltip="Click here to make a copy of this report" tooltip-placement="bottom">Copy</a>
-    <a ng-click="goBack()" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom" style="margin-right:3px;">Cancel</a>
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid" style="height: 100%;border-bottom: 2px solid #72A230;">
+<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
+    <h3 class="pull-left">Report</h3>
+    <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-if="mode == 'edit'" style="margin-left: 5px" tooltip="Click here to save the report changes" tooltip-placement="bottom">Save</a>
+
+    <a ng-click="goBack();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
     <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for data explorer" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
-</section>
+</div>
 
+    <section id="dataObjects">
+        <div id="dataObjectsIntroBlock"></div>
+        <section id="dataObjectsInner" class="data-objects-layer scrollPane" ng-include="'partials/query/data-objects.html'">
 
-
-<section ng-show="!queryInterface" id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'data'" class="ng-scope">
-<!--<menu>
-    <li id="searchTabButton" class="search">
-        <a ng-click="showTab(1)">Settings</a></li>
-    <li id="layoutTabButton" class="layout on" ng-show="service.parameters.layouts"><a ng-click="showTab(2)">Layouts</a></li>
-    <li id="textTabButton" class="text"><a ng-click="showTab(3)">Text</a></li>
-    <li id="backgroundsTabButton" class="backgrounds"><a ng-click="showTab(4)">Bkground</a></li>
-    <li id="uploadsTabButton" class="uploads"><a ng-click="showTab(5)">Uploads</a></li>
-</menu>-->
-
-
-<menu>
-    <li id="searchTabButton" class="search hand-cursor on" ng-class="{'on': tabs.selected == 'data'}"><a ng-click="tabs.selected = 'data'">Data</a></li>
-    <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'layouts'}"><a ng-click="tabs.selected = 'layouts'">Layouts</a></li>
-    <li id="textTabButton" class="text hand-cursor" ng-class="{'on': tabs.selected == 'text'}"><a ng-click="tabs.selected = 'text'">Elements</a></li>
-    <!--
-    <li id="backgroundsTabButton" class="backgrounds hand-cursor" ng-class="{'on': tabs.selected == 'backgrounds'}" ><a ng-click="tabs.selected = 'backgrounds'">Backgrounds</a></li>
-    -->
-    <!--
-    <li id="uploadsTabButton" class="uploads hand-cursor" ng-class="{'on': tabs.selected == 'uploads'}"><a ng-click="tabs.selected = 'uploads'">Uploads</a></li>
-    -->
-</menu>
-
-
-
-<section class="content">
-<section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
-
-</section>
-<section id="dataObjectsInner" class="layer scrollPane" ng-include="'partials/query/data-objects.html'">
-    <!--
-    <section class="layer scrollPane">
-        <button class="button buttonBlock fileUploadButton" ng-click="newQuery()">New Query</button>
+        </section>
+    </section>
+    <section id="dropZone" class="scrollPane multiPage rendered ng-scope" style="padding:10px;" ng-include="'partials/report_v2/report-edit.html'">
 
     </section>
-    <div class="scrollTrack vScrollTrack">
-        <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
-    </div>
-    <div class="scrollTrack hScrollTrack">
-        <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
-    </div>
-
-    -->
-</section>
-
-
-</section>
-
-</section>
-
-
-
-
-<section class="content">
-    <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
-
-    </section>
-
-
-
-
-
-</section>
-
-
-
-
-<section page-block ndType="page" ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
-    jjj
-</section>
 
 </div>

@@ -2,6 +2,8 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
     $scope.reportModal = 'partials/query/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
+    $scope.settingsHtml = 'partials/pages/settings.html';
+    $scope.queriesHtml = 'partials/pages/queries.html';
     $scope.queries = [];
     $scope.charts = [];
     $scope.repeaters = [];
@@ -512,6 +514,9 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
             var theid = 'TABS_'+uuid2.newguid();
             var theTabs = [{label:'tab1',active:true,id:uuid2.newguid()},{label:'tab2',active:false,id:uuid2.newguid()},{label:'tab3',active:false,id:uuid2.newguid()},{label:'tab4',active:false,id:uuid2.newguid()}]
             var tabsElement = {id:theid,type:'tabs',properties:{tabs:theTabs}};
+            if (!$scope.selectedPage.properties.containers)
+                $scope.selectedPage.properties.containers = [];
+            console.log('pos aqui',$scope.selectedPage.properties);
             $scope.selectedPage.properties.containers.push(tabsElement);
 
             var html = getTabsHTML(theid,theTabs);
@@ -755,11 +760,8 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                                                                         id:customObjectData.name,
                                                                         type:'line',
                                                                         color:'#000000'}
-
                                     c3Charts.rebuildChart($scope.charts[i]);
-
                             } else {
-
                                 var errorMsg = 'This element is not allowed here...is not in the same query, please select an element that belongs to the same query or reinit the chart prior to assign this element.';
                                 noty({text: errorMsg,  timeout: 6000, type: 'error'});
 

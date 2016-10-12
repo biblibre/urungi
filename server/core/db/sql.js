@@ -884,15 +884,15 @@ function getFilterSQL(filter,isHaving)
         }
         if (filter.filterType == "between" && filter.elementType != 'date') {
             if (filter.elementType == 'number')
-                result = ('BETWEEN '+filterValue+' AND '+filter.filterText2);
+                result = (filterElementName +' BETWEEN '+filterValue+' AND '+filter.filterText2);
             else
-                result = ('BETWEEN '+'\''+filterValue+'\''+' AND '+'\''+filter.filterText2+'\'');
+                result = (filterElementName +' BETWEEN '+'\''+filterValue+'\''+' AND '+'\''+filter.filterText2+'\'');
         }
         if (filter.filterType == "notBetween" && filter.elementType != 'date') {
             if (filter.elementType == 'number')
-                result = ('NOT BETWEEN '+filterValue+' AND '+filter.filterText2);
+                result = (filterElementName +' NOT BETWEEN '+filterValue+' AND '+filter.filterText2);
             else
-                result = ('NOT BETWEEN '+'\''+filterValue+'\''+' AND '+'\''+filter.filterText2+'\'');
+                result = (filterElementName +' NOT BETWEEN '+'\''+filterValue+'\''+' AND '+'\''+filter.filterText2+'\'');
         }
         if (filter.filterType == "contains") {
             result = (filterElementName +' LIKE '+'\'%'+filterValue+'%\'');
