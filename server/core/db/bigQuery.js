@@ -29,7 +29,7 @@ db.prototype.connect = function(data, done) {
 
     DB.connection = bq;
 
-    var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-392992cba62f.json';
+    var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-b8c90025164d.json';
 
     bq.init({
         json_file: jsonFile
@@ -39,7 +39,7 @@ db.prototype.connect = function(data, done) {
 
 exports.testConnection = function(data, setresult) {
     console.log('test connection');
-    var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-392992cba62f.json';
+    var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-b8c90025164d.json';
 
     bq.init({
         json_file: jsonFile
@@ -198,7 +198,7 @@ function getTableFields(tables,index,fields, done)
 
     } else {
 
-        var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-392992cba62f.json';
+        var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-b8c90025164d.json';
         var collectionID = 'WST'+generateShortUID();
         var collectionName = tables[index].dataset+'.'+tables[index].table;
         var theCollection = {collectionID: collectionID ,collectionName: collectionName,visible:true,collectionLabel:tables[index].table};
@@ -246,7 +246,7 @@ db.prototype.getLimitString = function(limit, offset) {
 
 db.prototype.executeSQLQuery = function(connection,sql,done){
 
-    var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-392992cba62f.json';
+    var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-b8c90025164d.json';
     bq.init({
         json_file: jsonFile
     });
@@ -303,7 +303,7 @@ db.prototype.executeSQLQuery = function(connection,sql,done){
 
 function getQueryResults(connection,jobId,done){
 
-    var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-392992cba62f.json';
+    var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-b8c90025164d.json';
     bq.init({
         json_file: jsonFile
     });
