@@ -38,7 +38,7 @@ db.prototype.connect = function(data, done) {
 
 
 exports.testConnection = function(data, setresult) {
-
+    console.log('test connection');
     var jsonFile = __dirname + '/../../keys/COMPID/bigQuery/Essential_Big_Data-392992cba62f.json';
 
     bq.init({
@@ -46,7 +46,10 @@ exports.testConnection = function(data, setresult) {
     });
 
     bq.dataset.list(data.database, function(e,r,d){
-        if(e) console.log(e);
+        if(e) {
+            console.log(e);
+            setresult({result: 0, msg: 'Connection Error: '+ e});
+        }
 
         var jsonObj = JSON.parse(d);
         var rows = [];
