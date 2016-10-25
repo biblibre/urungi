@@ -7,7 +7,14 @@
     <h3 ng-bind="selectedPage.pageName"></h3>
 </div>
 
-<div class="container" id="pageViewer" ng-init="loadHTML()">
+<div class="container-fluid" id="pageViewer" ng-init="loadHTML()" style="
+    top: 49px;
+    bottom: 0px;
+    position: absolute;
+    overflow-y: auto;
+    width: 100%;
+    padding-top:10px;
+">
 
 
 </div>

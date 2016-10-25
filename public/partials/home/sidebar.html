@@ -5,15 +5,15 @@
     <a id="homeMainMenu" href="/#/home" class="list-group-item ">
         <span><i class="fa fa-home"></i></span> Home
     </a>
-    <a id="dashboardsMainMenu" ng-if="user.dashboardsCreate || counts.dashBoards > 0" href="/#/dashboards" class="list-group-item ">
-        <span><i class="fa fa-dashboard"></i></span> Single query dashboards <span class="badge">{{counts.dashBoards}}</span>
+    <a id="dashboardsMainMenu" ng-if="user.dashboardsCreate || counts.dashBoards > 0" href="/#/dashboardv2" class="list-group-item ">
+        <span><i class="fa fa-dashboard"></i></span> My Dashboards <span class="badge">{{counts.dashBoards}}</span>
     </a>
     <a id="reportsMainMenu" ng-if="user.reportsCreate || counts.reports > 0" href="/#/reports" class="list-group-item">
-        <span><i class="fa fa-bar-chart"></i></span> Single query reports <span class="badge">{{counts.reports}}</span>
+        <span><i class="fa fa-bar-chart"></i></span> My Reports <span class="badge">{{counts.reports}}</span>
     </a>
-    <a id="pagesMainMenu" ng-if="user.pagesCreate || counts.pages > 0" href="/#/pages" class="list-group-item">
+   <!-- <a id="pagesMainMenu" ng-if="user.pagesCreate || counts.pages > 0" href="/#/pages" class="list-group-item">
         <span><i class="fa fa-newspaper-o"></i></span> Page reports <span class="badge">{{counts.pages}}</span>
-    </a>
+    </a> -->
     <a id="exploreMainMenu" ng-if="user.exploreData" href="/#/explore" class="list-group-item">
         <span><i class="fa fa-sun-o"></i></span> Explore
     </a>

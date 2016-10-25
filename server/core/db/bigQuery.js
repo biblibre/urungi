@@ -110,8 +110,6 @@ function getBigqueryDataset(bq,database,jsonObj,index,rows,done)
           done();
 
         } else {
-
-
             bq.table.list(database, jsonObj.datasets[index].datasetReference.datasetId, function(e,r,d){
                     if(e) console.log(e);
                     var jsonObj2 = JSON.parse(d);
@@ -274,6 +272,7 @@ db.prototype.executeSQLQuery = function(connection,sql,done){
                 }
                 done(results);
             } else {
+                console.log('big query retrieve query results',connection.database,d);
                 /*console.log('big query retrieve query results',connection.database,d.jobReference.jobId);
                 bq.job.getQueryResults(connection.database, d.jobReference.jobId, function(e,r,d){
                         var jsonObj = JSON.parse(JSON.stringify(d));

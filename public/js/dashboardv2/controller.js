@@ -1,13 +1,13 @@
-app.controller('pagesCtrl', function ($scope, queryService, connection, $routeParams, queryModel, grid, c3Charts,uuid2, icons,colors,htmlWidgets,promptModel, grid,bsLoadingOverlayService,$timeout,$rootScope ) {
-    $scope.reportModal = 'partials/query/edit.html';
+app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams,report_v2Model, queryModel, grid, c3Charts,uuid2, icons,colors,htmlWidgets,dashboardv2Model,promptModel, grid,bsLoadingOverlayService,$timeout,$rootScope ) {
+    $scope.reportModal = 'partials/report_v2/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
     $scope.settingsHtml = 'partials/pages/settings.html';
     $scope.queriesHtml = 'partials/pages/queries.html';
-    $scope.queries = [];
-    $scope.charts = [];
-    $scope.repeaters = [];
-    $scope.pageID = $routeParams.pageID;
+    $scope.settingsTemplate = 'partials/widgets/common.html';
+
+    $scope.selectedDashboard = {reports:[],containers:[],prompts:[]};
+    $scope.dashboardID = $routeParams.dashboardID;
     $scope.lastElementID = 0;
     $scope.dataPool = [];
     $scope.faList = icons.faList;
@@ -58,10 +58,10 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         {name: 'oblique', value: 'oblique'}
     ];
 
-    $scope.newQuery = function() {
-        $scope.queryInterface = true;
-        $scope.editingQuery = null;
-        $scope.$broadcast("newQuery",{});
+    $scope.newReport = function() {
+        $scope.reportInterface = true;
+        $scope.editingReport = null;
+        $scope.$broadcast("newReportForDash",{});
     }
 
     var hashCode = function(s) {
@@ -191,59 +191,31 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
 
     $scope.initForm = function() {
-
         $scope.dataMode = 'preview';
-        if ($routeParams.newPage == 'true') {
-            $scope.selectedPage = {pageName:"New PAGE", backgroundColor:"#999999" ,items:[],properties:{},pageType:'DEFAULT'};
+        if ($routeParams.newDashboard == 'true') {
+            $scope.selectedDashboard = {dashboardName:"New Dashboard", backgroundColor:"#999999" ,reports:[],items:[],properties:{},dashboardType:'DEFAULT'};
+            console.log('add mode');
             $scope.mode = 'add';
-        } else {
-            if ($scope.pageID)
+        };
+        if ($routeParams.mode == 'edit')
+        { //editing
+            if ($scope.dashboardID)
             {
-                connection.get('/api/pages/get/'+$scope.pageID, {id: $scope.pageID}, function(data) {
-                    $scope.selectedPage = data.item;
-                    if (!$scope.selectedPage.properties.containers)
-                            $scope.selectedPage.properties.containers = [];
+                connection.get('/api/dashboardsv2/get/'+$scope.dashboardID, {id: $scope.dashboardID}, function(data) {
+                    $scope.selectedDashboard = data.item;
 
-                    $scope.queries = $scope.selectedPage.properties.queries;
+                    if ($scope.selectedDashboard.backgroundColor)
+                        $('#designArea').css({ 'background-color': $scope.selectedDashboard.backgroundColor}) ;
 
-                    if ($scope.selectedPage.properties.repeaters)
-                        $scope.repeaters = $scope.selectedPage.properties.repeaters;
-
-                    for (var q in $scope.queries)
-                    {
-                        var hashedID = hashCode($scope.queries[q].name);
-                        $scope.queries[q].hashedID = hashedID;
-                    }
-
-                    $scope.charts = $scope.selectedPage.properties.charts;
-                    //Assign the correct query to every chart
-
-                    for (var ch in $scope.charts)
-                    {
-                        if ($scope.charts[ch] != undefined)
-                        {
-                        for (var qu in $scope.queries)
-                        {
-                            if ($scope.charts[ch].queryName == $scope.queries[qu].name)
-                                $scope.charts[ch].query = $scope.queries[qu];
-                        }
-                        }
-                    }
-
-                    $scope.lastElementID = $scope.charts.length;
-
-                    if ($scope.selectedPage.backgroundColor)
-                        $('#designArea').css({ 'background-color': $scope.selectedPage.backgroundColor}) ;
-
-                    getQueryData($scope,0,function(){
+                    getQueryData(0,function(){
                         rebuildCharts();
-                        rebuildRepeaters();
+                        rebuildGrids();
                     });
 
-                    getAllPageColumns();
+                    //getAllPageColumns();
 
 
-                    var $div = $($scope.selectedPage.properties.designerHTML);
+                    var $div = $($scope.selectedDashboard.properties.designerHTML);
                     var el = angular.element(document.getElementById('designArea'));
                     el.append($div);
                     angular.element(document).injector().invoke(function($compile) {
@@ -257,41 +229,66 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                 });
             }
         }
+
+        if ($routeParams.mode == 'push')
+        { //editing
+            if ($scope.dashboardID)
+            {
+                connection.get('/api/dashboardsv2/get/'+$scope.dashboardID, {id: $scope.dashboardID}, function(data) {
+                    $scope.selectedDashboard = data.item;
+
+                    var qstructure = reportService.getReport();
+                    qstructure.reportName = 'report_'+($scope.selectedDashboard.reports.length +1);
+                    qstructure.id = uuid2.newguid();
+                    $scope.selectedDashboard.reports.push(qstructure);
+
+                    if ($scope.selectedDashboard.backgroundColor)
+                        $('#designArea').css({ 'background-color': $scope.selectedDashboard.backgroundColor}) ;
+
+                    getQueryData(0,function(){
+                        rebuildCharts();
+                        rebuildGrids();
+                    });
+
+                    //getAllPageColumns();
+
+
+                    var $div = $($scope.selectedDashboard.properties.designerHTML);
+                    var el = angular.element(document.getElementById('designArea'));
+                    el.append($div);
+                    angular.element(document).injector().invoke(function($compile) {
+                        var scope = angular.element($div).scope();
+                        $compile($div)($scope);
+                    });
+
+                    cleanAllSelected();
+
+                    $scope.getPrompts();
+                });
+            }
+        }
+
     };
 
     $scope.loadHTML = function() {
-        connection.get('/api/pages/get/'+$scope.pageID, {id: $scope.pageID}, function(data) {
-                    $scope.selectedPage = data.item;
-                    $scope.queries = $scope.selectedPage.properties.queries;
-                    $scope.charts = $scope.selectedPage.properties.charts;
-                     if ($scope.selectedPage.properties.repeaters)
-                        $scope.repeaters = $scope.selectedPage.properties.repeaters;
-                    if (!$scope.selectedPage.properties.containers)
-                            $scope.selectedPage.properties.containers = [];
+        console.log('view mode',$scope.dashboardID);
 
-                    for (var ch in $scope.charts)
-                    {
-                        if ($scope.charts[ch] != undefined)
-                        {
-                        for (var qu in $scope.queries)
-                        {
-                            if ($scope.charts[ch].queryName == $scope.queries[qu].name)
-                                $scope.charts[ch].query = $scope.queries[qu];
-                        }
-                        }
-                    }
+        connection.get('/api/dashboardsv2/get/'+$scope.dashboardID, {id: $scope.dashboardID}, function(data) {
+                    $scope.selectedDashboard = data.item;
+                    if (!$scope.selectedDashboard.containers)
+                            $scope.selectedDashboard.containers = [];
 
-                    getQueryData($scope,0,function(){
+                    getQueryData(0,function(){
                         rebuildCharts();
-                        rebuildRepeaters();
+                        rebuildGrids();
                     });
 
-                    if ($scope.selectedPage.backgroundColor)
-                        $('#pageViewer').css({ 'background-color': $scope.selectedPage.backgroundColor}) ;
+                    if ($scope.selectedDashboard.backgroundColor)
+                        $('#pageViewer').css({ 'background-color': $scope.selectedDashboard.backgroundColor}) ;
 
-                    getAllPageColumns();
+                    //getAllPageColumns();
 
-                    var $div = $($scope.selectedPage.html);
+                    var $div = $($scope.selectedDashboard.html);
                     var el = angular.element(document.getElementById('pageViewer'));
                     el.append($div);
                     angular.element(document).injector().invoke(function($compile) {
@@ -316,73 +313,51 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         });
     };
 
-    $scope.getPages = function(params) {
-        var params = (params) ? params : {};
+    $scope.getDashboards = function(params) {
 
-        connection.get('/api/pages/find-all', params, function(data) {
-            $scope.pages = data;
-        });
+        dashboardv2Model.getDashboards(params, function(data){
+            $scope.dashboards = data;
+        })
     };
 
-    $scope.cancelQuery = function() {
-        $scope.queryInterface = false;
+    $scope.cancelReport = function() {
+        $scope.reportInterface = false;
     }
 
-    $scope.saveQuery2 = function()
+    $scope.saveReport4Dashboard = function()
     {
+        //first clean the results area for not to create a conflict with other elements with same ID
+        var el = document.getElementById('reportLayout');
+        angular.element(el).empty();
 
-        var qstructure = queryService.getQuery();
+        var qstructure = reportService.getReport();
+        //console.log('this is the report',JSON.stringify(qstructure));
 
-        console.log('query structure in savequery2', qstructure);
-
-        if ($scope.editingQuery == null)
+        if ($scope.editingReport == null)
         {
-            qstructure.name = 'query'+($scope.queries.length +1);
+            qstructure.reportName = 'report_'+($scope.selectedDashboard.reports.length +1);
             qstructure.id = uuid2.newguid();
-            $scope.queries.push(qstructure);
-            //tiene prompts sin valores???
-            console.log('the wrong filters',qstructure.query.wrongFilters);
-            //if (qstructure.query.wrongFilters.length == 0)
-              //  {
-                queryModel.getQueryData($scope,qstructure.query, function(data)
-                    {
-                            qstructure.data = data;
-                            qstructure.loadingData= false;
-                            $scope.setQueryLoadedData(qstructure.id);
-                            $scope.theData[qstructure.hashedID] = data;
-                    });
-                //} else {
-                  //  console.log('query imcomplete');
-                //}
+            $scope.selectedDashboard.reports.push(qstructure);
         } else {
-            for (var q in $scope.queries)
+            for (var q in $scope.selectedDashboard.reports)
             {
-                if ($scope.queries[q].name == $scope.editingQuery)
+                if ($scope.selectedDashboard.reports[q].name == $scope.editingReport)
                 {
-                    qstructure.name = $scope.editingQuery;
-                    $scope.queries[q] = qstructure;
-                    //tiene prompts sin valores???
-                    filters.filters.filtertext1
-                    console.log('the wrong filters',$scope.queries[q].query.wrongFilters);
-                  //  if ($scope.queries[q].query.wrongFilters.length == 0)
-                    //    {
-                            queryModel.getQueryData($scope,$scope.queries[q].query, function(data)
+                    qstructure.name = $scope.editingReport;
+                    $scope.selectedDashboard.reports[q] = qstructure;
+                    //TODO: has prompts without values?
+                            queryModel.getQueryData($scope.selectedDashboard.reports[q].query, function(data)
                             {
-                                    $scope.queries[q].data = data;
-                                    $scope.queries[q].loadingData= false;
-                                    $scope.setQueryLoadedData($scope.queries[q].id);
-                                    $scope.theData[$scope.queries[q].hashedID] = data;
+                                    $scope.selectedDashboard.reports[q].query.data = data;
+                                    $scope.selectedDashboard.reports[q].query.loadingData= false;
+                                    //TODO: $scope.setQueryLoadedData($scope.queries[q].id);
+                                    $scope.theData[$scope.selectedDashboard.reports[q].hashedID] = data;
                             });
-                      //  } else {
-                        //    console.log('query imcomplete');
-                        //}
                 }
             }
-
         }
-
-        $scope.queryInterface = false;
-        getAllPageColumns();
+        $scope.reportInterface = false;
+        //getAllPageColumns();
         $scope.getPrompts();
     }
 
@@ -391,41 +366,20 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     $scope.getQuery = function(queryID)
     {
-        for (var q in $scope.queries)
+        for (var r in $scope.selectedDashboard.reports)
         {
-            if ($scope.queries[q].id == queryID)
+            if ($scope.selectedDashboard.reports[r].query.id == queryID)
                 {
-                return $scope.queries[q]
+                return $scope.selectedDashboard.reports[r].query;
                 }
         }
     }
 
-    $scope.setQueryLoadingData = function(queryID)
+    $scope.loadReport = function(report)
     {
-        //identify the charts that are using this query...
-        for (var c in $scope.charts)
-        {
-            if ($scope.charts[c] != undefined)
-                if ($scope.charts[c].query.id == queryID)
-                    $scope.showOverlay('OVERLAY_'+$scope.charts[c].chartID);
-        }
-    }
-
-    $scope.setQueryLoadedData = function(queryID)
-    {
-        for (var c in $scope.charts)
-        {
-            if ($scope.charts[c] != undefined)
-                if ($scope.charts[c].query.id == queryID)
-                    $scope.hideOverlay('OVERLAY_'+$scope.charts[c].chartID);
-        }
-    }
-
-    $scope.loadQS = function(query)
-    {
-        $scope.queryInterface = true;
-        $scope.editingQuery = query.name;
-        $scope.$broadcast("loadQueryStructure", {query: query});
+        $scope.reportInterface = true;
+        $scope.editingReport = report.name;
+        $scope.$broadcast("loadReportStructure", {report: report});
     }
 
     $scope.onDrop = function (data, event, type, group) {
@@ -505,6 +459,35 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
             createOnDesignArea(html,function(){});
         }
 
+        if (customObjectData.objectType == 'report') {
+
+            var containerID = 'REPORT_'+customObjectData.reportID; //uuid2.newguid();
+
+            for (var i in $scope.selectedDashboard.reports)
+                    {
+                        if ($scope.selectedDashboard.reports[i].id == customObjectData.reportID)
+                            {
+
+                                if ( angular.element('#REPORT_'+$scope.selectedDashboard.reports[i].id).length ){ // || angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
+                                    noty({text: 'Sorry, that report is already on the board',  timeout: 6000, type: 'error'});
+                                    } else {
+                                        var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
+                                                        '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
+                                                           // '<div page-block class="Block500" ndType="reportBlock" id="'+containerID+'">'+getReportHTML($scope.selectedDashboard.reports[i],containerID)+'</div>'
+                                                              '<div page-block class="container-fluid" ndType="ndReportContainer" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+$scope.selectedDashboard.reports[i].id+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+$scope.selectedDashboard.reports[i].id+'"></div>';
+
+                                                        '</div>'+
+                                                    '</div>';
+
+
+                                        //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("donut")+'</div>';
+                                        createOnDesignArea(html,function(){});
+                                    }
+                            }
+                    }
+
+        }
+
         if (customObjectData.objectType == 'queryFilter') {
             var html = '<div id="PROMPT_'+customObjectData.elementID+'" page-block class="container-fluid ndContainer" ndType="ndPrompt" ng-init="getDistinctValues('+customObjectData.elementID+')"><nd-prompt element-id="'+customObjectData.elementID+'" label="'+customObjectData.objectLabel+'" value-field="'+customObjectData.name+'" show-field="'+customObjectData.name+'" prompts="prompts" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
             createOnDesignArea(html,function(){});
@@ -514,10 +497,9 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
             var theid = 'TABS_'+uuid2.newguid();
             var theTabs = [{label:'tab1',active:true,id:uuid2.newguid()},{label:'tab2',active:false,id:uuid2.newguid()},{label:'tab3',active:false,id:uuid2.newguid()},{label:'tab4',active:false,id:uuid2.newguid()}]
             var tabsElement = {id:theid,type:'tabs',properties:{tabs:theTabs}};
-            if (!$scope.selectedPage.properties.containers)
-                $scope.selectedPage.properties.containers = [];
-            console.log('pos aqui',$scope.selectedPage.properties);
-            $scope.selectedPage.properties.containers.push(tabsElement);
+            if (!$scope.selectedDashboard.containers)
+                $scope.selectedDashboard.containers = [];
+            $scope.selectedDashboard.containers.push(tabsElement);
 
             var html = getTabsHTML(theid,theTabs);
             createOnDesignArea(html,function(){});
@@ -599,9 +581,9 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                     $scope.prompts[p].searchValue = selectedValue;
                     $scope.prompts[p].filterText1 = selectedValue;
 
-                    for (var q in $scope.selectedPage.properties.queries)
+                    for (var q in $scope.selectedDashboard.reports)
                     {
-                        var theQuery = $scope.selectedPage.properties.queries[q];
+                        var theQuery = $scope.selectedDashboard.reports[q].query;
                         promptModel.updatePromptsForQuery($scope,theQuery,$scope.prompts[p], function(theQuery2){
 
                         });
@@ -610,7 +592,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                     }
 
                     $scope.setQueryLoadingData($scope.queries[0].id);
-                    getQueryData($scope,0,function(){
+                    getQueryData(0,function(){
                         rebuildCharts();
                         //rebuildCharts4Query(theQuery.id);
                         $scope.setQueryLoadedData($scope.queries[0].id);
@@ -701,6 +683,26 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         if (customObjectData.objectType == 'image') {
 
         }
+
+        if (customObjectData.objectType == 'report') {
+            var containerID = 'REPORT_'+customObjectData.reportID; // uuid2.newguid();
+            for (var i in $scope.selectedDashboard.reports)
+                    {
+                        if ($scope.selectedDashboard.reports[i].id == customObjectData.reportID)
+                            {
+
+                                if ( angular.element('#REPORT_'+$scope.selectedDashboard.reports[i].id).length ){//||  angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
+                                    noty({text: 'Sorry, that report is already on the board',  timeout: 6000, type: 'error'});
+                                    } else {
+                                        //poner aqui la carga dinamica del informe con getRuntimeReport(reportID) , cambiar el ndtype para que pueda ser vaciado antes de guardar...
+                                    //var html = '<div page-block class="container-fluid" ndType="ndContainer" id="'+containerID+'">'+getReportHTML($scope.selectedDashboard.reports[i],containerID)+'</div>';
+                                    var html = '<div page-block class="container-fluid" ndType="ndReportContainer" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+$scope.selectedDashboard.reports[i].id+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+$scope.selectedDashboard.reports[i].id+'"></div>';
+
+                                    }
+                            }
+                    }
+        }
+
         if (html)
         {
             var $div = $(html);
@@ -819,50 +821,6 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     }
 
-    $scope.deleteQuery = function(query)
-    {
-        var theQueryID = query.id;
-        var theQuery = -1;
-
-        for (var q in $scope.selectedPage.properties.queries)
-        {
-            if ($scope.selectedPage.properties.queries[q].id == theQueryID)
-               theQuery = q;
-        }
-
-        if (theQuery > -1)
-        {
-            $scope.selectedPage.properties.queries.splice(theQuery,1);
-        }
-
-        theQuery = -1
-
-        for (var q in $scope.queries)
-        {
-            if ($scope.queries[q].id == theQueryID)
-               theQuery = q;
-        }
-
-        if (theQuery > -1)
-        {
-            $scope.queries.splice(theQuery,1);
-        }
-
-
-                    for (var ch in $scope.charts)
-                    {
-                        if ($scope.charts[ch] != undefined)
-                            if($scope.charts[ch].query.id == theQueryID)
-                                {
-                                  var chartID = $scope.charts[ch].chartID;
-                                  $('#'+chartID).remove();
-                                  $scope.charts[ch] = undefined;
-
-                                }
-                    }
-        $scope.getPrompts();
-
-    }
 
     $scope.changeHeight = function(newHeight)
     {
@@ -1014,11 +972,11 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
                     var tabsContainerID = theElement.attr('id');
 
-                    for (var i in $scope.selectedPage.properties.containers)
+                    for (var i in $scope.selectedDashboard.containers)
                     {
-                        if ($scope.selectedPage.properties.containers[i].id == tabsContainerID)
+                        if ($scope.selectedDashboard.containers[i].id == tabsContainerID)
                             {
-                                $scope.selectedTabContainer = $scope.selectedPage.properties.containers[i];
+                                $scope.selectedTabContainer = $scope.selectedDashboard.containers[i];
                                 $scope.objectHeight = $scope.selectedTabContainer.height;
 
                             }
@@ -1029,14 +987,14 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                 {
                     var gridID = theElement.attr('id');
 
-                    for (var g in $scope.repeaters)
+                    /*for (var g in $scope.repeaters)
                     {
                         if ($scope.repeaters[g].id == gridID)
                             {
                                 $scope.selectedRepeater = $scope.repeaters[g];
 
                             }
-                    }
+                    }*/
 
 
                 }
@@ -1066,7 +1024,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         $scope.BackgroundColor = color;
 
         if ($scope.selectedElementType == 'page')
-            $scope.selectedPage.backgroundColor = color;
+            $scope.selectedDashboard.backgroundColor = color;
 
         if ($scope.selectedElementType == 'gridHeaderColumn')
             grid.savePropertyForGridColumn($scope.repeaters,'backgroundColor',elementID,'rgba('+r+','+g+','+b+',' + alpha + ')');
@@ -1120,12 +1078,12 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
             {
             var containerNbr = -1;
 
-            for (var c in $scope.selectedPage.properties.containers)
-                if ($scope.selectedPage.properties.containers[c].id == elementID)
+            for (var c in $scope.selectedDashboard.containers)
+                if ($scope.selectedDashboard.containers[c].id == elementID)
                     containerNbr = c;
 
             if (containerNbr > -1)
-               $scope.selectedPage.properties.containers.splice(containerNbr,1);
+               $scope.selectedDashboard.containers.splice(containerNbr,1);
 
             }
 
@@ -1181,11 +1139,11 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
     $scope.getTabs = function(id)
     {
-        for (var c in $scope.selectedPage.properties.containers)
+        for (var c in $scope.selectedDashboard.containers)
             {
-            if ($scope.selectedPage.properties.containers[c].id == id)
+            if ($scope.selectedDashboard.containers[c].id == id)
                 {
-                    return $scope.selectedPage.properties.containers[c].properties.tabs;
+                    return $scope.selectedDashboard.containers[c].properties.tabs;
 
                 }
 
@@ -1196,17 +1154,17 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
     $scope.selectThisTab = function(tabsID,id)
     {
 
-      for (var t in $scope.selectedPage.properties.containers)
+      for (var t in $scope.selectedDashboard.containers)
       {
-        if ($scope.selectedPage.properties.containers[t].id == tabsID)
+        if ($scope.selectedDashboard.containers[t].id == tabsID)
             {
-            var actualSelectedTab = $scope.selectedPage.properties.containers[t].actualSelectedTab;
+            var actualSelectedTab = $scope.selectedDashboard.containers[t].actualSelectedTab;
             var actualHeaderID = '#'+actualSelectedTab+'_HEADER';
             var actualBodyID = '#'+actualSelectedTab+'_BODY';
             $(actualHeaderID).removeClass('active');
             $(actualBodyID).removeClass('active');
 
-            $scope.selectedPage.properties.containers[t].actualSelectedTab = id;
+            $scope.selectedDashboard.containers[t].actualSelectedTab = id;
 
             setTimeout(function () {
                 //jQuery(window).trigger('resize');
@@ -1289,6 +1247,39 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
         '</div>';
         return htmlCode + c3Charts.getChartHTML(theChartID);
     }
+
+    function getReportHTML(report,containerID)
+    {
+
+         report_v2Model.getReport(report,containerID, function(sql){});
+
+    }
+
+    $scope.getRuntimeReport = function(reportID)
+    {
+        for (var i in $scope.selectedDashboard.reports)
+            {
+                if ($scope.selectedDashboard.reports[i].id == reportID)
+                    {
+                        var theHTML = report_v2Model.getReport($scope.selectedDashboard.reports[i],'REPORT_'+reportID, function(sql){
+
+                            if (theHTML)
+                            {
+                                var $div = $(html);
+                                var el = angular.element('#REPORT_'+reportID);
+                                el.append($div);
+                                angular.element(document).injector().invoke(function($compile) {
+                                    var scope = angular.element($div).scope();
+                                    $compile($div)(scope);
+                                });
+                            }
+
+                        });
+
+                    }
+            }
+    }
+
 
     $scope.isChartCompleted = function(chartID)
     {
@@ -1395,7 +1386,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
 
         if ($scope.selectedElementType == 'page')
-            $scope.selectedPage.backgroundImage = backgroundImage.source1400;
+            $scope.selectedDashboard.backgroundImage = backgroundImage.source1400;
 
 
 
@@ -1433,11 +1424,8 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
 
 $scope.changeVisibility = function() {
 
-
-
     if($scope.selectedElementType != 'page')
     {
-    //visibility properties
 
     if ($scope.visibleXS == true)
         {
@@ -1507,18 +1495,19 @@ $scope.changeVisibility = function() {
     }
 
 
-    $scope.pageName = function () {
-        $('#pageNameModal').modal('show');
+    $scope.dashboardName = function () {
+        $('#dashboardNameModal').modal('show');
     };
 
-    $scope.pageNameSave = function () {
+    $scope.dashboardNameSave = function () {
 
-        $('#pageNameModal').modal('hide');
-        $scope.savePage();
+        $('#dashboardNameModal').modal('hide');
+        saveDashboard();
 
     };
 
     function cleanAll() {
+
         var root = document.getElementById('previewContainer');
 
         if (root != undefined)
@@ -1539,6 +1528,7 @@ $scope.changeVisibility = function() {
             $(theElement.childNodes[i]).removeClass('editable');
             $(theElement.childNodes[i]).removeClass('selected');
             $(theElement.childNodes[i]).removeClass('Block500');
+            $(theElement.childNodes[i]).removeAttr('vs-repeat');
 
             var elementType = $(theElement.childNodes[i]).attr('ndType');
 
@@ -1546,11 +1536,13 @@ $scope.changeVisibility = function() {
                 {
                 $(theElement.childNodes[i]).children().remove();
                 }
-
-            if (elementType == 'repeaterGrid')
+/*
+            if (elementType == 'ndReportContainer')
                 {
-                $(theElement.childNodes[i]).children().remove();
-                }
+                    $(theElement.childNodes[i]).children().remove();
+                }*/
+
+
 
             if (theElement.childNodes[i].hasChildNodes() == true)
                   cleanElement(theElement.childNodes[i]);
@@ -1576,7 +1568,7 @@ $scope.changeVisibility = function() {
         }
     }
 
-
+/*
     function getAllPageColumns()
     {
         $scope.allPageColumns = [];
@@ -1593,8 +1585,8 @@ $scope.changeVisibility = function() {
             }
 
     }
-
-
+*/
+/*
     function preparePageToSave()
     {
 
@@ -1606,7 +1598,7 @@ $scope.changeVisibility = function() {
             }
 
         cleanAllSelected();
-        var page = $scope.selectedPage;
+        var page = $scope.selectedDashboard;
 
         page.properties.queries = $scope.queries;
         var cleanedCharts = [];
@@ -1656,8 +1648,8 @@ $scope.changeVisibility = function() {
         page.html = previewContainer.html();
 
         return page;
-    }
-
+    }*/
+/*
     $scope.copyPage = function()
     {
         //var page = preparePageToSave;
@@ -1670,7 +1662,7 @@ $scope.changeVisibility = function() {
         }
 
         cleanAllSelected();
-        var page = $scope.selectedPage;
+        var page = $scope.selectedDashboard;
 
         page.properties.queries = $scope.queries;
         var cleanedCharts = [];
@@ -1724,36 +1716,55 @@ $scope.changeVisibility = function() {
 
                 }
             });
-    }
+    }*/
 
-    function savePage()
+    function saveDashboard()
     {
-        //Put all charts in loading mode...
-        for (var c in $scope.charts)
-        {
-                if ($scope.charts[c] != undefined)
-                    $scope.showOverlay('OVERLAY_'+$scope.charts[c].chartID);
-        }
+        //Put all reports in loading mode...
+
 
         cleanAllSelected();
-        var page = $scope.selectedPage;
+        var dashboard = $scope.selectedDashboard;
 
-        page.properties.queries = $scope.queries;
+        for (var i in $scope.selectedDashboard.reports)
+        {
+           if ($scope.selectedDashboard.reports[i].properties != undefined)
+            {
+                if ($scope.selectedDashboard.reports[i].properties.chart != undefined)
+                {
+                    var theChart = clone($scope.selectedDashboard.reports[i].properties.chart);
+                    theChart.chartCanvas = undefined;
+                    theChart.data = undefined;
+                    theChart.query = undefined;
+
+                    //var targetChart = document.getElementById(theChart.chartID);
+
+                    //if (targetChart != undefined)
+                        $scope.selectedDashboard.reports[i].properties.chart = theChart;
+                }
+            }
+        }
+
+
+/*
         var cleanedCharts = [];
 
-        for (var i in $scope.charts)
+        for (var i in $scope.selectedDashboard.reports)
         {
-            if ($scope.charts[i] != undefined)
+            if ($scope.selectedDashboard.reports[i].properties != undefined)
             {
-            var theChart = clone($scope.charts[i]);
-            theChart.chartCanvas = undefined;
-            theChart.data = undefined;
-            theChart.query = undefined;
+                if ($scope.selectedDashboard.reports[i].properties.chart != undefined)
+                {
+                    var theChart = clone($scope.selectedDashboard.reports[i].properties.chart);
+                    theChart.chartCanvas = undefined;
+                    theChart.data = undefined;
+                    theChart.query = undefined;
 
-            var targetChart = document.getElementById(theChart.chartID);
+                    var targetChart = document.getElementById(theChart.chartID);
 
-            if (targetChart != undefined)
-                cleanedCharts.push(theChart);
+                    if (targetChart != undefined)
+                        cleanedCharts.push(theChart);
+                }
             }
         }
 
@@ -1765,12 +1776,14 @@ $scope.changeVisibility = function() {
         }
 
         page.properties.charts = cleanedCharts;
-
+*/
         var container = $('#designArea');
 
         var theHTML = container.html();
 
-        page.properties.designerHTML = theHTML;
+        theHTML = theHTML.replace('vs-repeat',' ');
+
+        $scope.selectedDashboard.properties.designerHTML = theHTML;
 
         var previewContainer = $('#previewContainer');
 
@@ -1785,11 +1798,11 @@ $scope.changeVisibility = function() {
 
         cleanAll();
 
-        page.html = previewContainer.html();
+        $scope.selectedDashboard.html = previewContainer.html();
 
 
         if ($scope.mode == 'add') {
-            connection.post('/api/pages/create', page, function(data) {
+            connection.post('/api/dashboardsv2/create', dashboard, function(data) {
                 if (data.result == 1) {
 
                 }
@@ -1797,66 +1810,65 @@ $scope.changeVisibility = function() {
 
         } else {
 
-            connection.post('/api/pages/update/'+$scope.pageID, page, function(result) {
+            connection.post('/api/dashboardsv2/update/'+dashboard._id, dashboard, function(result) {
                 if (result.result == 1) {
+                    /*
                     for (var c in $scope.charts)
                         {
                            if ($scope.charts[c] != undefined)
                            $scope.hideOverlay('OVERLAY_'+$scope.charts[c].chartID);
                         }
+                        */
                 }
             });
         }
     }
 
-    function getQueryData($scope,index,done)
+    function getQueryData(index,done)
     {
-        if (!$scope.queries[index])
+        if (!$scope.selectedDashboard.reports[index])
             {
             done();
             return;
             }
 
-        if (!$scope.queries[index].id)
-            $scope.queries[index].id = uuid2.newguid();
 
-            $scope.queries[index].loadingData= true;
-            //$scope.setQueryLoadingData($scope.queries[index].id);
+            $scope.selectedDashboard.reports[index].loadingData= true;
+            $scope.showOverlay('OVERLAY_'+$scope.selectedDashboard.reports[index].id);
 
-            queryModel.getQueryData($scope,$scope.queries[index].query, function(data)
+            queryModel.getQueryData($scope.selectedDashboard.reports[index].query, function(data)
             {
-                $scope.queries[index].data = data;
-                    $scope.queries[index].loadingData= false;
-                    $scope.theData[$scope.queries[index].hashedID] = data;
-                getQueryData($scope,index+1,done);
+                $scope.selectedDashboard.reports[index].query.data = data;
+                    $scope.selectedDashboard.reports[index].loadingData= false;
+                $scope.hideOverlay('OVERLAY_'+$scope.selectedDashboard.reports[index].id);
+                getQueryData(index+1,done);
             });
     }
 
     function rebuildCharts()
     {
-        for (var i in $scope.charts)
-        {
-           if ($scope.charts[i] != undefined)
-           {
-            var theChart = $scope.charts[i];
-            //found the query for the chart
-            for (var q in $scope.queries)
+        if ($scope.selectedDashboard)
             {
-                if ($scope.queries[q].name == theChart.query.name)
-                    {
-                    theChart.query = $scope.queries[q];
-                    }
+                for (var i in $scope.selectedDashboard.reports)
+                {
+
+                    if ($scope.selectedDashboard.reports[i].properties != undefined)
+                        {
+                             if ($scope.selectedDashboard.reports[i].properties.chart != undefined)
+                               {
+                                var theChart = $scope.selectedDashboard.reports[i].properties.chart;
+                                $scope.showOverlay('OVERLAY_'+theChart.chartID);
+                                c3Charts.rebuildChart($scope.selectedDashboard.reports[i]);
+                                $scope.hideOverlay('OVERLAY_'+theChart.chartID);
+                                }
+                        }
+                }
             }
-            $scope.showOverlay('OVERLAY_'+theChart.chartID);
-            c3Charts.rebuildChart(theChart);
-            $scope.hideOverlay('OVERLAY_'+theChart.chartID);
-            }
-        }
     }
 
-    function rebuildRepeaters()
+    function rebuildGrids()
     {
-            for (var rp in $scope.repeaters)
+            /*for (var rp in $scope.repeaters)
                     {
 
                         for (var q in $scope.queries)
@@ -1871,10 +1883,10 @@ $scope.changeVisibility = function() {
                         grid.simpleGrid($scope.repeaters[rp].dataColumns,$scope.repeaters[rp].id,queryScopeReference,true,$scope.repeaters[rp].properties,function(){
 
                         });
-                    }
+                    }*/
     }
 
-    function rebuildCharts4Query(queryID)
+   /* function rebuildCharts4Query(queryID)
     {
         for (var i in $scope.charts)
         {
@@ -1891,7 +1903,7 @@ $scope.changeVisibility = function() {
             c3Charts.refreshChartData(theChart);
             }
         }
-    }
+    } */
 
     function clone(obj) {
         if (null == obj || "object" != typeof obj) return obj;
@@ -1921,51 +1933,51 @@ $scope.changeVisibility = function() {
         return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
     }
 
-    $scope.publishPage = function()
+    $scope.publishDashboard = function()
     {
-        $scope.objectToPublish = $scope.selectedPage;
+        $scope.objectToPublish = $scope.selectedDashboard;
         $('#publishModal').modal('show');
     }
 
     $scope.unPublish = function()
     {
-        connection.post('/api/pages/unpublish', {_id:$scope.selectedPage._id}, function(data) {
-            $scope.selectedPage.isPublic = false;
+        connection.post('/api/dashboardsv2/unpublish', {_id:$scope.selectedDashboard._id}, function(data) {
+            $scope.selectedDashboard.isPublic = false;
             $('#publishModal').modal('hide');
         });
     }
 
     $scope.selectThisFolder = function(folderID)
     {
-        connection.post('/api/pages/publish-page', {_id:$scope.selectedPage._id,parentFolder:folderID}, function(data) {
-            $scope.selectedPage.parentFolder = folderID;
-            $scope.selectedPage.isPublic = true;
+        connection.post('/api/pages/publish-page', {_id:$scope.selectedDashboard._id,parentFolder:folderID}, function(data) {
+            $scope.selectedDashboard.parentFolder = folderID;
+            $scope.selectedDashboard.isPublic = true;
             $('#publishModal').modal('hide');
         });
     }
 
     $scope.delete = function (pageID, pageName) {
         $scope.modalOptions = {};
-        $scope.modalOptions.headerText = 'Confirm delete page'
-        $scope.modalOptions.bodyText = 'Are you sure you want to delete the page:'+' '+pageName;
+        $scope.modalOptions.headerText = 'Confirm delete dashboard'
+        $scope.modalOptions.bodyText = 'Are you sure you want to delete the dashboard:'+' '+pageName;
         $scope.modalOptions.ID = pageID;
         $('#deleteModal').modal('show');
     };
 
-    $scope.deleteConfirmed = function (pageID) {
-        connection.post('/api/pages/delete/'+pageID, {id:pageID}, function(result) {
+    $scope.deleteConfirmed = function (dashboardID) {
+        connection.post('/api/dashboardsv2/delete/'+dashboardID, {id:dashboardID}, function(result) {
             if (result.result == 1) {
                 $('#deleteModal').modal('hide');
 
                 var nbr = -1;
-                for (var i in $scope.pages.items)
+                for (var i in $scope.dashboards.items)
                 {
-                    if ($scope.pages.items[i]._id === pageID)
+                    if ($scope.dashboards.items[i]._id === dashboardID)
                         nbr = i;
                 }
 
                 if (nbr > -1)
-                    $scope.pages.items.splice(nbr,1);
+                    $scope.dashboards.items.splice(nbr,1);
             }
         });
 

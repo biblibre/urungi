@@ -457,7 +457,6 @@ function clone(obj) {
         if (previousHierarchyFilter == -1)
             {
 
-        //4.-Add the actual value as a filter
 
                     //add the actual value as a filter to the query
                     var theFilter = {};

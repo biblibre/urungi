@@ -97,7 +97,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         ];
         dataSources = [];
         queries = [];
-        detectLayerJoins();
+        if (selectedLayer)
+            detectLayerJoins();
         //processStructure();
 
     }
@@ -264,18 +265,22 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         getQueryData(done);
     }
 
+    this.getQueryData = function(queryObject, done) {
+        query = queryObject;
+        getQueryData(done);
+    }
+
     this.loadQuery = function(queryObject)
     {
         query = queryObject;
     }
 
 
-    function getQueryData( done)
+    function getQueryData(done)
     {
             var params = {};
             params.query = query;
 
-            //console.log('the query gor get Data',query)
 
             connection.get('/api/reports/get-data', params, function(data) {
                 var sql = data.sql;
@@ -286,6 +291,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                     noty({text: data.msg,  timeout: 2000, type: 'error'});
                     done([],sql,query);
                 } else {
+
 
                     prepareData(query,data.data, function(result)
                     {
@@ -327,6 +333,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             }
             return value;
         }
+
+
         done(JSON.parse(JSON.stringify(data),dateTimeReviver));
     }
 

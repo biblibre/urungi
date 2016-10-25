@@ -267,7 +267,7 @@ this.simpleGridV2 = function(report,designerMode,properties)
 
             hashedID = report.query.id;
 
-            var htmlCode = '<div class="container-fluid repeater-tool-container"></div>';
+            var htmlCode = '<div  class="container-fluid repeater-tool-container"></div>';
 
             if (columns.length == 5 || columns.length > 6)
                 colWidth = 'width:'+100/columns.length+'%;float:left;';
@@ -414,11 +414,12 @@ this.extendedGridV2 = function(report)
             report = report;
             var id = report.id;
             hashedID = report.query.id;
-            var htmlCode = '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel(\''+hashedID+'\')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." /></div>';
+
+            var htmlCode =  '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel(\''+hashedID+'\')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." /></div>';
 
             columns = report.properties.columns;
 
-            if (columns.length == 5 || columns.length > 6)
+            if (columns.length > 4)
                 colWidth = 'width:'+100/columns.length+'%;float:left;';
             else
                 colClass = 'col-xs-'+12/columns.length;
@@ -432,12 +433,12 @@ this.extendedGridV2 = function(report)
             htmlCode += '</div>';
 
             //Body
-            htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;" bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+hashedID+'">';
+            htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;height:85%" >';
 
             //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
             //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
 
-            htmlCode += '<div class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data | filter:theFilter | orderBy:getReport(\''+hashedID+'\').predicate:getReport(\''+hashedID+'\').reverse  " style="width:100%;padding:0px">';
+            htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data | filter:theFilter | orderBy:getReport(\''+hashedID+'\').predicate:getReport(\''+hashedID+'\').reverse  " style="width:100%;padding:0px">';
 
             // POPOVER con HTML https://maxalley.wordpress.com/2014/08/19/bootstrap-3-popover-with-html-content/
 
@@ -448,6 +449,8 @@ this.extendedGridV2 = function(report)
             }
 
             htmlCode += '</div>';
+
+
 
             htmlCode += '<div ng-if="getQuery(\''+hashedID+'\').data.length == 0" >No data found</div>';
 
@@ -477,9 +480,10 @@ this.extendedGridV2 = function(report)
                     var elementNameAux = elementName;
                     if (column.elementType === 'date')
                         elementNameAux = "'"+column.collectionID.toLowerCase()+'_'+column.elementName+'_original'+"'";
+                    //htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementNameAux+','+quotedHashedID()+')">'+column.objectLabel+'</span><span class="sortorder" ng-show="getReport(\''+hashedID+'\').predicate === '+elementName+'" ng-class="{reverse:getReport(\''+hashedID+'\').reverse}"></span>'+getColumnDropDownHTMLCode(column,columnIndex,elementName,column.elementType)+' </div>';
+        htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><table style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space: nowrap;width:95%;">'+column.objectLabel+'</td><td style="width:34px;>'+getColumnDropDownHTMLCode(column,columnIndex,elementName,column.elementType)+'</td></tr></table> </div>';
 
-                    htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementNameAux+','+quotedHashedID()+')">'+column.objectLabel+'</span><span class="sortorder" ng-show="getReport(\''+hashedID+'\').predicate === '+elementName+'" ng-class="{reverse:getReport(\''+hashedID+'\').reverse}"></span>'+getColumnDropDownHTMLCode(column,columnIndex,elementName,column.elementType)+' </div>';
-          return htmlCode;
+        return htmlCode;
     }
 
 
@@ -593,9 +597,7 @@ this.extendedGridV2 = function(report)
 
     function calculateForColumn(report,columnIndex,elementName)
     {
-
         var htmlCode = '';
-
 
         if (columns[columnIndex].operationSum === true)
         {

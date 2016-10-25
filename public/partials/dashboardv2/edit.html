@@ -1,59 +1,26 @@
-<nd-modal id="pageNameModal">
-    <!--<div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3></h3>
-    </div>-->
-    <div class="modal-body">
-        <form class="simple-form" role="form" name="reportForm">
-            <div class="form-group">
-                <label>Page Name</label>
-                <input name="pageName" type="text" class="form-control" ng-model="selectedPage.pageName" ng-required="true" required >
-                <span ng-show="pageForm.pageName.$invalid" class="help-inline">The page name is required</span>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button ng-click="pageNameSave()" ng-disabled="reportForm.$invalid" class="btn btn-primary submit-btn pull-right">Save</button>
-        <button type="button" class="btn pull-right" data-dismiss="modal">Cancel</button>
-    </div>
-</nd-modal>
+<div ng-show="!reportInterface" id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid" style="height: 100%;border-bottom: 2px solid #72A230;">
+<div class="container-fluid" ng-init="initForm()" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
+    <h3 class="pull-left">Dashboard</h3>
+    <a id="saveDashboardBtn" data-ng-click="dashboardName()" class="btn btn-success pull-right" style="margin-left: 5px" tooltip="Click here to save the dashboard changes" tooltip-placement="bottom">Save</a>
 
-<div ng-init="initForm()" class="container-fluid" id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroDesignerOptions">
-<section ng-show="!queryInterface" id="designMainMenu" style="padding-top:5px;">
-    <a ng-disabled="columns.length <=0" data-ng-click="pageName()" class="btn btn-success pull-right" style="margin-right: 5px" tooltip="Click here to save the report" tooltip-placement="bottom">Save Page</a>
-    <a ng-if="!mode == 'add'" ng-disabled="columns.length <=0" data-ng-click="copyPage()" class="btn btn-primary pull-right" style="margin-right: 5px" tooltip="Click here to make a copy of this report" tooltip-placement="bottom">Copy</a>
-    <a ng-click="goBack()" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom" style="margin-right:3px;">Cancel</a>
-    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for data explorer" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
-</section>
-
-<section ng-show="!queryInterface" id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'data'" class="ng-scope">
-    <!--<menu>
-        <li id="searchTabButton" class="search">
-            <a ng-click="showTab(1)">Settings</a></li>
-        <li id="layoutTabButton" class="layout on" ng-show="service.parameters.layouts"><a ng-click="showTab(2)">Layouts</a></li>
-        <li id="textTabButton" class="text"><a ng-click="showTab(3)">Text</a></li>
-        <li id="backgroundsTabButton" class="backgrounds"><a ng-click="showTab(4)">Bkground</a></li>
-        <li id="uploadsTabButton" class="uploads"><a ng-click="showTab(5)">Uploads</a></li>
-    </menu>-->
+    <a ng-click="goBack();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
+    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for dashboards" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+</div>
 
 
+    <section id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'reports'" class="ng-scope">
         <menu>
-            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'data'}"><a ng-click="tabs.selected = 'data'">Data</a></li>
+            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'reports'}"><a ng-click="tabs.selected = 'reports'">Reports</a></li>
+            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'prompts'}" ><a ng-click="tabs.selected = 'prompts'">Run time Filters</a></li>
             <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'layouts'}" ><a ng-click="tabs.selected = 'layouts'">Layouts</a></li>
-            <li id="textTabButton" class="text hand-cursor" ng-class="{'on': tabs.selected == 'text'}" ><a ng-click="tabs.selected = 'text'">Elements</a></li>
-            <!--
-            <li id="backgroundsTabButton" class="backgrounds hand-cursor" ng-class="{'on': tabs.selected == 'backgrounds'}" ><a ng-click="tabs.selected = 'backgrounds'">Backgrounds</a></li>
-            -->
-            <!--
-            <li id="uploadsTabButton" class="uploads hand-cursor" ng-class="{'on': tabs.selected == 'uploads'}"><a ng-click="tabs.selected = 'uploads'">Uploads</a></li>
-            -->
+
         </menu>
-
-
-
     <section class="content">
         <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
-        <div ng-include src="settingsHtml"></div>
+            <section class="layer scrollPane">
+                <div ng-include src="settingsTemplate">
+                </div>
+            </section>
             <div class="scrollTrack vScrollTrack">
                 <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
             </div>
@@ -61,16 +28,52 @@
                 <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
             </div>
         </section>
-    <section id="resultsSearch" class="results infinite ng-hide" ng-show="tabs.selected == 'data'">
-        <div ng-include src="queriesHtml"></div>
-        <div class="scrollTrack vScrollTrack">
-            <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
-        </div>
-        <div class="scrollTrack hScrollTrack">
-            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
-        </div>
-    </section>
-    <section id="resultsLayout" class="results infinite twoCol" ng-show="tabs.selected == 'layouts'">
+        <section id="reportsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'reports'">
+            <section class="layer scrollPane">
+                <button class="button buttonBlock fileUploadButton" ng-click="newReport()" style="height:54px;">Add New Report</button>
+                <!--<ul>
+                    <li ng-repeat="item in dashBoardDefinitition.items">{{item.reportDefinition.reportName}}</li>
+                </ul>-->
+                <div ng-repeat="item in selectedDashboard.reports" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'report',reportID:'{{item.id}}'}" style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " id="{{item.id}}" class="">
+                    <!--background-image: url(images/chart_donut.png);background-size: contain;background-repeat: no-repeat;background-position-x: center;-->
+                    <span style="padding: 2px;border-right: 2px white solid;margin-right: 5px;background-color: white;">
+                        <img ng-if="item.reportType == 'grid'" src="images/grid.png" data-pin-nopin="true">
+                        <img ng-if="item.reportType == 'chart-line'" src="images/chart_line.png" data-pin-nopin="true">
+                        <img ng-if="item.reportType == 'chart-donut'" src="images/chart_donut.png" data-pin-nopin="true">
+                        <img ng-if="item.reportType == 'chart-bar'" src="images/chart_bar.png" data-pin-nopin="true">
+                        <img ng-if="item.reportType == 'indicator'" src="images/indicator.png" data-pin-nopin="true">
+                        <img ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
+                    </span>
+                    <span style="color: white; font-size: 10px; width:100%;text-align: left">{{item.reportName}}</span>
+                       <!-- <img src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px;" data-pin-nopin="true"> -->
+                </div>
+
+            </section>
+            <div class="scrollTrack vScrollTrack">
+                <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
+            </div>
+            <div class="scrollTrack hScrollTrack">
+                <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+            </div>
+        </section>
+        <section id="promptsTab" class="results infinite twoCol" ng-show="tabs.selected == 'prompts'">
+            <section class="layoutsTabContainer tabContainer">
+                <section class="tab">
+                    <section class="layer scrollPane">
+                        <ul>
+                            <li ng-repeat="prompt in prompts">{{prompt.objectLabel}}</li> <!--reportType-->
+                        </ul>
+                    </section>
+                    <div class="scrollTrack vScrollTrack">
+                        <div class="scrollThumb" style="height: 15px; transform: translateY(0px);"></div>
+                    </div>
+                    <div class="scrollTrack hScrollTrack">
+                        <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+                    </div>
+                </section>
+            </section>
+        </section>
+        <section id="resultsLayout" class="results infinite twoCol" ng-show="tabs.selected == 'layouts'">
         <section class="layoutsTabContainer tabContainer">
             <section class="tab">
                 <section class="layer scrollPane">
@@ -136,209 +139,50 @@
             </section>
         </section>
     </section>
-    <section id="resultsText" class="results infinite ng-hide" ng-show="tabs.selected == 'text'">
-        <section class="layoutsTabContainer scrollPane">
-            <section class="tab">
-                <section class="layer scrollPane">
 
-
-                    <!--<div class="inner">
-                        <div class="searchLoaderHolder"></div>
-                        <div class="searchGroup hasContent" style="height: 2872px;">
-                            <div class="row gallery infoPanelGallery templateGallery laidOut">
-                          -->  <ul id="photoGallery" class="galleryUploads infoPanelGallery photoGallery"  ng-init="getCatalogImages()">
-                                    <li >
-                                        <img style="background-color:#fff;width:70px;height:70px;margin:5px;padding:5px;" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'repeaterGrid'}"   ng-src="images/grid.png" width="70px" />
-                                    </li>
-                                    <li >
-                                        <img style="background-color:#fff;width:70px;height:70px;margin:5px;padding:5px;" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'chart'}"   ng-src="images/chart_line.png" width="70px" />
-                                    </li>
-                                    <li >
-                                        <img style="background-color:#fff;width:70px;height:70px;margin:5px;padding:5px;" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'donutChart'}"   ng-src="images/chart_donut.png" width="70px" />
-                                    </li>
-                                    <li >
-                                        <img style="background-color:#fff;width:70px;height:70px;margin:5px;padding:5px;" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'gauge'}"   ng-src="images/gauge.png" width="70px" />
-                                    </li>
-                                    <li >
-                                        <img style="background-color:#fff;width:70px;height:70px;margin:5px;padding:5px;" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'indicator'}"   ng-src="images/indicator.png" width="70px" />
-                                    </li>
-                                </ul>
-                                <!--
-                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'repeaterGrid'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c01" class="">
-
-                                 <img src="images/repeater_grid.png" width="200"  style="height: 50px;">
-                                </div>
-                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'chart'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c02" class="">
-
-                                 <img src="images/line_chart.png" width="200" style="height: 50px;">
-                                </div>
-                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'pieChart'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c03" class="">
-
-                                 <img src="images/pie_chart.png" width="200"  style="height: 50px;">
-                                </div>
-                                -->
-                               <!--
-                                <div x-lvl-draggable="true" data-color="h1" style="margin-bottom: 5px" draggable="true" id="11ca87e8-f335-9a72-03aa-c56c51f5106b">
-
-                                    <h1>Header 1</h1>
-                                </div>
-                                <div x-lvl-draggable="true" data-color="h2" style="margin-bottom: 5px" draggable="true" id="36485b41-197c-06ec-ea37-ca46b4a45a9d">
-
-                                    <h2>Header 2</h2>
-                                </div>
-                                <div x-lvl-draggable="true" data-color="h3" style="margin-bottom: 5px" draggable="true" id="b6e7ec7f-f2f4-a334-4f29-b5bc7c75a62c">
-
-                                    <h3>Header 3</h3>
-                                </div>
-                                <div x-lvl-draggable="true" data-color="h4" style="margin-bottom: 5px" draggable="true" id="8e0d4e90-b9d3-96cd-b1be-566686c324e7">
-
-                                    <h4>Header 4</h4>
-                                </div>
-                                <div x-lvl-draggable="true" data-color="h5" style="margin-bottom: 5px" draggable="true" id="6ab0437c-1cb3-82ad-6444-0f06b51dd32d">
-
-                                    <h5>Header 5</h5>
-                                </div>
-                                <div x-lvl-draggable="true" data-color="h6" style="margin-bottom: 5px" draggable="true" id="dc0bf5ee-c08d-35bd-871f-e540be4b2590">
-
-                                    <h6>Header 6</h6>
-                                </div>
-                                <div x-lvl-draggable="true" data-color="p" style="margin-bottom: 5px" draggable="true" id="6b66e962-3e2e-ee62-6950-69d8317b7011">
-                                    <p>Paragraph</p>
-                                </div>
-                                <div x-lvl-draggable="true" data-color="lead" style="margin-bottom: 5px" draggable="true" id="01d3c2ae-8847-f895-f902-32eeb0594fd8">
-                                    <p class="lead">Lead</p>
-                                </div>
-
-                                <div x-lvl-draggable="true" data-color="button" style="margin-bottom: 5px" draggable="true" id="60bf5c53-fc96-bb15-a711-bfb1b4cb9921">
-
-                                    <button class="btn btn-default btn-large" width="200" height="50">Button</button>
-                                </div>
-                                -->
-                           <!-- </div>
-                        </div>
-                    </div> -->
-                </section>
-            </section>
-        </section>
-        <div class="scrollTrack vScrollTrack">
-            <div class="scrollThumb" style="height: 42px; transform: translateY(0px);"></div>
-        </div>
-        <div class="scrollTrack hScrollTrack">
-            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
-        </div>
     </section>
+
+    </section>
+
     <!--
-        <section id="resultsBackground" class="results infinite ng-hide" ng-show="tabs.selected == 'backgrounds'">
-        <section class="layer scrollPane">
-            <ul id="photoGallery" class="galleryUploads infoPanelGallery photoGallery" ng-init="getCatalogImages()">
+    <section id="dropZone" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
 
-                    <li ng-repeat="catalogImage in catalogImages">
-                        <img draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'image',url:catalogImage.source1400}"  data-id="{{catalogImage.source1400}}" ng-src="{{catalogImage.url}}" width="70px" />
-                    </li>
 
-                </ul>
-        </section>
-        <div class="scrollTrack vScrollTrack">
-            <div class="scrollThumb" style="height: 26px; transform: translateY(0px);"></div>
-        </div>
-        <div class="scrollTrack hScrollTrack">
-            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
-        </div>
-    </section>
-        -->
-    <section id="resultsUpload" class="results infinite ng-hide" ng-show="tabs.selected == 'uploads'" ng-init="getUploads()">
-        <section id="normalUploads" class="layer scrollPane">
-            <div class="inner">
-                <section class="uploadButtonAndMessage">
-                    <button id="SelectFile" class="button buttonBlock fileUploadButton">Upload your own images</button>
-                    <!--<p>...or just drag them from your desktop.</p> -->
-                   <!-- <div class="progress-striped active progress ng-isolate-scope ng-hide" ng-show="uploads.uploadingFile" max="100" value="100" type="danger">
-  <div class="progress-bar progress-bar-danger" ng-class="type &amp;&amp; 'progress-bar-' + type" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" ng-style="{width: (percent < 100 ? percent : 100) + '%'}" aria-valuetext="100%" ng-transclude="" style="width: 100%;"><i class="ng-scope">uploading...</i></div>
-</div> -->
-                </section>
-                <!--<div class="browseCategories folderExpanded" style="height: 131px;">
-                    <ul class="gallery photoGallery albumGallery categories laidOut">
-                        <li class="folderExpanded" style="width: 109px; left: 0px; top: 0px;"><a href="#" data-query="uploads" title="Uploads" class="uploads"><span class="page on"></span><span class="page on"></span><img src="upload_folder_thumbnail.png" width="200" height="200" alt="Upload folder thumbnail" style="height: 81px;"><span class="text">Uploads</span></a></li>
-                        <li style="width: 109px; left: 109px; top: 0px;"><a href="#" data-query="facebook" title="Facebook" class="facebook"><span class="page on"></span><span class="page on"></span><img src="upload_folder_facebook.png" width="200" height="200" alt="Facebook folder thumbnail" style="height: 81px;"><span class="text">Facebook</span></a></li>
-                        <li style="width: 109px; left: 218px; top: 0px;"><a href="#" data-query="google" title="Google Drive" class="google"><span class="page on"></span><span class="page on"></span><img src="upload_folder_google_drive.png" width="200" height="200" alt="Google folder thumbnail" style="height: 81px;"><span class="text">Google Drive</span></a></li>
-                    </ul>
+    <div ng-include src="promptsBlock" class=" prompts-block"></div>
+
+    <div  data-gridster style="background-color: {{dashBoardDefinitition.backgroundColor}}" ng-init="generateDashBoard()">
+        <ul>
+            <li data-gridster-item data-row="item.position[0]" data-col="item.position[1]" data-sizex="item.size.x" data-sizey="item.size.y" ng-repeat="item in dashBoardDefinitition.items">
+                <div id="{{item.reportID}}" class="panel-body dashboard"  style=" background-color:#FFFFFF;height:100%;width: 100%;overflow-x:{{item.overflowx}};overflow-y: {{item.overflowy}}">
                 </div>
-                <div class="inlineFolderPointer" style="left: 84.5px;"></div>
-                <div class="inlineFolderGroup searchGroup end hasContent fetched" style="height: 78px;">
-                    <ul class="gallery infoPanelGallery photoGallery laidOut">
-                        <li class="" style="width: 102px; left: 0px; top: 0px;">
-                            <a href="#"><img  src="thumbnail.jpg?Expires=1427270510&amp;Signature=IgvQOZs2Y2AJqtfMbST~QJ1PNdUy1NMVm6xlp8C6qFK-frJZaHvQOhbIdZaUna8b5~~YTfG7bNBsils6u0hsamYLwz~OsRDSohuBBX4FPYhMHt2zoofzFqtOIJ~OwyF4fI6YC5OFBUUhql2efsBrvLnphLycSW6Lr6LnkhbDvXo~b1Xx4Fm7jA-Ow1HLkF5eBwDGJmX3Hzik1AlmrTivl0ANr~08y9GlVCcmOxEOsMzriKV~D-VCBDur6XBqwBwIVQNW6B0bCxmaKmB078bQx1TrYKq7vDuI2DTKJ8aJQ8cTTVC2VBmvz3D2lgJ27NLzKs9LfLf4mEji1dmsWDrLCg__&amp;Key-Pair-Id=APKAI6F2W6P23R2UF5NQ" width="200" height="150" style="height: 72px;"><span class="price free">Free</span><span class="info"><span class="price">Free</span> <span class="moreInfo" title="Show more info">i</span></span>
-                            </a>
-                        </li>
-                        <li class="" style="width: 102px; left: 102px; top: 0px;">
-                            <a href="#"><img  src="thumbnail.png?Expires=1427270510&amp;Signature=jcc2wOWQhv5aoYlYYNEtvkTSY7ywztpcrRrcKF8J~xW2cUg~CWVm5Q1Ohij8xuI8stVuINIIjBcfcNsjZBQyVtvb5enXPzK4HMCQxzUq5wxTm-teeHbkQhvJXpz9gGvKrTt-ZCEEuSMQccU7bxZXLDC8HZWGkKwo2sZgcFRuCO1Lr1c5HuKDzlM0LU4AuGFmFa-nR49jLNUHdCcQ-5clfCbqoW7rzbMYX7oaWQ3UPtz~xtj~~AUJIEeOVFq2yFX4XLdgCnw9suSG-1~mtenephxwJW9uHI7NJE-m9VdOskm9kj92CN5xhQkKoqnk6qI8pvCfIVIQNwPGx1KfBBF24w__&amp;Key-Pair-Id=APKAI6F2W6P23R2UF5NQ" width="200" height="61" style="height: 29.28px;"><span class="price free">Free</span><span class="info"><span class="price">Free</span> <span class="moreInfo" title="Show more info">i</span></span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>-->
-                <div class="spacer" style="height: 0px;"></div>
-                <div class="searchGroup">
-                    <!--<nd-drop-zone url="/api/custom/Designer/upload"></nd-drop-zone>-->
-
-
-                    <style>
-                        /*.designer-dropzone {
-                            position: fixed;
-                            top: 0px;
-                            left: 0px;
-                            width: 100%;
-                            background: rgba(0,0,0,0.5) !important;
-                            z-index: 9999;
-                            height: 100%;
-                            text-align: center;
-                        }*/
-                    </style>
-
-                    <ul id="photoGallery" class="galleryUploads infoPanelGallery photoGallery">
-
-                        <!-- ngRepeat: file in uploads.files -->
-
-                    </ul>
-
-                    <!-- Esto da problemas con el resto de drag and drop <form class="dropzone designer-dropzone" id="dropzone" ng-init="initDropzone()"></form> -->
-                    <!--<form class="dropzone designer-dropzone" id="dropzone" ng-init="initDropzone()"></form>-->
-
-                </div>
-
-            </div>
-        </section>
-        <div class="scrollTrack vScrollTrack">
-            <div class="scrollThumb" style="height: 80px; transform: translateY(0px);"></div>
-        </div>
-        <div class="scrollTrack hScrollTrack">
-            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
-        </div>
-    </section>
-    </section>
-
-    </section>
-</div>
-
-<section page-block ndType="page" ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
-
-</section>
-
-    <div id="previewContainer" ng-show="false">
-
+            </li>
+        </ul>
     </div>
 
 
+    </section> -->
+    <section page-block ndType="page" ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
 
+    </section>
 
- <div ng-show="queryInterface" id="queryModal" ng-controller="queryCtrl" ng-include src="reportModal"></div>
+</div>
 
+<div ng-show="reportInterface" id="reportModal" ng-controller="report_v2Ctrl" ng-include src="reportModal"></div>
 
+<nd-modal id="dashboardNameModal">
+    <div class="modal-body">
+        <form class="simple-form" role="form" name="dashboardForm">
+            <div class="form-group">
+                <label>Dashboard Name</label>
+                <input name="dashboardName" type="text" class="form-control" ng-model="selectedDashboard.dashboardName" ng-required="true" required >
+                <span ng-show="dashboardForm.dashboardName.$invalid" class="help-inline">The dashboard name is required</span>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-click="dashboardNameSave()" ng-disabled="reportForm.$invalid" class="btn btn-primary submit-btn pull-right">Save</button>
+        <button type="button" class="btn pull-right" data-dismiss="modal">Cancel</button>
+    </div>
+</nd-modal>
 
-<div ng-include src="chartModal"></div>
-
-
-
-
-
-
-
+<div id="previewContainer" ng-show="false"></div>

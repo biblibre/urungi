@@ -23,49 +23,22 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
 
     function getReport(report,parentDiv,done)
     {
-    showOverlay('OVERLAY_'+parentDiv);
+    showOverlay(parentDiv);
 
         var isLinked = false;
-/*
-        if ($routeParams.elementID && $routeParams.elementValue)
-               isLinked = true;
 
-        promptModel.getPrompts($scope,report, function(){
-                    if ($routeParams.elementID && $routeParams.elementValue)
-                    {
-                        for (var p in $scope.prompts)
-                        {
-                            if ($scope.prompts[p].elementID == $routeParams.elementID)
-                            {
-                                $scope.prompts[p].filterText1 = $routeParams.elementValue;
-                            }
-                        }
+        queryModel.loadQuery(report.query);
+        //report.parentDiv = parentDiv;
+        //repaintReport(report);
 
-                        $scope.checkPrompts();
+        queryModel.getQueryData(report.query, function(data,sql,query){
+                    report.query.data = data;
+                    report.parentDiv = parentDiv;
+                    repaintReport(report);
+                    //hideOverlay(parentDiv);
+                    done(sql);
 
-
-                    }  else {
-                        if ($scope.prompts.length > 0)
-                        {
-                            $scope.showPrompts = true;
-                        } else {
-                            setReportDiv($routeParams.reportID);
-                        }
-                    }
-                });
-
-    */
-
-    queryModel.loadQuery(report.query);
-
-    queryModel.getQueryData( function(data,sql,query){
-                console.log('the report data',data);
-                report.query.data = data;
-                report.parentDiv = parentDiv;
-                repaintReport(report);
-                done(sql);
-
-        });
+            });
     }
 
 
@@ -131,13 +104,9 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
             {
                 if (report.reportType == 'grid')
                             {
-                                    var gridProperties = {rowHeight:20,
-                                                         cellBorderColor:'#000'};
-                                //var htmlCode = grid.simpleGridV2(report,false,gridProperties);
+                                var gridProperties = {rowHeight:20,cellBorderColor:'#000'};
                                 var htmlCode = grid.extendedGridV2(report);
-                                //var htmlCode = grid.getUIGrid(report);
-
-                                    var el = document.getElementById(report.parentDiv);
+                                var el = document.getElementById(report.parentDiv);
 
                                         if (el)
                                         {
@@ -147,7 +116,8 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
                                             angular.element(document).injector().invoke(function($compile) {
                                                 var scope = angular.element($div).scope();
                                                 $compile($div)(scope);
-                                                hideOverlay('OVERLAY_'+report.parentDiv);
+                                                //hideOverlay('OVERLAY_'+report.parentDiv);
+                                                hideOverlay(report.parentDiv);
                                             });
                                         }
 
@@ -177,7 +147,8 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
                                             angular.element(document).injector().invoke(function($compile) {
                                                 var scope = angular.element($div).scope();
                                                 $compile($div)(scope);
-                                                hideOverlay('OVERLAY_'+report.parentDiv);
+                                                //hideOverlay('OVERLAY_'+report.parentDiv);
+                                                hideOverlay(report.parentDiv);
                                             });
                                         }
             }
@@ -186,7 +157,9 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
 
     function generatec3Chart(report)
     {
-            var htmlCode = c3Charts.getChartHTML(report.properties.chart.chartID);
+          var htmlCode = c3Charts.getChartHTML(report.id);
+
+        //var htmlCode = c3Charts.getChartHTML(report.properties.chart.chartID);
                                 var el = document.getElementById(report.parentDiv);
 
                                 if (el)
@@ -197,10 +170,12 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
                                     angular.element(document).injector().invoke(function($compile) {
                                         var scope = angular.element($div).scope();
                                         $compile($div)(scope);
-                                        setTimeout(function() {c3Charts.rebuildChart(report.query,report.properties.chart);
+                                        /*setTimeout(function() {c3Charts.rebuildChart(report,report.query,report.properties.chart);
+                                                               hideOverlay('OVERLAY_'+report.parentDiv);
+                                                               }, 500);*/
+                                        setTimeout(function() {c3Charts.rebuildChart(report);
                                                                hideOverlay('OVERLAY_'+report.parentDiv);
                                                                }, 500);
-                                        //$scope.gettingData = false;
                                     });
                                 }
 
@@ -279,8 +254,8 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
         report.query.order = [];
         report.query.order.push(theColumn);
         showOverlay('OVERLAY_'+hashedID);
-        console.log('overlay','OVERLAY_'+hashedID);
-        queryModel.getQueryData( function(data,sql,query){
+        //console.log('overlay','OVERLAY_'+hashedID);
+        queryModel.getQueryData(report.query, function(data,sql,query){
 
                 report.query.data = data;
                 hideOverlay('OVERLAY_'+hashedID);

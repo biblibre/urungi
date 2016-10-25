@@ -4,8 +4,6 @@
     <h3 class="pull-left">{{_Layer.name}}</h3>
     <a ng-click="save()" class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;">Save layer</a>
     <a href="/#/layers" class="btn btn-default pull-right">Cancel</a>
-
-
 </div>
 
 <div class="container-fluid" ng-init="view()">
@@ -30,6 +28,7 @@
 
             <section id="elementsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'elements'">
                 <section class="layer scrollPane">
+
                     <div class="container-fluid"  style="background-color: white; padding-top:3px">
                     <a ng-click="addFolder()" class="btn btn-info btn-small pull-right" style="margin-left: 5px;margin-right: 5px;">Add new folder</a>
                     </div>
@@ -56,7 +55,7 @@
                                     <span ng-if="!ngModelItem.editing == true" class="">{{ngModelItem.elementLabel}}</span>
                                     <span ng-if="ngModelItem.editing == true" class=""><input type="text" ng-model="ngModelItem.elementLabel" style="width:100px"></span>
                                     <div ng-if="!ngModelItem.editing == true" class="delete-schema-element-btn pull-right" ng-click="deleteSchemaElement(ngModelItem)" style="cursor:hand"><i class="fa fa-trash-o"></i></div>
-                                    <div ng-if="!ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = true" style="cursor:hand"><i class="fa fa-pencil"></i></div>
+                                    <div ng-if="!ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = true; elementEditing = true;" style="cursor:hand"><i class="fa fa-pencil"></i></div>
                                     <div ng-if="ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o"></i></div>
                                 </div>
                                 <!--
@@ -72,6 +71,7 @@
                             </div>
                         </script>
                      </div>
+
                 </section>
                 <div class="scrollTrack vScrollTrack">
                     <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>

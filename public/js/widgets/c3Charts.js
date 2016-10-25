@@ -1,10 +1,13 @@
 app.service('c3Charts' , function () {
 
 
-this.rebuildChart = function(query,chart)
+this.rebuildChart = function(report)
     {
         var theValues = [];
         var theNames = {};
+        var query = report.query;
+        var chart = report.properties.chart;
+        var reportID = report.id;
 
 
 
@@ -39,7 +42,7 @@ this.rebuildChart = function(query,chart)
             axisField = null;
             if (chart.dataAxis)
                 chart.dataAxis.id = null;
-            console.log('ERROR - No dataAxis defined for chart, or that column does not exists in query results');
+
         }
 
 
@@ -106,7 +109,8 @@ this.rebuildChart = function(query,chart)
 
         if (query)
         {
-            var theChartCode = '#'+chart.chartID;
+            //var theChartCode = '#'+chart.chartID;
+            var theChartCode = '#CHART_'+reportID;
 
                 if (!chart.height)
                     chart.height = 300;
@@ -333,7 +337,7 @@ this.rebuildChart = function(query,chart)
         if (mode == 'design')
             html = '<c3chart page-block  bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="'+theChartID+'" ndType="c3Chart" id="'+theChartID+'" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']">';
             else
-            html = '<c3chart bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="'+theChartID+'" id="'+theChartID+'" >';
+            html = '<c3chart bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="CHART_'+theChartID+'" id="CHART_'+theChartID+'" >';
             /*
             html = html + '<chart-axis>'+
                     '<chart-axis-x axis-id="x" axis-type="timeseries" axis-x-format="%Y-%m-%d %H:%M:%S">'+

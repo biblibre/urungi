@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryModel, queryService, promptModel, $routeParams,$timeout,$rootScope,bsLoadingOverlayService, grid, uuid2,c3Charts,report_v2Model,widgetsCommon) {
+app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryModel, queryService,reportService, promptModel, $routeParams,$timeout,$rootScope,bsLoadingOverlayService, grid, uuid2,c3Charts,report_v2Model,widgetsCommon,$location) {
 
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
@@ -19,6 +19,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.filterPromptModal = 'partials/query/filter-prompt-modal.html';
     $scope.dropArea = 'partials/query/drop-area.html';
     $scope.reportNameModal = 'partials/report/reportNameModal.html';
+    $scope.dashListModal = 'partials/report_v2/dashboardListModal.html';
+
 
     $scope.selectedReport = {};
     $scope.selectedReport.draft = true;
@@ -34,6 +36,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.gettingData = false;
     $scope.showSQL = false;
+
     $scope.rows = [];
     $scope.columns = queryModel.columns();
     $scope.order = queryModel.order();
@@ -69,10 +72,29 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
     };
 
-    $scope.initQuery = function() {
 
-        queryModel.initQuery();
 
+    $scope.initReport = function() {
+                console.log('intitiating new report');
+                $scope.selectedReport = {};
+                $scope.selectedReport.draft = true;
+                $scope.selectedReport.badgeStatus = 0;
+                $scope.selectedReport.exportable = true;
+                $scope.selectedReport.badgeMode = 1;
+                $scope.selectedReport.properties = {};
+                $scope.selectedReport.properties.xkeys = [];
+                $scope.selectedReport.properties.ykeys = [];
+                $scope.selectedReport.properties.columns = [];
+                $scope.selectedReport.reportType = 'grid';
+                $scope.rows = [];
+                $scope.columns = [];
+                $scope.order = [];
+                $scope.filters = [];
+                $scope.dataSources = [];
+                $scope.query = {};
+                $scope.selectedLayerID = queryModel.selectedLayerID;
+                $scope.mode = 'add';
+                queryModel.initQuery();
     }
 
     $scope.getSQLPanel = function()
@@ -94,9 +116,16 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         collection.splice(id,1);
     }
 
-    $scope.$on("newQuery", function (event, args) {
-        $scope.initQuery();
+    $scope.$on("newReport", function (event, args) {
+        $scope.initReport();
     });
+
+    $scope.$on("newReportForDash", function (event, args) {
+        $scope.initReport();
+        $scope.isForDash = true;
+    });
+
+
 
     $scope.$on("loadQueryStructure", function (event, args) {
         var theQuery = args.query;
@@ -113,6 +142,11 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.processStructure();
         console.log('load query strucuture');
     });
+
+    $scope.saveReportStructure = function() {
+        var clonedReport = $scope.selectedReport;
+        reportService.addReport(clonedReport);
+    }
 
     $scope.saveQueryStructure = function() {
         var queryStructure = {};
@@ -189,6 +223,16 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
 
 
+    };
+
+
+    $scope.getReports = function(params) {
+        var params = (params) ? params : {};
+
+
+        connection.get('/api/reports/find-all', params, function(data) {
+            $scope.reports = data;
+        });
     };
 
     $scope.getLayers = function() {
@@ -353,7 +397,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     var lastDrop = null;
     // Drop handler.
-    $scope.onDrop = function (data, event, type, group) {
+        $scope.onDrop = function (data, event, type, group) {
         $scope.gettingData = false;
         queryModel.onDrop($scope,data,event,type,group, function(){
             $scope.getDataForPreview();
@@ -785,6 +829,29 @@ $scope.changeColumnColor = function(color)
         $('modal-backdrop').remove();
 
     };
+
+    $scope.pushToDash = function()
+    {
+        var params = (params) ? params : {};
+
+        connection.get('/api/dashboardsv2/find-all', params, function(data) {
+            $scope.dashboards = data;
+            $('#dashListModal').modal('show');
+            //saveReportStructure(); saveReport4Dashboard(); initReport();
+            //$location.path( '/#/dashboardsv2/push/'+dashboardID );
+            //href="/#/dashboardsv2/push/{{dashboard._id}}"
+        });
+
+    }
+
+    $scope.reportPushed2Dash = function(dashboardID)
+    {
+        $('modal-backdrop').visible = false;
+        $('#dashListModal').modal('hide');
+        $scope.saveReportStructure();
+
+        $location.path( '/dashboardsv2/push/'+dashboardID );
+    }
 
 
 });

@@ -44,7 +44,7 @@ var app = angular.module('WideStage', [
 
         //dashboards v2
 
-         $routeProvider.when('/dashboardsv2', {
+         $routeProvider.when('/dashboardv2', {
             templateUrl: 'partials/dashboardv2/list.html',
             controller: 'dashBoardv2Ctrl'
         });
@@ -67,7 +67,11 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/dashboardv2/edit.html',
             controller: 'dashBoardv2Ctrl'
         });
-        $routeProvider.when('/dashboardsv2/edit/:dashboardID/', {
+        /*$routeProvider.when('/dashboardsv2/edit/:dashboardID/', {
+            templateUrl: 'partials/dashboardv2/edit.html',
+            controller: 'dashBoardv2Ctrl'
+        });*/
+        $routeProvider.when('/dashboardsv2/:mode/:dashboardID/', {
             templateUrl: 'partials/dashboardv2/edit.html',
             controller: 'dashBoardv2Ctrl'
         });
@@ -76,11 +80,11 @@ var app = angular.module('WideStage', [
 
         $routeProvider.when('/reports', {
             templateUrl: 'partials/report/list.html',
-            controller: 'reportCtrl'
+            controller: 'report_v2Ctrl'
         });
         $routeProvider.when('/report/:extra', {
             templateUrl: 'partials/report/list.html',
-            controller: 'reportCtrl'
+            controller: 'report_v2Ctrl'
         });
 
         $routeProvider.when('/reports/:reportID/', {
@@ -90,7 +94,7 @@ var app = angular.module('WideStage', [
 
         $routeProvider.when('/reports/:reportID/:elementID/:elementValue', {
             templateUrl: 'partials/report/view.html',
-            controller: 'reportCtrl'
+            controller: 'report_v2Ctrl'
         });
 
         $routeProvider.when('/reports/new/:reportID/', {
@@ -375,6 +379,24 @@ app.service('queryService', function() {
   return {
     addQuery: addQuery,
     getQuery: getQuery
+  };
+
+});
+
+app.service('reportService', function() {
+  var theReport = {};
+
+  var addReport = function(newObj) {
+      theReport = newObj;
+  };
+
+  var getReport = function(){
+      return theReport;
+  };
+
+  return {
+    addReport: addReport,
+    getReport: getReport
   };
 
 });

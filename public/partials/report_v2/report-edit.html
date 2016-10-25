@@ -10,7 +10,7 @@
 -->
 <div ng-include src="filterPromptModal"></div>
 
-<div class="container-fluid" style="padding:10px" ng-include src="dropArea">
+<div class="container-fluid" style="padding:10px" ng-include src="dropArea" ng-init="initReport()">
 </div>
 
 
@@ -32,19 +32,21 @@
     <h4 class="pull-right" >Query results</h4>
 </div>
 
-<div class="container-fluid" ng-show="sql && mode =='add'">
+<div class="container-fluid" ng-show="sql && mode =='add' && !isForDash">
     <button class="btn btn-success pull-right" ng-if="user.reportsCreate" ng-click="reportName()" style="margin-left:5px;">Save as a report</button>
-    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" style="margin-left:5px;">Push it to a Dashboard</button>
-    <button class="btn btn-success pull-right" ng-if="user.pagesCreate" style="margin-left:5px;">Push it to a Page</button>
+    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left:5px;">Push it to a Dashboard</button>
+</div>
+<div class="container-fluid" ng-show="sql && isForDash">
+    <button class="btn btn-success pull-right"  style="margin-left:5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(); initReport();">Push it to the Dashboard</button>
 </div>
 
 
-<div ng-show="showSQL" class="panel panel-default">
+<div ng-show="showSQL" class="panel panel-default" style="z-index:100">
             <div class="panel-heading">
 				<h3 class="panel-title">SQL query</h3>
 
 				<div class="panel-options">
-                    <a ng-click="getSQLPanel();" data-toggle="remove">
+                    <a ng-click="getSQLPanel();" data-toggle="remove" style="cursor: pointer; cursor: hand;" >
 						x
 					</a>
 				</div>
@@ -61,7 +63,10 @@
 </div>
 
 
-<div id="reportLayout" class="container-fluid" style="min-height:200px;position:relative;" bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_reportLayout">
+
+
+
+<div id="reportLayout" class="container-fluid" style="min-height:200px;position:relative;width:100%;height:350px" bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_reportLayout">
     <div ng-if="wrongFilters.length > 0 && columns.length > 0" class="alert alert-danger" role="alert"><i class="fa fa-warning fa-2" style="margin-right:10px;"></i>  <strong>Warning:</strong>     There are incomplete filters!!</div>
 
     <div ng-if="wrongFilters.length == 0"  bs-loading-overlay bs-loading-overlay-reference- style="min-height:100px">
@@ -78,3 +83,4 @@
 <div ng-include src="columnFormatModal"></div>
 <div ng-include src="columnSignalsModal"></div>
 <div ng-include src="reportNameModal"></div>
+<div ng-include src="dashListModal"></div>

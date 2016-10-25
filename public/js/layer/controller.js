@@ -792,7 +792,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                                     $scope.layerSelectedElement.format = element.format;
                                 if (element.associatedElements)
                                     $scope.layerSelectedElement.associatedElements = element.associatedElements;
-
+                                $scope.elementEditing = false;
                                 $('#elementModal').modal('hide');
                             }
                         }
