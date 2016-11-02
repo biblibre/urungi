@@ -290,7 +290,7 @@ img.img-cirlce {
 .btn {
     outline: 0;
     border: 1px solid transparent;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
 }
 
 [class*=fa-] {
@@ -1155,6 +1155,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     background-color: #FFF;
     margin-left: 90px;
     margin-right: 25px;
+    border-radius: 10px;
 
     /*float:left;*/
 }
@@ -2172,7 +2173,7 @@ div.callout {
 
 #dataObjects {
     position: absolute;
-    top: 50px;
+    top: 42px;
     right: -18px;
     left: 0;
     bottom: 0;
@@ -2197,7 +2198,6 @@ div.callout {
     box-sizing: border-box;
     overflow-y: auto;
     overflow-x: hidden;
-
     /*background-color: #CCCCCC;*/
 }
 

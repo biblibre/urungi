@@ -1,15 +1,20 @@
-    <div id="filtersPanel" ng-repeat="group in filters" ng-include="'partials/query/filtersGroup.html'"></div>
+    <div id="filtersPanel"  class="container-fluid column-zone no-padding" drop="onDropFilter($data, $event, 'filter')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+        <div class="filter-zone-label pull-right" ng-hide="selectedReport.properties.filters.length > 0">Drop here your filters</div>
+        <ul class="ul-drop no-padding" ng-model="selectedReport.properties.filters" ui-sortable="filterSortableOptions" ng-include="'partials/report_v2/filter.html'">
 
-    <div id="orderByPanel" ng-show="selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+        </ul>
+    </div>
+
+    <div id="orderByPanel" ng-show="selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" class="container-fluid column-zone no-padding" drop="onDropOrder($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="order.length > 0">Drop here order by elements</div>
-        <ul class="ul-drop no-padding" ng-model="order" ui-sortable="sortableOptions">
-            <li class="column-box order-box" ng-repeat="field in order" >
+        <ul class="ul-drop no-padding" ng-model="selectedReport.properties.order" ui-sortable="sortableOptions">
+            <li class="column-box order-box" ng-repeat="field in selectedReport.properties.order" >
                 <i class="fa fa-cube" ng-show="field.elementType != 'number' && field.elementType != 'count'"></i>
                 <i class="fa fa-list-ol" ng-show="field.elementType == 'number' || field.elementType == 'count'"></i>
                 <span tooltip="Drag to left or right to change order weight in the query (the more at your left, the more weight in the query when ordering results)" tooltip-placement="bottom">{{field.objectLabel}}</span>
                 <i ng-show="field.sortType == -1" class="fa fa-chevron-down hand-cursor order-box-close-btn" ng-click="field.sortType = 1;processStructure();" tooltip="Click here to order descendent using this field" tooltip-placement="bottom"></i>
                 <i ng-show="field.sortType == 1" class="fa fa-chevron-up hand-cursor order-box-close-btn" ng-click="field.sortType = -1;processStructure();" tooltip="Click here to order ascendent using this field" tooltip-placement="bottom"></i>
-                <i class="fa fa-times hand-cursor order-box-close-btn" ng-click="removeFromArray(order, field);detectLayerJoins();processStructure();" tooltip="Click here to remove this field from the query" tooltip-placement="bottom"></i>
+                <i class="fa fa-times hand-cursor order-box-close-btn" ng-click="removeOrder(field);detectLayerJoins();processStructure();" tooltip="Click here to remove this field from the query" tooltip-placement="bottom"></i>
             </li>
         </ul>
     </div>
@@ -17,17 +22,12 @@
     <div ng-if="selectedReport.reportType == 'grid'" id="columnsPanel"  class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="columns.length > 0">Drop here your columns</div>
         <ul class="ul-drop no-padding" ng-model="columns" ui-sortable="sortableOptions">
-            <li class="column-box" ng-repeat="column in columns" >
+            <li class="column-box" ng-repeat="column in selectedReport.properties.columns">
 
                 <div class="dropdown">
                     <i class="fa fa-cube" ng-show="column.elementType != 'number' && column.elementType != 'count'"></i>
                     <i class="fa fa-list-ol" ng-show="column.elementType == 'number' || column.elementType == 'count'"></i>
                     <span tooltip="Drag to left or right to change column order in the results" tooltip-placement="bottom">{{column.objectLabel}}</span>
-                    <!--<button class="btn btn-link dropdown-toggle" type="button" style="padding: 0px;"
-                            id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span style="color:#0000FF;">{{column.variableLabel}}</span>
-                        <i ng-show="column.elementType == 'string'" class="caret" style="color:#0000FF;"></i>
-                    </button>-->
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
                         <li ng-repeat="variable in stringVariables">
                             <a ng-click="column.variable = variable.value;column.variableLabel = variable.label;processStructure();">{{variable.label}}</a>

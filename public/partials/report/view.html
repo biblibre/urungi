@@ -1,12 +1,10 @@
 <div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
+    <h3 class="pull-left"  ng-bind="selectedReport.reportName"></h3>
     <a ng-if="selectedReport && ((selectedReport.owner == user._id) || isWSTADMIN)" href="/#/reports/edit/{{reportID}}"  class="btn btn-success pull-right" style="margin-right: 5px">Edit Report</a>
     <a ng-if="selectedReport && ((selectedReport.owner == user._id) || isWSTADMIN)" ng-click="publishReport()"  class="btn btn-success pull-right" style="margin-right: 5px">Publish</a>
     <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
 </div>
 
-<div class="container-fluid" style="border-bottom: 2px solid #72A230;">
-    <h3 ng-bind="selectedReport.reportName"></h3>
-</div>
 
 <div class="container-fluid " style="padding-top: 5px;">
 

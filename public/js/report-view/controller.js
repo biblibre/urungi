@@ -1,4 +1,4 @@
-app.controller('report_viewCtrl', function ($scope, promptModel,$routeParams,report_v2Model,queryModel,connection) {
+app.controller('report_viewCtrl', function ($scope, promptModel,$routeParams,report_v2Model,queryModel,connection,bsLoadingOverlayService) {
 
 $scope.searchModal = 'partials/report/searchModal.html';
 $scope.promptsBlock = 'partials/report/promptsBlock.html';
@@ -11,17 +11,29 @@ $scope.columnSignalsModal = 'partials/report/columnSignalsModal.html';
 
 $scope.selectedReport = {};
 
+$scope.showOverlay = function (referenceId) {
+        bsLoadingOverlayService.start({
+            referenceId: referenceId
+        });
+    };
 
+$scope.hideOverlay = function (referenceId) {
+        bsLoadingOverlayService.stop({
+            referenceId: referenceId
+        });
+    };
 
 $scope.getReportDiv = function() {
         if ($routeParams.reportID)
             {
+               $scope.showOverlay('OVERLAY_reportLayout');
                report_v2Model.getReportDefinition($routeParams.reportID,false, function(report) {
                     if (report)
                         {
                             $scope.selectedReport = report;
                             report_v2Model.getReport(report,'reportLayout',function() {
                                 //Done
+                                $scope.hideOverlay('OVERLAY_reportLayout');
                             });
                         } else {
                             //TODO:No report found message
@@ -35,13 +47,6 @@ $scope.getReportDiv = function() {
 
 $scope.getQuery = function(queryID)
     {
-        /*
-        for (var q in $scope.queries)
-        {
-            if ($scope.queries[q].id == queryID)
-                return $scope.queries[q]
-        }
-        */
         return queryModel.query();
     }
 

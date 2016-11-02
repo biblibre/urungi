@@ -60,7 +60,8 @@
     "ng-tags-input": "3.0.0",
     "angular-ui-grid": "~3.2.1",
     "angular-chosen-localytics": "~1.4.3",
-    "angular-ui-select": "~0.19.4"
+    "angular-ui-select": "~0.19.4",
+    "angular-editable-text": "~1.1.2"
   },
   "resolutions": {
     "angular": "1.5.5"

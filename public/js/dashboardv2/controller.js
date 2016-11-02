@@ -234,37 +234,48 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         { //editing
             if ($scope.dashboardID)
             {
-                connection.get('/api/dashboardsv2/get/'+$scope.dashboardID, {id: $scope.dashboardID}, function(data) {
-                    $scope.selectedDashboard = data.item;
+                if ($scope.dashboardID == 'new')
+                    {
+                        $scope.selectedDashboard = {dashboardName:"New Dashboard", backgroundColor:"#999999" ,reports:[],items:[],properties:{},dashboardType:'DEFAULT'};
+                        $scope.mode = 'add';
+                        var qstructure = reportService.getReport();
+                            qstructure.reportName = 'report_'+($scope.selectedDashboard.reports.length +1);
+                            qstructure.id = uuid2.newguid();
+                            $scope.selectedDashboard.reports.push(qstructure);
+                            $('modal-backdrop').remove();
+                    } else {
+                        connection.get('/api/dashboardsv2/get/'+$scope.dashboardID, {id: $scope.dashboardID}, function(data) {
+                            $scope.selectedDashboard = data.item;
 
-                    var qstructure = reportService.getReport();
-                    qstructure.reportName = 'report_'+($scope.selectedDashboard.reports.length +1);
-                    qstructure.id = uuid2.newguid();
-                    $scope.selectedDashboard.reports.push(qstructure);
+                            var qstructure = reportService.getReport();
+                            qstructure.reportName = 'report_'+($scope.selectedDashboard.reports.length +1);
+                            qstructure.id = uuid2.newguid();
+                            $scope.selectedDashboard.reports.push(qstructure);
 
-                    if ($scope.selectedDashboard.backgroundColor)
-                        $('#designArea').css({ 'background-color': $scope.selectedDashboard.backgroundColor}) ;
+                            if ($scope.selectedDashboard.backgroundColor)
+                                $('#designArea').css({ 'background-color': $scope.selectedDashboard.backgroundColor}) ;
 
-                    getQueryData(0,function(){
-                        rebuildCharts();
-                        rebuildGrids();
-                    });
+                            getQueryData(0,function(){
+                                rebuildCharts();
+                                rebuildGrids();
+                            });
 
-                    //getAllPageColumns();
+                            //getAllPageColumns();
 
 
-                    var $div = $($scope.selectedDashboard.properties.designerHTML);
-                    var el = angular.element(document.getElementById('designArea'));
-                    el.append($div);
-                    angular.element(document).injector().invoke(function($compile) {
-                        var scope = angular.element($div).scope();
-                        $compile($div)($scope);
-                    });
+                            var $div = $($scope.selectedDashboard.properties.designerHTML);
+                            var el = angular.element(document.getElementById('designArea'));
+                            el.append($div);
+                            angular.element(document).injector().invoke(function($compile) {
+                                var scope = angular.element($div).scope();
+                                $compile($div)($scope);
+                            });
 
-                    cleanAllSelected();
+                            cleanAllSelected();
 
-                    $scope.getPrompts();
-                });
+                            $scope.getPrompts();
+                        });
+                    }
             }
         }
 
@@ -1144,11 +1155,8 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             if ($scope.selectedDashboard.containers[c].id == id)
                 {
                     return $scope.selectedDashboard.containers[c].properties.tabs;
-
                 }
-
             }
-
     }
 
     $scope.selectThisTab = function(tabsID,id)
@@ -1496,7 +1504,12 @@ $scope.changeVisibility = function() {
 
 
     $scope.dashboardName = function () {
-        $('#dashboardNameModal').modal('show');
+        if ($scope.mode == 'add')
+            {
+              $('#dashboardNameModal').modal('show');
+            } else {
+              saveDashboard();
+            }
     };
 
     $scope.dashboardNameSave = function () {

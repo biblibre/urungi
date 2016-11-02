@@ -11,19 +11,19 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     {
         return query;
     }
-    var columns = [];
+   /* var columns = [];
     this.columns = function()
     {
         return columns;
     }
-
-    var order = [];
+*/
+  /*  var order = [];
     this.order = function()
     {
         return order;
     }
-
-    var filters = [
+*/
+   /* var filters = [
         {
             group: true,
             filters: []
@@ -33,7 +33,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     this.filters = function()
     {
         return filters;
-    }
+    } */
 
     var datasources = [];
     var queries = [];
@@ -87,20 +87,19 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     this.initQuery = function() {
         query = {};
         query.id = uuid2.newguid();
-        columns = [];
-        order = [];
-        filters = [
-        {
-            group: true,
-            filters: []
-        }
-        ];
+        query.columns = [];
+        query.order = [];
+        query.groupFilters = [];
         dataSources = [];
         queries = [];
         if (selectedLayer)
             detectLayerJoins();
-        //processStructure();
+    }
 
+    this.loadQuery = function(theQuery)
+    {
+        query = theQuery;
+        //detectLayerJoins();
     }
 
     this.filterStringOptions = [
@@ -250,12 +249,48 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
     this.removeQueryItem = function(object,type)
     {
-
         if (type == 'column')
-        {
-            if (columns)
-                $rootScope.removeFromArray(columns, object);
-        }
+                {
+                    if (query.columns)
+                        $rootScope.removeFromArray(query.columns, object);
+
+                    for (var i in query.columns)
+                        {
+                            if (query.columns[i].elementID == object.elementID)
+                                {
+
+                                    query.columns.splice(i,1);
+                                }
+                        }
+                }
+
+        if (type == 'order')
+                {
+                    $rootScope.removeFromArray(query.order, object);
+                    for (var i in query.order)
+                        {
+                            if (query.order[i].elementID == object.elementID)
+                                {
+
+                                    query.order.splice(i,1);
+                                }
+                        }
+                }
+
+       if (type == 'filter')
+                {
+
+                     $rootScope.removeFromArray(query.groupFilters, object);
+
+                   /* for (var i in query.groupFilters)
+                        {
+                            if (query.groupFilters[i].elementID == object.elementID)
+                                {
+
+                                    query.groupFilters.splice(i,1);
+                                }
+                        }*/
+                }
 
         detectLayerJoins();
 
@@ -268,11 +303,6 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     this.getQueryData = function(queryObject, done) {
         query = queryObject;
         getQueryData(done);
-    }
-
-    this.loadQuery = function(queryObject)
-    {
-        query = queryObject;
     }
 
 
@@ -295,10 +325,6 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
                     prepareData(query,data.data, function(result)
                     {
-                        query.columns = columns;
-                        query.filters = filters;
-                        query.order = order;
-
                         done(result,sql,query);
                     });
                 }
@@ -345,6 +371,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         var query = {};
         query.id = uuid2.newguid();
         query.datasources = [];
+        query.columns = [];
+        query.order = [];
 
         var datasourcesList = [];
         var layersList = [];
@@ -371,10 +399,10 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 collection.order = [];
                 collection.order.push(attribute);
 
-                for (var n1 in order) {
-                    if (order[n1].collectionID == dtsCollections[n])
+                for (var n1 in query.order) {
+                    if (query.order[n1].collectionID == dtsCollections[n])
                     {
-                        collection.order.push(order[n1]);
+                        collection.order.push(query.order[n1]);
                     }
                 }
 
@@ -385,8 +413,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         }
 
         query.layers = layersList;
-        query.order = [];
-        query.order.push(attribute);
+        //query.order = [];
+        //query.order.push(attribute);
 
         getData(query, {page: 0}, function(data,sql) {
 
@@ -411,6 +439,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         var query = {};
         query.id = uuid2.newguid();
         query.datasources = [];
+        query.columns = [];
+        query.order = [];
 
         var datasourcesList = [];
         var layersList = [];
@@ -437,10 +467,10 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 collection.order = [];
                 collection.order.push(attribute);
 
-                for (var n1 in order) {
-                    if (order[n1].collectionID == dtsCollections[n])
+                for (var n1 in query.order) {
+                    if (query.order[n1].collectionID == dtsCollections[n])
                     {
-                        collection.order.push(order[n1]);
+                        collection.order.push(query.order[n1]);
                     }
                 }
 
@@ -451,8 +481,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         }
 
         query.layers = layersList;
-        query.order = [];
-        query.order.push(attribute);
+        //query.order = [];
+        //query.order.push(attribute);
 
         getData(query, {page: 0}, function(data,sql) {
             done(data,sql);
@@ -466,6 +496,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         var query = {};
         query.id = uuid2.newguid();
         query.datasources = [];
+        query.columns = [];
+        query.order = [];
 
         var datasourcesList = [];
         var layersList = [];
@@ -492,10 +524,10 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 collection.order = [];
                 collection.order.push(attribute);
 
-                for (var n1 in order) {
-                    if (order[n1].collectionID == dtsCollections[n])
+                for (var n1 in query.order) {
+                    if (query.order[n1].collectionID == dtsCollections[n])
                     {
-                        collection.order.push(order[n1]);
+                        collection.order.push(query.order[n1]);
                     }
                 }
 
@@ -506,8 +538,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         }
 
         query.layers = layersList;
-        query.order = [];
-        query.order.push(attribute);
+        //query.order = [];
+        //query.order.push(attribute);
 
         getData(query, {page: 0}, function(data,sql) {
 
@@ -621,7 +653,9 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
         checkChoosedElements();
 
-        generateQuery(function(){
+        generateQuery();
+
+        console.log('detecting layers',query);
 
             //this function enables and disables elements in the layer if there is a join between the elements in the report and the element in the layer...
             var reportCollections = [];
@@ -664,7 +698,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 enableAllElements(rootItem.elements);
             else
                 detectLayerJoins4Elements(rootItem.elements,selectableCollections);
-        });
+
     }
 
     function detectLayerJoins4Elements(elements,selectableCollections)
@@ -712,10 +746,10 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     }
 
 
-    function checkFilters(filters)
+    function checkFilters(thefilters)
     {
-        for (var g in filters) {
-                var filter = filters[g];
+        for (var g in thefilters) {
+                var filter = thefilters[g];
                 if (filter)
                     {
                         if ((filter.searchValue == undefined || filter.searchValue == '') && filter.filterPrompt == false)
@@ -731,6 +765,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
 
     var lastDrop = null;
+
+
     // Drop handler.
     this.onDrop = function ($scope,data, event, type, group, done) {
         event.stopPropagation();
@@ -747,26 +783,23 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
 
         if (type == 'column') {
-            var el = document.getElementById('column-zone');
-            var theTemplate =  $compile('<div class="column-box">'+customObjectData.objectLabel+'</div>')($scope);
-            if (!columns)
-                columns = [];
-            columns.push(customObjectData);
-
-        }
+            if (!query.columns)
+                 query.columns = [];
+            query.columns.push(customObjectData);
+            }
 
         if (type == 'order') {
             customObjectData.sortType = -1;
-            order.push(customObjectData);
+            query.order.push(customObjectData);
         }
         if (type == 'filter') {
             var el = document.getElementById('filter-zone');
-            filters.push(customObjectData);
+            query.groupFilters.push(customObjectData);
             this.filtersUpdated();
         }
         if (type == 'group') {
 
-            group.filters.push(customObjectData);
+            query.groupFilters.push(customObjectData);
             this.filtersUpdated();
         }
 
@@ -775,7 +808,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         processStructure(undefined,done);
     };
 
-    this.onDropOnFilter = function (data, event, filter) {
+   /* this.onDropOnFilter = function (data, event, filter) {
         lastDrop = 'onFilter';
 
         var droppedFilter = data['json/custom-object'];
@@ -799,57 +832,59 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
         event.stopPropagation();
         return;
-    };
+    };*/
 
     function checkChoosedElements()
     {
-        if (columns.length > 1)
+        if (query.columns.length > 1)
         {
-            for( var e=columns.length -1;e>=0;e--)
+            for( var e=query.columns.length -1;e>=0;e--)
             {
-                if (thereIsAJoinForMe(columns[e]) == 0)
+                if (thereIsAJoinForMe(query.columns[e]) == 0)
                 {
 
-                columns.splice(e,1);
+                query.columns.splice(e,1);
                 }
             }
         }
     }
 
 
-    function generateQuery(done)
+    this.generateQuery = function()
     {
-        //$scope.processStructure();
-        query = {};
+        return generateQuery();
+    }
+
+    function generateQuery()
+    {
         query.id = uuid2.newguid();
         query.datasources = [];
-        query.order = order;
-
-
         query.wrongFilters = wrongFilters;
-
-
         var datasourcesList = [];
         var layersList = [];
         layersList.push(selectedLayerID);
 
-        for (var i in columns) {
-            if (datasourcesList.indexOf(columns[i].datasourceID) == -1)
-                datasourcesList.push(columns[i].datasourceID);
-            if (layersList.indexOf(columns[i].layerID) == -1)
-                layersList.push(columns[i].layerID);
+        for (var i in query.columns) {
+            if (datasourcesList.indexOf(query.columns[i].datasourceID) == -1)
+                datasourcesList.push(query.columns[i].datasourceID);
+            if (layersList.indexOf(query.columns[i].layerID) == -1)
+                layersList.push(query.columns[i].layerID);
         }
 
-        for (var i in filters) {
 
-            for (var z in filters[i].filters)
-            {
-                if (datasourcesList.indexOf(filters[i].filters[z].datasourceID) == -1)
-                    datasourcesList.push(filters[i].filters[z].datasourceID);
-                if (layersList.indexOf(filters[i].filters[z].layerID) == -1)
-                    layersList.push(filters[i].filters[z].layerID);
-            }
+        for (var i in query.groupFilters) {
+                if (datasourcesList.indexOf(query.groupFilters[i].datasourceID) == -1)
+                    datasourcesList.push(query.groupFilters[i].datasourceID);
+                if (layersList.indexOf(query.groupFilters[i].layerID) == -1)
+                    layersList.push(query.groupFilters[i].layerID);
+        }
 
+
+        for (var i in query.order) {
+                if (datasourcesList.indexOf(query.order[i].datasourceID) == -1)
+                    datasourcesList.push(query.order[i].datasourceID);
+                if (layersList.indexOf(query.order[i].layerID) == -1)
+                    layersList.push(query.order[i].layerID);
         }
 
         for (var i in datasourcesList) {
@@ -861,16 +896,24 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             var dtsCollections = [];
 
 
-            for (var z in columns) {
-                if (columns[z].datasourceID == datasourcesList[i])
+            for (var z in query.columns) {
+                if (query.columns[z].datasourceID == datasourcesList[i])
                 {
-                    if (dtsCollections.indexOf(columns[z].collectionID) == -1)
-                        dtsCollections.push(columns[z].collectionID);
+                    if (dtsCollections.indexOf(query.columns[z].collectionID) == -1)
+                        dtsCollections.push(query.columns[z].collectionID);
+                }
+            }
+
+            for (var z in query.order) {
+                if (query.order[z].datasourceID == datasourcesList[i])
+                {
+                    if (dtsCollections.indexOf(query.order[z].collectionID) == -1)
+                        dtsCollections.push(query.order[z].collectionID);
                 }
             }
 
 
-            getFiltersCollections(filters,dtsCollections,datasourcesList[i], function(){
+            getFiltersCollections(query.groupFilters,dtsCollections,datasourcesList[i], function(){
 
                         for (var n in dtsCollections) {
 
@@ -879,33 +922,40 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
                             collection.columns = [];
 
-                            for (var n1 in columns) {
-                                if (columns[n1].collectionID == dtsCollections[n])
+                            for (var n1 in query.columns) {
+                                if (query.columns[n1].collectionID == dtsCollections[n])
                                 {
-                                    collection.columns.push(columns[n1]);
+                                    collection.columns.push(query.columns[n1]);
                                 }
                             }
 
                             collection.order = [];
 
-                            for (var n1 in order) {
-                                if (order[n1].collectionID == dtsCollections[n])
+                            for (var n1 in query.order) {
+                                if (query.order[n1].collectionID == dtsCollections[n])
                                 {
-                                    collection.order.push(order[n1]);
+                                    collection.order.push(query.order[n1]);
                                 }
                             }
 
 
                             collection.filters = [];
-                             for (var n1 in filters) {
-                                for (var n1f in filters[n1].filters)
+                             for (var n1 in query.groupFilters) {
+                                /*for (var n1f in query.filters[n1].filters)
                                 {
-                                if (filters[n1].filters[n1f].collectionID)
-                                    if (filters[n1].filters[n1f].collectionID == dtsCollections[n])
+                                if (query.filters[n1].filters[n1f].collectionID)
+                                    if (query.filters[n1].filters[n1f].collectionID == dtsCollections[n])
                                         {
-                                            collection.filters.push(filters[n1].filters[n1f]);
+                                            collection.filters.push(query.filters[n1].filters[n1f]);
                                         }
-                                }
+                                }*/
+
+                                if (query.groupFilters[n1].collectionID)
+                                    if (query.groupFilters[n1].collectionID == dtsCollections[n])
+                                        {
+                                            collection.filters.push(query.groupFilters[n1]);
+                                        }
+
                              }
 
                             dtsObject.collections.push(collection);
@@ -921,22 +971,28 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
         }
 
-        query.groupFilters = filters;
+       // query.groupFilters = filters;
+
+        return query;
+    }
+
+
+    function getFiltersCollections(thefilters,dtsCollections,dtsID,done)
+    {
+
+        for (var z in thefilters) {
+                if (thefilters[z].datasourceID == dtsID)
+                            {
+                                    if (dtsCollections.indexOf(thefilters[z].collectionID) == -1)
+                                    {
+                                        dtsCollections.push(thefilters[z].collectionID);
+                                    }
+                            }
+            }
 
         done();
     }
-
-
-    function getFiltersCollections(filters,dtsCollections,dtsID,done)
-    {
-
-        for (var z in filters) {
-                getGroupCollections(filters[z].filters,dtsCollections,dtsID,true,function(){
-                    done();
-                });
-            }
-    }
-
+/*
     function getGroupCollections(theGroup,dtsCollections,dtsID,isRoot,done)
     {
             for (var ff in theGroup)
@@ -964,7 +1020,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 done();
 
     }
-
+*/
     this.processStructure = function(execute, done)
     {
         processStructure(execute,done);
@@ -974,14 +1030,13 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
         var execute = (typeof execute !== 'undefined') ? execute : true;
         wrongFilters = [];
-        checkFilters(filters);
+        checkFilters(query.groupFilters);
 
             if (wrongFilters.length == 0)
                 {
                     $('#reportLayout').empty();
-                    if (columns.length > 0 && execute)
+                    if (query.columns.length > 0 && execute)
                         done();
-                        //$scope.getDataForPreview();
 
                 } else {
 
@@ -995,11 +1050,11 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     function thereIsAJoinForMe(element)
     {
         var found = 0;
-        for (var i in columns)
+        for (var i in query.columns)
         {
-             if (element.elementID != columns[i].elementID)
+             if (element.elementID != query.columns[i].elementID)
              {
-                 if (joinExists(element.collectionID,columns[i].collectionID) || (element.collectionID == columns[i].collectionID))
+                 if (joinExists(element.collectionID,query.columns[i].collectionID) || (element.collectionID == query.columns[i].collectionID))
                     found = found+1;
              }
         }
@@ -1038,20 +1093,12 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
 
     this.filtersUpdated = function(theFilters, mainFilters) {
-        var theFilters = (theFilters) ? theFilters : filters;
+        var theFilters = (theFilters) ? theFilters : query.groupFilters;
         var mainFilters = (typeof mainFilters === 'undefined') ? true : mainFilters;
-        updateConditions(theFilters);
-        updateGroups(theFilters, mainFilters);
-        for (var i in theFilters) {
-            if (theFilters[i])
-                if (theFilters[i].group) {
-                    this.filtersUpdated(theFilters[i].filters, false);
-                }
-        }
     };
-
+/*
     function updateGroups(theFilters, mainFilters) {
-        var theFilters = (theFilters) ? theFilters : filters;
+        var theFilters = (theFilters) ? theFilters : query.groupFilters;
 
         for (var i in theFilters) {
             if (theFilters[i])
@@ -1062,9 +1109,9 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 }
         }
     };
-
+*/
     function updateConditions(theFilters) {
-        var theFilters = (theFilters) ? theFilters : filters;
+        var theFilters = (theFilters) ? theFilters : query.groupFilters;
         for (var i in theFilters) {
             if (i%2) { //must be condition
                 if (!theFilters[i].condition) {

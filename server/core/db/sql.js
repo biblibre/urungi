@@ -432,6 +432,8 @@ function getElementList (target,elements,parent) {
 }
 
 function processCollections(req,query,collections, dataSource, params, thereAreJoins, setresult,  index) {
+
+
     var from = [];
     var fields = [];
     var groupBy = [];
@@ -508,8 +510,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             var field = table.columns[e];
             elements.push(field);
             //TODO: Count test
-            //SELECT WSTx4fz.WSTcountedm.etl_log as wstx4fz_WSTcountedm.etl_log FROM edm.etl_log WSTx4fz GROUP BY WSTx4fz.WSTcountedm.etl_log LIMIT 500 OFFSET 0
-
 
             if (field.aggregation) {
                 found = true;
@@ -555,12 +555,13 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
     }
 
 
+
+
     SQLstring = SQLstring + ' FROM '+ leadTable.schema.collectionName + ' '+ leadTable.collectionID + getJoins(leadTable.collectionID,collections,[]);
 
 
 
     var havings = [];
-
     getFilters(query, function(filtersResult,havingsResult){
 
         if (filtersResult.length > 0)
@@ -574,6 +575,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
         if (groupBy.length > 0)
             SQLstring = SQLstring + ' GROUP BY ';
+
 
         for (var f in groupBy)
         {
@@ -654,10 +656,9 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             SQLstring += ' '+db.getLimitString(config.query.defaultRecordsPerPage, ((params.page -1 )*config.query.defaultRecordsPerPage));
             }
 
-        //console.log(SQLstring);
+
         //Fix for filters with having and normal filters
         SQLstring = SQLstring.replace("WHERE  AND", "WHERE");
-        //console.log(SQLstring);
 
         if (dataSource.type != 'BIGQUERY')
         {
@@ -738,9 +739,42 @@ function getFilters(query,done)
     var filters = [];
     var havings = [];
     //var previousRelational = '';
-
+/*
     if (query.groupFilters == undefined)
         done(filters,havings);
+*/
+
+
+    for (var f in query.groupFilters) {
+
+        var previousRelational = '';
+
+        if (query.groupFilters[f].conditionLabel)
+        {
+            previousRelational = ' '+query.groupFilters[f].conditionLabel+' ';
+        }
+
+        var filterSQL = getFilterSQL(query.groupFilters[f]);
+
+
+            if (!query.groupFilters[f].aggregation)
+            {
+                if (f > 0)
+                    filterSQL = previousRelational + filterSQL;
+
+                filters.push(filterSQL);
+            } else {
+                if (havings.length > 0)
+                    filterSQL = previousRelational + filterSQL;
+
+                havings.push(filterSQL);
+            }
+
+    }
+
+    done(filters,havings);
+
+    /*
 
     for (var g in query.groupFilters) {
 
@@ -753,7 +787,10 @@ function getFilters(query,done)
 
     }
 
+    */
+
 }
+
 
 
 function processFilterGroup(group,filters,havings,isRoot,done)
@@ -765,12 +802,12 @@ function processFilterGroup(group,filters,havings,isRoot,done)
     for (var f in group.filters)
     {
 
-        if (group.filters[f].condition)
+        if (group.filters[f].conditionLabel)
         {
             previousRelational = ' '+group.filters[f].conditionLabel+' ';
         }
 
-        if (!group.filters[f].condition)
+        if (!group.filters[f].conditionLabel)
         {
             var filterSQL = getFilterSQL(group.filters[f]);
 

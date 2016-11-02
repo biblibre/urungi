@@ -17,10 +17,10 @@
                 <div id="reportList" class="list-group">
                     <div  id="reportListItem" class="list-group-item" ng-repeat="dashboard in dashboards.items">
 
-                        <a id="reportListItemDeleteBtn" href="" class="pull-right" ng-click="delete(dashboard._id,dashboard.dashboardName)" style="color:#FF0000;font-size: 16px;margin-right: 5px" tooltip="Click here to delete this dashboard" tooltip-placement="bottom">
+                        <a id="reportListItemDeleteBtn" href="" class="pull-right  list-delete-button" ng-click="delete(dashboard._id,dashboard.dashboardName)"  tooltip="Click here to delete this dashboard" tooltip-placement="bottom">
                             <i class="fa fa-trash-o "  ></i>
                         </a>
-                        <a id="reportListItemEditBtn" class="pull-right" href="/#/dashboardsv2/edit/{{dashboard._id}}" style="color:#000080; font-size: 16px;margin-right: 3px;" tooltip="Click here to modify this dashboard" tooltip-placement="bottom">
+                        <a id="reportListItemEditBtn" class="pull-right  list-edit-button" href="/#/dashboardsv2/edit/{{dashboard._id}}"  tooltip="Click here to modify this dashboard" tooltip-placement="bottom">
                             <i class="fa fa-pencil" ></i>
                         </a>
                         <span id="reportListItemPublished" ng-if="dashboard.isPublic" class="badge badge-success pull-right" style="margin-right: 5px;">published</span>

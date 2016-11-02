@@ -578,6 +578,8 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                 //This executes in edit mode
                 reportModel.getReport($scope, $routeParams.reportID,'edit',false, function() {
                     $scope.getLayers();
+                    $scope.mode = 'edit';
+                    console.log('edit mode');
                     generateQuery(function(){
                         $scope.processStructure(false);
                     });
@@ -745,12 +747,18 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     };
 
     $scope.reportName = function () {
-        $('#theReportNameModal').modal('show');
+        if ($scope.mode == "add")
+            {
+                $('#theReportNameModal').modal('show');
+            } else {
+                $scope.save();
+            }
+
     };
     $scope.reportNameSave = function () {
 
         $('#theReportNameModal').modal('hide');
-        $scope.save($scope.selectedReport);
+        $scope.save();
 
         $('modal-backdrop').remove();
 
@@ -765,8 +773,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     };
 
     $scope.deleteConfirmed = function (reportID) {
-
-
         connection.post('/api/reports/delete/'+reportID, {id:reportID}, function(result) {
             if (result.result == 1) {
                 $('#deleteModal').modal('hide');
@@ -782,9 +788,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     $scope.reports.items.splice(nbr,1);
             }
         });
-
-
-
     };
 
     $scope.add = function() {
@@ -800,23 +803,15 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     };
 
-    $scope.save = function(data) {
+    $scope.save = function() {
 
         $('#reportNameModal').modal('hide');
 
-
         generateQuery(function(){
 
-                data.query = $scope.query;
-
-                if ($scope.selectedReport.reportType == 'grid')
-                {
-                    $scope.selectedReport.properties = {};
-                    $scope.selectedReport.properties.columns = $scope.columns;
-                }
 
                 if ($scope.mode == 'add') {
-                    connection.post('/api/reports/create', data, function(data) {
+                    connection.post('/api/reports/create', $scope.selectedReport, function(data) {
                         if (data.result == 1) {
                            setTimeout(function () {
                             $scope.goBack();
@@ -825,7 +820,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     });
                 }
                 else {
-                    connection.post('/api/reports/update/'+data._id, data, function(result) {
+                    connection.post('/api/reports/update/'+$scope.selectedReport._id, $scope.selectedReport, function(result) {
                         if (result.result == 1) {
 
                             

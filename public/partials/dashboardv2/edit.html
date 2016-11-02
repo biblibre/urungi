@@ -1,6 +1,6 @@
 <div ng-show="!reportInterface" id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid" style="height: 100%;border-bottom: 2px solid #72A230;">
 <div class="container-fluid" ng-init="initForm()" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
-    <h3 class="pull-left">Dashboard</h3>
+    <h3 class="pull-left" editable-text="selectedDashboard.dashboardName"></h3>
     <a id="saveDashboardBtn" data-ng-click="dashboardName()" class="btn btn-success pull-right" style="margin-left: 5px" tooltip="Click here to save the dashboard changes" tooltip-placement="bottom">Save</a>
 
     <a ng-click="goBack();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
@@ -35,7 +35,7 @@
                     <li ng-repeat="item in dashBoardDefinitition.items">{{item.reportDefinition.reportName}}</li>
                 </ul>-->
                 <div ng-repeat="item in selectedDashboard.reports" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'report',reportID:'{{item.id}}'}" style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " id="{{item.id}}" class="">
-                    <!--background-image: url(images/chart_donut.png);background-size: contain;background-repeat: no-repeat;background-position-x: center;-->
+
                     <span style="padding: 2px;border-right: 2px white solid;margin-right: 5px;background-color: white;">
                         <img ng-if="item.reportType == 'grid'" src="images/grid.png" data-pin-nopin="true">
                         <img ng-if="item.reportType == 'chart-line'" src="images/chart_line.png" data-pin-nopin="true">
@@ -44,7 +44,21 @@
                         <img ng-if="item.reportType == 'indicator'" src="images/indicator.png" data-pin-nopin="true">
                         <img ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
                     </span>
-                    <span style="color: white; font-size: 10px; width:100%;text-align: left">{{item.reportName}}</span>
+                    <div>
+                    <span style="color: white; font-size: 10px; width:100%;text-align: left" editable-text="item.reportName"></span>
+                        <br/>
+                    <!--<button class="btn btn-small" style="display: inline-block;
+    color: #979898;
+    margin-left: 7px;
+    line-height: 1;">x</button>-->
+                        <a id="reportListItemDeleteBtn" href="" class="pull-right  list-delete-button" ng-click="delete(dashboard._id,dashboard.dashboardName)"  tooltip="Click here to delete this dashboard" tooltip-placement="bottom">
+                            <i class="fa fa-trash-o "  ></i>
+                        </a>
+                        <a id="reportListItemEditBtn" class="pull-right  list-edit-button" href="/#/dashboardsv2/edit/{{dashboard._id}}"  tooltip="Click here to modify this dashboard" tooltip-placement="bottom">
+                            <i class="fa fa-pencil" ></i>
+                        </a>
+                        </div>
+
                        <!-- <img src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px;" data-pin-nopin="true"> -->
                 </div>
 
