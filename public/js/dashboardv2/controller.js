@@ -64,6 +64,10 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         $scope.$broadcast("newReportForDash",{});
     }
 
+    $scope.$on("cancelReport", function (event, args) {
+        $scope.reportInterface = false;
+    });
+
     var hashCode = function(s) {
         return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
     };
@@ -388,9 +392,10 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
     $scope.loadReport = function(report)
     {
+        console.log('loading report');
         $scope.reportInterface = true;
         $scope.editingReport = report.name;
-        $scope.$broadcast("loadReportStructure", {report: report});
+        $scope.$broadcast("loadReportStrucuture", {report: report});
     }
 
     $scope.onDrop = function (data, event, type, group) {
@@ -1969,13 +1974,29 @@ $scope.changeVisibility = function() {
         });
     }
 
-    $scope.delete = function (pageID, pageName) {
+    $scope.delete = function (dashboardID, dashboardName) {
         $scope.modalOptions = {};
         $scope.modalOptions.headerText = 'Confirm delete dashboard'
-        $scope.modalOptions.bodyText = 'Are you sure you want to delete the dashboard:'+' '+pageName;
-        $scope.modalOptions.ID = pageID;
+        $scope.modalOptions.bodyText = 'Are you sure you want to delete the dashboard:'+' '+dashboardName;
+        $scope.modalOptions.ID = dashboardID;
         $('#deleteModal').modal('show');
     };
+
+    $scope.deleteReport = function (reportID,reportName)
+    {
+        for (var i in $scope.selectedDashboard.reports)
+            {
+                if ($scope.selectedDashboard.reports[i].id == reportID)
+                    {
+                        $scope.selectedDashboard.reports.splice(i,1);
+                    }
+            }
+    }
+
+    $scope.editReport = function (reportID,reportName)
+    {
+
+    }
 
     $scope.deleteConfirmed = function (dashboardID) {
         connection.post('/api/dashboardsv2/delete/'+dashboardID, {id:dashboardID}, function(result) {

@@ -20,6 +20,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.dropArea = 'partials/report_v2/drop-area.html';
     $scope.reportNameModal = 'partials/report_v2/reportNameModal.html';
     $scope.dashListModal = 'partials/report_v2/dashboardListModal.html';
+    $scope.tabs = {selected: 'elements'};
+
+
+    $scope.fieldsAggregations = queryModel.fieldsAggregations;
 
 
     $scope.selectedReport = {};
@@ -41,6 +45,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.selectedLayerID = queryModel.selectedLayerID;
     $scope.layers = [];
     $scope.mode = 'add';
+    $scope.isForDash = false;
 
     //$scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
 
@@ -85,13 +90,31 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     }
 
     $scope.$on("newReport", function (event, args) {
-        $scope.initReport();
+        //$scope.initReport();
     });
 
     $scope.$on("newReportForDash", function (event, args) {
-        $scope.initReport();
+        //$scope.initReport();
         $scope.isForDash = true;
+        console.log('new report');
     });
+
+    $scope.$on("loadReportStrucuture", function (event, args) {
+        //UNA QUERY SOLO PUEDE PERTENECER A UNA LAYER POR LO QUE EN LUGAR DE LAYERS ES LAYERID
+        //VER TB POR QUE HAY MAS DE UNA LAYER EN QUERY Y A NULL
+        var report = args.report;
+
+        $scope.showOverlay('OVERLAY_reportLayout');
+        $scope.selectedReport = report;
+        $scope.mode = 'edit';
+        queryModel.loadQuery(report.query);
+        queryModel.detectLayerJoins();
+                            report_v2Model.getReport(report,'reportLayout',function() {
+                                $scope.hideOverlay('OVERLAY_reportLayout');
+                            });
+    });
+
+
 
     $scope.showOverlay = function (referenceId) {
         bsLoadingOverlayService.start({
@@ -189,7 +212,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport.reportType = 'grid';
                 $scope.mode = 'add';
             } else {
-                console.log('loading query 0')
+
                 report_v2Model.getReportDefinition($routeParams.reportID,false, function(report) {
                     if (report)
                         {
@@ -533,6 +556,17 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport.properties.ykeys = [];
         $scope.selectedReport.properties.ykeys.push(customObjectData);
 
+        if (customObjectData.elementType != 'number')
+            {
+                customObjectData.aggregation = 'count';
+                if (customObjectData.originalLabel == undefined)
+                    {
+                    customObjectData.originalLabel = customObjectData.elementLabel;
+                    }
+                customObjectData.elementLabel = customObjectData.originalLabel + ' (count)';
+                customObjectData.objectLabel = customObjectData.originalLabel + ' (count)';
+            }
+
         queryModel.onDrop($scope,data,event,type,group, function(){
             $scope.getDataForPreview();
         });
@@ -706,7 +740,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         var query =  queryModel.generateQuery();  //queryModel.query();
         $scope.selectedReport.query = query;
 
-console.log('get data for preview',query);
+
                 if ($scope.selectedReport.reportType == 'grid')
                     {
                         //var clonedColumns = clone(queryModel.columns());
@@ -752,10 +786,19 @@ console.log('get data for preview',query);
 
                         var theChartID = 'Chart'+uuid2.newguid();
                         $scope.selectedReport.properties.chart = {chartID:theChartID,dataPoints:[],dataColumns:[],datax:{},height:300,type:'bar',query:query,queryName:null};
-                        //$scope.selectedReport.properties.chart.query = query;
                         $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
                         var customObjectData = $scope.selectedReport.properties.xkeys[0];
                         report_v2Model.getReport($scope.selectedReport,'reportLayout', function(sql){
+
+                            $scope.sql = sql;
+                            $scope.hideOverlay('OVERLAY_reportLayout');
+                            $scope.gettingData == false;
+                        });
+                    }
+
+        if ( $scope.selectedReport.reportType == 'indicator')
+                    {
+                       report_v2Model.getReport($scope.selectedReport,'reportLayout', function(sql){
 
                             $scope.sql = sql;
                             $scope.hideOverlay('OVERLAY_reportLayout');
@@ -878,18 +921,24 @@ console.log('get data for preview',query);
         //$scope.processStructure();
     }
 
-    $scope.changeChartColumnType = function(column)
+    $scope.changeChartColumnType = function(column,type)
     {
-        c3Charts.changeChartColumnType($scope.selectedReport.properties.chart,column);
+        column.type = type;
+        c3Charts.transformChartColumnType($scope.selectedReport.properties.chart,column);
     }
 
-    $scope.changeChartSectorType = function()
+    $scope.changeChartSectorType = function(type)
     {
+        if (type == 'pie')
+            $scope.selectedReport.reportType = 'chart-pie';
+        if (type == 'donut')
+            $scope.selectedReport.reportType = 'chart-donut';
+        /*
         if (!$scope.selectedReport.reportType == 'chart-donut')
             $scope.selectedReport.reportType = 'chart-donut';
         else
             $scope.selectedReport.reportType = 'chart-pie';
-
+        */
 
 
         $scope.processStructure();
@@ -1001,10 +1050,6 @@ $scope.changeColumnColor = function(color)
 
     };
 
-
-
-
-
     $scope.pushToDash = function()
     {
         var params = (params) ? params : {};
@@ -1024,6 +1069,33 @@ $scope.changeColumnColor = function(color)
         $scope.saveReportStructure();
 
         $location.path( '/dashboardsv2/push/'+dashboardID );
+    }
+
+    $scope.aggregationChoosed = function(column,variable)
+    {
+
+        if (variable.value == 'original')
+            {
+              delete(column.aggregation);
+            } else {
+              column.aggregation = variable.value;
+            }
+
+        if (column.originalLabel == undefined)
+            {
+            column.originalLabel = column.elementLabel;
+            }
+
+        if (variable.value == 'original')
+            {
+                column.elementLabel = column.originalLabel;
+                column.objectLabel = column.originalLabel;
+            } else {
+                column.elementLabel = column.originalLabel + ' ('+variable.name+')';
+                column.objectLabel = column.originalLabel + ' ('+variable.name+')';
+            }
+
+        $scope.getDataForPreview();
     }
 
 

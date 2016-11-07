@@ -3,13 +3,26 @@
     <h3 class="pull-left" editable-text="selectedReport.reportName"></h3>
     <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-if="mode == 'edit'" style="margin-left: 5px" tooltip="Click here to save the report changes" tooltip-placement="bottom">Save</a>
 
-    <a ng-click="goBack();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
+    <a ng-if="isForDash != true" ng-click="goBack();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
+    <a ng-if="isForDash == true" ng-click="cancelReport();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
     <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for data explorer" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
 </div>
 
-    <section id="dataObjects">
+    <section id="objectPanel">
         <div id="dataObjectsIntroBlock"></div>
-        <section id="dataObjectsInner" class="data-objects-layer scrollPane" ng-include="'partials/query/data-objects.html'">
+        <menu>
+            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'elements'}"><a ng-click="tabs.selected = 'elements'">Elements</a></li>
+        </menu>
+
+        <section  class="content" >
+            <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
+
+            </section>
+            <section id="elementsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'elements'">
+                <section id="dataObjectsInner" class="layer scrollPane" ng-include="'partials/query/data-objects.html'" style="padding: 0px 0px 0px 0px;padding-top:10px;">
+
+                </section>
+            </section>
 
         </section>
     </section>

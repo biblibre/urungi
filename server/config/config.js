@@ -3,7 +3,9 @@ module.exports = {
         url: 'http://localhost:8080/',
         ip: "0.0.0.0",
         port: 8080,
-        db: 'mongodb://localhost:27017/widestage_development',
+        db_type: 'mongoDB', // tingoDB or mongoDB
+        db: 'mongodb://localhost:27017/widestage_development', //Mongo DB connection only used if db_type = mongoDB
+        tingo_db_path: '/data', //Db files path if using tingoDB
         app: {
             name: 'WideStage',
             contactEmail: '',
@@ -36,6 +38,7 @@ module.exports = {
         url: 'http://localhost',
         ip: "0.0.0.0",
         port: 80,
+        db_type: 'mongoDB', // tingoDB or mongoDB
         db: 'mongodb://localhost:27017/widestage',
         app: {
             name: 'WideStage',
@@ -69,6 +72,7 @@ module.exports = {
         url: 'http://localhost:8081/',
         ip:  "127.0.0.1",
         port: 8081,
+        db_type: 'mongoDB', // tingoDB or mongoDB
         db: 'localhost:27017/widestage_development',
         app: {
             name: 'WideStage',

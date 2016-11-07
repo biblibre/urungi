@@ -1,4 +1,4 @@
-app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverlayService,connection,$routeParams,promptModel) {
+app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,grid,bsLoadingOverlayService,connection,$routeParams,promptModel) {
 
     var report = {};
 
@@ -23,21 +23,14 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
 
     function getReport(report,parentDiv,done)
     {
-    showOverlay(parentDiv);
-
+        showOverlay(parentDiv);
         var isLinked = false;
-
         queryModel.loadQuery(report.query);
-        //report.parentDiv = parentDiv;
-        //repaintReport(report);
-
         queryModel.getQueryData(report.query, function(data,sql,query){
                     report.query.data = data;
                     report.parentDiv = parentDiv;
                     repaintReport(report);
-                    //hideOverlay(parentDiv);
                     done(sql);
-
             });
     }
 
@@ -100,6 +93,7 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
 
     function repaintReport(report)
     {
+
         if (report.query.data.length != 0)
             {
                 if (report.reportType == 'grid')
@@ -116,7 +110,6 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
                                             angular.element(document).injector().invoke(function($compile) {
                                                 var scope = angular.element($div).scope();
                                                 $compile($div)(scope);
-                                                //hideOverlay('OVERLAY_'+report.parentDiv);
                                                 hideOverlay(report.parentDiv);
                                             });
                                         }
@@ -135,6 +128,12 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
                                             report.properties.chart.type = 'gauge';
                                 generatec3Chart(report);
                             }
+                    if (report.reportType == 'indicator')
+                        {
+                            generateIndicator(report);
+                        }
+
+
             } else {
 
                                 var htmlCode = '<span style="font-size: small;color: darkgrey;padding: 5px;">'+report.reportName+'</span><div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>';
@@ -152,6 +151,27 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
                                             });
                                         }
             }
+    }
+
+    function generateIndicator(report)
+    {
+
+        var htmlCode = reportHtmlWidgets.generateIndicator(report);
+        var el = document.getElementById(report.parentDiv);
+
+                                if (el)
+                                {
+                                    angular.element(el).empty();
+                                    var $div = $(htmlCode);
+                                    angular.element(el).append($div);
+                                    angular.element(document).injector().invoke(function($compile) {
+                                        var scope = angular.element($div).scope();
+                                        $compile($div)(scope);
+                                        setTimeout(function() {c3Charts.rebuildChart(report);
+                                                               hideOverlay('OVERLAY_'+report.parentDiv);
+                                                               }, 500);
+                                    });
+                                }
     }
 
 
@@ -237,11 +257,7 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
 
         if (!selectedColumn.signals)
             selectedColumn.signals = [];
-
-
         $('#columnSignalsModal').modal('show');
-
-
     }
 
     this.orderColumn = function(report,columnIndex, desc,hashedID) {
@@ -254,14 +270,12 @@ app.service('report_v2Model' , function (queryModel,c3Charts,grid,bsLoadingOverl
         report.query.order = [];
         report.query.order.push(theColumn);
         showOverlay('OVERLAY_'+hashedID);
-        //console.log('overlay','OVERLAY_'+hashedID);
+
         queryModel.getQueryData(report.query, function(data,sql,query){
 
                 report.query.data = data;
                 hideOverlay('OVERLAY_'+hashedID);
         });
-
-
         //get the column index, identify the report.query.column by  index, then add to query.order taking care about the sortType -1 / 1
     };
 

@@ -325,6 +325,36 @@ this.rebuildChart = function(report)
 
     }
 
+
+    this.transformChartColumnType = function(chart,column)
+    {
+        if (column.type == 'spline')
+        {
+            chart.chartCanvas.transform('spline', column.id);
+        } else
+            if (column.type == 'bar')
+            {
+                chart.chartCanvas.transform('bar', column.id);
+            } else
+                if (column.type == 'area')
+                {
+                    chart.chartCanvas.transform('area', column.id);
+                } else
+                    if (column.type == 'area-spline')
+                    {
+                        chart.chartCanvas.transform('area-spline', column.id);
+                    } else
+                        if (column.type == 'scatter')
+                        {
+                            chart.chartCanvas.transform('scatter', column.id);
+                        } else
+                            if (column.type == 'line')
+                            {
+                                chart.chartCanvas.transform('line', column.id);
+                            }
+
+    }
+
     this.changeChartColumnColor = function(chart,column,color)
     {
         var column = "'"+column.id+"'";

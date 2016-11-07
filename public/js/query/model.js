@@ -210,19 +210,22 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             {name: 'Avg', value: 'avg'},
             {name: 'Min', value: 'min'},
             {name: 'Max', value: 'max'},
-            {name: 'Count', value: 'count'}
+            {name: 'Count', value: 'count'},
+            {name: 'Original value', value:'original'}
         ],
         'date': [
             {name: 'Year', value: 'year'},
             {name: 'Month', value: 'month'},
             {name: 'Day', value: 'day'},
-            {name: 'Count', value: 'count'}
+            {name: 'Count', value: 'count'},
+            {name: 'Original value', value:'original'}
             /*{name: 'Semester', value: 'semester'},
             {name: 'Quarter', value: 'quarter'},
             {name: 'Trimester', value: 'trimester'}*/
         ],
         'string': [
-            {name: 'Count', value: 'count'}
+            {name: 'Count', value: 'count'},
+            {name: 'Original value', value:'original'}
         ]
     };
 
@@ -335,7 +338,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
     function getData(query, params,  done) {
         params.query = query;
-        console.log('the query',query);
+
         connection.get('/api/reports/get-data', params, function(data) {
             if (data.result == 0)
                 {
@@ -649,13 +652,9 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
     function detectLayerJoins()
     {
-
-
         checkChoosedElements();
 
         generateQuery();
-
-        console.log('detecting layers',query);
 
             //this function enables and disables elements in the layer if there is a join between the elements in the report and the element in the layer...
             var reportCollections = [];

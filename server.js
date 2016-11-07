@@ -10,14 +10,11 @@ if (env == 'production') {
 
 };
 
-
-
 var express = require('express'),
     path = require('path'),
     http = require('http');
 
 var cluster = require('cluster');
-var mongoose = require('mongoose');
 var passport = require("passport");
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session); //npm install connect-redis --- to store variable sessions
@@ -31,11 +28,9 @@ app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 
-
 app.use(cookieParser());
 app.use(cookieSession({key:"widestage", secret:"HEWÑÑasdfwejñlkjqwernnkkk13134134wer", httpOnly: true, secure: false, cookie: {maxAge: 60 * 60 * 1000}}));
 app.use(session({secret: 'ndwidestagev0', cookie: {httpOnly: true, secure: false}, store: new RedisStore({maxAge: 60 * 60 * 1000}), resave: false, saveUninitialized: true}));
-
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: '50mb'})); // get information from html forms
@@ -44,7 +39,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var authentication = true;
 
 global.authentication  = authentication;
-
 global.logFailLogin = true;
 global.logSuccessLogin = true;
 
@@ -79,7 +73,7 @@ if (cluster.isMaster) {
     var config = require('./server/config/config')[env];
     global.config = config;
 
-    require('./server/config/mongoose')(mongoose);
+    require('./server/config/mongoose');//(mongoose);
     require('./server/config/passport')(passport);
 
     require('./server/globals');
