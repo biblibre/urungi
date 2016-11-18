@@ -104,7 +104,9 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
     this.filterStringOptions = [
                                     {value:"equal",label:"equal"},
+                                    {value:"in",label:"in"},
                                     {value:"diferentThan",label:"different than"},
+                                    {value:"notIn",label:"not in"},
                                     {value:"biggerThan",label:"bigger than"},
                                     {value:"biggerOrEqualThan",label:"bigger or equal than"},
                                     {value:"lessThan",label:"less than"},
@@ -120,9 +122,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                                     {value:"like",label:"like"},
                                     {value:"notLike",label:"not like"},
                                     {value:"null",label:"is null"},
-                                    {value:"notNull",label:"is not null"},
-                                    {value:"in",label:"in"},
-                                    {value:"notIn",label:"not in"}
+                                    {value:"notNull",label:"is not null"}
+
                                     ];
     this.filterArrayOptions = [
         {value:"equal",label:"equal"},
@@ -135,7 +136,9 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
     this.filterNumberOptions = [
         {value:"equal",label:"equal"},
+        {value:"in",label:"in"},
         {value:"diferentThan",label:"different than"},
+        {value:"notIn",label:"not in"},
         {value:"biggerThan",label:"bigger than"},
         {value:"biggerOrEqualThan",label:"bigger or equal than"},
         {value:"lessThan",label:"less than"},
@@ -143,9 +146,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         {value:"between",label:"between"},
         {value:"notBetween",label:"not between"},
         {value:"null",label:"is null"},
-        {value:"notNull",label:"is not null"},
-        {value:"in",label:"in"},
-        {value:"notIn",label:"not in"}
+        {value:"notNull",label:"is not null"}
+
         /* RANKING
         el (los) primeros
         el (los) ultimos
@@ -165,7 +167,12 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         {value:"notBetween",label:"not between"}
     ];
 
-    this.dateFilters = [
+    this.getDatePatternFilters = function()
+    {
+        return this.datePatternFilters;
+    }
+
+    this.datePatternFilters = [
         {value:"#WST-TODAY#",label:"Today"},
         {value:"#WST-THISWEEK#",label:"This week"},
         {value:"#WST-THISMONTH#",label:"This month"},
@@ -190,18 +197,24 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
     this.filterDateOptions = [
         {value:"equal",label:"equal"},
+        {value:"equal-pattern",label:"equal (pattern)"},
+        //{value:"in",label:"in"},
         {value:"diferentThan",label:"different than"},
+        {value:"diferentThan-pattern",label:"different than (pattern)"},
+        //{value:"notIn",label:"not in"},
         {value:"biggerThan",label:"bigger than"},
+        {value:"biggerThan-pattern",label:"bigger than (pattern)"},
         {value:"biggerOrEqualThan",label:"bigger or equal than"},
+        {value:"biggerOrEqualThan-pattern",label:"bigger or equal than (pattern)"},
         {value:"lessThan",label:"less than"},
+        {value:"lessThan-pattern",label:"less than (pattern)"},
         {value:"lessOrEqualThan",label:"less or equal than"},
+        {value:"lessOrEqualThan-pattern",label:"less or equal than (pattern)"},
         {value:"between",label:"between"},
         {value:"notBetween",label:"not between"},
         {value:"null",label:"is null"},
-        {value:"notNull",label:"is not null"},
+        {value:"notNull",label:"is not null"}
         //TODO: in , not in or date elements
-        {value:"in",label:"in"},
-        {value:"notIn",label:"not in"}
     ];
 
     this.fieldsAggregations = {
@@ -312,11 +325,11 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     function getQueryData(done)
     {
             var params = {};
-            params.query = query;
-
+            cleanQuery();
+            params.query = angular.copy(query);
 
             connection.get('/api/reports/get-data', params, function(data) {
-                var sql = data.sql;
+               var sql = data.sql;
 
 
                 if (data.result == 0)
@@ -324,8 +337,6 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                     noty({text: data.msg,  timeout: 2000, type: 'error'});
                     done([],sql,query);
                 } else {
-
-
                     prepareData(query,data.data, function(result)
                     {
                         done(result,sql,query);
@@ -335,6 +346,24 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             });
 
     };
+
+    function cleanQuery()
+    {
+        query.data = [];
+        for (f in query.groupFilters)
+            {
+                query.groupFilters[f].data = [];
+                query.groupFilters[f].values = [];
+            }
+        for (var c in query.collections)
+            {
+                for (var cf in query.collections[c].filters)
+                    {
+                        query.collections[c].filters[cf].data = [];
+                        query.collections[c].filters[cf].values = [];
+                    }
+            }
+    }
 
     function getData(query, params,  done) {
         params.query = query;
@@ -367,7 +396,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         done(JSON.parse(JSON.stringify(data),dateTimeReviver));
     }
 
-    this.getDistinct = function($scope,attribute) {
+    this.getDistinct = function($scope,attribute,done) {
 
         var execute = (typeof execute !== 'undefined') ? execute : true;
 
@@ -429,6 +458,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             $scope.errorMsg = (data.result === 0) ? data.msg : false;
             page = data.page;
             pages = data.pages;
+
+            done(data,sql);
             //$scope.data = data;
 
         });
@@ -444,6 +475,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         query.datasources = [];
         query.columns = [];
         query.order = [];
+
 
         var datasourcesList = [];
         var layersList = [];
@@ -486,7 +518,6 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         query.layers = layersList;
         //query.order = [];
         //query.order.push(attribute);
-
         getData(query, {page: 0}, function(data,sql) {
             done(data,sql);
         });
@@ -561,30 +592,36 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
 
     this.onDateSet = function (newDate, oldDate, filter) {
-        var year = newDate.getFullYear();
-        var month = pad(newDate.getMonth()+1,2);
-        var day = pad(newDate.getDate(),2);
-        var theDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
-        if (filter.filterType == 'in' || filter.filterType == 'notIn')
-        {
-            if (!filter.filterText1)
-                filter.filterText1 = [];
-            filter.filterText1.push(theDate);
-        } else
-            filter.filterText1 = theDate;
+        if (angular.isDate(newDate))
+            {
+                var year = newDate.getFullYear();
+                var month = pad(newDate.getMonth()+1,2);
+                var day = pad(newDate.getDate(),2);
+                var theDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
+                if (filter.filterType == 'in' || filter.filterType == 'notIn')
+                {
+                    if (!filter.filterText1)
+                        filter.filterText1 = [];
+                    filter.filterText1.push(theDate);
+                } else
+                    filter.filterText1 = theDate;
 
-        filter.searchValue = theDate;
-        filter.filterValue = theDate;
-        filter.dateCustomFilterLabel = undefined;
+                filter.searchValue = theDate;
+                filter.filterValue = theDate;
+                filter.dateCustomFilterLabel = undefined;
+            }
     }
 
     this.onDateEndSet = function (newDate, oldDate, filter) {
-        var year = newDate.getFullYear();
-        var month = pad(newDate.getMonth()+1,2);
-        var day = pad(newDate.getDate(),2);
-        var theDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
-        filter.filterText2 = theDate;
-        filter.dateCustomFilterLabel = undefined;
+        if (angular.isDate(newDate))
+            {
+                var year = newDate.getFullYear();
+                var month = pad(newDate.getMonth()+1,2);
+                var day = pad(newDate.getDate(),2);
+                var theDate = new Date(year+'-'+month+'-'+day+'T00:00:00.000Z');
+                filter.filterText2 = theDate;
+                filter.dateCustomFilterLabel = undefined;
+            }
     }
 
     this.getLayers = function(done) {
@@ -751,8 +788,16 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 var filter = thefilters[g];
                 if (filter)
                     {
-                        if ((filter.searchValue == undefined || filter.searchValue == '') && filter.filterPrompt == false)
-                            wrongFilters.push(filter);
+                        /*if ((filter.searchValue == undefined || filter.searchValue == '' || filter.searchValue == 'Invalid Date') && filter.filterPrompt == false )
+                            {
+                            wrongFilters.push(filter.id);
+                            } else {
+                               if ((filter.filterType == 'between' || filter.filterType == 'notBetween') && (filter.filterText2 == undefined || filter.filterText2 == '' || filter.filterText2 == 'Invalid Date'))
+                                    wrongFilters.push(filter.id);
+                            }*/
+
+                        if (isfilterComplete(filter) == false)
+                             wrongFilters.push(filter.id);
 
                         if (filter.group == true)
                         {
@@ -793,6 +838,11 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         }
         if (type == 'filter') {
             var el = document.getElementById('filter-zone');
+            if (query.groupFilters.length > 0)
+            {
+               customObjectData.condition = 'AND';
+               customObjectData.conditionLabel = 'AND';
+            }
             query.groupFilters.push(customObjectData);
             this.filtersUpdated();
         }
@@ -852,6 +902,18 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     this.generateQuery = function()
     {
         return generateQuery();
+    }
+
+    this.hideColumn = function(elementID,hidden)
+    {
+        for( var i  in query.columns)
+            {
+                if (query.columns[i].elementID == elementID)
+                {
+                    query.columns[i].hidden = hidden;
+                }
+
+            }
     }
 
     function generateQuery()
@@ -952,7 +1014,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                                 if (query.groupFilters[n1].collectionID)
                                     if (query.groupFilters[n1].collectionID == dtsCollections[n])
                                         {
-                                            collection.filters.push(query.groupFilters[n1]);
+                                            //collection.filters.push(angular.copy(query.groupFilters[n1]));
                                         }
 
                              }
@@ -1065,7 +1127,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     {
         var found = false;
 
-        if (!selectedLayer.params || !selectedLayer.params.joins) return false;
+        if (!selectedLayer || !selectedLayer.params || !selectedLayer.params.joins) return false;
 
         if (collection1 != collection2)
         {
@@ -1161,6 +1223,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             filter.filterLabel2 = '';
         }
         //set the appropiate interface for the choosed filter relation
+        console.log('set the filter type',filterOption.value,filter)
     }
 
     this.orderColumn = function(predicate) {
@@ -1168,6 +1231,61 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         this.predicate = predicate;
     };
 
+
+    this.isfilterComplete = function(filter)
+    {
+        return isfilterComplete(filter);
+    }
+
+    function isfilterComplete(filter)
+    {
+        var result = true;
+        if ((filter.searchValue == '' || filter.searchValue == undefined || filter.searchValue == 'Invalid Date') )
+            {
+                result = false;
+
+            } else {
+                if ((filter.filterType == 'between' || filter.filterType == 'notBetween') && (filter.filterText2 == undefined || filter.filterText2 == '' || filter.filterText2 == 'Invalid Date'))
+                        result = false;
+            }
+
+        if ((filter.filterType == 'null' || filter.filterType == 'notNull'))
+            result = true;
+
+        return result;
+    }
+
+    this.setDatePatternFilterType = function(filter,option)
+    {
+        filter.searchValue = option.value;
+        filter.filterText1 = option.value;
+        filter.filterLabel1 = option.label;
+    }
+
+    this.reorderFilters = function()
+    {
+        reorderFilters();
+    }
+
+    function reorderFilters()
+    {
+        for (var i in query.groupFilters)
+                {
+                    if (i == 0)
+                        {
+                           delete(query.groupFilters[0].condition);
+                           delete(query.groupFilters[0].conditionLabel);
+                        }
+                    if (i != 0 && query.groupFilters[i].condition == undefined)
+                        {
+                            query.groupFilters[i].condition = 'AND';
+                            query.groupFilters[i].conditionLabel = 'AND';
+                        }
+                }
+
+
+
+    }
 
 
 });

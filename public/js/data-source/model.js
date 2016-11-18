@@ -28,23 +28,22 @@ app.service('datasourceModel' , function ($http, $q, $filter, connection) {
         data.entities = entities;
 
 
-        console.log(data);
-
         connection.get('/api/data-sources/getEntitySchema', data, function(result) {
-            //console.log(result);
             if (result.result == 1) {
-
                 done(result);
-                /*
-                $scope.schemas = result.items;
+            }
+        });
+    }
 
-                console.log(JSON.stringify($scope.schemas));
+    this.getSqlQuerySchema = function(datasourceID,sqlQuery,done)
+    {
+        var data = {};
+        data.datasourceID = datasourceID;
+        data.sqlQuery = sqlQuery;
 
-                //var element = {colectionName: collectionName,elementName:name,elementType:type}
-                //console.log(result.items);
-                $scope.mongoStep = 3;
-                  */
-
+        connection.get('/api/data-sources/getsqlQuerySchema', data, function(result) {
+            if (result.result == 1) {
+                done(result);
             }
         });
     }

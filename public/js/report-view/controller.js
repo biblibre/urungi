@@ -1,4 +1,4 @@
-app.controller('report_viewCtrl', function ($scope, promptModel,$routeParams,report_v2Model,queryModel,connection,bsLoadingOverlayService) {
+app.controller('report_viewCtrl', function ($scope, promptModel,$routeParams,report_v2Model,queryModel,connection,bsLoadingOverlayService,uiGridConstants) {
 
 $scope.searchModal = 'partials/report/searchModal.html';
 $scope.promptsBlock = 'partials/report/promptsBlock.html';
@@ -8,8 +8,15 @@ $scope.repeaterTemplate = 'partials/report/repeater.html';
 $scope.publishModal  = 'partials/report/publishModal.html';
 $scope.columnFormatModal = 'partials/report/columnFormatModal.html';
 $scope.columnSignalsModal = 'partials/report/columnSignalsModal.html';
-
+$scope.showPrompts = true;
 $scope.selectedReport = {};
+$scope.selectedReport.query = {};
+$scope.queryModel = queryModel;
+
+$scope.getPrompts = function()
+    {
+           return $scope.selectedReport.query.groupFilters;
+    }
 
 $scope.showOverlay = function (referenceId) {
         bsLoadingOverlayService.start({
@@ -34,7 +41,14 @@ $scope.getReportDiv = function() {
                             report_v2Model.getReport(report,'reportLayout',function() {
                                 //Done
                                 $scope.hideOverlay('OVERLAY_reportLayout');
+                                var theReports = [];
+                                    theReports.push($scope.selectedReport);
+                                   /* promptModel.getPromptsForReportsV2(theReports,function(prompts){
+                                        $scope.prompts = prompts;
+
+                                    });*/
                             });
+
                         } else {
                             //TODO:No report found message
                         }
@@ -74,7 +88,53 @@ $scope.selectThisFolder = function(folderID)
         });
     }
 
+$scope.getDistinctValues = function(filter)
+    {
+        promptModel.getDistinctValues($scope, filter);
+    };
+
+$scope.selectSearchValue = function(searchValue)
+    {
+        promptModel.selectSearchValue($scope);
+        $scope.processStructure();
+    };
+
+$scope.processStructure = function(execute) {
+        queryModel.processStructure(execute,function(){
+            /*queryModel.getQueryData( function(){
+
+            });*/
+
+            report_v2Model.getReport($scope.selectedReport,'reportLayout',function() {
+                                //Done
+                                $scope.hideOverlay('OVERLAY_reportLayout');
+                                var theReports = [];
+                                    theReports.push($scope.selectedReport);
+                                    /*promptModel.getPromptsForReportsV2(theReports,function(prompts){
+                                        $scope.prompts = prompts;
+
+                                    });*/
+                            });
+        });
+    }
+
+$scope.onDateSet = function (newDate, oldDate, filter) {
+        queryModel.onDateSet(newDate,oldDate,filter);
+        $scope.processStructure();
+    }
+
+$scope.onDateEndSet = function (newDate, oldDate, filter) {
+        queryModel.onDateEndSet(newDate,oldDate,filter);
+        $scope.processStructure();
+    }
+
 /********END PUBLISH******/
+
+$scope.getReportColumnDefs = function(reportID)
+    {
+        return $scope.selectedReport.properties.columnDefs;
+    }
 
 
 });
+

@@ -77,19 +77,13 @@ exports.testConnection = function(data, setresult) {
         connection.execute("SELECT tablespace_name as table_schema, table_name as name FROM user_tables", [], {outFormat: oracledb.OBJECT}, function(err, result) {
             result.rows = columnNamesToLowerCase(result.rows);
 
-            console.log(result.rows);
+
             setresult({result: 1, items: result.rows});
 
             connection.release(function(err) {
                 if (err) { console.error(err.message); }
             });
 
-            /* if(err) {
-             return console.error('error running query', err);
-             }
-             console.log(result.rows[0].number);
-             */
-            //output: 1
         });
     });
 };

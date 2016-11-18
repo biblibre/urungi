@@ -1,5 +1,5 @@
     <div id="filtersPanel"  class="container-fluid column-zone no-padding" drop="onDropFilter($data, $event, 'filter')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
-        <div class="filter-zone-label pull-right" ng-hide="selectedReport.properties.filters.length > 0">Drop here your filters</div>
+        <div class="filter-zone-label pull-right" ng-hide="selectedReport.query.groupFilters.length > 0">Drop here your filters</div>
         <ul class="ul-drop no-padding" ng-model="selectedReport.properties.filters" ui-sortable="filterSortableOptions" ng-include="'partials/report_v2/filter.html'">
 
         </ul>
@@ -35,10 +35,20 @@
                                             <li ng-repeat="variable in fieldsAggregations.number">
                                                 <a ng-click="aggregationChoosed(column,variable)">{{variable.name}}</a>
                                             </li>
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a ng-if="!column.hidden" ng-click="hideColumn(column,true);">Hide Column</a>
+                                                <a ng-if="column.hidden" ng-click="hideColumn(column,false);">Show Column</a>
+                                            </li>
                                         </ul>
                                     <ul ng-if="column.elementType == 'string'" class="dropdown-menu" aria-labelledby="dropdownMenu4" >
                                             <li ng-repeat="variable in fieldsAggregations.string">
                                                 <a ng-click="aggregationChoosed(column,variable)">{{variable.name}}</a>
+                                            </li>
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a ng-if="!column.hidden" ng-click="hideColumn(column,true);">Hide Column</a>
+                                                <a ng-if="column.hidden" ng-click="hideColumn(column,false);">Show Column</a>
                                             </li>
                                         </ul>
                     </div>

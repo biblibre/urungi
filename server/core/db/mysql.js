@@ -75,7 +75,7 @@ exports.testConnection = function(data, setresult) {
         connection.query("select table_schema, table_name as name from information_schema.tables where table_schema not in ('information_schema','mysql','performance_schema')", function(err, rows, fields) {
             if (err) throw err;
 
-            console.log(rows);
+
             setresult({result: 1, items: rows});
             connection.end();
         });

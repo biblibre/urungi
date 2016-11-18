@@ -1,15 +1,15 @@
-    <li class="filter-box" ng-class="{'incomplete-filter': (filter.searchValue == '' || filter.searchValue == undefined)}" style="margin-left: 90px;"
-                        drop="onDropOnFilter($data, $event, filter)" drop-effect="copy" drop-accept="'json/custom-object'" ng-repeat="filter in selectedReport.properties.filters" >
+    <li class="filter-box" ng-class="{'incomplete-filter': !isfilterComplete(filter)}" style="margin-left: 90px;"
+                        drop="onDropOnFilter($data, $event, filter)" drop-effect="copy" drop-accept="'json/custom-object'" ng-repeat="filter in selectedReport.query.groupFilters" >
+<span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFilter(filter);filtersUpdated();detectLayerJoins();processStructure();"></i></span>
 
 
 
-
-                        <div class="container-fluid">
-                            <form role="form" class="form-inline">
+                        <div class="container-fluid form-inline">
+                           <!-- <form role="form" class="form-inline">
 
 
                             <div class="dropdown" style="vertical-align: middle">
-                                <!-- and, or, and not, or not-->
+
                                 <div ng-if="filter.condition" class="btn-group" dropdown="">
                                     <button type="button" class="btn " ng-bind="filter.conditionLabel"></button>
                                     <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -22,9 +22,10 @@
                                 </div>
 
 
-                                <button class="btn btn-primary">{{filter.objectLabel}}</button>
 
-                                <!-- equal, not equal, bigger than, etc...-->
+                                <input  type="text" class="form-control" ng-model="filter.objectLabel" ng-readonly="true">
+
+
                                 <div class="btn-group" dropdown="">
                                     <button type="button" class="btn " ng-bind="filter.filterTypeLabel"></button>
                                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -34,19 +35,33 @@
                                             <li ng-repeat="option in getElementFilterOptions(filter.elementType)"><a ng-click="setFilterType(filter,option)">{{option.label}}</a></li>
                                         </ul>
                                 </div>
+                            -->
 
+                                <!--<div class="form-group" ng-include="'partials/report_v2/filterWidget.html'"></div>-->
+
+                                <!--prompt-->
+                                <div class="col-md-1">
+                               <!-- <div class="form-group">-->
+                                    <button class="btn popover-primary ng-scope" ng-class="{'btn-black': filter.filterPrompt == true, 'btn-white': filter.filterPrompt == false}" ng-click="filterPromptsClick(filter)" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Filter prompt" popover="{{getButtonFilterPromptMessage(filter)}}">
+                                        <i class="fa fa-filter"></i><i class="fa fa-question"></i>
+                                    </button>
+                                 <!-- </div>-->
+                            </div>
+                            <div class="col-md-11">
+                                <nd-prompt element-id="filter.elementID" label="filter.objectLabel" value-field="filter.name" show-field="filter.name" prompts="prompts" after-get-values="afterFilterGetValues" is-prompt="false" filter="filter" on-change="filterChanged" ng-model="lastFilterSelectedValue"></nd-prompt>
+</div>
                                 <!-- Array -->
-                                <div class="form-group" ng-show="(filter.values != undefined && filter.elementType == 'array' && (filter.filterType != 'in' && filter.filterType != 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
+                                <!--<div class="form-group" ng-show="(filter.values != undefined && filter.elementType == 'array' && (filter.filterType != 'in' && filter.filterType != 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
                                     <ui-select ng-model="filter.filterLabel1" on-select="selectFilterArrayValue('simple', filter)" theme="select2" ng-disabled="disabled" style="width: 200px;">
                                         <ui-select-match placeholder="Select or search a value in the list...">{{$select.selected.label}}</ui-select-match>
                                         <ui-select-choices repeat="value in filter.values | filter: $select.search">
                                             <span ng-bind-html="value.label | highlight: $select.search"></span>
                                         </ui-select-choices>
                                     </ui-select>
-                                </div>
+                                </div>-->
                                 <!-- END Array -->
                                 <!-- Multiple Array -->
-                                <div class="form-group" ng-show="(filter.values != undefined && filter.elementType == 'array' && (filter.filterType == 'in' || filter.filterType == 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull') )" >
+                                <!--<div class="form-group" ng-show="(filter.values != undefined && filter.elementType == 'array' && (filter.filterType == 'in' || filter.filterType == 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull') )" >
 
                                     <ui-select multiple ng-model="filter.filterLabel1" on-select="selectFilterArrayValue('multiple', filter)" on-remove="selectFilterArrayValue('multiple', filter)" theme="select2" ng-disabled="disabled" style="width: 200px;">
                                         <ui-select-match placeholder="Select multiple values...">{{$item.label}}</ui-select-match>
@@ -58,17 +73,15 @@
                                             </small>
                                         </ui-select-choices>
                                     </ui-select>
-                                </div>
+                                </div>-->
                                 <!-- END Multiple Array -->
 
                                 <!-- TODO: Selector de fecha , tratamiento de los campos de tipo fecha, mes , año, día, dia de la semana, etc... -->
                                 <!-- Date -->
-                                <div class="form-group" ng-show="(filter.elementType == 'date' && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
+                                <!--<div class="form-group" ng-show="(filter.elementType == 'date' && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
                                     <span ng-show="(filter.elementType == 'date' && (filter.filterType != 'in' && filter.filterType != 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull'))">{{filter.filterLabel1 | date:'yyyy-MM-dd'}}</span>
                                     <span ng-show="filter.filterType == 'in' || filter.filterType == 'notIn'">
-                                        <span class="filter-in-list" ng-repeat="oneDate in filter.filterText1">
-                                            {{oneDate | date:'yyyy-MM-dd'}} <i class="fa fa-remove filter-in-list-remove hand-cursor" ng-click="removeItem(oneDate,filter.filterText1)"></i>
-                                        </span>
+
 
                                     </span>
                                     <span class="dropdown" popover-trigger="mouseenter" popover-placement="top"  popover="Click here to select the date to filter">
@@ -76,17 +89,17 @@
                                         <ul class="dropdown-menu" role="menu">
                                             <datetimepicker ng-model="filter.filterLabel1"  data-on-set-time="onDateSet(newDate, oldDate, filter)" data-datetimepicker-config="{ dropdownSelector: '#dropdown1', startView:'day', minView:'day'  }"/>
                                         </ul>
-                                    </span>
+                                    </span>-->
 
                                     <!--between for date -->
-                                    <span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'" style="color:#0000FF;"> and </span>
+                                    <!--<span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'" style="color:#0000FF;"> and </span>
                                     <span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'"> {{filter.filterLabel2 | date:'yyyy-MM-dd'}} </span>
                                     <span ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'" class="dropdown" popover-trigger="mouseenter" popover-placement="top" popover="Click here to select the end date to filter">
                                         <a class="btn btn-primary popover-primary ng-scope"  id="dropdown2" role="button" data-toggle="dropdown" data-target="#" ><i class="fa fa-calendar"></i></a>
                                         <ul class="dropdown-menu" role="menu">
                                             <datetimepicker ng-model="filter.filterLabel2"  data-on-set-time="onDateEndSet(newDate, oldDate, filter)" data-datetimepicker-config="{ dropdownSelector: '#dropdown2', startView:'day', minView:'day'  }"/>
                                         </ul>
-                                    </span>
+                                    </span>-->
                                     <!--end between for date -->
 
 
@@ -103,30 +116,31 @@
 
 
 
-                                </div>
+                                <!--</div> -->
                                 <!-- END Date -->
 
                                 <!--equal, in, etc ...-->
-                                <div class="input-group" ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && (filter.filterPrompt == false) && ( filter.elementType != 'array') && ( filter.elementType != 'date')" style="width:200px;">
+                                <!--<div class="input-group" ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && (filter.filterPrompt == false) && ( filter.elementType != 'array') && ( filter.elementType != 'date')" style="width:200px;">
                                     <input type="text" class="form-control no-right-border form-focus-green" ng-model="filter.filterText1" >
                                     <span class="input-group-btn" ng-show="(filter.filterType != 'between' && filter.filterType != 'notBetween')">
                                         <button class="btn btn-primary popover-primary ng-scope" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Select distinct values" popover="Click here to select one or more from the distinct values that can currently be found in the database" ng-click="getDistinctValues(filter)"><i class="fa fa-search"></i></button>
                                     </span>
-                                </div>
+                                </div> -->
 
                                 <!--between-->
-                                <span ng-show="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType != 'date'"><button class="btn" style="margin-right:2px;margin-left:2px">and</button>  <input type="text" class="form-control form-focus-green" ng-model="filter.filterText2" />  </span>
-
+                                <!--<span ng-show="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType != 'date'"><button class="btn" style="margin-right:2px;margin-left:2px">and</button>  <input type="text" class="form-control form-focus-green" ng-model="filter.filterText2" />  </span>
+                                -->
                                 <!--prompt-->
-                                <div class="form-group">
+
+                            <!--<div class="form-group">
                                     <button class="btn popover-primary ng-scope" ng-class="{'btn-black': filter.filterPrompt == true, 'btn-white': filter.filterPrompt == false}" ng-click="filterPromptsClick(filter)" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Filter prompt" popover="{{getButtonFilterPromptMessage(filter)}}">
                                         <i class="fa fa-filter"></i><i class="fa fa-question"></i>
                                     </button>
-                                </div>
+                                </div>-->
 
-                                <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFilter(filter);filtersUpdated();detectLayerJoins();processStructure();"></i></span>
+
                             </div>
-                            </form>
-                        </div>
+                            <!--</form>
+                        </div>-->
 
                     </li>

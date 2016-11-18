@@ -1,10 +1,19 @@
-app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,datasourceModel,uuid2,$timeout ) {
+app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,datasourceModel,uuid2,$timeout,PagerService,$window ) {
+
+
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
+    $scope.sqlModal = 'partials/layer/sqlModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';
     $scope.datasetPropertiesModal  = 'partials/layer/datasetPropertiesModal.html';
     $scope.ReadOnlyDataSourceSelector = false;
     $scope.items =  [];
+    $scope.pager = {};
+
+
+
+
+
     $scope.elementTypes = [{name:"object",value:"object"},
         {name:"string",value:"string"},
         {name:"number",value:"number"},
@@ -27,7 +36,10 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
     $scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
 
     $scope.deletingJoin = false;
-    $scope.elementEditing = false;
+
+
+
+
 
     if ($routeParams.extra == 'intro') {
             $timeout(function(){$scope.showIntro()}, 1000);
@@ -246,8 +258,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             $scope.items = data.items;
             $scope.page = data.page;
             $scope.pages = data.pages;
-
-
+            $scope.pager = PagerService.GetPager($scope.items.length, data.page,10,data.pages);
         });
     };
 
@@ -283,6 +294,23 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         $('#datasetModal').modal('show');
     }
 
+
+    $scope.addSQL = function ()
+    {
+        $scope.temporarySQLCollection = {};
+        $scope.selectedDts = {};
+        if ($scope._Layer.params)
+            if ($scope._Layer.params.schema)
+                if ($scope._Layer.params.schema.length > 0)
+                    {
+                      $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
+                      $scope.ReadOnlyDataSourceSelector = true;
+                      $scope.getDatasetsForDts();
+                    }
+
+        $('#sqlModal').modal('show');
+    }
+
     $scope.setSelectedEntity = function (entity)
     {
         if ($scope.selectedEntities.indexOf(entity) == -1)
@@ -315,22 +343,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                             result.items[i].elements[e].collectionName = result.items[i].collectionName;
                         }
 
-                        //Add the count element
-                        /*
-                        var theCountElement = {};
-                        theCountElement.elementName = 'WSTcount'+result.items[i].collectionName;
-                        theCountElement.elementLabel = 'Count'+' '+result.items[i].collectionLabel;
-                        theCountElement.datasourceID = $scope.selectedDts.id;
-                        theCountElement.collectionID = result.items[i].collectionID;
-                        theCountElement.collectionName = result.items[i].collectionName;
-                        theCountElement.elementID = result.items[i].collectionID+'#count#',
-                        theCountElement.elementType = 'number';
-                        theCountElement.aggregation = 'count'
-                        theCountElement.count = true;
-
-                        result.items[i].elements.unshift(theCountElement);
-*/
-
                         if (!$scope._Layer.params)
                             $scope._Layer.params = {};
                         if (!$scope._Layer.params.schema)
@@ -343,10 +355,44 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                     $('#datasetModal').modal('hide');
                     $scope.erDiagramInit();
 
-            }
+                }
             });
         }
     }
+
+    $scope.addSqlToLayer = function()
+    {
+        datasourceModel.getSqlQuerySchema($scope.selectedDts.id,$scope.temporarySQLCollection,function(result){
+
+        if (result.result == 1)
+                {
+                    for (i in result.items)
+                    {
+                        result.items[i].datasourceID = $scope.selectedDts.id;
+
+                        for (e in result.items[i].elements)
+                        {
+                            result.items[i].elements[e].datasourceID = $scope.selectedDts.id;
+                            result.items[i].elements[e].collectionID = result.items[i].collectionID;
+                            result.items[i].elements[e].collectionName = result.items[i].collectionName;
+                        }
+
+                        if (!$scope._Layer.params)
+                            $scope._Layer.params = {};
+                        if (!$scope._Layer.params.schema)
+                            $scope._Layer.params.schema = [];
+
+                        $scope._Layer.params.schema.push(result.items[i]);
+
+                    }
+
+                    $('#sqlModal').modal('hide');
+                    $scope.erDiagramInit();
+
+            }
+        });
+    }
+
 
     $scope.getDatasetsForDts = function (_id)
     {
@@ -738,6 +784,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
     $scope.elementAdd = function (element)
     {
         $scope.selectedElement = element;
+        $scope.elementEditing = false;
         $('#elementModal').modal('show');
     }
 
@@ -752,10 +799,11 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 {
                     if ($scope._Layer.params.schema[collection].elements[e].elementID == element.elementID)
                     {
-                        $scope.elementEditing = true;
+
                         var tempElement = {};
                         tempElement = $scope._Layer.params.schema[collection].elements[e];
                         $scope.selectedElement = tempElement;
+                        $scope.elementEditing = true;
                         $('#elementModal').modal('show');
                     }
                 }
@@ -763,7 +811,23 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         }
     }
 
-    $scope.saveEditElement = function()
+    $scope.saveElement = function()
+    {
+        if ($scope.elementEditing == false)
+            {
+                if (!$scope._Layer.objects)
+                    $scope._Layer.objects = [];
+
+                $scope.selectedElement.elementRole = 'dimension';
+                $scope._Layer.objects.push($scope.selectedElement);
+
+                $('#elementModal').modal('hide');
+            } else {
+                saveEditElement();
+            }
+    }
+
+    function saveEditElement()
     {
         var element = $scope.selectedElement;
 
@@ -937,16 +1001,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         jsPlumb.setZoom(z);
     };
 
-    $scope.addElementToObjects = function()
-    {
-        if (!$scope._Layer.objects)
-            $scope._Layer.objects = [];
 
-        $scope.selectedElement.elementRole = 'dimension';
-        $scope._Layer.objects.push($scope.selectedElement);
-
-        $('#elementModal').modal('hide');
-    }
 
     $scope.addValueToElement = function(element, value, label) {
         if (!element.values) element.values = [];
@@ -1136,6 +1191,21 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             }
 
 
+    }
+
+    $scope.checkIfMongoDbForSQL = function()
+    {
+        for (var i in $scope.datasources)
+            {
+                if ($scope.selectedDts.id == $scope.datasources[i]._id)
+                    {
+                        if ($scope.datasources[i].type == 'MONGODB')
+                            {
+                                $window.alert("SQL Queries are not compatible with MONGODB datasources");
+                                $scope.selectedDts.id = undefined;
+                            }
+                    }
+            }
     }
 
 

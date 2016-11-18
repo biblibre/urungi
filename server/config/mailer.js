@@ -22,7 +22,7 @@ function sendEmail(emailSubject, emailMessage, emailTo) {
         if(error){
             console.log(error);
         }else{
-            console.log(response);
+
         }
 
     transportSMTP.close(); // shut down the connection pool, no more messages
@@ -86,7 +86,7 @@ async.mapLimit(recipients, 10, function (item, next) {
     if (err) {
         console.error(err)
     }
-    console.log('Succesfully sent %d messages', recipients.length)
+
 })
 
 }

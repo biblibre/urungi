@@ -50,7 +50,6 @@ module.exports = function (passport) {
 
     passport.use(new RememberMeStrategy(
         function(token, done) {
-            console.log('remember me strategy aqui');
             Users.findOne({accessToken: token},{}, function (err, user) {
                 if (err) { return done(err); }
                 if (!user) { return done(null, false); }

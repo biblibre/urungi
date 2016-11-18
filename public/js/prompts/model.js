@@ -50,8 +50,7 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
         var searchValue = '';
         if ($scope.selectedFilter.filterType == 'in' || $scope.selectedFilter.filterType == 'notIn') {
             for (var i in $scope.selectedFilter.searchValue) {
-                console.log('multiple values',$scope.selectedFilter.searchValue);
-                searchValue += $scope.selectedFilter.searchValue[i][$scope.selectedFilter.collectionID.toLowerCase()+'_'+$scope.selectedFilter.elementName];
+                searchValue += $scope.selectedFilter.searchValue[i][$scope.selectedFilter.id];
                 if (i < $scope.selectedFilter.searchValue.length-1) {
                     searchValue += ';';
                 }
@@ -234,7 +233,7 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
         //1st get all prompts and common prompts over all the reports
         for (var r in reports)
             {
-                getPromptsV2(reports[r].reportDefinition);
+                getPromptsV2(reports[r]);
             }
 
         for (var p in prompts)
@@ -254,27 +253,38 @@ app.service('promptModel', ['queryModel' , function (queryModel) {
     var duplicatePrompts = [];
     var promptMessage = '';
 
+
+    this.getPromptsV2 = function(report,done)
+    {
+        done(getPromptsV2(report));
+    }
+
     function getPromptsV2(report)
     {
-                for (var g in report.query.groupFilters) {
+          console.log('this is the report',report);
+        var reportPrompts = [];
+           for (var g in report.query.groupFilters) {
 
-                    for (var f in report.query.groupFilters[g].filters)
-                       {
-                            var filter = report.query.groupFilters[g].filters[f];
+                    //for (var f in report.query.groupFilters[g].filters)
+                      // {
+                            var filter = report.query.groupFilters[g];
                             if (filter.filterPrompt == true)
                             {
-                                filter.reportID = report._id;
+                                filter.reportID = report.id;
                                 if (checkIfPromptExistsV2(prompts,filter) == true)
                                 {
+                                    reportPrompts.push(filter);
                                     duplicatePrompts.push(filter);
                                 } else {
                                     prompts.push(filter);
+                                    reportPrompts.push(filter);
                                 }
 
                             }
-                        }
+                        //}
                 }
-        return;
+        console.log('founded prompts',reportPrompts);
+        return reportPrompts;
     }
 
 function checkIfPromptExistsV2(promptslist,prompt)
@@ -503,13 +513,25 @@ function checkIfPromptExistsV2(promptslist,prompt)
     }
 
     function funcAsync(filter,search, done) {   //SELECT2
-
         queryModel.getDistinctFiltered(filter,search, function(data,sql){
-            console.log('The result',data);
-            var values = ['one','two','three'];
-            filter.values = values;
-            done(values);
+            filter.values = data;
+            done(data);
         });
+    }
+
+    this.filterSelectChanged = function(item, filter, done)
+    {
+        var theResult = '';
+
+        for (var i in filter.searchValue)
+            {
+                theResult = theResult + filter.searchValue[i][filter.id]
+                if (i < filter.searchValue.length-1)
+                    theResult += ';';
+            }
+        filter.filterText1 = theResult;
+        //filter.searchValue = theResult;
+        done();
     }
 
     return this;

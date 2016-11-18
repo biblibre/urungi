@@ -1,13 +1,6 @@
 
 
 
-
-
-<!--
-<div class="container-fluid" style="border-top: 2px solid #72A230; padding: 10px;">
-     <h3 class="pull-right" >Query design zone</h3>
-</div>
--->
 <div ng-include src="filterPromptModal"></div>
 
 <div class="container-fluid" style="padding:10px" ng-include src="dropArea" ng-init="initForm()">
@@ -40,7 +33,7 @@
     <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left:5px;">Push it to a Dashboard</button>
 </div>
 <div class="container-fluid" ng-show="sql && isForDash">
-    <button class="btn btn-success pull-right"  style="margin-left:5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(); initReport();">Push it to the Dashboard</button>
+    <button class="btn btn-success pull-right"  style="margin-left:5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();">Push it to the Dashboard</button>
 </div>
 
 
@@ -68,11 +61,12 @@
 
 
 
+<div ng-include src="promptsBlock" class=" prompts-block"></div>
 
 <div id="reportLayout" class="container-fluid" style="min-height:200px;position:relative;width:100%;height:350px" bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_reportLayout">
     <div ng-if="wrongFilters.length > 0 && columns.length > 0" class="alert alert-danger" role="alert"><i class="fa fa-warning fa-2" style="margin-right:10px;"></i>  <strong>Warning:</strong>     There are incomplete filters!!</div>
 
-    <div ng-if="wrongFilters.length == 0" style="min-height:100px">
+    <div  style="min-height:100px">
 
     </div>
 

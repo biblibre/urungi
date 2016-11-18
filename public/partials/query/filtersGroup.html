@@ -55,9 +55,9 @@
                                 <div class="form-group" ng-show="(filter.elementType == 'date' && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
                                     <span ng-show="(filter.elementType == 'date' && (filter.filterType != 'in' && filter.filterType != 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull'))">{{filter.filterLabel1 | date:'yyyy-MM-dd'}}</span>
                                     <span ng-show="filter.filterType == 'in' || filter.filterType == 'notIn'">
-                                        <span class="filter-in-list" ng-repeat="oneDate in filter.filterText1">
+                                        <!--<span class="filter-in-list" ng-repeat="oneDate in filter.filterText1">
                                             {{oneDate | date:'yyyy-MM-dd'}} <i class="fa fa-remove filter-in-list-remove hand-cursor" ng-click="removeItem(oneDate,filter.filterText1)"></i>
-                                        </span>
+                                        </span>-->
 
                                     </span>
                                     <span class="dropdown" popover-trigger="mouseenter" popover-placement="top"  popover="Click here to select the date to filter">

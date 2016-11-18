@@ -1,7 +1,7 @@
 <script src="libs/jsplumb/jquery.jsPlumb-1.7.6-min.js"></script>
 
 <div class="container-fluid" style="padding-left:25px;padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
-    <h3 class="pull-left">{{_Layer.name}}</h3>
+    <h3 class="pull-left" editable-text="_Layer.name"></h3>
     <a ng-click="save()" class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;">Save layer</a>
     <a href="/#/layers" class="btn btn-default pull-right">Cancel</a>
 </div>
@@ -9,12 +9,12 @@
 <div class="container-fluid" ng-init="view()">
     <div class="col-md-12">
         <div class="container-fluid" style="margin-bottom: 10px">
-
+            <a ng-click="addSQL()" class="btn btn-info pull-right" style="margin-left: 5px;margin-right: 5px;">Add new SQL</a>
             <a ng-click="addDataset()" class="btn btn-info pull-right" style="margin-left: 5px;margin-right: 5px;">Add new dataset</a>
         </div>
     </div>
     <div class="container-fluid">
-    <section id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'elements'" class="catalogSidebar" style="top: 53px;width: 350px;">
+    <section id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'elements'" class="catalogSidebar" style="top: 46px;width: 350px;">
         <menu>
             <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'elements'}"><a ng-click="tabs.selected = 'elements'">Elements</a></li>
             <!--<li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'properties'}"><a ng-click="tabs.selected = 'properties'">Properties</a></li>-->
@@ -142,3 +142,4 @@
 <div ng-include src="datasetModal"></div>
 <div ng-include src="elementModal"></div>
 <div ng-include src="datasetPropertiesModal"></div>
+<div ng-include src="sqlModal"></div>

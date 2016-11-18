@@ -81,7 +81,6 @@ exports.testConnection = function(data, setresult) {
         request.query("SELECT table_schema, TABLE_NAME as name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'", function(err, recordset) {
             if (err) throw err;
 
-            console.log(recordset);
             setresult({result: 1, items: recordset});
             connection.close();
         });

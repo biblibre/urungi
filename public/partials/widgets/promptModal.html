@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="promptModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -13,7 +13,7 @@
             </div>
             <div id="searchModalBody" class="modal-body" ng-init="setHeight('searchModalBody', 'full', -118)" style="overflow-y: scroll;">
                 <ul style="list-style: none;">
-                    <li ng-repeat="value in searchValues">
+                    <li ng-repeat="value in selectedFilter.data">
                         <div ng-if="selectedFilter.filterType != 'in' && selectedFilter.filterType != 'notIn'">
 
                             <div class="radio">

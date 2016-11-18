@@ -34,8 +34,8 @@ db.prototype.end = function() {
 db.prototype.query = function(query, done) {
     this.connection.query(query, function(err, result) {
         if (err) {
-            done(err);
-            return console.error('Connection Error: '+err);
+            done('Query Error: '+err);
+            return console.error('Query Error: '+err);
         }
 
         done(false, {rows: result.rows});

@@ -73,9 +73,12 @@
             <section class="layoutsTabContainer tabContainer">
                 <section class="tab">
                     <section class="layer scrollPane">
-                        <ul>
-                            <li ng-repeat="prompt in prompts">{{prompt.objectLabel}}</li> <!--reportType-->
-                        </ul>
+
+                            <div ng-repeat="prompt in prompts" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'queryFilter',promptID:'{{prompt.elementID}}'}" style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " id="{{item.id}}" class="">
+                                {{prompt.objectLabel}}
+                            </div>
+
+
                     </section>
                     <div class="scrollTrack vScrollTrack">
                         <div class="scrollThumb" style="height: 15px; transform: translateY(0px);"></div>

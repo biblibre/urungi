@@ -1,3 +1,35 @@
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #000;
+    border-color: #000;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #000;
+    border-color: #000;
+}
+
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    background-color: #000;
+    border-color: #000;
+}
+
+.pagination>li>a, .pagination>li>span {
+    color: #000;
+}
+
+.list-group-item.active>.badge, .nav-pills>.active>a>.badge {
+    color: #000;
+}
+
+
 .fullscreen-modal {
     padding: 0px !important;
 }
@@ -1620,6 +1652,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     padding: 4px 20px;
     margin-left: 5px;
     top: -6px;
+    height:32px;
 }
 
 .panel .panel-heading>.panel-options .nav-tabs>li.active>a {
@@ -2460,8 +2493,8 @@ label[for] {
 .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #ccc;
-    height: 29px;
+    background-color: #94C255;
+    height: 25px;
 }
 
 
@@ -2475,6 +2508,21 @@ label[for] {
     color:#94C255;
 }
 
+.filter-label-value {
+    /*background-color: white;*/
+    height: 35px;
+    padding: 9px;
+    min-width: 95px;
+}
 
 
+.ui-grid-menu-button {
+    background-color: #3F4652;
+    color: #fff;
+    height: 40px;
+}
 
+.shorter-menu {
+    height:250px;
+    overflow-y: auto;
+}

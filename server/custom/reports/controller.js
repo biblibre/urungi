@@ -273,7 +273,6 @@ exports.PreviewQuery = function(req,res)
 exports.ReportsGetData = function(req, res) {
     var data = req.query;
     var query = data.query;
-
     processDataSources(req,query.datasources,query.layers, {page: (data.page) ? data.page : 1},query, function(result) {
         //debug(result);
         serverResponse(req, res, 200, result);
@@ -375,16 +374,6 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
                         }
 
                     }
-
-                    /*
-                    for (var i in dts.params[0].schema) {
-                        for (var j in dataSource.collections) {
-                            if (dts.params[0].schema[i].collectionID == dataSource.collections[j].collectionID) {
-                                dataSource.collections[j]['schema'] = dts.params[0].schema[i];
-                            }
-                        }
-                    }
-                    */
 
                     switch (dts.type) {
                         case 'MONGODB':

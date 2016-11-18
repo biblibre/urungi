@@ -16,6 +16,7 @@ var express = require('express'),
 
 var cluster = require('cluster');
 var passport = require("passport");
+//var mongoose = require('mongoose');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session); //npm install connect-redis --- to store variable sessions
 var cookieParser = require('cookie-parser');
@@ -73,7 +74,7 @@ if (cluster.isMaster) {
     var config = require('./server/config/config')[env];
     global.config = config;
 
-    require('./server/config/mongoose');//(mongoose);
+    require('./server/config/mongoose')();
     require('./server/config/passport')(passport);
 
     require('./server/globals');

@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryModel, queryService,reportService, promptModel, $routeParams,$timeout,$rootScope, bsLoadingOverlayService, grid, uuid2,c3Charts,report_v2Model,widgetsCommon,$location) {
+app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryModel,promptModel, queryService,reportService, promptModel, $routeParams,$timeout,$rootScope, bsLoadingOverlayService, grid, uuid2,c3Charts,report_v2Model,widgetsCommon,$location) {
 
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
@@ -38,6 +38,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.selectedReport.reportType = 'grid';
     $scope.selectedReport.query = {};
 
+
     $scope.gettingData = false;
     $scope.showSQL = false;
 
@@ -46,6 +47,12 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.layers = [];
     $scope.mode = 'add';
     $scope.isForDash = false;
+    $scope.showPrompts = true;
+
+    $scope.getSelectedLayer = function()
+    {
+        return queryModel.selectedLayerID;
+    }
 
     //$scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
 
@@ -65,6 +72,14 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.signalOptions = widgetsCommon.signalOptions;
 
+    $scope.queryModel = queryModel;
+
+    $scope.getPrompts = function()
+    {
+        if ($scope.selectedReport.query)
+            return $scope.selectedReport.query.groupFilters;
+    }
+
 
     var hashCode = function(s){
         return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
@@ -77,10 +92,12 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.onDateSet = function (newDate, oldDate, filter) {
         queryModel.onDateSet(newDate,oldDate,filter);
+        $scope.processStructure();
     }
 
     $scope.onDateEndSet = function (newDate, oldDate, filter) {
         queryModel.onDateEndSet(newDate,oldDate,filter);
+        $scope.processStructure();
     }
 
     $scope.removeItem = function(item, collection)
@@ -96,14 +113,26 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.$on("newReportForDash", function (event, args) {
         //$scope.initReport();
         $scope.isForDash = true;
-        console.log('new report');
+
+        $scope.selectedReport = {};
+        $scope.selectedReport.draft = true;
+        $scope.selectedReport.badgeStatus = 0;
+        $scope.selectedReport.exportable = true;
+        $scope.selectedReport.badgeMode = 1;
+        $scope.selectedReport.properties = {};
+        $scope.selectedReport.properties.xkeys = [];
+        $scope.selectedReport.properties.ykeys = [];
+        $scope.selectedReport.properties.columns = [];
+        $scope.selectedReport.reportType = 'grid';
+        $scope.selectedReport.query = {};
+
     });
 
-    $scope.$on("loadReportStrucuture", function (event, args) {
+    $scope.$on("loadReportStrucutureForDash", function (event, args) {
         //UNA QUERY SOLO PUEDE PERTENECER A UNA LAYER POR LO QUE EN LUGAR DE LAYERS ES LAYERID
         //VER TB POR QUE HAY MAS DE UNA LAYER EN QUERY Y A NULL
         var report = args.report;
-
+        $scope.isForDash = true;
         $scope.showOverlay('OVERLAY_reportLayout');
         $scope.selectedReport = report;
         $scope.mode = 'edit';
@@ -188,7 +217,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport.properties.xkeys = [];
                 $scope.selectedReport.properties.ykeys = [];
                 $scope.selectedReport.properties.columns = [];
-                $scope.selectedReport.properties.filters = [];
+                ///$scope.selectedReport.properties.filters = [];
                 $scope.selectedReport.properties.order = [];
                 $scope.selectedReport.reportType = 'grid';
                 $scope.selectedLayerID = queryModel.selectedLayerID;
@@ -224,6 +253,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                             report_v2Model.getReport(report,'reportLayout',function() {
                                 $scope.hideOverlay('OVERLAY_reportLayout');
                             });
+
+                            /*promptModel.getPromptsV2($scope.selectedReport,function(prompts){
+                                $scope.prompts = prompts;
+                            });*/
 
                         } else {
                             //TODO:No report found message
@@ -352,6 +385,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.changeLayer = function(selectedLayerID)
     {
+        $scope.selectedLayer = selectedLayerID;
         queryModel.changeLayer(selectedLayerID);
     }
 
@@ -397,9 +431,14 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         });
     }
 
-    $scope.getElementFilterOptions = function(elementType)
+   /* $scope.getElementFilterOptions = function(elementType)
     {
         return queryModel.getElementFilterOptions(elementType);
+    }
+    */
+    $scope.getDatePatternFilters = function()
+    {
+        return queryModel.getDatePatternFilters();
     }
 
     var lastDrop = null;
@@ -422,18 +461,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.onDropFilter = function (data, event, type, group) {
 
         var customObjectData = data['json/custom-object']; // {foo: 'bar'}
-        if (!$scope.selectedReport.properties.filters)
-                $scope.selectedReport.properties.filters = [];
-
-        if ($scope.selectedReport.properties.filters.length > 0)
-            {
-               customObjectData.condition = 'AND';
-               customObjectData.conditionLabel = 'AND';
-            }
-
-        $scope.selectedReport.properties.filters.push(customObjectData);
-
-
         queryModel.onDrop($scope,data,event,type,group, function(){
             $scope.getDataForPreview();
         });
@@ -463,7 +490,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     function reorderFilters()
     {
-        for (var i in $scope.selectedReport.properties.filters)
+       /* for (var i in $scope.selectedReport.properties.filters)
                 {
                     if (i == 0)
                         {
@@ -476,6 +503,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                             $scope.selectedReport.properties.filters[i].conditionLabel = 'AND';
                         }
                 }
+                */
+        queryModel.reorderFilters();
+
     }
 
     $scope.onDropOnFilterGroup = function (data, event, filter) {
@@ -499,7 +529,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         delete(filter.filterText2);
 
 
-        $scope.selectedReport.properties.filters.push(filter);
+        ///$scope.selectedReport.properties.filters.push(filter);
 
         queryModel.onDropOnFilter(data,event,filter);
     };
@@ -571,28 +601,65 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             $scope.getDataForPreview();
         });
     };
-
+/*
     $scope.conditionTypes = queryModel.conditionTypes;
-
+*/
 
     $scope.filtersUpdated = function() {
         queryModel.filtersUpdated();
     }
 
-
+/*
     $scope.updateCondition = function(filter, condition) {
         filter.conditionType = condition.conditionType;
         filter.conditionLabel = condition.conditionLabel;
         queryModel.updateCondition(filter, condition);
     };
-
+*/
     $scope.onDragOver = function (event) {
         // ...
     };
-
+/*
     $scope.setFilterType = function(filter, filterOption)
     {
         queryModel.setFilterType(filter, filterOption);
+        console.log('the filter',filter);
+        if (filter.filterType == 'null' || filter.filterType == 'notNull')
+            $scope.processStructure();
+    }
+*/
+
+
+    $scope.filterChanged = function(elementID,values)
+    {
+
+        //console.log('the filter has changed...');
+        $scope.processStructure();
+        /*for (var r in $scope.selectedDashboard.reports)
+                {
+                    for (var f in $scope.selectedDashboard.reports[r].query.groupFilters)
+                        {
+                            if ($scope.selectedDashboard.reports[r].query.groupFilters[f].elementID == elementID && $scope.selectedDashboard.reports[r].query.groupFilters[f].filterPrompt == true)
+                                {
+
+                                    $scope.selectedDashboard.reports[r].query.groupFilters[f].filterText1 = values.filterText1;
+                                    $scope.selectedDashboard.reports[r].query.groupFilters[f].searchValue = values.searchValue;
+                                    $scope.selectedDashboard.reports[r].query.groupFilters[f].filterValue = values.filterValue;
+                                    $scope.selectedDashboard.reports[r].query.groupFilters[f].dateCustomFilterLabel = values.dateCustomFilterLabel;
+                                    $scope.selectedDashboard.reports[r].query.groupFilters[f].filterText2 = values.filterText2;
+
+                                    console.log('the prompt has changed 2...');
+                                    getQueryData(r,function(){
+                                        rebuildCharts();
+                                        rebuildGrids();
+                                        rebuildIndicators();
+
+                                    });
+                                }
+                        }
+                }*/
+
+
     }
 
     $scope.remove = function(object,type)
@@ -613,7 +680,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 }
             if (type == 'filter')
                 {
-                    $rootScope.removeFromArray($scope.selectedReport.properties.filters, object);
+                   /* $rootScope.removeFromArray($scope.selectedReport.properties.filters, object);
                     for (var i in $scope.selectedReport.properties.filters)
                         {
                             if ($scope.selectedReport.properties.filters[i].elementID == object.elementID)
@@ -621,7 +688,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
                                     $scope.selectedReport.properties.filters.splice(i,1);
                                 }
-                        }
+                        }*/
                 }
             if (type == 'order')
                 {
@@ -676,7 +743,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.removeFilter = function(filter)
     {
-        $rootScope.removeFromArray($scope.selectedReport.properties.filters, filter);
+        //$rootScope.removeFromArray($scope.selectedReport.properties.filters, filter);
         queryModel.removeQueryItem(filter,'filter');
         reorderFilters();
     }
@@ -704,13 +771,30 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         promptModel.isValueSelected($scope,value);
     }
 
+    $scope.setHeight = function(element, height, correction) {
+        var height = (height == 'full') ? $(document).height() : height;
+
+        if (correction) height = height+correction;
+
+        $('#'+element).css('height', height);
+    };
+
     $scope.setFilterPrompt = function(filter)
     {
         $('#filterPromptsModal').modal('hide');
         if (filter.filterPrompt == true)
+            {
             filter.filterPrompt = false;
+                console.log('deactivated prompt',filter);
+            }
         else
             filter.filterPrompt = true;
+
+        /*
+        promptModel.getPromptsV2($scope.selectedReport,function(prompts){
+            $scope.prompts = prompts;
+            console.log('these are the prompts',$scope.prompts,prompts);
+        });*/
     }
 
     $scope.getButtonFilterPromptMessage = function(filter)
@@ -729,6 +813,11 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $('#filterPromptsModal').modal('show');
     };
 
+    $scope.isfilterComplete = function(filter)
+    {
+        return queryModel.isfilterComplete(filter);
+    }
+
     $scope.getDataForPreview  = function()
     {
 
@@ -738,6 +827,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.gettingData == true;
 
         var query =  queryModel.generateQuery();  //queryModel.query();
+        //TODO: clean data query
+        console.log('the query',query);
         $scope.selectedReport.query = query;
 
 
@@ -993,17 +1084,6 @@ $scope.changeColumnSignals = function(columnIndex ,hashedID)
         $scope.selectedColumn = report_v2Model.selectedColumn();
         $scope.selectedColumnHashedID  = report_v2Model.selectedColumnHashedID();
         $scope.selectedColumnIndex  = report_v2Model.selectedColumnIndex();
-    /*
-        $scope.selectedColumn = $scope.selectedReport.properties.columns[columnIndex];
-        $scope.selectedColumnHashedID  = hashedID;
-        $scope.selectedColumnIndex  = columnIndex;
-
-        if (!$scope.selectedColumn.signals)
-            $scope.selectedColumn.signals = [];
-
-
-        $('#columnSignalsModal').modal('show');
-*/
 
     }
 
@@ -1096,6 +1176,41 @@ $scope.changeColumnColor = function(color)
             }
 
         $scope.getDataForPreview();
+    }
+
+    $scope.hideColumn = function(column,hidden)
+    {
+        console.log('the column',column);
+        column['hidden'] = hidden;
+        queryModel.hideColumn(column.elementID,hidden);
+        $scope.getDataForPreview();
+        console.log('the column',column);
+    }
+
+    $scope.funcAsync = function(filter, search)
+    {
+        promptModel.funcAsync(filter,search,function(result){
+
+        });
+    }
+
+    $scope.filterSelectChanged = function(item,filter)
+    {
+        promptModel.filterSelectChanged(item,filter, function(filterText) {
+            //$scope.getDataForPreview();
+            $scope.processStructure();
+        });
+    }
+
+    $scope.saveToExcel = function(reportHash)
+    {
+        report_v2Model.saveToExcel($scope,reportHash) ;
+    }
+
+    $scope.setDatePatternFilterType = function(filter,option)
+    {
+        queryModel.setDatePatternFilterType(filter,option);
+        $scope.processStructure();
     }
 
 

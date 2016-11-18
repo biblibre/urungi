@@ -87,7 +87,7 @@ Controller.method('findAll', function (req, done) {
     if (mandatoryFilters != [])
         find =  {$and: mandatoryFilters};
 
-    console.log(JSON.stringify(find)) ;
+
 
     Model.find(find, fields, params, function(err, items){
         if(err) throw err;

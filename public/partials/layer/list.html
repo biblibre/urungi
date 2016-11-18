@@ -28,6 +28,26 @@
 
                     </div>
                 </div>
+                <div class="container-fluid">
+                     <ul ng-if="pager.pages.length" class="pagination">
+                        <li ng-class="{disabled:pager.currentPage === 1}">
+                            <a ng-click="getLayers(1,'',['name','status','description'])">First</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === 1}">
+                            <a ng-click="getLayers(pager.currentPage - 1,'',['name','status','description'])">Previous</a>
+                        </li>
+                        <li ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
+                            <a ng-click="getLayers(page,'',['name','status','description'])">{{page}}</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                            <a ng-click="getLayers(pager.currentPage + 1,'',['name','status','description'])">Next</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                            <a ng-click="getLayers(pager.totalPages,'',['name','status','description'])">Last</a>
+                        </li>
+                    </ul>
+
+                </div>
             </div>
         </div>
     </div>

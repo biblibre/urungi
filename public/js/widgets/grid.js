@@ -75,7 +75,7 @@ this.getUIGrid = function(report)
             */
 
             report.properties.columnDefs = colDefs;
-            return '<div ui-grid="{data: getQuery(\''+hashedID+'\').data, columnDefs: getReportColumnDefs(\''+report.id+'\'), enableVerticalScrollbar:0, enableHorizontalScrollbar:0}" class="myGrid"></div>';
+            return '<div page-block ndtype="ui-grid" id="'+report.id+'" ui-grid="{data: getQuery(\''+hashedID+'\').data, columnDefs: getReportColumnDefs(\''+report.id+'\'), enableVerticalScrollbar:1, enableHorizontalScrollbar:0,enableGridMenu: true}" ui-grid-move-columns ui-grid-resize-columns ui-grid-pinning ui-grid-exporter ui-grid-grouping class="myGrid"></div>';
    }
 
 
@@ -415,7 +415,9 @@ this.extendedGridV2 = function(report)
             var id = report.id;
             hashedID = report.query.id;
 
-            var htmlCode =  '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel(\''+hashedID+'\')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." /></div>';
+            var htmlCode = '';
+
+            //var htmlCode =  '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel(\''+hashedID+'\')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." /></div>';
 
             columns = report.properties.columns;
 
@@ -449,8 +451,6 @@ this.extendedGridV2 = function(report)
             }
 
             htmlCode += '</div>';
-
-
 
             htmlCode += '<div ng-if="getQuery(\''+hashedID+'\').data.length == 0" >No data found</div>';
 
@@ -794,13 +794,16 @@ this.extendedGridV2 = function(report)
 
         columnPropertiesBtn +=
             '      </ul>'
-            +'</li>'
-            +'<li>'
-            +'      <a ng-click="changeColumnSignals('+columnIndex+','+quotedHashedID()+')">Conditional format</a>'
-            +'</li>'
-            /*+'<li>'
-            +'      <a href="">Hide components</a>'
-            +'</li>'*/
+            +'</li>';
+
+        if (column.elementType == 'number')
+                columnPropertiesBtn +='      <li><a ng-click="changeColumnSignals('+columnIndex+','+quotedHashedID()+')">Conditional format</a></li>';
+
+
+            columnPropertiesBtn += '<li class="divider"></li>'
+            //+'<li><a ng-click="saveToExcel(\''+hashedID+'\')"><i class="fa fa-file-excel-o"></i> Export table to excel</a></li>'
+            //+'<li class="divider"></li>'
+            +'<li><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." style="margin:5px;" /></li>'
             +'</ul>'
             +'</div>';
 

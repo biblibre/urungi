@@ -279,12 +279,13 @@
         </div> <!--tab content-->
         </div> <!--body-->
     </div><!--panel-->
+        <div ng-if="elementEditingWarning && elementEditingWarning != ''" class="alert-block">{{elementEditingWarning}}</div>
+    </div>
 
-    <div ng-if="elementEditingWarning && elementEditingWarning != ''" class="alert-block">{{elementEditingWarning}}</div>
 
     <div class="modal-footer ng-scope">
         <button type="button" class="btn btn-white" data-dismiss="modal" ng-click="elementEditing = false">Close</button>
-        <button ng-if="!elementEditing" type="button" class="btn btn-info"  ng-click="addElementToObjects()">Add to schema</button>
-        <button ng-if="elementEditing" type="button" class="btn btn-info"  ng-click="saveEditElement()">Save</button>
+        <!--<button ng-show="elementEditing == false" type="button" class="btn btn-info"  ng-click="addElementToObjects()">Add to schema</button>-->
+        <button  type="button" class="btn btn-info"  ng-click="saveElement()">Save</button>
     </div>
 </nd-modal>

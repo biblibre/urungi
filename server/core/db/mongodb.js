@@ -14,7 +14,6 @@ exports.testConnection = function(data, done) {
                     done({result:0, msg: err});
                     conn.close();
                 } else {
-                    console.log('collection names',names);
                     done({result: 1, items: names});
                     conn.close();
                 }

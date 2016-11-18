@@ -80,6 +80,91 @@ exports.getSchemas = function(data, setresult) {
     });
 };
 
+
+exports.getSqlQuerySchema = function(data, setresult) {
+    switch (data.type) {
+        case 'MySQL': var db = 'mysql';
+            break;
+        case 'POSTGRE': var db = 'postgresql';
+            break;
+        case 'ORACLE': var db = 'oracle';
+            break;
+        case 'MSSQL': var db = 'mssql';
+    }
+
+    var dbController = require('./'+db+'.js');
+
+    var db = new dbController.db();
+    db.connect(data, function(err, connection) {
+        if(err) {
+            console.log(data.type+' default connection error: ', err);
+            setresult({result: 0, msg: 'Connection Error: '+ err});
+            return console.error('Connection Error: ', err);
+        }
+
+        var query =  'SELECT * FROM ('+data.sqlQuery.sql+') wst_q1 '+db.getLimitString(1, 0) ;
+
+
+            db.query(query, function(err, finalresult) {
+                if (finalresult)
+                    {
+                        getSQLResultsSchema(data.sqlQuery.name,finalresult.rows,data.sqlQuery.sql, function(collection){
+                            var schemas = [];
+                            schemas.push(collection);
+                            debug({result: 1, items: schemas});
+                            setresult({result: 1, items: schemas});
+                        });
+                    } else {
+                        console.log('the msg',err);
+                        setresult({result: 0, msg: err});
+                    }
+                db.end();
+
+            });
+    });
+};
+
+function getSQLResultsSchema(collectionName,queryResults,sqlQuery, done) {
+
+    var collectionID = 'WST'+generateShortUID();
+
+    collectionID =  collectionID.replace(new RegExp('-', 'g'), '');
+    var theCollection = {collectionID: collectionID ,collectionName: collectionName,visible:true,collectionLabel:collectionName,isSQL:true,sqlQuery:sqlQuery};
+    theCollection.elements = [];
+
+    for (var key in queryResults[0])
+        {
+        var dbstruc = {};
+        var elements = [];
+
+         var name = key;
+         var type = 'string';
+
+         if (typeof(queryResults[0][key]) == 'number')
+             if(isNaN(queryResults[0][key]) == false)
+                 type = 'number';
+
+
+        //TODO: type = 'date'; json type = object , NaN = false
+
+        if (typeof(queryResults[0][key]) == 'boolean')
+                type = 'boolean';
+
+
+
+
+        var elementID = generateShortUID();
+        var isVisible = true;
+        theCollection.elements.push({elementID:elementID,elementName:name,elementType:type,visible:isVisible,elementLabel:name})
+
+
+        }
+
+
+
+    done(theCollection);
+}
+
 exports.getReverseEngineering = function(datasourceID, data, setresult) {
     //var uuid = require('node-uuid');
 
@@ -432,8 +517,6 @@ function getElementList (target,elements,parent) {
 }
 
 function processCollections(req,query,collections, dataSource, params, thereAreJoins, setresult,  index) {
-
-
     var from = [];
     var fields = [];
     var groupBy = [];
@@ -442,7 +525,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
     var elements = [];
     var leadTable = {};
     var leadTableJoinsCount = 0;
-
     if (collections.length == 1)
     {
         leadTable = collections[0];
@@ -501,7 +583,8 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         }
 
         if (processedCollections.indexOf(table.collectionID) == -1)
-            from.push(table.schema.collectionName +' '+table.collectionID + strJoin);
+            //from.push(table.schema.collectionName +' '+table.collectionID + strJoin);
+            from.push(table.collectionName +' '+table.collectionID + strJoin);
 
         processedCollections.push(table.collectionID);
 
@@ -511,26 +594,29 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             elements.push(field);
             //TODO: Count test
 
-            if (field.aggregation) {
-                found = true;
-                switch (field.aggregation) {
-                    case 'sum': fields.push('SUM('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'sum');
-                        break;
-                    case 'avg': fields.push('AVG('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'avg');
-                        break;
-                    case 'min': fields.push('MIN('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'min');
-                        break;
-                    case 'max': fields.push('MAX('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'max');
-                        break;
-                    case 'count': fields.push('COUNT('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'count');
+            if (field.hidden != true)
+                {
+                    if (field.aggregation) {
+                        found = true;
+                        switch (field.aggregation) {
+                            case 'sum': fields.push('SUM('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'sum');
+                                break;
+                            case 'avg': fields.push('AVG('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'avg');
+                                break;
+                            case 'min': fields.push('MIN('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'min');
+                                break;
+                            case 'max': fields.push('MAX('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'max');
+                                break;
+                            case 'count': fields.push('COUNT('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'count');
+                        }
+                    } else {
+                        fields.push(table.collectionID+'.'+field.elementName + ' as '+table.collectionID.toLowerCase()+'_'+field.elementName);
+                        if (dataSource.type != 'BIGQUERY')
+                            groupBy.push(table.collectionID+'.'+field.elementName);
+                            else
+                            groupBy.push(table.collectionID.toLowerCase()+'_'+field.elementName);
+                    }
                 }
-            } else {
-                fields.push(table.collectionID+'.'+field.elementName + ' as '+table.collectionID.toLowerCase()+'_'+field.elementName);
-                if (dataSource.type != 'BIGQUERY')
-                    groupBy.push(table.collectionID+'.'+field.elementName);
-                    else
-                    groupBy.push(table.collectionID.toLowerCase()+'_'+field.elementName);
-            }
         }
 
 
@@ -555,9 +641,27 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
     }
 
 
+    if (leadTable.schema)
+        {
+        if (leadTable.schema.isSQL == true)
+            {
+                SQLstring = SQLstring + ' FROM ('+ leadTable.schema.sqlQuery + ') '+ leadTable.collectionID + getJoins(leadTable.collectionID,collections,[]);
+            } else {
+                SQLstring = SQLstring + ' FROM '+ leadTable.schema.collectionName + ' '+ leadTable.collectionID + getJoins(leadTable.collectionID,collections,[]);
+            }
+        } else {
+           if (leadTable.isSQL == true)
+            {
+                SQLstring = SQLstring + ' FROM ('+ leadTable.sqlQuery + ') '+ leadTable.collectionID + getJoins(leadTable.collectionID,collections,[]);
+            } else {
+                SQLstring = SQLstring + ' FROM '+ leadTable.collectionName + ' '+ leadTable.collectionID + getJoins(leadTable.collectionID,collections,[]);
+            }
+        }
 
 
-    SQLstring = SQLstring + ' FROM '+ leadTable.schema.collectionName + ' '+ leadTable.collectionID + getJoins(leadTable.collectionID,collections,[]);
+
+
+
 
 
 
@@ -660,6 +764,8 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         //Fix for filters with having and normal filters
         SQLstring = SQLstring.replace("WHERE  AND", "WHERE");
 
+        console.log(SQLstring);
+
         if (dataSource.type != 'BIGQUERY')
         {
         db.connect(dataSource.params[0].connection, function(err, connection) {
@@ -738,12 +844,6 @@ function getFilters(query,done)
     var theFilter = '';
     var filters = [];
     var havings = [];
-    //var previousRelational = '';
-/*
-    if (query.groupFilters == undefined)
-        done(filters,havings);
-*/
-
 
     for (var f in query.groupFilters) {
 
@@ -756,20 +856,21 @@ function getFilters(query,done)
 
         var filterSQL = getFilterSQL(query.groupFilters[f]);
 
+            if (filterSQL != '')
+                {
+                    if (!query.groupFilters[f].aggregation)
+                    {
+                        if (f > 0)
+                            filterSQL = previousRelational + filterSQL;
 
-            if (!query.groupFilters[f].aggregation)
-            {
-                if (f > 0)
-                    filterSQL = previousRelational + filterSQL;
+                        filters.push(filterSQL);
+                    } else {
+                        if (havings.length > 0)
+                            filterSQL = previousRelational + filterSQL;
 
-                filters.push(filterSQL);
-            } else {
-                if (havings.length > 0)
-                    filterSQL = previousRelational + filterSQL;
-
-                havings.push(filterSQL);
-            }
-
+                        havings.push(filterSQL);
+                    }
+                }
     }
 
     done(filters,havings);
@@ -811,28 +912,31 @@ function processFilterGroup(group,filters,havings,isRoot,done)
         {
             var filterSQL = getFilterSQL(group.filters[f]);
 
+            if (filterSQL != '')
+                {
+                    if (!group.filters[f].aggregation)
+                    {
+                        if (f > 0)
+                            filterSQL = previousRelational + filterSQL;
 
-            if (!group.filters[f].aggregation)
-            {
-                if (f > 0)
-                    filterSQL = previousRelational + filterSQL;
+                        filters.push(filterSQL);
+                    } else {
+                        if (havings.length > 0)
+                            filterSQL = previousRelational + filterSQL;
 
-                filters.push(filterSQL);
-            } else {
-                if (havings.length > 0)
-                    filterSQL = previousRelational + filterSQL;
+                        havings.push(filterSQL);
+                    }
 
-                havings.push(filterSQL);
-            }
-
-            if (group.filters[f].group == true)
-            {
-
-
-                var recursive =  processFilterGroup(group.filters[f],filters,havings,false,done);
+                    if (group.filters[f].group == true)
+                    {
 
 
-            }
+                        var recursive =  processFilterGroup(group.filters[f],filters,havings,false,done);
+
+
+                    }
+
+                }
 
         }
 
@@ -854,7 +958,7 @@ function getFilterSQL(filter,isHaving)
     var result = '';
 
 
-    if ((filter.filterText1 || filter.filterType == 'notNull' || filter.filterType == 'null') ) {
+    if (((filter.filterText1 && filter.filterText1 != '') || filter.filterType == 'notNull' || filter.filterType == 'null') ) {
 
         var thisFilter = {}, filterValue = filter.filterText1;
         if (!filter.aggregation)
@@ -1006,7 +1110,6 @@ function getFilterSQL(filter,isHaving)
 function getJoins(collectionID,collections,processedCollections)
 {
     var fromSQL = '';
-
     for (var c in collections) {
         if (collections[c].collectionID == collectionID && (processedCollections.indexOf(collectionID) == -1))
         {
@@ -1019,7 +1122,6 @@ function getJoins(collectionID,collections,processedCollections)
             for (var j in table.joins) {
                 var join = table.joins[j];
 
-
                 if (join.sourceCollectionID == table.collectionID && (processedCollections.indexOf(join.targetCollectionID) == -1))
                 {
                     if (join.joinType == 'default')
@@ -1030,7 +1132,6 @@ function getJoins(collectionID,collections,processedCollections)
                     fromSQL = fromSQL + join.targetCollectionName + ' '+ join.targetCollectionID;
 
                     fromSQL = fromSQL + ' ON ('+join.sourceCollectionID+'.'+join.sourceElementName+' = '+join.targetCollectionID+'.'+join.targetElementName+')';
-
                     fromSQL = fromSQL + getJoins(join.targetCollectionID,collections,processedCollections);
 
                 }
@@ -1041,12 +1142,11 @@ function getJoins(collectionID,collections,processedCollections)
                         fromSQL = fromSQL + ' INNER JOIN ';
 
 
-
                     fromSQL = fromSQL + join.sourceCollectionName + ' '+ join.sourceCollectionID;
 
                     fromSQL = fromSQL + ' ON ('+join.targetCollectionID+'.'+join.targetElementName+' = '+join.sourceCollectionID+'.'+join.sourceElementName+')';
 
-                    fromSQL = fromSQL + getJoins(join.targetCollectionID,collections,processedCollections);
+                    fromSQL = fromSQL + getJoins(join.sourceCollectionID,collections,processedCollections);
                 }
 
             }
@@ -1324,18 +1424,35 @@ function dateFilter(filterElementName,filterValue, filter)
 
     if (found == true)
     {
-        if (filter.filterType == "equal")
-            return {$gte: firstDate, $lt: lastDate};
-        if (filter.filterType == "diferentThan")
-            return {$not: {$gte: firstDate, $lt: lastDate}};
-        if (filter.filterType == "biggerThan")
-            return {$gt: lastDate};
-        if (filter.filterType == "biggerOrEqualThan" )
-            return {$gte: firstDate};
-        if (filter.filterType == "lessThan" )
-            return {$lt: firstDate};
-        if (filter.filterType == "lessOrEqualThan" )
-            return {$lt: lastDate};
+
+        var fyear = firstDate.getFullYear();
+        var fmonth = pad(firstDate.getMonth()+1,2);
+        var fday = pad(firstDate.getDate(),2);
+        var lyear = lastDate.getFullYear();
+        var lmonth = pad(lastDate.getMonth()+1,2);
+        var lday = pad(lastDate.getDate(),2);
+
+        var queryFirstDate =  fyear+'/'+fmonth+'/'+fday;
+        var queryLastDate =  lyear+'/'+lmonth+'/'+lday;
+
+        if (filter.filterType == "equal-pattern")
+            return "("+ filterElementName + " >= '"+ queryFirstDate+"' AND "+filterElementName + " < '"+ queryLastDate+"')";
+
+        if (filter.filterType == "diferentThan-pattern")
+            return "("+ filterElementName + " < '"+ queryFirstDate+"' OR "+filterElementName + " >= '"+ queryLastDate+"')";
+
+        if (filter.filterType == "biggerThan-pattern")
+            return "("+ filterElementName + " > '"+ queryLastDate+"')";
+
+        if (filter.filterType == "biggerOrEqualThan-pattern" )
+            return "("+ filterElementName + " >= '"+ queryFirstDate+"')";
+
+        if (filter.filterType == "lessThan-pattern" )
+            return "("+ filterElementName + " < '"+ queryFirstDate+"')";
+
+        if (filter.filterType == "lessOrEqualThan-pattern" )
+            return "("+ filterElementName + " <= '"+ queryLastDate+"')";
+
     } else {
 
         var searchDate = new Date(filterValue);
@@ -1344,6 +1461,10 @@ function dateFilter(filterElementName,filterValue, filter)
         var qyear = searchDate.getFullYear();
         var qmonth = pad(searchDate.getMonth()+1,2);
         var qday = pad(searchDate.getDate(),2);
+
+        var qyear2 = theNextDay.getFullYear();
+        var qmonth2 = pad(theNextDay.getMonth()+1,2);
+        var qday2 = pad(theNextDay.getDate(),2);
 
         if (filter.filterText2)
         {
@@ -1356,15 +1477,19 @@ function dateFilter(filterElementName,filterValue, filter)
 
         var querySearchDate = qyear+'/'+qmonth+'/'+qday;
 
+        var querySearchDate2 = qyear2+'/'+qmonth2+'/'+qday2;
+
 
         if (filter.filterType == "equal" )
         {
-            return filterElementName + " = '"+ querySearchDate+"'";
+            //return filterElementName + " = '"+ querySearchDate+"'";
+            return "("+ filterElementName + " >= '"+ querySearchDate+"' AND "+filterElementName + " < '"+ querySearchDate2+"')";
         }
 
         if (filter.filterType == "diferentThan" && found == false)
         {
-            return filterElementName + " <> '"+ querySearchDate+"'";
+            //return filterElementName + " <> '"+ querySearchDate+"'";
+            return "("+ filterElementName + " < '"+ querySearchDate+"' OR "+filterElementName + " >= '"+ querySearchDate2+"')";
         }
 
         if (filter.filterType == "biggerThan" )
@@ -1399,7 +1524,7 @@ function dateFilter(filterElementName,filterValue, filter)
 
         if (filter.filterType == "between" )
         {
-            return filterElementName + " >= '"+ querySearchDate+"' AND "+filterElementName + " <= '"+queryLastDate+"'";
+            return filterElementName + " > '"+ querySearchDate+"' AND "+filterElementName + " <= '"+queryLastDate+"'";
         }
 
         if (filter.filterType == "notBetween" )
