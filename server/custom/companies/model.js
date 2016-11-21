@@ -5,6 +5,8 @@ var CompaniesSchema = new mongoose.Schema({
     publicSpace: [],
     defaultDocument: {type: String},
     defaultDocumentType: {type: String},
+    customCSS: {type: String},
+    customLogo: {type: String},
     history: [],
     nd_trash_deleted:{type: Boolean},
     nd_trash_deleted_date: {type: Date},

@@ -5,7 +5,7 @@ var app = angular.module('WideStage', [
         'ngRoute','ui.sortable','gridster','ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
         'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
         'ui.bootstrap.datetimepicker','ui.tree','page.block','gridshore.c3js.chart','vAccordion','bsLoadingOverlay','gg.editableText'
-    ,'intro.help','ngTagsInput','ui.grid','ui.grid.cellNav', 'ui.grid.resizeColumns', 'ui.grid.pinning',  'ui.grid.moveColumns', 'ui.grid.exporter', 'ui.grid.importer', 'ui.grid.grouping'
+    ,'intro.help','ngTagsInput','ui.grid','ui.grid.cellNav', 'ui.grid.resizeColumns', 'ui.grid.pinning',  'ui.grid.moveColumns', 'ui.grid.exporter', 'ui.grid.importer', 'ui.grid.grouping','ui.codemirror'
     ])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
@@ -122,7 +122,7 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/data-sources/:dataSourceID/', {
-            templateUrl: 'partials/data-source/source_wizard_mongo.html',
+            templateUrl: 'partials/data-source/edit.html',
             controller: 'dataSourceCtrl'
         });
 
@@ -132,12 +132,12 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/data_sources/new/:newDataSource/', {
-            templateUrl: 'partials/data-source/source_wizard_mongo.html',
+            templateUrl: 'partials/data-source/edit.html',
             controller: 'dataSourceCtrl'
         });
 
         $routeProvider.when('/datasources/new/:newDataSource/:extra', {
-            templateUrl: 'partials/data-source/source_wizard_mongo.html',
+            templateUrl: 'partials/data-source/edit.html',
             controller: 'dataSourceCtrl'
         });
 
@@ -297,6 +297,13 @@ var app = angular.module('WideStage', [
         $routeProvider.when('/reports-v2/edit/:reportID/', {
             templateUrl: 'partials/report_v2/edit.html',
             controller: 'report_v2Ctrl'
+        });
+
+        /*setup*/
+
+        $routeProvider.when('/setup', {
+            templateUrl: 'partials/setup/index.html',
+            controller: 'setupCtrl'
         });
 
     }])

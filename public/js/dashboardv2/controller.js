@@ -1,4 +1,4 @@
-app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams,report_v2Model, queryModel, grid, c3Charts,uuid2, icons,colors,htmlWidgets,dashboardv2Model,promptModel, grid,bsLoadingOverlayService,$timeout,$rootScope ) {
+app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams,report_v2Model, queryModel, grid, c3Charts,uuid2, icons,colors,htmlWidgets,dashboardv2Model, grid,bsLoadingOverlayService,$timeout,$rootScope ) {
     $scope.reportModal = 'partials/report_v2/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
@@ -12,16 +12,16 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     $scope.dashboardID = $routeParams.dashboardID;
     $scope.lastElementID = 0;
     $scope.dataPool = [];
-    $scope.faList = icons.faList;
-    $scope.colors = colors.colors;
+    //$scope.faList = icons.faList;
+    //$scope.colors = colors.colors;
     $scope.hiddenXS = false;
     $scope.hiddenSM = false;
     $scope.hiddenMD = false;
     $scope.hiddenLG = false;
     $scope.hiddenPrint = false;
     $scope.canMoveSelectedElement = false;
-    $scope.imageFilters = [];
-    $scope.imageFilters.opacity = 10;
+    //$scope.imageFilters = [];
+    //$scope.imageFilters.opacity = 10;
     $scope.theData = [];
 
 
@@ -619,42 +619,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
     $scope.promptChanged = function(elementID,values)
     {
-/*
-        for (var p in $scope.prompts)
-            {
-            if ($scope.prompts[p].elementID == elementID)
-                {
-
-                    $scope.prompts[p].searchValue = selectedValue;
-                    $scope.prompts[p].filterText1 = selectedValue;
-
-                    for (var q in $scope.selectedDashboard.reports)
-                    {
-                        var theQuery = $scope.selectedDashboard.reports[q].query;
-                        promptModel.updatePromptsForQuery($scope,theQuery,$scope.prompts[p], function(theQuery2){
-
-                        });
-
-
-                    }
-
-                    $scope.setQueryLoadingData($scope.queries[0].id);
-                    getQueryData(0,function(){
-                        rebuildCharts();
-                        //rebuildCharts4Query(theQuery.id);
-                        $scope.setQueryLoadedData($scope.queries[0].id);
-                    });
-
-
-                }
-            }
-        getQueryData(0,function(){
-                        rebuildCharts();
-                        rebuildGrids();
-                    });
-        */
-
-        console.log('the prompt has changed...')
         for (var r in $scope.selectedDashboard.reports)
                 {
                     for (var f in $scope.selectedDashboard.reports[r].query.groupFilters)
@@ -928,7 +892,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
     }
 */
-
+/*
     $scope.changeHeight = function(newHeight)
     {
         if ($scope.selectedElementType  == 'c3Chart')
@@ -1094,27 +1058,20 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                 {
                     var gridID = theElement.attr('id');
 
-                    /*for (var g in $scope.repeaters)
-                    {
-                        if ($scope.repeaters[g].id == gridID)
-                            {
-                                $scope.selectedRepeater = $scope.repeaters[g];
 
-                            }
-                    }*/
 
 
                 }
 
                 $scope.$apply();
             }
-    }
+    }*/
 
     $scope.deleteChartColumn = function(chart,column)
     {
         c3Charts.deleteChartColumn(chart,column)
     }
-
+/*
     $scope.changeBackgroundColor = function(color)
     {
         var elementID = $scope.selectedElement.attr('id');
@@ -1136,9 +1093,9 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         if ($scope.selectedElementType == 'gridHeaderColumn')
             grid.savePropertyForGridColumn($scope.repeaters,'backgroundColor',elementID,'rgba('+r+','+g+','+b+',' + alpha + ')');
 
-    }
+    } */
 
-
+/*
 
     $scope.changeOpacity = function()
     {
@@ -1167,6 +1124,8 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         $scope.FontColor = color;
     }
 
+    */
+
     $scope.changeChartColumnType = function(chart,column)
     {
         c3Charts.changeChartColumnType(chart,column)
@@ -1176,7 +1135,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     {
         c3Charts.changeChartColumnColor(chart,column,hexToRgb(color));
     }
-
+/*
     $scope.deleteSelected = function()
     {
         var elementID = $scope.selectedElement.attr('id');
@@ -1198,7 +1157,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
         $scope.tabs.selected = 'data';
     }
-
+*/
     $scope.overChartDragging = function ()
     {
 
@@ -1455,7 +1414,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     {
         c3Charts.onChartPropertiesChanged($scope,object);
     }
-
+/*
     $scope.getCatalogImages = function()
     {
         $scope.catalogImages = [];
@@ -1490,7 +1449,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
 
     }
-
+*/
     $scope.changeBackgroundFilter = function() {
 
         var theElement = $scope.selectedElement;
@@ -1520,7 +1479,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         theElement.css("msFilter",styleValue);
 
     }
-
+/*
 $scope.changeVisibility = function() {
 
     if($scope.selectedElementType != 'page')
@@ -1591,7 +1550,7 @@ $scope.changeVisibility = function() {
         }
 
         }
-    }
+    }*/
 
 
     $scope.dashboardName = function () {
@@ -2157,16 +2116,7 @@ $scope.changeVisibility = function() {
     }
 
 
-    /*$scope.getPrompts = function()
-    {
-        $scope.prompts = [];
 
-        for (var q in $scope.queries)
-        {
-            promptModel.getPromptsForQuery($scope, $scope.queries[q]);
-        }
-        getPromptsWidget();
-    }*/
 
     function getPromptsWidget()
     {
@@ -2235,13 +2185,6 @@ $scope.changeVisibility = function() {
 
     }
 
-    $scope.filterSelectChanged = function(item,filter)
-    {
-        promptModel.filterSelectChanged(item,filter, function(filterText) {
-            //$scope.getDataForPreview();
-            $scope.processStructure();
-        });
-    }
 
 
 

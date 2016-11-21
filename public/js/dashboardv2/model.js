@@ -1,4 +1,4 @@
-app.service('dashboardv2Model',  function ($http, $q, connection, promptModel, reportService) {
+app.service('dashboardv2Model',  function ($http, $q, connection, reportService) {
 
 
     this.getDashBoard = function(dashboardID, isLinked, done)
@@ -23,9 +23,10 @@ app.service('dashboardv2Model',  function ($http, $q, connection, promptModel, r
 
     }
 
+
     function getDashboardPrompts($scope,dashboard,index,prompts, done)
     {
-        if (!dashboard.items[index])
+    /*    if (!dashboard.items[index])
         {
             done(prompts);
             return;
@@ -45,7 +46,7 @@ app.service('dashboardv2Model',  function ($http, $q, connection, promptModel, r
         }  else {
             getDashboardPrompts($scope,dashboard,index+1,prompts,done);
         }
-
+*/
     }
 
 

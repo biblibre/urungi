@@ -61,7 +61,9 @@
     "angular-ui-grid": "^3.2.9",
     "angular-chosen-localytics": "~1.4.3",
     "angular-ui-select": "~0.19.4",
-    "angular-editable-text": "~1.1.2"
+    "angular-editable-text": "~1.1.2",
+    "pdfmake": "^0.1.20",
+    "angular-ui-codemirror": "^0.3.0"
   },
   "resolutions": {
     "angular": "1.5.5"

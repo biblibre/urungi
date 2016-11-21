@@ -122,14 +122,9 @@ return {
                 filter.dateCustomFilterLabel = undefined;
             }
 
-        var values = {};
-        values.filterText1 = filter.filterText1;
-        values.searchValue = filter.searchValue;
-        values.filterValue = filter.filterValue;
-        values.dateCustomFilterLabel = filter.dateCustomFilterLabel;
-        values.filterText2 = filter.filterText2;
 
-        $scope.onChange($scope.elementId,values);
+
+        checkForOnChange(filter);
     }
 
       $scope.onDateEndSet = function (newDate, oldDate, filter) {
@@ -142,14 +137,7 @@ return {
                 filter.filterText2 = theDate;
                 filter.dateCustomFilterLabel = undefined;
             }
-        var values = {};
-        values.filterText1 = filter.filterText1;
-        values.searchValue = filter.searchValue;
-        values.filterValue = filter.filterValue;
-        values.dateCustomFilterLabel = filter.dateCustomFilterLabel;
-        values.filterText2 = filter.filterText2;
-
-        $scope.onChange($scope.elementId,values);
+        checkForOnChange(filter);
     }
 
     $scope.filterSelectChanged = function(item,filter)
@@ -163,21 +151,7 @@ return {
                     theResult += ';';
             }
         filter.filterText1 = theResult;
-        //filter.searchValue = theResult;
-        var values = {};
-        values.filterText1 = filter.filterText1;
-        values.searchValue = filter.searchValue;
-        values.filterValue = filter.filterValue;
-        values.dateCustomFilterLabel = filter.dateCustomFilterLabel;
-
-        $scope.onChange($scope.elementId,values);
-
-
-        /*
-        promptModel.filterSelectChanged(item,filter, function(filterText) {
-            //$scope.getDataForPreview();
-            $scope.processStructure();
-        });*/
+        checkForOnChange(filter);
     }
 
     $scope.funcAsync = function(filter, search)
@@ -191,44 +165,42 @@ return {
     {
         $scope.showList = true;
         $scope.selectedFilter = filter;
-        console.log('the filter data',filter);
         if ($scope.selectedFilter.data == undefined || $scope.selectedFilter.data.length == 0)
             {
-        queryModel.getDistinct($scope,filter, function(theData,sql){
-                $scope.selectedFilter = filter;
-                $scope.afterGetValues(filter,theData);
+                queryModel.getDistinct($scope,filter, function(theData,sql){
+                        $scope.selectedFilter = filter;
+                    if ($scope.afterGetValues)
+                        $scope.afterGetValues(filter,theData);
 
-        });
+                });
             }
-
-        //promptModel.getDistinctValues($scope, filter);
     };
 
     $scope.selectSearchValue = function(selectedValue)
     {
-        $scope.selectedFilter.searchValue = selectedValue;
+        $scope.filter.searchValue = selectedValue;
         var searchValue = '';
-        if ($scope.selectedFilter.filterType == 'in' || $scope.selectedFilter.filterType == 'notIn') {
-            for (var i in $scope.selectedFilter.searchValue) {
-                searchValue += $scope.selectedFilter.searchValue[i][$scope.selectedFilter.id];
-                if (i < $scope.selectedFilter.searchValue.length-1) {
+        if ($scope.filter.filterType == 'in' || $scope.filter.filterType == 'notIn') {
+            for (var i in $scope.filter.searchValue) {
+                searchValue += $scope.filter.searchValue[i][$scope.filter.id];
+                if (i < $scope.filter.searchValue.length-1) {
                     searchValue += ';';
                 }
             }
         }
         else {
-            searchValue = $scope.selectedFilter.searchValue;
+            searchValue = $scope.filter.searchValue;
         }
 
-        $scope.selectedFilter.filterText1 = searchValue;
-        $scope.selectedFilter.filterValue = searchValue;
+        $scope.filter.filterText1 = searchValue;
+        $scope.filter.filterValue = searchValue;
         $scope.showList = false;
 
         var values = {};
-        values.filterText1 = $scope.selectedFilter.filterText1;
-        values.searchValue = $scope.selectedFilter.searchValue;
-        values.filterValue = $scope.selectedFilter.filterValue;
-        values.dateCustomFilterLabel = $scope.selectedFilter.dateCustomFilterLabel;
+        values.filterText1 = $scope.filter.filterText1;
+        values.searchValue = $scope.filter.searchValue;
+        values.filterValue = $scope.filter.filterValue;
+        values.dateCustomFilterLabel = $scope.filter.dateCustomFilterLabel;
 
         $scope.onChange($scope.elementId,values);
 
@@ -246,8 +218,8 @@ return {
         values.searchValue = filter.searchValue;
         values.filterValue = filter.filterValue;
         values.dateCustomFilterLabel = filter.dateCustomFilterLabel;
-
-        $scope.onChange($scope.elementId,values);
+        if (filter.filterType == 'between' && (filter.filterText2 != undefined || filter.filterText2 != '') )
+            $scope.onChange($scope.elementId,values);
     }
 
     $scope.updateCondition = function(filter, condition) {
@@ -287,6 +259,21 @@ return {
         while (s.length < size) s = "0" + s;
         return s;
     }
+
+    function checkForOnChange(filter)
+        {
+            var values = {};
+            values.filterText1 = filter.filterText1;
+            values.searchValue = filter.searchValue;
+            values.filterValue = filter.filterValue;
+            values.dateCustomFilterLabel = filter.dateCustomFilterLabel;
+            values.filterText2 = filter.filterText2;
+          if (filter.filterType == 'between' && (filter.filterText2 != undefined && filter.filterText2 != '') )
+              {
+              $scope.onChange($scope.elementId,values);
+              }
+        }
+
     }
   }
 

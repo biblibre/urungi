@@ -1,7 +1,6 @@
 app.service('colors' , function () {
 
     this.colors = [
-        "transparent",
         "#FFFFFF",
         "#CCCCCC",
         "#FFFF00",

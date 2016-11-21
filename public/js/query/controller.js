@@ -1,4 +1,4 @@
-app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, queryService, promptModel, $routeParams,$timeout,$rootScope,bsLoadingOverlayService, grid, uuid2) {
+app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, queryService, $routeParams,$timeout,$rootScope,bsLoadingOverlayService, grid, uuid2) {
 
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
@@ -302,27 +302,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         */
     }
 
-    $scope.getDistinctValues = function(filter)
-    {
-        promptModel.getDistinctValues($scope, filter);
-    };
-
-
-    $scope.selectSearchValue = function(searchValue)
-    {
-        promptModel.selectSearchValue($scope);
-        $scope.processStructure();
-    };
-
-    $scope.toggleSelection = function toggleSelection(value)
-    {
-        promptModel.toggleSelection($scope,value);
-    };
-
-    $scope.isValueSelected = function(value)
-    {
-        promptModel.isValueSelected($scope,value);
-    }
 
     $scope.setFilterPrompt = function(filter)
     {

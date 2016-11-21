@@ -46,6 +46,8 @@ select
 <link rel="stylesheet" type="text/css" href="angular-ui-grid/ui-grid.min.css">
 <!--Angular Editable Text-->
 <link rel="stylesheet" type="text/css" href="angular-editable-text/dist/angular-editable-text.min.css">
+<!--CodeMirror-->
+<link rel="stylesheet" type="text/css" href="codemirror/lib/codemirror.css">
 
 
 <link rel="stylesheet" type="text/css" href="nodedream/nodedream.css"/>
@@ -58,6 +60,11 @@ select
 
 <link rel="stylesheet" type="text/css" href="css/ndDesigner.css"/>
 
+<link rel="stylesheet" type="text/css" href="css/custom.css"/>
+
+<style>
+<%- customCSS %>
+</style>
 
 <body>
 
@@ -176,6 +183,10 @@ select
 
 <!--Angular Editable Text-->
 <script src="angular-editable-text/dist/angular-editable-text.min.js" charset="utf-8"></script>
+<!--CodeMirror-->
+<script type="text/javascript" src="codemirror/lib/codemirror.js"></script>
+<script type="text/javascript" src="angular-ui-codemirror/ui-codemirror.js"></script>
+
 
 <!--Intro js -->
 <!--
@@ -224,8 +235,11 @@ select
 <script type="text/javascript" src="js/widgets/htmlWidgets.js"></script>
 <script type="text/javascript" src="js/widgets/prompts.js"></script>
 <script type="text/javascript" src="js/widgets/common.js"></script>
-<script type="text/javascript" src="js/widgets/wstDropdown.js"></script>
-
+<script type="text/javascript" src="js/widgets/widgetProperties.js"></script>
+<script type="text/javascript" src="js/widgets/wstColor.js"></script>
+<script type="text/javascript" src="js/widgets/wstImage.js"></script>
+<script type="text/javascript" src="js/widgets/wstHidden.js"></script>
+<script type="text/javascript" src="js/setup/controller.js"></script>
 
 <script>
     $(document).ready(function(){

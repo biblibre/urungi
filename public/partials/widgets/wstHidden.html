@@ -1,0 +1,13 @@
+<div>
+
+
+<ui-select multiple ng-model="hiddenIn" on-select="onSelect()" on-remove="onRemove()">
+    <ui-select-match>
+        <span >{{$item.name}}</span>
+    </ui-select-match>
+    <ui-select-choices repeat="item in items">
+        <span ng-bind="item.name"> </span>
+    </ui-select-choices>
+</ui-select>
+
+    </div>

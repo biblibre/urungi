@@ -1,6 +1,5 @@
-app.controller('report_viewCtrl', function ($scope, promptModel,$routeParams,report_v2Model,queryModel,connection,bsLoadingOverlayService,uiGridConstants) {
+app.controller('report_viewCtrl', function ($scope,$routeParams,report_v2Model,queryModel,connection,bsLoadingOverlayService,uiGridConstants) {
 
-$scope.searchModal = 'partials/report/searchModal.html';
 $scope.promptsBlock = 'partials/report/promptsBlock.html';
 $scope.dateModal = 'partials/report/dateModal.html';
 $scope.linkModal = 'partials/report/linkModal.html';
@@ -39,14 +38,9 @@ $scope.getReportDiv = function() {
                         {
                             $scope.selectedReport = report;
                             report_v2Model.getReport(report,'reportLayout',function() {
-                                //Done
                                 $scope.hideOverlay('OVERLAY_reportLayout');
                                 var theReports = [];
                                     theReports.push($scope.selectedReport);
-                                   /* promptModel.getPromptsForReportsV2(theReports,function(prompts){
-                                        $scope.prompts = prompts;
-
-                                    });*/
                             });
 
                         } else {
@@ -88,16 +82,9 @@ $scope.selectThisFolder = function(folderID)
         });
     }
 
-$scope.getDistinctValues = function(filter)
-    {
-        promptModel.getDistinctValues($scope, filter);
-    };
 
-$scope.selectSearchValue = function(searchValue)
-    {
-        promptModel.selectSearchValue($scope);
-        $scope.processStructure();
-    };
+
+
 
 $scope.processStructure = function(execute) {
         queryModel.processStructure(execute,function(){
@@ -110,23 +97,11 @@ $scope.processStructure = function(execute) {
                                 $scope.hideOverlay('OVERLAY_reportLayout');
                                 var theReports = [];
                                     theReports.push($scope.selectedReport);
-                                    /*promptModel.getPromptsForReportsV2(theReports,function(prompts){
-                                        $scope.prompts = prompts;
 
-                                    });*/
                             });
         });
     }
 
-$scope.onDateSet = function (newDate, oldDate, filter) {
-        queryModel.onDateSet(newDate,oldDate,filter);
-        $scope.processStructure();
-    }
-
-$scope.onDateEndSet = function (newDate, oldDate, filter) {
-        queryModel.onDateEndSet(newDate,oldDate,filter);
-        $scope.processStructure();
-    }
 
 /********END PUBLISH******/
 
@@ -134,6 +109,17 @@ $scope.getReportColumnDefs = function(reportID)
     {
         return $scope.selectedReport.properties.columnDefs;
     }
+
+$scope.filterChanged = function(elementID,values)
+{
+
+        $scope.processStructure();
+}
+
+$scope.getElementProperties = function(theElement)
+{
+
+}
 
 
 });

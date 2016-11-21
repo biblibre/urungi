@@ -4,7 +4,12 @@ module.exports = function (app, passport) {
 
 
     app.get('/',restrict, function(req, res) {
-        res.render('index');
+        var data = {};
+        if (req.user.companyData)
+            data.customCSS = req.user.companyData.customCSS;
+        else
+            data.customCSS = '';
+        res.render('index',data);
     });
 
     app.get('/login', function(req, res, next) {
@@ -101,7 +106,9 @@ function authenticate(passport, Users, req, res, next)
                     res.send(401, "User's company not found!");
 
                 } else {
+                    console.log('this is the company data');
                     user.companyData = company;
+                    //req.user.companyData = company;
 
                     Users.update({
                         "_id" : user._id

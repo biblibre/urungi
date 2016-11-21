@@ -36,7 +36,7 @@ module.directive('elementDraggable', ['$rootScope', 'uuid', '$compile','$parse',
 
 	                $rootScope.$emit("ELEMENT-DRAG-START");
 	            });
-	            
+
 	            el.bind("dragend", function(e) {
                     e.stopPropagation();
                     var dest = document.getElementById('ndDropped');
@@ -160,7 +160,7 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
 	                id = uuid.new()
 	                $(el).attr("id", id);
 	            }
-	                       
+
 	            el.bind("dragover", function(e) {
                     if (e.preventDefault) {
                         e.preventDefault(); // Necessary. Allows us to drop.
@@ -270,7 +270,7 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                     console.log('estoy '+x+'  '+y + ' '+ mar.height);
 
                 });
-	            
+
 	            el.bind("dragenter", function(e) {
 	              // this / e.target is the current hover target.
                     if (e.preventDefault) {
@@ -306,7 +306,7 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
 
                     }
 	            });
-	            
+
 	            el.bind("dragleave", function(e) {
 	                $(e.target).removeClass('lvl-over');  // this / e.target is previous target element.
                     $(e.target).removeClass('lvl-inside');
@@ -314,7 +314,7 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                     $(e.target).removeClass("draggingOver");
                     $(el).removeClass("selectedImage");
                 });
-	            
+
 	            el.bind("drop", function(e) {
 
                     $(e.target).removeClass('selectedImage');
@@ -461,7 +461,7 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                    //scope.draggingHere = true;
 
 	            });
-	            
+
 	            $rootScope.$on("LVL-DRAG-END", function() {
                     console.log("LVL-DRAG-END");
 	                var el = document.getElementById(id);

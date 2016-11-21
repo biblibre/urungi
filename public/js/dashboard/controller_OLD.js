@@ -8,7 +8,7 @@
 
 'use strict';
 
-app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection', 'promptModel','dashboardModel', 'bsLoadingOverlayService','report_v2Model', function ($scope, reportModel ,$timeout ,$routeParams, connection,promptModel,dashboardModel,bsLoadingOverlayService,report_v2Model) {
+app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection','dashboardModel', 'bsLoadingOverlayService','report_v2Model', function ($scope, reportModel ,$timeout ,$routeParams, connection,dashboardModel,bsLoadingOverlayService,report_v2Model) {
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
@@ -185,7 +185,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
             $scope.mode = 'add';
         }
     };
-    
+
     $scope.showOverlay = function (referenceId) {
         bsLoadingOverlayService.start({
             referenceId: referenceId
@@ -395,7 +395,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
     $scope.reportClicked = function(reportID,parameters)
     {
-        
+
     }
 
 
@@ -427,9 +427,9 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         });
         /*
         $scope.showOverlay('OVERLAY_'+report._id);
-            
+
         reportModel.executeReport($scope,report._id, report, function (errorCode){
-         
+
 
             if (errorCode != 0)
             {
@@ -453,7 +453,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
                     });
                 }
             }
-            
+
              $scope.hideOverlay('OVERLAY_'+report._id);
         }); */
     }
@@ -548,37 +548,7 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
         }
     }
 
-    $scope.funcAsync = function(filter, search)
-    {
-        promptModel.funcAsync(filter,search,function(result){
 
-        });
-    }
-
-    $scope.getDistinctValues = function(filter)
-    {
-        promptModel.getDistinctValues($scope, filter);
-    }
-
-    $scope.getFilterValues = function(filter)
-    {
-        promptModel.getFilterValues(filter);
-    }
-
-    $scope.toggleSelection = function(value)
-    {
-        promptModel.toggleSelection($scope, value);
-    }
-
-    $scope.isValueSelected = function(value)
-    {
-        promptModel.isValueSelected($scope,value);
-    }
-
-    $scope.selectSearchValue = function(searchValue)
-    {
-        promptModel.selectSearchValue($scope);
-    }
 
     $scope.setHeight = function(element, height, correction) {
         var height = (height == 'full') ? $(document).height() : height;
@@ -587,13 +557,6 @@ app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routePar
 
         $('#'+element).css('height', height);
     };
-
-    $scope.checkPrompts = function()
-    {
-        promptModel.checkPrompts($scope, function (){
-            paintReports($scope.dashBoardDefinitition);
-        });
-    }
 
     $scope.changeColumnFormat = function(columnIndex ,hashedID)
     {

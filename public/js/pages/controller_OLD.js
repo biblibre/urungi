@@ -280,7 +280,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                         }
                         }
                     }
-            
+
                     getQueryData($scope,0,function(){
                         rebuildCharts();
                         rebuildRepeaters();
@@ -299,7 +299,7 @@ app.controller('pagesCtrl', function ($scope, queryService, connection, $routePa
                         $compile($div)($scope);
                     });
                     $scope.getPrompts();
-    
+
     });
     };
 
@@ -1721,7 +1721,7 @@ $scope.changeVisibility = function() {
 
             connection.post('/api/pages/duplicate', page, function(data) {
                 if (data.result == 1) {
-                    
+
                 }
             });
     }

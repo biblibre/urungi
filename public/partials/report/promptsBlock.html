@@ -1,5 +1,5 @@
 <div id="promptsModal" ng-show="getPrompts().length  > 0 && showPrompts == true" >
-    <form role="form" class="form-inline" name="filtersForm">
+    <!--<form role="form" class="form-inline" name="filtersForm">-->
         <!--<div class="container-fluid">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="closePromptsBlock()">×</button>
         </div>-->
@@ -7,11 +7,15 @@
         <!--<div class="panel-body ng-scope">-->
 
             <div class="container-fluid" ng-if="filter.filterPrompt == true" ng-repeat="filter in getPrompts()" style="padding-bottom: 5px;">
+
+                <nd-prompt element-id="filter.elementID" label="filter.objectLabel" value-field="filter.name" show-field="filter.name" prompts="prompts" is-prompt="true" filter="filter" on-change="filterChanged" ng-model="lastFilterSelectedValue"></nd-prompt>
+
+
                 <!--<div class="col-md-2">
                     <p ng-show="filter.promptMandatory == true && (!filter.filterText1 || filter.filterText1 == '')" style="color: #cc3f44;">{{filter.objectLabel}} *</p>
                     <label ng-show="(filter.promptMandatory == false || !filter.promptMandatory) || (filter.filterText1 && filter.filterText1 != '')" class="control-label">{{filter.objectLabel}}</label>
                 </div>-->
-
+<!--
                 <div class="col-md-12" >
                     <label class="control-label" ng-show="filter.promptMandatory == true && (!filter.filterText1 || filter.filterText1 == '')" style="color: #cc3f44;">{{filter.objectLabel}} *</label>
                     <label class="control-label" ng-show="(filter.promptMandatory == false || !filter.promptMandatory) || (filter.filterText1 && filter.filterText1 != '')" class="control-label">{{filter.objectLabel}} {{filter.filterTypeLabel}}</label>
@@ -20,7 +24,7 @@
 
                 <div class="col-md-12" ng-include="'partials/report_v2/filterWidget.html'">
                     </div>
-
+-->
                    <!--
                     <div class="form-group"  ng-show="(filter.values != undefined && filter.elementType == 'array' && (filter.filterType != 'in' && filter.filterType != 'notIn') && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
 
@@ -73,16 +77,16 @@
                 -->
                 </div>
 
-            </div>
-            <div class="container-fluid" ng-show="promptMessage && promptMessage != ''">
+           <!-- </div> -->
+            <!--<div class="container-fluid" ng-show="promptMessage && promptMessage != ''">
                 <p style="padding: 10px 15px;background-color: #cc3f44;color: #ffffff;">{{promptMessage}}</p>
-            </div>
+            </div>-->
         <!--</div>-->
 
         <!--<div class="container-fluid">
             <button type="button" class="btn btn-info pull-right" ng-click="checkPrompts()" >Execute</button>
         </div>-->
-    </form>
+    <!--</form>-->
 </div>
 <!--<div class="container-fluid" ng-show="prompts.length > 0 && showPrompts == false" style="padding-bottom: 5px;">
     <button class="btn btn-orange pull-right"  ng-click="openPromptsBlock()" style="width: 100%;padding-bottom: 5px;"><i class="fa fa-filter"></i> Filters</button>

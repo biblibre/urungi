@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryModel,promptModel, queryService,reportService, promptModel, $routeParams,$timeout,$rootScope, bsLoadingOverlayService, grid, uuid2,c3Charts,report_v2Model,widgetsCommon,$location) {
+app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryModel, queryService,reportService,  $routeParams,$timeout,$rootScope, bsLoadingOverlayService, grid, uuid2,c3Charts,report_v2Model,widgetsCommon,$location) {
 
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
@@ -20,6 +20,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.dropArea = 'partials/report_v2/drop-area.html';
     $scope.reportNameModal = 'partials/report_v2/reportNameModal.html';
     $scope.dashListModal = 'partials/report_v2/dashboardListModal.html';
+    $scope.settingsTemplate = 'partials/widgets/common.html';
     $scope.tabs = {selected: 'elements'};
 
 
@@ -254,9 +255,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                                 $scope.hideOverlay('OVERLAY_reportLayout');
                             });
 
-                            /*promptModel.getPromptsV2($scope.selectedReport,function(prompts){
-                                $scope.prompts = prompts;
-                            });*/
 
                         } else {
                             //TODO:No report found message
@@ -735,10 +733,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
            $scope.sql = undefined;
     }
 
-    $scope.getDistinctValues = function(filter)
-    {
-        promptModel.getDistinctValues($scope, filter);
-    };
+
 
 
     $scope.removeFilter = function(filter)
@@ -755,21 +750,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     }
 
 
-    $scope.selectSearchValue = function(searchValue)
-    {
-        promptModel.selectSearchValue($scope);
-        $scope.processStructure();
-    };
 
-    $scope.toggleSelection = function toggleSelection(value)
-    {
-        promptModel.toggleSelection($scope,value);
-    };
-
-    $scope.isValueSelected = function(value)
-    {
-        promptModel.isValueSelected($scope,value);
-    }
 
     $scope.setHeight = function(element, height, correction) {
         var height = (height == 'full') ? $(document).height() : height;
@@ -790,11 +771,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         else
             filter.filterPrompt = true;
 
-        /*
-        promptModel.getPromptsV2($scope.selectedReport,function(prompts){
-            $scope.prompts = prompts;
-            console.log('these are the prompts',$scope.prompts,prompts);
-        });*/
+
     }
 
     $scope.getButtonFilterPromptMessage = function(filter)
@@ -809,7 +786,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.selectedFilter = filter;
         if (!$scope.selectedFilter.promptTitle || $scope.selectedFilter.promptTitle == '')
             $scope.selectedFilter.promptTitle = $scope.selectedFilter.objectLabel;
-
         $('#filterPromptsModal').modal('show');
     };
 
@@ -1187,20 +1163,8 @@ $scope.changeColumnColor = function(color)
         console.log('the column',column);
     }
 
-    $scope.funcAsync = function(filter, search)
-    {
-        promptModel.funcAsync(filter,search,function(result){
 
-        });
-    }
 
-    $scope.filterSelectChanged = function(item,filter)
-    {
-        promptModel.filterSelectChanged(item,filter, function(filterText) {
-            //$scope.getDataForPreview();
-            $scope.processStructure();
-        });
-    }
 
     $scope.saveToExcel = function(reportHash)
     {
@@ -1211,6 +1175,18 @@ $scope.changeColumnColor = function(color)
     {
         queryModel.setDatePatternFilterType(filter,option);
         $scope.processStructure();
+    }
+
+    $scope.getElementProperties = function(element)
+    {
+        //widgetProperties.getElementProperties($scope, element);
+        $scope.selectedElement = element;
+        $scope.tabs.selected = 'settings';
+    }
+
+    $scope.onChangeElementProperties = function()
+    {
+        console.log('properties changed',$scope.selectedReport);
     }
 
 

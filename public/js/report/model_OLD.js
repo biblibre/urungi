@@ -709,7 +709,7 @@ function clone(obj) {
                     hideHover: true,
                     resize: true,
                     parseTime: false
-                    
+
                 };
 
                 var ykeys = [], labels = [];
@@ -720,9 +720,9 @@ function clone(obj) {
 
                     ykeys.push(theYKey);
                     labels.push(report.properties.ykeys[i].objectLabel);
-            
+
                 }
-     
+
                 chartParams.ykeys = ykeys;
                 chartParams.labels = labels;
 
@@ -783,7 +783,7 @@ function clone(obj) {
             }
 
             new Morris.Bar(chartParams).on('click', function(i, row){
-        
+
                 var params = {};
                 params.i = i;
                 params.row = row;
@@ -823,7 +823,7 @@ function clone(obj) {
                 }
 
                 Morris.Donut(chartParams).on('click', function(i, row){
-                    
+
                     var params = {};
                     params.i = i;
                     params.row = row;
@@ -871,7 +871,7 @@ function clone(obj) {
             }
 
             new Morris.Area(chartParams).on('click', function(i, row){
-               
+
                 var params = {};
                 params.i = i;
                 params.row = row;
@@ -938,7 +938,7 @@ function clone(obj) {
 
     this.columnCalculation = function($scope,operation, columnIndex, hashedID)
     {
-     
+
         var report = $scope.reports[hashedID];
 
             if (operation === 1) //SUM
@@ -1301,7 +1301,7 @@ function clone(obj) {
         {
             var theRow = $scope.theData[report.hashedID][row];
 
-            
+
             if (theRow[elementName])
                 if (theRow[elementName] != undefined)
                 {
@@ -1320,7 +1320,7 @@ function clone(obj) {
         {
             var theRow = $scope.theData[report.hashedID][row];
 
-           
+
             if (theRow[elementName])
                 if (theRow[elementName] != undefined)
                 {
@@ -1390,7 +1390,7 @@ function clone(obj) {
             +'</button>'
             +'<ul class="dropdown-menu dropdown-blue multi-level" role="menu">'
             +'<li class="dropdown-submenu">'
-            +'      <a href="">Sort</a>'  
+            +'      <a href="">Sort</a>'
             +'      <ul class="dropdown-menu">'
             +'      <li><a ng-click="reverse = true; orderColumn('+elementName+','+hashedID+')">Ascending</a></li>'
             +'      <li><a ng-click="reverse = false; orderColumn('+elementName+','+hashedID+')">Descending</a></li>'
@@ -1546,7 +1546,7 @@ function clone(obj) {
 
     function generateIndicator($scope, id, report,  done)
     {
-       
+
 
         var htmlCode = '';
 
@@ -1581,17 +1581,17 @@ function clone(obj) {
                 var theEvolution = theData[0].evolution + ' %';
 
                 var trend = 'same';
-                var trendLabel = 'same'; 
+                var trendLabel = 'same';
 
                 if (theData[0].evolution > 0)
                     {
                       trend = 'up';
-                      trendLabel = 'increase'; 
+                      trendLabel = 'increase';
                     }
                 if (theData[0].evolution < 0)
                     {
                     trend = 'down';
-                    trendLabel = 'decrement'; 
+                    trendLabel = 'decrement';
                     }
 
                 var theBackgroundColor = '#68b828';
@@ -1607,7 +1607,7 @@ function clone(obj) {
 
                 if (report.properties.style == 'style1')
                 {
-                    
+
 
                     htmlCode += '<div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">';
                     htmlCode += '   <div class="xe-icon" >';
@@ -1666,7 +1666,7 @@ function clone(obj) {
             }
         });
 
- 
+
     }
 
     function generateVectorMap($scope, id, report,  done)

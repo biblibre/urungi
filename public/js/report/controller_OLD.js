@@ -98,7 +98,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         while (s.length < size) s = "0" + s;
         return s;
     }
-    
+
     if ($routeParams.extra == 'intro') {
             $timeout(function(){$scope.showIntro()}, 1000);
     }
@@ -343,7 +343,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
 
 
-    
+
     $scope.showOverlay = function (referenceId) {
         bsLoadingOverlayService.start({
             referenceId: referenceId
@@ -553,7 +553,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.reportClicked = function(reportID,parameters)
     {
-        
+
     }
 
     $scope.initForm = function() {
@@ -717,26 +717,6 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         //set the appropiate interface for the choosed filter relation
     }
 
-    $scope.getDistinctValues = function(filter)
-    {
-        promptModel.getDistinctValues($scope, filter);
-    };
-
-
-    $scope.selectSearchValue = function(searchValue)
-    {
-        promptModel.selectSearchValue($scope);
-    };
-
-    $scope.toggleSelection = function toggleSelection(value)
-    {
-        promptModel.toggleSelection($scope,value);
-    };
-
-    $scope.isValueSelected = function(value)
-    {
-        promptModel.isValueSelected($scope,value);
-    }
 
     $scope.setHeight = function(element, height, correction) {
         var height = (height == 'full') ? $(document).height() : height;
@@ -823,7 +803,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     connection.post('/api/reports/update/'+$scope.selectedReport._id, $scope.selectedReport, function(result) {
                         if (result.result == 1) {
 
-                            
+
                             setTimeout(function () {
                             $scope.goBack();
                             }, 400);
@@ -946,7 +926,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.getReportData2 = function()
     {
             $scope.showOverlay('OVERLAY_'+$scope.selectedReport._id);
-            
+
             reportModel.getReportBlockForPreview($scope,$scope.selectedReport,$scope.selectedReport._id, function(errorCode) {
 
                 if (errorCode != 0)
@@ -954,16 +934,16 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                     var el = document.getElementById($scope.selectedReport._id);
 
                     var theHTML = '';
-                    
+
                     if (errorCode == 1)
                         theHTML = '<div class="alert">Report not found!</div>';
-                    
+
                     if (errorCode == 2)
                         theHTML = '<div class="alert">Chart type not found!</div>';
-                    
+
                     if (errorCode == 3)
                         theHTML = '<div class="alert">No data Found!</div>';
-                    
+
                     if (el)
                     {
                         var $div = $(theHTML);
@@ -974,11 +954,11 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
                             $compile($div)(scope);
                         });
                     }
-                    
+
                 }
-                
+
                 $scope.hideOverlay('OVERLAY_'+$scope.selectedReport._id);
-               
+
             });
 
 
@@ -1168,7 +1148,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         var drop = angular.element(document.getElementById(dropEl));
         var drag = angular.element(document.getElementById(dragEl));
 
-       
+
         if (dropEl == "metricObjects")
         {
             $scope.metrics = [];
@@ -1301,7 +1281,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
         var customObjectData = data['json/custom-object']; // {foo: 'bar'}
 
-        var uriList = data['text/uri-list']; 
+        var uriList = data['text/uri-list'];
 
 
         if (type == 'column') {
@@ -1391,7 +1371,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         delete(filter.filterText1);
         delete(filter.filterText2);
 
-       
+
         event.stopPropagation();
         return;
     };
@@ -2144,7 +2124,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
         if (!$scope.selectedColumn.columnStyle)
             $scope.selectedColumn.columnStyle = {color:'#000','background-color':'#EEEEEE','text-align':'left','font-size':"12px",'font-weight':"normal",'font-style':"normal"};
 
-        
+
         $('#columnFormatModal').modal('show');
 
 
@@ -2213,7 +2193,7 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
 
     $scope.getColumnStyle = function(column)
     {
-        
+
         var columnFormat = '';
         if (column.format)
         {

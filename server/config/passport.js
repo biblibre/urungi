@@ -7,13 +7,32 @@ var Users = connection.model('Users'); //require('../../models/users');
 
 module.exports = function (passport) {
 
-
-
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+
+        if (user.companyID) {
+
+                    var Companies = connection.model('Companies');
+
+                    Companies.findOne({companyCode: user.companyID}, function(err, company){
+                        if (company) {
+                            user['companyData'] = company;
+                        }
+
+                        done(err, user);
+                    });
+        } else {
+
+            done(null, user.id);
+        }
+
+
     });
 
-    passport.deserializeUser(function(id, done) {
+    passport.deserializeUser(function(user, done) {
+        done(false, user);
+    });
+
+   /* passport.deserializeUser(function(id, done) {
         Users.findOne({ _id: id }, function (err, user) {
             if (user) {
                 user = user.toObject();
@@ -39,6 +58,7 @@ module.exports = function (passport) {
             }
         });
     });
+    */
 
     passport.use(new LocalStrategy({
             usernameField: 'userName',

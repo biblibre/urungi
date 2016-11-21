@@ -1,4 +1,4 @@
-app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,grid,bsLoadingOverlayService,connection,$routeParams,promptModel) {
+app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,grid,bsLoadingOverlayService,connection,$routeParams) {
 
     var report = {};
 
@@ -31,6 +31,7 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
                     report.parentDiv = parentDiv;
                     repaintReport(report);
                     done(sql);
+                    hideOverlay(parentDiv);
             });
     }
 
@@ -44,15 +45,11 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
     {
         var data = report.query.data;
 
-        if (data.length != 0)
-            {
+
 
 
                 if (report.reportType == 'grid')
                             {
-                            console.log('reapinting the report');
-                            //   var gridProperties = {rowHeight:20,cellBorderColor:'#000'};
-                                //var htmlCode = grid.extendedGridV2(report);
                                 var htmlCode = grid.getUIGrid(report);
                                 var el = document.getElementById(report.parentDiv);
 
@@ -69,9 +66,10 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
                                         }
 
 
-                            }
+                            } else {
 
-
+        if (data.length != 0)
+            {
                     if (report.reportType == 'chart-line' || report.reportType == 'chart-donut' || report.reportType == 'chart-pie' || report.reportType == 'gauge')
                             {
 
@@ -91,7 +89,15 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
 
 
             } else {
-                                var htmlCode = '<span style="font-size: small;color: darkgrey;padding: 5px;">'+report.reportName+'</span><div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>';
+                 generateNoDataHTML()
+            }
+                            }
+
+    }
+
+    function generateNoDataHTML()
+    {
+        var htmlCode = '<span style="font-size: small;color: darkgrey;padding: 5px;">'+report.reportName+'</span><div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>';
                                 var el = document.getElementById(report.parentDiv);
                                         if (el)
                                         {
@@ -105,9 +111,6 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
                                                 hideOverlay(report.parentDiv);
                                             });
                                         }
-            }
-
-
     }
 
     this.generateIndicator = function(report)

@@ -7,7 +7,7 @@
     </div>
     <div class="modal-body">
         <button class="btn" ng-click="selectedColumn.signals.push({filter:'biggerThan',filterLabel:signalOptions[2].label,color:'#000','background-color':'#EEEEEE','text-align':'left','font-size':'12px','font-weight':'normal','font-style':'normal'})">add new format</button>
-        <span>for <span style="color:#72A230;font-weight: bold">{{selectedColumn.objectLabel}}</span></span>
+        <span>for <span class="branded-strong-label" >{{selectedColumn.objectLabel}}</span></span>
         <div class="container-fluid">
             <div class="container-fluid" ng-repeat="signal in selectedColumn.signals" style="border: 1px #ccc solid;margin-bottom: 5px;">
 

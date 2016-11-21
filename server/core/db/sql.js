@@ -755,9 +755,16 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
         var db = new dbController.db();
 
-        if (config.query.defaultRecordsPerPage > 1)
+        if (dataSource.params[0].packetSize)
             {
-            SQLstring += ' '+db.getLimitString(config.query.defaultRecordsPerPage, ((params.page -1 )*config.query.defaultRecordsPerPage));
+                if (dataSource.params[0].packetSize != -1)
+                    SQLstring += ' '+db.getLimitString(dataSource.params[0].packetSize, ((params.page -1 )*dataSource.params[0].packetSize));
+            } else {
+
+            if (config.query.defaultRecordsPerPage > 1)
+                {
+                SQLstring += ' '+db.getLimitString(config.query.defaultRecordsPerPage, ((params.page -1 )*config.query.defaultRecordsPerPage));
+                }
             }
 
 

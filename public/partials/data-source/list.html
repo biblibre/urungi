@@ -8,7 +8,7 @@
         <div class="main col-md-9">
             <div class="container-fluid">
 
-                <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
+                <div class="container-fluid branded-border-panel" >
                     <h3 class="pull-left" >Data sources</h3>
                     <a id="newDataSourceBtn" href="/#/data_sources/new/true" class="btn btn-success pull-right" tooltip="Click here to create a new data source" tooltip-placement="bottom">New Data Source</a>
                     <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for data sources" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
@@ -16,7 +16,7 @@
 
                 <div id="datasourceList" class="list-group" ng-init="getDataSources(1,'',['name','type','params.connection.host','params.connection.port','params.connection.database'])">
                     <a id="datasourceListItem" href="/#/data-sources/{{dts._id}}" class="list-group-item" ng-repeat="dts in items">
-                        <span id="datasourceListItemType" class="pull-right" style="color:#72A230">{{dts.type}}</span>
+                        <span id="datasourceListItemType" class="pull-right branded-label" >{{dts.type}}</span>
                         <h4 id="datasourceListItemName" class="list-group-item-heading" tooltip="Click here to see or set data source details">{{dts.name}} </h4>
                         <p id="datasourceListItemDetails" class="list-group-item-text">
 

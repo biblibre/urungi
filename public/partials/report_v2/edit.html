@@ -1,4 +1,4 @@
-<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid" style="height: 100%;border-bottom: 2px solid #72A230;">
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid branded-border-panel" style="height: 100%;">
 <div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
     <h3 class="pull-left" editable-text="selectedReport.reportName"></h3>
     <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-if="mode == 'edit' && !isForDash" style="margin-left: 5px" tooltip="Click here to save the report changes" tooltip-placement="bottom">Save</a>
@@ -16,7 +16,17 @@
 
         <section  class="content" >
             <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
-
+                            <section class="layer scrollPane">
+                                <!--<div ng-include src="settingsTemplate">
+                                </div>-->
+                               <wst-widget-properties element="selectedElement" properties="selectedReport.properties" on-change="onChangeElementProperties"></wst-widget-properties>
+                            </section>
+                            <div class="scrollTrack vScrollTrack">
+                                <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
+                            </div>
+                            <div class="scrollTrack hScrollTrack">
+                                <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+                            </div>
             </section>
             <section id="elementsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'elements'">
                 <section id="dataObjectsInner" class="layer scrollPane" ng-include="'partials/query/data-objects.html'" style="padding: 0px 0px 0px 0px;padding-top:10px;">

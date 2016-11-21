@@ -49,6 +49,36 @@ this.getUIGrid = function(report)
                         col.cellClass = 'grid-cell-right';
                     }
 
+
+                /* CONDITIONAL FORMATING
+
+                http://plnkr.co/edit/PHCUKtuci36Ez5eb20U9?p=preview
+
+                var rowtpl='<div ng-class="{\'green\':true, \'blue\':row.entity.count==1 }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
+
+                  $scope.gridOptions = {
+                    enableSorting: true,
+                    data:'myData',
+                    rowTemplate:rowtpl,
+                    columnDefs: [
+                      { field: 'sv_name', displayName: 'Nombre'},
+                      { field: 'sv_code', displayName: 'Placa'},
+                      { field: 'count', displayName: 'Cuenta'}
+                    ]
+                  };
+
+
+                .ui-grid-top-panel { header
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    background: #3F4652;
+                    height: 40px;
+                    padding: 5px;
+                }
+
+
+                */
+
                /* col.menuItems = [
           {
             title: 'Outer Scope Alert',
@@ -74,8 +104,19 @@ this.getUIGrid = function(report)
 
             */
 
+            var gridOptions = 'ui-grid-move-columns ui-grid-resize-columns ui-grid-pinning ui-grid-exporter ui-grid-grouping';
+
+    var theStyle = ' style="';
+    if (report.properties.backgroundColor)
+        theStyle += 'background-color: '+report.properties.backgroundColor+';';
+    if (report.properties.height)
+        theStyle += 'height: '+report.properties.height+'px;';
+
+    theStyle += '"';
+
+    //var gridOptions = 'ui-grid-move-columns ui-grid-pinning ui-grid-exporter ui-grid-grouping';
             report.properties.columnDefs = colDefs;
-            return '<div page-block ndtype="ui-grid" id="'+report.id+'" ui-grid="{data: getQuery(\''+hashedID+'\').data, columnDefs: getReportColumnDefs(\''+report.id+'\'), enableVerticalScrollbar:1, enableHorizontalScrollbar:0,enableGridMenu: true}" ui-grid-move-columns ui-grid-resize-columns ui-grid-pinning ui-grid-exporter ui-grid-grouping class="myGrid"></div>';
+            return '<div page-block ndtype="ui-grid" id="'+report.id+'" ui-grid="{data: getQuery(\''+hashedID+'\').data, columnDefs: getReportColumnDefs(\''+report.id+'\'), enableVerticalScrollbar:1, enableHorizontalScrollbar:0,enableGridMenu: true,showColumnFooter:true,showGridFooter:true,enableColumnResizing:true,fastWatch:true}" '+gridOptions+theStyle+'  class="myGrid"></div>';
    }
 
 

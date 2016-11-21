@@ -1,0 +1,15 @@
+ <div class="input-group">
+								<input type="text" class="form-control colorpicker colorpicker-element" data-format="hex" ng-readonly="true" style="background-image: url('{{selectedImage.url}}');">
+
+								<div class="input-group-addon" data-selected="fa-car" data-toggle="dropdown" >
+									<span class="caret"></span>
+								</div>
+
+
+                                                        <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: 150px;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
+                                                        <div class="iconpicker-items">
+                                                            <a role="button" ng-click="clearImage()" class="iconpicker-item" style="width: 50px;"> <i class="fa fa-eraser"></i> </a>
+                                                            <a role="button" ng-click="changeImage(image)" class="iconpicker-item" ng-repeat="image in catalogImages" style="background-image: url('{{image.url}}');width: 50px;height: 40px;background-repeat:no-repeat;background-position: center center;"></a>
+
+                                                        </div></div></div></div></div>
+							</div>

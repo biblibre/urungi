@@ -2526,3 +2526,52 @@ label[for] {
     height:250px;
     overflow-y: auto;
 }
+
+.has-error {
+    border-color: #cc3f44;
+    color: #cc3f44;
+}
+
+.has-error-message {
+        font-size: 12px;
+    color: #cc3f44;
+}
+
+.input-group-addon {
+    padding: 3px 3px;
+}
+
+.input-group-addon .color-preview {
+    width: 24px;
+}
+
+.branded-border-panel {
+    padding: 5px;
+    border-bottom: 2px solid #72A230;
+    margin-bottom: 10px
+}
+
+.branded-parent-intro {
+    height: 100%;
+    border-bottom: 2px solid #72A230;
+}
+
+.admin-menu {
+    background-color: #72A230;
+    color: #FFFFFF
+}
+
+.branded-strong-label {
+    color:#72A230;
+    font-weight: bold;
+}
+
+.branded-label {
+    color:#72A230;
+}
+
+.main-menu-logo {
+    background-color: #000;
+    color: #FFFFFF;
+    text-align: center;
+}

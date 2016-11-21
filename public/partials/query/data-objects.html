@@ -33,7 +33,7 @@
 
 
                         {{ngModelItem.elementLabel}}
-                    <!--<i ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date' || ngModelItem.elementType == 'string') && (!ngModelItem.count)" class="fa fa-toggle-down pull-right" ng-click="ngModelItem.isAggregateCollapsed = !ngModelItem.isAggregateCollapsed" style="color:#72A230;"></i>-->
+
                 </a>
 
                 <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'string') &&  ngModelItem.defaultAggregation && ngModelItem.defaultAggregation != 'value' " draggable="true" effect-allowed="copy" draggable-type="custom-object"
@@ -57,7 +57,7 @@
                             <i class="fa fa-reorder wst-main-color" ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
 
                         {{ngModelItem.elementLabel +' ('+ngModelItem.defaultAggregation+')'}}
-                    <!--<i ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date' || ngModelItem.elementType == 'string') && (!ngModelItem.count)" class="fa fa-toggle-down pull-right" ng-click="ngModelItem.isAggregateCollapsed = !ngModelItem.isAggregateCollapsed" style="color:#72A230;"></i>-->
+
                 </a>
 
 

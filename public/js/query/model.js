@@ -326,25 +326,34 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     {
             var params = {};
             cleanQuery();
-            params.query = angular.copy(query);
+            wrongFilters = [];
+            checkFilters(query.groupFilters);
 
-            connection.get('/api/reports/get-data', params, function(data) {
-               var sql = data.sql;
-
-
-                if (data.result == 0)
-                {
-                    noty({text: data.msg,  timeout: 2000, type: 'error'});
-                    done([],sql,query);
-                } else {
-                    prepareData(query,data.data, function(result)
+            if (wrongFilters.length == 0)
                     {
-                        done(result,sql,query);
-                    });
-                }
+                        params.query = angular.copy(query);
 
-            });
+                        connection.get('/api/reports/get-data', params, function(data) {
+                           var sql = data.sql;
 
+
+                            if (data.result == 0)
+                            {
+                                noty({text: data.msg,  timeout: 2000, type: 'error'});
+                                done([],sql,query);
+                            } else {
+                                prepareData(query,data.data, function(result)
+                                {
+                                    done(result,sql,query);
+                                });
+                            }
+
+
+                        });
+                    } else {
+
+                        done([],'',query);
+                    }
     };
 
     function cleanQuery()
@@ -796,7 +805,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                                     wrongFilters.push(filter.id);
                             }*/
 
-                        if (isfilterComplete(filter) == false)
+                        if (isfilterComplete(filter) == false && filter.promptMandatory == true)
                              wrongFilters.push(filter.id);
 
                         if (filter.group == true)

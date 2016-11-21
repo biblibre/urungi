@@ -1,9 +1,10 @@
-
+<div>
             <div ng-if="selectedElementType != 'page'">
                 <button class="btn btn-danger" ng-click="deleteSelected()"><i class="fa fa-trash"></i></button>
             </div>
             <div >
-                <div class="btn-group" style="width:100%"> <!--background color-->
+                <!--background color-->
+                <!--<div class="btn-group" style="width:100%">
                                                     <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Background Color</button>
                                                     <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
                                                         <span class="caret"></span>
@@ -14,11 +15,39 @@
                                                             <a role="button" ng-click="changeBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
                                                         </div></div></div></div>
                                                     </div>
-                </div>
-            </div>
+                </div>-->
 
-            <div >
-                <div class="btn-group" style="width:100%" ng-init="getCatalogImages()"> <!--background image-->
+
+                <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Background color</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <wst-color ng-model="backgroundColor"></wst-color>
+                            </div>
+                    </div>
+                <!--<div class="input-group">
+								<input type="text" class="form-control colorpicker colorpicker-element" data-format="hex" ng-model="backgroundColor">
+
+								<div class="input-group-addon" data-selected="fa-car" data-toggle="dropdown" >
+									<i class="color-preview" style="background-color: {{backgroundColor}};"></i>
+								</div>
+                                                        <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
+                                                        <div class="iconpicker-items">
+                                                            <a role="button" ng-click="changeBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
+                                                        </div></div></div></div></div>
+							</div>-->
+            </div>
+                    <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Background image</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <wst-image ng-model="backgroundImage"></wst-image>
+                            </div>
+                    </div>
+
+    <!--background image-->
+
+    <!--
+        <div >
+                <div class="btn-group" style="width:100%" ng-init="getCatalogImages()">
                                                     <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" >Background Image</button>
                                                     <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px" aria-expanded="false">
                                                         <span class="caret"></span>
@@ -31,7 +60,7 @@
                                                         </div></div></div></div>
                                                     </div>
                 </div>
-            </div>
+            </div>-->
 
 
 
@@ -70,7 +99,7 @@
                     </div>
                 -->
                     <div class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Opacity</label>
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Opacity</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
                                 <input class="sliderInput" ng-model="imageFilters.opacity" type="range" step="1" min="0" max="10" value="10" ng-change="changeOpacity()">
                             </div>
@@ -81,7 +110,8 @@
 
 
             <div >
-                <div ng-if="selectedElementType != 'page'" class="btn-group" style="width:100%"> <!--font color-->
+                <!--font color-->
+                <!--<div ng-if="selectedElementType != 'page'" class="btn-group" style="width:100%">
                                                     <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (FontColor == '#ffffff' || FontColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': FontColor}">Font Color</button>
                                                     <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
                                                         <span class="caret"></span>
@@ -91,11 +121,18 @@
                                                         <div class="iconpicker-items">
                                                             <a role="button" ng-click="changeFontColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
                                                         </div></div></div></div></div>
-                </div>
+                </div>-->
+    <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Font color</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <wst-color ng-model="fontColor"></wst-color>
+                            </div>
+                    </div>
             </div>
+<!--Hidden in-->
+            <!--<div >
 
-            <div >
-                <div class="btn-group" style="width:100%"> <!--Hidden in-->
+                <div class="btn-group" style="width:100%">
                                                     <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" >Hidden in</button>
                                                     <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
                                                         <span class="caret"></span>
@@ -125,7 +162,16 @@
                                                         </ul>
 
                 </div>
-            </div>
+            </div>-->
+    <div ng-if="selectedElementType != 'page'" class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Hidden in</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <wst-hidden ng-model="hiddenIn" on-change="changeHiddenIn"></wst-hidden>
+                            </div>
+                    </div>
+
+
+
 <!--
             <div >
                     <div class="btn-group" style="width:100%" >
@@ -158,15 +204,14 @@
                     </div>
                 </div>-->
 
-            <form ng-if="selectedElementType != 'page'" role="form" class="form-horizontal">
-                    <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectHeight">Height</label>
 
-						<div class="col-sm-8">
-							<input type="number" class="form-control" id="objectHeight" ng-model='objectHeight' placeholder="Height" ng-change="changeHeight(objectHeight)">
-						</div>
-					</div>
-            </form>
+
+        <div ng-if="selectedElementType != 'page'" class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Height</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input type="number" class="form-control" id="objectHeight" ng-model='objectHeight' placeholder="Height" ng-change="changeHeight(objectHeight)">
+                            </div>
+                    </div>
 
 
             <table ng-if="canMoveSelectedElement">
@@ -348,4 +393,6 @@
 
 </v-accordion>
 <!-- -->
+
+</div>
 

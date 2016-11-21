@@ -1,149 +1,153 @@
-Hola
-<div class="container-fluid" style="padding: 5px;border-bottom: 2px solid #72A230;margin-bottom: 10px">
-    <a href="/#/data-sources/{{_dataSource._id}}" class="btn btn-default pull-left">Cancel</a>
-    <a ng-click="save()" class="btn btn-warning pull-right" style="margin-left: 5px;margin-right: 5px;">Save</a>
+<div class="container-fluid" class="branded-border-panel" >
+    <a ng-click="save()" ng-disabled="(!_DataSource.params[0].type == 'BIGQUERY' && (!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database || testingConnection)) || (_DataSource.params[0].type == 'BIGQUERY' && (!_DataSource.params[0].connection.database) || testingConnection) " class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;">Save Datasource</a>
+    <a href="/#/data-sources" class="btn btn-default  pull-right">Cancel</a>
+</div>
+<div class="container-fluid">
+
+<div class="tab-pane with-bg" id="fwv-1">
+
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Connection Type II</label>
+                <select ng-model="_DataSource.type" placeholder="Select a datasource type..." id="type" class="form-control" ng-change="selectedRoleChanged = true">
+                    <option label="MONGODB" value="MONGODB">MONGODB</option>
+                    <option label="MySQL" value="MySQL">MySQL</option>
+                    <option label="PostgreSql" value="POSTGRE">PostgreSql</option>
+                    <!--<option label="Oracle" value="ORACLE">Oracle</option>-->
+                    <option label="MSSQL" value="MSSQL">MSSQL</option>
+                    <option label="Google Big query" value="BIGQUERY">Google Big query</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label" for="name">Name</label>
+                <input class="form-control" name="name" id="name" ng-model="_DataSource.name" data-validate="required" placeholder="Insert here the name for this connection" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12" ng-if="_DataSource.type != 'BIGQUERY'">
+            <div class="form-group">
+                <label class="control-label" for="host">Host</label>
+                <input class="form-control" name="host" id="host" ng-model="_DataSource.params[0].connection.host" data-validate="required" placeholder="Insert here your Host address or IP" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12"  ng-if="_DataSource.type != 'BIGQUERY'">
+            <div class="form-group">
+                <label class="control-label" for="port">Port</label>
+                <input class="form-control" name="port" id="port" ng-model="_DataSource.params[0].connection.port" data-validate="required" placeholder="Insert here the port to access the MongoDB instance" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label" for="database" ng-if="_DataSource.type != 'BIGQUERY'">Database</label>
+                <label class="control-label" for="database" ng-if="_DataSource.type == 'BIGQUERY'">Project ID</label>
+                <input class="form-control" name="database" id="database" ng-model="_DataSource.params[0].connection.database" data-validate="required" placeholder="Set here the name of the MongoDB Database to connect" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12"  ng-if="_DataSource.type == 'BIGQUERY'">
+            <div class="form-group">
+                <label class="control-label" for="userName">Google Cloud JSON authorization file</label>
+                <input type="file" class="form-control" id="file">
+            </div>
+        </div>
+
+        <div class="col-md-12"  ng-if="_DataSource.type != 'BIGQUERY'">
+            <div class="form-group">
+                <label class="control-label" for="userName">User name</label>
+                <input class="form-control" name="userName" id="userName" ng-model="_DataSource.params[0].connection.userName" data-validate="required" placeholder="Set here the username to access the database" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12"  ng-if="_DataSource.type != 'BIGQUERY'">
+            <div class="form-group">
+                <label class="control-label" for="password">Password</label>
+                <input class="form-control" type="password" name="password" id="password" ng-model="_DataSource.params[0].connection.password" data-validate="required" placeholder="Set here the username password to access the database" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12" >
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label" for="password">Data Packet size</label>
+                    <input class="form-control" type="number" name="packetSize" id="packetSize" ng-model="_DataSource.params[0].packetSize" data-validate="required" placeholder="Set here the packet size for this datasource (-1 means get always all data)" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12" style="padding: 5px;">
+            <a ng-click="doTestConnection()" ng-disabled="(!_DataSource.params[0].type == 'BIGQUERY' && (!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database || testingConnection)) || (_DataSource.params[0].type == 'BIGQUERY' && (!_DataSource.params[0].connection.database) || testingConnection) " class="btn btn-default pull-right" style="margin-left: 5px;margin-right: 5px;">Test Connection</a>
+            <div ng-if="testConnection.message" class="row alert" ng-class="{'alert-success': testConnection.result == 1,'alert-danger': testConnection.result != 1}" >
+                {{testConnection.message}}
+            </div>
+            <div ng-if="testConnection.errorMessage" style="font-size:11px;color:#ccc">
+                {{testConnection.errorMessage}}
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="container-fluid" ng-init="edit()">
-    <div class="form-group">
-        <label class="control-label">Name</label>
-        <select ng-model="selectedRole" placeholder="Select a datasource type..." ng-class="_dataSource.type" id="roleSelect" class="form-control" ng-change="selectedRoleChanged = true">
-            <option value="MONGODB" selected="selected"></option>
-            <option label="MONGODB" value="MONGODB">MONGODB</option>
-            <option label="MySQL" value="MySQL">MySQL</option>
-            <option label="PostgreSql" value="POSTGRE">PostgreSql</option>
-            <option label="Google Big query" value="BIGQUERY">Google Big query</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label class="control-label">Name</label>
-        <input class="form-control" ng-model="_dataSource.name" required>
-    </div>
-    <div class="form-group">
-        <label class="control-label">Type</label>
-        <input class="form-control" ng-model="_dataSource.type" required>
-    </div>
-    <div class="form-group">
-        <label class="control-label"  ng-if="_DataSource.type != 'BIGQUERY'">Host</label>
-        <input class="form-control" ng-model="_dataSource.params[0].connection.host" required>
-    </div>
-    <div class="form-group">
-        <label class="control-label"  ng-if="_DataSource.type != 'BIGQUERY'">Port</label>
-        <input class="form-control" ng-model="_dataSource.params[0].connection.port" required>
-    </div>
-    <div class="form-group">
-        <label class="control-label"  ng-if="_DataSource.type != 'BIGQUERY'">Database</label>
-        <input class="form-control" ng-model="_dataSource.params[0].connection.database" required>
-    </div>
+<div class="container-fluid" style="padding: 5px;">
 
-    <div class="container-fluid" style="border-bottom: 2px solid #72A230;margin-bottom: 10px">
-        <h3 class="pull-left">Collections</h3>
+
+</div>
+
+</div>
+
+<div class="container-fluid" ng-show='mongoStep == 2'>
+
+    <div class="container-fluid" style="padding: 5px;">
+
     </div>
+                 {{selectedCollections}}
 
-    <accordion close-others="false">
-        <accordion-group is-open="collection.isOpen" ng-repeat="collection in _dataSource.params[0].schema">
-            <accordion-heading>
-                <input type="checkbox" ng-model="collection.selected" onclick="event.stopPropagation()" ng-change="onCollectionSelectionChange(collection)">
-                {{collection.collectionLabel}} - {{collection.collectionName}}
-                <div class="pull-right">
-                    <small>Show Fields</small>
-                    <span class="caret" style="color:#0000FF;"></span>
-                </div>
-            </accordion-heading>
-            <table class="table table-condensed" style="margin-bottom: 0px;">
-                <thead>
-                <tr>
-                    <th>Selected</th>
-                    <th>Label</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Visible</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="element in collection.elements" ng-class="{'new-collection-element': element.isNew}">
-                    <td width="10%"><input type="checkbox" ng-model="element.selected" ng-change="onElementSelectionChange(collection)"></td>
-                    <td width="20%"><input class="form-control" ng-model="element.elementLabel" required></td>
-                    <td width="20%"><input class="form-control" ng-model="element.elementName" required></td>
-                    <td width="40%">
-                        <select class="form-control" ng-model="element.elementType" ng-options="obj.value as obj.name for obj in elementTypes"
-                                ng-change="onElementTypeChange(collection, element)"></select>
-                        <div ng-if="element.elementType == 'array'">
+    <ul>
+            <li ng-repeat="item in items"><input type="checkbox" checklist-model="selectedCollections" checklist-value="item.name" name="item.name" value="item.name"/>    {{item.name}}</li>
+    </ul>
 
-                            <div ng-repeat="value in element.values">
-                                <input class="form-control" ng-model="value.value" placeholder="value" style="width: 47%;float: left;">
-                                <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
-                                <i class="fa fa-times hand-cursor" ng-click="removeFromArray(element.values, value)" style="padding: 9px;"></i>
-                            </div>
+</div>
 
-                            <div>
-                                <input class="form-control" ng-model="valueValue" placeholder="enter new value" style="width: 47%;float: left;">
-                                <input class="form-control" ng-model="valueLabel" placeholder="enter new label" style="width: 47%;float: left;">
-                                <i class="fa fa-arrow-right hand-cursor" style="padding: 9px;"
-                                   ng-click="addValueToElement(element, valueValue, valueLabel);valueValue='';valueLabel='';"></i>
-                            </div>
+<div class="container-fluid" ng-show='mongoStep == 3'>
 
-                        </div>
-                        <div ng-if="element.elementType == 'number' || element.elementType == 'date'">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default" ng-repeat="collection in schemas">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 
-                            <div>
-                                <input class="form-control" ng-model="element.format" placeholder="format..." style="width: 100%;">
-                            </div>
+                        <table class="table table-striped">
+                            <tr>
+                                <td><h3>{{collection.collectionName}}</h3></td>
+                                <td><input type="checkbox"  ng-model="collection.visible"/></td>
+                                <td><input type="text"  ng-model="collection.collectionLabel"/></td>
+                            </tr>
+                        </table>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
 
-                        </div>
-                    </td>
-                    <td width="10%"><input type="checkbox" ng-model="element.visible"></td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="row">
-                <div class="col-md-12" style="text-align: center; padding: 5px; font-size: 20px; font-weight: bold;">
-                    <span class="hand-cursor" ng-click="addNewElement(collection)">+</span>
+                    <table class="table table-striped">
+                        <tr ng-repeat="element in collection.elements">
+                            <td>{{element.elementName}}</td>
+                            <td><select name="elementType" ng-model="element.elementType" ng-options="obj.value as obj.name for obj in elementTypes" ></select></td>
+                            <td><input type="checkbox" ng-model="element.visible"/></td>
+                            <td><input type="text"  ng-model="element.elementLabel"/></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
-        </accordion-group>
-    </accordion>
+        </div>
 
-    <accordion class="new-collections" close-others="false">
-        <accordion-group is-open="collection.isOpen" ng-repeat="collection in schemas">
-            <accordion-heading>
-                <input type="checkbox" ng-model="collection.selected" onclick="event.stopPropagation()" ng-change="onCollectionSelectionChange(collection)">
-                {{collection.collectionLabel}} - {{collection.collectionName}}
-                <div class="pull-right">
-                    <small>Show Fields</small>
-                    <span class="caret" style="color:#0000FF;"></span>
-                </div>
-            </accordion-heading>
-            <table class="table table-condensed" style="margin-bottom: 0px;">
-                <thead>
-                <tr>
-                    <th>Selected</th>
-                    <th>Label</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Visible</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="element in collection.elements" class="new-collection-element">
-                    <td><input type="checkbox" ng-model="element.selected" ng-change="onElementSelectionChange(collection)"></td>
-                    <td><input class="form-control" ng-model="element.elementLabel" required></td>
-                    <td><input class="form-control" ng-model="element.elementName" required></td>
-                    <td><select class="form-control" ng-model="element.elementType" ng-options="obj.value as obj.name for obj in elementTypes"></select></td>
-                    <td><input type="checkbox" ng-model="element.visible"></td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="row">
-                <div class="col-md-12" style="text-align: center; padding: 5px; font-size: 20px; font-weight: bold;">
-                    <span class="hand-cursor" ng-click="addNewElement(collection)">+</span>
-                </div>
-            </div>
-        </accordion-group>
-    </accordion>
 
-    <div ng-show="loadingNewCollections" style="text-align: center;padding: 20px;">
-        <span style="font-size: 20px;">Loading new collections...</span> <img src="images/loader.gif" style="width: 50px;">
     </div>
+
+
+
 
 </div>
