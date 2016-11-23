@@ -1177,9 +1177,8 @@ $scope.changeColumnColor = function(color)
         $scope.processStructure();
     }
 
-    $scope.getElementProperties = function(element)
+    $scope.getElementProperties = function(element,elementID)
     {
-        //widgetProperties.getElementProperties($scope, element);
         $scope.selectedElement = element;
         $scope.tabs.selected = 'settings';
     }

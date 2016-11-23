@@ -1,4 +1,4 @@
-app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams,report_v2Model, queryModel, grid, c3Charts,uuid2, icons,colors,htmlWidgets,dashboardv2Model, grid,bsLoadingOverlayService,$timeout,$rootScope ) {
+app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams,report_v2Model, queryModel,  c3Charts,uuid2, icons,colors,htmlWidgets,dashboardv2Model, grid,bsLoadingOverlayService,$timeout,$rootScope ) {
     $scope.reportModal = 'partials/report_v2/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
@@ -478,7 +478,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
         if (customObjectData.objectType == 'report') {
 
-            var containerID = 'REPORT_'+customObjectData.reportID; //uuid2.newguid();
+            var containerID = 'REPORT_CONTAINER_'+customObjectData.reportID; //uuid2.newguid();
 
             for (var i in $scope.selectedDashboard.reports)
                     {
@@ -491,7 +491,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                                         var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
                                                         '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
                                                            // '<div page-block class="Block500" ndType="reportBlock" id="'+containerID+'">'+getReportHTML($scope.selectedDashboard.reports[i],containerID)+'</div>'
-                                                              '<div page-block class="container-fluid" ndType="ndReportContainer" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+$scope.selectedDashboard.reports[i].id+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+$scope.selectedDashboard.reports[i].id+'"></div>';
+                                                              '<div class="container-fluid" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+$scope.selectedDashboard.reports[i].id+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+$scope.selectedDashboard.reports[i].id+'" style="padding:0px"></div>';
 
                                                         '</div>'+
                                                     '</div>';
@@ -764,7 +764,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                                         var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
                                                         '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
                                                            // '<div page-block class="Block500" ndType="reportBlock" id="'+containerID+'">'+getReportHTML($scope.selectedDashboard.reports[i],containerID)+'</div>'
-                                                              '<div page-block class="container-fluid" ndType="ndReportContainer" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+$scope.selectedDashboard.reports[i].id+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+$scope.selectedDashboard.reports[i].id+'"></div>';
+                                                              '<div class="container-fluid" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+$scope.selectedDashboard.reports[i].id+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+$scope.selectedDashboard.reports[i].id+'" style="padding:0px"></div>';
 
                                                         '</div>'+
                                                     '</div>';
@@ -837,12 +837,41 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                             } else {
                                 var errorMsg = 'This element is not allowed here...is not in the same query, please select an element that belongs to the same query or reinit the chart prior to assign this element.';
                                 noty({text: errorMsg,  timeout: 6000, type: 'error'});
-
                             }
                         }
                 }
         }
     };
+
+
+ $scope.getElementProperties = function(element,elementID)
+    {
+     if (elementID)
+         if (elementID.substr(0,7) == 'REPORT_')
+             {
+
+                 var reportID = elementID.substr(7,elementID.length);
+                 for (var i in $scope.selectedDashboard.reports)
+                     {
+                         if ($scope.selectedDashboard.reports[i].id == reportID)
+                             {
+
+                                 $scope.selectedReport = $scope.selectedDashboard.reports[i];
+                             }
+                     }
+             }
+
+        $scope.selectedElement = element;
+        $scope.tabs.selected = 'settings';
+
+    }
+
+$scope.onChangeElementProperties = function()
+    {
+        console.log('properties changed',$scope.selectedElement);
+        //$scope.selectedElement
+    }
+
 /*
     $scope.onDropOnRepeater = function (data, event, repeaterCode) {
         event.stopPropagation();
@@ -934,6 +963,8 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                         else
                         $scope.selectedElement.css(cssProperty,value);
     }
+
+
 
 
     $scope.getElementProperties = function(theElement)
@@ -1325,7 +1356,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                 if ($scope.selectedDashboard.reports[i].id == reportID)
                     {
 
-                        var theHTML = report_v2Model.getReport($scope.selectedDashboard.reports[i],'REPORT_'+reportID, function(sql){
+                        var theHTML = report_v2Model.getReport($scope.selectedDashboard.reports[i],'REPORT_CONTAINER_'+reportID, function(sql){
 
                             //var grid = document.getElementById('REPORT_'+reportID);
                             //cleanElement(grid)

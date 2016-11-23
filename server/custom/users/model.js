@@ -62,7 +62,8 @@ var usersSchema = new mongoose.Schema({
     nd_trash_deleted:{type: Boolean},
     nd_trash_deleted_date: {type: Date},
     createdBy: {type: String},
-    createdOn: {type: Date}
+    createdOn: {type: Date},
+    companyData: {}
 }, { collection: 'wst_Users' })
 
 if (!usersSchema.options.toObject) usersSchema.options.toObject = {};
@@ -283,6 +284,31 @@ usersSchema.statics.changePassword = function(req, done){
     });
 }
 
+usersSchema.statics.findOrCreateGoogleUser = function(profile, done){
+    var User = this;
+    this.findOne({ 'google.email' : profile.emails[0].value }, function(err, user){
+        if(err) throw err;
+        // if (err) return done(err);
+        if(user){
+            done(null, user);
+        }else{
+            User.create({
+                status : 1,
+                username : profile.emails[0].value,
+                companyID : 'COMPID',
+                email : profile.emails[0].value,
+                google : {
+                    email: profile.emails[0].value,
+                    name:  profile.displayName
+                }
+            }, function(err, user){
+                if(err) throw err;
+                // if (err) return done(err);
+                done(null, user);
+            });
+        }
+    });
+}
 
 
 

@@ -67,8 +67,7 @@ exports.GetReport = function(req,res){
 
     controller.findOne(req, function(result){
         serverResponse(req, res, 200, result);
-
-        if (req.query.mode == 'execute' && result.item)
+        if ((req.query.mode == 'execute' || req.query.mode == 'preview')  && result.item)
         {
             //Note the execution in statistics
             var statistics = connection.model('statistics');

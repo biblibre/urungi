@@ -2561,6 +2561,11 @@ label[for] {
     color: #FFFFFF
 }
 
+.admin-menu:hover {
+    background-color: #000;
+    color: #000;
+}
+
 .branded-strong-label {
     color:#72A230;
     font-weight: bold;
@@ -2574,4 +2579,41 @@ label[for] {
     background-color: #000;
     color: #FFFFFF;
     text-align: center;
+}
+
+.panel.panel-secondary .panel-heading {
+    background-color: #000;
+    color: #fff;
+}
+
+.bs-docs-footer {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-top: 50px;
+    color: #ccc;
+    text-align: left;
+    background-color: #2a2730;
+}
+
+.bs-docs-footer-links {
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.bs-docs-footer-links li {
+    display: inline-block;
+}
+
+.bs-docs-footer a {
+    color: #fff;
+}
+
+@media (min-width: 768px)
+.bs-docs-footer {
+    text-align: left;
+}
+
+.bs-docs-featurette+.bs-docs-footer {
+    margin-top: 0;
+    border-top: 0;
 }

@@ -310,7 +310,6 @@ app.controller('homeCtrl', ['$scope', '$rootScope','$sessionStorage','connection
     });
 
     connection.get('/api/get-user-last-executions', {}, function(data) {
-        //console.log('the user last executions',JSON.stringify(data.items));
         $scope.lastExecutions = [];
         $scope.mostExecutions = [];
 
@@ -319,8 +318,9 @@ app.controller('homeCtrl', ['$scope', '$rootScope','$sessionStorage','connection
                 if (l < 10)
                 {
                     data.items.theLastExecutions[l]._id['lastDate'] =  moment(data.items.theLastExecutions[l].lastDate).fromNow();
+                    data.items.theLastExecutions[l]._id['relationedName'] =  data.items.theLastExecutions[l]._id.relationedName;
                     $scope.lastExecutions.push(data.items.theLastExecutions[l]._id);
-                }
+                    }
             }
         for ( var m in data.items.theMostExecuted)
             {
@@ -331,7 +331,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope','$sessionStorage','connection
                 }
             }
 
-        //console.log('the user most executions',JSON.stringify($scope.mostExecutions));
+
     });
 
 

@@ -21,6 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="/css/login.css">
+    <link type="text/css" rel="stylesheet" href="/css/custom.css">
 </head>
 
 
@@ -75,7 +76,11 @@
                             Log In
                         </button>
                     </div>
-
+                    <div class="form-group">
+                                        <a class="button button-big button-full button-gapps" href="/auth/google">
+                                            Log In with Google
+                                        </a>
+                    </div>
                     <div class="alert alert-danger" ng-if="loginError == true">
 
                         {{errorLoginMessage}}

@@ -27,6 +27,11 @@ module.exports = {
             },
             from: 'no_reply@yourserver.com'
         },
+        google: {
+            clientID: "463281618964-m88ulbgehrre5gf86uvnefhbtdom82qg.apps.googleusercontent.com",
+            clientSecret: "eO2q5_24aIiFke3vHASTfqus",
+            callbackURL: "http://127.0.0.1:8080/auth/google/callback"
+        },
         pagination: {
             itemsPerPage: 10
         },
@@ -61,6 +66,11 @@ module.exports = {
             },
             from: 'no_reply@yourserver.com'
         },
+        google: {
+            clientID: "463281618964-m88ulbgehrre5gf86uvnefhbtdom82qg.apps.googleusercontent.com",
+            clientSecret: "eO2q5_24aIiFke3vHASTfqus",
+            callbackURL: "http://127.0.0.1:8080/auth/google/callback"
+        },
         pagination: {
             itemsPerPage: 10
         },
@@ -94,6 +104,11 @@ module.exports = {
                 pass: 'yourpassword'
             },
             from: 'no_reply@yourserver.com'
+        },
+        google: {
+            clientID: "PLACE_YOUR_CLIENT_ID_HERE",
+            clientSecret: "PLACE_YOUR_CLIENT_SECRET_HERE",
+            callbackURL: "http://PLACE_URL_HERE/auth/google/callback"
         },
         pagination: {
             itemsPerPage: 10

@@ -36,7 +36,7 @@
 
     <div class="col-md-6">
         <div class="row">
-            <div id="latestExecutions" class="panel panel-color panel-black">
+            <div id="latestExecutions" class="panel panel-color panel-secondary">
                 <div class="panel-heading">
                     Latest executions
                 </div>
@@ -48,14 +48,8 @@
                                 <div class="last-executed-item">
 
                                     <a ng-if="execution.type == 'report'" href="/#/reports/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                    <a ng-if="execution.type == 'dashboard'" href="/#/dashboards/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                    <a ng-if="execution.type == 'page'" href="/#/pages/{{execution.relationedID}}"><i class="fa fa-newspaper-o" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                    <a ng-if="execution.type == 'Dashboard'" href="/#/dashboards/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
 
-                                    <!--
-                                    <a ng-if="execution.type == 'report'" ><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                    <a ng-if="execution.type == 'dashboard'" ><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                    <a ng-if="execution.type == 'page'" ><i class="fa fa-newspaper-o" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                    -->
                                     <span class="pull-right">{{execution.lastDate}}</span>
 
                                 </div>
@@ -66,7 +60,7 @@
             </div>
         </div>
         <div class="row">
-            <div id="mostExecuted" class="panel panel-color panel-black">
+            <div id="mostExecuted" class="panel panel-color panel-secondary">
                 <div class="panel-heading">
                     Most executed
                 </div>
@@ -78,14 +72,9 @@
                                 <div class="most-executed-item">
 
                                     <a ng-if="execution.type == 'report'" href="/#/reports/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                    <a ng-if="execution.type == 'dashboard'" href="/#/dashboards/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                    <a ng-if="execution.type == 'page'" href="/#/pages/{{execution.relationedID}}"><i class="fa fa-newspaper-o" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                    <a ng-if="execution.type == 'Dashboard'" href="/#/dashboards/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
 
-                                    <!--
-                                    <a ng-if="execution.type == 'report'" ><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                    <a ng-if="execution.type == 'dashboard'" ><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                    <a ng-if="execution.type == 'page'" ><i class="fa fa-newspaper-o" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                    -->
+
 
                                     <span class="badge pull-right">{{execution.count}}</span>
                                 </div>

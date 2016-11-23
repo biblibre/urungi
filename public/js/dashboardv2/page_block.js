@@ -37,7 +37,9 @@ module.directive('pageBlock', ['$rootScope',  '$compile','$parse', function($roo
                         }
                         $rootScope.$emit("SELECTED");
                         scope.$apply();
-                        scope.getElementProperties($(el));
+
+                        var elementID = $(el).attr("id");
+                        scope.getElementProperties($(el),elementID);
 
                 });
 

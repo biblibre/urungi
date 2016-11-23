@@ -29,17 +29,12 @@ return {
 
 
       $scope.$watch('element', function(){
-          console.log('changed element');
           getElementProperties();
       });
 
     $scope.faList = icons.faList;
     $scope.imageFilters = [];
     $scope.imageFilters.opacity = 10;
-        /*
-        <tp-report element='element'></tp-report>
-        http://stackoverflow.com/questions/20068526/angularjs-directive-does-not-update-on-scope-variable-changes
-        */
 
       $scope.changeCSS = function(cssProperty,value)
         {
@@ -48,64 +43,49 @@ return {
                             else
                             $scope.selectedElement.css(cssProperty,value);
         }
-      /*$scope.changeBackgroundColor = function(color)
-        {
-            var elementID = $scope.selectedElement.attr('id');
-
-            var alpha = $scope.imageFilters.opacity /10;
-            var hex = hexToRgb(color);
-            if (hex)
-            {
-                var r = hex.r;
-                var g = hex.g;
-                var b = hex.b;
-                $scope.selectedElement.css({'background-color': 'rgba('+r+','+g+','+b+',' + alpha + ')'});
-
-            }
-            //$scope.BackgroundColor = color;
-
-            if ($scope.selectedElementType == 'page')
-                $scope.selectedDashboard.backgroundColor = color;
-
-            if ($scope.selectedElementType == 'gridHeaderColumn')
-                grid.savePropertyForGridColumn($scope.repeaters,'backgroundColor',elementID,'rgba('+r+','+g+','+b+',' + alpha + ')');
-
-            $scope.backgroundColor = 'rgba('+r+','+g+','+b+',' + alpha + ')';
-          console.log('the background color',$scope.backgroundColor);
-            saveProperties();
-
-
-        }*/
 
       $scope.$watch('backgroundColor', function(){
-          $scope.selectedElement.css({'background-color': $scope.backgroundColor});
+          if ($scope.selectedElement)
+            $scope.selectedElement.css({'background-color': $scope.backgroundColor});
+      });
+
+      $scope.$watch('properties', function(){
+                    if ($scope.properties)
+                        {
+                            $scope.backgroundColor = $scope.properties.backgroundColor;
+                            $scope.backgroundImage = $scope.properties.backgroundImage;
+                            $scope.height = $scope.properties.height;
+                            $scope.hiddenIn = $scope.properties.hiddenIn;
+                            $scope.rowHeight = $scope.properties.rowHeight;
+                            $scope.headerRowHeight = $scope.properties.headerRowHeight;
+                            $scope.headerBackgroundColor = $scope.properties.headerBackgroundColor;
+                            $scope.headerHeight = $scope.properties.headerHeight;
+                            $scope.height = $scope.properties.height;
+                            $scope.headerBottomLineColor = $scope.properties.headerBottomLineColor;
+                            $scope.headerBottomLineWidth = $scope.properties.headerBottomLineWidth;
+                            $scope.rowBottomLineWidth = $scope.properties.rowBottomLineWidth;
+                            $scope.rowBorderColor = $scope.properties.rowBorderColor;
+                            $scope.columnLineWidth = $scope.properties.columnLineWidth;
+                        }
       });
 
     $scope.$watch('backgroundImage', function(){
-          var theElement = $scope.selectedElement;
-
-        if ($scope.backgroundImage != undefined)
+        if ($scope.selectedElement)
             {
-            theElement.css({ 'background-image': "url('"+$scope.backgroundImage.source1400+"')" });
-            theElement.css({ '-webkit-background-size': 'cover'});
-            theElement.css({ '-moz-background-size': 'cover'});
-            theElement.css({ '-o-background-size': 'cover'});
-            theElement.css({ 'background-size': 'cover'});
-            } else {
-              theElement.css({ 'background-image': 'none' });
+                  var theElement = $scope.selectedElement;
+
+                if ($scope.backgroundImage != undefined)
+                    {
+                    theElement.css({ 'background-image': "url('"+$scope.backgroundImage.source1400+"')" });
+                    theElement.css({ '-webkit-background-size': 'cover'});
+                    theElement.css({ '-moz-background-size': 'cover'});
+                    theElement.css({ '-o-background-size': 'cover'});
+                    theElement.css({ 'background-size': 'cover'});
+                    } else {
+                      theElement.css({ 'background-image': 'none' });
+                    }
             }
-
-
-        //if ($scope.selectedElementType == 'page')
-          //  $scope.selectedDashboard.backgroundImage = backgroundImage.source1400;
       });
-
-
-     /* $scope.inputChangeBackgroundColor = function()
-        {
-
-        $scope.selectedElement.css({'background-color': $scope.backgroundColor});
-      }*/
 
     $scope.changeOpacity = function()
     {
@@ -128,15 +108,28 @@ return {
         //alert( hexToRgb("#0033ff").g );
     }
 
-    /*$scope.changeFontColor = function(color)
-    {
-        $scope.selectedElement.css({ 'color': color }) ;
-        $scope.fontColor = color;
-    }*/
-
     $scope.$watch('fontColor', function(){
+        if ($scope.selectedElement)
           $scope.selectedElement.css({ 'color': $scope.fontColor }) ;
       });
+
+    $scope.changeRowHeight = function(newHeight)
+    {
+       $scope.rowHeight = newHeight;
+        saveProperties();
+    }
+
+    $scope.changeHeaderBackgroundcolor = function(headerBackgroundColor)
+    {
+        $scope.headerBackgroundColor = headerBackgroundColor;
+        saveProperties();
+    }
+
+    $scope.changeHeaderHeight = function(headerHeight)
+    {
+        $scope.headerHeight = headerHeight;
+        saveProperties();
+    }
 
     $scope.deleteSelected = function()
     {
@@ -181,14 +174,58 @@ return {
         saveProperties();
     }
 
+    $scope.changeHeaderBottomLineWidth = function(headerBottomLineWidth)
+    {
+        $scope.headerBottomLineWidth = headerBottomLineWidth;
+        saveProperties();
+    }
+
+    $scope.changeHeaderBottomLineColor = function(headerBottomLineColor)
+    {
+        $scope.headerBottomLineColor = headerBottomLineColor;
+        saveProperties();
+    }
+
+    $scope.changeRowBottomLineWidth = function(rowBottomLineWidth)
+    {
+        $scope.rowBottomLineWidth = rowBottomLineWidth;
+        saveProperties();
+    }
+
+    $scope.changeRowBorderColor = function(rowBorderColor)
+    {
+        $scope.rowBorderColor = rowBorderColor;
+        saveProperties();
+    }
+
+    $scope.changeColumnLineWidth = function(columnLineWidth)
+    {
+        $scope.columnLineWidth = columnLineWidth;
+        saveProperties();
+    }
+
     function saveProperties()
         {
-            $scope.properties.backgroundColor = $scope.backgroundColor;
-            $scope.properties.backgroundImage = $scope.backgroundImage;
-            $scope.properties.height = $scope.height;
-            $scope.properties.hiddenIn = $scope.hiddenIn;
+            if ($scope.properties)
+                {
+                    $scope.properties.backgroundColor = $scope.backgroundColor;
+                    $scope.properties.backgroundImage = $scope.backgroundImage;
+                    $scope.properties.height = $scope.height;
+                    $scope.properties.hiddenIn = $scope.hiddenIn;
+                    $scope.properties.rowHeight = $scope.rowHeight;
+                    $scope.properties.headerRowHeight = $scope.headerRowHeight;
+                    $scope.properties.headerBackgroundColor = $scope.headerBackgroundColor;
+                    $scope.properties.headerHeight = $scope.headerHeight;
+                    $scope.properties.height = $scope.height;
+                    $scope.properties.headerBottomLineColor = $scope.headerBottomLineColor;
+                    $scope.properties.headerBottomLineWidth = $scope.headerBottomLineWidth;
+                    $scope.properties.rowBottomLineWidth = $scope.rowBottomLineWidth;
+                    $scope.properties.rowBorderColor = $scope.rowBorderColor;
+                    $scope.properties.columnLineWidth = $scope.columnLineWidth;
 
+                }
             $scope.onChange();
+
         }
 
     /* ALTERNATE ROWS COLOR
@@ -211,7 +248,7 @@ return {
 
     $scope.changeHiddenIn = function(values)
     {
-        console.log('changed hiddenIn',values, $scope.hiddenIn);
+
 
             if($scope.selectedElementType != 'page')
             {

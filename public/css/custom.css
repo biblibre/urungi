@@ -5,14 +5,18 @@ body {
     font-family: museo_sans299,sans-serif;
 }
 
+.wst-btn {
+    background-color: #54A097;
+}
+
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
     color: #fff;
-    background-color: #5E6D80;
-    border-color: #5E6D80;
+    background-color: #407C6E;
+    border-color: #407C6E;
 }
 
 .main-menu-logo {
-    background-color: #5E6D80;
+    background-color: #fff;
     color: #FFFFFF;
 }
 
@@ -109,8 +113,6 @@ body {
     border-bottom: 2px solid #407C6E;
 }
 
-
-
 .branded-strong-label {
     color:#407C6E;
 }
@@ -121,4 +123,9 @@ body {
 
 #objectPanel>menu .on a {
     color: #407C6E!important;
+}
+
+.panel.panel-secondary .panel-heading {
+    background-color: #5E6D80;
+    color: #fff;
 }

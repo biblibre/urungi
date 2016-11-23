@@ -1,72 +1,88 @@
 <div>
 
-            <div >
-                <div class="btn-group" style="width:100%">
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Header Background Color</button>
-                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
-                                                        <div class="iconpicker-items">
-                                                            <a role="button" ng-click="changeHeaderBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
-                                                        </div></div></div></div>
-                                                    </div>
-                </div>
-            </div>
+
+<!--
+                        <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Data Row Color</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <wst-color ng-model="alternateDataRowBackgroundColor"></wst-color>
+                            </div>
+                        </div>
+-->
 
 
 
-            <div >
-                <div class="btn-group" style="width:100%">
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Data row Color</button>
-                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
-                                                        <div class="iconpicker-items">
-                                                            <a role="button" ng-click="changeBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
-                                                        </div></div></div></div>
-                                                    </div>
-                </div>
-            </div>
-        <div >
-        <div class="btn-group" style="width:100%">
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Alternate data row color</button>
-                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
-                                                        <div class="iconpicker-items">
-                                                            <a role="button" ng-click="changeBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                </div>
+<v-accordion class="vAccordion--default" multiple>
+  <v-pane >
+    <v-pane-header>
+      Grid Header
+    </v-pane-header>
 
+    <v-pane-content>
+                        <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Header Background Color</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <wst-color ng-model="headerBackgroundColor" on-change="changeHeaderBackgroundcolor(headerBackgroundColor)"></wst-color>
+                            </div>
+                        </div>
+                        <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Bottom line Color</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <wst-color ng-model="headerBottomLineColor" on-change="changeHeaderBottomLineColor(headerBottomLineColor)"></wst-color>
+                            </div>
+                        </div>
+                        <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Header Height</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input type="number" class="form-control" id="objectHeight" ng-model="headerHeight" ng-change="changeHeaderHeight(headerHeight)">
+                            </div>
+                        </div>
+                        <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Bottom line Width</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input type="number" class="form-control" id="headerBottomLineWidth" ng-model="headerBottomLineWidth" ng-change="changeHeaderBottomLineWidth(headerBottomLineWidth)">
+                            </div>
+                        </div>
 
-                <div class="btn-group" style="width:100%">
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Cell border color</button>
-                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
-                                                        <div class="iconpicker-items">
-                                                            <a role="button" ng-click="changeCellBorderColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                </div>
-        </div>
+    </v-pane-content>
 
-        <a class="btn btn-default" ng-click="changeRowHeight(50)">height</a>
+  </v-pane>
+  <v-pane >
+    <v-pane-header>
+      Grid Rows
+    </v-pane-header>
+
+    <v-pane-content>
+                        <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Border Color</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <wst-color ng-model="rowBorderColor" on-change="changeRowBorderColor(rowBorderColor)"></wst-color>
+                            </div>
+                        </div>
+
+                        <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Row Width</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input type="number" class="form-control" id="objectHeight" ng-model="rowHeight" ng-change="changeRowHeight(rowHeight)">
+                            </div>
+                        </div>
+                        <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Bottom line Width</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input type="number" class="form-control" id="rowBottomLineWidth" ng-model="rowBottomLineWidth" ng-change="changeRowBottomLineWidth(rowBottomLineWidth)">
+                            </div>
+                        </div>
+                        <div class="form-group designer_form_group row">
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">column line Width</label>
+                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                <input type="number" class="form-control" id="columnLineWidth" ng-model="columnLineWidth" ng-change="changeColumnLineWidth(columnLineWidth)">
+                            </div>
+                        </div>
+    </v-pane-content>
+
+  </v-pane>
+
+</v-accordion>
 
   <v-pane>
       <v-pane-header>

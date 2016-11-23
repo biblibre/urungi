@@ -50,7 +50,8 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
 
                 if (report.reportType == 'grid')
                             {
-                                var htmlCode = grid.getUIGrid(report);
+                                //var htmlCode = grid.getUIGrid(report);
+                                var htmlCode = grid.extendedGridV2(report);
                                 var el = document.getElementById(report.parentDiv);
 
                                         if (el)

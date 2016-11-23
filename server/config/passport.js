@@ -1,3 +1,5 @@
+GoogleStrategy = require('passport-google-oauth20').Strategy
+
 var mongoose = require('mongoose')
     , LocalStrategy = require('passport-local').Strategy
     , RememberMeStrategy = require('passport-remember-me').Strategy
@@ -7,22 +9,19 @@ var Users = connection.model('Users'); //require('../../models/users');
 
 module.exports = function (passport) {
 
-    passport.serializeUser(function(user, done) {
+passport.serializeUser(function(user, done) {
 
         if (user.companyID) {
-
                     var Companies = connection.model('Companies');
 
                     Companies.findOne({companyCode: user.companyID}, function(err, company){
                         if (company) {
                             user['companyData'] = company;
                         }
-
                         done(err, user);
                     });
         } else {
-
-            done(null, user.id);
+            done(null, user);
         }
 
 
@@ -32,11 +31,11 @@ module.exports = function (passport) {
         done(false, user);
     });
 
-   /* passport.deserializeUser(function(id, done) {
-        Users.findOne({ _id: id }, function (err, user) {
+   /* passport.deserializeUser(function(userObj, done) {
+        Users.findOne({ _id: userObj.id }, function (err, user) {
             if (user) {
                 user = user.toObject();
-
+console.log('deserialize');
                 if (user.companyID) {
 
                     var Companies = connection.model('Companies');
@@ -52,13 +51,17 @@ module.exports = function (passport) {
                 else {
                     done(err, user);
                 }
+               // done(err, user);
             }
             else {
                 done(err, user);
             }
         });
-    });
-    */
+        console.log('te user',user);
+           done(false, user);
+
+    });*/
+
 
     passport.use(new LocalStrategy({
             usernameField: 'userName',
@@ -90,6 +93,21 @@ module.exports = function (passport) {
             });
         }
     ));
+
+    if (typeof config.google !== 'undefined') {
+        passport.use(new GoogleStrategy({
+                clientID: config.google.clientID,
+                clientSecret: config.google.clientSecret,
+                scope: ['profile', 'email'],
+                callbackURL: config.google.callbackURL
+            },
+            function(req, accessToken, refreshToken, profile, done) {
+                Users.findOrCreateGoogleUser(profile, done);
+            }
+        ));
+    }
+
+
 }
 
 

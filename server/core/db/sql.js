@@ -771,7 +771,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         //Fix for filters with having and normal filters
         SQLstring = SQLstring.replace("WHERE  AND", "WHERE");
 
-        console.log(SQLstring);
+        //console.log(SQLstring);
 
         if (dataSource.type != 'BIGQUERY')
         {

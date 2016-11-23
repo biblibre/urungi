@@ -306,8 +306,10 @@ exports.getUserPages = function(req,res){
         serverResponse(req, res, 200, {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count/perPage) : 1), items: pages});
     });
 }
-
+/*
 exports.getUserData = function(req,res){
+    var viewSQL = false;
+
     var Companies = connection.model('Companies');
     Companies.findOne({companyID:req.user.companyID,nd_trash_deleted: false},{},function(err, company){
 
@@ -376,7 +378,79 @@ exports.getUserData = function(req,res){
 
     });
 };
+*/
 
+exports.getUserData = function(req,res){
+    var Companies = connection.model('Companies');
+    Companies.findOne({companyID:req.user.companyID,nd_trash_deleted: false},{},function(err, company){
+
+
+        req.user.companyData = company;
+        req.session.companyData = company;
+
+        var createReports = false;
+        var createDashboards = false;
+        var createPages = false;
+        var isWSTADMIN = false;
+        var exploreData = false;
+        var viewSQL = false;
+
+        if(req.isAuthenticated()){
+            for (var i in req.user.roles) {
+                if (req.user.roles[i] == 'WSTADMIN'){
+                    isWSTADMIN = true;
+                    createReports = true;
+                    createDashboards = true;
+                    createPages = true;
+                    exploreData = true;
+                    viewSQL = true;
+                    req.session.reportsCreate = createReports;
+                    req.session.dashboardsCreate = createDashboards;
+                    req.session.pagesCreate = createPages;
+                    req.session.viewSQL = viewSQL;
+                    req.session.isWSTADMIN = isWSTADMIN;
+                }
+            }
+        }
+
+
+        if (req.user.roles.length > 0)
+        {
+            var Roles = connection.model('Roles');
+            Roles.find({ _id : { $in : req.user.roles} },{},function(err, roles){
+                req.session.rolesData = roles;
+
+                for (var i in roles)
+                {
+                    if (roles[i].reportsCreate == true)
+                        createReports = true;
+                    if (roles[i].dashboardsCreate == true)
+                        createDashboards = true;
+                    if (roles[i].pagesCreate == true)
+                        createPages = true;
+                    if (roles[i].exploreData == true)
+                        exploreData = true;
+                    if (roles[i].viewSQL == true)
+                        viewSQL = true;
+                }
+
+                req.session.reportsCreate = createReports;
+                req.session.dashboardsCreate = createDashboards;
+                req.session.pagesCreate = createPages;
+                req.session.exploreData = exploreData;
+                req.session.viewSQL = viewSQL;
+                req.session.isWSTADMIN = isWSTADMIN;
+
+                serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {user: req.user, companyData:company, rolesData:roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL}});
+            });
+
+        } else {
+            var user = (req.user) ? req.user : false;
+          serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {user: user, companyData:company, rolesData:[], reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages,exploreData: exploreData, viewSQL: viewSQL, isWSTADMIN: isWSTADMIN}});
+        }
+
+    });
+};
 exports.getUserOtherData = function(req, res)
 {
     var Users = connection.model('Users');
@@ -387,7 +461,7 @@ exports.getUserOtherData = function(req, res)
 
 
 exports.getUserObjects = function(req, res){
-
+    console.log('getting user objects',req.user.companyID);
     var Companies = connection.model('Companies');
     Companies.findOne({companyID:req.user.companyID,nd_trash_deleted: false},{},function(err, company){
 

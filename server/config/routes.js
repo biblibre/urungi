@@ -4,12 +4,7 @@ module.exports = function (app, passport) {
 
 
     app.get('/',restrict, function(req, res) {
-        var data = {};
-        if (req.user.companyData)
-            data.customCSS = req.user.companyData.customCSS;
-        else
-            data.customCSS = '';
-        res.render('index',data);
+        res.render('index');
     });
 
     app.get('/login', function(req, res, next) {
@@ -19,6 +14,17 @@ module.exports = function (app, passport) {
     app.get('/partial/:name', api.partial);
     app.get('/partial/:controller/:name', api.controllerPartial);
     app.get('/partial/custom/:controller/:name', api.controllerCustomPartial);
+
+
+    app.get('/auth/google', passport.authenticate('google'));
+
+    app.get('/auth/google/callback',
+        passport.authenticate("google",{ failureRedirect: '/login'}),
+        function(req,res){
+            res.redirect('/');
+        }
+    );
+
 
 
     /* PASSTHROUGH */
@@ -78,6 +84,7 @@ function authenticate(passport, Users, req, res, next)
         if (err) { return next(err); }
 
         if (!user) {
+            console.log('no user');
                 if (global.logFailLogin == true)
                     saveToLog(req, 'User fail login: '+info.message, 102);
                 res.send(401, info.message);
@@ -106,9 +113,8 @@ function authenticate(passport, Users, req, res, next)
                     res.send(401, "User's company not found!");
 
                 } else {
-                    console.log('this is the company data');
+
                     user.companyData = company;
-                    //req.user.companyData = company;
 
                     Users.update({
                         "_id" : user._id
@@ -116,7 +122,6 @@ function authenticate(passport, Users, req, res, next)
                         $set: loginData
                     }, function (err) {
                         if(err) throw err;
-
                         req.logIn(user, function(err) {
                             if (err) { return next(err); }
                             res.json({ user : user.toObject() });

@@ -13,8 +13,7 @@ app.service('grid' , function () {
 
 this.refresh = function(columns,id,query,designerMode, properties)
     {
-        this.simpleGrid(columns,id,query,designerMode,properties, function(){
-        });
+        this.simpleGrid(columns,id,query,designerMode,properties, function(){});
     }
 
 function replaceAll(str, find, replace) {
@@ -104,7 +103,7 @@ this.getUIGrid = function(report)
 
             */
 
-            var gridOptions = 'ui-grid-move-columns ui-grid-resize-columns ui-grid-pinning ui-grid-exporter ui-grid-grouping';
+            //var gridOptions = 'ui-grid-move-columns ui-grid-resize-columns ui-grid-pinning ui-grid-exporter ui-grid-grouping';
 
     var theStyle = ' style="';
     if (report.properties.backgroundColor)
@@ -114,7 +113,7 @@ this.getUIGrid = function(report)
 
     theStyle += '"';
 
-    //var gridOptions = 'ui-grid-move-columns ui-grid-pinning ui-grid-exporter ui-grid-grouping';
+    var gridOptions = 'ui-grid-move-columns ui-grid-pinning ui-grid-exporter ui-grid-grouping';
             report.properties.columnDefs = colDefs;
             return '<div page-block ndtype="ui-grid" id="'+report.id+'" ui-grid="{data: getQuery(\''+hashedID+'\').data, columnDefs: getReportColumnDefs(\''+report.id+'\'), enableVerticalScrollbar:1, enableHorizontalScrollbar:0,enableGridMenu: true,showColumnFooter:true,showGridFooter:true,enableColumnResizing:true,fastWatch:true}" '+gridOptions+theStyle+'  class="myGrid"></div>';
    }
@@ -455,8 +454,52 @@ this.extendedGridV2 = function(report)
             report = report;
             var id = report.id;
             hashedID = report.query.id;
+            var theProperties = report.properties;
 
-            var htmlCode = '';
+            var reportStyle = 'width:100%;padding-left:0px;padding-right:0px;';
+            var headerStyle = 'width:100%;padding-left:0px;background-color:#ccc;';
+            var rowStyle = 'width:100%;padding:0px';
+            var columnDefaultStyle = 'height:40px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;';
+            if (theProperties)
+                {
+                    if (theProperties.backgroundColor)
+                        reportStyle += 'background-color:'+theProperties.backgroundColor+';';
+                    if (theProperties.height)
+                        {
+                        reportStyle += 'height:'+theProperties.height+'px;';
+                            var theRepeatHeight = theProperties.height - theProperties.headerHeight;
+                        repeatHeight = 'height:'+theRepeatHeight+'px;';
+                        }
+                    if (theProperties.rowHeight)
+                        {
+                        columnDefaultStyle += 'height:'+theProperties.rowHeight+'px;';
+                            var paddingTop = (theProperties.rowHeight - 14) /2;
+                        columnDefaultStyle += 'padding-top:'+paddingTop+'px;';
+                        }
+                    if (theProperties.headerBackgroundColor)
+                        headerStyle += 'background-color:'+theProperties.headerBackgroundColor+';';
+
+                    if (theProperties.headerHeight)
+                        headerStyle += 'height:'+theProperties.headerHeight+'px;';
+
+                    if (theProperties.headerBottomLineWidth && theProperties.headerBottomLineColor)
+                        headerStyle += 'border-bottom: '+theProperties.headerBottomLineWidth+'px solid '+theProperties.headerBottomLineColor+';';
+
+                    if (theProperties.rowBorderColor && theProperties.rowBottomLineWidth)
+                        columnDefaultStyle += 'border-bottom: '+theProperties.rowBottomLineWidth+'px solid '+theProperties.rowBorderColor+';';
+
+                    if (theProperties.rowBorderColor && theProperties.columnLineWidht)
+                        columnDefaultStyle += 'border-bottom: '+theProperties.rowBottomLineWidth+'px solid '+theProperties.rowBorderColor+';';
+
+                    //if (theProperties.rowBorderColor && theProperties.columnLineWidth)
+                        columnDefaultStyle += 'border-right: '+theProperties.columnLineWidth+'px solid '+theProperties.rowBorderColor+';';
+
+
+
+                }
+
+
+            var htmlCode = '<div page-block id="REPORT_'+report.id+'" ndType="extendedGrid" class="container-fluid" style="'+reportStyle+'">';
 
             //var htmlCode =  '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel(\''+hashedID+'\')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." /></div>';
 
@@ -468,7 +511,7 @@ this.extendedGridV2 = function(report)
                 colClass = 'col-xs-'+12/columns.length;
 
             //header
-            htmlCode += '<div class="container-fluid" style="width:100%;padding-left:0px;background-color:#ccc;">';
+            htmlCode += '<div class="container-fluid" style="'+headerStyle+'">';
             for(var i = 0; i < columns.length; i++)
             {
                 htmlCode += getHeaderColumn(columns[i],i);
@@ -476,18 +519,18 @@ this.extendedGridV2 = function(report)
             htmlCode += '</div>';
 
             //Body
-            htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;height:85%" >';
+            htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;'+repeatHeight+'" >';
 
             //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
             //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
 
-            htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data | filter:theFilter | orderBy:getReport(\''+hashedID+'\').predicate:getReport(\''+hashedID+'\').reverse  " style="width:100%;padding:0px">';
+            htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data | filter:theFilter | orderBy:getReport(\''+hashedID+'\').predicate:getReport(\''+hashedID+'\').reverse  " style="'+rowStyle+'">';
 
             // POPOVER con HTML https://maxalley.wordpress.com/2014/08/19/bootstrap-3-popover-with-html-content/
 
             for(var i = 0; i < columns.length; i++)
             {
-                htmlCode += getDataCell(columns[i],id,i);
+                htmlCode += getDataCell(columns[i],id,i,columnDefaultStyle);
 
             }
 
@@ -505,7 +548,7 @@ this.extendedGridV2 = function(report)
                             elementName = columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName+columns[i].aggregation;
                         htmlCode += '<div class=" calculus-data-column '+colClass+' " style="'+colWidth+'"> '+calculateForColumn(report,i,elementName)+' </div>';
                     }
-            htmlCode += '</div>';
+            htmlCode += '</div> </div>';
             return htmlCode;
 
     }
@@ -528,7 +571,7 @@ this.extendedGridV2 = function(report)
     }
 
 
-    function getDataCell(column,gridID,columnIndex)
+    function getDataCell(column,gridID,columnIndex,columnDefaultStyle)
     {
             var htmlCode = '';
 
@@ -629,7 +672,7 @@ this.extendedGridV2 = function(report)
                 if (column.elementType === 'number')
                     defaultAligment = 'text-align: right;'
 
-                    htmlCode += '<div id="ROW_'+gridID+'" class="repeater-data-column '+colClass+' popover-primary" style="'+columnStyle+colWidth+defaultAligment+'height:20px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" popover-trigger="mouseenter" popover-placement="top" popover-title="'+column.objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick(\''+hashedID+'\',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
+                    htmlCode += '<div id="ROW_'+gridID+'" class="repeater-data-column '+colClass+' popover-primary" style="'+columnDefaultStyle+columnStyle+colWidth+defaultAligment+'" popover-trigger="mouseenter" popover-placement="top" popover-title="'+column.objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick(\''+hashedID+'\',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
 
         return htmlCode;
 
@@ -776,7 +819,7 @@ this.extendedGridV2 = function(report)
         }
 
         var columnPropertiesBtn = '<div class="btn-group pull-right" dropdown="" > '
-            +'<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom: 0px;">'
+            +'<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom: 0px;background-color:transparent;">'
             +' <span class="caret"></span>'
             +'</button>'
             +'<ul class="dropdown-menu dropdown-blue multi-level" role="menu">'
@@ -873,6 +916,7 @@ this.extendedGridV2 = function(report)
 
 });
 
+/*
 app.directive('gridProperties',['$compile','colors','grid', function($compile,colors,grid) {
 return {
     transclude: true,
@@ -940,3 +984,5 @@ return {
 
 
 }]);
+
+*/

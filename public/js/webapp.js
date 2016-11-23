@@ -449,11 +449,30 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
     }
 
     $rootScope.user = $sessionStorage.getObject('user');
-
     if (!$rootScope.user) {
-        window.location.href="/login";
+        connection.get('/api/get-user-data', {}, function(data) {
+            if (!data.items.user) return window.location.href="/login";
+
+            var theUser = data.items.user;
+
+            theUser.companyData = data.items.companyData;
+            theUser.rolesData = data.items.rolesData;
+            theUser.reportsCreate = data.items.reportsCreate;
+            theUser.dashboardsCreate = data.items.dashboardsCreate;
+            theUser.pagesCreate = data.items.pagesCreate;
+            theUser.exploreData = data.items.exploreData;
+            theUser.isWSTADMIN = data.items.isWSTADMIN;
+            theUser.contextHelp = data.items.contextHelp;
+            theUser.dialogs = data.items.dialogs;
+            theUser.viewSQL = data.items.viewSQL;
+            $rootScope.user = theUser;
+            $sessionStorage.setObject('user', theUser);
+
+        });
     } else {
         $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
+    }
+
 
 
 
@@ -463,7 +482,7 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
             $rootScope.user.canPublish = data.userCanPublish;
         });
 
-    }
+
 
 
 

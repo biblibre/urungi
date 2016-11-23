@@ -158,7 +158,6 @@ var app = angular.module('widestage-login', ['ui.router']).
                         $scope.loginError = false;
 
                         var theUser = data.user;
-
                         connection.get('/api/get-user-data', {}, function(data) {
                             if ($scope.rememberMe) {
                                 $localStorage.setObject('user', user);
@@ -182,7 +181,6 @@ var app = angular.module('widestage-login', ['ui.router']).
 
                     }).
                     error(function(data, status, headers, config) {
-
                         $scope.errorLoginMessage = data;
                         $scope.loginError = true;
                     });
