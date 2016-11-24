@@ -44,15 +44,20 @@
                                 </div>
                                 -->
                                 <div class="schema-element"  ng-if="ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure'" >
-                                     {{ngModelItem.elementLabel}}
-                                    <div class="delete-schema-element-btn pull-right" ng-click="deleteSchemaElement(ngModelItem)" style="cursor:hand"><i class="fa fa-trash-o"></i></div>
-                                    <div class="edit-schema-element-btn pull-right" ng-click="editElement(ngModelItem)" style="cursor:hand"><i class="fa fa-pencil"></i></div>
+                                    <table>
+                                        <tr style="height:20px;overflow:hidden;">
+                                   <td class="delete-schema-element-btn " ng-click="deleteSchemaElement(ngModelItem)" style="cursor:hand"><i class="fa fa-trash-o"></i></td>
+                                    <td class="edit-schema-element-btn " ng-click="editElement(ngModelItem)" style="cursor:hand"><i class="fa fa-pencil"></i></td>
+                                            <td style="height:20px;width:140px;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">{{ngModelItem.elementLabel}}</td>
 
+
+                                        </tr>
+                                    </table>
                                 </div>
 
                                 <div class="schema-folder"  ng-if="ngModelItem.elementRole == 'folder'" >
                                    <i class="fa fa-plus-square"></i>
-                                    <span ng-if="!ngModelItem.editing == true" class="">{{ngModelItem.elementLabel}}</span>
+                                    <span ng-if="!ngModelItem.editing == true" class="" >{{ngModelItem.elementLabel}}</span>
                                     <span ng-if="ngModelItem.editing == true" class=""><input type="text" ng-model="ngModelItem.elementLabel" style="width:100px"></span>
                                     <div ng-if="!ngModelItem.editing == true" class="delete-schema-element-btn pull-right" ng-click="deleteSchemaElement(ngModelItem)" style="cursor:hand"><i class="fa fa-trash-o"></i></div>
                                     <div ng-if="!ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = true; elementEditing = true;" style="cursor:hand"><i class="fa fa-pencil"></i></div>

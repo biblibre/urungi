@@ -1513,6 +1513,8 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     border: 0px solid #ddd;
     color:white;
     overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .delete-schema-element-btn {
