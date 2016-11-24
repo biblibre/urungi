@@ -1,6 +1,6 @@
 // Declare app level module which depends on filters, and services
 //var app = angular.module('widestage-login', ['ui.router','myApp.filters', 'myApp.services', 'myApp.directives']).
-var app = angular.module('widestage-login', ['ui.router']).
+var app = angular.module('widestage-login', ['ui.router','720kb.socialshare']).
     config(['$stateProvider','$urlRouterProvider','$locationProvider', function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/");
 

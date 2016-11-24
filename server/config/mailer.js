@@ -67,6 +67,10 @@ var templatesDir = path.resolve(__dirname, '../../', 'email_templates/'+theEmail
 
 // Send 10 mails at once
 async.mapLimit(recipients, 10, function (item, next) {
+    if (!item.firstName)
+        item.firstName = ' ';
+    if (!item.lastName)
+        item.lastName = ' ';
     template.render(item, function (err, results) {
         if (err) return next(err)
         transport.sendMail({

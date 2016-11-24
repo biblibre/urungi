@@ -224,6 +224,15 @@ filter: alpha(opacity=100);
     width: 25px;
 }
 
+footer {
+    background: #2c2e2f;
+    padding:25px;
+}
+
+footer a {
+    color:white;
+}
+
 
 
 
