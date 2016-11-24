@@ -33,7 +33,6 @@ return {
      {
          $scope.selectedImage = image;
          $scope.ngModel = image;
-         console.log('selected',image);
      }
 
      $scope.changeInput = function()
@@ -43,8 +42,9 @@ return {
 
      $scope.clearImage = function()
      {
-        $scope.ngModel = undefined;
-        $scope.selectedImage = undefined;
+        $scope.ngModel = 'none';
+        $scope.selectedImage = 'none';
+         console.log('cleaning image');
      }
 
      getCatalogImages();

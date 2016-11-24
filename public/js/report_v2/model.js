@@ -15,13 +15,13 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
         });
     }
 
-    this.getReport = function(report,parentDiv,done)
+    this.getReport = function(report,parentDiv,mode,done)
     {
-        getReport(report,parentDiv,done);
+        getReport(report,parentDiv,mode,done);
     }
 
 
-    function getReport(report,parentDiv,done)
+    function getReport(report,parentDiv,mode,done)
     {
         showOverlay(parentDiv);
         var isLinked = false;
@@ -29,19 +29,19 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
         queryModel.getQueryData(report.query, function(data,sql,query){
                     report.query.data = data;
                     report.parentDiv = parentDiv;
-                    repaintReport(report);
+                    repaintReport(report,mode);
                     done(sql);
                     hideOverlay(parentDiv);
             });
     }
 
 
-    this.repaintReport = function(report)
+    this.repaintReport = function(report,mode)
     {
-        repaintReport(report);
+        repaintReport(report,mode);
     }
 
-    function repaintReport(report)
+    function repaintReport(report,mode)
     {
         var data = report.query.data;
 
@@ -51,7 +51,7 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
                 if (report.reportType == 'grid')
                             {
                                 //var htmlCode = grid.getUIGrid(report);
-                                var htmlCode = grid.extendedGridV2(report);
+                                var htmlCode = grid.extendedGridV2(report,mode);
                                 var el = document.getElementById(report.parentDiv);
 
                                         if (el)

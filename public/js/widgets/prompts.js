@@ -213,13 +213,14 @@ return {
     filter.filterValue = filter.filterText1;
 
 
-         var values = {};
+       /*  var values = {};
         values.filterText1 = filter.filterText1;
         values.searchValue = filter.searchValue;
         values.filterValue = filter.filterValue;
         values.dateCustomFilterLabel = filter.dateCustomFilterLabel;
         if (filter.filterType == 'between' && (filter.filterText2 != undefined || filter.filterText2 != '') )
-            $scope.onChange($scope.elementId,values);
+            $scope.onChange($scope.elementId,values);*/
+        checkForOnChange(filter);
     }
 
     $scope.updateCondition = function(filter, condition) {
@@ -268,7 +269,11 @@ return {
             values.filterValue = filter.filterValue;
             values.dateCustomFilterLabel = filter.dateCustomFilterLabel;
             values.filterText2 = filter.filterText2;
-          if (filter.filterType == 'between' && (filter.filterText2 != undefined && filter.filterText2 != '') )
+          if ((filter.filterType == 'between' || filter.filterType == 'not between') && (filter.filterText2 != undefined && filter.filterText2 != '') )
+              {
+              $scope.onChange($scope.elementId,values);
+              }
+         if (filter.filterType != 'between' && filter.filterType != 'not between')
               {
               $scope.onChange($scope.elementId,values);
               }

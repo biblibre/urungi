@@ -449,57 +449,66 @@ this.simpleGridV2 = function(report,designerMode,properties)
     }
 
 
-this.extendedGridV2 = function(report)
+this.extendedGridV2 = function(report,mode)
     {
             report = report;
             var id = report.id;
             hashedID = report.query.id;
             var theProperties = report.properties;
+            var pageBlock = "page-block";
+
+            if (mode == 'preview')
+                {
+                   pageBlock = "";
+                }
+
 
             var reportStyle = 'width:100%;padding-left:0px;padding-right:0px;';
             var headerStyle = 'width:100%;padding-left:0px;background-color:#ccc;';
             var rowStyle = 'width:100%;padding:0px';
             var columnDefaultStyle = 'height:40px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;';
+
+
+            if (!theProperties.backgroundColor) theProperties.backgroundColor = "#FFFFFF";
+            if (!theProperties.height) theProperties.height = 400;
+            if (!theProperties.headerHeight) theProperties.headerHeight = 60;
+            if (!theProperties.rowHeight) theProperties.rowHeight = 35;
+            if (!theProperties.headerBackgroundColor) theProperties.headerBackgroundColor = "#FFFFFF";
+            if (!theProperties.headerBottomLineWidth) theProperties.headerBottomLineWidth = 4;
+            if (!theProperties.headerBottomLineColor) theProperties.headerBottomLineColor = "#999999";
+            if (!theProperties.rowBorderColor) theProperties.rowBorderColor = "#CCCCCC";
+            if (!theProperties.rowBottomLineWidth) theProperties.rowBottomLineWidth = 2;
+            if (!theProperties.columnLineWidht) theProperties.columnLineWidht = 0;
+
+            //margins
+            //paddings
+
+
+
+
+
             if (theProperties)
                 {
-                    if (theProperties.backgroundColor)
-                        reportStyle += 'background-color:'+theProperties.backgroundColor+';';
-                    if (theProperties.height)
-                        {
-                        reportStyle += 'height:'+theProperties.height+'px;';
-                            var theRepeatHeight = theProperties.height - theProperties.headerHeight;
-                        repeatHeight = 'height:'+theRepeatHeight+'px;';
-                        }
-                    if (theProperties.rowHeight)
-                        {
-                        columnDefaultStyle += 'height:'+theProperties.rowHeight+'px;';
-                            var paddingTop = (theProperties.rowHeight - 14) /2;
-                        columnDefaultStyle += 'padding-top:'+paddingTop+'px;';
-                        }
-                    if (theProperties.headerBackgroundColor)
-                        headerStyle += 'background-color:'+theProperties.headerBackgroundColor+';';
+                    reportStyle += 'background-color:'+theProperties.backgroundColor+';';
+                    reportStyle += 'height:'+theProperties.height+'px;';
 
-                    if (theProperties.headerHeight)
-                        headerStyle += 'height:'+theProperties.headerHeight+'px;';
+                    var theRepeatHeight = theProperties.height - theProperties.headerHeight;
+                    repeatHeight = 'height:'+theRepeatHeight+'px;';
 
-                    if (theProperties.headerBottomLineWidth && theProperties.headerBottomLineColor)
-                        headerStyle += 'border-bottom: '+theProperties.headerBottomLineWidth+'px solid '+theProperties.headerBottomLineColor+';';
+                    columnDefaultStyle += 'height:'+theProperties.rowHeight+'px;';
+                    var paddingTop = (theProperties.rowHeight - 14) /2;
+                    columnDefaultStyle += 'padding-top:'+paddingTop+'px;';
 
-                    if (theProperties.rowBorderColor && theProperties.rowBottomLineWidth)
-                        columnDefaultStyle += 'border-bottom: '+theProperties.rowBottomLineWidth+'px solid '+theProperties.rowBorderColor+';';
+                    headerStyle += 'background-color:'+theProperties.headerBackgroundColor+';';
+                    headerStyle += 'height:'+theProperties.headerHeight+'px;';
+                    headerStyle += 'border-bottom: '+theProperties.headerBottomLineWidth+'px solid '+theProperties.headerBottomLineColor+';';
 
-                    if (theProperties.rowBorderColor && theProperties.columnLineWidht)
-                        columnDefaultStyle += 'border-bottom: '+theProperties.rowBottomLineWidth+'px solid '+theProperties.rowBorderColor+';';
-
-                    //if (theProperties.rowBorderColor && theProperties.columnLineWidth)
-                        columnDefaultStyle += 'border-right: '+theProperties.columnLineWidth+'px solid '+theProperties.rowBorderColor+';';
-
-
-
+                    columnDefaultStyle += 'border-bottom: '+theProperties.rowBottomLineWidth+'px solid '+theProperties.rowBorderColor+';';
+                    columnDefaultStyle += 'border-right: '+theProperties.columnLineWidht+'px solid '+theProperties.rowBorderColor+';';
                 }
 
 
-            var htmlCode = '<div page-block id="REPORT_'+report.id+'" ndType="extendedGrid" class="container-fluid" style="'+reportStyle+'">';
+            var htmlCode = '<div '+pageBlock+' id="REPORT_'+report.id+'" ndType="extendedGrid" class="container-fluid" style="'+reportStyle+'">';
 
             //var htmlCode =  '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel(\''+hashedID+'\')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." /></div>';
 
@@ -671,8 +680,11 @@ this.extendedGridV2 = function(report)
                 var defaultAligment = '';
                 if (column.elementType === 'number')
                     defaultAligment = 'text-align: right;'
-
-                    htmlCode += '<div id="ROW_'+gridID+'" class="repeater-data-column '+colClass+' popover-primary" style="'+columnDefaultStyle+columnStyle+colWidth+defaultAligment+'" popover-trigger="mouseenter" popover-placement="top" popover-title="'+column.objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick(\''+hashedID+'\',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
+                    //with popover
+                   /* htmlCode += '<div id="ROW_'+gridID+'" class="repeater-data-column '+colClass+' popover-primary" style="'+columnDefaultStyle+columnStyle+colWidth+defaultAligment+'" popover-trigger="mouseenter" popover-placement="top" popover-title="'+column.objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick(\''+hashedID+'\',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
+                   */
+                    //without popover
+                    htmlCode += '<div id="ROW_'+gridID+'" class="repeater-data-column '+colClass+'" style="'+columnDefaultStyle+columnStyle+colWidth+defaultAligment+'" ng-click="cellClick(\''+hashedID+'\',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
 
         return htmlCode;
 
@@ -760,9 +772,7 @@ this.extendedGridV2 = function(report)
                     value += Number(theRow[elementName]);
                 }
         }
-
         return value/founded;
-
     }
 
     function calculateMinimumForColumn(columnIndex,elementName)
@@ -820,7 +830,8 @@ this.extendedGridV2 = function(report)
 
         var columnPropertiesBtn = '<div class="btn-group pull-right" dropdown="" > '
             +'<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom: 0px;background-color:transparent;">'
-            +' <span class="caret"></span>'
+            //+' <span class="caret"></span>'
+        +' <i class="fa fa-angle-down"></i>'
             +'</button>'
             +'<ul class="dropdown-menu dropdown-blue multi-level" role="menu">'
             +'<li class="dropdown-submenu">'
@@ -842,7 +853,7 @@ this.extendedGridV2 = function(report)
             +'<li>'
             +'      <a href="">Apply Break</a>'
             +'</li>'*/
-            +'<li class="divider"></li>'
+  /*          +'<li class="divider"></li>'
             +'<li class="dropdown-submenu">'
             +'      <a tabindex="-1" href="">Calculate</a>' //suma, cuenta, cuenta total, Promedio, mínimo, máximo, porcentaje
             +'      <ul class="dropdown-menu">';
@@ -882,11 +893,11 @@ this.extendedGridV2 = function(report)
 
         if (column.elementType == 'number')
                 columnPropertiesBtn +='      <li><a ng-click="changeColumnSignals('+columnIndex+','+quotedHashedID()+')">Conditional format</a></li>';
-
+*/
 
             columnPropertiesBtn += '<li class="divider"></li>'
-            //+'<li><a ng-click="saveToExcel(\''+hashedID+'\')"><i class="fa fa-file-excel-o"></i> Export table to excel</a></li>'
-            //+'<li class="divider"></li>'
+            +'<li><a ng-click="saveToExcel(\''+hashedID+'\')"><i class="fa fa-file-excel-o"></i> Export table to excel</a></li>'
+            +'<li class="divider"></li>'
             +'<li><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." style="margin:5px;" /></li>'
             +'</ul>'
             +'</div>';

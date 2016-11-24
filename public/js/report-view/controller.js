@@ -1,4 +1,4 @@
-app.controller('report_viewCtrl', function ($scope,$routeParams,report_v2Model,queryModel,connection,bsLoadingOverlayService,uiGridConstants) {
+app.controller('report_viewCtrl', function ($scope,$routeParams,report_v2Model,queryModel,connection,bsLoadingOverlayService,uiGridConstants,widgetsCommon) {
 
 $scope.promptsBlock = 'partials/report/promptsBlock.html';
 $scope.dateModal = 'partials/report/dateModal.html';
@@ -11,6 +11,7 @@ $scope.showPrompts = true;
 $scope.selectedReport = {};
 $scope.selectedReport.query = {};
 $scope.queryModel = queryModel;
+$scope.mode = 'preview';
 
 $scope.getPrompts = function()
     {
@@ -37,7 +38,7 @@ $scope.getReportDiv = function() {
                     if (report)
                         {
                             $scope.selectedReport = report;
-                            report_v2Model.getReport(report,'reportLayout',function() {
+                            report_v2Model.getReport(report,'reportLayout',$scope.mode,function() {
                                 $scope.hideOverlay('OVERLAY_reportLayout');
                                 var theReports = [];
                                     theReports.push($scope.selectedReport);
@@ -92,7 +93,7 @@ $scope.processStructure = function(execute) {
 
             });*/
 
-            report_v2Model.getReport($scope.selectedReport,'reportLayout',function() {
+            report_v2Model.getReport($scope.selectedReport,'reportLayout',$scope.mode,function() {
                                 //Done
                                 $scope.hideOverlay('OVERLAY_reportLayout');
                                 var theReports = [];
@@ -120,6 +121,54 @@ $scope.getElementProperties = function(theElement)
 {
 
 }
+
+/*GRID DROPDOWN FUNCTIONS*/
+
+$scope.textAlign = widgetsCommon.textAlign;
+
+    $scope.fontSizes = widgetsCommon.fontSizes;
+
+    $scope.fontWeights = widgetsCommon.fontWeights;
+
+    $scope.fontStyles = widgetsCommon.fontStyles;
+
+    $scope.colors = widgetsCommon.colors;
+
+    $scope.signalOptions = widgetsCommon.signalOptions;
+
+$scope.saveToExcel = function(reportHash)
+    {
+        report_v2Model.saveToExcel($scope,reportHash) ;
+    }
+$scope.orderColumn = function(columnIndex,desc,hashedID) {
+        report_v2Model.orderColumn($scope.selectedReport,columnIndex,desc,hashedID);
+    };
+
+$scope.changeColumnStyle = function(columnIndex ,hashedID)
+    {
+        report_v2Model.changeColumnStyle($scope.selectedReport,columnIndex,hashedID);
+        $scope.selectedColumn = report_v2Model.selectedColumn();
+        $scope.selectedColumnHashedID  = report_v2Model.selectedColumnHashedID();
+        $scope.selectedColumnIndex  = report_v2Model.selectedColumnIndex();
+    }
+ $scope.setColumnFormat = function()
+    {
+     console.log('the Report',$scope.selectedReport);
+        report_v2Model.repaintReport($scope.selectedReport,$scope.mode);
+    }
+
+ $scope.changeColumnColor = function(color)
+    {
+        if ($scope.selectedColumn.columnStyle)
+        $scope.selectedColumn.columnStyle.color = color;
+    }
+
+    $scope.changeColumnBackgroundColor = function(color)
+    {
+        if ($scope.selectedColumn.columnStyle)
+        $scope.selectedColumn.columnStyle['background-color'] = color;
+    }
+
 
 
 });

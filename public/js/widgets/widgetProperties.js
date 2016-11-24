@@ -7,7 +7,8 @@ return {
         onChange: '=',
         description: '@',
         element: '=',
-        properties: '='
+        properties: '=',
+        dashboard: '='
     },
 
    templateUrl: "partials/widgets/common.html",
@@ -47,11 +48,17 @@ return {
       $scope.$watch('backgroundColor', function(){
           if ($scope.selectedElement)
             $scope.selectedElement.css({'background-color': $scope.backgroundColor});
+          if ($scope.dashboard)
+              $scope.dashboard.backgroundColor = $scope.backgroundColor;
       });
 
+
       $scope.$watch('properties', function(){
+
+
                     if ($scope.properties)
                         {
+
                             $scope.backgroundColor = $scope.properties.backgroundColor;
                             $scope.backgroundImage = $scope.properties.backgroundImage;
                             $scope.height = $scope.properties.height;
@@ -67,25 +74,34 @@ return {
                             $scope.rowBorderColor = $scope.properties.rowBorderColor;
                             $scope.columnLineWidth = $scope.properties.columnLineWidth;
                         }
+
       });
 
     $scope.$watch('backgroundImage', function(){
         if ($scope.selectedElement)
             {
                   var theElement = $scope.selectedElement;
-
-                if ($scope.backgroundImage != undefined)
+                if ($scope.backgroundImage != undefined &&  $scope.backgroundImage != 'none')
                     {
-                    theElement.css({ 'background-image': "url('"+$scope.backgroundImage.source1400+"')" });
-                    theElement.css({ '-webkit-background-size': 'cover'});
-                    theElement.css({ '-moz-background-size': 'cover'});
-                    theElement.css({ '-o-background-size': 'cover'});
-                    theElement.css({ 'background-size': 'cover'});
+                     theElement.css({ 'background-image': "url('"+$scope.backgroundImage.source1400+"')" });
+                     theElement.css({ '-webkit-background-size': 'cover'});
+                     theElement.css({ '-moz-background-size': 'cover'});
+                     theElement.css({ '-o-background-size': 'cover'});
+                     theElement.css({ 'background-size': 'cover'});
                     } else {
                       theElement.css({ 'background-image': 'none' });
                     }
+
+                if ($scope.dashboard)
+                    {
+                        if ($scope.backgroundImage != undefined &&  $scope.backgroundImage != 'none')
+                            $scope.dashboard.backgroundImage = $scope.backgroundImage.source1400;
+                        else
+                            $scope.dashboard.backgroundImage = 'none';
+                    }
             }
       });
+
 
     $scope.changeOpacity = function()
     {
@@ -206,25 +222,27 @@ return {
 
     function saveProperties()
         {
-            if ($scope.properties)
-                {
-                    $scope.properties.backgroundColor = $scope.backgroundColor;
-                    $scope.properties.backgroundImage = $scope.backgroundImage;
-                    $scope.properties.height = $scope.height;
-                    $scope.properties.hiddenIn = $scope.hiddenIn;
-                    $scope.properties.rowHeight = $scope.rowHeight;
-                    $scope.properties.headerRowHeight = $scope.headerRowHeight;
-                    $scope.properties.headerBackgroundColor = $scope.headerBackgroundColor;
-                    $scope.properties.headerHeight = $scope.headerHeight;
-                    $scope.properties.height = $scope.height;
-                    $scope.properties.headerBottomLineColor = $scope.headerBottomLineColor;
-                    $scope.properties.headerBottomLineWidth = $scope.headerBottomLineWidth;
-                    $scope.properties.rowBottomLineWidth = $scope.rowBottomLineWidth;
-                    $scope.properties.rowBorderColor = $scope.rowBorderColor;
-                    $scope.properties.columnLineWidth = $scope.columnLineWidth;
 
-                }
-            $scope.onChange();
+                    if ($scope.properties)
+                        {
+                            $scope.properties.backgroundColor = $scope.backgroundColor;
+                            $scope.properties.backgroundImage = $scope.backgroundImage;
+                            $scope.properties.height = $scope.height;
+                            $scope.properties.hiddenIn = $scope.hiddenIn;
+                            $scope.properties.rowHeight = $scope.rowHeight;
+                            $scope.properties.headerRowHeight = $scope.headerRowHeight;
+                            $scope.properties.headerBackgroundColor = $scope.headerBackgroundColor;
+                            $scope.properties.headerHeight = $scope.headerHeight;
+                            $scope.properties.height = $scope.height;
+                            $scope.properties.headerBottomLineColor = $scope.headerBottomLineColor;
+                            $scope.properties.headerBottomLineWidth = $scope.headerBottomLineWidth;
+                            $scope.properties.rowBottomLineWidth = $scope.rowBottomLineWidth;
+                            $scope.properties.rowBorderColor = $scope.rowBorderColor;
+                            $scope.properties.columnLineWidth = $scope.columnLineWidth;
+
+                        }
+                    $scope.onChange();
+
 
         }
 
@@ -244,6 +262,27 @@ return {
 
     */
 
+    $scope.moveElementUp = function()
+    {
+       var theElement = $scope.selectedElement;
+
+       var selected = $(theElement).index();
+
+       var parent = $(theElement).parent();
+
+       $(parent).children().eq(selected-1).before($(parent).children().eq(selected));
+    }
+
+    $scope.moveElementDown = function()
+    {
+       var theElement = $scope.selectedElement;
+
+       var selected = $(theElement).index();
+
+       var parent = $(theElement).parent();
+
+       $(parent).children().eq(selected+1).after($(parent).children().eq(selected));
+    }
 
 
     $scope.changeHiddenIn = function(values)

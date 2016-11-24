@@ -23,6 +23,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     //$scope.imageFilters = [];
     //$scope.imageFilters.opacity = 10;
     $scope.theData = [];
+    $scope.mode = 'preview';
 
 
     $scope.textAlign = [
@@ -198,20 +199,35 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
 
     $scope.initForm = function() {
-        $scope.dataMode = 'preview';
+        $scope.mode = 'preview';
+
         if ($routeParams.newDashboard == 'true') {
             $scope.selectedDashboard = {dashboardName:"New Dashboard", backgroundColor:"#999999" ,reports:[],items:[],properties:{},dashboardType:'DEFAULT'};
             $scope.mode = 'add';
+
         };
         if ($routeParams.mode == 'edit')
         { //editing
             if ($scope.dashboardID)
             {
+                $scope.mode = 'edit';
+
                 connection.get('/api/dashboardsv2/get/'+$scope.dashboardID, {id: $scope.dashboardID}, function(data) {
                     $scope.selectedDashboard = data.item;
 
                     if ($scope.selectedDashboard.backgroundColor)
                         $('#designArea').css({ 'background-color': $scope.selectedDashboard.backgroundColor}) ;
+
+                    if ($scope.selectedDashboard.backgroundImage  && $scope.selectedDashboard.backgroundImage != 'none')
+                            {
+
+                                $('#designArea').css({ 'background-image': "url('"+$scope.selectedDashboard.backgroundImage+"')" });
+                                $('#designArea').css({ '-webkit-background-size': 'cover'});
+                                $('#designArea').css({ '-moz-background-size': 'cover'});
+                                $('#designArea').css({ '-o-background-size': 'cover'});
+                                $('#designArea').css({ 'background-size': 'cover'});
+
+                            }
 
                     getQueryData(0,function(){
                         rebuildCharts();
@@ -245,6 +261,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     {
                         $scope.selectedDashboard = {dashboardName:"New Dashboard", backgroundColor:"#999999" ,reports:[],items:[],properties:{},dashboardType:'DEFAULT'};
                         $scope.mode = 'add';
+
                         var qstructure = reportService.getReport();
                             qstructure.reportName = 'report_'+($scope.selectedDashboard.reports.length +1);
                             qstructure.id = uuid2.newguid();
@@ -253,7 +270,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     } else {
                         connection.get('/api/dashboardsv2/get/'+$scope.dashboardID, {id: $scope.dashboardID}, function(data) {
                             $scope.selectedDashboard = data.item;
-
                             var qstructure = reportService.getReport();
                             qstructure.reportName = 'report_'+($scope.selectedDashboard.reports.length +1);
                             qstructure.id = uuid2.newguid();
@@ -261,6 +277,17 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
                             if ($scope.selectedDashboard.backgroundColor)
                                 $('#designArea').css({ 'background-color': $scope.selectedDashboard.backgroundColor}) ;
+
+                            if ($scope.selectedDashboard.backgroundImage  && $scope.selectedDashboard.backgroundImage != 'none')
+                            {
+
+                                $('#designArea').css({ 'background-image': "url('"+$scope.selectedDashboard.backgroundImage+"')" });
+                                $('#designArea').css({ '-webkit-background-size': 'cover'});
+                                $('#designArea').css({ '-moz-background-size': 'cover'});
+                                $('#designArea').css({ '-o-background-size': 'cover'});
+                                $('#designArea').css({ 'background-size': 'cover'});
+
+                            }
 
                             getQueryData(0,function(){
                                 rebuildCharts();
@@ -290,6 +317,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     };
 
     $scope.loadHTML = function() {
+        $scope.mode = 'preview';
 
         connection.get('/api/dashboardsv2/get/'+$scope.dashboardID, {id: $scope.dashboardID}, function(data) {
                     $scope.selectedDashboard = data.item;
@@ -303,6 +331,17 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
                     if ($scope.selectedDashboard.backgroundColor)
                         $('#pageViewer').css({ 'background-color': $scope.selectedDashboard.backgroundColor}) ;
+
+                    if ($scope.selectedDashboard.backgroundImage && $scope.selectedDashboard.backgroundImage != 'none')
+                        {
+
+                            $('#pageViewer').css({ 'background-image': "url('"+$scope.selectedDashboard.backgroundImage+"')" });
+                            $('#pageViewer').css({ '-webkit-background-size': 'cover'});
+                            $('#pageViewer').css({ '-moz-background-size': 'cover'});
+                            $('#pageViewer').css({ '-o-background-size': 'cover'});
+                            $('#pageViewer').css({ 'background-size': 'cover'});
+
+                        }
 
                     //getAllPageColumns();
 
@@ -358,9 +397,8 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             $scope.selectedDashboard.reports.push(qstructure);
         } else {
             var updatedReport = angular.copy(qstructure);
-            console.log('aving  report',$scope.editingReportIndex);
             $scope.selectedDashboard.reports.splice($scope.editingReportIndex,1,updatedReport);
-            report_v2Model.getReport(updatedReport,'REPORT_'+qstructure.id, function(sql){});
+            report_v2Model.getReport(updatedReport,'REPORT_'+qstructure.id,$scope.mode, function(sql){});
         }
         $scope.reportInterface = false;
         //getAllPageColumns();
@@ -499,6 +537,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
                                         //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("donut")+'</div>';
                                         createOnDesignArea(html,function(){});
+                                        //report_v2Model.repaintReport($scope.selectedDashboard.reports[i],$scope.mode);
                                     }
                             }
                     }
@@ -632,7 +671,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                                     $scope.selectedDashboard.reports[r].query.groupFilters[f].dateCustomFilterLabel = values.dateCustomFilterLabel;
                                     $scope.selectedDashboard.reports[r].query.groupFilters[f].filterText2 = values.filterText2;
 
-                                    console.log('the prompt has changed 2...');
                                     getQueryData(r,function(){
                                         rebuildCharts();
                                         rebuildGrids();
@@ -786,10 +824,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         }
     };
 
-    function setBackgroundImage()
-    {
-
-    }
 
     $scope.onDropQueryElement = function (data, event, chartCode) {
         event.stopPropagation();
@@ -868,7 +902,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
 $scope.onChangeElementProperties = function()
     {
-        console.log('properties changed',$scope.selectedElement);
+        //console.log('properties changed',$scope.selectedElement);
         //$scope.selectedElement
     }
 
@@ -1351,20 +1385,16 @@ $scope.onChangeElementProperties = function()
 */
     $scope.getRuntimeReport = function(reportID)
     {
-        for (var i in $scope.selectedDashboard.reports)
+        if ($scope.mode != 'preview')
             {
-                if ($scope.selectedDashboard.reports[i].id == reportID)
+                for (var i in $scope.selectedDashboard.reports)
                     {
+                        if ($scope.selectedDashboard.reports[i].id == reportID)
+                            {
+                                var theHTML = report_v2Model.getReport($scope.selectedDashboard.reports[i],'REPORT_CONTAINER_'+reportID, $scope.mode, function(sql){
+                                });
 
-                        var theHTML = report_v2Model.getReport($scope.selectedDashboard.reports[i],'REPORT_CONTAINER_'+reportID, function(sql){
-
-                            //var grid = document.getElementById('REPORT_'+reportID);
-                            //cleanElement(grid)
-
-
-
-                        });
-
+                            }
                     }
             }
     }
@@ -1985,7 +2015,7 @@ $scope.changeVisibility = function() {
 
                     if ($scope.selectedDashboard.reports[i].reportType == 'grid')
                         {
-                            report_v2Model.repaintReport($scope.selectedDashboard.reports[i]);
+                            report_v2Model.repaintReport($scope.selectedDashboard.reports[i],$scope.mode);
                         }
                 }
             }
@@ -2180,7 +2210,7 @@ $scope.changeVisibility = function() {
         }
 
     }
-
+/*
     $scope.moveElementUp = function()
     {
        var theElement = $scope.selectedElement;
@@ -2202,7 +2232,7 @@ $scope.changeVisibility = function() {
 
        $(parent).children().eq(selected+1).after($(parent).children().eq(selected));
     }
-
+*/
     $scope.getReportColumnDefs = function(reportID)
     {
         for (var i in $scope.selectedDashboard.reports)

@@ -46,7 +46,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.rows = [];
     $scope.selectedLayerID = queryModel.selectedLayerID;
     $scope.layers = [];
-    $scope.mode = 'add';
+    $scope.mode = 'preview';
     $scope.isForDash = false;
     $scope.showPrompts = true;
 
@@ -113,6 +113,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.$on("newReportForDash", function (event, args) {
         //$scope.initReport();
+        $scope.mode = 'add';
         $scope.isForDash = true;
 
         $scope.selectedReport = {};
@@ -139,7 +140,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.mode = 'edit';
         queryModel.loadQuery(report.query);
         queryModel.detectLayerJoins();
-                            report_v2Model.getReport(report,'reportLayout',function() {
+                            report_v2Model.getReport(report,'reportLayout',$scope.mode,function() {
                                 $scope.hideOverlay('OVERLAY_reportLayout');
                             });
     });
@@ -220,13 +221,25 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport.properties.columns = [];
                 ///$scope.selectedReport.properties.filters = [];
                 $scope.selectedReport.properties.order = [];
+
+                $scope.selectedReport.properties.backgroundColor = "#FFFFFF";
+                $scope.selectedReport.properties.height = 400;
+                $scope.selectedReport.properties.headerHeight = 60;
+                $scope.selectedReport.properties.rowHeight = 35;
+                $scope.selectedReport.properties.headerBackgroundColor = "#FFFFFF";
+                $scope.selectedReport.properties.headerBottomLineWidth = 4;
+                $scope.selectedReport.properties.headerBottomLineColor = "#999999";
+                $scope.selectedReport.properties.rowBorderColor = "#CCCCCC";
+                $scope.selectedReport.properties.rowBottomLineWidth = 2;
+                $scope.selectedReport.properties.columnLineWidht = 0;
+
                 $scope.selectedReport.reportType = 'grid';
                 $scope.selectedLayerID = queryModel.selectedLayerID;
                 $scope.mode = 'add';
                 queryModel.initQuery();
 
 
-        $scope.dataMode = 'preview';
+        $scope.mode = 'preview';
         if ($routeParams.reportID)
             if ($routeParams.reportID == 'true') {
                 //New Report
@@ -251,7 +264,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                             $scope.mode = 'edit';
                             queryModel.loadQuery(report.query);
                             queryModel.detectLayerJoins();
-                            report_v2Model.getReport(report,'reportLayout',function() {
+                            report_v2Model.getReport(report,'reportLayout',$scope.mode,function() {
                                 $scope.hideOverlay('OVERLAY_reportLayout');
                             });
 
@@ -804,7 +817,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
         var query =  queryModel.generateQuery();  //queryModel.query();
         //TODO: clean data query
-        console.log('the query',query);
+        //console.log('the query',query);
         $scope.selectedReport.query = query;
 
 
@@ -812,7 +825,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                     {
                         //var clonedColumns = clone(queryModel.columns());
                         //$scope.selectedReport.properties.columns = clonedColumns;
-                        report_v2Model.getReport($scope.selectedReport,'reportLayout', function(sql){
+                        report_v2Model.getReport($scope.selectedReport,'reportLayout',$scope.mode, function(sql){
 
 
                             $scope.sql = sql;
@@ -839,7 +852,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                                                                         id:customObjectData.id,
                                                                         type:'bar',
                                                                         color:'#000000'}
-                                report_v2Model.getReport($scope.selectedReport,'reportLayout', function(sql){
+                                report_v2Model.getReport($scope.selectedReport,'reportLayout',$scope.mode, function(sql){
 
                                     $scope.sql = sql;
                                     $scope.hideOverlay('OVERLAY_reportLayout');
@@ -855,7 +868,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                         $scope.selectedReport.properties.chart = {chartID:theChartID,dataPoints:[],dataColumns:[],datax:{},height:300,type:'bar',query:query,queryName:null};
                         $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
                         var customObjectData = $scope.selectedReport.properties.xkeys[0];
-                        report_v2Model.getReport($scope.selectedReport,'reportLayout', function(sql){
+                        report_v2Model.getReport($scope.selectedReport,'reportLayout',$scope.mode, function(sql){
 
                             $scope.sql = sql;
                             $scope.hideOverlay('OVERLAY_reportLayout');
@@ -865,7 +878,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
         if ( $scope.selectedReport.reportType == 'indicator')
                     {
-                       report_v2Model.getReport($scope.selectedReport,'reportLayout', function(sql){
+                       report_v2Model.getReport($scope.selectedReport,'reportLayout',$scope.mode, function(sql){
 
                             $scope.sql = sql;
                             $scope.hideOverlay('OVERLAY_reportLayout');

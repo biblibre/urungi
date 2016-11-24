@@ -5,7 +5,7 @@ var app = angular.module('WideStage', [
         'ngRoute','ui.sortable','gridster','ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
         'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
         'ui.bootstrap.datetimepicker','ui.tree','page.block','gridshore.c3js.chart','vAccordion','bsLoadingOverlay','gg.editableText'
-    ,'intro.help','ngTagsInput','ui.grid','ui.grid.cellNav', 'ui.grid.resizeColumns', 'ui.grid.pinning',  'ui.grid.moveColumns', 'ui.grid.exporter', 'ui.grid.importer', 'ui.grid.grouping','ui.codemirror'
+    ,'intro.help','ngTagsInput','ui.grid','ui.grid.cellNav', 'ui.grid.resizeColumns', 'ui.grid.pinning',  'ui.grid.moveColumns', 'ui.grid.exporter', 'ui.grid.importer', 'ui.grid.grouping','ui.codemirror','720kb.socialshare'
     ])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
