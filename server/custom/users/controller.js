@@ -461,7 +461,6 @@ exports.getUserOtherData = function(req, res)
 
 
 exports.getUserObjects = function(req, res){
-    console.log('getting user objects',req.user.companyID);
     var Companies = connection.model('Companies');
     Companies.findOne({companyID:req.user.companyID,nd_trash_deleted: false},{},function(err, company){
 

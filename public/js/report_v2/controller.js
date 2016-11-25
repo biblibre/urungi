@@ -473,8 +473,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
         var customObjectData = data['json/custom-object']; // {foo: 'bar'}
         queryModel.onDrop($scope,data,event,type,group, function(){
-            $scope.getDataForPreview();
+                $scope.getDataForPreview();
         });
+
 
     }
 
@@ -810,21 +811,22 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.getDataForPreview  = function()
     {
 
-        var el = document.getElementById('reportLayout');
-        angular.element(el).empty();
-        $scope.showOverlay('OVERLAY_reportLayout');
-        $scope.gettingData == true;
+
 
         var query =  queryModel.generateQuery();  //queryModel.query();
         //TODO: clean data query
-        //console.log('the query',query);
         $scope.selectedReport.query = query;
 
+        if ($scope.selectedReport.query.columns.length > 0)
+            {
+                var el = document.getElementById('reportLayout');
+                angular.element(el).empty();
+                $scope.gettingData == true;
+                $scope.showOverlay('OVERLAY_reportLayout');
 
                 if ($scope.selectedReport.reportType == 'grid')
                     {
-                        //var clonedColumns = clone(queryModel.columns());
-                        //$scope.selectedReport.properties.columns = clonedColumns;
+
                         report_v2Model.getReport($scope.selectedReport,'reportLayout',$scope.mode, function(sql){
 
 
@@ -885,6 +887,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                             $scope.gettingData == false;
                         });
                     }
+    }
     }
 
 

@@ -11,29 +11,6 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     {
         return query;
     }
-   /* var columns = [];
-    this.columns = function()
-    {
-        return columns;
-    }
-*/
-  /*  var order = [];
-    this.order = function()
-    {
-        return order;
-    }
-*/
-   /* var filters = [
-        {
-            group: true,
-            filters: []
-        }
-        ];
-
-    this.filters = function()
-    {
-        return filters;
-    } */
 
     var datasources = [];
     var queries = [];
@@ -846,14 +823,17 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             query.order.push(customObjectData);
         }
         if (type == 'filter') {
+
             var el = document.getElementById('filter-zone');
             if (query.groupFilters.length > 0)
             {
                customObjectData.condition = 'AND';
                customObjectData.conditionLabel = 'AND';
             }
+
             query.groupFilters.push(customObjectData);
             this.filtersUpdated();
+
         }
         if (type == 'group') {
 
@@ -1097,19 +1077,19 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     }
 
     function processStructure(execute,done) {
-
         var execute = (typeof execute !== 'undefined') ? execute : true;
         wrongFilters = [];
         checkFilters(query.groupFilters);
-
             if (wrongFilters.length == 0)
                 {
                     $('#reportLayout').empty();
                     if (query.columns.length > 0 && execute)
-                        done();
+                        done(true);
+                        else
+                        done(false);
+
 
                 } else {
-
                     //var errorMsg = 'There are incomplete filters'
                     //noty({text: errorMsg,  timeout: 6000, type: 'error'});
                 }
