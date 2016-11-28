@@ -1851,9 +1851,9 @@ app.controller('reportCtrl', function ($scope, connection, $routeParams, reportM
     $scope.getButtonFilterPromptMessage = function(filter)
     {
         if (filter.filterPrompt == true)
-            return 'Select to deactivate the prompt for this filter';
+            return 'Select to deactivate the runtime';
             else
-            return 'Create a prompt for this filter, the filter will ask for a value each time the report is executed.' + "\n" +' '+ 'Click here to activate the prompt for this filter.';
+            return 'Make this filter a runtime filter.';
     }
 
     $scope.filterPromptsClick = function (filter) {

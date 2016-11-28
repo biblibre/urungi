@@ -86,7 +86,7 @@ function authenticate(passport, Users, req, res, next)
         if (!user) {
             console.log('no user');
                 if (global.logFailLogin == true)
-                    saveToLog(req, 'User fail login: '+info.message, 102);
+                    saveToLog(req, 'User fail login: '+info.message,'', 102);
                 res.send(401, info.message);
                 return;
         } else {
@@ -109,7 +109,7 @@ function authenticate(passport, Users, req, res, next)
 
                 if (!company)
                 {
-                    saveToLog(req, 'User fail login: '+user.userName+' ('+user.email+') user company not found!', 102);
+                    saveToLog(req, 'User fail login: '+user.userName+' ('+user.email+') user company not found!','', 102);
                     res.send(401, "User's company not found!");
 
                 } else {
@@ -127,7 +127,7 @@ function authenticate(passport, Users, req, res, next)
                             res.json({ user : user.toObject() });
 
                             if (global.logSuccessLogin == true) {
-                                saveToLog(req, 'User login: '+user.userName+' ('+user.email+')', 102);
+                                saveToLog(req, 'User login: '+user.userName+' ('+user.email+')','', 102);
                             }
                         });
                     });

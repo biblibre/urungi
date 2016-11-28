@@ -4,6 +4,7 @@ var logsSchema = new mongoose.Schema({
     text: String,
     type: Number,
     userID: String,
+    otherInfo: String,
     ip: String,
     companyID: {type: String},
     relationID: {type: String},
@@ -13,13 +14,14 @@ var logsSchema = new mongoose.Schema({
     createdBy: {type: String}
 }, { collection: 'wst_Logs' });
 
-logsSchema.statics.saveToLog = function(req, data, done){
+logsSchema.statics.saveToLog = function(req, data, otherInfo, done){
     if (req.user)
         var companyID = req.user.companyID;
 
     if (req) {
         var log = {
             text: data.text,
+            otherInfo: otherInfo,
             type: data.type,
             companyID: companyID,
             userID : (req.isAuthenticated()) ? req.user.id : null,

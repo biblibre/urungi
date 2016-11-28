@@ -786,7 +786,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                 if (err) {
                     console.log(err);
                     setresult({result: 0, msg: 'Generated SQL Error: '+SQLstring,sql:SQLstring});
-                    saveToLog(req, 'SQL Error: '+err+' ('+SQLstring+')      QUERY: ('+JSON.stringify(query)+')', 110);
+                    saveToLog(req,'SQL Error: '+err+' ('+SQLstring+')','QUERY: ('+JSON.stringify(query)+')', 110);
                     db.end();
                 } else {
                     if (result)

@@ -7,7 +7,7 @@
 
     <div id="orderByPanel" ng-show="selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" class="container-fluid column-zone no-padding" drop="onDropOrder($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="selectedReport.properties.order.length > 0">Drop here order by elements</div>
-        <ul class="ul-drop no-padding" ng-model="selectedReport.properties.order" ui-sortable="sortableOptions">
+        <ul class="ul-drop no-padding" ng-model="selectedReport.properties.order" ui-sortable="sortableOptions" ng-model="foo">
             <li class="column-box order-box" ng-repeat="field in selectedReport.properties.order" >
                 <i class="fa fa-cube" ng-show="field.elementType != 'number' && field.elementType != 'count'"></i>
                 <i class="fa fa-list-ol" ng-show="field.elementType == 'number' || field.elementType == 'count'"></i>
@@ -21,7 +21,7 @@
 
     <div ng-if="selectedReport.reportType == 'grid'" id="columnsPanel"  class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="selectedReport.properties.columns.length > 0">Drop here your columns</div>
-        <ul class="ul-drop no-padding" ng-model="columns" ui-sortable="sortableOptions">
+        <ul class="ul-drop no-padding" ng-model="selectedReport.properties.columns" ui-sortable="sortableOptions">
             <li class="column-box" ng-repeat="column in selectedReport.properties.columns">
 
                 <div class="dropdown">

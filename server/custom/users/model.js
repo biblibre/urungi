@@ -271,7 +271,7 @@ usersSchema.statics.changePassword = function(req, done){
 
                     Configurations.getConfiguration('log-user-pwd-change', function(configuration){
                         if (configuration.value == 1) {
-                            saveToLog(req, 'User password changed: '+user.email, 103);
+                            saveToLog(req, 'User password changed: '+user.email,'', 103);
                         }
                         done({result: 1, msg: "Password updated"});
                     });

@@ -463,15 +463,28 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport.properties.columns = [];
                 }
         var customObjectData = data['json/custom-object'];
-        $scope.selectedReport.properties.columns.push(customObjectData);
-        queryModel.onDrop($scope,data,event,type,group, function(){
-            $scope.getDataForPreview();
-        });
+        var found = false;
+
+        for (var i in $scope.selectedReport.properties.columns)
+            {
+               if ($scope.selectedReport.properties.columns[i].elementID == customObjectData.elementID)
+                   found = true;
+            }
+        if (!found)
+            {
+
+                $scope.selectedReport.properties.columns.push(customObjectData);
+                queryModel.onDrop($scope,data,event,type,group, function(){
+                    $scope.getDataForPreview();
+                });
+            } else {
+                noty({text: 'That column already exists',  timeout: 2000, type: 'error'});
+            }
     };
 
     $scope.onDropFilter = function (data, event, type, group) {
 
-        var customObjectData = data['json/custom-object']; // {foo: 'bar'}
+        var customObjectData = data['json/custom-object'];
         queryModel.onDrop($scope,data,event,type,group, function(){
                 $scope.getDataForPreview();
         });
@@ -481,15 +494,30 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.onDropOrder = function (data, event, type, group) {
 
-        var customObjectData = data['json/custom-object']; // {foo: 'bar'}
         if (!$scope.selectedReport.properties.order)
                 $scope.selectedReport.properties.order = [];
 
-        $scope.selectedReport.properties.order.push(customObjectData);
+        var customObjectData = data['json/custom-object'];
+        var found = false;
 
-        queryModel.onDrop($scope,data,event,type,group, function(){
-            $scope.getDataForPreview();
-        });
+        for (var i in $scope.selectedReport.properties.order)
+            {
+               if ($scope.selectedReport.properties.order[i].elementID == customObjectData.elementID)
+                   found = true;
+            }
+        if (!found)
+            {
+                $scope.selectedReport.properties.order.push(customObjectData);
+                queryModel.onDrop($scope,data,event,type,group, function(){
+                    $scope.getDataForPreview();
+                });
+            } else {
+                noty({text: 'That column order already exists',  timeout: 2000, type: 'error'});
+            }
+
+
+
+
 
     }
 
@@ -680,27 +708,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             if (type == 'column')
                 {
                     $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
-
-                   /* for (var i in $scope.selectedReport.properties.columns)
-                        {
-                            if ($scope.selectedReport.properties.columns[i].elementID == object.elementID)
-                                {
-
-                                    $scope.selectedReport.properties.columns.splice(i,1);
-                                }
-                        }*/
                 }
             if (type == 'filter')
                 {
-                   /* $rootScope.removeFromArray($scope.selectedReport.properties.filters, object);
-                    for (var i in $scope.selectedReport.properties.filters)
-                        {
-                            if ($scope.selectedReport.properties.filters[i].elementID == object.elementID)
-                                {
 
-                                    $scope.selectedReport.properties.filters.splice(i,1);
-                                }
-                        }*/
                 }
             if (type == 'order')
                 {
@@ -717,26 +728,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             if (type == 'ykey')
                 {
                     $rootScope.removeFromArray($scope.selectedReport.properties.ykeys, object);
-                    /*for (var i in $scope.selectedReport.properties.ykeys)
-                        {
-                            if ($scope.selectedReport.properties.ykeys[i].elementID == object.elementID)
-                                {
-
-                                    $scope.selectedReport.properties.ykeys.splice(i,1);
-                                }
-                        }*/
                 }
             if (type == 'xkey')
                 {
                     $rootScope.removeFromArray($scope.selectedReport.properties.xkeys, object);
-                    /*for (var i in $scope.selectedReport.properties.xkeys)
-                        {
-                            if ($scope.selectedReport.properties.xkeys[i].elementID == object.elementID)
-                                {
-
-                                    $scope.selectedReport.properties.xkeys.splice(i,1);
-                                }
-                        }*/
                 }
 
             if (type == 'ykey' || type == 'xkey')
@@ -791,9 +786,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.getButtonFilterPromptMessage = function(filter)
     {
         if (filter.filterPrompt == true)
-            return 'Select to deactivate the prompt for this filter';
+            return 'Select to deactivate the runtime';
             else
-            return 'Create a prompt for this filter, the filter will ask for a value each time the report is executed.' + "\n" +' '+ 'Click here to activate the prompt for this filter.';
+            return 'Make this filter appear in the report interface.';
     }
 
     $scope.filterPromptsClick = function (filter) {
@@ -1201,7 +1196,7 @@ $scope.changeColumnColor = function(color)
 
     $scope.onChangeElementProperties = function()
     {
-        console.log('properties changed',$scope.selectedReport);
+        //console.log('properties changed',$scope.selectedReport);
     }
 
 

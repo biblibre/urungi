@@ -2,7 +2,7 @@ var Logs = connection.model('Logs');
 
 /* LOGS */
 exports.logsSaveToLog = function(req,res){
-    Logs.saveToLog(req, req.body, function(result){
+    Logs.saveToLog(req, req.body,'', function(result){
         serverResponse(req, res, 200, result);
     });
 };
