@@ -1,4 +1,4 @@
-<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid " ng-init="getReports()"  style="padding-top: 10px;">
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid " ng-init="getReports(1,'',['reportName','reportType','isPublic','owner','reportDescription'])"  style="padding-top: 10px;">
     <div class="container-fluid">
 
         <div class="main col-md-3" ng-include="'partials/home/sidebar.html'">
@@ -30,6 +30,27 @@
                             <p id="reportListItemDetails" class="list-group-item-text" ng-bind="report.reportDescription"></p>
                         </a>
                     </div>
+
+                    <div class="container-fluid">
+                     <ul ng-if="pager.pages.length" class="pagination">
+                        <li ng-class="{disabled:pager.currentPage === 1}">
+                            <a ng-click="getReports(1,'',['reportName','reportType','isPublic','owner','reportDescription'])">First</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === 1}">
+                            <a ng-click="getReports(pager.currentPage - 1,'',['reportName','reportType','isPublic','owner','reportDescription'])">Previous</a>
+                        </li>
+                        <li ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
+                            <a ng-click="getReports(page,'',['reportName','reportType','isPublic','owner','reportDescription'])">{{page}}</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                            <a ng-click="getReports(pager.currentPage + 1,'',['reportName','reportType','isPublic','owner','reportDescription'])">Next</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                            <a ng-click="getReports(pager.totalPages,'',['reportName','reportType','isPublic','owner','reportDescription'])">Last</a>
+                        </li>
+                    </ul>
+
+                </div>
                 </div>
         </div>
     </div>

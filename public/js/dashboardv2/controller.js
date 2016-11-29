@@ -1,4 +1,4 @@
-app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams,report_v2Model, queryModel,  c3Charts,uuid2, icons,colors,htmlWidgets,dashboardv2Model, grid,bsLoadingOverlayService,$timeout,$rootScope ) {
+app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams,report_v2Model, queryModel,  c3Charts,uuid2, icons,colors,htmlWidgets,dashboardv2Model, grid,bsLoadingOverlayService,$timeout,$rootScope,PagerService ) {
     $scope.reportModal = 'partials/report_v2/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
@@ -24,6 +24,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     //$scope.imageFilters.opacity = 10;
     $scope.theData = [];
     $scope.mode = 'preview';
+    $scope.pager = {};
 
 
     $scope.textAlign = [
@@ -369,11 +370,39 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             referenceId: referenceId
         });
     };
-
+  /*
     $scope.getDashboards = function(params) {
 
         dashboardv2Model.getDashboards(params, function(data){
             $scope.dashboards = data;
+        })
+    };
+
+  */
+    $scope.getDashboards = function(page, search, fields) {
+        var params = {};
+
+        params.page = (page) ? page : 1;
+
+        if (search) {
+            $scope.search = search;
+        }
+        else if (page == 1) {
+            $scope.search = '';
+        }
+        if ($scope.search) {
+            params.search = $scope.search;
+        }
+
+        if (fields) params.fields = fields;
+
+
+
+        dashboardv2Model.getDashboards(params, function(data){
+            $scope.dashboards = data;
+            $scope.page = data.page;
+            $scope.pages = data.pages;
+            $scope.pager = PagerService.GetPager($scope.dashboards.items.length, data.page,10,data.pages);
         })
     };
 

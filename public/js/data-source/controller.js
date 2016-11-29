@@ -1,7 +1,8 @@
-app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal,datasourceModel,$timeout ) {
+app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal,datasourceModel,$timeout,PagerService) {
 
     $scope.activeForm = 'partials/data-source/source_wizard_index.html';
     $scope.selectedCollections = [];
+    $scope.pager = {};
 
 
     if ($routeParams.extra == 'intro') {
@@ -247,6 +248,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             $scope.items = data.items;
             $scope.page = data.page;
             $scope.pages = data.pages;
+            $scope.pager = PagerService.GetPager($scope.items.length, data.page,10,data.pages);
         });
 
         /*

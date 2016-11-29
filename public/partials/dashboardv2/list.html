@@ -1,4 +1,4 @@
-<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions" class="container-fluid " ng-init="getDashboards()"  style="padding-top: 10px;">
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions" class="container-fluid " ng-init="getDashboards(1,'',['dashboardName','isPublic','owner','dashboardDescription'])"  style="padding-top: 10px;">
     <div class="container-fluid">
 
         <div class="main col-md-3" ng-include="'partials/home/sidebar.html'">
@@ -31,6 +31,26 @@
                         </a>
 
                     </div>
+                </div>
+                <div class="container-fluid">
+                     <ul ng-if="pager.pages.length" class="pagination">
+                        <li ng-class="{disabled:pager.currentPage === 1}">
+                            <a ng-click="getDashboards(1,'',['dashboardName','isPublic','owner','dashboardDescription'])">First</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === 1}">
+                            <a ng-click="getDashboards(pager.currentPage - 1,'',['dashboardName','isPublic','owner','dashboardDescription'])">Previous</a>
+                        </li>
+                        <li ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
+                            <a ng-click="getDashboards(page,'',['dashboardName','isPublic','owner','dashboardDescription'])">{{page}}</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                            <a ng-click="getDashboards(pager.currentPage + 1,'',['dashboardName','isPublic','owner','dashboardDescription'])">Next</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                            <a ng-click="getDashboards(pager.totalPages,'',['dashboardName','isPublic','owner','dashboardDescription'])">Last</a>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
         </div>

@@ -26,6 +26,27 @@
                         </p>
                     </a>
                 </div>
+
+                <div class="container-fluid">
+                     <ul ng-if="pager.pages.length" class="pagination">
+                        <li ng-class="{disabled:pager.currentPage === 1}">
+                            <a ng-click="getDataSources(1,'',['name','type','params.connection.host','params.connection.port','params.connection.database'])">First</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === 1}">
+                            <a ng-click="getDataSources(pager.currentPage - 1,'',['name','type','params.connection.host','params.connection.port','params.connection.database'])">Previous</a>
+                        </li>
+                        <li ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
+                            <a ng-click="getDataSources(page,'',['name','type','params.connection.host','params.connection.port','params.connection.database'])">{{page}}</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                            <a ng-click="getDataSources(pager.currentPage + 1,'',['name','type','params.connection.host','params.connection.port','params.connection.database'])">Next</a>
+                        </li>
+                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
+                            <a ng-click="getDataSources(pager.totalPages,'',['name','type','params.connection.host','params.connection.port','params.connection.database'])">Last</a>
+                        </li>
+                    </ul>
+
+                </div>
             </div>
         </div>
     </div>

@@ -36,7 +36,6 @@ exports.LayersFindAll = function(req,res)
     req.query.companyid = true;
     req.user = {};
     req.user.companyID = 'COMPID';
-
     controller.findAll(req, function(result){
         serverResponse(req, res, 200, result);
     });

@@ -37,14 +37,9 @@ exports.ReportsFindAll = function(req,res){
         }
     } */
 
-
+/*
     var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
-    /*
-    if (isWSTADMIN)
-        var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"}]}
-        else */
-        var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{owner: req.user._id}]}
-    //var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{"$or": [{owner: req.user._id},{owner: { $exists: false }}]}]}
+    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{owner: req.user._id}]}
     var fields = {reportName:1,reportType:1,owner:1,isPublic:1};
     var params = {};
 
@@ -56,6 +51,17 @@ exports.ReportsFindAll = function(req,res){
             serverResponse(req, res, 200, result);
         });
     });
+
+    */
+
+        req.query.trash = true;
+    req.query.companyid = true;
+    req.user = {};
+    req.user.companyID = 'COMPID';
+    controller.findAll(req, function(result){
+        serverResponse(req, res, 200, result);
+    });
+
 };
 
 

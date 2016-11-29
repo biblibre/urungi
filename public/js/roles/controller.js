@@ -1,6 +1,7 @@
-app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$rootScope ) {
+app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$rootScope,PagerService ) {
     $scope.items =  [];
     $scope.roleModal = 'partials/roles/roleModal.html';
+    $scope.pager = {};
 
     $scope.publicSpace = $rootScope.user.companyData.publicSpace;
 
@@ -54,26 +55,6 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
         }
     };
 
-    /*
-    function getGrants(grants,folders)
-    {
-        for (var i in folders)
-        {
-            grants.push({
-               folderID: folders[i].id,
-               executeReports: folders[i].executeReports,
-               executeDashboards: folders[i].executeDashboards,
-               publishReports: folders[i].publishReports
-            });
-
-            if (folders[i].nodes.length > 0)
-            {
-                getGrants(grants,folders[i].nodes,done);
-            }
-        }
-
-    }
-    */
 
     $scope.getRoles = function(page, search, fields) {
         var params = {};
@@ -96,7 +77,7 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
             $scope.items = data.items;
             $scope.page = data.page;
             $scope.pages = data.pages;
-
+            $scope.pager = PagerService.GetPager($scope.items.length, data.page,10,data.pages);
 
         });
     };

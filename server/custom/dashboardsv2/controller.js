@@ -13,6 +13,7 @@ Dashboardsv2Controller.inherits(Controller);
 var controller = new Dashboardsv2Controller(Dashboardsv2);
 
 exports.Dashboardsv2FindAll = function(req,res){
+   /*
     req.query.trash = true;
     req.query.companyid = true;
     req.query.fields = ['dashboardName'];
@@ -38,6 +39,14 @@ exports.Dashboardsv2FindAll = function(req,res){
             var result = {result: 1, Dashboard: Dashboard, Dashboardsv2: ((req.query.Dashboard) ? Math.ceil(count/perDashboard) : 1), items: items};
             serverResponse(req, res, 200, result);
         });
+    });
+    */
+            req.query.trash = true;
+    req.query.companyid = true;
+    req.user = {};
+    req.user.companyID = 'COMPID';
+    controller.findAll(req, function(result){
+        serverResponse(req, res, 200, result);
     });
 };
 

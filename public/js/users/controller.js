@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window,$routeParams,$rootScope) {
+app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window,$routeParams,$rootScope,PagerService) {
     $scope.deleteModal = '/partial/private/deleteModal.html';
     $scope.changePasswordModal  = '/partials/users/changePassword.html';
     $scope.page = null;
@@ -14,6 +14,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
     $scope.search = null;
     $scope.selectedRole = '';
     $scope.editUserModal = 'partials/users/edit.html';
+    $scope.pager = {};
 
 
     $scope.breadcrumbs = [
@@ -214,7 +215,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
         return theRoles;
     }
 
-    $scope.getUsers = function(page, search) {
+   /* $scope.getUsers = function(page, search) {
         var params = {};
 
         params.page = (page) ? page : 1;
@@ -227,6 +228,33 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             $scope.pages = data.pages;
             //console.log('users data',JSON.stringify(data));
         });
+    };*/
+
+    $scope.getUsers = function(page, search, fields) {
+        var params = {};
+
+        params.page = (page) ? page : 1;
+
+        if (search) {
+            $scope.search = search;
+        }
+        else if (page == 1) {
+            $scope.search = '';
+        }
+        if ($scope.search) {
+            params.search = $scope.search;
+        }
+
+        if (fields) params.fields = fields;
+
+
+
+       connection.get('/api/admin/users/find-all', params, function(data) {
+            $scope.users = data.items;
+            $scope.page = data.page;
+            $scope.pages = data.pages;
+            $scope.pager = PagerService.GetPager($scope.users.length, data.page,10,data.pages);
+        })
     };
 
 

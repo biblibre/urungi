@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryModel, queryService,reportService,  $routeParams,$timeout,$rootScope, bsLoadingOverlayService, grid, uuid2,c3Charts,report_v2Model,widgetsCommon,$location) {
+app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryModel, queryService,reportService,  $routeParams,$timeout,$rootScope, bsLoadingOverlayService, grid, uuid2,c3Charts,report_v2Model,widgetsCommon,$location,PagerService) {
 
     $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
@@ -49,6 +49,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.mode = 'preview';
     $scope.isForDash = false;
     $scope.showPrompts = true;
+    $scope.pager = {};
 
     $scope.getSelectedLayer = function()
     {
@@ -283,6 +284,32 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
         connection.get('/api/reports/find-all', params, function(data) {
             $scope.reports = data;
+        });
+    };
+
+    $scope.getReports = function(page, search, fields) {
+        var params = {};
+
+        params.page = (page) ? page : 1;
+
+        if (search) {
+            $scope.search = search;
+        }
+        else if (page == 1) {
+            $scope.search = '';
+        }
+        if ($scope.search) {
+            params.search = $scope.search;
+        }
+
+        if (fields) params.fields = fields;
+
+        connection.get('/api/reports/find-all', params, function(data) {
+            $scope.reports = data
+            //$scope.items = data.items;
+            $scope.page = data.page;
+            $scope.pages = data.pages;
+            $scope.pager = PagerService.GetPager($scope.reports.items.length, data.page,10,data.pages);
         });
     };
 
