@@ -1084,9 +1084,13 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 {
                     $('#reportLayout').empty();
                     if (query.columns.length > 0 && execute)
-                        done(true);
-                        else
-                        done(false);
+                        {
+                          if (done)
+                              done(true);
+                        } else {
+                            if (done)
+                              done(false);
+                        }
 
 
                 } else {
