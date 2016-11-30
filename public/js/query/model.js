@@ -777,6 +777,12 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         }
     }
 
+
+    this.enableAllElements = function()
+    {
+        enableAllElements(rootItem.elements);
+    }
+
     function enableAllElements(elements)
     {
         for (var e in elements)

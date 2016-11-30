@@ -425,6 +425,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             qstructure.id = uuid2.newguid();
             $scope.selectedDashboard.reports.push(qstructure);
         } else {
+
             var updatedReport = angular.copy(qstructure);
             $scope.selectedDashboard.reports.splice($scope.editingReportIndex,1,updatedReport);
             report_v2Model.getReport(updatedReport,'REPORT_'+qstructure.id,$scope.mode, function(sql){});

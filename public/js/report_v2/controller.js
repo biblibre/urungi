@@ -120,6 +120,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.isForDash = true;
 
         $scope.selectedReport = {};
+        $scope.selectedReport.id = uuid2.newguid();
         $scope.selectedReport.draft = true;
         $scope.selectedReport.badgeStatus = 0;
         $scope.selectedReport.exportable = true;
@@ -130,6 +131,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.selectedReport.properties.columns = [];
         $scope.selectedReport.reportType = 'grid';
         $scope.selectedReport.query = {};
+        queryModel.initQuery();
+        //queryModel.enableAllElements();
+
 
     });
 
