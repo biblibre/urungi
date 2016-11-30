@@ -483,10 +483,6 @@ this.extendedGridV2 = function(report,mode)
             //margins
             //paddings
 
-
-
-
-
             if (theProperties)
                 {
                     reportStyle += 'background-color:'+theProperties.backgroundColor+';';

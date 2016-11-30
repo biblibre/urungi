@@ -454,7 +454,6 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
             if (!data.items.user) return window.location.href="/login";
 
             var theUser = data.items.user;
-
             theUser.companyData = data.items.companyData;
             theUser.rolesData = data.items.rolesData;
             theUser.reportsCreate = data.items.reportsCreate;
@@ -467,7 +466,7 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
             theUser.viewSQL = data.items.viewSQL;
             $rootScope.user = theUser;
             $sessionStorage.setObject('user', theUser);
-
+            $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
         });
     } else {
         $rootScope.isWSTADMIN = isWSTADMIN($rootScope);

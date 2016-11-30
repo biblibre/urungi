@@ -162,7 +162,6 @@ var app = angular.module('widestage-login', ['ui.router','720kb.socialshare']).
                             if ($scope.rememberMe) {
                                 $localStorage.setObject('user', user);
                             }
-
                             theUser.companyData = data.items.companyData;
                             theUser.rolesData = data.items.rolesData;
                             theUser.reportsCreate = data.items.reportsCreate;

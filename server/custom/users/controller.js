@@ -388,6 +388,19 @@ exports.getUserData = function(req,res){
         req.user.companyData = company;
         req.session.companyData = company;
 
+        var theUserData = {};
+        theUserData.companyData = req.user.companyData;
+        theUserData.companyID = req.user.companyID;
+        theUserData.contextHelp = req.user.contextHelp;
+        theUserData.dialogs = req.user.dialogs;
+        theUserData.filters = req.user.filters;
+        theUserData.privateSpace = req.user.privateSpace;
+        theUserData.roles = req.user.roles;
+        theUserData.rolesData = req.user.rolesData;
+        theUserData.staus = req.user.status;
+        theUserData.userName = req.user.userName;
+
+
         var createReports = false;
         var createDashboards = false;
         var createPages = false;
@@ -396,6 +409,7 @@ exports.getUserData = function(req,res){
         var viewSQL = false;
 
         if(req.isAuthenticated()){
+
             for (var i in req.user.roles) {
                 if (req.user.roles[i] == 'WSTADMIN'){
                     isWSTADMIN = true;
@@ -404,18 +418,28 @@ exports.getUserData = function(req,res){
                     createPages = true;
                     exploreData = true;
                     viewSQL = true;
+                    canPublish = true;
                     req.session.reportsCreate = createReports;
                     req.session.dashboardsCreate = createDashboards;
-                    req.session.pagesCreate = createPages;
+                    req.session.exploreData = exploreData;
                     req.session.viewSQL = viewSQL;
                     req.session.isWSTADMIN = isWSTADMIN;
+                    req.session.canPublish = canPublish;
+
+                    theUserData.reportsCreate = createReports;
+                    theUserData.dashboardsCreate = createDashboards;
+                    theUserData.exploreData = exploreData;
+                    theUserData.viewSQL = viewSQL;
+                    theUserData.isWSTADMIN = isWSTADMIN;
+                    theUserData.canPublish = canPublish;
                 }
             }
         }
 
 
-        if (req.user.roles.length > 0)
+        if (req.user.roles.length > 0 && !isWSTADMIN)
         {
+
             var Roles = connection.model('Roles');
             Roles.find({ _id : { $in : req.user.roles} },{},function(err, roles){
                 req.session.rolesData = roles;
@@ -441,12 +465,22 @@ exports.getUserData = function(req,res){
                 req.session.viewSQL = viewSQL;
                 req.session.isWSTADMIN = isWSTADMIN;
 
-                serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {user: req.user, companyData:company, rolesData:roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL}});
+                theUserData.reportsCreate = createReports;
+                theUserData.dashboardsCreate = createDashboards;
+                theUserData.exploreData = exploreData;
+                theUserData.viewSQL = viewSQL;
+                theUserData.isWSTADMIN = isWSTADMIN;
+                theUserData.canPublish = canPublish;
+
+                var userData = {}
+
+                serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {user: theUserData, companyData:company, rolesData:roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL}});
             });
 
+
         } else {
-            var user = (req.user) ? req.user : false;
-          serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {user: user, companyData:company, rolesData:[], reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages,exploreData: exploreData, viewSQL: viewSQL, isWSTADMIN: isWSTADMIN}});
+         //var user = (req.user) ? req.user : false;
+          serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {user: theUserData, companyData:company, rolesData:[], reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages,exploreData: exploreData, viewSQL: viewSQL, isWSTADMIN: isWSTADMIN}});
         }
 
     });
