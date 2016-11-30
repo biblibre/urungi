@@ -11,17 +11,9 @@
     <a id="reportsMainMenu" ng-if="user.reportsCreate || counts.reports > 0" href="/#/reports" class="list-group-item">
         <span><i class="fa fa-bar-chart"></i></span> My Reports <span class="badge">{{counts.reports}}</span>
     </a>
-   <!-- <a id="pagesMainMenu" ng-if="user.pagesCreate || counts.pages > 0" href="/#/pages" class="list-group-item">
-        <span><i class="fa fa-newspaper-o"></i></span> Page reports <span class="badge">{{counts.pages}}</span>
-    </a> -->
     <a id="exploreMainMenu" ng-if="user.exploreData" href="/#/explore" class="list-group-item">
         <span><i class="fa fa-sun-o"></i></span> Explore
     </a>
-    <!--
-    <a href="/#/history" class="list-group-item">
-        <span><i class="fa fa-history"></i></span> History
-    </a>
-    -->
     <a id="myProfileMainMenu" href="/#/users/{{user._id}}/" class="list-group-item">
         <span><i class="fa fa-user"></i></span> My profile
     </a>
@@ -41,9 +33,6 @@
     <a id="usersMainMenu" ng-show="isWSTADMIN" href="/#/users" class="list-group-item admin-menu" >
         <span><i class="fa fa-user"></i></span> Users  <span class="badge">{{counts.users}}</span>
     </a>
-    <!--<a id="usersMainMenu" ng-show="isWSTADMIN" href="/#/setup" class="list-group-item admin-menu" >
-        <span><i class="fa fa-cogs"></i></span> Settings
-    </a>-->
     <span class="list-group-item main-menu-logo" >
         <img src="images/logocustom.png" class="img-responsive">
     </span>
