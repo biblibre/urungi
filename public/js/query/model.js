@@ -302,7 +302,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     function getQueryData(done)
     {
             var params = {};
-            cleanQuery();
+            cleanQuery(query);
             wrongFilters = [];
             checkFilters(query.groupFilters);
 
@@ -333,20 +333,56 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                     }
     };
 
-    function cleanQuery()
+    this.getQueryDataNextPage = function(page, done) {
+        getQueryDataNextPage(page,done);
+    }
+
+    function getQueryDataNextPage(page, done)
     {
-        query.data = [];
-        for (f in query.groupFilters)
-            {
-                query.groupFilters[f].data = [];
-                query.groupFilters[f].values = [];
-            }
-        for (var c in query.collections)
-            {
-                for (var cf in query.collections[c].filters)
+        var params = {};
+            wrongFilters = [];
+            checkFilters(query.groupFilters);
+
+            if (wrongFilters.length == 0)
                     {
-                        query.collections[c].filters[cf].data = [];
-                        query.collections[c].filters[cf].values = [];
+                        params.query = angular.copy(query);
+                        cleanQuery(params.query);
+                        params.page = page;
+
+                        connection.get('/api/reports/get-data', params, function(data) {
+                           var sql = data.sql;
+                            if (data.result == 0)
+                            {
+                                noty({text: data.msg,  timeout: 2000, type: 'error'});
+                                done([],sql,query);
+                            } else {
+                                prepareData(query,data.data, function(result)
+                                {
+                                    done(result,sql,query);
+                                });
+
+
+                            }
+                        });
+                    } else {
+                        done([],'',query);
+                    }
+    }
+
+    function cleanQuery(theQuery)
+    {
+        theQuery.data = [];
+        for (f in theQuery.groupFilters)
+            {
+                theQuery.groupFilters[f].data = [];
+                theQuery.groupFilters[f].values = [];
+            }
+        for (var c in theQuery.collections)
+            {
+                for (var cf in theQuery.collections[c].filters)
+                    {
+                        theQuery.collections[c].filters[cf].data = [];
+                        theQuery.collections[c].filters[cf].values = [];
                     }
             }
     }

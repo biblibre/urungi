@@ -39,6 +39,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.selectedReport.reportType = 'grid';
     $scope.selectedReport.query = {};
 
+    $scope.page = 1;
+
 
     $scope.gettingData = false;
     $scope.showSQL = false;
@@ -1224,6 +1226,12 @@ $scope.changeColumnColor = function(color)
     $scope.onChangeElementProperties = function()
     {
         //console.log('properties changed',$scope.selectedReport);
+    }
+
+    $scope.gridGetMoreData = function(reportID)
+    {
+        $scope.page += 1;
+        report_v2Model.getReportDataNextPage($scope.selectedReport,$scope.page);
     }
 
 

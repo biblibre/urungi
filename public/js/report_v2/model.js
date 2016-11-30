@@ -35,6 +35,19 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
             });
     }
 
+    this.getReportDataNextPage = function(report,page)
+    {
+        getReportDataNextPage(report,page);
+    }
+
+    function getReportDataNextPage(report,page)
+    {
+
+        queryModel.loadQuery(report.query);
+        queryModel.getQueryDataNextPage(page, function(data,sql,query){
+                report.query.data.push.apply(report.query.data, data);
+            });
+    }
 
     this.repaintReport = function(report,mode)
     {
@@ -44,9 +57,6 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
     function repaintReport(report,mode)
     {
         var data = report.query.data;
-
-
-
 
                 if (report.reportType == 'grid')
                             {

@@ -528,12 +528,12 @@ this.extendedGridV2 = function(report,mode)
             htmlCode += '</div>';
 
             //Body
-            htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;'+repeatHeight+'" >';
+            htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;'+repeatHeight+'" scrolly="gridGetMoreData(\''+report.id+'\')">';
 
             //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
             //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
 
-            htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data | filter:theFilter | orderBy:getReport(\''+hashedID+'\').predicate:getReport(\''+hashedID+'\').reverse  " style="'+rowStyle+'">';
+            htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data | filter:theFilter | orderBy:getReport(\''+hashedID+'\').predicate:getReport(\''+hashedID+'\').reverse  " style="'+rowStyle+'"  >';
 
             // POPOVER con HTML https://maxalley.wordpress.com/2014/08/19/bootstrap-3-popover-with-html-content/
 
@@ -925,6 +925,20 @@ this.extendedGridV2 = function(report,mode)
     }
 
 
+});
+
+app.directive('scrolly', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            var raw = element[0];
+            element.bind('scroll', function () {
+                if (raw.scrollTop + raw.offsetHeight > raw.scrollHeight) {
+                    scope.$apply(attrs.scrolly);
+                }
+            });
+        }
+    };
 });
 
 /*

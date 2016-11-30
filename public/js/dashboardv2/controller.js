@@ -2275,6 +2275,23 @@ $scope.changeVisibility = function() {
 
     }
 
+    $scope.gridGetMoreData = function(reportID)
+    {
+        for (var i in $scope.selectedDashboard.reports)
+            {
+                if ($scope.selectedDashboard.reports[i].id == reportID)
+                    {
+                        if (!$scope.selectedDashboard.reports[i].lastLoadedPage)
+                            $scope.selectedDashboard.reports[i].lastLoadedPage = 2;
+                            else
+                            $scope.selectedDashboard.reports[i].lastLoadedPage += 1;
+
+                        report_v2Model.getReportDataNextPage($scope.selectedDashboard.reports[i],$scope.selectedDashboard.reports[i].lastLoadedPage);
+                    }
+            }
+    }
+
+
 
 
 
