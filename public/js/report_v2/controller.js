@@ -115,7 +115,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     });
 
     $scope.$on("newReportForDash", function (event, args) {
-        //$scope.initReport();
         $scope.mode = 'add';
         $scope.isForDash = true;
 
@@ -132,7 +131,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.selectedReport.reportType = 'grid';
         $scope.selectedReport.query = {};
         queryModel.initQuery();
-        //queryModel.enableAllElements();
 
 
     });

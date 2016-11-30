@@ -189,8 +189,8 @@ exports.getCounts = function(req,res){
         Reports.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, reportCount) {
             theCounts.reports = reportCount;
             //get all dashboards
-            var Dashboards = connection.model('Dashboards');
-            Dashboards.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, dashCount) {
+            var Dashboardsv2 = connection.model('Dashboardsv2');
+            Dashboardsv2.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, dashCount) {
                 theCounts.dashBoards = dashCount;
                 //get all pages
                 var Pages = connection.model('Pages');
