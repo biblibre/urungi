@@ -1,6 +1,6 @@
 app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, queryService, $routeParams,$timeout,$rootScope,bsLoadingOverlayService, grid, uuid2) {
 
-    $scope.searchModal = 'partials/report/searchModal.html';
+
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.dateModal = 'partials/report/dateModal.html';
     $scope.linkModal = 'partials/report/linkModal.html';
@@ -74,8 +74,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         $scope.queries = [];
         queryModel.detectLayerJoins($scope);
         $scope.processStructure();
-        console.log('load query strucuture');
-    });
+        });
 
     $scope.saveQueryStructure = function() {
         var queryStructure = {};
@@ -263,7 +262,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
     $scope.onDropOnFilter = function (data, event, filter) {
         $scope.gettingData = false;
-        console.log('the filter in controller',filter);
         queryModel.onDropOnFilter(data,event,filter);
     };
 

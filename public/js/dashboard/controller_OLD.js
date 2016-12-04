@@ -9,7 +9,6 @@
 'use strict';
 
 app.controller('dashBoardCtrl', ['$scope', 'reportModel', '$timeout', '$routeParams' ,'connection','dashboardModel', 'bsLoadingOverlayService','report_v2Model', function ($scope, reportModel ,$timeout ,$routeParams, connection,dashboardModel,bsLoadingOverlayService,report_v2Model) {
-    $scope.searchModal = 'partials/report/searchModal.html';
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
     $scope.columnFormatModal = 'partials/report/columnFormatModal.html';

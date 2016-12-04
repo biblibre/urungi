@@ -2,7 +2,7 @@
 
     <div class="container-fluid"  ng-if="layers.length > 1" style="padding:5px;padding-right:30px;">
     <span>Choose a layer:</span>
-    <select id="selectLayer" ng-disabled="columns.length > 0 || order.length > 0 || group.filters" class="form-control" ng-model="selectedLayerID" ng-options="obj._id as obj.name for obj in layers"
+    <select id="selectLayer" ng-disabled="selectedReport.properties.columns.length > 0 || selectedReport.properties.order.length > 0 || selectedReport.properties.filters" class="form-control" ng-model="selectedLayerID" ng-options="obj._id as obj.name for obj in layers"
                                             ng-change="changeLayer(selectedLayerID)"></select>
     </div>
     <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">

@@ -1,5 +1,5 @@
 <div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid branded-border-panel" style="height: 100%;">
-<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
+<div class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initLayers();initForm()">
     <h3 class="pull-left" editable-text="selectedReport.reportName"></h3>
     <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-if="mode == 'edit' && !isForDash" style="margin-left: 5px" tooltip="Click here to save the report changes" tooltip-placement="bottom">Save</a>
 
@@ -17,7 +17,7 @@
         <section  class="content" >
             <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
                             <section class="layer scrollPane">
-                               <wst-widget-properties element="selectedElement" properties="selectedReport.properties" on-change="onChangeElementProperties"></wst-widget-properties>
+                               <wst-widget-properties element="selectedElement" wst-mode="report-designer" properties="selectedReport.properties" on-change="onChangeElementProperties"></wst-widget-properties>
                             </section>
                             <div class="scrollTrack vScrollTrack">
                                 <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>

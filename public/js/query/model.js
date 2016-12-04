@@ -29,8 +29,9 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
     function setSelectedLayer(layer)
     {
-        selectedLayer = layer;
+       selectedLayer = layer;
         selectedLayerID = layer._id;
+        query.selectedLayerID = layer._id;
         rootItem.elements = layer.objects;
         calculateIdForAllElements(rootItem.elements);
     }
@@ -75,8 +76,18 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
     this.loadQuery = function(theQuery)
     {
+
+
         query = theQuery;
-        //detectLayerJoins();
+        query.selectedLayerID = query.layers[0];
+        for (var i in layers)
+                              {
+                                  if (layers[i]._id == query.selectedLayerID)
+                                      {
+                                           // selectedLayer = layers[i];
+                                          setSelectedLayer(layers[i])
+                                      }
+                              }
     }
 
     this.filterStringOptions = [
@@ -646,34 +657,45 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             }
     }
 
+
+    this.layers = function()
+    {
+        return layers;
+    }
+
     this.getLayers = function(done) {
 
-        connection.get('/api/layers/get-layers', {}, function(data) {
-            //$scope.errorMsg = (data.result === 0) ? data.msg : false;
 
-            if (data.result == 1)
-                {
-                    page = data.page;
-                    pages = data.pages;
-                    layers = data.items;
-                    if (selectedLayerID)
+        if (layers.length == 0)
+            {
+                connection.get('/api/layers/get-layers', {}, function(data) {
+                    //$scope.errorMsg = (data.result === 0) ? data.msg : false;
+
+                    if (data.result == 1)
                         {
-                          for (var i in data.items)
-                              {
-                                  if (data.items[i]._id == selectedLayerID)
+                            page = data.page;
+                            pages = data.pages;
+                            layers = data.items;
+                            if (selectedLayerID)
+                                {
+                                  for (var i in data.items)
                                       {
-                                            rootItem.elements = data.items[i].objects;
-                                            selectedLayer = data.items[i];
-                                      }
-                              }
-                        } else {
-                            setSelectedLayer(data.items[0]);
-                        }
+                                          if (data.items[i]._id == selectedLayerID)
+                                              {
+                                                    rootItem.elements = data.items[i].objects;
+                                                   selectedLayer = data.items[i];
 
-                    calculateIdForAllElements(rootItem.elements);
-                    done(layers,selectedLayerID);
-                }
-        });
+                                              }
+                                      }
+                                } else {
+                                    setSelectedLayer(data.items[0]);
+                                }
+
+                            calculateIdForAllElements(rootItem.elements);
+                            done(layers,selectedLayerID);
+                        }
+                });
+            }
     };
 
     function pad(num, size) {
@@ -711,6 +733,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
     function detectLayerJoins()
     {
+        if (layers.length > 0)
+            {
         checkChoosedElements();
 
         generateQuery();
@@ -726,36 +750,49 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 }
             }
 
-            //get the joins for these collections
-            if (selectedLayer.params && selectedLayer.params.joins)
-            for (var j in selectedLayer.params.joins)
+        if (!selectedLayer)
             {
-                for (var c in reportCollections)
-                {
-                    if (selectedLayer.params.joins[j].sourceCollectionID == reportCollections[c])
+                for (var i in layers)
                     {
-                             if (selectableCollections.indexOf(selectedLayer.params.joins[j].sourceCollectionID) == -1)
-                                 selectableCollections.push(selectedLayer.params.joins[j].sourceCollectionID);
+                        if (layers[i]._id == query.selectedLayerID)
+                            {
+                                selectedLayer = layers[i];
 
-                             if (selectableCollections.indexOf(selectedLayer.params.joins[j].targetCollectionID) == -1)
-                                 selectableCollections.push(selectedLayer.params.joins[j].targetCollectionID);
+
+                            }
                     }
-
-                    if (selectedLayer.params.joins[j].targetCollectionID == reportCollections[c])
-                    {
-                        if (selectableCollections.indexOf(selectedLayer.params.joins[j].sourceCollectionID) == -1)
-                            selectableCollections.push(selectedLayer.params.joins[j].sourceCollectionID);
-
-                        if (selectableCollections.indexOf(selectedLayer.params.joins[j].targetCollectionID) == -1)
-                            selectableCollections.push(selectedLayer.params.joins[j].targetCollectionID);
-                    }
-                }
             }
 
-            if (selectableCollections.length == 0)
-                enableAllElements(rootItem.elements);
-            else
-                detectLayerJoins4Elements(rootItem.elements,selectableCollections);
+                    if (selectedLayer.params && selectedLayer.params.joins)
+                    for (var j in selectedLayer.params.joins)
+                    {
+                        for (var c in reportCollections)
+                        {
+                            if (selectedLayer.params.joins[j].sourceCollectionID == reportCollections[c])
+                            {
+                                     if (selectableCollections.indexOf(selectedLayer.params.joins[j].sourceCollectionID) == -1)
+                                         selectableCollections.push(selectedLayer.params.joins[j].sourceCollectionID);
+
+                                     if (selectableCollections.indexOf(selectedLayer.params.joins[j].targetCollectionID) == -1)
+                                         selectableCollections.push(selectedLayer.params.joins[j].targetCollectionID);
+                            }
+
+                            if (selectedLayer.params.joins[j].targetCollectionID == reportCollections[c])
+                            {
+                                if (selectableCollections.indexOf(selectedLayer.params.joins[j].sourceCollectionID) == -1)
+                                    selectableCollections.push(selectedLayer.params.joins[j].sourceCollectionID);
+
+                                if (selectableCollections.indexOf(selectedLayer.params.joins[j].targetCollectionID) == -1)
+                                    selectableCollections.push(selectedLayer.params.joins[j].targetCollectionID);
+                            }
+                        }
+                    }
+
+                    if (selectableCollections.length == 0)
+                        enableAllElements(rootItem.elements);
+                    else
+                        detectLayerJoins4Elements(rootItem.elements,selectableCollections);
+            }
 
     }
 
@@ -768,8 +805,10 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 if (selectableCollections.indexOf(elements[e].collectionID) == -1)
                 {
                     elements[e].enabled = false;
-                } else
+                 } else {
                     elements[e].enabled = true;
+                }
+
             }
             if (elements[e].elements)
                 detectLayerJoins4Elements(elements[e].elements,selectableCollections);
@@ -858,6 +897,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             if (!query.columns)
                  query.columns = [];
             query.columns.push(customObjectData);
+
             }
 
         if (type == 'order') {
@@ -885,6 +925,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
 
         detectLayerJoins();
+
         processStructure(undefined,done);
     };
 
@@ -922,8 +963,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             {
                 if (thereIsAJoinForMe(query.columns[e]) == 0)
                 {
-
-                query.columns.splice(e,1);
+                    query.columns.splice(e,1);
                 }
             }
         }
@@ -1162,7 +1202,9 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
     {
         var found = false;
 
+
         if (!selectedLayer || !selectedLayer.params || !selectedLayer.params.joins) return false;
+
 
         if (collection1 != collection2)
         {
@@ -1258,7 +1300,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             filter.filterLabel2 = '';
         }
         //set the appropiate interface for the choosed filter relation
-        console.log('set the filter type',filterOption.value,filter)
+
     }
 
     this.orderColumn = function(predicate) {

@@ -8,7 +8,7 @@
 
 app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryModel, queryService,reportService,  $routeParams,$timeout,$rootScope, bsLoadingOverlayService, grid, uuid2,c3Charts,report_v2Model,widgetsCommon,$location,PagerService) {
 
-    $scope.searchModal = 'partials/report/searchModal.html';
+
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.dateModal = 'partials/report/dateModal.html';
     $scope.linkModal = 'partials/report/linkModal.html';
@@ -46,8 +46,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.showSQL = false;
 
     $scope.rows = [];
-    $scope.selectedLayerID = queryModel.selectedLayerID;
-    $scope.layers = [];
+    $scope.selectedLayerID = undefined;//queryModel.selectedLayerID();
+    $scope.layers = queryModel.layers();
     $scope.mode = 'preview';
     $scope.isForDash = false;
     $scope.showPrompts = true;
@@ -55,7 +55,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.getSelectedLayer = function()
     {
-        return queryModel.selectedLayerID;
+        return queryModel.selectedLayerID();
     }
 
     //$scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
@@ -164,42 +164,12 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         });
     };
 
-/*
-    $scope.$on("loadQueryStructure", function (event, args) {
-        var theQuery = args.query;
-        //$scope.query = theQuery.query;
-        //$scope.rows = theQuery.rows;
-        //$scope.columns = theQuery.columns;
-        //$scope.order = theQuery.order;
-        //$scope.filters = theQuery.filters;
-        //$scope.dataSources = theQuery.dataSources;
-        $scope.selectedLayerID = theQuery.selectedLayerID;
-        $scope.changeLayer($scope.selectedLayerID);
-        //$scope.queries = [];
-        queryModel.detectLayerJoins($scope);
-        $scope.processStructure();
-        console.log('load query strucuture');
-    });
-*/
 
     $scope.saveReportStructure = function() {
         var clonedReport = $scope.selectedReport;
         reportService.addReport(clonedReport);
     }
-/*
-    $scope.saveQueryStructure = function() {
-        var queryStructure = {};
-        queryStructure.query = $scope.query;
-        queryStructure.rows = $scope.rows;
-        queryStructure.columns = $scope.columns;
-        queryStructure.order = $scope.order;
-        queryStructure.filters = $scope.filters;
-        queryStructure.dataSources = $scope.dataSources;
-        queryStructure.selectedLayerID = $scope.selectedLayerID;
-        queryService.addQuery(queryStructure);
 
-    }
-*/
     $scope.stringVariables = [
         {value:"toUpper",label:"To Upper"},
         {value:"toLower",label:"To Lower"}
@@ -209,11 +179,16 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             $timeout(function(){$scope.showIntro()}, 1000);
         }
 
-    $scope.initForm = function() {
+    $scope.initLayers =function()
+    {
         queryModel.getLayers( function(layers,selectedLayerID){
-            $scope.layers = layers;
-            $scope.selectedLayerID = selectedLayerID;
+            $scope.layers = queryModel.layers();
+            $scope.selectedLayerID = queryModel.selectedLayerID();
         });
+    }
+
+    $scope.initForm = function() {
+
 
                 $scope.selectedReport = {};
                 $scope.selectedReport.draft = true;
@@ -239,7 +214,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport.properties.columnLineWidht = 0;
 
                 $scope.selectedReport.reportType = 'grid';
-                $scope.selectedLayerID = queryModel.selectedLayerID;
+                $scope.selectedLayerID = queryModel.selectedLayerID();
                 $scope.mode = 'add';
                 queryModel.initQuery();
 
@@ -267,9 +242,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                             $scope.showOverlay('OVERLAY_reportLayout');
                             $scope.selectedReport = report;
                             $scope.mode = 'edit';
-                            queryModel.loadQuery(report.query);
-                            queryModel.detectLayerJoins();
                             report_v2Model.getReport(report,'reportLayout',$scope.mode,function() {
+                                $scope.selectedLayerID = queryModel.selectedLayerID();
                                 $scope.hideOverlay('OVERLAY_reportLayout');
                             });
 
@@ -316,11 +290,12 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             $scope.pager = PagerService.GetPager($scope.reports.items.length, data.page,10,data.pages);
         });
     };
-
+/*
     $scope.getLayers = function() {
-        queryModel.getLayers();
-    };
+        $scope.layers = queryModel.Layers();
 
+    };
+*/
     $scope.IntroOptions = {
             //IF width > 300 then you will face problems with mobile devices in responsive mode
                 steps:[
@@ -427,8 +402,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.changeLayer = function(selectedLayerID)
     {
-        $scope.selectedLayer = selectedLayerID;
+        //$scope.selectedLayer = selectedLayerID;
         queryModel.changeLayer(selectedLayerID);
+        $scope.selectedLayerID = queryModel.selectedLayerID();
     }
 
     $scope.detectLayerJoins = function()
@@ -704,8 +680,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.filterChanged = function(elementID,values)
     {
 
-        //console.log('the filter has changed...');
-        $scope.processStructure();
+       $scope.processStructure();
         /*for (var r in $scope.selectedDashboard.reports)
                 {
                     for (var f in $scope.selectedDashboard.reports[r].query.groupFilters)
@@ -719,7 +694,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                                     $scope.selectedDashboard.reports[r].query.groupFilters[f].dateCustomFilterLabel = values.dateCustomFilterLabel;
                                     $scope.selectedDashboard.reports[r].query.groupFilters[f].filterText2 = values.filterText2;
 
-                                    console.log('the prompt has changed 2...');
                                     getQueryData(r,function(){
                                         rebuildCharts();
                                         rebuildGrids();
@@ -806,7 +780,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         if (filter.filterPrompt == true)
             {
             filter.filterPrompt = false;
-                console.log('deactivated prompt',filter);
+
             }
         else
             filter.filterPrompt = true;
@@ -1198,11 +1172,10 @@ $scope.changeColumnColor = function(color)
 
     $scope.hideColumn = function(column,hidden)
     {
-        console.log('the column',column);
         column['hidden'] = hidden;
         queryModel.hideColumn(column.elementID,hidden);
         $scope.getDataForPreview();
-        console.log('the column',column);
+
     }
 
 

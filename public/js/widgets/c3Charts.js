@@ -4,12 +4,11 @@ app.service('c3Charts' , function () {
 this.rebuildChart = function(report)
     {
         var theValues = [];
+        var theTypes = {};
         var theNames = {};
         var query = report.query;
         var chart = report.properties.chart;
         var reportID = report.id;
-
-
 
         var axisField = '';
         if (chart.dataAxis)
@@ -101,6 +100,7 @@ this.rebuildChart = function(report)
             {
                 theValues.push(chart.dataColumns[i].id);
                 var valueName = chart.dataColumns[i].id;
+                theTypes[chart.dataColumns[i].id] = chart.dataColumns[i].type;
 
 
             }
@@ -178,6 +178,7 @@ this.rebuildChart = function(report)
                                         x: axisField,
                                         value: theValues
                                     },
+                                    types: theTypes,
                                     names: theNames
                                 },
                                 axis: {
@@ -357,15 +358,26 @@ this.rebuildChart = function(report)
 
     this.changeChartColumnColor = function(chart,column,color)
     {
-        var column = "'"+column.id+"'";
-        chart.chartCanvas.data.colors[column] = d3.rgb('#ff0000').darker(1)
+        console.log('changing data color',column.id,d3.rgb('#ff0000').darker(1),chart);
+        /* var column = "'"+column.id+"'";
+        chart.chartCanvas.data.colors[column] = d3.rgb('#ff0000').darker(1);
+        chart.chartCanvas.data.colors[column] = '#00ff00';
+        */
+        chart.chartCanvas.data.colors[column.id] = '#ff0000';//d3.rgb('#ff0000').darker(1);
+        chart.chartCanvas.flush();
+        column.color = d3.rgb('#ff0000').darker(1);
+        //repaintChart();
+        console.log('changged',chart);
+
     }
 
-    this.getChartHTML = function (theChartID,mode)
+    this.getChartHTML = function (report,theChartID,mode)
     {
         var html = '';
-        if (mode == 'design')
-            html = '<c3chart page-block  bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="'+theChartID+'" ndType="c3Chart" id="'+theChartID+'" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']">';
+
+        if (mode == 'edit')
+            //html = '<c3chart page-block  bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="'+theChartID+'" ndType="c3Chart" id="'+theChartID+'" drop="onDropQueryElement($data, $event, \''+theChartID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']">';
+            html = '<c3chart page-block ndType="c3Chart" bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="CHART_'+theChartID+'" id="CHART_'+theChartID+'" >';
             else
             html = '<c3chart bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_'+theChartID+'" bindto-id="CHART_'+theChartID+'" id="CHART_'+theChartID+'" >';
             /*
@@ -375,7 +387,6 @@ this.rebuildChart = function(report)
                         '</chart-axis-x>'+
                     '</chart-axis>'+*/
             html = html +       '</c3chart>';
-
         return html;
     }
 

@@ -26,6 +26,7 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
         showOverlay(parentDiv);
         var isLinked = false;
         queryModel.loadQuery(report.query);
+        queryModel.detectLayerJoins();
         queryModel.getQueryData(report.query, function(data,sql,query){
                     report.query.data = data;
                     report.parentDiv = parentDiv;
@@ -90,7 +91,7 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
                                             report.properties.chart.type = 'pie';
                                         if (report.reportType == 'gauge')
                                             report.properties.chart.type = 'gauge';
-                                generatec3Chart(report);
+                                generatec3Chart(report,mode);
                             }
                     if (report.reportType == 'indicator')
                         {
@@ -151,12 +152,14 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
     }
 
 
-    function generatec3Chart(report)
+    function generatec3Chart(report,mode)
     {
-          var htmlCode = c3Charts.getChartHTML(report.id);
 
-        //var htmlCode = c3Charts.getChartHTML(report.properties.chart.chartID);
-                                var el = document.getElementById(report.parentDiv);
+        var reportID = report.id;
+
+        var htmlCode = c3Charts.getChartHTML(report,reportID,mode);
+
+        var el = document.getElementById(report.parentDiv);
 
                                 if (el)
                                 {

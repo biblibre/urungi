@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('wstWidgetProperties', function($compile,icons) {
+app.directive('wstWidgetProperties', function($compile,icons,c3Charts) {
 return {
     transclude: true,
     scope: {
@@ -8,7 +8,8 @@ return {
         description: '@',
         element: '=',
         properties: '=',
-        dashboard: '='
+        dashboard: '=',
+        wstMode: '@'
     },
 
    templateUrl: "partials/widgets/common.html",
@@ -375,6 +376,17 @@ return {
             return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
     }
 
+    $scope.changeChartColumnType = function(column,type)
+    {
+        column.type = type;
+        c3Charts.transformChartColumnType($scope.properties.chart,column);
+    }
+
+    $scope.changeChartColumnColor = function(chart,column,color)
+    {
+        c3Charts.changeChartColumnColor($scope.properties.chart,column,hexToRgb(color));
+    }
+
     function getElementProperties()
     {
         //$scope.tabs.selected = 'settings';
@@ -395,7 +407,6 @@ return {
                         $scope.fontColor = 'Transparent';
                     }
 
-
                 $scope.objectHeight = parseInt($scope.selectedElement.css('height'));
 
                 $scope.objectMargin = parseInt($scope.selectedElement.css('margin'));
@@ -409,9 +420,6 @@ return {
                 $scope.objectPaddingRight= parseInt($scope.selectedElement.css('padding-right'));
                 $scope.objectPaddingTop = parseInt($scope.selectedElement.css('padding-top'));
                 $scope.objectPaddingBottom = parseInt($scope.selectedElement.css('padding-bottom'));
-
-
-
 
                 var elementType = $scope.selectedElement.attr('ndType');
 
@@ -464,8 +472,11 @@ return {
                 if (elementType === 'c3Chart')
                 {
 
-                    var chartID = theElement.attr('bindto-id');
-                    for (var i in $scope.charts)
+                    var chartID = $scope.selectedElement.attr('bindto-id');
+
+                    $scope.selectedChart = $scope.properties;
+
+                    /*for (var i in $scope.properties.)
                     {
                         if ($scope.charts[i] != undefined)
                             if ($scope.charts[i].chartID == chartID)
@@ -473,7 +484,7 @@ return {
                                     $scope.selectedChart = $scope.charts[i];
                                     $scope.objectHeight = $scope.selectedChart.height;
                                 }
-                    }
+                    }*/
                 }
 
                 if (elementType === 'tabsContainer')

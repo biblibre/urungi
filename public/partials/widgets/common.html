@@ -1,22 +1,9 @@
 <div>
-            <div ng-if="selectedElementType != 'page'">
+            <div ng-if="selectedElementType != 'page' && wstMode != 'report-designer'">
                 <button class="btn btn-danger" ng-click="deleteSelected()"><i class="fa fa-trash"></i></button>
             </div>
             <div >
                 <!--background color-->
-                <!--<div class="btn-group" style="width:100%">
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (BackgroundColor == '#ffffff' || BackgroundColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': BackgroundColor}">Background Color</button>
-                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
-                                                        <div class="iconpicker-items">
-                                                            <a role="button" ng-click="changeBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
-                                                        </div></div></div></div>
-                                                    </div>
-                </div>-->
-
 
                 <div class="form-group designer_form_group row">
                             <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Background color</label>
@@ -24,104 +11,26 @@
                                 <wst-color ng-model="backgroundColor"></wst-color>
                             </div>
                     </div>
-                <!--<div class="input-group">
-								<input type="text" class="form-control colorpicker colorpicker-element" data-format="hex" ng-model="backgroundColor">
-
-								<div class="input-group-addon" data-selected="fa-car" data-toggle="dropdown" >
-									<i class="color-preview" style="background-color: {{backgroundColor}};"></i>
-								</div>
-                                                        <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
-                                                        <div class="iconpicker-items">
-                                                            <a role="button" ng-click="changeBackgroundColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
-                                                        </div></div></div></div></div>
-							</div>-->
-            </div>
-                    <div class="form-group designer_form_group row">
+                </div>
+                <div class="form-group designer_form_group row">
                             <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Background image</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
                                 <wst-image ng-model="backgroundImage"></wst-image>
                             </div>
-                    </div>
+                </div>
 
     <!--background image-->
 
-    <!--
-        <div >
-                <div class="btn-group" style="width:100%" ng-init="getCatalogImages()">
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" >Background Image</button>
-                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px" aria-expanded="false">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
-                                                        <div class="iconpicker-items">
-                                                            <a role="button" ng-click="changeBackgroundImage(catalogImage)" class="iconpicker-item" ng-repeat="catalogImage in catalogImages" style="background-image: url('{{catalogImage.url}}');width: 50px;height: 50px;background-repeat:no-repeat;background-position: center center;"></a>
-
-                                                        </div></div></div></div>
-                                                    </div>
-                </div>
-            </div>-->
-
-
-
             <div class="row" style="width:200px;text-align: center;padding: 10px;padding-left:15px;" >
-<!--
-                    <div class="form-group designer_form_group row">
-                        <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Blur</label>
-                        <div class="col-md-8 col-sm-8 col-xs-8">
-                            <input class="sliderInput" ng-model="imageFilters.blur" type="range" step="1" min="0" max="10" value="0" ng-change="changeBackgroundFilter()">
-                        </div>
-                    </div>
-                    <div class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Grayscale</label>
-                            <div class="col-md-8 col-sm-8 col-xs-8">
-                               <input class="sliderInput" ng-model="imageFilters.grayscale" type="range" step="1" min="0" max="100" value="0" ng-change="changeBackgroundFilter()">
-                            </div>
-
-                    </div>
-                    <div class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Sepia</label>
-                            <div class="col-md-8 col-sm-8 col-xs-8">
-                                <input class="sliderInput" ng-model="imageFilters.sepia" type="range" step="1" min="0" max="100" value="0" ng-change="changeBackgroundFilter()">
-                            </div>
-                    </div>
-                    <div class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Brightness</label>
-                            <div class="col-md-8 col-sm-8 col-xs-8">
-                                <input class="sliderInput" ng-model="imageFilters.brightness" type="range" step="1" min="0" max="200" value="100" ng-change="changeBackgroundFilter()">
-                            </div>
-                    </div>
-                    <div class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label">Contrast</label>
-                            <div class="col-md-8 col-sm-8 col-xs-8">
-                                <input class="sliderInput" ng-model="imageFilters.contrast" type="range" step="1" min="0" max="200" value="100" ng-change="changeBackgroundFilter()">
-                            </div>
-                    </div>
-                -->
                     <div class="form-group designer_form_group row">
                             <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Opacity</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
                                 <input class="sliderInput" ng-model="imageFilters.opacity" type="range" step="1" min="0" max="10" value="10" ng-change="changeOpacity()">
                             </div>
                     </div>
-
                 </div>
-
-
-
             <div >
                 <!--font color-->
-                <!--<div ng-if="selectedElementType != 'page'" class="btn-group" style="width:100%">
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" ng-style="{color: (FontColor == '#ffffff' || FontColor == '#FFFFFF') ? '#000000' : '#ffffff','background-color': FontColor}">Font Color</button>
-                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
-                                                        <div class="iconpicker-items">
-                                                            <a role="button" ng-click="changeFontColor(color)" class="iconpicker-item" ng-repeat="color in colors" style="background-color: {{color}}"></a>
-                                                        </div></div></div></div></div>
-                </div>-->
     <div class="form-group designer_form_group row">
                             <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Font color</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
@@ -130,80 +39,12 @@
                     </div>
             </div>
 <!--Hidden in-->
-            <!--<div >
-
-                <div class="btn-group" style="width:100%">
-                                                    <button type="button" class="btn btn-primary iconpicker-component" style="height:32px;width:155px;" >Hidden in</button>
-                                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="color:#ffffff;height:32px"  aria-expanded="false">
-                                                        <span class="caret"></span>
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <ul class="dropdown-menu" role="menu" style="color: #000000;padding: 5px;">
-                                                            <li><label>
-                                                                <input type="checkbox" ng-model="hiddenLG" ng-change="changeVisibility()">
-                                                                Large Desktop</label>
-                                                            </li>
-                                                            <li><label>
-                                                                <input type="checkbox" ng-model="hiddenMD" ng-change="changeVisibility()">
-                                                                Desktop
-                                                            </label></li>
-                                                            <li><label>
-                                                                <input type="checkbox" ng-model="hiddenSM" ng-change="changeVisibility()">
-                                                                Tablet
-                                                            </label></li>
-                                                            <li><label>
-                                                                <input type="checkbox" ng-model="hiddenXS" ng-change="changeVisibility()">
-                                                                Phone
-                                                            </label></li>
-                                                            <li><label>
-                                                                <input type="checkbox" ng-model="hiddenPrint" ng-change="changeVisibility()">
-                                                                Printer
-                                                            </label></li>
-                                                        </ul>
-
-                </div>
-            </div>-->
     <div ng-if="selectedElementType != 'page'" class="form-group designer_form_group row">
                             <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Hidden in</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
                                 <wst-hidden ng-model="hiddenIn" on-change="changeHiddenIn"></wst-hidden>
                             </div>
                     </div>
-
-
-
-<!--
-            <div >
-                    <div class="btn-group" style="width:100%" >
-
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="width:180px;text-align:right;">
-                            Hidden in  <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" style="color: #000000;padding: 5px;">
-                            <li><label>
-                                <input type="checkbox" ng-model="hiddenLG" ng-change="changeVisibility()">
-                                Large Desktop</label>
-                            </li>
-                            <li><label>
-                                <input type="checkbox" ng-model="hiddenMD" ng-change="changeVisibility()">
-                                Desktop
-                            </label></li>
-                            <li><label>
-                                <input type="checkbox" ng-model="hiddenSM" ng-change="changeVisibility()">
-                                Tablet
-                            </label></li>
-                            <li><label>
-                                <input type="checkbox" ng-model="hiddenXS" ng-change="changeVisibility()">
-                                Phone
-                            </label></li>
-                            <li><label>
-                                <input type="checkbox" ng-model="hiddenPrint" ng-change="changeVisibility()">
-                                Printer
-                            </label></li>
-                        </ul>
-                    </div>
-                </div>-->
-
 
 
         <div ng-if="selectedElementType != 'page'" class="form-group designer_form_group row">
@@ -328,6 +169,9 @@
     </v-pane-content>
   </v-pane>
 
+
+
+
   <v-pane ng-if="selectedElementType == 'c3Chart'">
       <v-pane-header>
       Chart Elements
@@ -337,18 +181,18 @@
             <div><strong>   Axis</strong></div>
             <table>
                 <tr>
-                    <td style="width:80%;overflow:hidden;"> {{selectedChart.dataAxis.elementLabel}}</td>
+                    <td style="width:80%;overflow:hidden;"> {{selectedChart.xkeys[0].elementLabel}}</td>
                     <td style="width:10%"></td>
                     <td style="width:10%"></td>
                 </tr>
              </table>
             <div><strong>   Data</strong></div>
             <table>
-                <tr ng-repeat="column in selectedChart.dataColumns">
+                <tr ng-repeat="column in selectedChart.ykeys">
                     <td style="width:80%;overflow:hidden;"> {{column.elementLabel}}</td>
-                    <td style="width:10%"><button ng-if="selectedChart.type != 'pie' && selectedChart.type != 'donut'" class="btn btn-danger btn-xs" ng-click="deleteChartColumn(selectedChart,column)"><i class="fa fa-trash"></i></button></td>
-                    <td style="width:10%"><button ng-if="selectedChart.type != 'pie' && selectedChart.type != 'donut'" class="btn btn-info btn-xs" ng-click="changeChartColumnType(selectedChart,column)"><i class="fa fa-bar-chart"></i></button></td>
-                    <td style="width:10%"><button class="btn btn-default btn-xs" ng-click="changeChartColumnColor(selectedChart,column,'#ff0000')"><i class="fa fa-sun-o"></i></button></td>
+                    <td style="width:10%"><!--<button ng-if="selectedChart.type != 'pie' && selectedChart.type != 'donut'" class="btn btn-danger btn-xs" ng-click="deleteChartColumn(selectedChart,column)"><i class="fa fa-trash"></i></button>--></td>
+                    <td style="width:10%"><!--<button ng-if="selectedChart.type != 'pie' && selectedChart.type != 'donut'" class="btn btn-info btn-xs" ng-click="changeChartColumnType(selectedChart,column)"><i class="fa fa-bar-chart"></i></button>--></td>
+                    <td style="width:10%"><!--<button class="btn btn-default btn-xs" ng-click="changeChartColumnColor(selectedChart,column,'#ff0000')"><i class="fa fa-sun-o"></i></button>--></td>
                 </tr>
              </table>
     </v-pane-content>

@@ -8,19 +8,16 @@
 
         <div class="row">
             <div class="col-md-6">
-
                 <div class="form-group">
                     <label for="field-3" class="control-label">Runtime Filter Label</label>
 
                     <input type="text" class="form-control" id="field-3"  ng-model="selectedFilter.promptTitle">
                 </div>
-
             </div>
-
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="field-3" class="control-label"></label>
-                    <div class="checkbox popover-primary ng-scope" popover-trigger="mouseenter" popover-placement="top" popover-title="Answer required" popover="Select if you want the user have to enter an answer before executing the report.">
+                    <div class="checkbox popover-primary ng-scope" popover-trigger="mouseenter" popover-placement="top" popover-title="Answer required" popover="Select if you want the user to enter an answer before executing the report.">
                         <label>
                             <input type="checkbox" ng-model="selectedFilter.promptMandatory">
                             Answer required (mandatory filter)
@@ -39,7 +36,6 @@
             <div class="col-md-12">
                         <div class="form-group no-margin">
                             <label for="field-7" class="control-label">Filter Instructions</label>
-
                             <textarea ng-model="selectedFilter.promptInstructions" class="form-control autogrow" id="field-7"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
                         </div>
             </div>
