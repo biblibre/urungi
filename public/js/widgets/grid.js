@@ -593,10 +593,8 @@ this.extendedGridV2 = function(report,mode)
 
                 if (column.signals)
                 {
-                    //htmlCode += "<style>.customStyle1_"+i+" {color:#FF9944;} .customStyle2_"+i+" {color:blue;}</style>"
                     var theStyle = '<style>';
                     var theClass = '';
-                    console.log('signals',column, column.signals);
                     for (var s in column.signals)
                     {
 
@@ -741,7 +739,6 @@ this.extendedGridV2 = function(report,mode)
         for (var row in $scope.theData[hashedID])
         {
             var theRow = $scope.theData[hashedID][row];
-            console.log('el valor',elementName,JSON.stringify(theRow));
             if (theRow[elementName])
                 if (theRow[elementName] != undefined)
                 {
@@ -760,7 +757,6 @@ this.extendedGridV2 = function(report,mode)
         {
             var theRow = $scope.theData[hashedID][row];
 
-            console.log('el valor',elementName,JSON.stringify(theRow));
             if (theRow[elementName])
                 if (theRow[elementName] != undefined)
                 {
@@ -779,7 +775,6 @@ this.extendedGridV2 = function(report,mode)
         {
             var theRow = $scope.theData[hashedID][row];
 
-            console.log('el valor',elementName,JSON.stringify(theRow));
             if (theRow[elementName])
                 if (theRow[elementName] != undefined)
                 {
@@ -802,7 +797,6 @@ this.extendedGridV2 = function(report,mode)
         {
             var theRow = $scope.theData[hashedID][row];
 
-            console.log('el valor',elementName,JSON.stringify(theRow));
             if (theRow[elementName])
                 if (theRow[elementName] != undefined)
                 {
@@ -936,74 +930,3 @@ app.directive('scrolly', function () {
         }
     };
 });
-
-/*
-app.directive('gridProperties',['$compile','colors','grid', function($compile,colors,grid) {
-return {
-    transclude: true,
-    scope: {
-        gridID: '@',
-        onChange: '=',
-        grid: '='
-    },
-
-   templateUrl: "partials/widgets/gridProperties.html",
-    // append
-    replace: true,
-    // attribute restriction
-    restrict: 'E',
-    // linking method
-    link: function($scope, element, attrs) {
-    $scope.colors = colors.colors;
-
-
-
-        switch (attrs['type']) {
-            case "text":
-                // append input field to "template"
-            case "select":
-                // append select dropdown to "template"
-        }
-
-
-      $scope.getPrompt = function(elementID)
-        {
-        for (var p in $scope.prompts)
-            {
-            if ($scope.prompts[p].elementID == elementID)
-                return $scope.prompts[p];
-            }
-        }
-
-      $scope.promptChanged = function(elementId) {
-	        $scope.onChange(elementId,$scope.selectedValue);
-        };
-
-      $scope.changeHeaderBackgroundColor = function(color) {
-        $scope.grid.headerBackgroundColor = color;
-        $('#HEADER_'+$scope.grid.id).css({'background-color': color});
-      }
-
-      $scope.changeRowHeight = function(newHeight)
-      {
-        //$('#ROW_'+$scope.grid.id).css({'height': newHeight});
-          console.log('applied');
-
-          $scope.grid.properties.rowHeight = newHeight;
-
-          grid.refresh($scope.grid.dataColumns,$scope.grid.id,$scope.grid.queryReference,true,$scope.grid.properties);
-      }
-
-      $scope.changeCellBorderColor = function(newColor)
-      {
-          $scope.grid.properties.cellBorderColor = newColor;
-          grid.refresh($scope.grid.dataColumns,$scope.grid.id,$scope.grid.queryReference,true,$scope.grid.properties);
-      }
-    }
-  }
-
-
-
-}]);
-
-*/

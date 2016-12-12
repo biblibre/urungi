@@ -36,14 +36,10 @@ app.directive('ndDropZone', function($rootScope) {
                 });
 
                 this.on('addedfile', function(file) {
-                    /*scope.$apply(function(){
-                     console.log(file);
-                     //scope.files.push({file: 'added'});
-                     });*/
                 });
 
                 this.on('drop', function(file) {
-                    console.log('file');
+                    //console.log('file');
                 });
             }
         });
@@ -157,7 +153,6 @@ app.directive('ndFunnel', function($timeout) {
                 };
 
                 scope.dropCallback = function(event, ui, categoryTo) {
-                    //console.log(ui.draggable.scope().item);
                     draggedTo = categoryTo;
 
                     $timeout(function () {

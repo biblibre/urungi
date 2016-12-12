@@ -269,7 +269,7 @@ function generateFindFields(req, id)
 
         mandatoryFilters.push(companyField);
     }
-    console.log({$and: mandatoryFilters});
+
 
     return  {"$and": mandatoryFilters};
 

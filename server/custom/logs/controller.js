@@ -25,6 +25,6 @@ exports.addToCustomLog = function(user, relationCollection, relationID, action, 
     if (text) log['text'] = text;
 
     Logs.create(log, function(err, item) {
-        console.log(item);
+        //console.log(item);
     });
 };

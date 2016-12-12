@@ -26,9 +26,8 @@ return {
     $scope.colors = colors.colors;
 
     $scope.$watch('ngModel', function(){
-          //console.log('this is the selected color',$scope.ngModel);
-            $scope.selectedColor = $scope.ngModel;
-            //$scope.onChange($scope.selectedColor);
+          $scope.selectedColor = $scope.ngModel;
+
       });
 
      $scope.changeColor = function(color)

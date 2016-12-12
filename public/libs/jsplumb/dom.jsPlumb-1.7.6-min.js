@@ -1636,11 +1636,7 @@
             }
             this.params.events["drag"]({el:this.el, pos:cPos, e:e, drag:this});
 
-            /* test to see if the parent needs to be scrolled
-             if (scroll) {
-             var pnsl = dragEl.parentNode.scrollLeft, pnst = dragEl.parentNode.scrollTop;
-             console.log("scroll!", pnsl, pnst);
-             }*/
+
         };
         this.destroy = function() {
             this.params.unbind(this.el, "mousedown", this.downListener);
@@ -1649,9 +1645,6 @@
             this.downListener = null;
             this.upListener = null;
             this.moveListener = null;
-            //this.params = null;
-            //this.el = null;
-            //dragEl = null;
         };
 
         // init:register mousedown, and perhaps set a filter
@@ -2307,7 +2300,7 @@
             if (exports.logEnabled && typeof console != "undefined") {
                 try {
                     var msg = arguments[arguments.length - 1];
-                    console.log(msg);
+
                 }
                 catch (e) {
                 }
@@ -9799,9 +9792,8 @@
         };
 
         var dumpSegmentsToConsole = function () {
-            console.log("SEGMENTS:");
             for (var i = 0; i < segments.length; i++) {
-                console.log(segments[i].type, segments[i].getLength(), segmentProportions[i]);
+                //console.log(segments[i].type, segments[i].getLength(), segmentProportions[i]);
             }
         };
 

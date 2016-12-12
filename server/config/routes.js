@@ -84,7 +84,6 @@ function authenticate(passport, Users, req, res, next)
         if (err) { return next(err); }
 
         if (!user) {
-            console.log('no user');
                 if (global.logFailLogin == true)
                     saveToLog(req, 'User fail login: '+info.message,'', 102);
                 res.send(401, info.message);

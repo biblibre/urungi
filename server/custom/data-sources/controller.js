@@ -93,7 +93,6 @@ exports.getEntities = function(req,res)
             }
             if (result.item.type == 'MySQL' || result.item.type == 'POSTGRE' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'BIGQUERY')
             {
-                console.log(result.item.type+' entities');
                 switch(result.item.type) {
                     case 'MySQL': var db = require('../../core/db/mysql.js');
                         break;
@@ -112,7 +111,6 @@ exports.getEntities = function(req,res)
                     password: result.item.params[0].connection.password,
                     database: result.item.params[0].connection.database
                 };
-                console.log(JSON.stringify(data));
                 db.testConnection(data, function(result) {
                     serverResponse(req, res, 200, result);
                 });
@@ -157,7 +155,6 @@ exports.testConnection = function(req,res) {
     }
     if (req.body.type == 'ORACLE')
     {
-        console.log('ORACLE test connection');
         var oracle = require('../../core/db/oracle.js');
 
         oracle.testConnection(req.body, function(result) {
@@ -167,7 +164,6 @@ exports.testConnection = function(req,res) {
     }
     if (req.body.type == 'MSSQL')
     {
-        console.log('MSSQL test connection');
         var mssql = require('../../core/db/mssql.js');
 
         mssql.testConnection(req.body, function(result) {
@@ -177,7 +173,6 @@ exports.testConnection = function(req,res) {
     }
     if (req.body.type == 'BIGQUERY')
     {
-        console.log('BIG QUERY test connection');
         var bigQuery = require('../../core/db/bigQuery.js');
 
         bigQuery.testConnection(req.body, function(result) {

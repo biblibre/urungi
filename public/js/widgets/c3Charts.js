@@ -91,8 +91,6 @@ this.rebuildChart = function(report)
         }
 
 
-       // console.log('the data columns ',chart.dataColumns);
-
 
         for (var i in chart.dataColumns)
         {
@@ -193,18 +191,12 @@ this.rebuildChart = function(report)
                         }
                 }
             chart.chartCanvas = chartCanvas;
-            //console.log('chart canvas assigned',chart,query);
+
         }
 
         if (chart.type != 'line')
         for (var c in chart.dataColumns)
         {
-            //if (chart.dataColumns[c].type != 'line')
-               // {
-                   //chart.chartCanvas.transform(chart.dataColumns[c].type, chart.type);
-
-               // }
-
 
         }
     }
@@ -358,16 +350,10 @@ this.rebuildChart = function(report)
 
     this.changeChartColumnColor = function(chart,column,color)
     {
-        console.log('changing data color',column.id,d3.rgb('#ff0000').darker(1),chart);
-        /* var column = "'"+column.id+"'";
-        chart.chartCanvas.data.colors[column] = d3.rgb('#ff0000').darker(1);
-        chart.chartCanvas.data.colors[column] = '#00ff00';
-        */
+
         chart.chartCanvas.data.colors[column.id] = '#ff0000';//d3.rgb('#ff0000').darker(1);
         chart.chartCanvas.flush();
         column.color = d3.rgb('#ff0000').darker(1);
-        //repaintChart();
-        console.log('changged',chart);
 
     }
 

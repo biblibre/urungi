@@ -10,7 +10,6 @@ var controller = new RolesController(Roles);
 
 
 exports.RolesCreate = function(req,res){
-    console.log('creating role',JSON.stringify(req.body));
     req.query.trash = true;
     req.user = {};
     req.user.companyID = 'COMPID';

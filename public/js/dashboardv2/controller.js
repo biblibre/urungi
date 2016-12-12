@@ -932,294 +932,17 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
 $scope.onChangeElementProperties = function()
     {
-        //console.log('properties changed',$scope.selectedElement);
-        //$scope.selectedElement
-    }
-
-/*
-    $scope.onDropOnRepeater = function (data, event, repeaterCode) {
-        event.stopPropagation();
-        var customObjectData = data['json/custom-object'];
-
-        if (customObjectData.objectType == 'queryColumn') {
-
-                for (var i in $scope.repeaters)
-                {
-                    if ($scope.repeaters[i].id == repeaterCode)
-                        {
-
-                        if ($scope.repeaters[i].query == undefined)
-                            $scope.repeaters[i].query = customObjectData.queryName;
-
-                            for (var q in $scope.queries)
-                            {
-                                if ($scope.queries[q].name == customObjectData.queryName)
-                                    //var queryScopeReference = 'queries['+q+'].data';
-                                    {
-                                    var queryScopeReference = $scope.queries[q];
-                                    $scope.repeaters[i].queryReference = $scope.queries[q];
-                                    }
-                            }
-
-                                if ($scope.repeaters[i].query == customObjectData.queryName)
-                                {
-
-                                        $scope.repeaters[i].dataColumns.push({elementName:customObjectData.elementName,
-                                                            queryName:customObjectData.queryName,
-                                                            elementLabel:customObjectData.objectLabel,
-                                                            id:customObjectData.name,
-                                                            type:'line',
-                                                            color:'#000000'});
-
-
-                                        grid.simpleGrid($scope.repeaters[i].dataColumns,repeaterCode,queryScopeReference,true,$scope.repeaters[i].properties,function(){
-
-
-                                        });
-
-                                }
-                        }
-                }
-
-        }
 
     }
-*/
-/*
-    $scope.changeHeight = function(newHeight)
-    {
-        if ($scope.selectedElementType  == 'c3Chart')
-           {
-            if ($scope.selectedChart)
-            {
-            $scope.selectedChart.chartCanvas.resize({height:newHeight});
-            $scope.selectedChart.height = newHeight;
-            }
-            } else {
-                    if (newHeight == '')
-                        $scope.selectedElement.css("height","");
-                        else
-                        $scope.selectedElement.css("height",newHeight);
 
-            }
-    }
-
-    $scope.changePadding = function(newPadding)
-    {
-            if (newPadding == '')
-                        $scope.selectedElement.css("padding","");
-                        else
-                        $scope.selectedElement.css("padding",newPadding);
-    }
-
-    $scope.changeMargin = function(newMargin)
-    {
-            if (newMargin == '')
-                        $scope.selectedElement.css("margin","");
-                        else
-                        $scope.selectedElement.css("margin",newMargin);
-    }
-
-    $scope.changeCSS = function(cssProperty,value)
-    {
-                if (cssProperty == '')
-                        $scope.selectedElement.css(cssProperty,"");
-                        else
-                        $scope.selectedElement.css(cssProperty,value);
-    }
-
-
-
-
-    $scope.getElementProperties = function(theElement)
-    {
-        $scope.tabs.selected = 'settings';
-        $scope.selectedElementType = '';
-
-        $scope.selectedElement = theElement;
-
-        if ($scope.selectedElement)
-            {
-                if ($scope.selectedElement.css('background-color') != 'rgba(0, 0, 0, 0)') {
-                        $scope.BackgroundColor = rgb2hex($scope.selectedElement.css('background-color'));
-                    } else {
-                        $scope.BackgroundColor = 'Transparent';
-                    }
-
-                if ($scope.selectedElement.css('color') != 'rgba(0, 0, 0, 0)') {
-                        $scope.FontColor = rgb2hex($scope.selectedElement.css('color'));
-                    } else {
-                        $scope.FontColor = 'Transparent';
-                    }
-
-
-                $scope.objectHeight = parseInt($scope.selectedElement.css('height'));
-
-                $scope.objectMargin = parseInt($scope.selectedElement.css('margin'));
-                $scope.objectMarginLeft = parseInt($scope.selectedElement.css('margin-left'));
-                $scope.objectMarginRight= parseInt($scope.selectedElement.css('margin-right'));
-                $scope.objectMarginTop = parseInt($scope.selectedElement.css('margin-top'));
-                $scope.objectMarginBottom = parseInt($scope.selectedElement.css('margin-bottom'));
-
-                $scope.objectPadding = parseInt($scope.selectedElement.css('padding'));
-                $scope.objectPaddingLeft = parseInt($scope.selectedElement.css('padding-left'));
-                $scope.objectPaddingRight= parseInt($scope.selectedElement.css('padding-right'));
-                $scope.objectPaddingTop = parseInt($scope.selectedElement.css('padding-top'));
-                $scope.objectPaddingBottom = parseInt($scope.selectedElement.css('padding-bottom'));
-
-
-
-
-                var elementType = theElement.attr('ndType');
-
-                $scope.selectedElementType = elementType;
-
-                //visibility Properties
-                    if ($scope.selectedElement.hasClass('hidden-lg') == true )
-                    {
-                        $scope.hiddenLG = true;
-                    } else {
-                        $scope.hiddenLG = false;
-                    }
-                    if ($scope.selectedElement.hasClass('hidden-md') == true )
-                    {
-                        $scope.hiddenMD = true;
-                    } else {
-                        $scope.hiddenMD = false;
-                    }
-                    if ($scope.selectedElement.hasClass('hidden-sm') == true )
-                    {
-                        $scope.hiddenSM = true;
-                    } else {
-                        $scope.hiddenSM = false;
-                    }
-                    if ($scope.selectedElement.hasClass('hidden-xs') == true )
-                    {
-                        $scope.hiddenXS = true;
-                    } else {
-                        $scope.hiddenXS = false;
-                    }
-                    if ($scope.selectedElement.hasClass('hidden-print') == true )
-                    {
-                        $scope.hiddenPrint = true;
-                    } else {
-                        $scope.hiddenPrint = false;
-                    }
-
-                if (elementType == 'ndContainer' || elementType == 'ndPrompt' || elementType == 'tabsContainer' || elementType == 'container' || elementType == 'jumbotron')
-                {
-                    $scope.canMoveSelectedElement = true;
-                } else
-                    $scope.canMoveSelectedElement = false;
-
-                if (elementType === 'page')
-                {
-
-
-                }
-
-                if (elementType === 'c3Chart')
-                {
-
-                    var chartID = theElement.attr('bindto-id');
-                    for (var i in $scope.charts)
-                    {
-                        if ($scope.charts[i] != undefined)
-                            if ($scope.charts[i].chartID == chartID)
-                                {
-                                    $scope.selectedChart = $scope.charts[i];
-                                    $scope.objectHeight = $scope.selectedChart.height;
-                                }
-                    }
-                }
-
-                if (elementType === 'tabsContainer')
-                {
-
-                    var tabsContainerID = theElement.attr('id');
-
-                    for (var i in $scope.selectedDashboard.containers)
-                    {
-                        if ($scope.selectedDashboard.containers[i].id == tabsContainerID)
-                            {
-                                $scope.selectedTabContainer = $scope.selectedDashboard.containers[i];
-                                $scope.objectHeight = $scope.selectedTabContainer.height;
-
-                            }
-                    }
-                }
-
-                if (elementType == 'repeaterGrid')
-                {
-                    var gridID = theElement.attr('id');
-
-
-
-
-                }
-
-                $scope.$apply();
-            }
-    }*/
 
     $scope.deleteChartColumn = function(chart,column)
     {
         c3Charts.deleteChartColumn(chart,column)
     }
-/*
-    $scope.changeBackgroundColor = function(color)
-    {
-        var elementID = $scope.selectedElement.attr('id');
 
-        var alpha = $scope.imageFilters.opacity /10;
-        var hex = hexToRgb(color);
-        if (hex)
-        {
-            var r = hex.r;
-            var g = hex.g;
-            var b = hex.b;
-            $scope.selectedElement.css({'background-color': 'rgba('+r+','+g+','+b+',' + alpha + ')'});
-        }
-        $scope.BackgroundColor = color;
 
-        if ($scope.selectedElementType == 'page')
-            $scope.selectedDashboard.backgroundColor = color;
 
-        if ($scope.selectedElementType == 'gridHeaderColumn')
-            grid.savePropertyForGridColumn($scope.repeaters,'backgroundColor',elementID,'rgba('+r+','+g+','+b+',' + alpha + ')');
-
-    } */
-
-/*
-
-    $scope.changeOpacity = function()
-    {
-        var alpha = $scope.imageFilters.opacity /10;
-        var hex = hexToRgb($scope.BackgroundColor);
-        var r = hex.r;
-        var g = hex.g;
-        var b = hex.b;
-        $scope.selectedElement.css({'background-color': 'rgba('+r+','+g+','+b+',' + alpha + ')'});
-    }
-
-    function hexToRgb(hex) {
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
-
-        //alert( hexToRgb("#0033ff").g );
-    }
-
-    $scope.changeFontColor = function(color)
-    {
-        $scope.selectedElement.css({ 'color': color }) ;
-        $scope.FontColor = color;
-    }
-
-    */
 
     $scope.changeChartColumnType = function(chart,column)
     {
@@ -1230,29 +953,7 @@ $scope.onChangeElementProperties = function()
     {
         c3Charts.changeChartColumnColor(chart,column,hexToRgb(color));
     }
-/*
-    $scope.deleteSelected = function()
-    {
-        var elementID = $scope.selectedElement.attr('id');
 
-        if ($scope.selectedElementType == 'container' || $scope.selectedElementType == 'tabsContainer')
-            {
-            var containerNbr = -1;
-
-            for (var c in $scope.selectedDashboard.containers)
-                if ($scope.selectedDashboard.containers[c].id == elementID)
-                    containerNbr = c;
-
-            if (containerNbr > -1)
-               $scope.selectedDashboard.containers.splice(containerNbr,1);
-
-            }
-
-        $scope.selectedElement.remove();
-
-        $scope.tabs.selected = 'data';
-    }
-*/
     $scope.overChartDragging = function ()
     {
 
@@ -1358,11 +1059,8 @@ $scope.onChangeElementProperties = function()
                     var theHeaderHTML = '<li id="'+tabID+'_HEADER" heading="Home" class="ng-isolate-scope" >'+
                                         '<a id="'+tabID+'_LABEL" ng-click="selectThisTab(\''+id+'\',\''+tabID+'\')"  class="ng-binding">new tab</a>'+
                                     '</li>';
-       // $(headerID).append(theHeaderHTML);
+
                     var theBodyHTML = '<div id="'+tabID+'_BODY" class="tab-pane Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" style="min-Height:150px;padding:5px;"></div>';
-
-       // $(bodyID).append(theBodyHTML);
-
 
                     var $div = $(theHeaderHTML);
                     $(headerID).append($div);
@@ -1386,33 +1084,7 @@ $scope.onChangeElementProperties = function()
         var labelID = '#'+id+'_LABEL';
         $(labelID).text(newLabel);
     }
-/*
-    function getRepeaterHTML(theRepeaterID)
-    {
-        return  '<div page-block ndType="repeaterGrid" id="'+theRepeaterID+'" drop="onDropOnRepeater($data, $event, \''+theRepeaterID+'\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" style="height:500px;overflow:hidden;padding:2px;">'+
-        '<div style="position: relative; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(255,255,255,0.7);" class="ng-scope" >'+
-        '<h1 class="absolute-center" style=" height: 100%;text-align: center;font-weight: bold;color: gainsboro;">DROP HERE THE DATA COLUMNS</h1>'
-        '</div>'
-        '</div>';
-    }
 
-    function getChartHTML(chartType)
-    {
-        var theChartID = 'Chart'+uuid2.newguid();
-        $scope.charts.push({chartID:theChartID,dataPoints:[],dataColumns:[],datax:{},height:300,type:chartType,query:null,queryName:null});
-        var htmlCode = '<div ng-if="!isChartCompleted(\''+theChartID+'\')" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(255,255,255,0.9);z-index: 400;border: 5px dotted #000;" class="ng-scope" drop="onDropQueryElement($data, $event, \''+theChartID+'\')">'+
-        '<h1 class="absolute-center" style=" height: 100%;text-align: center;font-weight: bold;color: gainsboro;">DROP HERE THE DATA CATEGORIES TO BE COMPARED</h1>'+
-        '</div>';
-        return htmlCode + c3Charts.getChartHTML(theChartID);
-    }
-
-    function getReportHTML(report,containerID)
-    {
-
-         report_v2Model.getReport(report,containerID, function(sql){});
-
-    }
-*/
     $scope.getRuntimeReport = function(reportID)
     {
         if ($scope.mode != 'preview')
@@ -1505,60 +1177,14 @@ $scope.onChangeElementProperties = function()
     {
         c3Charts.onChartPropertiesChanged($scope,object);
     }
-/*
-    $scope.getCatalogImages = function()
-    {
-        $scope.catalogImages = [];
-        for (var i = 1; i <= 100; ++i) {
-            var image = {};
-            var imgnbr = '';
-            if (i < 10)
-                imgnbr = '0'+i;
-            else
-                imgnbr = i;
 
-            image.url = '/resources/images/tumbnails100/JPEG/photo-'+imgnbr+'_1.jpg';
-            image.source1400 = '/resources/images/width1400/JPEG/photo-'+imgnbr+'_1.jpg';
-            image.source700 = '/resources/images/width700/JPEG/photo-'+imgnbr+'_1.jpg';
-            $scope.catalogImages.push(image);
-        }
-    }
-
-    $scope.changeBackgroundImage = function(backgroundImage)
-    {
-            var theElement = $scope.selectedElement;
-            theElement.css({ 'background-image': "url('"+backgroundImage.source1400+"')" });
-            theElement.css({ '-webkit-background-size': 'cover'});
-            theElement.css({ '-moz-background-size': 'cover'});
-            theElement.css({ '-o-background-size': 'cover'});
-            theElement.css({ 'background-size': 'cover'});
-
-
-        if ($scope.selectedElementType == 'page')
-            $scope.selectedDashboard.backgroundImage = backgroundImage.source1400;
-
-
-
-    }
-*/
     $scope.changeBackgroundFilter = function() {
 
         var theElement = $scope.selectedElement;
 
 
         var styleValue = '';
-/*
-        if ($scope.imageFilters.blur != 0)
-            styleValue =  " blur("+$scope.imageFilters.blur+"px) ";
-        if ($scope.imageFilters.grayscale != 0)
-            styleValue = styleValue + " grayscale("+$scope.imageFilters.grayscale+"%) ";
-        if ($scope.imageFilters.sepia != 0)
-            styleValue = styleValue + " sepia("+$scope.imageFilters.sepia+"%) ";
-        if ($scope.imageFilters.brightness != 0)
-            styleValue = styleValue + " brightness("+$scope.imageFilters.brightness+"%) ";
-        if ($scope.imageFilters.contrast != 0)
-            styleValue = styleValue + " contrast("+$scope.imageFilters.contrast+"%) ";
-  */
+
         if ($scope.imageFilters.opacity != 0)
             styleValue = styleValue + " opacity("+$scope.imageFilters.opacity+"%) ";
 
@@ -1570,78 +1196,7 @@ $scope.onChangeElementProperties = function()
         theElement.css("msFilter",styleValue);
 
     }
-/*
-$scope.changeVisibility = function() {
 
-    if($scope.selectedElementType != 'page')
-    {
-
-    if ($scope.visibleXS == true)
-        {
-            $scope.selectedElement.addClass('visible-xs');
-        } else {
-        $scope.selectedElement.removeClass('visible-xs');
-        }
-
-    if ($scope.visibleSM == true)
-        {
-            $scope.selectedElement.addClass('visible-sm');
-        } else {
-        $scope.selectedElement.removeClass('visible-sm');
-        }
-    if ($scope.visibleMD == true)
-        {
-            $scope.selectedElement.addClass('visible-md');
-        } else {
-        $scope.selectedElement.removeClass('visible-md');
-        }
-    if ($scope.visibleLG == true)
-        {
-            $scope.selectedElement.addClass('visible-lg');
-        } else {
-        $scope.selectedElement.removeClass('visible-lg');
-        }
-    if ($scope.visiblePrint == true)
-        {
-            $scope.selectedElement.addClass('visible-print');
-        } else {
-        $scope.selectedElement.removeClass('visible-print');
-        }
-
-        if ($scope.hiddenXS == true)
-        {
-            $scope.selectedElement.addClass('hidden-xs');
-        } else {
-            $scope.selectedElement.removeClass('hidden-xs');
-        }
-
-        if ($scope.hiddenSM == true)
-        {
-            $scope.selectedElement.addClass('hidden-sm');
-        } else {
-            $scope.selectedElement.removeClass('hidden-sm');
-        }
-        if ($scope.hiddenMD == true)
-        {
-            $scope.selectedElement.addClass('hidden-md');
-        } else {
-            $scope.selectedElement.removeClass('hidden-md');
-        }
-        if ($scope.hiddenLG == true)
-        {
-            $scope.selectedElement.addClass('hidden-lg');
-        } else {
-            $scope.selectedElement.removeClass('hidden-lg');
-        }
-        if ($scope.hiddenPrint == true)
-        {
-            $scope.selectedElement.addClass('hidden-print');
-        } else {
-            $scope.selectedElement.removeClass('hidden-print');
-        }
-
-        }
-    }*/
 
 
     $scope.dashboardName = function () {
@@ -1690,13 +1245,6 @@ $scope.changeVisibility = function() {
                 {
                 $(theElement.childNodes[i]).children().remove();
                 }
-/*
-            if (elementType == 'ndReportContainer')
-                {
-                    $(theElement.childNodes[i]).children().remove();
-                }*/
-
-
 
             if (theElement.childNodes[i].hasChildNodes() == true)
                   cleanElement(theElement.childNodes[i]);
@@ -1722,155 +1270,8 @@ $scope.changeVisibility = function() {
         }
     }
 
-/*
-    function getAllPageColumns()
-    {
-        $scope.allPageColumns = [];
-        $scope.allPageMetricColumns = [];
 
-        for (var i in  $scope.queries)
-            {
-          for (var c in  $scope.queries[i].columns)
-                {
-                  $scope.allPageColumns.push({label: $scope.queries[i].name +'.'+$scope.queries[i].columns[c].objectLabel,object:$scope.queries[i].columns[c],query:$scope.queries[i]});
-                    if ($scope.queries[i].columns[c].elementType == 'number' || $scope.queries[i].columns[c].elementType == 'count')
-                        $scope.allPageMetricColumns.push({label: $scope.queries[i].name +'.'+$scope.queries[i].columns[c].objectLabel,object:$scope.queries[i].columns[c],query:$scope.queries[i]});
-                }
-            }
 
-    }
-*/
-/*
-    function preparePageToSave()
-    {
-
-        //Put all charts in loading mode...
-        for (var c in $scope.charts)
-            {
-                if ($scope.charts[c] != undefined)
-                    $scope.showOverlay('OVERLAY_'+$scope.charts[c].chartID);
-            }
-
-        cleanAllSelected();
-        var page = $scope.selectedDashboard;
-
-        page.properties.queries = $scope.queries;
-        var cleanedCharts = [];
-
-        for (var i in $scope.charts)
-        {
-            if ($scope.charts[i] != undefined)
-            {
-            var theChart = clone($scope.charts[i]);
-            theChart.chartCanvas = undefined;
-            theChart.data = undefined;
-            theChart.query = undefined;
-
-            var targetChart = document.getElementById(theChart.chartID);
-
-            if (targetChart != undefined)
-                cleanedCharts.push(theChart);
-            }
-        }
-
-        for (var i in $scope.queries)
-        {
-        $scope.queries[i].data = undefined;
-        }
-
-        page.properties.charts = cleanedCharts;
-
-        var container = $('#designArea');
-
-        var theHTML = container.html();
-
-        page.properties.designerHTML = theHTML;
-
-        var previewContainer = $('#previewContainer');
-
-            $('#previewContainer').children().remove();
-
-                    var $div = $(theHTML);
-                    previewContainer.append($div);
-                    angular.element(document).injector().invoke(function($compile) {
-                        var scope = angular.element($div).scope();
-                        $compile($div)($scope);
-                    });
-
-        cleanAll();
-
-        page.html = previewContainer.html();
-
-        return page;
-    }*/
-/*
-    $scope.copyPage = function()
-    {
-        //var page = preparePageToSave;
-
-        //Put all charts in loading mode...
-        for (var c in $scope.charts)
-        {
-                if ($scope.charts[c] != undefined)
-                    $scope.showOverlay('OVERLAY_'+$scope.charts[c].chartID);
-        }
-
-        cleanAllSelected();
-        var page = $scope.selectedDashboard;
-
-        page.properties.queries = $scope.queries;
-        var cleanedCharts = [];
-
-        for (var i in $scope.charts)
-        {
-            if ($scope.charts[i] != undefined)
-            {
-            var theChart = clone($scope.charts[i]);
-            theChart.chartCanvas = undefined;
-            theChart.data = undefined;
-            theChart.query = undefined;
-
-            var targetChart = document.getElementById(theChart.chartID);
-
-            if (targetChart != undefined)
-                cleanedCharts.push(theChart);
-            }
-        }
-
-        for (var i in $scope.queries)
-        {
-        $scope.queries[i].data = undefined;
-        }
-
-        page.properties.charts = cleanedCharts;
-
-        var container = $('#designArea');
-
-        var theHTML = container.html();
-
-        page.properties.designerHTML = theHTML;
-
-        var previewContainer = $('#previewContainer');
-
-            $('#previewContainer').children().remove();
-
-                    var $div = $(theHTML);
-                    previewContainer.append($div);
-                    angular.element(document).injector().invoke(function($compile) {
-                        var scope = angular.element($div).scope();
-                        $compile($div)($scope);
-                    });
-
-        cleanAll();
-
-        page.html = previewContainer.html();
-
-            connection.post('/api/pages/duplicate', page, function(data) {
-                if (data.result == 1) {
-
-                }
-            });
-    }*/
 
     function saveDashboard()
     {
@@ -1900,37 +1301,7 @@ $scope.changeVisibility = function() {
         }
 
 
-/*
-        var cleanedCharts = [];
 
-        for (var i in $scope.selectedDashboard.reports)
-        {
-            if ($scope.selectedDashboard.reports[i].properties != undefined)
-            {
-                if ($scope.selectedDashboard.reports[i].properties.chart != undefined)
-                {
-                    var theChart = clone($scope.selectedDashboard.reports[i].properties.chart);
-                    theChart.chartCanvas = undefined;
-                    theChart.data = undefined;
-                    theChart.query = undefined;
-
-                    var targetChart = document.getElementById(theChart.chartID);
-
-                    if (targetChart != undefined)
-                        cleanedCharts.push(theChart);
-                }
-            }
-        }
-
-        page.properties.repeaters = $scope.repeaters;
-
-        for (var i in $scope.queries)
-        {
-        $scope.queries[i].data = undefined;
-        }
-
-        page.properties.charts = cleanedCharts;
-*/
         var container = $('#designArea');
 
         var theHTML = container.html();
@@ -1966,13 +1337,7 @@ $scope.changeVisibility = function() {
 
             connection.post('/api/dashboardsv2/update/'+dashboard._id, dashboard, function(result) {
                 if (result.result == 1) {
-                    /*
-                    for (var c in $scope.charts)
-                        {
-                           if ($scope.charts[c] != undefined)
-                           $scope.hideOverlay('OVERLAY_'+$scope.charts[c].chartID);
-                        }
-                        */
+
                 }
             });
         }
@@ -2051,42 +1416,10 @@ $scope.changeVisibility = function() {
             }
 
 
-        /*for (var rp in $scope.repeaters)
-                    {
 
-                        for (var q in $scope.queries)
-                            {
-                                if ($scope.queries[q].name == $scope.repeaters[rp].query)
-                                    {
-                                    var queryScopeReference = $scope.queries[q];
-
-                                    }
-                            }
-
-                        grid.simpleGrid($scope.repeaters[rp].dataColumns,$scope.repeaters[rp].id,queryScopeReference,true,$scope.repeaters[rp].properties,function(){
-
-                        });
-                    }*/
     }
 
-   /* function rebuildCharts4Query(queryID)
-    {
-        for (var i in $scope.charts)
-        {
-            if ($scope.charts[i] != undefined)
-            {
-            var theChart = $scope.charts[i];
-                if (queryID == theChart.query.id)
-                    {
-                    //c3Charts.rebuildChart(theChart)
-                    c3Charts.refreshChartData(theChart);
-                    }
 
-           // c3Charts.rebuildChart(theChart)
-            c3Charts.refreshChartData(theChart);
-            }
-        }
-    } */
 
     function clone(obj) {
         if (null == obj || "object" != typeof obj) return obj;
@@ -2240,29 +1573,7 @@ $scope.changeVisibility = function() {
         }
 
     }
-/*
-    $scope.moveElementUp = function()
-    {
-       var theElement = $scope.selectedElement;
 
-       var selected = $(theElement).index();
-
-       var parent = $(theElement).parent();
-
-       $(parent).children().eq(selected-1).before($(parent).children().eq(selected));
-    }
-
-    $scope.moveElementDown = function()
-    {
-       var theElement = $scope.selectedElement;
-
-       var selected = $(theElement).index();
-
-       var parent = $(theElement).parent();
-
-       $(parent).children().eq(selected+1).after($(parent).children().eq(selected));
-    }
-*/
     $scope.getReportColumnDefs = function(reportID)
     {
         for (var i in $scope.selectedDashboard.reports)

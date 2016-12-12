@@ -44,7 +44,7 @@ return {
      {
         $scope.ngModel = 'none';
         $scope.selectedImage = 'none';
-         console.log('cleaning image');
+
      }
 
      getCatalogImages();

@@ -26,7 +26,6 @@ app.directive("wstDropdown", function($rootScope) {
 			};
 
 			$rootScope.$on("documentClicked", function(inner, target) {
-				console.log($(target[0]).is(".dropdown-display.clicked") || $(target[0]).parents(".dropdown-display.clicked").length > 0);
 				if (!$(target[0]).is(".dropdown-display.clicked") && !$(target[0]).parents(".dropdown-display.clicked").length > 0)
 					scope.$apply(function() {
 						scope.listVisible = false;

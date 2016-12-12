@@ -239,7 +239,6 @@ return {
     $scope.setFilterType = function(filter, filterOption)
     {
         queryModel.setFilterType(filter, filterOption);
-        console.log('the filter',filter);
         if (filter.filterType == 'null' || filter.filterType == 'notNull')
             {
             var values = {};

@@ -115,7 +115,6 @@ exports.getSqlQuerySchema = function(data, setresult) {
                             setresult({result: 1, items: schemas});
                         });
                     } else {
-                        console.log('the msg',err);
                         setresult({result: 0, msg: err});
                     }
                 db.end();

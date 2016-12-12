@@ -27,19 +27,8 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
 
     function init()
     {
-        console.log('entering init');
         if ($routeParams.newUser) {
             if ($routeParams.newUser == 'true') {
-                /*
-                $scope._User = {};
-                $scope._User.roles = [];
-                $scope._User.status = 'active';
-                $scope._User.sendPassword = true;
-
-                $scope.mode = 'new';
-
-                console.log('entering in add mode for user');
-                */
             }
         }
     };
@@ -55,8 +44,6 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             isOk = false;
             return;
         }
-
-        console.log('sendpass',$scope._User.sendPassword);
 
         if ($scope._User.sendPassword == false)
         {
@@ -108,8 +95,6 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
     $scope.sendNewMyPassword = function()
     {
 
-        console.log('the passwords',$scope._User.pwd1,$scope._User.pwd2)
-
         var isOk = false;
 
         if ($scope._User.pwd1.length < 8)
@@ -147,17 +132,17 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
 
             connection.get('/api/get-user-counts/'+$routeParams.userID, {userID:$routeParams.userID}, function(data) {
                 $scope.userCounts = data;
-                console.log('user counts',JSON.stringify(data));
+
             });
 
             connection.get('/api/get-user-reports/'+$routeParams.userID, {userID:$routeParams.userID}, function(data) {
                 $scope.userReports = data.items;
-                console.log('user reports',JSON.stringify($scope.userReports));
+
             });
 
             connection.get('/api/get-user-dashboards/'+$routeParams.userID, {userID:$routeParams.userID}, function(data) {
                 $scope.userDashboards = data.items;
-                console.log('user dashboards',JSON.stringify($scope.userDashboards));
+
             });
         };
     };
@@ -214,21 +199,6 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
 
         return theRoles;
     }
-
-   /* $scope.getUsers = function(page, search) {
-        var params = {};
-
-        params.page = (page) ? page : 1;
-
-        if (search) params.search = search;
-
-        connection.get('/api/admin/users/find-all', params, function(data) {
-            $scope.users = data.items;
-            $scope.page = data.page;
-            $scope.pages = data.pages;
-            //console.log('users data',JSON.stringify(data));
-        });
-    };*/
 
     $scope.getUsers = function(page, search, fields) {
         var params = {};
@@ -389,8 +359,6 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
 
             var adminRole = {_id:'WSTADMIN',name:"Widestage Administrator"};
             $scope.roles.push(adminRole);
-
-            console.log('these are the roles',$scope.roles);
 
             if (typeof callLater != 'undefined')
                 callLater();

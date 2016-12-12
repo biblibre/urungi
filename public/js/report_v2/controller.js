@@ -648,62 +648,21 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             $scope.getDataForPreview();
         });
     };
-/*
-    $scope.conditionTypes = queryModel.conditionTypes;
-*/
 
     $scope.filtersUpdated = function() {
         queryModel.filtersUpdated();
     }
 
-/*
-    $scope.updateCondition = function(filter, condition) {
-        filter.conditionType = condition.conditionType;
-        filter.conditionLabel = condition.conditionLabel;
-        queryModel.updateCondition(filter, condition);
-    };
-*/
+
     $scope.onDragOver = function (event) {
         // ...
     };
-/*
-    $scope.setFilterType = function(filter, filterOption)
-    {
-        queryModel.setFilterType(filter, filterOption);
-        console.log('the filter',filter);
-        if (filter.filterType == 'null' || filter.filterType == 'notNull')
-            $scope.processStructure();
-    }
-*/
 
 
     $scope.filterChanged = function(elementID,values)
     {
 
        $scope.processStructure();
-        /*for (var r in $scope.selectedDashboard.reports)
-                {
-                    for (var f in $scope.selectedDashboard.reports[r].query.groupFilters)
-                        {
-                            if ($scope.selectedDashboard.reports[r].query.groupFilters[f].elementID == elementID && $scope.selectedDashboard.reports[r].query.groupFilters[f].filterPrompt == true)
-                                {
-
-                                    $scope.selectedDashboard.reports[r].query.groupFilters[f].filterText1 = values.filterText1;
-                                    $scope.selectedDashboard.reports[r].query.groupFilters[f].searchValue = values.searchValue;
-                                    $scope.selectedDashboard.reports[r].query.groupFilters[f].filterValue = values.filterValue;
-                                    $scope.selectedDashboard.reports[r].query.groupFilters[f].dateCustomFilterLabel = values.dateCustomFilterLabel;
-                                    $scope.selectedDashboard.reports[r].query.groupFilters[f].filterText2 = values.filterText2;
-
-                                    getQueryData(r,function(){
-                                        rebuildCharts();
-                                        rebuildGrids();
-                                        rebuildIndicators();
-
-                                    });
-                                }
-                        }
-                }*/
-
 
     }
 

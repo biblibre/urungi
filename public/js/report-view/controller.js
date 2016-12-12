@@ -153,8 +153,7 @@ $scope.changeColumnStyle = function(columnIndex ,hashedID)
     }
  $scope.setColumnFormat = function()
     {
-     console.log('the Report',$scope.selectedReport);
-        report_v2Model.repaintReport($scope.selectedReport,$scope.mode);
+       report_v2Model.repaintReport($scope.selectedReport,$scope.mode);
     }
 
  $scope.changeColumnColor = function(color)

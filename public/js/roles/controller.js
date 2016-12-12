@@ -25,7 +25,6 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
             connection.get('/api/roles/find-one', {id: roleID}, function(data) {
                 $scope._Role = data.item;
                 $scope.mode == 'edit';
-                console.log('the public space',$scope.publicSpace);
                 $scope.clearNodes($scope.publicSpace);
                 $scope.checkForNode($scope.publicSpace);
                 $('#roleModal').modal('show');
@@ -39,7 +38,6 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
         if ($scope.mode == 'add') {
             var data = $scope._Role;
 
-            console.log('saving role '+$scope._Role.name);
             connection.post('/api/roles/create', data, function(data) {
                 $scope.items.push(data.item);
                 $('#roleModal').modal('hide');
@@ -47,7 +45,6 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
 
         } else {
             connection.post('/api/roles/update/'+$scope._Role._id, $scope._Role, function(result) {
-                console.log(result);
                 if (result.result == 1) {
                     $('#roleModal').modal('hide');
                 }
@@ -174,15 +171,13 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
           });
       }
 
-        //console.log('the grants', JSON.stringify(grants));
+
     }
 
     $scope.clearNodes = function(nodes)
     {
         for (var n in nodes)
         {
-            console.log('nodo',n)
-
             var node = nodes[n];
             if (node.nodes)
                 if (node.nodes.length > 0)
@@ -197,15 +192,11 @@ app.controller('rolesCtrl', function ($scope,connection,$routeParams,uuid2,$root
 
     $scope.checkForNode = function(nodes)
     {
-        console.log('entrando en checkForNode',JSON.stringify(nodes))
-
         var grants = $scope._Role.grants;
 
         for (var n in nodes)
         {
-            console.log('nodo',n)
-
-            var node = nodes[n];
+           var node = nodes[n];
             if (node.nodes)
                 if (node.nodes.length > 0)
                     $scope.checkForNode(node.nodes)

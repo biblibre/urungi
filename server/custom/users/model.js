@@ -86,7 +86,6 @@ usersSchema.statics.createUser = function(req, done){
 usersSchema.statics.createTheUser = function (req,res,userData,done)
 {
     var User = this;
-    console.log('creating the user',userData.userName);
     if (!userData.userName) {
         done({result: 0, msg: "'Username' is required."});
         return;

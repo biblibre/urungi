@@ -1,7 +1,5 @@
 app.controller('spacesCtrl', function ($scope,$rootScope, connection, uuid2, $routeParams, $timeout) {
 
-    //console.log('this is the company data',$rootScope.user.companyData);
-
     if ($rootScope.user.companyData)
     {
         $scope.data = $rootScope.user.companyData.publicSpace;

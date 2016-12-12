@@ -56,7 +56,7 @@ exports.generateDataResource = function(_customController){
 
                 fs.writeFile('server/controllers/custom/'+controllerName+'.js', replacedData, function (err) {
                     if (err) return console.log(err);
-                    console.log('Server controller file created: '+'server/controllers/custom/'+controllerName+'.js' );
+                    //console.log('Server controller file created: '+'server/controllers/custom/'+controllerName+'.js' );
                 });
             });
 
@@ -79,7 +79,7 @@ exports.generateDataResource = function(_customController){
             });
 
         } else {
-            console.log('File '+serverModelFileName+' does not exists');
+            //console.log('File '+serverModelFileName+' does not exists');
         }
     });
 

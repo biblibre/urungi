@@ -47,7 +47,6 @@ return {
       {
           $scope.ngModel = $scope.hiddenIn;
           $scope.onChange($scope.hiddenIn);
-          console.log('on select',$scope.hiddenIn);
       }
 
       $scope.onRemove = function()

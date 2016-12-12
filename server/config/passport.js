@@ -31,36 +31,6 @@ passport.serializeUser(function(user, done) {
         done(false, user);
     });
 
-   /* passport.deserializeUser(function(userObj, done) {
-        Users.findOne({ _id: userObj.id }, function (err, user) {
-            if (user) {
-                user = user.toObject();
-console.log('deserialize');
-                if (user.companyID) {
-
-                    var Companies = connection.model('Companies');
-
-                    Companies.findOne({companyCode: user.companyID}, function(err, company){
-                        if (company) {
-                            user['companyData'] = company;
-                        }
-
-                        done(err, user);
-                    });
-                }
-                else {
-                    done(err, user);
-                }
-               // done(err, user);
-            }
-            else {
-                done(err, user);
-            }
-        });
-        console.log('te user',user);
-           done(false, user);
-
-    });*/
 
 
     passport.use(new LocalStrategy({
