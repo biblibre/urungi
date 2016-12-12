@@ -14,7 +14,6 @@ exports.DataSourcesCreate = function(req,res){
     req.query.companyid = true;
     req.body.companyID = 'COMPID';
 
-
     controller.create(req, function(result){
         serverResponse(req, res, 200, result);
     });

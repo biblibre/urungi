@@ -11,8 +11,7 @@
     <script type="text/ng-template" id="nestable_item.html">
         <div id="layerObjects">
             <div class="schema-element-report schema-item-report"  ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure') && ngModelItem.enabled != false" >
-
-                <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType != 'number' && !ngModelItem.defaultAggregation) || (ngModelItem.elementType == 'number' && (!ngModelItem.defaultAggregation || ngModelItem.defaultAggregation == 'value'))" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType != 'number' && (!ngModelItem.defaultAggregation  || ngModelItem.defaultAggregation == 'value')) || (ngModelItem.elementType == 'number' && (!ngModelItem.defaultAggregation || ngModelItem.defaultAggregation == 'value'))" draggable="true" effect-allowed="copy" draggable-type="custom-object"
                    draggable-data="{
                         elementName: ngModelItem.elementName,
                         objectLabel: ngModelItem.elementLabel,
@@ -59,29 +58,6 @@
                         {{ngModelItem.elementLabel +' ('+ngModelItem.defaultAggregation+')'}}
 
                 </a>
-
-
-                <!--<div class="schema-aggregate-element-container" ng-if="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date' || ngModelItem.elementType == 'string'" collapse="!ngModelItem.isAggregateCollapsed">
-                    <a ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'date' || ngModelItem.elementType == 'string') && (!ngModelItem.count)"
-                       class="list-group-item data-source-aggregation schema-item-report" ng-repeat="aggregation in fieldsAggregations[ngModelItem.elementType]"
-                       draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
-                       elementName: ngModelItem.elementName,
-                       objectLabel: ngModelItem.elementLabel+' ('+aggregation.name+')',
-                       datasourceID:ngModelItem.datasourceID,
-                       id:ngModelItem.id,
-                       elementLabel:ngModelItem.elementLabel+' ('+aggregation.name+')',
-                       collectionID:ngModelItem.collectionID,
-                       elementID: ngModelItem.elementID,
-                       layerID: selectedLayer._id,
-                       elementType: ngModelItem.elementType,
-                       filterType: 'equal',
-                       filterPrompt: false,
-                       filterTypeLabel:'equal',
-                       format:ngModelItem.format,
-                       aggregation: aggregation.value}" ng-bind="aggregation.name">
-
-                       </a>
-                </div>-->
 
             </div>
 
