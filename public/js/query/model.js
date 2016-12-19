@@ -501,6 +501,9 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
 
     this.getDistinctFiltered = function(attribute,search,done) {
 
+        if (attribute)
+            {
+
         var execute = (typeof execute !== 'undefined') ? execute : true;
 
         var query = {};
@@ -554,6 +557,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         getData(query, {page: 0}, function(data,sql) {
             done(data,sql);
         });
+            }
     }
 
     this.getFilterValues = function(attribute,done) {

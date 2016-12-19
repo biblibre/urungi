@@ -167,7 +167,7 @@ return {
 
         $scope.selectedElement.remove();
 
-        $scope.tabs.selected = 'data';
+        //$scope.tabs.selected = 'data';
     }
 
     $scope.changeHeight = function(newHeight)

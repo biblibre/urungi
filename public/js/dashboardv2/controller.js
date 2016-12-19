@@ -68,6 +68,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         $scope.$broadcast("newReportForDash",{});
     }
 
+
     $scope.$on("cancelReport", function (event, args) {
 
         $scope.reportInterface = false;
@@ -346,7 +347,11 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
                     //getAllPageColumns();
 
-                    var $div = $($scope.selectedDashboard.html);
+                    var theHTML = $scope.selectedDashboard.html;
+
+                    //var theHTML = $scope.selectedDashboard.properties.designerHTML;
+
+                    var $div = $(theHTML);
                     var el = angular.element(document.getElementById('pageViewer'));
                     el.append($div);
                     angular.element(document).injector().invoke(function($compile) {
@@ -354,6 +359,8 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                         $compile($div)($scope);
                     });
                     $scope.getPrompts();
+                    //cleanAll('pageViewer');
+
 
     });
     };
@@ -583,7 +590,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                                 if ( angular.element('#PROMPT_'+$scope.prompts[i].elementID).length ){ // || angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
                                     noty({text: 'Sorry, that filter is already on the board',  timeout: 6000, type: 'error'});
                                     } else {
-                                        var html = '<div id="PROMPT_'+$scope.prompts[i].elementID+'" page-block class="container-fluid ndContainer" ndType="ndPrompt" ng-init="getDistinctValues('+$scope.prompts[i].elementID+')"><nd-prompt element-id="'+$scope.prompts[i].elementID+'" label="'+$scope.prompts[i].objectLabel+'" value-field="'+$scope.prompts[i].name+'" show-field="'+$scope.prompts[i].name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
+                                        var html = '<div id="PROMPT_'+$scope.prompts[i].elementID+'" page-block class="ndContainer" ndType="ndPrompt" ><nd-prompt filter="getFilter('+"'"+$scope.prompts[i].elementID+"'"+')" element-id="'+$scope.prompts[i].elementID+'" label="'+$scope.prompts[i].objectLabel+'" value-field="'+$scope.prompts[i].name+'" show-field="'+$scope.prompts[i].name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
                                         createOnDesignArea(html,function(){});
                                     }
                             }
@@ -663,11 +670,27 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
     $scope.getDistinctValues = function(elementID)
     {
-        /*for (var p in $scope.prompts)
+       /* for (var p in $scope.prompts)
         {
         if ($scope.prompts[p].elementID == elementID)
-            queryModel.getDistinct($scope,$scope.prompts[p]);
-        }*/
+            queryModel.getDistinct($scope,$scope.prompts[p],function()
+            {
+
+            });
+        }
+        */
+
+    }
+
+    $scope.getFilter = function(elementID)
+    {
+        for (var p in $scope.prompts)
+        {
+            if ($scope.prompts[p].elementID == elementID)
+                return $scope.prompts[p];
+        }
+
+
     }
 
 
@@ -794,7 +817,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                                 if ( angular.element('#PROMPT_'+$scope.prompts[i].elementID).length ){ // || angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
                                     noty({text: 'Sorry, that filter is already on the board',  timeout: 6000, type: 'error'});
                                     } else {
-                                        var html = '<div id="PROMPT_'+$scope.prompts[i].elementID+'" page-block class="container-fluid ndContainer" ndType="ndPrompt" ng-init="getDistinctValues('+$scope.prompts[i].elementID+')"><nd-prompt element-id="'+$scope.prompts[i].elementID+'" label="'+$scope.prompts[i].objectLabel+'" value-field="'+$scope.prompts[i].name+'" show-field="'+$scope.prompts[i].name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
+                                        var html = '<div id="PROMPT_'+$scope.prompts[i].elementID+'" page-block class="ndContainer" ndType="ndPrompt"><nd-prompt  filter="getFilter('+"'"+$scope.prompts[i].elementID+"'"+')" element-id="'+$scope.prompts[i].elementID+'" label="'+$scope.prompts[i].objectLabel+'" value-field="'+$scope.prompts[i].name+'" show-field="'+$scope.prompts[i].name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
                                     }
                             }
                     }
@@ -1215,9 +1238,9 @@ $scope.onChangeElementProperties = function()
 
     };
 
-    function cleanAll() {
+    function cleanAll(theContainer) {
 
-        var root = document.getElementById('previewContainer');
+        var root = document.getElementById(theContainer);
 
         if (root != undefined)
         {
@@ -1279,6 +1302,7 @@ $scope.onChangeElementProperties = function()
 
 
         cleanAllSelected();
+
         var dashboard = $scope.selectedDashboard;
 
         for (var i in $scope.selectedDashboard.reports)
@@ -1304,9 +1328,13 @@ $scope.onChangeElementProperties = function()
 
         var container = $('#designArea');
 
+        clearPrompts();
+
         var theHTML = container.html();
 
         theHTML = theHTML.replace('vs-repeat',' ');
+
+        getPromptsWidget();
 
         $scope.selectedDashboard.properties.designerHTML = theHTML;
 
@@ -1321,7 +1349,7 @@ $scope.onChangeElementProperties = function()
                         $compile($div)($scope);
                     });
 
-        cleanAll();
+        cleanAll('previewContainer');
 
         $scope.selectedDashboard.html = previewContainer.html();
 
@@ -1341,6 +1369,8 @@ $scope.onChangeElementProperties = function()
                 }
             });
         }
+
+
     }
 
     function getQueryData(index,done)
@@ -1532,12 +1562,33 @@ $scope.onChangeElementProperties = function()
                     if ($scope.selectedDashboard.reports[r].query.groupFilters[f].filterPrompt == true)
                         {
                              $scope.prompts.push($scope.selectedDashboard.reports[r].query.groupFilters[f]);
-
                         }
                 }
         }
         getPromptsWidget();
     }
+
+
+    function clearPrompts()
+    {
+
+        for (var r in $scope.selectedDashboard.reports)
+        {
+
+            for (var f in $scope.selectedDashboard.reports[r].query.groupFilters)
+                {
+                    if ($scope.selectedDashboard.reports[r].query.groupFilters[f].filterPrompt == true)
+                        {
+                             var targetPrompt = document.getElementById('PROMPT_'+$scope.selectedDashboard.reports[r].query.groupFilters[f].elementID);
+
+                            $(targetPrompt).children().remove();
+
+                        }
+                }
+        }
+
+    }
+
 
 
 
@@ -1558,7 +1609,7 @@ $scope.onChangeElementProperties = function()
                     thePrompt.name = thePrompt.collectionID.toLowerCase()+'_'+thePrompt.elementName
 
                 $(targetPrompt).children().remove();
-                var html = '<nd-prompt element-id="'+thePrompt.elementID+'" label="'+thePrompt.objectLabel+'" description="'+thePrompt.promptInstructions+'" value-field="'+thePrompt.name+'" show-field="'+thePrompt.name+'" selected-value="'+thePrompt.filterText1+'" prompts="prompts" on-change="promptChanged" after-get-values="afterPromptGetValues" ng-model="lastPromptSelectedValue"></nd-prompt>';
+                var html = '<nd-prompt  filter="getFilter('+"'"+thePrompt.elementID+"'"+')"  element-id="'+thePrompt.elementID+'" label="'+thePrompt.objectLabel+'" description="'+thePrompt.promptInstructions+'" value-field="'+thePrompt.name+'" show-field="'+thePrompt.name+'" selected-value="'+thePrompt.filterText1+'" prompts="prompts" on-change="promptChanged" after-get-values="afterPromptGetValues" ng-model="lastPromptSelectedValue"></nd-prompt>';
 
                 var $div = $(html);
                             $(targetPrompt).append($div);
@@ -1568,6 +1619,8 @@ $scope.onChangeElementProperties = function()
                             });
 
 
+            } else {
+                console.log('no target prompt found');
             }
 
         }

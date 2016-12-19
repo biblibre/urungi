@@ -1,21 +1,16 @@
 <div class="">
 
         <form role="form" class="form-inline" name="FORM_filter">
-            <p ng-if="isPrompt == 'true'" class="prompt-label">{{filter.promptTitle}}</p>
-            <div ng-if="isPrompt == 'true'" class="container-fluid" ng-show="promptMessage && promptMessage != ''">
-                <p style="padding: 10px 15px;background-color: #cc3f44;color: #ffffff;">{{promptMessage}}</p>
-            </div>
-
-
-            <!--<div class="" ng-repeat="filter in getPromptAsArray(elementId)">
-                    <div class="" ng-include="'partials/report_v2/filterWidget.html'"></div>
-
+            <!--<p  class="prompt-label">{{filter.promptTitle}}</p>
+            <div  class="container-fluid" ng-show="filter.promptInstructions && filter.promptInstructions != ''">
+                <p style="padding: 10px 15px;background-color: #cc3f44;color: #ffffff;">{{filter.promptInstructions}}</p>
             </div>-->
+            <label class="control-label">{{filter.promptInstructions}}</label>
 
 <div class="form-group" ng-class="{'has-error': filter.promptMandatory == true && (filter.filterText1 == '' || filter.filterText1 == undefined) && isPrompt == 'true'}">
 
-                           <!-- <div class="dropdown" style="vertical-align: middle">-->
-                                <!-- and, or, and not, or not-->
+
+            <!-- and, or, and not, or not-->
                                 <div ng-if="filter.condition && isPrompt == 'false'" class="btn-group" dropdown="">
                                     <button type="button" class="btn " ng-bind="filter.conditionLabel"></button>
                                     <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -31,7 +26,7 @@
 
                                 <input ng-if="isPrompt == 'false'" type="text" class="form-control" ng-model="filter.objectLabel" ng-readonly="true">
 
-                                <!-- equal, not equal, bigger than, etc...-->
+           <!-- equal, not equal, bigger than, etc...-->
                                 <div ng-if="isPrompt == 'false'" class="btn-group" dropdown="">
                                     <button type="button" class="btn " ng-bind="filter.filterTypeLabel"></button>
                                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -108,13 +103,13 @@
                                 </div>
                                 <!-- END Date -->
 
-                                <!--equal, in, etc ...-->
+            <!--equal, in, etc ...-->
 
                                     <div class="input-group" dropdown ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && ( filter.elementType != 'array') && ( filter.elementType != 'date') && (filter.filterType != 'not in') && (filter.filterType != 'in')">
-                                         <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="filter.filterText1" ng-change="inputChanged(filter)"  ng-required="filter.promptMandatory == true">
+                                         <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="filter.filterText1" ng-change="inputChanged(filter)"  ng-required="filter.promptMandatory == true" style="height: 30px;border-right: 0px">
                                         <span class="input-group-btn" >
                                             <span class="dropdown" >
-                                                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="getDistinctValues(filter)">
+                                                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="getDistinctValues(filter)" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" tooltip="Click here to select a value" tooltip-placement="bottom">
                                                     <i class="fa-caret-down"></i>
                                                 </button>
                                                     <ul class="dropdown-menu shorter-menu" aria-labelledby="dropdownMenu5b" >
@@ -127,7 +122,7 @@
                                         </span>
                                         <span ng-if="filter.promptMandatory != true || isPrompt == 'false'" class="input-group-btn" >
 
-                                                <button type="button" class="btn btn-white" ng-click="clearFilter(filter)">
+                                                <button type="button" class="btn btn-white" ng-click="clearFilter(filter)" style="padding: 5px;width: 21px;    background-color: #ccc;" tooltip="Click here to clear the selected value" tooltip-placement="bottom">
                                                     <i class="fa-times"></i>
                                                 </button>
 
