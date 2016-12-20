@@ -88,7 +88,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                 steps:[
                     {
                         element: '#parentIntro',
-                        html: '<div><h3>Page reports</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">In here you can create and execute reports like html web pages.</span><br/><br/><span>Define several queries using filters and dragging and dropping from different layers.</span><br/><br/><span>After you define the query/es to get the data, you can drag and drop different html elements, and put your data in, using different formats to show it.</span><br/><br/><span></span></div>',
+                        html: '<div><h3>Dashboards</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">In here you can create and execute dashboards like web pages.</span><br/><br/><span>Define several reports using filters and dragging and dropping from different layers.</span><br/><br/><span>After you define the report/s to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it.</span><br/><br/><span></span></div>',
                         width: "500px",
                         objectArea: false,
                         verticalAlign: "top",
@@ -96,7 +96,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     },
                     {
                         element: '#newReportBtn',
-                        html: '<div><h3>New Page Report</h3><span style="font-weight:bold;">Click here to create a new page report.</span><br/><span></span></div>',
+                        html: '<div><h3>New Dashboard</h3><span style="font-weight:bold;">Click here to create a new dashboard.</span><br/><span></span></div>',
                         width: "300px",
                         height: "150px",
                         areaColor: 'transparent',
@@ -105,7 +105,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     },
                     {
                         element: '#reportList',
-                        html: '<div><h3>Reports list</h3><span style="font-weight:bold;">Here all your reports are listed.</span><br/><span>Click over a report\'s name to execute it.<br/><br/>You can also modify or drop the report.</span></div>',
+                        html: '<div><h3>Dashboards list</h3><span style="font-weight:bold;">Here all your dashboards are listed.</span><br/><span>Click over a dashboard\'s name to execute it.<br/><br/>You can also modify or drop the dashboard, clicking into the modify or delete buttons.</span></div>',
                         width: "300px",
                         areaColor: 'transparent',
                         areaLineColor: '#fff',
@@ -115,7 +115,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     },
                     {
                         element: '#reportListItem',
-                        html: '<div><h3>Report</h3><span style="font-weight:bold;">This is one of your reports.</span><br/><span>On every line (report) you can edit or drop it. If the report is published a label with the word "published" will appear.</span></div>',
+                        html: '<div><h3>Dashboard</h3><span style="font-weight:bold;">This is one of your dashboards.</span><br/><span>On every line (dashboard) you can edit or drop it. If the dashboard is published a green "published" label will be shown.</span></div>',
                         width: "300px",
                         areaColor: 'transparent',
                         areaLineColor: '#72A230',
@@ -124,8 +124,8 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     },
                     {
                         element: '#reportListItemName',
-                        html: '<div><h3>Report name</h3><span style="font-weight:bold;">The name for the report.</span><br/><br/><span>You can setup the name you want for your report, but think about make it descriptive enought, and take care about not duplicating names across the company, specially if the report is going to be published.</span><br/><br/><span>You can click here to execute the report.</span></div>',
-                        width: "300px",
+                        html: '<div><h3>Dashboard name</h3><span style="font-weight:bold;">The name for the dashboard.</span><br/><br/><span>You can setup the name you want for your dashboard, but think about make it descriptive enought, and take care about not duplicating names across the company, specially if the dashboard is going to be published.</span><br/><br/><span>You can click here to execute the dashboard.</span></div>',
+                        width: "400px",
                         areaColor: 'transparent',
                         areaLineColor: '#fff',
                         height: "250px"
@@ -133,7 +133,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     },
                     {
                         element: '#reportListItemDetails',
-                        html: '<div><h3>Report description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using this report.</span><br/><span></span></div>',
+                        html: '<div><h3>Dashboard description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using this dashboard.</span><br/><span></span></div>',
                         width: "300px",
                         areaColor: 'transparent',
                         areaLineColor: '#fff',
@@ -142,7 +142,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     },
                     {
                         element: '#reportListItemEditBtn',
-                        html: '<div><h3>Report edit</h3><span style="font-weight:bold;">Click here to modify the report.</span><br/><br/><span></span></div>',
+                        html: '<div><h3>Dashboard edit</h3><span style="font-weight:bold;">Click here to modify the dashboard.</span><br/><br/><span></span></div>',
                         width: "300px",
                         areaColor: 'transparent',
                         areaLineColor: '#fff',
@@ -152,7 +152,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     },
                     {
                         element: '#reportListItemDeleteBtn',
-                        html: '<div><h3>Report delete</h3><span style="font-weight:bold;">Click here to delete the report.</span><br/><br/><span>Once deleted the report will not be recoverable again.</span><br/><br/><span>Requires 2 step confirmation.</span></div>',
+                        html: '<div><h3>Dashboard delete</h3><span style="font-weight:bold;">Click here to delete the dashboard.</span><br/><br/><span>Once deleted the dashboard will not be recoverable again.</span><br/><br/><span>Requires 2 step confirmation.</span></div>',
                         width: "300px",
                         areaColor: 'transparent',
                         areaLineColor: '#fff',
@@ -162,7 +162,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     },
                     {
                         element: '#reportListItemPublished',
-                        html: '<div><h3>Report published</h3><span style="font-weight:bold;">This label indicates that this report is public.</span><br/><br/><span>If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report.</span></div>',
+                        html: '<div><h3>Dashboard published</h3><span style="font-weight:bold;">This label indicates that this dashboard is public.</span><br/><br/><span>If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard.</span></div>',
                         width: "300px",
                         areaColor: 'transparent',
                         areaLineColor: '#fff',
@@ -178,24 +178,12 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                 {
                 $scope.IntroOptions.steps.push({
                         element: '#parentIntro',
-                        html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Single query reports</span><br/><br/>See how you can create single query reports that shows your data using charts and data grids<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">Go to single query report designer and continue tour</a></span></div>',
+                        html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Reports </span><br/><br/>See how you can create reports that shows your data using charts and data grids<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">Go to report designer and continue tour</a></span></div>',
                         width: "500px",
                         objectArea: false,
                         verticalAlign: "top",
                         height: "250px"
                     });
-                } else {
-                    if ($rootScope.user.dashboardsCreate || $rootScope.counts.dashBoards > 0)
-                        {
-                        $scope.IntroOptions.steps.push({
-                                element: '#parentIntro',
-                                html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Dashboards</span><br/><br/>See how to create dashboards composed with a set of single query reports<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/dashboard/intro">Go to dashboards and continue tour</a></span></div>',
-                                width: "500px",
-                                objectArea: false,
-                                verticalAlign: "top",
-                                height: "250px"
-                            });
-                        }
                 }
 
 

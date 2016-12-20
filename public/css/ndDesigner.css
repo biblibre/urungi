@@ -461,8 +461,8 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
     overflow-x: hidden;
     overflow-y: scroll;
     box-sizing: border-box;
-    /*padding: 20px 20px 20px 30px;*/
-    padding: 20px 30px 20px 10px;
+    /*padding: 20px 20px 20px 30px;
+    padding: 20px 30px 20px 10px;*/
     transition: all .3s linear;
 }
 

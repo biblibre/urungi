@@ -92,7 +92,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 $scope._DataSource.params.push({connection:{}})
                 $scope._DataSource.status = 1;
                 $scope._DataSource.type = 'MONGODB';
-                //$scope._DataSource.companyID = 'XXXXXX';
 
                 $scope.mode = 'add';
 
@@ -121,7 +120,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
             var data = $scope._DataSource;
             connection.post('/api/data-sources/create', data, function(data) {
-                //$scope.items.push(data.item);
                 window.history.back();
             });
         } else {

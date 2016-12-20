@@ -300,6 +300,90 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             //IF width > 300 then you will face problems with mobile devices in responsive mode
                 steps:[
                     {
+                        element: '#parentIntro',
+                        html: '<div><h3>Reports</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Here you can create and execute reports.</span><br/><br/><span>Choose a report type and drag and drop elements from the selected layer to compose your report.</span><br/><br/><span>You can also add runtime filters to split your data in real time.</span><br/><br/><span></span></div>',
+                        width: "500px",
+                        objectArea: false,
+                        verticalAlign: "top",
+                        height: "300px"
+                    },
+                    {
+                        element: '#newReportBtn',
+                        html: '<div><h3>New Report</h3><span style="font-weight:bold;">Click here to create a new report.</span><br/><span></span></div>',
+                        width: "300px",
+                        height: "150px",
+                        areaColor: 'transparent',
+                        horizontalAlign: "right",
+                        areaLineColor: '#fff'
+                    },
+                    {
+                        element: '#reportList',
+                        html: '<div><h3>Reports list</h3><span style="font-weight:bold;">Here all your reports are listed.</span><br/><span>Click over a report\'s name to execute it.<br/><br/>You can also modify or drop the report, clicking into the modify or delete buttons.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        verticalAlign: "top",
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#reportListItem',
+                        html: '<div><h3>Report</h3><span style="font-weight:bold;">This is one of your reports.</span><br/><span>On every line (report) you can edit or drop it. If the report is published a green "published" label will be shown.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#72A230',
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#reportListItemName',
+                        html: '<div><h3>Report name</h3><span style="font-weight:bold;">The name for the report.</span><br/><br/><span>You can setup the name you want for your report, but think about make it descriptive enought, and take care about not duplicating names across the company, specially if the report is going to be published.</span><br/><br/><span>You can click here to execute the report.</span></div>',
+                        width: "400px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        height: "250px"
+
+                    },
+                    {
+                        element: '#reportListItemDetails',
+                        html: '<div><h3>Report description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using this report.</span><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        height: "180px"
+
+                    },
+                    {
+                        element: '#reportListItemEditBtn',
+                        html: '<div><h3>Report edit</h3><span style="font-weight:bold;">Click here to modify the report.</span><br/><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#reportListItemDeleteBtn',
+                        html: '<div><h3>Report delete</h3><span style="font-weight:bold;">Click here to delete the report.</span><br/><br/><span>Once deleted the report will not be recoverable again.</span><br/><br/><span>Requires 2 step confirmation.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
+                        element: '#reportListItemPublished',
+                        html: '<div><h3>Report published</h3><span style="font-weight:bold;">This label indicates that this report is public.</span><br/><br/><span>If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report.</span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        areaLineColor: '#fff',
+                        horizontalAlign: "right",
+                        height: "200px"
+
+                    },
+                    {
                         element: '#dataObjectsIntroBlock',
                         html: '<div><h3>The layer catalog</h3><span style="font-weight:bold;">Access here the different data elements of every layer that you have access on</span><br/><span>Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)</span></div>',
                         width: "300px",
@@ -313,6 +397,14 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                         areaColor: 'transparent',
                         areaLineColor: '#8DC63F'
 
+                    },
+
+                    {
+                        element: '#reportType',
+                        html: '<div><h3>Report Type selector</h3><span style="font-weight:bold;">Click over one of the different report types to change the visualization of the data you choose</span><br/><span></span></div>',
+                        width: "300px",
+                        areaColor: 'transparent',
+                        height: "180px"
                     },
                     {
                         element: '#columnsPanel',
@@ -362,7 +454,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
                 ]
             }
-
+/*
             if ($rootScope.user.pagesCreate || $rootScope.counts.pages > 0)
                 {
                 $scope.IntroOptions.steps.push({
@@ -398,7 +490,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                                 }
                         }
 
-                }
+                }*/
 
     $scope.changeLayer = function(selectedLayerID)
     {
@@ -912,7 +1004,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             if (!$scope.selectedReport.properties.style)
                 $scope.selectedReport.properties.style = 'style1';
             if (!$scope.selectedReport.properties.backgroundColor)
-                $scope.selectedReport.properties.backgroundColor = '#68b828';
+                $scope.selectedReport.properties.backgroundColor = '#fff';
             if (!$scope.selectedReport.properties.reportIcon)
                 $scope.selectedReport.properties.reportIcon = 'fa-bolt';
             if (!$scope.selectedReport.properties.mainFontColor)
