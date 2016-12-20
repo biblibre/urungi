@@ -11,8 +11,8 @@ body {
 
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
     color: #fff;
-    background-color: #94C255;
-    border-color: #94C255;
+    background-color: #000;
+    border-color: #000;
 }
 
 .main-menu-logo {
@@ -25,7 +25,7 @@ body {
 }
 
 .admin-menu {
-    background-color: #94C255;
+    background-color: #72A230;
     color: #fff;
 }
 
