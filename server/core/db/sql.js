@@ -807,7 +807,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                     {
                         getFormatedResult(elements,result,function(finalResults){
                             setresult({result: 1, data:finalResults,sql:SQLstring});
-                            //setresult(finalResults);
                         });
                     } else {
                         setresult({result: 1, data:[],sql:SQLstring});
