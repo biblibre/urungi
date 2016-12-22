@@ -403,5 +403,26 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
 
     }
 
+    this.getReportContainerHTML = function(reportID)
+    {
+        var containerID = 'REPORT_CONTAINER_'+reportID;
+
+        var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
+                        '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
+                              '<div class="container-fluid" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+reportID+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+reportID+'" style="padding:0px"></div>';
+
+                        '</div>'+
+                    '</div>';
+
+        return html;
+    }
+
+    this.getPromptHTML = function(prompt)
+    {
+        var html = '<div id="PROMPT_'+prompt.elementID+'" page-block class="ndContainer" ndType="ndPrompt"><nd-prompt  filter="getFilter('+"'"+prompt.elementID+"'"+')" element-id="'+prompt.elementID+'" label="'+prompt.objectLabel+'" value-field="'+prompt.name+'" show-field="'+prompt.name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
+
+        return html;
+    }
+
 
 });

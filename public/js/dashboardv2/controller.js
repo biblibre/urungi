@@ -177,7 +177,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             if ($rootScope.user.reportsCreate || $rootScope.counts.reports > 0)
                 {
                 $scope.IntroOptions.steps.push({
-                        element: '#parentIntro',
+                        element: '#parentIntroReports',
                         html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Reports </span><br/><br/>See how you can create reports that shows your data using charts and data grids<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">Go to report designer and continue tour</a></span></div>',
                         width: "500px",
                         objectArea: false,
@@ -502,6 +502,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             createOnDesignArea(html,function(){});
         }
 
+        /*
         if (customObjectData.objectType == 'chart') {
 
             var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
@@ -538,31 +539,20 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("donut")+'</div>';
             createOnDesignArea(html,function(){});
         }
+        */
 
         if (customObjectData.objectType == 'report') {
-
-            var containerID = 'REPORT_CONTAINER_'+customObjectData.reportID; //uuid2.newguid();
 
             for (var i in $scope.selectedDashboard.reports)
                     {
                         if ($scope.selectedDashboard.reports[i].id == customObjectData.reportID)
                             {
 
-                                if ( angular.element('#REPORT_'+$scope.selectedDashboard.reports[i].id).length ){ // || angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
-                                    noty({text: 'Sorry, that report is already on the board',  timeout: 6000, type: 'error'});
+                                if ( angular.element('#REPORT_'+$scope.selectedDashboard.reports[i].id).length ){
+                                        noty({text: 'Sorry, that report is already on the board',  timeout: 6000, type: 'error'});
                                     } else {
-                                        var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
-                                                        '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
-                                                           // '<div page-block class="Block500" ndType="reportBlock" id="'+containerID+'">'+getReportHTML($scope.selectedDashboard.reports[i],containerID)+'</div>'
-                                                              '<div class="container-fluid" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+$scope.selectedDashboard.reports[i].id+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+$scope.selectedDashboard.reports[i].id+'" style="padding:0px"></div>';
-
-                                                        '</div>'+
-                                                    '</div>';
-
-
-                                        //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("donut")+'</div>';
+                                        var html = report_v2Model.getReportContainerHTML(customObjectData.reportID);
                                         createOnDesignArea(html,function(){});
-                                        //report_v2Model.repaintReport($scope.selectedDashboard.reports[i],$scope.mode);
                                     }
                             }
                     }
@@ -578,7 +568,10 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                                 if ( angular.element('#PROMPT_'+$scope.prompts[i].elementID).length ){ // || angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
                                     noty({text: 'Sorry, that filter is already on the board',  timeout: 6000, type: 'error'});
                                     } else {
-                                        var html = '<div id="PROMPT_'+$scope.prompts[i].elementID+'" page-block class="ndContainer" ndType="ndPrompt" ><nd-prompt filter="getFilter('+"'"+$scope.prompts[i].elementID+"'"+')" element-id="'+$scope.prompts[i].elementID+'" label="'+$scope.prompts[i].objectLabel+'" value-field="'+$scope.prompts[i].name+'" show-field="'+$scope.prompts[i].name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
+                                        //var html = '<div id="PROMPT_'+$scope.prompts[i].elementID+'" page-block class="ndContainer" ndType="ndPrompt" ><nd-prompt filter="getFilter('+"'"+$scope.prompts[i].elementID+"'"+')" element-id="'+$scope.prompts[i].elementID+'" label="'+$scope.prompts[i].objectLabel+'" value-field="'+$scope.prompts[i].name+'" show-field="'+$scope.prompts[i].name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
+
+                                        var html = report_v2Model.getPromptHTML($scope.prompts[i])
+
                                         createOnDesignArea(html,function(){});
                                     }
                             }
@@ -596,7 +589,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             var html = getTabsHTML(theid,theTabs);
             createOnDesignArea(html,function(){});
         }
-
+/*
         if (customObjectData.objectType == 'image')
         {
            angular.element(event.target).css("background-image","url('"+ $(src).attr("data-id") +"')");
@@ -631,8 +624,12 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
             //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getRepeaterHTML(repeater.id)+'</div>';
             createOnDesignArea(html,function(){});
-        }
+        }*/
     };
+
+
+
+
 
     function defaultGridProperties()
     {
@@ -724,7 +721,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
 
     }
-
+/*
     $scope.onDropOverContainer = function()
     {
             if (customObjectData.objectType == 'image')
@@ -760,6 +757,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                 }
 
     }
+    */
 
     function createOnDesignArea(html, done)
     {
@@ -777,6 +775,8 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
         event.stopPropagation();
         var customObjectData = data['json/custom-object'];
+
+        /*
         if (customObjectData.objectType == 'chart') {
             var html = getChartHTML("chart");
         }
@@ -795,63 +795,51 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             $scope.repeaters.push(repeater);
 
             var html = getRepeaterHTML(repeater.id);
-        }
+        }*/
 
         if (customObjectData.objectType == 'queryFilter') {
             for (var i in $scope.prompts)
                     {
                         if ($scope.prompts[i].elementID == customObjectData.promptID)
                             {
-                                if ( angular.element('#PROMPT_'+$scope.prompts[i].elementID).length ){ // || angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
+                                if ( angular.element('#PROMPT_'+$scope.prompts[i].elementID).length ){
                                     noty({text: 'Sorry, that filter is already on the board',  timeout: 6000, type: 'error'});
                                     } else {
-                                        var html = '<div id="PROMPT_'+$scope.prompts[i].elementID+'" page-block class="ndContainer" ndType="ndPrompt"><nd-prompt  filter="getFilter('+"'"+$scope.prompts[i].elementID+"'"+')" element-id="'+$scope.prompts[i].elementID+'" label="'+$scope.prompts[i].objectLabel+'" value-field="'+$scope.prompts[i].name+'" show-field="'+$scope.prompts[i].name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
+                                        //var html = '<div id="PROMPT_'+$scope.prompts[i].elementID+'" page-block class="ndContainer" ndType="ndPrompt"><nd-prompt  filter="getFilter('+"'"+$scope.prompts[i].elementID+"'"+')" element-id="'+$scope.prompts[i].elementID+'" label="'+$scope.prompts[i].objectLabel+'" value-field="'+$scope.prompts[i].name+'" show-field="'+$scope.prompts[i].name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
+
+
+                                        var html = report_v2Model.getPromptHTML($scope.prompts[i])
+
                                     }
                             }
                     }
         }
-
+/*
         if (customObjectData.objectType == 'image') {
 
         }
+*/
+
+
 
         if (customObjectData.objectType == 'report') {
-           /* var containerID = 'REPORT_'+customObjectData.reportID; // uuid2.newguid();
-            for (var i in $scope.selectedDashboard.reports)
-                    {
-                        if ($scope.selectedDashboard.reports[i].id == customObjectData.reportID)
-                            {
-
-                                if ( angular.element('#REPORT_'+$scope.selectedDashboard.reports[i].id).length ){//||  angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
-                                    noty({text: 'Sorry, that report is already on the board',  timeout: 6000, type: 'error'});
-                                    } else {
-                                    var html = '<div page-block class="container-fluid" ndType="ndReportContainer" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+$scope.selectedDashboard.reports[i].id+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+$scope.selectedDashboard.reports[i].id+'"></div>';
-
-                                    }
-                            }
-                    }*/
-            var containerID = 'REPORT_'+customObjectData.reportID; //uuid2.newguid();
 
             for (var i in $scope.selectedDashboard.reports)
                     {
                         if ($scope.selectedDashboard.reports[i].id == customObjectData.reportID)
                             {
 
-                                if ( angular.element('#REPORT_'+$scope.selectedDashboard.reports[i].id).length ){ // || angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
-                                    noty({text: 'Sorry, that report is already on the board',  timeout: 6000, type: 'error'});
+                                if ( angular.element('#REPORT_'+$scope.selectedDashboard.reports[i].id).length ){
+                                        noty({text: 'Sorry, that report is already on the board',  timeout: 6000, type: 'error'});
                                     } else {
-                                        var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
-                                                        '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
-                                                           // '<div page-block class="Block500" ndType="reportBlock" id="'+containerID+'">'+getReportHTML($scope.selectedDashboard.reports[i],containerID)+'</div>'
-                                                              '<div class="container-fluid" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+$scope.selectedDashboard.reports[i].id+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+$scope.selectedDashboard.reports[i].id+'" style="padding:0px"></div>';
-
-                                                        '</div>'+
-                                                    '</div>';
-
+                                        var html = report_v2Model.getReportContainerHTML(customObjectData.reportID);
+                                        //createOnDesignArea(html,function(){});
                                     }
                             }
                     }
-        }
+
+            }
+
 
         if (html)
         {

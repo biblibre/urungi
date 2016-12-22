@@ -150,9 +150,12 @@ return {
 
     $scope.deleteSelected = function()
     {
+
+
         var elementID = $scope.selectedElement.attr('id');
 
-        if ($scope.selectedElementType == 'container' || $scope.selectedElementType == 'tabsContainer')
+        //if ($scope.selectedElementType == 'container' || $scope.selectedElementType == 'tabsContainer')
+          if ($scope.selectedElementType == 'tabsContainer')
             {
             var containerNbr = -1;
 

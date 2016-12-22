@@ -300,12 +300,20 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             //IF width > 300 then you will face problems with mobile devices in responsive mode
                 steps:[
                     {
-                        element: '#parentIntro',
-                        html: '<div><h3>Reports</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Here you can create and execute reports.</span><br/><br/><span>Choose a report type and drag and drop elements from the selected layer to compose your report.</span><br/><br/><span>You can also add runtime filters to split your data in real time.</span><br/><br/><span></span></div>',
+                        element: '#parentIntroReports',
+                        html: '<div><h3>Reports</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Here you can create and execute reports.</span><br/><br/><iframe width="350" height="225" src="https://www.youtube.com/embed/_g1NcBIgGQU" frameborder="0" allowfullscreen></iframe><br/><br/><span>Watch this short tutorial to see how to create a report.</span></div>',
                         width: "500px",
                         objectArea: false,
                         verticalAlign: "top",
-                        height: "300px"
+                        height: "400px"
+                    },
+                    {
+                        element: '#parentIntroReports',
+                        html: '<div><h3>Reports</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span>Choose a report type and drag and drop elements from the selected layer to compose your report.</span><br/><br/><span>You can also add runtime filters to split your data in real time.</span><br/><br/><span></span></div>',
+                        width: "350px",
+                        objectArea: false,
+                        verticalAlign: "top",
+                        height: "200px"
                     },
                     {
                         element: '#newReportBtn',
