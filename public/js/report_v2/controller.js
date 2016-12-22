@@ -1172,8 +1172,7 @@ $scope.changeColumnColor = function(color)
     $scope.reportNameSave = function () {
         report_v2Model.saveAsReport($scope.selectedReport,$scope.mode,function(){
             $('#theReportNameModal').modal('hide');
-            $('modal-backdrop').visible = false;
-            $('modal-backdrop').remove();
+            $('.modal-backdrop').hide();
             $scope.goBack();
         });
 

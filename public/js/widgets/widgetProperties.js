@@ -36,7 +36,7 @@ return {
 
     $scope.faList = icons.faList;
     $scope.imageFilters = [];
-    $scope.imageFilters.opacity = 10;
+    $scope.imageFilters.opacity = 100;
 
       $scope.changeCSS = function(cssProperty,value)
         {
@@ -106,12 +106,29 @@ return {
 
     $scope.changeOpacity = function()
     {
-        var alpha = $scope.imageFilters.opacity /10;
-        var hex = hexToRgb($scope.BackgroundColor);
-        var r = hex.r;
-        var g = hex.g;
-        var b = hex.b;
-        $scope.selectedElement.css({'background-color': 'rgba('+r+','+g+','+b+',' + alpha + ')'});
+        if ($scope.backgroundImage == undefined || $scope.backgroundImage == 'none')
+                    {
+                    var alpha = $scope.imageFilters.opacity /100;
+                    var hex = hexToRgb($scope.backgroundColor);
+                    var r = hex.r;
+                    var g = hex.g;
+                    var b = hex.b;
+                    $scope.selectedElement.css({'background-color': 'rgba('+r+','+g+','+b+',' + alpha + ')'});
+                    } else {
+                        if ($scope.imageFilters.opacity != 0)
+                          {
+                            var theElement = $scope.selectedElement;
+
+                            theElement.css("filter"," opacity("+$scope.imageFilters.opacity+"%) ");
+                            theElement.css("webkitFilter"," opacity("+$scope.imageFilters.opacity+"%) ");
+                            theElement.css("mozFilter"," opacity("+$scope.imageFilters.opacity+"%) ");
+                            theElement.css("oFilter"," opacity("+$scope.imageFilters.opacity+"%) ");
+                            theElement.css("msFilter"," opacity("+$scope.imageFilters.opacity+"%) ");
+                          }
+
+                        //filter: alpha(Opacity=30); opacity: 0.3;
+                        //TODO: problem with opacity for background images  go to https://scotch.io/tutorials/how-to-change-a-css-background-images-opacity
+                    }
     }
 
     function hexToRgb(hex) {
@@ -518,10 +535,95 @@ return {
             }
     }
 
+/*
+    $scope.changeBackgroundFilter = function() {
+        if ($scope.selectedElement)
+            {
+                  var theElement = $scope.selectedElement;
 
 
+            var styleValue = '';
+
+            if ($scope.imageFilters.opacity != 0)
+                styleValue = styleValue + " opacity("+$scope.imageFilters.opacity+"%) ";
 
 
+            theElement.css("filter",styleValue);
+            theElement.css("webkitFilter",styleValue);
+            theElement.css("mozFilter",styleValue);
+            theElement.css("oFilter",styleValue);
+            theElement.css("msFilter",styleValue);
+            }
+        }
+*/
+
+/* CHART PROPERTIES
+    $scope.isChartCompleted = function(chartID)
+    {
+        var found = false;
+        for (var i in $scope.charts)
+            {
+                if ($scope.charts[i].chartID == chartID)
+                    {
+                        if ($scope.charts[i].dataAxis && $scope.charts[i].dataColumns)
+                            if ($scope.charts[i].dataAxis && $scope.charts[i].dataColumns.length >0)
+                                {
+                                    found = true;
+                                }
+                    }
+            }
+        return found;
+    }
+
+    $scope.getChartDataAxis = function(chartID)
+    {
+        var result = false;
+
+        for (var c in $scope.charts)
+             {
+                if ($scope.charts[c].chartID == chartID)
+                    {
+                    if ($scope.charts[c].dataAxix != undefined)
+                        result = true;
+                    }
+             }
+    return result;
+    }
+
+    $scope.getChartDataColumns = function(chartID)
+    {
+    var result = false;
+
+        for (var c in $scope.charts)
+             {
+                if ($scope.charts[c].chartID == chartID)
+                    {
+                    if ($scope.charts[c].dataColumns != undefined && $scope.charts[c].dataColumns.length > 0)
+                        result = true;
+
+                    }
+
+             }
+    return result;
+
+    }
+
+    $scope.applyChartSettings = function()
+    {
+        c3Charts.applyChartSettings($scope);
+    }
+
+    $scope.onChartSelectedObjectChanged = function(datacolumn)
+    {
+         //dataColumn.object = $scope.selectedObject;
+    }
+
+    $scope.onChartPropertiesChanged = function(object)
+    {
+        c3Charts.onChartPropertiesChanged($scope,object);
+    }
+
+*/
 
 
         /**/

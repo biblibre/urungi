@@ -463,6 +463,9 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     }
 
     $scope.onDrop = function (data, event, type, group) {
+         //DROP OVER THE DASHBOARD PARENT DIV
+
+
         event.stopPropagation();
         var customObjectData = data['json/custom-object'];
 
@@ -502,44 +505,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             createOnDesignArea(html,function(){});
         }
 
-        /*
-        if (customObjectData.objectType == 'chart') {
-
-            var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
-                            '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
-                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" >'+getChartHTML("normal")+'</div>'
-                            '</div>'+
-                        '</div>';
-
-            //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+ getChartHTML("normal")
-
-            //+'</div>';
-            createOnDesignArea(html,function(){});
-        }
-
-        if (customObjectData.objectType == 'pieChart') {
-
-            var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
-                            '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
-                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" >'+getChartHTML("pie")+'</div>'
-                            '</div>'+
-                        '</div>';
-
-            //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("pie")+'</div>';
-            createOnDesignArea(html,function(){});
-        }
-
-        if (customObjectData.objectType == 'donutChart') {
-            var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
-                            '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
-                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" >'+getChartHTML("donut")+'</div>'
-                            '</div>'+
-                        '</div>';
-
-            //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getChartHTML("donut")+'</div>';
-            createOnDesignArea(html,function(){});
-        }
-        */
 
         if (customObjectData.objectType == 'report') {
 
@@ -568,10 +533,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                                 if ( angular.element('#PROMPT_'+$scope.prompts[i].elementID).length ){ // || angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
                                     noty({text: 'Sorry, that filter is already on the board',  timeout: 6000, type: 'error'});
                                     } else {
-                                        //var html = '<div id="PROMPT_'+$scope.prompts[i].elementID+'" page-block class="ndContainer" ndType="ndPrompt" ><nd-prompt filter="getFilter('+"'"+$scope.prompts[i].elementID+"'"+')" element-id="'+$scope.prompts[i].elementID+'" label="'+$scope.prompts[i].objectLabel+'" value-field="'+$scope.prompts[i].name+'" show-field="'+$scope.prompts[i].name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
-
                                         var html = report_v2Model.getPromptHTML($scope.prompts[i])
-
                                         createOnDesignArea(html,function(){});
                                     }
                             }
@@ -589,43 +551,77 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             var html = getTabsHTML(theid,theTabs);
             createOnDesignArea(html,function(){});
         }
-/*
-        if (customObjectData.objectType == 'image')
-        {
-           angular.element(event.target).css("background-image","url('"+ $(src).attr("data-id") +"')");
-        }
+        /*
+            if (customObjectData.objectType == 'image')
+            {
+               angular.element(event.target).css("background-image","url('"+ $(src).attr("data-id") +"')");
+            }
+        */
 
-        if (customObjectData.objectType == 'queryColumn') {
-            $scope.lastElementID = $scope.lastElementID + 1;
-
-            var repeater = {id:'repeater'+$scope.lastElementID,dataColumns:[],query:undefined,properties:defaultGridProperties()};
-
-            var gridProperties =
-
-            $scope.repeaters.push(repeater);
-
-            var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getRepeaterHTML(repeater.id)+'</div>'
-            createOnDesignArea(html,function(){
-            $scope.onDropOnRepeater(data, event, repeater.id);
-            });
-
-        }
-
-        if (customObjectData.objectType == 'repeaterGrid') {
-            $scope.lastElementID = $scope.lastElementID + 1;
-            var repeater = {id:'repeater'+$scope.lastElementID,dataColumns:[],query:undefined,properties:defaultGridProperties()}
-            $scope.repeaters.push(repeater);
-
-            var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
-                            '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
-                                '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" >'+getRepeaterHTML(repeater.id)+'</div>'
-                            '</div>'+
-                        '</div>';
-
-            //var html = '<div page-block class="container-fluid ndContainer" ndType="container" >'+getRepeaterHTML(repeater.id)+'</div>';
-            createOnDesignArea(html,function(){});
-        }*/
     };
+
+    $scope.onDropObject = function (data, event, type, group) {
+        //DROP OVER AN HTML CONTAINER
+
+        event.stopPropagation();
+        var customObjectData = data['json/custom-object'];
+
+
+        if (customObjectData.objectType == 'queryFilter') {
+            for (var i in $scope.prompts)
+                    {
+                        if ($scope.prompts[i].elementID == customObjectData.promptID)
+                            {
+                                if ( angular.element('#PROMPT_'+$scope.prompts[i].elementID).length ){
+                                    noty({text: 'Sorry, that filter is already on the board',  timeout: 6000, type: 'error'});
+                                    } else {
+
+                                        var html = report_v2Model.getPromptHTML($scope.prompts[i])
+
+                                    }
+                            }
+                    }
+        }
+
+        /*
+        if (customObjectData.objectType == 'image') {
+
+        }
+        */
+
+
+
+        if (customObjectData.objectType == 'report') {
+
+            for (var i in $scope.selectedDashboard.reports)
+                    {
+                        if ($scope.selectedDashboard.reports[i].id == customObjectData.reportID)
+                            {
+
+                                if ( angular.element('#REPORT_'+$scope.selectedDashboard.reports[i].id).length ){
+                                        noty({text: 'Sorry, that report is already on the board',  timeout: 6000, type: 'error'});
+                                    } else {
+                                        var html = report_v2Model.getReportContainerHTML(customObjectData.reportID);
+                                        //createOnDesignArea(html,function(){});
+                                    }
+                            }
+                    }
+
+            }
+
+
+        if (html)
+        {
+            var $div = $(html);
+            var el = angular.element(event.target);
+            el.append($div);
+            angular.element(document).injector().invoke(function($compile) {
+                var scope = angular.element($div).scope();
+                $compile($div)(scope);
+            });
+        }
+    };
+
 
 
 
@@ -651,20 +647,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                         return theResult;
                     }
             }
-    }
-
-    $scope.getDistinctValues = function(elementID)
-    {
-       /* for (var p in $scope.prompts)
-        {
-        if ($scope.prompts[p].elementID == elementID)
-            queryModel.getDistinct($scope,$scope.prompts[p],function()
-            {
-
-            });
-        }
-        */
-
     }
 
     $scope.getFilter = function(elementID)
@@ -721,43 +703,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
 
     }
-/*
-    $scope.onDropOverContainer = function()
-    {
-            if (customObjectData.objectType == 'image')
-                {
-                    var dropID = $(src).attr("data-id");
-                    var destType = $(dest).attr("ndType");
 
-                    if (destType == 'ndContainer')
-                    {
-                        var destiny =  $(dest)[0];
-                        var theElement = $($(dest).children()[0]);
-                        theElement.css("background-image","url('"+ $(src).attr("data-id") +"')");
-
-                    } else {
-                        if (destType == 'homeFull')
-                        {
-                            dest.style.backgroundImage = "url('"+ $(src).attr("data-id") +"')";
-
-                        } else {
-                            if (destType == 'image')
-                            {
-                                theTemplate = $compile($(dest).attr("src", $(src).attr("data-id")))(scope);
-
-                            } else {
-                                if (destType == 'carousell')
-                                {
-
-                                } else
-                                theTemplate = $compile('<div class="container-fluid image ndContainer" x-lvl-draggable="false" x-lvl-drop-target="true" ndType="container" x-on-select="selected(selectedEl)" > <div class="embed-responsive embed-responsive-16by9 ndContainer" ndType="none" ><img  x-lvl-draggable="false" x-lvl-drop-target="true" ndType="image" x-on-select="selected(selectedEl)" src="'+dropID+'"  allowfullscreen></img></div></div>')(scope);
-                            }
-                        }
-                    }
-                }
-
-    }
-    */
 
     function createOnDesignArea(html, done)
     {
@@ -769,142 +715,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             });
             done();
     }
-
-    $scope.onDropObject = function (data, event, type, group) {
-
-
-        event.stopPropagation();
-        var customObjectData = data['json/custom-object'];
-
-        /*
-        if (customObjectData.objectType == 'chart') {
-            var html = getChartHTML("chart");
-        }
-
-        if (customObjectData.objectType == 'pieChart') {
-            var html = getChartHTML("pie");
-        }
-
-        if (customObjectData.objectType == 'donutChart') {
-            var html = getChartHTML("donut");
-        }
-
-        if (customObjectData.objectType == 'repeaterGrid') {
-            $scope.lastElementID = $scope.lastElementID + 1;
-            var repeater = {id:'repeater'+$scope.lastElementID,dataColumns:[],query:undefined,properties:defaultGridProperties()}
-            $scope.repeaters.push(repeater);
-
-            var html = getRepeaterHTML(repeater.id);
-        }*/
-
-        if (customObjectData.objectType == 'queryFilter') {
-            for (var i in $scope.prompts)
-                    {
-                        if ($scope.prompts[i].elementID == customObjectData.promptID)
-                            {
-                                if ( angular.element('#PROMPT_'+$scope.prompts[i].elementID).length ){
-                                    noty({text: 'Sorry, that filter is already on the board',  timeout: 6000, type: 'error'});
-                                    } else {
-                                        //var html = '<div id="PROMPT_'+$scope.prompts[i].elementID+'" page-block class="ndContainer" ndType="ndPrompt"><nd-prompt  filter="getFilter('+"'"+$scope.prompts[i].elementID+"'"+')" element-id="'+$scope.prompts[i].elementID+'" label="'+$scope.prompts[i].objectLabel+'" value-field="'+$scope.prompts[i].name+'" show-field="'+$scope.prompts[i].name+'" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
-
-
-                                        var html = report_v2Model.getPromptHTML($scope.prompts[i])
-
-                                    }
-                            }
-                    }
-        }
-/*
-        if (customObjectData.objectType == 'image') {
-
-        }
-*/
-
-
-
-        if (customObjectData.objectType == 'report') {
-
-            for (var i in $scope.selectedDashboard.reports)
-                    {
-                        if ($scope.selectedDashboard.reports[i].id == customObjectData.reportID)
-                            {
-
-                                if ( angular.element('#REPORT_'+$scope.selectedDashboard.reports[i].id).length ){
-                                        noty({text: 'Sorry, that report is already on the board',  timeout: 6000, type: 'error'});
-                                    } else {
-                                        var html = report_v2Model.getReportContainerHTML(customObjectData.reportID);
-                                        //createOnDesignArea(html,function(){});
-                                    }
-                            }
-                    }
-
-            }
-
-
-        if (html)
-        {
-            var $div = $(html);
-            var el = angular.element(event.target);
-            el.append($div);
-            angular.element(document).injector().invoke(function($compile) {
-                var scope = angular.element($div).scope();
-                $compile($div)(scope);
-            });
-        }
-    };
-
-
-    $scope.onDropQueryElement = function (data, event, chartCode) {
-        event.stopPropagation();
-        var customObjectData = data['json/custom-object'];
-
-
-        if (customObjectData.objectType == 'queryColumn') {
-                for (var i in $scope.charts)
-                {
-                    if ($scope.charts[i] != undefined)
-                      if ($scope.charts[i].chartID == chartCode)
-                        {
-                        if ((!$scope.charts[i].dataColumns || $scope.charts[i].dataColumns.length == 0))
-                            {
-                                $scope.charts[i].dataColumns = [];
-
-                                for (var q in $scope.queries)
-                                    {
-                                    var theQuery = $scope.queries[q];
-                                    if (theQuery.name == customObjectData.queryName)
-                                        {
-                                        $scope.charts[i].query = theQuery;
-                                        $scope.charts[i].queryName = customObjectData.queryName;
-                                        }
-                                    }
-                            }
-
-                            if ($scope.charts[i].queryName == customObjectData.queryName)
-                            {
-                                    if (customObjectData.elementType == 'number')
-                                        $scope.charts[i].dataColumns.push({elementName:customObjectData.elementName,
-                                                                        queryName:customObjectData.queryName,
-                                                                        elementLabel:customObjectData.objectLabel,
-                                                                        id:customObjectData.name,
-                                                                        type:'line',
-                                                                        color:'#000000'});
-                                    if (customObjectData.elementType == 'string')
-                                        $scope.charts[i].dataAxis = {elementName:customObjectData.elementName,
-                                                                        queryName:customObjectData.queryName,
-                                                                        elementLabel:customObjectData.objectLabel,
-                                                                        id:customObjectData.name,
-                                                                        type:'line',
-                                                                        color:'#000000'}
-                                    c3Charts.rebuildChart($scope.charts[i]);
-                            } else {
-                                var errorMsg = 'This element is not allowed here...is not in the same query, please select an element that belongs to the same query or reinit the chart prior to assign this element.';
-                                noty({text: errorMsg,  timeout: 6000, type: 'error'});
-                            }
-                        }
-                }
-        }
-    };
 
 
  $scope.getElementProperties = function(element,elementID)
@@ -929,7 +739,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
     }
 
-$scope.onChangeElementProperties = function()
+    $scope.onChangeElementProperties = function()
     {
 
     }
@@ -1008,7 +818,7 @@ $scope.onChangeElementProperties = function()
                 }
             }
     }
-
+/* TABS Component
     $scope.selectThisTab = function(tabsID,id)
     {
 
@@ -1082,7 +892,7 @@ $scope.onChangeElementProperties = function()
     {
         var labelID = '#'+id+'_LABEL';
         $(labelID).text(newLabel);
-    }
+    }*/
 
     $scope.getRuntimeReport = function(reportID)
     {
@@ -1100,7 +910,7 @@ $scope.onChangeElementProperties = function()
             }
     }
 
-
+/* CHART PROPERTIES
     $scope.isChartCompleted = function(chartID)
     {
         var found = false;
@@ -1151,17 +961,6 @@ $scope.onChangeElementProperties = function()
 
     }
 
-    function getQueryFilterHTML()
-    {
-
-
-    }
-
-    $scope.elementDblClick = function(theElement)
-    {
-        var elementType = theElement.attr('ndType');
-    }
-
     $scope.applyChartSettings = function()
     {
         c3Charts.applyChartSettings($scope);
@@ -1176,6 +975,20 @@ $scope.onChangeElementProperties = function()
     {
         c3Charts.onChartPropertiesChanged($scope,object);
     }
+
+*/
+    function getQueryFilterHTML()
+    {
+
+
+    }
+
+    $scope.elementDblClick = function(theElement)
+    {
+        var elementType = theElement.attr('ndType');
+    }
+
+    /*
 
     $scope.changeBackgroundFilter = function() {
 
@@ -1195,7 +1008,7 @@ $scope.onChangeElementProperties = function()
         theElement.css("msFilter",styleValue);
 
     }
-
+*/
 
 
     $scope.dashboardName = function () {
@@ -1210,7 +1023,10 @@ $scope.onChangeElementProperties = function()
     $scope.dashboardNameSave = function () {
 
         $('#dashboardNameModal').modal('hide');
+        $('.modal-backdrop').hide();
         saveDashboard();
+        //$scope.mode = 'edit';
+        $scope.goBack();
 
     };
 
