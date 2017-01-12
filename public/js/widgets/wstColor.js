@@ -4,7 +4,7 @@ app.directive('wstColor', function($compile,colors) {
 return {
     transclude: true,
     scope: {
-        onChange: '=',
+        onChangeColor: '=',
         ngModel: '='
     },
 
@@ -34,16 +34,16 @@ return {
      {
          $scope.selectedColor = color;
          $scope.ngModel = color;
-         if ($scope.onChange)
-         $scope.onChange($scope.selectedColor);
+         if ($scope.onChangeColor)
+             $scope.onChangeColor();
      }
 
      $scope.clearColor = function()
      {
          $scope.selectedColor = 'transparent';
          $scope.ngModel = 'transparent';
-         if ($scope.onChange)
-         $scope.onChange($scope.selectedColor);
+         if ($scope.onChangeColor)
+             $scope.onChangeColor();
      }
 
      $scope.changeInput = function()
