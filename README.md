@@ -3,6 +3,16 @@ Lightweight Business Intelligence tool for reporting mongodb, postgresql, Mysql,
 
 To see how it works go to www.widestage.com
 
+# New Version (Jan 2017)
+Deleted the page reports, now dashboards are page reports. Dashboards are compromised of reports (former single query reports), reports can be created also from the Dashboard interface.
+
+Improved filters in exloration and reports
+
+Changes in the CSS styles for reports and exploration
+
+Improved run time filters in reports and also in the Dashboards (shared runtime filters)
+
+
 # Requirements
 
 nodejs  (https://nodejs.org)
