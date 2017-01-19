@@ -35,7 +35,6 @@
     "nodemailer": "~1.8.0",
     "nodemailer-wellknown": "~0.1.7",
     "numeral": "~1.5.3",
-    "oracledb": "~1.7.1",
     "passport": "~0.2.2",
     "passport-facebook": "~2.0.0",
     "passport-google": "~0.3.0",
