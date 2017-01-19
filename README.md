@@ -12,6 +12,8 @@ Changes in the CSS styles for reports and exploration
 
 Improved run time filters in reports and also in the Dashboards (shared runtime filters)
 
+You can now define a custom SQL as a source dataset into the Semantic Layer and not only tables and views
+
 
 # Requirements
 
