@@ -8,7 +8,7 @@ module.exports = function (mongoose, done) {
             var tungus = require('tungus');
             var mongoose = require('mongoose');
             global.TUNGUS_DB_OPTIONS =  { nativeObjectID: true, searchInArray: true };
-            global.connection = mongoose.connect('mongodb://{/data}');
+            global.connection = mongoose.connect('mongodb://data');
 
         } else {
             console.log('mongo DB connection');

@@ -64,7 +64,8 @@
     "angular-editable-text": "~1.1.2",
     "pdfmake": "^0.1.20",
     "angular-ui-codemirror": "^0.3.0",
-    "angular-socialshare": "angularjs-socialshare#^2.3.3"
+    "angular-socialshare": "angularjs-socialshare#^2.3.3",
+    "angular": "1.5.5"
   },
   "resolutions": {
     "angular": "1.5.5"

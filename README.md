@@ -58,6 +58,7 @@ download and install the npm libraries
     npm install
 
 download and install the bower libraries
+be sure you choose the angular 1.5.5 when pointed to choose otherwise it will install 1.6.4 and widestage is not compatible with that version yet, also to be sure you can run  bower install angular#1.5.5 --save
     
     bower install
 

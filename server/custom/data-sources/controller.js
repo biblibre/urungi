@@ -91,7 +91,7 @@ exports.getEntities = function(req,res)
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'MySQL' || result.item.type == 'POSTGRE' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'BIGQUERY')
+            if (result.item.type == 'MySQL' || result.item.type == 'POSTGRE' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'BIGQUERY' || result.item.type == 'HIVE')
             {
                 switch(result.item.type) {
                     case 'MySQL': var db = require('../../core/db/mysql.js');
@@ -103,6 +103,8 @@ exports.getEntities = function(req,res)
                     case 'MSSQL': var db = require('../../core/db/mssql.js');
                         break;
                     case 'BIGQUERY': var db = require('../../core/db/bigQuery.js');
+                        break;
+                    case 'HIVE': var db = require('../../core/db/hive.js');
                 }
                 var data = {
                     host: result.item.params[0].connection.host,
@@ -180,6 +182,36 @@ exports.testConnection = function(req,res) {
             serverResponse(req, res, 200, result);
         });
     }
+
+    if (req.body.type == 'HIVE')
+    {
+        var hive = require('../../core/db/hive.js');
+
+        hive.testConnection(req.body, function(result) {
+
+            serverResponse(req, res, 200, result);
+        });
+    }
+
+    if (req.body.type == 'DRILL-HIVE')
+    {
+        var drill = require('../../core/db/drill.js');
+
+        drill.testConnection(req.body, function(result) {
+
+            serverResponse(req, res, 200, result);
+        });
+    }
+
+    if (req.body.type == 'DRILL-FILE')
+    {
+        var drill = require('../../core/db/drill.js');
+
+        drill.testConnection(req.body, function(result) {
+
+            serverResponse(req, res, 200, result);
+        });
+    }
 };
 
 
@@ -209,7 +241,7 @@ exports.getReverseEngineering = function(req,res)
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL')
+            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' )
             {
                 var sql = require('../../core/db/sql.js');
                 var data = {

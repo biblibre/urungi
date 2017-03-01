@@ -15,6 +15,8 @@ exports.getSchemas = function(data, setresult) {
         case 'ORACLE': var db = 'oracle';
             break;
         case 'MSSQL': var db = 'mssql';
+            break;
+        case 'HIVE': var db = 'hive';
     }
 
     var dbController = require('./'+db+'.js');
@@ -90,6 +92,8 @@ exports.getSqlQuerySchema = function(data, setresult) {
         case 'ORACLE': var db = 'oracle';
             break;
         case 'MSSQL': var db = 'mssql';
+            break;
+        case 'HIVE': var db = 'hive';
     }
 
     var dbController = require('./'+db+'.js');
@@ -177,6 +181,8 @@ exports.getReverseEngineering = function(datasourceID, data, setresult) {
         case 'MSSQL': var db = 'mssql';
             break;
         case 'BIGQUERY': var db = 'bigQuery';
+            break;
+        case 'HIVE': var db = 'hive';
     }
 
     var dbController = require('./'+db+'.js');
@@ -750,6 +756,8 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             case 'MSSQL': var dbController = require('./mssql.js');
                 break;
             case 'BIGQUERY': var dbController = require('./bigQuery.js');
+                break;
+            case 'HIVE': var db = 'hive';
         }
 
         var db = new dbController.db();

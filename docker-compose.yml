@@ -1,0 +1,37 @@
+version: '2'
+services:
+  mongo:
+    image: mongo:3.3
+    container_name: mongo
+    hostname: mongo
+    ports:
+      - "27017:27017"
+    links:
+      - mysql
+  widestage:
+    build: .
+    image: widestage/widestage
+    container_name: widestage
+    hostname: widestage
+    volumes:
+      - ./server.js:/srv/app/server.js
+      - ./server/config/config.js:/srv/app/server/config/config.js
+    links:
+      - mongo
+      - mysql
+    environment:
+      - IP=0.0.0.0
+      - MONGOHOST=mongo
+      #- PORT=8080
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "8081:8081"
+  mysql:
+    image: mysql/mysql-server
+    hostname: mysql
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+    ports:
+      - "3306:3306"
