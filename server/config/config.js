@@ -3,7 +3,7 @@ module.exports = {
         url: 'http://localhost:8080/',
         ip: "0.0.0.0",
         port: 8080,
-        db_type: 'tingoDB', // tingoDB or mongoDB
+        db_type: 'mongoDB', // tingoDB or mongoDB
         db: 'mongodb://localhost:27017/widestage_development', //Mongo DB connection only used if db_type = mongoDB
         tingo_db_path: '/data', //Db files path if using tingoDB
         app: {
