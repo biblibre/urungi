@@ -506,7 +506,7 @@ function sortMergeResults(tempResults,query,done)
 {
     //Orderbys
 
-    var firstBy = require('thenBy.js');
+    var firstBy = require('thenby');
 
 
     if (query.order.length == 1)

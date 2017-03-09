@@ -48,6 +48,7 @@
     "pg": "^4.4.3",
     "request": "^2.34.0",
     "thenBy.js": "git+https://git@github.com/Teun/thenBy.js.git",
+    "thenby": "^1.2.3",
     "thrift": "^0.10.0",
     "tingodb": "^0.4.2",
     "tungus": "0.0.5"
