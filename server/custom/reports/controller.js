@@ -391,11 +391,13 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
                                 {
 
                                     mergeResults(dataSource.collections,query,function(mergedResults){
-
-                                        result = mergedResults;
+                                        var finalResult = {result: 1, data:mergedResults,sql:undefined};
+                                        result = finalResult;
                                     });
                                 }  else {
-                                        result = dataSource.collections[0].result;
+
+                                    var finalResult = {result: 1, data:dataSource.collections[0].result,sql:undefined};
+                                    result = finalResult;
 
                                 }
 

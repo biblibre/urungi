@@ -737,6 +737,7 @@ function isEmpty(obj) {
 }
 
 function processCollections(req,collections, dataSource, params, thereAreJoins, done,  index) {
+
     var index = (index) ? index : 0;
     var collection = (collections[index]) ? collections[index] : false;
     var result = (result) ? result : [];

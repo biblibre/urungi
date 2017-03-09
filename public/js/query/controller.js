@@ -328,7 +328,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
     $scope.getDataForPreview  = function()
     {
-
+console.log('getting data for preview');
         $scope.gettingData = true;
         bsLoadingOverlayService.start({referenceId: 'reportLayout'});
 
@@ -341,7 +341,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
 
         queryModel.getQueryData( function(data,sql){
-
+console.log('getting data for preview',data);
                 $scope.queries[0].data = data;
                 $scope.sql = sql;
 

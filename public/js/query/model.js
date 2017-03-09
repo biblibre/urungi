@@ -324,7 +324,6 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                         connection.get('/api/reports/get-data', params, function(data) {
                            var sql = data.sql;
 
-
                             if (data.result == 0)
                             {
                                 noty({text: data.msg,  timeout: 2000, type: 'error'});
@@ -425,8 +424,8 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             return value;
         }
 
-
-        done(JSON.parse(JSON.stringify(data),dateTimeReviver));
+        if (data != undefined)
+            done(JSON.parse(JSON.stringify(data),dateTimeReviver));
     }
 
     this.getDistinct = function($scope,attribute,done) {

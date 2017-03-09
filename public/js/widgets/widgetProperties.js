@@ -47,7 +47,7 @@ return {
         }
 
       $scope.$watch('backgroundColor', function(){
-          console.log('backgroundColor backgroundColor changed');
+
 
           if ($scope.gettingElementProperties == false)
               {
@@ -61,7 +61,7 @@ return {
 
 
       $scope.$watch('properties', function(){
-          console.log('the properties');
+
 $scope.gettingElementProperties = true;
                     getElementProperties();
                     if ($scope.properties)
@@ -76,12 +76,11 @@ $scope.gettingElementProperties = true;
                             $scope.headerBackgroundColor = $scope.properties.headerBackgroundColor;
                             $scope.headerHeight = $scope.properties.headerHeight;
                             $scope.height = $scope.properties.height;
-                            console.log('alarm');
+
                             //$scope.headerBottomLineColor = $scope.properties.headerBottomLineColor;
                             $scope.headerBottomLineWidth = $scope.properties.headerBottomLineWidth;
                             $scope.rowBottomLineWidth = $scope.properties.rowBottomLineWidth;
                             $scope.rowBorderColor = $scope.properties.rowBorderColor;
-                            console.log('this is the row color',$scope.rowBorderColor);
                             $scope.columnLineWidth = $scope.properties.columnLineWidth;
                         }
     $scope.gettingElementProperties = false;
@@ -89,7 +88,6 @@ $scope.gettingElementProperties = true;
       });
 
     $scope.$watch('properties.headerBottomLineColor', function(){
-        console.log('visto',$scope.gettingElementProperties);
         if ($scope.gettingElementProperties == false)
             $scope.onChange();
     });
@@ -171,10 +169,8 @@ $scope.gettingElementProperties = true;
 
     $scope.changeHeaderBackgroundcolor = function(headerBackgroundColor)
     {
-        console.log('changeHeaderBackgroundcolor changeHeaderBackgroundcolor changed');
-
         $scope.headerBackgroundColor = headerBackgroundColor;
-        //saveProperties();
+
     }
 
     $scope.changeHeaderHeight = function(headerHeight)
@@ -231,48 +227,24 @@ $scope.gettingElementProperties = true;
 
     $scope.changeHeaderBottomLineWidth = function(headerBottomLineWidth)
     {
-        console.log('changeHeaderBottomLineWidth changed');
         $scope.headerBottomLineWidth = headerBottomLineWidth;
         //saveProperties();
     }
 
-//$scope.$watch('headerBottomLineColor', function(){
-
-    //$scope.changeHeaderBottomLineColor = function(headerBottomLineColor)
-    //{
-       // console.log('changeHeaderBottomLineColor changed');
-        //$scope.headerBottomLineColor = headerBottomLineColor;
-    //$scope.properties.headerBottomLineColor = $scope.headerBottomLineColor;
-      //  console.log('the properties',$scope.properties.headerBottomLineColor,$scope.properties);
-
-        //saveProperties();
-    //console.log('the properties after',$scope.properties.headerBottomLineColor,$scope.properties);
-
-    //});
 
     $scope.changeRowBottomLineWidth = function(rowBottomLineWidth)
     {
-        console.log('changeRowBottomLineWidth changeRowBottomLineWidth changed');
         $scope.rowBottomLineWidth = rowBottomLineWidth;
         //saveProperties();
     }
 
     $scope.changeRowBorderColor = function(rowBorderColor)
     {
-        console.log('changeRowBorderColor changed');
         $scope.rowBorderColor = rowBorderColor;
         //saveProperties();
     }
 
-   /*
-     $scope.$watch('rowBorderColor', function(){
-        if ($scope.selectedElement && $scope.gettingElementProperties == false)
-            {
-         console.log('rowBorderColor changed');
-        saveProperties();
-            }
-      });
-*/
+
     $scope.changeColumnLineWidth = function(columnLineWidth)
     {
         $scope.columnLineWidth = columnLineWidth;
@@ -286,54 +258,15 @@ $scope.gettingElementProperties = true;
 
     $scope.propertyChanged = function()
     {
-        //console.log('property changed');
-        //$scope.onChange();
+
     }
 
     function saveProperties()
         {
-            /*
-                    if ($scope.properties)
-                        {
-                            $scope.properties.backgroundColor = $scope.backgroundColor;
-                            $scope.properties.backgroundImage = $scope.backgroundImage;
-                            $scope.properties.height = $scope.height;
-                            $scope.properties.hiddenIn = $scope.hiddenIn;
-                            $scope.properties.rowHeight = $scope.rowHeight;
-                            $scope.properties.headerRowHeight = $scope.headerRowHeight;
-                            $scope.properties.headerBackgroundColor = $scope.headerBackgroundColor;
-                            $scope.properties.headerHeight = $scope.headerHeight;
-                            $scope.properties.height = $scope.height;
-                            //$scope.properties.headerBottomLineColor = $scope.headerBottomLineColor;
-                            console.log('the header bottom line color',$scope.headerBottomLineColor);
-                            $scope.properties.headerBottomLineWidth = $scope.headerBottomLineWidth;
-                            $scope.properties.rowBottomLineWidth = $scope.rowBottomLineWidth;
-                            $scope.properties.rowBorderColor = $scope.rowBorderColor;
-                            $scope.properties.columnLineWidth = $scope.columnLineWidth;
 
-                        }
-
-            console.log('saving properties',$scope.properties);
-                    $scope.onChange();
-*/
 
         }
 
-    /* ALTERNATE ROWS COLOR
-
-    .ui-grid-row:nth-child(even) .ui-grid-cell {
-    background-color: #CCCDD0;   alternate colors par
-    }
-    .ui-grid-row:nth-child(odd) .ui-grid-cell {
-        background-color: transparent; alternate colors impar
-    }
-
-    HEADER COLOR
-
-
-
-
-    */
 
     $scope.moveElementUp = function()
     {
@@ -461,9 +394,7 @@ $scope.gettingElementProperties = true;
 
     function getElementProperties()
     {
-       console.log('aqui');
-        //$scope.gettingElementProperties = true;
-        //$scope.tabs.selected = 'settings';
+
         $scope.selectedElementType = '';
         $scope.selectedElement = $scope.element;
 

@@ -1258,7 +1258,7 @@ $scope.changeColumnColor = function(color)
 
     $scope.onChangeElementProperties = function()
     {
-        console.log('properties changed',$scope.selectedReport);
+
     }
 
     $scope.gridGetMoreData = function(reportID)
