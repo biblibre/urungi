@@ -810,7 +810,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                     if (result)
                         getFormatedResult(elements,result.rows,function(finalResults){
                             setresult({result: 1, data:finalResults,sql:SQLstring});
-                            saveToLog(req,SQLString, 400,'SQL-001','QUERY: ('+JSON.stringify(query)+')',undefined);
+                            saveToLog(req,SQLstring, 400,'SQL-001','QUERY: ('+JSON.stringify(query)+')',undefined);
                         });
                     else {
                         setresult({result: 1, data:[],sql:SQLstring});
