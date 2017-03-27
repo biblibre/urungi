@@ -149,7 +149,7 @@ pre strong {
     top: 50px;
     left: 0;
     bottom: 0;
-    z-index: 100;
+    /*z-index: 100;*/
     width: 300px;
     box-sizing: border-box;
     padding: 15px 30px 15px 100px;
@@ -309,8 +309,7 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
 }
 
 #objectPanel>menu a:hover, #objectPanel>menu .on a {
-    /*background-image: url(https://static.canva.com/static/images/icon_tabs_search_on.png); */
-    color: #00d4db!important;
+    color: #94C255!important;
     -webkit-transform: none;
     transform: none;
     background-color: #3f4652;
@@ -339,8 +338,8 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
 #objectPanel>menu a {
     display: block;
     width: 70px;
-    height: 70px;
-    padding-top: 41px;
+    height: 90px;
+    padding-top: 20px;
     box-sizing: border-box;
     /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_search.png);*/
     background-repeat: no-repeat;
@@ -351,9 +350,14 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
     transition: all .15s linear,opacity 0s linear;
 }
 
+#objectPanel>menu a i {
+        font-size: large;
+        margin-bottom: 5px;
+}
+
 #objectPanel>menu .layout a {
-    padding-top: 42px;
-    /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_layouts.png);*/
+    /*padding-top: 42px;
+    background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_layouts.png);*/
     background-size: 18px 19px;
 }
 

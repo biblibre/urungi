@@ -1,4 +1,4 @@
-exports.testConnection = function(data, done) {
+exports.testConnection = function(req,data, done) {
     var mongoose = require('mongoose');
 
     var dbURI =  'mongodb://'+data.host+':'+data.port+'/'+data.database;
@@ -737,7 +737,6 @@ function isEmpty(obj) {
 }
 
 function processCollections(req,collections, dataSource, params, thereAreJoins, done,  index) {
-
     var index = (index) ? index : 0;
     var collection = (collections[index]) ? collections[index] : false;
     var result = (result) ? result : [];

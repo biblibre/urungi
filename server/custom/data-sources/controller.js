@@ -87,11 +87,12 @@ exports.getEntities = function(req,res)
                 data.host = result.item.params[0].connection.host;
                 data.port = result.item.params[0].connection.port;
                 data.database = result.item.params[0].connection.database;
-                mongodb.testConnection(data, function(result) {
+                data.datasourceID = result.item._id;
+                mongodb.testConnection(req,data, function(result) {
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'MySQL' || result.item.type == 'POSTGRE' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'BIGQUERY' || result.item.type == 'HIVE')
+            if (result.item.type == 'MySQL' || result.item.type == 'POSTGRE' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'BIGQUERY' || result.item.type == 'JDBC-ORACLE')
             {
                 switch(result.item.type) {
                     case 'MySQL': var db = require('../../core/db/mysql.js');
@@ -103,17 +104,22 @@ exports.getEntities = function(req,res)
                     case 'MSSQL': var db = require('../../core/db/mssql.js');
                         break;
                     case 'BIGQUERY': var db = require('../../core/db/bigQuery.js');
-                        break;
-                    case 'HIVE': var db = require('../../core/db/hive.js');
+                         break;
+                    case 'JDBC-ORACLE': var db = require('../../core/db/jdbc-oracle.js');
                 }
                 var data = {
+                    datasourceID : result.item._id,
+                    companyID: req.user.companyID,
                     host: result.item.params[0].connection.host,
                     port: result.item.params[0].connection.port,
                     userName:result.item.params[0].connection.userName,
                     password: result.item.params[0].connection.password,
                     database: result.item.params[0].connection.database
                 };
-                db.testConnection(data, function(result) {
+
+                if (result.item.params[0].connection.file) data.file = result.item.params[0].connection.file;
+
+                db.testConnection(req,data, function(result) {
                     serverResponse(req, res, 200, result);
                 });
             }
@@ -129,12 +135,13 @@ exports.getEntities = function(req,res)
 }
 
 exports.testConnection = function(req,res) {
+    req.body.companyID = req.user.companyID;
 
     if (req.body.type == 'MONGODB')
     {
         var mongodb = require('../../core/db/mongodb.js');
     
-        mongodb.testConnection(req.body, function(result) {
+        mongodb.testConnection(req,req.body, function(result) {
             serverResponse(req, res, 200, result);
         });
     }
@@ -142,7 +149,7 @@ exports.testConnection = function(req,res) {
     {
         var mysql = require('../../core/db/mysql.js');
     
-        mysql.testConnection(req.body, function(result) {
+        mysql.testConnection(req,req.body, function(result) {
             serverResponse(req, res, 200, result);
         });
     }
@@ -150,7 +157,7 @@ exports.testConnection = function(req,res) {
     {
         var postgre = require('../../core/db/postgresql.js');
 
-        postgre.testConnection(req.body, function(result) {
+        postgre.testConnection(req,req.body, function(result) {
 
             serverResponse(req, res, 200, result);
         });
@@ -159,7 +166,7 @@ exports.testConnection = function(req,res) {
     {
         var oracle = require('../../core/db/oracle.js');
 
-        oracle.testConnection(req.body, function(result) {
+        oracle.testConnection(req,req.body, function(result) {
 
             serverResponse(req, res, 200, result);
         });
@@ -168,7 +175,7 @@ exports.testConnection = function(req,res) {
     {
         var mssql = require('../../core/db/mssql.js');
 
-        mssql.testConnection(req.body, function(result) {
+        mssql.testConnection(req,req.body, function(result) {
 
             serverResponse(req, res, 200, result);
         });
@@ -177,37 +184,16 @@ exports.testConnection = function(req,res) {
     {
         var bigQuery = require('../../core/db/bigQuery.js');
 
-        bigQuery.testConnection(req.body, function(result) {
+        bigQuery.testConnection(req,req.body, function(result) {
 
             serverResponse(req, res, 200, result);
         });
     }
-
-    if (req.body.type == 'HIVE')
+    if (req.body.type == 'JDBC-ORACLE')
     {
-        var hive = require('../../core/db/hive.js');
+        var jdbcOracle = require('../../core/db/jdbc-oracle.js');
 
-        hive.testConnection(req.body, function(result) {
-
-            serverResponse(req, res, 200, result);
-        });
-    }
-
-    if (req.body.type == 'DRILL-HIVE')
-    {
-        var drill = require('../../core/db/drill.js');
-
-        drill.testConnection(req.body, function(result) {
-
-            serverResponse(req, res, 200, result);
-        });
-    }
-
-    if (req.body.type == 'DRILL-FILE')
-    {
-        var drill = require('../../core/db/drill.js');
-
-        drill.testConnection(req.body, function(result) {
+        jdbcOracle.testConnection(req,req.body, function(result) {
 
             serverResponse(req, res, 200, result);
         });
@@ -298,7 +284,8 @@ exports.getEntitySchema = function(req,res) {
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL')
+            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL'
+               || result.item.type == 'JDBC-ORACLE')
             {
                 var sql = require('../../core/db/sql.js');
                 var data = {
@@ -319,12 +306,14 @@ exports.getEntitySchema = function(req,res) {
             {
                 var bquery = require('../../core/db/bigQuery.js');
                 var data = {
+                    companyID: req.user.companyID,
                     type: result.item.type,
                     host: result.item.params[0].connection.host,
                     port: result.item.params[0].connection.port,
                     userName: result.item.params[0].connection.userName,
                     password: result.item.params[0].connection.password,
                     database: result.item.params[0].connection.database,
+                    file: result.item.params[0].connection.file,
                     entities: theEntities
                 };
 

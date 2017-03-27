@@ -68,12 +68,21 @@ db.prototype.getPKs = function()
 
 
 db.prototype.getLimitString = function(limit, offset) {
-    return 'LIMIT '+limit+' OFFSET '+offset;
+    return ' LIMIT '+limit+' OFFSET '+offset;
 };
+
+db.prototype.setLimitToSQL = function(sql,limit,offset)
+{
+   if (limit == -1)
+        return sql
+       else
+    return sql + ' LIMIT '+limit+' OFFSET '+offset;
+
+}
 
 exports.db = db;
 
-exports.testConnection = function(data, setresult) {
+exports.testConnection = function(req,data, setresult) {
 
     var conString = 'postgres://'+data.userName+':'+data.password+'@'+data.host+':'+data.port+'/'+data.database;
 

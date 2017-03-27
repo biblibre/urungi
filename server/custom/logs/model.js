@@ -10,9 +10,20 @@ var logsSchema = new mongoose.Schema({
     relationID: {type: String},
     relationCollection: {type: String},
     action: {type: String}, //'create', 'update', 'delete'
+    code: {type: String},
+    associatedID: String,
     createdOn: { type: Date, default: Date.now },
     createdBy: {type: String}
 }, { collection: 'wst_Logs' });
+
+
+
+//Log Types
+//100 info
+//200 warnings
+//300 error
+//400 SQL
+
 
 logsSchema.statics.saveToLog = function(req, data, otherInfo, done){
     if (req.user)
@@ -24,8 +35,10 @@ logsSchema.statics.saveToLog = function(req, data, otherInfo, done){
             otherInfo: otherInfo,
             type: data.type,
             companyID: companyID,
+            associatedID: data.associatedID,
             userID : (req.isAuthenticated()) ? req.user.id : null,
-            ip : req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            ip : req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+            code: data.code
         };
     }
     else {

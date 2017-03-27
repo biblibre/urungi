@@ -10,9 +10,9 @@
 
     <section id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'reports'" class="ng-scope">
         <menu>
-            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'reports'}"><a ng-click="tabs.selected = 'reports'">Reports</a></li>
-            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'prompts'}" ><a ng-click="tabs.selected = 'prompts'">Run time Filters</a></li>
-            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'layouts'}" ><a ng-click="tabs.selected = 'layouts'">Layouts</a></li>
+            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'reports'}"><a ng-click="tabs.selected = 'reports'"><i class="fa fa-bar-chart fa-2" aria-hidden="true"></i><br/><br/>Reports</a></li>
+            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'prompts'}" ><a ng-click="tabs.selected = 'prompts'"><i class="fa fa-filter fa-2" aria-hidden="true"></i><br/>Run time Filters</a></li>
+            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'layouts'}" ><a ng-click="tabs.selected = 'layouts'"><i class="fa fa-file-image-o fa-2" aria-hidden="true"></i><br/><br/>Layouts</a></li>
         </menu>
     <section class="content">
         <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">

@@ -10,7 +10,8 @@ Controller.method('findAll', function (req, done) {
     var Model = this.model, perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
     var find = {}, searchText = (req.query.search) ? req.query.search : false, fields = {};
     var fieldsToGet = (req.query.fields) ? req.query.fields : false;
-    var params = (req.query.page) ? {skip: (page-1)*perPage, limit: perPage} : {};
+    if (req.query.page > 0)
+        var params = (req.query.page) ? {skip: (page-1)*perPage, limit: perPage} : {};
 
     if (req.query.sort) {
         var sortField = {};
@@ -93,7 +94,10 @@ Controller.method('findAll', function (req, done) {
         if(err) throw err;
 
         Model.count(find, function (err, count) {
-            done({result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count/perPage) : 1), items: items});
+            if (req.query.page > 0)
+                done({result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count/perPage) : 1), items: items});
+            else
+                done({result: 1, page: 1, pages: 1, items: items});
         });
     });
 });
@@ -207,8 +211,10 @@ Controller.method('update', function (req, done) {
     });
 
     //this.model.update({"_id" : id}, {$set: data }, function (err, numAffected) {
-    this.model.update(find, {$set: data }, function (err, numAffected) {
+    this.model.update(find, {$set: data }, function (err, result) {
         if(err) throw err;
+
+        var numAffected = (typeof result.n == 'undefined') ? result.nModified : result.n; //MongoDB 2.X return n, 3.X return nModified?
 
         if (numAffected>0)
         {
@@ -226,8 +232,10 @@ Controller.method('remove', function (req, done) {
     }
 
     var find = generateFindFields(req, req.params.id);
-    this.model.remove(find, function (err, numAffected) {
+    this.model.remove(find, function (err, result) {
         if(err) throw err;
+
+        var numAffected = (typeof result.n == 'undefined') ? result.nModified : result.n; //MongoDB 2.X return n, 3.X return nModified?
 
         if (numAffected>0)
         {

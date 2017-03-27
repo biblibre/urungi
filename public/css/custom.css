@@ -129,3 +129,12 @@ body {
     background-color: #000;
     color: #fff;
 }
+
+#objectPanel>menu a:hover, #objectPanel>menu .on a {
+    color: #94C255;
+}
+
+.selected-datasource
+{
+    color:#72A230;
+}

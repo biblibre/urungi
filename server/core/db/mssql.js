@@ -53,12 +53,21 @@ db.prototype.getSchemaQuery = function(newSchemas, newTables) {
 };
 
 db.prototype.getLimitString = function(limit, offset) {
-    return "OFFSET "+offset+" ROWS FETCH NEXT "+limit+" ROWS ONLY";
+    return " OFFSET "+offset+" ROWS FETCH NEXT "+limit+" ROWS ONLY";
 };
+
+db.prototype.setLimitToSQL = function(sql,limit,offset)
+{
+   if (limit == -1)
+        return sql
+       else
+    return sql + " OFFSET "+offset+" ROWS FETCH NEXT "+limit+" ROWS ONLY";
+
+}
 
 exports.db = db;
 
-exports.testConnection = function(data, setresult) {
+exports.testConnection = function(req,data, setresult) {
     var connection = new mssql.Connection({
         user: data.userName,
         password: data.password,

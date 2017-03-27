@@ -1,22 +1,23 @@
 <script src="libs/jsplumb/jquery.jsPlumb-1.7.6-min.js"></script>
 
-<div class="container-fluid branded-border-panel" style="padding-left:25px;">
+
+<div class="container-fluid branded-border-panel" style="padding-left:25px;z-index:100">
     <h3 class="pull-left" editable-text="_Layer.name"></h3>
     <a ng-click="save()" class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;">Save layer</a>
     <a href="/#/layers" class="btn btn-default pull-right">Cancel</a>
 </div>
 
-<div class="container-fluid" ng-init="view()">
+<div class="container-fluid" ng-init="view()"   bs-loading-overlay bs-loading-overlay-reference-id="layerView">
     <div class="col-md-12">
         <div class="container-fluid" style="margin-bottom: 10px">
-            <a ng-click="addSQL()" class="btn btn-info pull-right" style="margin-left: 5px;margin-right: 5px;">Add new SQL</a>
+
             <a ng-click="addDataset()" class="btn btn-info pull-right" style="margin-left: 5px;margin-right: 5px;">Add new dataset</a>
         </div>
     </div>
     <div class="container-fluid">
     <section id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'elements'" class="catalogSidebar" style="top: 46px;width: 350px;">
         <menu>
-            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'elements'}"><a ng-click="tabs.selected = 'elements'">Elements</a></li>
+            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'elements'}"><a ng-click="tabs.selected = 'elements'"><i class="fa fa-newspaper-o fa-2" aria-hidden="true"></i><br/><br/>Elements</a></li>
             <!--<li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'properties'}"><a ng-click="tabs.selected = 'properties'">Properties</a></li>-->
         </menu>
 
@@ -95,9 +96,14 @@
 
     <div id="collections" class="canvas-parent" ng-click="selectedCanvas($event)" style="left: 360px;background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDguNSBMIDM0IDguNSBNIDguNSAwIEwgOC41IDM0IE0gMCAxNyBMIDM0IDE3IE0gMTcgMCBMIDE3IDM0IE0gMCAyNS41IEwgMzQgMjUuNSBNIDI1LjUgMCBMIDI1LjUgMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDM0IDAgTCAwIDAgMCAzNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=&quot;);
     ">
-            <div class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan" id="canvas" style="overflow: visible !important;border: 0px;background: transparent;">
-                <div id="{{collection.collectionID}}"  class="window jtk-node  jsplumb-draggable" ng-style="{'left': collection.left, 'top': collection.top}" ng-repeat="collection in _Layer.params.schema">
-                    <div class=" jtk-header " style="overflow: hidden;padding-left:2px">
+            <div ng-click="selectedCanvas()" class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan canvas-er" id="canvas">
+
+
+
+                <div id="{{collection.collectionID}}-parent"  class="window jtk-node  jsplumb-draggable" ng-style="{'left': collection.left, 'top': collection.top}" ng-repeat="collection in _Layer.params.schema">
+
+
+                    <div id="{{collection.collectionID}}" class=" jtk-header " style="overflow: hidden;padding-left:2px" ng-click="selectCollection(collection,$event)">
 
                         <table style="border: 0px;">
                             <tr>
@@ -107,10 +113,15 @@
                             </tr>
                         </table>
                     </div>
+
+
+
                     <!--
                     <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{'flowchart'+element.elementID}}" ng-repeat="element in collection.elements" popover-trigger="mouseenter" popover-placement="bottom" popover-title="{{element.elementName}}" popover="..." title="<h1><b>Another</b> <em>one</em> here too</h1>" data-html="true" rel="tooltip">{{element.elementName}}</div>
                     -->
-                    <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{element.elementID}}" ng-repeat="element in collection.elements"  title="{{element.elementName}}" data-html="true" rel="tooltip">
+                    <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{element.elementID}}" ng-repeat="element in collection.elements"  title="{{element.elementName}}" data-html="true" rel="tooltip" ng-class="{'isPK': element.isPK}" ng-click="selectElement(element,$event)">
+
+
                         <table style="border: 0px;">
                             <tr>
                                 <!--

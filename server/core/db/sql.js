@@ -16,10 +16,13 @@ exports.getSchemas = function(data, setresult) {
             break;
         case 'MSSQL': var db = 'mssql';
             break;
-        case 'HIVE': var db = 'hive';
+        case 'JDBC-ORACLE': var db = 'jdbc-oracle';
     }
 
     var dbController = require('./'+db+'.js');
+
+//    if (data.type == 'MySQL' || data.type == 'POSTGRE' || data.type == 'ORACLE' || data.type == 'MSSQL')
+  //      {}
 
     var db = new dbController.db();
 
@@ -69,16 +72,22 @@ exports.getSchemas = function(data, setresult) {
 
         db.query(query, function(err, result) {
             var schemas = [];
-            for (var s in schemasTables) {
-                getCollectionSchema(schemasTables[s], result.rows, function (resultCollection) {
-                   schemas.push(resultCollection);
-                });
-            }
+
+            if (result.rows)
+                {
+                    for (var s in schemasTables) {
+                        getCollectionSchema(schemasTables[s], result.rows, function (resultCollection) {
+                           schemas.push(resultCollection);
+                        });
+                    }
+                }
             debug({result: 1, items: schemas});
             setresult({result: 1, items: schemas});
             db.end();
 
+
         });
+
     });
 };
 
@@ -92,8 +101,8 @@ exports.getSqlQuerySchema = function(data, setresult) {
         case 'ORACLE': var db = 'oracle';
             break;
         case 'MSSQL': var db = 'mssql';
-            break;
-        case 'HIVE': var db = 'hive';
+             break;
+        case 'JDBC-ORACLE': var db = 'jdbc-oracle';
     }
 
     var dbController = require('./'+db+'.js');
@@ -106,7 +115,7 @@ exports.getSqlQuerySchema = function(data, setresult) {
             return console.error('Connection Error: ', err);
         }
 
-        var query =  'SELECT * FROM ('+data.sqlQuery.sql+') wst_q1 '+db.getLimitString(1, 0) ;
+        var query = db.setLimitToSQL('SELECT * FROM ('+data.sqlQuery.sql+') wst_q1 ',1,0);
 
 
             db.query(query, function(err, finalresult) {
@@ -158,7 +167,9 @@ function getSQLResultsSchema(collectionName,queryResults,sqlQuery, done) {
 
         var elementID = generateShortUID();
         var isVisible = true;
-        theCollection.elements.push({elementID:elementID,elementName:name,elementType:type,visible:isVisible,elementLabel:name})
+
+            if (name != 'wst_rnum') //not for the row num for Oracle limit
+                theCollection.elements.push({elementID:elementID,elementName:name,elementType:type,visible:isVisible,elementLabel:name})
 
 
         }
@@ -181,8 +192,6 @@ exports.getReverseEngineering = function(datasourceID, data, setresult) {
         case 'MSSQL': var db = 'mssql';
             break;
         case 'BIGQUERY': var db = 'bigQuery';
-            break;
-        case 'HIVE': var db = 'hive';
     }
 
     var dbController = require('./'+db+'.js');
@@ -415,6 +424,7 @@ function getCollectionSchema(collection,queryResults, done) {
             if (queryResults[d].data_type == 'smallint' ||
                 queryResults[d].data_type == 'integer' ||
                 queryResults[d].data_type == 'bigint' ||
+                queryResults[d].data_type == 'number' ||
                 queryResults[d].data_type == 'decimal' ||
                 queryResults[d].data_type == 'numeric' ||
                 queryResults[d].data_type == 'real' ||
@@ -433,15 +443,18 @@ function getCollectionSchema(collection,queryResults, done) {
                 queryResults[d].data_type == 'interval' )
                 type = 'date';
 
+            var dataType = queryResults[d].data_type;
+            if (dataType)
+                if (dataType.indexOf("timestamp") > -1)
+                    type = 'date';
+
             if (queryResults[d].data_type == 'boolean')
                 type = 'boolean';
 
 
-
-            //var elementID = uuid.v4();
             var elementID = generateShortUID();
             var isVisible = true;
-            theCollection.elements.push({elementID:elementID,elementName:name,elementType:type,visible:isVisible,elementLabel:name})
+            theCollection.elements.push({elementID:elementID,elementName:name,elementType:type,visible:isVisible,elementLabel:name,data_type:queryResults[d].data_type})
 
 
         }
@@ -756,8 +769,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             case 'MSSQL': var dbController = require('./mssql.js');
                 break;
             case 'BIGQUERY': var dbController = require('./bigQuery.js');
-                break;
-            case 'HIVE': var db = 'hive';
         }
 
         var db = new dbController.db();
@@ -765,12 +776,13 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         if (dataSource.params[0].packetSize)
             {
                 if (dataSource.params[0].packetSize != -1)
-                    SQLstring += ' '+db.getLimitString(dataSource.params[0].packetSize, ((params.page -1 )*dataSource.params[0].packetSize));
+                    //SQLstring += ' '+db.getLimitString(dataSource.params[0].packetSize, ((params.page -1 )*dataSource.params[0].packetSize));
+                    SQLstring = db.setLimitToSQL(SQLstring,dataSource.params[0].packetSize, ((params.page -1 )*dataSource.params[0].packetSize));
             } else {
 
             if (config.query.defaultRecordsPerPage > 1)
                 {
-                SQLstring += ' '+db.getLimitString(config.query.defaultRecordsPerPage, ((params.page -1 )*config.query.defaultRecordsPerPage));
+                SQLstring = db.setLimitToSQL(SQLstring,config.query.defaultRecordsPerPage, ((params.page -1 )*config.query.defaultRecordsPerPage));
                 }
             }
 
@@ -791,14 +803,14 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
             db.query(SQLstring, function(err, result) {
                 if (err) {
-                    console.log(err);
                     setresult({result: 0, msg: 'Generated SQL Error: '+SQLstring,sql:SQLstring});
-                    saveToLog(req,'SQL Error: '+err+' ('+SQLstring+')','QUERY: ('+JSON.stringify(query)+')', 110);
+                    saveToLog(req,'SQL Error: '+err+' ('+SQLstring+')', 300,'SQL-002','QUERY: ('+JSON.stringify(query)+')',undefined);
                     db.end();
                 } else {
                     if (result)
                         getFormatedResult(elements,result.rows,function(finalResults){
                             setresult({result: 1, data:finalResults,sql:SQLstring});
+                            saveToLog(req,SQLString, 400,'SQL-001','QUERY: ('+JSON.stringify(query)+')',undefined);
                         });
                     else {
                         setresult({result: 1, data:[],sql:SQLstring});
@@ -810,6 +822,8 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         });
 
         }  else {
+            dataSource.params[0].connection.companyID = req.user.companyID;
+
             db.executeSQLQuery(dataSource.params[0].connection,SQLstring,function (result) {
                 if (result)
                     {

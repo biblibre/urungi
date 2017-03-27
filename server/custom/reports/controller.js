@@ -506,7 +506,7 @@ function sortMergeResults(tempResults,query,done)
 {
     //Orderbys
 
-    var firstBy = require('thenby');
+    var firstBy = require('thenBy');
 
 
     if (query.order.length == 1)
@@ -751,53 +751,6 @@ function mergeTwoCollections(collections,sourceCollection,sourceElement,targetCo
 
 }
 
-
-///////////////////////////////////////////////////////////
-/*
-function processDataSources_OLD(dataSources, params, done, result, index) {
-    var index = (index) ? index : 0;
-    var dataSource = (dataSources[index]) ? dataSources[index] : false;
-    var result = (result) ? result : [];
-
-    if (!dataSource) {
-        done(result);
-        return;
-    }
-
-    var DataSources = connection.model('DataSources');
-
-    DataSources.findOne({ _id: dataSource.datasourceID}, {}, function (err, dts) {
-        if (dts) {
-            for (var i in dts.params[0].schema) {
-                for (var j in dataSource.collections) {
-                    if (dts.params[0].schema[i].collectionID == dataSource.collections[j].collectionID) {
-                        dataSource.collections[j]['schema'] = dts.params[0].schema[i];
-                    }
-                }
-            }
-            
-            switch (dts.type) {
-                case 'MONGODB':
-                    var mongodb = require('../../core/db/mongodb.js');
-
-                    mongodb.processCollections(dataSource.collections, dts, params, function(data) {
-                        for (var i in data) {
-                            result.push(data[i]);
-                        }
-
-                        processDataSources(dataSources, params, done, result, index+1);
-                    });
-            }
-        } else {
-            processDataSources(dataSources, params, done, result, index+1);
-        }
-    });
-} */
-
-
-
-////////////////////////////
-
 function executeDataSourceQuery(datasourceQuery,datasource,done)
 {
     //identificar el tipo de datasource
@@ -862,9 +815,6 @@ function executeMongoDBCollection(queryCollection,datasource,collection,done)
              }
         }
     }
-
-
-    //conn = mongoose.createConnection(dbURI,{ server: { poolSize: 5 } });
 
     var MongoClient = require('mongodb').MongoClient , assert = require('assert');
 

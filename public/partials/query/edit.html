@@ -1,14 +1,6 @@
-<!--<div ng-intro-options="IntroOptions" ng-intro-method="CallMe"
-		     ng-intro-oncomplete="CompletedEvent" ng-intro-onexit="ExitEvent"
-		     ng-intro-onchange="ChangeEvent" ng-intro-onbeforechange="BeforeChangeEvent"
-		     ng-intro-onafterchange="AfterChangeEvent"
-		     ng-intro-autostart="ShouldAutoStart">-->
-
 
 <div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions" id="queryEdit" class="container-fluid branded-border-panel" style="height: 100%;padding-left:0px;padding-right:0px;">
-    <!-- <div class="row" style="height: 100px">
 
-    </div> -->
 
 <section class="container-fluid" style="margin-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
     <h3 class="pull-left">Query design</h3>
@@ -17,72 +9,18 @@
     <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for data explorer" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
 </section>
 
-   <!-- <div class="row" style="height: 100%">  -->
+
     <section id="dataObjects">
         <div id="dataObjectsIntroBlock"></div>
             <section class="layer scrollPane" ng-include="'partials/query/data-objects.html'">
-            <!--<div id="dataObjects" class="col-md-3" style="height: 100%" ng-include="'partials/query/data-objects.html'"> -->
 
             </section>
 
     </section>
-        <section id="dropZone" class="scrollPane multiPage rendered ng-scope" style="padding:10px;" ng-include="'partials/query/query-edit.html'">
 
-        <!--<div id="dropZone" class="col-md-9" style="height: 100%;border-left:1px solid #000000;" ng-include="'partials/query/query-edit.html'">
+    <section id="dropZone" class="scrollPane multiPage rendered ng-scope" style="padding:10px;" ng-include="'partials/query/query-edit.html'">
 
-            </div> -->
-        </section>
+    </section>
 
-    <!--</div>-->
-
-
-<!--
-    <div ui-layout  >
-
-
-        <div ui-layout-container>
-            <div ui-layout="{flow : 'column'}" >
-                <div ui-layout-container class=" html-back" size="250px" >
-                    <div style="height: 100%" ng-include="'partials/query/data-objects.html'">
-
-                    </div>
-                </div>
-                <div ui-layout-container class=" js-back" >
-                    <div class="main col-md-10" style="width: 100%; height: 100%" ng-include="'partials/query/query-edit.html'">
-
-                    </div>
-
-
-                </div>
-
-            </div>
-        </div>
-
-    </div>
--->
-
-    <!--
-
-    <div ui-layout  >
-
-        <div ui-layout-container style=" background-color:#999999;">
-            <div ui-layout="{flow : 'column'}" >
-                <div ui-layout-container class=" html-back" size="250px" >
-                    <div style="height: 100%" ng-include="'partials/report/data-objects.html'">
-
-                    </div>
-                </div>
-                <div ui-layout-container class=" js-back" >
-                    <div class="main col-md-10" style="width: 100%; height: 100%" ng-include="'partials/pages/query-edit.html'">
-
-                    </div>
-
-
-                </div>
-
-            </div>
-        </div>
-
-    </div>-->
 
 </div>

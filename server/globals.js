@@ -1,4 +1,7 @@
 /* GLOBAL FUNCTIONS */
+var appRoot = __dirname+'/../';
+global.appRoot = appRoot;
+
 function restrict(req, res, next) {
 
     if (global.authentication)
@@ -71,10 +74,12 @@ function restrictRole(roles) {
 }
 global.restrictRole = restrictRole;
 
-function saveToLog(req, text, type) {
+function saveToLog(req, text, type, code, otherInfo,associatedID) {
     var Logs = connection.model('Logs');
 
-    Logs.saveToLog(req, {text: text, type: type});
+    Logs.saveToLog(req, {text: text, type: type, code: code,associatedID:associatedID},otherInfo, function(){
+
+    });
 };
 global.saveToLog = saveToLog;
 

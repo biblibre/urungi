@@ -1,4 +1,5 @@
 var mysql = require('mysql');
+var DataSources = connection.model('DataSources');
 
 var db = function () {
     /*this.host = data.host;
@@ -50,12 +51,21 @@ db.prototype.getSchemaQuery = function(newSchemas, newTables) {
 };
 
 db.prototype.getLimitString = function(limit, offset) {
-    return 'LIMIT '+offset+', '+limit;
+    return ' LIMIT '+offset+', '+limit;
 };
+
+db.prototype.setLimitToSQL = function(sql,limit,offset)
+{
+   if (limit == -1)
+        return sql
+       else
+    return sql + ' LIMIT '+offset+', '+limit;
+
+}
 
 exports.db = db;
 
-exports.testConnection = function(data, setresult) {
+exports.testConnection = function(req,data, setresult) {
     var connection = mysql.createConnection({
         host     : data.host,
         user     : data.userName,
@@ -63,21 +73,29 @@ exports.testConnection = function(data, setresult) {
         database : data.database
     });
 
-    connection.connect(function(err) {
-        if (err) {
-            console.log('MySQL connection error: '+ err.stack);
-            setresult({result: 0, msg: 'Connection Error: '+err.stack});
-            return console.error('Connection Error: '+err.stack);
-        }
+        connection.connect(function(err) {
+            if (err) {
+                        setresult({result: 0, msg: 'Error testing connection: '+ err,code:'MY-001',actionCode:'INVALIDATEDTS'});
+                        saveToLog(req,'Error testing connection: '+err, 200,'MY-001','',data.datasourceID);
+                        DataSources.invalidateDatasource(req,data.datasourceID,'MY-001','INVALIDATEDTS','Error testing connection: '+ err,function(result){
 
-        console.log('Connected to '+data.host+' as id '+connection.threadId+', getting table names');
-
-        connection.query("select table_schema, table_name as name from information_schema.tables where table_schema not in ('information_schema','mysql','performance_schema')", function(err, rows, fields) {
-            if (err) throw err;
-
-
-            setresult({result: 1, items: rows});
-            connection.end();
-        });
+                        });
+            } else {
+                connection.query("select table_schema, table_name as name from information_schema.tables where table_schema not in ('information_schema','mysql','performance_schema')", function(err, rows, fields) {
+                    if (err) {
+                            setresult({result: 0, msg: 'Error executing test connection SQL : '+ err,code:'MY-002',actionCode:'MESSAGEWST'});
+                            saveToLog(req,'Error executing test connection SQL : '+err, 400,'MY-002','',data.datasourceID);
+                        } else {
+                            setresult({result: 1, items: rows});
+                            connection.end();
+                        }
+                });
+            }
     });
+
+
+
+
+
+
 };

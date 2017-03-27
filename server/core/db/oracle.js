@@ -57,9 +57,18 @@ db.prototype.getLimitString = function(limit, offset) {
     return 'LIMIT '+limit+' OFFSET '+offset;
 };
 
+db.prototype.setLimitToSQL = function(sql,limit,offset)
+{
+   if (limit == -1)
+        return sql
+       else
+    return ' SELECT * FROM (SELECT rownum rnum, a.* FROM('+sql+') a WHERE rownum <='+offset+'+'+limit+') WHERE rnum >='+offset
+
+}
+
 exports.db = db;
 
-exports.testConnection = function(data, setresult) {
+exports.testConnection = function(req,data, setresult) {
     oracledb.getConnection({
         user          : data.userName,
         password      : data.password,
