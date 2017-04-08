@@ -765,9 +765,6 @@ function executeDataSourceQuery(datasourceQuery,datasource,done)
 
 function executeMongoDBQuery(datasourceQuery,datasource,done)
 {
-
-
-
     var collections = [];
     var queryCollections = [];
 
@@ -788,8 +785,6 @@ function executeMongoDBQuery(datasourceQuery,datasource,done)
             }
         }
     }
-
-
 }
 
 function executeMongoDBCollection(queryCollection,datasource,collection,done)

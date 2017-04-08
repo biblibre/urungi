@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('wstWidgetProperties', function($compile,icons,c3Charts) {
+app.directive('wstWidgetProperties', function($rootScope,$compile,icons,c3Charts) {
 return {
     transclude: true,
     scope: {
@@ -41,9 +41,9 @@ return {
       $scope.changeCSS = function(cssProperty,value)
         {
                     if (cssProperty == '')
-                            $scope.selectedElement.css(cssProperty,"");
+                            $rootScope.selectedElement.css(cssProperty,"");
                             else
-                            $scope.selectedElement.css(cssProperty,value);
+                            $rootScope.selectedElement.css(cssProperty,value);
         }
 
       $scope.$watch('backgroundColor', function(){
@@ -51,8 +51,8 @@ return {
 
           if ($scope.gettingElementProperties == false)
               {
-                  if ($scope.selectedElement)
-                    $scope.selectedElement.css({'background-color': $scope.backgroundColor});
+                  if ($rootScope.selectedElement)
+                    $rootScope.selectedElement.css({'background-color': $scope.backgroundColor});
                   if ($scope.dashboard)
                       $scope.dashboard.backgroundColor = $scope.backgroundColor;
               //saveProperties();
@@ -93,9 +93,9 @@ $scope.gettingElementProperties = true;
     });
 
     $scope.$watch('backgroundImage', function(){
-        if ($scope.selectedElement && $scope.gettingElementProperties == false)
+        if ($rootScope.selectedElement && $scope.gettingElementProperties == false)
             {
-                  var theElement = $scope.selectedElement;
+                  var theElement = $rootScope.selectedElement;
                 if ($scope.backgroundImage != undefined &&  $scope.backgroundImage != 'none')
                     {
                      theElement.css({ 'background-image': "url('"+$scope.backgroundImage.source1400+"')" });
@@ -127,11 +127,11 @@ $scope.gettingElementProperties = true;
                     var r = hex.r;
                     var g = hex.g;
                     var b = hex.b;
-                    $scope.selectedElement.css({'background-color': 'rgba('+r+','+g+','+b+',' + alpha + ')'});
+                    $rootScope.selectedElement.css({'background-color': 'rgba('+r+','+g+','+b+',' + alpha + ')'});
                     } else {
                         if ($scope.imageFilters.opacity != 0)
                           {
-                            var theElement = $scope.selectedElement;
+                            var theElement = $rootScope.selectedElement;
 
                             theElement.css("filter"," opacity("+$scope.imageFilters.opacity+"%) ");
                             theElement.css("webkitFilter"," opacity("+$scope.imageFilters.opacity+"%) ");
@@ -157,8 +157,8 @@ $scope.gettingElementProperties = true;
     }
 
     $scope.$watch('fontColor', function(){
-        if ($scope.selectedElement && $scope.gettingElementProperties == false)
-          $scope.selectedElement.css({ 'color': $scope.fontColor }) ;
+        if ($rootScope.selectedElement && $scope.gettingElementProperties == false)
+          $rootScope.selectedElement.css({ 'color': $scope.fontColor }) ;
       });
 
     $scope.changeRowHeight = function(newHeight)
@@ -183,10 +183,9 @@ $scope.gettingElementProperties = true;
     {
 
 
-        var elementID = $scope.selectedElement.attr('id');
+        var elementID = $rootScope.selectedElement.attr('id');
 
-        //if ($scope.selectedElementType == 'container' || $scope.selectedElementType == 'tabsContainer')
-          if ($scope.selectedElementType == 'tabsContainer')
+          if ($rootScope.selectedElementType == 'tabsContainer')
             {
             var containerNbr = -1;
 
@@ -199,14 +198,13 @@ $scope.gettingElementProperties = true;
 
             }
 
-        $scope.selectedElement.remove();
+        $rootScope.selectedElement.remove();
 
-        //$scope.tabs.selected = 'data';
     }
 
     $scope.changeHeight = function(newHeight)
     {
-        if ($scope.selectedElementType  == 'c3Chart')
+        if ($rootScope.selectedElementType  == 'c3Chart')
            {
             if ($scope.selectedChart)
             {
@@ -215,9 +213,9 @@ $scope.gettingElementProperties = true;
             }
             } else {
                     if (newHeight == '')
-                        $scope.selectedElement.css("height","");
+                        $rootScope.selectedElement.css("height","");
                         else
-                        $scope.selectedElement.css("height",newHeight);
+                        $rootScope.selectedElement.css("height",newHeight);
 
             }
 
@@ -270,7 +268,7 @@ $scope.gettingElementProperties = true;
 
     $scope.moveElementUp = function()
     {
-       var theElement = $scope.selectedElement;
+       var theElement = $rootScope.selectedElement;
 
        var selected = $(theElement).index();
 
@@ -281,7 +279,7 @@ $scope.gettingElementProperties = true;
 
     $scope.moveElementDown = function()
     {
-       var theElement = $scope.selectedElement;
+       var theElement = $rootScope.selectedElement;
 
        var selected = $(theElement).index();
 
@@ -295,71 +293,71 @@ $scope.gettingElementProperties = true;
     {
 
 
-            if($scope.selectedElementType != 'page')
+            if($rootScope.selectedElementType != 'page')
             {
 
             if ($scope.visibleXS == true)
                 {
-                    $scope.selectedElement.addClass('visible-xs');
+                    $rootScope.selectedElement.addClass('visible-xs');
                 } else {
-                $scope.selectedElement.removeClass('visible-xs');
+                    $rootScope.selectedElement.removeClass('visible-xs');
                 }
 
             if ($scope.visibleSM == true)
                 {
-                    $scope.selectedElement.addClass('visible-sm');
+                    $rootScope.selectedElement.addClass('visible-sm');
                 } else {
-                $scope.selectedElement.removeClass('visible-sm');
+                $rootScope.selectedElement.removeClass('visible-sm');
                 }
             if ($scope.visibleMD == true)
                 {
-                    $scope.selectedElement.addClass('visible-md');
+                    $rootScope.selectedElement.addClass('visible-md');
                 } else {
-                $scope.selectedElement.removeClass('visible-md');
+                $rootScope.selectedElement.removeClass('visible-md');
                 }
             if ($scope.visibleLG == true)
                 {
-                    $scope.selectedElement.addClass('visible-lg');
+                    $rootScope.selectedElement.addClass('visible-lg');
                 } else {
-                $scope.selectedElement.removeClass('visible-lg');
+                $rootScope.selectedElement.removeClass('visible-lg');
                 }
             if ($scope.visiblePrint == true)
                 {
-                    $scope.selectedElement.addClass('visible-print');
+                    $rootScope.selectedElement.addClass('visible-print');
                 } else {
-                $scope.selectedElement.removeClass('visible-print');
+                $rootScope.selectedElement.removeClass('visible-print');
                 }
 
                 if ($scope.hiddenXS == true)
                 {
-                    $scope.selectedElement.addClass('hidden-xs');
+                    $rootScope.selectedElement.addClass('hidden-xs');
                 } else {
-                    $scope.selectedElement.removeClass('hidden-xs');
+                    $rootScope.selectedElement.removeClass('hidden-xs');
                 }
 
                 if ($scope.hiddenSM == true)
                 {
-                    $scope.selectedElement.addClass('hidden-sm');
+                    $rootScope.selectedElement.addClass('hidden-sm');
                 } else {
-                    $scope.selectedElement.removeClass('hidden-sm');
+                    $rootScope.selectedElement.removeClass('hidden-sm');
                 }
                 if ($scope.hiddenMD == true)
                 {
-                    $scope.selectedElement.addClass('hidden-md');
+                    $rootScope.selectedElement.addClass('hidden-md');
                 } else {
-                    $scope.selectedElement.removeClass('hidden-md');
+                    $rootScope.selectedElement.removeClass('hidden-md');
                 }
                 if ($scope.hiddenLG == true)
                 {
-                    $scope.selectedElement.addClass('hidden-lg');
+                    $rootScope.selectedElement.addClass('hidden-lg');
                 } else {
-                    $scope.selectedElement.removeClass('hidden-lg');
+                    $rootScope.selectedElement.removeClass('hidden-lg');
                 }
                 if ($scope.hiddenPrint == true)
                 {
-                    $scope.selectedElement.addClass('hidden-print');
+                    $rootScope.selectedElement.addClass('hidden-print');
                 } else {
-                    $scope.selectedElement.removeClass('hidden-print');
+                    $rootScope.selectedElement.removeClass('hidden-print');
                 }
 
                 }
@@ -395,8 +393,8 @@ $scope.gettingElementProperties = true;
     function getElementProperties()
     {
 
-        $scope.selectedElementType = '';
-        $scope.selectedElement = $scope.element;
+        $rootScope.selectedElementType = '';
+        $rootScope.selectedElement = $scope.element;
 
         if ($scope.element)
             {
@@ -428,7 +426,7 @@ $scope.gettingElementProperties = true;
 
                 var elementType = $scope.element.attr('ndType');
 
-                $scope.selectedElementType = elementType;
+                $rootScope.selectedElementType = elementType;
 
 
                 //visibility Properties
@@ -482,15 +480,6 @@ $scope.gettingElementProperties = true;
 
                     $scope.selectedChart = $scope.properties;
 
-                    /*for (var i in $scope.properties.)
-                    {
-                        if ($scope.charts[i] != undefined)
-                            if ($scope.charts[i].chartID == chartID)
-                                {
-                                    $scope.selectedChart = $scope.charts[i];
-                                    $scope.objectHeight = $scope.selectedChart.height;
-                                }
-                    }*/
                 }
 
                 if (elementType === 'tabsContainer')
@@ -513,108 +502,13 @@ $scope.gettingElementProperties = true;
                 {
                     var gridID = theElement.attr('id');
 
-
-
                 }
 
-                //$scope.$apply();
             }
 
-        //$scope.gettingElementProperties = false;
     }
 
-/*
-    $scope.changeBackgroundFilter = function() {
-        if ($scope.selectedElement)
-            {
-                  var theElement = $scope.selectedElement;
 
-
-            var styleValue = '';
-
-            if ($scope.imageFilters.opacity != 0)
-                styleValue = styleValue + " opacity("+$scope.imageFilters.opacity+"%) ";
-
-
-            theElement.css("filter",styleValue);
-            theElement.css("webkitFilter",styleValue);
-            theElement.css("mozFilter",styleValue);
-            theElement.css("oFilter",styleValue);
-            theElement.css("msFilter",styleValue);
-            }
-        }
-*/
-
-/* CHART PROPERTIES
-    $scope.isChartCompleted = function(chartID)
-    {
-        var found = false;
-        for (var i in $scope.charts)
-            {
-                if ($scope.charts[i].chartID == chartID)
-                    {
-                        if ($scope.charts[i].dataAxis && $scope.charts[i].dataColumns)
-                            if ($scope.charts[i].dataAxis && $scope.charts[i].dataColumns.length >0)
-                                {
-                                    found = true;
-                                }
-                    }
-            }
-        return found;
-    }
-
-    $scope.getChartDataAxis = function(chartID)
-    {
-        var result = false;
-
-        for (var c in $scope.charts)
-             {
-                if ($scope.charts[c].chartID == chartID)
-                    {
-                    if ($scope.charts[c].dataAxix != undefined)
-                        result = true;
-                    }
-             }
-    return result;
-    }
-
-    $scope.getChartDataColumns = function(chartID)
-    {
-    var result = false;
-
-        for (var c in $scope.charts)
-             {
-                if ($scope.charts[c].chartID == chartID)
-                    {
-                    if ($scope.charts[c].dataColumns != undefined && $scope.charts[c].dataColumns.length > 0)
-                        result = true;
-
-                    }
-
-             }
-    return result;
-
-    }
-
-    $scope.applyChartSettings = function()
-    {
-        c3Charts.applyChartSettings($scope);
-    }
-
-    $scope.onChartSelectedObjectChanged = function(datacolumn)
-    {
-         //dataColumn.object = $scope.selectedObject;
-    }
-
-    $scope.onChartPropertiesChanged = function(object)
-    {
-        c3Charts.onChartPropertiesChanged($scope,object);
-    }
-
-*/
-
-
-        /**/
     }
   }
 

@@ -15,14 +15,14 @@ module.directive('pageBlock', ['$rootScope',  '$compile','$parse', function($roo
                         e.preventDefault();
                         e.stopPropagation();
 
-                        if (scope.selectedElement != null)
+                        if ($rootScope.selectedElement != null)
                         {
-                            scope.selectedElement.removeClass('selected');
-                            scope.selectedElement.attr("contenteditable", "false");
+                            $rootScope.selectedElement.removeClass('selected');
+                            $rootScope.selectedElement.attr("contenteditable", "false");
                         }
 
                         $(el).addClass('selected');
-                        scope.selectedElement = $(el);
+                        $rootScope.selectedElement = $(el);
 
                         if ($(el).hasClass("editable"))
                         {
