@@ -391,12 +391,12 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
                                 {
 
                                     mergeResults(dataSource.collections,query,function(mergedResults){
-                                        var finalResult = {result: 1, data:mergedResults,sql:undefined};
+                                        var finalResult = {result: 1, data:mergedResults,sql:'No SQL available for MongoDB'};
                                         result = finalResult;
                                     });
                                 }  else {
 
-                                    var finalResult = {result: 1, data:dataSource.collections[0].result,sql:undefined};
+                                    var finalResult = {result: 1, data:dataSource.collections[0].result,sql:'No SQL available for MongoDB'};
                                     result = finalResult;
 
                                 }
