@@ -170,16 +170,11 @@ exports.PublishReport = function(req,res)
             report.isPublic = true;
 
 
-            Reports.update({_id:data._id}, {$set: report.toObject() }, function (err, numAffected) {
-                if(err) throw err;
+            req.body = report;
 
-                if (numAffected>0)
-                {
-                    serverResponse(req, res, 200, {result: 1, msg: numAffected+" report published."});
-                } else {
-                    serverResponse(req, res, 200, {result: 0, msg: "Error publishing report, no report have been published"});
-                }
-            });
+            controller.update(req, function(result){
+                    serverResponse(req, res, 200, result);
+                });
         } else {
 
             serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to publish this report, or this report do not exists"});
@@ -205,16 +200,12 @@ exports.UnpublishReport = function(req,res)
         if(err) throw err;
         if (report) {
             report.isPublic = false;
-            Reports.update({_id:data._id}, {$set: report.toObject() }, function (err, numAffected) {
-                if(err) throw err;
 
-                if (numAffected>0)
-                {
-                    serverResponse(req, res, 200, {result: 1, msg: numAffected+" report unpublished."});
-                } else {
-                    serverResponse(req, res, 200, {result: 0, msg: "Error unpublishing report, no report have been unpublished"});
-                }
-            });
+            req.body = report;
+
+            controller.update(req, function(result){
+                    serverResponse(req, res, 200, result);
+                });
         } else {
             serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to unpublish this report, or this report do not exists"});
         }

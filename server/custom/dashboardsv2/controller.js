@@ -233,7 +233,7 @@ exports.PublishDashboard = function(req,res)
     var data = req.body;
     var parentFolder = data.parentFolder;
 
-    //tiene el usuario conectado permisos para publicar?
+    //Has the connected user grants to publish?
     var Dashboardsv2 = connection.model('Dashboardsv2');
     var find = {_id:data._id,owner:req.user._id,companyID:req.user.companyID};
 
@@ -247,17 +247,11 @@ exports.PublishDashboard = function(req,res)
             Dashboard.parentFolder = parentFolder;
             Dashboard.isPublic = true;
 
+            req.body = Dashboard;
 
-            Dashboardsv2.update({_id:data._id}, {$set: Dashboard.toObject() }, function (err, numAffected) {
-                if(err) throw err;
-
-                if (numAffected>0)
-                {
-                    serverResponse(req, res, 200, {result: 1, msg: numAffected+" Dashboard published."});
-                } else {
-                    serverResponse(req, res, 200, {result: 0, msg: "Error publishing Dashboard, no Dashboard have been published"});
-                }
-            });
+            controller.update(req, function(result){
+                    serverResponse(req, res, 200, result);
+                });
         } else {
             serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to publish this Dashboard, or this Dashboard do not exists"});
         }
@@ -281,16 +275,12 @@ exports.UnpublishDashboard = function(req,res)
         if(err) throw err;
         if (Dashboard) {
             Dashboard.isPublic = false;
-            Dashboardsv2.update({_id:data._id}, {$set: Dashboard.toObject() }, function (err, numAffected) {
-                if(err) throw err;
 
-                if (numAffected>0)
-                {
-                    serverResponse(req, res, 200, {result: 1, msg: numAffected+" Dashboard unpublished."});
-                } else {
-                    serverResponse(req, res, 200, {result: 0, msg: "Error unpublishing Dashboard, no Dashboard have been unpublished"});
-                }
-            });
+            req.body = Dashboard;
+
+            controller.update(req, function(result){
+                    serverResponse(req, res, 200, result);
+                });
         } else {
             serverResponse(req, res, 401, {result: 0, msg: "You don´t have permissions to unpublish this Dashboard, or this Dashboard do not exists"});
         }
