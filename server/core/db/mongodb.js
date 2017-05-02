@@ -1,12 +1,16 @@
 exports.testConnection = function(req,data, done) {
     var mongoose = require('mongoose');
 
-    var dbURI =  'mongodb://'+data.host+':'+data.port+'/'+data.database;
+
+    if (data.userName)  //data.userName+':'+data.password
+        var dbURI =  'mongodb://'+data.userName+':'+data.password+'@'+data.host+':'+data.port+'/'+data.database;
+        else
+        var dbURI =  'mongodb://'+data.host+':'+data.port+'/'+data.database;
+
     var conn = mongoose.createConnection(dbURI,{ server: { poolSize: 5 } });
 
     conn.on('connected', function () {
         console.log('mongodb connected, getting collection names');
-        //conn.db.collectionNames(function(err, names) {
         conn.db.listCollections().toArray(function (err, names) {
             if (err)
                 {
@@ -30,7 +34,10 @@ exports.getSchemas = function(data, done) {
     var collections = data.entities;
    var MongoClient = require('mongodb').MongoClient , assert = require('assert');
 
-    var dbURI =  'mongodb://'+data.host+':'+data.port+'/'+data.database;
+    if (data.userName)  //data.userName+':'+data.password
+        var dbURI =  'mongodb://'+data.userName+':'+data.password+'@'+data.host+':'+data.port+'/'+data.database;
+        else
+        var dbURI =  'mongodb://'+data.host+':'+data.port+'/'+data.database;
 
     MongoClient.connect(dbURI, function(err, db) {
         if(err) { return console.dir(err); }
@@ -40,8 +47,6 @@ exports.getSchemas = function(data, done) {
         getCollectionSchema(db,collections,0,schemas, function() {
             done({result: 1, items: schemas});
         });
-
-        //en la última iteración db.close();
     });
 };
 
@@ -57,8 +62,10 @@ exports.execOperation = function(operation, params, done) {
 
 
                                 var MongoClient = require('mongodb').MongoClient , assert = require('assert');
-
-                                var dbURI = 'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
+                                if (dataSource.params[0].connection.userName)  //data.userName+':'+data.password
+                                    var dbURI =  'mongodb://'+dataSource.params[0].connection.userName+':'+dataSource.params[0].connection.password+'@'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
+                                    else
+                                    var dbURI = 'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
 
                                 MongoClient.connect(dbURI, function(err, db) {
                                     if(err) { return console.dir(err); }
@@ -829,7 +836,10 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
 
     var MongoClient = require('mongodb').MongoClient , assert = require('assert');
 
-    var dbURI =  'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
+    if (dataSource.params[0].connection.userName)  //data.userName+':'+data.password
+        var dbURI =  'mongodb://'+dataSource.params[0].connection.userName+':'+dataSource.params[0].connection.password+'@'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
+        else
+        var dbURI =  'mongodb://'+dataSource.params[0].connection.host+':'+dataSource.params[0].connection.port+'/'+dataSource.params[0].connection.database;
 
     MongoClient.connect(dbURI, function(err, db) {
         if(err) { return console.dir(err); }

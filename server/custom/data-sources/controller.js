@@ -84,9 +84,12 @@ exports.getEntities = function(req,res)
             {
                 var mongodb = require('../../core/db/mongodb.js');
                 var data = {};
+                console.log('aqui',result);
                 data.host = result.item.params[0].connection.host;
                 data.port = result.item.params[0].connection.port;
                 data.database = result.item.params[0].connection.database;
+                data.userName = result.item.params[0].connection.userName;
+                data.password = result.item.params[0].connection.password;
                 data.datasourceID = result.item._id;
                 mongodb.testConnection(req,data, function(result) {
                     serverResponse(req, res, 200, result);
@@ -223,6 +226,8 @@ exports.getReverseEngineering = function(req,res)
                 data.host = result.item.params[0].connection.host;
                 data.port = result.item.params[0].connection.port;
                 data.database = result.item.params[0].connection.database;
+                data.userName = result.item.params[0].connection.userName;
+                data.password = result.item.params[0].connection.password;
                 mongodb.getReverseEngineering(data, function(result) {
                     serverResponse(req, res, 200, result);
                 });
@@ -279,6 +284,8 @@ exports.getEntitySchema = function(req,res) {
                 data.host = result.item.params[0].connection.host;
                 data.port = result.item.params[0].connection.port;
                 data.database = result.item.params[0].connection.database;
+                data.userName = result.item.params[0].connection.userName;
+                data.password = result.item.params[0].connection.password;
                 data.entities = theEntities;
                 mongodb.getSchemas(data, function(result) {
                     serverResponse(req, res, 200, result);
