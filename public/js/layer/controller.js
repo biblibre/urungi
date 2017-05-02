@@ -267,7 +267,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
         var params = {};
 
-        params.page = 1;
+        params.page = 0; //All data
 
         params.fields = ['name','type','params.connection.host','params.connection.port','params.connection.database'];
 
