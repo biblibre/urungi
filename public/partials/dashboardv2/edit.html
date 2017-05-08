@@ -1,23 +1,58 @@
-<div ng-show="!reportInterface" id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="container-fluid branded-border-panel" >
-<div class="container-fluid" ng-init="initForm()" style="padding-bottom: 5px;padding-top: 5px;height: 40px;">
-    <h3 class="pull-left" editable-text="selectedDashboard.dashboardName"></h3>
-    <a id="saveDashboardBtn" data-ng-click="dashboardName()" class="btn btn-success pull-right" style="margin-left: 5px" tooltip="Click here to save the dashboard changes" tooltip-placement="bottom">Save</a>
+<div ng-show="!reportInterface" id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions"  class="explorer-main-container" >
 
-    <a ng-click="goBack();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
-    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for dashboards" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
-</div>
+<div class="explorer-container">
+
+    <div class="explorer-header" ng-init="initForm()" style="">
+
+        <div class="explorer-header-title">
+            <h3 class="pull-left" editable-text="selectedDashboard.dashboardName"></h3>
+        </div>
+
+        <div class="explorer-header-buttons">
+            <a id="saveDashboardBtn" data-ng-click="dashboardName()" class="btn btn-success" style="margin-left: 5px" tooltip="Click here to save the dashboard changes" tooltip-placement="bottom">Save</a>
+
+            <a ng-click="goBack();" class="btn btn-default" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
+
+            <a class="btn btn-info" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for dashboards" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+        </div>
+
+    </div>
 
 
-    <section id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'reports'" class="ng-scope">
+    <div class="explorer-body" style="background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDguNSBMIDM0IDguNSBNIDguNSAwIEwgOC41IDM0IE0gMCAxNyBMIDM0IDE3IE0gMTcgMCBMIDE3IDM0IE0gMCAyNS41IEwgMzQgMjUuNSBNIDI1LjUgMCBMIDI1LjUgMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDM0IDAgTCAwIDAgMCAzNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=&quot;);
+    ">
+
+
+    <section id="objectPanel" class="dashboard-edit-object-panel" data-num-cols="4" ng-init="tabs.selected = 'reports'">
+
+
+        <div class="object-panel-header">
+
+            <div class="object-panel-header-inner">
+
+        <!--<i class="toggle-button fa-minus-circle"  ng-click="toggle();$event.stopPropagation()" role="button" tabindex="0" style="right: 5px;
+    position: absolute;
+    font-size: 20px;"></i>-->
+            </div>
+
+        </div>
+
         <menu>
-            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'reports'}"><a ng-click="tabs.selected = 'reports'"><i class="fa fa-bar-chart fa-2" aria-hidden="true"></i><br/><br/>Reports</a></li>
+            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'reports'}">
+                <a ng-click="tabs.selected = 'reports'">
+                <i class="fa fa-bar-chart fa-2" aria-hidden="true" style="margin-left:0px;margin-right:5px;"> </i><br/><br/> Reports
+                </a>
+            </li>
             <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'prompts'}" ><a ng-click="tabs.selected = 'prompts'"><i class="fa fa-filter fa-2" aria-hidden="true"></i><br/>Run time Filters</a></li>
             <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'layouts'}" ><a ng-click="tabs.selected = 'layouts'"><i class="fa fa-file-image-o fa-2" aria-hidden="true"></i><br/><br/>Layouts</a></li>
         </menu>
-    <section class="content">
+    <section  class="content" style="left:70px">
+
         <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
             <section class="layer scrollPane">
-                <wst-widget-properties element="selectedElement" properties="selectedReport.properties" dashboard="selectedDashboard" on-change="onChangeElementProperties"></wst-widget-properties>
+                <div class="layer-inner-reports">
+                    <wst-widget-properties element="selectedElement" properties="selectedReport.properties" dashboard="selectedDashboard" on-change="onChangeElementProperties"></wst-widget-properties>
+                </div>
             </section>
             <div class="scrollTrack vScrollTrack">
                 <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
@@ -26,38 +61,38 @@
                 <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
             </div>
         </section>
+
         <section id="reportsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'reports'">
-            <section class="layer scrollPane" style="margin-right: 10px;padding-left: 10px;">
-                <button class="button buttonBlock fileUploadButton" ng-click="newReport()" style="height:54px;">Add New Report</button>
-                <!--<ul>
-                    <li ng-repeat="item in dashBoardDefinitition.items">{{item.reportDefinition.reportName}}</li>
-                </ul>-->
-                <div ng-repeat="item in selectedDashboard.reports" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'report',reportID:'{{item.id}}'}" style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " id="{{item.id}}" class="">
+            <section class="layer scrollPane">
+                <div class="layer-inner-reports">
+                    <button class="btn btn-info" ng-click="newReport()" style="width:100%">Add New Report</button>
+                    <div ng-repeat="item in selectedDashboard.reports" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'report',reportID:'{{item.id}}'}" style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " id="{{item.id}}" class="">
 
-                    <span style="padding: 2px;border-right: 2px white solid;margin-right: 5px;background-color: white;">
-                        <img ng-if="item.reportType == 'grid'" src="images/grid.png" data-pin-nopin="true">
-                        <img ng-if="item.reportType == 'chart-line'" src="images/chart_line.png" data-pin-nopin="true">
-                        <img ng-if="item.reportType == 'chart-donut'" src="images/chart_donut.png" data-pin-nopin="true">
-                        <img ng-if="item.reportType == 'chart-bar'" src="images/chart_bar.png" data-pin-nopin="true">
-                        <img ng-if="item.reportType == 'indicator'" src="images/indicator.png" data-pin-nopin="true">
-                        <img ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
-                    </span>
-                    <div style="width:100%">
-                    <span style="color: white; font-size: 10px; width:100%;text-align: left" editable-text="item.reportName"></span>
-                        <br/>
-                    <!--<button class="btn btn-small" style="display: inline-block;
-    color: #979898;
-    margin-left: 7px;
-    line-height: 1;">x</button>-->
-                        <a id="reportListItemDeleteBtn" href="" class="pull-right  list-delete-button" ng-click="deleteReport(item.id,item.reportName)"  tooltip="Click here to delete this report" tooltip-placement="bottom">
-                            <i class="fa fa-trash-o "  ></i>
-                        </a>
-                        <a id="reportListItemEditBtn" class="pull-right  list-edit-button" ng-click="loadReport(item)"  tooltip="Click here to edit this report" tooltip-placement="bottom">
-                            <i class="fa fa-pencil" ></i>
-                        </a>
-                        </div>
+                        <span style="padding: 2px;border-right: 2px white solid;margin-right: 5px;background-color: white;">
+                            <img ng-if="item.reportType == 'grid'" src="images/grid.png" data-pin-nopin="true">
+                            <img ng-if="item.reportType == 'chart-line'" src="images/chart_line.png" data-pin-nopin="true">
+                            <img ng-if="item.reportType == 'chart-donut'" src="images/chart_donut.png" data-pin-nopin="true">
+                            <img ng-if="item.reportType == 'chart-bar'" src="images/chart_bar.png" data-pin-nopin="true">
+                            <img ng-if="item.reportType == 'indicator'" src="images/indicator.png" data-pin-nopin="true">
+                            <img ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
+                        </span>
+                        <div style="width:100%">
+                        <span style="color: white; font-size: 10px; width:100%;text-align: left" editable-text="item.reportName"></span>
+                            <br/>
+                        <!--<button class="btn btn-small" style="display: inline-block;
+        color: #979898;
+        margin-left: 7px;
+        line-height: 1;">x</button>-->
+                            <a id="reportListItemDeleteBtn" href="" class="pull-right  list-delete-button" ng-click="deleteReport(item.id,item.reportName)"  tooltip="Click here to delete this report" tooltip-placement="bottom">
+                                <i class="fa fa-trash-o "  ></i>
+                            </a>
+                            <a id="reportListItemEditBtn" class="pull-right  list-edit-button" ng-click="loadReport(item)"  tooltip="Click here to edit this report" tooltip-placement="bottom">
+                                <i class="fa fa-pencil" ></i>
+                            </a>
+                            </div>
 
-                       <!-- <img src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px;" data-pin-nopin="true"> -->
+                           <!-- <img src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px;" data-pin-nopin="true"> -->
+                    </div>
                 </div>
 
             </section>
@@ -72,11 +107,15 @@
             <section class="layoutsTabContainer tabContainer">
                 <section class="tab">
                     <section class="layer scrollPane">
-
-                            <div ng-repeat="prompt in prompts" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'queryFilter',promptID:'{{prompt.elementID}}'}" style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " id="{{item.id}}" class="">
+                        <div class="layer-inner-reports">
+                            <div ng-repeat="prompt in prompts" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'queryFilter',promptID:'{{prompt.elementID}}'}" style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " id="{{item.id}}" class="dashboard-filter-prompt-item">
+                              <span>
+                                  <i class="fa fa-filter"></i>
+                                    <i class="fa fa-question"></i>
+                              </span>
                                 {{prompt.objectLabel}}
                             </div>
-
+                        </div>
 
                     </section>
                     <div class="scrollTrack vScrollTrack">
@@ -92,7 +131,7 @@
         <section class="layoutsTabContainer tabContainer">
             <section class="tab">
                 <section class="layer scrollPane">
-                    <div class="inner">
+                    <div class="layer-inner">
                         <div class="searchLoaderHolder"></div>
                         <div class="searchGroup hasContent" style="height: 2872px;">
                             <div class="row gallery infoPanelGallery templateGallery laidOut">
@@ -179,7 +218,8 @@
     <section page-block ndType="page" ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
 
     </section>
-
+</div>
+    </div>
 </div>
 
 <div ng-show="reportInterface" id="reportModal" ng-controller="report_v2Ctrl" ng-include src="reportModal"></div>

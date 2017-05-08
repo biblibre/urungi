@@ -255,8 +255,10 @@ var app = angular.module('WideStage', [
             controller: 'report_v2Ctrl'
         });
         $routeProvider.when('/explore/:extra', {
-            templateUrl: 'partials/query/exploreIndex.html',
-            controller: 'queryCtrl'
+           // templateUrl: 'partials/query/exploreIndex.html',
+            //controller: 'queryCtrl'
+            templateUrl: 'partials/report_v2/edit.html',
+            controller: 'report_v2Ctrl'
         });
 
         //catalog

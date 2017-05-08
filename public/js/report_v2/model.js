@@ -43,7 +43,7 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
 
     function getReportDataNextPage(report,page)
     {
-
+        console.log('loading next page',report);
         queryModel.loadQuery(report.query);
         queryModel.getQueryDataNextPage(page, function(data,sql,query){
                 report.query.data.push.apply(report.query.data, data);
@@ -407,9 +407,9 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
     {
         var containerID = 'REPORT_CONTAINER_'+reportID;
 
-        var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
-                        '<div page-block class="col-md-12 ndContainer" ndtype="column">'+
-                              '<div class="container-fluid" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+reportID+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+reportID+'" style="padding:0px"></div>';
+        var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" style="height:100%">'+
+                        '<div page-block class="col-md-12 ndContainer" ndtype="column" style="height:100%">'+
+                              '<div class="container-fluid" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+reportID+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+reportID+'" style="padding:0pxposition: relative;height: 100%;"></div>';
 
                         '</div>'+
                     '</div>';

@@ -1,6 +1,6 @@
 <div class="object-tree" style="">
 
-    <div class="container-fluid"  ng-if="layers.length > 1" style="padding:5px;padding-right:30px;">
+    <div id="selectLayerContainer" class="container-fluid"  ng-if="layers.length > 1" >
     <span>Choose a layer:</span>
     <select id="selectLayer" ng-disabled="selectedReport.properties.columns.length > 0 || selectedReport.properties.order.length > 0 || selectedReport.properties.filters" class="form-control" ng-model="selectedLayerID" ng-options="obj._id as obj.name for obj in layers"
                                             ng-change="changeLayer(selectedLayerID)"></select>
@@ -11,7 +11,7 @@
     <script type="text/ng-template" id="nestable_item.html">
         <div id="layerObjects">
             <div class="schema-element-report schema-item-report"  ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure') && ngModelItem.enabled != false" >
-                <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType != 'number' && (!ngModelItem.defaultAggregation  || ngModelItem.defaultAggregation == 'value')) || (ngModelItem.elementType == 'number' && (!ngModelItem.defaultAggregation || ngModelItem.defaultAggregation == 'value'))" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                <a id="ELEMENT_{{ngModelItem.elementID}}" class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType != 'number' && (!ngModelItem.defaultAggregation  || ngModelItem.defaultAggregation == 'value')) || (ngModelItem.elementType == 'number' && (!ngModelItem.defaultAggregation || ngModelItem.defaultAggregation == 'value'))" ng-click="addColumn(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
                    draggable-data="{
                         elementName: ngModelItem.elementName,
                         objectLabel: ngModelItem.elementLabel,
@@ -35,7 +35,7 @@
 
                 </a>
 
-                <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'string') &&  ngModelItem.defaultAggregation && ngModelItem.defaultAggregation != 'value' " draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'string') &&  ngModelItem.defaultAggregation && ngModelItem.defaultAggregation != 'value' " ng-click="addColumn(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
                    draggable-data="{
                         elementName: ngModelItem.elementName,
                         objectLabel: ngModelItem.elementLabel+' ('+ngModelItem.defaultAggregation+')',
@@ -95,25 +95,5 @@
             border: 1px solid black;
         }
     </style>
-    <!--
-    Metrics
-    <ul id="metrics-list">
-        <li x-lvl-draggable="true">Count</li>
-        <li x-lvl-draggable="true">Count Unique Values</li>
-        <li x-lvl-draggable="true">List Unique Values</li>
-        <li x-lvl-draggable="true">Sum</li>
-        <li x-lvl-draggable="true">Integer Sum</li>
-        <li x-lvl-draggable="true">Average</li>
-        <li x-lvl-draggable="true">Sum over Sum</li>
-        <li x-lvl-draggable="true">80% Upper Bound</li>
-        <li x-lvl-draggable="true">80% Lower Bound</li>
-        <li x-lvl-draggable="true">Sum as Fraction of Total</li>
-        <li x-lvl-draggable="true">Sum as Fraction of Rows</li>
-        <li x-lvl-draggable="true">Sum as Fraction of Columns</li>
-        <li x-lvl-draggable="true">Count as Fraction of Total</li>
-        <li x-lvl-draggable="true">Count as Fraction of Rows</li>
-        <li x-lvl-draggable="true">Count as Fraction of Columns</li>
-    </ul>
-    -->
 
 </div>

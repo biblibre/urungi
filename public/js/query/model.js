@@ -932,6 +932,16 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         processStructure(undefined,done);
     };
 
+    this.addColumn = function (element, done) {
+
+        if (!query.columns)
+                 query.columns = [];
+            query.columns.push(element);
+        detectLayerJoins();
+
+        processStructure(undefined,done);
+    }
+
    /* this.onDropOnFilter = function (data, event, filter) {
         lastDrop = 'onFilter';
 

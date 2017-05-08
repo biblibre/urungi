@@ -1287,7 +1287,7 @@ console.log('properties changed');
 
     $scope.selectThisFolder = function(folderID)
     {
-        connection.post('/api/pages/publish-page', {_id:$scope.selectedDashboard._id,parentFolder:folderID}, function(data) {
+        connection.post('/api/dashboardsv2/publish-page', {_id:$scope.selectedDashboard._id,parentFolder:folderID}, function(data) {
             $scope.selectedDashboard.parentFolder = folderID;
             $scope.selectedDashboard.isPublic = true;
             $('#publishModal').modal('hide');

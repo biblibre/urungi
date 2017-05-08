@@ -28,8 +28,8 @@ module.exports = {
             from: 'no_reply@yourserver.com'
         },
         google: {
-            clientID: "463281618964-m88ulbgehrre5gf86uvnefhbtdom82qg.apps.googleusercontent.com",
-            clientSecret: "eO2q5_24aIiFke3vHASTfqus",
+            clientID: "your client id",
+            clientSecret: "your client secret",
             callbackURL: "http://127.0.0.1:8080/auth/google/callback"
         },
         pagination: {
@@ -67,8 +67,8 @@ module.exports = {
             from: 'no_reply@yourserver.com'
         },
         google: {
-            clientID: "463281618964-m88ulbgehrre5gf86uvnefhbtdom82qg.apps.googleusercontent.com",
-            clientSecret: "eO2q5_24aIiFke3vHASTfqus",
+            clientID: "your client id",
+            clientSecret: "your client secret",
             callbackURL: "http://127.0.0.1:8080/auth/google/callback"
         },
         pagination: {
@@ -83,7 +83,7 @@ module.exports = {
         ip:  "127.0.0.1",
         port: 8081,
         db_type: 'mongoDB', // tingoDB or mongoDB
-        db: 'localhost:27017/widestage_development',
+        db: 'localhost:27017/widestage_local',
         app: {
             name: 'WideStage',
             contactEmail: '',

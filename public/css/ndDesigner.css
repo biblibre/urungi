@@ -144,19 +144,7 @@ pre strong {
     padding-top: 19px;
     top: 54px;
 }
-#objectPanel {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    bottom: 0;
-    /*z-index: 100;*/
-    width: 300px;
-    box-sizing: border-box;
-    padding: 15px 30px 15px 100px;
-    color: #fff;
-    background: linear-gradient(to right,#272c33 0,#272c33 71px,#ebeced 71px,#ebeced 100%);
-    -webkit-transform: translate3d(0,0,0);
-}
+
 
 #panelToolbar {
     position: absolute;
@@ -233,17 +221,7 @@ article, blockquote, body, dd, dl, dt, fieldset, figure, form, h1, h2, h3, h4, h
 }
 
 
-#objectPanel>menu {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 11;
-    width: 70px;
-    list-style: none;
-    text-align: center;
-    background: transparent;
-}
+
 user agent stylesheetli {
     display: list-item;
     text-align: -webkit-match-parent;
@@ -255,11 +233,7 @@ li.search {
 }
 
 
-#objectPanel>menu li {
-    font-size: 70%;
-    text-align: center;
-    text-transform: uppercase;
-}
+
 
 article, blockquote, body, dd, dl, dt, fieldset, figure, form, h1, h2, h3, h4, h5, h6, header, li, menu, nav, ol, p, section, ul {
     margin: 0;
@@ -296,89 +270,8 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
     height: 92px;
 }
 
-#objectPanel>.content {
-    position: absolute;
-    left: 70px;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    overflow: hidden;
-    padding: 20px 18px 20px 0;
-    text-align: left;
-    background-color: #3f4652;
-}
 
-#objectPanel>menu a:hover, #objectPanel>menu .on a {
-    color: #94C255!important;
-    -webkit-transform: none;
-    transform: none;
-    background-color: #3f4652;
-}
 
-#objectPanel>menu .layout a:hover, #objectPanel>menu .layout.on a {
-    /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_layouts_on.png);*/
-}
-
-#objectPanel>menu .search a:hover, #objectPanel>menu .search.on a {
-    /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_search_on.png);*/
-}
-
-#objectPanel>menu .text a:hover, #objectPanel>menu .text.on a {
-    /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_text_on.png);*/
-}
-
-#objectPanel>menu .backgrounds a:hover, #objectPanel>menu .backgrounds.on a {
-    /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_bgs_on.png);*/
-}
-
-#objectPanel>menu .uploads a:hover, #objectPanel>menu .uploads.on a {
-    /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_uploads_on.png);*/
-}
-
-#objectPanel>menu a {
-    display: block;
-    width: 70px;
-    height: 90px;
-    padding-top: 20px;
-    box-sizing: border-box;
-    /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_search.png);*/
-    background-repeat: no-repeat;
-    background-size: 20px 20px;
-    background-position: 50% 19px;
-    color: #fff;
-    text-decoration: none;
-    transition: all .15s linear,opacity 0s linear;
-}
-
-#objectPanel>menu a i {
-        font-size: large;
-        margin-bottom: 5px;
-}
-
-#objectPanel>menu .layout a {
-    /*padding-top: 42px;
-    background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_layouts.png);*/
-    background-size: 18px 19px;
-}
-
-#objectPanel>menu .text a {
-    padding-top: 42px;
-    /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_text.png);*/
-    background-size: 18px 19px;
-}
-
-#objectPanel>menu .backgrounds a {
-    padding-top: 43px;
-    /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_bgs.png);*/
-    background-size: 20px 20px;
-}
-
-#objectPanel>menu .uploads a {
-    padding-top: 42px;
-    /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_uploads.png);*/
-    background-size: 16px 20px;
-    background-position: 50% 18px;
-}
 
 #trashcan span {
     text-transform: uppercase;
@@ -455,36 +348,10 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
 
 
 
-.layer {
-    position: absolute;
-    left: 0;
-    right: -18px;
-    top: 0;
-    bottom: 0;
-    z-index: 10;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    box-sizing: border-box;
-    /*padding: 20px 20px 20px 30px;
-    padding: 20px 30px 20px 10px;*/
-    transition: all .3s linear;
-}
 
-.scrollPane {
-    outline: none;
-}
 
-#objectPanel>.content {
-    position: absolute;
-    left: 70px;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    overflow: hidden;
-    padding: 20px 18px 20px 0;
-    text-align: left;
-    background-color: #3f4652;
-}
+
+
 
 .browseCategories {
     margin-top: 19px;
@@ -541,53 +408,7 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
     display: none;
 }
 
-.scrollTrack {
-    cursor: default;
-    margin: 3px;
-    position: absolute;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
 
-.vScrollTrack {
-    bottom: 0;
-    right: 9px;
-    top: 0;
-    width: 0;
-    z-index: 2499;
-}
-
-#objectPanel .vScrollTrack {
-    top: -47px;
-}
-
-.scrollThumb {
-    background-color: #000;
-    border-radius: 5px;
-    border: 1px solid #ebeced;
-    box-sizing: border-box;
-    height: 9px;
-    opacity: 0;
-    transition: opacity .15s linear;
-    width: 9px;
-}
-
-#objectPanel .scrollThumb, .paletteToolbarWrapper .scrollThumb {
-    background-color: #fff;
-    border-width: 0;
-    height: 7px;
-    width: 7px;
-}
-
-.hScrollTrack {
-    bottom: 9px;
-    height: 0;
-    left: 0;
-    right: 0;
-    z-index: 2498;
-}
 
 
 
@@ -677,17 +498,7 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
     display: none;
 }
 
-#designArea {
-    position: absolute;
-    left: 300px;
-    right: 0px;
-    top: 55px;
-    bottom: 0px;
-    padding: 0 18px 18px 0;
-    box-sizing: border-box;
-    overflow: scroll;
-    background-color: #CCCCCC;
-}
+
 
 .textToolbar, .imageToolbar {
     position: absolute;
@@ -796,10 +607,16 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
 }
 
 .designer_control_label {
-    text-align: left;
+    /*text-align: left;
     font-size: 10px;
     margin-bottom: 0px;
     font-weight: 0;
+        font-weight: normal;*/
+    text-align: left;
+    font-weight: 100;
+    color: #fff;
+    margin-bottom: 3px;
+    font-size: 12px;
 }
 
 .designer_modal_window .modal-dialog {
@@ -947,4 +764,9 @@ display:box;
 box-pack:center;
 box-align:center;
 
+}
+
+.report-container {
+    height: 100%;
+    position: relative;
 }

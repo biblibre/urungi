@@ -290,12 +290,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             $scope.pager = PagerService.GetPager($scope.reports.items.length, data.page,10,data.pages);
         });
     };
-/*
-    $scope.getLayers = function() {
-        $scope.layers = queryModel.Layers();
 
-    };
-*/
     $scope.IntroOptions = {
             //IF width > 300 then you will face problems with mobile devices in responsive mode
                 steps:[
@@ -462,43 +457,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
                 ]
             }
-/*
-            if ($rootScope.user.pagesCreate || $rootScope.counts.pages > 0)
-                {
-                $scope.IntroOptions.steps.push({
-                        element: '#parentIntro',
-                        html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Page reports</span><br/><br/>See how you can create customized web pages that shows your data using charts and data grids along with HTML components<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/page/intro">Go to pages designer and continue tour</a></span></div>',
-                        width: "500px",
-                        objectArea: false,
-                        verticalAlign: "top",
-                        height: "250px"
-                    });
-                } else {
-                    if ($rootScope.user.reportsCreate || $rootScope.counts.reports > 0)
-                        {
-                        $scope.IntroOptions.steps.push({
-                                element: '#parentIntro',
-                                html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Single query reports</span><br/><br/>See how you can create single query reports that shows your data using charts and data grids<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">Go to single query report designer and continue tour</a></span></div>',
-                                width: "500px",
-                                objectArea: false,
-                                verticalAlign: "top",
-                                height: "250px"
-                            });
-                        } else {
-                            if ($rootScope.user.dashboardsCreate || $rootScope.counts.dashBoards > 0)
-                                {
-                                $scope.IntroOptions.steps.push({
-                                        element: '#parentIntro',
-                                        html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Dashboards</span><br/><br/>See how to create dashboards composed with a set of single query reports<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/dashboard/intro">Go to dashboards and continue tour</a></span></div>',
-                                        width: "500px",
-                                        objectArea: false,
-                                        verticalAlign: "top",
-                                        height: "250px"
-                                    });
-                                }
-                        }
-
-                }*/
 
     $scope.changeLayer = function(selectedLayerID)
     {
@@ -514,13 +472,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.getQuery = function(queryID)
     {
-        /*
-        for (var q in $scope.queries)
-        {
-            if ($scope.queries[q].id == queryID)
-                return $scope.queries[q]
-        }
-        */
         return queryModel.query();
     }
 
@@ -549,11 +500,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         });
     }
 
-   /* $scope.getElementFilterOptions = function(elementType)
-    {
-        return queryModel.getElementFilterOptions(elementType);
-    }
-    */
     $scope.getDatePatternFilters = function()
     {
         return queryModel.getDatePatternFilters();
@@ -570,24 +516,87 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport.properties.columns = [];
                 }
         var customObjectData = data['json/custom-object'];
+
+        $scope.addColumn(customObjectData);
+    };
+
+    $scope.addColumn = function(ngModelItem)
+    {
+
+        if (ngModelItem.defaultAggregation)
+            {
+                var element = {
+                        elementName: ngModelItem.elementName,
+                        objectLabel: ngModelItem.elementLabel +' ('+ngModelItem.defaultAggregation+')',
+                        datasourceID:ngModelItem.datasourceID,
+                        id:ngModelItem.id,
+                        elementLabel:ngModelItem.elementLabel,
+                        collectionID:ngModelItem.collectionID,
+                        elementID: ngModelItem.elementID,
+                        elementType: ngModelItem.elementType,
+                        layerID: $scope.selectedLayerID,
+                        filterType: 'equal',
+                        filterPrompt: false,
+                        filterTypeLabel:'equal',
+                        format:ngModelItem.format,
+                        values:ngModelItem.values,
+                        aggregation: ngModelItem.defaultAggregation};
+            } else {
+
+                var element = {
+                                elementName: ngModelItem.elementName,
+                                objectLabel: ngModelItem.elementLabel,
+                                datasourceID:ngModelItem.datasourceID,
+                                id:ngModelItem.id,
+                                elementLabel:ngModelItem.elementLabel,
+                                collectionID:ngModelItem.collectionID,
+                                elementID: ngModelItem.elementID,
+                                elementType: ngModelItem.elementType,
+                                layerID: $scope.selectedLayerID,
+                                filterType: 'equal',
+                                filterPrompt: false,
+                                filterTypeLabel:'equal',
+                                format:ngModelItem.format,
+                                values:ngModelItem.values};
+            }
+
+
+
         var found = false;
 
         for (var i in $scope.selectedReport.properties.columns)
             {
-               if ($scope.selectedReport.properties.columns[i].elementID == customObjectData.elementID)
+               if ($scope.selectedReport.properties.columns[i].elementID == element.elementID)
                    found = true;
             }
         if (!found)
             {
 
-                $scope.selectedReport.properties.columns.push(customObjectData);
-                queryModel.onDrop($scope,data,event,type,group, function(){
+
+                if ((element.elementType == 'string' || element.elementType == 'date') && (element.aggregation != 'count') )
+                    {
+                        if (!$scope.selectedReport.properties.xkeys)
+                            $scope.selectedReport.properties.xkeys = [];
+                        $scope.selectedReport.properties.xkeys.push(element);
+                    }
+                if (element.elementType == 'number' || (element.elementType == 'string' && element.aggregation == 'count') )
+                    {
+                        if (!$scope.selectedReport.properties.ykeys)
+                            $scope.selectedReport.properties.ykeys = [];
+                        $scope.selectedReport.properties.ykeys.push(element);
+
+                    }
+
+
+                $scope.selectedReport.properties.columns.push(element);
+                queryModel.addColumn(element, function(){
                     $scope.getDataForPreview();
                 });
             } else {
                 noty({text: 'That column already exists',  timeout: 2000, type: 'error'});
             }
-    };
+
+    }
 
     $scope.onDropFilter = function (data, event, type, group) {
 
@@ -622,10 +631,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 noty({text: 'That column order already exists',  timeout: 2000, type: 'error'});
             }
 
-
-
-
-
     }
 
     $scope.filterSortableOptions = {
@@ -637,20 +642,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     function reorderFilters()
     {
-       /* for (var i in $scope.selectedReport.properties.filters)
-                {
-                    if (i == 0)
-                        {
-                           delete($scope.selectedReport.properties.filters[0].condition);
-                           delete($scope.selectedReport.properties.filters[0].conditionLabel);
-                        }
-                    if (i != 0 && $scope.selectedReport.properties.filters[i].condition == undefined)
-                        {
-                            $scope.selectedReport.properties.filters[i].condition = 'AND';
-                            $scope.selectedReport.properties.filters[i].conditionLabel = 'AND';
-                        }
-                }
-                */
         queryModel.reorderFilters();
 
     }
@@ -772,6 +763,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             if (type == 'column')
                 {
                     $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
+                    $rootScope.removeFromArray($scope.selectedReport.properties.ykeys, object);
+                    $rootScope.removeFromArray($scope.selectedReport.properties.xkeys, object);
                 }
             if (type == 'filter')
                 {
@@ -792,10 +785,12 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             if (type == 'ykey')
                 {
                     $rootScope.removeFromArray($scope.selectedReport.properties.ykeys, object);
+                    $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
                 }
             if (type == 'xkey')
                 {
                     $rootScope.removeFromArray($scope.selectedReport.properties.xkeys, object);
+                    $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
                 }
 
             if (type == 'ykey' || type == 'xkey')
@@ -952,35 +947,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.changeReportType = function(newReportType)
     {
-        //If there are no xkeys and y keys move from columns
-
-        //Clean all previous
-        $scope.selectedReport.properties.xkeys = [];
-        $scope.selectedReport.properties.ykeys = [];
-        //$scope.selectedReport.properties.columns = [];
-        //$scope.columns = queryModel.columns();
-        queryModel.initQuery();
-        //$scope.columns = queryModel.columns();
-        //$scope.order = queryModel.order();
-        //$scope.filters = queryModel.filters();
-
-        if (!$scope.selectedReport.properties.xkeys)
-         {
-            for (var c in $scope.selectedReport.properties.columns)
-            {
-
-            if ($scope.selectedReport.properties.columns[c].elementType == 'count' || $scope.selectedReport.properties.columns[c].elementType == 'number')
-                {
-                    if (!$scope.selectedReport.properties.ykeys)
-                        $scope.selectedReport.properties.ykeys = [];
-                    $scope.selectedReport.properties.ykeys.push($scope.selectedReport.properties.columns[c]);
-                } else {
-                    if (!$scope.selectedReport.properties.xkeys)
-                        $scope.selectedReport.properties.xkeys = [];
-                    $scope.selectedReport.properties.xkeys.push($scope.selectedReport.properties.columns[c]);
-                }
-            }
-        }
 
         if (newReportType == 'grid')
         {
@@ -1060,7 +1026,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport.properties.animationSpeed = 32;
         }
 
-        //$scope.processStructure();
+        //TODO: only generate the visualization not requery all data again
+        $scope.getDataForPreview();
+
     }
 
     $scope.changeChartColumnType = function(column,type)
@@ -1075,14 +1043,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             $scope.selectedReport.reportType = 'chart-pie';
         if (type == 'donut')
             $scope.selectedReport.reportType = 'chart-donut';
-        /*
-        if (!$scope.selectedReport.reportType == 'chart-donut')
-            $scope.selectedReport.reportType = 'chart-donut';
-        else
-            $scope.selectedReport.reportType = 'chart-pie';
-        */
-
-
         $scope.processStructure();
     }
 

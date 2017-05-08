@@ -138,3 +138,13 @@ body {
 {
     color:#72A230;
 }
+
+.report-selected-btn
+{
+    background-color: #72A230;
+}
+
+.report-unselected-btn
+{
+    background-color: #fff;
+}

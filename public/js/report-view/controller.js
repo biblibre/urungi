@@ -168,6 +168,12 @@ $scope.changeColumnStyle = function(columnIndex ,hashedID)
         $scope.selectedColumn.columnStyle['background-color'] = color;
     }
 
+    $scope.gridGetMoreData = function(reportID)
+    {
+        $scope.page += 1;
+        report_v2Model.getReportDataNextPage($scope.selectedReport,$scope.page);
+    }
+
 
 
 });

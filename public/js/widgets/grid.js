@@ -20,6 +20,7 @@ function replaceAll(str, find, replace) {
   return str.replace(new RegExp(find, 'g'), replace);
 }
 
+/*
 this.getUIGrid = function(report)
    {
        report = report;
@@ -49,61 +50,11 @@ this.getUIGrid = function(report)
                     }
 
 
-                /* CONDITIONAL FORMATING
 
-                http://plnkr.co/edit/PHCUKtuci36Ez5eb20U9?p=preview
-
-                var rowtpl='<div ng-class="{\'green\':true, \'blue\':row.entity.count==1 }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
-
-                  $scope.gridOptions = {
-                    enableSorting: true,
-                    data:'myData',
-                    rowTemplate:rowtpl,
-                    columnDefs: [
-                      { field: 'sv_name', displayName: 'Nombre'},
-                      { field: 'sv_code', displayName: 'Placa'},
-                      { field: 'count', displayName: 'Cuenta'}
-                    ]
-                  };
-
-
-                .ui-grid-top-panel { header
-                    font-weight: bold;
-                    color: #FFFFFF;
-                    background: #3F4652;
-                    height: 40px;
-                    padding: 5px;
-                }
-
-
-                */
-
-               /* col.menuItems = [
-          {
-            title: 'Outer Scope Alert',
-            icon: 'ui-grid-icon-info-circled',
-            //action: function($event) {
-            //  this.context.blargh(); // $scope.blargh() would work too, this is just an example
-            //},
-            //context: this
-          }];*/
-                //This is to be applied for conditional formating ...
-                //col.cellTemplate = '<div class="ui-grid-cell-contents" > hola {{grid.getCellValue(row, col)}}</div>';
 
                 colDefs.push(col);
             }
 
-            /* Scroll bars
-            enableHorizontalScrollbar = value;
-            enableVerticalScrollbar = value;
-
-            value = 0;  NEVER
-            value = 1;  ALWAYS
-            value = 2;  WHEN_NEEDED
-
-            */
-
-            //var gridOptions = 'ui-grid-move-columns ui-grid-resize-columns ui-grid-pinning ui-grid-exporter ui-grid-grouping';
 
     var theStyle = ' style="';
     if (report.properties.backgroundColor)
@@ -118,11 +69,6 @@ this.getUIGrid = function(report)
             return '<div page-block ndtype="ui-grid" id="'+report.id+'" ui-grid="{data: getQuery(\''+hashedID+'\').data, columnDefs: getReportColumnDefs(\''+report.id+'\'), enableVerticalScrollbar:1, enableHorizontalScrollbar:0,enableGridMenu: true,showColumnFooter:true,showGridFooter:true,enableColumnResizing:true,fastWatch:true}" '+gridOptions+theStyle+'  class="myGrid"></div>';
    }
 
-
-   this.blargh = function()
-   {
-       console.log('blargh');
-   }
 
 this.simpleGrid = function(columns,id,query,designerMode,properties,done)
     {
@@ -448,14 +394,21 @@ this.simpleGridV2 = function(report,designerMode,properties)
 
     }
 
+*/
 
 this.extendedGridV2 = function(report,mode)
     {
             report = report;
-            var id = report.id;
+            if (report.id == undefined)
+                var id = report._id;
+                else
+                var id = report.id;
+
             hashedID = report.query.id;
             var theProperties = report.properties;
             var pageBlock = "page-block";
+
+            console.log('the report',report);
 
             if (mode == 'preview')
                 {
@@ -471,13 +424,13 @@ this.extendedGridV2 = function(report,mode)
 
             if (!theProperties.backgroundColor) theProperties.backgroundColor = "#FFFFFF";
             if (!theProperties.height) theProperties.height = 400;
-            if (!theProperties.headerHeight) theProperties.headerHeight = 60;
-            if (!theProperties.rowHeight) theProperties.rowHeight = 35;
+            if (!theProperties.headerHeight) theProperties.headerHeight = 30;
+            if (!theProperties.rowHeight) theProperties.rowHeight = 20;
             if (!theProperties.headerBackgroundColor) theProperties.headerBackgroundColor = "#FFFFFF";
             if (!theProperties.headerBottomLineWidth) theProperties.headerBottomLineWidth = 4;
             if (!theProperties.headerBottomLineColor) theProperties.headerBottomLineColor = "#999999";
             if (!theProperties.rowBorderColor) theProperties.rowBorderColor = "#CCCCCC";
-            if (!theProperties.rowBottomLineWidth) theProperties.rowBottomLineWidth = 2;
+            if (!theProperties.rowBottomLineWidth) theProperties.rowBottomLineWidth = 1;
             if (!theProperties.columnLineWidht) theProperties.columnLineWidht = 0;
 
             //margins
@@ -486,7 +439,7 @@ this.extendedGridV2 = function(report,mode)
             if (theProperties)
                 {
                     reportStyle += 'background-color:'+theProperties.backgroundColor+';';
-                    reportStyle += 'height:'+theProperties.height+'px;';
+                    //reportStyle += 'height:'+theProperties.height+'px;';
 
                     var theRepeatHeight = theProperties.height - theProperties.headerHeight;
                     repeatHeight = 'height:'+theRepeatHeight+'px;';
@@ -504,9 +457,7 @@ this.extendedGridV2 = function(report,mode)
                 }
 
 
-            var htmlCode = '<div '+pageBlock+' id="REPORT_'+report.id+'" ndType="extendedGrid" class="container-fluid" style="'+reportStyle+'">';
-
-            //var htmlCode =  '<div class="container-fluid repeater-tool-container"><button class="btn btn-white pull-left" ng-click="saveToExcel(\''+hashedID+'\')" style="margin-bottom: 2px;"><i class="fa fa-file-excel-o"></i></button><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." /></div>';
+            var htmlCode = '<div '+pageBlock+' id="REPORT_'+id+'" ndType="extendedGrid" class="container-fluid report-container" style="'+reportStyle+'">';
 
             columns = report.properties.columns;
 
@@ -523,15 +474,9 @@ this.extendedGridV2 = function(report,mode)
             }
             htmlCode += '</div>';
 
-            //Body
-            htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;'+repeatHeight+'" scrolly="gridGetMoreData(\''+report.id+'\')">';
-
-            //TODO: orderby  ....   | orderBy:[]    orderBy:'+orderBys+'
-            //var orderBys = "'-WSTc33d4a83bea446dab99c7feb0f8fe71a_topPerformerRatingavg'";
+            htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: '+theProperties.headerHeight+'px;" scrolly="gridGetMoreData(\''+id+'\')">';
 
             htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data | filter:theFilter | orderBy:getReport(\''+hashedID+'\').predicate:getReport(\''+hashedID+'\').reverse  " style="'+rowStyle+'"  >';
-
-            // POPOVER con HTML https://maxalley.wordpress.com/2014/08/19/bootstrap-3-popover-with-html-content/
 
             for(var i = 0; i < columns.length; i++)
             {

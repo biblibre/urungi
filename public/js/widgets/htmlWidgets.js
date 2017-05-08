@@ -5,7 +5,7 @@ app.service('htmlWidgets' , function () {
     {
 
                 return '<div page-block class="jumbotron" ndType="jumbotron">'+
-                        '<h1 page-block  class="editable" ndType="header" contenteditable="false">  A header text H1 ddd </h1>'+
+                        '<h1 page-block  class="editable" ndType="header" contenteditable="false">  Hello, world! </h1>'+
                         '<p page-block  class="editable" contenteditable="false" ndType="paragraph">This is a simple text paragraph select to edit content.</p>'+
                         /*'<a page-block  class="editable btn btn-default" ndType="button"  role="button">My button</a>'+*/
                         '</div>';

@@ -107,7 +107,6 @@ this.rebuildChart = function(report)
 
         if (query)
         {
-            //var theChartCode = '#'+chart.chartID;
             var theChartCode = '#CHART_'+reportID;
 
                 if (!chart.height)
@@ -253,7 +252,6 @@ this.rebuildChart = function(report)
                 }
 
     }
-
 
     this.deleteChartColumn = function(chart,column)
     {
