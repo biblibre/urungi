@@ -5,7 +5,7 @@ To see how it works go to www.widestage.com
 
 # Supported databases
 
-MongoDB 
+[MongoDB](http://widestage.com/en/pages/open_source_reports_for_mongodb) 
 
 Postgres
 
