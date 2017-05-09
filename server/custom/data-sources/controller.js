@@ -19,6 +19,42 @@ exports.DataSourcesCreate = function(req,res){
     });
 };
 
+exports.DataSourcesUploadConfigFile = function(req,res) {
+
+    var file = req.files[0];
+
+    if (!file) {
+        return serverResponse(req, res, 200, {result: 0, msg: "file is undefined"});
+    }
+    var fs = require('fs');
+    var companyID = 'COMPID';
+
+    if (!fs.existsSync(appRoot+"server/keys/"+companyID)) {
+        fs.mkdirSync(appRoot+"server/keys/"+companyID);
+    }
+
+
+    var filePath = appRoot+"server/keys/"+companyID+"/"+file.originalname;
+
+    fs.readFile(file.path, function(err, data) {
+        if(err)
+            {
+            return serverResponse(req, res, 200, {result: 0, msg: err.message});
+            throw err;
+            }
+
+        fs.writeFile(filePath, data, function (err) {
+            if(err){
+            return serverResponse(req, res, 200, {result: 0, msg: err.message});
+            throw err;
+            }
+
+            serverResponse(req, res, 200, {result: 1, msg: 'File uploaded successfully'});
+        });
+    });
+
+};
+
 
 exports.DataSourcesUpdate = function(req,res){
 
@@ -84,7 +120,7 @@ exports.getEntities = function(req,res)
             {
                 var mongodb = require('../../core/db/mongodb.js');
                 var data = {};
-                console.log('aqui',result);
+
                 data.host = result.item.params[0].connection.host;
                 data.port = result.item.params[0].connection.port;
                 data.database = result.item.params[0].connection.database;
@@ -520,39 +556,6 @@ function getElementList (target,elements,parent) {
                 getElementList(target[k],elements,node);
         }
     }
-};
-
-
-exports.uploadBigqueryAutorizationJson = function(req,res){
-    if (!req.files.file) {
-        res.status(200).send({result: 0, msg: "'file' is required."});
-        return;
-    }
-
-    var file = req.files.file;
-    var data = req.body;
-    debug(data);
-
-    var path = 'server/keys/COMPID/bigQuery';
-
-    fileUpload(file, path, function(result) {
-        if (result.result == 1) {
-            res.status(200).send({result: 1, msg: "File loaded", file: result.file});
-        }
-        else {
-            res.status(200).send(result);
-        }
-    });
-
-    /*
-     fs.readFile(req.files.displayImage.path, function (err, data) {
-     // ...
-     var newPath = __dirname + "/uploads/uploadedFileName";
-     fs.writeFile(newPath, data, function (err) {
-     res.redirect("back");
-     });
-     });
-     */
 };
 
 

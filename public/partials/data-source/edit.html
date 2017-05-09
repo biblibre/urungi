@@ -14,12 +14,9 @@
                     <option label="MONGODB" value="MONGODB">MONGODB</option>
                     <option label="MySQL" value="MySQL">MySQL</option>
                     <option label="PostgreSql" value="POSTGRE">PostgreSql</option>
-                    <!--<option label="Oracle" value="ORACLE">Oracle</option>-->
                     <option label="MSSQL" value="MSSQL">MSSQL</option>
-                    <!--<option label="Google Big query" value="BIGQUERY">Google Big query</option>-->
-                    <!--<option label="DRILL File" value="DRILL-FILE">DRILL File</option>
-                    <option label="HIVE" value="HIVE">Hive</option>
--->
+                    <option label="Google Big query" value="BIGQUERY">Google Big query</option>
+                    <option label="Oracle" value="JDBC-ORACLE">Oracle</option>
                 </select>
             </div>
         </div>
@@ -53,10 +50,16 @@
         </div>
 
         <div class="col-md-12"  ng-if="_DataSource.type == 'BIGQUERY'">
-            <div class="form-group">
-                <label class="control-label" for="userName">Google Cloud JSON authorization file</label>
-                <input type="file" class="form-control" id="file" ng-model="_DataSource.params[0].connection.file">
-            </div>
+                    <div class="form-group">
+                        <label class="control-label" for="userName">Google Cloud JSON authorization file</label>
+                        <!--<input type="file" class="form-control" id="file" ng-model="_DataSource.params[0].connection.file">-->
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="_DataSource.params[0].connection.file" placeholder="Google Cloud JSON authorization file" aria-describedby="basic-addon2">
+                            <span class="input-group-addon hand-cursor" id="basic-addon2" ngf-select ngf-change="upload($file)" ngf-multiple="false" ngf-accept="'application/json'">Select File</span>
+                        </div>
+                        <span ng-if="fileUploadSuccess == true" style="color:green">{{fileUploadMessage}}</span>
+                        <span ng-if="fileUploadSuccess == false" style="color:red">{{fileUploadMessage}}</span>
+                    </div>
         </div>
 
         <div class="col-md-12"  ng-if="_DataSource.type != 'BIGQUERY'">
@@ -74,7 +77,7 @@
         </div>
 
         <div class="col-md-12" >
-            <div class="col-md-6">
+            <div class="col-md-6" style="padding:0px">
                 <div class="form-group">
                     <label class="control-label" for="password">Data Packet size</label>
                     <input class="form-control" type="number" name="packetSize" id="packetSize" ng-model="_DataSource.params[0].packetSize" data-validate="required" placeholder="Set here the packet size for this datasource (-1 means get always all data)" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
@@ -83,7 +86,8 @@
         </div>
 
         <div class="col-md-12" style="padding: 5px;">
-            <a ng-click="doTestConnection()" ng-disabled="(!_DataSource.params[0].type == 'BIGQUERY' && (!_DataSource.params[0].connection.host || !_DataSource.params[0].connection.port || !_DataSource.params[0].connection.database || testingConnection)) || (_DataSource.params[0].type == 'BIGQUERY' && (!_DataSource.params[0].connection.database) || testingConnection) " class="btn btn-default pull-right" style="margin-left: 5px;margin-right: 5px;">Test Connection</a>
+            <a ng-click="doTestConnection()" ng-disabled="!enableTestConnection()" class="btn btn-default pull-right" style="margin-left: 5px;margin-right: 5px;">Test Connection</a>
+
             <div ng-if="testConnection.message" class="row alert" ng-class="{'alert-success': testConnection.result == 1,'alert-danger': testConnection.result != 1}" >
                 {{testConnection.message}}
             </div>
@@ -93,6 +97,8 @@
         </div>
     </div>
 </div>
+
+
 
 <div class="container-fluid" style="padding: 5px;">
 

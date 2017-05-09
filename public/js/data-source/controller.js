@@ -1,4 +1,4 @@
-app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal,datasourceModel,$timeout,PagerService) {
+app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal,datasourceModel,$timeout,PagerService,$http,Constants) {
 
     $scope.activeForm = 'partials/data-source/source_wizard_index.html';
     $scope.selectedCollections = [];
@@ -84,18 +84,15 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
     function init()
     {
-        console.log('entering init');
         if ($routeParams.newDataSource) {
             if ($routeParams.newDataSource == 'true') {
                 $scope._DataSource = {};
                 $scope._DataSource.params = [];
-                $scope._DataSource.params.push({connection:{}})
+                $scope._DataSource.params.push({connection:{},packetSize:500})
                 $scope._DataSource.status = 1;
                 $scope._DataSource.type = 'MONGODB';
 
                 $scope.mode = 'add';
-
-                console.log('entering in add mode for datasource');
 
             }
         } else {
@@ -114,10 +111,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
 
     $scope.save = function() {
-
-
         if ($scope.mode == 'add') {
-
             var data = $scope._DataSource;
             connection.post('/api/data-sources/create', data, function(data) {
                 window.history.back();
@@ -132,6 +126,71 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         }
 
     };
+
+    $scope.upload = function(file) {
+
+
+        if (file)
+            {
+                $scope._DataSource.params[0].connection.file = file.name;
+
+                var fd = new FormData();
+
+                fd.append('file', file);
+
+                $http.post('/api/data-sources/upload-config-file', fd, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+                })
+                .success(angular.bind(this, function (data, status, headers, config) {
+                    if (Constants.CRYPTO) {
+                        var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
+                        data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+                    }
+                    if (data.result == 1)
+                        {
+                            $scope.fileUploadSuccess = true;
+                            $scope.fileUploadMessage = 'File uploaded successfully';
+                        } else {
+                            $scope.fileUploadSuccess = false;
+                            $scope.fileUploadMessage = 'File upload failed ['+data.msg+']';
+                        }
+
+                }))
+                .error(function (data, status) {
+                    if (Constants.CRYPTO) {
+                        var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
+                        data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+                    }
+
+                    $scope.fileUploadSuccess = false;
+                    $scope.fileUploadMessage = 'File upload failed ['+data.msg+']';
+                });
+            }
+
+    };
+
+    $scope.enableTestConnection = function()
+    {
+        var result = false;
+
+
+        if ($scope._DataSource.type != 'BIGQUERY' &&
+            ($scope._DataSource.params[0].connection.host && $scope._DataSource.params[0].connection.port && $scope._DataSource.params[0].connection.database)
+           )
+            result = true;
+
+
+        if ($scope._DataSource.type == 'BIGQUERY' &&
+            ($scope._DataSource.params[0].connection.database && $scope._DataSource.params[0].connection.file && $scope.fileUploadSuccess == true)
+           )
+            result = true;
+
+        if ($scope.testingConnection)
+            result = false;
+
+            return result;
+    }
 
     function removeUnselected(items) {
         for (var i in items) {
@@ -202,7 +261,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
     $scope.doTestConnection = function()
     {
-        console.log('testing connection');
         $scope.testConnection = {};
         var data = {};
         $scope.testingConnection = true;
@@ -212,6 +270,8 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         data.database = $scope._DataSource.params[0].connection.database;
         data.userName = $scope._DataSource.params[0].connection.userName;
         data.password = $scope._DataSource.params[0].connection.password;
+
+        if ($scope._DataSource.params[0].connection.file) data.file = $scope._DataSource.params[0].connection.file;
 
         connection.post('/api/data-sources/testConnection', data, function(result) {
             if (result.result == 1) {
@@ -249,14 +309,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             $scope.pager = PagerService.GetPager($scope.items.length, data.page,10,data.pages);
         });
 
-        /*
-        connection.get('/api/data-sources/find-all', params, function(data) {
-            $scope.items = data.items;
-            $scope.page = data.page;
-            $scope.pages = data.pages;
-
-
-        });*/
     };
 
     $scope.getDataSource = function() {
@@ -284,8 +336,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             connection.get('/api/data-sources/find-one', {id: $routeParams.dataSourceID}, function(data) {
                 $scope._dataSource = data.item;
                 console.log($scope._dataSource);
-
-                //params: Array[1]0: connection: {database: "testIntalligent"host: "54.154.195.107"port: 27017}
 
                 for (var i in $scope._dataSource.params[0].schema) {
                     $scope._dataSource.params[0].schema[i].selected = true;
@@ -356,8 +406,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                         }
 
                         $scope.loadingNewCollections = false;
-
-                        //elements: Array[17]0: ObjectelementID: "99181711-971a-453d-be90-8556c5844f8a"elementLabel: "_id"elementName: "_id"elementType: "object"visible: false__proto__: Object1: ObjectelementID: "9641ce17-5c04-412b-bfaf-d5cbfbf4f744"elementLabel: "content"elementName: "content"elementType: "string"visible: true
 
 
                     });

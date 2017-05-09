@@ -10,9 +10,12 @@ if (env == 'production') {
 
 };
 
+
 var express = require('express'),
     path = require('path'),
     http = require('http');
+
+
 
 var cluster = require('cluster');
 var passport = require("passport");
@@ -21,7 +24,10 @@ var session = require('express-session');
 var RedisStore = require('connect-redis')(session); //npm install connect-redis --- to store variable sessions
 var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
+
+//var bb = require('express-busboy');
 var app = express();
+//bb.extend(app);
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -36,6 +42,10 @@ app.use(session({secret: 'ndwidestagev0', cookie: {httpOnly: true, secure: false
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: '50mb'})); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
+
+var multer = require('multer');
+//app.use(multer());
+app.use(multer({dest:'./uploads'}).any());
 
 var authentication = true;
 

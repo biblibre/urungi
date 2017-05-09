@@ -5,6 +5,7 @@ module.exports = function (app) {
     app.get('/api/data-sources/find-all', restrictRole(['WSTADMIN']), DataSources.DataSourcesFindAll);
     app.get('/api/data-sources/find-one', restrictRole(['WSTADMIN']), DataSources.DataSourcesFindOne);
     app.post('/api/data-sources/create', restrictRole(['WSTADMIN']), DataSources.DataSourcesCreate);
+    app.post('/api/data-sources/upload-config-file', restrictRole(['WSTADMIN']), DataSources.DataSourcesUploadConfigFile);
     app.post('/api/data-sources/update/:id', restrictRole(['WSTADMIN']), DataSources.DataSourcesUpdate);
     app.post('/api/data-sources/testS3Connection', restrictRole(['WSTADMIN']), DataSources.getS3Files);
     app.post('/api/data-sources/testConnection', restrictRole(['WSTADMIN']), DataSources.testConnection);
