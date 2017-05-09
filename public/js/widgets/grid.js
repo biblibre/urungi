@@ -532,9 +532,9 @@ this.extendedGridV2 = function(report,mode)
                     elementName = column.collectionID.toLowerCase()+'_'+column.elementName+column.aggregation;
 
 
-                var theValue = '<span>{{item.'+elementName+'}}</span>';
+                var theValue = '<div style="overflow:hidden;height:100%;">{{item.'+elementName+'}}</div>';
                 if (column.elementType === 'number')
-                     theValue = '<span>{{item.'+elementName+' | number}}</span>';
+                     theValue = '<div style="overflow:hidden;height:100%;">{{item.'+elementName+' | number}}</div>';
 
                 if (column.signals)
                 {
@@ -582,9 +582,9 @@ this.extendedGridV2 = function(report,mode)
                     htmlCode += theStyle +'</style>'
 
                     if (column.elementType === 'number')
-                        theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+' | number}}</span>';
+                        theValue = '<div ng-class="{'+theClass+'}" style="overflow:hidden;height:100%;" >{{item.'+elementName+' | number}}</div>';
                     else
-                        theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+'}}</span>';
+                        theValue = '<div ng-class="{'+theClass+'}" style="overflow:hidden;height:100%;" >{{item.'+elementName+'}}</div>';
 
                 }
 
@@ -593,16 +593,16 @@ this.extendedGridV2 = function(report,mode)
                     if (column.link.type == 'report')
                     {
                        if (column.elementType === 'number')
-                       theValue = '<a class="columnLink" href="/#/reports/'+column.link._id+'/'+column.link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+' | number}}</a>'
+                       theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/'+column.link._id+'/'+column.link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+' | number}}</a>'
                        else
-                        theValue = '<a class="columnLink" href="/#/reports/'+column.link._id+'/'+column.link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
+                        theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/'+column.link._id+'/'+column.link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
                     }
                     if (column.link.type == 'dashboard')
                     {
                         if (column.elementType === 'number')
-                        theValue = '<a class="columnLink" href="/#/dashboards/'+column.link._id+'/'+column.link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+' | number}}</a>'
+                        theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/'+column.link._id+'/'+column.link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+' | number}}</a>'
                         else
-                        theValue = '<a class="columnLink" href="/#/dashboards/'+column.link._id+'/'+column.link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
+                        theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/'+column.link._id+'/'+column.link.promptElementID+'/{{item.'+elementName+'}}">{{item.'+elementName+'}}</a>'
                     }
                 }
 
