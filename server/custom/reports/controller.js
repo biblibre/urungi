@@ -669,20 +669,20 @@ function mergeTwoCollections(collections,sourceCollection,sourceElement,targetCo
         var largestElement;
         var shortestElement;
 
+        //TODO: order by 1 is the short collection
+
         if (theSourceCollection.result.length > theTargetCollection.result.length)
         {
             largestResult = theSourceCollection.result;
-            largestElement = theSourceCollection.schema.collectionID+'_'+sourceElement;
+            largestElement = theSourceCollection.schema.collectionID.toLowerCase()+'_'+sourceElement;
             shortestResult = theTargetCollection.result;
-            shortestElement = theTargetCollection.schema.collectionID+'_'+targetElement;
+            shortestElement = theTargetCollection.schema.collectionID.toLowerCase()+'_'+targetElement;
         } else {
             largestResult = theTargetCollection.result;
-            largestElement = theTargetCollection.schema.collectionID+'_'+targetElement;
+            largestElement = theTargetCollection.schema.collectionID.toLowerCase()+'_'+targetElement;
             shortestResult = theSourceCollection.result;
-            shortestElement = theSourceCollection.schema.collectionID+'_'+sourceElement;
+            shortestElement = theSourceCollection.schema.collectionID.toLowerCase()+'_'+sourceElement;
         }
-
-
 
         for (var s in largestResult)
         {
