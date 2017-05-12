@@ -14,6 +14,7 @@ db.prototype.connect = function(data, done) {
 
     var connection = mysql.createConnection({
         host     : data.host,
+        port     : data.port,
         user     : data.userName,
         password : data.password,
         database : data.database
@@ -68,6 +69,7 @@ exports.db = db;
 exports.testConnection = function(req,data, setresult) {
     var connection = mysql.createConnection({
         host     : data.host,
+        port     : data.port,
         user     : data.userName,
         password : data.password,
         database : data.database
@@ -81,7 +83,13 @@ exports.testConnection = function(req,data, setresult) {
 
                         });
             } else {
-                connection.query("select table_schema, table_name as name from information_schema.tables where table_schema not in ('information_schema','mysql','performance_schema')", function(err, rows, fields) {
+
+                if (data.database)
+                    var tablesSQL = "select table_schema, table_name as name from information_schema.tables where table_schema = '"+data.database+"'";
+                else
+                    var tablesSQL = "select table_schema, table_name as name from information_schema.tables where table_schema not in ('information_schema','mysql','performance_schema')"
+
+                connection.query(tablesSQL, function(err, rows, fields) {
                     if (err) {
                             setresult({result: 0, msg: 'Error executing test connection SQL : '+ err,code:'MY-002',actionCode:'MESSAGEWST'});
                             saveToLog(req,'Error executing test connection SQL : '+err, 400,'MY-002','',data.datasourceID);
