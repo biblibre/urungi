@@ -118,8 +118,8 @@ exports.execOperation = function(operation, params, done) {
 
 };
 
-exports.processCollections = function(req,collections, dataSource, params,thereAreJoins, done) {
-    processCollections(req,collections, dataSource, params,thereAreJoins, done);
+exports.processCollections = function(req,query,collections, dataSource, params,thereAreJoins, done) {
+    processCollections(req,query,collections, dataSource, params,thereAreJoins, done);
 };
 
 
@@ -274,126 +274,155 @@ function pad(num, size) {
 }
 
 
-function getCollectionFilters(collection, filters) {
-    var theFilters = [], condition = false;
 
-    debug(filters);
+function getCollectionFiltersV2(collection, filters) {
+    var theFilters = [], condition = 'AND';
+
 
     for (var i in filters) {
-        var filter = filters[i];
+        if (filters[i].collectionID == collection.collectionID)
+            {
+                var filter = filters[i];
 
-        if (filter.group) {
+                if (filter.group) {
 
-            theFilters.push(getCollectionFilters(collection, filter.filters));
-        }
-        else if (filter.condition) {
-            if (!condition) condition = filter.conditionType;
-        }
-        else if (filter.filterText1 || filter.filterType == 'notNull' || filter.filterType == 'null' ) {
-            for (var e in collection.schema.elements) {
-                if (filter.elementID == collection.schema.elements[e].elementID) {
-                    var thisFilter = {}, filterValue = filter.filterText1;
-                    var filterElementName = collection.schema.elements[e].elementName;
+                    theFilters.push(getCollectionFilters(collection, filter.filters));
+                }
+                else if (filter.filterText1 || filter.filterType == 'notNull' || filter.filterType == 'null' ) {
 
-                    if (collection.schema.elements[e].elementType == 'number') {
-                        filterValue = Number(filterValue);
-                    }
-                    if (collection.schema.elements[e].elementType == 'date') {
 
-                        if (filter.filterType == "in" || filter.filterType == "notIn")
-                        {
-                           thisFilter = dateFilter(filterValue,filter);
-                        } else
-                        thisFilter[filterElementName] = dateFilter(filterValue,filter);
-                    }
+                    for (var e in collection.schema.elements) {
 
-                    if (filter.filterType == "equal" && filter.elementType != 'date') {
-                        thisFilter[filterElementName] = filterValue;
-                    }
-                    if (filter.filterType == "diferentThan" && filter.elementType != 'date') {
-                        thisFilter[filterElementName] = {$not: filterValue};;
-                    }
-                    if (filter.filterType == "biggerThan" && filter.elementType != 'date' ) {
-                        thisFilter[filterElementName] = {$gt: filterValue};
-                    }
-                    if (filter.filterType == "notGreaterThan" && filter.elementType != 'date') {
-                        thisFilter[filterElementName] = {$not: {$gt: filterValue}};
-                    }
-                    if (filter.filterType == "biggerOrEqualThan" && filter.elementType != 'date') {
-                        thisFilter[filterElementName] = {$gte: filterValue};
-                    }
-                    if (filter.filterType == "lessThan" && filter.elementType != 'date') {
-                        thisFilter[filterElementName] = {$lt: filterValue};
-                    }
-                    if (filter.filterType == "lessOrEqualThan" && filter.elementType != 'date') {
-                        thisFilter[filterElementName] = {$lte: filterValue};
-                    }
-                    if (filter.filterType == "between" && filter.elementType != 'date') {
-                        thisFilter[filterElementName] = {$gt: filterValue, $lt: filter.filterText2};
-                    }
-                    if (filter.filterType == "notBetween" && filter.elementType != 'date') {
-                        thisFilter[filterElementName] = {$not: {$gt: filterValue, $lt: filter.filterText2}};
-                    }
-                    if (filter.filterType == "contains") {
-                        thisFilter[filterElementName] = new RegExp(filterValue, "i");
-                    }
-                    if (filter.filterType == "notContains") {
-                        thisFilter[filterElementName] = {$ne: new RegExp(filterValue, "i")};
-                    }
-                    if (filter.filterType == "startWith") {
-                        thisFilter[filterElementName] = new RegExp('/^'+filterValue+'/', "i");
-                    }
-                    if (filter.filterType == "notStartWith") {
-                        thisFilter[filterElementName] = {$ne: new RegExp('/^'+filterValue+'/', "i")};
-                    }
-                    if (filter.filterType == "endsWith") {
-                        thisFilter[filterElementName] = new RegExp('/'+filterValue+'$/', "i");
-                    }
-                    if (filter.filterType == "notEndsWith") {
-                        thisFilter[filterElementName] = {$ne: new RegExp('/'+filterValue+'$/', "i")};
-                    }
-                    if (filter.filterType == "like") {
-                        thisFilter[filterElementName] = new RegExp('/'+filterValue+'/', "i");
-                    }
-                    if (filter.filterType == "notLike") {
-                        thisFilter[filterElementName] = {$ne: new RegExp('/'+filterValue+'/', "i")};
-                    }
-                    if (filter.filterType == "null") {
-                        thisFilter[filterElementName] = null;
-                    }
-                    if (filter.filterType == "notNull") {
-                        thisFilter[filterElementName] = {$ne: null};
-                    }
-                    if (filter.filterType == "in"  && filter.elementType != 'date') {
-                        thisFilter[filterElementName] = {$in: String(filterValue).split(';')};     //;
-                    }
-                    if (filter.filterType == "notIn" && filter.elementType != 'date') {
-                        thisFilter[filterElementName] = {$nin: String(filterValue).split(';')};
-                    }
+                       if (filter.elementID == collection.schema.elements[e].elementID) {
+                            var thisFilter = {}, filterValue = filter.filterText1;
+                            var filterElementName = collection.schema.elements[e].elementName;
 
-                    if (!isEmpty(thisFilter)) {
-                        theFilters.push(thisFilter);
+
+
+                            if (collection.schema.elements[e].elementType == 'number') {
+                                filterValue = Number(filterValue);
+                            }
+                            if (collection.schema.elements[e].elementType == 'date') {
+
+                                if (filter.filterType == "in" || filter.filterType == "notIn")
+                                {
+                                   thisFilter = dateFilter(filterValue,filter);
+                                } else {
+                                    thisFilter[filterElementName] = dateFilter(filterValue,filter);
+                                }
+                            }
+
+                            if (filter.filterType == "equal" && filter.elementType != 'date') {
+                                thisFilter[filterElementName] = filterValue;
+                            }
+                            if (filter.filterType == "diferentThan" && filter.elementType != 'date') {
+                                thisFilter[filterElementName] = {$not: filterValue};;
+                            }
+                            if (filter.filterType == "biggerThan" && filter.elementType != 'date' ) {
+                                thisFilter[filterElementName] = {$gt: filterValue};
+                            }
+                            if (filter.filterType == "notGreaterThan" && filter.elementType != 'date') {
+                                thisFilter[filterElementName] = {$not: {$gt: filterValue}};
+                            }
+                            if (filter.filterType == "biggerOrEqualThan" && filter.elementType != 'date') {
+                                thisFilter[filterElementName] = {$gte: filterValue};
+                            }
+                            if (filter.filterType == "lessThan" && filter.elementType != 'date') {
+                                thisFilter[filterElementName] = {$lt: filterValue};
+                            }
+                            if (filter.filterType == "lessOrEqualThan" && filter.elementType != 'date') {
+                                thisFilter[filterElementName] = {$lte: filterValue};
+                            }
+                            if (filter.filterType == "between" && filter.elementType != 'date') {
+                                thisFilter[filterElementName] = {$gt: filterValue, $lt: filter.filterText2};
+                            }
+                            if (filter.filterType == "notBetween" && filter.elementType != 'date') {
+                                thisFilter[filterElementName] = {$not: {$gt: filterValue, $lt: filter.filterText2}};
+                            }
+                            if (filter.filterType == "contains") {
+                                thisFilter[filterElementName] = new RegExp(filterValue, "i");
+                            }
+                            if (filter.filterType == "notContains") {
+                                thisFilter[filterElementName] = {$ne: new RegExp(filterValue, "i")};
+                            }
+                            if (filter.filterType == "startWith") {
+                                thisFilter[filterElementName] = new RegExp('/^'+filterValue+'/', "i");
+                            }
+                            if (filter.filterType == "notStartWith") {
+                                thisFilter[filterElementName] = {$ne: new RegExp('/^'+filterValue+'/', "i")};
+                            }
+                            if (filter.filterType == "endsWith") {
+                                thisFilter[filterElementName] = new RegExp('/'+filterValue+'$/', "i");
+                            }
+                            if (filter.filterType == "notEndsWith") {
+                                thisFilter[filterElementName] = {$ne: new RegExp('/'+filterValue+'$/', "i")};
+                            }
+                            if (filter.filterType == "like") {
+                                thisFilter[filterElementName] = new RegExp('/'+filterValue+'/', "i");
+                            }
+                            if (filter.filterType == "notLike") {
+                                thisFilter[filterElementName] = {$ne: new RegExp('/'+filterValue+'/', "i")};
+                            }
+                            if (filter.filterType == "null") {
+                                thisFilter[filterElementName] = null;
+                            }
+                            if (filter.filterType == "notNull") {
+                                thisFilter[filterElementName] = {$ne: null};
+                            }
+                            if (filter.filterType == "in"  && filter.elementType != 'date') {
+                                thisFilter[filterElementName] = {$in: String(filterValue).split(';')};     //;
+                            }
+                            if (filter.filterType == "notIn" && filter.elementType != 'date') {
+                                thisFilter[filterElementName] = {$nin: String(filterValue).split(';')};
+                            }
+
+                            if (!isEmpty(thisFilter)) {
+
+                                if (filter.conditionLabel)
+                                    {
+                                        var pushCondition = [];
+                                        pushCondition.push(thisFilter);
+
+                                        condition = filter.conditionLabel;
+
+                                        switch(filter.conditionLabel) {
+                                            case 'AND': theFilters.push({$and: pushCondition});
+                                                break;
+                                            case 'OR': theFilters.push({$or:  pushCondition});
+                                                break;
+                                            case 'AND NOT': theFilters.push({$not:  pushCondition});
+                                                break;
+                                            case 'OR NOT': theFilters.push({$nor: pushCondition});
+                                                break;
+                                            default: theFilters.push({$and:  pushCondition});
+                                        }
+                                        //theFilters.push(thisFilter);
+                                    } else {
+                                        theFilters.push(thisFilter);
+                                    }
+                            }
+                        }
                     }
                 }
-            }
         }
     }
 
     if (theFilters.length > 0) {
         switch(condition) {
-            case 'and': return {$and: theFilters};
+            case 'AND': return {$and: theFilters};
                 break;
-            case 'or': return {$or: theFilters};
+            case 'OR': return {$or: theFilters};
                 break;
-            case 'andNot': return {$not: theFilters};
+            case 'AND NOT': return {$not: theFilters};
                 break;
-            case 'orNot': return {$nor: theFilters};
+            case 'OR NOT': return {$nor: theFilters};
                 break;
             default: return {$and: theFilters};
         }
     }
     else return {};
 }
+
 
 function dateFilter(filterValue, filter)
 {
@@ -729,9 +758,6 @@ function dateFilter(filterValue, filter)
         }
 
     }
-
-
-
 }
 
 function isEmpty(obj) {
@@ -743,7 +769,7 @@ function isEmpty(obj) {
     return true;
 }
 
-function processCollections(req,collections, dataSource, params, thereAreJoins, done,  index) {
+function processCollections(req,query,collections, dataSource, params, thereAreJoins, done,  index) {
     var index = (index) ? index : 0;
     var collection = (collections[index]) ? collections[index] : false;
     var result = (result) ? result : [];
@@ -751,14 +777,24 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
     if (!collection) {
         done();
         return;
-
     }
+
+    //No pagination when there are joins as all data is processed
+    if (thereAreJoins && params.page > 1 )
+        {
+        done();
+        return;
+        }
 
 
 
    var fields = {};
 
-    var filters = getCollectionFilters(collection, collection.filters);
+    //console.log('the filters before', query.groupFilters);
+
+    var filters = getCollectionFiltersV2(collection, query.groupFilters);
+
+    //console.log('the filters', filters);
 
 
     for (var i in collection.columns) {
@@ -923,18 +959,10 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
             }
 
             }
-            //ADD the necessary fields for joins
 
-            /*
-            if (!found) {
-                if (collection.columns[i].count) {
-
-                    group['count'] = { $sum: 1 };
-                }
-            } */
         }
 
-
+        //Include necessary fields for joins
         if (collections.length > 1)
         {
             for (var i in collection.joins) {
@@ -963,93 +991,142 @@ function processCollections(req,collections, dataSource, params, thereAreJoins, 
 
         if (!isEmpty(sort)) aggregation.push({ $sort: sort });
 
-        //If there are joins, then we can´t set up limits...
 
-        if (!thereAreJoins)
+        //console.log('packet',params.page,dataSource.params[0].packetSize);
+
+        //If there are joins, then we can´t set up limits...
+        if (!thereAreJoins && (dataSource.params[0].packetSize > 0))
         {
             if (params.page) {
-                aggregation.push({ $skip: (params.page-1)*100 });
-                aggregation.push({ $limit: 100 });
+                aggregation.push({ $skip: (params.page-1)*dataSource.params[0].packetSize });
+                aggregation.push({ $limit: dataSource.params[0].packetSize });
             }
-            else {
+            /*else {
                 aggregation.push({ $limit: 10 });
-            }
+            }*/
         }
 
-        debug(aggregation);
+        console.log('aggregation',JSON.stringify(aggregation));
+                col.aggregate(aggregation, function(err, docs) {
 
-        col.aggregate(aggregation, function(err, docs) {
-            //debug(docs);
-            for (var i in docs) {
-                var item = {};
+                    //console.log('docs',docs);
 
-                for(var group in docs[i]) {
-                    if (group == '_id') {
-                        for(var field in docs[i][group]) {
-                            item[field] = docs[i][group][field];
+                    for (var i in docs) {
+                        var item = {};
+
+                        for(var group in docs[i]) {
+                            if (group == '_id') {
+                                for(var field in docs[i][group]) {
+                                    item[field] = docs[i][group][field];
+                                }
+                            }
+                            else {
+                                item[group] = docs[i][group];
+                            }
                         }
-                    }
-                    else {
-                        item[group] = docs[i][group];
-                    }
-                }
 
-                for (var field in item) {
+                        for (var field in item) {
 
-                    for (var e in collection.schema.elements) {
-                        if (field == collection.schema.elements[e].elementName && collection.schema.elements[e].values) {
-                            for (var v in collection.schema.elements[e].values) {
-                                if (collection.schema.elements[e].values[v].value == item[field]) {
-                                    item[field] = collection.schema.elements[e].values[v].label;
+                            for (var e in collection.schema.elements) {
+                                if (field == collection.schema.elements[e].elementName && collection.schema.elements[e].values) {
+                                    for (var v in collection.schema.elements[e].values) {
+                                        if (collection.schema.elements[e].values[v].value == item[field]) {
+                                            item[field] = collection.schema.elements[e].values[v].label;
+                                        }
+                                    }
+                                }
+
+                                if ((field == collection.schema.elements[e].elementName ||
+                                      field == collection.schema.elements[e].elementName+'sum' ||
+                                        field == collection.schema.elements[e].elementName+'avg' ||
+                                            field == collection.schema.elements[e].elementName+'min' ||
+                                                field == collection.schema.elements[e].elementName+'max' ||
+                                                    field == collection.schema.elements[e].elementName+'count'
+                                    )  && collection.schema.elements[e].format) {
+
+                                    if (collection.schema.elements[e].elementType == 'date') {
+                                        item[field+'_original'] = item[field];
+
+                                        var date = new Date(item[field]);
+                                        var moment = require('moment');
+                                        item[field] = moment(date).format(collection.schema.elements[e].format);
+                                    }
+
+                                    if (collection.schema.elements[e].elementType == 'number') {
+                                        item[field+'_original'] = item[field];
+                                        var numeral = require('numeral');
+                                        item[field] = numeral(item[field]).format(collection.schema.elements[e].format);
+                                    }
+
                                 }
                             }
                         }
 
-                        if ((field == collection.schema.elements[e].elementName ||
-                              field == collection.schema.elements[e].elementName+'sum' ||
-                                field == collection.schema.elements[e].elementName+'avg' ||
-                                    field == collection.schema.elements[e].elementName+'min' ||
-                                        field == collection.schema.elements[e].elementName+'max' ||
-                                            field == collection.schema.elements[e].elementName+'count'
-                            )  && collection.schema.elements[e].format) {
 
-                            if (collection.schema.elements[e].elementType == 'date') {
-                                item[field+'_original'] = item[field];
-
-                                var date = new Date(item[field]);
-                                var moment = require('moment');
-                                item[field] = moment(date).format(collection.schema.elements[e].format);
+                        //cambio de nombre añadiendo el nombre de la colección
 
 
-                            }
+                        var finalItem = {};
+                        for (var field in item)
+                        {
+//console.log('field name',field);
+                            //columns for results
+                            for (var e in collection.columns) {
+                                if (field == collection.columns[e].elementName ||
+                                      field == collection.columns[e].elementName+'sum' ||
+                                        field == collection.columns[e].elementName+'avg' ||
+                                            field == collection.columns[e].elementName+'min' ||
+                                                field == collection.columns[e].elementName+'max' ||
+                                                    field == collection.columns[e].elementName+'count')
+                                                        {
+                                                           if (collection.columns[e].aggregation)
+                                                                    var elementID = 'wst'+collection.columns[e].elementID.toLowerCase()+collection.columns[e].aggregation;
+                                                                else
+                                                                    var elementID = 'wst'+collection.columns[e].elementID.toLowerCase();
 
-                            if (collection.schema.elements[e].elementType == 'number') {
-                                item[field+'_original'] = item[field];
-                                var numeral = require('numeral');
-                                item[field] = numeral(item[field]).format(collection.schema.elements[e].format);
-                            }
+                                                        var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
+                                                        finalItem[elementName] = item[field];
+                                                            //console.log('element name',elementName);
+                                                        }
 
+                                }
+                            //columns for joins
+                            if (collections.length > 1)
+                                {
+                                    for (var i in collection.joins)
+                                    {
+                                        if (collection.joins[i].sourceCollectionID == collection.collectionID)
+                                        {
+                                            if (field == collection.joins[i].sourceElementName)
+                                                {
+                                                var elementName = ('wst'+collection.joins[i].sourceElementID.toLowerCase()).replace(/[^a-zA-Z ]/g,'');
+                                                finalItem[elementName] = item[field];
+                                                }
+                                        }
+                                        if (collection.joins[i].targetCollectionID == collection.collectionID)
+                                        {
+                                            if (field == collection.joins[i].targetElementName)
+                                                {
+                                                var elementName = ('wst'+collection.joins[i].targetElementID.toLowerCase()).replace(/[^a-zA-Z ]/g,'');
+                                                finalItem[elementName] = item[field];
+                                                }
+                                        }
+                                    }
+                                }
                         }
+
+                        result.push(finalItem);
                     }
-                }
+//console.log('the result',result);
+                    collection.result = result;
+                    db.close();
 
+                    processCollections(req,query,collections, dataSource, params,thereAreJoins, done, index+1);
+                });
 
-                //cambio de nombre añadiendo el nombre de la colección
-
-
-                var finalItem = {};
-                for (var field in item) {
-                    finalItem[collection.schema.collectionID.toLowerCase()+'_'+field] = item[field];
-                }
-
-                result.push(finalItem);
-            }
-            collection.result = result;
-            db.close();
-
-            processCollections(req,collections, dataSource, params,thereAreJoins, done, index+1);
-        });
     });
+
 }
+
 
 
