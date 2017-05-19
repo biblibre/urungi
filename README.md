@@ -67,13 +67,14 @@ be sure you choose the angular 1.5.5 when pointed to choose otherwise it will in
 
 # Oracle connections
 
-If you are going to use oracle connections, first you need to install in your server the Oracle instant client and then run the npm install oracledb
-[more info](https://github.com/oracle/node-oracledb)
+If you are going to use oracle connections, first you need to install in your server the Oracle instant client and then run:
+
+    npm install oracledb 
+
+( [more info](https://github.com/oracle/node-oracledb) )
 
 
 # Starting up the widestage server
-
-launch the application using:
     
     node server.js
 
