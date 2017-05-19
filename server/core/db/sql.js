@@ -17,6 +17,8 @@ exports.getSchemas = function(data, setresult) {
         case 'MSSQL': var db = 'mssql';
             break;
         case 'JDBC-ORACLE': var db = 'jdbc-oracle';
+            break;
+        case 'BIGQUERY': var db = 'bigQuery';
     }
 
     var dbController = require('./'+db+'.js');
@@ -57,12 +59,20 @@ exports.getSchemas = function(data, setresult) {
             if (tables.indexOf(table) == -1)
                 tables.push(table);
 
-            if (schemasTables.indexOf(schema+'.'+table) == -1)
-            {
-                var stable = {name: schema+'.'+table, schema:schema, table:table};
-                schemasTables.push(stable);
-            }
-
+            if (schema != undefined)
+                {
+                    if (schemasTables.indexOf(schema+'.'+table) == -1)
+                        {
+                            var stable = {name: schema+'.'+table, schema:schema, table:table};
+                            schemasTables.push(stable);
+                        }
+                } else {
+                    if (schemasTables.indexOf(table) == -1)
+                        {
+                            var stable = {name: table, schema:schema, table:table};
+                            schemasTables.push(stable);
+                        }
+                }
         }
 
         var newSchemas = schemas.length === 0 ? "" : "'" + schemas.join("','") + "'";
@@ -71,18 +81,24 @@ exports.getSchemas = function(data, setresult) {
         var query = db.getSchemaQuery(newSchemas, newTables);
 
         db.query(query, function(err, result) {
-            var schemas = [];
-
-            if (result.rows)
+            if (err)
                 {
-                    for (var s in schemasTables) {
-                        getCollectionSchema(schemasTables[s], result.rows, function (resultCollection) {
-                           schemas.push(resultCollection);
-                        });
-                    }
+                  setresult({result: 0, msg: 'Error getting the element schemas : '+ err});
+                    console.log('Error getting the element schemas : ',err);
+                } else {
+                    var schemas = [];
+
+                    if (result.rows)
+                        {
+                            for (var s in schemasTables) {
+                                getCollectionSchema(schemasTables[s], result.rows, function (resultCollection) {
+                                   schemas.push(resultCollection);
+                                });
+                            }
+                        }
+                    debug({result: 1, items: schemas});
+                    setresult({result: 1, items: schemas});
                 }
-            debug({result: 1, items: schemas});
-            setresult({result: 1, items: schemas});
             db.end();
 
 
@@ -103,6 +119,8 @@ exports.getSqlQuerySchema = function(data, setresult) {
         case 'MSSQL': var db = 'mssql';
              break;
         case 'JDBC-ORACLE': var db = 'jdbc-oracle';
+            break;
+        case 'BIGQUERY': var db = 'bigQuery';
     }
 
     var dbController = require('./'+db+'.js');
@@ -165,7 +183,7 @@ function getSQLResultsSchema(collectionName,queryResults,sqlQuery, done) {
 
 
 
-        var elementID = generateShortUID();
+        var elementID = 'wst'+generateShortUID();
         var isVisible = true;
 
             if (name != 'wst_rnum') //not for the row num for Oracle limit
@@ -192,6 +210,8 @@ exports.getReverseEngineering = function(datasourceID, data, setresult) {
         case 'MSSQL': var db = 'mssql';
             break;
         case 'BIGQUERY': var db = 'bigQuery';
+            break;
+        case 'JDBC-ORACLE': var db = 'jdbc-oracle';
     }
 
     var dbController = require('./'+db+'.js');
@@ -610,43 +630,38 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         {
             var field = table.columns[e];
             elements.push(field);
-            //TODO: Count test
 
-            if (field.hidden != true)
-                {
-                    if (field.aggregation) {
-                        found = true;
-                        switch (field.aggregation) {
-                            case 'sum': fields.push('SUM('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'sum');
-                                break;
-                            case 'avg': fields.push('AVG('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'avg');
-                                break;
-                            case 'min': fields.push('MIN('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'min');
-                                break;
-                            case 'max': fields.push('MAX('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'max');
-                                break;
-                            case 'count': fields.push('COUNT('+table.collectionID+'.'+field.elementName+')'+ ' as '+table.collectionID.toLowerCase()+'_'+field.elementName+'count');
+
+                if (field.hidden != true)
+                    {
+                        var elementID = 'wst'+field.elementID.toLowerCase();
+                        var theElementID = elementID.replace(/[^a-zA-Z ]/g,'');
+
+
+                        if (field.aggregation) {
+                            found = true;
+                            switch (field.aggregation) {
+                                case 'sum': fields.push('SUM('+table.collectionID+'.'+field.elementName+')'+ ' as '+theElementID+'sum');
+                                    break;
+                                case 'avg': fields.push('AVG('+table.collectionID+'.'+field.elementName+')'+ ' as '+theElementID+'avg');
+                                    break;
+                                case 'min': fields.push('MIN('+table.collectionID+'.'+field.elementName+')'+ ' as '+theElementID+'min');
+                                    break;
+                                case 'max': fields.push('MAX('+table.collectionID+'.'+field.elementName+')'+ ' as '+theElementID+'max');
+                                    break;
+                                case 'count': fields.push('COUNT('+table.collectionID+'.'+field.elementName+')'+ ' as '+theElementID+'count');
+                            }
+                        } else {
+                            fields.push(table.collectionID+'.'+field.elementName + ' as '+theElementID);
+                            if (dataSource.type != 'BIGQUERY')
+                                groupBy.push(table.collectionID+'.'+field.elementName);
+                                else
+                                groupBy.push(theElementID);
                         }
-                    } else {
-                        fields.push(table.collectionID+'.'+field.elementName + ' as '+table.collectionID.toLowerCase()+'_'+field.elementName);
-                        if (dataSource.type != 'BIGQUERY')
-                            groupBy.push(table.collectionID+'.'+field.elementName);
-                            else
-                            groupBy.push(table.collectionID.toLowerCase()+'_'+field.elementName);
                     }
-                }
         }
 
-
-
-
-
     }
-
-    //get target collection for joins
-
-
-
 
     var SQLstring = 'SELECT ';
 
@@ -675,12 +690,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                 SQLstring = SQLstring + ' FROM '+ leadTable.collectionName + ' '+ leadTable.collectionID + getJoins(leadTable.collectionID,collections,[]);
             }
         }
-
-
-
-
-
-
 
 
     var havings = [];
@@ -769,6 +778,8 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             case 'MSSQL': var dbController = require('./mssql.js');
                 break;
             case 'BIGQUERY': var dbController = require('./bigQuery.js');
+                break;
+            case 'JDBC-ORACLE': var dbController = require('./jdbc-oracle.js');
         }
 
         var db = new dbController.db();
@@ -776,7 +787,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         if (dataSource.params[0].packetSize)
             {
                 if (dataSource.params[0].packetSize != -1)
-                    //SQLstring += ' '+db.getLimitString(dataSource.params[0].packetSize, ((params.page -1 )*dataSource.params[0].packetSize));
                     SQLstring = db.setLimitToSQL(SQLstring,dataSource.params[0].packetSize, ((params.page -1 )*dataSource.params[0].packetSize));
             } else {
 
@@ -799,7 +809,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                 setresult({result: 0, msg: 'Connection Error: '+ err});
                 return console.error('Connection Error: ', err);
             }
-
 
             db.query(SQLstring, function(err, result) {
                 if (err) {
@@ -847,6 +856,9 @@ function getFormatedResult(elementSchema,results,done)
         {
             for (var es in elementSchema)
                 {
+                    var newRecord = {};
+                    var field = elementSchema[es];
+
                     if (elementSchema[es].elementType == 'date' && elementSchema[es].format)
                         {
                             results[r][elementSchema[es].id+'_original'] = results[r][elementSchema[es].id];
@@ -856,12 +868,30 @@ function getFormatedResult(elementSchema,results,done)
                                    results[r][elementSchema[es].id] = moment(date).format(elementSchema[es].format);
                                 }
                         }
+
+                    for (var f in results[r])
+                        {
+                            newRecord[f.toLowerCase()] = results[r][f];
+                        }
+
                 }
 
-        finalResults.push(results[r]);
+            finalResults.push(newRecord);
         }
 
+
     done(finalResults);
+}
+
+
+function columnNamesToLowerCase(rows) {
+    for (var i in rows) {
+        for (var key in rows[i]) {
+            rows[i][String(key).toLowerCase()] = rows[i][key];
+            delete(rows[i][key]);
+        }
+    }
+    return rows;
 }
 
 
@@ -994,18 +1024,23 @@ function getFilterSQL(filter,isHaving)
             var filterElementName = filter.aggregation+'('+filter.collectionID+'.'+filter.elementName+')';
 
 
+        var filterElementID = 'wst'+filter.elementID.toLowerCase();
+        var theFilterElementID = filterElementID.replace(/[^a-zA-Z ]/g,'');
+
         if (filter.elementType == 'number') {
-            filterValue = Number(filterValue);
+            if (filter.filterType != "in" && filter.filterType != "notIn")
+                {
+                    filterValue = Number(filterValue);
+                }
         }
         if (filter.elementType == 'date') {
 
             if (filter.filterType == "in" || filter.filterType == "notIn")
             {
-                //thisFilter = dateFilter(filterValue,filter);
                 result = dateFilter(filterElementName,filterValue,filter);
-            } else
-                //thisFilter[filterElementName] = dateFilter(filterValue,filter);
+            } else {
                 result = dateFilter(filterElementName,filterValue,filter);
+            }
         }
 
         if (filter.filterType == "equal" && filter.elementType != 'date') {
@@ -1095,7 +1130,7 @@ function getFilterSQL(filter,isHaving)
         if (filter.filterType == "in"  && filter.elementType != 'date') {
             if (filter.elementType == 'number')
             {
-                result = (filterElementName +' IN '+'('+String(filterValue).split(';')+')');
+                result = (filterElementName +' IN '+'('+filterValue.split(';')+')');
             } else {
                 var theSplit = filterValue.split(';');
                 var filterSTR = '';
@@ -1153,6 +1188,10 @@ function getJoins(collectionID,collections,processedCollections)
                 {
                     if (join.joinType == 'default')
                         fromSQL = fromSQL + ' INNER JOIN ';
+                    if (join.joinType == 'left')
+                        fromSQL = fromSQL + ' LEFT JOIN ';
+                    if (join.joinType == 'right')
+                        fromSQL = fromSQL + ' RIGHT JOIN ';
 
 
 
@@ -1167,6 +1206,10 @@ function getJoins(collectionID,collections,processedCollections)
                 {
                     if (join.joinType == 'default')
                         fromSQL = fromSQL + ' INNER JOIN ';
+                    if (join.joinType == 'left')
+                        fromSQL = fromSQL + ' LEFT JOIN ';
+                    if (join.joinType == 'right')
+                        fromSQL = fromSQL + ' RIGHT JOIN ';
 
 
                     fromSQL = fromSQL + join.sourceCollectionName + ' '+ join.sourceCollectionID;

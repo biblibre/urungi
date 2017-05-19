@@ -268,7 +268,7 @@ exports.getReverseEngineering = function(req,res)
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' )
+            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'JDBC-ORACLE' || result.item.type == 'BIGQUERY')
             {
                 var sql = require('../../core/db/sql.js');
                 var data = {
@@ -396,7 +396,7 @@ exports.getsqlQuerySchema = function(req,res)
             {
                     serverResponse(req, res, 400, result);
             }
-            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL')
+            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'JDBC-ORACLE')
             {
                 var sql = require('../../core/db/sql.js');
                 var data = {
