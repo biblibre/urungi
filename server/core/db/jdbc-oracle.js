@@ -36,6 +36,8 @@ db.prototype.connect = function(data, done) {
 
       DB.connection = new JDBC(config);
 
+      this.connection = DB.connection;
+
       DB.connection.initialize(function(err) {
         if (err) {
             done(err);
@@ -55,73 +57,18 @@ db.prototype.end = function() {
 };
 
 
-/*
-db.prototype.query = function(connection, query, done) {
-var asyncjs = require('async');
-    connection.reserve(function(err, connObj) {
-    if (connObj) {
-      var conn = connObj.conn;
-
-      // Query the database.
-      asyncjs.series([
-        function(callback) {
-          // Select statement example.
-          conn.createStatement(function(err, statement) {
-            if (err) {
-              done(err);
-            } else {
-              statement.setFetchSize(100, function(err) {
-                if (err) {
-                  done(err);
-                } else {
-                    //Execute a query
-                    statement.executeQuery(query,
-                      function(err, resultset) {
-                        if (err) {
-                          done(err);
-                        } else {
-                          resultset.toObjArray(function(err, results) {
-                            done(false, {rows: columnNamesToLowerCase(results)});
-                          });
-                        }
-                      });
-                }
-              });
-            }
-          });
-        },
-      ], function(err, results) {
-        // Results can also be processed here.
-        // Release the connection back to the pool.
-        connection.release(connObj, function(err) {
-          if (err) {
-            done(err);
-          }
-        });
-      });
-    }
-  });
-
-};
-*/
-
 db.prototype.query = function(theQuery, done) {
         query(this.connection, theQuery, function(error, results){
+            if (error)
+                {
+                    done('Query Error: '+error);
+                }
+
+            else
             done(false,{rows: results.rows});
         });
 }
 
-
-/*
-db.prototype.executeQuery = function(theConnection, theQuery, done) {
-    console.log('executing THE query',theQuery);
-    //db.prototype.connect(data, function(error, connection){
-        query(theConnection, theQuery, function(error, results){
-            setresult({result: 1, items: results.rows});
-        });
-
-    //});
-}*/
 
 function query(connection, query, done) {
   if (connection)
@@ -149,8 +96,13 @@ function query(connection, query, done) {
                                 if (err) {
                                   done(err);
                                 } else {
-                                  resultset.toObjArray(function(err, results) {
-                                    done(false, {rows: columnNamesToLowerCase(results)});
+                                    resultset.toObjArray(function(err, results) {
+                                    //done(false, {rows: columnNamesToLowerCase(results)});
+                                        if (results.length > 0) {
+                                            console.log("ID: " + results[0].ID);
+                                          }
+
+                                    done(false, {rows: results});
                                   });
                                 }
                               });
@@ -177,8 +129,8 @@ function query(connection, query, done) {
 }
 
 db.prototype.getSchemaQuery = function(newSchemas, newTables) {
-    return "SELECT t.tablespace_name as table_schema, c.table_name, c.column_name, LOWER(c.data_type) as data_type"+
-    " FROM user_tab_columns c, user_tables t WHERE t.tablespace_name in ("+newSchemas+") AND c.table_name IN ("+newTables+")"+
+    return "SELECT t.owner as table_schema, c.table_name, c.column_name, LOWER(c.data_type) as data_type"+
+    " FROM user_tab_columns c, all_tables t WHERE t.owner in ("+newSchemas+") AND c.table_name IN ("+newTables+")"+
     " AND t.table_name = c.table_name";
 };
 
@@ -198,7 +150,7 @@ db.prototype.setLimitToSQL = function(sql,limit,offset)
 
 exports.testConnection = function(req,data, setresult) {
     var DB = this;
-    var theQuery = 'SELECT tablespace_name as table_schema, table_name as name FROM user_tables';
+    var theQuery = 'SELECT user as table_schema, table_name as name FROM user_tables';
     db.prototype.connect(data, function(error, connection){
         query(connection, theQuery, function(err, results){
             if (err)
@@ -215,35 +167,6 @@ exports.testConnection = function(req,data, setresult) {
         });
 
     });
-
-   /*
-    oracledb.getConnection({
-        user          : data.userName,
-        password      : data.password,
-        connectString : data.host+":"+data.port+"/"+data.database
-    },
-    function(err, connection) {
-        if(err) {
-            console.log('Oracle default connection error: '+data.database+err);
-            setresult({result: 0, msg: 'Connection Error: '+ err});
-            return console.error('Connection Error: ', err);
-        }
-
-        console.log('Connected to '+data.database+' getting table names');
-
-        connection.execute("SELECT tablespace_name as table_schema, table_name as name FROM user_tables", [], {outFormat: oracledb.OBJECT}, function(err, result) {
-            result.rows = columnNamesToLowerCase(result.rows);
-
-
-            setresult({result: 1, items: result.rows});
-
-            connection.release(function(err) {
-                if (err) { console.error(err.message); }
-            });
-
-        });
-    });
-    */
 };
 
 function columnToLowerCase(rows,column) {
@@ -267,97 +190,3 @@ function columnNamesToLowerCase(rows) {
 
     return rows;
 }
-
-
-/*
-
-exports.testConnection = function(data, setresult) {
-var JDBC = require('jdbc');
-var jinst = require('jdbc/lib/jinst');
-var asyncjs = require('async');
-if (!jinst.isJvmCreated()) {
-    jinst.addOption("-Xrs");
-
-    jinst.setupClasspath(['./server/jdbc/ojdbc7.jar','./server/jdbc/orai18n.jar','./server/jdbc/xdb6.jar']);
-
-    //jinst.setupClasspath(['/Users/hermesromero/projects/wst-enterprise/server/jdbc/postgresql-42.0.0.jar']);
-    // jinst.setupClasspath(['./server/jdbc/postgresql-42.0.0.jar']);
-
-    console.log('creating the jinst jvm');
-  }
-  var config = {
-    // SparkSQL configuration to your server
-    url: 'jdbc:oracle:thin:widestage/widestage?55@widestage-test.crdxd3i1xxr3.eu-west-1.rds.amazonaws.com:1521/ORCL',
-    drivername: 'oracle.jdbc.OracleDriver',
-    //url: 'jdbc:postgresql://localhost:5432/postgres',
-    //drivername: 'org.postgresql.Driver',
-
-    minpoolsize: 1,
-    maxpoolsize: 100,
-    user: 'data',
-    password: 'pgadild0',
-    properties: {}
-  };
-  var sparksqldb = new JDBC(config);
-//initialize
-  sparksqldb.initialize(function(err) {
-    if (err) {
-      console.log(err);
-    }
-  });
-
-  sparksqldb.reserve(function(err, connObj) {
-    if (connObj) {
-      console.log("Using connection: " + connObj.uuid);
-      var conn = connObj.conn;
-
-      // Query the database.
-      asyncjs.series([
-        function(callback) {
-          // Select statement example.
-          conn.createStatement(function(err, statement) {
-            if (err) {
-              callback(err);
-            } else {
-              statement.setFetchSize(100, function(err) {
-                if (err) {
-                  callback(err);
-                } else {
-            //Execute a query
-                    console.log('the query'); //SELECT owner, table_name FROM dba_tables
-                  statement.executeQuery("SELECT table_name FROM user_tables", //SELECT owner, table_name FROM all_tables
-                      function(err, resultset) {
-                        if (err) {
-                          callback(err);
-                            console.log('the error', err);
-                        } else {
-                            //console.log('the result', resultset);
-                          resultset.toObjArray(function(err, results) {
-                            //Printing number of records
-                            if (results.length > 0) {
-                              console.log("Record count: " + JSON.stringify(results));
-                            }
-                            callback(null, resultset);
-                          });
-                        }
-                      });
-                }
-              });
-            }
-          });
-        },
-      ], function(err, results) {
-        // Results can also be processed here.
-        // Release the connection back to the pool.
-        sparksqldb.release(connObj, function(err) {
-          if (err) {
-            console.log(err.message);
-          }
-        });
-      });
-    }
-  });
-
-};
-
-*/
