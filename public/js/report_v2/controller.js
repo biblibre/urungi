@@ -523,11 +523,25 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.addColumn = function(ngModelItem)
     {
 
+
+        var agg = undefined;
+        var aggLabel = '';
+
+        if (ngModelItem.aggregation)
+            {
+            agg = ngModelItem.aggregation;
+            aggLabel = ' ('+ngModelItem.aggregation+')';
+            }
+
         if (ngModelItem.defaultAggregation)
             {
+            agg = ngModelItem.defaultAggregation;
+            aggLabel = ' ('+ngModelItem.defaultAggregation+')';
+            }
+
                 var element = {
                         elementName: ngModelItem.elementName,
-                        objectLabel: ngModelItem.elementLabel +' ('+ngModelItem.defaultAggregation+')',
+                        objectLabel: ngModelItem.elementLabel +aggLabel,
                         datasourceID:ngModelItem.datasourceID,
                         id:ngModelItem.id,
                         elementLabel:ngModelItem.elementLabel,
@@ -540,25 +554,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                         filterTypeLabel:'equal',
                         format:ngModelItem.format,
                         values:ngModelItem.values,
-                        aggregation: ngModelItem.defaultAggregation};
-            } else {
-
-                var element = {
-                                elementName: ngModelItem.elementName,
-                                objectLabel: ngModelItem.elementLabel,
-                                datasourceID:ngModelItem.datasourceID,
-                                id:ngModelItem.id,
-                                elementLabel:ngModelItem.elementLabel,
-                                collectionID:ngModelItem.collectionID,
-                                elementID: ngModelItem.elementID,
-                                elementType: ngModelItem.elementType,
-                                layerID: $scope.selectedLayerID,
-                                filterType: 'equal',
-                                filterPrompt: false,
-                                filterTypeLabel:'equal',
-                                format:ngModelItem.format,
-                                values:ngModelItem.values};
-            }
+                        aggregation: agg};
 
 
 
@@ -865,7 +861,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.getDataForPreview  = function()
     {
 
-
+        $scope.page = 1;
 
         var query =  queryModel.generateQuery();  //queryModel.query();
         //TODO: clean data query
@@ -934,7 +930,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
         if ( $scope.selectedReport.reportType == 'indicator')
                     {
-                       report_v2Model.getReport($scope.selectedReport,'reportLayout',$scope.mode, function(sql){
+                       console.log('Report Type indicator');
+
+                        report_v2Model.getReport($scope.selectedReport,'reportLayout',$scope.mode, function(sql){
 
                             $scope.sql = sql;
                             $scope.hideOverlay('OVERLAY_reportLayout');

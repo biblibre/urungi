@@ -12,49 +12,7 @@ ReportsController.inherits(Controller);
 var controller = new ReportsController(Reports);
 
 exports.ReportsFindAll = function(req,res){
-
-    /*
-
     req.query.trash = true;
-    req.query.companyid = true;
-
-    req.query.fields = ['reportName'];
-
-    controller.findAll(req, function(result){
-        serverResponse(req, res, 200, result);
-    });
-
-    */
-
-    /*
-    var isWSTADMIN = false;
-
-    if(req.isAuthenticated()){
-        for (var i in req.user.roles) {
-            if (req.user.roles[i] == 'WSTADMIN'){
-                isWSTADMIN = true;
-            }
-        }
-    } */
-
-/*
-    var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
-    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{owner: req.user._id}]}
-    var fields = {reportName:1,reportType:1,owner:1,isPublic:1};
-    var params = {};
-
-    var Reports = connection.model('Reports');
-    Reports.find(find, fields, params, function(err, items){
-        if(err) throw err;
-        Reports.count(find, function (err, count) {
-            var result = {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count/perPage) : 1), items: items};
-            serverResponse(req, res, 200, result);
-        });
-    });
-
-    */
-
-        req.query.trash = true;
     req.query.companyid = true;
     req.user = {};
     req.user.companyID = 'COMPID';
@@ -375,7 +333,7 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
                         case 'MONGODB':
                             var mongodb = require('../../core/db/mongodb.js');
 
-                            mongodb.processCollections(req,dataSource.collections, dts, params,thereAreJoins, function(data) {
+                            mongodb.processCollections(req,query,dataSource.collections, dts, params,thereAreJoins, function(data) {
 
 
                                 if (dataSource.collections.length > 1)
@@ -397,7 +355,7 @@ function processDataSources(req,dataSources,layers, params,query, done, result, 
                                 processDataSources(req,dataSources,layers, params, query, done, result, index+1);
                             });
                         break;
-                        case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL': case 'BIGQUERY':
+                        case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL': case 'BIGQUERY': case 'JDBC-ORACLE':
                             var sql = require('../../core/db/sql.js');
 
                             sql.processCollections(req,query,dataSource.collections, dts, params,thereAreJoins, function(data) {
@@ -469,9 +427,15 @@ function mergeResults(collections,query,done){
             if (collections[collection].joins[join].sourceCollectionID == collections[collection].collectionID)
             {
             var sourceCollection = collections[collection].joins[join].sourceCollectionID;
-            var sourceElement = collections[collection].joins[join].sourceElementName;
+            //var sourceElement = collections[collection].joins[join].sourceElementName;
+            var sourceElement = ('wst'+collections[collection].joins[join].sourceElementID.toLowerCase()).replace(/[^a-zA-Z ]/g,'');
             var targetCollection = collections[collection].joins[join].targetCollectionID;
-            var targetElement = collections[collection].joins[join].targetElementName;
+            //var targetElement = collections[collection].joins[join].targetElementName;
+            var targetElement = ('wst'+collections[collection].joins[join].targetElementID.toLowerCase()).replace(/[^a-zA-Z ]/g,'');
+
+            //console.log('source element',sourceElement);
+            //console.log('target element',targetElement);
+
 
 
             mergeTwoCollections(collections,sourceCollection,sourceElement,targetCollection,targetElement,isLast, function(result){
@@ -674,21 +638,26 @@ function mergeTwoCollections(collections,sourceCollection,sourceElement,targetCo
         if (theSourceCollection.result.length > theTargetCollection.result.length)
         {
             largestResult = theSourceCollection.result;
-            largestElement = theSourceCollection.schema.collectionID.toLowerCase()+'_'+sourceElement;
+            //largestElement = theSourceCollection.schema.collectionID.toLowerCase()+'_'+sourceElement;
+            largestElement = sourceElement;
             shortestResult = theTargetCollection.result;
-            shortestElement = theTargetCollection.schema.collectionID.toLowerCase()+'_'+targetElement;
+            //shortestElement = theTargetCollection.schema.collectionID.toLowerCase()+'_'+targetElement;
+            shortestElement = targetElement;
         } else {
             largestResult = theTargetCollection.result;
-            largestElement = theTargetCollection.schema.collectionID.toLowerCase()+'_'+targetElement;
+            //largestElement = theTargetCollection.schema.collectionID.toLowerCase()+'_'+targetElement;
+            largestElement = targetElement;
             shortestResult = theSourceCollection.result;
-            shortestElement = theSourceCollection.schema.collectionID.toLowerCase()+'_'+sourceElement;
+            //shortestElement = theSourceCollection.schema.collectionID.toLowerCase()+'_'+sourceElement;
+            shortestElement = sourceElement;
         }
+
 
         for (var s in largestResult)
         {
             for (var t in shortestResult)
             {
-                if (String(largestResult[s][largestElement]) == String(shortestResult[t][shortestElement]))
+                if (String(largestResult[s][largestElement]) == String(shortestResult[t][shortestElement]) && largestResult[s][largestElement] != undefined && shortestResult[t][shortestElement] != undefined)
                 {
                     var tempRecord = {};
                     for (var key in largestResult[s])
@@ -703,6 +672,8 @@ function mergeTwoCollections(collections,sourceCollection,sourceElement,targetCo
                             tempRecord[key] = shortestResult[t][key];
                     }
                     tempResults.push(tempRecord);
+
+                    //console.log('found',String(largestResult[s][largestElement]),String(shortestResult[t][shortestElement]));
                 }
             }
 
@@ -735,7 +706,6 @@ function mergeTwoCollections(collections,sourceCollection,sourceElement,targetCo
         var theResult = {};
         theResult.result = 0;
         theResult.results = undefined;
-
         done(theResult);
     }
 

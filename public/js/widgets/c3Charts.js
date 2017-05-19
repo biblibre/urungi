@@ -23,10 +23,16 @@ this.rebuildChart = function(report)
                         {
                             for (var qc in query.datasources[d].collections[c].columns)
                                 {
-                                    var elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName;
+                                    //var elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName;
+                                    var elementID = 'wst'+query.datasources[d].collections[c].columns[qc].elementID.toLowerCase();
+                                    var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
 
                                     if (query.datasources[d].collections[c].columns[qc].aggregation)
-                                        elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName+query.datasources[d].collections[c].columns[qc].aggregation;
+                                        {
+                                       // elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName+query.datasources[d].collections[c].columns[qc].aggregation;
+                                        var elementID = 'wst'+query.datasources[d].collections[c].columns[qc].elementID.toLowerCase()+query.datasources[d].collections[c].columns[qc].aggregation;
+                                        var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
+                                        }
 
                                     if (elementName == chart.dataAxis.id)
                                     {
@@ -46,20 +52,23 @@ this.rebuildChart = function(report)
 
 
         var columnsForDelete = [];
-
         for (var i in chart.dataColumns)
         {
             var columnFound = false;
             //remove column if not in query
             for (var qc in query.columns)
             {
-                var elementName = query.columns[qc].collectionID.toLowerCase()+'_'+query.columns[qc].elementName;
+                //var elementName = query.columns[qc].collectionID.toLowerCase()+'_'+query.columns[qc].elementName;
+                var elementID = 'wst'+query.columns[qc].elementID.toLowerCase();
+                var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
 
                 if (query.columns[qc].aggregation)
                     {
-                        elementName = query.columns[qc].collectionID.toLowerCase()+'_'+query.columns[qc].elementName+query.columns[qc].aggregation;
-                        query.columns[qc].id = elementName;
+                        var elementID = 'wst'+query.columns[qc].elementID.toLowerCase()+query.columns[qc].aggregation;
+                        var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
                     }
+
+                console.log('this is the data column name',elementName);
                 if (chart.dataColumns[i].id == elementName)
                 {
                     columnFound = true; //columnsForDelete.push(i);
@@ -96,14 +105,19 @@ this.rebuildChart = function(report)
         {
             if (chart.dataColumns[i].id != undefined)
             {
-                theValues.push(chart.dataColumns[i].id);
-                var valueName = chart.dataColumns[i].id;
-                theTypes[chart.dataColumns[i].id] = chart.dataColumns[i].type;
+                if (chart.dataColumns[i].aggregation)
+                    var valueName = chart.dataColumns[i].id+chart.dataColumns[i].aggregation;
+                    else
+                    var valueName = chart.dataColumns[i].id;
 
-
+                theValues.push(valueName);
+                theTypes[valueName] = chart.dataColumns[i].type;
             }
             theNames[valueName] = chart.dataColumns[i].elementLabel;
+
         }
+
+    console.log('the names',theNames);
 
         if (query)
         {
@@ -271,47 +285,52 @@ this.rebuildChart = function(report)
 
     this.changeChartColumnType = function(chart,column)
     {
+        if (column.aggregation)
+            var columnID = column.id+column.aggregation;
+            else
+            var columnID = column.id;
+
         if (column.type == 'line' || column.type == undefined)
         {
             column.type = 'spline';
-            chart.chartCanvas.transform('spline', column.id);
+            chart.chartCanvas.transform('spline', columnID);
         } else
             if (column.type == 'spline')
             {
                 column.type = 'bar';
-                chart.chartCanvas.transform('bar', column.id);
+                chart.chartCanvas.transform('bar', columnID);
             } else
                 if (column.type == 'bar')
                 {
                     column.type = 'area';
-                    chart.chartCanvas.transform('area', column.id);
+                    chart.chartCanvas.transform('area', columnID);
                 } else
                     if (column.type == 'area')
                     {
                         column.type = 'area-spline';
-                        chart.chartCanvas.transform('area-spline', column.id);
+                        chart.chartCanvas.transform('area-spline', columnID);
                     } else
                         if (column.type == 'area-spline')
                         {
                             column.type = 'scatter';
-                            chart.chartCanvas.transform('scatter', column.id);
+                            chart.chartCanvas.transform('scatter', columnID);
                         } else
                             if (column.type == 'scatter')
                             {
                             /*    column.type = 'pie';
-                                //chart.chartCanvas.transform('pie', column.id);
+                                //chart.chartCanvas.transform('pie', columnID);
                                 chart.chartCanvas.transform('pie');
                             } else
                             if (column.type == 'pie')
                             {
                                 column.type = 'donut';
-                                //chart.chartCanvas.transform('donut', column.id);
+                                //chart.chartCanvas.transform('donut', columnID);
                                 chart.chartCanvas.transform('donut');
                             } else
                             if (column.type == 'donut')
                             {*/
                                 column.type = 'line';
-                                chart.chartCanvas.transform('line', column.id);
+                                chart.chartCanvas.transform('line', columnID);
                             }
 
     }
@@ -319,37 +338,47 @@ this.rebuildChart = function(report)
 
     this.transformChartColumnType = function(chart,column)
     {
+        if (column.aggregation)
+            var columnID = column.id+column.aggregation;
+            else
+            var columnID = column.id;
+
+
         if (column.type == 'spline')
         {
-            chart.chartCanvas.transform('spline', column.id);
+            chart.chartCanvas.transform('spline', columnID);
         } else
             if (column.type == 'bar')
             {
-                chart.chartCanvas.transform('bar', column.id);
+                chart.chartCanvas.transform('bar', columnID);
             } else
                 if (column.type == 'area')
                 {
-                    chart.chartCanvas.transform('area', column.id);
+                    chart.chartCanvas.transform('area', columnID);
                 } else
                     if (column.type == 'area-spline')
                     {
-                        chart.chartCanvas.transform('area-spline', column.id);
+                        chart.chartCanvas.transform('area-spline', columnID);
                     } else
                         if (column.type == 'scatter')
                         {
-                            chart.chartCanvas.transform('scatter', column.id);
+                            chart.chartCanvas.transform('scatter', columnID);
                         } else
                             if (column.type == 'line')
                             {
-                                chart.chartCanvas.transform('line', column.id);
+                                chart.chartCanvas.transform('line', columnID);
                             }
 
     }
 
     this.changeChartColumnColor = function(chart,column,color)
     {
+        if (column.aggregation)
+            var columnID = column.id+column.aggregation;
+            else
+            var columnID = column.id;
 
-        chart.chartCanvas.data.colors[column.id] = '#ff0000';//d3.rgb('#ff0000').darker(1);
+        chart.chartCanvas.data.colors[columnID] = '#ff0000';//d3.rgb('#ff0000').darker(1);
         chart.chartCanvas.flush();
         column.color = d3.rgb('#ff0000').darker(1);
 

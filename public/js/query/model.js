@@ -212,21 +212,21 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             {name: 'Min', value: 'min'},
             {name: 'Max', value: 'max'},
             {name: 'Count', value: 'count'},
-            {name: 'Original value', value:'original'}
+            {name: 'Raw', value:'original'}
         ],
         'date': [
             {name: 'Year', value: 'year'},
             {name: 'Month', value: 'month'},
             {name: 'Day', value: 'day'},
             {name: 'Count', value: 'count'},
-            {name: 'Original value', value:'original'}
+            {name: 'Raw', value:'original'}
             /*{name: 'Semester', value: 'semester'},
             {name: 'Quarter', value: 'quarter'},
             {name: 'Trimester', value: 'trimester'}*/
         ],
         'string': [
             {name: 'Count', value: 'count'},
-            {name: 'Original value', value:'original'}
+            {name: 'Raw', value:'original'}
         ]
     };
 
@@ -720,8 +720,14 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         {
                 if (elements[e].collectionID)
                 {
-                var elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName;
-                elements[e].id = elementID;
+                //var elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName;
+
+                if (!elements[e].aggregation)
+                    var elementID = 'wst'+elements[e].elementID.toLowerCase();
+                    else
+                    var elementID = 'wst'+elements[e].elementID.toLowerCase()+elements[e].aggregation;
+
+                elements[e].id = elementID.replace(/[^a-zA-Z ]/g,'');
                 }
 
             if (elements[e].elements)
@@ -838,10 +844,13 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
             {
                 if (elements[e].collectionID)
                     {
-                       var elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName;
+                       //var elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName;
+                        var elementID = 'wst'+elements[e].elementID.toLowerCase();
+
                         if (elements[e].aggregation)
-                          elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName+elements[e].aggregation;
-                        elements[e].id = elementID;
+                          var elementID = 'wst'+elements[e].elementID.toLowerCase()+elements[e].aggregation;
+
+                        elements[e].id = elementID.replace(/[^a-zA-Z ]/g,'');
                     }
 
             }

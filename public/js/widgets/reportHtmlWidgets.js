@@ -16,8 +16,13 @@ function generateIndicator(report)
                 if (!report.properties.style)
                     report.properties.style = 'style1';
 
-                var theYKey = report.properties.ykeys[0].collectionID.toLowerCase()+'_'+report.properties.ykeys[0].elementName;
-                if (report.properties.ykeys[0].aggregation) theYKey += report.properties.ykeys[0].aggregation;
+                //var theYKey = report.properties.ykeys[0].collectionID.toLowerCase()+'_'+report.properties.ykeys[0].elementName;
+                var theYKey = 'wst'+report.properties.ykeys[0].elementID.toLowerCase();
+
+                theYKey = theYKey.replace(/[^a-zA-Z ]/g,'');
+
+                if (report.properties.ykeys[0].aggregation)
+                    theYKey += report.properties.ykeys[0].aggregation;
 
                 var theValue = '{{'+theData[0][theYKey] +'| number}}';
 

@@ -20,382 +20,6 @@ function replaceAll(str, find, replace) {
   return str.replace(new RegExp(find, 'g'), replace);
 }
 
-/*
-this.getUIGrid = function(report)
-   {
-       report = report;
-       var id = report.id;
-       hashedID = report.query.id;
-       columns = report.properties.columns;
-
-       var colDefs = [];
-
-        for (var i in columns)
-            {
-                var elementName = columns[i].id;
-                if (columns[i].aggregation)
-                    elementName = elementName+columns[i].aggregation;
-                var elementNameAux = elementName;
-                if (columns[i].elementType === 'date')
-                        elementNameAux = "'"+columns[i].id+'_original'+"'";
-
-                var col = {};
-                col.field = elementName;
-                col.displayName = columns[i].objectLabel;
-
-                if (columns[i].elementType == 'number')
-                    {
-                        col.cellFilter = 'number: 2';
-                        col.cellClass = 'grid-cell-right';
-                    }
-
-
-
-
-                colDefs.push(col);
-            }
-
-
-    var theStyle = ' style="';
-    if (report.properties.backgroundColor)
-        theStyle += 'background-color: '+report.properties.backgroundColor+';';
-    if (report.properties.height)
-        theStyle += 'height: '+report.properties.height+'px;';
-
-    theStyle += '"';
-
-    var gridOptions = 'ui-grid-move-columns ui-grid-pinning ui-grid-exporter ui-grid-grouping';
-            report.properties.columnDefs = colDefs;
-            return '<div page-block ndtype="ui-grid" id="'+report.id+'" ui-grid="{data: getQuery(\''+hashedID+'\').data, columnDefs: getReportColumnDefs(\''+report.id+'\'), enableVerticalScrollbar:1, enableHorizontalScrollbar:0,enableGridMenu: true,showColumnFooter:true,showGridFooter:true,enableColumnResizing:true,fastWatch:true}" '+gridOptions+theStyle+'  class="myGrid"></div>';
-   }
-
-
-this.simpleGrid = function(columns,id,query,designerMode,properties,done)
-    {
-            hashedID = query.id;
-
-
-            var htmlCode = '<div class="container-fluid repeater-tool-container"></div>';
-
-
-            if (columns.length == 5 || columns.length > 6)
-                colWidth = 'width:'+100/columns.length+'%;float:left;';
-            else
-                colClass = 'col-xs-'+12/columns.length;
-
-            //header  page-block  ndType="gridHeader"
-            htmlCode += '<div page-block ndtype="gridHeader" class="container-fluid" id="HEADER_'+id+'" style="width:100%;padding:2px;background-color:#ccc;">';
-            for(var i = 0; i < columns.length; i++)
-            {
-                    var elementName = "'"+columns[i].id+"'";
-                    if (columns[i].aggregation)
-                        elementName = "'"+elementName+columns[i].aggregation+"'";
-
-                    var elementNameAux = elementName;
-                    if (columns[i].elementType === 'date')
-                        elementNameAux = "'"+columns[i].id+'_original'+"'";
-                    htmlCode += '<div id="HEADERCOL_'+columns[i].id+'['+i+']"  class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" >'+columns[i].elementLabel+'</span> </div>';
-
-            }
-
-            htmlCode += '</div>';
-
-
-            //Body
-            htmlCode += '<div page-block ndtype="gridBody" vs-repeat style="max-height:460px;width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;">';
-
-            htmlCode += '<div  class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data" style="width:100%;padding:0px">';
-
-            // POPOVER con HTML https://maxalley.wordpress.com/2014/08/19/bootstrap-3-popover-with-html-content/
-            htmlCode += '<div ng-if="getQuery(\''+hashedID+'\').data.length == 0">No data</div>';
-
-            for(var i = 0; i < columns.length; i++)
-            {
-                var elementName = columns[i].id;
-                if (columns[i].aggregation)
-                    elementName = elementName+columns[i].aggregation;
-                var theValue = '<span>{{item.'+elementName+'}}</span>';
-
-                if (columns[i].elementType === 'number')
-                    theValue = '<span>{{item.'+elementName+' | number}}</span>';
-
-                if (columns[i].signals)
-                {
-                    var theStyle = '<style>';
-                    var theClass = '';
-                    for (var s in columns[i].signals)
-                    {
-                        theStyle += ' .customStyle'+s+'_'+i+'{color:'+columns[i].signals[s].color+';background-color:'+columns[i].signals[s]['background-color']+';font-size:'+columns[i].signals[s]['font-size']+';font-weight:'+columns[i].signals[s]['font-weight']+';font-style:'+columns[i].signals[s]['font-style']+';}';
-                        var theComma = '';
-                        if (s > 0)
-                            theComma = ' , ';
-
-                        var operator = '>'
-
-                        switch(columns[i].signals[s].filter) {
-                            case "equal":
-                                operator = ' == ' + columns[i].signals[s].value1
-                                break;
-                            case "diferentThan":
-                                operator = ' != '  + columns[i].signals[s].value1
-                                break;
-                            case "biggerThan":
-                                operator = ' > '  + columns[i].signals[s].value1
-                                break;
-                            case "biggerOrEqualThan":
-                                operator = ' >= '  + columns[i].signals[s].value1
-                                break;
-                            case "lessThan":
-                                operator = ' < '  + columns[i].signals[s].value1
-                                break;
-                            case "lessOrEqualThan":
-                                operator = ' <= ' + columns[i].signals[s].value1
-                                break;
-                            case "between":
-                                operator = ' >= ' + columns[i].signals[s].value1 + ' && {{item.'+elementName+'}} <= ' + columns[i].signals[s].value2
-                                break;
-                            case "notBetween":
-                                operator = ' < ' + columns[i].signals[s].value1 + ' || {{item.'+elementName+'}}  > ' + columns[i].signals[s].value2
-                                break;
-                        }
-
-
-
-
-                        theClass += theComma+ 'customStyle'+s+'_'+i+' : {{item.'+elementName+'}} '+operator;
-                    }
-                    htmlCode += theStyle +'</style>'
-
-                    if (columns[i].elementType === 'number')
-                        theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+' | number}}</span>';
-                        else
-                        theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+'}}</span>';
-
-                }
-
-
-
-
-
-                var columnStyle = '';
-                if (columns[i].columnStyle)
-                {
-                    columnStyle = 'color:'+columns[i].columnStyle.color+';';
-
-                    for (var key in columns[i].columnStyle) {
-                        columnStyle += key+':'+columns[i].columnStyle[key]+';';
-                    }
-                }
-
-                var rowHeight = 20;
-                var cellBorderColor = '#000';
-                if (properties)
-                    rowHeight = properties.rowHeight;
-                    cellBorderColor = properties.cellBorderColor;
-
-                var defaultAligment = '';
-                if (columns[i].elementType === 'number')
-                    defaultAligment = 'text-align: right;';
-
-                var borderRight = 'border-right: 1px solid '+cellBorderColor+';';
-                var borderBottom = 'border-bottom: 1px solid '+cellBorderColor+';';
-                var borderLeft = '';
-                if (i == 0)
-                    borderLeft = 'border-left: 1px solid '+cellBorderColor+';';
-                var cellHeight = 'height:'+rowHeight+'px;';
-                var cellPadding = 'padding:2px;';
-                var theCellStyle = columnStyle+colWidth+defaultAligment+cellHeight+'overflow:hidden;'+cellPadding+borderRight+borderBottom+borderLeft;
-
-
-                    //page-block ndType="gridDataColumn"
-                    htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+theCellStyle+'" popover-trigger="mouseenter" popover-placement="top" popover-title="'+columns[i].elementLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
-            }
-
-            htmlCode += '</div>';
-            htmlCode += '</div>';
-
-            htmlCode += '<div class="repeater-data">';
-                    for(var i in columns)
-                    {
-                        var elementName = columns[i].id;
-                        if (columns[i].aggregation)
-                            elementName = elementName+columns[i].aggregation;
-
-                    }
-        htmlCode += '</div>';
-
-            var el = document.getElementById(id);
-
-            if (!el)
-                el = document.getElementById('reportLayout');
-
-
-            if (el)
-            {
-                angular.element(el).empty();
-                var $div = $(htmlCode);
-                angular.element(el).append($div);
-                angular.element(document).injector().invoke(function($compile) {
-                    var scope = angular.element($div).scope();
-                    $compile($div)(scope);
-                });
-            }
-            done(0);
-            return;
-
-    }
-
-this.simpleGridV2 = function(report,designerMode,properties)
-    {
-            report = report;
-            columns = report.properties.columns;
-            var id = report.id;
-
-            hashedID = report.query.id;
-
-            var htmlCode = '<div  class="container-fluid repeater-tool-container"></div>';
-
-            if (columns.length == 5 || columns.length > 6)
-                colWidth = 'width:'+100/columns.length+'%;float:left;';
-            else
-                colClass = 'col-xs-'+12/columns.length;
-
-            htmlCode += '<div page-block ndtype="gridHeader" class="container-fluid" id="HEADER_'+id+'" style="width:100%;padding:2px;background-color:#ccc;">';
-            for(var i = 0; i < columns.length; i++)
-            {
-                    var elementName = "'"+columns[i].id+"'";
-                    if (columns[i].aggregation)
-                        elementName = "'"+elementName+columns[i].aggregation+"'";
-
-                    var elementNameAux = elementName;
-                    if (columns[i].elementType === 'date')
-                        elementNameAux = "'"+columns[i].id+'_original'+"'";
-                    htmlCode += '<div id="HEADERCOL_'+columns[i].id+'['+i+']"  class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" >'+columns[i].elementLabel+'</span> </div>';
-
-            }
-
-            htmlCode += '</div>';
-
-            //Body
-            htmlCode += '<div page-block ndtype="gridBody" vs-repeat style="max-height:460px;width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;">';
-
-            htmlCode += '<div  class="repeater-data container-fluid" ng-repeat="item in getQuery(\''+hashedID+'\').data" style="width:100%;padding:0px">';
-
-            htmlCode += '<div ng-if="getQuery(\''+hashedID+'\').data.length == 0">No data</div>';
-
-            for(var i = 0; i < columns.length; i++)
-            {
-                var elementName = columns[i].id;
-                if (columns[i].aggregation)
-                    elementName = elementName+columns[i].aggregation;
-                var theValue = '<span>{{item.'+elementName+'}}</span>';
-
-                if (columns[i].elementType === 'number')
-                    theValue = '<span>{{item.'+elementName+' | number}}</span>';
-
-                if (columns[i].signals)
-                {
-                    var theStyle = '<style>';
-                    var theClass = '';
-                    for (var s in columns[i].signals)
-                    {
-                        theStyle += ' .customStyle'+s+'_'+i+'{color:'+columns[i].signals[s].color+';background-color:'+columns[i].signals[s]['background-color']+';font-size:'+columns[i].signals[s]['font-size']+';font-weight:'+columns[i].signals[s]['font-weight']+';font-style:'+columns[i].signals[s]['font-style']+';}';
-                        var theComma = '';
-                        if (s > 0)
-                            theComma = ' , ';
-
-                        var operator = '>'
-
-                        switch(columns[i].signals[s].filter) {
-                            case "equal":
-                                operator = ' == ' + columns[i].signals[s].value1
-                                break;
-                            case "diferentThan":
-                                operator = ' != '  + columns[i].signals[s].value1
-                                break;
-                            case "biggerThan":
-                                operator = ' > '  + columns[i].signals[s].value1
-                                break;
-                            case "biggerOrEqualThan":
-                                operator = ' >= '  + columns[i].signals[s].value1
-                                break;
-                            case "lessThan":
-                                operator = ' < '  + columns[i].signals[s].value1
-                                break;
-                            case "lessOrEqualThan":
-                                operator = ' <= ' + columns[i].signals[s].value1
-                                break;
-                            case "between":
-                                operator = ' >= ' + columns[i].signals[s].value1 + ' && {{item.'+elementName+'}} <= ' + columns[i].signals[s].value2
-                                break;
-                            case "notBetween":
-                                operator = ' < ' + columns[i].signals[s].value1 + ' || {{item.'+elementName+'}}  > ' + columns[i].signals[s].value2
-                                break;
-                        }
-
-                        theClass += theComma+ 'customStyle'+s+'_'+i+' : {{item.'+elementName+'}} '+operator;
-                    }
-                    htmlCode += theStyle +'</style>'
-
-                    if (columns[i].elementType === 'number')
-                        theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+' | number}}</span>';
-                        else
-                        theValue = '<span ng-class="{'+theClass+'}"  >{{item.'+elementName+'}}</span>';
-
-                }
-
-                var columnStyle = '';
-                if (columns[i].columnStyle)
-                {
-                    columnStyle = 'color:'+columns[i].columnStyle.color+';';
-
-                    for (var key in columns[i].columnStyle) {
-                        columnStyle += key+':'+columns[i].columnStyle[key]+';';
-                    }
-                }
-
-                var rowHeight = 20;
-                var cellBorderColor = '#000';
-                if (properties)
-                    rowHeight = properties.rowHeight;
-                    cellBorderColor = properties.cellBorderColor;
-
-                var defaultAligment = '';
-                if (columns[i].elementType === 'number')
-                    defaultAligment = 'text-align: right;';
-
-                var borderRight = 'border-right: 1px solid '+cellBorderColor+';';
-                var borderBottom = 'border-bottom: 1px solid '+cellBorderColor+';';
-                var borderLeft = '';
-                if (i == 0)
-                    borderLeft = 'border-left: 1px solid '+cellBorderColor+';';
-                var cellHeight = 'height:'+rowHeight+'px;';
-                var cellPadding = 'padding:2px;';
-                var theCellStyle = columnStyle+colWidth+defaultAligment+cellHeight+'overflow:hidden;'+cellPadding+borderRight+borderBottom+borderLeft;
-
-
-                    //page-block ndType="gridDataColumn"
-                    htmlCode += '<div class="repeater-data-column '+colClass+' popover-primary" style="'+theCellStyle+'" popover-trigger="mouseenter" popover-placement="top" popover-title="'+columns[i].elementLabel+'" popover="{{item.'+elementName+'}}">'+theValue+' </div>';
-            }
-
-            htmlCode += '</div>';
-            htmlCode += '</div>';
-
-            htmlCode += '<div class="repeater-data">';
-                    for(var i in columns)
-                    {
-                        var elementName = columns[i].id;
-                        if (columns[i].aggregation)
-                            elementName = elementName+columns[i].aggregation;
-
-                    }
-        htmlCode += '</div>';
-        return htmlCode;
-
-    }
-
-*/
-
 this.extendedGridV2 = function(report,mode)
     {
             report = report;
@@ -408,7 +32,6 @@ this.extendedGridV2 = function(report,mode)
             var theProperties = report.properties;
             var pageBlock = "page-block";
 
-            console.log('the report',report);
 
             if (mode == 'preview')
                 {
@@ -493,9 +116,13 @@ this.extendedGridV2 = function(report,mode)
             htmlCode += '<div class="repeater-data">';
                     for(var i in columns)
                     {
-                        var elementName = columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName;
+                        //var elementName = columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName;
+                        var elementID = 'wst'+columns[i].elementID.toLowerCase();
+                        var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
+                        //var elementName = 'wst'+columns[i].elementID.toLowerCase();
                         if (columns[i].aggregation)
-                            elementName = columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName+columns[i].aggregation;
+                            //elementName = columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName+columns[i].aggregation;
+                            elementName = elementName+columns[i].aggregation;
                         htmlCode += '<div class=" calculus-data-column '+colClass+' " style="'+colWidth+'"> '+calculateForColumn(report,i,elementName)+' </div>';
                     }
             htmlCode += '</div> </div>';
@@ -508,12 +135,15 @@ this.extendedGridV2 = function(report,mode)
     function getHeaderColumn(column,columnIndex)
     {
           var htmlCode = '';
-            var elementName = "'"+column.id+"'";
+            //var elementName = "'"+column.id+"'";
+                    var elementID = 'wst'+column.elementID.toLowerCase();
+                    var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
                     if (column.aggregation)
-                        elementName = "'"+column.collectionID.toLowerCase()+'_'+column.elementName+column.aggregation+"'";
+                        //elementName = "'"+column.collectionID.toLowerCase()+'_'+column.elementName+column.aggregation+"'";
+                        elementName = "'"+elementName+column.aggregation+"'";
                     var elementNameAux = elementName;
                     if (column.elementType === 'date')
-                        elementNameAux = "'"+column.collectionID.toLowerCase()+'_'+column.elementName+'_original'+"'";
+                        elementNameAux = "'"+'wst'+column.elementID+'_original'+"'";
                     //htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementNameAux+','+quotedHashedID()+')">'+column.objectLabel+'</span><span class="sortorder" ng-show="getReport(\''+hashedID+'\').predicate === '+elementName+'" ng-class="{reverse:getReport(\''+hashedID+'\').reverse}"></span>'+getColumnDropDownHTMLCode(column,columnIndex,elementName,column.elementType)+' </div>';
         htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><table style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space: nowrap;width:95%;">'+column.objectLabel+'</td><td style="width:34px;>'+getColumnDropDownHTMLCode(column,columnIndex,elementName,column.elementType)+'</td></tr></table> </div>';
 
@@ -525,11 +155,15 @@ this.extendedGridV2 = function(report,mode)
     {
             var htmlCode = '';
 
-                var elementName = column.collectionID.toLowerCase()+'_'+column.elementName;
-                var elementID = column.elementID;
+                //var elementName = column.collectionID.toLowerCase()+'_'+column.elementName;
+                var elementID = 'wst'+column.elementID.toLowerCase();
+                var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
+                //var elementName = 'wst'+column.elementID.toLowerCase();
+                //var elementID = column.elementID;
 
                 if (column.aggregation)
-                    elementName = column.collectionID.toLowerCase()+'_'+column.elementName+column.aggregation;
+                    //elementName = column.collectionID.toLowerCase()+'_'+column.elementName+column.aggregation;
+                    elementName = elementName+column.aggregation;
 
 
                 var theValue = '<div style="overflow:hidden;height:100%;">{{item.'+elementName+'}}</div>';
@@ -760,12 +394,14 @@ this.extendedGridV2 = function(report,mode)
     {
         if (column.elementType == 'date')
         {
-            elementName = "'"+column.collectionID.toLowerCase()+'_'+column.elementName+'_original'+"'";
+            var elementID = 'wst'+column.elementID.toLowerCase();
+            var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
+            //elementName = "'"+column.collectionID.toLowerCase()+'_'+column.elementName+'_original'+"'";
+            elementName = "'"+elementName+'_original'+"'";
         }
 
         var columnPropertiesBtn = '<div class="btn-group pull-right" dropdown="" > '
             +'<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom: 0px;background-color:transparent;">'
-            //+' <span class="caret"></span>'
         +' <i class="fa fa-angle-down"></i>'
             +'</button>'
             +'<ul class="dropdown-menu dropdown-blue multi-level" role="menu">'
@@ -776,59 +412,7 @@ this.extendedGridV2 = function(report,mode)
             +'      <li><a ng-click="reverse = false; orderColumn('+columnIndex+',true,'+quotedHashedID()+')">Descending</a></li>'
             +'      </ul>'
             +'</li>'
-            /*+'<li>'
-            +'      <a href="">Filter</a>'
-            +'</li>'*/
-            +'<li>'
-            +'      <a ng-click="changeColumnStyle('+columnIndex+','+quotedHashedID()+')">Format</a>'
-            +'</li>'
-            /*+'<li>'
-            +'      <a href="">Create Section</a>'
-            +'</li>'
-            +'<li>'
-            +'      <a href="">Apply Break</a>'
-            +'</li>'*/
-  /*          +'<li class="divider"></li>'
-            +'<li class="dropdown-submenu">'
-            +'      <a tabindex="-1" href="">Calculate</a>' //suma, cuenta, cuenta total, Promedio, mínimo, máximo, porcentaje
-            +'      <ul class="dropdown-menu">';
 
-
-
-        var sumIcon = '';
-        if (column.operationSum == true)
-            sumIcon = '<i class="fa fa-check"></i>';
-        var avgIcon = '';
-        if (column.operationAvg == true)
-            avgIcon = '<i class="fa fa-check"></i>';
-        var countIcon = '';
-        if (column.operationCount == true)
-            countIcon = '<i class="fa fa-check"></i>';
-        var minIcon = '';
-        if (column.operationMin == true)
-            minIcon = '<i class="fa fa-check"></i>';
-        var maxIcon = '';
-        if (column.operationMax == true)
-            maxIcon = '<i class="fa fa-check"></i>';
-
-        columnPropertiesBtn += '      <li><a ng-click="columnCalculation(2,'+columnIndex+','+quotedHashedID()+')">'+countIcon+'Count</a></li>';
-
-        if (columnType === 'number')
-        {
-            columnPropertiesBtn += '      <li> <a  ng-click="columnCalculation(1,'+columnIndex+','+quotedHashedID()+')">'+sumIcon+' Sum</a></li>';
-            columnPropertiesBtn += '      <li><a ng-click="columnCalculation(3,'+columnIndex+','+quotedHashedID()+')">'+avgIcon+'Average</a></li>';
-            columnPropertiesBtn += '      <li><a ng-click="columnCalculation(4,'+columnIndex+','+quotedHashedID()+')">'+minIcon+'Minimum</a></li>';
-            columnPropertiesBtn += '      <li><a ng-click="columnCalculation(5,'+columnIndex+','+quotedHashedID()+')">'+maxIcon+'Maximum</a></li>';
-            columnPropertiesBtn += '      <li><a href="#">Percent</a></li>';
-        }
-
-        columnPropertiesBtn +=
-            '      </ul>'
-            +'</li>';
-
-        if (column.elementType == 'number')
-                columnPropertiesBtn +='      <li><a ng-click="changeColumnSignals('+columnIndex+','+quotedHashedID()+')">Conditional format</a></li>';
-*/
 
             columnPropertiesBtn += '<li class="divider"></li>'
             +'<li><a ng-click="saveToExcel(\''+hashedID+'\')"><i class="fa fa-file-excel-o"></i> Export table to excel</a></li>'

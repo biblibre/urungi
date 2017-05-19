@@ -341,7 +341,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope','$sessionStorage','connection
 
         connection.get('/api/reports/find-all', params, function(data) {
             $scope.reports = data;
-            console.log($scope.reports);
+
         });
     };
 
@@ -350,7 +350,6 @@ app.controller('homeCtrl', ['$scope', '$rootScope','$sessionStorage','connection
 
         connection.get('/api/dashboards/find-all', params, function(data) {
             $scope.dashboards = data;
-            //console.log($scope.reports);
         });
     };
 

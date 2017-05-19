@@ -21,32 +21,6 @@ exports.generateDataResource = function(_customController){
 
     //create directories for the customController
 
-    /*fs.mkdir('server/controllers/custom/'+controllerName,function(e){
-        if(!e || (e && e.code === 'EEXIST')){
-            //do something with contents
-        } else {
-            //debug
-            console.log(e);
-        }
-    });
-
-    fs.mkdir('models/controllers/custom/'+controllerName,function(e){
-        if(!e || (e && e.code === 'EEXIST')){
-            //do something with contents
-        } else {
-            //debug
-            console.log(e);
-        }
-    });*/
-
-    /*fs.mkdir('views/partials/custom/'+controllerName,function(e){
-        if(!e || (e && e.code === 'EEXIST')){
-            //do something with contents
-        } else {
-            //debug
-            console.log(e);
-        }
-    }); */
 
 
     fs.exists(serverControllerFileName, function(exists) {
@@ -56,7 +30,7 @@ exports.generateDataResource = function(_customController){
 
                 fs.writeFile('server/controllers/custom/'+controllerName+'.js', replacedData, function (err) {
                     if (err) return console.log(err);
-                    //console.log('Server controller file created: '+'server/controllers/custom/'+controllerName+'.js' );
+
                 });
             });
 
@@ -78,8 +52,6 @@ exports.generateDataResource = function(_customController){
                 });
             });
 
-        } else {
-            //console.log('File '+serverModelFileName+' does not exists');
         }
     });
 
@@ -146,10 +118,6 @@ function generateModelControllerFields(fields){
 
     var result = '';
 
-
-
-    console.log(fields);
-
     for(var i = 0; i < fields.length; i++) {
 
         resField =  fields[i].name + ': {type: '+fields[i].type;
@@ -166,8 +134,6 @@ function generateModelControllerFields(fields){
         resField = resField +'\n';
         result = result + resField;
     }
-
-    console.log(result);
 
     return(result);
 

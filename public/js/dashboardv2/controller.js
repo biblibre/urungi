@@ -741,7 +741,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
     $scope.onChangeElementProperties = function()
     {
-console.log('properties changed');
+
     }
 
 

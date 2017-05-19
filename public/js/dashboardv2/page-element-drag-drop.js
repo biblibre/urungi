@@ -11,11 +11,8 @@ var selectedElement;
 module.directive('elementDraggable', ['$rootScope', 'uuid', '$compile','$parse', function($rootScope, uuid, $compile, $parse) {
 	    return {
 	        restrict: 'A',
-            /*scope: {
-                onSelect: '&'
-            },*/
+
 	        link: function(scope, el, attrs, controller) {
-	        	//console.log("linking draggable element");
 
 	            $(el).attr("draggable", "true");
 	            var id = $(el).attr("id");
@@ -29,7 +26,6 @@ module.directive('elementDraggable', ['$rootScope', 'uuid', '$compile','$parse',
 	            el.bind("dragstart", function(e) {
                     e.stopPropagation();
                     e.originalEvent.dataTransfer.setData('text', id);
-                    //console.log('starting drag...');
 
                     theTemplate2 = $compile('<div id="ndDropped" class="container-fluid ndplaceholder" ></div>')(scope);
 
@@ -51,7 +47,6 @@ module.directive('elementDraggable', ['$rootScope', 'uuid', '$compile','$parse',
                     e.stopPropagation();
                     scope.cleanAllLvlElement($(el));
                     $(el).addClass('lvl-element');
-                    console.log('I am over a '+$(el).attr("ndType"));
 
                 });
 
@@ -74,7 +69,6 @@ module.directive('elementDraggable', ['$rootScope', 'uuid', '$compile','$parse',
 
                     if (scope.selectedElement != null)
                     {
-                        //console.log('quitando selected bind click');
                         scope.selectedElement.removeClass('selected');
                         scope.selectedElement.attr("contenteditable", "false");
                     }
@@ -82,7 +76,6 @@ module.directive('elementDraggable', ['$rootScope', 'uuid', '$compile','$parse',
                         $(el).addClass('selected');
                         scope.selectedElement = $(el);
 
-                        console.log('selected bind click'+ scope.selectedElement);
 
                         scope.selectedBackgroundColor = scope.selectedElement.css('background-color');
 
@@ -107,12 +100,8 @@ module.directive('elementDraggable', ['$rootScope', 'uuid', '$compile','$parse',
                         scope.$apply(function () {
                             scope.tabs.selected = 'settings';
                         });
-                        //console.log('element selected bc '+selectedElement.attr('id'));
                         scope.getElementProperties($(el));
-                   // } else {
-                       // scope.editMode = false;
-                        console.log('edit mode =TRUE '+ scope.selectedElement);
-                   // }
+
                     }
                 });
 
@@ -127,13 +116,11 @@ module.directive('elementDraggable', ['$rootScope', 'uuid', '$compile','$parse',
                         //var self = this;
                         setTimeout(function() { el.click(); el.focus(); }, 10);
                         scope.editCommand = false;
-                        console.log('estoy aqui en blur');
 
                     }  else {
 
                         if (scope.editMode == true)
                         {
-                            console.log('blur ing');
                             scope.editMode = false;
                             $(el).attr("contenteditable", "false");
 
@@ -185,7 +172,6 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                     var dest = document.getElementById(id);
                     var src = document.getElementById(data);
 
-                    console.log(' el data '+data);
 
                     var x, y,
                         mar = {};
@@ -197,37 +183,30 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
 
                     if (y <= 10)
                     {
-                        console.log('estoy en el margen superior');
                         theParent = el;
                         mode = 'before';
                         el.before(theTemplate2);
-                        console.log('before '+$(dest).attr("id"));
                         $(el).removeClass("selectedImage");
                     }
 
                     if (y > mar.height -10)
                     {
-                        console.log('estoy en el margen inferior');
                         theParent = el;
                         mode = 'after';
                         el.after(theTemplate2);
-                        console.log('after '+$(dest).attr("id"));
                         $(el).removeClass("selectedImage");
 
                     }
 
                     if (y < mar.height -10 && y > 10)
                     {
-                        console.log('estoy en el centro');
                         var dropType = $(src).attr("data-color");
 
                         var theNDType =  $(dest).attr("ndType");
 
-                        console.log('el dropType: '+ dropType);
 
                             if (($(dest).attr("ndType") == 'photoHeader') )
                             {
-                                console.log('This is a photo header...')
                                 $(el).addClass("selectedImage");
                                 mode = 'photoHeader';
 
@@ -235,18 +214,15 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
 
                             if (($(dest).attr("ndType") == 'image') )
                             {
-                                console.log('dragenter This is a image...');
-                                $(el).addClass("selectedImage");
+                               $(el).addClass("selectedImage");
                                 mode = 'image';
 
 
                             }
 
-                            console.log('el ndtyp es '+$(dest).attr("ndType")) ;
 
                             if (($(dest).attr("ndType") == 'carousell') )
                             {
-                                console.log('dragenter This is a carousell...');
                                 $(el).addClass("selectedImage");
                                 mode = 'image';
 
@@ -257,7 +233,6 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                         if (($(dest).attr("ndType") == 'column') || ($(dest).attr("ndType") == 'container') )
                         {
                             theParent = el;
-                            console.log('dragenter This is a column...');
                             $(el).addClass("selectedImage");
                             mode = 'column';
 
@@ -267,7 +242,6 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                             $(el).removeClass("selectedImage");
 
                     }
-                    console.log('estoy '+x+'  '+y + ' '+ mar.height);
 
                 });
 
@@ -279,7 +253,6 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
 
                     e.stopPropagation();
 
-                    console.log('estoy aqui....en dragenter');
 
                     var data = e.originalEvent.dataTransfer.getData("text");
                     var dest = document.getElementById(id);
@@ -289,7 +262,6 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                     var dropType = $(src).attr("data-color");
 
 
-                    console.log('el dropType de dragenter: '+ dropType);
 
                     if (($(dest).attr("ndType") == 'mainContainer') )
                     {
@@ -297,7 +269,6 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                         theParent = el;
                         mode = 'append';
                         el.append(theTemplate2);
-                        console.log('append');
 
 
                     } else {
@@ -350,10 +321,8 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
 
                         if (!dropType)
                         {
-                            console.log('is undefined');
                             theTemplate = src;
                         } else {
-                            console.log('is not undefined: '+dropType +' and mode: '+mode);
 
                             if (dropType == 'image')
                             {
@@ -373,12 +342,10 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                         if (mode == 'append')
                         {
                             theParent.append(theTemplate);
-                            console.log('final append el html:' + theTemplate.html());
                         }
 
                         if (mode == 'column')
                         {
-                            console.log('... mode column ...');
 
 
                             var newID = uuid.new()
@@ -401,10 +368,8 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
 
                         if (mode == 'before')
                         {
-                            console.log('the before');
 
-                            if (!theTemplate)
-                                console.log('no existo');
+
 
                             var newID = uuid.new()
 
@@ -417,17 +382,15 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                             var src2 = document.getElementById(data);
                             if (src2 && dropType == undefined) {
                                 $(src2).remove();
-                                console.log('removed');
+
 
                             }
                         }
 
                         if (mode == 'after')
                         {
-                            console.log('the after');
 
-                            if (!theTemplate)
-                                console.log('no existo');
+
 
                             var newID = uuid.new()
 
@@ -443,7 +406,7 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
                             var src2 = document.getElementById(data);
                             if (src2 && dropType == undefined) {
                                 $(src2).remove();
-                                console.log('removed');
+
 
                             }
                         }
@@ -463,7 +426,7 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
 	            });
 
 	            $rootScope.$on("LVL-DRAG-END", function() {
-                    console.log("LVL-DRAG-END");
+
 	                var el = document.getElementById(id);
 	                $(el).removeClass("lvl-target");
 
@@ -481,26 +444,24 @@ function dropImage(src,dest,dropType,$compile,scope)
 
     if (($(dest).attr("ndType") == 'photoHeader') )
     {
-        console.log('This is a photo header...')
+
         mode = 'photoHeader';
 
     }
 
     if (($(dest).attr("ndType") == 'image') )
     {
-        console.log('dragenter This is a image...');
+
         mode = 'image';
 
 
     }
 
-    console.log('el ndtyp es '+$(dest).attr("ndType")) ;
+
 
     if (($(dest).attr("ndType") == 'carousell') )
     {
-        console.log('dragenter This is a carousell...');
         mode = 'photoHeader';
-
 
     }
 
@@ -509,7 +470,6 @@ function dropImage(src,dest,dropType,$compile,scope)
     {
         var dropID = $(src).attr("data-id");
         var destType = $(dest).attr("ndType");
-        console.log('source is an image and destiny is ' +destType);
 
         if (destType == 'photoHeader')
         {
@@ -521,19 +481,17 @@ function dropImage(src,dest,dropType,$compile,scope)
         } else {
             if (destType == 'homeFull')
             {
-                console.log('destiny is a homeFull '+ $(src).attr("data-id"));
                 dest.style.backgroundImage = "url('"+ $(src).attr("data-id") +"')";
 
             } else {
                 if (destType == 'image')
                 {
-                    console.log('destiny is a image '+ $(src).attr("data-id"));
                     theTemplate = $compile($(dest).attr("src", $(src).attr("data-id")))(scope);
 
                 } else {
                     if (destType == 'carousell')
                     {
-                         console.log('voy al carousell ....bien!!')
+
                     } else
 
 

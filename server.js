@@ -65,7 +65,6 @@ if (cluster.isMaster) {
 
     // Fork workers.
     for (var i = 0; i < numCPUs; i++) {
-        console.log ('forking ',i);
         cluster.fork();
     }
 
@@ -76,9 +75,7 @@ if (cluster.isMaster) {
         var newPID = worker.process.pid;
         var oldPID = deadWorker.process.pid;
 
-        // Log the event
-        console.log('worker '+oldPID+' died.');
-        console.log('worker '+newPID+' born.');
+
     });
 } else {
     var config = require('./server/config/config')[env];

@@ -43,7 +43,6 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
 
     function getReportDataNextPage(report,page)
     {
-        console.log('loading next page',report);
         queryModel.loadQuery(report.query);
         queryModel.getQueryDataNextPage(page, function(data,sql,query){
                 report.query.data.push.apply(report.query.data, data);
@@ -135,7 +134,11 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
 
         var htmlCode = reportHtmlWidgets.generateIndicator(report);
         //var el = document.getElementById(report.parentDiv);
-        var el = document.getElementById('REPORT_'+report.id);
+        var el = document.getElementById(report.parentDiv);
+
+        console.log('indicator HTML',htmlCode);
+        console.log('indicator el',el);
+
                                 if (el)
                                 {
                                     angular.element(el).empty();
@@ -369,9 +372,16 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
 
             for(var i = 0; i < report.properties.columns.length; i++)
             {
-                var elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName;
+                //var elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName;
+                var elementID = 'wst'+report.properties.columns[i].elementID.toLowerCase();
+                var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
+
                 if (report.properties.columns[i].aggregation)
-                    elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
+                    {
+                    //elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
+                    var elementID = 'wst'+report.properties.columns[i].elementID.toLowerCase()+report.properties.columns[i].aggregation;
+                    var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
+                    }
                 if(range.s.r > R+1) range.s.r = R+1;
                 if(range.s.c > i) range.s.c = i;
                 if(range.e.r < R+1) range.e.r = R+1;

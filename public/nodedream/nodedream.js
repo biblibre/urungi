@@ -39,7 +39,7 @@ app.directive('ndDropZone', function($rootScope) {
                 });
 
                 this.on('drop', function(file) {
-                    //console.log('file');
+
                 });
             }
         });

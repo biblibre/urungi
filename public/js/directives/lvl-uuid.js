@@ -1,5 +1,4 @@
 var module;
-console.log('module lvl services');
 
 try {
     module = angular.module('lvl.services');

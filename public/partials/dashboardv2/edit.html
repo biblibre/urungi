@@ -22,36 +22,54 @@
     <div class="explorer-body" style="background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDguNSBMIDM0IDguNSBNIDguNSAwIEwgOC41IDM0IE0gMCAxNyBMIDM0IDE3IE0gMTcgMCBMIDE3IDM0IE0gMCAyNS41IEwgMzQgMjUuNSBNIDI1LjUgMCBMIDI1LjUgMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDM0IDAgTCAwIDAgMCAzNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=&quot;);
     ">
 
+    <section page-block ndType="page" ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
+
+    </section>
 
     <section id="objectPanel" class="dashboard-edit-object-panel" data-num-cols="4" ng-init="tabs.selected = 'reports'">
 
 
         <div class="object-panel-header">
+                        <div class="object-panel-header-icon" ng-click="tabs.selected = 'settings'" ng-class="{'active': tabs.selected == 'settings'}">
+                            <i class="fa fa-gear" ></i>
+                        </div>
+                        <div class="object-panel-header-inner">
+                                <!--<i class="toggle-button fa-minus-circle"  ng-click="toggle();$event.stopPropagation()" role="button" tabindex="0" style="right: 5px;
+                position: absolute;
+                font-size: 20px;"></i>-->
 
-            <div class="object-panel-header-inner">
-
-        <!--<i class="toggle-button fa-minus-circle"  ng-click="toggle();$event.stopPropagation()" role="button" tabindex="0" style="right: 5px;
-    position: absolute;
-    font-size: 20px;"></i>-->
-            </div>
+                        </div>
 
         </div>
 
         <menu>
             <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'reports'}">
                 <a ng-click="tabs.selected = 'reports'">
-                <i class="fa fa-bar-chart fa-2" aria-hidden="true" style="margin-left:0px;margin-right:5px;"> </i><br/><br/> Reports
+                    <i class="fa fa-bar-chart fa-2" aria-hidden="true" style="margin-left:0px;margin-right:5px;"> </i>
+                    <div class="objectPanel-menu-label">Reports</div>
                 </a>
             </li>
-            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'prompts'}" ><a ng-click="tabs.selected = 'prompts'"><i class="fa fa-filter fa-2" aria-hidden="true"></i><br/>Run time Filters</a></li>
-            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'layouts'}" ><a ng-click="tabs.selected = 'layouts'"><i class="fa fa-file-image-o fa-2" aria-hidden="true"></i><br/><br/>Layouts</a></li>
+            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'prompts'}" >
+                <a ng-click="tabs.selected = 'prompts'">
+                    <i class="fa fa-filter fa-2" aria-hidden="true"></i>
+                    <div class="objectPanel-menu-label">Run time<br/>Filters</div>
+                </a>
+            </li>
+            <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'layouts'}" >
+                <a ng-click="tabs.selected = 'layouts'">
+                    <i class="fa fa-file-image-o fa-2" aria-hidden="true"></i>
+                    <div class="objectPanel-menu-label">Layouts</div>
+                </a>
+            </li>
         </menu>
-    <section  class="content" style="left:70px">
+    <section  class="content">
 
         <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
             <section class="layer scrollPane">
                 <div class="layer-inner-reports">
-                    <wst-widget-properties element="selectedElement" properties="selectedReport.properties" dashboard="selectedDashboard" on-change="onChangeElementProperties"></wst-widget-properties>
+
+                    <wst-widget-properties element="selectedElement" properties="selectedReport.properties" dashboard="selectedDashboard" on-change="onChangeElementProperties" bl-color-picker></wst-widget-properties>
+
                 </div>
             </section>
             <div class="scrollTrack vScrollTrack">
@@ -134,7 +152,7 @@
                     <div class="layer-inner">
                         <div class="searchLoaderHolder"></div>
                         <div class="searchGroup hasContent" style="height: 2872px;">
-                            <div class="row gallery infoPanelGallery templateGallery laidOut">
+                            <div class="row gallery infoPanelGallery templateGallery laidOut" style="padding-left: 25px;">
 
                                 <!--<div draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{type: 'jumbotron'}"
                                      drag-start="onDragStart()" drag-end="onDragEnd()">
@@ -196,7 +214,13 @@
 
     </section>
 
+        <div class="arrow-right" id="color-picker-arrow"></div>
+        <div class="arrow-right" id="background-arrow"></div>
+
     </section>
+
+
+
 
     <!--
     <section id="dropZone" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
@@ -215,9 +239,7 @@
 
 
     </section> -->
-    <section page-block ndType="page" ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
 
-    </section>
 </div>
     </div>
 </div>

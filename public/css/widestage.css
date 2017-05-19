@@ -1441,17 +1441,20 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
 
 .schema-element {
 
+
     width: 100%;
     height: 20px;
-    /*
-    border: solid 1px #999999;
-    background-color: #CCC;
-    */
     overflow: hidden;
+    /* border: solid 1px #999999; */
+    /* background-color: #CCC; */
     margin: 1px;
     padding-left: 5px;
     z-index: 0;
     cursor: move;
+    color: #fff;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
 
 }
 
@@ -1507,6 +1510,15 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     padding-bottom: 30px;
 }
 
+
+.schema-element:hover .schema-element-btn {
+    display:block;
+}
+
+.schema-folder:hover .schema-element-btn {
+    display:block;
+}
+
 .schema-container .list-group-item {
     position: relative;
     display: block;
@@ -1529,10 +1541,33 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     text-overflow: ellipsis;
 }
 
-.delete-schema-element-btn {
+.schema-element-btn {
     padding-left: 2px;
-    text-align: center;
+    padding-right: 5px;
+    z-index: 100;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: none;
+    height: 25px;
+    filter: alpha(opacity=50);
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 2px;
+}
 
+
+
+.delete-schema-element-btn {
+    font-size: xx-small;
+    color: #FF0000;
+    border: 1px solid #FF0000;
+    background-color: #fff;
+    border-radius: 2px;
+    margin-left: 3px;
+    margin-top: 3px;
+    min-width: 40px;
+    height: 17px;
+    text-transform: uppercase;
 }
 
 .delete-schema-element-btn-icon
@@ -1547,8 +1582,16 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
 }
 
 .edit-schema-element-btn {
-    padding-left: 2px;
-    text-align: center;
+    font-size: xx-small;
+    color: #999;
+    border: 1px solid #999;
+    background-color: #fff;
+    border-radius: 2px;
+    margin-left: 3px;
+    margin-top: 3px;
+    min-width: 40px;
+    height: 17px;
+    text-transform: uppercase;
 }
 
 .edit-schema-element-btn-icon
@@ -2167,7 +2210,7 @@ div.callout {
 #objectPanel.catalogSidebar
 {
     top: 75px;
-    width: 250px;
+    width: 300px;
 }
 
 .jtk-field
@@ -2651,10 +2694,15 @@ label[for] {
     color: #fff;
 }
 
+
+
 .bs-docs-footer {
-    padding-top: 50px;
-    padding-bottom: 50px;
-    margin-top: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /*position: fixed;
+    bottom: 0;*/
+    width: 100%;
+    margin-top: 10px;
     color: #ccc;
     text-align: left;
     background-color: #2a2730;
@@ -2936,11 +2984,11 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
 .object-panel-header {
-    height:40px;
+    height: 40px;
     position: absolute;
     top: 0px;
     left: 0px;
-    padding: 5px;
+    /* padding: 5px; */
     right: 0px;
     background-color: #272c33;
     color: #ffffff;
@@ -2948,14 +2996,31 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     font-weight: 100;
 }
 
+.object-panel-header-icon {
+    width: 40px;
+    height: 100%;
+}
+
+.object-panel-header-icon.active {
+    background-color: #3f4652;
+}
+
+.object-panel-header-icon i {
+    font-size: 22px;
+    margin-left: 10px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+
 .object-panel-header-inner {
-    height:40px;
+    height: 40px;
     position: absolute;
     top: 0px;
-    left: 70px;
+    left: 40px;
     right: 0px;
     background-color: #3f4652;
     color: #ffffff;
+    padding: 5px;
 }
 
 #objectPanel {
@@ -3028,8 +3093,8 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 
 #objectPanel>menu a {
     display: block;
-    width: 70px;
-    height: 90px;
+    width: 40px;
+    height: 150px;
     padding-top: 20px;
     box-sizing: border-box;
     /*background-image: url(https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/icon_tabs_search.png);*/
@@ -3071,14 +3136,26 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     background-position: 50% 18px;
 }
 
+.objectPanel-menu-label {
+    transform: rotate(-90deg);
+    width: 120px;
+    /* height: 100px; */
+    left: -40px;
+    position: relative;
+    top: 20px;
+    right: 0px;
+    /* font-size: smaller; */
+    cursor: default;
+}
+
 #objectPanel>.content {
     position: absolute;
-    left: 35px;
+    left: 40px;
     right: 0;
     top: 40px;
     bottom: 0;
     overflow: hidden;
-    padding: 20px 18px 20px 0;
+    /* padding: 20px 18px 20px 0; */
     text-align: left;
     background-color: #3f4652;
 }

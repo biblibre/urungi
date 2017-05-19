@@ -117,7 +117,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 window.history.back();
             });
         } else {
-        console.log($scope._dataSource);
             connection.post('/api/data-sources/update/'+$scope._DataSource._id, $scope._DataSource, function(result) {
                 if (result.result == 1) {
                     window.history.back();
@@ -225,7 +224,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
     $scope.mongoSourceSelected  = function()
     {
-        console.log('mongo selected');
         $scope.activeForm = '/partials/data-source/source_wizard_mongo.html';
         $scope.mongoStep = 1;
         $scope._Parameters = {};
@@ -251,7 +249,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         data.folder = $scope._Parameters.folder;
 
 
-        console.log(data);
 
         connection.post('/api/data-sources/testS3Connection', data, function(result) {
 
@@ -335,7 +332,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         {
             connection.get('/api/data-sources/find-one', {id: $routeParams.dataSourceID}, function(data) {
                 $scope._dataSource = data.item;
-                console.log($scope._dataSource);
 
                 for (var i in $scope._dataSource.params[0].schema) {
                     $scope._dataSource.params[0].schema[i].selected = true;
@@ -346,7 +342,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 }
 
                 connection.post('/api/data-sources/testMongoConnection', $scope._dataSource.params[0].connection, function(result) {
-                    console.log(result);
 
                     var collections = [];
 
@@ -364,7 +359,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                     $scope.loadingNewCollections = true;
 
                     connection.post('/api/data-sources/getMongoSchemas', params, function(result) {
-                        console.log(result);
 
                         $scope.schemas = [];
 
@@ -440,7 +434,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             elementName: "",
             elementID: new ObjectId().toString()
         };
-        console.log(element);
         collection.elements.push(element);
     };
 
@@ -481,7 +474,6 @@ app.directive('plumbItem', function() {
         replace: true,
         controller: 'PlumbCtrl',
         link: function (scope, element, attrs) {
-            console.log("Add plumbing for the 'item' element");
 
             jsPlumb.makeTarget(element, {
                 anchor: 'Continuous',
@@ -515,9 +507,6 @@ app.directive('plumbMenuItem', function() {
         replace: true,
         controller: 'PlumbCtrl',
         link: function (scope, element, attrs) {
-            console.log("Add plumbing for the 'menu-item' element");
-
-            // jsPlumb uses the containment from the underlying library, in our case that is jQuery.
             jsPlumb.draggable(element, {
                 containment: element.parent().parent()
             });
@@ -529,7 +518,6 @@ app.directive('plumbConnect', function() {
     return {
         replace: true,
         link: function (scope, element, attrs) {
-            console.log("Add plumbing for the 'connect' element");
 
             jsPlumb.makeSource(element, {
                 parent: $(element).parent(),

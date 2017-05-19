@@ -36,7 +36,6 @@ app.service('dashboardv2Model',  function ($http, $q, connection, reportService)
             prompts = [];
 
 
-        //console.log('processing prompts for report '+dashboard.items[index].reportID);
 
         if (dashboard.items[index].itemType == 'reportBlock')
         {
