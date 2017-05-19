@@ -5,12 +5,15 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
     $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';
+    $scope.statusInfoModal = 'partials/common/statusInfo.html';
     $scope.datasetPropertiesModal  = 'partials/layer/datasetPropertiesModal.html';
+    $scope.setupModal = 'partials/layer/setupModal.html';
     $scope.ReadOnlyDataSourceSelector = false;
     $scope.items =  [];
     $scope.pager = {};
-
-
+    $scope.datasources = [];
+    $scope.selectedDts = {};
+    $scope.initiated = false;
 
 
 
@@ -22,14 +25,14 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         {name:"array",value:"array"}
     ];
 
-    $scope.numberDefaultAggregation = [{name:"original value",value:"value"},
+    $scope.numberDefaultAggregation = [{name:"raw",value:"value"},
         {name:"SUM",value:"sum"},
         {name:"AVG",value:"avg"},
         {name:"MIN",value:"min"},
         {name:"MAX",value:"max"},
         {name:"COUNT",value:"count"}
     ];
-    $scope.stringDefaultAggregation = [{name:"original value",value:"value"},
+    $scope.stringDefaultAggregation = [{name:"raw",value:"value"},
         {name:"COUNT",value:"count"}
     ];
 
@@ -125,6 +128,103 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             }
 
 
+    /**** JSPLUMB variables and functions ****/
+
+    var rightJoinType = {
+                connector: "StateMachine",
+                paintStyle: { strokeStyle: "#61B7CF", lineWidth: 4 },
+                hoverPaintStyle: { strokeStyle: "blue" },
+                overlays: [
+                    ["Diamond" , { location: 1 }]
+                ]
+
+            };
+
+    var leftJoinType = {
+                connector: "StateMachine",
+                paintStyle: { strokeStyle: "#61B7CF", lineWidth: 4 },
+                hoverPaintStyle: { strokeStyle: "blue" },
+                params: {margin: 40},
+                overlays: [
+                    ["Diamond" , { location: 0 }]
+                ]
+
+            };
+
+
+    var connectorPaintStyle = {
+                    lineWidth: 4,
+                    strokeStyle: "#61B7CF",
+                    joinstyle: "round",
+                    outlineColor: "white",
+                    outlineWidth: 2
+                },
+               connectorHoverStyle = {
+                    lineWidth: 4,
+                    strokeStyle: "#216477",
+                    outlineWidth: 2,
+                    outlineColor: "white"
+                },
+                endpointHoverStyle = {
+                    fillStyle: "#000000",
+                    strokeStyle: "#000000"    //strokeStyle: "#216477"
+                },
+
+            // the definition of source endpoints (the small blue ones)
+                sourceEndpoint = {
+                    endpoint: "Dot",
+                    paintStyle: {
+                        strokeStyle: "#7AB02C",
+                        fillStyle: "transparent",
+                        radius: 6,
+                        lineWidth: 3
+                    },
+                    isSource: true,
+                    connector: [ "Flowchart", { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
+                    connectorStyle: connectorPaintStyle,
+                    hoverPaintStyle: endpointHoverStyle,
+                    connectorHoverStyle: connectorHoverStyle,
+                    maxConnections: -1,
+                    dragOptions: {},
+                    overlays: [
+                        [ "Label", {
+                            location: [0.5, 1.5],
+                            label: "",
+                            cssClass: "endpointSourceLabel"
+                        } ]
+                    ]
+                },
+            // the definition of target endpoints (will appear when the user drags a connection)
+                targetEndpoint = {
+                    endpoint: "Dot",
+                    paintStyle: { fillStyle: "#7AB02C", radius: 6 },
+                    hoverPaintStyle: endpointHoverStyle,
+                    maxConnections: -1,
+                    dropOptions: { hoverClass: "hover", activeClass: "active" },
+                    isTarget: true,
+                    overlays: [
+                        [ "Label", { location: [0.5, -0.5], label: "", cssClass: "endpointTargetLabel" } ]
+                    ]
+                },
+                 _addEndpoints = function (toId, sourceAnchors, targetAnchors) {
+                    for (var i = 0; i < sourceAnchors.length; i++) {
+                        var sourceUUID = toId + sourceAnchors[i];
+
+                        instance.addEndpoint( toId, sourceEndpoint, {
+                            anchor: sourceAnchors[i], uuid: sourceUUID
+                        });
+                    }
+                    for (var j = 0; j < targetAnchors.length; j++) {
+                        var targetUUID = toId + targetAnchors[j];
+
+                        instance.addEndpoint( toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID });
+                    }
+                 },
+                init = function (connection) {
+                    //connection.getOverlay("label").setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
+                };
+
+
 
     $scope.newLayer = function ()
     {
@@ -134,6 +234,70 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         $scope.mode = 'add';
         $('#layerModal').modal('show');
     }
+
+    function setDraggable(targetID)
+    {
+
+        instance.draggable(document.querySelectorAll(targetID), {
+
+            drag:function(e){
+                // Your code comes here
+                jsPlumb.repaint($(this));
+            },
+            stop: function(event, ui) {
+
+                if (ui.position != undefined)
+                {
+                    var pos_x = ui.position.left;
+                    var pos_y = ui.position.top;
+
+                    if (pos_x < 0)
+                               pos_x = 0;
+
+                    if (pos_y < 0)
+                               pos_y = 0;
+
+                    var parentId = $(this).attr("id");
+
+                    var id = parentId.replace('-parent','');
+
+
+
+
+                    for (var c in $scope._Layer.params.schema)
+                    {
+                        if ($scope._Layer.params.schema[c].collectionID == id)
+                        {
+                            $scope._Layer.params.schema[c].left = pos_x;
+                            $scope._Layer.params.schema[c].top = pos_y;
+                        }
+                    }
+
+                }
+            }
+        });
+    }
+
+  /*******   *******/
+
+
+    $scope.initForm = function() {
+        if ($routeParams.layerID) {
+            connection.get('/api/layers/find-one', {id: $routeParams.layerID}, function(data) {
+                $scope._Layer = data.item;
+                $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
+                $scope.mode = 'edit';
+                $scope.erDiagramInit();
+            });
+        }
+        else {
+            $scope._Layer = {};
+            $scope._Layer.params = {};
+            $scope._Layer.status = 'Not active';
+            $scope.mode = 'add';
+            $scope.erDiagramInit();
+        }
+    };
 
     $scope.changeLayerStatus = function(layer)
     {
@@ -154,10 +318,18 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
     }
 
     $scope.view = function() {
+
         if ($routeParams.layerID)
         {
             connection.get('/api/layers/find-one', {id: $routeParams.layerID}, function(data) {
                 $scope._Layer = data.item;
+                if ($scope._Layer.params) {
+                    if ($scope._Layer.params.schema) {
+                        if ($scope._Layer.params.schema.length > 0) {
+                            $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
+                        }
+                    }
+                }
                 $scope.mode == 'edit';
                 $scope.rootItem.elements = $scope._Layer.objects;
 
@@ -238,6 +410,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
     };
 
     $scope.getLayers = function(page, search, fields) {
+
         var params = {};
 
         params.page = (page) ? page : 1;
@@ -264,18 +437,18 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
     $scope.getDatasources = function()
     {
-
         var params = {};
 
         params.page = 0; //All data
 
-        params.fields = ['name','type','params.connection.host','params.connection.port','params.connection.database'];
+        params.fields = ['name','type','status','statusInfo','params.connection.host','params.connection.port','params.connection.database'];
 
         datasourceModel.getDataSources(params, function(data){
+
             $scope.datasources = data.items;
         });
     }
-
+/*
     $scope.addDataset = function ()
     {
         $scope.selectedDts = {};
@@ -294,19 +467,20 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         $('#datasetModal').modal('show');
     }
 
+*/
 
     $scope.addSQL = function ()
     {
         $scope.temporarySQLCollection = {};
-        $scope.selectedDts = {};
-        if ($scope._Layer.params)
-            if ($scope._Layer.params.schema)
-                if ($scope._Layer.params.schema.length > 0)
-                    {
-                      $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
+        //$scope.selectedDts = {};
+        //if ($scope._Layer.params)
+          //  if ($scope._Layer.params.schema)
+            //    if ($scope._Layer.params.schema.length > 0)
+              //      {
+                //      $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
                       $scope.ReadOnlyDataSourceSelector = true;
-                      $scope.getDatasetsForDts();
-                    }
+                //      $scope.getDatasetsForDts();
+                //    }
 
         $('#sqlModal').modal('show');
     }
@@ -322,7 +496,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         }
 
     }
-
+/*
     $scope.addToLayer = function ()
     {
         if ($scope.selectedEntities.length > 0)
@@ -360,6 +534,8 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         }
     }
 
+    */
+
     $scope.addSqlToLayer = function()
     {
         datasourceModel.getSqlQuerySchema($scope.selectedDts.id,$scope.temporarySQLCollection,function(result){
@@ -384,6 +560,22 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
                         $scope._Layer.params.schema.push(result.items[i]);
 
+                        setTimeout(function () {
+
+                                for (var element in result.items[i].elements)
+                                    {
+                                        if (!result.items[i].elements[element].painted || result.items[i].elements[element].painted == false)
+                                        {
+                                            _addEndpoints(result.items[i].elements[element].elementID, [ "RightMiddle"], ["LeftMiddle"]);
+                                        }
+
+
+                                    }
+                                    var targetID = '#'+result.items[i].collectionID+'-parent';
+                                    setDraggable(".window");
+
+                                },100);
+
                     }
 
                     $('#sqlModal').modal('hide');
@@ -393,7 +585,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         });
     }
 
-
+/*
     $scope.getDatasetsForDts = function (_id)
     {
         connection.get('/api/data-sources/getEntities', {id: $scope.selectedDts.id}, function(data) {
@@ -402,7 +594,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         });
     }
 
-
+*/
     function getElement(elementID)
     {
         for (var collection in $scope._Layer.params.schema)
@@ -494,13 +686,34 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         if(!$scope._Layer.params.joins)
             $scope._Layer.params.joins = [];
 
+
         var found = false;
         //First verify that the join does not exists
         for (var j in $scope._Layer.params.joins)
         {
-            if ($scope._Layer.params.joins[j].sourceElementID == sourceID && $scope._Layer.params.joins[j].targetElementID == targetID)
+            if (($scope._Layer.params.joins[j].sourceElementID == sourceID && $scope._Layer.params.joins[j].targetElementID == targetID) ||
+                ($scope._Layer.params.joins[j].sourceElementID == targetID && $scope._Layer.params.joins[j].targetElementID == sourceID))
             {
                 found = true;
+
+                var connections = instance.getAllConnections();
+
+                    for (var c in connections)
+                    {
+                        var source = connections[c].endpoints[0].getElement().id;
+                        var target = connections[c].endpoints[1].getElement().id;
+
+
+                        if ((target == sourceID && source == targetID) ||
+                            (target == targetID && source == sourceID) ){
+
+
+                           $scope._Layer.params.joins[j].connection = undefined;
+                           $scope.instance.detach(connections[c]);
+                        }
+
+                    }
+
                 $scope._Layer.params.joins.splice(j,1);
 
             }
@@ -510,6 +723,8 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
     var instance;
 
     $scope.erDiagramInit = function() {
+
+        if (!$scope.initiated) {
 
         //this timeout is here to give time to angular to create the element's divs'
         setTimeout(function () {
@@ -532,7 +747,8 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 paintStyle: { strokeStyle: "#61B7CF", lineWidth: 4 },
                 hoverPaintStyle: { strokeStyle: "blue" },
                 overlays: [
-                    ["Diamond" , { location: 1 }]
+                    //["Diamond" , { location: 1 }]
+                    ["Label" , { location: 0.88,label:'[right]',labelStyle:{cssClass:'leftJoinType',color:'#000',font:'bold 20px ER',fill:' #fff no-repeat fixed center'} }]
                 ]
 
             };
@@ -541,21 +757,31 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 connector: "StateMachine",
                 paintStyle: { strokeStyle: "#61B7CF", lineWidth: 4 },
                 hoverPaintStyle: { strokeStyle: "blue" },
+                params: {margin: 40},
                 overlays: [
-                    ["Diamond" , { location: 0 }]
+                    //["Diamond" , { location: 0 }]
+                    // zero one many ["Label" , { location: 0.02,label:'>|*',labelStyle:{cssClass:'leftJoinType',color:'#61B7CF',font:'bold 42px ER',fill:' #fff no-repeat fixed center'} }]
+                    ["Label" , { location: 0.10,label:'[left]',labelStyle:{cssClass:'leftJoinType',color:'#000',font:'bold 20px ER',fill:' #fff no-repeat fixed center'} }]
                 ]
 
             };
 
+            var selectedJoin = {
+                paintStyle: { strokeStyle: "#999", lineWidth: 4 },
+                hoverPaintStyle: { strokeStyle: "#999" }
+            };
+
             instance.registerConnectionType("right", rightJoinType);
             instance.registerConnectionType("left", leftJoinType);
+            instance.registerConnectionType("selected", selectedJoin);
 
             var connectorPaintStyle = {
                     lineWidth: 4,
                     strokeStyle: "#61B7CF",
                     joinstyle: "round",
                     outlineColor: "white",
-                    outlineWidth: 2
+                    outlineWidth: 2,
+                    params: {margin:40}  //Distance from element to start and end connectors, in pixels.
                 },
             // .. and this is the hover style.
                 connectorHoverStyle = {
@@ -585,6 +811,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                     connectorHoverStyle: connectorHoverStyle,
                     maxConnections: -1,
                     dragOptions: {},
+
                     overlays: [
                         [ "Label", {
                             location: [0.5, 1.5],
@@ -620,16 +847,16 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                     }
                  },
                 init = function (connection) {
-                    connection.getOverlay("label").setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
+                    //connection.getOverlay("label").setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
                 };
-
-
-
+/*****************/
+                var jtkField = jsPlumb.getSelector(".jtk-field");
+/*****************/
             // suspend drawing and initialise.
             instance.batch(function () {
 
 
-
+/************
 
                 for (var collection in $scope._Layer.params.schema)
                 {
@@ -644,6 +871,29 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
                     }
                 }
+                ***************/
+
+                /*****************/
+                instance.makeSource(jtkField, {
+                    filter:"a",
+                    filterExclude:true,
+                    connector: [ "Flowchart", { stub: [60, 60], gap: 0, cornerRadius: 5, alwaysRespectStubs: true } ],
+                            connectorStyle: connectorPaintStyle,
+                            hoverPaintStyle: endpointHoverStyle,
+                            connectorHoverStyle: connectorHoverStyle,
+                    maxConnections: -1,
+                    //endpoint:[ "Rectangle", { width: 10, cssClass:"small-blue" } ],
+                    anchor:["LeftMiddle","RightMiddle"]
+                });
+
+                instance.makeTarget(jtkField, {
+                    dropOptions: { hoverClass: "hover" },
+                    anchor:["LeftMiddle","RightMiddle"]
+                    //endpoint: "Dot"
+                    //endpoint:[ "Dot", { radius: 10, cssClass:"large-green" } ]
+                });
+
+                /*****************/
 
 
                 /*
@@ -673,13 +923,20 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                         jsPlumb.repaint($(this));
                     },
                     stop: function(event, ui) {
-
                         if (ui.position != undefined)
                         {
                             var pos_x = ui.position.left;
                             var pos_y = ui.position.top;
 
-                            var id = $(this).attr("id");
+                            if (pos_x < 0)
+                               pos_x = 0;
+
+                            if (pos_y < 0)
+                               pos_y = 0;
+
+                            var parentId = $(this).attr("id");
+
+                            var id = parentId.replace('-parent','');
 
                             for (var c in $scope._Layer.params.schema)
                             {
@@ -695,17 +952,42 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 });
 
 
-
+/*****************
 
                 for (var j in $scope._Layer.params.joins)
                 {
                     instance.connect({uuids: [$scope._Layer.params.joins[j].sourceElementID+"RightMiddle", $scope._Layer.params.joins[j].targetElementID+"LeftMiddle"], editable: true,type: $scope._Layer.params.joins[j].joinType});
                 }
+****************/
+
+/*****************/
+                for (var j in $scope._Layer.params.joins)
+                {
+                    var c = instance.connect({ source: $scope._Layer.params.joins[j].targetElementID, target: $scope._Layer.params.joins[j].sourceElementID,id: $scope._Layer.params.joins[j].joinID });
+
+                    if ($scope._Layer.params.joins[j].joinType == 'left')
+                        c.setType("left");
+                    if ($scope._Layer.params.joins[j].joinType == 'right')
+                        c.setType("right");
+
+
+                }
+/*****************/
 
                 //
                 // listen for clicks on connections, and offer to delete connections on click.
                 //
                 instance.bind("click", function (conn, originalEvent) {
+
+                    //unSelect();
+                    //$scope.selectedItem = 'join';
+                    //$scope.tabs.selected = 'properties';
+
+
+
+
+
+/*
                     var joinType = '';
                     if (conn.hasType("right") == true)
                     {
@@ -722,13 +1004,22 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                                 conn.setType("right");
                                 joinType = 'right';
                             }
-
+*/
                     for (var j in $scope._Layer.params.joins)
                     {
-                        if ($scope._Layer.params.joins[j].sourceElementID == conn.sourceId && $scope._Layer.params.joins[j].targetElementID == conn.targetId)
-                            $scope._Layer.params.joins[j].joinType = joinType;
+
+                        if (($scope._Layer.params.joins[j].sourceElementID == conn.sourceId && $scope._Layer.params.joins[j].targetElementID == conn.targetId) ||
+                             ($scope._Layer.params.joins[j].sourceElementID == conn.targetId && $scope._Layer.params.joins[j].targetElementID == conn.sourceId) )
+                            {
+                                $scope._Layer.params.joins[j].connection = conn;
+                                selectJoin($scope._Layer.params.joins[j]);
+
+                            }
                     }
 
+                originalEvent.stopPropagation();
+                conn.setPaintStyle({strokeStyle: "#000", lineWidth: 4 });
+                conn.selected = true;
 
                 });
 
@@ -772,6 +1063,20 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
         },100);
 
+
+
+
+        $scope.initiated = true;
+      }
+    }
+
+    function selectJoin(join)
+    {
+         unSelect();
+                    $scope.selectedItem = 'join';
+                    $scope.tabs.selected = 'properties';
+        $scope.theSelectedElement = join;
+        $scope.$apply();
     }
 
     $scope.collectionClicked = function (collection)
@@ -1139,7 +1444,11 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
     {
         var theCollectionID = collection.collectionID;
 
+        deleteAllCollectionJoins(theCollectionID);
+
         deleteAllCollectionElements($scope.rootItem.elements,theCollectionID);
+
+        //delete all joins related to this collection
 
         for (var c in $scope._Layer.params.schema)
         {
@@ -1148,8 +1457,8 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
                 for (var element in $scope._Layer.params.schema[c].elements)
                 {
-                    instance.deleteEndpoint($scope._Layer.params.schema[c].elements[element].elementID+"LeftMiddle");
-                    instance.deleteEndpoint($scope._Layer.params.schema[c].elements[element].elementID+"RightMiddle");
+                    instance.deleteEndpoint($scope._Layer.params.schema[c].elements[element].elementID);
+                    instance.deleteEndpoint($scope._Layer.params.schema[c].elements[element].elementID);
                 }
                 $scope._Layer.params.schema.splice(c, 1);
             }
@@ -1159,11 +1468,55 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         $('#datasetPropertiesModal').modal('hide');
         $scope.selectedCollection = undefined;
 
+
+        //Clear selectedDts if collections == 0
+        var totalCollections = 0;
+
+        for (var c in $scope._Layer.params.schema)
+        {
+
+            totalCollections = totalCollections +1;
+
+        }
+
+        if (totalCollections == 0)
+            $scope.selectedDts = {};
+
+    }
+
+
+
+    function deleteAllCollectionJoins(collectionID)
+    {
+        var joinsToDelete = [];
+
+        for (var o in $scope._Layer.params.schema)
+            {
+                if ($scope._Layer.params.schema[o].collectionID == collectionID)
+                    {
+                        for (var e in $scope._Layer.params.schema[o].elements)
+                            {
+                                for (var j in $scope._Layer.params.joins)
+                                    {
+                                        if (($scope._Layer.params.joins[j].sourceElementID == $scope._Layer.params.schema[o].elements[e].elementID) ||
+                                            ($scope._Layer.params.joins[j].targetElementID == $scope._Layer.params.schema[o].elements[e].elementID))
+                                            {
+
+                                                joinsToDelete.push({sourceElementID: $scope._Layer.params.joins[j].sourceElementID,targetElementID: $scope._Layer.params.joins[j].targetElementID});
+                                            }
+                                    }
+                            }
+                    }
+            }
+
+        for (var jtd in joinsToDelete)
+            {
+               deleteJoin(joinsToDelete[jtd].sourceElementID,joinsToDelete[jtd].targetElementID);
+            }
     }
 
     function deleteAllCollectionElements(elements,collectionID)
     {
-
         for( var e=elements.length -1;e>=0;e--)
         //for (var e = elements.length -1 to 0)
         {
@@ -1176,19 +1529,23 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 elements.splice(e, 1);
             }
 
-
-
         }
     }
 
     $scope.getCollectionElements = function(collectionID)
     {
-        if ($scope._Layer)
-            for (var e in $scope._Layer.params.schema)
-            {
-                if ($scope._Layer.params.schema[e].collectionID == collectionID)
-                    return $scope._Layer.params.schema[e].elements;
-            }
+                if ($scope._Layer.params) {
+                    if ($scope._Layer.params.schema) {
+                        if ($scope._Layer.params.schema.length > 0) {
+                            for (var e in $scope._Layer.params.schema)
+                                {
+                                    if ($scope._Layer.params.schema[e].collectionID == collectionID)
+                                        return $scope._Layer.params.schema[e].elements;
+                                }
+                        }
+                    }
+                }
+
 
 
     }
@@ -1207,6 +1564,307 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                     }
             }
     }
+
+    $scope.openSetup = function() {
+        $rootScope.currentModal = $modal.open({templateUrl: 'setupModal', scope: $scope});
+    };
+
+
+     $scope.getDatasetsForThisDts = function (_id, theDataSource)
+    {
+        if (!theDataSource.loading)
+            {
+               theDataSource.loading = true;
+                    connection.get('/api/data-sources/getEntities', {id: _id}, function(data) {
+
+                        theDataSource.loading = false;
+                        if (data.result == 1)
+                            {
+                                theDataSource.entities = data.items;
+                            } else {
+                                if (data.actionCode == 'INVALIDATEDTS')
+                                    {
+                                        theDataSource.status = -1;
+                                        theDataSource.statusInfo = {errorCode:data.code,actionCode:data.actionCode,message:data.msg,lastDate:new Date()}
+                                    }
+                            }
+                    });
+            }
+
+    }
+
+    $scope.getFieldsForThisEntity = function (dataSourceID,entity, theEntity)
+    {
+        datasourceModel.getEntitiesSchema([dataSourceID],[entity],function(result){
+
+            if (result.result == 1)
+                {
+                   theEntity.fields = result.items[0].elements;
+                }
+            bsLoadingOverlayService.stop({referenceId: 'layerView'});
+            });
+    }
+
+    $scope.selectedCanvas = function(event)
+    {
+        unSelect();
+        $scope.selectedItem = 'layer';
+        $scope.theSelectedElement = $scope._layer;
+        $scope.tabs.selected = 'properties';
+
+
+        if ($scope.joinMode)
+          {
+            //showAll();
+          }
+    }
+
+    function unSelect()
+    {
+                for (var s in $scope.selectedElements)
+                    {
+                       $("#"+$scope.selectedElements[s]).removeClass( "selectedElement" );
+                    }
+                var connections = instance.getAllConnections();
+
+                    for (var c in connections)
+                    {
+                        //connections[c].setType("default"); esto cambia el tipo left right, es solo el color lo que queremos cambiar
+                        connections[c].setPaintStyle({strokeStyle: "#61B7CF", lineWidth: 4 });
+                        connections[c].selected = false;
+
+                    }
+
+                $("#"+$scope.selectedTargetId).css({ backgroundColor: "#D5D5D5" });
+                $("#"+$scope.selectedSourceId).css({ backgroundColor: "#D5D5D5" });
+                $scope.selectedTargetId = undefined;
+                $scope.selectedSourceId = undefined;
+                $scope.selectedConnection = undefined;
+                $scope.selectedElements = [];
+        $scope.selectedItem = '';
+    }
+
+
+
+
+    $scope.selectCollection = function(theCollection,event)
+    {
+        event.stopPropagation();
+        if(!event.shiftKey || $scope.selectedItem != 'collection')
+        {
+           unSelect();
+        }
+
+       // $scope.tabs.selected = 'properties';
+        $scope.selectedItem = 'collection';
+        $scope.theSelectedElement = theCollection;
+        $scope.selected_name = theCollection.table_name;
+        $scope.selected_schema_name = theCollection.schema_name;
+        $scope.selected_decription = theCollection.description;
+        //if ($scope.joinMode)
+          //  collectionHighliter(theCollection.collectionID);
+
+        if ($scope.selectedElements.indexOf(theCollection.collectionID) == -1)
+            $scope.selectedElements.push(theCollection.collectionID);
+
+        setSelectedElements();
+
+    }
+
+
+    $scope.selectElement = function(theElement, event)
+    {
+        event.stopPropagation();
+        unSelect();
+       // $scope.tabs.selected = 'properties';
+        $scope.selectedItem = 'element';
+        $scope.theSelectedElement = theElement;
+        $scope.selected_name = theElement.column_name;
+        $scope.selected_schema_name = theElement.table_schema;
+        $scope.selected_table_name = theElement.table_name;
+        $scope.selected_decription = theElement.description;
+        $scope.selected_data_type = theElement.data_type;
+        if (theElement.isPK == true)
+            $scope.selected_primary_key = true
+            else
+            $scope.selected_primary_key = false;
+        if ($scope.selectedElements.indexOf(theElement.elementID) == -1)
+                $scope.selectedElements.push(theElement.elementID);
+        setSelectedElements();
+    }
+
+    $scope.showStatusInfo = function(statusInfo)
+    {
+        $scope.statusInfo = statusInfo;
+        $('#statusInfo').modal('show');
+    }
+
+    function setSelectedElements()
+    {
+        for (var s in $scope.selectedElements)
+            {
+               $("#"+$scope.selectedElements[s]).addClass( "selectedElement" );
+            }
+        $scope.tabs.selected = 'properties';
+    }
+
+        $scope.addDatasetToLayer = function (datasourceID,entity)
+    {
+
+            if ($scope.selectedDts.id == undefined || $scope.selectedDts.id == datasourceID)
+                {
+                    datasourceModel.getEntitiesSchema(datasourceID,[entity],function(result){
+
+                        if (result.result == 1)
+                        {
+                            for (i in result.items)
+                            {
+                                result.items[i].datasourceID = datasourceID;
+                                $scope.selectedDts.id = datasourceID;
+
+                                for (e in result.items[i].elements)
+                                {
+                                    result.items[i].elements[e].datasourceID = datasourceID;
+                                    result.items[i].elements[e].collectionID = result.items[i].collectionID;
+                                    result.items[i].elements[e].collectionName = result.items[i].collectionName;
+                                }
+
+                                if (!$scope._Layer.params)
+                                    $scope._Layer.params = {};
+                                if (!$scope._Layer.params.schema)
+                                    $scope._Layer.params.schema = [];
+
+
+                                $scope._Layer.params.schema.push(result.items[i]);
+
+                                setTimeout(function () {
+
+                                for (var element in result.items[i].elements)
+                                    {
+                                        if (!result.items[i].elements[element].painted || result.items[i].elements[element].painted == false)
+                                        {
+                                            _addEndpoints(result.items[i].elements[element].elementID, [ "RightMiddle"], ["LeftMiddle"]);
+                                        }
+
+
+                                    }
+                                    var targetID = '#'+result.items[i].collectionID+'-parent';
+                                    setDraggable(".window");
+
+                                },100);
+
+                            }
+                        $scope.erDiagramInit();
+                        }
+                    });
+                } else {
+                    toastr.error('Datasource must be the same for all entities');
+                }
+
+
+
+    }
+
+    $scope.deleteObject = function()
+    {
+        //selectedItem" object="theSelectedElement
+        if ($scope.selectedItem == 'join')
+            {
+                deleteJoin($scope.theSelectedElement.sourceElementID,$scope.theSelectedElement.targetElementID);
+
+            }
+    }
+
+    /*
+    function collectionHighliter(collectionID)
+    {
+        var collectionsFound = [];
+        showAll();
+
+        for (var j in $scope.joins)
+                {
+                    var found = false;
+
+                    if ($scope.joins[j].foreign_collectionID == collectionID)
+                        {
+                            if (collectionsFound.indexOf($scope.joins[j].collectionID) == -1)
+                                collectionsFound.push($scope.joins[j].collectionID);
+                            found = true;
+                        }
+                    if ($scope.joins[j].collectionID == collectionID)
+                        {
+                            if (collectionsFound.indexOf($scope.joins[j].foreign_collectionID) == -1)
+                                collectionsFound.push($scope.joins[j].foreign_collectionID);
+                            found = true;
+                        }
+
+                    if (found == false)
+                        {
+                            $scope.instance.hide($scope.joins[j].joinID);
+                            $("#"+$scope.joins[j].joinID ).hide();
+                            $.each($scope.instance.getAllConnections(), function(idx, connection) {
+                                if (connection.id == $scope.joins[j].joinID)
+                                    {
+                                        connection.setVisible(false);
+                                        for (var e in connection.endpoints)
+                                            {
+                                              connection.endpoints[e].setVisible(false);
+                                            }
+                                    }
+
+                            });
+                        }
+
+                }
+
+
+
+        for (var t in $scope.tables)
+            {
+                if (collectionsFound.indexOf($scope.tables[t].collectionID) == -1 && $scope.tables[t].collectionID != collectionID)
+                   {
+                      $("#"+$scope.tables[t].collectionID+"-parent" ).hide();
+                   }
+
+            }
+
+
+    }
+
+     function showAll()
+    {
+        for (var t in $scope.tables)
+            {
+                $("#"+$scope.tables[t].collectionID+"-parent" ).show();
+            }
+        $.each($scope.instance.getAllConnections(), function(idx, connection) {
+
+            connection.setVisible(true);
+            for (var e in connection.endpoints)
+                {
+                  connection.endpoints[e].setVisible(true);
+                }
+        });
+    }
+
+
+
+
+    $(document).keyup(function(e){
+        if(e.keyCode == 46){
+            if(connection != null){
+                jsPlumb.detach(connection);
+                connection = null;
+            }
+
+            if($scope.theSelectedElement != null){
+                $scope.instance.remove($scope.theSelectedElement);
+                $scope.theSelectedElement = null;
+            }
+        }
+
+    })
+ */
 
 
 });
