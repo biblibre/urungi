@@ -13,27 +13,27 @@ MySQL
 
 MS SQL Server
 
-Oracle
+Oracle (1)
 
 Google Big Query
 
 # Requirements
 
-nodejs  (https://nodejs.org)
+[nodejs](https://nodejs.org)
 
-mongodb (https://www.mongodb.org)
+[mongodb](https://www.mongodb.org)
 
     mongodb is used to store the widestage metadata, you have to install it even if you are not going to explore mondodb data.
 
-npm (https://www.npmjs.com)
+[npm](https://www.npmjs.com)
 
-bower (http://bower.io)
+[bower](http://bower.io)
 
 - Optional
 
-    forever (https://www.npmjs.com/package/forever)
+    [forever](https://www.npmjs.com/package/forever)
 
-    nginx (http://nginx.org)
+    [nginx](http://nginx.org)
 
 # Installation
 
@@ -63,6 +63,15 @@ download and install the bower libraries
 be sure you choose the angular 1.5.5 when pointed to choose otherwise it will install 1.6.4 and widestage is not compatible with that version yet, also to be sure you can run  bower install angular#1.5.5 --save
     
     bower install
+
+
+# Oracle connections
+
+If you are going to use oracle connections, first you need to install in your server the Oracle instant client and then run the npm install oracledb
+[more info](https://github.com/oracle/node-oracledb)
+
+
+# Starting up the widestage server
 
 launch the application using:
     
