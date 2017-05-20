@@ -3400,3 +3400,29 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     font-size: 16px;
     color: #ccc;
 }
+
+.vertical-grid-data-column {
+    height: 40px;
+    overflow: hidden;
+    line-height: 40px;
+}
+
+.vertical-grid-label-column {
+    height: 40px;
+    overflow: hidden;
+    line-height: 40px;
+    background-color: #eee;
+    font-weight: bold;
+}
+
+.vertical-grid-record-container {
+    padding: 0px;
+    border-bottom: 2px solid #ccc;
+}
+
+.vertical-grid-column-container {
+    padding: 0px;
+    border-bottom: 1px solid #ccc;
+}
+
+

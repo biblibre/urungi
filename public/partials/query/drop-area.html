@@ -14,7 +14,7 @@
         </ul>
     </div>
 
-    <div ng-if="selectedReport.reportType == 'grid'" id="columnsPanel"  class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+    <div ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid'" id="columnsPanel"  class="container-fluid column-zone no-padding" drop="onDrop($data, $event, 'column')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="columns.length > 0">Drop here your columns</div>
         <ul class="ul-drop no-padding" ng-model="columns" ui-sortable="sortableOptions">
             <li class="column-box" ng-repeat="column in columns" >

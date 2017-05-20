@@ -874,7 +874,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.gettingData == true;
                 $scope.showOverlay('OVERLAY_reportLayout');
 
-                if ($scope.selectedReport.reportType == 'grid')
+                if ($scope.selectedReport.reportType == 'grid' || $scope.selectedReport.reportType == 'vertical-grid')
                     {
 
                         report_v2Model.getReport($scope.selectedReport,'reportLayout',$scope.mode, function(sql){
@@ -949,6 +949,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         if (newReportType == 'grid')
         {
             $scope.selectedReport.reportType = 'grid';
+        }
+        if (newReportType == 'vertical-grid')
+        {
+            $scope.selectedReport.reportType = 'vertical-grid';
         }
         if (newReportType == 'chart-bar')
         {

@@ -790,11 +790,9 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
    var fields = {};
 
-    //console.log('the filters before', query.groupFilters);
 
     var filters = getCollectionFiltersV2(collection, query.groupFilters);
 
-    //console.log('the filters', filters);
 
 
     for (var i in collection.columns) {
@@ -992,7 +990,6 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
         if (!isEmpty(sort)) aggregation.push({ $sort: sort });
 
 
-        //console.log('packet',params.page,dataSource.params[0].packetSize);
 
         //If there are joins, then we can´t set up limits...
         if (!thereAreJoins && (dataSource.params[0].packetSize > 0))
@@ -1006,10 +1003,9 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
             }*/
         }
 
-        console.log('aggregation',JSON.stringify(aggregation));
+
                 col.aggregate(aggregation, function(err, docs) {
 
-                    //console.log('docs',docs);
 
                     for (var i in docs) {
                         var item = {};
@@ -1063,13 +1059,12 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                         }
 
 
-                        //cambio de nombre añadiendo el nombre de la colección
 
 
                         var finalItem = {};
                         for (var field in item)
                         {
-//console.log('field name',field);
+
                             //columns for results
                             for (var e in collection.columns) {
                                 if (field == collection.columns[e].elementName ||
@@ -1085,8 +1080,14 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                                                                     var elementID = 'wst'+collection.columns[e].elementID.toLowerCase();
 
                                                         var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
-                                                        finalItem[elementName] = item[field];
-                                                            //console.log('element name',elementName);
+
+
+                                                            finalItem[elementName] = item[field];
+//IDENTIFY OBJECT ELEMENTS TO GENERATE DUPLICATE RECORDS FOR EVERY RESULT  i.e employees rankings.total
+//if( Object.prototype.toString.call( item[field] ) === '[object Array]' ) {
+  //  console.log('element name',elementName,field,item[field]);
+//}
+
                                                         }
 
                                 }
@@ -1117,7 +1118,7 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
                         result.push(finalItem);
                     }
-//console.log('the result',result);
+
                     collection.result = result;
                     db.close();
 

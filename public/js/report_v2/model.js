@@ -1,4 +1,4 @@
-app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,grid,bsLoadingOverlayService,connection,$routeParams) {
+app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,grid,bsLoadingOverlayService,connection,$routeParams,verticalGrid) {
 
     var report = {};
 
@@ -58,6 +58,71 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
     {
         var data = report.query.data;
 
+        if (data.length != 0)
+            {
+        switch(report.reportType)
+            {
+                case "grid":
+                    {
+                                var htmlCode = grid.extendedGridV2(report,mode);
+                                var el = document.getElementById(report.parentDiv);
+
+                                        if (el)
+                                        {
+                                            angular.element(el).empty();
+                                            var $div = $(htmlCode);
+                                            angular.element(el).append($div);
+                                            angular.element(document).injector().invoke(function($compile) {
+                                                var scope = angular.element($div).scope();
+                                                $compile($div)(scope);
+                                                hideOverlay(report.parentDiv);
+                                            });
+                                        }
+                    }
+                    break;
+                case "vertical-grid":
+                    {
+                                var htmlCode = verticalGrid.getVerticalGrid(report,mode);
+                                var el = document.getElementById(report.parentDiv);
+
+                                        if (el)
+                                        {
+                                            angular.element(el).empty();
+                                            var $div = $(htmlCode);
+                                            angular.element(el).append($div);
+                                            angular.element(document).injector().invoke(function($compile) {
+                                                var scope = angular.element($div).scope();
+                                                $compile($div)(scope);
+                                                hideOverlay(report.parentDiv);
+                                            });
+                                        }
+                    }
+                    break;
+                case 'chart-line':
+                case 'chart-donut':
+                case 'chart-pie':
+                case 'gauge':
+                    {
+                        if (report.reportType == 'chart-donut')
+                                    report.properties.chart.type = 'donut';
+                                if (report.reportType == 'chart-pie')
+                                    report.properties.chart.type = 'pie';
+                                if (report.reportType == 'gauge')
+                                    report.properties.chart.type = 'gauge';
+                        generatec3Chart(report,mode);
+                    }
+                    break;
+                case 'indicator':
+                    generateIndicator(report);
+                    break;
+
+        }
+
+            } else {
+                generateNoDataHTML()
+            }
+        /*
+
                 if (report.reportType == 'grid')
                             {
                                 //var htmlCode = grid.getUIGrid(report);
@@ -102,7 +167,10 @@ app.service('report_v2Model' , function (queryModel,c3Charts,reportHtmlWidgets,g
             } else {
                  generateNoDataHTML()
             }
+
+
                             }
+        */
 
     }
 

@@ -14,6 +14,7 @@
 <div id="reportType" class="container-fluid" ng-hide="queryID" style="width:100%">
     <!-- TYPE OF REPORT SELECTION -->
     <a id="reportTypeGrid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'grid', 'report-unselected-btn': selectedReport.reportType != 'grid'}" ng-click="changeReportType('grid')"><img src="/images/grid.png"></a>
+    <a id="reportTypeVerticalGrid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'vertical-grid', 'report-unselected-btn': selectedReport.reportType != 'vertical-grid'}" ng-click="changeReportType('vertical-grid')"><img src="/images/vertical_grid.png"></a>
     <a id="reportTypeChartLine" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'chart-line', 'report-unselected-btn': selectedReport.reportType != 'chart-line'}" ng-click="changeReportType('chart-line')"><img src="/images/chart_line.png"></a>
     <a id="reportTypeChartDonut" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'chart-donut', 'report-unselected-btn': selectedReport.reportType != 'chart-donut'}" ng-click="changeReportType('chart-donut')"><img src="/images/chart_donut.png"></a>
     <a id="reportTypeIndicator" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'indicator', 'report-unselected-btn': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="/images/indicator.png"></a>
