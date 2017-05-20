@@ -36,9 +36,6 @@ this.getVerticalGrid = function(report,mode)
             if (!theProperties.rowBottomLineWidth) theProperties.rowBottomLineWidth = 1;
             if (!theProperties.columnLineWidht) theProperties.columnLineWidht = 0;
 
-            //margins
-            //paddings
-
             if (theProperties)
                 {
                     reportStyle += 'background-color:'+theProperties.backgroundColor+';';
@@ -76,21 +73,7 @@ this.getVerticalGrid = function(report,mode)
             htmlCode += '<div ng-if="getQuery(\''+hashedID+'\').data.length == 0" >No data found</div>';
 
             htmlCode += '</div>';
-/*
-            htmlCode += '<div class="repeater-data">';
-                    for(var i in columns)
-                    {
-                        //var elementName = columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName;
-                        var elementID = 'wst'+columns[i].elementID.toLowerCase();
-                        var elementName = elementID.replace(/[^a-zA-Z ]/g,'');
-                        //var elementName = 'wst'+columns[i].elementID.toLowerCase();
-                        if (columns[i].aggregation)
-                            //elementName = columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName+columns[i].aggregation;
-                            elementName = elementName+columns[i].aggregation;
-                        htmlCode += '<div class=" calculus-data-column '+colClass+' " style="'+colWidth+'"> '+calculateForColumn(report,i,elementName)+' </div>';
-                    }
-            htmlCode += '</div> </div>';
-    */
+
 
     htmlCode += '</div>';
             return htmlCode;

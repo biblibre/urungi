@@ -13,7 +13,6 @@ app.service('dataElements' , function () {
     this.getElementValue = function(element,dataColumnClass)
     {
         var htmlCode = '';
-        //var columnDefaultStyle = 'height:40px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;';
         var columnDefaultStyle = '';
 
 
