@@ -129,7 +129,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
 
     /**** JSPLUMB variables and functions ****/
-
+/*
     var rightJoinType = {
                 connector: "StateMachine",
                 paintStyle: { strokeStyle: "#61B7CF", lineWidth: 4 },
@@ -150,7 +150,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 ]
 
             };
-
+*/
 
     var connectorPaintStyle = {
                     lineWidth: 4,
@@ -378,19 +378,10 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
 
     $scope.save = function() {
-        if ($scope.mode == 'add') {
-            $scope._Layer.objects = $scope.rootItem.elements;
-            var data = $scope._Layer;
-            connection.post('/api/layers/create', data, function(data) {
-                $scope.items.push(data.item);
-                //$scope.cancel();
-                $('#layerModal').modal('hide');
-            });
 
-        } else {
+            var theLayer = $scope._Layer;
 
-        var theLayer = $scope._Layer;
-            //clean parameters just for the view...
+            //clean up
 
             for (var collection in theLayer.params.schema)
             {
@@ -401,6 +392,21 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 }
             }
 
+            for (var join in theLayer.params.joins)
+                {
+                    theLayer.params.joins[join].connection = undefined;
+                }
+
+
+        if ($scope.mode == 'add') {
+            theLayer.objects = $scope.rootItem.elements;
+            var data = theLayer;
+            connection.post('/api/layers/create', data, function(data) {
+                $scope.items.push(data.item);
+                $('#layerModal').modal('hide');
+            });
+
+        } else {
             connection.post('/api/layers/update/'+theLayer._id, theLayer, function(result) {
                 if (result.result == 1) {
                     window.history.back();
@@ -408,6 +414,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             });
         }
     };
+
 
     $scope.getLayers = function(page, search, fields) {
 
@@ -748,7 +755,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 hoverPaintStyle: { strokeStyle: "blue" },
                 overlays: [
                     //["Diamond" , { location: 1 }]
-                    ["Label" , { location: 0.88,label:'[right]',labelStyle:{cssClass:'leftJoinType',color:'#000',font:'bold 20px ER',fill:' #fff no-repeat fixed center'} }]
+                    ["Label" , { location: 0.88,label:'[right]',labelStyle:{cssClass:'leftJoinType',color:'#000',font:'bold 14px ER',fill:' #fff no-repeat fixed center'} }]
                 ]
 
             };
@@ -761,7 +768,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
                 overlays: [
                     //["Diamond" , { location: 0 }]
                     // zero one many ["Label" , { location: 0.02,label:'>|*',labelStyle:{cssClass:'leftJoinType',color:'#61B7CF',font:'bold 42px ER',fill:' #fff no-repeat fixed center'} }]
-                    ["Label" , { location: 0.10,label:'[left]',labelStyle:{cssClass:'leftJoinType',color:'#000',font:'bold 20px ER',fill:' #fff no-repeat fixed center'} }]
+                    ["Label" , { location: 0.10,label:'[left]',labelStyle:{cssClass:'leftJoinType',color:'#000',font:'bold 14px ER',fill:' #fff no-repeat fixed center'} }]
                 ]
 
             };
@@ -1534,17 +1541,18 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
     $scope.getCollectionElements = function(collectionID)
     {
+            if ($scope._Layer)
                 if ($scope._Layer.params) {
-                    if ($scope._Layer.params.schema) {
-                        if ($scope._Layer.params.schema.length > 0) {
-                            for (var e in $scope._Layer.params.schema)
-                                {
-                                    if ($scope._Layer.params.schema[e].collectionID == collectionID)
-                                        return $scope._Layer.params.schema[e].elements;
-                                }
+                        if ($scope._Layer.params.schema) {
+                            if ($scope._Layer.params.schema.length > 0) {
+                                for (var e in $scope._Layer.params.schema)
+                                    {
+                                        if ($scope._Layer.params.schema[e].collectionID == collectionID)
+                                            return $scope._Layer.params.schema[e].elements;
+                                    }
+                            }
                         }
                     }
-                }
 
 
 
@@ -1609,14 +1617,8 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
     {
         unSelect();
         $scope.selectedItem = 'layer';
-        $scope.theSelectedElement = $scope._layer;
+        $scope.theSelectedElement = $scope._Layer;
         $scope.tabs.selected = 'properties';
-
-
-        if ($scope.joinMode)
-          {
-            //showAll();
-          }
     }
 
     function unSelect()
@@ -1655,7 +1657,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
            unSelect();
         }
 
-       // $scope.tabs.selected = 'properties';
         $scope.selectedItem = 'collection';
         $scope.theSelectedElement = theCollection;
         $scope.selected_name = theCollection.table_name;
@@ -1664,8 +1665,9 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         //if ($scope.joinMode)
           //  collectionHighliter(theCollection.collectionID);
 
-        if ($scope.selectedElements.indexOf(theCollection.collectionID) == -1)
-            $scope.selectedElements.push(theCollection.collectionID);
+        if ($scope.selectedElements)
+            if ($scope.selectedElements.indexOf(theCollection.collectionID) == -1)
+                $scope.selectedElements.push(theCollection.collectionID);
 
         setSelectedElements();
 
@@ -1676,7 +1678,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
     {
         event.stopPropagation();
         unSelect();
-       // $scope.tabs.selected = 'properties';
         $scope.selectedItem = 'element';
         $scope.theSelectedElement = theElement;
         $scope.selected_name = theElement.column_name;
@@ -1688,8 +1689,11 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
             $scope.selected_primary_key = true
             else
             $scope.selected_primary_key = false;
-        if ($scope.selectedElements.indexOf(theElement.elementID) == -1)
+
+        if ($scope.selectedElements)
+            if ($scope.selectedElements.indexOf(theElement.elementID) == -1)
                 $scope.selectedElements.push(theElement.elementID);
+
         setSelectedElements();
     }
 
@@ -1765,14 +1769,27 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
     }
 
-    $scope.deleteObject = function()
+    $scope.deleteObject = function(object,objectType)
     {
-        //selectedItem" object="theSelectedElement
         if ($scope.selectedItem == 'join')
             {
                 deleteJoin($scope.theSelectedElement.sourceElementID,$scope.theSelectedElement.targetElementID);
+                unSelect();
 
             }
+        if ($scope.selectedItem == 'collection')
+            {
+                $scope.deleteCollection($scope.theSelectedElement);
+                unSelect();
+            }
+
+    }
+
+    function unSelect()
+    {
+        $scope.selectedItem = '';
+        $scope.theSelectedElement = undefined;
+        $scope.tabs.selected = 'elements';
     }
 
     /*

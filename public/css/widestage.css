@@ -3343,7 +3343,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 
 .layer-elements-tree {
     position: absolute;
-    top: 35px;
+    top: 55px;
     bottom: 0px;
     width: 95%;
 }
@@ -3372,10 +3372,11 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
 .layer-add-new-folder-btn {
-        margin-left: 5px;
+    margin-left: 5px;
     margin-right: 10px;
     background-color: transparent;
-    border: 1px solid #fff;
+    border: 1px solid #000;
+    color: #000;
 }
 
 .layer-inner {
@@ -3425,4 +3426,165 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     border-bottom: 1px solid #ccc;
 }
 
+.control-label .properties {
 
+}
+
+#layerObjectProperties .control-label {
+    color : #ccc;
+    font-weight: normal;
+        font-size: 10px;
+}
+
+#layerObjectProperties .tool-set {
+    padding: 0px;
+    /*border: 1px solid #fff;
+    border-radius: 5px;*/
+    margin: 5px;
+    margin-bottom: 20px;
+}
+
+#layerObjectProperties .tool-set .container-fluid {
+    background-color:#ccc;
+    padding:0px;
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    padding-left: 5px;
+    color:#000;
+}
+
+#layerObjectProperties .main {
+    padding: 0px;
+    /*border: 1px solid #fff;*/
+    margin: 5px;
+    background-color: #272c33;
+    padding-top: 0px;
+    /*border-radius: 5px;*/
+}
+
+.leftJoinType
+{
+    z-index: 100;
+    font-size: 12px;
+    /* background-color: #ccc; */
+    padding: 2px;
+}
+
+#elementsTab .tool-set
+{
+    background-color: #ccc;
+    padding: 0px;
+    margin: 10px;
+    margin-right: 30px;
+
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    padding-left: 5px;
+    color: #000;"
+}
+
+#layerObjectProperties input {
+        height: 20px;
+    font-size: 10px;
+}
+
+#layerObjectProperties .form-group {
+    margin-bottom: 5px;
+}
+
+#layerObjectProperties textarea {
+    overflow: hidden;
+    word-wrap: break-word;
+    resize: horizontal;
+    height: 100px;
+    font-size: 10px;
+}
+
+#layerObjectProperties select {
+        height: 20px;
+    font-size: 10px;
+}
+
+#layerObjectProperties .panel-tabs {
+    background-color: transparent;
+    padding: 0px;
+    margin: 0px;
+}
+
+#layerObjectProperties  .panel.panel-tabs>.panel-heading .nav-tabs>li>a
+{
+    height: 20px;
+    margin-left:0px;
+    top: 0px;
+    background-color: #3f4652;
+}
+
+#layerObjectProperties .panel.panel-tabs>.panel-heading .nav-tabs>li.active>a
+{
+    background-color: #272c33;
+    color: #fff;
+}
+
+.panel.panel-tabs>.panel-body {
+    background-color: transparent;
+    padding: 0px;
+}
+
+
+#layerObjectProperties .nav.nav-tabs + .tab-content {
+     background: transparent;
+     padding: 0px;
+     margin-bottom: 0px;
+}
+
+#layerObjectProperties .nav.nav-tabs>li>a {
+     margin-right: 0px;
+     padding: 5px;
+
+     cursor: pointer;
+    background-color: #3f4652;
+    color: #ccc;
+    border-radius: 0px;
+}
+
+#layerObjectProperties .nav.nav-tabs > li.active > a {
+    border: 0;
+    background-color: #272c33;
+    color: #fff;
+}
+
+#layerObjectProperties .tab-container {
+    padding-bottom: 20px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 20px;
+    min-height: 300px;
+}
+
+#layerObjectProperties .help-block {
+    color: #fff;
+    font-size: 10px;
+}
+
+#layerObjectProperties .help-block a {
+    color: #ccc;
+    cursor: pointer;
+    text-align: right;
+}
+
+#elementModal .panel-body {
+    background-color: #fff;
+    padding: 10px;
+    min-height: 250px;
+}
+
+#elementModal .modal-body {
+    background-color: #eee;
+}
+
+#layerObjectProperties .main-properties-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
