@@ -6,7 +6,6 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
     $scope.sqlModal = 'partials/layer/sqlModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';
     $scope.statusInfoModal = 'partials/common/statusInfo.html';
-    $scope.datasetPropertiesModal  = 'partials/layer/datasetPropertiesModal.html';
     $scope.setupModal = 'partials/layer/setupModal.html';
     $scope.ReadOnlyDataSourceSelector = false;
     $scope.items =  [];
@@ -1086,12 +1085,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
         $scope.$apply();
     }
 
-    $scope.collectionClicked = function (collection)
-    {
-        $scope.selectedCollection = collection;
-        $('#datasetPropertiesModal').modal('show');
 
-    }
 
     $scope.elementAdd = function (element)
     {
@@ -1472,7 +1466,7 @@ app.controller('layerCtrl', function ($scope,$rootScope,connection,$routeParams,
 
         }
 
-        $('#datasetPropertiesModal').modal('hide');
+
         $scope.selectedCollection = undefined;
 
 
