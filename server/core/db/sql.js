@@ -729,39 +729,68 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
 
                 for (var f in query.order)
                 {
-
                     var theOrderField = query.order[f];
                     var theOrderFieldName = '';
+                    var theShortOrderFieldName = '';
+                    var elementID = 'wst'+theOrderField.elementID.toLowerCase();
+                    var theElementID = elementID.replace(/[^a-zA-Z ]/g,'');
 
                     if (theOrderField.aggregation) {
                         found = true;
+                        var AGG = theOrderField.aggregation.toUpperCase();
+
+                        theSortOrderFieldName =     AGG+'('+theOrderField.collectionID+'.'+theOrderField.elementName+')';
+                        theOrderFieldName = theSortOrderFieldName+ ' as '+theElementID+theOrderField.aggregation;
+
+                        /*
                         switch (theOrderField.aggregation) {
-                            case 'sum': theOrderFieldName = ('SUM('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName+'sum');
+                            case 'sum': {
+                                theSortOrderFieldName = 'SUM('+theOrderField.collectionID+'.'+theOrderField.elementName+')';
+                                theOrderFieldName = theSortOrderFieldName+ ' as '+theElementID+'sum';
+                                }
                                 break;
-                            case 'avg': theOrderFieldName = ('AVG('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName+'avg');
+                            case 'avg': {
+                                theShortOrderFieldName =
+                                theOrderFieldName = ('AVG('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theElementID+'avg');
+                                } break;
+                            case 'min': theOrderFieldName = ('MIN('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theElementID+'min');
                                 break;
-                            case 'min': theOrderFieldName = ('MIN('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName+'min');
+                            case 'max': theOrderFieldName = ('MAX('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theElementID+'max');
                                 break;
-                            case 'max': theOrderFieldName = ('MAX('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName+'max');
-                                break;
-                            case 'count': theOrderFieldName = ('COUNT('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName+'count');
-                        }
+                            case 'count': theOrderFieldName = ('COUNT('+theOrderField.collectionID+'.'+theOrderField.elementName+')'+ ' as '+theElementID+'count');
+                        }*/
                     } else {
-                        theOrderFieldName = (theOrderField.collectionID+'.'+theOrderField.elementName + ' as '+theOrderField.collectionID.toLowerCase()+'_'+theOrderField.elementName);
+                        theSortOrderFieldName = theOrderField.collectionID+'.'+theOrderField.elementName;
+                        theOrderFieldName = theSortOrderFieldName + ' as '+theElementID;
 
                     }
+
+
+                    var sortType = '';
+                    if (query.order[f].sortType == 1)
+                            sortType = ' DESC';
+
                     var theIndex = fields.indexOf(theOrderFieldName);
+
                     if (theIndex >= 0)
                     {
-                        var sortType = '';
-                        if (query.order[f].sortType == 1)
-                            sortType = ' DESC';
+                        //The order by field is in the result set
                         if (theOrderByString == '')
                             theOrderByString += (theIndex +1)+ sortType;
                         else
                             theOrderByString += ', '+(theIndex +1) + sortType;
+                    } else {
+                        //No index, the field is not in the result set
+                        if (theOrderByString == '')
+                            theOrderByString += theSortOrderFieldName+ sortType;
+                        else
+                            theOrderByString += ', '+theSortOrderFieldName + sortType;
+
                     }
                 }
+
+                console.log('order by string', theOrderByString);
+
 
                 if (theOrderByString != '')
                     SQLstring += ' ORDER BY ' + theOrderByString;
