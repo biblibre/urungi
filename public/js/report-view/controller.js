@@ -1,4 +1,4 @@
-app.controller('report_viewCtrl', function ($scope,$routeParams,report_v2Model,queryModel,connection,bsLoadingOverlayService,uiGridConstants,widgetsCommon) {
+app.controller('report_viewCtrl', function ($scope,$routeParams,report_v2Model,queryModel,connection,bsLoadingOverlayService,widgetsCommon) {
 
 $scope.promptsBlock = 'partials/report/promptsBlock.html';
 $scope.dateModal = 'partials/report/dateModal.html';
