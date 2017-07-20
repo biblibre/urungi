@@ -22,6 +22,10 @@
     <div class="explorer-body" style="background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDguNSBMIDM0IDguNSBNIDguNSAwIEwgOC41IDM0IE0gMCAxNyBMIDM0IDE3IE0gMTcgMCBMIDE3IDM0IE0gMCAyNS41IEwgMzQgMjUuNSBNIDI1LjUgMCBMIDI1LjUgMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDM0IDAgTCAwIDAgMCAzNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=&quot;);
     ">
 
+        <div id="select-box" ng-hide="dragging" >
+
+        </div>
+
     <section page-block ndType="page" ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered ng-scope" style="padding:10px;">
 
     </section>
@@ -34,9 +38,7 @@
                             <i class="fa fa-gear" ></i>
                         </div>
                         <div class="object-panel-header-inner">
-                                <!--<i class="toggle-button fa-minus-circle"  ng-click="toggle();$event.stopPropagation()" role="button" tabindex="0" style="right: 5px;
-                position: absolute;
-                font-size: 20px;"></i>-->
+
 
                         </div>
 
@@ -68,7 +70,7 @@
             <section class="layer scrollPane">
                 <div class="layer-inner-reports">
 
-                    <wst-widget-properties element="selectedElement" properties="selectedReport.properties" dashboard="selectedDashboard" on-change="onChangeElementProperties" bl-color-picker></wst-widget-properties>
+                    <wst-inspector element="selectedElement" properties="selectedReport.properties" dashboard="selectedDashboard" on-change="onChangeElementProperties"></wst-inspector>
 
                 </div>
             </section>
@@ -154,49 +156,77 @@
                         <div class="searchGroup hasContent" style="height: 2872px;">
                             <div class="row gallery infoPanelGallery templateGallery laidOut" style="padding-left: 25px;">
 
-                                <!--<div draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{type: 'jumbotron'}"
-                                     drag-start="onDragStart()" drag-end="onDragEnd()">
-                                    <img   src="https://d28pzkwbso7p1u.cloudfront.net/ndDesigner/images/catalog/layout_jumbotron.png" width="200" height="50" style="height: 50px;">
-                                </div>-->
+                                <div  style="width:200px">
+                                    <div class="col-md-6" style="padding:0px;padding-right:1px;">
+                                        <div id="element-btn" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'paragraph'}"  >
+                                            <i class="fa fa-paragraph"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="padding:0px;padding-left:1px;">
+                                        <div id="element-btn" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'heading'}"  >
+                                            <i class="fa fa-header"></i>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                <!--<div  x-lvl-draggable="true" data-color="navbar" style="margin-bottom: 5px">
-                                    <img   src="modules/designer/images/layout_navbar.png" width="200" height="16" style="height: 16px;">
-                                </div>-->
+                                <div  style="width:200px">
+                                    <div class="col-md-6" style="padding:0px;padding-right:1px;">
+                                        <div id="element-btn" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'image'}"  >
+                                            <i class="fa fa-picture-o"></i>
 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="padding:0px;padding-left:1px;">
+                                        <div id="element-btn" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'video'}"  >
+                                            <i class="fa fa-play"></i>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div data-color="jumbotron" effect-allowed="copy"  style="margin-bottom: 5px" draggable="true" draggable-type="custom-object" id="5c025c3c-2dcb-a4b4-488a-01dbf3e54fbc" draggable-data="{
                                     objectType: 'jumbotron'}">
-                                    <img src="images/layout_jumbotron.png" width="200" height="50" style="height: 50px;">
+                                    <img src="images/layout_jumbotron.png" width="200" height="50" style="height: 50px;width: 200px;">
                                 </div>
                                 <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: '4colscta'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c0" class="">
 
-                                    <img src="images/layout_4cols_cta.png" width="200" >
+                                    <img src="images/layout_4cols_cta.png" width="200" style="height: 50px;width: 200px;">
                                 </div>
 
                                 <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: '3colscta'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4c0" class="">
 
-                                    <img src="images/layout_3cols_cta.png" width="200" >
+                                    <img src="images/layout_3cols_cta.png" width="200" style="height: 50px;width: 200px;">
                                 </div>
                                 <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: '2colscta'}" style="margin-bottom: 5px" id="b79177e2-9eae-d919-f544-5ee126dff4dd" class="">
 
-                                    <img src="images/layout_2cols_cta.png" width="200" >
+                                    <img src="images/layout_2cols_cta.png" width="200" style="height: 50px;width: 200px;">
                                 </div>
                                 <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'imageTextLarge'}"  style="margin-bottom: 5px"  id="953bd17f-45d8-9daf-3bde-92f4809bdf07" class="">
 
-                                    <img src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px;">
+                                    <img src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px;width: 200px;">
                                 </div>
                                 <div draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'textImageLarge'}" style="margin-bottom: 5px" id="b512bcc4-dd1d-2a33-2246-69671ae9430d">
 
-                                    <img src="images/layout_block_text_image_large.png" width="200" height="50">
+                                    <img src="images/layout_block_text_image_large.png" width="200" height="50" style="height: 50px;width: 200px;">
                                 </div>
                                 <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'divider'}" style="margin-bottom: 5px"  id="4f8c0bca-7d8f-9bad-2354-309b48a37764">
 
-                                    <img src="images/layout_featurete_divider.png" width="200" height="50">
+                                    <img src="images/layout_featurete_divider.png" width="200" height="15" style="height: 15px;width: 200px;">
                                 </div>
+                                <!--
                                 <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'tabs'}"  style="margin-bottom: 5px"  id="953bd17f-d45d8-9daf-3bde-92f4809bdf07" class="">
 
                                     <img src="images/tabs.png" width="200" height="50" style="height: 50px;">
                                 </div>
+                                -->
+                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'pageHeader'}"  style="margin-bottom: 5px"  id="953bd17f-d45d8-9daf-3bde-92f4809bdf07" class="">
+                                    <img src="images/layout-page-header.png" width="200" height="50" style="height: 50px;width: 200px;">
+                                </div>
+                                <!--
+                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'definitionList'}"  style="margin-bottom: 5px"  id="953bd17f-d45d8-9daf-3bde-92f4809bdf07" class="">
+                                    <img src="images/layout-definition-list.png" width="200" height="50" style="height: 50px;width: 200px;">
+                                </div> -->
+
+
 
                             </div>
                         </div>

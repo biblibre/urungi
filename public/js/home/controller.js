@@ -5,7 +5,6 @@ app.controller('homeCtrl', ['$scope', '$rootScope','$sessionStorage','connection
     $scope.notificationsNbr = 0;
     $scope.alertsNbr = 0;
     $scope.subPage = 'js/report/list.html';
-    //$scope.data = $rootScope.user.companyData.publicSpace;
 
     connection.get('/api/get-counts', {}, function(data) {
             $rootScope.counts = data;

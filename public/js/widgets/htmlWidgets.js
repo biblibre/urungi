@@ -163,12 +163,55 @@ app.service('htmlWidgets' , function () {
 
     this.getDivider = function()
     {
-    return '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >'+
-            '<hr class="featurette-divider" ndType="featureteDivider">'+
-            '</div>';
+    return '<hr page-block class="featurette-divider" ndType="featureteDivider" style="padding: 5px;">';
 
     }
 
+
+    this.getImage = function(imageURL)
+    {
+        return   '<img page-block ndtype="image" class="img-responsive" src="'+imageURL+'" class="">';
+
+    }
+
+    this.getVideo = function()
+    {
+        var url = 'https://www.youtube.com/embed/OTsmsIeybQo';
+
+        return   '<div page-block ndtype="container" class="embed-responsive embed-responsive-16by9" >'+
+            '<iframe page-block ndtype="video" class="embed-responsive-item" src="'+url+'" style="padding: 5px;"></iframe>'+
+            '</div>';
+    }
+
+    this.getParagraph = function()
+    {
+        return '<p page-block ndtype="paragraph" class="editable" >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>';
+    }
+
+    this.getPageHeader = function()
+    {
+        return '<div page-block ndtype="page-header" class="page-header"><h1 page-block ndtype="heading" class="editable">Lorem Ipsum</h1><p page-block ndtype="paragraph" class="editable">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p></div>';
+    }
+
+    this.getDefinitionList = function()
+    {
+        return '<dl page-block style="padding:5px;" ndType="dl"><dt page-block class="editable" ndType="dt">Lorem ipsum</dt><dd page-block ndType="dd" class="editable">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor... </dd><dt page-block ndType="dt" class="editable">Lorem ipsum</dt><dd page-block class="editable" ndType="dd">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</dd></dl>';
+    }
+
+    this.getBlockQuote = function()
+    {
+
+    }
+
+    this.getUnOrderedList = function()
+    {
+
+    }
+
+    this.getHeading = function()
+    {
+        return '<h2 page-block ndtype="heading" class="editable">Lorem Ipsum</h2>';
+    }
 
 
 });

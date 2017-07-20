@@ -3326,8 +3326,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     bottom: 0px;
     padding: 0 18px 18px 0;
     box-sizing: border-box;
-    overflow-y: scroll;
-    /*background-color: #CCCCCC;*/
+    overflow-y: auto;
         margin-left: 5px;
     margin-bottom: 10px;
     margin-right:5px;
@@ -3599,3 +3598,9 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+    #objectPanel input {
+        background-color: #272c33;
+        border: 0px;
+        color: white;
+    }

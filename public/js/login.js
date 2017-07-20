@@ -219,6 +219,7 @@ angular.module('widestage-login').run(['$http', '$rootScope', '$sce', '$sessionS
         var host = $('#host').attr('value');
         window.location.href="/#/home";
     };
+
 }]);
 
 

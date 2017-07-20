@@ -4,7 +4,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     $scope.publishModal  = 'partials/report/publishModal.html';
     $scope.settingsHtml = 'partials/pages/settings.html';
     $scope.queriesHtml = 'partials/pages/queries.html';
-    $scope.settingsTemplate = 'partials/widgets/common.html';
+    $scope.settingsTemplate = 'partials/widgets/inspector.html';
     $scope.filterWidget = 'partials/report_v2/filterWidget.html';
     $scope.promptModal = 'partials/widgets/promptModal.html';
 
@@ -514,7 +514,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                             {
 
                                 if ( angular.element('#REPORT_'+$scope.selectedDashboard.reports[i].id).length ){
-                                        noty({text: 'Sorry, that report is already on the board',  timeout: 6000, type: 'error'});
+                                        noty({text: 'Sorry, that report is already on the dash',  timeout: 6000, type: 'error'});
                                     } else {
                                         var html = report_v2Model.getReportContainerHTML(customObjectData.reportID);
                                         createOnDesignArea(html,function(){});
@@ -531,7 +531,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                         if ($scope.prompts[i].elementID == customObjectData.promptID)
                             {
                                 if ( angular.element('#PROMPT_'+$scope.prompts[i].elementID).length ){ // || angular.element('#CHART_'+$scope.selectedDashboard.reports[i].id).length ) {
-                                    noty({text: 'Sorry, that filter is already on the board',  timeout: 6000, type: 'error'});
+                                    noty({text: 'Sorry, that filter is already on the dash',  timeout: 6000, type: 'error'});
                                     } else {
                                         var html = report_v2Model.getPromptHTML($scope.prompts[i])
                                         createOnDesignArea(html,function(){});
@@ -551,6 +551,40 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             var html = getTabsHTML(theid,theTabs);
             createOnDesignArea(html,function(){});
         }
+
+        if (customObjectData.objectType == 'image') {
+            $rootScope.openGalleryModal(function(url) {
+                var html = htmlWidgets.getImage(url);
+                createOnDesignArea(html,function(){});
+            });
+        }
+
+        if (customObjectData.objectType == 'video') {
+            var html = htmlWidgets.getVideo();
+            createOnDesignArea(html,function(){});
+        }
+
+        if (customObjectData.objectType == 'paragraph') {
+            var html = htmlWidgets.getParagraph();
+            createOnDesignArea(html,function(){});
+        }
+
+        if (customObjectData.objectType == 'heading') {
+            var html = htmlWidgets.getHeading();
+            createOnDesignArea(html,function(){});
+        }
+
+        if (customObjectData.objectType == 'pageHeader') {
+            var html = htmlWidgets.getPageHeader();
+            createOnDesignArea(html,function(){});
+        }
+
+        if (customObjectData.objectType == 'definitionList') {
+            var html = htmlWidgets.getDefinitionList();
+            createOnDesignArea(html,function(){});
+        }
+
+
         /*
             if (customObjectData.objectType == 'image')
             {
@@ -1447,6 +1481,10 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     }
             }
     }
+
+    $scope.$on('element.reselected', function(e, node) {
+        $scope.tabs.selected = 'settings';
+    });
 
 
 

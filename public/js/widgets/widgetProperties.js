@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('wstWidgetProperties', function($rootScope,$compile,icons,c3Charts) {
+app.directive('wstWidgetProperties', function($compile,icons,c3Charts,$rootScope, Inspector) {
 return {
     transclude: true,
     scope: {
@@ -12,7 +12,7 @@ return {
         wstMode: '@'
     },
 
-   templateUrl: "partials/widgets/common.html",
+   templateUrl: "partials/widgets/inspector.html",
 
     // append
     replace: true,
@@ -20,6 +20,28 @@ return {
     restrict: 'E',
     // linking method
     link: function($scope, element, attrs) {
+    /*
+    $scope.textStyles = {};
+    $scope.textStyles.baseFonts =
+    [
+        {data-font-family:"Impact, Charcoal, sans-serif", value:"Impact, Charcoal, sans-serif",label:"Impact"},
+        {data-font-family:"&quot;Comic Sans MS&quot;, cursive, sans-serif", value:"&quot;Comic Sans MS&quot;, cursive, sans-serif",label:"Comic Sans"},
+        {data-font-family:"&quot;Arial Black&quot;, Gadget, sans-serif", value:"&quot;Arial Black&quot;, Gadget, sans-serif",label:"Arial Black"},
+        {data-font-family:"Century Gothic, sans-serif", value:"Century Gothic, sans-serif",label:"Century Gothic"},
+        {data-font-family:"&quot;Courier New&quot;, Courier, monospace", value:"&quot;Courier New&quot;, Courier, monospace",label:"Courier New"},
+        {data-font-family:"&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif", value:"&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif",label:"Lucida Sans"},
+        {data-font-family:"&quot;Times New Roman&quot;, Times, serif", value:"&quot;Times New Roman&quot;, Times, serif",label:"Times New Roman"},
+        {data-font-family:"&quot;Lucida Console&quot;, Monaco, monospace", value:"&quot;Lucida Console&quot;, Monaco, monospace",label:"Lucida Console"},
+        {data-font-family:"&quot;Andele Mono&quot;, monospace, sans-serif", value:"&quot;Andele Mono&quot;, monospace, sans-serif",label:"Andele Mono"},
+        {data-font-family:"Verdana, Geneva, sans-serif", value:"Verdana, Geneva, sans-serif",label:"Verdana"},
+        {data-font-family:"&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif", value:"&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif",label:"Helvetica Neue"}
+    ];
+
+
+    $scope.textStyles.fontWeights =
+        ['100','200','300','400','500','600','700','800','900','bold','bolder','light','lighter','normal'];
+
+      */
         switch (attrs['type']) {
             case "text":
                 // append input field to "template"
@@ -27,6 +49,22 @@ return {
                 // append select dropdown to "template"
         }
 
+        $scope.openImageGallery = function(target) {
+            $rootScope.openGalleryModal(function(url) {
+
+                $scope.setBackgroundImage(url);
+                console.log(url);
+            });
+        };
+
+
+        Inspector.onElementChange(function(element) {
+            $scope.element = element;
+            $scope.$apply(function() {
+                getElementProperties();
+            });
+
+        });
 
 
 
@@ -41,19 +79,36 @@ return {
       $scope.changeCSS = function(cssProperty,value)
         {
                     if (cssProperty == '')
-                            $rootScope.selectedElement.css(cssProperty,"");
+                            $scope.selectedElement.css(cssProperty,"");
                             else
-                            $rootScope.selectedElement.css(cssProperty,value);
+                            $scope.selectedElement.css(cssProperty,value);
         }
 
       $scope.$watch('backgroundColor', function(){
-
-
+        console.log('watch backgroundColor');
           if ($scope.gettingElementProperties == false)
               {
-                  if ($rootScope.selectedElement)
+                if ($scope.selectedChart)
+                {
+                    console.log($scope.selectedChart);
+                    $scope.selectedChart.backgroundColor = $scope.backgroundColor;
+                }
+
+                  if ($rootScope.selectedElement) {
+                    var elementID = String($rootScope.selectedElement.attr('id')).split('_');
+
+                    if (elementID[0] == 'REPORT' && $scope.dashboard) {
+                        for (var i in $scope.dashboard.reports) {
+                            if ($scope.dashboard.reports[i].id == elementID[1]) {
+                                $scope.dashboard.reports[i].properties.backgroundColor = $scope.backgroundColor;
+                                break;
+                            }
+                        }
+                    }
+
                     $rootScope.selectedElement.css({'background-color': $scope.backgroundColor});
-                  if ($scope.dashboard)
+                  }
+                  else if ($scope.dashboard)
                       $scope.dashboard.backgroundColor = $scope.backgroundColor;
               //saveProperties();
               }
@@ -61,7 +116,7 @@ return {
 
 
       $scope.$watch('properties', function(){
-
+          console.log('the properties');
 $scope.gettingElementProperties = true;
                     getElementProperties();
                     if ($scope.properties)
@@ -76,11 +131,12 @@ $scope.gettingElementProperties = true;
                             $scope.headerBackgroundColor = $scope.properties.headerBackgroundColor;
                             $scope.headerHeight = $scope.properties.headerHeight;
                             $scope.height = $scope.properties.height;
-
+                            console.log('alarm');
                             //$scope.headerBottomLineColor = $scope.properties.headerBottomLineColor;
                             $scope.headerBottomLineWidth = $scope.properties.headerBottomLineWidth;
                             $scope.rowBottomLineWidth = $scope.properties.rowBottomLineWidth;
                             $scope.rowBorderColor = $scope.properties.rowBorderColor;
+                            console.log('this is the row color',$scope.rowBorderColor);
                             $scope.columnLineWidth = $scope.properties.columnLineWidth;
                         }
     $scope.gettingElementProperties = false;
@@ -88,14 +144,15 @@ $scope.gettingElementProperties = true;
       });
 
     $scope.$watch('properties.headerBottomLineColor', function(){
+        console.log('visto',$scope.gettingElementProperties);
         if ($scope.gettingElementProperties == false)
             $scope.onChange();
     });
 
-    $scope.$watch('backgroundImage', function(){
-        if ($rootScope.selectedElement && $scope.gettingElementProperties == false)
+    /*$scope.$watch('backgroundImage', function(){
+        if ($scope.selectedElement && $scope.gettingElementProperties == false)
             {
-                  var theElement = $rootScope.selectedElement;
+                  var theElement = $scope.selectedElement;
                 if ($scope.backgroundImage != undefined &&  $scope.backgroundImage != 'none')
                     {
                      theElement.css({ 'background-image': "url('"+$scope.backgroundImage.source1400+"')" });
@@ -115,7 +172,32 @@ $scope.gettingElementProperties = true;
                             $scope.dashboard.backgroundImage = 'none';
                     }
             }
-      });
+    });*/
+
+    $scope.setBackgroundImage = function(url){
+        $scope.backgroundImage = url;
+
+        if ($scope.selectedElement && $scope.gettingElementProperties == false) {
+            var theElement = $scope.selectedElement;
+
+            if ($scope.backgroundImage != undefined &&  $scope.backgroundImage != 'none') {
+                theElement.css({ 'background-image': "url('"+$scope.backgroundImage+"')" });
+                theElement.css({ '-webkit-background-size': 'cover'});
+                theElement.css({ '-moz-background-size': 'cover'});
+                theElement.css({ '-o-background-size': 'cover'});
+                theElement.css({ 'background-size': 'cover'});
+            } else {
+                theElement.css({ 'background-image': 'none' });
+            }
+
+            if ($scope.dashboard) {
+                if ($scope.backgroundImage != undefined &&  $scope.backgroundImage != 'none')
+                    $scope.dashboard.backgroundImage = $scope.backgroundImage;
+                else
+                    $scope.dashboard.backgroundImage = 'none';
+            }
+        }
+    };
 
 
     $scope.changeOpacity = function()
@@ -127,11 +209,11 @@ $scope.gettingElementProperties = true;
                     var r = hex.r;
                     var g = hex.g;
                     var b = hex.b;
-                    $rootScope.selectedElement.css({'background-color': 'rgba('+r+','+g+','+b+',' + alpha + ')'});
+                    $scope.selectedElement.css({'background-color': 'rgba('+r+','+g+','+b+',' + alpha + ')'});
                     } else {
                         if ($scope.imageFilters.opacity != 0)
                           {
-                            var theElement = $rootScope.selectedElement;
+                            var theElement = $scope.selectedElement;
 
                             theElement.css("filter"," opacity("+$scope.imageFilters.opacity+"%) ");
                             theElement.css("webkitFilter"," opacity("+$scope.imageFilters.opacity+"%) ");
@@ -157,8 +239,8 @@ $scope.gettingElementProperties = true;
     }
 
     $scope.$watch('fontColor', function(){
-        if ($rootScope.selectedElement && $scope.gettingElementProperties == false)
-          $rootScope.selectedElement.css({ 'color': $scope.fontColor }) ;
+        if ($scope.selectedElement && $scope.gettingElementProperties == false)
+          $scope.selectedElement.css({ 'color': $scope.fontColor }) ;
       });
 
     $scope.changeRowHeight = function(newHeight)
@@ -169,8 +251,10 @@ $scope.gettingElementProperties = true;
 
     $scope.changeHeaderBackgroundcolor = function(headerBackgroundColor)
     {
-        $scope.headerBackgroundColor = headerBackgroundColor;
+        console.log('changeHeaderBackgroundcolor changeHeaderBackgroundcolor changed');
 
+        $scope.headerBackgroundColor = headerBackgroundColor;
+        //saveProperties();
     }
 
     $scope.changeHeaderHeight = function(headerHeight)
@@ -183,9 +267,10 @@ $scope.gettingElementProperties = true;
     {
 
 
-        var elementID = $rootScope.selectedElement.attr('id');
+        var elementID = $scope.selectedElement.attr('id');
 
-          if ($rootScope.selectedElementType == 'tabsContainer')
+        //if ($scope.selectedElementType == 'container' || $scope.selectedElementType == 'tabsContainer')
+          if ($scope.selectedElementType == 'tabsContainer')
             {
             var containerNbr = -1;
 
@@ -198,24 +283,25 @@ $scope.gettingElementProperties = true;
 
             }
 
-        $rootScope.selectedElement.remove();
+        $scope.selectedElement.remove();
 
+        //$scope.tabs.selected = 'data';
     }
 
     $scope.changeHeight = function(newHeight)
     {
-        if ($rootScope.selectedElementType  == 'c3Chart')
+        if ($scope.selectedElementType  == 'c3Chart')
            {
             if ($scope.selectedChart)
             {
-            $scope.selectedChart.chartCanvas.resize({height:newHeight});
-            $scope.selectedChart.height = newHeight;
+            $scope.selectedChart.chart.chartCanvas.resize({height:newHeight});
+            $scope.selectedChart.chart.height = newHeight;
             }
             } else {
                     if (newHeight == '')
-                        $rootScope.selectedElement.css("height","");
+                        $scope.selectedElement.css("height","");
                         else
-                        $rootScope.selectedElement.css("height",newHeight);
+                        $scope.selectedElement.css("height",newHeight);
 
             }
 
@@ -261,14 +347,37 @@ $scope.gettingElementProperties = true;
 
     function saveProperties()
         {
+            /*
+                    if ($scope.properties)
+                        {
+                            $scope.properties.backgroundColor = $scope.backgroundColor;
+                            $scope.properties.backgroundImage = $scope.backgroundImage;
+                            $scope.properties.height = $scope.height;
+                            $scope.properties.hiddenIn = $scope.hiddenIn;
+                            $scope.properties.rowHeight = $scope.rowHeight;
+                            $scope.properties.headerRowHeight = $scope.headerRowHeight;
+                            $scope.properties.headerBackgroundColor = $scope.headerBackgroundColor;
+                            $scope.properties.headerHeight = $scope.headerHeight;
+                            $scope.properties.height = $scope.height;
+                            //$scope.properties.headerBottomLineColor = $scope.headerBottomLineColor;
+                            console.log('the header bottom line color',$scope.headerBottomLineColor);
+                            $scope.properties.headerBottomLineWidth = $scope.headerBottomLineWidth;
+                            $scope.properties.rowBottomLineWidth = $scope.rowBottomLineWidth;
+                            $scope.properties.rowBorderColor = $scope.rowBorderColor;
+                            $scope.properties.columnLineWidth = $scope.columnLineWidth;
 
+                        }
+
+            console.log('saving properties',$scope.properties);
+                    $scope.onChange();
+*/
 
         }
 
 
     $scope.moveElementUp = function()
     {
-       var theElement = $rootScope.selectedElement;
+       var theElement = $scope.selectedElement;
 
        var selected = $(theElement).index();
 
@@ -279,7 +388,7 @@ $scope.gettingElementProperties = true;
 
     $scope.moveElementDown = function()
     {
-       var theElement = $rootScope.selectedElement;
+       var theElement = $scope.selectedElement;
 
        var selected = $(theElement).index();
 
@@ -293,71 +402,71 @@ $scope.gettingElementProperties = true;
     {
 
 
-            if($rootScope.selectedElementType != 'page')
+            if($scope.selectedElementType != 'page')
             {
 
             if ($scope.visibleXS == true)
                 {
-                    $rootScope.selectedElement.addClass('visible-xs');
+                    $scope.selectedElement.addClass('visible-xs');
                 } else {
-                    $rootScope.selectedElement.removeClass('visible-xs');
+                $scope.selectedElement.removeClass('visible-xs');
                 }
 
             if ($scope.visibleSM == true)
                 {
-                    $rootScope.selectedElement.addClass('visible-sm');
+                    $scope.selectedElement.addClass('visible-sm');
                 } else {
-                $rootScope.selectedElement.removeClass('visible-sm');
+                $scope.selectedElement.removeClass('visible-sm');
                 }
             if ($scope.visibleMD == true)
                 {
-                    $rootScope.selectedElement.addClass('visible-md');
+                    $scope.selectedElement.addClass('visible-md');
                 } else {
-                $rootScope.selectedElement.removeClass('visible-md');
+                $scope.selectedElement.removeClass('visible-md');
                 }
             if ($scope.visibleLG == true)
                 {
-                    $rootScope.selectedElement.addClass('visible-lg');
+                    $scope.selectedElement.addClass('visible-lg');
                 } else {
-                $rootScope.selectedElement.removeClass('visible-lg');
+                $scope.selectedElement.removeClass('visible-lg');
                 }
             if ($scope.visiblePrint == true)
                 {
-                    $rootScope.selectedElement.addClass('visible-print');
+                    $scope.selectedElement.addClass('visible-print');
                 } else {
-                $rootScope.selectedElement.removeClass('visible-print');
+                $scope.selectedElement.removeClass('visible-print');
                 }
 
                 if ($scope.hiddenXS == true)
                 {
-                    $rootScope.selectedElement.addClass('hidden-xs');
+                    $scope.selectedElement.addClass('hidden-xs');
                 } else {
-                    $rootScope.selectedElement.removeClass('hidden-xs');
+                    $scope.selectedElement.removeClass('hidden-xs');
                 }
 
                 if ($scope.hiddenSM == true)
                 {
-                    $rootScope.selectedElement.addClass('hidden-sm');
+                    $scope.selectedElement.addClass('hidden-sm');
                 } else {
-                    $rootScope.selectedElement.removeClass('hidden-sm');
+                    $scope.selectedElement.removeClass('hidden-sm');
                 }
                 if ($scope.hiddenMD == true)
                 {
-                    $rootScope.selectedElement.addClass('hidden-md');
+                    $scope.selectedElement.addClass('hidden-md');
                 } else {
-                    $rootScope.selectedElement.removeClass('hidden-md');
+                    $scope.selectedElement.removeClass('hidden-md');
                 }
                 if ($scope.hiddenLG == true)
                 {
-                    $rootScope.selectedElement.addClass('hidden-lg');
+                    $scope.selectedElement.addClass('hidden-lg');
                 } else {
-                    $rootScope.selectedElement.removeClass('hidden-lg');
+                    $scope.selectedElement.removeClass('hidden-lg');
                 }
                 if ($scope.hiddenPrint == true)
                 {
-                    $rootScope.selectedElement.addClass('hidden-print');
+                    $scope.selectedElement.addClass('hidden-print');
                 } else {
-                    $rootScope.selectedElement.removeClass('hidden-print');
+                    $scope.selectedElement.removeClass('hidden-print');
                 }
 
                 }
@@ -387,21 +496,26 @@ $scope.gettingElementProperties = true;
 
     $scope.changeChartColumnColor = function(chart,column,color)
     {
-        c3Charts.changeChartColumnColor($scope.properties.chart,column,hexToRgb(color));
+        console.log('changeChartColumnColor');
+        console.log($scope.selectedChart);
+        //c3Charts.changeChartColumnColor($scope.properties.chart,column,hexToRgb(color));
+        c3Charts.changeChartColumnColor($scope.properties.chart,column,color);
     }
 
     function getElementProperties()
     {
-
-        $rootScope.selectedElementType = '';
-        $rootScope.selectedElement = $scope.element;
+       console.log('getElementProperties');
+        //$scope.gettingElementProperties = true;
+        //$scope.tabs.selected = 'settings';
+        $scope.selectedElementType = '';
+        $scope.selectedElement = $scope.element;
 
         if ($scope.element)
             {
                 if ($scope.element.css('background-color') != 'rgba(0, 0, 0, 0)') {
-                        $scope.BackgroundColor = rgb2hex($scope.element.css('background-color'));
+                        $scope.backgroundColor = rgb2hex($scope.element.css('background-color'));
                     } else {
-                        $scope.BackgroundColor = 'Transparent';
+                        $scope.backgroundColor = 'Transparent';
                     }
 
                 if ($scope.element.css('color') != 'rgba(0, 0, 0, 0)') {
@@ -412,11 +526,27 @@ $scope.gettingElementProperties = true;
 
                 $scope.objectHeight = parseInt($scope.element.css('height'));
 
-                $scope.objectMargin = parseInt($scope.element.css('margin'));
+                $scope.margins = {
+                    margin: parseInt($scope.element.css('margin')),
+                    left: parseInt($scope.element.css('margin-left')),
+                    right: parseInt($scope.element.css('margin-right')),
+                    top: parseInt($scope.element.css('margin-top')),
+                    bottom: parseInt($scope.element.css('margin-bottom'))
+                };
+
+                /*$scope.objectMargin = parseInt($scope.element.css('margin'));
                 $scope.objectMarginLeft = parseInt($scope.element.css('margin-left'));
                 $scope.objectMarginRight= parseInt($scope.element.css('margin-right'));
                 $scope.objectMarginTop = parseInt($scope.element.css('margin-top'));
-                $scope.objectMarginBottom = parseInt($scope.element.css('margin-bottom'));
+                $scope.objectMarginBottom = parseInt($scope.element.css('margin-bottom'));*/
+
+                $scope.paddings = {
+                    padding: parseInt($scope.element.css('padding')),
+                    left: parseInt($scope.element.css('padding-left')),
+                    right: parseInt($scope.element.css('padding-right')),
+                    top: parseInt($scope.element.css('padding-top')),
+                    bottom: parseInt($scope.element.css('padding-bottom'))
+                };
 
                 $scope.objectPadding = parseInt($scope.element.css('padding'));
                 $scope.objectPaddingLeft = parseInt($scope.element.css('padding-left'));
@@ -426,8 +556,7 @@ $scope.gettingElementProperties = true;
 
                 var elementType = $scope.element.attr('ndType');
 
-                $rootScope.selectedElementType = elementType;
-
+                $scope.selectedElementType = elementType;
 
                 //visibility Properties
                     if ($scope.element.hasClass('hidden-lg') == true )
@@ -479,7 +608,11 @@ $scope.gettingElementProperties = true;
                     var chartID = $scope.element.attr('bindto-id');
 
                     $scope.selectedChart = $scope.properties;
+                }
 
+                if (elementType === 'extendedGrid')
+                {
+                    $scope.selectedChart = $scope.properties;
                 }
 
                 if (elementType === 'tabsContainer')
@@ -515,4 +648,3 @@ $scope.gettingElementProperties = true;
 
 
 });
-
