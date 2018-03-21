@@ -231,7 +231,7 @@ exports.getCounts = function(req,res){
         Reports.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, reportCount) {
             theCounts.reports = reportCount;
             //get all dashboards
-            var Dashboards = connection.model('Dashboards');
+            var Dashboards = connection.model('Dashboardsv2');
             Dashboards.count({companyID: companyID,owner:req.user._id,nd_trash_deleted:false}, function (err, dashCount) {
                 theCounts.dashBoards = dashCount;
                 //get all pages
@@ -256,14 +256,14 @@ exports.getCountsForUser = function(req,res){
         Reports.count({companyID: companyID,owner:userID,isPublic:true,nd_trash_deleted:false}, function (err, reportCount) {
             theCounts.publishedReports = reportCount;
             //get all dashboards
-            var Dashboards = connection.model('Dashboards');
+            var Dashboards = connection.model('Dashboardsv2');
             Dashboards.count({companyID: companyID,owner:userID,isPublic:true,nd_trash_deleted:false}, function (err, dashCount) {
                 theCounts.publishedDashBoards = dashCount;
 
                 Reports.count({companyID: companyID,owner:userID,isPublic:false,nd_trash_deleted:false}, function (err, privateReportCount) {
                     theCounts.privateReports = privateReportCount;
 
-                    var Dashboards = connection.model('Dashboards');
+                    var Dashboards = connection.model('Dashboardsv2');
                     Dashboards.count({companyID: companyID,owner:userID,isPublic:false,nd_trash_deleted:false}, function (err, privateDashCount) {
                         theCounts.privateDashBoards = privateDashCount;
                         serverResponse(req, res, 200, theCounts);
@@ -290,7 +290,7 @@ exports.getUserDashboards = function(req,res){
     var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
     var userID = req.query.userID;
     var companyID = req.user.companyID;
-    var Dashboards = connection.model('Dashboards');
+    var Dashboards = connection.model('Dashboardsv2');
     Dashboards.find({companyID: companyID,owner:userID,nd_trash_deleted:false},{dashboardName:1,parentFolder:1,isPublic:1,dashboardDescription:1,status:1}, function (err, privateDashCount) {
         serverResponse(req, res, 200, {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count/perPage) : 1), items: privateDashCount});
     });
@@ -700,28 +700,35 @@ function getReportsForFolder(grant,idfolder,folder,done)
     }
 }
 
-function getDashboardsForFolder(grant,idfolder,folder,done)
+function getDashboardsForFolder(grant, idfolder, folder, done)
 {
-    if (grant.executeDashboards == true)
-    {
-        var Dashboards = connection.model('Dashboards');
+    if (grant.executeDashboards == true) {
+        let Dashboards = connection.model('Dashboardsv2');
 
-            var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{parentFolder:idfolder},{isPublic:true}]}
-            var fields = {dashboardName:1,dashboardDescription:1};
+        let query = {
+            "$and": [
+                { "nd_trash_deleted": false },
+                { "companyID": "COMPID" },
+                { "parentFolder": idfolder },
+                { "isPublic": true }
+            ]
+        };
+        let projection = { dashboardName: 1, dashboardDescription: 1 };
 
-        Dashboards.find(find,fields,{},function(err, dashboards){
-
-                var nodes = [];
-                for (var r in dashboards)
-                {
-                    nodes.push({id:dashboards[r]._id,title:dashboards[r].dashboardName,nodeType:'dashboard',description:dashboards[r].dashboardDescription,nodes:[]});
-                }
-
-                done(nodes,folder)
+        Dashboards.find(query).select(projection).exec(function (err, dashboards) {
+            let nodes = dashboards.map(function (dashboard) {
+                return {
+                    id: dashboard._id,
+                    title: dashboard.dashboardName,
+                    description: dashboard.dashboardDescription,
+                    nodeType: 'dashboard',
+                    nodes: []
+                };
             });
-
+            done(nodes, folder);
+        });
     } else {
-        done([],folder);
+        done([], folder);
     }
 }
 
@@ -773,7 +780,7 @@ function getNoFolderReports(done)
 
 function getNoFolderDashboards(done)
 {
-    var Dashboards = connection.model('Dashboards');
+    var Dashboards = connection.model('Dashboardsv2');
 
     var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{isPublic:true},{parentFolder: 'root'}]}
     var fields = {dashboardName:1,dashboardDescription:1};
