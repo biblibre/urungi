@@ -438,383 +438,242 @@ exports.getUserOtherData = function(req, res)
 }
 
 
-exports.getUserObjects = function(req, res){
-    var Companies = connection.model('Companies');
-    Companies.findOne({companyID:req.user.companyID,nd_trash_deleted: false},{},function(err, company){
+exports.getUserObjects = async function(req, res){
+    const Companies = connection.model('Companies');
+    const query = {
+        "companyID": req.user.companyID,
+        "nd_trash_deleted": false
+    };
+    const company = await Companies.findOne(query).exec();
 
-        var folders = company.publicSpace;
+    let folders = company.publicSpace;
 
+    let canPublish = false;
+    if (req.session.isWSTADMIN) {
+        canPublish = true
+        await getFolderStructureForWSTADMIN(folders, 0);
+    } else {
+        if (req.user.roles.length > 0) {
+            const Roles = connection.model('Roles');
+            const query = {
+                "_id": { "$in": req.user.roles },
+                "companyID": req.user.companyID
+            };
+            const roles = await Roles.find(query).lean().exec();
 
-        if (req.session.isWSTADMIN)
-        {
-
-            getFolderStructureForWSTADMIN(folders,0,true,function(){
-
-                getNoFolderReports(function(reports){
-
-                    getNoFolderDashboards(function(dashboards){
-
-                        getNoFolderPages(function(pages){
-
-                            for (var d in dashboards)
-                                folders.push(dashboards[d]);
-                            for (var r in reports)
-                                folders.push(reports[r]);
-                            for (var p in pages)
-                                folders.push(pages[p]);
-                            serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: folders});
-
-                        });
-
-                    });
-                });
-
-
-
-            });
-
-        } else {
-
-        if (req.user.roles.length > 0)
-            {
-                var Roles = connection.model('Roles');
-                var find = { _id : { $in : req.user.roles},companyID:req.user.companyID };
-                if (req.session.isWSTADMIN)
-                    find = {companyID:req.user.companyID };
-                Roles.find(find,{},function(err, roles){
-
-                    navigateRoles(req,folders,roles,function(canPublish){
-
-                        getNoFolderReports(function(reports){
-
-                           getNoFolderDashboards(function(dashboards){
-
-                               getNoFolderPages(function(pages){
-                                   for (var d in dashboards)
-                                       folders.push(dashboards[d]);
-                                   for (var r in reports)
-                                       folders.push(reports[r]);
-                                   for (var p in pages)
-                                       folders.push(pages[p]);
-                                   serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: folders, userCanPublish: canPublish});
-
-                               });
-                           });
-                        });
-                    });
-                }).lean();
-
-            } else {
-                //Has no access to any folder
-                getNoFolderReports(function(reports){
-
-                    getNoFolderDashboards(function(dashboards){
-
-                        getNoFolderPages(function(pages){
-                            for (var d in dashboards)
-                                folders.push(dashboards[d]);
-                            for (var r in reports)
-                                folders.push(reports[r]);
-                            for (var p in pages)
-                                folders.push(pages[p]);
-
-                            serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: folders, userCanPublish: false});
-                        });
-                    });
-                });
-
-            }
+            canPublish = await navigateRoles(folders, roles);
         }
+    }
 
-    });
+    const reports = await getNoFolderReports();
+    reports.forEach(report => folders.push(report));
+
+    const dashboards = await getNoFolderDashboards();
+    dashboards.forEach(dashboard => folders.push(dashboard));
+
+    const pages = await getNoFolderPages();
+    pages.forEach(page => folders.push(page));
+
+    const body = {
+        result: 1,
+        page: 1,
+        pages: 1,
+        items: folders,
+        userCanPublish: canPublish
+    };
+    serverResponse(req, res, 200, body);
 }
 
 
-function navigateRoles(req,folders,rolesData,done)
+async function navigateRoles(folders, rolesData)
 {
     var canPublish = false;
 
-    var roleFound = false;
-
-    for (var r in rolesData)
-    {
-        if (!rolesData[r].grants)
-        {
+    for (var r in rolesData) {
+        if (!rolesData[r].grants || rolesData[r].grants.length == 0) {
             rolesData.splice(r, 1);
-        } else {
-            if (rolesData[r].grants.length == 0)
-            {
-                rolesData.splice(r, 1);
+        }
+    }
+
+    for (var r in rolesData) {
+        for (var g in rolesData[r].grants) {
+            var theGrant = rolesData[r].grants[g];
+
+            const publish = await setGrantsToFolder_v2(folders, theGrant);
+            if (publish == true) {
+                canPublish = true;
             }
         }
     }
 
-    for (var r in rolesData)
-    {
-        for (var g in rolesData[r].grants)
-        {
-            roleFound = true;
-
-            var theGrant = rolesData[r].grants[g];
-
-            setGrantsToFolder_v2(req,folders,theGrant,r,g, function(roleIndex,grantIndex,publish){
-            //setGrantsToFolder_old(req,folders,theGrant,r,g, function(roleIndex,grantIndex,publish){
-            if (publish == true) canPublish = true;
-            if (roleIndex == rolesData.length -1 && grantIndex == rolesData[roleIndex].grants.length -1)
-                done(canPublish);
-            });
-        }
-    }
-    if (roleFound === false)
-        done(false);
+    return canPublish;
 }
 
 
-function setGrantsToFolder_v2(req,folders, grant,roleIndex,grantIndex, done)
+async function setGrantsToFolder_v2(folders, grant)
 {
-
     var publish = false;
 
-    for (var i in folders)
-    {
-        if ((folders[i].id == grant.folderID))
-        {
-            folders[i].grants = grant;
+    for (var i in folders) {
+        let folder = folders[i];
+        if (folder.id == grant.folderID) {
+            folder.grants = grant;
 
-            if (grant.publishReports == true)
-            {
+            if (grant.publishReports == true) {
                 publish = true;
             }
 
-            getReportsForFolder(grant,grant.folderID,folders[i],function(reports,folder){
-                    for (var n in reports)
-                            folder.nodes.push(reports[n]);
+            const reports = await getReportsForFolder(grant.folderID, grant);
+            reports.forEach(report => folder.nodes.push(report));
 
-                    getDashboardsForFolder(grant,grant.folderID,folder,function(dashboards,folder){
-                            for (var n in dashboards)
-                                folder.nodes.push(dashboards[n]);
+            const dashboards = await getDashboardsForFolder(grant.folderID, grant);
+            dashboards.forEach(dashboard => folder.nodes.push(dashboard));
 
-                                getPagesForFolder(grant,grant.folderID,folder,function(pages,folder){
-                                        for (var p in pages)
-                                            folder.nodes.push(pages[p]);
+            const pages = await getPagesForFolder(grant.folderID, grant);
+            pages.forEach(page => folder.nodes.push(page));
 
-                                        done(roleIndex,grantIndex,publish);
-
-                                });
-
-                    });
-
-            });
-
-
+            return publish;
         } else {
-            if (folders[i].nodes)
-                if (folders[i].nodes.length > 0)
-                    setGrantsToFolder_v2(req,folders[i].nodes,grant,roleIndex,grantIndex,done);
+            if (folder.nodes && folder.nodes.length > 0) {
+                return await setGrantsToFolder_v2(folder.nodes, grant);
+            }
         }
     }
-
 }
 
-
-
-
-function getFolderStructureForWSTADMIN(folders,index,firstRound, done) {
-
-    var sec = 0;
-    var i = index;
-
-    if (folders[i] == undefined)
-    {
-       if (firstRound)
-       {
-            done();
-       }
-      return;
-
-    } else {
-
-            if (folders[i].nodes)
-                if (folders[i].nodes.length > 0)
-                    getFolderStructureForWSTADMIN(folders[i].nodes,0,false,done);
-
-
-            var theFolder = folders[i];
-            theFolder.grants = {folderID:theFolder.id, executeDashboards: true,executeReports:true ,executePages:true ,publishReports:true};
-
-            getReportsForFolder(theFolder.grants,theFolder.id,theFolder,function(reports,folder){
-
-                    folder = Object(folder);
-
-                    for (var n in reports)
-                    {
-                        if (folder.nodes)
-                            folder.nodes.push(reports[n]);
-                    }
-
-                    getDashboardsForFolder(theFolder.grants,folder.id,folder,function(dashboards,folder){
-                            for (var n in dashboards)
-                            {
-                                if (folder.nodes)
-                                folder.nodes.push(dashboards[n]);
-                            }
-
-                                getPagesForFolder(theFolder.grants,folder.id,folder,function(pages,folder){
-                                        for (var p in pages)
-                                            {
-                                                if (folder.nodes)
-                                                    folder.nodes.push(pages[p]);
-                                            }
-
-                                        getFolderStructureForWSTADMIN(folders,i+1,firstRound,done);
-                                    });
-
-                    });
-                });
-    }
-}
-
-
-
-
-function getReportsForFolder(grant,idfolder,folder,done)
+async function getFolderStructureForWSTADMIN(folders, index)
 {
-    if (grant.executeReports == true)
-    {
-        var Reports = connection.model('Reports');
+    let folder = folders[index];
 
-        var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{parentFolder:idfolder},{isPublic:true}]}
-        var fields = {reportName:1,reportType:1,reportDescription:1};
+    if (folder) {
+        if (!folder.nodes) {
+            folder.nodes = [];
+        }
 
-        Reports.find(find,fields,{},function(err, reports){
+        await getFolderStructureForWSTADMIN(folder.nodes, 0);
 
-            var nodes = [];
-             for (var r in reports)
-             {
-                nodes.push({id:reports[r]._id,title:reports[r].reportName,nodeType:'report',description:reports[r].reportDescription,nodeSubtype:reports[r].reportType,nodes:[]});
-             }
-            done(nodes,folder);
-        });
-    } else {
-        done([],folder);
-    }
-}
-
-function getDashboardsForFolder(grant, idfolder, folder, done)
-{
-    if (grant.executeDashboards == true) {
-        let Dashboards = connection.model('Dashboardsv2');
-
-        let query = {
-            "$and": [
-                { "nd_trash_deleted": false },
-                { "companyID": "COMPID" },
-                { "parentFolder": idfolder },
-                { "isPublic": true }
-            ]
+        folder.grants = {
+            folderID: folder.id,
+            executeDashboards: true,
+            executeReports: true,
+            executePages: true,
+            publishReports: true
         };
-        let projection = { dashboardName: 1, dashboardDescription: 1 };
 
-        Dashboards.find(query).select(projection).exec(function (err, dashboards) {
-            let nodes = dashboards.map(function (dashboard) {
-                return {
-                    id: dashboard._id,
-                    title: dashboard.dashboardName,
-                    description: dashboard.dashboardDescription,
-                    nodeType: 'dashboard',
-                    nodes: []
-                };
-            });
-            done(nodes, folder);
-        });
-    } else {
-        done([], folder);
+        const reports = await getReportsForFolder(folder.id, folder.grants);
+        reports.forEach(report => folder.nodes.push(report));
+
+        const dashboards = await getDashboardsForFolder(folder.id, folder.grants);
+        dashboards.forEach(dashboard => folder.nodes.push(dashboard));
+
+        const pages = await getPagesForFolder(folder.id, folder.grants);
+        pages.forEach(page => folder.nodes.push(page));
+
+        await getFolderStructureForWSTADMIN(folders, index+1);
     }
 }
 
-
-function getPagesForFolder(grant,idfolder,folder,done)
+async function getReportsForFolder(idfolder, grant)
 {
-    if (grant.executePages == true)
-    {
-        var Pages = connection.model('Pages');
+    var nodes = [];
 
-            var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{parentFolder:idfolder},{isPublic:true}]}
-            var fields = {pageName:1,pageDescription:1};
+    if (!grant || grant.executeReports) {
+        const Reports = connection.model('Reports');
 
-        Pages.find(find,fields,{},function(err, pages){
+        const query = {
+            "nd_trash_deleted": false,
+            "companyID": "COMPID",
+            "parentFolder": idfolder,
+            "isPublic": true
+        };
+        const projection = {reportName: 1, reportType: 1, reportDescription: 1};
 
-                var nodes = [];
-                for (var r in pages)
-                {
-                    nodes.push({id:pages[r]._id,title:pages[r].pageName,nodeType:'page',description:pages[r].pageDescription,nodes:[]});
-                }
-
-                done(nodes,folder)
-            });
-    } else {
-        done([],folder);
+        const reports = await Reports.find(query).select(projection).exec();
+        nodes = reports.map(report => ({
+            id: report._id,
+            title: report.reportName,
+            nodeType: 'report',
+            description: report.reportDescription,
+            nodeSubtype: report.reportType,
+            nodes:[]
+        }));
     }
+
+    return nodes;
+}
+
+async function getDashboardsForFolder(idfolder, grant)
+{
+    var nodes = [];
+
+    if (!grant || grant.executeDashboards) {
+        const Dashboards = connection.model('Dashboardsv2');
+
+        const query = {
+            "nd_trash_deleted": false,
+            "companyID": "COMPID",
+            "parentFolder": idfolder,
+            "isPublic": true
+        };
+        const projection = { dashboardName: 1, dashboardDescription: 1 };
+
+        const dashboards = await Dashboards.find(query).select(projection).exec();
+        nodes = dashboards.map(dashboard => ({
+            id: dashboard._id,
+            title: dashboard.dashboardName,
+            description: dashboard.dashboardDescription,
+            nodeType: 'dashboard',
+            nodes: []
+        }));
+    }
+
+    return nodes;
 }
 
 
-function getNoFolderReports(done)
+async function getPagesForFolder(idfolder, grant)
 {
+    var nodes = [];
 
-    var Reports = connection.model('Reports');
+    if (!grant || grant.executePages) {
+        const Pages = connection.model('Pages');
 
-    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{isPublic:true},{parentFolder: 'root'}]}
-    var fields = {reportName:1,reportType:1,reportDescription:1};
+        const query = {
+            "nd_trash_deleted": false,
+            "companyID": "COMPID",
+            "parentFolder": idfolder,
+            "isPublic": true
+        };
+        const projection = {pageName: 1, pageDescription: 1};
 
-    Reports.find(find,fields,{},function(err, reports){
+        const pages = await Pages.find(query).select(projection).exec();
+        nodes = pages.map(page => ({
+            id: page._id,
+            title: page.pageName,
+            nodeType: 'page',
+            description: page.pageDescription,
+            nodes: []
+        }));
+    }
 
-        var nodes = [];
-        for (var r in reports)
-        {
-            nodes.push({id:reports[r]._id,title:reports[r].reportName,nodeType:'report',description:reports[r].reportDescription,nodeSubtype:reports[r].reportType,nodes:[]});
-        }
-        done(nodes);
-    });
-
-}
-
-function getNoFolderDashboards(done)
-{
-    var Dashboards = connection.model('Dashboardsv2');
-
-    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{isPublic:true},{parentFolder: 'root'}]}
-    var fields = {dashboardName:1,dashboardDescription:1};
-
-    Dashboards.find(find,fields,{},function(err, dashboards){
-
-        var nodes = [];
-        for (var r in dashboards)
-        {
-            nodes.push({id:dashboards[r]._id,title:dashboards[r].dashboardName,nodeType:'dashboard',description:dashboards[r].dashboardDescription,nodes:[]});
-        }
-
-        done(nodes)
-    });
+    return nodes;
 }
 
 
-function getNoFolderPages(done)
+async function getNoFolderReports()
 {
-    var Pages = connection.model('Pages');
+    return await getReportsForFolder('root');
+}
 
-    var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{isPublic:true},{parentFolder: 'root'}]}
-    var fields = {pageName:1,pageDescription:1};
+async function getNoFolderDashboards()
+{
+    return await getDashboardsForFolder('root');
+}
 
-    Pages.find(find,fields,{},function(err, pages){
 
-        var nodes = [];
-        for (var r in pages)
-        {
-            nodes.push({id:pages[r]._id,title:pages[r].pageName,nodeType:'page',description:pages[r].pageDescription,nodes:[]});
-        }
-
-        done(nodes)
-    });
+async function getNoFolderPages()
+{
+    return await getPagesForFolder('root');
 }
 
 exports.getUserLastExecutions = function(req, res){

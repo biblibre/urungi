@@ -13,6 +13,7 @@ module.exports = function (mongoose, done) {
             let dbURI = config.get('db');
             console.log('mongo DB connection');
             var mongoose = require('mongoose');
+            mongoose.Promise = global.Promise;
             global.connection = mongoose.createConnection(dbURI,{ server: { poolSize: 5 } });
 
             // CONNECTION EVENTS
