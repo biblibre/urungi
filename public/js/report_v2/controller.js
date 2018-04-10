@@ -242,7 +242,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                             $scope.showOverlay('OVERLAY_reportLayout');
                             $scope.selectedReport = report;
                             $scope.mode = 'edit';
-                            report_v2Model.getReport(report,'reportLayout',$scope.mode,function() {
+                            report_v2Model.getReport(report,'reportLayout',$scope.mode,function(sql) {
+                                $scope.sql = sql;
                                 $scope.selectedLayerID = queryModel.selectedLayerID();
                                 $scope.hideOverlay('OVERLAY_reportLayout');
                             });
