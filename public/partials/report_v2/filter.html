@@ -1,6 +1,6 @@
     <li class="filter-box" ng-class="{'incomplete-filter': !isfilterComplete(filter)}" style="margin-left: 90px;"
                         drop="onDropOnFilter($data, $event, filter)" drop-effect="copy" drop-accept="'json/custom-object'" ng-repeat="filter in selectedReport.query.groupFilters" >
-<span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFilter(filter);filtersUpdated();detectLayerJoins();processStructure();"></i></span>
+<span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="removeFilter(filter);filtersUpdated();detectLayerJoins();"></i></span>
 
 
 

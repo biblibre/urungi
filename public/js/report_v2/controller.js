@@ -96,12 +96,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.onDateSet = function (newDate, oldDate, filter) {
         queryModel.onDateSet(newDate,oldDate,filter);
-        $scope.processStructure();
     }
 
     $scope.onDateEndSet = function (newDate, oldDate, filter) {
         queryModel.onDateEndSet(newDate,oldDate,filter);
-        $scope.processStructure();
     }
 
     $scope.removeItem = function(item, collection)
@@ -585,9 +583,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
 
                 $scope.selectedReport.properties.columns.push(element);
-                queryModel.addColumn(element, function(){
-                    $scope.getDataForPreview();
-                });
+                queryModel.addColumn(element);
             } else {
                 noty({text: 'That column already exists',  timeout: 2000, type: 'error'});
             }
@@ -597,9 +593,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.onDropFilter = function (data, event, type, group) {
 
         var customObjectData = data['json/custom-object'];
-        queryModel.onDrop($scope,data,event,type,group, function(){
-                $scope.getDataForPreview();
-        });
+        queryModel.onDrop($scope, data, event, type, group);
 
 
     }
@@ -620,13 +614,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         if (!found)
             {
                 $scope.selectedReport.properties.order.push(customObjectData);
-                queryModel.onDrop($scope,data,event,type,group, function(){
-                    $scope.getDataForPreview();
-                });
+                queryModel.onDrop($scope, data, event, type, group);
             } else {
                 noty({text: 'That column order already exists',  timeout: 2000, type: 'error'});
             }
-
     }
 
     $scope.filterSortableOptions = {
@@ -707,9 +698,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport.properties.xkeys = [];
         $scope.selectedReport.properties.xkeys.push(customObjectData);
 
-        queryModel.onDrop($scope,data,event,type,group, function(){
-            $scope.getDataForPreview();
-        });
+        queryModel.onDrop($scope, data, event, type, group);
     };
 
     $scope.onDropOnMetrics = function (data, event, type, group) {
@@ -731,9 +720,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 customObjectData.objectLabel = customObjectData.originalLabel + ' (count)';
             }
 
-        queryModel.onDrop($scope,data,event,type,group, function(){
-            $scope.getDataForPreview();
-        });
+        queryModel.onDrop($scope, data, event, type, group);
     };
 
     $scope.filtersUpdated = function() {
@@ -746,11 +733,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     };
 
 
-    $scope.filterChanged = function(elementID,values)
-    {
-
-       $scope.processStructure();
-
+    $scope.filterChanged = function (elementID, values) {
     }
 
     $scope.remove = function(object,type)
@@ -1187,15 +1170,12 @@ $scope.changeColumnColor = function(color)
                 column.objectLabel = column.originalLabel + ' ('+variable.name+')';
             }
 
-        $scope.getDataForPreview();
     }
 
     $scope.hideColumn = function(column,hidden)
     {
         column['hidden'] = hidden;
         queryModel.hideColumn(column.elementID,hidden);
-        $scope.getDataForPreview();
-
     }
 
 
@@ -1209,7 +1189,6 @@ $scope.changeColumnColor = function(color)
     $scope.setDatePatternFilterType = function(filter,option)
     {
         queryModel.setDatePatternFilterType(filter,option);
-        $scope.processStructure();
     }
 
     $scope.getElementProperties = function(element,elementID)

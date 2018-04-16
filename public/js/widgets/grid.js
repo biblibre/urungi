@@ -145,7 +145,7 @@ this.extendedGridV2 = function(report,mode)
                     if (column.elementType === 'date')
                         elementNameAux = "'"+'wst'+column.elementID+'_original'+"'";
                     //htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementNameAux+','+quotedHashedID()+')">'+column.objectLabel+'</span><span class="sortorder" ng-show="getReport(\''+hashedID+'\').predicate === '+elementName+'" ng-class="{reverse:getReport(\''+hashedID+'\').reverse}"></span>'+getColumnDropDownHTMLCode(column,columnIndex,elementName,column.elementType)+' </div>';
-        htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><table style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space: nowrap;width:95%;">'+column.objectLabel+'</td><td style="width:34px;>'+getColumnDropDownHTMLCode(column,columnIndex,elementName,column.elementType)+'</td></tr></table> </div>';
+        htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><table style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space: nowrap;width:95%;">'+column.objectLabel+'</td><td style="width:34px;">'+getColumnDropDownHTMLCode(column,columnIndex,elementName,column.elementType)+'</td></tr></table> </div>';
 
         return htmlCode;
     }
