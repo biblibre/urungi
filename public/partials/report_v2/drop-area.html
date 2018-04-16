@@ -12,9 +12,9 @@
                 <i class="fa fa-cube" ng-show="field.elementType != 'number' && field.elementType != 'count'"></i>
                 <i class="fa fa-list-ol" ng-show="field.elementType == 'number' || field.elementType == 'count'"></i>
                 <span tooltip="Drag to left or right to change order weight in the query (the more at your left, the more weight in the query when ordering results)" tooltip-placement="bottom">{{field.objectLabel}}</span>
-                <i ng-show="field.sortType == -1" class="fa fa-chevron-down hand-cursor order-box-close-btn" ng-click="field.sortType = 1;processStructure();" tooltip="Click here to order descendent using this field" tooltip-placement="bottom"></i>
-                <i ng-show="field.sortType == 1" class="fa fa-chevron-up hand-cursor order-box-close-btn" ng-click="field.sortType = -1;processStructure();" tooltip="Click here to order ascendent using this field" tooltip-placement="bottom"></i>
-                <i class="fa fa-times hand-cursor order-box-close-btn" ng-click="removeOrder(field);detectLayerJoins();processStructure();" tooltip="Click here to remove this field from the query" tooltip-placement="bottom"></i>
+                <i ng-show="field.sortType == -1" class="fa fa-chevron-down hand-cursor order-box-close-btn" ng-click="setSortType(field, 1)" tooltip="Click here to order descendent using this field" tooltip-placement="bottom"></i>
+                <i ng-show="field.sortType == 1" class="fa fa-chevron-up hand-cursor order-box-close-btn" ng-click="setSortType(field, -1)" tooltip="Click here to order ascendent using this field" tooltip-placement="bottom"></i>
+                <i class="fa fa-times hand-cursor order-box-close-btn" ng-click="removeOrder(field);detectLayerJoins();" tooltip="Click here to remove this field from the query" tooltip-placement="bottom"></i>
             </li>
         </ul>
     </div>
@@ -61,7 +61,7 @@
 
                     <button class="btn " ng-class="{'btn-info': column.link, 'btn-dark': !column.link}" ng-click="setLinkForColumn(column)"><i class="fa fa-link"></i></button>
                     -->
-                    <i class="fa fa-times hand-cursor  column-box-close-btn" ng-click="remove(column,'column');processStructure();" tooltip="Click here to remove this column from the results" tooltip-placement="bottom"></i>
+                    <i class="fa fa-times hand-cursor  column-box-close-btn" ng-click="remove(column,'column');" tooltip="Click here to remove this column from the results" tooltip-placement="bottom"></i>
                 </div>
             </li>
         </ul>
@@ -77,7 +77,7 @@
                     <i class="fa fa-cube" ng-show="xkey.elementType != 'number' && xkey.elementType != 'count'"></i>
                     <i class="fa fa-list-ol" ng-show="xkey.elementType == 'number' || xkey.elementType == 'count'"></i>
                     {{xkey.objectLabel}}
-                    <i class="fa fa-times hand-cursor  column-box-close-btn" ng-click="remove(xkey,'xkey');processStructure();" tooltip="Click here to remove this dimension from the results" tooltip-placement="bottom"></i>
+                    <i class="fa fa-times hand-cursor  column-box-close-btn" ng-click="remove(xkey,'xkey');" tooltip="Click here to remove this dimension from the results" tooltip-placement="bottom"></i>
                 </div>
 
             </li>
@@ -128,7 +128,7 @@
                         <img ng-if="selectedReport.reportType == 'chart-donut'" src="images/pie.png"/>
                         <img ng-if="selectedReport.reportType == 'chart-pie'" src="images/donut.png"/>
                     </a>-->
-                    <i class="fa fa-times hand-cursor  column-box-close-btn" ng-click="remove(ykey,'ykey');processStructure();" tooltip="Click here to remove this metric from the results" tooltip-placement="bottom" style="padding: 6px;margin-left: 2px;"></i>
+                    <i class="fa fa-times hand-cursor  column-box-close-btn" ng-click="remove(ykey,'ykey');" tooltip="Click here to remove this metric from the results" tooltip-placement="bottom" style="padding: 6px;margin-left: 2px;"></i>
                 </div>
 
 

@@ -297,7 +297,7 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
                 }
 
         detectLayerJoins();
-
+        processStructure();
     }
 
     this.getQueryData = function( done) {

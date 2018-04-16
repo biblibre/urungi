@@ -139,7 +139,7 @@
                                 </ui-select>
 
                                 <!--between-->
-                                <span ng-show="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType != 'date'"><button class="btn" style="margin-right:2px;margin-left:2px">and</button>  <input type="text" class="form-control form-focus-green" ng-model="filter.filterText2" />  </span>
+                                <span ng-show="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType != 'date'"><button class="btn" style="margin-right:2px;margin-left:2px">and</button>  <input type="text" class="form-control form-focus-green" ng-model="filter.filterText2" ng-change="inputChanged(filter)" />  </span>
 
 
 

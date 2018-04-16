@@ -22,7 +22,7 @@
 </div>
 
 
-<div ng-if="selectedReport.query.columns.length > 0" class="container-fluid branded-border-panel" style="width:100%">
+<div ng-if="selectedReport.properties.columns.length > 0" class="container-fluid branded-border-panel" style="width:100%">
     <button  id="queryRefresh" class="btn btn-success" ng-show="selectedReport.properties.columns.length > 0" class="pull-right" ng-click="processStructure();"  style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ></i> Refresh data</button>
     <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
 
