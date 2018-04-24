@@ -20,14 +20,14 @@ exports.savePublicSpace = function(req,res){
     var data = req.body;
 
     var Companies = connection.model('Companies');
-    Companies.update({companyID:req.user.companyID}, {$set: {publicSpace: data} }, function (err, numAffected) {
+    Companies.update({companyID:req.user.companyID}, {$set: {publicSpace: data} }, function (err, rawResponse) {
         if(err) throw err;
 
-        if (numAffected>0)
-        {
-            var result = {result: 1, msg: numAffected+" record updated."};
+        let result;
+        if (rawResponse.nModified > 0) {
+            result = {result: 1, msg: rawResponse.nModified + " record updated."};
         } else {
-            var result = {result: 0, msg: "Error updating record, no record have been updated"};
+            result = {result: 0, msg: "Error updating record, no record have been updated"};
         }
 
         serverResponse(req, res, 200, result);
