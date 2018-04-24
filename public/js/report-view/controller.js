@@ -1,5 +1,7 @@
 app.controller('report_viewCtrl', function ($scope,$routeParams,report_v2Model,queryModel,connection,bsLoadingOverlayService,widgetsCommon) {
 
+    $scope.loadUserObjects();
+
 $scope.promptsBlock = 'partials/report/promptsBlock.html';
 $scope.dateModal = 'partials/report/dateModal.html';
 $scope.linkModal = 'partials/report/linkModal.html';

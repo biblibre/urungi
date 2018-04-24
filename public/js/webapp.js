@@ -483,10 +483,13 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
 
 
 
-        connection.get('/api/get-user-objects', {}, function(data) {
+    $rootScope.loadUserObjects = function() {
+        connection.get('/api/get-user-objects', {}).then(data => {
             $rootScope.userObjects = data.items;
             $rootScope.user.canPublish = data.userCanPublish;
         });
+    };
+    $rootScope.loadUserObjects();
 
 
 

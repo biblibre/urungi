@@ -1,4 +1,7 @@
 app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams,report_v2Model, queryModel,  c3Charts,uuid2, icons,colors,htmlWidgets,dashboardv2Model, grid,bsLoadingOverlayService,$timeout,$rootScope,PagerService ) {
+
+    $scope.loadUserObjects();
+
     $scope.reportModal = 'partials/report_v2/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
     $scope.publishModal  = 'partials/report/publishModal.html';
