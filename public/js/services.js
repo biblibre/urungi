@@ -22,46 +22,52 @@ app.service('Constants' , function () {
 .service('connection' , function ($http, Constants) {
 
     this.get = function(url, params, done, options) {
-options = {
-    showLoader: (options && typeof options.showLoader != 'undefined') ? options.showLoader : true,
-    showMsg: (options && typeof options.showMsg != 'undefined') ? options.showMsg : true
-};
+        options = {
+            showLoader: (options && typeof options.showLoader != 'undefined') ? options.showLoader : true,
+            showMsg: (options && typeof options.showMsg != 'undefined') ? options.showMsg : true
+        };
 
-if (options.showLoader) $('#loader-overlay').show();
-
-if (Constants.CRYPTO) {
-    var encrypted = CryptoJS.AES.encrypt(JSON.stringify(params), Constants.SECRET);
-    params = {data: String(encrypted)};
-}
-
-$http({method: 'GET', url: url, params: params})
-    .success(angular.bind(this, function (data, status, headers, config) {
-        if (typeof data == 'string') window.location.href = '/';
+        if (options.showLoader) $('#loader-overlay').show();
 
         if (Constants.CRYPTO) {
-            var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
-            data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+            var encrypted = CryptoJS.AES.encrypt(JSON.stringify(params), Constants.SECRET);
+            params = {data: String(encrypted)};
         }
 
-        if (typeof done != 'undefined')
-            done(data);
+        let p = $http.get(url, {params: params})
+            .then(response => {
+                let data = response.data;
 
-        if (options.showLoader) $('#loader-overlay').hide();
+                if (typeof data == 'string') window.location.href = '/';
 
-        if (data.result == 1 && data.msg && options.showMsg) {
-            noty({text: data.msg,  timeout: 2000, type: 'success'});
+                if (Constants.CRYPTO) {
+                    var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
+                    data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+                }
+
+                if (data.result == 1 && data.msg && options.showMsg) {
+                    noty({text: data.msg,  timeout: 2000, type: 'success'});
+                }
+                else if (data.result === 0 && data.msg && options.showMsg) {
+                    noty({text: data.msg,  timeout: 2000, type: 'error'});
+                }
+
+                return data;
+            }, response => {
+                noty({text: 'Error', timeout: 2000, type: 'error'});
+
+                throw new Error(response.statusText);
+            })
+            .finally(() => {
+                if (options.showLoader) $('#loader-overlay').hide();
+            })
+
+        if (typeof done != 'undefined') {
+            p.then(data => done(data));
+        } else {
+            return p;
         }
-        else if (data.result === 0 && data.msg && options.showMsg) {
-            noty({text: data.msg,  timeout: 2000, type: 'error'});
-        }
-    }))
-    .error(angular.bind(this, function (data, status, headers, config) {
-        if (options.showLoader) $('#loader-overlay').hide();
-
-        noty({text: 'Error',  timeout: 2000, type: 'error'});
-    }));
-
-};
+    };
 
     this.post = function(url, data, done) {
         if (typeof data._id != 'undefined') data.id = data._id;
