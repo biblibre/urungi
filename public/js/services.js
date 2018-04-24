@@ -63,45 +63,52 @@ $http({method: 'GET', url: url, params: params})
 
 };
 
-this.post = function(url, data, done) {
-    if (typeof data._id != 'undefined') data.id = data._id;
+    this.post = function(url, data, done) {
+        if (typeof data._id != 'undefined') data.id = data._id;
 
-    $('#loader-overlay').show();
+        $('#loader-overlay').show();
 
-    if (Constants.CRYPTO) {
-        var encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), Constants.SECRET);
-        data = {data: String(encrypted)};
-    }
+        if (Constants.CRYPTO) {
+            var encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), Constants.SECRET);
+            data = {data: String(encrypted)};
+        }
 
-    $http.post(url, data)
-        .success(angular.bind(this, function (data, status, headers, config) {
-            if (typeof data == 'string') window.location.href = '/';
+        let p = $http.post(url, data)
+            .then(response => {
+                let data = response.data;
 
-            if (Constants.CRYPTO) {
-                var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
-                data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-            }
+                if (typeof data == 'string') window.location.href = '/';
 
-            if (typeof done != 'undefined')
-                done(data);
+                if (Constants.CRYPTO) {
+                    var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
+                    data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+                }
 
-            $('#loader-overlay').hide();
+                if (data.result == 1 && data.msg) {
+                    noty({text: data.msg,  timeout: 2000, type: 'success'});
+                }
+                else if (data.result === 0 && data.msg) {
+                    noty({text: data.msg,  timeout: 2000, type: 'error'});
+                }
 
-            if (data.result == 1 && data.msg) {
-                noty({text: data.msg,  timeout: 2000, type: 'success'});
-            }
-            else if (data.result === 0 && data.msg) {
-                noty({text: data.msg,  timeout: 2000, type: 'error'});
-            }
-        }))
-        .error(angular.bind(this, function (data, status, headers, config) {
-            $('#loader-overlay').hide();
+                return data;
+            }, response => {
+                noty({text: 'Error',  timeout: 2000, type: 'error'});
 
-            noty({text: 'Error',  timeout: 2000, type: 'error'});
-        }));
-};
+                throw new Error(response.statusText);
+            })
+            .finally(() => {
+                $('#loader-overlay').hide();
+            });
 
-return this;
+        if (typeof done != 'undefined') {
+            p.then(data => done(data));
+        } else {
+            return p;
+        }
+    };
+
+    return this;
 });
 
 
