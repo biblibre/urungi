@@ -1,9 +1,8 @@
 app.controller('spacesCtrl', function ($scope,$rootScope, connection, uuid2, $routeParams, $timeout) {
 
-    if ($rootScope.user.companyData)
+    if ($rootScope.userObjects)
     {
-        $scope.data = $rootScope.user.companyData.publicSpace;
-        $scope.initialData = $rootScope.user.companyData.publicSpace;
+        $scope.data = $rootScope.userObjects;
     }
 
     if ($routeParams.extra == 'intro') {
@@ -119,14 +118,12 @@ app.controller('spacesCtrl', function ($scope,$rootScope, connection, uuid2, $ro
     };
 
     $scope.save = function(){
-
-
-        connection.post('/api/company/save-public-space', $scope.data, function(data) {
-            if (data.result == 1) {
-                $rootScope.user.companyData.publicSpace =  $scope.data;
-                $scope.initialData = $rootScope.user.companyData.publicSpace;
-            }
-        });
+        connection.post('/api/company/save-public-space', $scope.data)
+            .then(data => {
+                if (data.result == 1) {
+                    $rootScope.userObjects = $scope.data;
+                }
+            });
     }
 
     $scope.remove = function (scope) {
