@@ -98,9 +98,9 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         }
 
     $scope.initForm = function() {
-        queryModel.getLayers( function(layers,selectedLayerID){
+        queryModel.getLayers().then((layers) => {
             $scope.layers = layers;
-            $scope.selectedLayerID = selectedLayerID;
+            $scope.selectedLayerID = queryModel.selectedLayerID();
         });
     }
 

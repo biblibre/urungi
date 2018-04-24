@@ -179,8 +179,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.initLayers =function()
     {
-        queryModel.getLayers( function(layers,selectedLayerID){
-            $scope.layers = queryModel.layers();
+        queryModel.getLayers().then((layers) => {
+            $scope.layers = layers;
             $scope.selectedLayerID = queryModel.selectedLayerID();
         });
     }

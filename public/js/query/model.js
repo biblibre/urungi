@@ -666,39 +666,31 @@ app.service('queryModel' , function ($http, $q, $filter, connection, $compile, $
         return layers;
     }
 
-    this.getLayers = function(done) {
-
-
-        if (layers.length == 0)
-            {
-                connection.get('/api/layers/get-layers', {}, function(data) {
-                    //$scope.errorMsg = (data.result === 0) ? data.msg : false;
-
-                    if (data.result == 1)
-                        {
-                            page = data.page;
-                            pages = data.pages;
-                            layers = data.items;
-                            if (selectedLayerID)
-                                {
-                                  for (var i in data.items)
-                                      {
-                                          if (data.items[i]._id == selectedLayerID)
-                                              {
-                                                    rootItem.elements = data.items[i].objects;
-                                                   selectedLayer = data.items[i];
-
-                                              }
-                                      }
-                                } else {
-                                    setSelectedLayer(data.items[0]);
-                                }
-
-                            calculateIdForAllElements(rootItem.elements);
-                            done(layers,selectedLayerID);
-                        }
-                });
+    this.getLayers = function() {
+        return connection.get('/api/layers/get-layers', {}).then(data => {
+            if (data.result != 1) {
+                throw new Error(data.msg);
             }
+
+            page = data.page;
+            pages = data.pages;
+            layers = data.items;
+
+            if (selectedLayerID) {
+                for (var i in data.items) {
+                    if (data.items[i]._id == selectedLayerID) {
+                        rootItem.elements = data.items[i].objects;
+                        selectedLayer = data.items[i];
+                    }
+                }
+            } else {
+                setSelectedLayer(data.items[0]);
+            }
+
+            calculateIdForAllElements(rootItem.elements);
+
+            return layers;
+        });
     };
 
     function pad(num, size) {
