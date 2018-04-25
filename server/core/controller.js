@@ -7,7 +7,7 @@ function Controller(model) {
 }
 
 Controller.method('findAll', function (req, done) {
-    var Model = this.model, perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
+    var Model = this.model, perPage = config.get('pagination.itemsPerPage'), page = (req.query.page) ? req.query.page : 1;
     var find = {}, searchText = (req.query.search) ? req.query.search : false, fields = {};
     var fieldsToGet = (req.query.fields) ? req.query.fields : false;
     if (req.query.page > 0)

@@ -64,12 +64,12 @@ passport.serializeUser(function(user, done) {
         }
     ));
 
-    if (typeof config.google !== 'undefined') {
+    if (config.has('google')) {
         passport.use(new GoogleStrategy({
-                clientID: config.google.clientID,
-                clientSecret: config.google.clientSecret,
+                clientID: config.get('google.clientID'),
+                clientSecret: config.get('google.clientSecret'),
                 scope: ['profile', 'email'],
-                callbackURL: config.google.callbackURL
+                callbackURL: config.get('google.callbackURL')
             },
             function(req, accessToken, refreshToken, profile, done) {
                 Users.findOrCreateGoogleUser(profile, done);

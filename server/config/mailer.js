@@ -2,17 +2,17 @@ function sendEmail(emailSubject, emailMessage, emailTo) {
 
     var nodemailer = require("nodemailer");
     var transportSMTP = nodemailer.createTransport("SMTP", {
-        host: config.mailer.host, // hostname
-        secureConnection: config.mailer.secureConnection, // use SSL
-        port: config.mailer.port, // port for secure SMTP
+        host: config.get('mailer.host'), // hostname
+        secureConnection: config.get('mailer.secureConnection'), // use SSL
+        port: config.get('mailer.port'), // port for secure SMTP
         auth: {
-            user: config.mailer.auth.user,
-            pass: config.mailer.auth.pass
+            user: config.get('mailer.auth.user'),
+            pass: config.get('mailer.auth.pass')
         }
     });
 
     var mailOptions = {
-        from: config.mailer.from, // sender address
+        from: config.get('mailer.from'), // sender address
         to: emailTo, // list of receivers
         subject: emailSubject, // Subject line
         html: emailMessage // html body
@@ -44,23 +44,23 @@ function sendEmailTemplate(theEmailTemplate,recipients,emailField,subject)
 
 var templatesDir = path.resolve(__dirname, '../../', 'email_templates/'+theEmailTemplate)
     var template = new EmailTemplate(templatesDir);
-    if (config.mailer.service != 'SMTP')
+    if (config.get('mailer.service') != 'SMTP')
     {
         var transport = nodemailer.createTransport({
-            service: config.mailer.service,
+            service: config.get('mailer.service'),
             auth: {
-                user: config.mailer.auth.user,
-                pass: config.mailer.auth.pass
+                user: config.get('mailer.auth.user'),
+                pass: config.get('mailer.auth.pass')
             }
         });
     } else {
         var transport = nodemailer.createTransport({
-            host: config.mailer.host, // hostname
-            secureConnection: config.mailer.secureConnection, // use SSL
-            port: config.mailer.port, // port for secure SMTP
+            host: config.get('mailer.host'), // hostname
+            secureConnection: config.get('mailer.secureConnection'), // use SSL
+            port: config.get('mailer.port'), // port for secure SMTP
             auth: {
-                user: config.mailer.auth.user,
-                pass: config.mailer.auth.pass
+                user: config.get('mailer.auth.user'),
+                pass: config.get('mailer.auth.pass')
             }
         });
     }
@@ -74,7 +74,7 @@ async.mapLimit(recipients, 10, function (item, next) {
     template.render(item, function (err, results) {
         if (err) return next(err)
         transport.sendMail({
-            from: config.mailer.from,
+            from: config.get('mailer.from'),
             to: item[emailField],
             subject: subject,
             html: results.html,

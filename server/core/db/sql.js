@@ -819,9 +819,9 @@ function processCollections(req,query,collections, dataSource, params, thereAreJ
                     SQLstring = db.setLimitToSQL(SQLstring,dataSource.params[0].packetSize, ((params.page -1 )*dataSource.params[0].packetSize));
             } else {
 
-            if (config.query.defaultRecordsPerPage > 1)
+            if (config.get('query.defaultRecordsPerPage') > 1)
                 {
-                SQLstring = db.setLimitToSQL(SQLstring,config.query.defaultRecordsPerPage, ((params.page -1 )*config.query.defaultRecordsPerPage));
+                SQLstring = db.setLimitToSQL(SQLstring,config.get('query.defaultRecordsPerPage'), ((params.page -1 )*config.get('query.defaultRecordsPerPage')));
                 }
             }
 

@@ -30,7 +30,7 @@ exports.DashboardsFindAll = function(req,res){
     }
 
 
-    var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
+    var perPage = config.get('pagination.itemsPerPage'), page = (req.query.page) ? req.query.page : 1;
     /*
      if (isWSTADMIN)
      var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"}]}

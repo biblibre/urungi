@@ -67,7 +67,7 @@ function upload(data, file, params, done) {
         fs.writeFile(newPath, data, function (err) {
             if(err) throw err;
 
-            File['url'] = config.url+"uploads/"+File._id+"."+File.extension;
+            File['url'] = config.get('url')+"uploads/"+File._id+"."+File.extension;
 
             Files.create(File, function(err, file){
                 if(err) throw err;

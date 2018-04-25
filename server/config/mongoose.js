@@ -1,7 +1,6 @@
 module.exports = function (mongoose, done) {
 
-    var dbURI = config.db;
-    if (config.db_type == 'tingoDB')
+    if (config.get('db_type') == 'tingoDB')
         {
             //global.connection = mongoose.connect('tingodb:'+global.tingo_db_path);
             console.log('tingo DB connection');
@@ -11,6 +10,7 @@ module.exports = function (mongoose, done) {
             global.connection = mongoose.connect('mongodb://data');
 
         } else {
+            let dbURI = config.get('db');
             console.log('mongo DB connection');
             var mongoose = require('mongoose');
             global.connection = mongoose.createConnection(dbURI,{ server: { poolSize: 5 } });

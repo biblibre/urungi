@@ -1,15 +1,4 @@
-var env = process.env.NODE_ENV || 'production';
-// Application Params
-process.argv.forEach(function(val, index, array) {
-    if (index == 2) env = val;
-});
-global.env = env;
-
-// production only
-if (env == 'production') {
-
-};
-
+const config = require('config');
 
 var express = require('express'),
     path = require('path'),
@@ -78,7 +67,6 @@ if (cluster.isMaster) {
 
     });
 } else {
-    var config = require('./server/config/config')[env];
     global.config = config;
 
     require('./server/config/mongoose')();
@@ -98,8 +86,8 @@ if (cluster.isMaster) {
         require(routes_dir+'/'+ file+'/routes.js')(app);
     });
     
-    var ipaddr  = process.env.IP || config.ip;
-    var port    = process.env.PORT  || config.port;
+    var ipaddr  = process.env.IP || config.get('ip');
+    var port    = process.env.PORT || config.get('port');
 
     app.listen(port, ipaddr);
 

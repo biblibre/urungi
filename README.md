@@ -40,8 +40,6 @@ Google Big Query
 Install nodejs (mandatory)
 
 Install mongodb (mandatory)
-    
-    mongodb can be installed in a different server, if so, configure the connection in the /server/config.js production environment.
 
 Install npm (mandatory)
 
@@ -63,6 +61,18 @@ download and install the bower libraries
 be sure you choose the angular 1.5.5 when pointed to choose otherwise it will install 1.6.4 and widestage is not compatible with that version yet, also to be sure you can run  bower install angular#1.5.5 --save
     
     bower install
+
+
+# Configuration
+
+widestage use [config](https://www.npmjs.com/package/config) to manage its
+configuration files.
+
+You can change the configuration by creating a file in `config/` directory named
+`local-{env}.js` (where {env} is one of: `production`, `development`) and
+overriding any properties defined in `config/default.js`
+
+More info at https://github.com/lorenwest/node-config/wiki/Configuration-Files
 
 
 # Oracle connections
