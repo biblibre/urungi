@@ -10,9 +10,8 @@ var cluster = require('cluster');
 var passport = require("passport");
 //var mongoose = require('mongoose');
 var session = require('express-session');
-var RedisStore = require('connect-redis')(session); //npm install connect-redis --- to store variable sessions
+const MongoStore = require ('connect-mongo')(session);
 var cookieParser = require('cookie-parser');
-var cookieSession = require('cookie-session');
 
 //var bb = require('express-busboy');
 var app = express();
@@ -24,9 +23,30 @@ app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 
+const mongooseConnection = require('mongoose').createConnection(config.get('db'));
+const mongoStore = new MongoStore({
+    mongooseConnection: mongooseConnection,
+    collection: 'wst_Sessions',
+    ttl: 60 * 60 * 24, // 24 hours
+});
 app.use(cookieParser());
-app.use(cookieSession({key:"widestage", secret:"HEWÑÑasdfwejñlkjqwernnkkk13134134wer", httpOnly: true, secure: false, cookie: {maxAge: 60 * 60 * 1000}}));
-app.use(session({secret: 'ndwidestagev0', cookie: {httpOnly: true, secure: false}, store: new RedisStore({maxAge: 60 * 60 * 1000}), resave: false, saveUninitialized: true}));
+app.use(session({
+    secret: 'ndwidestagev0',
+    cookie: {
+        httpOnly: true,
+        secure: false,
+    },
+    store: mongoStore,
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.use(function (req, res, next) {
+  if (!req.session) {
+    return next(new Error('Session initialization failed, check the server logs'))
+  }
+  next()
+})
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: '50mb'})); // get information from html forms

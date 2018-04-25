@@ -13,7 +13,7 @@
     "bigquery": "0.0.6",
     "body-parser": "~1.14.1",
     "config": "^1.30.0",
-    "connect-redis": "~2.1.0",
+    "connect-mongo": "^2.0.1",
     "cookie": "^0.2.3",
     "cookie-parser": "~1.4.0",
     "cookie-session": "~2.0.0-alpha.1",
