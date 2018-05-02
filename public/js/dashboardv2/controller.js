@@ -913,8 +913,8 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         $scope.selectedDashboard.reports[index].loadingData = true;
         $scope.showOverlay('OVERLAY_' + $scope.selectedDashboard.reports[index].id);
 
-        queryModel.getQueryData($scope.selectedDashboard.reports[index].query, function (data) {
-            $scope.selectedDashboard.reports[index].query.data = data;
+        queryModel.getQueryData($scope.selectedDashboard.reports[index].query).then(data => {
+            $scope.selectedDashboard.reports[index].query.data = data.data;
             $scope.selectedDashboard.reports[index].loadingData = false;
             $scope.hideOverlay('OVERLAY_' + $scope.selectedDashboard.reports[index].id);
             getQueryData(index + 1, done);

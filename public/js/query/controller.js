@@ -299,12 +299,14 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         $scope.queries = [];
         $scope.queries.push($scope.query);
 
-        queryModel.getQueryData(function (data, sql) {
-            $scope.queries[0].data = data;
-            $scope.sql = sql;
+        queryModel.getQueryData().then(data => {
+            $scope.queries[0].data = data.data;
+            $scope.sql = data.sql;
 
-            var gridProperties = {rowHeight: 20,
-                cellBorderColor: '#000'};
+            var gridProperties = {
+                rowHeight: 20,
+                cellBorderColor: '#000',
+            };
 
             grid.simpleGrid($scope.columns, $scope.query.name, $scope.query, false, gridProperties, function () {
                 bsLoadingOverlayService.stop({referenceId: 'reportLayout'});

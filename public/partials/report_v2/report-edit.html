@@ -39,19 +39,18 @@
 
 
 <div ng-show="showSQL" class="panel panel-default" style="z-index:100">
-            <div class="panel-heading">
-				<h3 class="panel-title">SQL query</h3>
+    <div class="panel-heading">
+        <h3 class="panel-title">SQL query</h3>
 
-				<div class="panel-options">
-                    <a ng-click="getSQLPanel();" data-toggle="remove" style="cursor: pointer; cursor: hand;" >
-						x
-					</a>
-				</div>
-			</div>
+        <div class="panel-options">
+            <a ng-click="getSQLPanel();" data-toggle="remove" style="cursor: pointer;">x</a>
+        </div>
+    </div>
 
-			<div class="panel-body">
-				<p>{{sql}}</p>
-			</div>
+    <div class="panel-body">
+        <p>{{sql}}</p>
+        <p>Execution time: {{time}}ms</p>
+    </div>
 </div>
 
 

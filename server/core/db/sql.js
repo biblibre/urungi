@@ -434,36 +434,35 @@ function processCollections (req, query, collections, dataSource, params, thereA
                     return console.error('Connection Error: ', err);
                 }
 
+                const start = Date.now();
                 db.query(SQLstring, function (err, result) {
                     if (err) {
                         setresult({result: 0, msg: 'Generated SQL Error: ' + SQLstring, sql: SQLstring});
                         saveToLog(req, 'SQL Error: ' + err + ' (' + SQLstring + ')', 300, 'SQL-002', 'QUERY: (' + JSON.stringify(query) + ')', undefined);
-                        db.end();
                     } else {
-                        if (result) {
-                            getFormatedResult(elements, result.rows, function (finalResults) {
-                                setresult({result: 1, data: finalResults, sql: SQLstring});
-                                saveToLog(req, SQLstring, 400, 'SQL-001', 'QUERY: (' + JSON.stringify(query) + ')', undefined);
-                            });
-                        } else {
-                            setresult({result: 1, data: [], sql: SQLstring});
-                        }
+                        const time = Date.now() - start;
 
-                        db.end();
+                        getFormatedResult(elements, result.rows, function (finalResults) {
+                            setresult({result: 1, data: finalResults, sql: SQLstring, time: time});
+                            if (result) {
+                                saveToLog(req, SQLstring, 400, 'SQL-001', 'QUERY: (' + JSON.stringify(query) + ')', undefined);
+                            }
+                        });
                     }
+
+                    db.end();
                 });
             });
         } else {
             dataSource.params[0].connection.companyID = req.user.companyID;
 
+            const start = Date.now();
             db.executeSQLQuery(dataSource.params[0].connection, SQLstring, function (result) {
-                if (result) {
-                    getFormatedResult(elements, result, function (finalResults) {
-                        setresult({result: 1, data: finalResults, sql: SQLstring});
-                    });
-                } else {
-                    setresult({result: 1, data: [], sql: SQLstring});
-                }
+                const time = Date.now() - start;
+
+                getFormatedResult(elements, result, function (finalResults) {
+                    setresult({result: 1, data: finalResults, sql: SQLstring, time: time});
+                });
             });
         }
     });
@@ -473,24 +472,26 @@ function getFormatedResult (elementSchema, results, done) {
     var finalResults = [];
     var moment = require('moment');
 
-    for (var r in results) {
-        for (var es in elementSchema) {
-            var newRecord = {};
+    if (results) {
+        for (var r in results) {
+            for (var es in elementSchema) {
+                var newRecord = {};
 
-            if (elementSchema[es].elementType === 'date' && elementSchema[es].format) {
-                results[r][elementSchema[es].id + '_original'] = results[r][elementSchema[es].id];
-                if (results[r][elementSchema[es].id]) {
-                    var date = new Date(results[r][elementSchema[es].id]);
-                    results[r][elementSchema[es].id] = moment(date).format(elementSchema[es].format);
+                if (elementSchema[es].elementType === 'date' && elementSchema[es].format) {
+                    results[r][elementSchema[es].id + '_original'] = results[r][elementSchema[es].id];
+                    if (results[r][elementSchema[es].id]) {
+                        var date = new Date(results[r][elementSchema[es].id]);
+                        results[r][elementSchema[es].id] = moment(date).format(elementSchema[es].format);
+                    }
+                }
+
+                for (var f in results[r]) {
+                    newRecord[f.toLowerCase()] = results[r][f];
                 }
             }
 
-            for (var f in results[r]) {
-                newRecord[f.toLowerCase()] = results[r][f];
-            }
+            finalResults.push(newRecord);
         }
-
-        finalResults.push(newRecord);
     }
 
     done(finalResults);
