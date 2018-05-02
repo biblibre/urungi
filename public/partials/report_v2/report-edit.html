@@ -23,7 +23,11 @@
 
 
 <div ng-if="selectedReport.properties.columns.length > 0 || (selectedReport.properties.ykeys.length > 0 && selectedReport.properties.xkeys.length > 0)" class="container-fluid branded-border-panel" style="width:100%">
-    <button  id="queryRefresh" class="btn btn-success" ng-show="selectedReport.properties.columns.length > 0 || (selectedReport.properties.ykeys.length > 0 && selectedReport.properties.xkeys.length > 0)" class="pull-right" ng-click="processStructure();"  style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ></i> Refresh data</button>
+    <button  id="queryRefresh" class="btn btn-success" ng-show="selectedReport.properties.columns.length > 0 || (selectedReport.properties.ykeys.length > 0 && selectedReport.properties.xkeys.length > 0)" class="pull-right" ng-click="processStructure();"  style="padding: 3px 10px;">
+        <i class="fa fa-refresh hand-cursor"></i>
+        Refresh data
+        <span ng-if="time !== undefined">({{time}}ms)</span>
+    </button>
     <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
 
     <h4 class="pull-right" >Query results</h4>
@@ -39,19 +43,17 @@
 
 
 <div ng-show="showSQL" class="panel panel-default" style="z-index:100">
-            <div class="panel-heading">
-				<h3 class="panel-title">SQL query</h3>
+    <div class="panel-heading">
+        <h3 class="panel-title">SQL query</h3>
 
-				<div class="panel-options">
-                    <a ng-click="getSQLPanel();" data-toggle="remove" style="cursor: pointer; cursor: hand;" >
-						x
-					</a>
-				</div>
-			</div>
+        <div class="panel-options">
+            <a ng-click="getSQLPanel();" data-toggle="remove" style="cursor: pointer;">x</a>
+        </div>
+    </div>
 
-			<div class="panel-body">
-				<p>{{sql}}</p>
-			</div>
+    <div class="panel-body">
+        <p>{{sql}}</p>
+    </div>
 </div>
 
 

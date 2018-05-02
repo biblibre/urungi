@@ -14,20 +14,22 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         });
     };
 
-    this.getReport = function (report, parentDiv, mode, done) {
-        getReport(report, parentDiv, mode, done);
+    this.getReport = function (report, parentDiv, mode) {
+        return getReport(report, parentDiv, mode);
     };
 
-    function getReport (report, parentDiv, mode, done) {
+    function getReport (report, parentDiv, mode) {
         showOverlay(parentDiv);
         queryModel.loadQuery(report.query);
         queryModel.detectLayerJoins();
-        queryModel.getQueryData(report.query, function (data, sql, query) {
-            report.query.data = data;
+
+        return queryModel.getQueryData(report.query).then(data => {
+            report.query.data = data.data;
             report.parentDiv = parentDiv;
             repaintReport(report, mode);
-            done(sql);
             hideOverlay(parentDiv);
+
+            return data;
         });
     }
 
@@ -37,8 +39,8 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
 
     function getReportDataNextPage (report, page) {
         queryModel.loadQuery(report.query);
-        queryModel.getQueryDataNextPage(page, function (data, sql, query) {
-            report.query.data.push.apply(report.query.data, data);
+        queryModel.getQueryDataNextPage(page).then(data => {
+            report.query.data.push.apply(report.query.data, data.data);
         });
     }
 
@@ -230,8 +232,8 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         report.query.order.push(theColumn);
         showOverlay('OVERLAY_' + hashedID);
 
-        queryModel.getQueryData(report.query, function (data, sql, query) {
-            report.query.data = data;
+        queryModel.getQueryData(report.query).then(data => {
+            report.query.data = data.data;
             hideOverlay('OVERLAY_' + hashedID);
         });
         // get the column index, identify the report.query.column by  index, then add to query.order taking care about the sortType -1 / 1

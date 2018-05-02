@@ -126,7 +126,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.mode = 'edit';
         queryModel.loadQuery(report.query);
         queryModel.detectLayerJoins();
-        report_v2Model.getReport(report, 'reportLayout', $scope.mode, function () {
+        report_v2Model.getReport(report, 'reportLayout', $scope.mode).then(() => {
             $scope.hideOverlay('OVERLAY_reportLayout');
         });
     });
@@ -214,13 +214,12 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                         $scope.showOverlay('OVERLAY_reportLayout');
                         $scope.selectedReport = report;
                         $scope.mode = 'edit';
-                        report_v2Model.getReport(report, 'reportLayout', $scope.mode, function (sql) {
-                            $scope.sql = sql;
+                        report_v2Model.getReport(report, 'reportLayout', $scope.mode).then(() => {
                             $scope.selectedLayerID = queryModel.selectedLayerID();
                             $scope.hideOverlay('OVERLAY_reportLayout');
                         });
                     } else {
-                    // TODO:No report found message
+                        // TODO:No report found message
                     }
                 });
             }
@@ -739,8 +738,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             $scope.showOverlay('OVERLAY_reportLayout');
 
             if ($scope.selectedReport.reportType === 'grid' || $scope.selectedReport.reportType === 'vertical-grid') {
-                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, function (sql) {
-                    $scope.sql = sql;
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                    $scope.sql = data.sql;
+                    $scope.time = data.time;
                     $scope.hideOverlay('OVERLAY_reportLayout');
                     $scope.gettingData = false;
                 });
@@ -760,8 +760,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                         id: customObjectData.id,
                         type: 'bar',
                         color: '#000000'};
-                    report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, function (sql) {
-                        $scope.sql = sql;
+                    report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                        $scope.sql = data.sql;
+                        $scope.time = data.time;
                         $scope.hideOverlay('OVERLAY_reportLayout');
                         $scope.gettingData = false;
                     });
@@ -771,8 +772,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 const theChartID = 'Chart' + uuid2.newguid();
                 $scope.selectedReport.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
                 $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
-                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, function (sql) {
-                    $scope.sql = sql;
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                    $scope.sql = data.sql;
+                    $scope.time = data.time;
                     $scope.hideOverlay('OVERLAY_reportLayout');
                     $scope.gettingData = false;
                 });
@@ -781,8 +783,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             if ($scope.selectedReport.reportType === 'indicator') {
                 console.log('Report Type indicator');
 
-                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, function (sql) {
-                    $scope.sql = sql;
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                    $scope.sql = data.sql;
+                    $scope.time = data.time;
                     $scope.hideOverlay('OVERLAY_reportLayout');
                     $scope.gettingData = false;
                 });
