@@ -64,8 +64,7 @@ exports.UsersUpdate = function (req, res) {
 
 exports.UsersDelete = function (req, res) {
     req.query.trash = true;
-
-    controller.delete(req, function (result) {
+    controller.remove(req, function (result) {
         serverResponse(req, res, 200, result);
     });
 };
@@ -285,7 +284,7 @@ exports.getUserData = function (req, res) {
         theUserData.privateSpace = req.user.privateSpace;
         theUserData.roles = req.user.roles;
         theUserData.rolesData = req.user.rolesData;
-        theUserData.staus = req.user.status;
+        theUserData.status = req.user.status;
         theUserData.userName = req.user.userName;
 
         var createReports = false;

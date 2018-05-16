@@ -74,7 +74,7 @@ function authenticate (passport, Users, req, res, next) {
 
         if (!user) {
             if (global.logFailLogin == true) { saveToLog(req, 'User fail login: ' + info.message, '', 102); }
-            res.send(401, info.message);
+            res.status(401).send(info.message);
         } else {
             var loginData = {
                 'last_login_date': new Date(),

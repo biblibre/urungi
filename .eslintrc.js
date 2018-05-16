@@ -2,6 +2,7 @@ module.exports = {
     extends: 'standard',
     env: {
         jquery: true,
+        mocha: true,
     },
     globals: {
         // defined in server.js

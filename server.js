@@ -8,7 +8,9 @@ var cluster = require('cluster');
 var passport = require('passport');
 // var mongoose = require('mongoose');
 var session = require('express-session');
+
 const MongoStore = require('connect-mongo')(session);
+
 var cookieParser = require('cookie-parser');
 
 // var bb = require('express-busboy');
@@ -27,7 +29,9 @@ const mongoStore = new MongoStore({
     collection: 'wst_Sessions',
     ttl: 60 * 60 * 24, // 24 hours
 });
+app.locals.mongooseConnection = mongooseConnection;
 app.use(cookieParser());
+
 app.use(session({
     secret: 'ndwidestagev0',
     cookie: {
@@ -66,7 +70,7 @@ if (authentication) {
     app.use(passport.authenticate('remember-me'));
 }
 
-if (cluster.isMaster) {
+if (cluster.isMaster && process.env.NODE_ENV !== 'test') {
     var numCPUs = require('os').cpus().length;
 
     // Fork workers.
@@ -104,7 +108,13 @@ if (cluster.isMaster) {
     var ipaddr = process.env.IP || config.get('ip');
     var port = process.env.PORT || config.get('port');
 
-    app.listen(port, ipaddr);
+    if (process.env.NODE_ENV !== 'test') {
+        app.listen(port, ipaddr);
 
-    console.log('Server running at http://' + ipaddr + ':' + port + '/ in worker ' + cluster.worker.id);
+        console.log("Server running at http://" + ipaddr + ":" + port + "/");
+    }
+
+
 }
+
+module.exports = app

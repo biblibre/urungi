@@ -78,7 +78,6 @@ usersSchema.statics.createUser = function (req, done) {
         done(result);
     });
 };
-
 usersSchema.statics.createTheUser = function (req, res, userData, done) {
     var User = this;
     if (!userData.userName) {
@@ -113,7 +112,6 @@ usersSchema.statics.createTheUser = function (req, res, userData, done) {
 
 usersSchema.statics.setViewedContextHelp = function (req, done) {
     var userID = req.user._id;
-    console.log('the user context name', userID, req.query.contextHelpName, req);
 
     this.findOne({'_id': userID}, function (err, findUser) {
         if (findUser) {

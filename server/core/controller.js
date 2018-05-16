@@ -182,7 +182,7 @@ Controller.method('update', function (req, done) {
         user_companyName: (req.isAuthenticated()) ? req.user.companyName : null
     });
 
-    // this.model.update({"_id" : id}, {$set: data }, function (err, numAffected) {
+
     this.model.update(find, {$set: data }, function (err, result) {
         if (err) throw err;
 
@@ -197,6 +197,7 @@ Controller.method('update', function (req, done) {
 });
 
 Controller.method('remove', function (req, done) {
+    
     if (!req.params.id) {
         done({result: 0, msg: "'id' is required."});
         return;
@@ -205,7 +206,7 @@ Controller.method('remove', function (req, done) {
     var find = generateFindFields(req, req.params.id);
     this.model.remove(find, function (err, result) {
         if (err) throw err;
-
+        result = result.result;
         var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
 
         if (numAffected > 0) {
