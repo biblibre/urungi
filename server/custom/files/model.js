@@ -6,7 +6,7 @@ var FilesSchema = new mongoose.Schema({
     type: {type: String, required: true},
     url: {type: String},
     size: {type: Number},
-    nd_trash_deleted:{type: Boolean},
+    nd_trash_deleted: {type: Boolean},
     nd_trash_deleted_date: {type: Date},
     upload_user_id: {type: String},
     createdOn: {type: Date}

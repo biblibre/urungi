@@ -2,14 +2,13 @@
 'use strict';
 
 var app = angular.module('WideStage', [
-        'ngRoute','ui.sortable','gridster','ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
-        'infinite-scroll','angular-canv-gauge','ui.bootstrap-slider', 'widestage.directives','ngSanitize', 'ui.select','tg.dynamicDirective','angularUUID2','vs-repeat',
-        'ui.bootstrap.datetimepicker','ui.tree','page.block','gridshore.c3js.chart','vAccordion','bsLoadingOverlay','gg.editableText'
-    ,'intro.help','ngTagsInput','ui.codemirror','720kb.socialshare','ngFileUpload','pascalprecht.translate','colorpicker.module','angularSpectrumColorpicker','wst.inspector'
-    ])
-    .config(['$routeProvider','$translateProvider', function($routeProvider,$translateProvider) {
-
-        //$translateProvider.useUrlLoader('./translations.json');
+    'ngRoute', 'ui.sortable', 'gridster', 'ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
+    'infinite-scroll', 'angular-canv-gauge', 'ui.bootstrap-slider', 'widestage.directives', 'ngSanitize', 'ui.select', 'tg.dynamicDirective', 'angularUUID2', 'vs-repeat',
+    'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'gridshore.c3js.chart', 'vAccordion', 'bsLoadingOverlay', 'gg.editableText',
+    'intro.help', 'ngTagsInput', 'ui.codemirror', '720kb.socialshare', 'ngFileUpload', 'pascalprecht.translate', 'colorpicker.module', 'angularSpectrumColorpicker', 'wst.inspector'
+])
+    .config(['$routeProvider', '$translateProvider', function ($routeProvider, $translateProvider) {
+        // $translateProvider.useUrlLoader('./translations.json');
         $translateProvider.preferredLanguage('en');
         $translateProvider.useSanitizeValueStrategy('escaped');
 
@@ -47,9 +46,9 @@ var app = angular.module('WideStage', [
             controller: 'dashBoardCtrl'
         });
 
-        //dashboards v2
+        // dashboards v2
 
-         $routeProvider.when('/dashboardv2', {
+        $routeProvider.when('/dashboardv2', {
             templateUrl: 'partials/dashboardv2/list.html',
             controller: 'dashBoardv2Ctrl'
         });
@@ -72,16 +71,16 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/dashboardv2/edit.html',
             controller: 'dashBoardv2Ctrl'
         });
-        /*$routeProvider.when('/dashboardsv2/edit/:dashboardID/', {
+        /* $routeProvider.when('/dashboardsv2/edit/:dashboardID/', {
             templateUrl: 'partials/dashboardv2/edit.html',
             controller: 'dashBoardv2Ctrl'
-        });*/
+        }); */
         $routeProvider.when('/dashboardsv2/:mode/:dashboardID/', {
             templateUrl: 'partials/dashboardv2/edit.html',
             controller: 'dashBoardv2Ctrl'
         });
 
-        //reports
+        // reports
 
         $routeProvider.when('/reports', {
             templateUrl: 'partials/report/list.html',
@@ -103,18 +102,18 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/reports/new/:reportID/', {
-            /*templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl'*/
+            /* templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl' */
             templateUrl: 'partials/report_v2/edit.html',
             controller: 'report_v2Ctrl'
         });
         $routeProvider.when('/reports/edit/:reportID/', {
-            /*templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl'*/
+            /* templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl' */
             templateUrl: 'partials/report_v2/edit.html',
             controller: 'report_v2Ctrl'
         });
-        //Data sources
+        // Data sources
 
         $routeProvider.when('/data-sources', {
             templateUrl: 'partials/data-source/list.html',
@@ -146,7 +145,7 @@ var app = angular.module('WideStage', [
             controller: 'dataSourceCtrl'
         });
 
-        //layers
+        // layers
 
         $routeProvider.when('/layers', {
             templateUrl: 'partials/layer/list.html',
@@ -168,7 +167,7 @@ var app = angular.module('WideStage', [
             controller: 'layerCtrl'
         });
 
-        //users
+        // users
 
         $routeProvider.when('/users', {
             templateUrl: 'partials/users/list.html',
@@ -189,7 +188,7 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/users/edit.html',
             controller: 'AdminUsersCtrl'
         });
-        //roles
+        // roles
         $routeProvider.when('/roles', {
             templateUrl: 'partials/roles/list.html',
             controller: 'rolesCtrl'
@@ -208,7 +207,7 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/logout/index.html',
             controller: 'logOutCtrl'
         });
-        //spaces
+        // spaces
         $routeProvider.when('/public-space', {
             templateUrl: 'partials/spaces/index.html',
             controller: 'spacesCtrl'
@@ -217,7 +216,7 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/spaces/index.html',
             controller: 'spacesCtrl'
         });
-        //pages
+        // pages
         $routeProvider.when('/pages', {
             templateUrl: 'partials/pages/list.html',
             controller: 'pagesCtrl'
@@ -241,7 +240,7 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/pages/edit.html',
             controller: 'pagesCtrl'
         });
-        //queries
+        // queries
 
         $routeProvider.when('/query/new/:queryID', {
             templateUrl: 'partials/report/edit.html',
@@ -252,21 +251,21 @@ var app = angular.module('WideStage', [
             controller: 'reportCtrl'
         });
 
-        //explore
+        // explore
         $routeProvider.when('/explore', {
-            //templateUrl: 'partials/query/exploreIndex.html',
-            //controller: 'queryCtrl'
+            // templateUrl: 'partials/query/exploreIndex.html',
+            // controller: 'queryCtrl'
             templateUrl: 'partials/report_v2/edit.html',
             controller: 'report_v2Ctrl'
         });
         $routeProvider.when('/explore/:extra', {
-           // templateUrl: 'partials/query/exploreIndex.html',
-            //controller: 'queryCtrl'
+            // templateUrl: 'partials/query/exploreIndex.html',
+            // controller: 'queryCtrl'
             templateUrl: 'partials/report_v2/edit.html',
             controller: 'report_v2Ctrl'
         });
 
-        //catalog
+        // catalog
         $routeProvider.when('/catalog', {
             templateUrl: 'partials/catalog/view.html',
             controller: 'catalogCtrl'
@@ -276,7 +275,7 @@ var app = angular.module('WideStage', [
             controller: 'catalogCtrl'
         });
 
-        //reports V2
+        // reports V2
         /*
         $routeProvider.when('/reports-v2', {
             templateUrl: 'partials/report_v2/list.html',
@@ -285,7 +284,7 @@ var app = angular.module('WideStage', [
         $routeProvider.when('/reports-v2/:extra', {
             templateUrl: 'partials/report_v2/list.html',
             controller: 'report_v2Ctrl'
-        });*/
+        }); */
 
         $routeProvider.when('/reports-v2/:reportID/', {
             templateUrl: 'partials/report-view/view.html',
@@ -306,71 +305,70 @@ var app = angular.module('WideStage', [
             controller: 'report_v2Ctrl'
         });
 
-        /*setup*/
+        /* setup */
 
         $routeProvider.when('/setup', {
             templateUrl: 'partials/setup/index.html',
             controller: 'setupCtrl'
         });
-
     }])
-.factory('$sessionStorage', ['$window', function($window) {
-    return {
-        set: function(key, value) {
-            $window.sessionStorage[key] = value;
-        },
-        get: function(key, defaultValue) {
-            return $window.sessionStorage[key] || defaultValue;
-        },
-        setObject: function(key, value) {
-            $window.sessionStorage[key] = JSON.stringify(value);
-        },
-        getObject: function(key) {
-            return ($window.sessionStorage[key]) ? JSON.parse($window.sessionStorage[key]) : false;
-        },
-        removeObject: function(key) {
-            delete($window.sessionStorage[key]);
-        }
-    };
-}])
-.factory('$localStorage', ['$window', function($window) {
-    return {
-        set: function(key, value) {
-            $window.localStorage[key] = value;
-        },
-        get: function(key, defaultValue) {
-            return $window.localStorage[key] || defaultValue;
-        },
-        setObject: function(key, value) {
-            $window.localStorage[key] = JSON.stringify(value);
-        },
-        getObject: function(key) {
-            return ($window.localStorage[key]) ? JSON.parse($window.localStorage[key]) : false;
-        },
-        removeObject: function(key) {
-            delete($window.localStorage[key]);
-        }
-    };
-}]);
+    .factory('$sessionStorage', ['$window', function ($window) {
+        return {
+            set: function (key, value) {
+                $window.sessionStorage[key] = value;
+            },
+            get: function (key, defaultValue) {
+                return $window.sessionStorage[key] || defaultValue;
+            },
+            setObject: function (key, value) {
+                $window.sessionStorage[key] = JSON.stringify(value);
+            },
+            getObject: function (key) {
+                return ($window.sessionStorage[key]) ? JSON.parse($window.sessionStorage[key]) : false;
+            },
+            removeObject: function (key) {
+                delete ($window.sessionStorage[key]);
+            }
+        };
+    }])
+    .factory('$localStorage', ['$window', function ($window) {
+        return {
+            set: function (key, value) {
+                $window.localStorage[key] = value;
+            },
+            get: function (key, defaultValue) {
+                return $window.localStorage[key] || defaultValue;
+            },
+            setObject: function (key, value) {
+                $window.localStorage[key] = JSON.stringify(value);
+            },
+            getObject: function (key) {
+                return ($window.localStorage[key]) ? JSON.parse($window.localStorage[key]) : false;
+            },
+            removeObject: function (key) {
+                delete ($window.localStorage[key]);
+            }
+        };
+    }]);
 
 app.factory('PagerService', PagerService);
 
 app.directive('sizeelement', function ($window) {
-    return{
-        scope:true,
+    return {
+        scope: true,
         priority: 0,
         link: function (scope, element) {
-            scope.$watch(function(){return $(element).height(); }, function(newValue, oldValue) {
-                scope.height=$(element).height();
+            scope.$watch(function () { return $(element).height(); }, function (newValue, oldValue) {
+                scope.height = $(element).height();
             });
-        }}
+        }};
 });
 
-app.directive('ngEnter', function() {
-    return function(scope, element, attrs) {
-        element.bind("keydown keypress", function(event) {
-            if(event.which === 13) {
-                scope.$apply(function(){
+app.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind('keydown keypress', function (event) {
+            if (event.which === 13) {
+                scope.$apply(function () {
                     scope.$eval(attrs.ngEnter, {'event': event});
                 });
 
@@ -380,85 +378,77 @@ app.directive('ngEnter', function() {
     };
 });
 
-app.service('queryService', function() {
-  var theQuery = {};
+app.service('queryService', function () {
+    var theQuery = {};
 
-  var addQuery = function(newObj) {
-      theQuery = newObj;
-  };
+    var addQuery = function (newObj) {
+        theQuery = newObj;
+    };
 
-  var getQuery = function(){
-      return theQuery;
-  };
+    var getQuery = function () {
+        return theQuery;
+    };
 
-  return {
-    addQuery: addQuery,
-    getQuery: getQuery
-  };
-
+    return {
+        addQuery: addQuery,
+        getQuery: getQuery
+    };
 });
 
-app.service('reportService', function() {
-  var theReport = {};
+app.service('reportService', function () {
+    var theReport = {};
 
-  var addReport = function(newObj) {
-      theReport = newObj;
-  };
+    var addReport = function (newObj) {
+        theReport = newObj;
+    };
 
-  var getReport = function(){
-      return theReport;
-  };
+    var getReport = function () {
+        return theReport;
+    };
 
-  return {
-    addReport: addReport,
-    getReport: getReport
-  };
-
+    return {
+        addReport: addReport,
+        getReport: getReport
+    };
 });
 
-app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $sessionStorage, connection) {
-    $rootScope.removeFromArray = function(array, item) {
+app.run(['$rootScope', '$sessionStorage', 'connection', function ($rootScope, $sessionStorage, connection) {
+    $rootScope.removeFromArray = function (array, item) {
         var index = array.indexOf(item);
 
         if (index > -1) array.splice(index, 1);
     };
 
-    $rootScope.goBack = function() {
+    $rootScope.goBack = function () {
         window.history.back();
     };
 
-    $rootScope.getUserContextHelp = function(contextHelpName)
-    {
+    $rootScope.getUserContextHelp = function (contextHelpName) {
         var found = false;
 
-        if ($rootScope.user.contextHelp)
-            {
-                for (var i in $rootScope.user.contextHelp)
-                    {
-                        if ($rootScope.user.contextHelp[i] == contextHelpName)
-                            {
-                                found = true;
-                            }
-                    }
+        if ($rootScope.user.contextHelp) {
+            for (var i in $rootScope.user.contextHelp) {
+                if ($rootScope.user.contextHelp[i] == contextHelpName) {
+                    found = true;
+                }
             }
+        }
 
         return !found;
-    }
+    };
 
-    $rootScope.setUserContextHelpViewed = function(contextHelpName)
-    {
-        var params = (params) ? params : {};
+    $rootScope.setUserContextHelpViewed = function (contextHelpName) {
+        var params = (params) || {};
         params.contextHelpName = contextHelpName;
-        connection.get('/api/set-viewed-context-help', params, function(data) {
+        connection.get('/api/set-viewed-context-help', params, function (data) {
             $rootScope.user.contextHelp = data.items;
         });
-
-    }
+    };
 
     $rootScope.user = $sessionStorage.getObject('user');
     if (!$rootScope.user) {
-        connection.get('/api/get-user-data', {}, function(data) {
-            if (!data.items.user) return window.location.href="/login";
+        connection.get('/api/get-user-data', {}, function (data) {
+            if (!data.items.user) return window.location.href = '/login';
 
             var theUser = data.items.user;
             theUser.companyData = data.items.companyData;
@@ -479,46 +469,33 @@ app.run(['$rootScope', '$sessionStorage','connection', function($rootScope, $ses
         $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
     }
 
-
-
-
-
-    $rootScope.loadUserObjects = function() {
+    $rootScope.loadUserObjects = function () {
         connection.get('/api/get-user-objects', {}).then(data => {
             $rootScope.userObjects = data.items;
             $rootScope.user.canPublish = data.userCanPublish;
         });
     };
     $rootScope.loadUserObjects();
-
-
-
-
-
 }]);
 
 app.run(function (bsLoadingOverlayService) {
-  bsLoadingOverlayService.setGlobalConfig({
-    delay: 0, // Minimal delay to hide loading overlay in ms.
-    activeClass: undefined, // Class that is added to the element where bs-loading-overlay is applied when the overlay is active.
-    templateUrl: 'partials/loading-overlay-template.html' // Template url for overlay element. If not specified - no overlay element is created.
-  });
+    bsLoadingOverlayService.setGlobalConfig({
+        delay: 0, // Minimal delay to hide loading overlay in ms.
+        activeClass: undefined, // Class that is added to the element where bs-loading-overlay is applied when the overlay is active.
+        templateUrl: 'partials/loading-overlay-template.html' // Template url for overlay element. If not specified - no overlay element is created.
+    });
 });
 
-function isWSTADMIN($rootScope)
-{
+function isWSTADMIN ($rootScope) {
     var found = false;
-    for (var i in $rootScope.user.roles)
-    {
-        if ($rootScope.user.roles[i] == 'WSTADMIN')
-            found = true;
+    for (var i in $rootScope.user.roles) {
+        if ($rootScope.user.roles[i] == 'WSTADMIN') { found = true; }
     }
 
     return found;
 }
 
-
-function PagerService() {
+function PagerService () {
     // service definition
     var service = {};
 
@@ -527,7 +504,7 @@ function PagerService() {
     return service;
 
     // service implementation
-    function GetPager(totalItems, currentPage, pageSize, totalPages) {
+    function GetPager (totalItems, currentPage, pageSize, totalPages) {
         // default to first page
         currentPage = currentPage || 1;
 
@@ -535,7 +512,7 @@ function PagerService() {
         pageSize = pageSize || 10;
 
         // calculate total pages
-        //totalPages = totalPages Math.ceil(totalItems / pageSize);
+        // totalPages = totalPages Math.ceil(totalItems / pageSize);
 
         var startPage, endPage;
         if (totalPages <= 10) {
@@ -561,14 +538,14 @@ function PagerService() {
         var endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
 
         // create an array of pages to ng-repeat in the pager control
-        //var pages = range(startPage, endPage + 1,1);
+        // var pages = range(startPage, endPage + 1,1);
 
         var pages = [];
         var i = startPage;
-        while (i < endPage +1) {
+        while (i < endPage + 1) {
             pages.push(i);
             i++;
-            }
+        }
 
         // return object with all pager properties required by the view
         return {
@@ -584,5 +561,3 @@ function PagerService() {
         };
     }
 }
-
-

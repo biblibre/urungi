@@ -7,12 +7,12 @@
  */
 
 app.directive('sizeelement', function ($window) {
-    return{
-        scope:true,
+    return {
+        scope: true,
         priority: 0,
         link: function (scope, element) {
-            scope.$watch(function(){return $(element).height(); }, function(newValue, oldValue) {
-                scope.height=$(element).height();
+            scope.$watch(function () { return $(element).height(); }, function (newValue, oldValue) {
+                scope.height = $(element).height();
             });
-        }}
-})
+        }};
+});

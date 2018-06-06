@@ -8,7 +8,7 @@ var CompaniesSchema = new mongoose.Schema({
     customCSS: {type: String},
     customLogo: {type: String},
     history: [],
-    nd_trash_deleted:{type: Boolean},
+    nd_trash_deleted: {type: Boolean},
     nd_trash_deleted_date: {type: Date},
     createdBy: {type: String},
     createdOn: {type: Date}
@@ -16,4 +16,3 @@ var CompaniesSchema = new mongoose.Schema({
 
 var Companies = connection.model('Companies', CompaniesSchema);
 module.exports = Companies;
-

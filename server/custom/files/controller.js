@@ -1,39 +1,38 @@
 var Files = connection.model('Files');
 
-exports.getFiles = function(req,res){
-    var find = {"type" : new RegExp('image', "i"), "upload_user_id" : req.user._id};
+exports.getFiles = function (req, res) {
+    var find = {'type': new RegExp('image', 'i'), 'upload_user_id': req.user._id};
 
     if (req.query.format) {
         find['extension'] = req.query.format;
     }
 
-    Files.find(find, {}, {sort: {created: -1}}, function(err, files){
-        if(err) throw err;
+    Files.find(find, {}, {sort: {created: -1}}, function (err, files) {
+        if (err) throw err;
 
         serverResponse(req, res, 200, {result: 1, files: files});
     });
 };
 
-
-exports.upload = function(req, res) {
-    uploadFile(req.files.file, {userID: req.user._id, companyID: req.user.companyID}, function(data) {
+exports.upload = function (req, res) {
+    uploadFile(req.files.file, {userID: req.user._id, companyID: req.user.companyID}, function (data) {
         debug(data);
 
         res.status(200).send(data);
     });
 };
 
-function uploadFile(file, params, done) {
+function uploadFile (file, params, done) {
     var fs = require('fs');
 
-    fs.readFile(file.path, function(err, data) {
-        if(err) throw err;
+    fs.readFile(file.path, function (err, data) {
+        if (err) throw err;
 
         upload(data, file, params, done);
     });
 }
 
-function upload(data, file, params, done) {
+function upload (data, file, params, done) {
     var fs = require('fs'), mongoose = require('mongoose');
 
     var File = {
@@ -47,7 +46,7 @@ function upload(data, file, params, done) {
         File['data'] = params.data;
     }
 
-    var extension = File.name.split(".");
+    var extension = File.name.split('.');
 
     File['extension'] = String(extension[1]).toLowerCase();
     File['source'] = 1;
@@ -59,40 +58,39 @@ function upload(data, file, params, done) {
         File['companyID'] = params.companyID;
     }
 
-    var files = [{name: extension[0]+'.'+File._id+'.'+File.extension, data: data, type: File.type}];
+    var files = [{name: extension[0] + '.' + File._id + '.' + File.extension, data: data, type: File.type}];
 
-    if (File.source == 0) { //Local
-        var newPath = __dirname+"/../../public/uploads/"+File._id+"."+File.extension;
+    if (File.source == 0) { // Local
+        var newPath = __dirname + '/../../public/uploads/' + File._id + '.' + File.extension;
 
         fs.writeFile(newPath, data, function (err) {
-            if(err) throw err;
+            if (err) throw err;
 
-            File['url'] = config.get('url')+"uploads/"+File._id+"."+File.extension;
+            File['url'] = config.get('url') + 'uploads/' + File._id + '.' + File.extension;
 
-            Files.create(File, function(err, file){
-                if(err) throw err;
+            Files.create(File, function (err, file) {
+                if (err) throw err;
 
-                done({result: 1, msg: "File uploaded", file: file.toObject()});
+                done({result: 1, msg: 'File uploaded', file: file.toObject()});
             });
         });
-    }
-    else if (File.source == 1) { //Amazon http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/frames.html#!AWS/S3.html
-        uploadToS3(files, params, function(filesURLs) {
+    } else if (File.source == 1) { // Amazon http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/frames.html#!AWS/S3.html
+        uploadToS3(files, params, function (filesURLs) {
             File['url'] = filesURLs[0];
 
-            Files.create(File, function(err, file){
-                if(err) throw err;
+            Files.create(File, function (err, file) {
+                if (err) throw err;
 
-                done({result: 1, msg: "File uploaded", file: file.toObject()});
+                done({result: 1, msg: 'File uploaded', file: file.toObject()});
             });
         });
     }
 }
 
 // files -> {name: ..., data: ..., type: ...}
-function uploadToS3(files, params, done, index, filesURLs) {
-    var index = (index) ? index : 0;
-    var filesURLs = (filesURLs) ? filesURLs : [];
+function uploadToS3 (files, params, done, index, filesURLs) {
+    var index = (index) || 0;
+    var filesURLs = (filesURLs) || [];
     var file = (files[index]) ? files[index] : false;
 
     if (!file) {
@@ -111,32 +109,32 @@ function uploadToS3(files, params, done, index, filesURLs) {
     var s3 = new AWS.S3(), bucket = config.amazon.bucket, folder = config.amazon.folder;
 
     if (params.companyID) {
-        folder += '/'+params.companyID;
+        folder += '/' + params.companyID;
     }
     if (params.path) {
-        folder += '/'+params.path;
+        folder += '/' + params.path;
     }
 
-    console.log('Bucket: '+bucket);
-    console.log('Folder: '+folder);
+    console.log('Bucket: ' + bucket);
+    console.log('Folder: ' + folder);
 
-    s3.createBucket({Bucket: bucket}, function() {
-        var key = folder+'/'+file.name;
+    s3.createBucket({Bucket: bucket}, function () {
+        var key = folder + '/' + file.name;
 
         var S3Params = {
             Bucket: bucket,
             Key: key,
             Body: file.data,
-            ACL: "public-read",
+            ACL: 'public-read',
             ContentType: file.type
         };
 
-        filesURLs.push('https://s3.amazonaws.com/'+bucket+'/'+key);
+        filesURLs.push('https://s3.amazonaws.com/' + bucket + '/' + key);
 
-        s3.putObject(S3Params, function(err) {
-            if(err) throw err;
+        s3.putObject(S3Params, function (err) {
+            if (err) throw err;
 
-            uploadToS3(files, params, done, index+1, filesURLs);
+            uploadToS3(files, params, done, index + 1, filesURLs);
         });
     });
 }

@@ -5,7 +5,7 @@ var ConfigurationSchema = new mongoose.Schema({
     logUserFailLogin: {type: Boolean},
     logUserLogin: {type: Boolean},
     history: [],
-    nd_trash_deleted:{type: Boolean},
+    nd_trash_deleted: {type: Boolean},
     nd_trash_deleted_date: {type: Date},
     createdBy: {type: String},
     createdOn: {type: Date}

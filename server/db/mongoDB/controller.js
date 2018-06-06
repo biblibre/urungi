@@ -6,8 +6,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-
-
 /* UTILIDADES */
 
 /*
@@ -17,7 +15,5 @@ Convertir un campo que no todo es fecha en fecha
  doc.lastEvaluationDate=new Date(doc.lastEvaluationDate);
  db.ndcustom_Employees.save(doc);
  })
-
-
 
  */

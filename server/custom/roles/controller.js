@@ -1,76 +1,67 @@
 var Roles = connection.model('Roles');
 require('../../core/controller.js');
-function RolesController(model) {
+function RolesController (model) {
     this.model = model;
     this.searchFields = ['actionCategory'];
 }
 RolesController.inherits(Controller);
 var controller = new RolesController(Roles);
 
-
-
-exports.RolesCreate = function(req,res){
+exports.RolesCreate = function (req, res) {
     req.query.trash = true;
     req.user = {};
     req.user.companyID = 'COMPID';
     req.query.companyid = true;
     req.body.companyID = 'COMPID';
-    controller.create(req, function(result){
+    controller.create(req, function (result) {
         serverResponse(req, res, 200, result);
     });
 };
 
+exports.RolesUpdate = function (req, res) {
+    // req.query.trash = true;
+    // req.query.companyid = true;
 
-exports.RolesUpdate = function(req,res){
-    //req.query.trash = true;
-    //req.query.companyid = true;
-
-    controller.update(req, function(result){
+    controller.update(req, function (result) {
         serverResponse(req, res, 200, result);
     });
 };
 
-
-exports.RolesFindAll = function(req,res)
-{
+exports.RolesFindAll = function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
     req.user = {};
     req.user.companyID = 'COMPID';
 
-    controller.findAll(req, function(result){
+    controller.findAll(req, function (result) {
         serverResponse(req, res, 200, result);
     });
-}
+};
 
-exports.GetRoles = function(req,res)
-{
-
+exports.GetRoles = function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
     req.user = {};
     req.user.companyID = 'COMPID';
 
-    req.query.fields = ['name','description','permissions'];
+    req.query.fields = ['name', 'description', 'permissions'];
 
-    controller.findAll(req, function(result){
-        serverResponse(req, res, 200, result);
-    });
-}
-
-exports.RolesFindOne = function(req,res){
-
-    req.query.companyid = true;
-    req.user = {};
-    req.user.companyID = 'COMPID';
-
-    controller.findOne(req, function(result){
+    controller.findAll(req, function (result) {
         serverResponse(req, res, 200, result);
     });
 };
 
+exports.RolesFindOne = function (req, res) {
+    req.query.companyid = true;
+    req.user = {};
+    req.user.companyID = 'COMPID';
 
-exports.RolesDelete = function(req,res){
+    controller.findOne(req, function (result) {
+        serverResponse(req, res, 200, result);
+    });
+};
+
+exports.RolesDelete = function (req, res) {
     var data = req.body;
 
     req.query.trash = true;
@@ -82,9 +73,7 @@ exports.RolesDelete = function(req,res){
 
     req.body = data;
 
-    controller.update(req, function(result){
+    controller.update(req, function (result) {
         serverResponse(req, res, 200, result);
     });
 };
-
-

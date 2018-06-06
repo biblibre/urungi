@@ -7,7 +7,7 @@ Function.method('inherits', function (parent) {
     var d = {},
         p = this.prototype;
     this.prototype.constructor = parent;
-    this.method('uber', function uber(name) {
+    this.method('uber', function uber (name) {
         if (!(name in d)) {
             d[name] = 0;
         }

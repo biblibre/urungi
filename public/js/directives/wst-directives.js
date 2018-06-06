@@ -1,16 +1,13 @@
-function attrDefault($el, data_var, default_val)
-{
-    if(typeof $el.data(data_var) != 'undefined')
-    {
+function attrDefault ($el, data_var, default_val) {
+    if (typeof $el.data(data_var) !== 'undefined') {
         return $el.data(data_var);
     }
 
     return default_val;
 }
 
-
-angular.module('widestage.directives', []).
-/*directive('xeCounter', function(){
+angular.module('widestage.directives', [])
+/* directive('xeCounter', function(){
 
     return {
         restrict: 'EAC',
@@ -86,11 +83,10 @@ directive('xeFillCounter', function(){
         }
     };
 }) */
-    directive('spinner', function(){
+    .directive('spinner', function () {
         return {
             restrict: 'AC',
-            link: function(scope, el, attr)
-            {
+            link: function (scope, el, attr) {
                 var $ig = angular.element(el),
                     $dec = $ig.find('[data-type="decrement"]'),
                     $inc = $ig.find('[data-type="increment"]'),
@@ -101,29 +97,24 @@ directive('xeFillCounter', function(){
                     max = attrDefault($ig, 'max', 0),
                     umm = min < max;
 
-
-                $dec.on('click', function(ev)
-                {
+                $dec.on('click', function (ev) {
                     ev.preventDefault();
 
                     var num = new Number($inp.val()) - step;
 
-                    if(umm && num <= min)
-                    {
+                    if (umm && num <= min) {
                         num = min;
                     }
 
                     $inp.val(num);
                 });
 
-                $inc.on('click', function(ev)
-                {
+                $inc.on('click', function (ev) {
                     ev.preventDefault();
 
                     var num = new Number($inp.val()) + step;
 
-                    if(umm && num >= max)
-                    {
+                    if (umm && num >= max) {
                         num = max;
                     }
 
@@ -131,62 +122,55 @@ directive('xeFillCounter', function(){
                 });
             }
 
+        };
+    }).directive('erDraggable', function () {
+        return {
+            restrict: 'A',
+            link: function (scope, elem, attr, ctrl) {
+                elem.draggable({
+                    containment: elem.parent().parent()
+                }, {
+                    stop: function (event, ui) {
+                    // jqSimpleConnect.repaintAll();
 
-        }
-    }).directive('erDraggable', function() {
-    return {
-        restrict: 'A',
-        link: function(scope, elem, attr, ctrl) {
-            elem.draggable({
-                containment: elem.parent().parent()
-            },{
-                stop: function( event, ui ) {
-                    //jqSimpleConnect.repaintAll();
+                    }
+                });
+            }
+        };
+    }).directive('datepicker', function () {
+        return {
+            restrict: 'AC',
+            link: function (scope, el, attr) {
+                if (!jQuery.isFunction(jQuery.fn.datepicker)) { return false; }
 
+                var $this = angular.element(el),
+                    opts = {
+                        format: attrDefault($this, 'format', 'mm/dd/yyyy'),
+                        startDate: attrDefault($this, 'startDate', ''),
+                        endDate: attrDefault($this, 'endDate', ''),
+                        daysOfWeekDisabled: attrDefault($this, 'disabledDays', ''),
+                        startView: attrDefault($this, 'startView', 0)
+                    },
+                    $n = $this.next(),
+                    $p = $this.prev();
+
+                $this.datepicker(opts);
+
+                if ($n.is('.input-group-addon') && $n.has('a')) {
+                    $n.on('click', function (ev) {
+                        ev.preventDefault();
+
+                        $this.datepicker('show');
+                    });
                 }
-            });
-        }
-    };
-}).directive('datepicker', function(){
-    return {
-        restrict: 'AC',
-        link: function(scope, el, attr)
-        {
-            if( ! jQuery.isFunction(jQuery.fn.datepicker))
-                return false;
 
-            var $this = angular.element(el),
-                opts = {
-                    format: attrDefault($this, 'format', 'mm/dd/yyyy'),
-                    startDate: attrDefault($this, 'startDate', ''),
-                    endDate: attrDefault($this, 'endDate', ''),
-                    daysOfWeekDisabled: attrDefault($this, 'disabledDays', ''),
-                    startView: attrDefault($this, 'startView', 0)
-                },
-                $n = $this.next(),
-                $p = $this.prev();
+                if ($p.is('.input-group-addon') && $p.has('a')) {
+                    $p.on('click', function (ev) {
+                        ev.preventDefault();
 
-            $this.datepicker(opts);
-
-            if($n.is('.input-group-addon') && $n.has('a'))
-            {
-                $n.on('click', function(ev)
-                {
-                    ev.preventDefault();
-
-                    $this.datepicker('show');
-                });
+                        $this.datepicker('show');
+                    });
+                }
             }
-
-            if($p.is('.input-group-addon') && $p.has('a'))
-            {
-                $p.on('click', function(ev)
-                {
-                    ev.preventDefault();
-
-                    $this.datepicker('show');
-                });
-            }
-        }
-    }
-});
+        };
+    });

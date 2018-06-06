@@ -29,19 +29,17 @@ var iterations = 12000;
  */
 
 module.exports = function (pwd, salt, fn) {
-
-    if (3 == arguments.length) {
-        crypto.pbkdf2(pwd, salt, iterations, len,'SHA1',fn);
+    if (arguments.length == 3) {
+        crypto.pbkdf2(pwd, salt, iterations, len, 'SHA1', fn);
     } else {
         fn = salt;
-        crypto.randomBytes(len, function(err, salt){
+        crypto.randomBytes(len, function (err, salt) {
             if (err) return fn(err);
             salt = salt.toString('base64');
-            crypto.pbkdf2(pwd, salt, iterations, len,'SHA1', function(err, hash){
+            crypto.pbkdf2(pwd, salt, iterations, len, 'SHA1', function (err, hash) {
                 if (err) return fn(err);
                 fn(null, salt, hash);
             });
         });
     }
-
 };

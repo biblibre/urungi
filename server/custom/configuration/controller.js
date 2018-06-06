@@ -2,7 +2,7 @@ var Configuration = connection.model('Configuration');
 
 require('../../core/controller.js');
 
-function ConfigurationController(model) {
+function ConfigurationController (model) {
     this.model = model;
     this.searchFields = [];
 }
@@ -10,6 +10,3 @@ function ConfigurationController(model) {
 ConfigurationController.inherits(Controller);
 
 var controller = new ConfigurationController(Configuration);
-
-
-

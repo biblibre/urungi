@@ -13,8 +13,8 @@ var ReportsSchema = new mongoose.Schema({
     createdOn: {type: Date},
     history: [],
     parentFolder: {type: String},
-    isPublic:{type: Boolean},
-    nd_trash_deleted:{type: Boolean},
+    isPublic: {type: Boolean},
+    nd_trash_deleted: {type: Boolean},
     nd_trash_deleted_date: {type: Date},
     selectedLayerID: {type: String}
 }, { collection: 'wst_Reports' });

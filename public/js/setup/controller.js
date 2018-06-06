@@ -1,18 +1,13 @@
-app.controller('setupCtrl', function ($scope,connection,$routeParams) {
-
+app.controller('setupCtrl', function ($scope, connection, $routeParams) {
     $scope.editorOptions = {
-        lineWrapping : true,
+        lineWrapping: true,
         lineNumbers: true,
         mode: 'css'
     };
 
-    $scope.saveCustomCSS = function()
-    {
-        connection.post('/api/company/save-custom-css', {customCSS:$scope.customCSS}, function(data) {
+    $scope.saveCustomCSS = function () {
+        connection.post('/api/company/save-custom-css', {customCSS: $scope.customCSS}, function (data) {
 
-            });
-
-    }
-
-
+        });
+    };
 });

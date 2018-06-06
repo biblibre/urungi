@@ -10,81 +10,76 @@ app.controller('filesModalCtrl', function ($scope, connection, $modalInstance, $
         }
     };
 
-    connection.get('/api/files/get-files', {format: fileFormat}, function(data) {
+    connection.get('/api/files/get-files', {format: fileFormat}, function (data) {
         $scope.files = data.files;
     });
 
-    $scope.onFileSelected = function(file) {
-        if (typeof currentTargetElement == 'function') {
+    $scope.onFileSelected = function (file) {
+        if (typeof currentTargetElement === 'function') {
             currentTargetElement(file.url);
-        }
-        else {
-            $('#'+currentTargetElement).val(file.url);
-            $('#'+currentTargetElement).trigger('input');
+        } else {
+            $('#' + currentTargetElement).val(file.url);
+            $('#' + currentTargetElement).trigger('input');
         }
 
         $modalInstance.dismiss('cancel');
     };
 
-    $scope.onTumbnailSelected = function(file) {
-        console.log('selected tumbnail',file);
-        if (typeof currentTargetElement == 'function') {
+    $scope.onTumbnailSelected = function (file) {
+        console.log('selected tumbnail', file);
+        if (typeof currentTargetElement === 'function') {
             currentTargetElement(file.source1400);
-        }
-        else {
-            $('#'+currentTargetElement).val(file.source1400);
-            $('#'+currentTargetElement).trigger('input');
+        } else {
+            $('#' + currentTargetElement).val(file.source1400);
+            $('#' + currentTargetElement).trigger('input');
         }
 
         $modalInstance.dismiss('cancel');
     };
 
-    $scope.setDropzone = function() {
+    $scope.setDropzone = function () {
         console.log('setDropzone');
 
         $('#dropzone').dropzone({
-            url: "/api/files/upload",
+            url: '/api/files/upload',
             maxFilesize: 2,
-            paramName: "file",
+            paramName: 'file',
             maxThumbnailFilesize: 2,
             thumbnailWidth: 150,
             thumbnailHeight: 150,
-            dictDefaultMessage: "Drop files or click here to upload",
-            acceptedFiles: (fileFormat) ? "image/"+fileFormat : "image/*",
+            dictDefaultMessage: 'Drop files or click here to upload',
+            acceptedFiles: (fileFormat) ? 'image/' + fileFormat : 'image/*',
             previewTemplate: $('#dropzone-item').html(),
-            init: function() {
-                this.on("addedfile", function(file) {
+            init: function () {
+                this.on('addedfile', function (file) {
                     $('.files-loader-overlay').show();
 
                     $(file.previewElement).remove();
 
                     if (fileFormat) {
-                        if (file.type == 'image/'+fileFormat) {
+                        if (file.type == 'image/' + fileFormat) {
                             $('#file-list').prepend($(file.previewElement));
-                        }
-                        else {
+                        } else {
                             $(file.previewElement).remove();
-                            noty({text: 'Invalid file format',  timeout: 2000, type: 'error'});
+                            noty({text: 'Invalid file format', timeout: 2000, type: 'error'});
                         }
-                    }
-                    else {
+                    } else {
                         $('#file-list').prepend($(file.previewElement));
                     }
                 });
             },
-            success: function(file, res) {
+            success: function (file, res) {
                 $('.files-loader-overlay').hide();
 
-                if (typeof res == 'string' && String(res).indexOf(")]}',") > -1) {
-                    res = angular.fromJson(String(res).replace(")]}',", ""));
+                if (typeof res === 'string' && String(res).indexOf(")]}',") > -1) {
+                    res = angular.fromJson(String(res).replace(")]}',", ''));
                 }
                 console.log(res);
                 $(file.previewElement).children('a').children('.dz-loading').hide();
 
-                if(res.result === 0){
+                if (res.result === 0) {
                     $(file.previewElement).children('a').children('.label-danger').show();
-                }
-                else {
+                } else {
                     $(file.previewElement).remove();
 
                     var thisFile = res.file;
@@ -101,15 +96,15 @@ app.controller('filesModalCtrl', function ($scope, connection, $modalInstance, $
                 }
             }
         });
-    }
+    };
 
-    $scope.searchOnline = function(search) {
-
-
-        $http({method: 'GET', url: 'https://api.unsplash.com/search/photos/', params: {
-            client_id: '65d94c5d3440b6da10c6cd390059fd709a1f33ffc8f46f46ed44d6b6c6759559',
-            query: search
-        }}).success(angular.bind(this, function (data, status, headers, config) {
+    $scope.searchOnline = function (search) {
+        $http({method: 'GET',
+            url: 'https://api.unsplash.com/search/photos/',
+            params: {
+                client_id: '65d94c5d3440b6da10c6cd390059fd709a1f33ffc8f46f46ed44d6b6c6759559',
+                query: search
+            }}).success(angular.bind(this, function (data, status, headers, config) {
             console.log(data);
 
             $scope.onlineImages = [];
@@ -121,27 +116,23 @@ app.controller('filesModalCtrl', function ($scope, connection, $modalInstance, $
                 });
             }
         }))
-        .error(angular.bind(this, function (data, status, headers, config) {
-            console.log(data);
-        }));
-
+            .error(angular.bind(this, function (data, status, headers, config) {
+                console.log(data);
+            }));
     };
 
-        //https://api.unsplash.com/search/photos/?client_id=65d94c5d3440b6da10c6cd390059fd709a1f33ffc8f46f46ed44d6b6c6759559&query=office
+    // https://api.unsplash.com/search/photos/?client_id=65d94c5d3440b6da10c6cd390059fd709a1f33ffc8f46f46ed44d6b6c6759559&query=office
 
     $scope.catalogImages = [];
 
     for (var i = 1; i <= 100; ++i) {
         var image = {};
         var imgnbr = '';
-        if (i < 10)
-            imgnbr = '0'+i;
-        else
-            imgnbr = i;
+        if (i < 10) { imgnbr = '0' + i; } else { imgnbr = i; }
 
-        image.url = '/resources/images/tumbnails100/JPEG/photo-'+imgnbr+'_1.jpg';
-        image.source1400 = '/resources/images/width1400/JPEG/photo-'+imgnbr+'_1.jpg';
-        image.source700 = '/resources/images/width700/JPEG/photo-'+imgnbr+'_1.jpg';
+        image.url = '/resources/images/tumbnails100/JPEG/photo-' + imgnbr + '_1.jpg';
+        image.source1400 = '/resources/images/width1400/JPEG/photo-' + imgnbr + '_1.jpg';
+        image.source700 = '/resources/images/width700/JPEG/photo-' + imgnbr + '_1.jpg';
 
         $scope.catalogImages.push(image);
     }
@@ -152,21 +143,21 @@ app.controller('filesCtrl', function ($scope, connection, $q, $rootScope, $modal
 
     $scope.data = null;
 
-    $rootScope.openGallery = function(targetElement, format) {
+    $rootScope.openGallery = function (targetElement, format) {
         console.log('openGallery');
         currentTargetElement = targetElement;
 
         $scope.extensionMSG = false;
 
-        connection.get('/api/files/get-files', {format: format}, function(data) {
+        connection.get('/api/files/get-files', {format: format}, function (data) {
             var files = data.files;
 
-            form = $('#'+targetElement).closest("form");
+            form = $('#' + targetElement).closest('form');
 
             $.ajax({
                 url: 'partials/files/gallery.html',
                 dataType: 'html',
-                success: function(html) {
+                success: function (html) {
                     gallery = $(html);
 
                     var filesList = gallery.children('#file-list');
@@ -174,7 +165,7 @@ app.controller('filesCtrl', function ($scope, connection, $q, $rootScope, $modal
                     for (var i in files) {
                         var fileLi = $('<li></li>');
                         var fileLink = $('<a class="hand-cursor file-selection"></a>');
-                        var fileImg = $('<img class="dz-image" alt="'+files[i].description+'" src="'+files[i].url+'"></img>');
+                        var fileImg = $('<img class="dz-image" alt="' + files[i].description + '" src="' + files[i].url + '"></img>');
 
                         fileLink.append(fileImg);
                         fileLi.append(fileLink);
@@ -187,25 +178,24 @@ app.controller('filesCtrl', function ($scope, connection, $q, $rootScope, $modal
 
                     onNewFiles();
 
-                    $('#close-gallery-btn').click(function() {
+                    $('#close-gallery-btn').click(function () {
                         closeGallery();
                     });
 
                     if (format) {
-                        $('#extensionMSG').html($scope.getTranslation('Only the following extensions are allowed: ')+' '+String(format).toUpperCase());
+                        $('#extensionMSG').html($scope.getTranslation('Only the following extensions are allowed: ') + ' ' + String(format).toUpperCase());
                     }
 
                     setDropzone(onNewFiles, format);
 
-                    function uploadComplete(evt) {
+                    function uploadComplete (evt) {
                         var res = JSON.parse(evt.target.responseText);
 
                         filePreview.find('.dz-loading').hide();
 
-                        if(res.result === 0){
+                        if (res.result === 0) {
                             filePreview.find('.label-danger').show();
-                        }
-                        else {
+                        } else {
                             filePreview.find('.label-success').show();
 
                             filePreview.find('.dz-image').attr('src', res.file.url);
@@ -214,21 +204,21 @@ app.controller('filesCtrl', function ($scope, connection, $q, $rootScope, $modal
                         onNewFiles();
                     }
 
-                    function uploadFailed(evt) {
-                        console.log("There was an error attempting to upload the file.");
+                    function uploadFailed (evt) {
+                        console.log('There was an error attempting to upload the file.');
                     }
 
                     var dropZone = document.getElementById('file-list');
 
                     // Optional.   Show the copy icon when dragging over.  Seems to only work for chrome.
-                    dropZone.addEventListener('dragover', function(e) {
+                    dropZone.addEventListener('dragover', function (e) {
                         e.stopPropagation();
                         e.preventDefault();
                         e.dataTransfer.dropEffect = 'copy';
                     });
 
                     // Get file data on drop
-                    dropZone.addEventListener('drop', function(e) {
+                    dropZone.addEventListener('drop', function (e) {
                         e.stopPropagation();
                         e.preventDefault();
 
@@ -246,12 +236,12 @@ app.controller('filesCtrl', function ($scope, connection, $q, $rootScope, $modal
                         $('#file-list').prepend(filePreview);
 
                         var fd = new FormData();
-                        fd.append("file", e.dataTransfer.files[0]);
+                        fd.append('file', e.dataTransfer.files[0]);
                         var xhr = new XMLHttpRequest();
 
-                        xhr.addEventListener("load", uploadComplete, false);
-                        xhr.addEventListener("error", uploadFailed, false);
-                        xhr.open("POST", "/api/files/upload");
+                        xhr.addEventListener('load', uploadComplete, false);
+                        xhr.addEventListener('error', uploadFailed, false);
+                        xhr.open('POST', '/api/files/upload');
                         xhr.send(fd);
                     });
                 }
@@ -259,7 +249,7 @@ app.controller('filesCtrl', function ($scope, connection, $q, $rootScope, $modal
         });
     };
 
-    $rootScope.openGalleryModal = function(targetElement, params) {
+    $rootScope.openGalleryModal = function (targetElement, params) {
         console.log('openGalleryModal');
         currentTargetElement = targetElement;
         fileFormat = (params && params.format) ? params.format : null;
@@ -272,74 +262,68 @@ app.controller('filesCtrl', function ($scope, connection, $q, $rootScope, $modal
             keyboard: true,
             modalFade: true,
             templateUrl: 'partials/files/galleryModal.html',
-            windowClass: "in files-modal-window",
+            windowClass: 'in files-modal-window',
             controller: 'filesModalCtrl'
         });
     };
 
-    function closeGallery() {
+    function closeGallery () {
         gallery.remove();
 
         form.show();
     }
 
-    function onNewFiles() {
-        $('.file-selection').click(function() {
+    function onNewFiles () {
+        $('.file-selection').click(function () {
             closeGallery();
 
-            if (typeof currentTargetElement == 'function') {
+            if (typeof currentTargetElement === 'function') {
                 currentTargetElement($(this).children('.dz-image').attr('src'));
-            }
-            else {
-                if (currentTargetElement == 'wysiwyg-editor')
-                    tinyMCE.activeEditor.execCommand('mceInsertContent', false, '<img src="'+$(this).children('.dz-image').attr('src')+'" style="width: 150px; height: 150px;"></img>');
-                else {
-                    $('#'+currentTargetElement).val($(this).children('.dz-image').attr('src'));
-                    $('#'+currentTargetElement).trigger('input');
+            } else {
+                if (currentTargetElement == 'wysiwyg-editor') { tinyMCE.activeEditor.execCommand('mceInsertContent', false, '<img src="' + $(this).children('.dz-image').attr('src') + '" style="width: 150px; height: 150px;"></img>'); } else {
+                    $('#' + currentTargetElement).val($(this).children('.dz-image').attr('src'));
+                    $('#' + currentTargetElement).trigger('input');
                 }
             }
         });
     }
 
     /* DROPZONE */
-    function setDropzone(onNewFiles, format) {
+    function setDropzone (onNewFiles, format) {
         $('#dropzone').dropzone({
-            url: "/api/files/upload",
+            url: '/api/files/upload',
             maxFilesize: 2,
-            paramName: "file",
+            paramName: 'file',
             maxThumbnailFilesize: 2,
             thumbnailWidth: 150,
             thumbnailHeight: 150,
-            dictDefaultMessage: "Drop files or click here to upload",
-            acceptedFiles: (format) ? "image/"+format : "image/*",
+            dictDefaultMessage: 'Drop files or click here to upload',
+            acceptedFiles: (format) ? 'image/' + format : 'image/*',
             previewTemplate: $('#dropzone-item').html(),
-            init: function() {
-                this.on("addedfile", function(file) {
+            init: function () {
+                this.on('addedfile', function (file) {
                     if (format) {
-                        if (file.type == 'image/'+format) {
+                        if (file.type == 'image/' + format) {
                             $('#file-list').prepend($(file.previewElement));
-                        }
-                        else {
+                        } else {
                             $(file.previewElement).remove();
-                            noty({text: 'Invalid file format',  timeout: 2000, type: 'error'});
+                            noty({text: 'Invalid file format', timeout: 2000, type: 'error'});
                         }
-                    }
-                    else {
+                    } else {
                         $('#file-list').prepend($(file.previewElement));
                     }
                 });
             },
-            success: function(file, res) {
-                if (typeof res == 'string' && String(res).indexOf(")]}',") > -1) {
-                    res = angular.fromJson(String(res).replace(")]}',", ""));
+            success: function (file, res) {
+                if (typeof res === 'string' && String(res).indexOf(")]}',") > -1) {
+                    res = angular.fromJson(String(res).replace(")]}',", ''));
                 }
 
                 $(file.previewElement).children('a').children('.dz-loading').hide();
 
-                if(res.result === 0){
+                if (res.result === 0) {
                     $(file.previewElement).children('a').children('.label-danger').show();
-                }
-                else {
+                } else {
                     $(file.previewElement).children('a').children('.label-success').show();
 
                     $(file.previewElement).children('a').children('.dz-image').attr('src', res.file.url);

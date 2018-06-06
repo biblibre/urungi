@@ -6,14 +6,11 @@ SEE https://github.com/agershun/alasql
 
 transform the json data into a multidimensional array like Pandas, then create the grid
 
-
 columns
 sex
 
-
 rows
 city
-
 
 we need to identify the different values for sex
 this is male and female,
@@ -35,14 +32,9 @@ for every row in results
 
  }
 
-
 for (var i in sex)
 {
 
-
 }
 
-
-
  */
-

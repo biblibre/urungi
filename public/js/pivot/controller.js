@@ -1,12 +1,11 @@
-app.controller('pivotCtrl', function ($scope, $routeParams, reportModel ) {
+app.controller('pivotCtrl', function ($scope, $routeParams, reportModel) {
+    $scope.dropped = function (dragEl, dropEl) { // function referenced by the drop target
+    // this is application logic, for the demo we just want to color the grid squares
+    // the directive provides a native dom object, wrap with jqlite
+        var drop = angular.element(dropEl);
+        var drag = angular.element(dragEl);
 
-$scope.dropped = function(dragEl, dropEl) { // function referenced by the drop target
-    //this is application logic, for the demo we just want to color the grid squares
-    //the directive provides a native dom object, wrap with jqlite
-    var drop = angular.element(dropEl);
-    var drag = angular.element(dragEl);
-
-    console.log(drag.attr("id"))
+        console.log(drag.attr('id'));
     /*
     //clear the previously applied color, if it exists
     var bgClass = drop.attr('data-color');
@@ -25,12 +24,10 @@ $scope.dropped = function(dragEl, dropEl) { // function referenced by the drop t
     }
     */
 
-    //http://logicbomb.github.io/ng-directives/drag-drop.html
-}
+    // http://logicbomb.github.io/ng-directives/drag-drop.html
+    };
 
-    $scope.horiz = function()
-    {
+    $scope.horiz = function () {
 
-    }
-
+    };
 });
