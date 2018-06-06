@@ -1,8 +1,7 @@
 const config = require('config');
 
-var express = require('express'),
-    path = require('path'),
-    http = require('http');
+const express = require('express');
+const path = require('path');
 
 var cluster = require('cluster');
 var passport = require('passport');
@@ -19,7 +18,7 @@ var app = express();
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 
@@ -79,11 +78,7 @@ if (cluster.isMaster && process.env.NODE_ENV !== 'test') {
     }
 
     cluster.on('exit', function (deadWorker, code, signal) {
-        var worker = cluster.fork();
-
-        // Note the process IDs
-        var newPID = worker.process.pid;
-        var oldPID = deadWorker.process.pid;
+        cluster.fork();
     });
 } else {
     global.config = config;
@@ -99,7 +94,7 @@ if (cluster.isMaster && process.env.NODE_ENV !== 'test') {
     var fs = require('fs');
 
     // Custom routes
-    var routes_dir = __dirname + '/server/custom';
+    var routes_dir = path.join(__dirname, 'server', 'custom');
     fs.readdirSync(routes_dir).forEach(function (file) {
         if (file[0] === '.') return;
         require(routes_dir + '/' + file + '/routes.js')(app);
