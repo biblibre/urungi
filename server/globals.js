@@ -1,5 +1,7 @@
 /* GLOBAL FUNCTIONS */
-var appRoot = __dirname + '/../';
+const path = require('path');
+
+var appRoot = path.join(__dirname, '..');
 global.appRoot = appRoot;
 
 function restrict (req, res, next) {
@@ -21,12 +23,12 @@ function passthrough (req, res, next) {
         var CryptoJS = require('crypto-js');
 
         if (req.query.data) {
-            var decrypted = CryptoJS.AES.decrypt(req.query.data, config.crypto.secret);
+            const decrypted = CryptoJS.AES.decrypt(req.query.data, config.crypto.secret);
             req.query = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
             req.query = stripInvalidChars(req.query);
             return next();
         } else if (req.body.data) {
-            var decrypted = CryptoJS.AES.decrypt(req.body.data, config.crypto.secret);
+            const decrypted = CryptoJS.AES.decrypt(req.body.data, config.crypto.secret);
             req.body = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
             req.body = stripInvalidChars(req.body);
             return next();
@@ -118,7 +120,7 @@ function generateUserFilter (req, filters) {
     if (req.user.filters) {
         for (var i in filters) {
             for (var j in req.user.filters) {
-                if (String(req.user.filters[j].name).toLowerCase() == String(filters[i]).toLowerCase()) {
+                if (String(req.user.filters[j].name).toLowerCase() === String(filters[i]).toLowerCase()) {
                     if (!userFilters.hasOwnProperty(filters[i])) { userFilters[filters[i]] = []; }
 
                     userFilters[filters[i]].push(req.user.filters[j].value);
@@ -136,7 +138,7 @@ function generateUserFilterValue (req, filter) {
 
     if (req.user.filters) {
         for (var i in req.user.filters) {
-            if (String(req.user.filters[i].name).toLowerCase() == String(filter).toLowerCase()) {
+            if (String(req.user.filters[i].name).toLowerCase() === String(filter).toLowerCase()) {
                 userFilterValue.push(req.user.filters[i].value);
             }
         }
@@ -167,26 +169,14 @@ function serverResponse (req, res, status, obj) {
         var encrypted = CryptoJS.AES.encrypt(JSON.stringify(obj), config.crypto.secret);
         obj = {data: String(encrypted)};
 
-        var result = ")]}',\n" + JSON.stringify(obj);
+        const result = ")]}',\n" + JSON.stringify(obj);
 
         res.status(status).send(result);
     } else {
-        var result = ")]}',\n" + JSON.stringify(obj);
+        const result = ")]}',\n" + JSON.stringify(obj);
 
         res.status(status).send(result);
     }
 }
+
 global.serverResponse = serverResponse;
-
-function fileUpload (file, path, done) {
-    var fs = require('fs');
-
-    fs.readFile(file.path, function (err, data) {
-        if (err) throw err;
-
-        fs.writeFile(path, data, function (err) {
-            if (err) throw err;
-            done({result: 1, msg: 'File uploaded', file: file.toObject()});
-        });
-    });
-}

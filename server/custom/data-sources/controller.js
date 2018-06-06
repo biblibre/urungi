@@ -1,4 +1,5 @@
 var DataSources = connection.model('DataSources');
+const path = require('path');
 const Controller = require('../../core/controller.js');
 
 class DataSourcesController extends Controller {
@@ -29,11 +30,12 @@ exports.DataSourcesUploadConfigFile = function (req, res) {
     var fs = require('fs');
     var companyID = 'COMPID';
 
-    if (!fs.existsSync(appRoot + 'server/keys/' + companyID)) {
-        fs.mkdirSync(appRoot + 'server/keys/' + companyID);
+    const dirPath = path.join(appRoot, 'server', 'keys', companyID);
+    if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath);
     }
 
-    var filePath = appRoot + 'server/keys/' + companyID + '/' + file.originalname;
+    var filePath = path.join(dirPath, file.originalname);
 
     fs.readFile(file.path, function (err, data) {
         if (err) {

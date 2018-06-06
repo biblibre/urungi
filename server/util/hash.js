@@ -29,7 +29,7 @@ var iterations = 12000;
  */
 
 module.exports = function (pwd, salt, fn) {
-    if (arguments.length == 3) {
+    if (arguments.length === 3) {
         crypto.pbkdf2(pwd, salt, iterations, len, 'SHA1', fn);
     } else {
         fn = salt;

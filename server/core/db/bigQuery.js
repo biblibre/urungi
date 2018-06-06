@@ -7,6 +7,7 @@
  */
 
 var bq = require('bigquery');
+const path = require('path');
 
 var db = function () {
     /* this.host = data.host;
@@ -23,7 +24,7 @@ db.prototype.connect = function (data, done) {
 
     DB.connection = bq;
 
-    var jsonFile = appRoot + 'server/keys/' + data.companyID + '/' + data.file;
+    var jsonFile = path.join(appRoot, 'server', 'keys', data.companyID, data.file);
 
     bq.init({
         json_file: jsonFile
@@ -31,7 +32,7 @@ db.prototype.connect = function (data, done) {
 };
 
 exports.testConnection = function (req, data, setresult) {
-    var jsonFile = appRoot + 'server/keys/' + data.companyID + '/' + data.file;
+    var jsonFile = path.join(appRoot, 'server', 'keys', data.companyID, data.file);
 
     bq.init({
         json_file: jsonFile
@@ -102,7 +103,7 @@ exports.getSchemas = function (data, setresult) {
         }
     }
 
-    var jsonFile = appRoot + 'server/keys/' + data.companyID + '/' + data.file;
+    var jsonFile = path.join(appRoot, 'server', 'keys', data.companyID, data.file);
 
     getTableFields(jsonFile, schemasTables, 0, [], function (fields) {
         setresult({result: 1, items: fields});
@@ -158,7 +159,7 @@ db.prototype.setLimitToSQL = function (sql, limit, offset) {
 };
 
 db.prototype.executeSQLQuery = function (connection, sql, done) {
-    var jsonFile = appRoot + 'server/keys/' + connection.companyID + '/' + connection.file;
+    var jsonFile = path.join(appRoot, 'server', 'keys', connection.companyID, connection.file);
 
     bq.init({
         json_file: jsonFile
@@ -191,7 +192,7 @@ db.prototype.executeSQLQuery = function (connection, sql, done) {
 };
 
 function getQueryResults (connection, jobId, done) {
-    var jsonFile = appRoot + 'server/keys/' + connection.companyID + '/' + connection.file;
+    var jsonFile = path.join(appRoot, 'server', 'keys', connection.companyID, connection.file);
 
     bq.init({
         json_file: jsonFile
