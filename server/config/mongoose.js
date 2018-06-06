@@ -1,15 +1,15 @@
-module.exports = function (mongoose, done) {
-    if (config.get('db_type') == 'tingoDB') {
+module.exports = function (_, done) {
+    const path = require('path');
+    const mongoose = require('mongoose');
+
+    if (config.get('db_type') === 'tingoDB') {
         // global.connection = mongoose.connect('tingodb:'+global.tingo_db_path);
         console.log('tingo DB connection');
-        var tungus = require('tungus');
-        var mongoose = require('mongoose');
         global.TUNGUS_DB_OPTIONS = { nativeObjectID: true, searchInArray: true };
         global.connection = mongoose.connect('mongodb://data');
     } else {
         const dbURI = config.get('db');
         console.log('mongo DB connection');
-        var mongoose = require('mongoose');
         mongoose.Promise = global.Promise;
         global.connection = mongoose.createConnection(dbURI, { server: { poolSize: 5 } });
 
@@ -45,7 +45,7 @@ module.exports = function (mongoose, done) {
     var fs = require('fs');
 
     // Custom models
-    var models_dir = __dirname + '/../custom';
+    var models_dir = path.join(__dirname, '..', 'custom');
     fs.readdirSync(models_dir).forEach(function (file) {
         if (file[0] === '.') return;
         require(models_dir + '/' + file + '/model.js');

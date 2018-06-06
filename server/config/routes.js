@@ -17,7 +17,7 @@ module.exports = function (app, passport) {
     app.get('/auth/google', passport.authenticate('google'));
 
     app.get('/auth/google/callback',
-        passport.authenticate('google', { failureRedirect: '/login'}),
+        passport.authenticate('google', { failureRedirect: '/login' }),
         function (req, res) {
             res.redirect('/');
         }
@@ -32,7 +32,9 @@ module.exports = function (app, passport) {
         var Companies = connection.model('Companies');
 
         Users.count({}, function (err, c) {
-            if (c == 0) {
+            if (err) throw err;
+
+            if (c === 0) {
                 console.log('no records in the users model, this is the initial setup!');
                 var theCompany = {};
                 theCompany.companyID = 'COMPID';
@@ -73,7 +75,7 @@ function authenticate (passport, Users, req, res, next) {
         if (err) { return next(err); }
 
         if (!user) {
-            if (global.logFailLogin == true) { saveToLog(req, 'User fail login: ' + info.message, '', 102); }
+            if (global.logFailLogin) { saveToLog(req, 'User fail login: ' + info.message, '', 102); }
             res.status(401).send(info.message);
         } else {
             var loginData = {
@@ -91,6 +93,8 @@ function authenticate (passport, Users, req, res, next) {
             var Companies = connection.model('Companies');
 
             Companies.findOne({companyID: user.companyID}, {}, function (err, company) {
+                if (err) throw err;
+
                 if (!company) {
                     saveToLog(req, 'User fail login: ' + user.userName + ' (' + user.email + ') user company not found!', '', 102);
                     res.send(401, "User's company not found!");
@@ -107,7 +111,7 @@ function authenticate (passport, Users, req, res, next) {
                             if (err) { return next(err); }
                             res.json({ user: user.toObject() });
 
-                            if (global.logSuccessLogin == true) {
+                            if (global.logSuccessLogin) {
                                 saveToLog(req, 'User login: ' + user.userName + ' (' + user.email + ')', '', 102);
                             }
                         });

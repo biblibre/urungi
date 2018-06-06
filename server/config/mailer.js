@@ -33,13 +33,13 @@ function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
     var path = require('path');
     var EmailTemplate = require('email-templates').EmailTemplate;
     var nodemailer = require('nodemailer');
-    var wellknown = require('nodemailer-wellknown');
     var async = require('async');
 
     var templatesDir = path.resolve(__dirname, '../../', 'email_templates/' + theEmailTemplate);
     var template = new EmailTemplate(templatesDir);
-    if (config.get('mailer.service') != 'SMTP') {
-        var transport = nodemailer.createTransport({
+    var transport;
+    if (config.get('mailer.service') !== 'SMTP') {
+        transport = nodemailer.createTransport({
             service: config.get('mailer.service'),
             auth: {
                 user: config.get('mailer.auth.user'),
@@ -47,7 +47,7 @@ function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
             }
         });
     } else {
-        var transport = nodemailer.createTransport({
+        transport = nodemailer.createTransport({
             host: config.get('mailer.host'), // hostname
             secureConnection: config.get('mailer.secureConnection'), // use SSL
             port: config.get('mailer.port'), // port for secure SMTP

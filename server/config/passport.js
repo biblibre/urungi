@@ -1,8 +1,7 @@
-GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-var mongoose = require('mongoose'),
-    LocalStrategy = require('passport-local').Strategy,
-    RememberMeStrategy = require('passport-remember-me').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
+const RememberMeStrategy = require('passport-remember-me').Strategy;
 
 var Users = connection.model('Users'); // require('../../models/users');
 
@@ -69,25 +68,4 @@ module.exports = function (passport) {
         }
         ));
     }
-};
-
-exports.isAuthenticated = function (req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        console.log('the user is not authenticated...redirecting');
-        res.redirect('/login');
-    }
-};
-
-exports.userExist = function (req, res, next) {
-    Users.count({
-        email: req.body.email
-    }, function (err, count) {
-        if (count === 0) {
-            next();
-        } else {
-            res.redirect('/signup');
-        }
-    });
 };
