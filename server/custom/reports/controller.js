@@ -1,15 +1,15 @@
 var Reports = connection.model('Reports');
 
-require('../../core/controller.js');
+const Controller = require('../../core/controller.js');
 
-function ReportsController (model) {
-    this.model = model;
-    this.searchFields = [];
+class ReportsController extends Controller {
+    constructor () {
+        super(Reports);
+        this.searchFields = [];
+    }
 }
 
-ReportsController.inherits(Controller);
-
-var controller = new ReportsController(Reports);
+var controller = new ReportsController();
 
 exports.ReportsFindAll = function (req, res) {
     req.query.trash = true;

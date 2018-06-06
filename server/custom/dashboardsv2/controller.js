@@ -1,15 +1,15 @@
 var Dashboardsv2 = connection.model('Dashboardsv2');
 
-require('../../core/controller.js');
+const Controller = require('../../core/controller.js');
 
-function Dashboardsv2Controller (model) {
-    this.model = model;
-    this.searchFields = [];
+class Dashboardsv2Controller extends Controller {
+    constructor () {
+        super(Dashboardsv2);
+        this.searchFields = [];
+    }
 }
 
-Dashboardsv2Controller.inherits(Controller);
-
-var controller = new Dashboardsv2Controller(Dashboardsv2);
+var controller = new Dashboardsv2Controller();
 
 exports.Dashboardsv2FindAll = function (req, res) {
     /*

@@ -1,12 +1,10 @@
 var Configuration = connection.model('Configuration');
 
-require('../../core/controller.js');
+const Controller = require('../../core/controller.js');
 
-function ConfigurationController (model) {
-    this.model = model;
-    this.searchFields = [];
+class ConfigurationController extends Controller {
+    constructor () {
+        super(Configuration);
+        this.searchFields = [];
+    }
 }
-
-ConfigurationController.inherits(Controller);
-
-var controller = new ConfigurationController(Configuration);

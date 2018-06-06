@@ -1,15 +1,15 @@
 var Dashboards = connection.model('Dashboards');
 
-require('../../core/controller.js');
+const Controller = require('../../core/controller.js');
 
-function DashboardsController (model) {
-    this.model = model;
-    this.searchFields = [];
+class DashboardsController extends Controller {
+    constructor () {
+        super(Dashboards);
+        this.searchFields = [];
+    }
 }
 
-DashboardsController.inherits(Controller);
-
-var controller = new DashboardsController(Dashboards);
+var controller = new DashboardsController();
 
 exports.DashboardsFindAll = function (req, res) {
     req.query.trash = true;

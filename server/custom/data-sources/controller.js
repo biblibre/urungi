@@ -1,11 +1,14 @@
 var DataSources = connection.model('DataSources');
-require('../../core/controller.js');
-function DataSourcesController (model) {
-    this.model = model;
-    this.searchFields = ['actionCategory'];
+const Controller = require('../../core/controller.js');
+
+class DataSourcesController extends Controller {
+    constructor () {
+        super(DataSources);
+        this.searchFields = ['actionCategory'];
+    }
 }
-DataSourcesController.inherits(Controller);
-var controller = new DataSourcesController(DataSources);
+
+var controller = new DataSourcesController();
 
 exports.DataSourcesCreate = function (req, res) {
     req.query.trash = true;

@@ -1,11 +1,14 @@
 var Users = connection.model('Users');
-require('../../core/controller.js');
-function UsersController (model) {
-    this.model = model;
-    this.searchFields = ['userName'];
+const Controller = require('../../core/controller.js');
+
+class UsersController extends Controller {
+    constructor () {
+        super(Users);
+        this.searchFields = ['userName'];
+    }
 }
-UsersController.inherits(Controller);
-var controller = new UsersController(Users);
+
+var controller = new UsersController();
 
 exports.UsersCreate = function (req, res) {
     req.query.trash = true;

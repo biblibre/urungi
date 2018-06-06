@@ -1,15 +1,15 @@
 var Pages = connection.model('Pages');
 
-require('../../core/controller.js');
+const Controller = require('../../core/controller.js');
 
-function PagesController (model) {
-    this.model = model;
-    this.searchFields = [];
+class PagesController extends Controller {
+    constructor () {
+        super(Pages);
+        this.searchFields = [];
+    }
 }
 
-PagesController.inherits(Controller);
-
-var controller = new PagesController(Pages);
+var controller = new PagesController();
 
 exports.PagesFindAll = function (req, res) {
     req.query.trash = true;

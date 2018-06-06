@@ -56,10 +56,10 @@ db.prototype.getLimitString = function (limit, offset) {
 };
 
 db.prototype.setLimitToSQL = function (sql, limit, offset) {
-    if (limit == -1) { return sql; } else { return sql + ' LIMIT ' + offset + ', ' + limit; }
+    if (limit === -1) { return sql; } else { return sql + ' LIMIT ' + offset + ', ' + limit; }
 };
 
-exports.db = db;
+exports.Db = db;
 
 exports.testConnection = function (req, data, setresult) {
     var connection = mysql.createConnection({
@@ -78,7 +78,12 @@ exports.testConnection = function (req, data, setresult) {
 
             });
         } else {
-            if (data.database) { var tablesSQL = "select table_schema, table_name as name from information_schema.tables where table_schema = '" + data.database + "'"; } else { var tablesSQL = "select table_schema, table_name as name from information_schema.tables where table_schema not in ('information_schema','mysql','performance_schema')"; }
+            let tablesSQL;
+            if (data.database) {
+                tablesSQL = "select table_schema, table_name as name from information_schema.tables where table_schema = '" + data.database + "'";
+            } else {
+                tablesSQL = "select table_schema, table_name as name from information_schema.tables where table_schema not in ('information_schema','mysql','performance_schema')";
+            }
 
             connection.query(tablesSQL, function (err, rows, fields) {
                 if (err) {

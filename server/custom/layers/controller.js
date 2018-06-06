@@ -1,11 +1,14 @@
 var Layers = connection.model('Layers');
-require('../../core/controller.js');
-function LayersController (model) {
-    this.model = model;
-    this.searchFields = ['actionCategory'];
+const Controller = require('../../core/controller.js');
+
+class LayersController extends Controller {
+    constructor () {
+        super(Layers);
+        this.searchFields = ['actionCategory'];
+    }
 }
-LayersController.inherits(Controller);
-var controller = new LayersController(Layers);
+
+var controller = new LayersController();
 
 exports.LayersCreate = function (req, res) {
     req.query.trash = true;

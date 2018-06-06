@@ -67,10 +67,10 @@ db.prototype.getLimitString = function (limit, offset) {
 };
 
 db.prototype.setLimitToSQL = function (sql, limit, offset) {
-    if (limit == -1) { return sql; } else { return sql + ' LIMIT ' + limit + ' OFFSET ' + offset; }
+    if (limit === -1) { return sql; } else { return sql + ' LIMIT ' + limit + ' OFFSET ' + offset; }
 };
 
-exports.db = db;
+exports.Db = db;
 
 exports.testConnection = function (req, data, setresult) {
     var conString = 'postgres://' + data.userName + ':' + data.password + '@' + data.host + ':' + data.port + '/' + data.database;
@@ -83,6 +83,8 @@ exports.testConnection = function (req, data, setresult) {
         }
 
         client.query("SELECT table_schema || '.' || table_name as name  from information_schema.tables where table_schema not in ('pg_catalog','information_schema')", function (err, result) {
+            if (err) { console.error(err); }
+
             done();
 
             setresult({result: 1, items: result.rows});

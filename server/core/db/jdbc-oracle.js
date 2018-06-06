@@ -8,7 +8,7 @@ var db = function () {
     this.connection = null;
 };
 
-exports.db = db;
+exports.Db = db;
 
 db.prototype.connect = function (data, done) {
     var DB = this;
@@ -40,7 +40,6 @@ db.prototype.connect = function (data, done) {
         if (err) {
             done(err);
             return console.error('Connection Error: ' + err);
-            saveToLog(req, 'Error on connection: ' + err, 300, 'JO-002', '', data.datasourceID);
         } else {
             done(false, DB.connection);
         }
@@ -66,7 +65,9 @@ function query (connection, query, done) {
     if (connection) {
         var asyncjs = require('async');
         connection.reserve(function (err, connObj) {
-            if (connObj) {
+            if (err) {
+                done(err);
+            } else if (connObj) {
                 var conn = connObj.conn;
 
                 // Query the database.
@@ -88,12 +89,15 @@ function query (connection, query, done) {
                                                     done(err);
                                                 } else {
                                                     resultset.toObjArray(function (err, results) {
-                                                        // done(false, {rows: columnNamesToLowerCase(results)});
-                                                        if (results.length > 0) {
-                                                            console.log('ID: ' + results[0].ID);
-                                                        }
+                                                        if (err) {
+                                                            done(err);
+                                                        } else {
+                                                            if (results.length > 0) {
+                                                                console.log('ID: ' + results[0].ID);
+                                                            }
 
-                                                        done(false, {rows: results});
+                                                            done(false, {rows: results});
+                                                        }
                                                     });
                                                 }
                                             });
@@ -103,13 +107,17 @@ function query (connection, query, done) {
                         });
                     },
                 ], function (err, results) {
-                // Results can also be processed here.
-                // Release the connection back to the pool.
-                    connection.release(connObj, function (err) {
-                        if (err) {
-                            done(err);
-                        }
-                    });
+                    if (err) {
+                        done(err);
+                    } else {
+                        // Results can also be processed here.
+                        // Release the connection back to the pool.
+                        connection.release(connObj, function (err) {
+                            if (err) {
+                                done(err);
+                            }
+                        });
+                    }
                 });
             }
         });
@@ -130,45 +138,30 @@ db.prototype.getLimitString = function (limit, offset) {
 };
 
 db.prototype.setLimitToSQL = function (sql, limit, offset) {
-    if (limit == -1) { return sql; } else { return ' SELECT * FROM (SELECT rownum wst_rnum, a.* FROM(' + sql + ') a WHERE rownum <=' + offset + '+' + limit + ') WHERE wst_rnum >=' + offset; }
+    if (limit === -1) { return sql; } else { return ' SELECT * FROM (SELECT rownum wst_rnum, a.* FROM(' + sql + ') a WHERE rownum <=' + offset + '+' + limit + ') WHERE wst_rnum >=' + offset; }
 };
 
 exports.testConnection = function (req, data, setresult) {
-    var DB = this;
     var theQuery = 'SELECT user as table_schema, table_name as name FROM user_tables';
     db.prototype.connect(data, function (error, connection) {
-        query(connection, theQuery, function (err, results) {
-            if (err) {
-                setresult({result: 0, msg: 'Error testing connection: ' + err, code: 'JO-001', actionCode: 'INVALIDATEDTS'});
-                saveToLog(req, 'Error testing connection: ' + err, 200, 'JO-001', '', data.datasourceID);
-                DataSources.invalidateDatasource(req, data.datasourceID, 'JO-001', 'INVALIDATEDTS', 'Error testing connection: ' + err, function (result) {
-                    // console.log('change status',result);
-                });
-            } else {
-                setresult({result: 1, items: results.rows});
-            }
-        });
+        if (error) {
+            setresult({result: 0, msg: 'Error testing connection: ' + error, code: 'JO-001', actionCode: 'INVALIDATEDTS'});
+            saveToLog(req, 'Error testing connection: ' + error, 200, 'JO-001', '', data.datasourceID);
+            DataSources.invalidateDatasource(req, data.datasourceID, 'JO-001', 'INVALIDATEDTS', 'Error testing connection: ' + error, function (result) {
+                // console.log('change status',result);
+            });
+        } else {
+            query(connection, theQuery, function (err, results) {
+                if (err) {
+                    setresult({result: 0, msg: 'Error testing connection: ' + err, code: 'JO-001', actionCode: 'INVALIDATEDTS'});
+                    saveToLog(req, 'Error testing connection: ' + err, 200, 'JO-001', '', data.datasourceID);
+                    DataSources.invalidateDatasource(req, data.datasourceID, 'JO-001', 'INVALIDATEDTS', 'Error testing connection: ' + err, function (result) {
+                        // console.log('change status',result);
+                    });
+                } else {
+                    setresult({result: 1, items: results.rows});
+                }
+            });
+        }
     });
 };
-
-function columnToLowerCase (rows, column) {
-    for (var i in rows) {
-        for (var key in rows[i]) {
-            rows[i][column] = rows[i][column].toLowerCase();
-            delete (rows[i][key]);
-        }
-    }
-
-    return rows;
-}
-
-function columnNamesToLowerCase (rows) {
-    for (var i in rows) {
-        for (var key in rows[i]) {
-            rows[i][String(key).toLowerCase()] = rows[i][key];
-            delete (rows[i][key]);
-        }
-    }
-
-    return rows;
-}

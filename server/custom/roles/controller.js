@@ -1,11 +1,14 @@
 var Roles = connection.model('Roles');
-require('../../core/controller.js');
-function RolesController (model) {
-    this.model = model;
-    this.searchFields = ['actionCategory'];
+const Controller = require('../../core/controller.js');
+
+class RolesController extends Controller {
+    constructor () {
+        super(Roles);
+        this.searchFields = ['actionCategory'];
+    }
 }
-RolesController.inherits(Controller);
-var controller = new RolesController(Roles);
+
+var controller = new RolesController();
 
 exports.RolesCreate = function (req, res) {
     req.query.trash = true;

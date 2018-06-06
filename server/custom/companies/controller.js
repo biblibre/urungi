@@ -1,10 +1,12 @@
 var Companies = connection.model('Companies');
 
-require('../../core/controller.js');
+const Controller = require('../../core/controller.js');
 
-function CompaniesController (model) {
-    this.model = model;
-    this.searchFields = [];
+class CompaniesController extends Controller {
+    constructor () {
+        super(Companies);
+        this.searchFields = [];
+    }
 }
 
 exports.getCompanyData = function (req, res) {
@@ -65,7 +67,3 @@ exports.saveCustomLogo = function (req, res) {
         serverResponse(req, res, 200, result);
     });
 };
-
-CompaniesController.inherits(Controller);
-
-var controller = new CompaniesController(Companies);

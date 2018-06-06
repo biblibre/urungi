@@ -41,7 +41,6 @@ db.prototype.query = function (query, done) {
             return console.error('Connection Error: ' + err);
         }
 
-        // result.rows = columnNamesToLowerCase(result.rows);
         done(false, {rows: result.rows});
     });
 };
@@ -63,10 +62,10 @@ db.prototype.getLimitString = function (limit, offset) {
 };
 
 db.prototype.setLimitToSQL = function (sql, limit, offset) {
-    if (limit == -1) { return sql; } else { return ' SELECT * FROM (SELECT rownum wst_rnum, a.* FROM(' + sql + ') a WHERE rownum <=' + offset + '+' + limit + ') WHERE wst_rnum >=' + offset; }
+    if (limit === -1) { return sql; } else { return ' SELECT * FROM (SELECT rownum wst_rnum, a.* FROM(' + sql + ') a WHERE rownum <=' + offset + '+' + limit + ') WHERE wst_rnum >=' + offset; }
 };
 
-exports.db = db;
+exports.Db = db;
 
 exports.testConnection = function (req, data, setresult) {
     oracledb.getConnection({
@@ -86,7 +85,7 @@ exports.testConnection = function (req, data, setresult) {
         var theQuery = 'SELECT user as table_schema, table_name as name FROM user_tables';
 
         connection.execute(theQuery, [], {outFormat: oracledb.OBJECT}, function (err, result) {
-            // result.rows = columnNamesToLowerCase(result.rows);
+            if (err) { console.error(err.message); }
 
             setresult({result: 1, items: result.rows});
 
@@ -96,14 +95,3 @@ exports.testConnection = function (req, data, setresult) {
         });
     });
 };
-
-function columnNamesToLowerCase (rows) {
-    for (var i in rows) {
-        for (var key in rows[i]) {
-            rows[i][String(key).toLowerCase()] = rows[i][key];
-            delete (rows[i][key]);
-        }
-    }
-
-    return rows;
-}

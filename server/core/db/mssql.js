@@ -60,15 +60,15 @@ db.prototype.setLimitToSQL = function (sql, limit, offset) {
     var order_by_position = sql.indexOf(' ORDER BY ');
     var defaultOrderBy = '';
 
-    if (order_by_position == -1) {
+    if (order_by_position === -1) {
         // no order by, include the default order by
         defaultOrderBy = ' ORDER BY 1 ';
     }
 
-    if (limit == -1) { return sql; } else { return sql + defaultOrderBy + ' OFFSET ' + offset + ' ROWS FETCH NEXT ' + limit + ' ROWS ONLY'; }
+    if (limit === -1) { return sql; } else { return sql + defaultOrderBy + ' OFFSET ' + offset + ' ROWS FETCH NEXT ' + limit + ' ROWS ONLY'; }
 };
 
-exports.db = db;
+exports.Db = db;
 
 exports.testConnection = function (req, data, setresult) {
     var connection = new mssql.Connection({

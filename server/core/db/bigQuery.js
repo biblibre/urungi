@@ -16,7 +16,7 @@ var db = function () {
     this.connection = null;
 };
 
-exports.db = db;
+exports.Db = db;
 
 db.prototype.connect = function (data, done) {
     var DB = this;
@@ -60,7 +60,7 @@ exports.testConnection = function (req, data, setresult) {
 };
 
 function getBigqueryDataset (bq, database, jsonObj, index, rows, done) {
-    if (jsonObj.datasets[index] == undefined) {
+    if (typeof jsonObj.datasets[index] === 'undefined') {
         done();
     } else {
         bq.table.list(database, jsonObj.datasets[index].datasetReference.datasetId, function (e, r, d) {
@@ -92,11 +92,11 @@ exports.getSchemas = function (data, setresult) {
         var dataset = res1[0];
         var table = res1[1];
 
-        if (projects.indexOf(project) == -1) { projects.push(project); }
-        if (datasets.indexOf(dataset) == -1) { datasets.push(dataset); }
-        if (tables.indexOf(table) == -1) { tables.push(table); }
+        if (projects.indexOf(project) === -1) { projects.push(project); }
+        if (datasets.indexOf(dataset) === -1) { datasets.push(dataset); }
+        if (tables.indexOf(table) === -1) { tables.push(table); }
 
-        if (schemasTables.indexOf({name: collections[i].name, project: project, dataset: dataset, table: table}) == -1) {
+        if (schemasTables.indexOf({name: collections[i].name, project: project, dataset: dataset, table: table}) === -1) {
             var stable = {name: collections[i].name, project: project, dataset: dataset, table: table};
             schemasTables.push(stable);
         }
@@ -134,9 +134,9 @@ function getTableFields (jsonFile, tables, index, fields, done) {
                 var elementID = generateShortUID();
                 var isVisible = true;
                 var type = 'string';
-                if (jsonObj.schema.fields[i].type == 'INTEGER' || jsonObj.schema.fields[i].type == 'FLOAT') { type = 'number'; }
-                if (jsonObj.schema.fields[i].type == 'TIMESTAMP') { type = 'date'; }
-                if (jsonObj.schema.fields[i].type == 'BOOLEAN') { type = 'boolean'; }
+                if (jsonObj.schema.fields[i].type === 'INTEGER' || jsonObj.schema.fields[i].type === 'FLOAT') { type = 'number'; }
+                if (jsonObj.schema.fields[i].type === 'TIMESTAMP') { type = 'date'; }
+                if (jsonObj.schema.fields[i].type === 'BOOLEAN') { type = 'boolean'; }
 
                 theCollection.elements.push({elementID: elementID, elementName: jsonObj.schema.fields[i].name, elementType: type, visible: isVisible, elementLabel: jsonObj.schema.fields[i].name});
                 // table_schema, c.table_name, c.column_name, c.data_type
@@ -154,7 +154,7 @@ db.prototype.getLimitString = function (limit, offset) {
 };
 
 db.prototype.setLimitToSQL = function (sql, limit, offset) {
-    if (limit == -1) { return sql; } else { return sql + ' LIMIT ' + limit + ' OFFSET ' + offset; }
+    if (limit === -1) { return sql; } else { return sql + ' LIMIT ' + limit + ' OFFSET ' + offset; }
 };
 
 db.prototype.executeSQLQuery = function (connection, sql, done) {
@@ -174,7 +174,7 @@ db.prototype.executeSQLQuery = function (connection, sql, done) {
 
             var results = [];
 
-            for (var r in jsonObj.rows) {
+            for (const r in jsonObj.rows) {
                 var theRow = {};
                 for (var field in jsonObj.schema.fields) {
                     theRow[jsonObj.schema.fields[field].name] = jsonObj.rows[r].f[field].v;
@@ -202,7 +202,7 @@ function getQueryResults (connection, jobId, done) {
 
         var results = [];
 
-        for (var r in jsonObj.rows) {
+        for (const r in jsonObj.rows) {
             var theRow = {};
             for (var field in jsonObj.schema.fields) {
                 theRow[jsonObj.schema.fields[field].name] = jsonObj.rows[r].f[field].v;

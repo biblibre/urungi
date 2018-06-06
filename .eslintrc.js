@@ -11,9 +11,6 @@ module.exports = {
         // defined in server/config/mongoose.js
         connection: false,
 
-        // defined in server/core/controller.js
-        Controller: false,
-
         // defined in server/globals.js
         appRoot: false,
         debug: false,
