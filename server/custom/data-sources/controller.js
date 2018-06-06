@@ -40,13 +40,11 @@ exports.DataSourcesUploadConfigFile = function (req, res) {
     fs.readFile(file.path, function (err, data) {
         if (err) {
             return serverResponse(req, res, 200, {result: 0, msg: err.message});
-            throw err;
         }
 
         fs.writeFile(filePath, data, function (err) {
             if (err) {
                 return serverResponse(req, res, 200, {result: 0, msg: err.message});
-                throw err;
             }
 
             serverResponse(req, res, 200, {result: 1, msg: 'File uploaded successfully'});
@@ -65,8 +63,6 @@ exports.saveS3Configuration = function (req, res) {
 };
 
 exports.getS3Files = function (req, res) {
-    var data = req.body;
-
     var AWS = require('aws-sdk');
 
     AWS.config.update({
@@ -75,12 +71,14 @@ exports.getS3Files = function (req, res) {
         region: req.body.region
     });
 
-    var s3 = new AWS.S3(), bucket = req.body.bucket, folder = req.body.folder;
+    var s3 = new AWS.S3();
 
     var allKeys = [];
 
     s3.listObjects({Bucket: req.body.bucket, Marker: req.body.marker}, function (err, data) {
-        for (i = 0; i < data.Contents.length; i++) {
+        if (err) { console.error(err); }
+
+        for (let i = 0; i < data.Contents.length; i++) {
             var theFile = {};
             theFile.fileName = data.Contents[i].Key;
             theFile.LastModified = data.Contents[i].LastModified;
@@ -98,10 +96,10 @@ exports.getEntities = function (req, res) {
     req.user.companyID = 'COMPID';
 
     controller.findOne(req, function (result) {
-        if (result.result == 1) {
-            if (result.item.type == 'MONGODB') {
+        if (result.result === 1) {
+            if (result.item.type === 'MONGODB') {
                 var mongodb = require('../../core/db/mongodb.js');
-                var data = {};
+                const data = {};
 
                 data.host = result.item.params[0].connection.host;
                 data.port = result.item.params[0].connection.port;
@@ -113,21 +111,22 @@ exports.getEntities = function (req, res) {
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'MySQL' || result.item.type == 'POSTGRE' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'BIGQUERY' || result.item.type == 'JDBC-ORACLE') {
+            if (result.item.type === 'MySQL' || result.item.type === 'POSTGRE' || result.item.type === 'ORACLE' || result.item.type === 'MSSQL' || result.item.type === 'BIGQUERY' || result.item.type === 'JDBC-ORACLE') {
+                let db;
                 switch (result.item.type) {
-                case 'MySQL': var db = require('../../core/db/mysql.js');
+                case 'MySQL': db = require('../../core/db/mysql.js');
                     break;
-                case 'POSTGRE': var db = require('../../core/db/postgresql.js');
+                case 'POSTGRE': db = require('../../core/db/postgresql.js');
                     break;
-                case 'ORACLE': var db = require('../../core/db/oracle.js');
+                case 'ORACLE': db = require('../../core/db/oracle.js');
                     break;
-                case 'MSSQL': var db = require('../../core/db/mssql.js');
+                case 'MSSQL': db = require('../../core/db/mssql.js');
                     break;
-                case 'BIGQUERY': var db = require('../../core/db/bigQuery.js');
+                case 'BIGQUERY': db = require('../../core/db/bigQuery.js');
                     break;
-                case 'JDBC-ORACLE': var db = require('../../core/db/jdbc-oracle.js');
+                case 'JDBC-ORACLE': db = require('../../core/db/jdbc-oracle.js');
                 }
-                var data = {
+                const data = {
                     datasourceID: result.item._id,
                     companyID: req.user.companyID,
                     host: result.item.params[0].connection.host,
@@ -152,49 +151,49 @@ exports.getEntities = function (req, res) {
 exports.testConnection = function (req, res) {
     req.body.companyID = req.user.companyID;
 
-    if (req.body.type == 'MONGODB') {
+    if (req.body.type === 'MONGODB') {
         var mongodb = require('../../core/db/mongodb.js');
 
         mongodb.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
     }
-    if (req.body.type == 'MySQL') {
+    if (req.body.type === 'MySQL') {
         var mysql = require('../../core/db/mysql.js');
 
         mysql.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
     }
-    if (req.body.type == 'POSTGRE') {
+    if (req.body.type === 'POSTGRE') {
         var postgre = require('../../core/db/postgresql.js');
 
         postgre.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
     }
-    if (req.body.type == 'ORACLE') {
+    if (req.body.type === 'ORACLE') {
         var oracle = require('../../core/db/oracle.js');
 
         oracle.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
     }
-    if (req.body.type == 'MSSQL') {
+    if (req.body.type === 'MSSQL') {
         var mssql = require('../../core/db/mssql.js');
 
         mssql.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
     }
-    if (req.body.type == 'BIGQUERY') {
+    if (req.body.type === 'BIGQUERY') {
         var bigQuery = require('../../core/db/bigQuery.js');
 
         bigQuery.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
     }
-    if (req.body.type == 'JDBC-ORACLE') {
+    if (req.body.type === 'JDBC-ORACLE') {
         var jdbcOracle = require('../../core/db/jdbc-oracle.js');
 
         jdbcOracle.testConnection(req, req.body, function (result) {
@@ -213,10 +212,10 @@ exports.getReverseEngineering = function (req, res) {
     req.user.companyID = 'COMPID';
 
     controller.findOne(req, function (result) {
-        if (result.result == 1) {
-            if (result.item.type == 'MONGODB') {
+        if (result.result === 1) {
+            if (result.item.type === 'MONGODB') {
                 var mongodb = require('../../core/db/mongodb.js');
-                var data = {};
+                const data = {};
                 data.host = result.item.params[0].connection.host;
                 data.port = result.item.params[0].connection.port;
                 data.database = result.item.params[0].connection.database;
@@ -226,9 +225,9 @@ exports.getReverseEngineering = function (req, res) {
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'JDBC-ORACLE' || result.item.type == 'BIGQUERY') {
+            if (result.item.type === 'POSTGRE' || result.item.type === 'MySQL' || result.item.type === 'ORACLE' || result.item.type === 'MSSQL' || result.item.type === 'JDBC-ORACLE' || result.item.type === 'BIGQUERY') {
                 var sql = require('../../core/db/sql.js');
-                var data = {
+                const data = {
                     type: result.item.type,
                     host: result.item.params[0].connection.host,
                     port: result.item.params[0].connection.port,
@@ -258,10 +257,10 @@ exports.getEntitySchema = function (req, res) {
     req.user.companyID = 'COMPID';
 
     controller.findOne(req, function (result) {
-        if (result.result == 1) {
-            if (result.item.type == 'MONGODB') {
+        if (result.result === 1) {
+            if (result.item.type === 'MONGODB') {
                 var mongodb = require('../../core/db/mongodb.js');
-                var data = {};
+                const data = {};
                 data.host = result.item.params[0].connection.host;
                 data.port = result.item.params[0].connection.port;
                 data.database = result.item.params[0].connection.database;
@@ -272,10 +271,10 @@ exports.getEntitySchema = function (req, res) {
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' ||
-               result.item.type == 'JDBC-ORACLE') {
+            if (result.item.type === 'POSTGRE' || result.item.type === 'MySQL' || result.item.type === 'ORACLE' || result.item.type === 'MSSQL' ||
+               result.item.type === 'JDBC-ORACLE') {
                 var sql = require('../../core/db/sql.js');
-                var data = {
+                const data = {
                     type: result.item.type,
                     host: result.item.params[0].connection.host,
                     port: result.item.params[0].connection.port,
@@ -289,9 +288,9 @@ exports.getEntitySchema = function (req, res) {
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'BIGQUERY') {
+            if (result.item.type === 'BIGQUERY') {
                 var bquery = require('../../core/db/bigQuery.js');
-                var data = {
+                const data = {
                     companyID: req.user.companyID,
                     type: result.item.type,
                     host: result.item.params[0].connection.host,
@@ -324,13 +323,13 @@ exports.getsqlQuerySchema = function (req, res) {
     req.user.companyID = 'COMPID';
 
     controller.findOne(req, function (result) {
-        if (result.result == 1) {
-            if (result.item.type == 'MONGODB') {
+        if (result.result === 1) {
+            if (result.item.type === 'MONGODB') {
                 serverResponse(req, res, 400, result);
             }
-            if (result.item.type == 'POSTGRE' || result.item.type == 'MySQL' || result.item.type == 'ORACLE' || result.item.type == 'MSSQL' || result.item.type == 'JDBC-ORACLE') {
+            if (result.item.type === 'POSTGRE' || result.item.type === 'MySQL' || result.item.type === 'ORACLE' || result.item.type === 'MSSQL' || result.item.type === 'JDBC-ORACLE') {
                 var sql = require('../../core/db/sql.js');
-                var data = {
+                const data = {
                     type: result.item.type,
                     host: result.item.params[0].connection.host,
                     port: result.item.params[0].connection.port,
@@ -344,9 +343,9 @@ exports.getsqlQuerySchema = function (req, res) {
                     serverResponse(req, res, 200, result);
                 });
             }
-            if (result.item.type == 'BIGQUERY') {
+            if (result.item.type === 'BIGQUERY') {
                 var bquery = require('../../core/db/bigQuery.js');
-                var data = {
+                const data = {
                     type: result.item.type,
                     host: result.item.params[0].connection.host,
                     port: result.item.params[0].connection.port,
@@ -411,59 +410,4 @@ exports.DataSourcesFindOne = function (req, res) {
     controller.findOne(req, function (result) {
         serverResponse(req, res, 200, result);
     });
-};
-
-function getKP (target, dbstruc) {
-    for (var k in target) {
-        if (typeof target[k] !== 'object') {
-            if (target.hasOwnProperty(k) && !dbstruc.hasOwnProperty(k)) {
-                dbstruc[k] = typeof target[k];
-            }
-        } else {
-            dbstruc[k] = {};
-            getKP(target[k], dbstruc[k]);
-        }
-    }
-}
-
-function getElementList (target, elements, parent) {
-    for (var k in target) {
-        if (typeof target[k] !== 'object') {
-            if (target.hasOwnProperty(k)) {
-                if (k >= 0) {
-
-                } else {
-                    if (parent != '') {
-                        var node = parent + '.' + k + ':' + typeof target[k];
-                    } else {
-                        var node = k + ':' + typeof target[k];
-                    }
-                    if (elements.indexOf(node) == -1) { elements.push(node); }
-                }
-            }
-        } else {
-            if (target[k]) {
-                if (target[k][0] == 0) {
-
-                }
-            }
-
-            if (parseInt(k) != k) {
-                if (parent != '') {
-                    var nodeDesc = parent + '.' + k + ':' + typeof target[k];
-                    var node = parent + '.' + k;
-                } else {
-                    var nodeDesc = k + ':' + typeof target[k];
-                    var node = k;
-                }
-            } else {
-                var node = parent;
-            }
-
-            if (elements.indexOf(nodeDesc) == -1) {
-                elements.push(nodeDesc);
-            }
-            getElementList(target[k], elements, node);
-        }
-    }
 };

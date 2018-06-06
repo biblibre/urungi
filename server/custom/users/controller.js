@@ -1,4 +1,5 @@
 var Users = connection.model('Users');
+const Reports = connection.model('Reports');
 const Controller = require('../../core/controller.js');
 
 class UsersController extends Controller {
@@ -16,7 +17,7 @@ exports.UsersCreate = function (req, res) {
     req.body.companyID = 'COMPID';
 
     // Do we have to generate a password?
-    if (req.body.sendPassword == true) {
+    if (req.body.sendPassword) {
         var generatePassword = require('password-generator');
         var thePassword = generatePassword();
         req.body.pwd1 = thePassword;
@@ -28,7 +29,7 @@ exports.UsersCreate = function (req, res) {
 
     var Users = connection.model('Users');
     Users.createTheUser(req, res, req.body, function (result) {
-        if (req.body.sendPassword == true && thePassword != undefined) {
+        if (req.body.sendPassword && typeof thePassword !== 'undefined') {
             var recipients = [];
             recipients.push(req.body);
             sendEmailTemplate('newUserAndPassword', recipients, 'email', 'welcome to widestage');
@@ -43,7 +44,7 @@ exports.UsersUpdate = function (req, res) {
     req.query.companyid = true;
 
     if (req.body.pwd1 && req.body.pwd2) {
-        if (req.body.pwd1 == req.body.pwd2) {
+        if (req.body.pwd1 === req.body.pwd2) {
             var hash = require('../../util/hash');
             hash(req.body.pwd1, function (err, salt, hash) {
                 if (err) throw err;
@@ -102,6 +103,8 @@ exports.rememberPassword = function (req, res) {
     var url = 'http://' + req.headers.host + '/';
 
     Users.findOne({ email: body.email }, function (err, findUser) {
+        if (err) { console.error(err); }
+
         if (findUser) {
             Users.rememberPassword(body.email, url, function (result) {
                 serverResponse(req, res, 200, result);
@@ -114,17 +117,19 @@ exports.rememberPassword = function (req, res) {
 
 exports.changeMyPassword = function (req, res) {
     if (req.body.pwd1 && req.body.pwd2) {
-        if (req.body.pwd1 == req.body.pwd2) {
+        if (req.body.pwd1 === req.body.pwd2) {
             var hash = require('../../util/hash');
             hash(req.body.pwd1, function (err, salt, hash) {
                 if (err) throw err;
-                Users.update({_id: req.user._id}, {salt: salt, hash: hash}, function (result) {
-                    var result = {result: 1, msg: 'Password changed'};
+                Users.update({_id: req.user._id}, {salt: salt, hash: hash}, function (err) {
+                    if (err) { console.error(err); }
+
+                    const result = {result: 1, msg: 'Password changed'};
                     serverResponse(req, res, 200, result);
                 });
             });
         } else {
-            var result = {result: 0, msg: 'Passwords do not match'};
+            const result = {result: 0, msg: 'Passwords do not match'};
             serverResponse(req, res, 200, result);
         }
     }
@@ -143,8 +148,6 @@ exports.setViewedContextHelp = function (req, res) {
 };
 
 exports.getCounts = function (req, res) {
-    var body = req.body;
-    var userID = req.user.id;
     var companyID = req.user.companyID;
     var theCounts = {};
 
@@ -153,7 +156,7 @@ exports.getCounts = function (req, res) {
 
     if (req.isAuthenticated()) {
         for (var i in req.user.roles) {
-            if (req.user.roles[i] == 'WSTADMIN') {
+            if (req.user.roles[i] === 'WSTADMIN') {
                 isWSTADMIN = true;
             }
         }
@@ -161,32 +164,45 @@ exports.getCounts = function (req, res) {
 
     if (isWSTADMIN) {
         // get all reports
-        var Reports = connection.model('Reports');
         Reports.count({companyID: companyID, owner: req.user._id, nd_trash_deleted: false}, function (err, reportCount) {
+            if (err) { console.error(err); }
+
             theCounts.reports = reportCount;
             // get all dashboards
             var Dashboardsv2 = connection.model('Dashboardsv2');
             Dashboardsv2.count({companyID: companyID, owner: req.user._id, nd_trash_deleted: false}, function (err, dashCount) {
+                if (err) { console.error(err); }
+
                 theCounts.dashBoards = dashCount;
                 // get all pages
                 var Pages = connection.model('Pages');
                 Pages.count({companyID: companyID, owner: req.user._id, nd_trash_deleted: false}, function (err, pageCount) {
+                    if (err) { console.error(err); }
+
                     theCounts.pages = pageCount;
                     // get all datasources
                     var DataSources = connection.model('DataSources');
                     DataSources.count({companyID: companyID, nd_trash_deleted: false}, function (err, dtsCount) {
+                        if (err) { console.error(err); }
+
                         theCounts.dataSources = dtsCount;
                         // get all layers
                         var Layers = connection.model('Layers');
                         Layers.count({companyID: companyID, nd_trash_deleted: false}, function (err, layersCount) {
+                            if (err) { console.error(err); }
+
                             theCounts.layers = layersCount;
                             // get all users
                             var Users = connection.model('Users');
                             Users.count({companyID: companyID, nd_trash_deleted: false}, function (err, usersCount) {
+                                if (err) { console.error(err); }
+
                                 theCounts.users = usersCount;
                                 // get all roles
                                 var Roles = connection.model('Roles');
                                 Roles.count({companyID: companyID, nd_trash_deleted: false}, function (err, rolesCount) {
+                                    if (err) { console.error(err); }
+
                                     theCounts.roles = rolesCount;
                                     // send the response
                                     serverResponse(req, res, 200, theCounts);
@@ -199,16 +215,21 @@ exports.getCounts = function (req, res) {
         });
     } else {
         // get all reports
-        var Reports = connection.model('Reports');
         Reports.count({companyID: companyID, owner: req.user._id, nd_trash_deleted: false}, function (err, reportCount) {
+            if (err) { console.error(err); }
+
             theCounts.reports = reportCount;
             // get all dashboards
             var Dashboards = connection.model('Dashboardsv2');
             Dashboards.count({companyID: companyID, owner: req.user._id, nd_trash_deleted: false}, function (err, dashCount) {
+                if (err) { console.error(err); }
+
                 theCounts.dashBoards = dashCount;
                 // get all pages
                 var Pages = connection.model('Pages');
                 Pages.count({companyID: companyID, owner: req.user._id, nd_trash_deleted: false}, function (err, pageCount) {
+                    if (err) { console.error(err); }
+
                     theCounts.pages = pageCount;
                     serverResponse(req, res, 200, theCounts);
                 });
@@ -225,17 +246,25 @@ exports.getCountsForUser = function (req, res) {
     // get all reports
     var Reports = connection.model('Reports');
     Reports.count({companyID: companyID, owner: userID, isPublic: true, nd_trash_deleted: false}, function (err, reportCount) {
+        if (err) { console.error(err); }
+
         theCounts.publishedReports = reportCount;
         // get all dashboards
         var Dashboards = connection.model('Dashboardsv2');
         Dashboards.count({companyID: companyID, owner: userID, isPublic: true, nd_trash_deleted: false}, function (err, dashCount) {
+            if (err) { console.error(err); }
+
             theCounts.publishedDashBoards = dashCount;
 
             Reports.count({companyID: companyID, owner: userID, isPublic: false, nd_trash_deleted: false}, function (err, privateReportCount) {
+                if (err) { console.error(err); }
+
                 theCounts.privateReports = privateReportCount;
 
                 var Dashboards = connection.model('Dashboardsv2');
                 Dashboards.count({companyID: companyID, owner: userID, isPublic: false, nd_trash_deleted: false}, function (err, privateDashCount) {
+                    if (err) { console.error(err); }
+
                     theCounts.privateDashBoards = privateDashCount;
                     serverResponse(req, res, 200, theCounts);
                 });
@@ -245,39 +274,46 @@ exports.getCountsForUser = function (req, res) {
 };
 
 exports.getUserReports = function (req, res) {
-    var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
+    var page = (req.query.page) ? req.query.page : 1;
     var userID = req.query.userID;
     var companyID = req.user.companyID;
     var Reports = connection.model('Reports');
     Reports.find({companyID: companyID, owner: userID, nd_trash_deleted: false}, {reportName: 1, parentFolder: 1, isPublic: 1, reportType: 1, reportDescription: 1, status: 1}, function (err, reports) {
-        serverResponse(req, res, 200, {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: reports});
+        if (err) { console.error(err); }
+
+        serverResponse(req, res, 200, {result: 1, page: page, pages: 1, items: reports});
     });
 };
 
 exports.getUserDashboards = function (req, res) {
-    var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
+    var page = (req.query.page) ? req.query.page : 1;
     var userID = req.query.userID;
     var companyID = req.user.companyID;
     var Dashboards = connection.model('Dashboardsv2');
     Dashboards.find({companyID: companyID, owner: userID, nd_trash_deleted: false}, {dashboardName: 1, parentFolder: 1, isPublic: 1, dashboardDescription: 1, status: 1}, function (err, privateDashCount) {
-        serverResponse(req, res, 200, {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: privateDashCount});
+        if (err) { console.error(err); }
+
+        serverResponse(req, res, 200, {result: 1, page: page, pages: 1, items: privateDashCount});
     });
 };
 
 exports.getUserPages = function (req, res) {
-    var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
+    var page = (req.query.page) ? req.query.page : 1;
     var userID = req.query.userID;
-    var companyID = req.user.companyID;
     var companyID = req.user.companyID;
     var Pages = connection.model('Pages');
     Pages.find({companyID: companyID, owner: userID, nd_trash_deleted: false}, {pageName: 1, parentFolder: 1, isPublic: 1, dashboardDescription: 1, status: 1}, function (err, pages) {
-        serverResponse(req, res, 200, {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: pages});
+        if (err) { console.error(err); }
+
+        serverResponse(req, res, 200, {result: 1, page: page, pages: 1, items: pages});
     });
 };
 
 exports.getUserData = function (req, res) {
     var Companies = connection.model('Companies');
     Companies.findOne({companyID: req.user.companyID, nd_trash_deleted: false}, {}, function (err, company) {
+        if (err) { console.error(err); }
+
         var theUserData = {};
         theUserData.companyData = req.user.companyData;
         theUserData.companyID = req.user.companyID;
@@ -302,7 +338,7 @@ exports.getUserData = function (req, res) {
 
         if (req.isAuthenticated()) {
             for (var i in req.user.roles) {
-                if (req.user.roles[i] == 'WSTADMIN') {
+                if (req.user.roles[i] === 'WSTADMIN') {
                     isWSTADMIN = true;
                     createReports = true;
                     createDashboards = true;
@@ -336,17 +372,19 @@ exports.getUserData = function (req, res) {
 
         if (req.user.roles.length > 0 && !isWSTADMIN) {
             var Roles = connection.model('Roles');
-            Roles.find({ _id: { $in: req.user.roles} }, {}, function (err, roles) {
+            Roles.find({ _id: { $in: req.user.roles } }, {}, function (err, roles) {
+                if (err) { console.error(err); }
+
                 req.session.rolesData = roles;
 
                 for (var i in roles) {
-                    if (roles[i].reportsCreate == true) { createReports = true; }
-                    if (roles[i].dashboardsCreate == true) { createDashboards = true; }
-                    if (roles[i].pagesCreate == true) { createPages = true; }
-                    if (roles[i].exploreData == true) { exploreData = true; }
-                    if (roles[i].viewSQL == true) { viewSQL = true; }
-                    if (roles[i].reportsPublish == true) { publishReports = true; }
-                    if (roles[i].dashboardsPublish == true) { publishDashboards = true; }
+                    if (roles[i].reportsCreate) { createReports = true; }
+                    if (roles[i].dashboardsCreate) { createDashboards = true; }
+                    if (roles[i].pagesCreate) { createPages = true; }
+                    if (roles[i].exploreData) { exploreData = true; }
+                    if (roles[i].viewSQL) { viewSQL = true; }
+                    if (roles[i].reportsPublish) { publishReports = true; }
+                    if (roles[i].dashboardsPublish) { publishDashboards = true; }
                 }
 
                 req.session.reportsCreate = createReports;
@@ -368,8 +406,6 @@ exports.getUserData = function (req, res) {
                 theUserData.publishReports = publishReports;
                 theUserData.publishDashboards = publishDashboards;
 
-                var userData = {};
-
                 serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {user: theUserData, companyData: company, rolesData: roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL}});
             });
         } else {
@@ -381,6 +417,8 @@ exports.getUserData = function (req, res) {
 exports.getUserOtherData = function (req, res) {
     var Users = connection.model('Users');
     Users.findOne({_id: req.user._id}, {}, function (err, user) {
+        if (err) { console.error(err); }
+
         serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: user});
     });
 };
@@ -434,18 +472,18 @@ exports.getUserObjects = async function (req, res) {
 async function navigateRoles (folders, rolesData) {
     var canPublish = false;
 
-    for (var r in rolesData) {
-        if (!rolesData[r].grants || rolesData[r].grants.length == 0) {
+    for (const r in rolesData) {
+        if (!rolesData[r].grants || rolesData[r].grants.length === 0) {
             rolesData.splice(r, 1);
         }
     }
 
-    for (var r in rolesData) {
-        for (var g in rolesData[r].grants) {
+    for (const r in rolesData) {
+        for (const g in rolesData[r].grants) {
             var theGrant = rolesData[r].grants[g];
 
             const publish = await setGrantsToFolder_v2(folders, theGrant);
-            if (publish == true) {
+            if (publish) {
                 canPublish = true;
             }
         }
@@ -459,10 +497,10 @@ async function setGrantsToFolder_v2 (folders, grant) {
 
     for (var i in folders) {
         const folder = folders[i];
-        if (folder.id == grant.folderID) {
+        if (folder.id === grant.folderID) {
             folder.grants = grant;
 
-            if (grant.publishReports == true) {
+            if (grant.publishReports === true) {
                 publish = true;
             }
 
@@ -478,7 +516,7 @@ async function setGrantsToFolder_v2 (folders, grant) {
             return publish;
         } else {
             if (folder.nodes && folder.nodes.length > 0) {
-                return await setGrantsToFolder_v2(folder.nodes, grant);
+                return setGrantsToFolder_v2(folder.nodes, grant);
             }
         }
     }
@@ -598,36 +636,37 @@ async function getPagesForFolder (idfolder, grant) {
 }
 
 async function getNoFolderReports () {
-    return await getReportsForFolder('root');
+    return getReportsForFolder('root');
 }
 
 async function getNoFolderDashboards () {
-    return await getDashboardsForFolder('root');
+    return getDashboardsForFolder('root');
 }
 
 async function getNoFolderPages () {
-    return await getPagesForFolder('root');
+    return getPagesForFolder('root');
 }
 
 exports.getUserLastExecutions = function (req, res) {
     var statistics = connection.model('statistics');
 
+    let find;
     if (req.session.isWSTADMIN) {
-        var find = {action: 'execute'};
+        find = {action: 'execute'};
     } else {
-        var find = {'$and': [{userID: '' + req.user._id + ''}, {action: 'execute'}]};
+        find = {'$and': [{userID: '' + req.user._id + ''}, {action: 'execute'}]};
     }
 
     // Last executions
 
     statistics.aggregate([
-        { $match: find},
+        { $match: find },
         { $group: {
             _id: {relationedID: '$relationedID',
                 type: '$type',
                 relationedName: '$relationedName',
                 action: '$action'},
-            lastDate: { $max: '$createdOn'}
+            lastDate: { $max: '$createdOn' }
         }},
         { $sort: { lastDate: -1 } }
     ], function (err, lastExecutions) {
@@ -637,7 +676,7 @@ exports.getUserLastExecutions = function (req, res) {
         }
 
         statistics.aggregate([
-            { $match: find},
+            { $match: find },
             { $group: {
                 _id: {relationedID: '$relationedID',
                     type: '$type',
@@ -651,7 +690,7 @@ exports.getUserLastExecutions = function (req, res) {
                 console.log(err);
                 return;
             }
-            var mergeResults = {theLastExecutions: lastExecutions, theMostExecuted: mostExecuted };
+            var mergeResults = { theLastExecutions: lastExecutions, theMostExecuted: mostExecuted };
             serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: mergeResults});
         });
     });

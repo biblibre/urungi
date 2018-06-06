@@ -172,10 +172,10 @@ exports.getDashboard = function (req, res) {
             });
 
             for (var r in result.item.items) {
-                if (result.item.items[r].itemType == 'reportBlock') {
+                if (result.item.items[r].itemType === 'reportBlock') {
                     theReports.push(result.item.items[r].reportID);
                 }
-                if (result.item.items[r].itemType == 'tabBlock') {
+                if (result.item.items[r].itemType === 'tabBlock') {
                     // $scope.getTabBlock(result.item.items[r]);
                 }
             }
@@ -184,10 +184,12 @@ exports.getDashboard = function (req, res) {
             var Reports = connection.model('Reports');
 
             Reports.find({ _id: {$in: theReports} }, function (err, reports) {
+                if (err) { console.error(err); }
+
                 if (reports) {
                     for (var r in reports) {
                         for (var i in result.item.items) {
-                            if (reports[r]._id == result.item.items[i].reportID) {
+                            if (reports[r]._id === result.item.items[i].reportID) {
                                 result.item.items[i].reportDefinition = reports[r];
                             }
                         }

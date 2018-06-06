@@ -17,17 +17,8 @@ exports.DashboardsFindAll = function (req, res) {
 
     req.query.fields = ['dashboardName'];
 
-    var isWSTADMIN = false;
-
-    if (req.isAuthenticated()) {
-        for (var i in req.user.roles) {
-            if (req.user.roles[i] == 'WSTADMIN') {
-                isWSTADMIN = true;
-            }
-        }
-    }
-
-    var perPage = config.get('pagination.itemsPerPage'), page = (req.query.page) ? req.query.page : 1;
+    var perPage = config.get('pagination.itemsPerPage');
+    var page = (req.query.page) ? req.query.page : 1;
     /*
      if (isWSTADMIN)
      var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"}]}
@@ -40,7 +31,10 @@ exports.DashboardsFindAll = function (req, res) {
     var Dashboards = connection.model('Dashboards');
     Dashboards.find(find, fields, params, function (err, items) {
         if (err) throw err;
+
         Dashboards.count(find, function (err, count) {
+            if (err) throw err;
+
             var result = {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items};
             serverResponse(req, res, 200, result);
         });
@@ -152,16 +146,16 @@ exports.getDashboard = function (req, res) {
             stat.type = 'dashboard';
             stat.relationedID = result.item._id;
             stat.relationedName = result.item.dashboardName;
-            if (req.query.linked == true) { stat.action = 'execute link'; } else { stat.action = 'execute'; }
+            if (req.query.linked) { stat.action = 'execute link'; } else { stat.action = 'execute'; }
             statistics.save(req, stat, function () {
 
             });
 
             for (var r in result.item.items) {
-                if (result.item.items[r].itemType == 'reportBlock') {
+                if (result.item.items[r].itemType === 'reportBlock') {
                     theReports.push(result.item.items[r].reportID);
                 }
-                if (result.item.items[r].itemType == 'tabBlock') {
+                if (result.item.items[r].itemType === 'tabBlock') {
                     // $scope.getTabBlock(result.item.items[r]);
                 }
             }
@@ -170,10 +164,12 @@ exports.getDashboard = function (req, res) {
             var Reports = connection.model('Reports');
 
             Reports.find({ _id: {$in: theReports} }, function (err, reports) {
+                if (err) { console.error(err); }
+
                 if (reports) {
                     for (var r in reports) {
                         for (var i in result.item.items) {
-                            if (reports[r]._id == result.item.items[i].reportID) {
+                            if (reports[r]._id === result.item.items[i].reportID) {
                                 result.item.items[i].reportDefinition = reports[r];
                             }
                         }
@@ -206,7 +202,7 @@ exports.PublishDashboard = function (req, res) {
             Dashboard.parentFolder = parentFolder;
             Dashboard.isPublic = true;
 
-            Dashboards.update({_id: data._id}, {$set: Dashboard.toObject() }, function (err, numAffected) {
+            Dashboards.update({_id: data._id}, { $set: Dashboard.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
@@ -234,7 +230,7 @@ exports.UnpublishDashboard = function (req, res) {
         if (err) throw err;
         if (Dashboard) {
             Dashboard.isPublic = false;
-            Dashboards.update({_id: data._id}, {$set: Dashboard.toObject() }, function (err, numAffected) {
+            Dashboards.update({_id: data._id}, { $set: Dashboard.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {

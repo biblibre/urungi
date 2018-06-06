@@ -1,3 +1,5 @@
+const path = require('path');
+
 var Files = connection.model('Files');
 
 exports.getFiles = function (req, res) {
@@ -33,7 +35,8 @@ function uploadFile (file, params, done) {
 }
 
 function upload (data, file, params, done) {
-    var fs = require('fs'), mongoose = require('mongoose');
+    var fs = require('fs');
+    var mongoose = require('mongoose');
 
     var File = {
         _id: mongoose.Types.ObjectId(),
@@ -60,8 +63,8 @@ function upload (data, file, params, done) {
 
     var files = [{name: extension[0] + '.' + File._id + '.' + File.extension, data: data, type: File.type}];
 
-    if (File.source == 0) { // Local
-        var newPath = __dirname + '/../../public/uploads/' + File._id + '.' + File.extension;
+    if (File.source === 0) { // Local
+        var newPath = path.join(__dirname, '..', '..', 'public', 'uploads', File._id + '.' + File.extension);
 
         fs.writeFile(newPath, data, function (err) {
             if (err) throw err;
@@ -74,7 +77,7 @@ function upload (data, file, params, done) {
                 done({result: 1, msg: 'File uploaded', file: file.toObject()});
             });
         });
-    } else if (File.source == 1) { // Amazon http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/frames.html#!AWS/S3.html
+    } else if (File.source === 1) { // Amazon http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/frames.html#!AWS/S3.html
         uploadToS3(files, params, function (filesURLs) {
             File['url'] = filesURLs[0];
 
@@ -89,8 +92,8 @@ function upload (data, file, params, done) {
 
 // files -> {name: ..., data: ..., type: ...}
 function uploadToS3 (files, params, done, index, filesURLs) {
-    var index = (index) || 0;
-    var filesURLs = (filesURLs) || [];
+    index = index || 0;
+    filesURLs = filesURLs || [];
     var file = (files[index]) ? files[index] : false;
 
     if (!file) {
@@ -106,7 +109,9 @@ function uploadToS3 (files, params, done, index, filesURLs) {
         region: config.amazon.region
     });
 
-    var s3 = new AWS.S3(), bucket = config.amazon.bucket, folder = config.amazon.folder;
+    var s3 = new AWS.S3();
+    var bucket = config.amazon.bucket;
+    var folder = config.amazon.folder;
 
     if (params.companyID) {
         folder += '/' + params.companyID;

@@ -20,7 +20,7 @@ var usersSchema = new mongoose.Schema({
     contextHelp: [],
     dialogs: [],
     accessToken: String,
-    startDate: {type: Date, default: Date.now },
+    startDate: { type: Date, default: Date.now },
     endDate: {type: Date},
     history: String,
     title: String,
@@ -72,12 +72,6 @@ usersSchema.options.toObject.transform = function (doc, user, options) {
     delete user.hash_change_password;
 };
 
-usersSchema.statics.createUser = function (req, done) {
-    var data = req.body;
-    createTheUser(data, function (result) {
-        done(result);
-    });
-};
 usersSchema.statics.createTheUser = function (req, res, userData, done) {
     var User = this;
     if (!userData.userName) {
@@ -85,7 +79,7 @@ usersSchema.statics.createTheUser = function (req, res, userData, done) {
         return;
     }
 
-    User.findOne({'userName': userData.userName, companyID: req.user.companyID }, {}, function (err, user) {
+    User.findOne({ 'userName': userData.userName, companyID: req.user.companyID }, {}, function (err, user) {
         if (err) throw err;
         if (user) {
             done({result: 0, msg: 'userName already in use.'});
@@ -114,14 +108,20 @@ usersSchema.statics.setViewedContextHelp = function (req, done) {
     var userID = req.user._id;
 
     this.findOne({'_id': userID}, function (err, findUser) {
+        if (err) { console.error(err); }
+
         if (findUser) {
             if (!findUser.contextHelp) { findUser.contextHelp = []; }
             var found = false;
-            for (var i in findUser.contextHelp) {
-                if (findUser.contextHelp == req.query.contextHelpName) { found = true; }
+            for (const i in findUser.contextHelp) {
+                if (findUser.contextHelp[i] === req.query.contextHelpName) {
+                    found = true;
+                }
             }
 
-            if (found == false) { findUser.contextHelp.push(req.query.contextHelpName); }
+            if (!found) {
+                findUser.contextHelp.push(req.query.contextHelpName);
+            }
 
             Users.update({
                 '_id': userID
@@ -150,6 +150,8 @@ usersSchema.statics.setStatus = function (req, done) {
             return;
         }
         this.findOne({'_id': userID, 'companyID': req.user.companyID}, function (err, findUser) {
+            if (err) { console.error(err); }
+
             if (findUser) {
                 Users.update({
                     '_id': userID
@@ -173,11 +175,11 @@ usersSchema.statics.isValidUserPassword = function (username, password, done) {
     this.findOne({$or: [ {'userName': username}, {'email': username} ], status: 'active'}, function (err, user) {
         if (err) return done(err);
         if (!user) return done(null, false, { message: 'User' + ' ' + username + ' ' + 'does not exists or is inactive' });
-        if (user.status == 0) return done(null, false, { message: 'User not verified ' + username });
+        if (user.status === 0) return done(null, false, { message: 'User not verified ' + username });
 
         hash(password, user.salt, function (err, hash) {
             if (err) return done(err);
-            if (hash == user.hash || password == user.hash + user.salt) {
+            if (hash.toString() === user.hash || password === user.hash + user.salt) {
                 return done(null, user);
             } else {
                 done(null, false, { message: 'Password do not match' });
@@ -208,45 +210,6 @@ usersSchema.statics.rememberPassword = function (email, url, done) {
         sendCommunication(postData);
 
         done({result: 1, msg: 'Check your email for instructions'});
-    });
-};
-
-usersSchema.statics.changePassword = function (req, done) {
-    var User = this, data = req.body;
-    if (!data.hash || !data.password) {
-        done({result: 0, msg: "'hash' and 'password' is required."});
-        return;
-    }
-    this.findOne({'hash_change_password': data.hash}, {}, function (err, user) {
-        if (err) throw err;
-        if (user) {
-            hash(data.password, function (err, salt, hash) {
-                if (err) throw err;
-
-                User.update({
-                    '_id': user._id
-                }, {
-                    $set: {
-                        'salt': salt,
-                        'hash': hash,
-                        'hash_change_password': null
-                    }
-                }, function (err) {
-                    if (err) throw err;
-
-                    var Configurations = connection.model('Configurations');
-
-                    Configurations.getConfiguration('log-user-pwd-change', function (configuration) {
-                        if (configuration.value == 1) {
-                            saveToLog(req, 'User password changed: ' + user.email, 100, 'USERS-001', '', undefined);
-                        }
-                        done({result: 1, msg: 'Password updated'});
-                    });
-                });
-            });
-        } else {
-            done({result: 0, msg: 'Invalid hash.'});
-        }
     });
 };
 

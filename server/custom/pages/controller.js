@@ -15,16 +15,9 @@ exports.PagesFindAll = function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
     req.query.fields = ['pageName'];
-    var isWSTADMIN = false;
-    if (req.isAuthenticated()) {
-        for (var i in req.user.roles) {
-            if (req.user.roles[i] == 'WSTADMIN') {
-                isWSTADMIN = true;
-            }
-        }
-    }
 
-    var perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
+    var perPage = config.pagination.itemsPerPage;
+    var page = (req.query.page) ? req.query.page : 1;
     var find = {'$and': [{'nd_trash_deleted': false}, {'companyID': 'COMPID'}, {owner: req.user._id}]};
     var fields = {pageName: 1, owner: 1, isPublic: 1};
     var params = {};
@@ -33,6 +26,8 @@ exports.PagesFindAll = function (req, res) {
     Pages.find(find, fields, params, function (err, items) {
         if (err) throw err;
         Pages.count(find, function (err, count) {
+            if (err) { console.error(err); }
+
             var result = {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items};
             serverResponse(req, res, 200, result);
         });
@@ -163,10 +158,10 @@ exports.getPage = function (req, res) {
             });
 
             for (var r in result.item.items) {
-                if (result.item.items[r].itemType == 'reportBlock') {
+                if (result.item.items[r].itemType === 'reportBlock') {
                     theReports.push(result.item.items[r].reportID);
                 }
-                if (result.item.items[r].itemType == 'tabBlock') {
+                if (result.item.items[r].itemType === 'tabBlock') {
                     // $scope.getTabBlock(result.item.items[r]);
                 }
             }
@@ -175,10 +170,12 @@ exports.getPage = function (req, res) {
             var Reports = connection.model('Reports');
 
             Reports.find({ _id: {$in: theReports} }, function (err, reports) {
+                if (err) { console.error(err); }
+
                 if (reports) {
                     for (var r in reports) {
                         for (var i in result.item.items) {
-                            if (reports[r]._id == result.item.items[i].reportID) {
+                            if (reports[r]._id === result.item.items[i].reportID) {
                                 result.item.items[i].reportDefinition = reports[r];
                             }
                         }
@@ -211,7 +208,7 @@ exports.PublishPage = function (req, res) {
             Page.parentFolder = parentFolder;
             Page.isPublic = true;
 
-            Pages.update({_id: data._id}, {$set: Page.toObject() }, function (err, numAffected) {
+            Pages.update({_id: data._id}, { $set: Page.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
@@ -239,7 +236,7 @@ exports.UnpublishPage = function (req, res) {
         if (err) throw err;
         if (Page) {
             Page.isPublic = false;
-            Pages.update({_id: data._id}, {$set: Page.toObject() }, function (err, numAffected) {
+            Pages.update({_id: data._id}, { $set: Page.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {

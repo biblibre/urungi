@@ -23,6 +23,8 @@ LayersSchema.statics.setStatus = function (req, done) {
             return;
         }
         this.findOne({'_id': layerID, 'companyID': req.user.companyID}, function (err, findLayer) {
+            if (err) { console.error(err); }
+
             if (findLayer) {
                 Layers.update({
                     '_id': layerID

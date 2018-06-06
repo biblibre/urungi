@@ -25,8 +25,9 @@ var logsSchema = new mongoose.Schema({
 logsSchema.statics.saveToLog = function (req, data, otherInfo, done) {
     if (req.user) { var companyID = req.user.companyID; }
 
+    let log;
     if (req) {
-        var log = {
+        log = {
             text: data.text,
             otherInfo: otherInfo,
             type: data.type,
@@ -37,7 +38,7 @@ logsSchema.statics.saveToLog = function (req, data, otherInfo, done) {
             code: data.code
         };
     } else {
-        var log = {
+        log = {
             text: data.text,
             type: data.type
         };
@@ -53,15 +54,20 @@ logsSchema.statics.saveToLog = function (req, data, otherInfo, done) {
 // admin methods
 
 logsSchema.statics.adminFindAll = function (req, done) {
-    var Log = this, perPage = config.pagination.itemsPerPage, page = (req.query.page) ? req.query.page : 1;
-    var find = {}, searchText = (req.query.search) ? req.query.search : false;
+    var Log = this;
+    var perPage = config.pagination.itemsPerPage;
+    var page = (req.query.page) ? req.query.page : 1;
+    var find = {};
+    var searchText = (req.query.search) ? req.query.search : false;
 
-    if (searchText) { find = {$or: [{text: {$regex: searchText}}, {user_id: {$regex: searchText}} ]}; }
+    if (searchText) { find = {$or: [ {text: {$regex: searchText}}, {user_id: {$regex: searchText}} ]}; }
 
     this.find(find, {}, {skip: (page - 1) * perPage, limit: perPage, sort: {created: -1}}, function (err, logs) {
         if (err) throw err;
 
         Log.count(find, function (err, count) {
+            if (err) { console.error(err); }
+
             done({result: 1, page: page, pages: Math.ceil(count / perPage), logs: logs});
         });
     });
