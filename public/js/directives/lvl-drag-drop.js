@@ -70,8 +70,6 @@ module.directive('lvlDropTarget', ['$rootScope', 'uuid', function ($rootScope, u
                 // var data = e.dataTransfer.getData("text");
 
                 var data = e.originalEvent.dataTransfer.getData('text');
-                var dest = document.getElementById(id);
-                var src = document.getElementById(data);
                 // changed by mene because a problem with the dom
 
                 scope.onDrop({dragEl: data, dropEl: id});
