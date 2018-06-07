@@ -84,7 +84,6 @@ PublicCtrl.$inject = ['$scope', '$http', '$rootScope', '$sessionStorage'];
 
 function VerificationCtrl ($scope, $http, $window, $stateParams, vcRecaptchaService) {
     $scope.verify = function () {
-        var valid = false;
         var recaptcha = vcRecaptchaService.data();
 
         var postData = {
