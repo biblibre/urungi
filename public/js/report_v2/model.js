@@ -1,3 +1,5 @@
+/* global XLSX: false, saveAs: false, Blob: false, datenum: false */
+
 app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid) {
     var report = {};
 
@@ -18,7 +20,6 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
 
     function getReport (report, parentDiv, mode, done) {
         showOverlay(parentDiv);
-        var isLinked = false;
         queryModel.loadQuery(report.query);
         queryModel.detectLayerJoins();
         queryModel.getQueryData(report.query, function (data, sql, query) {
@@ -47,53 +48,50 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
 
     function repaintReport (report, mode) {
         var data = report.query.data;
+        var htmlCode;
+        var el;
+        var $div;
 
-        if (data.length != 0) {
+        if (data.length !== 0) {
             switch (report.reportType) {
             case 'grid':
-                {
-                    var htmlCode = grid.extendedGridV2(report, mode);
-                    var el = document.getElementById(report.parentDiv);
+                htmlCode = grid.extendedGridV2(report, mode);
+                el = document.getElementById(report.parentDiv);
 
-                    if (el) {
-                        angular.element(el).empty();
-                        var $div = $(htmlCode);
-                        angular.element(el).append($div);
-                        angular.element(document).injector().invoke(function ($compile) {
-                            var scope = angular.element($div).scope();
-                            $compile($div)(scope);
-                            hideOverlay(report.parentDiv);
-                        });
-                    }
+                if (el) {
+                    angular.element(el).empty();
+                    $div = $(htmlCode);
+                    angular.element(el).append($div);
+                    angular.element(document).injector().invoke(function ($compile) {
+                        var scope = angular.element($div).scope();
+                        $compile($div)(scope);
+                        hideOverlay(report.parentDiv);
+                    });
                 }
                 break;
             case 'vertical-grid':
-                {
-                    var htmlCode = verticalGrid.getVerticalGrid(report, mode);
-                    var el = document.getElementById(report.parentDiv);
+                htmlCode = verticalGrid.getVerticalGrid(report, mode);
+                el = document.getElementById(report.parentDiv);
 
-                    if (el) {
-                        angular.element(el).empty();
-                        var $div = $(htmlCode);
-                        angular.element(el).append($div);
-                        angular.element(document).injector().invoke(function ($compile) {
-                            var scope = angular.element($div).scope();
-                            $compile($div)(scope);
-                            hideOverlay(report.parentDiv);
-                        });
-                    }
+                if (el) {
+                    angular.element(el).empty();
+                    $div = $(htmlCode);
+                    angular.element(el).append($div);
+                    angular.element(document).injector().invoke(function ($compile) {
+                        var scope = angular.element($div).scope();
+                        $compile($div)(scope);
+                        hideOverlay(report.parentDiv);
+                    });
                 }
                 break;
             case 'chart-line':
             case 'chart-donut':
             case 'chart-pie':
             case 'gauge':
-                {
-                    if (report.reportType == 'chart-donut') { report.properties.chart.type = 'donut'; }
-                    if (report.reportType == 'chart-pie') { report.properties.chart.type = 'pie'; }
-                    if (report.reportType == 'gauge') { report.properties.chart.type = 'gauge'; }
-                    generatec3Chart(report, mode);
-                }
+                if (report.reportType === 'chart-donut') { report.properties.chart.type = 'donut'; }
+                if (report.reportType === 'chart-pie') { report.properties.chart.type = 'pie'; }
+                if (report.reportType === 'gauge') { report.properties.chart.type = 'gauge'; }
+                generatec3Chart(report, mode);
                 break;
             case 'indicator':
                 generateIndicator(report);
@@ -102,53 +100,6 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         } else {
             generateNoDataHTML();
         }
-        /*
-
-                if (report.reportType == 'grid')
-                            {
-                                //var htmlCode = grid.getUIGrid(report);
-                                var htmlCode = grid.extendedGridV2(report,mode);
-                                var el = document.getElementById(report.parentDiv);
-
-                                        if (el)
-                                        {
-                                            angular.element(el).empty();
-                                            var $div = $(htmlCode);
-                                            angular.element(el).append($div);
-                                            angular.element(document).injector().invoke(function($compile) {
-                                                var scope = angular.element($div).scope();
-                                                $compile($div)(scope);
-                                                hideOverlay(report.parentDiv);
-                                            });
-                                        }
-
-                            } else {
-
-        if (data.length != 0)
-            {
-                    if (report.reportType == 'chart-line' || report.reportType == 'chart-donut' || report.reportType == 'chart-pie' || report.reportType == 'gauge')
-                            {
-
-                                        if (report.reportType == 'chart-donut')
-                                            report.properties.chart.type = 'donut';
-                                        if (report.reportType == 'chart-pie')
-                                            report.properties.chart.type = 'pie';
-                                        if (report.reportType == 'gauge')
-                                            report.properties.chart.type = 'gauge';
-                                generatec3Chart(report,mode);
-                            }
-                    if (report.reportType == 'indicator')
-                        {
-
-                            generateIndicator(report);
-                        }
-
-            } else {
-                 generateNoDataHTML()
-            }
-
-                            }
-        */
     }
 
     function generateNoDataHTML () {
@@ -231,19 +182,19 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         });
     };
 
-    var selectedColumn = undefined;
+    var selectedColumn;
 
     this.selectedColumn = function () {
         return selectedColumn;
     };
 
-    var selectedColumnHashedID = undefined;
+    var selectedColumnHashedID;
 
     this.selectedColumnHashedID = function () {
         return selectedColumnHashedID;
     };
 
-    var selectedColumnIndex = undefined;
+    var selectedColumnIndex;
 
     this.selectedColumnIndex = function () {
         return selectedColumnIndex;
@@ -270,7 +221,11 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
 
     this.orderColumn = function (report, columnIndex, desc, hashedID) {
         var theColumn = report.query.columns[columnIndex];
-        if (desc == true) { theColumn.sortType = 1; } else { theColumn.sortType = -1; }
+        if (desc) {
+            theColumn.sortType = 1;
+        } else {
+            theColumn.sortType = -1;
+        }
         report.query.order = [];
         report.query.order.push(theColumn);
         showOverlay('OVERLAY_' + hashedID);
@@ -302,9 +257,9 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         if (clonedReport.query.data) { clonedReport.query.data = undefined; }
         clonedReport.parentDiv = undefined;
 
-        if (mode == 'add') {
+        if (mode === 'add') {
             connection.post('/api/reports/create', clonedReport, function (data) {
-                if (data.result == 1) {
+                if (data.result === 1) {
                     setTimeout(function () {
                         done();
                     }, 400);
@@ -312,7 +267,7 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
             });
         } else {
             connection.post('/api/reports/update/' + report._id, clonedReport, function (result) {
-                if (result.result == 1) {
+                if (result.result === 1) {
                     setTimeout(function () {
                         done();
                     }, 400);
@@ -325,7 +280,8 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
         var ws_name = $scope.selectedReport.reportName;
 
-        var wb = new Workbook(), ws = sheet_from_array_of_arrays($scope, reportHash);
+        var wb = new Workbook();
+        var ws = sheet_from_array_of_arrays($scope, reportHash);
 
         wb.SheetNames.push(ws_name);
         wb.Sheets[ws_name] = ws;
@@ -335,7 +291,10 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         function s2ab (s) {
             var buf = new ArrayBuffer(s.length);
             var view = new Uint8Array(buf);
-            for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+            for (let i = 0; i !== s.length; ++i) {
+                view[i] = s.charCodeAt(i) & 0xFF;
+            }
+
             return buf;
         }
 
@@ -352,14 +311,14 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         var data = $scope.selectedReport.query.data;
         var report = $scope.selectedReport;
         var ws = {};
-        var range = {s: {c: 10000000, r: 10000000}, e: {c: 0, r: 0 }};
+        var range = {s: {c: 10000000, r: 10000000}, e: { c: 0, r: 0 }};
         for (var i = 0; i < report.properties.columns.length; i++) {
             if (range.s.r > 0) range.s.r = 0;
             if (range.s.c > i) range.s.c = i;
             if (range.e.r < 0) range.e.r = 0;
             if (range.e.c < i) range.e.c = i;
 
-            var cell = {v: report.properties.columns[i].objectLabel };
+            var cell = { v: report.properties.columns[i].objectLabel };
             var cell_ref = XLSX.utils.encode_cell({c: i, r: 0});
             if (typeof cell.v === 'number') cell.t = 'n';
             else if (typeof cell.v === 'boolean') cell.t = 'b';
@@ -371,28 +330,29 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
             ws[cell_ref] = cell;
         }
 
-        for (var R = 0; R != data.length; ++R) {
-            for (var i = 0; i < report.properties.columns.length; i++) {
+        for (let R = 0; R !== data.length; ++R) {
+            for (let i = 0; i < report.properties.columns.length; i++) {
                 // var elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName;
                 var elementID = 'wst' + report.properties.columns[i].elementID.toLowerCase();
                 var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
 
                 if (report.properties.columns[i].aggregation) {
                     // elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName+report.properties.columns[i].aggregation;
-                    var elementID = 'wst' + report.properties.columns[i].elementID.toLowerCase() + report.properties.columns[i].aggregation;
-                    var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
+                    elementID = 'wst' + report.properties.columns[i].elementID.toLowerCase() + report.properties.columns[i].aggregation;
+                    elementName = elementID.replace(/[^a-zA-Z ]/g, '');
                 }
                 if (range.s.r > R + 1) range.s.r = R + 1;
                 if (range.s.c > i) range.s.c = i;
                 if (range.e.r < R + 1) range.e.r = R + 1;
                 if (range.e.c < i) range.e.c = i;
 
-                if (report.properties.columns[i].elementType == 'number' && data[R][elementName]) {
-                    var cell = {v: Number(data[R][elementName]) };
+                let cell;
+                if (report.properties.columns[i].elementType === 'number' && data[R][elementName]) {
+                    cell = { v: Number(data[R][elementName]) };
                 } else {
-                    var cell = {v: data[R][elementName] };
+                    cell = { v: data[R][elementName] };
                 }
-                var cell_ref = XLSX.utils.encode_cell({c: i, r: R + 1});
+                cell_ref = XLSX.utils.encode_cell({c: i, r: R + 1});
                 if (typeof cell.v === 'number') cell.t = 'n';
                 else if (typeof cell.v === 'boolean') cell.t = 'b';
                 else if (cell.v instanceof Date) {
@@ -400,7 +360,7 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
                     cell.v = datenum(cell.v);
                 } else cell.t = 's';
 
-                cell.s = {fill: { fgColor: { rgb: 'FFFF0000'}}};
+                cell.s = { fill: { fgColor: { rgb: 'FFFF0000' } } };
 
                 ws[cell_ref] = cell;
             }
@@ -422,9 +382,9 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
 */
         var html = '<div page-block  class="container-fluid featurette ndContainer"  ndType="container" style="height:100%;padding:0px;">' +
                         '<div page-block class="col-md-12 ndContainer" ndType="column" style="height:100%;padding:0px;">' +
-                            '<div page-block class="container-fluid" id="' + containerID + '" ndType="' + reportType + '" ng-init="getRuntimeReport(' + "'" + reportID + "'" + ')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_' + reportID + '" style="padding:0px;position: relative;height: 100%;"></div>';
+                            '<div page-block class="container-fluid" id="' + containerID + '" ng-init="getRuntimeReport(' + "'" + reportID + "'" + ')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_' + reportID + '" style="padding:0px;position: relative;height: 100%;"></div>' +
 
-        '</div>' +
+                        '</div>' +
                     '</div>';
 
         return html;
