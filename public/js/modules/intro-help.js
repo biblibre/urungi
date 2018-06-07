@@ -2,7 +2,7 @@ var module = angular.module('intro.help', []);
 
 module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', function ($rootScope, $compile, $parse, $window) {
     return {
-	        restrict: 'A',
+        restrict: 'A',
         scope: {
             ngIntroMethod: '=',
             ngIntroHelpShow: '=',
@@ -25,7 +25,7 @@ module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', fu
                     scope.divToPop.append(nextBtn);
                 },
 */
-	        link: function (scope, el, attrs, controller) {
+        link: function (scope, el, attrs, controller) {
             $window.addEventListener('keydown', function (e) {
                 scope._onKeyDown(e);
             });
@@ -47,16 +47,13 @@ module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', fu
             $('#introHelpPreviousBtn').hide();
 
             scope.showHelpForElement = function (theElement) {
-                if ($(theElement).offset()) // Is visible the element?
-                {
+                // Is visible the element?
+                if ($(theElement).offset()) {
                     if (scope.previousElement) { $(scope.previousElement).css({'z-index': 0}); }
 
                     $('#introHelpOverlay').show();
                     $('#introHelpObjectArea').hide();
 
-                    var pos = $(theElement).offset();
-                    var h = $(theElement).height();
-                    var w = $(theElement).width();
                     var elementOffset = _getOffset(theElement);
 
                     var theWidth = '200px';
@@ -77,16 +74,16 @@ module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', fu
 
                     var elementLeft = elementOffset.left + 10;
                     var elementTop = elementOffset.top + elementOffset.height;
-                    if (scope.introElements[scope.actualStep].verticalAlign == 'top') { elementTop = elementOffset.top; }
+                    if (scope.introElements[scope.actualStep].verticalAlign === 'top') { elementTop = elementOffset.top; }
 
                     var numericWidth = parseInt(theWidth.replace('px', ''));
 
-                    if (scope.introElements[scope.actualStep].horizontalAlign == 'right') { elementLeft = elementOffset.left - numericWidth + elementOffset.width; }
+                    if (scope.introElements[scope.actualStep].horizontalAlign === 'right') { elementLeft = elementOffset.left - numericWidth + elementOffset.width; }
 
                     $('#introHelpCallout').css({ left: elementLeft, top: elementTop, width: theWidth, height: theHeight });
                     $('#introHelpCallout').show();
 
-                    if (scope.introElements[scope.actualStep].objectArea != false) {
+                    if (scope.introElements[scope.actualStep].objectArea) {
                         var areaColor = '#fff';
                         if (scope.introElements[scope.actualStep].areaColor) { areaColor = scope.introElements[scope.actualStep].areaColor; }
 
@@ -127,10 +124,6 @@ module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', fu
             };
 
             scope.ngIntroMethod = function (step) {
-                navigationWatch = scope.$on('$locationChangeStart', function () {
-
-                });
-
                 scope.actualStep = 0;
 
                 if (step) { scope.actualStep = step; }
@@ -156,8 +149,8 @@ module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', fu
                     var targetElement = $(scope.introElements[scope.actualStep].element);
                     scope.showHelpForElement(targetElement);
 
-                    if (scope.actualStep == 0) { $('#introHelpPreviousBtn').hide(); } else { $('#introHelpPreviousBtn').show(); }
-                    if (scope.actualStep == scope.introElements.length - 1) { $('#introHelpNextBtn').hide(); } else { $('#introHelpNextBtn').show(); }
+                    if (scope.actualStep === 0) { $('#introHelpPreviousBtn').hide(); } else { $('#introHelpPreviousBtn').show(); }
+                    if (scope.actualStep === scope.introElements.length - 1) { $('#introHelpNextBtn').hide(); } else { $('#introHelpNextBtn').show(); }
                 }
             };
 
@@ -168,9 +161,9 @@ module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', fu
                     var targetElement = $(scope.introElements[scope.actualStep].element);
                     scope.showHelpForElement(targetElement);
 
-                    if (scope.actualStep == 0) { $('#introHelpPreviousBtn').hide(); } else { $('#introHelpPreviousBtn').show(); }
+                    if (scope.actualStep === 0) { $('#introHelpPreviousBtn').hide(); } else { $('#introHelpPreviousBtn').show(); }
 
-                    if (scope.actualStep == scope.introElements.length - 1) { $('#introHelpNextBtn').hide(); } else { $('#introHelpNextBtn').show(); }
+                    if (scope.actualStep === scope.introElements.length - 1) { $('#introHelpNextBtn').hide(); } else { $('#introHelpNextBtn').show(); }
                 }
             };
 
