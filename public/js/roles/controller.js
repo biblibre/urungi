@@ -22,7 +22,7 @@ app.controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $
         if (roleID) {
             connection.get('/api/roles/find-one', {id: roleID}, function (data) {
                 $scope._Role = data.item;
-                $scope.mode == 'edit';
+                $scope.mode = 'edit';
                 $scope.clearNodes($scope.publicSpace);
                 $scope.checkForNode($scope.publicSpace);
                 $('#roleModal').modal('show');
@@ -32,7 +32,7 @@ app.controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $
 
     $scope.save = function () {
         // $scope._Role.grants = $scope.grants;
-        if ($scope.mode == 'add') {
+        if ($scope.mode === 'add') {
             var data = $scope._Role;
 
             connection.post('/api/roles/create', data, function (data) {
@@ -41,7 +41,7 @@ app.controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $
             });
         } else {
             connection.post('/api/roles/update/' + $scope._Role._id, $scope._Role, function (result) {
-                if (result.result == 1) {
+                if (result.result === 1) {
                     $('#roleModal').modal('hide');
                 }
             });
@@ -55,7 +55,7 @@ app.controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $
 
         if (search) {
             $scope.search = search;
-        } else if (page == 1) {
+        } else if (page === 1) {
             $scope.search = '';
         }
         if ($scope.search) {
@@ -116,7 +116,7 @@ app.controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $
         var found = false;
 
         for (var i in grants) {
-            if (grants[i].folderID == node.id) {
+            if (grants[i].folderID === node.id) {
                 found = true;
                 grants[i].executePages = node.executePages;
                 grants[i].executeReports = node.executeReports;
@@ -125,7 +125,7 @@ app.controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $
             }
         }
 
-        if (found == false) {
+        if (!found) {
             grants.push({
                 folderID: node.id,
                 executePages: node.executePages,
@@ -160,7 +160,7 @@ app.controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $
             }
 
             for (var i in grants) {
-                if (node.id == grants[i].folderID) {
+                if (node.id === grants[i].folderID) {
                     node.executePages = grants[i].executePages;
                     node.executeReports = grants[i].executeReports;
                     node.executeDashboards = grants[i].executeDashboards;
