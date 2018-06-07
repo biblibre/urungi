@@ -1,3 +1,4 @@
+/* global jsPlumb: false, $modal: false, bsLoadingOverlayService: false */
 app.controller('layerCtrl', function ($scope, $rootScope, connection, $routeParams, datasourceModel, uuid2, $timeout, PagerService, $window) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
@@ -35,7 +36,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.deletingJoin = false;
 
-    if ($routeParams.extra == 'intro') {
+    if ($routeParams.extra === 'intro') {
         $timeout(function () { $scope.showIntro(); }, 1000);
     }
 
@@ -117,101 +118,76 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         ]
     };
 
-    /** ** JSPLUMB variables and functions ****/
-    /*
-    var rightJoinType = {
-                connector: "StateMachine",
-                paintStyle: { strokeStyle: "#61B7CF", lineWidth: 4 },
-                hoverPaintStyle: { strokeStyle: "blue" },
-                overlays: [
-                    ["Diamond" , { location: 1 }]
-                ]
-
-            };
-
-    var leftJoinType = {
-                connector: "StateMachine",
-                paintStyle: { strokeStyle: "#61B7CF", lineWidth: 4 },
-                hoverPaintStyle: { strokeStyle: "blue" },
-                params: {margin: 40},
-                overlays: [
-                    ["Diamond" , { location: 0 }]
-                ]
-
-            };
-*/
-
     var connectorPaintStyle = {
-            lineWidth: 4,
-            strokeStyle: '#61B7CF',
-            joinstyle: 'round',
-            outlineColor: 'white',
-            outlineWidth: 2
-        },
-        connectorHoverStyle = {
-            lineWidth: 4,
-            strokeStyle: '#216477',
-            outlineWidth: 2,
-            outlineColor: 'white'
-        },
-        endpointHoverStyle = {
-            fillStyle: '#000000',
-            strokeStyle: '#000000' // strokeStyle: "#216477"
-        },
+        lineWidth: 4,
+        strokeStyle: '#61B7CF',
+        joinstyle: 'round',
+        outlineColor: 'white',
+        outlineWidth: 2
+    };
+    var connectorHoverStyle = {
+        lineWidth: 4,
+        strokeStyle: '#216477',
+        outlineWidth: 2,
+        outlineColor: 'white'
+    };
+    var endpointHoverStyle = {
+        fillStyle: '#000000',
+        strokeStyle: '#000000' // strokeStyle: "#216477"
+    };
 
-        // the definition of source endpoints (the small blue ones)
-        sourceEndpoint = {
-            endpoint: 'Dot',
-            paintStyle: {
-                strokeStyle: '#7AB02C',
-                fillStyle: 'transparent',
-                radius: 6,
-                lineWidth: 3
-            },
-            isSource: true,
-            connector: [ 'Flowchart', { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
-            connectorStyle: connectorPaintStyle,
-            hoverPaintStyle: endpointHoverStyle,
-            connectorHoverStyle: connectorHoverStyle,
-            maxConnections: -1,
-            dragOptions: {},
-            overlays: [
-                [ 'Label', {
-                    location: [0.5, 1.5],
-                    label: '',
-                    cssClass: 'endpointSourceLabel'
-                } ]
-            ]
+    // the definition of source endpoints (the small blue ones)
+    var sourceEndpoint = {
+        endpoint: 'Dot',
+        paintStyle: {
+            strokeStyle: '#7AB02C',
+            fillStyle: 'transparent',
+            radius: 6,
+            lineWidth: 3
         },
-        // the definition of target endpoints (will appear when the user drags a connection)
-        targetEndpoint = {
-            endpoint: 'Dot',
-            paintStyle: { fillStyle: '#7AB02C', radius: 6 },
-            hoverPaintStyle: endpointHoverStyle,
-            maxConnections: -1,
-            dropOptions: { hoverClass: 'hover', activeClass: 'active' },
-            isTarget: true,
-            overlays: [
-                [ 'Label', { location: [0.5, -0.5], label: '', cssClass: 'endpointTargetLabel' } ]
-            ]
-        },
-        _addEndpoints = function (toId, sourceAnchors, targetAnchors) {
-            for (var i = 0; i < sourceAnchors.length; i++) {
-                var sourceUUID = toId + sourceAnchors[i];
+        isSource: true,
+        connector: [ 'Flowchart', { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
+        connectorStyle: connectorPaintStyle,
+        hoverPaintStyle: endpointHoverStyle,
+        connectorHoverStyle: connectorHoverStyle,
+        maxConnections: -1,
+        dragOptions: {},
+        overlays: [
+            [ 'Label', {
+                location: [0.5, 1.5],
+                label: '',
+                cssClass: 'endpointSourceLabel'
+            } ]
+        ]
+    };
 
-                instance.addEndpoint(toId, sourceEndpoint, {
-                    anchor: sourceAnchors[i], uuid: sourceUUID
-                });
-            }
-            for (var j = 0; j < targetAnchors.length; j++) {
-                var targetUUID = toId + targetAnchors[j];
+    // the definition of target endpoints (will appear when the user drags a connection)
+    var targetEndpoint = {
+        endpoint: 'Dot',
+        paintStyle: { fillStyle: '#7AB02C', radius: 6 },
+        hoverPaintStyle: endpointHoverStyle,
+        maxConnections: -1,
+        dropOptions: { hoverClass: 'hover', activeClass: 'active' },
+        isTarget: true,
+        overlays: [
+            [ 'Label', { location: [0.5, -0.5], label: '', cssClass: 'endpointTargetLabel' } ]
+        ]
+    };
 
-                instance.addEndpoint(toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID });
-            }
-        },
-        init = function (connection) {
-            // connection.getOverlay("label").setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
-        };
+    var _addEndpoints = function (toId, sourceAnchors, targetAnchors) {
+        for (var i = 0; i < sourceAnchors.length; i++) {
+            var sourceUUID = toId + sourceAnchors[i];
+
+            instance.addEndpoint(toId, sourceEndpoint, {
+                anchor: sourceAnchors[i], uuid: sourceUUID
+            });
+        }
+        for (var j = 0; j < targetAnchors.length; j++) {
+            var targetUUID = toId + targetAnchors[j];
+
+            instance.addEndpoint(toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID });
+        }
+    };
 
     $scope.newLayer = function () {
         $scope._Layer = {};
@@ -229,7 +205,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 jsPlumb.repaint($(this));
             },
             stop: function (event, ui) {
-                if (ui.position != undefined) {
+                if (typeof ui.position !== 'undefined') {
                     var pos_x = ui.position.left;
                     var pos_y = ui.position.top;
 
@@ -242,7 +218,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                     var id = parentId.replace('-parent', '');
 
                     for (var c in $scope._Layer.params.schema) {
-                        if ($scope._Layer.params.schema[c].collectionID == id) {
+                        if ($scope._Layer.params.schema[c].collectionID === id) {
                             $scope._Layer.params.schema[c].left = pos_x;
                             $scope._Layer.params.schema[c].top = pos_y;
                         }
@@ -273,8 +249,9 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.changeLayerStatus = function (layer) {
         if ($rootScope.isWSTADMIN) {
-            if (layer.status == 'active') { var newStatus = 'Not active'; }
-            if (layer.status == 'Not active') { var newStatus = 'active'; }
+            let newStatus;
+            if (layer.status === 'active') { newStatus = 'Not active'; }
+            if (layer.status === 'Not active') { newStatus = 'active'; }
 
             var data = {layerID: layer._id, status: newStatus};
 
@@ -295,7 +272,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                         }
                     }
                 }
-                $scope.mode == 'edit';
+                $scope.mode = 'edit';
                 $scope.rootItem.elements = $scope._Layer.objects;
 
                 if ($scope._Layer.params) {
@@ -346,7 +323,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
             theLayer.params.joins[join].connection = undefined;
         }
 
-        if ($scope.mode == 'add') {
+        if ($scope.mode === 'add') {
             theLayer.objects = $scope.rootItem.elements;
             var data = theLayer;
             connection.post('/api/layers/create', data, function (data) {
@@ -355,7 +332,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
             });
         } else {
             connection.post('/api/layers/update/' + theLayer._id, theLayer, function (result) {
-                if (result.result == 1) {
+                if (result.result === 1) {
                     window.history.back();
                 }
             });
@@ -369,7 +346,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         if (search) {
             $scope.search = search;
-        } else if (page == 1) {
+        } else if (page === 1) {
             $scope.search = '';
         }
         if ($scope.search) {
@@ -434,7 +411,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     $scope.setSelectedEntity = function (entity) {
-        if ($scope.selectedEntities.indexOf(entity) == -1) {
+        if ($scope.selectedEntities.indexOf(entity) === -1) {
             $scope.selectedEntities.push(entity);
         } else {
             var index = $scope.selectedEntities.indexOf(entity);
@@ -448,7 +425,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         {
             datasourceModel.getEntitiesSchema($scope.selectedDts.id,$scope.selectedEntities,function(result){
 
-                if (result.result == 1)
+                if (result.result === 1)
                 {
                     for (i in result.items)
                     {
@@ -482,11 +459,11 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.addSqlToLayer = function () {
         datasourceModel.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection, function (result) {
-            if (result.result == 1) {
-                for (i in result.items) {
+            if (result.result === 1) {
+                for (const i in result.items) {
                     result.items[i].datasourceID = $scope.selectedDts.id;
 
-                    for (e in result.items[i].elements) {
+                    for (const e in result.items[i].elements) {
                         result.items[i].elements[e].datasourceID = $scope.selectedDts.id;
                         result.items[i].elements[e].collectionID = result.items[i].collectionID;
                         result.items[i].elements[e].collectionName = result.items[i].collectionName;
@@ -499,11 +476,10 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
                     setTimeout(function () {
                         for (var element in result.items[i].elements) {
-                            if (!result.items[i].elements[element].painted || result.items[i].elements[element].painted == false) {
-                                _addEndpoints(result.items[i].elements[element].elementID, [ 'RightMiddle'], ['LeftMiddle']);
+                            if (!result.items[i].elements[element].painted) {
+                                _addEndpoints(result.items[i].elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
                             }
                         }
-                        var targetID = '#' + result.items[i].collectionID + '-parent';
                         setDraggable('.window');
                     }, 100);
                 }
@@ -514,62 +490,31 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         });
     };
 
-    /*
-    $scope.getDatasetsForDts = function (_id)
-    {
-        connection.get('/api/data-sources/getEntities', {id: $scope.selectedDts.id}, function(data) {
-            $scope.datasetEntities = data.items;
-
-        });
-    }
-
-*/
-    function getElement (elementID) {
-        for (var collection in $scope._Layer.params.schema) {
-            for (var element in $scope._Layer.params.schema[collection].elements) {
-                if ($scope._Layer.params.schema[collection].elements[element].elementID == id) { return $scope._Layer.params.schema[collection].elements[element]; }
-            }
-        }
-    }
-
-    function getElementAndCollection (elementID) {
-        var foundedElement = {};
-
-        for (var collection in $scope._Layer.params.schema) {
-            for (var element in $scope._Layer.params.schema[collection].elements) {
-                if ($scope._Layer.params.schema[collection].elements[element].elementID == id) {
-                    foundedElement.elementID = $scope._Layer.params.schema[collection].elements[element].elementID;
-                    foundedElement.collectionID = $scope._Layer.params.schema[collection].collectionID;
-                }
-            }
-        }
-    }
-
     function makeJoin (sourceID, targetID) {
         if (!$scope._Layer.params.joins) { $scope._Layer.params.joins = []; }
 
         var found = false;
         // First verify that the join does not exists
         for (var j in $scope._Layer.params.joins) {
-            if ($scope._Layer.params.joins[j].sourceElementID == sourceID && $scope._Layer.params.joins[j].targetElementID == targetID) {
+            if ($scope._Layer.params.joins[j].sourceElementID === sourceID && $scope._Layer.params.joins[j].targetElementID === targetID) {
                 found = true;
             }
         }
 
-        if (found == false) {
+        if (!found) {
             var join = {};
             join.joinID = uuid2.newguid();
 
             for (var collection in $scope._Layer.params.schema) {
                 for (var element in $scope._Layer.params.schema[collection].elements) {
-                    if ($scope._Layer.params.schema[collection].elements[element].elementID == sourceID) {
+                    if ($scope._Layer.params.schema[collection].elements[element].elementID === sourceID) {
                         join.sourceElementID = $scope._Layer.params.schema[collection].elements[element].elementID;
                         join.sourceElementName = $scope._Layer.params.schema[collection].elements[element].elementName;
                         join.sourceCollectionID = $scope._Layer.params.schema[collection].collectionID;
                         join.sourceCollectionName = $scope._Layer.params.schema[collection].collectionName;
                     }
 
-                    if ($scope._Layer.params.schema[collection].elements[element].elementID == targetID) {
+                    if ($scope._Layer.params.schema[collection].elements[element].elementID === targetID) {
                         join.targetElementID = $scope._Layer.params.schema[collection].elements[element].elementID;
                         join.targetElementName = $scope._Layer.params.schema[collection].elements[element].elementName;
                         join.targetCollectionID = $scope._Layer.params.schema[collection].collectionID;
@@ -588,21 +533,18 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     function deleteJoin (sourceID, targetID) {
         if (!$scope._Layer.params.joins) { $scope._Layer.params.joins = []; }
 
-        var found = false;
         // First verify that the join does not exists
         for (var j in $scope._Layer.params.joins) {
-            if (($scope._Layer.params.joins[j].sourceElementID == sourceID && $scope._Layer.params.joins[j].targetElementID == targetID) ||
-                ($scope._Layer.params.joins[j].sourceElementID == targetID && $scope._Layer.params.joins[j].targetElementID == sourceID)) {
-                found = true;
-
+            if (($scope._Layer.params.joins[j].sourceElementID === sourceID && $scope._Layer.params.joins[j].targetElementID === targetID) ||
+                ($scope._Layer.params.joins[j].sourceElementID === targetID && $scope._Layer.params.joins[j].targetElementID === sourceID)) {
                 var connections = instance.getAllConnections();
 
                 for (var c in connections) {
                     var source = connections[c].endpoints[0].getElement().id;
                     var target = connections[c].endpoints[1].getElement().id;
 
-                    if ((target == sourceID && source == targetID) ||
-                            (target == targetID && source == sourceID)) {
+                    if ((target === sourceID && source === targetID) ||
+                            (target === targetID && source === sourceID)) {
                         $scope._Layer.params.joins[j].connection = undefined;
                         $scope.instance.detach(connections[c]);
                     }
@@ -667,101 +609,33 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 instance.registerConnectionType('selected', selectedJoin);
 
                 var connectorPaintStyle = {
-                        lineWidth: 4,
-                        strokeStyle: '#61B7CF',
-                        joinstyle: 'round',
-                        outlineColor: 'white',
-                        outlineWidth: 2,
-                        params: {margin: 40} // Distance from element to start and end connectors, in pixels.
-                    },
-                    // .. and this is the hover style.
-                    connectorHoverStyle = {
-                        lineWidth: 4,
-                        strokeStyle: '#216477',
-                        outlineWidth: 2,
-                        outlineColor: 'white'
-                    },
-                    endpointHoverStyle = {
-                        fillStyle: '#000000',
-                        strokeStyle: '#000000' // strokeStyle: "#216477"
-                    },
+                    lineWidth: 4,
+                    strokeStyle: '#61B7CF',
+                    joinstyle: 'round',
+                    outlineColor: 'white',
+                    outlineWidth: 2,
+                    params: {margin: 40} // Distance from element to start and end connectors, in pixels.
+                };
+                // .. and this is the hover style.
+                var connectorHoverStyle = {
+                    lineWidth: 4,
+                    strokeStyle: '#216477',
+                    outlineWidth: 2,
+                    outlineColor: 'white'
+                };
+                var endpointHoverStyle = {
+                    fillStyle: '#000000',
+                    strokeStyle: '#000000' // strokeStyle: "#216477"
+                };
 
-                    // the definition of source endpoints (the small blue ones)
-                    sourceEndpoint = {
-                        endpoint: 'Dot',
-                        paintStyle: {
-                            strokeStyle: '#7AB02C',
-                            fillStyle: 'transparent',
-                            radius: 6,
-                            lineWidth: 3
-                        },
-                        isSource: true,
-                        connector: [ 'Flowchart', { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
-                        connectorStyle: connectorPaintStyle,
-                        hoverPaintStyle: endpointHoverStyle,
-                        connectorHoverStyle: connectorHoverStyle,
-                        maxConnections: -1,
-                        dragOptions: {},
-
-                        overlays: [
-                            [ 'Label', {
-                                location: [0.5, 1.5],
-                                label: '',
-                                cssClass: 'endpointSourceLabel'
-                            } ]
-                        ]
-                    },
-                    // the definition of target endpoints (will appear when the user drags a connection)
-                    targetEndpoint = {
-                        endpoint: 'Dot',
-                        paintStyle: { fillStyle: '#7AB02C', radius: 6 },
-                        hoverPaintStyle: endpointHoverStyle,
-                        maxConnections: -1,
-                        dropOptions: { hoverClass: 'hover', activeClass: 'active' },
-                        isTarget: true,
-                        overlays: [
-                            [ 'Label', { location: [0.5, -0.5], label: '', cssClass: 'endpointTargetLabel' } ]
-                        ]
-                    },
-                    _addEndpoints = function (toId, sourceAnchors, targetAnchors) {
-                        for (var i = 0; i < sourceAnchors.length; i++) {
-                            var sourceUUID = toId + sourceAnchors[i];
-
-                            instance.addEndpoint(toId, sourceEndpoint, {
-                                anchor: sourceAnchors[i], uuid: sourceUUID
-                            });
-                        }
-                        for (var j = 0; j < targetAnchors.length; j++) {
-                            var targetUUID = toId + targetAnchors[j];
-
-                            instance.addEndpoint(toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID });
-                        }
-                    },
-                    init = function (connection) {
-                    // connection.getOverlay("label").setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
-                    };
+                var init = function (connection) {
+                // connection.getOverlay("label").setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
+                };
                 /*****************/
                 var jtkField = jsPlumb.getSelector('.jtk-field');
                 /*****************/
                 // suspend drawing and initialise.
                 instance.batch(function () {
-                    /************
-
-                for (var collection in $scope._Layer.params.schema)
-                {
-                    for (var element in $scope._Layer.params.schema[collection].elements)
-                    {
-                        if (!$scope._Layer.params.schema[collection].elements[element].painted || $scope._Layer.params.schema[collection].elements[element].painted == false)
-                        {
-                            _addEndpoints($scope._Layer.params.schema[collection].elements[element].elementID, [ "RightMiddle"], ["LeftMiddle"]);
-                            $scope._Layer.params.schema[collection].elements[element].painted = true;
-                        }
-
-                    }
-                }
-                ***************/
-
-                /*****************/
                     instance.makeSource(jtkField, {
                         filter: 'a',
                         filterExclude: true,
@@ -781,18 +655,6 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                     // endpoint:[ "Dot", { radius: 10, cssClass:"large-green" } ]
                     });
 
-                    /*****************/
-
-                    /*
-                 _addEndpoints("Window2", [ "RightMiddle"], ["LeftMiddle"]);
-                 _addEndpoints("Window1", [ "RightMiddle"], ["LeftMiddle"]);
-                 _addEndpoints("Window3", [ "RightMiddle"], ["LeftMiddle"]);
-                 _addEndpoints("Window4", [ "RightMiddle"], ["LeftMiddle"]);
-                 _addEndpoints("Window5", [ "RightMiddle"], ["LeftMiddle"]);
-                 _addEndpoints("Window6", [ "RightMiddle"], ["LeftMiddle"]);
-                 _addEndpoints("Window7", [ "RightMiddle"], ["LeftMiddle"]);
-                 */
-
                     // listen for new connections; initialise them the same way we initialise the connections at startup.
                     instance.bind('connection', function (connInfo, originalEvent) {
                         init(connInfo.connection);
@@ -809,7 +671,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                             jsPlumb.repaint($(this));
                         },
                         stop: function (event, ui) {
-                            if (ui.position != undefined) {
+                            if (typeof ui.position !== 'undefined') {
                                 var pos_x = ui.position.left;
                                 var pos_y = ui.position.top;
 
@@ -822,7 +684,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                                 var id = parentId.replace('-parent', '');
 
                                 for (var c in $scope._Layer.params.schema) {
-                                    if ($scope._Layer.params.schema[c].collectionID == id) {
+                                    if ($scope._Layer.params.schema[c].collectionID === id) {
                                         $scope._Layer.params.schema[c].left = pos_x;
                                         $scope._Layer.params.schema[c].top = pos_y;
                                     }
@@ -843,8 +705,8 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                     for (var j in $scope._Layer.params.joins) {
                         var c = instance.connect({ source: $scope._Layer.params.joins[j].targetElementID, target: $scope._Layer.params.joins[j].sourceElementID, id: $scope._Layer.params.joins[j].joinID });
 
-                        if ($scope._Layer.params.joins[j].joinType == 'left') { c.setType('left'); }
-                        if ($scope._Layer.params.joins[j].joinType == 'right') { c.setType('right'); }
+                        if ($scope._Layer.params.joins[j].joinType === 'left') { c.setType('left'); }
+                        if ($scope._Layer.params.joins[j].joinType === 'right') { c.setType('right'); }
                     }
                     /*****************/
 
@@ -852,38 +714,16 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                     // listen for clicks on connections, and offer to delete connections on click.
                     //
                     instance.bind('click', function (conn, originalEvent) {
-                    // unSelect();
-                    // $scope.selectedItem = 'join';
-                    // $scope.tabs.selected = 'properties';
-
-                        /*
-                    var joinType = '';
-                    if (conn.hasType("right") == true)
-                    {
-                        conn.setType("left");
-                        joinType = 'left';
-                    } else
-                        if (conn.hasType("left") == true)
-                        {
-                            conn.setType("default");
-                            joinType = 'default';
-                        }else
-                            if (conn.hasType("default") == true)
-                            {
-                                conn.setType("right");
-                                joinType = 'right';
-                            }
-*/
                         for (var j in $scope._Layer.params.joins) {
-                            if (($scope._Layer.params.joins[j].sourceElementID == conn.sourceId && $scope._Layer.params.joins[j].targetElementID == conn.targetId) ||
-                             ($scope._Layer.params.joins[j].sourceElementID == conn.targetId && $scope._Layer.params.joins[j].targetElementID == conn.sourceId)) {
+                            if (($scope._Layer.params.joins[j].sourceElementID === conn.sourceId && $scope._Layer.params.joins[j].targetElementID === conn.targetId) ||
+                             ($scope._Layer.params.joins[j].sourceElementID === conn.targetId && $scope._Layer.params.joins[j].targetElementID === conn.sourceId)) {
                                 $scope._Layer.params.joins[j].connection = conn;
                                 selectJoin($scope._Layer.params.joins[j]);
                             }
                         }
 
                         originalEvent.stopPropagation();
-                        conn.setPaintStyle({strokeStyle: '#000', lineWidth: 4 });
+                        conn.setPaintStyle({ strokeStyle: '#000', lineWidth: 4 });
                         conn.selected = true;
                     });
 
@@ -943,9 +783,9 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     $scope.editElement = function (element) {
         $scope.layerSelectedElement = element;
         for (var collection in $scope._Layer.params.schema) {
-            if ($scope._Layer.params.schema[collection].collectionID == element.collectionID) {
+            if ($scope._Layer.params.schema[collection].collectionID === element.collectionID) {
                 for (var e in $scope._Layer.params.schema[collection].elements) {
-                    if ($scope._Layer.params.schema[collection].elements[e].elementID == element.elementID) {
+                    if ($scope._Layer.params.schema[collection].elements[e].elementID === element.elementID) {
                         var tempElement = {};
                         tempElement = $scope._Layer.params.schema[collection].elements[e];
                         $scope.selectedElement = tempElement;
@@ -958,7 +798,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     $scope.saveElement = function () {
-        if ($scope.elementEditing == false) {
+        if (!$scope.elementEditing) {
             if (!$scope._Layer.objects) { $scope._Layer.objects = []; }
 
             $scope.selectedElement.elementRole = 'dimension';
@@ -974,11 +814,11 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         var element = $scope.selectedElement;
 
         checkElementOk(element, function (result) {
-            if (result.result == 1) {
+            if (result.result === 1) {
                 for (var collection in $scope._Layer.params.schema) {
-                    if ($scope._Layer.params.schema[collection].collectionID == element.collectionID) {
+                    if ($scope._Layer.params.schema[collection].collectionID === element.collectionID) {
                         for (var e in $scope._Layer.params.schema[collection].elements) {
-                            if ($scope._Layer.params.schema[collection].elements[e].elementID == element.elementID) {
+                            if ($scope._Layer.params.schema[collection].elements[e].elementID === element.elementID) {
                                 $scope._Layer.params.schema[collection].elements[e] = element;
 
                                 $scope.layerSelectedElement.elementRole = element.elementRole;
@@ -1004,10 +844,9 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         var isOk = true;
         var message = '';
 
-        if (element.elementType == 'date') {
-            if (element.extractFromString == true) {
-                if (!element.yearPositionFrom) // || !angular.isNumber(element.yearPositionFrom))
-                {
+        if (element.elementType === 'date') {
+            if (element.extractFromString) {
+                if (!element.yearPositionFrom) {
                     isOk = false;
                     message = 'You have to setup a valid "FROM" position number to extract the year from the string';
                 }
@@ -1045,7 +884,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         }
 
         var theResult = {};
-        if (isOk == true) { theResult.result = 1; } else { theResult.result = 0; }
+        if (isOk) { theResult.result = 1; } else { theResult.result = 0; }
 
         theResult.message = message;
 
@@ -1057,11 +896,11 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         var theFontSize = '10px';
         var theIconSize = '12px';
 
-        if (ratio == 0.5) {
+        if (ratio === 0.5) {
             theFontSize = '8px';
             theIconSize = '12px';
         }
-        if (ratio == 2) {
+        if (ratio === 2) {
             theFontSize = '12px';
             theIconSize = '14px';
         }
@@ -1081,7 +920,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         var leftCorrection = (200 * ratio);
 
-        for (var collection in $scope._Layer.params.schema) {
+        for (const collection in $scope._Layer.params.schema) {
             var theID = $scope._Layer.params.schema[collection].collectionID;
 
             var p = $(theID);
@@ -1091,18 +930,11 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
             $($scope._Layer.params.schema[collection].collectionID).css('left', theLeft + leftCorrection + 'px');
         }
 
-        for (var collection in $scope._Layer.params.schema) {
+        for (const collection in $scope._Layer.params.schema) {
             for (var element in $scope._Layer.params.schema[collection].elements) {
                 instance.revalidate($scope._Layer.params.schema[collection].elements[element].elementID);
             }
         }
-    };
-
-    var setZoom = function (z, el) {
-        var p = [ '-webkit-', '-moz-', '-ms-', '-o-', '' ],
-            s = 'scale(' + z + ')';
-        for (var i = 0; i < p.length; i++) { el.css(p[i] + 'transform', s); }
-        jsPlumb.setZoom(z);
     };
 
     $scope.addValueToElement = function (element, value, label) {
@@ -1141,7 +973,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         for (var s in $scope._Layer.params.schema) {
             for (var e in $scope._Layer.params.schema[s].elements) {
-                if ($scope._Layer.params.schema[s].elements[e].elementID == elementID) {
+                if ($scope._Layer.params.schema[s].elements[e].elementID === elementID) {
                     delete $scope._Layer.params.schema[s].elements[e]['elementRole'];
                 }
             }
@@ -1152,7 +984,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     function checkfordelete (elements, elementID) {
         for (var i in elements) {
-            if (elements[i].elementID == elementID) {
+            if (elements[i].elementID === elementID) {
                 unassingElementRole(elements[i]);
                 elements.splice(i, 1);
                 return;
@@ -1169,7 +1001,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         for (var s in $scope._Layer.params.schema) {
             for (var e in $scope._Layer.params.schema[s].elements) {
-                if ($scope._Layer.params.schema[s].elements[e].elementID == elementID) {
+                if ($scope._Layer.params.schema[s].elements[e].elementID === elementID) {
                     delete $scope._Layer.params.schema[s].elements[e]['elementRole'];
                 }
             }
@@ -1187,7 +1019,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     $scope.onElementTypeChange = function (element) {
         var params = {datasourceID: element.datasourceID, layerID: $scope._Layer._id, collectionID: element.collectionID, collectionName: element.collectionName, elementName: element.elementName, defaultAggregation: element.defaultAggregation};
 
-        if (element.elementType == 'array') {
+        if (element.elementType === 'array') {
             connection.get('/api/data-sources/get-element-distinct-values', params, function (data) {
                 for (var i in data.items) {
                     $scope.addValueToElement(element, data.items[i]['_id'][element.elementName], data.items[i]['_id'][element.elementName]);
@@ -1224,9 +1056,9 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         // delete all joins related to this collection
 
-        for (var c in $scope._Layer.params.schema) {
-            if ($scope._Layer.params.schema[c].collectionID == theCollectionID) {
-                for (var element in $scope._Layer.params.schema[c].elements) {
+        for (const c in $scope._Layer.params.schema) {
+            if ($scope._Layer.params.schema[c].collectionID === theCollectionID) {
+                for (const element in $scope._Layer.params.schema[c].elements) {
                     instance.deleteEndpoint($scope._Layer.params.schema[c].elements[element].elementID);
                     instance.deleteEndpoint($scope._Layer.params.schema[c].elements[element].elementID);
                 }
@@ -1236,25 +1068,27 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         $scope.selectedCollection = undefined;
 
-        // Clear selectedDts if collections == 0
+        // Clear selectedDts if collections === 0
         var totalCollections = 0;
 
-        for (var c in $scope._Layer.params.schema) {
+        // FIXME: Replace by Object.keys(...).length ?
+        // eslint-disable-next-line no-unused-vars
+        for (const c in $scope._Layer.params.schema) {
             totalCollections = totalCollections + 1;
         }
 
-        if (totalCollections == 0) { $scope.selectedDts = {}; }
+        if (totalCollections === 0) { $scope.selectedDts = {}; }
     };
 
     function deleteAllCollectionJoins (collectionID) {
         var joinsToDelete = [];
 
         for (var o in $scope._Layer.params.schema) {
-            if ($scope._Layer.params.schema[o].collectionID == collectionID) {
+            if ($scope._Layer.params.schema[o].collectionID === collectionID) {
                 for (var e in $scope._Layer.params.schema[o].elements) {
                     for (var j in $scope._Layer.params.joins) {
-                        if (($scope._Layer.params.joins[j].sourceElementID == $scope._Layer.params.schema[o].elements[e].elementID) ||
-                                            ($scope._Layer.params.joins[j].targetElementID == $scope._Layer.params.schema[o].elements[e].elementID)) {
+                        if (($scope._Layer.params.joins[j].sourceElementID === $scope._Layer.params.schema[o].elements[e].elementID) ||
+                                            ($scope._Layer.params.joins[j].targetElementID === $scope._Layer.params.schema[o].elements[e].elementID)) {
                             joinsToDelete.push({sourceElementID: $scope._Layer.params.joins[j].sourceElementID, targetElementID: $scope._Layer.params.joins[j].targetElementID});
                         }
                     }
@@ -1268,12 +1102,10 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     }
 
     function deleteAllCollectionElements (elements, collectionID) {
-        for (var e = elements.length - 1; e >= 0; e--)
-        // for (var e = elements.length -1 to 0)
-        {
+        for (var e = elements.length - 1; e >= 0; e--) {
             if (elements[e].elements) { deleteAllCollectionElements(elements[e].elements, collectionID); }
 
-            if (elements[e].collectionID == collectionID) {
+            if (elements[e].collectionID === collectionID) {
                 elements.splice(e, 1);
             }
         }
@@ -1285,7 +1117,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 if ($scope._Layer.params.schema) {
                     if ($scope._Layer.params.schema.length > 0) {
                         for (var e in $scope._Layer.params.schema) {
-                            if ($scope._Layer.params.schema[e].collectionID == collectionID) { return $scope._Layer.params.schema[e].elements; }
+                            if ($scope._Layer.params.schema[e].collectionID === collectionID) { return $scope._Layer.params.schema[e].elements; }
                         }
                     }
                 }
@@ -1295,8 +1127,8 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.checkIfMongoDbForSQL = function () {
         for (var i in $scope.datasources) {
-            if ($scope.selectedDts.id == $scope.datasources[i]._id) {
-                if ($scope.datasources[i].type == 'MONGODB') {
+            if ($scope.selectedDts.id === $scope.datasources[i]._id) {
+                if ($scope.datasources[i].type === 'MONGODB') {
                     $window.alert('SQL Queries are not compatible with MONGODB datasources');
                     $scope.selectedDts.id = undefined;
                 }
@@ -1313,10 +1145,10 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
             theDataSource.loading = true;
             connection.get('/api/data-sources/getEntities', {id: _id}, function (data) {
                 theDataSource.loading = false;
-                if (data.result == 1) {
+                if (data.result === 1) {
                     theDataSource.entities = data.items;
                 } else {
-                    if (data.actionCode == 'INVALIDATEDTS') {
+                    if (data.actionCode === 'INVALIDATEDTS') {
                         theDataSource.status = -1;
                         theDataSource.statusInfo = {errorCode: data.code, actionCode: data.actionCode, message: data.msg, lastDate: new Date()};
                     }
@@ -1327,7 +1159,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.getFieldsForThisEntity = function (dataSourceID, entity, theEntity) {
         datasourceModel.getEntitiesSchema([dataSourceID], [entity], function (result) {
-            if (result.result == 1) {
+            if (result.result === 1) {
                 theEntity.fields = result.items[0].elements;
             }
             bsLoadingOverlayService.stop({referenceId: 'layerView'});
@@ -1342,6 +1174,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     function unSelect () {
+        console.log('unSelect1');
         for (var s in $scope.selectedElements) {
             $('#' + $scope.selectedElements[s]).removeClass('selectedElement');
         }
@@ -1349,7 +1182,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         for (var c in connections) {
             // connections[c].setType("default"); esto cambia el tipo left right, es solo el color lo que queremos cambiar
-            connections[c].setPaintStyle({strokeStyle: '#61B7CF', lineWidth: 4 });
+            connections[c].setPaintStyle({ strokeStyle: '#61B7CF', lineWidth: 4 });
             connections[c].selected = false;
         }
 
@@ -1364,7 +1197,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.selectCollection = function (theCollection, event) {
         event.stopPropagation();
-        if (!event.shiftKey || $scope.selectedItem != 'collection') {
+        if (!event.shiftKey || $scope.selectedItem !== 'collection') {
             unSelect();
         }
 
@@ -1377,7 +1210,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         //  collectionHighliter(theCollection.collectionID);
 
         if ($scope.selectedElements) {
-            if ($scope.selectedElements.indexOf(theCollection.collectionID) == -1) { $scope.selectedElements.push(theCollection.collectionID); }
+            if ($scope.selectedElements.indexOf(theCollection.collectionID) === -1) { $scope.selectedElements.push(theCollection.collectionID); }
         }
 
         setSelectedElements();
@@ -1393,10 +1226,10 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         $scope.selected_table_name = theElement.table_name;
         $scope.selected_decription = theElement.description;
         $scope.selected_data_type = theElement.data_type;
-        if (theElement.isPK == true) { $scope.selected_primary_key = true; } else { $scope.selected_primary_key = false; }
+        if (theElement.isPK) { $scope.selected_primary_key = true; } else { $scope.selected_primary_key = false; }
 
         if ($scope.selectedElements) {
-            if ($scope.selectedElements.indexOf(theElement.elementID) == -1) { $scope.selectedElements.push(theElement.elementID); }
+            if ($scope.selectedElements.indexOf(theElement.elementID) === -1) { $scope.selectedElements.push(theElement.elementID); }
         }
 
         setSelectedElements();
@@ -1415,14 +1248,14 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     }
 
     $scope.addDatasetToLayer = function (datasourceID, entity) {
-        if ($scope.selectedDts.id == undefined || $scope.selectedDts.id == datasourceID) {
+        if (typeof $scope.selectedDts.id === 'undefined' || $scope.selectedDts.id === datasourceID) {
             datasourceModel.getEntitiesSchema(datasourceID, [entity], function (result) {
-                if (result.result == 1) {
-                    for (i in result.items) {
+                if (result.result === 1) {
+                    for (const i in result.items) {
                         result.items[i].datasourceID = datasourceID;
                         $scope.selectedDts.id = datasourceID;
 
-                        for (e in result.items[i].elements) {
+                        for (const e in result.items[i].elements) {
                             result.items[i].elements[e].datasourceID = datasourceID;
                             result.items[i].elements[e].collectionID = result.items[i].collectionID;
                             result.items[i].elements[e].collectionName = result.items[i].collectionName;
@@ -1434,12 +1267,11 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                         $scope._Layer.params.schema.push(result.items[i]);
 
                         setTimeout(function () {
-                            for (var element in result.items[i].elements) {
-                                if (!result.items[i].elements[element].painted || result.items[i].elements[element].painted == false) {
-                                    _addEndpoints(result.items[i].elements[element].elementID, [ 'RightMiddle'], ['LeftMiddle']);
+                            for (const element in result.items[i].elements) {
+                                if (!result.items[i].elements[element].painted) {
+                                    _addEndpoints(result.items[i].elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
                                 }
                             }
-                            var targetID = '#' + result.items[i].collectionID + '-parent';
                             setDraggable('.window');
                         }, 100);
                     }
@@ -1447,109 +1279,18 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 }
             });
         } else {
-            toastr.error('Datasource must be the same for all entities');
+            noty({text: 'Datasource must be the same for all entities', timeout: 2000, type: 'error'});
         }
     };
 
     $scope.deleteObject = function (object, objectType) {
-        if ($scope.selectedItem == 'join') {
+        if ($scope.selectedItem === 'join') {
             deleteJoin($scope.theSelectedElement.sourceElementID, $scope.theSelectedElement.targetElementID);
             unSelect();
         }
-        if ($scope.selectedItem == 'collection') {
+        if ($scope.selectedItem === 'collection') {
             $scope.deleteCollection($scope.theSelectedElement);
             unSelect();
         }
     };
-
-    function unSelect () {
-        $scope.selectedItem = '';
-        $scope.theSelectedElement = undefined;
-        $scope.tabs.selected = 'elements';
-    }
-
-    /*
-    function collectionHighliter(collectionID)
-    {
-        var collectionsFound = [];
-        showAll();
-
-        for (var j in $scope.joins)
-                {
-                    var found = false;
-
-                    if ($scope.joins[j].foreign_collectionID == collectionID)
-                        {
-                            if (collectionsFound.indexOf($scope.joins[j].collectionID) == -1)
-                                collectionsFound.push($scope.joins[j].collectionID);
-                            found = true;
-                        }
-                    if ($scope.joins[j].collectionID == collectionID)
-                        {
-                            if (collectionsFound.indexOf($scope.joins[j].foreign_collectionID) == -1)
-                                collectionsFound.push($scope.joins[j].foreign_collectionID);
-                            found = true;
-                        }
-
-                    if (found == false)
-                        {
-                            $scope.instance.hide($scope.joins[j].joinID);
-                            $("#"+$scope.joins[j].joinID ).hide();
-                            $.each($scope.instance.getAllConnections(), function(idx, connection) {
-                                if (connection.id == $scope.joins[j].joinID)
-                                    {
-                                        connection.setVisible(false);
-                                        for (var e in connection.endpoints)
-                                            {
-                                              connection.endpoints[e].setVisible(false);
-                                            }
-                                    }
-
-                            });
-                        }
-
-                }
-
-        for (var t in $scope.tables)
-            {
-                if (collectionsFound.indexOf($scope.tables[t].collectionID) == -1 && $scope.tables[t].collectionID != collectionID)
-                   {
-                      $("#"+$scope.tables[t].collectionID+"-parent" ).hide();
-                   }
-
-            }
-
-    }
-
-     function showAll()
-    {
-        for (var t in $scope.tables)
-            {
-                $("#"+$scope.tables[t].collectionID+"-parent" ).show();
-            }
-        $.each($scope.instance.getAllConnections(), function(idx, connection) {
-
-            connection.setVisible(true);
-            for (var e in connection.endpoints)
-                {
-                  connection.endpoints[e].setVisible(true);
-                }
-        });
-    }
-
-    $(document).keyup(function(e){
-        if(e.keyCode == 46){
-            if(connection != null){
-                jsPlumb.detach(connection);
-                connection = null;
-            }
-
-            if($scope.theSelectedElement != null){
-                $scope.instance.remove($scope.theSelectedElement);
-                $scope.theSelectedElement = null;
-            }
-        }
-
-    })
- */
 });
