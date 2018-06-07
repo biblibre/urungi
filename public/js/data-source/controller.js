@@ -1,9 +1,11 @@
+/* global CryptoJS: false, ObjectId: false, jsPlumb: false */
+
 app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal, datasourceModel, $timeout, PagerService, $http, Constants) {
     $scope.activeForm = 'partials/data-source/source_wizard_index.html';
     $scope.selectedCollections = [];
     $scope.pager = {};
 
-    if ($routeParams.extra == 'intro') {
+    if ($routeParams.extra === 'intro') {
         $timeout(function () { $scope.showIntro(); }, 1000);
     }
 
@@ -79,7 +81,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
     function init () {
         if ($routeParams.newDataSource) {
-            if ($routeParams.newDataSource == 'true') {
+            if ($routeParams.newDataSource === 'true') {
                 $scope._DataSource = {};
                 $scope._DataSource.params = [];
                 $scope._DataSource.params.push({connection: {}, packetSize: 500});
@@ -98,14 +100,14 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     };
 
     $scope.save = function () {
-        if ($scope.mode == 'add') {
+        if ($scope.mode === 'add') {
             var data = $scope._DataSource;
             connection.post('/api/data-sources/create', data, function (data) {
                 window.history.back();
             });
         } else {
             connection.post('/api/data-sources/update/' + $scope._DataSource._id, $scope._DataSource, function (result) {
-                if (result.result == 1) {
+                if (result.result === 1) {
                     window.history.back();
                 }
             });
@@ -129,7 +131,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                         var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
                         data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
                     }
-                    if (data.result == 1) {
+                    if (data.result === 1) {
                         $scope.fileUploadSuccess = true;
                         $scope.fileUploadMessage = 'File uploaded successfully';
                     } else {
@@ -152,28 +154,18 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     $scope.enableTestConnection = function () {
         var result = false;
 
-        if ($scope._DataSource.type != 'BIGQUERY' &&
+        if ($scope._DataSource.type !== 'BIGQUERY' &&
             ($scope._DataSource.params[0].connection.host && $scope._DataSource.params[0].connection.port && $scope._DataSource.params[0].connection.database)
         ) { result = true; }
 
-        if ($scope._DataSource.type == 'BIGQUERY' &&
-            ($scope._DataSource.params[0].connection.database && $scope._DataSource.params[0].connection.file && $scope.fileUploadSuccess == true)
+        if ($scope._DataSource.type === 'BIGQUERY' &&
+            ($scope._DataSource.params[0].connection.database && $scope._DataSource.params[0].connection.file && $scope.fileUploadSuccess)
         ) { result = true; }
 
         if ($scope.testingConnection) { result = false; }
 
         return result;
     };
-
-    function removeUnselected (items) {
-        for (var i in items) {
-            if (!items[i].selected) {
-                items.splice(i, 1);
-                return removeUnselected(items);
-            }
-        }
-        return items;
-    }
 
     $scope.fileSourceSelected = function () {
         $scope.activeForm = 'partials/data-source/source_wizard_file1.html';
@@ -232,7 +224,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         if ($scope._DataSource.params[0].connection.file) data.file = $scope._DataSource.params[0].connection.file;
 
         connection.post('/api/data-sources/testConnection', data, function (result) {
-            if (result.result == 1) {
+            if (result.result === 1) {
                 $scope.testConnection = {result: 1, message: 'Successful database connection.'};
                 $scope.testingConnection = false;
             } else {
@@ -249,7 +241,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
         if (search) {
             $scope.search = search;
-        } else if (page == 1) {
+        } else if (page === 1) {
             $scope.search = '';
         }
         if ($scope.search) {
@@ -267,9 +259,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     };
 
     $scope.getDataSource = function () {
-        {
-
-        }
     };
 
     $scope.elementTypes = [
@@ -313,16 +302,16 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                     connection.post('/api/data-sources/getMongoSchemas', params, function (result) {
                         $scope.schemas = [];
 
-                        for (var i in result.items) {
+                        for (const i in result.items) {
                             var found = false;
 
-                            for (var j in $scope._dataSource.params[0].schema) {
-                                if (result.items[i].collectionName == $scope._dataSource.params[0].schema[j].collectionName) {
-                                    for (var e in result.items[i].elements) {
+                            for (const j in $scope._dataSource.params[0].schema) {
+                                if (result.items[i].collectionName === $scope._dataSource.params[0].schema[j].collectionName) {
+                                    for (const e in result.items[i].elements) {
                                         var elementFound = false;
 
-                                        for (var ej in $scope._dataSource.params[0].schema[j].elements) {
-                                            if (result.items[i].elements[e].elementName == $scope._dataSource.params[0].schema[j].elements[ej].elementName) {
+                                        for (const ej in $scope._dataSource.params[0].schema[j].elements) {
+                                            if (result.items[i].elements[e].elementName === $scope._dataSource.params[0].schema[j].elements[ej].elementName) {
                                                 elementFound = true;
                                                 break;
                                             }
@@ -342,7 +331,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                             if (!found) {
                                 result.items[i].isNew = true;
 
-                                for (var e in result.items[i].elements) {
+                                for (const e in result.items[i].elements) {
                                     result.items[i].elements[e].isNew = true;
                                 }
 
@@ -385,10 +374,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         };
         collection.elements.push(element);
     };
-
-    function getElement (elementID) {
-
-    }
 });
 
 app.directive('postRender', [ '$timeout', function ($timeout) {
@@ -456,7 +441,7 @@ app.directive('plumbConnect', function () {
         link: function (scope, element, attrs) {
             jsPlumb.makeSource(element, {
                 parent: $(element).parent(),
-                //				anchor: 'Continuous',
+                // anchor: 'Continuous',
                 paintStyle: {
                     strokeStyle: '#225588',
                     fillStyle: 'transparent',

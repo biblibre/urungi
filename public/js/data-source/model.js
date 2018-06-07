@@ -20,7 +20,7 @@ app.service('datasourceModel', function ($http, $q, $filter, connection) {
         data.entities = entities;
 
         connection.get('/api/data-sources/getEntitySchema', data, function (result) {
-            if (result.result == 1) {
+            if (result.result === 1) {
                 done(result);
             }
         });
@@ -32,7 +32,7 @@ app.service('datasourceModel', function ($http, $q, $filter, connection) {
         data.sqlQuery = sqlQuery;
 
         connection.get('/api/data-sources/getsqlQuerySchema', data, function (result) {
-            if (result.result == 1) {
+            if (result.result === 1) {
                 done(result);
             }
         });
