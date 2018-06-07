@@ -24,10 +24,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
     $scope.fieldsAggregations = queryModel.fieldsAggregations;
 
-    var hashCode = function (s) {
-        return s.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a; }, 0);
-    };
-
     $scope.initQuery = function () {
         queryModel.initQuery();
     };
@@ -85,7 +81,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         {value: 'toLower', label: 'To Lower'}
     ];
 
-    if ($routeParams.extra == 'intro') {
+    if ($routeParams.extra === 'intro') {
         $timeout(function () { $scope.showIntro(); }, 1000);
     }
 
@@ -210,7 +206,7 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
     $scope.getQuery = function (queryID) {
         for (var q in $scope.queries) {
-            if ($scope.queries[q].id == queryID) { return $scope.queries[q]; }
+            if ($scope.queries[q].id === queryID) { return $scope.queries[q]; }
         }
     };
 
@@ -233,7 +229,6 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
         return queryModel.getElementFilterOptions(elementType);
     };
 
-    var lastDrop = null;
     // Drop handler.
     $scope.onDrop = function (data, event, type, group) {
         $scope.gettingData = false;
@@ -280,16 +275,16 @@ app.controller('queryCtrl', function ($scope, connection, $compile, queryModel, 
 
     $scope.setFilterPrompt = function (filter) {
         $('#filterPromptsModal').modal('hide');
-        if (filter.filterPrompt == true) { filter.filterPrompt = false; } else { filter.filterPrompt = true; }
+        if (filter.filterPrompt) { filter.filterPrompt = false; } else { filter.filterPrompt = true; }
     };
 
     $scope.getButtonFilterPromptMessage = function (filter) {
-        if (filter.filterPrompt == true) { return 'Select to deactivate the runtime'; } else { return 'Make this filter appear in the report interface.'; }
+        if (filter.filterPrompt) { return 'Select to deactivate the runtime'; } else { return 'Make this filter appear in the report interface.'; }
     };
 
     $scope.filterPromptsClick = function (filter) {
         $scope.selectedFilter = filter;
-        if (!$scope.selectedFilter.promptTitle || $scope.selectedFilter.promptTitle == '') { $scope.selectedFilter.promptTitle = $scope.selectedFilter.objectLabel; }
+        if (!$scope.selectedFilter.promptTitle || $scope.selectedFilter.promptTitle === '') { $scope.selectedFilter.promptTitle = $scope.selectedFilter.objectLabel; }
 
         $('#filterPromptsModal').modal('show');
     };

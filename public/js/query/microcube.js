@@ -8,9 +8,6 @@
 
 app.service('microcube', function ($http, $q, $filter, connection) {
     this.mergeData = function ($scope, dataset1, dataset2, joins) {
-        for (var d1 in dataset1) {
-
-        }
     };
 
     this.mergeTwoCollections = function (dataset1, dataset2, dataset1Element, dataset2Element, done) {
@@ -36,13 +33,13 @@ app.service('microcube', function ($http, $q, $filter, connection) {
 
             for (var s in largestResult) {
                 for (var t in shortestResult) {
-                    if (String(largestResult[s][largestElement]) == String(shortestResult[t][shortestElement])) {
+                    if (String(largestResult[s][largestElement]) === String(shortestResult[t][shortestElement])) {
                         var tempRecord = {};
-                        for (var key in largestResult[s]) {
+                        for (const key in largestResult[s]) {
                             tempRecord[key] = largestResult[s][key];
                         }
 
-                        for (var key in shortestResult[t]) {
+                        for (const key in shortestResult[t]) {
                             tempRecord[key] = shortestResult[t][key];
                         }
                         tempResults.push(tempRecord);
