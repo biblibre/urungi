@@ -1,9 +1,10 @@
+/* global numeral:false, $scope:false */
+
 app.service('grid', function () {
     var colClass = '';
     var colWidth = '';
     var hashedID = '';
     var columns = [];
-    var report = {};
 
     function quotedHashedID () {
         return "'" + hashedID + "'";
@@ -13,19 +14,19 @@ app.service('grid', function () {
         this.simpleGrid(columns, id, query, designerMode, properties, function () {});
     };
 
-    function replaceAll (str, find, replace) {
-        return str.replace(new RegExp(find, 'g'), replace);
-    }
-
     this.extendedGridV2 = function (report, mode) {
-        report = report;
-        if (report.id == undefined) { var id = report._id; } else { var id = report.id; }
+        let id;
+        if (typeof report.id === 'undefined') {
+            id = report._id;
+        } else {
+            id = report.id;
+        }
 
         hashedID = report.query.id;
         var theProperties = report.properties;
         var pageBlock = 'page-block';
 
-        if (mode == 'preview') {
+        if (mode === 'preview') {
             pageBlock = '';
         }
 
@@ -52,9 +53,6 @@ app.service('grid', function () {
             reportStyle += 'background-color:' + theProperties.backgroundColor + ';';
             // reportStyle += 'height:'+theProperties.height+'px;';
 
-            var theRepeatHeight = theProperties.height - theProperties.headerHeight;
-            repeatHeight = 'height:' + theRepeatHeight + 'px;';
-
             columnDefaultStyle += 'height:' + theProperties.rowHeight + 'px;';
             var paddingTop = (theProperties.rowHeight - 14) / 2;
             columnDefaultStyle += 'padding-top:' + paddingTop + 'px;';
@@ -75,7 +73,7 @@ app.service('grid', function () {
 
         // header
         htmlCode += '<div class="container-fluid" style="' + headerStyle + '">';
-        for (var i = 0; i < columns.length; i++) {
+        for (let i = 0; i < columns.length; i++) {
             htmlCode += getHeaderColumn(columns[i], i);
         }
         htmlCode += '</div>';
@@ -84,7 +82,7 @@ app.service('grid', function () {
 
         htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in getQuery(\'' + hashedID + '\').data | filter:theFilter | orderBy:getReport(\'' + hashedID + '\').predicate:getReport(\'' + hashedID + '\').reverse  " style="' + rowStyle + '"  >';
 
-        for (var i = 0; i < columns.length; i++) {
+        for (let i = 0; i < columns.length; i++) {
             htmlCode += getDataCell(columns[i], id, i, columnDefaultStyle);
         }
 
@@ -95,14 +93,12 @@ app.service('grid', function () {
         htmlCode += '</div>';
 
         htmlCode += '<div class="repeater-data">';
-        for (var i in columns) {
-            // var elementName = columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName;
+        for (const i in columns) {
             var elementID = 'wst' + columns[i].elementID.toLowerCase();
             var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-            // var elementName = 'wst'+columns[i].elementID.toLowerCase();
-            if (columns[i].aggregation)
-            // elementName = columns[i].collectionID.toLowerCase()+'_'+columns[i].elementName+columns[i].aggregation;
-            { elementName = elementName + columns[i].aggregation; }
+            if (columns[i].aggregation) {
+                elementName = elementName + columns[i].aggregation;
+            }
             htmlCode += '<div class=" calculus-data-column ' + colClass + ' " style="' + colWidth + '"> ' + calculateForColumn(report, i, elementName) + ' </div>';
         }
         htmlCode += '</div> </div>';
@@ -111,15 +107,11 @@ app.service('grid', function () {
 
     function getHeaderColumn (column, columnIndex) {
         var htmlCode = '';
-        // var elementName = "'"+column.id+"'";
         var elementID = 'wst' + column.elementID.toLowerCase();
         var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-        if (column.aggregation)
-        // elementName = "'"+column.collectionID.toLowerCase()+'_'+column.elementName+column.aggregation+"'";
-        { elementName = "'" + elementName + column.aggregation + "'"; }
-        var elementNameAux = elementName;
-        if (column.elementType === 'date') { elementNameAux = "'" + 'wst' + column.elementID + '_original' + "'"; }
-        // htmlCode += '<div class="'+colClass+' report-repeater-column-header" style="'+colWidth+'"><span class="hand-cursor" ng-click="orderColumn('+elementNameAux+','+quotedHashedID()+')">'+column.objectLabel+'</span><span class="sortorder" ng-show="getReport(\''+hashedID+'\').predicate === '+elementName+'" ng-class="{reverse:getReport(\''+hashedID+'\').reverse}"></span>'+getColumnDropDownHTMLCode(column,columnIndex,elementName,column.elementType)+' </div>';
+        if (column.aggregation) {
+            elementName = "'" + elementName + column.aggregation + "'";
+        }
         htmlCode += '<div class="' + colClass + ' report-repeater-column-header" style="' + colWidth + '"><table style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space: nowrap;width:95%;">' + column.objectLabel + '</td><td style="width:34px;">' + getColumnDropDownHTMLCode(column, columnIndex, elementName, column.elementType) + '</td></tr></table> </div>';
 
         return htmlCode;
@@ -134,9 +126,9 @@ app.service('grid', function () {
         // var elementName = 'wst'+column.elementID.toLowerCase();
         // var elementID = column.elementID;
 
-        if (column.aggregation)
-        // elementName = column.collectionID.toLowerCase()+'_'+column.elementName+column.aggregation;
-        { elementName = elementName + column.aggregation; }
+        if (column.aggregation) {
+            elementName = elementName + column.aggregation;
+        }
 
         var theValue = '<div style="overflow:hidden;height:100%;">{{item.' + elementName + '}}</div>';
         if (column.elementType === 'number') { theValue = '<div style="overflow:hidden;height:100%;">{{item.' + elementName + ' | number}}</div>'; }
@@ -186,10 +178,10 @@ app.service('grid', function () {
         }
 
         if (column.link) {
-            if (column.link.type == 'report') {
+            if (column.link.type === 'report') {
                 if (column.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + '}}</a>'; }
             }
-            if (column.link.type == 'dashboard') {
+            if (column.link.type === 'dashboard') {
                 if (column.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + '}}</a>'; }
             }
         }
@@ -246,7 +238,7 @@ app.service('grid', function () {
             var theRow = $scope.theData[hashedID][row];
 
             if (theRow[elementName]) {
-                if (theRow[elementName] != undefined) { value += Number(theRow[elementName]); }
+                if (typeof theRow[elementName] !== 'undefined') { value += Number(theRow[elementName]); }
             }
         }
         return value;
@@ -257,7 +249,7 @@ app.service('grid', function () {
         for (var row in $scope.theData[hashedID]) {
             var theRow = $scope.theData[hashedID][row];
             if (theRow[elementName]) {
-                if (theRow[elementName] != undefined) {
+                if (typeof theRow[elementName] !== 'undefined') {
                     founded += 1;
                 }
             }
@@ -273,7 +265,7 @@ app.service('grid', function () {
             var theRow = $scope.theData[hashedID][row];
 
             if (theRow[elementName]) {
-                if (theRow[elementName] != undefined) {
+                if (typeof theRow[elementName] !== 'undefined') {
                     founded += 1;
                     value += Number(theRow[elementName]);
                 }
@@ -283,14 +275,14 @@ app.service('grid', function () {
     }
 
     function calculateMinimumForColumn (columnIndex, elementName) {
-        var lastValue = undefined;
+        var lastValue;
 
         for (var row in $scope.theData[hashedID]) {
             var theRow = $scope.theData[hashedID][row];
 
             if (theRow[elementName]) {
-                if (theRow[elementName] != undefined) {
-                    if (lastValue == undefined) { lastValue = theRow[elementName]; }
+                if (typeof theRow[elementName] !== 'undefined') {
+                    if (typeof lastValue === 'undefined') { lastValue = theRow[elementName]; }
 
                     if (theRow[elementName] < lastValue) { lastValue = theRow[elementName]; }
                 }
@@ -300,14 +292,14 @@ app.service('grid', function () {
     }
 
     function calculateMaximumForColumn ($scope, columnIndex, elementName) {
-        var lastValue = undefined;
+        var lastValue;
 
         for (var row in $scope.theData[hashedID]) {
             var theRow = $scope.theData[hashedID][row];
 
             if (theRow[elementName]) {
-                if (theRow[elementName] != undefined) {
-                    if (lastValue == undefined) { lastValue = theRow[elementName]; }
+                if (typeof theRow[elementName] !== 'undefined') {
+                    if (typeof lastValue === 'undefined') { lastValue = theRow[elementName]; }
 
                     if (theRow[elementName] > lastValue) { lastValue = theRow[elementName]; }
                 }
@@ -317,13 +309,6 @@ app.service('grid', function () {
     }
 
     function getColumnDropDownHTMLCode (column, columnIndex, elementName, columnType) {
-        if (column.elementType == 'date') {
-            var elementID = 'wst' + column.elementID.toLowerCase();
-            var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-            // elementName = "'"+column.collectionID.toLowerCase()+'_'+column.elementName+'_original'+"'";
-            elementName = "'" + elementName + '_original' + "'";
-        }
-
         var columnPropertiesBtn = '<div class="btn-group pull-right" dropdown="" > ' +
             '<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom: 0px;background-color:transparent;">' +
         ' <i class="fa fa-angle-down"></i>' +
@@ -346,20 +331,6 @@ app.service('grid', function () {
 
         return columnPropertiesBtn;
     }
-
-    this.changeBackgroundColor = function () {
-
-    };
-
-    this.savePropertyForGridColumn = function (grids, property, columnID, value) {
-        // HEADERCOL_'+columns[i].id+'['+i+']"
-
-        for (var g in grids) {
-            for (var c in gridColumns) {
-                grids[g].gridColumns[c].header[property] = value;
-            }
-        }
-    };
 });
 
 app.directive('scrolly', function () {

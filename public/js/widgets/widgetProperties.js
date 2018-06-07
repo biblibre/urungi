@@ -44,6 +44,7 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             switch (attrs['type']) {
             case 'text':
                 // append input field to "template"
+                break;
             case 'select':
                 // append select dropdown to "template"
             }
@@ -71,12 +72,16 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             $scope.imageFilters.opacity = 100;
 
             $scope.changeCSS = function (cssProperty, value) {
-                if (cssProperty == '') { $scope.selectedElement.css(cssProperty, ''); } else { $scope.selectedElement.css(cssProperty, value); }
+                if (cssProperty === '') {
+                    $scope.selectedElement.css(cssProperty, '');
+                } else {
+                    $scope.selectedElement.css(cssProperty, value);
+                }
             };
 
             $scope.$watch('backgroundColor', function () {
                 console.log('watch backgroundColor');
-                if ($scope.gettingElementProperties == false) {
+                if (!$scope.gettingElementProperties) {
                     if ($scope.selectedChart) {
                         console.log($scope.selectedChart);
                         $scope.selectedChart.backgroundColor = $scope.backgroundColor;
@@ -85,9 +90,9 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                     if ($rootScope.selectedElement) {
                         var elementID = String($rootScope.selectedElement.attr('id')).split('_');
 
-                        if (elementID[0] == 'REPORT' && $scope.dashboard) {
+                        if (elementID[0] === 'REPORT' && $scope.dashboard) {
                             for (var i in $scope.dashboard.reports) {
-                                if ($scope.dashboard.reports[i].id == elementID[1]) {
+                                if ($scope.dashboard.reports[i].id === elementID[1]) {
                                     $scope.dashboard.reports[i].properties.backgroundColor = $scope.backgroundColor;
                                     break;
                                 }
@@ -127,58 +132,37 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
 
             $scope.$watch('properties.headerBottomLineColor', function () {
                 console.log('visto', $scope.gettingElementProperties);
-                if ($scope.gettingElementProperties == false) { $scope.onChange(); }
+                if (!$scope.gettingElementProperties) { $scope.onChange(); }
             });
-
-            /* $scope.$watch('backgroundImage', function(){
-        if ($scope.selectedElement && $scope.gettingElementProperties == false)
-            {
-                  var theElement = $scope.selectedElement;
-                if ($scope.backgroundImage != undefined &&  $scope.backgroundImage != 'none')
-                    {
-                     theElement.css({ 'background-image': "url('"+$scope.backgroundImage.source1400+"')" });
-                     theElement.css({ '-webkit-background-size': 'cover'});
-                     theElement.css({ '-moz-background-size': 'cover'});
-                     theElement.css({ '-o-background-size': 'cover'});
-                     theElement.css({ 'background-size': 'cover'});
-                    } else {
-                      theElement.css({ 'background-image': 'none' });
-                    }
-
-                if ($scope.dashboard)
-                    {
-                        if ($scope.backgroundImage != undefined &&  $scope.backgroundImage != 'none')
-                            $scope.dashboard.backgroundImage = $scope.backgroundImage.source1400;
-                        else
-                            $scope.dashboard.backgroundImage = 'none';
-                    }
-            }
-    }); */
 
             $scope.setBackgroundImage = function (url) {
                 $scope.backgroundImage = url;
 
-                if ($scope.selectedElement && $scope.gettingElementProperties == false) {
+                if ($scope.selectedElement && !$scope.gettingElementProperties) {
                     var theElement = $scope.selectedElement;
 
-                    if ($scope.backgroundImage != undefined && $scope.backgroundImage != 'none') {
+                    if (typeof $scope.backgroundImage !== 'undefined' && $scope.backgroundImage !== 'none') {
                         theElement.css({ 'background-image': "url('" + $scope.backgroundImage + "')" });
-                        theElement.css({ '-webkit-background-size': 'cover'});
-                        theElement.css({ '-moz-background-size': 'cover'});
-                        theElement.css({ '-o-background-size': 'cover'});
-                        theElement.css({ 'background-size': 'cover'});
+                        theElement.css({ '-webkit-background-size': 'cover' });
+                        theElement.css({ '-moz-background-size': 'cover' });
+                        theElement.css({ '-o-background-size': 'cover' });
+                        theElement.css({ 'background-size': 'cover' });
                     } else {
                         theElement.css({ 'background-image': 'none' });
                     }
 
                     if ($scope.dashboard) {
-                        if ($scope.backgroundImage != undefined && $scope.backgroundImage != 'none') { $scope.dashboard.backgroundImage = $scope.backgroundImage; } else { $scope.dashboard.backgroundImage = 'none'; }
+                        if (typeof $scope.backgroundImage !== 'undefined' && $scope.backgroundImage !== 'none') {
+                            $scope.dashboard.backgroundImage = $scope.backgroundImage;
+                        } else {
+                            $scope.dashboard.backgroundImage = 'none';
+                        }
                     }
                 }
             };
 
             $scope.changeOpacity = function () {
-                if ($scope.backgroundImage == undefined || $scope.backgroundImage == 'none') {
+                if (typeof $scope.backgroundImage === 'undefined' || $scope.backgroundImage === 'none') {
                     var alpha = $scope.imageFilters.opacity / 100;
                     var hex = hexToRgb($scope.backgroundColor);
                     var r = hex.r;
@@ -186,7 +170,7 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                     var b = hex.b;
                     $scope.selectedElement.css({'background-color': 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')'});
                 } else {
-                    if ($scope.imageFilters.opacity != 0) {
+                    if ($scope.imageFilters.opacity !== 0) {
                         var theElement = $scope.selectedElement;
 
                         theElement.css('filter', ' opacity(' + $scope.imageFilters.opacity + '%) ');
@@ -213,7 +197,9 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             }
 
             $scope.$watch('fontColor', function () {
-                if ($scope.selectedElement && $scope.gettingElementProperties == false) { $scope.selectedElement.css({ 'color': $scope.fontColor }); }
+                if ($scope.selectedElement && !$scope.gettingElementProperties) {
+                    $scope.selectedElement.css({ 'color': $scope.fontColor });
+                }
             });
 
             $scope.changeRowHeight = function (newHeight) {
@@ -236,12 +222,12 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             $scope.deleteSelected = function () {
                 var elementID = $scope.selectedElement.attr('id');
 
-                // if ($scope.selectedElementType == 'container' || $scope.selectedElementType == 'tabsContainer')
-                if ($scope.selectedElementType == 'tabsContainer') {
+                // if ($scope.selectedElementType === 'container' || $scope.selectedElementType === 'tabsContainer')
+                if ($scope.selectedElementType === 'tabsContainer') {
                     var containerNbr = -1;
 
                     for (var c in $scope.selectedDashboard.containers) {
-                        if ($scope.selectedDashboard.containers[c].id == elementID) { containerNbr = c; }
+                        if ($scope.selectedDashboard.containers[c].id === elementID) { containerNbr = c; }
                     }
 
                     if (containerNbr > -1) { $scope.selectedDashboard.containers.splice(containerNbr, 1); }
@@ -253,13 +239,17 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             };
 
             $scope.changeHeight = function (newHeight) {
-                if ($scope.selectedElementType == 'c3Chart') {
+                if ($scope.selectedElementType === 'c3Chart') {
                     if ($scope.selectedChart) {
                         $scope.selectedChart.chart.chartCanvas.resize({height: newHeight});
                         $scope.selectedChart.chart.height = newHeight;
                     }
                 } else {
-                    if (newHeight == '') { $scope.selectedElement.css('height', ''); } else { $scope.selectedElement.css('height', newHeight); }
+                    if (newHeight === '') {
+                        $scope.selectedElement.css('height', '');
+                    } else {
+                        $scope.selectedElement.css('height', newHeight);
+                    }
                 }
 
                 $scope.height = newHeight;
@@ -343,56 +333,56 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             };
 
             $scope.changeHiddenIn = function (values) {
-                if ($scope.selectedElementType != 'page') {
-                    if ($scope.visibleXS == true) {
+                if ($scope.selectedElementType !== 'page') {
+                    if ($scope.visibleXS) {
                         $scope.selectedElement.addClass('visible-xs');
                     } else {
                         $scope.selectedElement.removeClass('visible-xs');
                     }
 
-                    if ($scope.visibleSM == true) {
+                    if ($scope.visibleSM) {
                         $scope.selectedElement.addClass('visible-sm');
                     } else {
                         $scope.selectedElement.removeClass('visible-sm');
                     }
-                    if ($scope.visibleMD == true) {
+                    if ($scope.visibleMD) {
                         $scope.selectedElement.addClass('visible-md');
                     } else {
                         $scope.selectedElement.removeClass('visible-md');
                     }
-                    if ($scope.visibleLG == true) {
+                    if ($scope.visibleLG) {
                         $scope.selectedElement.addClass('visible-lg');
                     } else {
                         $scope.selectedElement.removeClass('visible-lg');
                     }
-                    if ($scope.visiblePrint == true) {
+                    if ($scope.visiblePrint) {
                         $scope.selectedElement.addClass('visible-print');
                     } else {
                         $scope.selectedElement.removeClass('visible-print');
                     }
 
-                    if ($scope.hiddenXS == true) {
+                    if ($scope.hiddenXS) {
                         $scope.selectedElement.addClass('hidden-xs');
                     } else {
                         $scope.selectedElement.removeClass('hidden-xs');
                     }
 
-                    if ($scope.hiddenSM == true) {
+                    if ($scope.hiddenSM) {
                         $scope.selectedElement.addClass('hidden-sm');
                     } else {
                         $scope.selectedElement.removeClass('hidden-sm');
                     }
-                    if ($scope.hiddenMD == true) {
+                    if ($scope.hiddenMD) {
                         $scope.selectedElement.addClass('hidden-md');
                     } else {
                         $scope.selectedElement.removeClass('hidden-md');
                     }
-                    if ($scope.hiddenLG == true) {
+                    if ($scope.hiddenLG) {
                         $scope.selectedElement.addClass('hidden-lg');
                     } else {
                         $scope.selectedElement.removeClass('hidden-lg');
                     }
-                    if ($scope.hiddenPrint == true) {
+                    if ($scope.hiddenPrint) {
                         $scope.selectedElement.addClass('hidden-print');
                     } else {
                         $scope.selectedElement.removeClass('hidden-print');
@@ -400,8 +390,7 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                 }
             };
 
-            var hexDigits = new Array
-            ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
+            var hexDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
 
             function rgb2hex (rgb) {
                 if (rgb) {
@@ -434,13 +423,13 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                 $scope.selectedElement = $scope.element;
 
                 if ($scope.element) {
-                    if ($scope.element.css('background-color') != 'rgba(0, 0, 0, 0)') {
+                    if ($scope.element.css('background-color') !== 'rgba(0, 0, 0, 0)') {
                         $scope.backgroundColor = rgb2hex($scope.element.css('background-color'));
                     } else {
                         $scope.backgroundColor = 'Transparent';
                     }
 
-                    if ($scope.element.css('color') != 'rgba(0, 0, 0, 0)') {
+                    if ($scope.element.css('color') !== 'rgba(0, 0, 0, 0)') {
                         $scope.fontColor = rgb2hex($scope.element.css('color'));
                     } else {
                         $scope.fontColor = 'Transparent';
@@ -481,33 +470,33 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                     $scope.selectedElementType = elementType;
 
                     // visibility Properties
-                    if ($scope.element.hasClass('hidden-lg') == true) {
+                    if ($scope.element.hasClass('hidden-lg')) {
                         $scope.hiddenLG = true;
                     } else {
                         $scope.hiddenLG = false;
                     }
-                    if ($scope.element.hasClass('hidden-md') == true) {
+                    if ($scope.element.hasClass('hidden-md')) {
                         $scope.hiddenMD = true;
                     } else {
                         $scope.hiddenMD = false;
                     }
-                    if ($scope.element.hasClass('hidden-sm') == true) {
+                    if ($scope.element.hasClass('hidden-sm')) {
                         $scope.hiddenSM = true;
                     } else {
                         $scope.hiddenSM = false;
                     }
-                    if ($scope.element.hasClass('hidden-xs') == true) {
+                    if ($scope.element.hasClass('hidden-xs')) {
                         $scope.hiddenXS = true;
                     } else {
                         $scope.hiddenXS = false;
                     }
-                    if ($scope.element.hasClass('hidden-print') == true) {
+                    if ($scope.element.hasClass('hidden-print')) {
                         $scope.hiddenPrint = true;
                     } else {
                         $scope.hiddenPrint = false;
                     }
 
-                    if (elementType == 'ndContainer' || elementType == 'ndPrompt' || elementType == 'tabsContainer' || elementType == 'container' || elementType == 'jumbotron') {
+                    if (elementType === 'ndContainer' || elementType === 'ndPrompt' || elementType === 'tabsContainer' || elementType === 'container' || elementType === 'jumbotron') {
                         $scope.canMoveSelectedElement = true;
                     } else { $scope.canMoveSelectedElement = false; }
 
@@ -516,8 +505,6 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                     }
 
                     if (elementType === 'c3Chart') {
-                        var chartID = $scope.element.attr('bindto-id');
-
                         $scope.selectedChart = $scope.properties;
                     }
 
@@ -526,18 +513,14 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                     }
 
                     if (elementType === 'tabsContainer') {
-                        var tabsContainerID = theElement.attr('id');
+                        var tabsContainerID = $scope.selectedElement.attr('id');
 
                         for (var i in $scope.selectedDashboard.containers) {
-                            if ($scope.selectedDashboard.containers[i].id == tabsContainerID) {
+                            if ($scope.selectedDashboard.containers[i].id === tabsContainerID) {
                                 $scope.selectedTabContainer = $scope.selectedDashboard.containers[i];
                                 $scope.objectHeight = $scope.selectedTabContainer.height;
                             }
                         }
-                    }
-
-                    if (elementType == 'repeaterGrid') {
-                        var gridID = theElement.attr('id');
                     }
                 }
             }

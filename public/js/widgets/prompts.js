@@ -29,6 +29,7 @@ app.directive('ndPrompt', function ($compile, queryModel) {
             switch (attrs['type']) {
             case 'text':
                 // append input field to "template"
+                break;
             case 'select':
                 // append select dropdown to "template"
             }
@@ -49,7 +50,7 @@ app.directive('ndPrompt', function ($compile, queryModel) {
 
             $scope.getPrompt = function (elementID) {
                 for (var p in $scope.prompts) {
-                    if ($scope.prompts[p].elementID == elementID) { return $scope.prompts[p]; }
+                    if ($scope.prompts[p].elementID === elementID) { return $scope.prompts[p]; }
                 }
             };
 
@@ -74,7 +75,7 @@ app.directive('ndPrompt', function ($compile, queryModel) {
 
             $scope.getPromptAsArray = function (elementID) {
                 for (var p in $scope.prompts) {
-                    if ($scope.prompts[p].elementID == elementID) {
+                    if ($scope.prompts[p].elementID === elementID) {
                         var theResult = [];
                         theResult.push($scope.prompts[p]);
                         return theResult;
@@ -83,7 +84,7 @@ app.directive('ndPrompt', function ($compile, queryModel) {
             };
 
             $scope.promptChanged = function (elementId) {
-	        $scope.onChange(elementId, $scope.selectedValue);
+                $scope.onChange(elementId, $scope.selectedValue);
             };
 
             $scope.onDateSet = function (newDate, oldDate, filter) {
@@ -92,7 +93,7 @@ app.directive('ndPrompt', function ($compile, queryModel) {
                     var month = pad(newDate.getMonth() + 1, 2);
                     var day = pad(newDate.getDate(), 2);
                     var theDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
-                    if (filter.filterType == 'in' || filter.filterType == 'notIn') {
+                    if (filter.filterType === 'in' || filter.filterType === 'notIn') {
                         if (!filter.filterText1) { filter.filterText1 = []; }
                         filter.filterText1.push(theDate);
                     } else { filter.filterText1 = theDate; }
@@ -137,7 +138,7 @@ app.directive('ndPrompt', function ($compile, queryModel) {
             $scope.getDistinctValues = function (filter) {
                 $scope.showList = true;
                 $scope.selectedFilter = filter;
-                if ($scope.selectedFilter.data == undefined || $scope.selectedFilter.data.length == 0) {
+                if (typeof $scope.selectedFilter.data === 'undefined' || $scope.selectedFilter.data.length === 0) {
                     queryModel.getDistinct($scope, filter, function (theData, sql) {
                         $scope.selectedFilter = filter;
                         if ($scope.afterGetValues) { $scope.afterGetValues(filter, theData); }
@@ -148,7 +149,7 @@ app.directive('ndPrompt', function ($compile, queryModel) {
             $scope.selectSearchValue = function (selectedValue) {
                 $scope.filter.searchValue = selectedValue;
                 var searchValue = '';
-                if ($scope.filter.filterType == 'in' || $scope.filter.filterType == 'notIn') {
+                if ($scope.filter.filterType === 'in' || $scope.filter.filterType === 'notIn') {
                     for (var i in $scope.filter.searchValue) {
                         searchValue += $scope.filter.searchValue[i][$scope.filter.id];
                         if (i < $scope.filter.searchValue.length - 1) {
@@ -200,7 +201,7 @@ app.directive('ndPrompt', function ($compile, queryModel) {
 
             $scope.setFilterType = function (filter, filterOption) {
                 queryModel.setFilterType(filter, filterOption);
-                if (filter.filterType == 'null' || filter.filterType == 'notNull') {
+                if (filter.filterType === 'null' || filter.filterType === 'notNull') {
                     var values = {};
                     values.filterText1 = filter.filterText1;
                     values.searchValue = filter.searchValue;
@@ -225,10 +226,10 @@ app.directive('ndPrompt', function ($compile, queryModel) {
                 values.filterValue = filter.filterValue;
                 values.dateCustomFilterLabel = filter.dateCustomFilterLabel;
                 values.filterText2 = filter.filterText2;
-                if ((filter.filterType == 'between' || filter.filterType == 'not between') && (filter.filterText2 != undefined && filter.filterText2 != '')) {
+                if ((filter.filterType === 'between' || filter.filterType === 'not between') && (typeof filter.filterText2 !== 'undefined' && filter.filterText2 !== '')) {
                     $scope.onChange($scope.elementId, values);
                 }
-                if (filter.filterType != 'between' && filter.filterType != 'not between') {
+                if (filter.filterType !== 'between' && filter.filterType !== 'not between') {
                     $scope.onChange($scope.elementId, values);
                 }
             }

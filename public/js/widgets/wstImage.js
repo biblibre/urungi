@@ -19,6 +19,7 @@ app.directive('wstImage', function ($compile) {
             switch (attrs['type']) {
             case 'text':
                 // append input field to "template"
+                break;
             case 'select':
                 // append select dropdown to "template"
             }
@@ -62,12 +63,12 @@ app.directive('wstImage', function ($compile) {
             $scope.changeBackgroundImage = function (backgroundImage) {
                 var theElement = $scope.selectedElement;
                 theElement.css({ 'background-image': "url('" + backgroundImage.source1400 + "')" });
-                theElement.css({ '-webkit-background-size': 'cover'});
-                theElement.css({ '-moz-background-size': 'cover'});
-                theElement.css({ '-o-background-size': 'cover'});
-                theElement.css({ 'background-size': 'cover'});
+                theElement.css({ '-webkit-background-size': 'cover' });
+                theElement.css({ '-moz-background-size': 'cover' });
+                theElement.css({ '-o-background-size': 'cover' });
+                theElement.css({ 'background-size': 'cover' });
 
-                if ($scope.selectedElementType == 'page') { $scope.selectedDashboard.backgroundImage = backgroundImage.source1400; }
+                if ($scope.selectedElementType === 'page') { $scope.selectedDashboard.backgroundImage = backgroundImage.source1400; }
             };
 
             // $scope.$watch('element', function(){

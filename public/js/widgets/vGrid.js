@@ -1,19 +1,22 @@
 app.service('verticalGrid', function (dataElements) {
     this.getVerticalGrid = function (report, mode) {
-        if (report.id == undefined) { var id = report._id; } else { var id = report.id; }
+        let id;
+        if (typeof report.id === 'undefined') {
+            id = report._id;
+        } else {
+            id = report.id;
+        }
 
-        hashedID = report.query.id;
+        const hashedID = report.query.id;
         var theProperties = report.properties;
         var pageBlock = 'page-block';
 
-        if (mode == 'preview') {
+        if (mode === 'preview') {
             pageBlock = '';
         }
 
         var reportStyle = 'width:100%;padding-left:0px;padding-right:0px;';
-        var headerStyle = 'width:100%;padding-left:0px;background-color:#ccc;';
         var rowStyle = 'width:100%;padding:0px';
-        var columnDefaultStyle = 'height:40px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;';
 
         if (!theProperties.backgroundColor) theProperties.backgroundColor = '#FFFFFF';
         if (!theProperties.height) theProperties.height = 400;
@@ -28,26 +31,11 @@ app.service('verticalGrid', function (dataElements) {
 
         if (theProperties) {
             reportStyle += 'background-color:' + theProperties.backgroundColor + ';';
-            // reportStyle += 'height:'+theProperties.height+'px;';
-
-            var theRepeatHeight = theProperties.height - theProperties.headerHeight;
-            repeatHeight = 'height:' + theRepeatHeight + 'px;';
-
-            columnDefaultStyle += 'height:' + theProperties.rowHeight + 'px;';
-            var paddingTop = (theProperties.rowHeight - 14) / 2;
-            columnDefaultStyle += 'padding-top:' + paddingTop + 'px;';
-
-            headerStyle += 'background-color:' + theProperties.headerBackgroundColor + ';';
-            headerStyle += 'height:' + theProperties.headerHeight + 'px;';
-            headerStyle += 'border-bottom: ' + theProperties.headerBottomLineWidth + 'px solid ' + theProperties.headerBottomLineColor + ';';
-
-            columnDefaultStyle += 'border-bottom: ' + theProperties.rowBottomLineWidth + 'px solid ' + theProperties.rowBorderColor + ';';
-            columnDefaultStyle += 'border-right: ' + theProperties.columnLineWidht + 'px solid ' + theProperties.rowBorderColor + ';';
         }
 
         var htmlCode = '<div ' + pageBlock + ' id="REPORT_' + id + '" ndType="extendedGrid" class="container-fluid report-container" style="' + reportStyle + '">';
 
-        columns = report.properties.columns;
+        const columns = report.properties.columns;
 
         htmlCode += '<div vs-repeat style="width:100%;overflow-y: auto;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: 0px;" scrolly="gridGetMoreData(\'' + id + '\')">';
 

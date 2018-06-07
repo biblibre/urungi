@@ -22,6 +22,7 @@ app.service('dataElements', function () {
         if (element.signals) {
             var theStyle = '<style>';
             var theClass = '';
+            const columnIndex = '';
             for (var s in element.signals) {
                 theStyle += ' .customStyle' + s + '_' + columnIndex + '{color:' + element.signals[s].color + ';background-color:' + element.signals[s]['background-color'] + ';font-size:' + element.signals[s]['font-size'] + ';font-weight:' + element.signals[s]['font-weight'] + ';font-style:' + element.signals[s]['font-style'] + ';}';
                 var theComma = '';
@@ -64,10 +65,10 @@ app.service('dataElements', function () {
         }
 
         if (element.link) {
-            if (element.link.type == 'report') {
+            if (element.link.type === 'report') {
                 if (element.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + '}}</a>'; }
             }
-            if (element.link.type == 'dashboard') {
+            if (element.link.type === 'dashboard') {
                 if (element.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + '}}</a>'; }
             }
         }
@@ -87,7 +88,11 @@ app.service('dataElements', function () {
 
         var colClass = '';
 
-        if (element.elementType === 'number') { defaultAligment = 'text-align: right;'; }
+        if (element.elementType === 'number') {
+            defaultAligment = 'text-align: right;';
+        }
+
+        const hashedID = '';
         htmlCode += '<div id="ROW_' + elementName + '" class="' + dataColumnClass + ' ' + colClass + '" style="' + columnDefaultStyle + columnStyle + colWidth + defaultAligment + '" ng-click="cellClick(\'' + hashedID + '\',item,' + '\'' + elementID + '\'' + ',' + '\'' + elementName + '\'' + ')">' + theValue + ' </div>';
 
         return htmlCode;

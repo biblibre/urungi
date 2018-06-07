@@ -19,6 +19,7 @@ app.directive('wstHidden', function ($compile) {
             switch (attrs['type']) {
             case 'text':
                 // append input field to "template"
+                break;
             case 'select':
                 // append select dropdown to "template"
             }
