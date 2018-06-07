@@ -1,3 +1,5 @@
+/* global fontAwesomeIconsList: false */
+
 angular.module('dbteam.builder', [])
 
     .factory('textStyles', function () {
@@ -88,7 +90,7 @@ angular.module('dbteam.builder', [])
                     for (var i = el.get(0).options.length - 1; i >= 0; i--) {
                         var selVal = el.get(0).options[i].value.removeQoutes();
 
-                        if (selVal == elVal || selVal.match(new RegExp('^.*?' + elVal + '.*?$'))) {
+                        if (selVal === elVal || selVal.match(new RegExp('^.*?' + elVal + '.*?$'))) {
                             return el.val(selVal).prettyselect('refresh');
                         }
                     }
@@ -102,28 +104,28 @@ angular.module('dbteam.builder', [])
             restrict: 'A',
             link: function ($scope, el, attrs) {
                 el.on('click', function (e) {
-            	var deco = attrs.blToggleTextDecoration,
-            		scopeDeco = $scope.inspector.styles.text.textDecoration.trim();
+                    var deco = attrs.blToggleTextDecoration;
+                    var scopeDeco = $scope.inspector.styles.text.textDecoration.trim();
 
-            	$scope.$apply(function () {
-            		// element has no text decoration currently so we'll just apply it now
-            		if (!scopeDeco || scopeDeco.match(/^.*(none|initial).*$/)) {
-            			$scope.inspector.styles.text.textDecoration = deco;
+                    $scope.$apply(function () {
+                        // element has no text decoration currently so we'll just apply it now
+                        if (!scopeDeco || scopeDeco.match(/^.*(none|initial).*$/)) {
+                            $scope.inspector.styles.text.textDecoration = deco;
 
-            		// element has given text decoration already so we'll remove it
-            		} else if (deco == scopeDeco) {
-            			$scope.inspector.styles.text.textDecoration = 'none';
+                        // element has given text decoration already so we'll remove it
+                        } else if (deco === scopeDeco) {
+                            $scope.inspector.styles.text.textDecoration = 'none';
 
-            		// element has given text decoration as well as other decorations
-            		// (underline overline) so we'll just remove given one and leave others intact
-            		} else if (scopeDeco.match(deco)) {
-            			$scope.inspector.styles.text.textDecoration = scopeDeco.replace(deco, '').trim();
+                        // element has given text decoration as well as other decorations
+                        // (underline overline) so we'll just remove given one and leave others intact
+                        } else if (scopeDeco.match(deco)) {
+                            $scope.inspector.styles.text.textDecoration = scopeDeco.replace(deco, '').trim();
 
-            		// element has other text decorations but not this one so we'll append it to existing ones
-            		} else {
-            			$scope.inspector.styles.text.textDecoration += ' ' + deco;
-            		}
-            	});
+                        // element has other text decorations but not this one so we'll append it to existing ones
+                        } else {
+                            $scope.inspector.styles.text.textDecoration += ' ' + deco;
+                        }
+                    });
                 });
             }
         };
@@ -134,21 +136,21 @@ angular.module('dbteam.builder', [])
             restrict: 'A',
             link: function ($scope, el, attrs) {
                 el.on('click', function (e) {
-            	var split = attrs.blToggleTextStyle.split('|');
+                    var split = attrs.blToggleTextStyle.split('|');
 
-            	$scope.$apply(function () {
-            		if (el.hasClass('active')) {
-	            		el.removeClass('active');
-	            		$scope.inspector.styles.text[split[0]] = 'initial';
-	            	} else {
-	            		$scope.inspector.styles.text[split[0]] = split[1];
-	            		el.addClass('active');
+                    $scope.$apply(function () {
+                        if (el.hasClass('active')) {
+                            el.removeClass('active');
+                            $scope.inspector.styles.text[split[0]] = 'initial';
+                        } else {
+                            $scope.inspector.styles.text[split[0]] = split[1];
+                            el.addClass('active');
 
-	            		if (split[1] != 'italic') {
-	            			el.siblings().removeClass('active');
-	            		}
-	            	}
-            	});
+                            if (split[1] !== 'italic') {
+                                el.siblings().removeClass('active');
+                            }
+                        }
+                    });
                 });
             }
         };
@@ -175,7 +177,7 @@ angular.module('dbteam.builder', [])
                 $scope.fontSelect = $('#el-font-family');
 
                 // grab current text/font styles for active element
-	 $scope.$on('element.reselected', function (e) {
+                $scope.$on('element.reselected', function (e) {
                     inspector.styles.text = {
                         color: $scope.selected.getStyle('color'),
                         fontSize: $scope.selected.getStyle('font-size'),

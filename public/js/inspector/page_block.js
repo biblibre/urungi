@@ -3,10 +3,10 @@ var module = angular.module('page.block', []);
 module.directive('pageBlock', ['$rootScope', '$compile', '$parse', function ($rootScope, $compile, $parse) {
     return {
 
-	        restrict: 'A',
+        restrict: 'A',
 
-	        link: function (scope, el, attrs, controller) {
-	            el.bind('click', function (e) {
+        link: function (scope, el, attrs, controller) {
+            el.bind('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -27,6 +27,6 @@ module.directive('pageBlock', ['$rootScope', '$compile', '$parse', function ($ro
                 e.stopPropagation();
                 scope.elementDblClick($(el));
             });
-	        }
+        }
     };
 }]);
