@@ -54,7 +54,7 @@ exports.ReportsFindOne = function (req, res) {
 
 exports.ReportsCreate = function (req, res) {
     if (!req.session.reportsCreate && !req.session.isWSTADMIN) {
-        serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to create reports'});
+        serverResponse(req, res, 401, {result: 0, msg: 'You do not have permissions to create reports'});
     } else {
         req.query.trash = true;
         req.query.companyid = true;

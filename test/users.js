@@ -45,7 +45,6 @@ describe('get /api/admin/users/find-all', function () {
                         expect(decrypted).to.have.property('page');
                         expect(decrypted).to.have.property('pages');
                         expect(decrypted.items).to.be.a('array');
-                        expect(decrypted.items);
                         expect(decrypted.items[0]).to.have.property('_id');
                         expect(decrypted.items[0]).to.have.property('userName', 'administrator');
                         expect(decrypted.items[0]).to.have.property('companyID', 'COMPID');
