@@ -1,12 +1,9 @@
 process.env.NODE_ENV = 'test';
 
-const mongoose = require("mongoose");
-
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../server');
 const expect = chai.expect;
-const assert = chai.assert;
 
 chai.use(chaiHttp);
 
@@ -22,7 +19,6 @@ after(() => {
     ]);
 });
 
-
 describe('POST /api/login', () => {
     describe('with invalid credentials', () => {
         it('should return status 401', () => {
@@ -30,7 +26,7 @@ describe('POST /api/login', () => {
                 .send({ userName: 'administrator', password: 'invalidpassword' })
                 .then(res => {
                     expect(res).to.have.status(401);
-                })
+                });
         });
     });
     describe('with valid credentials', () => {
@@ -48,4 +44,4 @@ describe('POST /api/login', () => {
                 });
         });
     });
-})
+});
