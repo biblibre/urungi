@@ -3,7 +3,7 @@ app.controller('spacesCtrl', function ($scope, $rootScope, connection, uuid2, $r
         $scope.data = $rootScope.userObjects;
     }
 
-    if ($routeParams.extra == 'intro') {
+    if ($routeParams.extra === 'intro') {
         $timeout(function () { $scope.showIntro(); }, 1000);
     }
 
@@ -97,7 +97,7 @@ app.controller('spacesCtrl', function ($scope, $rootScope, connection, uuid2, $r
     $scope.newSubItem = function (scope) {
         var nodeData = scope.$modelValue;
 
-        if (nodeData == undefined) {
+        if (typeof nodeData === 'undefined') {
             $scope.data.push({
                 id: uuid2.newguid(),
                 title: 'my folder',
@@ -115,7 +115,7 @@ app.controller('spacesCtrl', function ($scope, $rootScope, connection, uuid2, $r
     $scope.save = function () {
         connection.post('/api/company/save-public-space', $scope.data)
             .then(data => {
-                if (data.result == 1) {
+                if (data.result === 1) {
                     $rootScope.userObjects = $scope.data;
                 }
             });
