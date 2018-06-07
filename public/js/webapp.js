@@ -428,7 +428,7 @@ app.run(['$rootScope', '$sessionStorage', 'connection', function ($rootScope, $s
 
         if ($rootScope.user.contextHelp) {
             for (var i in $rootScope.user.contextHelp) {
-                if ($rootScope.user.contextHelp[i] == contextHelpName) {
+                if ($rootScope.user.contextHelp[i] === contextHelpName) {
                     found = true;
                 }
             }
@@ -438,7 +438,7 @@ app.run(['$rootScope', '$sessionStorage', 'connection', function ($rootScope, $s
     };
 
     $rootScope.setUserContextHelpViewed = function (contextHelpName) {
-        var params = (params) || {};
+        var params = {};
         params.contextHelpName = contextHelpName;
         connection.get('/api/set-viewed-context-help', params, function (data) {
             $rootScope.user.contextHelp = data.items;
@@ -448,7 +448,10 @@ app.run(['$rootScope', '$sessionStorage', 'connection', function ($rootScope, $s
     $rootScope.user = $sessionStorage.getObject('user');
     if (!$rootScope.user) {
         connection.get('/api/get-user-data', {}, function (data) {
-            if (!data.items.user) return window.location.href = '/login';
+            if (!data.items.user) {
+                window.location.href = '/login';
+                return;
+            }
 
             var theUser = data.items.user;
             theUser.companyData = data.items.companyData;
@@ -489,7 +492,7 @@ app.run(function (bsLoadingOverlayService) {
 function isWSTADMIN ($rootScope) {
     var found = false;
     for (var i in $rootScope.user.roles) {
-        if ($rootScope.user.roles[i] == 'WSTADMIN') { found = true; }
+        if ($rootScope.user.roles[i] === 'WSTADMIN') { found = true; }
     }
 
     return found;
