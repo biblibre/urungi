@@ -1,10 +1,5 @@
-/**
- * Created with JetBrains WebStorm.
- * User: hermenegildoromero
- * Date: 04/06/15
- * Time: 15:28
- * To change this template use File | Settings | File Templates.
- */
+/* global CryptoJS: false */
+
 angular.module('myApp.services', [])
     .value('version', '0.1');
 
@@ -43,7 +38,7 @@ app.service('Constants', function () {
                         data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
                     }
 
-                    if (data.result == 1 && data.msg && options.showMsg) {
+                    if (data.result === 1 && data.msg && options.showMsg) {
                         noty({text: data.msg, timeout: 2000, type: 'success'});
                     } else if (data.result === 0 && data.msg && options.showMsg) {
                         noty({text: data.msg, timeout: 2000, type: 'error'});
@@ -87,7 +82,7 @@ app.service('Constants', function () {
                         data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
                     }
 
-                    if (data.result == 1 && data.msg) {
+                    if (data.result === 1 && data.msg) {
                         noty({text: data.msg, timeout: 2000, type: 'success'});
                     } else if (data.result === 0 && data.msg) {
                         noty({text: data.msg, timeout: 2000, type: 'error'});

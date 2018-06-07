@@ -1,6 +1,7 @@
+/* global CryptoJS: false */
 // Declare app level module which depends on filters, and services
 // var app = angular.module('widestage-login', ['ui.router','myApp.filters', 'myApp.services', 'myApp.directives']).
-var app = angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
+angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
     }]).service('Constants', function () {
@@ -11,12 +12,6 @@ var app = angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
         };
 
         return constants;
-
-        return {
-            mifuncion: function () {
-                return true;
-            }
-        };
     })
     .factory('$sessionStorage', ['$window', function ($window) {
         return {
@@ -79,7 +74,7 @@ var app = angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
 
                     if (options.showLoader) $('#loader-overlay').hide();
 
-                    if (data.result == 1 && data.msg && options.showMsg) {
+                    if (data.result === 1 && data.msg && options.showMsg) {
                         noty({text: data.msg, timeout: 2000, type: 'success'});
                     } else if (data.result === 0 && data.msg && options.showMsg) {
                         noty({text: data.msg, timeout: 2000, type: 'error'});
@@ -120,7 +115,7 @@ var app = angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
 
                     if (options.showLoader) $('#loader-overlay').hide();
 
-                    if (data.result == 1 && data.msg && options.showMsg) {
+                    if (data.result === 1 && data.msg && options.showMsg) {
                         noty({text: data.msg, timeout: 2000, type: 'success'});
                     } else if (data.result === 0 && data.msg && options.showMsg) {
                         noty({text: data.msg, timeout: 2000, type: 'error'});
@@ -202,7 +197,6 @@ var app = angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
 angular.module('widestage-login').run(['$http', '$rootScope', '$sce', '$sessionStorage', 'connection',
     function ($http, $rootScope, $sce, $sessionStorage, connection) {
         $rootScope.loginRedirect = function () {
-            var host = $('#host').attr('value');
             window.location.href = '/#/home';
         };
     }]);

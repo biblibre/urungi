@@ -275,36 +275,6 @@ var app = angular.module('WideStage', [
             controller: 'catalogCtrl'
         });
 
-        // reports V2
-        /*
-        $routeProvider.when('/reports-v2', {
-            templateUrl: 'partials/report_v2/list.html',
-            controller: 'report_v2Ctrl'
-        });
-        $routeProvider.when('/reports-v2/:extra', {
-            templateUrl: 'partials/report_v2/list.html',
-            controller: 'report_v2Ctrl'
-        }); */
-
-        $routeProvider.when('/reports-v2/:reportID/', {
-            templateUrl: 'partials/report-view/view.html',
-            controller: 'report_viewCtrl'
-        });
-
-        $routeProvider.when('/reports-v2/:reportID/:elementID/:elementValue', {
-            templateUrl: 'partials/report_v2/view.html',
-            controller: 'report_v2Ctrl'
-        });
-
-        $routeProvider.when('/reports-v2/new/:reportID/', {
-            templateUrl: 'partials/report_v2/edit.html',
-            controller: 'report_v2Ctrl'
-        });
-        $routeProvider.when('/reports-v2/edit/:reportID/', {
-            templateUrl: 'partials/report_v2/edit.html',
-            controller: 'report_v2Ctrl'
-        });
-
         /* setup */
 
         $routeProvider.when('/setup', {
