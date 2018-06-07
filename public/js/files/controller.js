@@ -1,3 +1,5 @@
+/* global tinyMCE: false */
+
 var fileFormat, currentTargetElement, autoSubmit;
 
 app.controller('filesModalCtrl', function ($scope, connection, $modalInstance, $http) {
@@ -57,7 +59,7 @@ app.controller('filesModalCtrl', function ($scope, connection, $modalInstance, $
                     $(file.previewElement).remove();
 
                     if (fileFormat) {
-                        if (file.type == 'image/' + fileFormat) {
+                        if (file.type === 'image/' + fileFormat) {
                             $('#file-list').prepend($(file.previewElement));
                         } else {
                             $(file.previewElement).remove();
@@ -280,7 +282,7 @@ app.controller('filesCtrl', function ($scope, connection, $q, $rootScope, $modal
             if (typeof currentTargetElement === 'function') {
                 currentTargetElement($(this).children('.dz-image').attr('src'));
             } else {
-                if (currentTargetElement == 'wysiwyg-editor') { tinyMCE.activeEditor.execCommand('mceInsertContent', false, '<img src="' + $(this).children('.dz-image').attr('src') + '" style="width: 150px; height: 150px;"></img>'); } else {
+                if (currentTargetElement === 'wysiwyg-editor') { tinyMCE.activeEditor.execCommand('mceInsertContent', false, '<img src="' + $(this).children('.dz-image').attr('src') + '" style="width: 150px; height: 150px;"></img>'); } else {
                     $('#' + currentTargetElement).val($(this).children('.dz-image').attr('src'));
                     $('#' + currentTargetElement).trigger('input');
                 }
@@ -303,7 +305,7 @@ app.controller('filesCtrl', function ($scope, connection, $q, $rootScope, $modal
             init: function () {
                 this.on('addedfile', function (file) {
                     if (format) {
-                        if (file.type == 'image/' + format) {
+                        if (file.type === 'image/' + format) {
                             $('#file-list').prepend($(file.previewElement));
                         } else {
                             $(file.previewElement).remove();
