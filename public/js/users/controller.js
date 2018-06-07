@@ -25,10 +25,6 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
     init();
 
     function init () {
-        if ($routeParams.newUser) {
-            if ($routeParams.newUser == 'true') {
-            }
-        }
     };
 
     $scope.checkForNewUser = function () {
@@ -41,13 +37,13 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             return;
         }
 
-        if ($scope._User.sendPassword == false) {
+        if (!$scope._User.sendPassword) {
             if (!$scope._User.pwd1) {
                 $scope.alertMessage = 'You have to introduce a password';
                 isOk = false;
                 return;
             } else {
-                if ($scope._User.pwd1 != $scope._User.pwd2) {
+                if ($scope._User.pwd1 !== $scope._User.pwd2) {
                     $scope.alertMessage = 'Passwords do not match';
                     isOk = false;
                     return;
@@ -61,7 +57,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             }
         }
 
-        if (isOk == true) {
+        if (isOk) {
             $scope.save();
         }
     };
@@ -85,13 +81,13 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             $scope.passwordAlertMsg = 'Your password must be at least 8 characters long';
         }
 
-        if ($scope._User.pwd1 != $scope._User.pwd2) {
+        if ($scope._User.pwd1 !== $scope._User.pwd2) {
             $scope.passwordAlertMsg = 'Enter the same password in both text areas';
         }
 
-        if ($scope._User.pwd1.length >= 8 && $scope._User.pwd1 == $scope._User.pwd2) { isOk = true; }
+        if ($scope._User.pwd1.length >= 8 && $scope._User.pwd1 === $scope._User.pwd2) { isOk = true; }
 
-        if (isOk == true) {
+        if (isOk) {
             connection.post('/api/change-my-password', {pwd1: $scope._User.pwd1, pwd2: $scope._User.pwd2}, function (data) {
                 $('#changePasswordModal').modal('hide');
             });
@@ -122,7 +118,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
     };
 
     $scope.save = function () {
-        if ($scope.mode == 'new') {
+        if ($scope.mode === 'new') {
             connection.post('/api/admin/users/create', $scope._User, function (data) {
                 $('#editUserModal').modal('hide');
                 $scope.users.push($scope._User);
@@ -136,8 +132,9 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
 
     $scope.changeUserStatus = function (user) {
         if ($rootScope.isWSTADMIN) {
-            if (user.status == 'active') { var newStatus = 'Not active'; }
-            if (user.status == 'Not active') { var newStatus = 'active'; }
+            let newStatus;
+            if (user.status === 'active') { newStatus = 'Not active'; }
+            if (user.status === 'Not active') { newStatus = 'active'; }
 
             var data = {userID: user._id, status: newStatus};
 
@@ -149,14 +146,14 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
 
     $scope.getRoleName = function (roleID) {
         for (var r in $scope.roles) {
-            if ($scope.roles[r]._id == roleID) { return $scope.roles[r].name; }
+            if ($scope.roles[r]._id === roleID) { return $scope.roles[r].name; }
         }
     };
 
     $scope.getRolesNotInUser = function () {
         var theRoles = [];
         for (var r in $scope.roles) {
-            if ($scope._User.roles.indexOf($scope.roles[r]._id) == -1) { theRoles.push($scope.roles[r]); }
+            if ($scope._User.roles.indexOf($scope.roles[r]._id) === -1) { theRoles.push($scope.roles[r]); }
         }
 
         return theRoles;
@@ -169,7 +166,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
 
         if (search) {
             $scope.search = search;
-        } else if (page == 1) {
+        } else if (page === 1) {
             $scope.search = '';
         }
         if ($scope.search) {
@@ -186,32 +183,6 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
         });
     };
 
-    $scope.getUser = function () {
-        loadStatuses();
-        loadLanguages(loadRoles(loadFilters(getUser)));
-    };
-
-    function getUser () {
-        connection.get('/api/admin/users/find-one', {id: $stateParams.user_id}, function (data) {
-            $scope.data = data.user;
-
-            // $scope.data.status = $filter('getByValue')($scope.statuses, $scope.data.status);
-            // $scope.data.language = $filter('getByValue')($scope.languages, $scope.data.language);
-
-            for (var i in $scope.data.filters) {
-                var $clone = $('#filter-row-template').children().clone();
-
-                $clone.children('.filter-value').children('input').val($scope.data.filters[i].value);
-
-                $clone.children('.filter-name').children('select').val($scope.data.filters[i].name);
-
-                $('#filters-table').append($clone);
-            }
-
-            addListeners();
-        });
-    }
-
     $scope.clearData = function () {
         $scope.data = null;
 
@@ -226,7 +197,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             data.filters = getFilters();
 
             connection.post('/api/admin/users/create', data, function (data) {
-                if (data.result == 1) window.location.hash = '/admin/users';
+                if (data.result === 1) window.location.hash = '/admin/users';
             });
         }
     };
@@ -236,7 +207,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
             data.filters = getFilters();
 
             connection.post('/api/admin/users/update/'+data._id, data, function(data) {
-                if (data.result == 1) window.location.hash = '/admin/users';
+                if (data.result === 1) window.location.hash = '/admin/users';
             });
         //}
     }; */
@@ -259,7 +230,8 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
         var filters = [];
         $('#filters-table').children().each(function () {
             if ($(this).children('.filter-value').children('input').val()) {
-                var filterValue = $(this).children('.filter-value').children('input').val(), filterName = false;
+                var filterValue = $(this).children('.filter-value').children('input').val();
+                var filterName = false;
 
                 if ($(this).children('.filter-name').hasClass('list-filter') && $(this).children('.filter-name').children('select').val()) { filterName = $(this).children('.filter-name').children('select').val(); } else if ($(this).children('.filter-name').children('input').val()) { filterName = $(this).children('.filter-name').children('input').val(); }
 
@@ -323,26 +295,8 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
         });
     }
 
-    function addListeners () {
-        $('.filter-delete').click(function () {
-            $(this).parent().parent().remove();
-        });
-        $('.enter-manually-btn').click(function () {
-            $(this).parent().removeClass('list-filter');
-            $(this).parent().addClass('manually-filter');
-            $(this).parent().children('.list-filter').hide();
-            $(this).parent().children('.manually-filter').show();
-        });
-        $('.choose-from-list-btn').click(function () {
-            $(this).parent().removeClass('manually-filter');
-            $(this).parent().addClass('list-filter');
-            $(this).parent().children('.manually-filter').hide();
-            $(this).parent().children('.list-filter').show();
-        });
-    }
-
     $scope.deleteRole = function (roleID) {
-        if ($scope._User.userName == 'administrator' && roleID == 'WSTADMIN') {
+        if ($scope._User.userName === 'administrator' && roleID === 'WSTADMIN') {
             noty({text: "The role 'Widestage Administrator' can't be removed from the user administrator", timeout: 6000, type: 'warning'});
         } else {
             var roleName = $scope.getRoleName(roleID);

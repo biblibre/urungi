@@ -30,6 +30,7 @@ module.exports = {
         // Browser
         angular: false,
         app: false,
+        noty: false,
     },
     rules: {
         'no-console': 'off',
