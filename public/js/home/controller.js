@@ -1,3 +1,5 @@
+/* global moment: false */
+
 app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connection', function ($scope, $rootScope, $sessionStorage, connection) {
     $scope.dashboardsNbr = 3;
     $scope.reportsNbr = 10;
@@ -308,7 +310,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
     });
 
     $scope.getReports = function (params) {
-        var params = (params) || {};
+        params = params || {};
 
         connection.get('/api/reports/find-all', params, function (data) {
             $scope.reports = data;
@@ -316,15 +318,11 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
     };
 
     $scope.getDashboards = function (params) {
-        var params = (params) || {};
+        params = params || {};
 
         connection.get('/api/dashboards/find-all', params, function (data) {
             $scope.dashboards = data;
         });
-    };
-
-    $scope.logOut = function () {
-        logout();
     };
 
     $scope.getCounts = function () {
