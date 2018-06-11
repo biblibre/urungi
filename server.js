@@ -1,4 +1,5 @@
 const config = require('config');
+const debug = require('debug')('urungi:server');
 
 const express = require('express');
 const path = require('path');
@@ -106,10 +107,8 @@ if (cluster.isMaster && process.env.NODE_ENV !== 'test') {
     if (process.env.NODE_ENV !== 'test') {
         app.listen(port, ipaddr);
 
-        console.log("Server running at http://" + ipaddr + ":" + port + "/");
+        debug('Server running at http://' + ipaddr + ':' + port + '/');
     }
-
-
 }
 
-module.exports = app
+module.exports = app;
