@@ -105,6 +105,10 @@ enter the credentials
 enjoy!!!
 
 
+
 License GPL 3.0
 https://opensource.org/licenses/GPL-3.0
 
+# Tests
+
+[![Build Status](https://travis-ci.org/biblibre/Urungi.svg?branch=master)](https://travis-ci.org/biblibre/Urungi)
