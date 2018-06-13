@@ -5,4 +5,4 @@ services:
     - mongodb
 script:
     - npm test
-    - ./node_modules/.bin/eslint --fix-dry-run .
+    - ./node_modules/.bin/eslint .
