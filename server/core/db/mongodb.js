@@ -1,3 +1,5 @@
+const debug = require('debug')('urungi:server');
+
 exports.testConnection = function (req, data, done) {
     var mongoose = require('mongoose');
 
@@ -11,7 +13,7 @@ exports.testConnection = function (req, data, done) {
     var conn = mongoose.createConnection(dbURI, { server: { poolSize: 5 } });
 
     conn.on('connected', function () {
-        console.log('mongodb connected, getting collection names');
+        debug('mongodb connected, getting collection names');
         conn.db.listCollections().toArray(function (err, names) {
             if (err) {
                 console.log(err);
@@ -25,7 +27,7 @@ exports.testConnection = function (req, data, done) {
     });
 
     conn.on('error', function (err) {
-        console.log('Mongoose default connection error: ' + err);
+        console.error('Mongoose default connection error: ' + err);
         done({result: 0, msg: 'Connection Error'});
     });
 };

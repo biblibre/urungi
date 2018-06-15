@@ -1,3 +1,5 @@
+const debug = require('debug')('urungi:server');
+
 module.exports = function (app, passport) {
     var hash = require('../util/hash');
     var api = require('../api.js');
@@ -35,7 +37,7 @@ module.exports = function (app, passport) {
             if (err) throw err;
 
             if (c === 0) {
-                console.log('no records in the users model, this is the initial setup!');
+                debug('no records in the users model, this is the initial setup!');
                 var theCompany = {};
                 theCompany.companyID = 'COMPID';
                 theCompany.createdBy = 'widestage setup';
@@ -97,7 +99,7 @@ function authenticate (passport, Users, req, res, next) {
 
                 if (!company) {
                     saveToLog(req, 'User fail login: ' + user.userName + ' (' + user.email + ') user company not found!', '', 102);
-                    res.send(401, "User's company not found!");
+                    res.status(401).send("User's company not found!");
                 } else {
                     user.companyData = company;
 

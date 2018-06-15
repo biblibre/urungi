@@ -110,7 +110,7 @@ exports.rememberPassword = function (req, res) {
                 serverResponse(req, res, 200, result);
             });
         } else {
-            res.send(200, {result: 0, msg: 'Email not registered'});
+            res.status(200).send({result: 0, msg: 'Email not registered'});
         }
     });
 };

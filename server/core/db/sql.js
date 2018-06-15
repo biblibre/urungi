@@ -1,3 +1,5 @@
+const debug = require('debug')('urungi:server');
+
 exports.processCollections = function (req, query, collections, dataSource, params, thereAreJoins, done) {
     processCollections(req, query, collections, dataSource, params, thereAreJoins, done);
 };

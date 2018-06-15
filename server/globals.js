@@ -1,5 +1,6 @@
 /* GLOBAL FUNCTIONS */
 const path = require('path');
+const debug = require('debug')('urungi:server');
 
 var appRoot = path.join(__dirname, '..');
 global.appRoot = appRoot;
@@ -65,8 +66,8 @@ function restrictRole (roles) {
         }
         req.session.error = 'Access denied!';
         // TODO: Log annotation security issue
-        console.log('Access denied!');
-        res.send(401, {result: 0, msg: 'You don´t have access to this function'});
+        debug('Access denied!');
+        res.status(401).send({result: 0, msg: 'You don´t have access to this function'});
     };
 }
 global.restrictRole = restrictRole;
@@ -156,11 +157,6 @@ function isAllowed (req, area) {
     return req.user.companyData[area];
 };
 global.isAllowed = isAllowed;
-
-function debug (obj) {
-
-}
-global.debug = debug;
 
 function serverResponse (req, res, status, obj) {
     if (config.crypto.enabled) {

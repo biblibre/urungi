@@ -14,7 +14,6 @@ module.exports = {
 
         // defined in server/globals.js
         appRoot: false,
-        debug: false,
         generateUserFilter: false,
         generateUserFilterValue: false,
         getNextSequence: false,

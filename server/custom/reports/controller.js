@@ -1,3 +1,5 @@
+const debug = require('debug')('urungi:server');
+
 var Reports = connection.model('Reports');
 
 const Controller = require('../../core/controller.js');
@@ -183,7 +185,6 @@ exports.PreviewQuery = function (req, res) {
     debug(query);
 
     processDataSources(query.datasources, query.layers, {}, query, function (result) {
-        // debug(result);
         serverResponse(req, res, 200, result);
     });
 };
@@ -192,7 +193,6 @@ exports.ReportsGetData = function (req, res) {
     var data = req.query;
     var query = data.query;
     processDataSources(req, query.datasources, query.layers, {page: (data.page) ? data.page : 1}, query, function (result) {
-        // debug(result);
         serverResponse(req, res, 200, result);
     });
 };
@@ -227,8 +227,6 @@ function processDataSources (req, dataSources, layers, params, query, done, resu
                                 }
                             }
                         }
-
-                        // debug(theLayers[l].params.joins);
 
                         for (const n in theLayers[l].params.joins) {
                             for (const j in dataSource.collections) {

@@ -1,4 +1,5 @@
 const path = require('path');
+const debug = require('debug')('urungi:server');
 
 var Files = connection.model('Files');
 
