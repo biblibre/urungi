@@ -64,23 +64,6 @@ exports.LayersFindOne = function (req, res) {
     });
 };
 
-exports.LayersDelete = function (req, res) {
-    var data = req.body;
-
-    req.query.trash = true;
-    req.query.companyid = true;
-
-    data._id = data.id;
-    data.nd_trash_deleted = true;
-    data.nd_trash_deleted_date = new Date();
-
-    req.body = data;
-
-    controller.update(req, function (result) {
-        serverResponse(req, res, 200, result);
-    });
-};
-
 exports.changeLayerStatus = function (req, res) {
     Layers.setStatus(req, function (result) {
         serverResponse(req, res, 200, result);
