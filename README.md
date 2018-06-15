@@ -1,71 +1,51 @@
-# widestage
-Lightweight Business Intelligence tool for reporting mongodb, postgresql, Mysql, &amp; MS sql data
+# Urungi
 
-To see how it works go to www.widestage.com
+Lightweight Business Intelligence tool for reporting MongoDB, PostgreSQL, MySQL
+and others, see [Supported databases](#supported-databases)
 
-# Supported databases
 
-[MongoDB](http://widestage.com/en/pages/open_source_reports_for_mongodb) 
+## Supported databases
 
-Postgres
+- MongoDB
+- PostgreSQL
+- MySQL
+- MS SQL Server
+- Oracle
+- Google Big Query
 
-MySQL
 
-MS SQL Server
+## Requirements
 
-Oracle (1)
+- [nodejs](https://nodejs.org)
+- [npm](https://www.npmjs.com)
+- [bower](http://bower.io)
+- [MongoDB](https://www.mongodb.org)
 
-Google Big Query
+MongoDB is used to store Urungi metadata, you have to install it even if you are
+not going to explore MondoDB data.
 
-# Requirements
 
-[nodejs](https://nodejs.org)
+## Installation
 
-[mongodb](https://www.mongodb.org)
+1. Install the requirements listed above
+2. Clone the github repository
 
-    mongodb is used to store the widestage metadata, you have to install it even if you are not going to explore mondodb data.
+    ```
+    git clone https://github.com/biblibre/urungi.git
+    cd urungi
+    ```
 
-[npm](https://www.npmjs.com)
+3. Download and install dependencies
 
-[bower](http://bower.io)
-
-- Optional
-
-    [forever](https://www.npmjs.com/package/forever)
-
-    [nginx](http://nginx.org)
-
-# Installation
-
-Install nodejs (mandatory)
-
-Install mongodb (mandatory)
-
-Install npm (mandatory)
-
-Install bower (mandatory)
-
-Install forever (optional)
-
-clone the github repository
-    
-    git clone https://github.com/widestage/widestage.git
-
-get into the widestage folder
-
-download and install the npm libraries
-    
+    ```
     npm install
-
-download and install the bower libraries
-be sure you choose the angular 1.5.5 when pointed to choose otherwise it will install 1.6.4 and widestage is not compatible with that version yet, also to be sure you can run  bower install angular#1.5.5 --save
-    
     bower install
+    ```
 
 
-# Configuration
+## Configuration
 
-widestage use [config](https://www.npmjs.com/package/config) to manage its
+Urungi uses [config](https://www.npmjs.com/package/config) to manage its
 configuration files.
 
 You can change the configuration by creating a file in `config/` directory named
@@ -75,41 +55,34 @@ overriding any properties defined in `config/default.js`
 More info at https://github.com/lorenwest/node-config/wiki/Configuration-Files
 
 
-# Oracle connections
+## Oracle connections
 
-If you are going to use oracle connections, first you need to install in your server the Oracle instant client and then run:
+If you are going to use oracle connections, first you need to install in your
+server the Oracle instant client and then run:
 
-    npm install oracledb 
+    npm install oracledb
 
-( [more info](https://github.com/oracle/node-oracledb) )
-
-
-# Starting up the widestage server
-    
-    node server.js
-
-    if you downloaded the forever package run:
-        forever start "your_path_to_widestage/server.js"
-
-    to see if is running:
-        forever list
-
-point your browser to your ip/server name
-
-enter the credentials
-    
-    user name: administrator
-    
-    password: widestage
-
-enjoy!!!
+More info at https://github.com/oracle/node-oracledb
 
 
+## Starting up the Urungi server
 
-License GPL 3.0
-https://opensource.org/licenses/GPL-3.0
+1. Launch the server
 
-# Tests
+    ```
+    npm start
+    ```
+
+2. Point your browser to your ip/server name (eg. http://localhost:8080)
+3. Enter the credentials
+
+    - Username: `administrator`
+    - Password: `widestage`
+
+4. Enjoy!!!
+
+
+## Tests
 
 [![Build Status](https://travis-ci.org/biblibre/Urungi.svg?branch=master)](https://travis-ci.org/biblibre/Urungi)
 
@@ -120,3 +93,8 @@ To run the tests:
 To run a single test suite:
 
     npm test test/file-name.js
+
+
+## License
+
+[GPL 3.0](https://opensource.org/licenses/GPL-3.0)
