@@ -412,12 +412,16 @@ function processCollections (req, query, collections, dataSource, params, thereA
 
         var db = new dbController.Db();
 
+        if (query.recordLimit){
+            SQLstring = db.setLimitToSQL(SQLstring, query.recordLimit, ((params.page - 1) * query.recordLimit));
+        } else {
         if (dataSource.params[0].packetSize) {
             if (dataSource.params[0].packetSize !== -1) { SQLstring = db.setLimitToSQL(SQLstring, dataSource.params[0].packetSize, ((params.page - 1) * dataSource.params[0].packetSize)); }
         } else {
             if (config.get('query.defaultRecordsPerPage') > 1) {
                 SQLstring = db.setLimitToSQL(SQLstring, config.get('query.defaultRecordsPerPage'), ((params.page - 1) * config.get('query.defaultRecordsPerPage')));
             }
+        }
         }
 
         // Fix for filters with having and normal filters

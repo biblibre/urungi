@@ -26,6 +26,13 @@
     <button  id="queryRefresh" class="btn btn-success" ng-show="selectedReport.properties.columns.length > 0 || (selectedReport.properties.ykeys.length > 0 && selectedReport.properties.xkeys.length > 0)" class="pull-right" ng-click="processStructure();"  style="padding: 3px 10px;"><i class="fa fa-refresh hand-cursor" ></i> Refresh data</button>
     <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
 
+    <select id="recordLimit" ng-model="recordLimitSelection">
+        <option value="10">10</option>
+        <option value="100">100</option>
+        <option value="500" selected>500</option>
+        <option value="unlimited">unlimited</option>
+      </select>
+
     <h4 class="pull-right" >Query results</h4>
 </div>
 
