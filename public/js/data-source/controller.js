@@ -197,19 +197,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         $scope.mongoStep = step;
     };
 
-    $scope.testS3Connection = function () {
-        var data = {};
-        data.accessKey = $scope._Parameters.accessKey;
-        data.secret = $scope._Parameters.secret;
-        data.bucket = $scope._Parameters.bucket;
-        data.region = $scope._Parameters.region;
-        data.folder = $scope._Parameters.folder;
-
-        connection.post('/api/data-sources/testS3Connection', data, function (result) {
-
-        });
-    };
-
     $scope.doTestConnection = function () {
         $scope.testConnection = {};
         var data = {};

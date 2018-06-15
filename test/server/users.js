@@ -1,11 +1,9 @@
-process.env.NODE_ENV = 'test';
+const { app, decrypt } = require('../common');
+
 const chai = require('chai');
-const chaiHttp = require('chai-http');
-const server = require('../server');
 const expect = chai.expect;
-var CryptoJS = require('crypto-js');
-chai.use(chaiHttp);
-var agent = chai.request.agent(server);
+const agent = chai.request.agent(app);
+
 var DataSources = connection.model('DataSources');
 var Layers = connection.model('Layers');
 var Reports = connection.model('Reports');
@@ -13,21 +11,8 @@ var Dashboards = connection.model('Dashboardsv2');
 var Users = connection.model('Users');
 var statistics = connection.model('statistics');
 
-before(() => {
-    return connection.dropDatabase();
-});
-
 after(() => {
     agent.close();
-    // Close pending connections
-    return Promise.all([
-        new Promise(resolve => {
-            connection.close(() => { resolve(); });
-        }),
-        new Promise(resolve => {
-            server.locals.mongooseConnection.close(() => { resolve(); });
-        }),
-    ]);
 });
 
 describe('get /api/admin/users/find-all', function () {
@@ -555,8 +540,3 @@ describe('get (/api/get-user-other-data', function () {
         expect(decrypted.items).to.have.property('roles');
     });
 });
-function decrypt (data) {
-    var object = JSON.parse(data.substr(6));
-    var decrypted = CryptoJS.AES.decrypt(object.data, 'SecretPassphrase');
-    return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-}

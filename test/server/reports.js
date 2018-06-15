@@ -1,29 +1,15 @@
-process.env.NODE_ENV = 'test';
+const { app, decrypt } = require('../common');
+
 const chai = require('chai');
-const chaiHttp = require('chai-http');
-const server = require('../server');
 const expect = chai.expect;
-var CryptoJS = require('crypto-js');
-chai.use(chaiHttp);
-var agent = chai.request.agent(server);
+var agent = chai.request.agent(app);
 var Reports = connection.model('Reports');
 var Users = connection.model('Users');
-before(() => {
-    return connection.dropDatabase();
-});
 
 after(() => {
     agent.close();
-    // Close pending connections
-    return Promise.all([
-        new Promise(resolve => {
-            connection.close(() => { resolve(); });
-        }),
-        new Promise(resolve => {
-            server.locals.mongooseConnection.close(() => { resolve(); });
-        }),
-    ]);
 });
+
 describe('get /api/reports/find-all', function () {
     it('should find all reports and their data', async function () {
         var res = await agent.post('/api/login')
@@ -204,9 +190,3 @@ describe('post /api/reports/unpublish', function () {
         res = await Reports.deleteOne({reportName: 'Report'});
     });
 });
-
-function decrypt (data) {
-    var object = JSON.parse(data.substr(6));
-    var decrypted = CryptoJS.AES.decrypt(object.data, 'SecretPassphrase');
-    return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-}

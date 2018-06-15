@@ -151,99 +151,67 @@ exports.getEntities = function (req, res) {
 exports.testConnection = function (req, res) {
     req.body.companyID = req.user.companyID;
 
-    if (req.body.type === 'MONGODB') {
+    switch (req.body.type) {
+    case 'MONGODB' :
         var mongodb = require('../../core/db/mongodb.js');
 
         mongodb.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
-    }
-    if (req.body.type === 'MySQL') {
+        break;
+
+    case 'MySQL' :
         var mysql = require('../../core/db/mysql.js');
 
         mysql.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
-    }
-    if (req.body.type === 'POSTGRE') {
+        break;
+
+    case 'POSTGRE':
         var postgre = require('../../core/db/postgresql.js');
 
         postgre.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
-    }
-    if (req.body.type === 'ORACLE') {
+        break;
+
+    case 'ORACLE':
         var oracle = require('../../core/db/oracle.js');
 
         oracle.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
-    }
-    if (req.body.type === 'MSSQL') {
+        break;
+
+    case 'MSSQL':
         var mssql = require('../../core/db/mssql.js');
 
         mssql.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
-    }
-    if (req.body.type === 'BIGQUERY') {
+        break;
+
+    case 'BIGQUERY':
         var bigQuery = require('../../core/db/bigQuery.js');
 
         bigQuery.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
-    }
-    if (req.body.type === 'JDBC-ORACLE') {
+        break;
+
+    case 'JDBC-ORACLE':
         var jdbcOracle = require('../../core/db/jdbc-oracle.js');
 
         jdbcOracle.testConnection(req, req.body, function (result) {
             serverResponse(req, res, 200, result);
         });
-    }
-};
+        break;
 
-exports.getReverseEngineering = function (req, res) {
-    var theDatasourceID = req.query.datasourceID;
-    req.query = {};
-    req.query.companyid = true;
-    req.query.id = theDatasourceID;
-
-    req.user = {};
-    req.user.companyID = 'COMPID';
-
-    controller.findOne(req, function (result) {
-        if (result.result === 1) {
-            if (result.item.type === 'MONGODB') {
-                var mongodb = require('../../core/db/mongodb.js');
-                const data = {};
-                data.host = result.item.params[0].connection.host;
-                data.port = result.item.params[0].connection.port;
-                data.database = result.item.params[0].connection.database;
-                data.userName = result.item.params[0].connection.userName;
-                data.password = result.item.params[0].connection.password;
-                mongodb.getReverseEngineering(data, function (result) {
-                    serverResponse(req, res, 200, result);
-                });
-            }
-            if (result.item.type === 'POSTGRE' || result.item.type === 'MySQL' || result.item.type === 'ORACLE' || result.item.type === 'MSSQL' || result.item.type === 'JDBC-ORACLE' || result.item.type === 'BIGQUERY') {
-                var sql = require('../../core/db/sql.js');
-                const data = {
-                    type: result.item.type,
-                    host: result.item.params[0].connection.host,
-                    port: result.item.params[0].connection.port,
-                    userName: result.item.params[0].connection.userName,
-                    password: result.item.params[0].connection.password,
-                    database: result.item.params[0].connection.database,
-
-                };
-                sql.getReverseEngineering(result.item._id, data, function (result) {
-                    serverResponse(req, res, 200, result);
-                });
-            }
-        } else {
-            serverResponse(req, res, 200, result);
-        }
-    });
+    default:
+        serverResponse(req, res, 200, {result: 0, msg: 'Invalid database type'});
+        break;
+    };
 };
 
 exports.getEntitySchema = function (req, res) {

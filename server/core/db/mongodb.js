@@ -30,6 +30,19 @@ exports.testConnection = function (req, data, done) {
     });
 };
 
+/*
+data.entities must have the following format :
+
+[
+    {
+        name : "collection1Name"
+    },
+    {
+        name : "collection2Name"
+    }
+]
+
+*/
 exports.getSchemas = function (data, done) {
     var collections = data.entities;
     var MongoClient = require('mongodb').MongoClient;
@@ -42,7 +55,10 @@ exports.getSchemas = function (data, done) {
     }
 
     MongoClient.connect(dbURI, function (err, db) {
-        if (err) { return console.dir(err); }
+        if (err) {
+            done({result: 0, msg: 'An error ocured while connecting to the database'});
+            return console.dir(err);
+        }
 
         var schemas = [];
 
@@ -56,7 +72,11 @@ exports.execOperation = function (operation, params, done) {
     var DataSources = connection.model('DataSources');
 
     DataSources.findOne({ _id: params.datasourceID }, function (err, dataSource) {
-        if (err) { return console.dir(err); }
+        if (err) {
+            console.dir(err);
+            done({result: 0, msg: 'Error encountered'});
+            return;
+        }
 
         if (dataSource) {
             var theCollectionName = '';
@@ -71,7 +91,14 @@ exports.execOperation = function (operation, params, done) {
             }
 
             MongoClient.connect(dbURI, function (err, db) {
-                if (err) { return console.dir(err); }
+                if (err) {
+                    console.dir(err);
+                    if (db) {
+                        db.close();
+                    }
+                    done({result: 0, msg: 'Error encountered'});
+                    return;
+                }
 
                 var collection = db.collection(theCollectionName);
 
@@ -96,10 +123,15 @@ exports.execOperation = function (operation, params, done) {
                         { $group: { _id: params.group } },
                         { $sort: params.sort },
                         { $limit: 50 }
-                    ],
-                    function (err, result) {
-                        if (err) { return console.dir(err); }
-
+                    ], {
+                        cursor: {batchSize: 100}
+                    }).get(function (err, result) {
+                        if (err) {
+                            console.dir(err);
+                            done({result: 0, msg: 'Error encountered'});
+                            db.close();
+                            return;
+                        }
                         db.close();
                         done({result: 1, items: result});
                     });
@@ -115,8 +147,11 @@ exports.processCollections = function (req, query, collections, dataSource, para
     processCollections(req, query, collections, dataSource, params, thereAreJoins, done);
 };
 
+// this function uses recursion to iterate over an array.
+// There does not seem to be a reason for that.
 function getCollectionSchema (db, collections, index, schemas, done) {
     if (typeof collections[index] === 'undefined') {
+        db.close();
         done();
         return;
     }

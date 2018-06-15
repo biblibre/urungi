@@ -112,3 +112,11 @@ https://opensource.org/licenses/GPL-3.0
 # Tests
 
 [![Build Status](https://travis-ci.org/biblibre/Urungi.svg?branch=master)](https://travis-ci.org/biblibre/Urungi)
+
+To run the tests:
+
+    npm test
+
+To run a single test suite:
+
+    npm test test/file-name.js
