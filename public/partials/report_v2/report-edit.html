@@ -23,14 +23,20 @@
 
 
 <div ng-if="selectedReport.properties.columns.length > 0 || (selectedReport.properties.ykeys.length > 0 && selectedReport.properties.xkeys.length > 0)" class="container-fluid branded-border-panel" style="width:100%">
-    <button  id="queryRefresh" class="btn btn-success" ng-show="selectedReport.properties.columns.length > 0 || (selectedReport.properties.ykeys.length > 0 && selectedReport.properties.xkeys.length > 0)" class="pull-right" ng-click="processStructure();"  style="padding: 3px 10px;">
-        <i class="fa fa-refresh hand-cursor"></i>
-        Refresh data
-        <span ng-if="time !== undefined">({{time}}ms)</span>
-    </button>
+    <span ng-show="selectedReport.query.recordLimit == undefined">
+        Quick display with
+        <input type="number" ng-model="selectedRecordLimit.value" size="8">
+        results.
+        <button id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
+    </span>
     <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
-
-    <h4 class="pull-right" >Query results</h4>
+    <span class="pull-right">
+        <button id="queryRefresh" class="btn btn-success" ng-show="selectedReport.properties.columns.length > 0 || (selectedReport.properties.ykeys.length > 0 && selectedReport.properties.xkeys.length > 0)" class="pull-right" ng-click="processStructure();" style="padding: 3px 10px;">
+            <i class="fa fa-refresh hand-cursor"></i>
+            Refresh data
+            <span ng-if="time !== undefined">({{time}}ms)</span>
+        </button>
+    </span>
 </div>
 
 <div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width:100%">

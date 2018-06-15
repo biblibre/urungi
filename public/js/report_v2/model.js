@@ -14,14 +14,16 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         });
     };
 
-    this.getReport = function (report, parentDiv, mode) {
-        return getReport(report, parentDiv, mode);
+    this.getReport = function (report, parentDiv, mode, limit) {
+        return getReport(report, parentDiv, mode, limit);
     };
 
-    function getReport (report, parentDiv, mode) {
+    function getReport (report, parentDiv, mode, limit) {
         showOverlay(parentDiv);
         queryModel.loadQuery(report.query);
         queryModel.detectLayerJoins();
+
+        queryModel.setSelectedRecordLimit(mode, limit);
 
         return queryModel.getQueryData(report.query).then(data => {
             report.query.data = data.data;
