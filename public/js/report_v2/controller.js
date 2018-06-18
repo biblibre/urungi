@@ -40,9 +40,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.gettingData = false;
     $scope.showSQL = false;
 
-    $scope.recordLimit = {};
-    $scope.recordLimit.selected = '500';
-
     $scope.rows = [];
     $scope.selectedLayerID = undefined;// queryModel.selectedLayerID();
     $scope.layers = queryModel.layers();
@@ -50,6 +47,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.isForDash = false;
     $scope.showPrompts = true;
     $scope.pager = {};
+
+    $scope.selectedRecordLimit = { value : '500' };
 
     $scope.getSelectedLayer = function () {
         return queryModel.selectedLayerID();
@@ -76,7 +75,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.queryModel = queryModel;
 
     $scope.getPrompts = function () {
-        if ($scope.selectedReport.query) { return $scope.selectedReport.query.groupFilters; }
+        if ($scope.selectedReport.query) { value : '500' };
     };
 
     $scope.getSQLPanel = function () {
@@ -733,11 +732,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         var query = queryModel.generateQuery(); // queryModel.query();
         // TODO: clean data query
 
-        if ($scope.recordLimit.selected === 'unlimited') {
-            query.recordLimit = -1;
-        } else {
-            query.recordLimit = parseInt($scope.recordLimit.selected);
-        }
+        let limit = $scope.selectedRecordLimit.value;
 
         $scope.selectedReport.query = query;
 
@@ -748,7 +743,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             $scope.showOverlay('OVERLAY_reportLayout');
 
             if ($scope.selectedReport.reportType === 'grid' || $scope.selectedReport.reportType === 'vertical-grid') {
-                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
                     $scope.sql = data.sql;
                     $scope.time = data.time;
                     $scope.hideOverlay('OVERLAY_reportLayout');
@@ -770,7 +765,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                         id: customObjectData.id,
                         type: 'bar',
                         color: '#000000'};
-                    report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                    report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
                         $scope.sql = data.sql;
                         $scope.time = data.time;
                         $scope.hideOverlay('OVERLAY_reportLayout');
@@ -782,7 +777,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 const theChartID = 'Chart' + uuid2.newguid();
                 $scope.selectedReport.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
                 $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
-                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
                     $scope.sql = data.sql;
                     $scope.time = data.time;
                     $scope.hideOverlay('OVERLAY_reportLayout');
@@ -793,7 +788,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             if ($scope.selectedReport.reportType === 'indicator') {
                 console.log('Report Type indicator');
 
-                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
                     $scope.sql = data.sql;
                     $scope.time = data.time;
                     $scope.hideOverlay('OVERLAY_reportLayout');
@@ -987,4 +982,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         field.sortType = type;
         queryModel.processStructure();
     };
+
+    $scope.logReport = function () {
+        console.log($scope.selectedReport);
+    }
 });

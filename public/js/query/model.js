@@ -49,6 +49,26 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
         return rootItem;
     };
 
+    var selectedRecordLimit;
+
+    this.setSelectedRecordLimit = function (mode, value) {
+        console.log(mode);
+        console.log(value);
+        if( value && mode === 'edit' || mode === 'add' ){
+            if (value === 'unlimited') {
+                selectedRecordLimit = -1;
+            } else {
+                try {
+                    selectedRecordLimit = parseInt(value);
+                }catch(err){
+                    selectedRecordLimit = 404;
+                }
+            }
+        }else{
+            selectedRecordLimit = -1;
+        }
+    };
+
     this.initQuery = function () {
         query = {};
         query.id = uuid2.newguid();
@@ -278,6 +298,9 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
     };
 
     function getQueryDataNextPage (page) {
+
+        console.log("getting query data next page");
+
         return new Promise((resolve, reject) => {
             var params = {};
             wrongFilters = [];
@@ -290,6 +313,10 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
             params.query = angular.copy(query);
             cleanQuery(params.query);
             params.page = page;
+
+            if(!params.query.recordLimit){
+                params.query.recordLimit = selectedRecordLimit;
+            }
 
             connection.get('/api/reports/get-data', params, function (data) {
                 if (data.result === 0) {
@@ -1022,4 +1049,9 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
             }
         }
     }
+
+    this.logQuery = function () {
+        console.log(query);
+    };
+
 });
