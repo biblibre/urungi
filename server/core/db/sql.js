@@ -537,6 +537,7 @@ function getFilterSQL (filter, isHaving) {
 
     if (((filter.filterText1 && filter.filterText1 !== '') || filter.filterType === 'notNull' || filter.filterType === 'null')) {
         var filterValue = filter.filterText1;
+        var filterSecondValue = filter.filterText2;
         let filterElementName;
         if (!filter.aggregation) {
             filterElementName = filter.collectionID + '.' + filter.elementName;
@@ -544,77 +545,103 @@ function getFilterSQL (filter, isHaving) {
             filterElementName = filter.aggregation + '(' + filter.collectionID + '.' + filter.elementName + ')';
         }
 
+        const numericalFilters = ['equal', 'diferentThan', 'biggerThan', 'notGreaterThan', 'biggerOrEqualThan', 'lessThan', 'lessOrEqualThan', 'between', 'notBetween'];
+
         if (filter.elementType === 'number') {
             if (filter.filterType !== 'in' && filter.filterType !== 'notIn') {
                 filterValue = Number(filterValue);
             }
         }
-        if (filter.elementType === 'date') {
-            if (filter.filterType === 'in' || filter.filterType === 'notIn') {
-                result = dateFilter(filterElementName, filterValue, filter);
-            } else {
-                result = dateFilter(filterElementName, filterValue, filter);
+
+        if (filter.elementType !== 'number' && numericalFilters.indexOf(filter.filterType) >= 0) {
+            filterValue = '\'' + filterValue + '\'';
+            if (filterSecondValue) {
+                filterSecondValue = '\'' + filterSecondValue + '\'';
             }
         }
 
-        if (filter.filterType === 'equal' && filter.elementType !== 'date') {
-            if (filter.elementType === 'number') { result = filterElementName + ' = ' + filterValue; } else { result = (filterElementName + ' = ' + '\'' + filterValue + '\''); }
+        if (filter.elementType === 'date' && (numericalFilters + ['in', 'notIn']).indexOf(filter.filterType) >= 0) {
+            return dateFilter(filterElementName, filterValue, filter);
         }
-        if (filter.filterType === 'diferentThan' && filter.elementType !== 'date') {
-            if (filter.elementType === 'number') { result = (filterElementName + ' <> ' + filterValue); } else { result = (filterElementName + ' <> ' + '\'' + filterValue + '\''); }
-        }
-        if (filter.filterType === 'biggerThan' && filter.elementType !== 'date') {
-            if (filter.elementType === 'number') { result = (filterElementName + ' > ' + filterValue); } else { result = (filterElementName + ' > ' + '\'' + filterValue + '\''); }
-        }
-        if (filter.filterType === 'notGreaterThan' && filter.elementType !== 'date') {
-            if (filter.elementType === 'number') { result = (filterElementName + ' <= ' + filterValue); } else { result = (filterElementName + ' <= ' + '\'' + filterValue + '\''); }
-        }
-        if (filter.filterType === 'biggerOrEqualThan' && filter.elementType !== 'date') {
-            if (filter.elementType === 'number') { result = (filterElementName + ' >= ' + filterValue); } else { result = (filterElementName + ' >= ' + '\'' + filterValue + '\''); }
-        }
-        if (filter.filterType === 'lessThan' && filter.elementType !== 'date') {
-            if (filter.elementType === 'number') { result = (filterElementName + ' < ' + filterValue); } else { result = (filterElementName + ' < ' + '\'' + filterValue + '\''); }
-        }
-        if (filter.filterType === 'lessOrEqualThan' && filter.elementType !== 'date') {
-            if (filter.elementType === 'number') { result = (filterElementName + ' <= ' + filterValue); } else { result = (filterElementName + ' <= ' + '\'' + filterValue + '\''); }
-        }
-        if (filter.filterType === 'between' && filter.elementType !== 'date') {
-            if (filter.elementType === 'number') { result = (filterElementName + ' BETWEEN ' + filterValue + ' AND ' + filter.filterText2); } else { result = (filterElementName + ' BETWEEN ' + '\'' + filterValue + '\'' + ' AND ' + '\'' + filter.filterText2 + '\''); }
-        }
-        if (filter.filterType === 'notBetween' && filter.elementType !== 'date') {
-            if (filter.elementType === 'number') { result = (filterElementName + ' NOT BETWEEN ' + filterValue + ' AND ' + filter.filterText2); } else { result = (filterElementName + ' NOT BETWEEN ' + '\'' + filterValue + '\'' + ' AND ' + '\'' + filter.filterText2 + '\''); }
-        }
-        if (filter.filterType === 'contains') {
+
+        switch (filter.filterType) {
+        case 'equal':
+            result = filterElementName + ' = ' + filterValue;
+            break;
+
+        case 'diferentThan' :
+            result = (filterElementName + ' <> ' + filterValue);
+            break;
+
+        case 'biggerThan':
+            result = (filterElementName + ' > ' + filterValue);
+            break;
+
+        case 'notGreaterThan':
+            result = (filterElementName + ' <= ' + filterValue);
+            break;
+
+        case 'biggerOrEqualThan':
+            result = (filterElementName + ' >= ' + filterValue);
+            break;
+
+        case 'lessThan':
+            result = (filterElementName + ' < ' + filterValue);
+            break;
+
+        case 'lessOrEqualThan':
+            result = (filterElementName + ' <= ' + filterValue);
+            break;
+
+        case 'between':
+            result = (filterElementName + ' BETWEEN ' + filterValue + ' AND ' + filter.filterText2);
+            break;
+
+        case 'notBetween':
+            result = (filterElementName + ' NOT BETWEEN ' + filterValue + ' AND ' + filter.filterText2);
+            break;
+
+        case 'contains':
             result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '%\'');
-        }
-        if (filter.filterType === 'notContains') {
+            break;
+
+        case 'notContains':
             result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '%\'');
-        }
-        if (filter.filterType === 'startWith') {
+            break;
+
+        case 'startWith':
             result = (filterElementName + ' LIKE ' + '\'' + filterValue + '%\'');
-        }
-        if (filter.filterType === 'notStartWith') {
+            break;
+
+        case 'notStartWith':
             result = (filterElementName + ' NOT LIKE ' + '\'' + filterValue + '%\'');
-        }
-        if (filter.filterType === 'endsWith') {
+            break;
+
+        case 'endsWith':
             result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '\'');
-        }
-        if (filter.filterType === 'notEndsWith') {
+            break;
+
+        case 'notEndsWith':
             result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '\'');
-        }
-        if (filter.filterType === 'like') {
+            break;
+
+        case 'like':
             result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '%\'');
-        }
-        if (filter.filterType === 'notLike') {
+            break;
+
+        case 'notLike':
             result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '%\'');
-        }
-        if (filter.filterType === 'null') {
+            break;
+
+        case 'null':
             result = (filterElementName + ' IS NULL ');
-        }
-        if (filter.filterType === 'notNull') {
+            break;
+
+        case 'notNull':
             result = (filterElementName + ' IS NOT NULL ');
-        }
-        if (filter.filterType === 'in' && filter.elementType !== 'date') {
+            break;
+
+        case 'in':
             if (filter.elementType === 'number') {
                 result = (filterElementName + ' IN ' + '(' + filterValue.split(';') + ')');
             } else {
@@ -629,8 +656,9 @@ function getFilterSQL (filter, isHaving) {
                 }
                 result = (filterElementName + ' IN ' + '(' + filterSTR + ')');
             }
-        }
-        if (filter.filterType === 'notIn' && filter.elementType !== 'date') {
+            break;
+
+        case 'notIn':
             if (filter.elementType === 'number') {
                 result = (filterElementName + ' NOT IN ' + '(' + String(filterValue).split(';') + ')');
             } else {
@@ -645,6 +673,10 @@ function getFilterSQL (filter, isHaving) {
                 }
                 result = (filterElementName + ' NOT IN ' + '(' + filterSTR + ')');
             }
+            break;
+
+        default:
+            break;
         }
     }
 
