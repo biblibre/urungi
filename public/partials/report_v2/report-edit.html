@@ -30,6 +30,14 @@
     </button>
     <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
 
+    <label for="recordLimit">Number of results shown : </label>
+    <select id="recordLimit" ng-model="recordLimit.selected">
+        <option value="10">10</option>
+        <option value="100">100</option>
+        <option value="500" selected>500</option>
+        <option value="unlimited">unlimited</option>
+      </select>
+
     <h4 class="pull-right" >Query results</h4>
 </div>
 
