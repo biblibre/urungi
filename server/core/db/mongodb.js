@@ -906,8 +906,8 @@ function processCollections (req, query, collections, dataSource, params, thereA
         if (!isEmpty(sort)) aggregation.push({ $sort: sort });
 
         // If there are joins, then we can´t set up limits...
-        if (!thereAreJoins && !(query.recordLimit === -1)){
-            limit = query.recordLimit || dataSource.params[0].packetSize || config.get('query.defaultRecordsPerPage');
+        if (!thereAreJoins && !(query.recordLimit === -1)) {
+            var limit = query.recordLimit || dataSource.params[0].packetSize || config.get('query.defaultRecordsPerPage');
             if (params.page) {
                 aggregation.push({ $skip: (params.page - 1) * limit });
             }

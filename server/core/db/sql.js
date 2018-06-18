@@ -412,8 +412,8 @@ function processCollections (req, query, collections, dataSource, params, thereA
 
         var db = new dbController.Db();
 
-        if (query.recordLimit){
-            if(query.recordLimit > 0){
+        if (query.recordLimit) {
+            if (query.recordLimit > 0) {
                 SQLstring = db.setLimitToSQL(SQLstring, query.recordLimit, ((params.page - 1) * query.recordLimit));
             }
         } else {
