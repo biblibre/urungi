@@ -39,7 +39,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.gettingData = false;
     $scope.showSQL = false;
-    $scope.recordLimitSelection = "500";
+    
+    $scope.recordLimit = {};
+    $scope.recordLimit.selected = "500";
 
     $scope.rows = [];
     $scope.selectedLayerID = undefined;// queryModel.selectedLayerID();
@@ -732,11 +734,11 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         var query = queryModel.generateQuery(); // queryModel.query();
         // TODO: clean data query
 
-
-        if(!($scope.recordLimitSelection === "unlimited")){
-            query.recordLimit = parseInt($scope.recordLimitSelection);
+        if($scope.recordLimit.selected === "unlimited"){
+            query.recordLimit = -1;
+        }else{
+            query.recordLimit = parseInt($scope.recordLimit.selected);
         }
-        
 
         $scope.selectedReport.query = query;
 
