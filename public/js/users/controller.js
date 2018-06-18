@@ -280,7 +280,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
         connection.get('/api/roles/find-all', {}, function (data) {
             $scope.roles = data.items;
 
-            var adminRole = {_id: 'WSTADMIN', name: 'Widestage Administrator'};
+            var adminRole = {_id: 'WSTADMIN', name: 'Urungi Administrator'};
             $scope.roles.push(adminRole);
 
             if (typeof callLater !== 'undefined') { callLater(); }
@@ -297,7 +297,7 @@ app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $win
 
     $scope.deleteRole = function (roleID) {
         if ($scope._User.userName === 'administrator' && roleID === 'WSTADMIN') {
-            noty({text: "The role 'Widestage Administrator' can't be removed from the user administrator", timeout: 6000, type: 'warning'});
+            noty({text: "The role 'Urungi Administrator' can't be removed from the user administrator", timeout: 6000, type: 'warning'});
         } else {
             var roleName = $scope.getRoleName(roleID);
             $scope.modalOptions = {};
