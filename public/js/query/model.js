@@ -49,23 +49,17 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
         return rootItem;
     };
 
-    var selectedRecordLimit;
+    var selectedRecordLimit = 500;
 
     this.setSelectedRecordLimit = function (mode, value) {
-        console.log(mode);
-        console.log(value);
-        if( value && mode === 'edit' || mode === 'add' ){
-            if (value === 'unlimited') {
-                selectedRecordLimit = -1;
+        if (mode === 'edit' || mode === 'add') {
+            if (value) {
+                selectedRecordLimit = value;
             } else {
-                try {
-                    selectedRecordLimit = parseInt(value);
-                }catch(err){
-                    selectedRecordLimit = 404;
-                }
+                selectedRecordLimit = -1;
             }
-        }else{
-            selectedRecordLimit = -1;
+        } else {
+            selectedRecordLimit = undefined;
         }
     };
 
@@ -298,9 +292,6 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
     };
 
     function getQueryDataNextPage (page) {
-
-        console.log("getting query data next page");
-
         return new Promise((resolve, reject) => {
             var params = {};
             wrongFilters = [];
@@ -314,7 +305,7 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
             cleanQuery(params.query);
             params.page = page;
 
-            if(!params.query.recordLimit){
+            if (!params.query.recordLimit) {
                 params.query.recordLimit = selectedRecordLimit;
             }
 
@@ -1049,9 +1040,4 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
             }
         }
     }
-
-    this.logQuery = function () {
-        console.log(query);
-    };
-
 });

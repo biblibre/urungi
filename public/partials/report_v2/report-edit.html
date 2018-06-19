@@ -29,7 +29,12 @@
         <span ng-if="time !== undefined">({{time}}ms)</span>
     </button>
     <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
-    <button  id="logQuery" class="btn btn-default" class="pull-right" ng-click="queryModel.logQuery();"  style="padding: 3px 10px;">Log Query</button>
+
+    <span ng-show="selectedReport.query.recordLimit == undefined">
+    <label for="recordLimit">Number of results shown : </label>
+    <input type="number" ng-model="selectedRecordLimit.value" size="8">
+      <button  id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();"  style="padding: 3px 10px;">Set limit on rapport</button>
+    </span>
 
     <h4 class="pull-right" >Query results</h4>
 </div>

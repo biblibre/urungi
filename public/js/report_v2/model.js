@@ -23,7 +23,6 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         queryModel.loadQuery(report.query);
         queryModel.detectLayerJoins();
 
-        console.log(limit);
         queryModel.setSelectedRecordLimit(mode, limit);
 
         return queryModel.getQueryData(report.query).then(data => {
