@@ -212,6 +212,30 @@ app.directive('ndPrompt', function ($compile, queryModel) {
                 }
             };
 
+            $scope.fieldsAggregations = queryModel.fieldsAggregations;
+
+            $scope.aggregationChoosed = function (column, variable) {
+                if (variable.value === 'original') {
+                    delete (column.aggregation);
+                } else {
+                    column.aggregation = variable.value;
+                }
+
+                if (typeof column.originalLabel === 'undefined') {
+                    column.originalLabel = column.elementLabel;
+                }
+
+                if (variable.value === 'original') {
+                    column.elementLabel = column.originalLabel;
+                    column.objectLabel = column.originalLabel;
+                } else {
+                    column.elementLabel = column.originalLabel + ' (' + variable.name + ')';
+                    column.objectLabel = column.originalLabel + ' (' + variable.name + ')';
+                }
+
+                queryModel.processStructure();
+            };
+
             function pad (num, size) {
                 var s = num + '';
                 while (s.length < size) s = '0' + s;

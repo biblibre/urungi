@@ -12,6 +12,16 @@
                 <i class="fa fa-cube" ng-show="field.elementType != 'number' && field.elementType != 'count'"></i>
                 <i class="fa fa-list-ol" ng-show="field.elementType == 'number' || field.elementType == 'count'"></i>
                 <span tooltip="Drag to left or right to change order weight in the query (the more at your left, the more weight in the query when ordering results)" tooltip-placement="bottom">{{field.objectLabel}}</span>
+
+                <div class="btn-group" dropdown="">
+                    <i class="fa-caret-down  hand-cursor  column-box-agg-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                    <ul ng-if="field.elementType == 'number'" class="dropdown-menu" aria-labelledby="dropdownMenu5" >
+                        <li ng-repeat="variable in fieldsAggregations.number">
+                            <a ng-click="aggregationChoosed(field,variable)">{{variable.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+
                 <i ng-show="field.sortType == -1" class="fa fa-chevron-down hand-cursor order-box-close-btn" ng-click="setSortType(field, 1)" tooltip="Click here to order descendent using this field" tooltip-placement="bottom"></i>
                 <i ng-show="field.sortType == 1" class="fa fa-chevron-up hand-cursor order-box-close-btn" ng-click="setSortType(field, -1)" tooltip="Click here to order ascendent using this field" tooltip-placement="bottom"></i>
                 <i class="fa fa-times hand-cursor order-box-close-btn" ng-click="removeOrder(field);detectLayerJoins();" tooltip="Click here to remove this field from the query" tooltip-placement="bottom"></i>

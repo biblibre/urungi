@@ -23,8 +23,21 @@
                                 </div>
 
 
-
-                                <input ng-if="isPrompt == 'false'" type="text" class="form-control" ng-model="filter.objectLabel" ng-readonly="true">
+                                <div class="input-group" dropdown ng-if="isPrompt == 'false'" >
+                                    <input type="text" class="form-control" ng-model="filter.objectLabel" ng-readonly="true">
+                                    <span class="input-group-btn">
+                                        <span class="dropdown" >
+                                            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="getDistinctValues(filter)" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" tooltip="Click here to select a value" tooltip-placement="bottom">
+                                                <i class="fa-caret-down"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu5b" >
+                                                <li ng-repeat="variable in fieldsAggregations.number">
+                                                    <a ng-click="aggregationChoosed(filter,variable)">{{variable.name}}</a>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </span>
+                                </div>
 
            <!-- equal, not equal, bigger than, etc...-->
                                 <div ng-if="isPrompt == 'false'" class="btn-group" dropdown="">
@@ -106,7 +119,7 @@
             <!--equal, in, etc ...-->
 
                                     <div class="input-group" dropdown ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && ( filter.elementType != 'array') && ( filter.elementType != 'date') && (filter.filterType != 'not in') && (filter.filterType != 'in')">
-                                         <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="filter.filterText1" ng-change="inputChanged(filter)"  ng-required="filter.promptMandatory == true" style="height: 30px;border-right: 0px">
+                                        <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="filter.filterText1" ng-change="inputChanged(filter)"  ng-required="filter.promptMandatory == true" style="height: 30px;border-right: 0px">
                                         <span class="input-group-btn" >
                                             <span class="dropdown" >
                                                 <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="getDistinctValues(filter)" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" tooltip="Click here to select a value" tooltip-placement="bottom">
