@@ -285,12 +285,11 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         var newReport = (await connection.get('/api/reports/find-one', params)).item;
 
         delete newReport._id;
+        delete newReport.createdOn;
         newReport.reportName = duplicateOptions.newName;
 
         const data = await connection.post('/api/reports/create', newReport);
-        if (data.result === 1) {
-
-        } else {
+        if (data.result !== 1) {
             // TODO indicate error
         }
     };
