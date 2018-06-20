@@ -1,40 +1,222 @@
+app.service('pivot', function (dataElements) {
+    this.getPivotTableSetup = function (report) {
+        const pivotKeys = report.properties.pivotKeys;
+        const data = report.query.data;
+        const ykeys = report.properties.ykeys;
 
-/*
+        const dimensions = {};
+        const dimensionList = {};
 
-SEE http://stackoverflow.com/questions/19757638/how-to-pivot-a-table-with-d3-js
-SEE https://github.com/agershun/alasql
+        var pivotID = 'pivot-' + report._id;
 
-transform the json data into a multidimensional array like Pandas, then create the grid
+        for (const dimInfo of (pivotKeys.columns.concat(pivotKeys.rows))) {
+            dimensionList[dimInfo.id] = {
+                info: dimInfo,
+                set: new Set()
+            };
+        }
 
-columns
-sex
+        // Replace null values by the string 'NULL' so they get displayed
+        for (const entry of data) {
+            for (const dim in dimensionList) {
+                if (entry[dim] == null) {
+                    entry[dim] = 'NULL';
+                }
+            }
+        }
 
-rows
-city
+        for (const entry of data) {
+            for (const dim in dimensionList) {
+                if (entry[dim]) {
+                    dimensionList[dim].set.add(entry[dim]);
+                }
+            }
+        }
 
-we need to identify the different values for sex
-this is male and female,
-in a array
+        for (const dim in dimensionList) {
+            var valueList = [];
 
-after identify the values for the columns
-for every row (city, we need to identify the values of the metric)
+            for (const v of dimensionList[dim].set.values()) {
+                const value = {
+                    id: v,
+                    label: v
+                };
+                valueList.push(value);
+            }
 
-we have to iterate using the results json , the results json includes the sex, city and the measure
+            dimensions[dim] = new DimensionDescription(dimensionList[dim].objectLabel, valueList);
+        }
 
-D3.js has the function nest  para agregar los datos y agruparlos...
+        const horizontalDimensions = [];
+        const verticalDimensions = [];
 
-pivot.js
+        for (const dim of pivotKeys.rows) {
+            horizontalDimensions.push(dim.id);
+        }
 
-for every row in results
- for (var r in results)
- {
-     for (
+        for (const dim of pivotKeys.columns) {
+            verticalDimensions.push(dim.id);
+        }
 
- }
+        const valueDataFields = [];
+        const dataFieldInfo = {};
 
-for (var i in sex)
-{
+        for (const ykey of ykeys) {
+            if (!ykey.aggregation) {
+                ykey.aggregation = '';
+            }
+            valueDataFields.push(ykey.id + ykey.aggregation);
+            dataFieldInfo[ykey.id + ykey.aggregation] = ykey;
+        }
 
-}
+        function dataCellRenderer (items, colContext, rowContext, opts) {
+            var html = '<span>';
+            for (const ykey of ykeys) {
+                html += '<div>';
+                if (items[ykey.id + ykey.aggregation]) {
+                    html += String(items[ykey.id + ykey.aggregation]);
+                } else {
+                    html += ' - ';
+                }
+                html += '</div>';
+            }
+            html += '</span>';
 
- */
+            return html;
+        }
+
+        var params = {
+            configuration: false,
+            data: data,
+            horizontalDimensions: horizontalDimensions,
+            verticalDimensions: verticalDimensions,
+            dimensions: dimensions,
+            valueDataFields: valueDataFields,
+            dataFieldInfo: dataFieldInfo,
+            dataCellRenderer: dataCellRenderer,
+            map: map,
+            reduce: reduce
+        };
+
+        return {
+            html: '<div id="' + pivotID + '" > ERROR - could not display pivot table </div>',
+            params: params,
+            jquerySelector: '#' + pivotID
+        };
+    };
+
+    function DimensionDescription (label, valueList) {
+        this.label = label;
+        this.valueList = valueList;
+        this.values = function () {
+            return this.valueList;
+        };
+    }
+
+    function map (rowContext, colContext, data) {
+        if (!data) {
+            return [];
+        }
+        var res = [];
+        var filter = [];
+        var i;
+
+        for (i = 0; i < rowContext.length; i++) {
+            const value = rowContext[i];
+            filter.push(value);
+        }
+
+        for (i = 0; i < colContext.length; i++) {
+            const value = colContext[i];
+            filter.push(value);
+        }
+
+        for (i = 0; i < data.length; i++) {
+            var item = data[i];
+            if (applyFilter2(item, filter)) {
+                res.push(item);
+            }
+        }
+        return { 'default': res };
+    }
+
+    function reduce (mapItems) {
+        var aggregValues = {};
+
+        for (const field of this.valueDataFields) {
+            var result;
+
+            switch (this.dataFieldInfo[field].aggregation) {
+            case 'min':
+                result = Number.POSITIVE_INFINITY;
+                for (const item of mapItems['default']) {
+                    if (item[field] && item[field] < result) {
+                        result = item[field];
+                    }
+                }
+                break;
+
+            case 'max':
+                result = Number.NEGATIVE_INFINITY;
+                for (const item of mapItems['default']) {
+                    if (item[field] && item[field] > result) {
+                        result = item[field];
+                    }
+                }
+                break;
+
+            case 'sum':
+            case 'count':
+                result = 0;
+                for (const item of mapItems['default']) {
+                    if (item[field]) { result += item[field]; }
+                }
+                break;
+
+            case 'avg':
+                var numer = 0;
+                var denom = 0;
+                for (const item of mapItems['default']) {
+                    if (item[field]) {
+                        numer += item[field] * item[ this.dataFieldInfo[field].id + 'ptcount' ];
+                        denom += item[ this.dataFieldInfo[field].id + 'ptcount' ];
+                    }
+                }
+                if (denom) {
+                    result = numer / denom;
+                } else {
+                    result = undefined;
+                }
+                break;
+
+            default:
+                result = undefined;
+                if (mapItems['default'][0]) {
+                    result = mapItems[0][field];
+                }
+            }
+
+            aggregValues[field] = result;
+        }
+
+        return aggregValues;
+    }
+
+    function applyFilter2 (test, filter) {
+        for (var i = 0; i < filter.length; i++) {
+            var filterItem = filter[i];
+            // var dimName = filterItem.dimName;
+            // var o1 = filterItem.id;
+            var o2 = test[filterItem.dimName];
+            if (typeof (o2) === 'object' && o2 != null) {
+                o2 = o2.id;
+            }
+            // if(o1 != Number.POSITIVE_INFINITY) {
+            if (filterItem.id !== o2) { // && o2 != -1) {
+                return false;
+            }
+            // }
+        }
+        return true;
+    }
+});

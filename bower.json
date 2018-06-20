@@ -71,7 +71,8 @@
     "angular-translate": "^2.15.2",
     "angular-spectrum-colorpicker": "^1.4.5",
     "malihu-custom-scrollbar-plugin": "^3.1.5",
-    "angular-bootstrap-colorpicker": "^3.0.31"
+    "angular-bootstrap-colorpicker": "^3.0.31",
+    "cynteka-pivot-table-jquery": "https://github.com/biblibre/cynteka-pivot-table-jquery.git#^0.10.0"
   },
   "resolutions": {
     "angular": "1.5.5"

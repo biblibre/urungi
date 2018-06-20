@@ -33,7 +33,7 @@ app.controller('report_viewCtrl', function ($scope, $routeParams, report_v2Model
     $scope.getReportDiv = function () {
         if ($routeParams.reportID) {
             $scope.showOverlay('OVERLAY_reportLayout');
-            report_v2Model.getReportDefinition($routeParams.reportID, false, function (report) {
+            report_v2Model.getReportDefinition($routeParams.reportID, false).then((report) => {
                 if (report) {
                     $scope.selectedReport = report;
                     report_v2Model.getReport(report, 'reportLayout', $scope.mode, function () {

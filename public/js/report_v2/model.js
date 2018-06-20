@@ -1,17 +1,16 @@
 /* global XLSX: false, saveAs: false, Blob: false, datenum: false */
 
-app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid) {
+app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid, pivot) {
     var report = {};
 
-    this.getReportDefinition = function (id, isLinked, done) {
-        connection.get('/api/reports/get-report/' + id, {id: id, mode: 'preview', linked: isLinked}, function (data) {
-            if (data.item) {
-                // report = data.item;
-                done(data.item);
-            } else {
-                done(null);
-            }
-        });
+    this.getReportDefinition = async function (id, isLinked) {
+        const data = await connection.get('/api/reports/get-report/' + id, {id: id, mode: 'preview', linked: isLinked});
+        if (data.item) {
+            // report = data.item;
+            return data.item;
+        } else {
+            return null;
+        }
     };
 
     this.getReport = function (report, parentDiv, mode, limit) {
@@ -88,6 +87,26 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
                     });
                 }
                 break;
+
+            case 'pivot':
+                var result = pivot.getPivotTableSetup(report);
+
+                el = document.getElementById(report.parentDiv);
+
+                if (el) {
+                    angular.element(el).empty();
+                    $div = $(result.html);
+                    angular.element(el).append($div);
+                    angular.element(document).injector().invoke(function ($compile) {
+                        var scope = angular.element($div).scope();
+                        $compile($div)(scope);
+                        hideOverlay(report.parentDiv);
+                    });
+                }
+
+                $(result.jquerySelector).cypivot(result.params);
+                break;
+
             case 'chart-line':
             case 'chart-donut':
             case 'chart-pie':
