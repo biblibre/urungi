@@ -1,0 +1,21 @@
+<nd-modal id="duplicateModal">
+    <div class="modal-header ng-scope">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ><i class="fa fa-close"></i></button>
+        <h4 class="modal-title">{{duplicateOptions.header}}</h4>
+    </div>
+
+    <div class="modal-body ng-scope" ng-init="tabbed_panel_active = 1">
+        <div class="panel panel-default panel-tabs">
+
+            <div>
+                <input class="form-control" type="text" ng-model="duplicateOptions.newName" ng-disabled="duplicateOptions.freeze">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer ng-scope">
+        <button type="button" class="btn btn-white" data-dismiss="modal" >Cancel</button>
+        <button  type="button" class="btn btn-info" ng-click="duplicateOptions.duplicate()" ng-disabled="duplicateOptions.freeze">Duplicate</button>
+    </div>
+</nd-modal>

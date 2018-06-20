@@ -28,6 +28,10 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     $scope.mode = 'preview';
     $scope.pager = {};
 
+    $scope.duplicateOptions = {};
+    $scope.duplicateOptions.freeze = false;
+    $scope.duplicateOptions.header = 'Duplicate dashboard';
+
     $scope.textAlign = [
         {name: 'left', value: 'left'},
         {name: 'right', value: 'right'},
@@ -357,6 +361,22 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             $scope.pager = PagerService.GetPager($scope.dashboards.items.length, data.page, 10, data.pages);
         });
     };
+
+    $scope.viewDuplicationForm = function (dashboard) {
+        $scope.duplicateOptions.dashboard = dashboard;
+        $scope.duplicateOptions.newName = dashboard.dashboardName + ' copy';
+        $('#duplicateModal').modal('show');
+    };
+
+    $scope.duplicateDashboard = async function () {
+        $scope.duplicateOptions.freeze = true;
+        await dashboardv2Model.duplicateDashboard($scope.duplicateOptions);
+        $scope.getDashboards($scope.page, '', ['dashboardName', 'isPublic', 'owner', 'dashboardDescription']);
+        $scope.duplicateOptions.freeze = false;
+        $('#duplicateModal').modal('hide');
+    };
+
+    $scope.duplicateOptions.duplicate = $scope.duplicateDashboard;
 
     $scope.cancelReport = function (report) {
         $scope.reportInterface = false;

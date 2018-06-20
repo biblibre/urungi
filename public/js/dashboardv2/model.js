@@ -50,4 +50,19 @@ app.service('dashboardv2Model', function ($http, $q, connection, reportService) 
             selectedDashboard.reports.push(qstructure);
         });
     };
+
+    this.duplicateDashboard = async function (duplicateOptions) {
+        const params = { id: duplicateOptions.dashboard._id };
+        var newDashboard = (await connection.get('/api/dashboardsv2/find-one', params)).item;
+
+        delete newDashboard._id;
+        newDashboard.dashboardName = duplicateOptions.newName;
+
+        const data = await connection.post('/api/dashboardsv2/create', newDashboard);
+        if (data.result === 1) {
+
+        } else {
+            // TODO indicate error
+        }
+    };
 });

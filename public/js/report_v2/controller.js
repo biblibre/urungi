@@ -35,6 +35,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.selectedReport.reportType = 'grid';
     $scope.selectedReport.query = {};
 
+    $scope.duplicateOptions = {};
+    $scope.duplicateOptions.freeze = false;
+    $scope.duplicateOptions.header = 'Duplicate report';
+
     $scope.page = 1;
 
     $scope.gettingData = false;
@@ -258,6 +262,22 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             $scope.pager = PagerService.GetPager($scope.reports.items.length, data.page, 10, data.pages);
         });
     };
+
+    $scope.viewDuplicationForm = function (report) {
+        $scope.duplicateOptions.report = report;
+        $scope.duplicateOptions.newName = report.reportName + ' copy';
+        $('#duplicateModal').modal('show');
+    };
+
+    $scope.duplicateReport = async function () {
+        $scope.duplicateOptions.freeze = true;
+        await report_v2Model.duplicateReport($scope.duplicateOptions);
+        $scope.getReports($scope.page, '', ['reportName', 'reportType', 'isPublic', 'owner', 'reportDescription']);
+        $scope.duplicateOptions.freeze = false;
+        $('#duplicateModal').modal('hide');
+    };
+
+    $scope.duplicateOptions.duplicate = $scope.duplicateReport;
 
     $scope.IntroOptions = {
         // IF width > 300 then you will face problems with mobile devices in responsive mode

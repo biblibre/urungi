@@ -20,6 +20,9 @@
                         <a id="reportListItemDeleteBtn" href="" class="pull-right  list-delete-button" ng-click="delete(dashboard._id,dashboard.dashboardName)"  tooltip="Click here to delete this dashboard" tooltip-placement="bottom">
                             <i class="fa fa-trash-o "  ></i>
                         </a>
+                        <a id="reportListItemDuplicateBtn" class="pull-right list-duplicate-button" href="" ng-click="viewDuplicationForm(dashboard)" tooltip="Click here to duplicate the dashboard" tooltip-placement="bottom">
+                            <i class="fas fa-copy" ></i>
+                        </a>
                         <a id="reportListItemEditBtn" class="pull-right  list-edit-button" href="/#/dashboardsv2/edit/{{dashboard._id}}"  tooltip="Click here to modify this dashboard" tooltip-placement="bottom">
                             <i class="fa fa-pencil" ></i>
                         </a>
@@ -57,3 +60,4 @@
     </div>
 
     <div ng-include src="'partials/deleteModal.html'"></div>
+    <div ng-include src="'partials/duplicateModal.html'"></div>

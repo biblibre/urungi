@@ -278,6 +278,21 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         }
     };
 
+    this.duplicateReport = async function (duplicateOptions) {
+        const params = { id: duplicateOptions.report._id };
+        var newReport = (await connection.get('/api/reports/find-one', params)).item;
+
+        delete newReport._id;
+        newReport.reportName = duplicateOptions.newName;
+
+        const data = await connection.post('/api/reports/create', newReport);
+        if (data.result === 1) {
+
+        } else {
+            // TODO indicate error
+        }
+    };
+
     this.saveToExcel = function ($scope, reportHash) {
         var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
         var ws_name = $scope.selectedReport.reportName;
