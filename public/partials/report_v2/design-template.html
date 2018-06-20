@@ -1,0 +1,92 @@
+
+<div id="reportLayout" style="min-height:200px;position:relative;width:100%;height:100%" 
+    bs-loading-overlay="" bs-loading-overlay-reference-id="OVERLAY_reportLayout" class="ng-scope">
+    
+    <div page-block="" id="REPORT_5b2a69e58f3c281382e9e415" ndtype="extendedGrid" class="container-fluid report-container ng-scope" 
+    style="width:100%;padding-left:0px;padding-right:0px;background-color:#FFFFFF;">
+        
+        <div class="container-fluid" style="width:100%;padding-left:0px;background-color:#ccc;background-color:#FFFFFF;height:30px;border-bottom: 4px solid #999999;">
+            <div class="col-xs-12 report-repeater-column-header" style="">
+                <table style="table-layout:fixed;width:100%">
+                    <tbody>
+                        <tr>
+                            <td style="overflow:hidden;white-space: nowrap;width:95%;">genre</td>
+                            <td style="width:34px;">
+                                <div class="btn-group pull-right" dropdown=""> 
+                                    <button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" 
+                                    aria-haspopup="true" aria-expanded="false" style="margin-bottom: 0px;background-color:transparent;"> 
+                                        <i class="fa fa-angle-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-blue multi-level" role="menu">
+                                        <li class="dropdown-submenu">      
+                                            <a href="">Sort</a>      
+                                            <ul class="dropdown-menu">      
+                                                <li><a ng-click="reverse = true; orderColumn(0,false,'0e639529-317d-c9ea-eb62-6eed4731080f')">Ascending</a></li>      
+                                                <li><a ng-click="reverse = false; orderColumn(0,true,'0e639529-317d-c9ea-eb62-6eed4731080f')">Descending</a></li>      
+                                            </ul>
+                                        </li>
+                                        <li class="divider"></li><li><a ng-click="saveToExcel('0e639529-317d-c9ea-eb62-6eed4731080f')">
+                                            <i class="fa fa-file-excel-o"></i> Export table to excel</a></li><li class="divider">
+                                        </li>
+                                        <li>
+                                            <input class="find-input pull-right ng-pristine ng-untouched ng-valid ng-empty" ng-model="theFilter" 
+                                                placeholder="Table filter..." aria-label="Table filter..." style="margin:5px;" type="search">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> 
+            </div>
+        </div>
+        <div vs-repeat="" style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: 30px;" 
+        scrolly="gridGetMoreData('5b2a69e58f3c281382e9e415')" class="ng-scope">
+        <div class="vs-repeat-before-content" style="width: 100%; height: 0px;">
+
+        </div><!-- ngRepeat: item in $vs_collection -->
+        <div ndtype="repeaterGridItems" class="repeater-data container-fluid vs-repeat-repeated-element ng-scope" ng-repeat="item in $vs_collection" style="width:100%;padding:0px">
+        
+            <div id="ROW_5b2a69e58f3c281382e9e415" class="repeater-data-column col-xs-12" 
+            style="height:40px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;height:20px;padding-top:3px;border-bottom: 1px solid #CCCCCC;border-right: 0px solid #CCCCCC;" 
+            ng-click="cellClick('0e639529-317d-c9ea-eb62-6eed4731080f',item,'wstfurg','wstfurg')">
+            
+                <div style="overflow:hidden;height:100%;" class="ng-binding">fantasy</div> 
+            
+            </div>
+        </div><!-- end ngRepeat: item in $vs_collection -->
+        
+        <div ndtype="repeaterGridItems" class="repeater-data container-fluid vs-repeat-repeated-element ng-scope" ng-repeat="item in $vs_collection" style="width:100%;padding:0px">
+        
+            <div id="ROW_5b2a69e58f3c281382e9e415" class="repeater-data-column col-xs-12" style="height:40px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;height:20px;padding-top:3px;border-bottom: 1px solid #CCCCCC;border-right: 0px solid #CCCCCC;" 
+            ng-click="cellClick('0e639529-317d-c9ea-eb62-6eed4731080f',item,'wstfurg','wstfurg')">
+            
+                <div style="overflow:hidden;height:100%;" class="ng-binding">sci-fi</div> 
+            
+            </div>
+        </div><!-- end ngRepeat: item in $vs_collection -->
+        
+        <div ndtype="repeaterGridItems" class="repeater-data container-fluid vs-repeat-repeated-element ng-scope" ng-repeat="item in $vs_collection" style="width:100%;padding:0px">
+            
+            <div id="ROW_5b2a69e58f3c281382e9e415" class="repeater-data-column col-xs-12" style="height:40px;overflow:hidden;padding:2px; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;height:20px;padding-top:3px;border-bottom: 1px solid #CCCCCC;border-right: 0px solid #CCCCCC;" 
+            ng-click="cellClick('0e639529-317d-c9ea-eb62-6eed4731080f',item,'wstfurg','wstfurg')">
+            
+                <div style="overflow:hidden;height:100%;" class="ng-binding">thriller</div> 
+            
+            </div>
+        
+        </div><!-- end ngRepeat: item in $vs_collection -->
+        
+        <div class="vs-repeat-after-content" style="width: 100%; height: 0px;"></div>
+    
+    </div>
+    
+    <div class="repeater-data">
+        <div class=" calculus-data-column col-xs-12 " style="">  
+
+        </div>
+    </div> 
+
+</div>
+
+</div>

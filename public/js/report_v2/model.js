@@ -1,6 +1,6 @@
 /* global XLSX: false, saveAs: false, Blob: false, datenum: false */
 
-app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid) {
+app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid, crossTableGrid, $templateRequest) {
     var report = {};
 
     this.getReportDefinition = function (id, isLinked, done) {
@@ -74,7 +74,6 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
                 }
                 break;
             case 'vertical-grid':
-            case 'cross-table':
                 htmlCode = verticalGrid.getVerticalGrid(report, mode);
                 el = document.getElementById(report.parentDiv);
 
@@ -88,7 +87,28 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
                         hideOverlay(report.parentDiv);
                     });
                 }
-                break;
+            break;
+
+            case 'cross-table':
+                crossTableGrid.getCrossTableGrid(report, $templateRequest).then(htmlCode => {
+                        el = document.getElementById(report.parentDiv);
+
+                    if (el) {
+                        angular.element(el).empty();
+                        $div = $(htmlCode);
+                        angular.element(el).append($div);
+                        angular.element(document).injector().invoke(function ($compile) {
+                            var scope = angular.element($div).scope();
+                            $compile($div)(scope);
+                            hideOverlay(report.parentDiv);
+                        });
+                    }
+                    $("#pivot").cypivot( crossTableGrid.getParams(report));
+                    
+
+                });
+            break;
+
             case 'chart-line':
             case 'chart-donut':
             case 'chart-pie':

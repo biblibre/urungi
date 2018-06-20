@@ -1,0 +1,51 @@
+
+<span>
+
+    <!-- Include jQuery and jQuery UI with css files -->
+    <script src='http://code.jquery.com/jquery-2.1.0.min.js' type="text/javascript"></script>
+
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css"></link>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+    <!-- Include jQuery Cookie plugin -->
+    <script src='//cdn.jsdelivr.net/jquery.cookie/1.4.0/jquery.cookie.js' type="text/javascript"></script>
+                    
+    <!-- Include jQuery Cynteka Pivot plugin -->
+    <link rel="stylesheet" media="screen" href="css/jquery.cy-pivot.css"></link>
+    <script src="js/jquery.cy-pivot.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#pivot").cypivot({
+                
+                configuration : false,
+                data : [
+                            {
+                                employee : 1,	
+                                department : 1,
+                                year : 2013,
+                                month : 1,
+                                day : 10,
+                                amount : 34	
+                            },
+                            {
+                                employee : 20,	
+                                department : 2,
+                                year : 2013,
+                                month : 2,
+                                day : 15,
+                                amount : 50	
+                            },
+                            // etc ...
+                        ],
+                horizontalDimensions : ['department'],
+                verticalDimensions : ['year']
+
+            });
+        });
+    </script>
+
+    <div id="pivot"></div>
+
+</span>
+
