@@ -74,6 +74,7 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
                 }
                 break;
             case 'vertical-grid':
+            case 'cross-table':
                 htmlCode = verticalGrid.getVerticalGrid(report, mode);
                 el = document.getElementById(report.parentDiv);
 
