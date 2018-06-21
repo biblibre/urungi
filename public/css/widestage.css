@@ -1,5 +1,5 @@
 body {
-    color: #6B747C;
+    color: #000;
     font-family: "Open Sans",Helvetica,Arial,sans-serif;
     font-weight: 100;
     font-size: 12px;
@@ -16,7 +16,7 @@ a {
 
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
     z-index: 2;
-    color: #fff;
+    color: #000;
     background-color: #000;
     border-color: #000;
 }
@@ -1033,7 +1033,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     padding: 5px 10px 8px;
     float: left;
     text-decoration: none;
-    color: #555;
+    color: #000;
     position: relative;
 }
 
@@ -1525,7 +1525,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     padding: 0px 0px;
     padding-left: 10px;
     margin-bottom: -1px;
-    background-color: #fff;
+    background-color: #000;
     border: 0px solid #ddd;
 }
 
@@ -3044,7 +3044,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     width: 300px;
     box-sizing: border-box;
     padding: 15px 30px 15px 100px;
-    color: #fff;
+    color: #000;
     background: linear-gradient(to right,#272c33 0,#272c33 71px,#ebeced 71px,#ebeced 100%);
     -webkit-transform: translate3d(0,0,0);
     display: -webkit-flex;
@@ -3288,7 +3288,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     -moz-align-items: center;
     align-items: center;
     width: 100%;
-                 border-bottom: 2px solid #72A230;
+                 border-bottom: 2px solid #60a3bc;
 }
 
 .explorer-header-title
@@ -3380,6 +3380,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 
 .list-group-item {
     background-color: transparent;
+    color: #000;
 }
 
 .layer-add-new-folder-btn {

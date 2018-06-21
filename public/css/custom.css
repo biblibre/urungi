@@ -1,152 +1,154 @@
 /* #5E6D80 #407C6E */
 
 body {
-    color:#6B747C;
+    color:#000;
     font-family: museo_sans299,sans-serif;
 }
 
 .wst-btn {
-    background-color: #94C255;
+    background-color: #e58e26;
 }
-
+a.list-group-item{
+    color:#000;
+}
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
-    color: #fff;
-    background-color: #000;
-    border-color: #000;
+    color: #000;
+    background-color: #e58e26;
+    border-color: #e58e26;
 }
 
 .main-menu-logo {
-    background-color: #fff;
+    background-color: transparent;
     color: #FFFFFF;
 }
 
 .wst-main-color {
-    color: #94C255;
+    color: #e58e26;
 }
 
 .admin-menu {
-    background-color: #72A230;
-    color: #fff;
+    background-color: #60a3bc;
+    color: #000;
 }
 
 .admin-menu:hover {
-    background-color: #94C255;
-    color: #fff;
+    background-color: #e58e26;
+    color: #000;
 }
 
 .profile-env .user-info-sidebar .user-status.is-active {
-    background-color: #72A230;
+    background-color: #60a3bc;
 }
 
 .btn-success {
-    color: #fff;
-    background-color: #72A230;
-    border-color: #94C255;
+    color: #000;
+    background-color: #60a3bc;
+    border-color: #e58e26;
 }
 
 .btn-success:hover {
-    color: #fff;
-    background-color: #94C255 ;
-    border-color: #72A230;
+    color: #000;
+    background-color: #e58e26 ;
+    border-color: #60a3bc;
 }
 
 .btn.btn-success-white {
-    background-color: #fff;
-    color: #72A230;
-    border: 1px solid #72A230;
+    background-color: #000;
+    color: #60a3bc;
+    border: 1px solid #60a3bc;
 }
 
 .panel-success {
-    border-color: #72A230;
+    border-color: #3c6382;
 }
 
 .panel.panel-success .panel-heading {
-    background-color: #72A230;
-    color: #fff;
+    background-color: #60a3bc;
+    color: #000;
 }
 
 .badge.badge-success {
-    background-color: #72A230;
+    background-color: #60a3bc;
 }
 
 .column-box {
-    background-color: #94C255;
+    background-color: #e58e26;
 }
 
 .chart-series-button {
-    background-color: #fff;
+    background-color: #000;
     color: #94C255;
 }
 
 .column-box-close-btn {
-    background-color: #72A230;
+    background-color: #60a3bc;
     color: #94C255;
 }
 
 .column-box-agg-btn {
     background-color:white;
-    color: #94C255;
+    color: #e58e26;
 }
 
 .columnLink {
-    color:#94C255;
+    color: #e58e26;
 }
 
 .panel-success .tree-node-folder {
-    color:#94C255;
+    color: #e58e26;
 }
 
 .tree-node-folder:hover {
-    color:#72A230;
+    color: #60a3bc;
     background: none;
 }
 
 .selectedElement {
-    background-color: #72A230;
+    background-color: #60a3bc;
 }
 
 .branded-border-panel {
-    border-bottom: 2px solid #72A230;
+    border-bottom: 2px solid #60a3bc;
 }
 
 .branded-parent-intro {
-    border-bottom: 2px solid #72A230;
+    border-bottom: 2px solid #60a3bc;
 }
 
 .branded-strong-label {
-    color:#72A230;
+    color:#60a3bc;
 }
 
 .branded-label {
-    color:#72A230;
+    color:#60a3bc;
 }
 
 #objectPanel>menu .on a {
-    color: #72A230!important;
+    color: #60a3bc!important;
 }
 
 .panel.panel-secondary .panel-heading {
-    background-color: #000;
-    color: #fff;
+    background-color: #e58e26;
+    color: #000;
 }
 
 #objectPanel>menu a:hover, #objectPanel>menu .on a {
-    color: #94C255;
+    color: #e58e26;
 }
 
 .selected-datasource
 {
-    color:#72A230;
+    color: #60a3bc;
 }
 
 .report-selected-btn
 {
-    background-color: #72A230;
+    background-color: #60a3bc;
 }
 
 .report-unselected-btn
 {
-    background-color: #fff;
+    background-color: #e58e26;
 }
 
 .query-edit-btn
