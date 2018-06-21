@@ -1,6 +1,6 @@
 /* global XLSX: false, saveAs: false, Blob: false, datenum: false */
 
-app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid, crossTableGrid, $templateRequest) {
+app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid, pivot) {
     var report = {};
 
     this.getReportDefinition = function (id, isLinked, done) {
@@ -89,13 +89,16 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
                 }
             break;
 
-            case 'cross-table':
-                crossTableGrid.getCrossTableGrid(report, $templateRequest).then(htmlCode => {
-                        el = document.getElementById(report.parentDiv);
+            case 'pivot':
+                var result = pivot.getPivotTableSetup(report);
+
+                console.log(result.html);
+
+                    el = document.getElementById(report.parentDiv);
 
                     if (el) {
                         angular.element(el).empty();
-                        $div = $(htmlCode);
+                        $div = $(result.html);
                         angular.element(el).append($div);
                         angular.element(document).injector().invoke(function ($compile) {
                             var scope = angular.element($div).scope();
@@ -103,10 +106,8 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
                             hideOverlay(report.parentDiv);
                         });
                     }
-                    $("#pivot").cypivot( crossTableGrid.getParams(report));
-                    
 
-                });
+                    $(result.jquerySelector).cypivot( result.params);
             break;
 
             case 'chart-line':

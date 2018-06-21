@@ -31,7 +31,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.selectedReport.properties = {};
     $scope.selectedReport.properties.xkeys = [];
     $scope.selectedReport.properties.ykeys = [];
-    $scope.selectedReport.properties.tableKeys = {};
+    $scope.selectedReport.properties.pivotKeys = {};
+    $scope.selectedReport.properties.pivotKeys.column = [];
+    $scope.selectedReport.properties.pivotKeys.row = [];
     $scope.selectedReport.properties.columns = [];
     $scope.selectedReport.reportType = 'grid';
     $scope.selectedReport.query = {};
@@ -641,13 +643,14 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         queryModel.onDrop($scope, data, event, type, group);
     };
 
-    $scope.onDropOnTableKeys = function (data, event, type, tableKey){
+    $scope.onDropOnPivotKey = function (data, event, type, tableKey){
         $scope.gettingData = false;
         // Get custom object data.
         var customObjectData = data['json/custom-object'];
         
-        if (!$scope.selectedReport.properties.tableKeys) { $scope.selectedReport.properties.tableKeys = {}; }
-        $scope.selectedReport.properties.tableKeys[tableKey] = customObjectData;
+        if (!$scope.selectedReport.properties.pivotKeys) { $scope.selectedReport.properties.pivotKeys = {}; }
+        if (!$scope.selectedReport.properties.pivotKeys[tableKey]) { $scope.selectedReport.properties.pivotKeys[tableKey] = []; }
+        $scope.selectedReport.properties.pivotKeys[tableKey].push(customObjectData);
 
         queryModel.onDrop($scope, data, event, type);
     }
@@ -717,12 +720,12 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             break;
 
             case 'columnKey':
-                delete $scope.selectedReport.properties.tableKeys.column;
+                $rootScope.removeFromArray($scope.selectedReport.properties.pivotKeys.column, object);
                 $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
             break;
                 
             case 'rowKey':
-                delete $scope.selectedReport.properties.tableKeys.row;
+                $rootScope.removeFromArray($scope.selectedReport.properties.pivotKeys.row, object);
                 $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
             break;
         }
@@ -795,7 +798,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
                 case 'grid':
                 case 'vertical-grid':
-                case 'cross-table':
+                case 'pivot':
                     report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
                         $scope.sql = data.sql;
                         $scope.time = data.time;
@@ -869,8 +872,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport.reportType = 'vertical-grid';
             break;
 
-            case 'cross-table':
-                $scope.selectedReport.reportType = 'cross-table';
+            case 'pivot':
+                $scope.selectedReport.reportType = 'pivot';
             break;
 
             case 'chart-bar':

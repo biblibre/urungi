@@ -81,17 +81,20 @@
 					$this.find('.' + opts.div11Class).on('click', function(){
 						toggleConfig($this, opts);
 					});
-					createConfigDialog($this, opts);
-					$this.find('#' + opts.pivotConfigDialogId).dialog({
-						modal	: false,
-						title	: 'Pivot Table Configuration',
-						position:["right", "50px"],
-						beforeClose	: function() {
-							var $div11 = $this.find('.' + opts.div11Class);
-							$div11.removeClass(opts.configWindowActivatedClass);
-						},
-					});
-					jQuery('#' + opts.pivotConfigDialogId).dialog('close');
+					// createConfigDialog($this, opts);
+					// $this.find('#' + opts.pivotConfigDialogId).dialog({
+					// 	modal	: false,
+					// 	title	: 'Pivot Table Configuration',
+					// 	position:["right", "50px"],
+					// 	beforeClose	: function() {
+					// 		var $div11 = $this.find('.' + opts.div11Class);
+					// 		$div11.removeClass(opts.configWindowActivatedClass);
+					// 	},
+					// });
+					// jQuery('#' + opts.pivotConfigDialogId).dialog('close');
+
+					// Config dialog was glitching and is not used in Urungi
+					// Therefore it was removed
 
 					syncScrollAndSize($this, opts);
 					redraw($this, opts);
@@ -280,16 +283,16 @@
 	}
 
 	function toggleConfig($table, opts) {
-		if(opts.configuration) {
-			var $div11 = $table.find('.' + opts.div11Class);
-			$div11.toggleClass(opts.configWindowActivatedClass);
-			if($div11.hasClass(opts.configWindowActivatedClass)) {
-				jQuery('#' + opts.pivotConfigDialogId).dialog('open');
-			} else {
-				var $dialog = jQuery('#' + opts.pivotConfigDialogId);
-				$dialog.dialog('close');
-			}
-		}
+		// if(opts.configuration) {
+		// 	var $div11 = $table.find('.' + opts.div11Class);
+		// 	$div11.toggleClass(opts.configWindowActivatedClass);
+		// 	if($div11.hasClass(opts.configWindowActivatedClass)) {
+		// 		jQuery('#' + opts.pivotConfigDialogId).dialog('open');
+		// 	} else {
+		// 		var $dialog = jQuery('#' + opts.pivotConfigDialogId);
+		// 		$dialog.dialog('close');
+		// 	}
+		// }
 	}
 
 	function getColIndex($div, opts) {

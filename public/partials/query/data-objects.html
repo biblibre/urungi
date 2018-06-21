@@ -10,9 +10,13 @@
 
     <script type="text/ng-template" id="nestable_item.html">
         <div id="layerObjects">
-            <div class="schema-element-report schema-item-report"  ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure') && ngModelItem.enabled != false" >
-                <a id="ELEMENT_{{ngModelItem.elementID}}" class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType != 'number' && (!ngModelItem.defaultAggregation  || ngModelItem.defaultAggregation == 'value')) || (ngModelItem.elementType == 'number' && (!ngModelItem.defaultAggregation || ngModelItem.defaultAggregation == 'value'))" ng-click="addColumn(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
-                   draggable-data="{
+            <div class="schema-element-report schema-item-report"  
+            ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure') && ngModelItem.enabled != false" >
+
+                <a id="ELEMENT_{{ngModelItem.elementID}}" class="list-group-item data-source-element schema-item-report" 
+                ng-if=" !ngModelItem.defaultAggregation  || ngModelItem.defaultAggregation == 'value' "
+                ng-click="addColumn(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                draggable-data="{
                         elementName: ngModelItem.elementName,
                         objectLabel: ngModelItem.elementLabel,
                         datasourceID:ngModelItem.datasourceID,
