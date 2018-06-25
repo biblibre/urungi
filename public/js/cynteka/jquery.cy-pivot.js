@@ -78,9 +78,6 @@
 					$this.find('.' + opts.cell22Class).resize(function(){
 						syncScrollAndSize($this, opts);
 					});
-					$this.find('.' + opts.div11Class).on('click', function(){
-						toggleConfig($this, opts);
-					});
 					// createConfigDialog($this, opts);
 					// $this.find('#' + opts.pivotConfigDialogId).dialog({
 					// 	modal	: false,
@@ -161,138 +158,6 @@
 	    } else {
 	    	$.error( 'Method ' +  method + ' does not exist on jQuery.tooltip' );
 	    }
-	}
-
-	function createConfigDialog($table, opts) {
-		var $dialog = $table.find('.' + opts.configDialogClass);
-		var busyDims = {};
-
-		var verticalDimensionsHtml = '<li class="' + opts.dimensionListTitleClass + '" vdims="true">' + opts.verticalDimensionListTitle + '</li>';
-		for(var i = 0; i < opts.verticalDimensions.length; i++) {
-			var key = opts.verticalDimensions[i];
-			busyDims[key] = true;
-			var dim = opts.dimensions[key];
-			verticalDimensionsHtml = verticalDimensionsHtml + '<li dim="' + key + '">' + dim.label + '</li>';
-		}
-		if(!opts.configuration || !opts.configuration.verticalDimensions) {
-			verticalDimensionsHtml = '';
-		}
-
-		var horizontalDimensionsHtml = '<li class="' + opts.dimensionListTitleClass + '" hdims="true">' + opts.horizontalDimensionListTitle + '</li>';
-		for(var i = 0; i < opts.horizontalDimensions.length; i++) {
-			var key = opts.horizontalDimensions[i];
-			busyDims[key] = true;
-			var dim = opts.dimensions[key];
-			horizontalDimensionsHtml = horizontalDimensionsHtml + '<li dim="' + key + '">' + dim.label + '</li>';
-		}
-		if(!opts.configuration || !opts.configuration.horizontalDimensions) {
-			var horizontalDimensionsHtml = '';
-		}
-
-		var filterDimensionsHtml = '<li class="' + opts.dimensionListTitleClass + '" fdims="true">' + opts.filterDimensionListTitle + '</li>';
-		for(var i = 0; i < opts.filterDimensions.length; i++) {
-			var key = opts.filterDimensions[i];
-			busyDims[key] = true;
-			var dim = opts.dimensions[key];
-			var filterValues = getDataValues(opts, [], key, '');
-
-			var filterValuesHtml = '<ul>';
-			for(var idx = 0; idx < filterValues.length; idx++) {
-				var filterValue = filterValues[idx];
-				filterValuesHtml = filterValuesHtml + "<li><input type='checkbox' value='" + filterValue.id + "'/>" + filterValue.label + "</li>";
-
-			}
-			filterValuesHtml = filterValuesHtml + '</ul>';
-
-
-			filterDimensionsHtml = filterDimensionsHtml + '<li dim="' + key + '">' + dim.label +
-			filterValuesHtml +
-			'</li>';
-		}
-		if(!opts.configuration || !opts.configuration.filterDimensions) {
-			filterDimensionsHtml = '';
-		}
-
-		var dimensionsHtml = '';
-		for(var key in opts.dimensions) {
-			if(busyDims[key] != true) {
-				var dim = opts.dimensions[key];
-				dimensionsHtml = dimensionsHtml + '<li dim="' + key + '">' + dim.label + '</li>';
-			}
-		}
-
-		$dialog.append(
-				/*
-				'<ul class="' + opts.dimensionListClass + '">' + dimensionsHtml + '</ul>' +
-				'<ul class="' + opts.horizontalDimensionListClass + '">' + horizontalDimensionsHtml + '</ul>' +
-				'<ul class="' + opts.verticalDimensionListClass + '">' + verticalDimensionsHtml + '</ul>' +
-				'<ul class="' + opts.filterDimensionListClass + '"></ul>'
-				//*/
-
-				'<ul class="' + opts.firstDimensionListClass + '" style="padding-bottom:0px; margin-bottom:0px;">' +
-				'<li class="' + opts.dimensionListTitleClass + '">' + opts.dimensionListTitle + '</li>' +
-				'</ul>' +
-				'<ul class="' + opts.dimensionListClass + '" style="padding-top:0px; margin-top:0px;">' +
-				dimensionsHtml +
-				horizontalDimensionsHtml +
-				verticalDimensionsHtml +
-				filterDimensionsHtml +
-				'</ul>'
-				);
-		$dialog.find('ul.' + opts.dimensionListClass).sortable({
-			cancel: '.' + opts.dimensionListTitleClass,
-			update : function() {
-				// Update pivot table when dimensions has been changed
-				var vdims = [], hdims = [], fdims=[], curdims=[];
-				$dialog.find('.' + opts.dimensionListClass + ' li').each(function(){
-
-					var dim = jQuery(this).attr('dim');
-					if(dim) {
-						curdims[curdims.length] = dim;
-					}
-					if(jQuery(this).attr('vdims') == 'true') {
-						curdims = vdims;
-					}
-					if(jQuery(this).attr('hdims') == 'true') {
-						curdims = hdims;
-					}
-					if(jQuery(this).attr('fdims') == 'true') {
-						curdims = fdims;
-					}
-				});
-				if(opts.configuration && opts.configuration.verticalDimensions == true) {
-					opts.verticalDimensions = vdims;
-				}
-				if(opts.configuration && opts.configuration.horizontalDimensions == true) {
-					opts.horizontalDimensions = hdims;
-				}
-				if(opts.configuration && opts.configuration.filterDimensions == true) {
-					opts.filterDimensions = fdims;
-				}
-				if(opts.cookiePrefix && opts.storeDimConfig) {
-					var sHorizontalDims = opts.horizontalDimensions.join(';');
-					var sVerticalDims = opts.verticalDimensions.join(';');
-					var sFilterDims = opts.filterDimensions.join(';');
-					$.cookie(opts.cookiePrefix + 'horizontalDims', sHorizontalDims, {expires:15});
-					$.cookie(opts.cookiePrefix + 'verticalDims', sVerticalDims, {expires:15});
-					$.cookie(opts.cookiePrefix + 'filterDims', sFilterDims, {expires:15});
-				}
-				redraw($table, opts);
-			}
-		});
-	}
-
-	function toggleConfig($table, opts) {
-		// if(opts.configuration) {
-		// 	var $div11 = $table.find('.' + opts.div11Class);
-		// 	$div11.toggleClass(opts.configWindowActivatedClass);
-		// 	if($div11.hasClass(opts.configWindowActivatedClass)) {
-		// 		jQuery('#' + opts.pivotConfigDialogId).dialog('open');
-		// 	} else {
-		// 		var $dialog = jQuery('#' + opts.pivotConfigDialogId);
-		// 		$dialog.dialog('close');
-		// 	}
-		// }
 	}
 
 	function getColIndex($div, opts) {
@@ -594,7 +459,7 @@
 					if(rowItems == null) {
 						rowItems = opts.map(rowContext, [], opts.data);
 					}
-					var maps = opts.map(rowContext, colContext, rowItems['default']);
+					var maps = opts.map(rowContext, colContext, rowItems);
 					var reduces = opts.reduce(maps);
 					var html = "";
 					if(opts.dataCellRenderer) {

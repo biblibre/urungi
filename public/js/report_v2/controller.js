@@ -173,7 +173,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         });
     };
 
-    $scope.initForm = function () {
+    $scope.newForm = function () {
         $scope.selectedReport = {};
         $scope.selectedReport.draft = true;
         $scope.selectedReport.badgeStatus = 0;
@@ -185,6 +185,11 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.selectedReport.properties.columns = [];
         /// $scope.selectedReport.properties.filters = [];
         $scope.selectedReport.properties.order = [];
+        $scope.selectedReport.properties.pivotKeys = {};
+        $scope.selectedReport.properties.pivotKeys.columns = [];
+        $scope.selectedReport.properties.pivotKeys.rows = [];
+        $scope.selectedReport.properties.order = [];
+        $scope.selectedReport.reportType = 'grid';
 
         $scope.selectedReport.properties.backgroundColor = '#FFFFFF';
         $scope.selectedReport.properties.height = 400;
@@ -200,23 +205,19 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.selectedReport.reportType = 'grid';
         $scope.selectedLayerID = queryModel.selectedLayerID();
         $scope.mode = 'add';
-        queryModel.initQuery();
+    };
 
-        $scope.mode = 'preview';
-        if ($routeParams.reportID) {
-            if ($routeParams.reportID === 'true') {
-            // New Report
-                $scope.selectedReport = {};
-                $scope.selectedReport.draft = true;
-                $scope.selectedReport.badgeStatus = 0;
-                $scope.selectedReport.exportable = true;
-                $scope.selectedReport.badgeMode = 1;
-                $scope.selectedReport.properties = {};
-                $scope.selectedReport.properties.xkeys = [];
-                $scope.selectedReport.properties.ykeys = [];
-                $scope.selectedReport.properties.columns = [];
-                $scope.selectedReport.reportType = 'grid';
-                $scope.mode = 'add';
+    $scope.initForm = async function () {
+        if ($routeParams.reportID && $routeParams.reportID !== 'true') {
+            const report = await report_v2Model.getReportDefinition($routeParams.reportID, false);
+            if (report) {
+                $scope.showOverlay('OVERLAY_reportLayout');
+                $scope.selectedReport = report;
+                $scope.mode = 'edit';
+                $scope.cleanForm();
+                await report_v2Model.getReport(report, 'reportLayout', $scope.mode);
+                $scope.selectedLayerID = queryModel.selectedLayerID();
+                $scope.hideOverlay('OVERLAY_reportLayout');
             } else {
                 report_v2Model.getReportDefinition($routeParams.reportID, false, function (report) {
                     if (report) {
@@ -232,6 +233,24 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                     }
                 });
             }
+        } else {
+            $scope.newForm();
+            queryModel.initQuery();
+        }
+    };
+
+    $scope.cleanForm = function () {
+        if (!$scope.selectedReport.properties) {
+            $scope.initForm();
+        } else {
+            if (!$scope.selectedReport.properties.xkeys) { $scope.selectedReport.properties.xkeys = []; }
+            if (!$scope.selectedReport.properties.ykeys) { $scope.selectedReport.properties.ykeys = []; }
+            if (!$scope.selectedReport.properties.columns) { $scope.selectedReport.properties.columns = []; }
+            if (!$scope.selectedReport.properties.order) { $scope.selectedReport.properties.order = []; }
+            if (!$scope.selectedReport.properties.pivotKeys) { $scope.selectedReport.properties.pivotKeys = {}; }
+            if (!$scope.selectedReport.properties.pivotKeys.columns) { $scope.selectedReport.properties.pivotKeys.columns = []; }
+            if (!$scope.selectedReport.properties.pivotKeys.rows) { $scope.selectedReport.properties.pivotKeys.rows = []; }
+            if (!$scope.selectedReport.properties.order) { $scope.selectedReport.properties.order = []; }
         }
     };
 
@@ -490,17 +509,21 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         return queryModel.getDatePatternFilters();
     };
 
-    // Drop handler.
-    $scope.onDrop = function (data, event, type, group) {
-        if (!$scope.selectedReport.properties.columns) {
-            $scope.selectedReport.properties.columns = [];
-        }
-        var customObjectData = data['json/custom-object'];
-
-        $scope.addColumn(customObjectData);
+    $scope.onChangeDropZone = function () {
+        queryModel.onChange();
     };
 
-    $scope.addColumn = function (ngModelItem) {
+    $scope.onDropField = function (newItem, queryBind) {
+        $scope.sql = undefined;
+        queryModel.onDropTemp(newItem, queryBind);
+    };
+
+    $scope.onRemoveField = function (item, queryBind) {
+        $scope.sql = undefined;
+        queryModel.removeQueryItem(item, queryBind);
+    };
+
+    $scope.toReportItem = function (ngModelItem) {
         var agg;
         var aggLabel = '';
 
@@ -529,50 +552,109 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             filterTypeLabel: 'equal',
             format: ngModelItem.format,
             values: ngModelItem.values,
-            aggregation: agg};
-
-        var found = false;
-
-        for (var i in $scope.selectedReport.properties.columns) {
-            if ($scope.selectedReport.properties.columns[i].elementID === element.elementID) { found = true; }
-        }
-        if (!found) {
-            if ((element.elementType === 'string' || element.elementType === 'date') && (element.aggregation !== 'count')) {
-                if (!$scope.selectedReport.properties.xkeys) { $scope.selectedReport.properties.xkeys = []; }
-                $scope.selectedReport.properties.xkeys.push(element);
-            }
-            if (element.elementType === 'number' || (element.elementType === 'string' && element.aggregation === 'count')) {
-                if (!$scope.selectedReport.properties.ykeys) { $scope.selectedReport.properties.ykeys = []; }
-                $scope.selectedReport.properties.ykeys.push(element);
-            }
-
-            $scope.selectedReport.properties.columns.push(element);
-            queryModel.addColumn(element);
-        } else {
-            noty({text: 'That column already exists', timeout: 2000, type: 'error'});
-        }
+            aggregation: agg
+        };
     };
 
-    $scope.onDropFilter = function (data, event, type, group) {
-        queryModel.onDrop($scope, data, event, type, group);
-        $scope.selectedReport.query = queryModel.generateQuery();
-    };
+    $scope.autoFill = function (ngModelItem) {
+        var choice;
 
-    $scope.onDropOrder = function (data, event, type, group) {
-        if (!$scope.selectedReport.properties.order) { $scope.selectedReport.properties.order = []; }
+        switch ($scope.selectedReport.reportType) {
+        case 'grid':
+        case 'vertical-grid':
+            choice = {
+                propertyBind: $scope.selectedReport.properties.columns,
+                zone: 'columns',
+                queryBind: 'column'
+            };
+            break;
+
+        case 'pivot':
+            if ($scope.selectedReport.properties.pivotKeys.rows.length === 0) {
+                choice = {
+                    propertyBind: $scope.selectedReport.properties.pivotKeys.rows,
+                    zone: 'prow',
+                    queryBind: 'column'
+                };
+            } else {
+                if ($scope.selectedReport.properties.pivotKeys.columns.length === 0) {
+                    choice = {
+                        propertyBind: $scope.selectedReport.properties.pivotKeys.columns,
+                        zone: 'pcol',
+                        queryBind: 'column'
+                    };
+                } else {
+                    choice = {
+                        propertyBind: $scope.selectedReport.properties.ykeys,
+                        zone: 'ykeys',
+                        queryBind: 'column',
+                        forceAggregation: true
+                    };
+                }
+            }
+            break;
+
+        case 'chart-bar':
+        case 'chart-line':
+        case 'chart-area':
+        case 'chart-pie':
+        case 'chart-donut':
+            if ($scope.selectedReport.properties.xkeys.length === 0) {
+                choice = {
+                    propertyBind: $scope.selectedReport.properties.xkeys,
+                    zone: 'xkeys',
+                    queryBind: 'column'
+                };
+            } else {
+                if ($scope.selectedReport.properties.ykeys.length === 0 || $scope.selectedReport.properties.order.length > 0) {
+                    choice = {
+                        propertyBind: $scope.selectedReport.properties.ykeys,
+                        zone: 'ykeys',
+                        queryBind: 'column'
+                    };
+                } else {
+                    choice = {
+                        propertyBind: $scope.selectedReport.properties.order,
+                        zone: 'order',
+                        queryBind: 'order'
+                    };
+                }
+            }
+            break;
+
+        case 'indicator':
+        case 'vectorMap':
+        case 'gauge':
+            choice = {
+                propertyBind: $scope.selectedReport.properties.ykeys,
+                zone: 'ykeys',
+                queryBind: 'column'
+            };
+            break;
+        }
+
+        const newItem = $scope.toReportItem(ngModelItem);
+        newItem.zone = choice.zone;
+
+        if (newItem.aggregation && (newItem.zone === 'pcol' || newItem.zone === 'prow')) {
+            if (typeof newItem.originalLabel === 'undefined') {
+                newItem.originalLabel = newItem.elementLabel;
+            }
+            delete (newItem.aggregation);
+            newItem.elementLabel = newItem.originalLabel;
+            newItem.objectLabel = newItem.originalLabel;
+        }
 
         var customObjectData = data['json/custom-object'];
         var found = false;
-
-        for (var i in $scope.selectedReport.properties.order) {
-            if ($scope.selectedReport.properties.order[i].elementID === customObjectData.elementID) { found = true; }
+        for (const item of choice.propertyBind) {
+            if (item.elementID === newItem.elementID) { found = true; }
         }
         if (!found) {
-            $scope.selectedReport.properties.order.push(customObjectData);
-            queryModel.onDrop($scope, data, event, type, group);
-        } else {
-            noty({text: 'That column order already exists', timeout: 2000, type: 'error'});
+            choice.propertyBind.push(newItem);
         }
+
+        $scope.onDropField(newItem, choice.queryBind);
     };
 
     $scope.filterSortableOptions = {
@@ -794,148 +876,191 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             $scope.gettingData = true;
             $scope.showOverlay('OVERLAY_reportLayout');
 
-            switch($scope.selectedReport.reportType){
-
-                case 'grid':
-                case 'vertical-grid':
-                case 'pivot':
-                    report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
-                        $scope.sql = data.sql;
-                        $scope.time = data.time;
-                        $scope.hideOverlay('OVERLAY_reportLayout');
-                        $scope.gettingData = false;
-                    });
+            switch ($scope.selectedReport.reportType) {
+            case 'grid':
+            case 'vertical-grid':
+            case 'pivot':
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                    $scope.sql = data.sql;
+                    $scope.time = data.time;
+                    $scope.hideOverlay('OVERLAY_reportLayout');
+                    $scope.gettingData = false;
+                });
                 break;
 
-                case 'chart-line':
-                case 'chart-donut':
-                case 'chart-pie':
-                    if ($scope.selectedReport.properties.xkeys.length > 0 && $scope.selectedReport.properties.ykeys.length > 0) {
-                        const theChartID = 'Chart' + uuid2.newguid();
-                        $scope.selectedReport.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
-                        // $scope.selectedReport.properties.chart.query = query;
-                        $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
-
-                        const customObjectData = $scope.selectedReport.properties.xkeys[0];
-                        $scope.selectedReport.properties.chart.dataAxis = {elementName: customObjectData.elementName,
-                            queryName: 'query1',
-                            elementLabel: customObjectData.objectLabel,
-                            id: customObjectData.id,
-                            type: 'bar',
-                            color: '#000000'};
-                        report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
-                            $scope.sql = data.sql;
-                            $scope.time = data.time;
-                            $scope.hideOverlay('OVERLAY_reportLayout');
-                            $scope.gettingData = false;
-                        });
-                    }
-                break;
-
-                case 'gauge':
+            case 'chart-line':
+            case 'chart-donut':
+            case 'chart-pie':
+                if ($scope.selectedReport.properties.xkeys.length > 0 && $scope.selectedReport.properties.ykeys.length > 0) {
                     const theChartID = 'Chart' + uuid2.newguid();
                     $scope.selectedReport.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
+                    // $scope.selectedReport.properties.chart.query = query;
                     $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
+
+                    const customObjectData = $scope.selectedReport.properties.xkeys[0];
+                    $scope.selectedReport.properties.chart.dataAxis = {elementName: customObjectData.elementName,
+                        queryName: 'query1',
+                        elementLabel: customObjectData.objectLabel,
+                        id: customObjectData.id,
+                        type: 'bar',
+                        color: '#000000'};
                     report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
                         $scope.sql = data.sql;
                         $scope.time = data.time;
                         $scope.hideOverlay('OVERLAY_reportLayout');
                         $scope.gettingData = false;
                     });
+                }
                 break;
 
-                case 'indicator':
-                    console.log('Report Type indicator');
-
-                    report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
-                        $scope.sql = data.sql;
-                        $scope.time = data.time;
-                        $scope.hideOverlay('OVERLAY_reportLayout');
-                        $scope.gettingData = false;
-                    });
+            case 'gauge':
+                const theChartID = 'Chart' + uuid2.newguid();
+                $scope.selectedReport.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
+                $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                    $scope.sql = data.sql;
+                    $scope.time = data.time;
+                    $scope.hideOverlay('OVERLAY_reportLayout');
+                    $scope.gettingData = false;
+                });
                 break;
 
-                default:
+            case 'indicator':
+                console.log('Report Type indicator');
+
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                    $scope.sql = data.sql;
+                    $scope.time = data.time;
+                    $scope.hideOverlay('OVERLAY_reportLayout');
+                    $scope.gettingData = false;
+                });
+                break;
+
+            default:
                 break;
             }
         }
     };
 
     $scope.changeReportType = function (newReportType) {
+        queryModel.requestCount(false);
 
-        switch(newReportType){
-            case 'grid':
-                $scope.selectedReport.reportType = 'grid';
-            break;
-            
-            case 'vertical-grid':
-                $scope.selectedReport.reportType = 'vertical-grid';
+        switch (newReportType) {
+        case 'grid':
+            $scope.selectedReport.reportType = 'grid';
             break;
 
-            case 'pivot':
-                $scope.selectedReport.reportType = 'pivot';
+        case 'vertical-grid':
+            $scope.selectedReport.reportType = 'vertical-grid';
             break;
 
-            case 'chart-bar':
-                $scope.selectedReport.reportType = 'chart-bar';
+        case 'pivot':
+            $scope.selectedReport.reportType = 'pivot';
+            queryModel.requestCount(true);
             break;
 
-            case 'chart-line':
-                $scope.selectedReport.reportType = 'chart-line';
+        case 'chart-bar':
+            $scope.selectedReport.reportType = 'chart-bar';
             break;
 
-            case 'chart-area':
-                $scope.selectedReport.reportType = 'chart-area';
+        case 'chart-line':
+            $scope.selectedReport.reportType = 'chart-line';
             break;
 
-            case 'chart-donut':
-                $scope.selectedReport.reportType = 'chart-donut';
+        case 'chart-area':
+            $scope.selectedReport.reportType = 'chart-area';
             break;
 
-            case 'pivot':
-                $scope.selectedReport.reportType = 'pivot';
+        case 'chart-donut':
+            $scope.selectedReport.reportType = 'chart-donut';
             break;
 
-            case 'indicator':
-                $scope.selectedReport.reportType = 'indicator';
-                if (!$scope.selectedReport.properties.style) { $scope.selectedReport.properties.style = 'style1'; }
-                if (!$scope.selectedReport.properties.backgroundColor) { $scope.selectedReport.properties.backgroundColor = '#fff'; }
-                if (!$scope.selectedReport.properties.reportIcon) { $scope.selectedReport.properties.reportIcon = 'fa-bolt'; }
-                if (!$scope.selectedReport.properties.mainFontColor) { $scope.selectedReport.properties.mainFontColor = '#000000'; }
-                if (!$scope.selectedReport.properties.descFontColor) { $scope.selectedReport.properties.descFontColor = '#CCCCCC'; }
+        case 'indicator':
+            $scope.selectedReport.reportType = 'indicator';
+            if (!$scope.selectedReport.properties.style) { $scope.selectedReport.properties.style = 'style1'; }
+            if (!$scope.selectedReport.properties.backgroundColor) { $scope.selectedReport.properties.backgroundColor = '#fff'; }
+            if (!$scope.selectedReport.properties.reportIcon) { $scope.selectedReport.properties.reportIcon = 'fa-bolt'; }
+            if (!$scope.selectedReport.properties.mainFontColor) { $scope.selectedReport.properties.mainFontColor = '#000000'; }
+            if (!$scope.selectedReport.properties.descFontColor) { $scope.selectedReport.properties.descFontColor = '#CCCCCC'; }
             break;
 
-            case 'vectorMap':
-                $scope.selectedReport.reportType = 'vectorMap';
+        case 'vectorMap':
+            $scope.selectedReport.reportType = 'vectorMap';
             break;
 
-            case 'gauge':
-                $scope.selectedReport.reportType = 'gauge';
+        case 'gauge':
+            $scope.selectedReport.reportType = 'gauge';
 
-                if (!$scope.selectedReport.properties.lines) { $scope.selectedReport.properties.lines = 20; } // The number of lines to draw    12
-                if (!$scope.selectedReport.properties.angle) { $scope.selectedReport.properties.angle = 15; } // The length of each line
-                if (!$scope.selectedReport.properties.lineWidth) { $scope.selectedReport.properties.lineWidth = 44; } // The line thickness
-                if (!$scope.selectedReport.properties.pointerLength) { $scope.selectedReport.properties.pointerLength = 70; }
-                if (!$scope.selectedReport.properties.pointerStrokeWidth) { $scope.selectedReport.properties.pointerStrokeWidth = 35; }
-                if (!$scope.selectedReport.properties.pointerColor) { $scope.selectedReport.properties.pointerColor = '#000000'; }
-                if (!$scope.selectedReport.properties.limitMax) { $scope.selectedReport.properties.limitMax = 'false'; } // If true, the pointer will not go past the end of the gauge
-                if (!$scope.selectedReport.properties.colorStart) { $scope.selectedReport.properties.colorStart = '#6FADCF'; } // Colors
-                if (!$scope.selectedReport.properties.colorStop) { $scope.selectedReport.properties.colorStop = '#8FC0DA'; } // just experiment with them
-                if (!$scope.selectedReport.properties.strokeColor) { $scope.selectedReport.properties.strokeColor = '#E0E0E0'; } // to see which ones work best for you
-                if (!$scope.selectedReport.properties.generateGradient) { $scope.selectedReport.properties.generateGradient = true; }
-                if (!$scope.selectedReport.properties.minValue) { $scope.selectedReport.properties.minValue = 0; }
-                if (!$scope.selectedReport.properties.maxValue) { $scope.selectedReport.properties.maxValue = 100; }
-                if (!$scope.selectedReport.properties.animationSpeed) { $scope.selectedReport.properties.animationSpeed = 32; }
+            if (!$scope.selectedReport.properties.lines) { $scope.selectedReport.properties.lines = 20; } // The number of lines to draw    12
+            if (!$scope.selectedReport.properties.angle) { $scope.selectedReport.properties.angle = 15; } // The length of each line
+            if (!$scope.selectedReport.properties.lineWidth) { $scope.selectedReport.properties.lineWidth = 44; } // The line thickness
+            if (!$scope.selectedReport.properties.pointerLength) { $scope.selectedReport.properties.pointerLength = 70; }
+            if (!$scope.selectedReport.properties.pointerStrokeWidth) { $scope.selectedReport.properties.pointerStrokeWidth = 35; }
+            if (!$scope.selectedReport.properties.pointerColor) { $scope.selectedReport.properties.pointerColor = '#000000'; }
+            if (!$scope.selectedReport.properties.limitMax) { $scope.selectedReport.properties.limitMax = 'false'; } // If true, the pointer will not go past the end of the gauge
+            if (!$scope.selectedReport.properties.colorStart) { $scope.selectedReport.properties.colorStart = '#6FADCF'; } // Colors
+            if (!$scope.selectedReport.properties.colorStop) { $scope.selectedReport.properties.colorStop = '#8FC0DA'; } // just experiment with them
+            if (!$scope.selectedReport.properties.strokeColor) { $scope.selectedReport.properties.strokeColor = '#E0E0E0'; } // to see which ones work best for you
+            if (!$scope.selectedReport.properties.generateGradient) { $scope.selectedReport.properties.generateGradient = true; }
+            if (!$scope.selectedReport.properties.minValue) { $scope.selectedReport.properties.minValue = 0; }
+            if (!$scope.selectedReport.properties.maxValue) { $scope.selectedReport.properties.maxValue = 100; }
+            if (!$scope.selectedReport.properties.animationSpeed) { $scope.selectedReport.properties.animationSpeed = 32; }
             break;
 
-            default:
-                // TODO signal error
+        default:
+            // TODO signal error
             break;
-
         }
         // TODO: only generate the visualization not requery all data again
         $scope.getDataForPreview();
     };
+
+    $scope.chartColumnTypeOptions = [
+        {
+            id: 'spline',
+            name: 'Spline',
+            image: 'images/spline.png',
+        },
+        {
+            id: 'bar',
+            name: 'Bar',
+            icon: 'fa fa-bar-chart',
+        },
+        {
+            id: 'area',
+            name: 'Area',
+            icon: 'fa fa-area-chart',
+        },
+        {
+            id: 'line',
+            name: 'Line',
+            icon: 'fa fa-line-chart',
+        },
+        {
+            id: 'area-spline',
+            name: 'Area spline',
+            image: 'images/area-spline.png',
+        },
+        {
+            id: 'scatter',
+            name: 'Scatter',
+            image: 'images/scatter.png',
+        },
+
+    ];
+
+    $scope.chartSectorTypeOptions = [
+        {
+            id: 'pie',
+            name: 'Pie',
+            image: 'images/pie.png'
+        },
+        {
+            id: 'donut',
+            name: 'Donut',
+            image: 'images/donut.png'
+        }
+    ];
 
     $scope.changeChartColumnType = function (column, type) {
         column.type = type;
@@ -1011,26 +1136,22 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $location.path('/dashboardsv2/push/' + dashboardID);
     };
 
-    $scope.aggregationChoosed = function (column, variable) {
-        if (variable.value === 'original') {
-            delete (column.aggregation);
-        } else {
-            column.aggregation = variable.value;
-        }
-
+    $scope.aggregationChoosed = function (column, option, queryBind) {
         if (typeof column.originalLabel === 'undefined') {
             column.originalLabel = column.elementLabel;
         }
 
-        if (variable.value === 'original') {
+        if (option.value === 'original') {
+            delete (column.aggregation);
             column.elementLabel = column.originalLabel;
             column.objectLabel = column.originalLabel;
         } else {
-            column.elementLabel = column.originalLabel + ' (' + variable.name + ')';
-            column.objectLabel = column.originalLabel + ' (' + variable.name + ')';
+            column.aggregation = option.value;
+            column.elementLabel = column.originalLabel + ' (' + option.name + ')';
+            column.objectLabel = column.originalLabel + ' (' + option.name + ')';
         }
 
-        queryModel.processStructure();
+        queryModel.aggregationChoosed(column, option, queryBind);
     };
 
     $scope.hideColumn = function (column, hidden) {
@@ -1053,6 +1174,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.onChangeElementProperties = function () {
 
+    };
+
+    $scope.previewAvailable = function () {
+        return $scope.selectedReport.properties.columns.length > 0 || ($scope.selectedReport.properties.ykeys.length > 0 && ($scope.selectedReport.properties.xkeys.length > 0 || ($scope.selectedReport.properties.pivotKeys.columns.length > 0 && $scope.selectedReport.properties.pivotKeys.rows.length > 0)));
     };
 
     $scope.gridGetMoreData = function (reportID) {

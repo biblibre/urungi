@@ -1,0 +1,60 @@
+
+<div class="container-fluid column-zone no-padding" 
+    drop="onDrop($data, $event)" drop-effect="copy" drop-accept="['json/custom-object','json/column']" 
+    drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+
+    <div class="filter-zone-label pull-right" ng-hide="listModel.length > 0">{{zoneInfo}}</div>
+    <ul class="ul-drop no-padding" ng-model="listModel" ui-sortable="sortableOptions">
+        <li class="column-box" ng-repeat="item in listModel">
+            <div class="dropdown">
+                <i class="fa fa-cube" ng-show="item.elementType != 'number' && item.elementType != 'count'"></i>
+                <i class="fa fa-list-ol" ng-show="item.elementType == 'number' || item.elementType == 'count'"></i>
+                {{item.objectLabel}}
+                <div class="btn-group" dropdown="" ng-hide="forbidAggregation">
+                        <i class="fa-caret-down  hand-cursor  column-box-agg-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                           <ul class="dropdown-menu" aria-labelledby="dropdownMenu5" >
+
+                                <li ng-if="item.elementType == 'number'" ng-repeat="option in fieldsAggregations.number">
+                                    <a ng-click="aggregationChoosed(item, option, queryBind)">{{option.name}}</a>
+                                </li>
+
+                                <li ng-if="item.elementType == 'string'" ng-repeat="option in fieldsAggregations.string">
+                                    <a ng-click="aggregationChoosed(item, option, queryBind)">{{option.name}}</a>
+                                </li>
+
+                                <li class="divider" ng-show="displayOptions"></li>
+
+                                <li ng-repeat="option in displayOptions">
+                                    <a ng-click="displayCallback(item, option.id)">
+                                        <i ng-show="option.icon" class="{{option.icon}}" ></i>
+                                        <img ng-show="option.image"  src="{{option.image}}"/>
+                                        {{option.name}}
+                                    </a>
+                                </li>
+                            
+                                <li class="divider" ng-show="hideColumn"></li>
+
+                                <li ng-show="hideColumn">
+                                    <a ng-if="!item.hidden" ng-click="hideColumn(item,true);">Hide Column</a>
+                                    <a ng-if="item.hidden" ng-click="hideColumn(item,false);">Show Column</a>
+                                </li>
+
+                           </ul>
+                </div>
+
+                <span ng-if="setSortType">
+                    <i ng-show="item.sortType == -1" class="fa fa-chevron-down hand-cursor order-box-close-btn" 
+                    ng-click="setSortType(item, 1)" tooltip="Click here to order descendent using this field" tooltip-placement="bottom"></i>
+
+                    <i ng-show="item.sortType == 1" class="fa fa-chevron-up hand-cursor order-box-close-btn" 
+                    ng-click="setSortType(item, -1)" tooltip="Click here to order ascendent using this field" tooltip-placement="bottom"></i>
+                </span>
+
+                <i class="fa fa-times hand-cursor  column-box-close-btn" ng-click="onRemove(item, $event);" 
+                tooltip="{{removeToolTip || 'Remove this item from theis dimension'}}" tooltip-placement="bottom"></i>
+            </div>
+
+        </li>
+    </ul>
+
+</div>  

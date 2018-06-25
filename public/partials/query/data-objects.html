@@ -39,8 +39,9 @@
 
                 </a>
 
-                <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'string') &&  ngModelItem.defaultAggregation && ngModelItem.defaultAggregation != 'value' " ng-click="addColumn(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
-                   draggable-data="{
+                <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'string') &&  ngModelItem.defaultAggregation && ngModelItem.defaultAggregation != 'value' " 
+                ng-click="autoFill(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                draggable-data="{
                         elementName: ngModelItem.elementName,
                         objectLabel: ngModelItem.elementLabel+' ('+ngModelItem.defaultAggregation+')',
                         datasourceID:ngModelItem.datasourceID,

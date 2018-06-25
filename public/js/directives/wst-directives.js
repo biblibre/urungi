@@ -101,10 +101,10 @@ angular.module('widestage.directives', [])
     .directive('wstAlias', function () {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 var splits = attrs['wstAlias'].trim().split(/\s+as\s+/);
-                scope.$watch(splits[0], function(val) {
-                    scope.$eval(splits[1]+'=('+splits[0]+')');
+                scope.$watch(splits[0], function (val) {
+                    scope.$eval(splits[1] + '=(' + splits[0] + ')');
                 });
             }
         };

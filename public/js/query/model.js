@@ -303,6 +303,7 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
 
             params.query = angular.copy(query);
             cleanQuery(params.query);
+            setupQuery(params.query);
             params.page = page;
 
             if (!params.query.recordLimit) {
@@ -341,6 +342,37 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
                 theQuery.collections[c].filters[cf].values = [];
             }
         }
+    }
+
+    this.requestCount = function (option) {
+        query.countYKeys = option;
+    };
+
+    function setupQuery (theQuery) {
+        var countColumns = [];
+        if (!query.countYKeys) { return; }
+        for (const col of theQuery.columns) {
+            if (col.zone === 'ykeys') {
+                countColumns.push(countColumn(col));
+            }
+        }
+        for (const col of countColumns) { theQuery.columns.push(col); }
+    };
+
+    function countColumn (col) {
+        return {
+            aggregation: 'count',
+            collectionID: col.collectionID,
+            datasourceID: col.datasourceID,
+            elementID: col.elementID + 'pt',
+            elementLabel: col.elementLabel,
+            elementName: col.elementName,
+            elementType: col.elementName,
+            filterPrompt: false,
+            id: col.id,
+            layerID: col.layerID,
+            objectLabel: col.objectLabel + ' count'
+        };
     }
 
     function getData (query, params, done) {
@@ -734,51 +766,94 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
 
     var lastDrop = null;
 
-    // Drop handler.
-    this.onDrop = function ($scope, data, event, type, group, done) {
-        event.stopPropagation();
+    this.onDropTemp = function (item, queryBind) {
         if (lastDrop && lastDrop === 'onFilter') {
             lastDrop = null;
             return;
         }
 
-        // Get custom object data.
-        var customObjectData = data['json/custom-object']; // {foo: 'bar'}
-
-        if (type === 'column') {
+        switch (queryBind) {
+        case 'column':
             if (!query.columns) { query.columns = []; }
-            query.columns.push(customObjectData);
-        }
+            query.columns.push(item);
+            break;
 
-        if (type === 'order') {
-            customObjectData.sortType = -1;
-            query.order.push(customObjectData);
-        }
-        if (type === 'filter') {
+        case 'order':
+            item.sortType = -1;
+            query.order.push(item);
+            break;
+
+        case 'filter':
             if (query.groupFilters.length > 0) {
-                customObjectData.condition = 'AND';
-                customObjectData.conditionLabel = 'AND';
+                item.condition = 'AND';
+                item.conditionLabel = 'AND';
             }
 
-            query.groupFilters.push(customObjectData);
+            query.groupFilters.push(item);
             this.filtersUpdated();
-        }
-        if (type === 'group') {
-            query.groupFilters.push(customObjectData);
+            break;
+
+        case 'group':
+            query.groupFilters.push(item);
             this.filtersUpdated();
+            break;
+
+        default:
+            console.log('Invalid bind');
         }
 
         detectLayerJoins();
 
-        processStructure(undefined, done);
+        processStructure(undefined);
     };
 
-    this.addColumn = function (element, done) {
-        if (!query.columns) { query.columns = []; }
-        query.columns.push(element);
-        detectLayerJoins();
+    this.aggregationChoosed = function (column, option, queryBind) {
+        function changeAggregation (list) {
+            var index = 0;
+            while (index < list.length && list[index].id !== column.id) { index++; }
+            if (index < list.length) {
+                const column = list[index];
 
-        processStructure(undefined, done);
+                if (typeof column.originalLabel === 'undefined') {
+                    column.originalLabel = column.elementLabel;
+                }
+                if (option.value === 'original') {
+                    delete (column.aggregation);
+                    column.elementLabel = column.originalLabel;
+                    column.objectLabel = column.originalLabel;
+                } else {
+                    column.aggregation = option.value;
+                    column.elementLabel = column.originalLabel + ' (' + option.name + ')';
+                    column.objectLabel = column.originalLabel + ' (' + option.name + ')';
+                }
+                column.aggregation = option.value;
+                column.elementLabel = column.originalLabel + ' (' + option.name + ')';
+                column.objectLabel = column.originalLabel + ' (' + option.name + ')';
+            }
+        }
+
+        switch (queryBind) {
+        case 'column':
+            changeAggregation(query.columns);
+            break;
+
+        case 'order':
+            changeAggregation(query.order);
+            break;
+
+        case 'filter':
+            changeAggregation(query.filter);
+            break;
+
+        case 'group':
+            changeAggregation(query.groupFilters);
+            break;
+
+        default:
+            console.log('Invalid bind');
+        }
+
+        processStructure();
     };
 
     function checkChoosedElements () {
@@ -855,6 +930,14 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
                     for (const n1 in query.columns) {
                         if (query.columns[n1].collectionID === dtsCollections[n]) {
                             collection.columns.push(query.columns[n1]);
+                        }
+                    }
+
+                    if (query.countYKeys) {
+                        for (const col of query.columns) {
+                            if (col.zone === 'ykeys' && col.collectionID === dtsCollections[n]) {
+                                collection.columns.push(countColumn(col));
+                            }
                         }
                     }
 
