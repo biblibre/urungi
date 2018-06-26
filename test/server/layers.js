@@ -36,7 +36,6 @@ describe('get /api/layers/find-one', function () {
         var decrypted = decrypt(res.text);
         res = await agent.get('/api/layers/find-one').query({id: decrypted.item._id});
         expect(res).to.have.status(200);
-        // console.log(decrypt(res.text));
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('item');
         expect(decrypted.item).to.have.property('__v');
