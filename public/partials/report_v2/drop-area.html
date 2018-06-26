@@ -5,7 +5,7 @@
     
     <!-- Order keys -->
 
-    <div ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" 
+    <div ng-if="selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" 
     wst-dropzone="true" list-model="selectedReport.properties.order" set-sort-type="setSortType" zone="'order'"
     query-bind="'order'" zone-info="'Drop here your order keys'"></div>
 

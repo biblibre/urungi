@@ -5,6 +5,7 @@ app.directive('wstDropzone', function () {
 
             listModel: '=',
             queryBind: '=',
+            zone: '=',
 
             forbidAggregation: '=',
 

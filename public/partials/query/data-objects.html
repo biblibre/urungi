@@ -15,7 +15,7 @@
 
                 <a id="ELEMENT_{{ngModelItem.elementID}}" class="list-group-item data-source-element schema-item-report" 
                 ng-if=" !ngModelItem.defaultAggregation  || ngModelItem.defaultAggregation == 'value' "
-                ng-click="addColumn(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                ng-click="autoFill(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
                 draggable-data="{
                         elementName: ngModelItem.elementName,
                         objectLabel: ngModelItem.elementLabel,

@@ -15,16 +15,15 @@
     <!-- TYPE OF REPORT SELECTION -->
     <a id="reportTypeGrid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'grid', 'report-unselected-btn': selectedReport.reportType != 'grid'}" ng-click="changeReportType('grid')"><img src="/images/grid.png"></a>
     <a id="reportTypeVerticalGrid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'vertical-grid', 'report-unselected-btn': selectedReport.reportType != 'vertical-grid'}" ng-click="changeReportType('vertical-grid')"><img src="/images/vertical_grid.png"></a>
-    <a id="reportTypeCrossTable" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'pivot', 'report-unselected-btn': selectedReport.reportType != 'pivot'}" ng-click="changeReportType('pivot')"><img src="/images/vertical_grid.png"></a>
+    <a id="reportTypeCrossTable" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'pivot', 'report-unselected-btn': selectedReport.reportType != 'pivot'}" ng-click="changeReportType('pivot')"><img src="/images/pivot_table.png"></a>
     <a id="reportTypeChartLine" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'chart-line', 'report-unselected-btn': selectedReport.reportType != 'chart-line'}" ng-click="changeReportType('chart-line')"><img src="/images/chart_line.png"></a>
     <a id="reportTypeChartDonut" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'chart-donut', 'report-unselected-btn': selectedReport.reportType != 'chart-donut'}" ng-click="changeReportType('chart-donut')"><img src="/images/chart_donut.png"></a>
     <a id="reportTypeIndicator" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'indicator', 'report-unselected-btn': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="/images/indicator.png"></a>
     <a id="reportTypeGauge" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'gauge', 'report-unselected-btn': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="/images/gauge.png"></a>
 </div>
 
-<button  id="logReport" class="btn btn-default" class="pull-right" ng-click="logReport();"  style="padding: 3px 10px;">log Report</button>
-
-<div ng-if="selectedReport.properties.columns.length > 0 || (selectedReport.properties.ykeys.length > 0 && selectedReport.properties.xkeys.length > 0)" class="container-fluid branded-border-panel" style="width:100%">
+<div
+    class="container-fluid branded-border-panel" style="width:100%">
     <span ng-show="selectedReport.query.recordLimit == undefined">
         Quick display with
         <input type="number" ng-model="selectedRecordLimit.value" size="8">
@@ -33,7 +32,7 @@
     </span>
     <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
     <span class="pull-right">
-        <button id="queryRefresh" class="btn btn-success" ng-show="selectedReport.properties.columns.length > 0 || (selectedReport.properties.ykeys.length > 0 && selectedReport.properties.xkeys.length > 0)" class="pull-right" ng-click="processStructure();" style="padding: 3px 10px;">
+        <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" class="pull-right" ng-click="processStructure();" style="padding: 3px 10px;">
             <i class="fa fa-refresh hand-cursor"></i>
             Refresh data
             <span ng-if="time !== undefined">({{time}}ms)</span>

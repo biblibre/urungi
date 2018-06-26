@@ -135,7 +135,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.mode = 'edit';
         queryModel.loadQuery(report.query);
         queryModel.detectLayerJoins();
-        report_v2Model.getReport(report, 'reportLayout', $scope.mode).then(() => {
+        report_v2Model.getReport(report, 'reportLayout', $scope.mode, $scope.recordLimit.value).then(() => {
             $scope.hideOverlay('OVERLAY_reportLayout');
         });
     });
@@ -215,7 +215,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 $scope.selectedReport = report;
                 $scope.mode = 'edit';
                 $scope.cleanForm();
-                await report_v2Model.getReport(report, 'reportLayout', $scope.mode);
+                await report_v2Model.getReport(report, 'reportLayout', $scope.mode, $scope.recordLimit.value);
                 $scope.selectedLayerID = queryModel.selectedLayerID();
                 $scope.hideOverlay('OVERLAY_reportLayout');
             } else {
@@ -224,7 +224,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                         $scope.showOverlay('OVERLAY_reportLayout');
                         $scope.selectedReport = report;
                         $scope.mode = 'edit';
-                        report_v2Model.getReport(report, 'reportLayout', $scope.mode).then(() => {
+                        report_v2Model.getReport(report, 'reportLayout', $scope.mode, $scope.recordLimit.value).then(() => {
                             $scope.selectedLayerID = queryModel.selectedLayerID();
                             $scope.hideOverlay('OVERLAY_reportLayout');
                         });
@@ -241,7 +241,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.cleanForm = function () {
         if (!$scope.selectedReport.properties) {
-            $scope.initForm();
+            $scope.newForm();
         } else {
             if (!$scope.selectedReport.properties.xkeys) { $scope.selectedReport.properties.xkeys = []; }
             if (!$scope.selectedReport.properties.ykeys) { $scope.selectedReport.properties.ykeys = []; }
@@ -537,7 +537,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             aggLabel = ' (' + ngModelItem.defaultAggregation + ')';
         }
 
-        var element = {
+        return {
             elementName: ngModelItem.elementName,
             objectLabel: ngModelItem.elementLabel + aggLabel,
             datasourceID: ngModelItem.datasourceID,
@@ -557,6 +557,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     };
 
     $scope.autoFill = function (ngModelItem) {
+        console.log('autofillin');
+
         var choice;
 
         switch ($scope.selectedReport.reportType) {
@@ -645,7 +647,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             newItem.objectLabel = newItem.originalLabel;
         }
 
-        var customObjectData = data['json/custom-object'];
         var found = false;
         for (const item of choice.propertyBind) {
             if (item.elementID === newItem.elementID) { found = true; }
@@ -725,17 +726,17 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         queryModel.onDrop($scope, data, event, type, group);
     };
 
-    $scope.onDropOnPivotKey = function (data, event, type, tableKey){
+    $scope.onDropOnPivotKey = function (data, event, type, tableKey) {
         $scope.gettingData = false;
         // Get custom object data.
         var customObjectData = data['json/custom-object'];
-        
+
         if (!$scope.selectedReport.properties.pivotKeys) { $scope.selectedReport.properties.pivotKeys = {}; }
         if (!$scope.selectedReport.properties.pivotKeys[tableKey]) { $scope.selectedReport.properties.pivotKeys[tableKey] = []; }
         $scope.selectedReport.properties.pivotKeys[tableKey].push(customObjectData);
 
         queryModel.onDrop($scope, data, event, type);
-    }
+    };
 
     $scope.onDropOnMetrics = function (data, event, type, group) {
         $scope.gettingData = false;
@@ -769,50 +770,48 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     };
 
     $scope.remove = function (object, type) {
-
-        switch(type){
-
-            case 'column':
-                $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
-                $rootScope.removeFromArray($scope.selectedReport.properties.ykeys, object);
-                $rootScope.removeFromArray($scope.selectedReport.properties.xkeys, object);
+        switch (type) {
+        case 'column':
+            $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
+            $rootScope.removeFromArray($scope.selectedReport.properties.ykeys, object);
+            $rootScope.removeFromArray($scope.selectedReport.properties.xkeys, object);
             break;
 
-            case 'filter':
+        case 'filter':
 
             break;
 
-            case 'order':
-                $rootScope.removeFromArray($scope.selectedReport.properties.order, object);
-                for (var i in $scope.selectedReport.properties.order) {
-                    if ($scope.selectedReport.properties.order[i].elementID === object.elementID) {
-                        $scope.selectedReport.properties.order.splice(i, 1);
-                    }
+        case 'order':
+            $rootScope.removeFromArray($scope.selectedReport.properties.order, object);
+            for (var i in $scope.selectedReport.properties.order) {
+                if ($scope.selectedReport.properties.order[i].elementID === object.elementID) {
+                    $scope.selectedReport.properties.order.splice(i, 1);
                 }
+            }
             break;
 
-            case 'ykey':
-                $rootScope.removeFromArray($scope.selectedReport.properties.ykeys, object);
-                $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
+        case 'ykey':
+            $rootScope.removeFromArray($scope.selectedReport.properties.ykeys, object);
+            $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
             break;
 
-            case 'xkey':
-                $rootScope.removeFromArray($scope.selectedReport.properties.xkeys, object);
-                $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
+        case 'xkey':
+            $rootScope.removeFromArray($scope.selectedReport.properties.xkeys, object);
+            $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
             break;
 
-            case 'columnKey':
-                $rootScope.removeFromArray($scope.selectedReport.properties.pivotKeys.column, object);
-                $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
+        case 'columnKey':
+            $rootScope.removeFromArray($scope.selectedReport.properties.pivotKeys.column, object);
+            $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
             break;
-                
-            case 'rowKey':
-                $rootScope.removeFromArray($scope.selectedReport.properties.pivotKeys.row, object);
-                $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
+
+        case 'rowKey':
+            $rootScope.removeFromArray($scope.selectedReport.properties.pivotKeys.row, object);
+            $rootScope.removeFromArray($scope.selectedReport.properties.columns, object);
             break;
         }
         if (type === 'ykey' || type === 'xkey' || type === 'columnKey' || type === 'rowKey') { type = 'column'; }
-        
+
         queryModel.removeQueryItem(object, type);
 
         $scope.sql = undefined;
@@ -880,7 +879,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             case 'grid':
             case 'vertical-grid':
             case 'pivot':
-                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
                     $scope.sql = data.sql;
                     $scope.time = data.time;
                     $scope.hideOverlay('OVERLAY_reportLayout');
@@ -904,7 +903,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                         id: customObjectData.id,
                         type: 'bar',
                         color: '#000000'};
-                    report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                    report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
                         $scope.sql = data.sql;
                         $scope.time = data.time;
                         $scope.hideOverlay('OVERLAY_reportLayout');
@@ -917,7 +916,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 const theChartID = 'Chart' + uuid2.newguid();
                 $scope.selectedReport.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
                 $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
-                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
                     $scope.sql = data.sql;
                     $scope.time = data.time;
                     $scope.hideOverlay('OVERLAY_reportLayout');
@@ -928,7 +927,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
             case 'indicator':
                 console.log('Report Type indicator');
 
-                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode).then(data => {
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
                     $scope.sql = data.sql;
                     $scope.time = data.time;
                     $scope.hideOverlay('OVERLAY_reportLayout');
@@ -1199,5 +1198,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.forgetRecordLimit = function () {
         $scope.selectedRecordLimit.value = $scope.selectedReport.query.recordLimit;
         delete $scope.selectedReport.query.recordLimit;
+    };
+
+    $scope.previewAvailable = function () {
+        return $scope.selectedReport.properties.columns.length > 0 || ($scope.selectedReport.properties.ykeys.length > 0 && ($scope.selectedReport.properties.xkeys.length > 0 || ($scope.selectedReport.properties.pivotKeys.columns.length > 0 && $scope.selectedReport.properties.pivotKeys.rows.length > 0)));
     };
 });

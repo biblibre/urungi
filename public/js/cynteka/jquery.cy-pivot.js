@@ -71,27 +71,12 @@
 							);
 
 
-					// Size/scroll syncronization  init
 					$this.find('.' + opts.div22Class).on('scroll', function(){
 						syncScrollAndSize($this, opts);
 					});
 					$this.find('.' + opts.cell22Class).resize(function(){
 						syncScrollAndSize($this, opts);
 					});
-					// createConfigDialog($this, opts);
-					// $this.find('#' + opts.pivotConfigDialogId).dialog({
-					// 	modal	: false,
-					// 	title	: 'Pivot Table Configuration',
-					// 	position:["right", "50px"],
-					// 	beforeClose	: function() {
-					// 		var $div11 = $this.find('.' + opts.div11Class);
-					// 		$div11.removeClass(opts.configWindowActivatedClass);
-					// 	},
-					// });
-					// jQuery('#' + opts.pivotConfigDialogId).dialog('close');
-
-					// Config dialog was glitching and is not used in Urungi
-					// Therefore it was removed
 
 					syncScrollAndSize($this, opts);
 					redraw($this, opts);
