@@ -243,7 +243,7 @@ img.img-cirlce {
 }
 
 .profile-env .user-info-sidebar .user-status.is-active {
-    background-color: #8dc63f;
+    background-color: #3742fa;
 }
 
 .profile-env .user-info-sidebar .user-status.is-not-active {
@@ -352,8 +352,8 @@ img.img-cirlce {
 }
 .btn-success {
     color: #fff;
-    background-color: #8dc63f;
-    border-color: #80b636;
+    background-color: #3742fa;
+    border-color: #3742fa;
 }
 
 .btn+.btn {
@@ -393,6 +393,7 @@ img.img-cirlce {
     font-size: 12px;
     line-height: 1.5;
     border-radius: 0;
+    background-color: #3742fa;
 }
 
 .btn-round {
@@ -408,8 +409,8 @@ img.img-cirlce {
 
 .btn.btn-success-white {
     background-color: #fff;
-    color: #8dc63f;;
-    border: 1px solid #8dc63f;;
+    color: #3742fa;;
+    border: 1px solid #3742fa;;
 }
 
 .btn.btn-danger-white {
@@ -1320,7 +1321,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
 }
 
 .panel-success {
-    border-color: #8dc63f;
+    border-color: #3742fa;
 }
 
 .panel-warning {
@@ -1346,7 +1347,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
 }
 
 .panel.panel-success .panel-heading {
-    background-color: #8dc63f;
+    background-color:#3742fa;
     color: #fff;
 }
 
@@ -2016,7 +2017,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
 }
 
 .badge.badge-success {
-    background-color: #8dc63f;
+    background-color: #3742fa;
 }
 
 .badge.badge-danger {
@@ -3077,7 +3078,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
 #objectPanel>menu a:hover, #objectPanel>menu .on a {
-    color: #94C255!important;
+    color: #3742fa!important;
     -webkit-transform: none;
     transform: none;
     background-color: #3f4652;
@@ -3116,6 +3117,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     color: #fff;
     text-decoration: none;
     transition: all .15s linear,opacity 0s linear;
+
 }
 
 #objectPanel>menu a i {
@@ -3288,7 +3290,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     -moz-align-items: center;
     align-items: center;
     width: 100%;
-                 border-bottom: 2px solid #60a3bc;
+                 border-bottom: 2px solid #3742fa;
 }
 
 .explorer-header-title

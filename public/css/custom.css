@@ -21,13 +21,15 @@ a.list-group-item{
     background-color: transparent;
     color: #FFFFFF;
 }
-
+.btn.btn-info.pull-right{
+    background-color: #3742fa;
+}
 .wst-main-color {
     color: #e58e26;
 }
 
 .admin-menu {
-    background-color: #60a3bc;
+    background-color: #3742fa;
     color: #000;
 }
 
@@ -37,25 +39,25 @@ a.list-group-item{
 }
 
 .profile-env .user-info-sidebar .user-status.is-active {
-    background-color: #60a3bc;
+    background-color: #3742fa;
 }
 
 .btn-success {
     color: #000;
-    background-color: #60a3bc;
-    border-color: #e58e26;
+    background-color: #3742fa;
+    border-color: #3742fa;
 }
 
 .btn-success:hover {
     color: #000;
     background-color: #e58e26 ;
-    border-color: #60a3bc;
+    border-color: #e58e26;
 }
 
 .btn.btn-success-white {
     background-color: #000;
-    color: #60a3bc;
-    border: 1px solid #60a3bc;
+    color: #3742fa;
+    border: 1px solid #3742fa;
 }
 
 .panel-success {
@@ -63,12 +65,12 @@ a.list-group-item{
 }
 
 .panel.panel-success .panel-heading {
-    background-color: #60a3bc;
+    background-color: #e58e26;
     color: #000;
 }
 
 .badge.badge-success {
-    background-color: #60a3bc;
+    background-color: #3742fa;
 }
 
 .column-box {
@@ -81,8 +83,8 @@ a.list-group-item{
 }
 
 .column-box-close-btn {
-    background-color: #60a3bc;
-    color: #94C255;
+    background-color: #3742fa;
+    color: white;
 }
 
 .column-box-agg-btn {
@@ -99,36 +101,36 @@ a.list-group-item{
 }
 
 .tree-node-folder:hover {
-    color: #60a3bc;
+    color: #3742fa;
     background: none;
 }
 
 .selectedElement {
-    background-color: #60a3bc;
+    background-color: #3742fa;
 }
 
 .branded-border-panel {
-    border-bottom: 2px solid #60a3bc;
+    border-bottom: 2px solid #3742fa;
 }
 
 .branded-parent-intro {
-    border-bottom: 2px solid #60a3bc;
+    border-bottom: 2px solid #3742fa;
 }
 
 .branded-strong-label {
-    color:#60a3bc;
+    color:#3742fa;
 }
 
 .branded-label {
-    color:#60a3bc;
+    color:#3742fa;
 }
 
 #objectPanel>menu .on a {
-    color: #60a3bc!important;
+    color: #3742fa!important;
 }
 
 .panel.panel-secondary .panel-heading {
-    background-color: #e58e26;
+    background-color: #3742fa;
     color: #000;
 }
 
@@ -138,12 +140,12 @@ a.list-group-item{
 
 .selected-datasource
 {
-    color: #60a3bc;
+    color: #3742fa;
 }
 
 .report-selected-btn
 {
-    background-color: #60a3bc;
+    background-color: #3742fa;
 }
 
 .report-unselected-btn
