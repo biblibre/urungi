@@ -1,0 +1,128 @@
+<h2>Import layers, reports and dashboards </h2>
+
+<div class="container-fluid branded-border-panel" ng-init="initImport()">
+
+    <span ng-if="state === 1">
+        <span ng-if="importFile">
+            <h5>Layers</h5>
+    
+            <ul>
+                <li ng-repeat="layer in importFile.layerExports">
+                    <div>
+                        <span> {{layer.name}}</span>
+                    </div>
+                </li>
+            </ul>
+    
+            <h5>Reports</h5>
+    
+            <ul>
+                <li ng-repeat="report in importFile.reportExports">
+                    <div>
+                        <span> {{report.reportName}}</span>
+                    </div>
+                </li>
+            </ul>
+    
+            <h5>Dashboards</h5>
+    
+            <ul>
+                <li ng-repeat="dashboard in importFile.dashboardExports">
+                    <div>
+                        <span> {{dashboard.dashboardName}}</span>
+                    </div>
+                </li>
+            </ul>
+        </span>
+    
+        <button class="btn btn-success" ng-click="startImport()" ng-show="importFile">import</button>
+        </br>
+        <div class="btn btn-default" ng-app="fileUpload" ngf-select="upload($file)">Choose file to import</div>
+        </br>
+        <a class="btn btn-default" href="/#/home">back</a>
+    </span>
+
+    <span ng-if="state === 2">
+        <h5>Please associate the imported data sources to the local ones</h5>
+    
+            <style type="text/css">
+                #wrap {
+                width:800px;
+                margin:0 auto;
+                }
+                #left_col {
+                float:left;
+                width:500px;
+                }
+                #right_col {
+                float:right;
+                width:300px;
+                }
+            </style>
+            
+            <div id="wrap">
+                <div id="left_col">
+                    <h5>Imported data sources</h5>
+                    <ul>
+                        <li ng-repeat="dts in importFile.datasourceExports">
+                            <div>
+                                <span>{{dts.name}}</span>
+                                <span>
+                                    -> 
+                                    <select ng-model="datasourceMatch[dts._id]" ng-options="dts as dts.name for dts in localDataSources"></select>
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+
+
+                    </br>
+                    <div ng-show="matchAllDatasourcesMessage">Please match all datasources</div>
+                    </br>
+                    <button ng-click="confirmImport()">confirm</button>
+                    </br>
+                    <button ng-click="cancelImport()">cancel</button>
+
+                </div>
+                <div id="right_col">
+                    <h5>Existing data sources</h5>
+                    <ul>
+                        <li ng-repeat="dts in localDataSources">
+                            <div>
+                                {{dts.name}}
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+    </span>    
+    
+    <span ng-if="state === 3">
+        <h5>Import successful</h5>
+        <div ng-if="created.length">
+            The following items have been created : </br>
+            <ul>
+                <li ng-repeat="item in created">
+                    {{item.item.name || item.item.reportName}}
+                </li>
+            </ul>
+        </div>
+        <div ng-if="!created.length">
+            No new item has been created.
+        </div>
+        <button ng-click="initImport()">Import new file</button>
+        <a class="button" href="/#/home">Back to main page</a>
+    </span>
+
+    <span ng-if="state === 4">
+        <h5>An error has occurred</h5>
+        <button ng-click="console.log(creationError)">log error in console</button>
+        </br>
+        <button ng-click="initImport()">Import new file</button>
+        <a class="button" href="/#/home">Back to main page</a>
+    </span>
+
+</div>
+

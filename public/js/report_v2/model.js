@@ -1,6 +1,6 @@
-/* global XLSX: false, saveAs: false, Blob: false, datenum: false */
+/* global XLSX: false, Blob: false, datenum: false */
 
-app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid, pivot) {
+app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid, pivot, FileSaver) {
     var report = {};
 
     this.getReportDefinition = async function (id, isLinked) {
@@ -335,7 +335,7 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
             return buf;
         }
 
-        saveAs(new Blob([s2ab(wbout)], {type: ''}), ws_name + '.xlsx');
+        FileSaver.saveAs(new Blob([s2ab(wbout)], {type: ''}), ws_name + '.xlsx');
     };
 
     function Workbook () {
