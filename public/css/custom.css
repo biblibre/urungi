@@ -53,7 +53,16 @@ a.list-group-item{
     background-color: #e58e26 ;
     border-color: #e58e26;
 }
-
+.btn.btn-success:active{
+    color: #000;
+    background-color: #3742fa;
+    border-color: #3742fa;
+}
+.btn.btn-success:focus{
+    color: #000;
+    background-color: #3742fa;
+    border-color: #3742fa;
+}
 .btn.btn-success-white {
     background-color: #000;
     color: #3742fa;
