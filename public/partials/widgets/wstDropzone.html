@@ -43,11 +43,11 @@
                 </div>
 
                 <span ng-if="setSortType">
-                    <i ng-show="item.sortType == -1" class="fa fa-chevron-down hand-cursor order-box-close-btn" 
-                    ng-click="setSortType(item, 1)" tooltip="Click here to order descendent using this field" tooltip-placement="bottom"></i>
-
-                    <i ng-show="item.sortType == 1" class="fa fa-chevron-up hand-cursor order-box-close-btn" 
-                    ng-click="setSortType(item, -1)" tooltip="Click here to order ascendent using this field" tooltip-placement="bottom"></i>
+                        <i ng-show="item.sortType == -1" class="fa fa-chevron-down hand-cursor order-box-close-btn" 
+                        ng-click="setSortType(item, 1)" tooltip="Click here to order descendent using this field" tooltip-placement="bottom"></i>
+    
+                        <i ng-show="item.sortType == 1" class="fa fa-chevron-up hand-cursor order-box-close-btn" 
+                        ng-click="setSortType(item, -1)" tooltip="Click here to order ascendent using this field" tooltip-placement="bottom"></i>
                 </span>
 
                 <i class="fa fa-times hand-cursor  column-box-close-btn" ng-click="onRemove(item, $event);" 

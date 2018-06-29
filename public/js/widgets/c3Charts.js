@@ -3,16 +3,27 @@
 app.service('c3Charts', function () {
     this.rebuildChart = function (report) {
         var theValues = [];
+        var theStackValues = {};
         var theTypes = {};
         var theNames = {};
+        var theGroups = [];
+        var theData = [];
+
         var query = report.query;
         var chart = report.properties.chart;
         var reportID = report.id;
 
         var axisField = '';
         if (chart.dataAxis) { axisField = chart.dataAxis.id; }
-
         var axisIsInQuery = false;
+
+        var stackField = '';
+        if (chart.stackDimension) { stackField = chart.stackDimension.id; }
+        var stackIsInQuery = false;
+
+        chart.noUnicityWarning = false;
+        // Indicates that for a single (axisField * stackField) value there are multiple entries
+        // This causes some of the charts to display weird or misleading results
 
         if (chart.dataAxis) {
             for (const d in query.datasources) {
@@ -41,6 +52,35 @@ app.service('c3Charts', function () {
             if (chart.dataAxis) { chart.dataAxis.id = null; }
         }
 
+        if (chart.stackDimension) {
+            for (const d in query.datasources) {
+                for (const c in query.datasources[d].collections) {
+                    for (const qc in query.datasources[d].collections[c].columns) {
+                    // var elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName;
+                        elementID = 'wst' + query.datasources[d].collections[c].columns[qc].elementID.toLowerCase();
+                        elementName = elementID.replace(/[^a-zA-Z ]/g, '');
+
+                        if (query.datasources[d].collections[c].columns[qc].aggregation) {
+                        // elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName+query.datasources[d].collections[c].columns[qc].aggregation;
+                            elementID = 'wst' + query.datasources[d].collections[c].columns[qc].elementID.toLowerCase() + query.datasources[d].collections[c].columns[qc].aggregation;
+                            elementName = elementID.replace(/[^a-zA-Z ]/g, '');
+                        }
+
+                        if (elementName === chart.stackDimension.id) {
+                            stackIsInQuery = true;
+                            chart.stacked = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!stackIsInQuery) {
+            stackField = null;
+            if (chart.stackDimension) { chart.stackDimension.id = null; }
+            chart.stacked = false;
+        }
+
         var columnsForDelete = [];
         for (const i in chart.dataColumns) {
             var columnFound = false;
@@ -55,7 +95,6 @@ app.service('c3Charts', function () {
                     elementName = elementID.replace(/[^a-zA-Z ]/g, '');
                 }
 
-                console.log('this is the data column name', elementName);
                 if (chart.dataColumns[i].id === elementName) {
                     columnFound = true; // columnsForDelete.push(i);
                 }
@@ -88,12 +127,99 @@ app.service('c3Charts', function () {
                 }
 
                 theValues.push(valueName);
-                theTypes[valueName] = chart.dataColumns[i].type;
+                theTypes[valueName] = chart.dataColumns[i].type || 'bar';
             }
             theNames[valueName] = chart.dataColumns[i].elementLabel;
         }
 
-        console.log('the names', theNames);
+        if (stackField && chart.type === 'line') {
+            /* A second field has been entered as a dimension.
+            * The chart must in this case be displayed as stacked bars.
+            * Due to the way c3 functions, the way to do this is by ctreating a data column for each possible value
+            * of the second dimension.
+            * the name of the data column will be [name of ykey] + '-' + [ field value ]
+            */
+
+            var mapOnAxis = {};
+
+            for (const valueKey of theValues) {
+                theStackValues[valueKey] = [];
+            }
+
+            var newData = [];
+
+            query.data.map(function (item) {
+                if (!item[axisField]) {
+                    return;
+                }
+
+                const x = item[axisField];
+
+                if (!mapOnAxis[x]) {
+                    mapOnAxis[x] = [];
+                }
+
+                mapOnAxis[x].push(item);
+            });
+
+            const reducer = function (accumulator, oldItem) {
+                if (!oldItem[stackField]) {
+                    return accumulator;
+                }
+
+                var currentItem = accumulator;
+
+                for (const valueKey of theValues) {
+                    if (oldItem[valueKey] !== undefined) {
+                        const combinedKey = String(oldItem[stackField]) + '-' + valueKey;
+
+                        if (theStackValues[valueKey].indexOf(combinedKey) < 0) {
+                            theStackValues[valueKey].push(combinedKey);
+
+                            theTypes[combinedKey] = theTypes[valueKey];
+
+                            if (theValues.length === 1) {
+                                theNames[combinedKey] = String(oldItem[stackField]);
+                            } else {
+                                theNames[combinedKey] = theNames[valueKey] + ' : ' + String(oldItem[stackField]);
+                            }
+                        }
+
+                        if (currentItem[combinedKey]) {
+                            newData.push(currentItem);
+                            var newItem = {};
+                            newItem[axisField] = currentItem[axisField];
+                            chart.noUnicityWarning = true;
+                            currentItem = newItem;
+                        }
+
+                        currentItem[combinedKey] = oldItem[valueKey];
+                    }
+                }
+
+                return currentItem;
+            };
+
+            for (const x in mapOnAxis) {
+                const newItem = {};
+                newItem[axisField] = x;
+                newData.push(mapOnAxis[x].reduce(reducer, newItem));
+            }
+
+            theValues = [];
+            theGroups = [];
+            for (const valueKey in theStackValues) {
+                theGroups.push(theStackValues[valueKey]);
+                theValues = theValues.concat(theStackValues[valueKey]);
+            }
+
+            theData = newData;
+
+            chart.stackKeys = theStackValues;
+        } else {
+            theData = query.data;
+            theGroups = undefined;
+        }
 
         if (query) {
             var theChartCode = '#CHART_' + reportID;
@@ -101,7 +227,10 @@ app.service('c3Charts', function () {
             if (!chart.height) { chart.height = 300; }
 
             let chartCanvas;
-            if (chart.type === 'pie' || chart.type === 'donut') {
+
+            switch (chart.type) {
+            case 'pie':
+            case 'donut':
                 var theColumns = [];
                 if (axisField && theValues) {
                     for (const i in query.data) {
@@ -122,15 +251,16 @@ app.service('c3Charts', function () {
                         height: chart.height
                     }
                 });
-            } else {
-                if (chart.type === 'gauge') {
-                    chartCanvas = c3.generate({
-                        bindto: theChartCode,
-                        data: {
-                            columns: [theValues[0], query.data[0][theValues[0]]],
-                            type: chart.type
-                        },
-                        gauge: {
+                break;
+
+            case 'gauge':
+                chartCanvas = c3.generate({
+                    bindto: theChartCode,
+                    data: {
+                        columns: [theValues[0], query.data[0][theValues[0]]],
+                        type: chart.type
+                    },
+                    gauge: {
                         //        label: {
                         //            format: function(value, ratio) {
                         //                return value;
@@ -141,35 +271,40 @@ app.service('c3Charts', function () {
                         //    max: (query.data[0][theValues[0]]*2), // 100 is default
                         //    units: '' //' %',
                         //    width: 39 // for adjusting arc thickness
-                        },
+                    },
 
-                        size: {
-                            height: chart.height
-                        }
-                    });
-                } else {
-                    chartCanvas = c3.generate({
-                        bindto: theChartCode,
-                        data: {
-                            json: query.data,
-                            keys: {
-                                x: axisField,
-                                value: theValues
-                            },
-                            types: theTypes,
-                            names: theNames
+                    size: {
+                        height: chart.height
+                    }
+                });
+                break;
+
+            default :
+                chartCanvas = c3.generate({
+                    bindto: theChartCode,
+                    data: {
+                        json: theData,
+                        keys: {
+                            x: axisField,
+                            value: theValues
                         },
-                        axis: {
-                            x: {
-                                type: 'category'
-                            }
-                        },
-                        size: {
-                            height: chart.height
+                        types: theTypes,
+                        names: theNames,
+                        groups: theGroups
+                    },
+                    axis: {
+                        x: {
+                            type: 'category'
                         }
-                    });
-                }
+                    },
+                    size: {
+                        height: chart.height
+                    }
+                });
+
+                break;
             }
+
             chart.chartCanvas = chartCanvas;
         }
     };
@@ -217,24 +352,19 @@ app.service('c3Charts', function () {
 
     this.transformChartColumnType = function (chart, column) {
         let columnID;
+
         if (column.aggregation) {
             columnID = column.id + column.aggregation;
         } else {
             columnID = column.id;
         }
 
-        if (column.type === 'spline') {
-            chart.chartCanvas.transform('spline', columnID);
-        } else if (column.type === 'bar') {
-            chart.chartCanvas.transform('bar', columnID);
-        } else if (column.type === 'area') {
-            chart.chartCanvas.transform('area', columnID);
-        } else if (column.type === 'area-spline') {
-            chart.chartCanvas.transform('area-spline', columnID);
-        } else if (column.type === 'scatter') {
-            chart.chartCanvas.transform('scatter', columnID);
-        } else if (column.type === 'line') {
-            chart.chartCanvas.transform('line', columnID);
+        if (chart.stacked) {
+            for (const key of chart.stackKeys[columnID]) {
+                chart.chartCanvas.transform(column.type, key);
+            }
+        } else {
+            chart.chartCanvas.transform(column.type, columnID);
         }
     };
 

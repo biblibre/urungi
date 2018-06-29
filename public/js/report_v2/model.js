@@ -108,14 +108,25 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
                 break;
 
             case 'chart-line':
-            case 'chart-donut':
-            case 'chart-pie':
-            case 'gauge':
-                if (report.reportType === 'chart-donut') { report.properties.chart.type = 'donut'; }
-                if (report.reportType === 'chart-pie') { report.properties.chart.type = 'pie'; }
-                if (report.reportType === 'gauge') { report.properties.chart.type = 'gauge'; }
+                report.properties.chart.type = 'line';
                 generatec3Chart(report, mode);
                 break;
+
+            case 'chart-donut':
+                report.properties.chart.type = 'donut';
+                generatec3Chart(report, mode);
+                break;
+
+            case 'chart-pie':
+                report.properties.chart.type = 'pie';
+                generatec3Chart(report, mode);
+                break;
+
+            case 'gauge':
+                report.properties.chart.type = 'gauge';
+                generatec3Chart(report, mode);
+                break;
+
             case 'indicator':
                 generateIndicator(report);
                 break;

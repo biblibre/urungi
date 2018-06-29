@@ -745,12 +745,23 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                     $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
 
                     const customObjectData = $scope.selectedReport.properties.xkeys[0];
-                    $scope.selectedReport.properties.chart.dataAxis = {elementName: customObjectData.elementName,
+                    $scope.selectedReport.properties.chart.dataAxis = {
+                        elementName: customObjectData.elementName,
                         queryName: 'query1',
                         elementLabel: customObjectData.objectLabel,
                         id: customObjectData.id,
                         type: 'bar',
                         color: '#000000'};
+                    if ($scope.selectedReport.properties.xkeys.length > 1) {
+                        const customObjectData2 = $scope.selectedReport.properties.xkeys[1];
+                        $scope.selectedReport.properties.chart.stackDimension = {
+                            elementName: customObjectData2.elementName,
+                            queryName: 'query1',
+                            elementLabel: customObjectData2.objectLabel,
+                            id: customObjectData2.id,
+                            type: 'bar',
+                            color: '#000000'};
+                    }
                     report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
                         $scope.sql = data.sql;
                         $scope.time = data.time;
@@ -866,33 +877,33 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         {
             id: 'spline',
             name: 'Spline',
-            image: 'images/spline.png',
+            image: 'images/spline.png'
         },
         {
             id: 'bar',
             name: 'Bar',
-            icon: 'fa fa-bar-chart',
+            icon: 'fa fa-bar-chart'
         },
         {
             id: 'area',
             name: 'Area',
-            icon: 'fa fa-area-chart',
+            icon: 'fa fa-area-chart'
         },
         {
             id: 'line',
             name: 'Line',
-            icon: 'fa fa-line-chart',
+            icon: 'fa fa-line-chart'
         },
         {
             id: 'area-spline',
             name: 'Area spline',
-            image: 'images/area-spline.png',
+            image: 'images/area-spline.png'
         },
         {
             id: 'scatter',
             name: 'Scatter',
-            image: 'images/scatter.png',
-        },
+            image: 'images/scatter.png'
+        }
 
     ];
 
@@ -1046,5 +1057,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
     $scope.forgetRecordLimit = function () {
         $scope.selectedRecordLimit.value = $scope.selectedReport.query.recordLimit;
         delete $scope.selectedReport.query.recordLimit;
+    };
+
+    $scope.hideErrorMessage = function () {
+        $scope.selectedReport.hideErrorMessage = true;
     };
 });
