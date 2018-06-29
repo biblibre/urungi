@@ -238,7 +238,8 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
     };
 
     this.removeQueryItem = function (object, type) {
-        if (type === 'column') {
+        switch (type) {
+        case 'column':
             if (query.columns) { $rootScope.removeFromArray(query.columns, object); }
 
             for (const i in query.columns) {
@@ -246,28 +247,23 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
                     query.columns.splice(i, 1);
                 }
             }
-        }
+            break;
 
-        if (type === 'order') {
+        case 'order':
             $rootScope.removeFromArray(query.order, object);
             for (const i in query.order) {
                 if (query.order[i].elementID === object.elementID) {
                     query.order.splice(i, 1);
                 }
             }
-        }
+            break;
 
-        if (type === 'filter') {
+        case 'filter':
             $rootScope.removeFromArray(query.groupFilters, object);
+            this.reorderFilters();
+            this.filtersUpdated();
 
-            /* for (var i in query.groupFilters)
-                        {
-                            if (query.groupFilters[i].elementID === object.elementID)
-                                {
-
-                                    query.groupFilters.splice(i,1);
-                                }
-                        } */
+            break;
         }
 
         detectLayerJoins();
@@ -772,7 +768,7 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
     //     processStructure();
     // }
 
-    this.onDropTemp = function (item, queryBind) {
+    this.onDrop = function (item, queryBind) {
         if (lastDrop && lastDrop === 'onFilter') {
             lastDrop = null;
             return;
@@ -1170,8 +1166,10 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
     };
 
     function reorderFilters () {
-        delete (query.groupFilters[0].condition);
-        delete (query.groupFilters[0].conditionLabel);
+        if (query.groupFilters.length > 0) {
+            delete (query.groupFilters[0].condition);
+            delete (query.groupFilters[0].conditionLabel);
+        }
 
         for (let i = 1; i < query.groupFilters.length; ++i) {
             if (typeof query.groupFilters[i].condition === 'undefined') {

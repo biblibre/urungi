@@ -111,19 +111,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.mode = 'add';
         $scope.isForDash = true;
 
-        $scope.selectedReport = {};
-        $scope.selectedReport.id = uuid2.newguid();
-        $scope.selectedReport.draft = true;
-        $scope.selectedReport.badgeStatus = 0;
-        $scope.selectedReport.exportable = true;
-        $scope.selectedReport.badgeMode = 1;
-        $scope.selectedReport.properties = {};
-        $scope.selectedReport.properties.xkeys = [];
-        $scope.selectedReport.properties.ykeys = [];
-        $scope.selectedReport.properties.columns = [];
-        $scope.selectedReport.reportType = 'grid';
-        $scope.selectedReport.query = {};
+        $scope.newForm();
+
         queryModel.initQuery();
+        $scope.selectedReport.query = queryModel.generateQuery();
     });
 
     $scope.$on('loadReportStrucutureForDash', function (event, args) {
@@ -184,7 +175,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.selectedReport.properties.xkeys = [];
         $scope.selectedReport.properties.ykeys = [];
         $scope.selectedReport.properties.columns = [];
-        /// $scope.selectedReport.properties.filters = [];
         $scope.selectedReport.properties.order = [];
         $scope.selectedReport.properties.pivotKeys = {};
         $scope.selectedReport.properties.pivotKeys.columns = [];
@@ -226,6 +216,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         } else {
             $scope.newForm();
             queryModel.initQuery();
+            $scope.selectedReport.query = queryModel.generateQuery();
         }
     };
 
@@ -466,10 +457,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         $scope.selectedLayerID = queryModel.selectedLayerID();
     };
 
-    $scope.detectLayerJoins = function () {
-        queryModel.detectLayerJoins();
-    };
-
     $scope.getQuery = function (queryID) {
         return queryModel.query();
     };
@@ -503,9 +490,17 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
         queryModel.onChange();
     };
 
+    $scope.onDropOnFilter = function (data, event, type, group) {
+        var item = data['json/custom-object'];
+        event.stopPropagation();
+        $scope.sql = undefined;
+        $scope.onDropField(item, 'filter');
+        setTimeout(function () { $scope.selectedReport.query = queryModel.generateQuery(); }, 1000);
+    };
+
     $scope.onDropField = function (newItem, queryBind) {
         $scope.sql = undefined;
-        queryModel.onDropTemp(newItem, queryBind);
+        queryModel.onDrop(newItem, queryBind);
     };
 
     $scope.onRemoveField = function (item, queryBind) {
@@ -648,13 +643,9 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
 
     $scope.filterSortableOptions = {
         stop: function (e, ui) {
-            reorderFilters();
+            queryModel.reorderFilters();
         }
     };
-
-    function reorderFilters () {
-        queryModel.reorderFilters();
-    }
 
     $scope.delete = function (reportID, reportName) {
         $scope.modalOptions = {};
@@ -677,10 +668,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 if (nbr > -1) { $scope.reports.items.splice(nbr, 1); }
             }
         });
-    };
-
-    $scope.filtersUpdated = function () {
-        queryModel.filtersUpdated();
     };
 
     $scope.onDragOver = function (event) {
