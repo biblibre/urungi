@@ -15,6 +15,8 @@ a.list-group-item{
     color: #000;
     background-color: #F68010;
     border-color: #F68010;
+
+    font-weight: bold;
 }
 .main-menu-logo {
     background-color: transparent;
@@ -82,7 +84,11 @@ a.list-group-item{
 }
 
 .column-box {
-    background-color: #F68010;
+    background-color: #a2570d;
+    border-color: #F68010;
+    color: #FFFFFF;
+
+    font-weight: bold;
 }
 
 .chart-series-button {
@@ -92,11 +98,11 @@ a.list-group-item{
 
 .column-box-close-btn {
     background-color: transparent;
-    color: white;
+    color: #FFFFFF;
 }
 
 .column-box-agg-btn {
-    background-color:white;
+    background-color: #FFFFFF;
     color: #F68010;
 }
 
