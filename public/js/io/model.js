@@ -104,7 +104,9 @@ app.service('ioModel', function (connection) {
 
     async function importLayer (layer, datasourceRef, additions) {
         var params = {
-            _id: layer._id
+            find: [
+                { _id: layer._id }
+            ]
         };
 
         var existingLayer = await connection.get('/api/layers/find-all', params);
@@ -126,7 +128,9 @@ app.service('ioModel', function (connection) {
 
     async function importReport (report, datasourceRef, additions) {
         var params = {
-            _id: report._id
+            find: [
+                { _id: report._id }
+            ]
         };
 
         var existingReport = await connection.get('/api/reports/find-all', params);
@@ -162,7 +166,9 @@ app.service('ioModel', function (connection) {
 
     async function importDashboard (dashboard, datasourceRef, additions) {
         var params = {
-            _id: dashboard._id
+            find: [
+                { _id: dashboard._id }
+            ]
         };
 
         var existingDashboard = await connection.get('/api/dashboardsv2/find-all', params);
