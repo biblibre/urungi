@@ -11,3 +11,6 @@ Light blue :
 
 Dark orange :
 #a2570d
+
+Soft blue :
+#557fc2

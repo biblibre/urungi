@@ -3,6 +3,11 @@
 body {
     color:#000;
     font-family: museo_sans299,sans-serif;
+    background-color: #e6e0d9;
+}
+
+.list-group-item {
+    border-color : #bbbbbb;
 }
 
 .wst-btn {
@@ -75,7 +80,8 @@ a.list-group-item{
 }
 
 .panel.panel-success .panel-heading {
-    background-color: #FF802A;
+    background-color: #f6ebe0;
+    border : 1px solid #F68010;
     color: #000;
 }
 
@@ -84,8 +90,8 @@ a.list-group-item{
 }
 
 .column-box {
-    background-color: #a2570d;
-    border-color: #F68010;
+    background-color: #557fc2;
+    border: none;
     color: #FFFFFF;
 
     font-weight: bold;
@@ -103,7 +109,7 @@ a.list-group-item{
 
 .column-box-agg-btn {
     background-color: #FFFFFF;
-    color: #F68010;
+    color: #557fc2;
 }
 
 .columnLink {
@@ -144,7 +150,8 @@ a.list-group-item{
 }
 
 .panel.panel-secondary .panel-heading {
-    background-color: #136EFF;
+    background-color: #d8e7ff;
+    border: 1px solid #0063FF;
     color: #000;
 }
 
