@@ -7,7 +7,10 @@ Biblibre orange :
 #F68010
 
 Light blue :
-#a1c5ff
+#c4dbff
+
+light orange :
+#f6ebe0
 
 Dark orange :
 #a2570d

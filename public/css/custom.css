@@ -3,7 +3,7 @@
 body {
     color:#000;
     font-family: museo_sans299,sans-serif;
-    background-color: #e6e0d9;
+    background-color: #eeeeee;
 }
 
 .list-group-item {
@@ -150,7 +150,7 @@ a.list-group-item{
 }
 
 .panel.panel-secondary .panel-heading {
-    background-color: #d8e7ff;
+    background-color: #d6e6ff;
     border: 1px solid #0063FF;
     color: #000;
 }
@@ -166,7 +166,7 @@ a.list-group-item{
 
 .report-selected-btn
 {
-    background-color: #a1c5ff;
+    background-color: #d6e6ff;
     border-color: #0063FF;
     border-width: 2px;
 }
