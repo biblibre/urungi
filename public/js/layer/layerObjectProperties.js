@@ -4,6 +4,7 @@ app.directive('layerObjectProperties', function ($compile, icons, c3Charts) {
         scope: {
             onChange: '=',
             onDelete: '&',
+            onEdit: '=',
             objectType: '=',
             object: '=',
             elementTypes: '=',
