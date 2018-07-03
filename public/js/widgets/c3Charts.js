@@ -294,7 +294,13 @@ app.service('c3Charts', function () {
                     },
                     axis: {
                         x: {
-                            type: 'category'
+                            type: 'category',
+                            tick: {
+                                culling: {
+                                    max: 20
+                                },
+                                multiline: false
+                            }
                         }
                     },
                     size: {
