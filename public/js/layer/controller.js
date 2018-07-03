@@ -399,7 +399,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         $scope.temporarySQLCollection = {};
         $scope.temporarySQLCollection.mode = 'add';
         $scope.selectedDts = {};
-        if ($scope._Layer.params && $scope._Layer.params.schema && $scope._Layer.params.schema.length > 0){
+        if ($scope._Layer.params && $scope._Layer.params.schema && $scope._Layer.params.schema.length > 0) {
             $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
             $scope.ReadOnlyDataSourceSelector = true;
             // $scope.getDatasetsForDts(); // ??? This function doesn't exist. Is it supposed to be the same as getDatasetsForThisDts() ?
@@ -409,8 +409,8 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.editSQL = function () {
         var selectedCollection = $scope.theSelectedElement;
-        if(!selectedCollection.isSQL){
-            console.log("Error : cannot modify sql of an object which is not an sql request");
+        if (!selectedCollection.isSQL) {
+            console.log('Error : cannot modify sql of an object which is not an sql request');
             return;
         }
 
@@ -419,14 +419,12 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         $scope.temporarySQLCollection.sql = selectedCollection.sqlQuery;
         $scope.temporarySQLCollection.name = selectedCollection.collectionName;
 
-
         $scope.selectedDts = {};
         $scope.selectedDts.id = selectedCollection.datasourceID;
         $scope.ReadOnlyDataSourceSelector = true;
-        
+
         $scope.newSQLCollection = undefined;
         $('#sqlModal').modal('show');
-
     };
 
     $scope.setSelectedEntity = function (entity) {
@@ -510,10 +508,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     $scope.saveSQLChanges = function () {
-        datasourceModel.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection, function (result){
-            console.log(result);
-            console.log($scope.theSelectedElement);
-
+        datasourceModel.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection, function (result) {
             if (result.result === 1 && result.items.length > 0) {
                 // The result is an array but I think it never holds more than one element.
 
@@ -527,71 +522,72 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 }
 
                 $scope.elementMatch = {};
+                $scope.lostElements = [];
+                $scope.newElements = [];
+                $scope.matchedElements = [];
 
-                for(const e1 of currentCol.elements){
+                for (const e1 of newCol.elements) {
                     $scope.elementMatch[e1.elementID] = null;
-                    for(const e2 of newCol.elements){
-                        if(e1.elementName === e2.elementName){
+                    for (const e2 of currentCol.elements) {
+                        if (e1.elementName === e2.elementName) {
                             $scope.elementMatch[e1.elementID] = e2;
+                            $scope.matchedElements.push(e2);
                         }
+                    }
+                }
+
+                for (const el of currentCol.elements) {
+                    if ($scope.matchedElements.indexOf(el) < 0) {
+                        $scope.lostElements.push(el);
+                    }
+                }
+
+                for (const el of newCol.elements) {
+                    if (!$scope.elementMatch[el.elementID]) {
+                        $scope.newElements.push(el);
                     }
                 }
 
                 $scope.newSQLCollection = newCol;
             }
-
         });
     };
 
     $scope.confirmSQLChanges = function () {
-
-        var reversedElementMatch = {};
-
-        for(el in $scope.elementMatch){
-            if($scope.elementMatch[el]){
-                if(reversedElementMatch[ $scope.elementMatch[el].elementID ] !== undefined){
-                    $scope.newSQLCollection.overLapIssue = [el, reversedElementMatch[ $scope.elementMatch[el] ]];
-                    return;
-                }else{
-                    reversedElementMatch[ $scope.elementMatch[el].elementID ] = el;
-                }
-            }
-        }
-
-        var oldElementRef = {}
-        for(el of $scope.theSelectedElement.elements){
-            oldElementRef[el.elementID] = el;
-        }
-        
         $scope.theSelectedElement.sqlQuery = $scope.newSQLCollection.sqlQuery;
 
-        for(el of $scope.newSQLCollection.elements){
-            if(reversedElementMatch[el.elementID]){
-                const id = reversedElementMatch[el.elementID];
-                el.elementID = id;
-                el.elementRole = oldElementRef[id].elementRole;
-                el.elementLabel = oldElementRef[id].elementLabel;
+        for (const el of $scope.newSQLCollection.elements) {
+            if ($scope.elementMatch[el.elementID]) {
+                const oldElement = $scope.elementMatch[el.elementID];
+                el.elementID = oldElement.elementID;
+                el.elementRole = oldElement.elementRole;
+                el.elementLabel = oldElement.elementLabel;
             }
         }
 
-        for(el of $scope._Layer.objects){
-            if(el.collectionID === $scope.theSelectedElement.collectionID){
-                if($scope.elementMatch[el.elementID]){
-                    el.elementName = $scope.elementMatch[el.elementID].elementName;
-                }else{
-                    // TODO : delete the object
+        var deletedIndexes = [];
+
+        for (var i in $scope._Layer.objects) {
+            const e1 = $scope._Layer.objects[i];
+            if (e1.collectionID === $scope.theSelectedElement.collectionID) {
+                for (const e2 of $scope.lostElements) {
+                    if (e2.elementID === e1.elementID) {
+                        deletedIndexes.push(i);
+                        break;
+                    }
                 }
             }
-            
         }
 
-        console.log($scope.theSelectedElement.elements);
-        console.log(reversedElementMatch);
-        console.log($scope.newSQLCollection.elements);
+        for (var k = deletedIndexes.length - 1; k >= 0; k--) {
+            // Iterate backwards so the indexes to be removed don't change as we remove the ones before
+            $scope._Layer.objects.splice(deletedIndexes[k], 1);
+        }
 
         $scope.theSelectedElement.elements = $scope.newSQLCollection.elements;
-        $('#sqlModal').modal('hide');
 
+        $scope.newSQLElements = undefined;
+        $('#sqlModal').modal('hide');
     };
 
     function makeJoin (sourceID, targetID) {
@@ -1278,7 +1274,6 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     function unSelect () {
-        console.log('unSelect1');
         for (var s in $scope.selectedElements) {
             $('#' + $scope.selectedElements[s]).removeClass('selectedElement');
         }
@@ -1402,6 +1397,6 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         if ($scope.selectedItem === 'collection' && $scope.theSelectedElement.isSQL) {
             $scope.editSQL();
         }
-    }
+    };
 
 });

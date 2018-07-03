@@ -65,39 +65,40 @@
 
         <div class="modal-body ng-scope">
 
-            <h4>Please match the fields of this collection to those returned by the new query.</h4>
+            <h4>Please confirm your modification</h4>
             </br>
 
             <div class="row">
-                <div class="col-md-8">
-                    <h5>Elements from the old query</h5>
-                    </br>
-                    <ul class="ul-drop">
-                        <li ng-repeat="el in theSelectedElement.elements">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    {{el.elementName}} :
-                                </div>
-                                <div class="col-md-4">
-                                    <select ng-model="elementMatch[el.elementID]" 
-                                    ng-options="element as element.elementName for element in newSQLCollection.elements">
-                                        <option value="">- DELETE -</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-    
                 <div class="col-md-4">
-                    <h5>Elements from the new query</h5>
+                    <h6>The following columns will be kept :</h6>
                     </br>
                     <ul>
-                        <li ng-repeat="el in newSQLCollection.elements">
+                        <li ng-repeat="el in matchedElements">
                             {{el.elementName}}
                         </li>
                     </ul>
                 </div>
+
+                <div class="col-md-4">
+                    <h6>The following columns will be added :</h6>
+                    </br>
+                    <ul>
+                        <li ng-repeat="el in newElements">
+                            {{el.elementName}}
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h6>The following columns will be removed :</h6>
+                    </br>
+                    <ul>
+                        <li ng-repeat="el in lostElements">
+                            {{el.elementName}}
+                        </li>
+                    </ul>
+                </div>
+
             </div>
 
         </div>
