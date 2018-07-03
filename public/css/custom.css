@@ -148,3 +148,13 @@ body {
 {
     background-color: #fff;
 }
+
+.query-edit-btn
+{
+    background-color: #ffb888;
+}
+
+.query-edit-btn:hover
+{
+    background-color: #ffa366;
+}

@@ -64,7 +64,9 @@
                     <section id="propertiesTab" class="results infinite ng-hide" ng-show="tabs.selected == 'properties'" style="padding:5px;">
                             <!--<h5 class="pull-right">Properties</h5>-->
 
-                        <layer-object-properties object-type="selectedItem" object="theSelectedElement" on-delete="deleteObject()" element-types="elementTypes" string-default-aggregation="stringDefaultAggregation" number-default-aggregation="numberDefaultAggregation" layer="_Layer" on-delete-element="deleteSchemaElement" on-publish-element="elementAdd"></layer-object-properties>
+                        <layer-object-properties object-type="selectedItem" object="theSelectedElement" on-delete="deleteObject()" on-edit="editObject"
+                        element-types="elementTypes" string-default-aggregation="stringDefaultAggregation" number-default-aggregation="numberDefaultAggregation" 
+                        layer="_Layer" on-delete-element="deleteSchemaElement" on-publish-element="elementAdd"></layer-object-properties>
 
                     </section>
 

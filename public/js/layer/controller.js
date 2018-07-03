@@ -397,16 +397,33 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.addSQL = function () {
         $scope.temporarySQLCollection = {};
-        // $scope.selectedDts = {};
-        // if ($scope._Layer.params)
-        //  if ($scope._Layer.params.schema)
-        //    if ($scope._Layer.params.schema.length > 0)
-        //      {
-        //      $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
-        $scope.ReadOnlyDataSourceSelector = true;
-        //      $scope.getDatasetsForDts();
-        //    }
+        $scope.temporarySQLCollection.mode = 'add';
+        $scope.selectedDts = {};
+        if ($scope._Layer.params && $scope._Layer.params.schema && $scope._Layer.params.schema.length > 0) {
+            $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
+            $scope.ReadOnlyDataSourceSelector = true;
+            // $scope.getDatasetsForDts(); // ??? This function doesn't exist. Is it supposed to be the same as getDatasetsForThisDts() ?
+        }
+        $('#sqlModal').modal('show');
+    };
 
+    $scope.editSQL = function () {
+        var selectedCollection = $scope.theSelectedElement;
+        if (!selectedCollection.isSQL) {
+            console.log('Error : cannot modify sql of an object which is not an sql request');
+            return;
+        }
+
+        $scope.temporarySQLCollection = {};
+        $scope.temporarySQLCollection.mode = 'edit';
+        $scope.temporarySQLCollection.sql = selectedCollection.sqlQuery;
+        $scope.temporarySQLCollection.name = selectedCollection.collectionName;
+
+        $scope.selectedDts = {};
+        $scope.selectedDts.id = selectedCollection.datasourceID;
+        $scope.ReadOnlyDataSourceSelector = true;
+
+        $scope.newSQLCollection = undefined;
         $('#sqlModal').modal('show');
     };
 
@@ -488,6 +505,89 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 $scope.erDiagramInit();
             }
         });
+    };
+
+    $scope.saveSQLChanges = function () {
+        datasourceModel.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection, function (result) {
+            if (result.result === 1 && result.items.length > 0) {
+                // The result is an array but I think it never holds more than one element.
+
+                var currentCol = $scope.theSelectedElement;
+                var newCol = result.items[0];
+
+                for (const e in newCol.elements) {
+                    newCol.elements[e].datasourceID = currentCol.datasourceID;
+                    newCol.elements[e].collectionID = currentCol.collectionID;
+                    newCol.elements[e].collectionName = currentCol.collectionName;
+                }
+
+                $scope.elementMatch = {};
+                $scope.lostElements = [];
+                $scope.newElements = [];
+                $scope.matchedElements = [];
+
+                for (const e1 of newCol.elements) {
+                    $scope.elementMatch[e1.elementID] = null;
+                    for (const e2 of currentCol.elements) {
+                        if (e1.elementName === e2.elementName) {
+                            $scope.elementMatch[e1.elementID] = e2;
+                            $scope.matchedElements.push(e2);
+                        }
+                    }
+                }
+
+                for (const el of currentCol.elements) {
+                    if ($scope.matchedElements.indexOf(el) < 0) {
+                        $scope.lostElements.push(el);
+                    }
+                }
+
+                for (const el of newCol.elements) {
+                    if (!$scope.elementMatch[el.elementID]) {
+                        $scope.newElements.push(el);
+                    }
+                }
+
+                $scope.newSQLCollection = newCol;
+            }
+        });
+    };
+
+    $scope.confirmSQLChanges = function () {
+        $scope.theSelectedElement.sqlQuery = $scope.newSQLCollection.sqlQuery;
+
+        for (const el of $scope.newSQLCollection.elements) {
+            if ($scope.elementMatch[el.elementID]) {
+                const oldElement = $scope.elementMatch[el.elementID];
+                el.elementID = oldElement.elementID;
+                el.elementRole = oldElement.elementRole;
+                el.elementLabel = oldElement.elementLabel;
+            }
+        }
+
+        var deletedIndexes = [];
+
+        for (var i in $scope._Layer.objects) {
+            const e1 = $scope._Layer.objects[i];
+            if (e1.collectionID === $scope.theSelectedElement.collectionID) {
+                for (const e2 of $scope.lostElements) {
+                    if (e2.elementID === e1.elementID) {
+                        deletedIndexes.push(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (var k = deletedIndexes.length - 1; k >= 0; k--) {
+            // Iterate backwards so the indexes to be removed don't change as we remove the ones before
+            $scope._Layer.objects.splice(deletedIndexes[k], 1);
+        }
+
+        $scope.theSelectedElement.elements = $scope.newSQLCollection.elements;
+
+        $scope.newSQLElements = undefined;
+        $('#sqlModal').modal('hide');
     };
 
     function makeJoin (sourceID, targetID) {
@@ -1174,7 +1274,6 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     function unSelect () {
-        console.log('unSelect1');
         for (var s in $scope.selectedElements) {
             $('#' + $scope.selectedElements[s]).removeClass('selectedElement');
         }
@@ -1291,6 +1390,12 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         if ($scope.selectedItem === 'collection') {
             $scope.deleteCollection($scope.theSelectedElement);
             unSelect();
+        }
+    };
+
+    $scope.editObject = function () {
+        if ($scope.selectedItem === 'collection' && $scope.theSelectedElement.isSQL) {
+            $scope.editSQL();
         }
     };
 });

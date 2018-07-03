@@ -5,6 +5,7 @@
                     <span ng-if="objectType == 'collection'">Dataset</span>
                     <span ng-if="objectType == 'element'">Element</span>
                     <button ng-if="objectType != 'element'" type="button" class="btn btn-danger pull-right"  ng-click="delete()">Delete</button>
+                    <button ng-if="objectType == 'collection' && object.isSQL" type="button" class="btn pull-right query-edit-btn"  ng-click="onEdit()">Edit</button>
                     <button ng-if="!object.elementRole && objectType == 'element'" type="button" class="btn btn-success pull-right" ng-click="publishElement()" data-toggle="tooltip" data-placement="bottom" title="Add to layer's elements">+</button>
                     <button ng-if="object.elementRole && objectType == 'element'" type="button" class="btn btn-warning pull-right" ng-click="removeElement()" data-toggle="tooltip" data-placement="bottom" title="Remove from layer's elements">-</button>
 
