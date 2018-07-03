@@ -1398,5 +1398,4 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
             $scope.editSQL();
         }
     };
-
 });
