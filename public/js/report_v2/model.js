@@ -1,6 +1,6 @@
 /* global XLSX: false, saveAs: false, Blob: false, datenum: false */
 
-app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid, pivot) {
+app.service('report_v2Model', function (c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid, pivot, uuid2) {
     var report = {};
 
     this.getReportDefinition = async function (id, isLinked) {
@@ -13,37 +13,140 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         }
     };
 
-    this.getReport = function (report, parentDiv, mode, limit) {
-        return getReport(report, parentDiv, mode, limit);
+    this.getLayers = async function () {
+        var data = await connection.get('/api/layers/get-layers', {});
+        if (data.result !== 1) {
+            throw new Error(data.msg);
+        }
+
+        var layers = data.items;
+
+        for(layer of layers){
+            layer.rootItem = {
+                elementLabel: '',
+                elementRole: 'root',
+                elements: layer.objects
+            }
+        }
+
+        return layers;
     };
 
-    function getReport (report, parentDiv, mode, limit) {
-        showOverlay(parentDiv);
-        queryModel.loadQuery(report.query);
-        queryModel.detectLayerJoins();
+    /* 
+    * Fetches all of the data associated to the report's query, and stores it in report.query.data
+    * Then initializes the chart if necessary
+    */
+    this.fetchDataForPreview = async function (report, params){
 
-        queryModel.setSelectedRecordLimit(mode, limit);
+        if(report.query.columns.length === 0){
+            console.log('nothing to fetch');
+            return;
+        }
+        
+        const result = await fetchData(report.query, params);
+        report.query.data = result.data;
 
-        return queryModel.getQueryData(report.query).then(data => {
-            report.query.data = data.data;
-            report.parentDiv = parentDiv;
-            repaintReport(report, mode);
-            hideOverlay(parentDiv);
+        const parentDiv = params.parentDiv || 'reportLayout';
+        report.parentDiv = parentDiv;
 
-            return data;
-        });
+        switch(report.reportType){
+            case 'chart-line':
+            case 'chart-donut':
+            case 'chart-pie':
+                if (report.properties.xkeys.length > 0 && report.properties.ykeys.length > 0) {
+                    initGraphChart(report);
+                }
+            break;
+
+            case 'gauge':
+                const theChartID = 'Chart' + uuid2.newguid();
+                report.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
+                report.properties.chart.dataColumns = report.properties.ykeys;
+            break;
+
+            default:
+            break;
+        }
+
+        return result;
     }
 
-    this.getReportDataNextPage = function (report, page) {
-        getReportDataNextPage(report, page);
-    };
+    async function fetchData(query, params){
 
-    function getReportDataNextPage (report, page) {
-        queryModel.loadQuery(report.query);
-        queryModel.getQueryDataNextPage(page).then(data => {
-            report.query.data.push.apply(report.query.data, data.data);
-        });
+        var request = {};
+
+        if(params.page !== undefined){ 
+            request.page = params.page;
+        }else{
+            request.page = 1;
+        }
+
+        request.query = clone(query);
+
+        if(!query.recordLimit && params.selectedRecordLimit){
+            request.query.recordLimit = params.selectedRecordLimit;
+        }
+
+        var result = await connection.get('/api/reports/get-data', request);
+
+        if(result.result === 0){
+            noty({text: result.msg, timeout: 2000, type: 'error'});
+            return {
+                data : []
+            }
+        }
+
+        var data = result.data;
+        
+        // processData(data);
+
+        return {
+            data : data,
+            sql : result.sql,
+            time : result.time
+        }
     }
+
+    function processData (data){
+        var dateTimeReviver = function (key, value) {
+            var a;
+            if (typeof value === 'string') {
+                a = /\/Date\((\d*)\)\//.exec(value);
+                if (a) {
+                    return new Date(+a[1]);
+                }
+            }
+            return value;
+        };
+
+        return JSON.parse(JSON.stringify(data), dateTimeReviver);
+    }
+
+    function initGraphChart (report){
+
+        const theChartID = 'Chart' + uuid2.newguid();
+        report.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
+        // report.properties.chart.query = query;
+        report.properties.chart.dataColumns = report.properties.ykeys;
+
+        const customObjectData = report.properties.xkeys[0];
+        report.properties.chart.dataAxis = {elementName: customObjectData.elementName,
+            queryName: 'query1',
+            elementLabel: customObjectData.objectLabel,
+            id: customObjectData.id,
+            type: 'bar',
+            color: '#000000'};
+    }
+
+    // this.getReportDataNextPage = function (report, page) {
+    //     getReportDataNextPage(report, page);
+    // };
+
+    // function getReportDataNextPage (report, page) {
+    //     // queryModel.getQueryDataNextPage(page).then(data => {
+    //     //     report.query.data.push.apply(report.query.data, data.data);
+    //     // });
+    // }
 
     this.repaintReport = function (report, mode) {
         repaintReport(report, mode);
@@ -264,10 +367,10 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         report.query.order.push(theColumn);
         showOverlay('OVERLAY_' + hashedID);
 
-        queryModel.getQueryData(report.query).then(data => {
-            report.query.data = data.data;
-            hideOverlay('OVERLAY_' + hashedID);
-        });
+        // queryModel.getQueryData(report.query).then(data => {
+        //     report.query.data = data.data;
+        //     hideOverlay('OVERLAY_' + hashedID);
+        // });
         // get the column index, identify the report.query.column by  index, then add to query.order taking care about the sortType -1 / 1
     };
 
@@ -280,7 +383,7 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         return copy;
     }
 
-    this.saveAsReport = function (report, mode, done) {
+    this.saveAsReport = async function (report, mode) {
         // Cleaning up the report object
         var clonedReport = clone(report);
         if (clonedReport.properties.chart) {
@@ -291,22 +394,16 @@ app.service('report_v2Model', function (queryModel, c3Charts, reportHtmlWidgets,
         if (clonedReport.query.data) { clonedReport.query.data = undefined; }
         clonedReport.parentDiv = undefined;
 
+        var result;
+
         if (mode === 'add') {
-            connection.post('/api/reports/create', clonedReport, function (data) {
-                if (data.result === 1) {
-                    setTimeout(function () {
-                        done();
-                    }, 400);
-                }
-            });
+            result = await connection.post('/api/reports/create', clonedReport);
         } else {
-            connection.post('/api/reports/update/' + report._id, clonedReport, function (result) {
-                if (result.result === 1) {
-                    setTimeout(function () {
-                        done();
-                    }, 400);
-                }
-            });
+            result = await connection.post('/api/reports/update/' + report._id, clonedReport);
+        }
+
+        if (result.result === 1) {
+            await new Promise(resolve => setTimeout(resolve, 400));
         }
     };
 

@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('ndPrompt', function ($compile, queryModel) {
+app.directive('ndPrompt', function ($compile) {
     return {
         transclude: true,
         scope: {
@@ -14,7 +14,6 @@ app.directive('ndPrompt', function ($compile, queryModel) {
             description: '@',
             selectedValue: '@',
             filter: '=',
-            afterGetValues: '=',
             isPrompt: '@'
         },
 
@@ -34,10 +33,12 @@ app.directive('ndPrompt', function ($compile, queryModel) {
                 // append select dropdown to "template"
             }
 
-            $scope.queryModel = queryModel;
-
             $scope.setDatePatternFilterType = function (filter, option) {
-                queryModel.setDatePatternFilterType(filter, option);
+
+                filter.searchValue = option.value;
+                filter.filterText1 = option.value;
+                filter.filterLabel1 = option.label;
+
                 var values = {};
                 values.filterText1 = filter.filterText1;
                 values.searchValue = filter.searchValue;
@@ -129,22 +130,22 @@ app.directive('ndPrompt', function ($compile, queryModel) {
                 checkForOnChange(filter);
             };
 
-            $scope.funcAsync = function (filter, search) {
-                queryModel.getDistinctFiltered(filter, search, function (data, sql) {
-                    filter.values = data;
-                });
-            };
+            // $scope.funcAsync = function (filter, search) {
+            //     queryModel.getDistinctFiltered(filter, search, function (data, sql) {
+            //         filter.values = data;
+            //     });
+            // };
 
-            $scope.getDistinctValues = function (filter) {
-                $scope.showList = true;
-                $scope.selectedFilter = filter;
-                if (typeof $scope.selectedFilter.data === 'undefined' || $scope.selectedFilter.data.length === 0) {
-                    queryModel.getDistinct($scope, filter, function (theData, sql) {
-                        $scope.selectedFilter = filter;
-                        if ($scope.afterGetValues) { $scope.afterGetValues(filter, theData); }
-                    });
-                }
-            };
+            // $scope.getDistinctValues = function (filter) {
+            //     $scope.showList = true;
+            //     $scope.selectedFilter = filter;
+            //     if (typeof $scope.selectedFilter.data === 'undefined' || $scope.selectedFilter.data.length === 0) {
+            //         queryModel.getDistinct($scope, filter, function (theData, sql) {
+            //             $scope.selectedFilter = filter;
+            //             if ($scope.afterGetValues) { $scope.afterGetValues(filter, theData); }
+            //         });
+            //     }
+            // };
 
             $scope.selectSearchValue = function (selectedValue) {
                 $scope.filter.searchValue = selectedValue;

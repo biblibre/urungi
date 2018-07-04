@@ -17,14 +17,14 @@
         </div>
         <div class="col-md-11">
             <nd-prompt element-id="filter.elementID" label="filter.objectLabel" value-field="filter.name" show-field="filter.name" prompts="prompts" 
-            after-get-values="afterFilterGetValues" is-prompt="false" filter="filter" on-change="filterChanged" ng-model="lastFilterSelectedValue"></nd-prompt>
+            is-prompt="false" filter="filter" on-change="filterChanged" ng-model="lastFilterSelectedValue"></nd-prompt>
         </div>
 
     </div>
 
 </li>
 <li class="filter-box" style="margin-left: 90px;" ng-show="selectedReport.query.recordLimit!=undefined">
-    <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="forgetRecordLimit();filtersUpdated();detectLayerJoins();"></i></span>
+    <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="forgetRecordLimit();"></i></span>
 
     <div class="container-fluid form-inline">
         <div class="col-md-11">

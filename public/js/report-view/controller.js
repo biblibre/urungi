@@ -1,4 +1,4 @@
-app.controller('report_viewCtrl', function ($scope, $routeParams, report_v2Model, queryModel, connection, bsLoadingOverlayService, widgetsCommon) {
+app.controller('report_viewCtrl', function ($scope, $routeParams, report_v2Model, connection, bsLoadingOverlayService, widgetsCommon) {
     $scope.loadUserObjects();
 
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
@@ -11,7 +11,6 @@ app.controller('report_viewCtrl', function ($scope, $routeParams, report_v2Model
     $scope.showPrompts = true;
     $scope.selectedReport = {};
     $scope.selectedReport.query = {};
-    $scope.queryModel = queryModel;
     $scope.mode = 'preview';
 
     $scope.getPrompts = function () {
@@ -49,7 +48,7 @@ app.controller('report_viewCtrl', function ($scope, $routeParams, report_v2Model
     };
 
     $scope.getQuery = function (queryID) {
-        return queryModel.query();
+        return $scope.selectedReport.query;
     };
 
     /** ******PUBLISH******/
@@ -74,17 +73,11 @@ app.controller('report_viewCtrl', function ($scope, $routeParams, report_v2Model
     };
 
     $scope.processStructure = function (execute) {
-        queryModel.processStructure(execute, function () {
-            /* queryModel.getQueryData( function(){
-
-            }); */
-
-            report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, function () {
-                // Done
-                $scope.hideOverlay('OVERLAY_reportLayout');
-                var theReports = [];
-                theReports.push($scope.selectedReport);
-            });
+        report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, function () {
+            // Done
+            $scope.hideOverlay('OVERLAY_reportLayout');
+            var theReports = [];
+            theReports.push($scope.selectedReport);
         });
     };
 

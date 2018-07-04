@@ -6,8 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryService, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, grid, uuid2, c3Charts, report_v2Model, widgetsCommon, $location, PagerService) {
-    
+app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryModel, queryService, reportService, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, grid, uuid2, c3Charts, report_v2Model, widgetsCommon, $location, PagerService) {
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.dateModal = 'partials/report/dateModal.html';
     $scope.linkModal = 'partials/report/linkModal.html';
@@ -15,7 +14,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     $scope.publishModal = 'partials/report/publishModal.html';
     $scope.columnFormatModal = 'partials/report/columnFormatModal.html';
     $scope.columnSignalsModal = 'partials/report/columnSignalsModal.html';
-    $scope.filterPromptModal = 'partials/report_v2/filter-prompt-modal.html';
+    $scope.filterPromptModal = 'partials/query/filter-prompt-modal.html';
     $scope.dropArea = 'partials/report_v2/drop-area.html';
     $scope.reportNameModal = 'partials/report_v2/reportNameModal.html';
     $scope.dashListModal = 'partials/report_v2/dashboardListModal.html';
@@ -50,8 +49,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     $scope.showSQL = false;
 
     $scope.rows = [];
-    $scope.selectedLayerID = undefined;
-    $scope.layers = [];
+    $scope.selectedLayerID = undefined;// queryModel.selectedLayerID();
+    $scope.layers = queryModel.layers();
     $scope.mode = 'preview';
     $scope.isForDash = false;
     $scope.showPrompts = true;
@@ -59,7 +58,15 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
 
     $scope.selectedRecordLimit = { value: 500 };
 
-    $scope.rootItem = {};
+    $scope.getSelectedLayer = function () {
+        return queryModel.selectedLayerID();
+    };
+
+    // $scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
+
+    $scope.rootItem = queryModel.rootItem();
+
+    $scope.fieldsAggregations = queryModel.fieldsAggregations;
 
     $scope.textAlign = widgetsCommon.textAlign;
 
@@ -72,6 +79,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     $scope.colors = widgetsCommon.colors;
 
     $scope.signalOptions = widgetsCommon.signalOptions;
+
+    $scope.queryModel = queryModel;
 
     $scope.getPrompts = function () {
         if ($scope.selectedReport.query) { return $scope.selectedReport.query.groupFilters; };
@@ -104,19 +113,20 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
 
         $scope.newForm();
 
-        $scope.selectedReport.query = queryModel.newQuery();
+        queryModel.initQuery();
+        $scope.selectedReport.query = queryModel.generateQuery();
     });
 
-    $scope.$on('loadReportStrucutureForDash', async function (event, args) {
+    $scope.$on('loadReportStrucutureForDash', function (event, args) {
+        // UNA QUERY SOLO PUEDE PERTENECER A UNA LAYER POR LO QUE EN LUGAR DE LAYERS ES LAYERID
+        // VER TB POR QUE HAY MAS DE UNA LAYER EN QUERY Y A NULL
         var report = args.report;
         $scope.isForDash = true;
         $scope.showOverlay('OVERLAY_reportLayout');
         $scope.selectedReport = report;
-        $scope.layers = await report_v2Model.getLayers();
-        queryModel.loadQuery(report.query);
-        queryModel.loadLayers($scope.layers);
         $scope.mode = 'edit';
-        await queryModel.processQuery(report.query);
+        queryModel.loadQuery(report.query);
+        queryModel.detectLayerJoins();
         report_v2Model.getReport(report, 'reportLayout', $scope.mode).then(() => {
             $scope.hideOverlay('OVERLAY_reportLayout');
         });
@@ -148,31 +158,15 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
         $timeout(function () { $scope.showIntro(); }, 1000);
     }
 
-    $scope.init = async function () {
-        console.log('init');
-        await $scope.initLayers();
-        console.log('layers initiated');
-        await $scope.initForm();
-        console.log('form initiated');
-        await $scope.refresh();
-        console.log('refreshed');
-    }
-
-    $scope.initLayers = async function () {
-        $scope.layers = await report_v2Model.getLayers();
-        queryModel.loadLayers($scope.layers);
-        if($scope.layers.length > 0){
-            $scope.selectedLayerID = $scope.layers[0]._id;
-            $scope.rootItem = $scope.layers[0].rootItem;
-        }
+    $scope.initLayers = function () {
+        queryModel.getLayers().then((layers) => {
+            $scope.layers = layers;
+            $scope.selectedLayerID = queryModel.selectedLayerID();
+        });
     };
 
     $scope.newForm = function () {
-
-        var query = queryModel.newQuery();
-
         $scope.selectedReport = {};
-        $scope.selectedReport.query = query;
         $scope.selectedReport.draft = true;
         $scope.selectedReport.badgeStatus = 0;
         $scope.selectedReport.exportable = true;
@@ -199,8 +193,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
         $scope.selectedReport.properties.rowBottomLineWidth = 2;
         $scope.selectedReport.properties.columnLineWidht = 0;
 
-
         $scope.selectedReport.reportType = 'grid';
+        $scope.selectedLayerID = queryModel.selectedLayerID();
         $scope.mode = 'add';
     };
 
@@ -210,20 +204,19 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
             if (report) {
                 $scope.showOverlay('OVERLAY_reportLayout');
                 $scope.selectedReport = report;
-                queryModel.loadQuery(report.query);
                 $scope.mode = 'edit';
                 $scope.cleanForm();
-                if(report.query.selectedLayerID){
-                    $scope.selectedLayerID = report.query.selectedLayerID;
-                    var layer = $scope.layers.find( l => l._id === $scope.selectedLayerID);
-                    $scope.rootItem = layer.rootItem;
-                }
+                await report_v2Model.getReport(report, 'reportLayout', $scope.mode);
+                $scope.selectedLayerID = queryModel.selectedLayerID();
+                $scope.hideOverlay('OVERLAY_reportLayout');
             } else {
 
                 // TODO:No report found message
             }
         } else {
             $scope.newForm();
+            queryModel.initQuery();
+            $scope.selectedReport.query = queryModel.generateQuery();
         }
     };
 
@@ -459,14 +452,13 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     };
 
     $scope.changeLayer = function (selectedLayerID) {
-        $scope.selectedLayerID = selectedLayerID;
-        $scope.selectedReport.query.selectedLayerID = selectedLayerID;
-        var layer = $scope.layers.find( l => l._id === $scope.selectedLayerID);
-        $scope.rootItem = layer.rootItem;
+        // $scope.selectedLayer = selectedLayerID;
+        queryModel.changeLayer(selectedLayerID);
+        $scope.selectedLayerID = queryModel.selectedLayerID();
     };
 
-    $scope.getQuery = function () {
-        return $scope.selectedReport.query;
+    $scope.getQuery = function (queryID) {
+        return queryModel.query();
     };
 
     $scope.getReport = function (hashedID) {
@@ -484,41 +476,26 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
         return null;
     };
 
-    $scope.refresh = async function () {
-        $scope.gettingData = true;
-
-        await queryModel.processQuery($scope.selectedReport.query);
-
-        console.log('query processed');
-
-        params = {
-            mode : $scope.mode,
-            selectedRecordLimit : $scope.selectedRecordLimit
-        };
-
-        const result = await report_v2Model.fetchDataForPreview($scope.selectedReport, params);
-
-        $scope.gettingData = false;
-
-        $scope.sql = result.sql;
-        $scope.time = result.time;
-
-        $scope.$digest();
-
-        report_v2Model.repaintReport($scope.selectedReport, $scope.mode);
-
-        // $scope.hideOverlay('OVERLAY_reportLayout'); // unnecessary unless I missed something
-        
-    }
+    $scope.processStructure = function (execute) {
+        queryModel.processStructure(execute, function () {
+            $scope.getDataForPreview();
+        });
+    };
 
     $scope.getDatePatternFilters = function () {
         return queryModel.getDatePatternFilters();
     };
 
+    $scope.onChangeDropZone = function () {
+        queryModel.onChange();
+    };
+
     $scope.onDropOnFilter = function (data, event, type, group) {
         var item = data['json/custom-object'];
         event.stopPropagation();
+        $scope.sql = undefined;
         $scope.onDropField(item, 'filter');
+        setTimeout(function () { $scope.selectedReport.query = queryModel.generateQuery(); }, 1000);
     };
 
     $scope.onDropField = function (newItem, queryBind) {
@@ -698,6 +675,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     };
 
     $scope.filterChanged = function (elementID, values) {
+        queryModel.processStructure();
     };
 
     $scope.setHeight = function (element, height, correction) {
@@ -729,9 +707,90 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
         return queryModel.isfilterComplete(filter);
     };
 
-    $scope.changeReportType = function (newReportType) {
+    $scope.getDataForPreview = function () {
+        $scope.page = 1;
 
-        $scope.selectedReport.query.countYKeys = false;
+        var query = queryModel.generateQuery(); // queryModel.query();
+        // TODO: clean data query
+
+        const limit = $scope.selectedRecordLimit.value;
+
+        $scope.selectedReport.query = query;
+
+        if ($scope.selectedReport.query.columns.length > 0) {
+            var el = document.getElementById('reportLayout');
+            angular.element(el).empty();
+            $scope.gettingData = true;
+            $scope.showOverlay('OVERLAY_reportLayout');
+
+            switch ($scope.selectedReport.reportType) {
+            case 'grid':
+            case 'vertical-grid':
+            case 'pivot':
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
+                    $scope.sql = data.sql;
+                    $scope.time = data.time;
+                    $scope.hideOverlay('OVERLAY_reportLayout');
+                    $scope.gettingData = false;
+                });
+                break;
+
+            case 'chart-line':
+            case 'chart-donut':
+            case 'chart-pie':
+                if ($scope.selectedReport.properties.xkeys.length > 0 && $scope.selectedReport.properties.ykeys.length > 0) {
+                    const theChartID = 'Chart' + uuid2.newguid();
+                    $scope.selectedReport.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
+                    // $scope.selectedReport.properties.chart.query = query;
+                    $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
+
+                    const customObjectData = $scope.selectedReport.properties.xkeys[0];
+                    $scope.selectedReport.properties.chart.dataAxis = {elementName: customObjectData.elementName,
+                        queryName: 'query1',
+                        elementLabel: customObjectData.objectLabel,
+                        id: customObjectData.id,
+                        type: 'bar',
+                        color: '#000000'};
+                    report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
+                        $scope.sql = data.sql;
+                        $scope.time = data.time;
+                        $scope.hideOverlay('OVERLAY_reportLayout');
+                        $scope.gettingData = false;
+                    });
+                }
+                break;
+
+            case 'gauge':
+                const theChartID = 'Chart' + uuid2.newguid();
+                $scope.selectedReport.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
+                $scope.selectedReport.properties.chart.dataColumns = $scope.selectedReport.properties.ykeys;
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
+                    $scope.sql = data.sql;
+                    $scope.time = data.time;
+                    $scope.hideOverlay('OVERLAY_reportLayout');
+                    $scope.gettingData = false;
+                });
+                break;
+
+            case 'indicator':
+                console.log('Report Type indicator');
+
+                report_v2Model.getReport($scope.selectedReport, 'reportLayout', $scope.mode, limit).then(data => {
+                    $scope.sql = data.sql;
+                    $scope.time = data.time;
+                    $scope.hideOverlay('OVERLAY_reportLayout');
+                    $scope.gettingData = false;
+                });
+                break;
+
+            default:
+                break;
+            }
+        }
+    };
+
+    $scope.changeReportType = function (newReportType) {
+        queryModel.requestCount(false);
 
         switch (newReportType) {
         case 'grid':
@@ -743,8 +802,8 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
             break;
 
         case 'pivot':
-            $scope.selectedReport.query.countYKeys = true;
             $scope.selectedReport.reportType = 'pivot';
+            queryModel.requestCount(true);
             break;
 
         case 'chart-bar':
@@ -800,39 +859,40 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
             break;
         }
         // TODO: only generate the visualization not requery all data again
+        $scope.getDataForPreview();
     };
 
     $scope.chartColumnTypeOptions = [
         {
             id: 'spline',
             name: 'Spline',
-            image: 'images/spline.png'
+            image: 'images/spline.png',
         },
         {
             id: 'bar',
             name: 'Bar',
-            icon: 'fa fa-bar-chart'
+            icon: 'fa fa-bar-chart',
         },
         {
             id: 'area',
             name: 'Area',
-            icon: 'fa fa-area-chart'
+            icon: 'fa fa-area-chart',
         },
         {
             id: 'line',
             name: 'Line',
-            icon: 'fa fa-line-chart'
+            icon: 'fa fa-line-chart',
         },
         {
             id: 'area-spline',
             name: 'Area spline',
-            image: 'images/area-spline.png'
+            image: 'images/area-spline.png',
         },
         {
             id: 'scatter',
             name: 'Scatter',
-            image: 'images/scatter.png'
-        }
+            image: 'images/scatter.png',
+        },
 
     ];
 
@@ -857,7 +917,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     $scope.changeChartSectorType = function (column, type) {
         if (type === 'pie') { $scope.selectedReport.reportType = 'chart-pie'; }
         if (type === 'donut') { $scope.selectedReport.reportType = 'chart-donut'; }
-        report_v2Model.repaintReport($scope.selectedReport, $scope.mode);
+        $scope.processStructure();
     };
 
     $scope.changeColumnStyle = function (columnIndex, hashedID) {
@@ -897,17 +957,12 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
             $scope.reportNameSave();
         }
     };
-    
-    $scope.reportNameSave = async function () {
-
-        await queryModel.processQuery();
-
-        await report_v2Model.saveAsReport($scope.selectedReport, $scope.mode);
-        
-        $('#theReportNameModal').modal('hide');
-        $('.modal-backdrop').hide();
-        $scope.goBack();
-    
+    $scope.reportNameSave = function () {
+        report_v2Model.saveAsReport($scope.selectedReport, $scope.mode, function () {
+            $('#theReportNameModal').modal('hide');
+            $('.modal-backdrop').hide();
+            $scope.goBack();
+        });
     };
 
     $scope.pushToDash = function () {
@@ -943,7 +998,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
             column.objectLabel = column.originalLabel + ' (' + option.name + ')';
         }
 
-        queryModel.aggregationChoosed($scope.selectedReport.query, column, option, queryBind);
+        queryModel.aggregationChoosed(column, option, queryBind);
     };
 
     $scope.hideColumn = function (column, hidden) {
@@ -956,9 +1011,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     };
 
     $scope.setDatePatternFilterType = function (filter, option) {
-        filter.searchValue = option.value;
-        filter.filterText1 = option.value;
-        filter.filterLabel1 = option.label;
+        queryModel.setDatePatternFilterType(filter, option);
     };
 
     $scope.getElementProperties = function (element, elementID) {
@@ -981,6 +1034,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
 
     $scope.setSortType = function (field, type) {
         field.sortType = type;
+        queryModel.processStructure();
     };
 
     $scope.chooseRecordLimit = function () {
@@ -992,9 +1046,5 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     $scope.forgetRecordLimit = function () {
         $scope.selectedRecordLimit.value = $scope.selectedReport.query.recordLimit;
         delete $scope.selectedReport.query.recordLimit;
-    };
-
-    $scope.hideErrorMessage = function () {
-        $scope.selectedReport.hideErrorMessage = true;
     };
 });

@@ -1152,12 +1152,6 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
         return result;
     }
 
-    this.setDatePatternFilterType = function (filter, option) {
-        filter.searchValue = option.value;
-        filter.filterText1 = option.value;
-        filter.filterLabel1 = option.label;
-    };
-
     this.reorderFilters = function () {
         reorderFilters();
     };

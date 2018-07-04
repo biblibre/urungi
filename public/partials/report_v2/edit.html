@@ -2,7 +2,7 @@
 
 <div class="explorer-container">
 
-    <div class="explorer-header" ng-init="initLayers(); initForm()">
+    <div class="explorer-header" ng-init="init()">
 
         <div class="explorer-header-title">
                 <h3  ng-if="mode == 'preview' && !selectedReport.reportName">Explorer</h3>
@@ -61,7 +61,7 @@
                             </div>
             </section>
             <section id="elementsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'elements'">
-                <section id="dataObjectsInner" class="layer scrollPane" ng-include="'partials/query/data-objects.html'">
+                <section id="dataObjectsInner" class="layer scrollPane" ng-include="'partials/report_v2/data-objects.html'">
 
                 </section>
             </section>

@@ -31,7 +31,7 @@
     </span>
     <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
     <span class="pull-right">
-        <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" class="pull-right" ng-click="processStructure();" style="padding: 3px 10px;">
+        <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" class="pull-right" ng-click="refresh();" style="padding: 3px 10px;">
             <i class="fa fa-refresh hand-cursor"></i>
             Refresh data
             <span ng-if="time !== undefined">({{time}}ms)</span>
