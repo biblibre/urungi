@@ -828,9 +828,6 @@ app.service('queryModel', function ($http, $q, $filter, connection, $compile, $r
                     column.elementLabel = column.originalLabel + ' (' + option.name + ')';
                     column.objectLabel = column.originalLabel + ' (' + option.name + ')';
                 }
-                column.aggregation = option.value;
-                column.elementLabel = column.originalLabel + ' (' + option.name + ')';
-                column.objectLabel = column.originalLabel + ' (' + option.name + ')';
             }
         }
 
