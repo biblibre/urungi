@@ -88,15 +88,6 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                         areaLineColor: '#fff'
                     },
                     {
-                        element: '#myProfileMainMenu',
-                        html: '<div><h3>My profile</h3><span style="font-weight:bold;color:#8DC63F">This link is available for all users.</span><br/><span style="font-weight:bold;">Access this to view info about your profile, change your password, etc...</span><br/><span></span></div>',
-                        width: '300px',
-                        height: '180px',
-                        position: 'right',
-                        areaColor: 'transparent',
-                        areaLineColor: '#8DC63F'
-                    },
-                    {
                         element: '#exploreMainMenu',
                         html: '<div><h3>Explore</h3><span style="font-weight:bold;color:#8DC63F">This link is available for all users that have the grant for explore data.</span><br/><span style="font-weight:bold;">Explore allow users to surf across the data without creating a report for that.</span><br/><span>Use this if you want to query your data but is not necessary for you to save it for a later use</span></div>',
                         width: '300px',
@@ -180,15 +171,6 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                         html: '<div><h3>Most Executed</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">This area display your 10 most executed elements and the number of executions per element</span><br/><span></span></div>',
                         width: '300px',
                         height: '180px'
-                    },
-                    {
-                        element: '#myProfileMainMenu',
-                        html: '<div><h3>My profile</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span style="font-weight:bold;">Access this to view info about your profile, change your password, etc...</span><br/><span></span></div>',
-                        width: '300px',
-                        height: '180px',
-                        position: 'right',
-                        areaColor: 'transparent',
-                        areaLineColor: '#8DC63F'
                     },
                     {
                         element: '#exploreMainMenu',
