@@ -1,15 +1,3 @@
-
-
-
-<div ng-include src="filterPromptModal"></div>
-
-<div class="container-fluid" style="width:100%" ng-include src="dropArea" >
-
-
-
-</div>
-
-
 <!--choose a widget to see your data-->
 <div id="reportType" class="container-fluid" ng-hide="queryID" style="width:100%">
     <!-- TYPE OF REPORT SELECTION -->
@@ -21,6 +9,10 @@
     <a id="reportTypeIndicator" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'indicator', 'report-unselected-btn': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="/images/indicator.png"></a>
     <a id="reportTypeGauge" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'gauge', 'report-unselected-btn': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="/images/gauge.png"></a>
 </div>
+
+<div ng-include src="filterPromptModal"></div>
+
+<div class="container-fluid" style="width:100%" ng-include src="dropArea"></div>
 
 <div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width:100%">
     <span ng-show="selectedReport.query.recordLimit == undefined">
