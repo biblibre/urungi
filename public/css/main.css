@@ -22,7 +22,9 @@ a {
     border-color: #F68010;
     font-weight: bold;
 }
-
+.logo{
+    width: 500px;
+}
 .btn-primary {
     color: #fff;
     background-color: #000;

@@ -15,6 +15,7 @@ html, body {
 
 .row .login-header {
     padding: 20px;
+    width:500px;
 }
 
 .page-container {
@@ -70,13 +71,19 @@ filter: alpha(opacity=100);
 
 .login-page .login-form .login-header {
     margin-bottom: 40px;
+
 }
 
 .login-page .login-form .login-header .logo {
     display: block;
+        
 }
-
-
+.logo{
+    width: 500px;
+}
+a.logo{
+    width: 500px;
+}
 .login-page .login-form .login-header p {
     color: #979898;
     font-size: 13px;
