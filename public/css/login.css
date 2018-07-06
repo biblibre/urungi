@@ -175,9 +175,9 @@ filter: alpha(opacity=100);
     color: rgba(151, 152, 152, 0.7);
 }
 
-.wst-btn
+#login-btn
 {
- background-color: #8AC444;
+ background-color: #F68010;
 }
 
 .button {

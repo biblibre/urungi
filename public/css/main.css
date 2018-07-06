@@ -18,8 +18,9 @@ a {
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
     z-index: 2;
     color: #000;
-    background-color: #000;
-    border-color: #000;
+    background-color: #F68010;
+    border-color: #F68010;
+    font-weight: bold;
 }
 
 .btn-primary {
@@ -351,6 +352,7 @@ img.img-cirlce {
     display: block;
     width: 100%;
 }
+
 .btn-success {
     color: #000;
     background-color: transparent;
@@ -438,10 +440,6 @@ img.img-cirlce {
     color: #cc3f44;;
     border: 1px solid #cc3f44;;
 }
-
-
-
-
 
 .profile-env .profile-post-form {
     position: relative;
@@ -1282,8 +1280,8 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
 }
 
 .column-box-agg-btn {
-    background-color:white;
-    color: #557fc2;
+    background-color:transparent;
+    color: white;
     padding: 6px;
     border-radius: 25px;
     margin-left: 2px;
@@ -1548,6 +1546,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     padding-left: 10px;
     margin-bottom: -1px;
     background-color: #000;
+    background-color: transparent;
     border: 0px solid #ddd;
 }
 
@@ -2708,16 +2707,6 @@ label[for] {
     border-bottom: 2px solid #0063FF;
 }
 
-.admin-menu {
-    background-color: #72A230;
-    color: #FFFFFF
-}
-
-.admin-menu:hover {
-    background-color: #000;
-    color: #000;
-}
-
 .branded-strong-label {
     color:#0063FF;
     font-weight: bold;
@@ -2776,12 +2765,6 @@ label[for] {
     border-top: 0;
 }
 
-.add-to-layer-btn {
-    font-size: 9px;
-    width: 40px;
-}
-
-
 .layer-tree-datasource
 {
     font-weight: normal;
@@ -2790,6 +2773,11 @@ label[for] {
 .selected-datasource
 {
     font-weight: bolder;
+    color:#F68010;
+}
+
+.selected-datasource:hover
+{
     color:#0063FF;
 }
 
@@ -2804,6 +2792,23 @@ label[for] {
     width: 220px;
     margin-bottom: 3px;
     overflow: hidden;
+    color : white;
+}
+
+.layer-tree-datasource-collection:hover {
+    color : #3f4652;
+}
+
+.add-to-layer-btn {
+    font-size: 9px;
+    width: 40px;
+    background-color: white;
+    color: #0063FF
+}
+
+.layer-tree-datasource-collection:hover .add-to-layer-btn {
+    background-color: #0063FF;
+    color: white;
 }
 
 .layer-tree-datasource-field {
@@ -3110,7 +3115,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
 #objectPanel>menu a:hover, #objectPanel>menu .on a {
-    color: #3742fa;
+    color: #F68010;
     -webkit-transform: none;
     transform: none;
     background-color: #3f4652;
@@ -3410,10 +3415,6 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     white-space: nowrap;
     text-overflow: ellipsis;
     padding-left: 5px;
-}
-
-.schema-container .list-group-item {
-    background-color: transparent;
 }
 
 .list-group-item {
