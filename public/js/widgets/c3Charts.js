@@ -299,7 +299,8 @@ app.service('c3Charts', function () {
                                 culling: {
                                     max: 20
                                 },
-                                multiline: false
+                                multiline: false,
+                                rotate: 45
                             }
                         }
                     },
