@@ -1,7 +1,7 @@
     <div id="filtersPanel"  class="container-fluid column-zone no-padding" drop="onDropOnFilter($data, $event, 'filter')" 
     drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="selectedReport.query.groupFilters.length > 0 || selectedReport.query.recordLimit != undefined">Drop here your filters</div>
-        <ul class="ul-drop no-padding" ng-model="selectedReport.properties.filters" ui-sortable="filterSortableOptions" ng-include="'partials/report_v2/filter.html'"></ul>
+        <ul class="ul-drop no-padding" ng-model="selectedReport.properties.filters" ui-sortable="filterSortableOptions" ng-include="'partials/report/filter.html'"></ul>
     </div>
     
     <!-- Order keys -->

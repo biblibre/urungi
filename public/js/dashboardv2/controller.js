@@ -1,13 +1,13 @@
-app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams, report_v2Model, c3Charts, uuid2, icons, colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout, $rootScope, PagerService) {
+app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons, colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout, $rootScope, PagerService) {
     $scope.loadUserObjects();
 
-    $scope.reportModal = 'partials/report_v2/edit.html';
+    $scope.reportModal = 'partials/report/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
     $scope.publishModal = 'partials/report/publishModal.html';
     $scope.settingsHtml = 'partials/pages/settings.html';
     $scope.queriesHtml = 'partials/pages/queries.html';
     $scope.settingsTemplate = 'partials/widgets/inspector.html';
-    $scope.filterWidget = 'partials/report_v2/filterWidget.html';
+    $scope.filterWidget = 'partials/report/filterWidget.html';
     $scope.promptModal = 'partials/widgets/promptModal.html';
 
     $scope.selectedDashboard = {reports: [], containers: [], prompts: []};
@@ -396,7 +396,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         } else {
             var updatedReport = angular.copy(qstructure);
             $scope.selectedDashboard.reports.splice($scope.editingReportIndex, 1, updatedReport);
-            report_v2Model.getReport(updatedReport, 'REPORT_' + qstructure.id, $scope.mode, function (sql) {});
+            reportModel.getReport(updatedReport, 'REPORT_' + qstructure.id, $scope.mode, function (sql) {});
         }
         $scope.reportInterface = false;
         // getAllPageColumns();
@@ -473,7 +473,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     if (angular.element('#REPORT_' + $scope.selectedDashboard.reports[i].id).length) {
                         noty({text: 'Sorry, that report is already on the dash', timeout: 6000, type: 'error'});
                     } else {
-                        const html = report_v2Model.getReportContainerHTML(customObjectData.reportID);
+                        const html = reportModel.getReportContainerHTML(customObjectData.reportID);
                         createOnDesignArea(html, function () {});
                     }
                 }
@@ -486,7 +486,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     if (angular.element('#PROMPT_' + $scope.prompts[i].elementID).length) {
                         noty({text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error'});
                     } else {
-                        const html = report_v2Model.getPromptHTML($scope.prompts[i]);
+                        const html = reportModel.getPromptHTML($scope.prompts[i]);
                         createOnDesignArea(html, function () {});
                     }
                 }
@@ -551,7 +551,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     if (angular.element('#PROMPT_' + $scope.prompts[i].elementID).length) {
                         noty({text: 'Sorry, that filter is already on the board', timeout: 6000, type: 'error'});
                     } else {
-                        html = report_v2Model.getPromptHTML($scope.prompts[i]);
+                        html = reportModel.getPromptHTML($scope.prompts[i]);
                     }
                 }
             }
@@ -569,7 +569,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     if (angular.element('#REPORT_' + $scope.selectedDashboard.reports[i].id).length) {
                         noty({text: 'Sorry, that report is already on the board', timeout: 6000, type: 'error'});
                     } else {
-                        html = report_v2Model.getReportContainerHTML(customObjectData.reportID);
+                        html = reportModel.getReportContainerHTML(customObjectData.reportID);
                         // createOnDesignArea(html,function(){});
                     }
                 }
@@ -789,7 +789,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         if ($scope.mode !== 'preview') {
             for (var i in $scope.selectedDashboard.reports) {
                 if ($scope.selectedDashboard.reports[i].id === reportID) {
-                    report_v2Model.getReport($scope.selectedDashboard.reports[i], 'REPORT_CONTAINER_' + reportID, $scope.mode, function (sql) {
+                    reportModel.getReport($scope.selectedDashboard.reports[i], 'REPORT_CONTAINER_' + reportID, $scope.mode, function (sql) {
                     });
                 }
             }
@@ -960,7 +960,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         if ($scope.selectedDashboard) {
             for (var i in $scope.selectedDashboard.reports) {
                 if ($scope.selectedDashboard.reports[i].reportType === 'indicator') {
-                    report_v2Model.generateIndicator($scope.selectedDashboard.reports[i]);
+                    reportModel.generateIndicator($scope.selectedDashboard.reports[i]);
                 }
             }
         }
@@ -970,7 +970,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         if ($scope.selectedDashboard) {
             for (var i in $scope.selectedDashboard.reports) {
                 if ($scope.selectedDashboard.reports[i].reportType === 'grid') {
-                    report_v2Model.repaintReport($scope.selectedDashboard.reports[i], $scope.mode);
+                    reportModel.repaintReport($scope.selectedDashboard.reports[i], $scope.mode);
                 }
             }
         }
@@ -1106,7 +1106,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             if ($scope.selectedDashboard.reports[i].id === reportID) {
                 if (!$scope.selectedDashboard.reports[i].lastLoadedPage) { $scope.selectedDashboard.reports[i].lastLoadedPage = 2; } else { $scope.selectedDashboard.reports[i].lastLoadedPage += 1; }
 
-                report_v2Model.getReportDataNextPage($scope.selectedDashboard.reports[i], $scope.selectedDashboard.reports[i].lastLoadedPage);
+                reportModel.getReportDataNextPage($scope.selectedDashboard.reports[i], $scope.selectedDashboard.reports[i].lastLoadedPage);
             }
         }
     };

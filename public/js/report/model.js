@@ -1,6 +1,6 @@
 /* global XLSX: false, saveAs: false, Blob: false, datenum: false */
 
-app.service('report_v2Model', function (c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid, pivot, uuid2) {
+app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadingOverlayService, connection, $routeParams, verticalGrid, pivot, uuid2) {
     var report = {};
 
     this.getReportDefinition = async function (id, isLinked) {

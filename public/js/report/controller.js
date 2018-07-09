@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryService, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, grid, uuid2, c3Charts, report_v2Model, widgetsCommon, $location, PagerService) {
+app.controller('reportCtrl', function ($scope, connection, $compile, queryService, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, grid, uuid2, c3Charts, reportModel, widgetsCommon, $location, PagerService) {
     
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.dateModal = 'partials/report/dateModal.html';
@@ -15,10 +15,10 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     $scope.publishModal = 'partials/report/publishModal.html';
     $scope.columnFormatModal = 'partials/report/columnFormatModal.html';
     $scope.columnSignalsModal = 'partials/report/columnSignalsModal.html';
-    $scope.filterPromptModal = 'partials/report_v2/filter-prompt-modal.html';
-    $scope.dropArea = 'partials/report_v2/drop-area.html';
-    $scope.reportNameModal = 'partials/report_v2/reportNameModal.html';
-    $scope.dashListModal = 'partials/report_v2/dashboardListModal.html';
+    $scope.filterPromptModal = 'partials/report/filter-prompt-modal.html';
+    $scope.dropArea = 'partials/report/drop-area.html';
+    $scope.reportNameModal = 'partials/report/reportNameModal.html';
+    $scope.dashListModal = 'partials/report/dashboardListModal.html';
     $scope.settingsTemplate = 'partials/widgets/common.html';
     $scope.tabs = {selected: 'elements'};
 
@@ -112,12 +112,12 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
         $scope.isForDash = true;
         $scope.showOverlay('OVERLAY_reportLayout');
         $scope.selectedReport = report;
-        $scope.layers = await report_v2Model.getLayers();
+        $scope.layers = await reportModel.getLayers();
         queryModel.loadQuery(report.query);
         queryModel.loadLayers($scope.layers);
         $scope.mode = 'edit';
         await queryModel.processQuery(report.query);
-        report_v2Model.getReport(report, 'reportLayout', $scope.mode).then(() => {
+        reportModel.getReport(report, 'reportLayout', $scope.mode).then(() => {
             $scope.hideOverlay('OVERLAY_reportLayout');
         });
     });
@@ -159,7 +159,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     }
 
     $scope.initLayers = async function () {
-        $scope.layers = await report_v2Model.getLayers();
+        $scope.layers = await reportModel.getLayers();
         queryModel.loadLayers($scope.layers);
         if($scope.layers.length > 0){
             $scope.selectedLayerID = $scope.layers[0]._id;
@@ -206,7 +206,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
 
     $scope.initForm = async function () {
         if ($routeParams.reportID && $routeParams.reportID !== 'true') {
-            const report = await report_v2Model.getReportDefinition($routeParams.reportID, false);
+            const report = await reportModel.getReportDefinition($routeParams.reportID, false);
             if (report) {
                 $scope.showOverlay('OVERLAY_reportLayout');
                 $scope.selectedReport = report;
@@ -283,7 +283,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
 
     $scope.duplicateReport = async function () {
         $scope.duplicateOptions.freeze = true;
-        await report_v2Model.duplicateReport($scope.duplicateOptions);
+        await reportModel.duplicateReport($scope.duplicateOptions);
         $scope.getReports($scope.page, '', ['reportName', 'reportType', 'isPublic', 'owner', 'reportDescription']);
         $scope.duplicateOptions.freeze = false;
         $('#duplicateModal').modal('hide');
@@ -491,12 +491,16 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
 
         console.log('query processed');
 
+        if( ['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0 ){
+            reportModel.initChart($scope.selectedReport);
+        }
+
         params = {
             mode : $scope.mode,
             selectedRecordLimit : $scope.selectedRecordLimit
         };
 
-        const result = await report_v2Model.fetchDataForPreview($scope.selectedReport, params);
+        const result = await reportModel.fetchDataForPreview($scope.selectedReport, params);
 
         $scope.gettingData = false;
 
@@ -857,21 +861,21 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     $scope.changeChartSectorType = function (column, type) {
         if (type === 'pie') { $scope.selectedReport.reportType = 'chart-pie'; }
         if (type === 'donut') { $scope.selectedReport.reportType = 'chart-donut'; }
-        report_v2Model.repaintReport($scope.selectedReport, $scope.mode);
+        reportModel.repaintReport($scope.selectedReport, $scope.mode);
     };
 
     $scope.changeColumnStyle = function (columnIndex, hashedID) {
-        report_v2Model.changeColumnStyle($scope.selectedReport, columnIndex, hashedID);
-        $scope.selectedColumn = report_v2Model.selectedColumn();
-        $scope.selectedColumnHashedID = report_v2Model.selectedColumnHashedID();
-        $scope.selectedColumnIndex = report_v2Model.selectedColumnIndex();
+        reportModel.changeColumnStyle($scope.selectedReport, columnIndex, hashedID);
+        $scope.selectedColumn = reportModel.selectedColumn();
+        $scope.selectedColumnHashedID = reportModel.selectedColumnHashedID();
+        $scope.selectedColumnIndex = reportModel.selectedColumnIndex();
     };
 
     $scope.changeColumnSignals = function (columnIndex, hashedID) {
-        report_v2Model.changeColumnSignals($scope.selectedReport, columnIndex, hashedID);
-        $scope.selectedColumn = report_v2Model.selectedColumn();
-        $scope.selectedColumnHashedID = report_v2Model.selectedColumnHashedID();
-        $scope.selectedColumnIndex = report_v2Model.selectedColumnIndex();
+        reportModel.changeColumnSignals($scope.selectedReport, columnIndex, hashedID);
+        $scope.selectedColumn = reportModel.selectedColumn();
+        $scope.selectedColumnHashedID = reportModel.selectedColumnHashedID();
+        $scope.selectedColumnIndex = reportModel.selectedColumnIndex();
     };
 
     $scope.changeColumnColor = function (color) {
@@ -883,11 +887,11 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     };
 
     $scope.setColumnFormat = function () {
-        report_v2Model.repaintReport($scope.selectedReport);
+        reportModel.repaintReport($scope.selectedReport);
     };
 
     $scope.orderColumn = function (columnIndex, desc, hashedID) {
-        report_v2Model.orderColumn($scope.selectedReport, columnIndex, desc, hashedID);
+        reportModel.orderColumn($scope.selectedReport, columnIndex, desc, hashedID);
     };
 
     $scope.reportName = function () {
@@ -902,7 +906,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
 
         await queryModel.processQuery();
 
-        await report_v2Model.saveAsReport($scope.selectedReport, $scope.mode);
+        await reportModel.saveAsReport($scope.selectedReport, $scope.mode);
         
         $('#theReportNameModal').modal('hide');
         $('.modal-backdrop').hide();
@@ -952,7 +956,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
     };
 
     $scope.saveToExcel = function (reportHash) {
-        report_v2Model.saveToExcel($scope, reportHash);
+        reportModel.saveToExcel($scope, reportHash);
     };
 
     $scope.setDatePatternFilterType = function (filter, option) {
@@ -976,7 +980,7 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, querySer
 
     $scope.gridGetMoreData = function (reportID) {
         $scope.page += 1;
-        report_v2Model.getReportDataNextPage($scope.selectedReport, $scope.page);
+        reportModel.getReportDataNextPage($scope.selectedReport, $scope.page);
     };
 
     $scope.setSortType = function (field, type) {

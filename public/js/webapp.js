@@ -92,8 +92,8 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/reports/:reportID/', {
-            templateUrl: 'partials/report-view/view.html',
-            controller: 'report_viewCtrl'
+            templateUrl: 'partials/report/view.html',
+            controller: 'reportCtrl'
         });
 
         $routeProvider.when('/reports/:reportID/:elementID/:elementValue', {
@@ -102,16 +102,12 @@ var app = angular.module('WideStage', [
         });
 
         $routeProvider.when('/reports/new/:reportID/', {
-            /* templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl' */
-            templateUrl: 'partials/report_v2/edit.html',
-            controller: 'report_v2Ctrl'
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
         });
         $routeProvider.when('/reports/edit/:reportID/', {
-            /* templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl' */
-            templateUrl: 'partials/report_v2/edit.html',
-            controller: 'report_v2Ctrl'
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
         });
         // Data sources
 
@@ -240,25 +236,15 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/pages/edit.html',
             controller: 'pagesCtrl'
         });
-        // queries
-
-        $routeProvider.when('/query/new/:queryID', {
-            templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl'
-        });
-        $routeProvider.when('/query/edit/:queryID', {
-            templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl'
-        });
 
         // explore
         $routeProvider.when('/explore', {
-            templateUrl: 'partials/report_v2/edit.html',
-            controller: 'report_v2Ctrl'
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
         });
         $routeProvider.when('/explore/:extra', {
-            templateUrl: 'partials/report_v2/edit.html',
-            controller: 'report_v2Ctrl'
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
         });
 
         // catalog
