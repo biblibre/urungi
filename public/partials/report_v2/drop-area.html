@@ -3,23 +3,23 @@
     <div ng-if="selectedReport.reportType == 'pivot'"
     wst-dropzone="true" list-model="selectedReport.properties.ykeys"
     aggregation-mandatory="true" zone="'ykeys'"
-    query-bind="'column'" zone-info="'Drop here your metric.'"></div>
+    query-bind="'column'" zone-info="'Drop here your metrics'"></div>
 
     <div ng-if="selectedReport.reportType == 'chart-bar' || selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'indicator' || selectedReport.reportType == 'gauge'"
     wst-dropzone="true" list-model="selectedReport.properties.ykeys" zone="'ykeys'"
-    query-bind="'column'" zone-info="'Drop here your metric.'"></div>
+    query-bind="'column'" zone-info="'Drop here your metrics'"></div>
 
     <div ng-if="selectedReport.reportType == 'chart-line'"
     wst-dropzone="true" list-model="selectedReport.properties.ykeys" zone="'ykeys'"
     display-options="chartColumnTypeOptions"
     display-callback="changeChartColumnType"
-    query-bind="'column'" zone-info="'Drop here your metric.'"></div>
+    query-bind="'column'" zone-info="'Drop here your metrics'"></div>
 
     <div ng-if="selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'chart-pie'"
     wst-dropzone="true" list-model="selectedReport.properties.ykeys" zone="'ykeys'"
     display-options="chartSectorTypeOptions"
     display-callback = "changeChartSectorType"
-    query-bind="'column'" zone-info="'Drop here your metric.'"></div>
+    query-bind="'column'" zone-info="'Drop here your metrics'"></div>
 
     <!-- Column entries -->
 
