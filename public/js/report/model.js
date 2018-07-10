@@ -40,40 +40,20 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
 
         if(report.query.columns.length === 0){
             console.log('nothing to fetch');
-            return;
+            return {};
         }
         
-        const result = await fetchData(report.query, params);
-        report.query.data = result.data;
-
-        const parentDiv = params.parentDiv || 'reportLayout';
-        report.parentDiv = parentDiv;
-
-        switch(report.reportType){
-            case 'chart-line':
-            case 'chart-donut':
-            case 'chart-pie':
-                if (report.properties.xkeys.length > 0 && report.properties.ykeys.length > 0) {
-                    initGraphChart(report);
-                }
-            break;
-
-            case 'gauge':
-                const theChartID = 'Chart' + uuid2.newguid();
-                report.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
-                report.properties.chart.dataColumns = report.properties.ykeys;
-            break;
-
-            default:
-            break;
-        }
+        const result = await this.fetchData(report.query, params);
 
         return result;
     }
 
-    async function fetchData(query, params){
+    this.fetchData = async function (query, params){
 
         var request = {};
+        if(!params){
+            params = {};
+        }
 
         if(params.page !== undefined){ 
             request.page = params.page;
@@ -517,18 +497,11 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
 
     this.getReportContainerHTML = function (reportID) {
         var containerID = 'REPORT_CONTAINER_' + reportID;
-        /*
-        var html = '<div page-block class="container-fluid featurette ndContainer"  ndType="container" style="height:100%">'+
-                        '<div page-block class="col-md-12 ndContainer" ndtype="column" style="height:100%">'+
-                              '<div class="container-fluid" id="'+containerID+'" ng-init="getRuntimeReport('+"'"+reportID+"'"+')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_'+reportID+'" style="padding:0pxposition: relative;height: 100%;"></div>';
 
-                        '</div>'+
-                    '</div>';
-*/
         var html = '<div page-block  class="container-fluid featurette ndContainer"  ndType="container" style="height:100%;padding:0px;">' +
                         '<div page-block class="col-md-12 ndContainer" ndType="column" style="height:100%;padding:0px;">' +
-                            '<div page-block class="container-fluid" id="' + containerID + '" ng-init="getRuntimeReport(' + "'" + reportID + "'" + ')" bs-loading-overlay bs-loading-overlay-reference-id="REPORT_' + reportID + '" style="padding:0px;position: relative;height: 100%;"></div>' +
-
+                            '<div page-block class="container-fluid" id="' + containerID
+                             + '" report-view report="getReport(\'' + reportID +'\')" style="padding:0px;position: relative;height: 100%;"></div>' +
                         '</div>' +
                     '</div>';
 
@@ -540,4 +513,5 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
 
         return html;
     };
+
 });

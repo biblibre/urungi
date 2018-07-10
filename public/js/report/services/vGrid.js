@@ -7,7 +7,6 @@ app.service('verticalGrid', function (dataElements) {
             id = report.id;
         }
 
-        const hashedID = report.query.id;
         var theProperties = report.properties;
         var pageBlock = 'page-block';
 
@@ -39,13 +38,13 @@ app.service('verticalGrid', function (dataElements) {
 
         htmlCode += '<div vs-repeat style="width:100%;overflow-y: auto;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: 0px;" scrolly="gridGetMoreData(\'' + id + '\')">';
 
-        htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in getQuery(\'' + hashedID + '\').data | filter:theFilter | orderBy:getReport(\'' + hashedID + '\').predicate:getReport(\'' + hashedID + '\').reverse  " style="' + rowStyle + '"  >';
+        htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in report.query.data | filter:theFilter | orderBy:report.predicate:report.reverse  " style="' + rowStyle + '"  >';
 
         htmlCode += getRowData(columns);
 
         htmlCode += '</div>';
 
-        htmlCode += '<div ng-if="getQuery(\'' + hashedID + '\').data.length == 0" >No data found</div>';
+        htmlCode += '<div ng-if="report.query.data.length == 0" >No data found</div>';
 
         htmlCode += '</div>';
 

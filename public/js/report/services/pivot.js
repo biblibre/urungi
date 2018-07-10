@@ -98,6 +98,8 @@ app.service('pivot', function (dataElements) {
             reduce: reduce
         };
 
+        console.log(params);
+
         return {
             html: '<div id="' + pivotID + '" > ERROR - could not display pivot table </div>',
             params: params,

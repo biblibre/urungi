@@ -75,24 +75,13 @@
     
 </div>
 
+<div ng-include src="promptsBlock" class=" prompts-block"></div>
+
 <div class="container-fluid" ng-if="gettingData == true">
     <h3><img src="/images/loader.gif" width="32px" height="32px"/>getting data ....</h3>
 </div>
 
-
-
-
-<div ng-include src="promptsBlock" class=" prompts-block"></div>
-
-<div id="reportLayout"  style="min-height:200px;position:relative;width:100%;height:100%" bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_reportLayout">
-    <div ng-if="wrongFilters.length > 0 && columns.length > 0" class="alert alert-danger" role="alert"><i class="fa fa-warning fa-2" style="margin-right:10px;"></i>  <strong>Warning:</strong>     There are incomplete filters!!</div>
-
-    <div  style="min-height:100px">
-
-    </div>
-
-</div>
-
+<div report-view report="selectedReport" style="height:100%;position:relative" mode="mode" ></div>
 
 
 <div ng-include src="dateModal"></div>

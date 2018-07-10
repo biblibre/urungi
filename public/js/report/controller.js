@@ -156,6 +156,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, queryServic
         console.log('form initiated');
         await $scope.refresh();
         console.log('refreshed');
+
+        // TODO : initialize the right things at the right time
+        // Right now, init() is called often and not always necessary
+        
     }
 
     $scope.initLayers = async function () {
@@ -485,7 +489,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, queryServic
     };
 
     $scope.refresh = async function () {
-        $scope.gettingData = true;
+        // $scope.gettingData = true;
 
         await queryModel.processQuery($scope.selectedReport.query);
 
@@ -500,6 +504,8 @@ app.controller('reportCtrl', function ($scope, connection, $compile, queryServic
             selectedRecordLimit : $scope.selectedRecordLimit
         };
 
+        $scope.$broadcast('showLoadingMessage', 'Fetching data ...');
+
         const result = await reportModel.fetchDataForPreview($scope.selectedReport, params);
 
         $scope.gettingData = false;
@@ -507,11 +513,13 @@ app.controller('reportCtrl', function ($scope, connection, $compile, queryServic
         $scope.sql = result.sql;
         $scope.time = result.time;
 
-        $scope.$digest();
+        $scope.$broadcast('repaint', { fetchData : false });
 
-        report_v2Model.repaintReport($scope.selectedReport, $scope.mode);
+        // setTimeout( function () {
+        //     $scope.hideOverlay('OVERLAY_reportLayout');
+        // }, 500);
 
-        // $scope.hideOverlay('OVERLAY_reportLayout'); // unnecessary unless I missed something
+        // $scope.$digest();
         
     }
 
@@ -736,6 +744,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, queryServic
     $scope.changeReportType = function (newReportType) {
 
         $scope.selectedReport.query.countYKeys = false;
+        $scope.$broadcast('clearReport');
 
         switch (newReportType) {
         case 'grid':
@@ -1001,4 +1010,26 @@ app.controller('reportCtrl', function ($scope, connection, $compile, queryServic
     $scope.hideErrorMessage = function () {
         $scope.selectedReport.hideErrorMessage = true;
     };
+    
+    /** ******PUBLISH******/
+    $scope.publishReport = function () {
+        $scope.objectToPublish = $scope.selectedReport;
+        $('#publishModal').modal('show');
+    };
+
+    $scope.unPublish = async function () {
+        await connection.post('/api/reports/unpublish', {_id: $scope.selectedReport._id});
+        $scope.selectedReport.isPublic = false;
+        $scope.$digest();
+        $('#publishModal').modal('hide');
+    };
+
+    $scope.selectThisFolder = async function (folderID) {
+        await connection.post('/api/reports/publish-report', {_id: $scope.selectedReport._id, parentFolder: folderID});
+        $scope.selectedReport.parentFolder = folderID;
+        $scope.selectedReport.isPublic = true;
+        $scope.$digest();
+        $('#publishModal').modal('hide');
+    };
+
 });

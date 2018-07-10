@@ -1,7 +1,8 @@
 <div class="container-fluid branded-border-panel" style="height: 40px">
     <h3 class="pull-left"  ng-bind="selectedReport.reportName"></h3>
     <a ng-if="selectedReport && ((selectedReport.owner == user._id) || isWSTADMIN)" href="/#/reports/edit/{{selectedReport._id}}"  class="btn btn-success pull-right" style="margin-right: 5px">Edit Report</a>
-    <a ng-if="selectedReport && ((selectedReport.owner == user._id) || isWSTADMIN)" ng-click="publishReport()"  class="btn btn-success pull-right" style="margin-right: 5px">Publish</a>
+    <a ng-if="selectedReport && ((selectedReport.owner == user._id) || isWSTADMIN)" ng-click="publishReport()"  
+    class="btn btn-success pull-right" style="margin-right: 5px"><span ng-hide="selectedReport.isPublic">Publish</span><span ng-show="selectedReport.isPublic">Un-Publish</span></a>
     <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
 </div>
 
