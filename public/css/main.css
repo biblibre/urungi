@@ -379,8 +379,11 @@ img.img-cirlce {
     border-color: #0063FF;
 }
 
-.btn+.btn {
-    margin-left: 5px;
+
+.btn.btn-info{
+    color: #000;
+    background-color: #fff;
+    border-color: #0063FF;
 }
 
 .btn.btn-icon {
@@ -398,7 +401,9 @@ img.img-cirlce {
 }
 
 .btn.btn-info.pull-right{
-    background-color: #0063FF;
+    color: #000;
+    background-color: #fff;
+    border-color: #0063FF;
 }
 
 .btn.btn-white {
@@ -432,7 +437,7 @@ img.img-cirlce {
 }
 
 .btn.btn-success-white {
-    background-color: #000;
+    background-color: #fff;
     color: #0063FF;
     border: 1px solid #0063FF;
 }
