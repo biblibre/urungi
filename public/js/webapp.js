@@ -84,11 +84,11 @@ var app = angular.module('WideStage', [
 
         $routeProvider.when('/reports', {
             templateUrl: 'partials/report/list.html',
-            controller: 'report_v2Ctrl'
+            controller: 'reportCtrl'
         });
         $routeProvider.when('/report/:extra', {
             templateUrl: 'partials/report/list.html',
-            controller: 'report_v2Ctrl'
+            controller: 'reportCtrl'
         });
 
         $routeProvider.when('/reports/:reportID/', {
@@ -98,7 +98,7 @@ var app = angular.module('WideStage', [
 
         $routeProvider.when('/reports/:reportID/:elementID/:elementValue', {
             templateUrl: 'partials/report/view.html',
-            controller: 'report_v2Ctrl'
+            controller: 'reportCtrl'
         });
 
         $routeProvider.when('/reports/new/:reportID/', {
@@ -327,23 +327,6 @@ app.directive('ngEnter', function () {
                 event.preventDefault();
             }
         });
-    };
-});
-
-app.service('queryService', function () {
-    var theQuery = {};
-
-    var addQuery = function (newObj) {
-        theQuery = newObj;
-    };
-
-    var getQuery = function () {
-        return theQuery;
-    };
-
-    return {
-        addQuery: addQuery,
-        getQuery: getQuery
     };
 });
 

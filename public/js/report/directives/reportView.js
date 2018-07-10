@@ -53,11 +53,12 @@ app.directive('reportView', function ( reportModel, $compile, c3Charts, reportHt
                     case 'chart-pie':
                     case 'gauge':
                         $scope.changeContent(c3Charts.getChartHTML($scope.report, $scope.report.id, '$scope.mode'));
-                        setTimeout( function () {
-                            c3Charts.rebuildChart($scope.report);
-                        }, 1000);
-                        // This used to be in a timeout. If there are issues, we should instead find
-                        // a proper way to wait for the previous change to be applied before applying this one
+                        await new Promise( resolve => {
+                            setTimeout( function () {
+                                c3Charts.rebuildChart($scope.report);
+                                resolve();
+                            }, 500);
+                        });
                     break;
                     case 'indicator':
                         $scope.changeContent(reportHtmlWidgets.generateIndicator($scope.report));
@@ -71,7 +72,6 @@ app.directive('reportView', function ( reportModel, $compile, c3Charts, reportHt
                 
                 $scope.$digest();
 
-                console.log('repaint successful');
             });
 
             $scope.$on('clearReport', function () {

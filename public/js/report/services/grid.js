@@ -3,12 +3,7 @@
 app.service('grid', function () {
     var colClass = '';
     var colWidth = '';
-    var hashedID = '';
     var columns = [];
-
-    function quotedHashedID () {
-        return "'" + hashedID + "'";
-    }
 
     this.refresh = function (columns, id, query, designerMode, properties) {
         this.simpleGrid(columns, id, query, designerMode, properties, function () {});
@@ -21,8 +16,7 @@ app.service('grid', function () {
         } else {
             id = report.id;
         }
-
-        hashedID = report.query.id;
+        
         var theProperties = report.properties;
         var pageBlock = 'page-block';
 
@@ -78,9 +72,10 @@ app.service('grid', function () {
         }
         htmlCode += '</div>';
 
-        htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: ' + theProperties.headerHeight + 'px;" scrolly="gridGetMoreData(\'' + id + '\')">';
+        htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: ' 
+            + theProperties.headerHeight + 'px;" scrolly="gridGetMoreData(\'' + id + '\')">';
 
-        htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in getQuery(\'' + hashedID + '\').data | filter:theFilter | orderBy:getReport(\'' + hashedID + '\').predicate:getReport(\'' + hashedID + '\').reverse  " style="' + rowStyle + '"  >';
+        htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in report.query.data | filter:theFilter | orderBy:report.predicate:report.reverse  " style="' + rowStyle + '"  >';
 
         for (let i = 0; i < columns.length; i++) {
             htmlCode += getDataCell(columns[i], id, i, columnDefaultStyle);
@@ -88,7 +83,7 @@ app.service('grid', function () {
 
         htmlCode += '</div>';
 
-        htmlCode += '<div ng-if="getQuery(\'' + hashedID + '\').data.length == 0" >No data found</div>';
+        htmlCode += '<div ng-if="report.query.data.length == 0" >No data found</div>';
 
         htmlCode += '</div>';
 
@@ -102,6 +97,7 @@ app.service('grid', function () {
             htmlCode += '<div class=" calculus-data-column ' + colClass + ' " style="' + colWidth + '"> ' + calculateForColumn(report, i, elementName) + ' </div>';
         }
         htmlCode += '</div> </div>';
+
         return htmlCode;
     };
 
@@ -112,7 +108,7 @@ app.service('grid', function () {
         if (column.aggregation) {
             elementName = "'" + elementName + column.aggregation + "'";
         }
-        htmlCode += '<div class="' + colClass + ' report-repeater-column-header" style="' + colWidth + '"><table style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space: nowrap;width:95%;">' + column.objectLabel + '</td><td style="width:34px;">' + getColumnDropDownHTMLCode(column, columnIndex, elementName, column.elementType) + '</td></tr></table> </div>';
+        htmlCode += '<div class="' + colClass + ' report-repeater-column-header" style="' + colWidth + '"><table style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space: nowrap;width:95%;">' + column.objectLabel + '</td></tr></table> </div>';
 
         return htmlCode;
     }
@@ -197,11 +193,8 @@ app.service('grid', function () {
 
         var defaultAligment = '';
         if (column.elementType === 'number') { defaultAligment = 'text-align: right;'; }
-        // with popover
-        /* htmlCode += '<div id="ROW_'+gridID+'" class="repeater-data-column '+colClass+' popover-primary" style="'+columnDefaultStyle+columnStyle+colWidth+defaultAligment+'" popover-trigger="mouseenter" popover-placement="top" popover-title="'+column.objectLabel+'" popover="{{item.'+elementName+'}}" ng-click="cellClick(\''+hashedID+'\',item,'+'\''+elementID+'\''+','+'\''+elementName+'\''+')">'+theValue+' </div>';
-                   */
-        // without popover
-        htmlCode += '<div id="ROW_' + gridID + '" class="repeater-data-column ' + colClass + '" style="' + columnDefaultStyle + columnStyle + colWidth + defaultAligment + '" ng-click="cellClick(\'' + hashedID + '\',item,' + '\'' + elementID + '\'' + ',' + '\'' + elementName + '\'' + ')">' + theValue + ' </div>';
+
+        htmlCode += '<div id="ROW_' + gridID + '" class="repeater-data-column ' + colClass + '" style="' + columnDefaultStyle + columnStyle + colWidth + defaultAligment + '" >' + theValue + ' </div>';
 
         return htmlCode;
     }
@@ -234,57 +227,53 @@ app.service('grid', function () {
     function calculateSumForColumn (columnIndex, elementName) {
         var value = 0;
 
-        for (var row in $scope.theData[hashedID]) {
-            var theRow = $scope.theData[hashedID][row];
+        for (var row of $scope.report.query.data) {
 
-            if (theRow[elementName]) {
-                if (typeof theRow[elementName] !== 'undefined') { value += Number(theRow[elementName]); }
+            if (row[elementName]) {
+                if (typeof row[elementName] !== 'undefined') { value += Number(row[elementName]); }
             }
         }
         return value;
     }
 
     function calculateCountForColumn (columnIndex, elementName) {
-        var founded = 0;
-        for (var row in $scope.theData[hashedID]) {
-            var theRow = $scope.theData[hashedID][row];
-            if (theRow[elementName]) {
-                if (typeof theRow[elementName] !== 'undefined') {
-                    founded += 1;
+        var count = 0;
+        for (var row of $scope.report.query.data) {
+            if (row[elementName]) {
+                if (typeof row[elementName] !== 'undefined') {
+                    count += 1;
                 }
             }
         }
-        return founded;
+        return count;
     }
 
     function calculateAvgForColumn (columnIndex, elementName) {
-        var value = 0;
-        var founded = 0;
+        var sum = 0;
+        var count = 0;
 
-        for (var row in $scope.theData[hashedID]) {
-            var theRow = $scope.theData[hashedID][row];
+        for (var row in $scope.report.query.data) {
 
-            if (theRow[elementName]) {
-                if (typeof theRow[elementName] !== 'undefined') {
-                    founded += 1;
-                    value += Number(theRow[elementName]);
+            if (row[elementName]) {
+                if (typeof row[elementName] !== 'undefined') {
+                    count += 1;
+                    value += Number(row[elementName]);
                 }
             }
         }
-        return value / founded;
+        return value / count;
     }
 
     function calculateMinimumForColumn (columnIndex, elementName) {
         var lastValue;
 
-        for (var row in $scope.theData[hashedID]) {
-            var theRow = $scope.theData[hashedID][row];
+        for (var row in $scope.report.query.data) {
 
-            if (theRow[elementName]) {
-                if (typeof theRow[elementName] !== 'undefined') {
-                    if (typeof lastValue === 'undefined') { lastValue = theRow[elementName]; }
+            if (row[elementName]) {
+                if (typeof row[elementName] !== 'undefined') {
+                    if (typeof lastValue === 'undefined') { lastValue = row[elementName]; }
 
-                    if (theRow[elementName] < lastValue) { lastValue = theRow[elementName]; }
+                    if (row[elementName] < lastValue) { lastValue = row[elementName]; }
                 }
             }
         }
@@ -294,43 +283,19 @@ app.service('grid', function () {
     function calculateMaximumForColumn ($scope, columnIndex, elementName) {
         var lastValue;
 
-        for (var row in $scope.theData[hashedID]) {
-            var theRow = $scope.theData[hashedID][row];
+        for (var row in $scope.report.query.data) {
 
-            if (theRow[elementName]) {
-                if (typeof theRow[elementName] !== 'undefined') {
-                    if (typeof lastValue === 'undefined') { lastValue = theRow[elementName]; }
+            if (row[elementName]) {
+                if (typeof row[elementName] !== 'undefined') {
+                    if (typeof lastValue === 'undefined') { lastValue = row[elementName]; }
 
-                    if (theRow[elementName] > lastValue) { lastValue = theRow[elementName]; }
+                    if (row[elementName] > lastValue) { lastValue = row[elementName]; }
                 }
             }
         }
         return lastValue;
     }
 
-    function getColumnDropDownHTMLCode (column, columnIndex, elementName, columnType) {
-        var columnPropertiesBtn = '<div class="btn-group pull-right" dropdown="" > ' +
-            '<button type="button" class="btn btn-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom: 0px;background-color:transparent;">' +
-        ' <i class="fa fa-angle-down"></i>' +
-            '</button>' +
-            '<ul class="dropdown-menu dropdown-blue multi-level" role="menu">' +
-            '<li class="dropdown-submenu">' +
-            '      <a href="">Sort</a>' + // ascendente, descendente
-            '      <ul class="dropdown-menu">' +
-            '      <li><a ng-click="reverse = true; orderColumn(' + columnIndex + ',false,' + quotedHashedID() + ')">Ascending</a></li>' +
-            '      <li><a ng-click="reverse = false; orderColumn(' + columnIndex + ',true,' + quotedHashedID() + ')">Descending</a></li>' +
-            '      </ul>' +
-            '</li>';
-
-        columnPropertiesBtn += '<li class="divider"></li>' +
-            '<li><a ng-click="saveToExcel(\'' + hashedID + '\')"><i class="fa fa-file-excel-o"></i> Export table to excel</a></li>' +
-            '<li class="divider"></li>' +
-            '<li><input class="find-input pull-right" type="search" ng-model="theFilter" placeholder="Table filter..." aria-label="Table filter..." style="margin:5px;" /></li>' +
-            '</ul>' +
-            '</div>';
-
-        return columnPropertiesBtn;
-    }
 });
 
 app.directive('scrolly', function () {

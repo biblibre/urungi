@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('reportCtrl', function ($scope, connection, $compile, queryService, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, grid, uuid2, c3Charts, reportModel, widgetsCommon, $location, PagerService) {
+app.controller('reportCtrl', function ($scope, connection, $compile, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, grid, uuid2, c3Charts, reportModel, widgetsCommon, $location, PagerService) {
     
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.dateModal = 'partials/report/dateModal.html';
@@ -489,7 +489,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, queryServic
     };
 
     $scope.refresh = async function () {
-        // $scope.gettingData = true;
 
         await queryModel.processQuery($scope.selectedReport.query);
 
@@ -506,20 +505,14 @@ app.controller('reportCtrl', function ($scope, connection, $compile, queryServic
 
         $scope.$broadcast('showLoadingMessage', 'Fetching data ...');
 
-        const result = await reportModel.fetchDataForPreview($scope.selectedReport, params);
-
-        $scope.gettingData = false;
+        const result = await reportModel.fetchData($scope.selectedReport.query, params);
 
         $scope.sql = result.sql;
         $scope.time = result.time;
 
         $scope.$broadcast('repaint', { fetchData : false });
 
-        // setTimeout( function () {
-        //     $scope.hideOverlay('OVERLAY_reportLayout');
-        // }, 500);
-
-        // $scope.$digest();
+        $scope.$digest();
         
     }
 
@@ -1010,7 +1003,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, queryServic
     $scope.hideErrorMessage = function () {
         $scope.selectedReport.hideErrorMessage = true;
     };
-    
+
     /** ******PUBLISH******/
     $scope.publishReport = function () {
         $scope.objectToPublish = $scope.selectedReport;

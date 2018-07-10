@@ -34,23 +34,16 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
 
     /* 
     * Fetches all of the data associated to the report's query, and stores it in report.query.data
-    * Then initializes the chart if necessary
     */
-    this.fetchDataForPreview = async function (report, params){
+    this.fetchData = async function (query, params){
 
-        if(report.query.columns.length === 0){
+        if(query.columns.length === 0){
             console.log('nothing to fetch');
             return {};
         }
-        
-        const result = await this.fetchData(report.query, params);
-
-        return result;
-    }
-
-    this.fetchData = async function (query, params){
 
         var request = {};
+
         if(!params){
             params = {};
         }
@@ -80,6 +73,8 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
         
         // processData(data);
 
+        query.data = result.data;
+
         return {
             data : data,
             sql : result.sql,
@@ -101,121 +96,52 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
 
         return JSON.parse(JSON.stringify(data), dateTimeReviver);
     }
+  
+    this.initChart = function (report) {
 
-    function initGraphChart (report){
-
-        const theChartID = 'Chart' + uuid2.newguid();
-        report.properties.chart = {chartID: theChartID, dataPoints: [], dataColumns: [], datax: {}, height: 300, type: 'bar', query: query, queryName: null};
-        // report.properties.chart.query = query;
-        report.properties.chart.dataColumns = report.properties.ykeys;
-
-        const customObjectData = report.properties.xkeys[0];
-        report.properties.chart.dataAxis = {elementName: customObjectData.elementName,
-            queryName: 'query1',
-            elementLabel: customObjectData.objectLabel,
-            id: customObjectData.id,
+        report.properties.chart = {
+            id : 'Chart' + uuid2.newguid(),
+            dataPoints: [],
+            dataColumns: [],
+            datax: {},
+            height: 300,
             type: 'bar',
-            color: '#000000'};
-    }
+            query: report.query,
+            queryName: null
+        };
 
-    // this.getReportDataNextPage = function (report, page) {
-    //     getReportDataNextPage(report, page);
-    // };
+        if (report.reportType === 'chart-donut') { report.properties.chart.type = 'donut'; }
+        if (report.reportType === 'chart-pie') { report.properties.chart.type = 'pie'; }
+        if (report.reportType === 'gauge') { report.properties.chart.type = 'gauge'; }
 
-    // function getReportDataNextPage (report, page) {
-    //     // queryModel.getQueryDataNextPage(page).then(data => {
-    //     //     report.query.data.push.apply(report.query.data, data.data);
-    //     // });
-    // }
+        if ( ['chart-line', 'chart-donut','chart-pie'].indexOf(report.reportType) >= 0 && 
+            report.properties.xkeys.length > 0 && report.properties.ykeys.length > 0) {
 
-    this.repaintReport = function (report, mode) {
-        repaintReport(report, mode);
-    };
+            report.properties.chart.dataColumns = report.properties.ykeys;
 
-    function repaintReport (report, mode) {
-        var data = report.query.data;
-        var htmlCode;
-        var el;
-        var $div;
+            const dataAxisInfo = report.properties.xkeys[0];
+            report.properties.chart.dataAxis = {
+                elementName: dataAxisInfo.elementName,
+                queryName: 'query1',
+                elementLabel: dataAxisInfo.objectLabel,
+                id: dataAxisInfo.id,
+                type: 'bar',
+                color: '#000000'};
 
-        if (data.length !== 0) {
-            switch (report.reportType) {
-            case 'grid':
-                htmlCode = grid.extendedGridV2(report, mode);
-                el = document.getElementById(report.parentDiv);
-
-                if (el) {
-                    angular.element(el).empty();
-                    $div = $(htmlCode);
-                    angular.element(el).append($div);
-                    angular.element(document).injector().invoke(function ($compile) {
-                        var scope = angular.element($div).scope();
-                        $compile($div)(scope);
-                        hideOverlay(report.parentDiv);
-                    });
+                if(report.properties.xkeys.length > 1){
+                    const stackDimensionInfo = report.properties.xkeys[1];
+                    report.properties.chart.stackDimension = {
+                        elementName: stackDimensionInfo.elementName,
+                        queryName: 'query1',
+                        elementLabel: stackDimensionInfo.objectLabel,
+                        id: stackDimensionInfo.id,
+                        type: 'bar',
+                        color: '#000000'};
                 }
-                break;
-            case 'vertical-grid':
-                htmlCode = verticalGrid.getVerticalGrid(report, mode);
-                el = document.getElementById(report.parentDiv);
+        }
 
-                if (el) {
-                    angular.element(el).empty();
-                    $div = $(htmlCode);
-                    angular.element(el).append($div);
-                    angular.element(document).injector().invoke(function ($compile) {
-                        var scope = angular.element($div).scope();
-                        $compile($div)(scope);
-                        hideOverlay(report.parentDiv);
-                    });
-                }
-                break;
-
-            case 'pivot':
-                var result = pivot.getPivotTableSetup(report);
-
-                el = document.getElementById(report.parentDiv);
-
-                if (el) {
-                    angular.element(el).empty();
-                    $div = $(result.html);
-                    angular.element(el).append($div);
-                    angular.element(document).injector().invoke(function ($compile) {
-                        var scope = angular.element($div).scope();
-                        $compile($div)(scope);
-                        hideOverlay(report.parentDiv);
-                    });
-                }
-
-                $(result.jquerySelector).cypivot(result.params);
-                break;
-
-            case 'chart-line':
-                report.properties.chart.type = 'line';
-                generatec3Chart(report, mode);
-                break;
-
-            case 'chart-donut':
-                report.properties.chart.type = 'donut';
-                generatec3Chart(report, mode);
-                break;
-
-            case 'chart-pie':
-                report.properties.chart.type = 'pie';
-                generatec3Chart(report, mode);
-                break;
-
-            case 'gauge':
-                report.properties.chart.type = 'gauge';
-                generatec3Chart(report, mode);
-                break;
-
-            case 'indicator':
-                generateIndicator(report);
-                break;
-            }
-        } else {
-            generateNoDataHTML();
+        if(report.reportType === 'gauge'){
+            report.properties.chart.dataColumns = report.properties.ykeys;
         }
     }
 
@@ -234,59 +160,6 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
             });
         }
     }
-
-    this.generateIndicator = function (report) {
-        generateIndicator(report);
-    };
-
-    function generateIndicator (report) {
-        var htmlCode = reportHtmlWidgets.generateIndicator(report);
-        // var el = document.getElementById(report.parentDiv);
-        var el = document.getElementById(report.parentDiv);
-
-        console.log('indicator HTML', htmlCode);
-        console.log('indicator el', el);
-
-        if (el) {
-            angular.element(el).empty();
-            var $div = $(htmlCode);
-            angular.element(el).append($div);
-            angular.element(document).injector().invoke(function ($compile) {
-                var scope = angular.element($div).scope();
-                $compile($div)(scope);
-                setTimeout(function () {
-                    c3Charts.rebuildChart(report);
-                    hideOverlay('OVERLAY_' + report.parentDiv);
-                }, 500);
-            });
-        }
-    }
-
-    function generatec3Chart (report, mode) {
-        var reportID = report.id;
-
-        var htmlCode = c3Charts.getChartHTML(report, reportID, mode);
-
-        var el = document.getElementById(report.parentDiv);
-
-        if (el) {
-            angular.element(el).empty();
-            var $div = $(htmlCode);
-            angular.element(el).append($div);
-            angular.element(document).injector().invoke(function ($compile) {
-                var scope = angular.element($div).scope();
-                $compile($div)(scope);
-                /* setTimeout(function() {c3Charts.rebuildChart(report,report.query,report.properties.chart);
-                                                               hideOverlay('OVERLAY_'+report.parentDiv);
-                                                               }, 500); */
-                setTimeout(function () {
-                    c3Charts.rebuildChart(report);
-                    hideOverlay('OVERLAY_' + report.parentDiv);
-                }, 500);
-            });
-        }
-    }
-
     function showOverlay (referenceId) {
         bsLoadingOverlayService.start({
             referenceId: referenceId
