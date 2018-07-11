@@ -85,7 +85,7 @@
         <section id="reportsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'reports'">
             <section class="layer scrollPane">
                 <div class="layer-inner-reports">
-                    <button class="btn btn-info pull-right" ng-click="newReport()" %">New Report</button>
+                    <button class="btn btn-info pull-right" ng-click="newReport()">New Report</button>
                     <div ng-repeat="item in selectedDashboard.reports" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'report',reportID:'{{item.id}}'}" style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " id="{{item.id}}" class="">
 
                         <span style="padding: 2px;border-right: 2px white solid;margin-right: 5px;background-color: white;">
