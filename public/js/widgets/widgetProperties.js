@@ -408,13 +408,6 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                 c3Charts.transformChartColumnType($scope.properties.chart, column);
             };
 
-            $scope.changeChartColumnColor = function (chart, column, color) {
-                console.log('changeChartColumnColor');
-                console.log($scope.selectedChart);
-                // c3Charts.changeChartColumnColor($scope.properties.chart,column,hexToRgb(color));
-                c3Charts.changeChartColumnColor($scope.properties.chart, column, color);
-            };
-
             function getElementProperties () {
                 console.log('getElementProperties');
                 // $scope.gettingElementProperties = true;

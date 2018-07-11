@@ -27,6 +27,7 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
                 elementRole: 'root',
                 elements: layer.objects
             }
+            calculateIdForAllElements(layer.rootItem.elements);
         }
 
         return layers;
@@ -72,6 +73,7 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
         var data = result.data;
         
         // processData(data);
+        // TODO : figure out what that does
 
         query.data = result.data;
 
@@ -155,7 +157,42 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
         }
 
         report.properties.chart = chart;
+    };
+
+    this.getColumnId = function (element){
+        return getColumnId(element);
+    };
+
+    this.changeColumnId = function (oldId, newAggregation) {
+        return oldId.substring(0, oldId.length-3) + newAggregation.substring(0, 3);
+    };
+
+    function getColumnId(element){
+        var columnId;
+        
+        if (!element.aggregation) {
+            columnId = 'wst' + element.elementID.toLowerCase() + 'raw';
+        } else {
+            columnId = 'wst' + element.elementID.toLowerCase() + element.aggregation.substring(0, 3);
+        }
+
+        columnId = columnId.replace(/[^a-zA-Z ]/g, '');
+        // this threatens unicity in theory
+        // Two elements with different ids could have the same transformed id after all numbers are removed
+        // It's unlikely, but if it happens it will result in a bug which is nightmarish to understand
+
+        return columnId;
     }
+
+    function calculateIdForAllElements(elements) {
+        for (var element of elements) {
+            if (element.collectionID) {
+                element.id = getColumnId(element);
+            }
+
+            if (element.elements) { calculateIdForAllElements(element.elements); }
+        }
+    };
 
     function generateNoDataHTML () {
         var htmlCode = '<span style="font-size: small;color: darkgrey;padding: 5px;">' + report.reportName + '</span><div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>';

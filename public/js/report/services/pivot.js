@@ -1,4 +1,4 @@
-app.service('pivot', function (dataElements) {
+app.service('pivot', function () {
     this.getPivotTableSetup = function (report) {
         const pivotKeys = report.properties.pivotKeys;
         const data = report.query.data;
@@ -62,19 +62,16 @@ app.service('pivot', function (dataElements) {
         const dataFieldInfo = {};
 
         for (const ykey of ykeys) {
-            if (!ykey.aggregation) {
-                ykey.aggregation = '';
-            }
-            valueDataFields.push(ykey.id + ykey.aggregation);
-            dataFieldInfo[ykey.id + ykey.aggregation] = ykey;
+            valueDataFields.push(ykey.id);
+            dataFieldInfo[ykey.id] = ykey;
         }
 
         function dataCellRenderer (items, colContext, rowContext, opts) {
             var html = '<span>';
             for (const ykey of ykeys) {
                 html += '<div>';
-                if (items[ykey.id + ykey.aggregation]) {
-                    html += String(items[ykey.id + ykey.aggregation]);
+                if (items[ykey.id]) {
+                    html += String(items[ykey.id]);
                 } else {
                     html += ' - ';
                 }

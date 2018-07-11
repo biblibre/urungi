@@ -67,8 +67,8 @@ app.service('grid', function () {
 
         // header
         htmlCode += '<div class="container-fluid" style="' + headerStyle + '">';
-        for (let i = 0; i < columns.length; i++) {
-            htmlCode += getHeaderColumn(columns[i], i);
+        for (let col of columns) {
+            htmlCode += getHeaderColumn(col);
         }
         htmlCode += '</div>';
 
@@ -77,7 +77,7 @@ app.service('grid', function () {
 
         htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in report.query.data | filter:theFilter | orderBy:report.predicate:report.reverse  " style="' + rowStyle + '"  >';
 
-        for (let i = 0; i < columns.length; i++) {
+        for (let i = 0; i<columns.length; i++) {
             htmlCode += getDataCell(columns[i], id, i, columnDefaultStyle);
         }
 
@@ -88,26 +88,16 @@ app.service('grid', function () {
         htmlCode += '</div>';
 
         htmlCode += '<div class="repeater-data">';
-        for (const i in columns) {
-            var elementID = 'wst' + columns[i].elementID.toLowerCase();
-            var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-            if (columns[i].aggregation) {
-                elementName = elementName + columns[i].aggregation;
-            }
-            htmlCode += '<div class=" calculus-data-column ' + colClass + ' " style="' + colWidth + '"> ' + calculateForColumn(report, i, elementName) + ' </div>';
+        for (const col of columns) {
+            htmlCode += '<div class=" calculus-data-column ' + colClass + ' " style="' + colWidth + '"> ' + calculateForColumn(col) + ' </div>';
         }
         htmlCode += '</div> </div>';
 
         return htmlCode;
     };
 
-    function getHeaderColumn (column, columnIndex) {
+    function getHeaderColumn (column) {
         var htmlCode = '';
-        var elementID = 'wst' + column.elementID.toLowerCase();
-        var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-        if (column.aggregation) {
-            elementName = "'" + elementName + column.aggregation + "'";
-        }
         htmlCode += '<div class="' + colClass + ' report-repeater-column-header" style="' + colWidth + '"><table style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space: nowrap;width:95%;">' + column.objectLabel + '</td></tr></table> </div>';
 
         return htmlCode;
@@ -116,18 +106,8 @@ app.service('grid', function () {
     function getDataCell (column, gridID, columnIndex, columnDefaultStyle) {
         var htmlCode = '';
 
-        // var elementName = column.collectionID.toLowerCase()+'_'+column.elementName;
-        var elementID = 'wst' + column.elementID.toLowerCase();
-        var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-        // var elementName = 'wst'+column.elementID.toLowerCase();
-        // var elementID = column.elementID;
-
-        if (column.aggregation) {
-            elementName = elementName + column.aggregation;
-        }
-
-        var theValue = '<div style="overflow:hidden;height:100%;">{{item.' + elementName + '}}</div>';
-        if (column.elementType === 'number') { theValue = '<div style="overflow:hidden;height:100%;">{{item.' + elementName + ' | number}}</div>'; }
+        var theValue = '<div style="overflow:hidden;height:100%;">{{item.' + column.id + '}}</div>';
+        if (column.elementType === 'number') { theValue = '<div style="overflow:hidden;height:100%;">{{item.' + column.id + ' | number}}</div>'; }
 
         if (column.signals) {
             var theStyle = '<style>';
@@ -159,26 +139,26 @@ app.service('grid', function () {
                     operator = ' <= ' + column.signals[s].value1;
                     break;
                 case 'between':
-                    operator = ' >= ' + column.signals[s].value1 + ' && {{item.' + elementName + '}} <= ' + column.signals[s].value2;
+                    operator = ' >= ' + column.signals[s].value1 + ' && {{item.' + column.id + '}} <= ' + column.signals[s].value2;
                     break;
                 case 'notBetween':
-                    operator = ' < ' + column.signals[s].value1 + ' || {{item.' + elementName + '}}  > ' + column.signals[s].value2;
+                    operator = ' < ' + column.signals[s].value1 + ' || {{item.' + column.id + '}}  > ' + column.signals[s].value2;
                     break;
                 }
 
-                theClass += theComma + 'customStyle' + s + '_' + columnIndex + ' : {{item.' + elementName + '}} ' + operator;
+                theClass += theComma + 'customStyle' + s + '_' + columnIndex + ' : {{item.' + column.id + '}} ' + operator;
             }
             htmlCode += theStyle + '</style>';
 
-            if (column.elementType === 'number') { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + elementName + ' | number}}</div>'; } else { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + elementName + '}}</div>'; }
+            if (column.elementType === 'number') { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + column.id + ' | number}}</div>'; } else { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + column.id + '}}</div>'; }
         }
 
         if (column.link) {
             if (column.link.type === 'report') {
-                if (column.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + '}}</a>'; }
+                if (column.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + column.id + '}}">{{item.' + column.id + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + column.id + '}}">{{item.' + column.id + '}}</a>'; }
             }
             if (column.link.type === 'dashboard') {
-                if (column.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + '}}</a>'; }
+                if (column.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + column.id + '}}">{{item.' + column.id + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + column.link._id + '/' + column.link.promptElementID + '/{{item.' + column.id + '}}">{{item.' + column.id + '}}</a>'; }
             }
         }
 
@@ -199,48 +179,48 @@ app.service('grid', function () {
         return htmlCode;
     }
 
-    function calculateForColumn (report, columnIndex, elementName) {
+    function calculateForColumn (column) {
         var htmlCode = '';
 
-        if (columns[columnIndex].operationSum === true) {
-            htmlCode += '<div  style=""><span class="calculus-label">SUM:</span><span class="calculus-value"> ' + numeral(calculateSumForColumn(columnIndex, elementName)).format('0,0.00') + '</span> </div>';
+        if (column.operationSum === true) {
+            htmlCode += '<div  style=""><span class="calculus-label">SUM:</span><span class="calculus-value"> ' + numeral(calculateSumForColumn(column)).format('0,0.00') + '</span> </div>';
         }
 
-        if (columns[columnIndex].operationAvg === true) {
-            htmlCode += '<div  style=""><span class="calculus-label">AVG:</span><span class="calculus-value"> ' + numeral(calculateAvgForColumn(columnIndex, elementName)).format('0,0.00') + '</span> </div>';
+        if (column.operationAvg === true) {
+            htmlCode += '<div  style=""><span class="calculus-label">AVG:</span><span class="calculus-value"> ' + numeral(calculateAvgForColumn(column)).format('0,0.00') + '</span> </div>';
         }
 
-        if (columns[columnIndex].operationCount === true) {
-            htmlCode += '<div  style=""><span class="calculus-label">COUNT:</span><span class="calculus-value"> ' + numeral(calculateCountForColumn(columnIndex, elementName)).format('0,0.00') + '</span> </div>';
+        if (column.operationCount === true) {
+            htmlCode += '<div  style=""><span class="calculus-label">COUNT:</span><span class="calculus-value"> ' + numeral(calculateCountForColumn(column)).format('0,0.00') + '</span> </div>';
         }
 
-        if (columns[columnIndex].operationMin === true) {
-            htmlCode += '<div  style=""><span class="calculus-label">MIN:</span><span class="calculus-value"> ' + numeral(calculateMinimumForColumn(columnIndex, elementName)).format('0,0.00') + '</span> </div>';
+        if (column.operationMin === true) {
+            htmlCode += '<div  style=""><span class="calculus-label">MIN:</span><span class="calculus-value"> ' + numeral(calculateMinimumForColumn(column)).format('0,0.00') + '</span> </div>';
         }
-        if (columns[columnIndex].operationMax === true) {
-            htmlCode += '<div  style=""><span class="calculus-label">MAX:</span><span class="calculus-value"> ' + numeral(calculateMaximumForColumn(columnIndex, elementName)).format('0,0.00') + '</span> </div>';
+        if (column.operationMax === true) {
+            htmlCode += '<div  style=""><span class="calculus-label">MAX:</span><span class="calculus-value"> ' + numeral(calculateMaximumForColumn(column)).format('0,0.00') + '</span> </div>';
         }
 
         return htmlCode;
     }
 
-    function calculateSumForColumn (columnIndex, elementName) {
+    function calculateSumForColumn (column) {
         var value = 0;
 
         for (var row of $scope.report.query.data) {
 
-            if (row[elementName]) {
-                if (typeof row[elementName] !== 'undefined') { value += Number(row[elementName]); }
+            if (row[column.id]) {
+                if (typeof row[column.id] !== 'undefined') { value += Number(row[column.id]); }
             }
         }
         return value;
     }
 
-    function calculateCountForColumn (columnIndex, elementName) {
+    function calculateCountForColumn (column) {
         var count = 0;
         for (var row of $scope.report.query.data) {
-            if (row[elementName]) {
-                if (typeof row[elementName] !== 'undefined') {
+            if (row[column.id]) {
+                if (typeof row[column.id] !== 'undefined') {
                     count += 1;
                 }
             }
@@ -248,48 +228,48 @@ app.service('grid', function () {
         return count;
     }
 
-    function calculateAvgForColumn (columnIndex, elementName) {
+    function calculateAvgForColumn (column) {
         var sum = 0;
         var count = 0;
 
         for (var row in $scope.report.query.data) {
 
-            if (row[elementName]) {
-                if (typeof row[elementName] !== 'undefined') {
+            if (row[column.id]) {
+                if (typeof row[column.id] !== 'undefined') {
                     count += 1;
-                    value += Number(row[elementName]);
+                    value += Number(row[column.id]);
                 }
             }
         }
         return value / count;
     }
 
-    function calculateMinimumForColumn (columnIndex, elementName) {
+    function calculateMinimumForColumn (column) {
         var lastValue;
 
         for (var row in $scope.report.query.data) {
 
-            if (row[elementName]) {
-                if (typeof row[elementName] !== 'undefined') {
-                    if (typeof lastValue === 'undefined') { lastValue = row[elementName]; }
+            if (row[column.id]) {
+                if (typeof row[column.id] !== 'undefined') {
+                    if (typeof lastValue === 'undefined') { lastValue = row[column.id]; }
 
-                    if (row[elementName] < lastValue) { lastValue = row[elementName]; }
+                    if (row[column.id] < lastValue) { lastValue = row[column.id]; }
                 }
             }
         }
         return lastValue;
     }
 
-    function calculateMaximumForColumn ($scope, columnIndex, elementName) {
+    function calculateMaximumForColumn ($scope, column) {
         var lastValue;
 
         for (var row in $scope.report.query.data) {
 
-            if (row[elementName]) {
-                if (typeof row[elementName] !== 'undefined') {
-                    if (typeof lastValue === 'undefined') { lastValue = row[elementName]; }
+            if (row[column.id]) {
+                if (typeof row[column.id] !== 'undefined') {
+                    if (typeof lastValue === 'undefined') { lastValue = row[column.id]; }
 
-                    if (row[elementName] > lastValue) { lastValue = row[elementName]; }
+                    if (row[column.id] > lastValue) { lastValue = row[column.id]; }
                 }
             }
         }

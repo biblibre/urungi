@@ -855,7 +855,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
     $scope.changeChartColumnType = function (column, type) {
         column.type = type;
-        c3Charts.transformChartColumnType($scope.selectedReport.properties.chart, column);
+        c3Charts.changeChartColumnType($scope.selectedReport.properties.chart, column);
     };
 
     $scope.changeChartSectorType = function (column, type) {
@@ -887,7 +887,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     };
 
     $scope.setColumnFormat = function () {
-        reportModel.repaintReport($scope.selectedReport);
+        $scope.$broadcast('repaint');
     };
 
     $scope.orderColumn = function (columnIndex, desc, hashedID) {
@@ -937,14 +937,16 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             column.originalLabel = column.elementLabel;
         }
 
-        if (option.value === 'original') {
+        if (option.value === 'raw') {
             delete (column.aggregation);
             column.elementLabel = column.originalLabel;
             column.objectLabel = column.originalLabel;
+            column.id = reportModel.changeColumnId(column.id, 'raw');
         } else {
             column.aggregation = option.value;
             column.elementLabel = column.originalLabel + ' (' + option.name + ')';
             column.objectLabel = column.originalLabel + ' (' + option.name + ')';
+            column.id = reportModel.changeColumnId(column.id, option.value);
         }
 
         queryModel.aggregationChoosed($scope.selectedReport.query, column, option, queryBind);

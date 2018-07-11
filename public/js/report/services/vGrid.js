@@ -65,7 +65,8 @@ app.service('verticalGrid', function (dataElements) {
             htmlCode += '</div>';
 
             htmlCode += '<div class="col-md-9 vertical-grid-column-value" >';
-            htmlCode += dataElements.getElementValue(columns[i], 'vertical-grid-data-column');
+            const ev = dataElements.getElementValue(columns[i], 'vertical-grid-data-column');
+            htmlCode += ev;
             htmlCode += '</div>';
 
             htmlCode += '</div>';

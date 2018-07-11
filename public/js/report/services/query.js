@@ -68,9 +68,6 @@ app.service('queryModel', function (uuid2) {
             console.log('no layer found');
             return;
         }
-        var elements = layer.objects;
-
-        this.calculateIdForAllElements(elements);
 
         generateDataSourceList();
         detectLayerJoins();
@@ -211,25 +208,6 @@ app.service('queryModel', function (uuid2) {
         return s;
     };
 
-    this.calculateIdForAllElements = function (elements) {
-        for (var e in elements) {
-            if (elements[e].collectionID) {
-                // var elementID = elements[e].collectionID.toLowerCase()+'_'+elements[e].elementName;
-
-                let elementID;
-                if (!elements[e].aggregation) {
-                    elementID = 'wst' + elements[e].elementID.toLowerCase();
-                } else {
-                    elementID = 'wst' + elements[e].elementID.toLowerCase() + elements[e].aggregation;
-                }
-
-                elements[e].id = elementID.replace(/[^a-zA-Z ]/g, '');
-            }
-
-            if (elements[e].elements) { this.calculateIdForAllElements(elements[e].elements); }
-        }
-    }
-
     function detectLayerJoins () {
         if (layers.length === 0) {
             return;
@@ -368,14 +346,16 @@ app.service('queryModel', function (uuid2) {
                 if (typeof column.originalLabel === 'undefined') {
                     column.originalLabel = column.elementLabel;
                 }
-                if (option.value === 'original') {
+                if (option.value === 'raw') {
                     delete (column.aggregation);
                     column.elementLabel = column.originalLabel;
                     column.objectLabel = column.originalLabel;
+                    column.id = reportModel.changeColumnId(column.id, 'raw');
                 } else {
                     column.aggregation = option.value;
                     column.elementLabel = column.originalLabel + ' (' + option.name + ')';
                     column.objectLabel = column.originalLabel + ' (' + option.name + ')';
+                    column.id = reportModel.changeColumnId(column.id, option.value);
                 }
             }
         }
@@ -761,21 +741,21 @@ app.service('queryModel', function (uuid2) {
             {name: 'Min', value: 'min'},
             {name: 'Max', value: 'max'},
             {name: 'Count', value: 'count'},
-            {name: 'Raw', value: 'original'}
+            {name: 'Raw', value: 'raw'}
         ],
         'date': [
             {name: 'Year', value: 'year'},
             {name: 'Month', value: 'month'},
             {name: 'Day', value: 'day'},
             {name: 'Count', value: 'count'},
-            {name: 'Raw', value: 'original'}
+            {name: 'Raw', value: 'raw'}
             /* {name: 'Semester', value: 'semester'},
             {name: 'Quarter', value: 'quarter'},
             {name: 'Trimester', value: 'trimester'} */
         ],
         'string': [
             {name: 'Count', value: 'count'},
-            {name: 'Raw', value: 'original'}
+            {name: 'Raw', value: 'raw'}
         ]
     };
 

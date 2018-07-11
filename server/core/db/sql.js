@@ -291,23 +291,21 @@ function processCollections (req, query, collections, dataSource, params, thereA
             elements.push(field);
 
             if (field.hidden !== true) {
-                var elementID = 'wst' + field.elementID.toLowerCase();
-                var theElementID = elementID.replace(/[^a-zA-Z ]/g, '');
 
                 if (field.aggregation) {
                     switch (field.aggregation) {
-                    case 'sum': fields.push('SUM(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + theElementID + 'sum');
+                    case 'sum': fields.push('SUM(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
                         break;
-                    case 'avg': fields.push('AVG(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + theElementID + 'avg');
+                    case 'avg': fields.push('AVG(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
                         break;
-                    case 'min': fields.push('MIN(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + theElementID + 'min');
+                    case 'min': fields.push('MIN(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
                         break;
-                    case 'max': fields.push('MAX(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + theElementID + 'max');
+                    case 'max': fields.push('MAX(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
                         break;
-                    case 'count': fields.push('COUNT(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + theElementID + 'count');
+                    case 'count': fields.push('COUNT(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
                     }
                 } else {
-                    fields.push(table.collectionID + '.' + field.elementName + ' as ' + theElementID);
+                    fields.push(table.collectionID + '.' + field.elementName + ' as ' + field.id);
                     if (dataSource.type !== 'BIGQUERY') { groupBy.push(table.collectionID + '.' + field.elementName); } else { groupBy.push(theElementID); }
                 }
             }
@@ -355,18 +353,16 @@ function processCollections (req, query, collections, dataSource, params, thereA
                 for (const f in query.order) {
                     var theOrderField = query.order[f];
                     var theOrderFieldName = '';
-                    var elementID = 'wst' + theOrderField.elementID.toLowerCase();
-                    var theElementID = elementID.replace(/[^a-zA-Z ]/g, '');
 
                     let theSortOrderFieldName;
                     if (theOrderField.aggregation) {
                         var AGG = theOrderField.aggregation.toUpperCase();
 
                         theSortOrderFieldName = AGG + '(' + theOrderField.collectionID + '.' + theOrderField.elementName + ')';
-                        theOrderFieldName = theSortOrderFieldName + ' as ' + theElementID + theOrderField.aggregation;
+                        theOrderFieldName = theSortOrderFieldName + ' as ' + theOrderField.id;
                     } else {
                         theSortOrderFieldName = theOrderField.collectionID + '.' + theOrderField.elementName;
-                        theOrderFieldName = theSortOrderFieldName + ' as ' + theElementID;
+                        theOrderFieldName = theSortOrderFieldName + ' as ' + theOrderField.id;
                     }
 
                     var sortType = '';

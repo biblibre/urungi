@@ -17,11 +17,11 @@ app.service('c3Charts', function () {
 
         var axisField = '';
         if (chart.dataAxis) { axisField = chart.dataAxis.id; }
-        var axisIsInQuery = false;
+        // var axisIsInQuery = false;
 
         var stackField = '';
         if (chart.stackDimension) { stackField = chart.stackDimension.id; }
-        var stackIsInQuery = false;
+        // var stackIsInQuery = false;
 
         chart.noUnicityWarning = false;
         // Indicates that for a single (axisField * stackField) value there are multiple entries
@@ -32,111 +32,96 @@ app.service('c3Charts', function () {
             return;
         }
 
-        if (chart.dataAxis) {
-            for (const d in query.datasources) {
-                for (const c in query.datasources[d].collections) {
-                    for (const qc in query.datasources[d].collections[c].columns) {
-                    // var elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName;
-                        var elementID = 'wst' + query.datasources[d].collections[c].columns[qc].elementID.toLowerCase();
-                        var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
+        // if (chart.dataAxis) {
+        //     for (const d in query.datasources) {
+        //         for (const c in query.datasources[d].collections) {
+        //             for (const element of query.datasources[d].collections[c].columns) {
+        //                 var columnID = getColumnId(element);
+        //                 if (columnID === chart.dataAxis.id) {
+        //                     axisIsInQuery = true;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
-                        if (query.datasources[d].collections[c].columns[qc].aggregation) {
-                        // elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName+query.datasources[d].collections[c].columns[qc].aggregation;
-                            elementID = 'wst' + query.datasources[d].collections[c].columns[qc].elementID.toLowerCase() + query.datasources[d].collections[c].columns[qc].aggregation;
-                            elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-                        }
 
-                        if (elementName === chart.dataAxis.id) {
-                            axisIsInQuery = true;
-                        }
-                    }
-                }
-            }
-        }
+        // if (!axisIsInQuery) {
+        //     axisField = null;
+        //     if (chart.dataAxis) { chart.dataAxis.id = null; }
+        // }
 
-        if (!axisIsInQuery) {
-            axisField = null;
-            if (chart.dataAxis) { chart.dataAxis.id = null; }
-        }
+        // if (chart.stackDimension) {
+        //     for (const d in query.datasources) {
+        //         for (const c in query.datasources[d].collections) {
+        //             for (const qc in query.datasources[d].collections[c].columns) {
+        //             // var elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName;
+        //                 elementID = 'wst' + query.datasources[d].collections[c].columns[qc].elementID.toLowerCase();
+        //                 elementName = elementID.replace(/[^a-zA-Z ]/g, '');
 
-        if (chart.stackDimension) {
-            for (const d in query.datasources) {
-                for (const c in query.datasources[d].collections) {
-                    for (const qc in query.datasources[d].collections[c].columns) {
-                    // var elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName;
-                        elementID = 'wst' + query.datasources[d].collections[c].columns[qc].elementID.toLowerCase();
-                        elementName = elementID.replace(/[^a-zA-Z ]/g, '');
+        //                 if (query.datasources[d].collections[c].columns[qc].aggregation) {
+        //                 // elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName+query.datasources[d].collections[c].columns[qc].aggregation;
+        //                     elementID = 'wst' + query.datasources[d].collections[c].columns[qc].elementID.toLowerCase() + query.datasources[d].collections[c].columns[qc].aggregation;
+        //                     elementName = elementID.replace(/[^a-zA-Z ]/g, '');
+        //                 }
 
-                        if (query.datasources[d].collections[c].columns[qc].aggregation) {
-                        // elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName+query.datasources[d].collections[c].columns[qc].aggregation;
-                            elementID = 'wst' + query.datasources[d].collections[c].columns[qc].elementID.toLowerCase() + query.datasources[d].collections[c].columns[qc].aggregation;
-                            elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-                        }
+        //                 if (elementName === chart.stackDimension.id) {
+        //                     stackIsInQuery = true;
+        //                     chart.stacked = true;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
-                        if (elementName === chart.stackDimension.id) {
-                            stackIsInQuery = true;
-                            chart.stacked = true;
-                        }
-                    }
-                }
-            }
-        }
+        // if (!stackIsInQuery) {
+        //     stackField = null;
+        //     if (chart.stackDimension) { chart.stackDimension.id = null; }
+        //     chart.stacked = false;
+        // }
 
-        if (!stackIsInQuery) {
-            stackField = null;
-            if (chart.stackDimension) { chart.stackDimension.id = null; }
-            chart.stacked = false;
-        }
+        // var columnsForDelete = [];
+        // for (const i in chart.dataColumns) {
+        //     var columnFound = false;
+        //     // remove column if not in query
+        //     for (const qc in query.columns) {
+        //         // var elementName = query.columns[qc].collectionID.toLowerCase()+'_'+query.columns[qc].elementName;
+        //         elementID = 'wst' + query.columns[qc].elementID.toLowerCase();
+        //         elementName = elementID.replace(/[^a-zA-Z ]/g, '');
 
-        var columnsForDelete = [];
-        for (const i in chart.dataColumns) {
-            var columnFound = false;
-            // remove column if not in query
-            for (const qc in query.columns) {
-                // var elementName = query.columns[qc].collectionID.toLowerCase()+'_'+query.columns[qc].elementName;
-                elementID = 'wst' + query.columns[qc].elementID.toLowerCase();
-                elementName = elementID.replace(/[^a-zA-Z ]/g, '');
+        //         if (query.columns[qc].aggregation) {
+        //             elementID = 'wst' + query.columns[qc].elementID.toLowerCase() + query.columns[qc].aggregation;
+        //             elementName = elementID.replace(/[^a-zA-Z ]/g, '');
+        //         }
 
-                if (query.columns[qc].aggregation) {
-                    elementID = 'wst' + query.columns[qc].elementID.toLowerCase() + query.columns[qc].aggregation;
-                    elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-                }
+        //         if (chart.dataColumns[i].id === elementName) {
+        //             columnFound = true; // columnsForDelete.push(i);
+        //         }
+        //     }
 
-                if (chart.dataColumns[i].id === elementName) {
-                    columnFound = true; // columnsForDelete.push(i);
-                }
-            }
+        //     if (!columnFound) {
+        //         /// /columnsForDelete.push(i);
+        //     }
+        // }
 
-            if (!columnFound) {
-                /// /columnsForDelete.push(i);
-            }
-        }
-
-        for (var cfd in columnsForDelete) {
-            chart.dataColumns.splice(columnsForDelete[cfd], 1);
-        }
+        // for (var cfd in columnsForDelete) {
+        //     chart.dataColumns.splice(columnsForDelete[cfd], 1);
+        // }
 
         // remove query if not dataColumns and not data Axis
 
-        if (!axisIsInQuery && chart.dataColumns.length) {
-            // this is not suitable for gauge as there is not dataColumns, only metrics, so I comented the 2 lines below
-            // chart.query = null;
-            // chart.queryName = null;
-        }
+        // if (!axisIsInQuery && chart.dataColumns.length) {
+        //     // this is not suitable for gauge as there is not dataColumns, only metrics, so I comented the 2 lines below
+        //     // chart.query = null;
+        //     // chart.queryName = null;
+        // }
 
-        for (const i in chart.dataColumns) {
-            let valueName;
-            if (typeof chart.dataColumns[i].id !== 'undefined') {
-                if (chart.dataColumns[i].aggregation) {
-                    valueName = chart.dataColumns[i].id + chart.dataColumns[i].aggregation;
-                } else {
-                    valueName = chart.dataColumns[i].id;
-                }
+        // Instead of doing all that, how about we initialize our chart and our query properly, then assume that they were initialized properly
 
-                theValues.push(valueName);
-                theTypes[valueName] = chart.dataColumns[i].type || 'bar';
-            }
-            theNames[valueName] = chart.dataColumns[i].elementLabel;
+        for (const dtc of chart.dataColumns) {
+            theValues.push(dtc.id);
+            theTypes[dtc.id] = dtc.type || 'bar';
+            theNames[dtc.id] = dtc.elementLabel;
         }
 
         if (stackField && chart.type === 'line') {
@@ -337,63 +322,14 @@ app.service('c3Charts', function () {
     };
 
     this.changeChartColumnType = function (chart, column) {
-        let columnID;
-        if (column.aggregation) {
-            columnID = column.id + column.aggregation;
-        } else {
-            columnID = column.id;
-        }
-
-        if (column.type === 'line' || typeof column.type === 'undefined') {
-            column.type = 'spline';
-            chart.chartCanvas.transform('spline', columnID);
-        } else if (column.type === 'spline') {
-            column.type = 'bar';
-            chart.chartCanvas.transform('bar', columnID);
-        } else if (column.type === 'bar') {
-            column.type = 'area';
-            chart.chartCanvas.transform('area', columnID);
-        } else if (column.type === 'area') {
-            column.type = 'area-spline';
-            chart.chartCanvas.transform('area-spline', columnID);
-        } else if (column.type === 'area-spline') {
-            column.type = 'scatter';
-            chart.chartCanvas.transform('scatter', columnID);
-        } else if (column.type === 'scatter') {
-            column.type = 'line';
-            chart.chartCanvas.transform('line', columnID);
-        }
-    };
-
-    this.transformChartColumnType = function (chart, column) {
-        let columnID;
-
-        if (column.aggregation) {
-            columnID = column.id + column.aggregation;
-        } else {
-            columnID = column.id;
-        }
 
         if (chart.stacked) {
-            for (const key of chart.stackKeys[columnID]) {
+            for (const key of chart.stackKeys[column.id]) {
                 chart.chartCanvas.transform(column.type, key);
             }
         } else {
-            chart.chartCanvas.transform(column.type, columnID);
+            chart.chartCanvas.transform(column.type, column.id);
         }
-    };
-
-    this.changeChartColumnColor = function (chart, column, color) {
-        let columnID;
-        if (column.aggregation) {
-            columnID = column.id + column.aggregation;
-        } else {
-            columnID = column.id;
-        }
-
-        chart.chartCanvas.data.colors[columnID] = '#ff0000';// d3.rgb('#ff0000').darker(1);
-        chart.chartCanvas.flush();
-        column.color = d3.rgb('#ff0000').darker(1);
     };
 
     this.getChartHTML = function (report, mode) {
@@ -410,65 +346,4 @@ app.service('c3Charts', function () {
         return html;
     };
 
-    this.applyChartSettings = function ($scope) {
-        var theValues = [];
-        var theNames = [];
-
-        for (var i in $scope.selectedChart.dataColumns) {
-            theValues.push($scope.selectedChart.dataColumns[i].object.elementName);
-            theNames.push($scope.selectedChart.dataColumns[i].object.elementLabel);
-        }
-
-        $scope.vm = {};
-
-        c3.generate({
-            bindto: '#chart1',
-            data: {
-                json: $scope.selectedChart.query.data,
-                keys: {
-                    x: 'wst5883cbeb81db4ae3b1d75e8371097e9a_device_name', // it's possible to specify 'x' when category axis
-                    value: theValues,
-                },
-                names: theNames
-            },
-            axis: {
-                x: {
-                    type: 'category'
-                }
-            }
-        });
-    };
-
-    this.onChartPropertiesChanged = function ($scope, object) {
-
-    };
-
-    this.applyChartSettings4Pie = function ($scope) {
-        var theValues = [];
-        var theNames = [];
-
-        for (var i in $scope.selectedChart.dataColumns) {
-            theValues.push($scope.selectedChart.dataColumns[i].object.elementName);
-            theNames.push($scope.selectedChart.dataColumns[i].object.elementLabel);
-        }
-
-        $scope.vm = {};
-
-        c3.generate({
-            bindto: '#chart1',
-            data: {
-                json: $scope.selectedChart.query.data,
-                keys: {
-                    x: 'wst5883cbeb81db4ae3b1d75e8371097e9a_device_name', // it's possible to specify 'x' when category axis
-                    value: theValues,
-                },
-                names: theNames
-            },
-            axis: {
-                x: {
-                    type: 'category'
-                }
-            }
-        });
-    };
 });

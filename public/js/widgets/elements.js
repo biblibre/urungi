@@ -8,16 +8,12 @@ app.service('dataElements', function () {
     };
 
     this.getElementValue = function (element, dataColumnClass) {
+
         var htmlCode = '';
         var columnDefaultStyle = '';
 
-        var elementID = 'wst' + element.elementID.toLowerCase();
-        var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-
-        if (element.aggregation) { elementName = elementName + element.aggregation; }
-
-        var theValue = '<div style="overflow:hidden;height:100%;">{{item.' + elementName + '}}</div>';
-        if (element.elementType === 'number') { theValue = '<div style="overflow:hidden;height:100%;">{{item.' + elementName + ' | number}}</div>'; }
+        var theValue = '<div style="overflow:hidden;height:100%;">{{item.' + element.id + '}}</div>';
+        if (element.elementType === 'number') { theValue = '<div style="overflow:hidden;height:100%;">{{item.' + element.id + ' | number}}</div>'; }
 
         if (element.signals) {
             var theStyle = '<style>';
@@ -50,26 +46,26 @@ app.service('dataElements', function () {
                     operator = ' <= ' + element.signals[s].value1;
                     break;
                 case 'between':
-                    operator = ' >= ' + element.signals[s].value1 + ' && {{item.' + elementName + '}} <= ' + element.signals[s].value2;
+                    operator = ' >= ' + element.signals[s].value1 + ' && {{item.' + element.id + '}} <= ' + element.signals[s].value2;
                     break;
                 case 'notBetween':
-                    operator = ' < ' + element.signals[s].value1 + ' || {{item.' + elementName + '}}  > ' + element.signals[s].value2;
+                    operator = ' < ' + element.signals[s].value1 + ' || {{item.' + element.id + '}}  > ' + element.signals[s].value2;
                     break;
                 }
 
-                theClass += theComma + 'customStyle' + s + '_' + columnIndex + ' : {{item.' + elementName + '}} ' + operator;
+                theClass += theComma + 'customStyle' + s + '_' + columnIndex + ' : {{item.' + element.id + '}} ' + operator;
             }
             htmlCode += theStyle + '</style>';
 
-            if (element.elementType === 'number') { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + elementName + ' | number}}</div>'; } else { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + elementName + '}}</div>'; }
+            if (element.elementType === 'number') { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + element.id + ' | number}}</div>'; } else { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + element.id + '}}</div>'; }
         }
 
         if (element.link) {
             if (element.link.type === 'report') {
-                if (element.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + '}}</a>'; }
+                if (element.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + '}}</a>'; }
             }
             if (element.link.type === 'dashboard') {
-                if (element.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + elementName + '}}">{{item.' + elementName + '}}</a>'; }
+                if (element.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + '}}</a>'; }
             }
         }
 
@@ -93,7 +89,7 @@ app.service('dataElements', function () {
         }
 
         const hashedID = '';
-        htmlCode += '<div id="ROW_' + elementName + '" class="' + dataColumnClass + ' ' + colClass + '" style="' + columnDefaultStyle + columnStyle + colWidth + defaultAligment + '" ng-click="cellClick(\'' + hashedID + '\',item,' + '\'' + elementID + '\'' + ',' + '\'' + elementName + '\'' + ')">' + theValue + ' </div>';
+        htmlCode += '<div id="ROW_' + element.id + '" class="' + dataColumnClass + ' ' + colClass + '" style="' + columnDefaultStyle + columnStyle + colWidth + defaultAligment + '" ng-click="cellClick(\'' + hashedID + '\',item,' + '\'' + element.id + '\'' + ',' + '\'' + element.id + '\'' + ')">' + theValue + ' </div>';
 
         return htmlCode;
     };
