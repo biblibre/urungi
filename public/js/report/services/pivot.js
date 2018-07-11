@@ -140,6 +140,7 @@ app.service('pivot', function () {
     }
 
     function reduce (mapItems) {
+        
         var aggregValues = {};
 
         for (const field of this.valueDataFields) {
@@ -191,7 +192,7 @@ app.service('pivot', function () {
             default:
                 result = undefined;
                 if (mapItems['default'][0]) {
-                    result = mapItems[0][field];
+                    result = mapItems['default'][0][field];
                 }
             }
 

@@ -302,9 +302,6 @@ app.service('queryModel', function (uuid2) {
 
     this.onDrop = function (item, queryBind) {
 
-        console.log(query);
-        console.log(queryBind);
-
         switch (queryBind) {
         case 'column':
             if (!query.columns) { query.columns = []; }
@@ -380,6 +377,13 @@ app.service('queryModel', function (uuid2) {
         default:
             console.log('Invalid bind');
         }
+    };
+
+    this.changeZone = function (column, newZone) {
+
+        var col = query.columns.find( c => c.id = column.id);
+        col.zone = newZone;
+        
     };
 
 
