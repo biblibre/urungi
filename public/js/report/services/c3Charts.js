@@ -11,7 +11,9 @@ app.service('c3Charts', function () {
 
         var query = report.query;
         var chart = report.properties.chart;
-        var reportID = report.id;
+        var reportID = report.id || report._id;
+
+        console.log(chart);
 
         var axisField = '';
         if (chart.dataAxis) { axisField = chart.dataAxis.id; }
@@ -24,6 +26,11 @@ app.service('c3Charts', function () {
         chart.noUnicityWarning = false;
         // Indicates that for a single (axisField * stackField) value there are multiple entries
         // This causes some of the charts to display weird or misleading results
+
+        if (!query.data) {
+            console.log('no data to display');
+            return;
+        }
 
         if (chart.dataAxis) {
             for (const d in query.datasources) {
@@ -221,99 +228,100 @@ app.service('c3Charts', function () {
             theGroups = undefined;
         }
 
-        if (query) {
-            var theChartCode = '#CHART_' + reportID;
+        var theChartCode = '#CHART_' + reportID;
 
-            if (!chart.height) { chart.height = 300; }
+        if (!chart.height) { chart.height = 300; }
 
-            let chartCanvas;
+        let canvasArgs;
 
-            switch (chart.type) {
-            case 'pie':
-            case 'donut':
-                var theColumns = [];
-                if (axisField && theValues) {
-                    for (const i in query.data) {
-                        const groupField = query.data[i][axisField];
-                        const valueField = query.data[i][theValues[0]];
-                        theColumns.push([groupField, valueField]);
-                    }
+        switch (chart.type) {
+        
+        case 'pie':
+        case 'donut':
+            var theColumns = [];
+            if (axisField && theValues) {
+                for (const i in query.data) {
+                    const groupField = query.data[i][axisField];
+                    const valueField = query.data[i][theValues[0]];
+                    theColumns.push([groupField, valueField]);
                 }
-
-                chartCanvas = c3.generate({
-                    bindto: theChartCode,
-                    data: {
-                        columns: theColumns,
-                        type: chart.type
-                    },
-
-                    size: {
-                        height: chart.height
-                    }
-                });
-                break;
-
-            case 'gauge':
-                chartCanvas = c3.generate({
-                    bindto: theChartCode,
-                    data: {
-                        columns: [theValues[0], query.data[0][theValues[0]]],
-                        type: chart.type
-                    },
-                    gauge: {
-                        //        label: {
-                        //            format: function(value, ratio) {
-                        //                return value;
-                        //            },
-                        //            show: false // to turn off the min/max labels.
-                        //        },
-                        //    min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
-                        //    max: (query.data[0][theValues[0]]*2), // 100 is default
-                        //    units: '' //' %',
-                        //    width: 39 // for adjusting arc thickness
-                    },
-
-                    size: {
-                        height: chart.height
-                    }
-                });
-                break;
-
-            default :
-                chartCanvas = c3.generate({
-                    bindto: theChartCode,
-                    data: {
-                        json: theData,
-                        keys: {
-                            x: axisField,
-                            value: theValues
-                        },
-                        types: theTypes,
-                        names: theNames,
-                        groups: theGroups
-                    },
-                    axis: {
-                        x: {
-                            type: 'category',
-                            tick: {
-                                culling: {
-                                    max: 20
-                                },
-                                multiline: false,
-                                rotate: 45
-                            }
-                        }
-                    },
-                    size: {
-                        height: chart.height
-                    }
-                });
-
-                break;
             }
 
-            chart.chartCanvas = chartCanvas;
+            canvasArgs = {
+                bindto: theChartCode,
+                data: {
+                    columns: theColumns,
+                    type: chart.type
+                },
+
+                size: {
+                    height: chart.height
+                }
+            };
+            break;
+
+        case 'gauge':
+            canvasArgs = {
+                bindto: theChartCode,
+                data: {
+                    columns: [theValues[0], query.data[0][theValues[0]]],
+                    type: chart.type
+                },
+                gauge: {
+                    //        label: {
+                    //            format: function(value, ratio) {
+                    //                return value;
+                    //            },
+                    //            show: false // to turn off the min/max labels.
+                    //        },
+                    //    min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
+                    //    max: (query.data[0][theValues[0]]*2), // 100 is default
+                    //    units: '' //' %',
+                    //    width: 39 // for adjusting arc thickness
+                },
+
+                size: {
+                    height: chart.height
+                }
+            };
+            break;
+
+        case 'line' :
+            canvasArgs = {
+                bindto: theChartCode,
+                data: {
+                    json: theData,
+                    keys: {
+                        x: axisField,
+                        value: theValues
+                    },
+                    types: theTypes,
+                    names: theNames,
+                    groups: theGroups
+                },
+                axis: {
+                    x: {
+                        type: 'category',
+                        tick: {
+                            culling: {
+                                max: 20
+                            },
+                            multiline: false,
+                            rotate: 45
+                        }
+                    }
+                },
+                size: {
+                    height: chart.height
+                }
+            };
+
+            break;
         }
+
+        console.log(canvasArgs);
+        chart.chartCanvas = c3.generate(canvasArgs);
+        
     };
 
     this.deleteChartColumn = function (chart, column) {
@@ -388,20 +396,16 @@ app.service('c3Charts', function () {
         column.color = d3.rgb('#ff0000').darker(1);
     };
 
-    this.getChartHTML = function (report, theChartID, mode) {
+    this.getChartHTML = function (report, mode) {
         var html = '';
 
+        const theChartID = report.id || report._id;
+
         if (mode === 'edit') {
-            html = '<c3chart page-block ndType="c3Chart" bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_' + theChartID + '" bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
+            html = '<c3chart page-block ndType="c3Chart" bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
         } else {
-            html = '<c3chart bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_' + theChartID + '" bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
+            html = '<c3chart bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
         }
-        /*
-            html = html + '<chart-axis>'+
-                    '<chart-axis-x axis-id="x" axis-type="timeseries" axis-x-format="%Y-%m-%d %H:%M:%S">'+
-                        '<chart-axis-x-tick tick-format-time="%H:%m:%s"/>'+
-                        '</chart-axis-x>'+
-                    '</chart-axis>'+ */
         html = html + '</c3chart>';
         return html;
     };

@@ -12,7 +12,7 @@
 
 </div>
 
-<div class="container-fluid " style="position: absolute;
+<div class="container-fluid " ng-init="init()" style="position: absolute;
     left: 15px;
     right: 0px;
     top: 100px;
@@ -23,15 +23,14 @@
     overflow-x: hidden;
     /* background-color: #CCCCCC; */">
 
-
-
     <div ng-include src="promptsBlock" class=" prompts-block" style="position:relative"></div>
 
-    <!--<div class="container-fluid">-->
-        <div id="reportLayout" ng-init="getReportDiv()" class="container-fluid" style="min-height:200px;position:relative;padding-left:0px;padding-right:0px;height:100%"  bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_reportLayout">
+    <div report-view report="selectedReport" mode="preview" style="height:100%"></div>
+    
 
-        </div>
-    <!--</div>-->
+    <!-- <div id="reportLayout" ng-init="getReportDiv()" class="container-fluid" style="min-height:200px;position:relative;padding-left:0px;padding-right:0px;height:100%"  
+    bs-loading-overlay bs-loading-overlay-reference-id="OVERLAY_reportLayout">
+    </div> -->
 
 </div>
 

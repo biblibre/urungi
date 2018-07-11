@@ -492,15 +492,13 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
         await queryModel.processQuery($scope.selectedReport.query);
 
-        console.log('query processed');
-
         if( ['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0 ){
             reportModel.initChart($scope.selectedReport);
         }
 
         params = {
             mode : $scope.mode,
-            selectedRecordLimit : $scope.selectedRecordLimit
+            selectedRecordLimit : $scope.selectedRecordLimit.value
         };
 
         $scope.$broadcast('showLoadingMessage', 'Fetching data ...');

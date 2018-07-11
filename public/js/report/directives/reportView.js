@@ -22,12 +22,17 @@ app.directive('reportView', function ( reportModel, $compile, c3Charts, reportHt
 
                 element.html(html);
                 $compile(element.contents())($scope);
+                $scope.$digest();
 
             }
 
             $scope.$on('repaint', async function(event, args){
 
                 $scope.loading = true;
+
+                if(!args){
+                    args = {};
+                }
 
                 if(args.fetchData){
                     $scope.loadingMessage = 'Fetching data ...';
@@ -52,7 +57,7 @@ app.directive('reportView', function ( reportModel, $compile, c3Charts, reportHt
                     case 'chart-donut':
                     case 'chart-pie':
                     case 'gauge':
-                        $scope.changeContent(c3Charts.getChartHTML($scope.report, $scope.report.id, '$scope.mode'));
+                        $scope.changeContent(c3Charts.getChartHTML($scope.report, '$scope.mode'));
                         await new Promise( resolve => {
                             setTimeout( function () {
                                 c3Charts.rebuildChart($scope.report);

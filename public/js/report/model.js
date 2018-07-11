@@ -99,28 +99,38 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
   
     this.initChart = function (report) {
 
-        report.properties.chart = {
+        var chart = {
             id : 'Chart' + uuid2.newguid(),
             dataPoints: [],
             dataColumns: [],
             datax: {},
             height: 300,
-            type: 'bar',
             query: report.query,
             queryName: null
         };
 
-        if (report.reportType === 'chart-donut') { report.properties.chart.type = 'donut'; }
-        if (report.reportType === 'chart-pie') { report.properties.chart.type = 'pie'; }
-        if (report.reportType === 'gauge') { report.properties.chart.type = 'gauge'; }
+        switch(report.reportType){
+            case 'chart-line':
+                chart.type = 'line';
+                break;
+            case 'chart-donut':
+                chart.type = 'donut';
+                break;
+            case 'chart-pie':
+                chart.type = 'pie';
+                break;
+            case 'gauge':
+                chart.type = 'gauge';
+                break;
+        }
 
         if ( ['chart-line', 'chart-donut','chart-pie'].indexOf(report.reportType) >= 0 && 
             report.properties.xkeys.length > 0 && report.properties.ykeys.length > 0) {
 
-            report.properties.chart.dataColumns = report.properties.ykeys;
+            chart.dataColumns = report.properties.ykeys;
 
             const dataAxisInfo = report.properties.xkeys[0];
-            report.properties.chart.dataAxis = {
+            chart.dataAxis = {
                 elementName: dataAxisInfo.elementName,
                 queryName: 'query1',
                 elementLabel: dataAxisInfo.objectLabel,
@@ -130,7 +140,7 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
 
                 if(report.properties.xkeys.length > 1){
                     const stackDimensionInfo = report.properties.xkeys[1];
-                    report.properties.chart.stackDimension = {
+                    chart.stackDimension = {
                         elementName: stackDimensionInfo.elementName,
                         queryName: 'query1',
                         elementLabel: stackDimensionInfo.objectLabel,
@@ -141,8 +151,10 @@ app.service('reportModel', function (c3Charts, reportHtmlWidgets, grid, bsLoadin
         }
 
         if(report.reportType === 'gauge'){
-            report.properties.chart.dataColumns = report.properties.ykeys;
+            chart.dataColumns = report.properties.ykeys;
         }
+
+        report.properties.chart = chart;
     }
 
     function generateNoDataHTML () {
