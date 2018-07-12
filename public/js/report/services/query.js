@@ -1,4 +1,4 @@
-app.service('queryModel', function (uuid2) {
+app.service('queryModel', function (uuid2, reportModel) {
 
     query = {};
     layers = [];
@@ -74,7 +74,7 @@ app.service('queryModel', function (uuid2) {
         processStructure();
         // checkChoosedElements(); // TODO : figure out what this does and why it exists
         cleanQuery();
-        setupQuery();
+        setupCount();
 
     };
 
@@ -92,7 +92,19 @@ app.service('queryModel', function (uuid2) {
         }
     }
 
-    function setupQuery () {
+    function setupCount () {
+        /*
+        * Get add to the query some columns to count all of the y keys
+        */
+        function isPivotTableCount(id){
+            console.log(id);
+            return (id.substring(id.length - 3, id.length) === 'ptc' );
+        }
+        for(var i = query.columns.length - 1; i >= 0; i--){
+            if( isPivotTableCount(query.columns[i].id) ){
+                query.columns.splice(i, 1);
+            }
+        }
         if (!query.countYKeys) { return; }
         var countColumns = [];
         for (const col of query.columns) {
@@ -108,12 +120,12 @@ app.service('queryModel', function (uuid2) {
             aggregation: 'count',
             collectionID: col.collectionID,
             datasourceID: col.datasourceID,
-            elementID: col.elementID + 'pt',
+            elementID: col.elementID,
             elementLabel: col.elementLabel,
             elementName: col.elementName,
             elementType: col.elementName,
             filterPrompt: false,
-            id: col.id,
+            id: col.id + 'ptc',
             layerID: col.layerID,
             objectLabel: col.objectLabel + ' count'
         };
@@ -333,52 +345,6 @@ app.service('queryModel', function (uuid2) {
         }
     };
 
-    this.aggregationChoosed = function (column, option, queryBind) {
-        function changeAggregation (list) {
-            var index = 0;
-            while (index < list.length && list[index].id !== column.id) { index++; }
-            if (index < list.length) {
-                const column = list[index];
-
-                if (typeof column.originalLabel === 'undefined') {
-                    column.originalLabel = column.elementLabel;
-                }
-                if (option.value === 'raw') {
-                    delete (column.aggregation);
-                    column.elementLabel = column.originalLabel;
-                    column.objectLabel = column.originalLabel;
-                    column.id = reportModel.changeColumnId(column.id, 'raw');
-                } else {
-                    column.aggregation = option.value;
-                    column.elementLabel = column.originalLabel + ' (' + option.name + ')';
-                    column.objectLabel = column.originalLabel + ' (' + option.name + ')';
-                    column.id = reportModel.changeColumnId(column.id, option.value);
-                }
-            }
-        }
-
-        switch (queryBind) {
-        case 'column':
-            changeAggregation(query.columns);
-            break;
-
-        case 'order':
-            changeAggregation(query.order);
-            break;
-
-        case 'filter':
-            changeAggregation(query.filter);
-            break;
-
-        case 'group':
-            changeAggregation(query.groupFilters);
-            break;
-
-        default:
-            console.log('Invalid bind');
-        }
-    };
-
     this.changeZone = function (column, newZone) {
 
         var col = query.columns.find( c => c.id = column.id);
@@ -507,14 +473,6 @@ app.service('queryModel', function (uuid2) {
                 for (const n1 in query.columns) {
                     if (query.columns[n1].collectionID === dtsCollections[n]) {
                         collection.columns.push(query.columns[n1]);
-                    }
-                }
-
-                if (query.countYKeys) {
-                    for (const col of query.columns) {
-                        if (col.zone === 'ykeys' && col.collectionID === dtsCollections[n]) {
-                            collection.columns.push(countColumn(col));
-                        }
                     }
                 }
 

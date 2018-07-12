@@ -33,6 +33,8 @@ app.service('pivot', function () {
             }
         }
 
+        console.log(dimensionList);
+
         for (const dim in dimensionList) {
             var valueList = [];
 
@@ -44,7 +46,7 @@ app.service('pivot', function () {
                 valueList.push(value);
             }
 
-            dimensions[dim] = new DimensionDescription(dimensionList[dim].objectLabel, valueList);
+            dimensions[dim] = new DimensionDescription(dimensionList[dim].info.objectLabel, valueList);
         }
 
         const horizontalDimensions = [];
@@ -140,7 +142,7 @@ app.service('pivot', function () {
     }
 
     function reduce (mapItems) {
-        
+
         var aggregValues = {};
 
         for (const field of this.valueDataFields) {
@@ -178,8 +180,8 @@ app.service('pivot', function () {
                 var denom = 0;
                 for (const item of mapItems['default']) {
                     if (item[field]) {
-                        numer += item[field] * item[ this.dataFieldInfo[field].id + 'ptcount' ];
-                        denom += item[ this.dataFieldInfo[field].id + 'ptcount' ];
+                        numer += item[field] * item[ this.dataFieldInfo[field].id + 'ptc' ];
+                        denom += item[ this.dataFieldInfo[field].id + 'ptc' ];
                     }
                 }
                 if (denom) {

@@ -51,7 +51,12 @@ app.directive('reportView', function ( reportModel, $compile, c3Charts, reportHt
                     case 'pivot':
                         var result = pivot.getPivotTableSetup($scope.report);
                         $scope.changeContent(result.html);
-                        $(result.jquerySelector).cypivot(result.params);
+                        await new Promise( resolve => {
+                            setTimeout( function () {
+                                $(result.jquerySelector).cypivot(result.params);
+                                resolve();
+                            }, 100);
+                        });
                     break;
                     case 'chart-line':
                     case 'chart-donut':
@@ -62,7 +67,7 @@ app.directive('reportView', function ( reportModel, $compile, c3Charts, reportHt
                             setTimeout( function () {
                                 c3Charts.rebuildChart($scope.report);
                                 resolve();
-                            }, 500);
+                            }, 100);
                         });
                     break;
                     case 'indicator':

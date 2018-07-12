@@ -177,6 +177,8 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
         $scope.selectedReport = {};
         $scope.selectedReport.query = query;
+        $scope.selectedReport.query.selectedLayerID = $scope.selectedLayerID;
+
         $scope.selectedReport.draft = true;
         $scope.selectedReport.badgeStatus = 0;
         $scope.selectedReport.exportable = true;
@@ -524,8 +526,19 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.onDropField(item, 'filter');
     };
 
-    $scope.onDropField = function (newItem, queryBind) {
+    $scope.onDropField = function (newItem, queryBind, forbidAggregation) {
         $scope.sql = undefined;
+
+        if (newItem.aggregation && forbidAggregation) {
+            if (typeof newItem.originalLabel === 'undefined') {
+                newItem.originalLabel = newItem.elementLabel;
+            }
+            delete (newItem.aggregation);
+            newItem.id = reportModel.changeColumnId(newItem.id, 'raw');
+            newItem.elementLabel = newItem.originalLabel;
+            newItem.objectLabel = newItem.originalLabel;
+        }
+
         queryModel.onDrop(newItem, queryBind);
     };
 
@@ -585,21 +598,22 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
                     choice = {
                         propertyBind: $scope.selectedReport.properties.pivotKeys.rows,
                         zone: 'prow',
-                        queryBind: 'column'
+                        queryBind: 'column',
+                        forbidAggregation : true
                     };
                 } else {
                     if ($scope.selectedReport.properties.pivotKeys.columns.length === 0) {
                         choice = {
                             propertyBind: $scope.selectedReport.properties.pivotKeys.columns,
                             zone: 'pcol',
-                            queryBind: 'column'
+                            queryBind: 'column',
+                            forbidAggregation : true
                         };
                     } else {
                         choice = {
                             propertyBind: $scope.selectedReport.properties.ykeys,
                             zone: 'ykeys',
-                            queryBind: 'column',
-                            forceAggregation: true
+                            queryBind: 'column'
                         };
                     }
                 }
@@ -670,7 +684,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             choice.propertyBind.push(newItem);
         }
 
-        $scope.onDropField(newItem, choice.queryBind);
+        $scope.onDropField(newItem, choice.queryBind, choice.forbidAggregation);
     };
 
     $scope.filterSortableOptions = {
@@ -850,6 +864,9 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             col.zone = choice.zone;
             queryModel.changeZone(col, choice.zone);
             choice.propertyBind.push(col);
+            if(choice.forbidAggregation){
+                $scope.aggregationChoosed(col, {name: 'Raw', value: 'raw'});
+            }
         }
     };
 
@@ -979,10 +996,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $location.path('/dashboardsv2/push/' + dashboardID);
     };
 
-    $scope.aggregationChoosed = function (column, option, queryBind) {
-
-        queryModel.aggregationChoosed($scope.selectedReport.query, column, option, queryBind);
-        // It is important to call this BEFORE changing the id in $scope.selectedReport
+    $scope.aggregationChoosed = function (column, option) {
 
         if (typeof column.originalLabel === 'undefined') {
             column.originalLabel = column.elementLabel;
@@ -1074,5 +1088,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.$digest();
         $('#publishModal').modal('hide');
     };
+
+    $scope.util = function () {
+        console.log($scope.selectedReport.properties.columns[0]);
+        console.log($scope.selectedReport.properties.columns[1]);
+    }
 
 });
