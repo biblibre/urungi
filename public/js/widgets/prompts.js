@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('ndPrompt', function ($compile) {
+app.directive('ndPrompt', function (queryModel) {
     return {
         transclude: true,
         scope: {
@@ -34,7 +34,6 @@ app.directive('ndPrompt', function ($compile) {
             }
 
             $scope.setDatePatternFilterType = function (filter, option) {
-
                 filter.searchValue = option.value;
                 filter.filterText1 = option.value;
                 filter.filterLabel1 = option.label;

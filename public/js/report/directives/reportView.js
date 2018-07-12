@@ -1,19 +1,17 @@
-app.directive('reportView', function ( reportModel, $compile, c3Charts, reportHtmlWidgets, grid, 
+app.directive('reportView', function (reportModel, $compile, c3Charts, reportHtmlWidgets, grid,
     verticalGrid, pivot) {
     return {
 
-        scope : {
-            report : '=',
-            mode : '='
+        scope: {
+            report: '=',
+            mode: '='
         },
 
-        link : function ($scope, element){
-
+        link: function ($scope, element) {
             $scope.loading = false;
             $scope.loadingMessage = '';
 
-            $scope.changeContent = function (newHtml){
-
+            $scope.changeContent = function (newHtml) {
                 var html = '<div ng-hide="loading" style="height:100%">';
                 html += newHtml;
                 html += '</div><div ng-show="loading" class="container-fluid" >';
@@ -23,65 +21,59 @@ app.directive('reportView', function ( reportModel, $compile, c3Charts, reportHt
                 element.html(html);
                 $compile(element.contents())($scope);
                 $scope.$digest();
+            };
 
-            }
-
-            $scope.$on('repaint', async function(event, args){
-
+            $scope.$on('repaint', async function (event, args) {
                 $scope.loading = true;
 
-                if(!args){
+                if (!args) {
                     args = {};
                 }
 
-                if(args.fetchData){
+                if (args.fetchData) {
                     $scope.loadingMessage = 'Fetching data ...';
                     await reportModel.fetchData($scope.report.query);
                 }
 
                 $scope.loadingMessage = 'Repainting report ...';
 
-                switch($scope.report.reportType){
-                    case 'grid':
-                        $scope.changeContent(grid.extendedGridV2($scope.report, $scope.mode));
+                switch ($scope.report.reportType) {
+                case 'grid':
+                    $scope.changeContent(grid.extendedGridV2($scope.report, $scope.mode));
                     break;
-                    case 'vertical-grid':
-                        $scope.changeContent(verticalGrid.getVerticalGrid($scope.report, $scope.mode));
+                case 'vertical-grid':
+                    $scope.changeContent(verticalGrid.getVerticalGrid($scope.report, $scope.mode));
                     break;
-                    case 'pivot':
-                        var result = pivot.getPivotTableSetup($scope.report);
-                        $scope.changeContent(result.html);
-                        await new Promise( resolve => {
-                            setTimeout( function () {
-                                $(result.jquerySelector).cypivot(result.params);
-                                resolve();
-                            }, 100);
-                        });
+                case 'pivot':
+                    var result = pivot.getPivotTableSetup($scope.report);
+                    $scope.changeContent(result.html);
+                    $scope.loading = false;
+                    $scope.$digest();
+                    $(result.jquerySelector).cypivot(result.params);
                     break;
-                    case 'chart-line':
-                    case 'chart-donut':
-                    case 'chart-pie':
-                    case 'gauge':
-                        $scope.changeContent(c3Charts.getChartHTML($scope.report, '$scope.mode'));
-                        await new Promise( resolve => {
-                            setTimeout( function () {
-                                c3Charts.rebuildChart($scope.report);
-                                resolve();
-                            }, 100);
-                        });
+                case 'chart-line':
+                case 'chart-donut':
+                case 'chart-pie':
+                case 'gauge':
+                    $scope.changeContent(c3Charts.getChartHTML($scope.report, '$scope.mode'));
+                    await new Promise(resolve => {
+                        setTimeout(function () {
+                            c3Charts.rebuildChart($scope.report);
+                            resolve();
+                        }, 100);
+                    });
                     break;
-                    case 'indicator':
-                        $scope.changeContent(reportHtmlWidgets.generateIndicator($scope.report));
-                        c3Charts.rebuildChart($scope.report);
+                case 'indicator':
+                    $scope.changeContent(reportHtmlWidgets.generateIndicator($scope.report));
+                    c3Charts.rebuildChart($scope.report);
                     break;
-                    default:
-                        $scope.changeContent('<span style="font-size: small;color: darkgrey;padding: 5px;">' + report.reportName + '</span><div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>');
+                default:
+                    $scope.changeContent('<span style="font-size: small;color: darkgrey;padding: 5px;">' + $scope.report.reportName + '</span><div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>');
                 }
 
                 $scope.loading = false;
-                
-                $scope.$digest();
 
+                $scope.$digest();
             });
 
             $scope.$on('clearReport', function () {
@@ -89,13 +81,13 @@ app.directive('reportView', function ( reportModel, $compile, c3Charts, reportHt
                 $scope.loading = false;
             });
 
-            $scope.$on('showLoadingMessage', function (event, loadingMessage){
+            $scope.$on('showLoadingMessage', function (event, loadingMessage) {
                 $scope.loading = true;
                 $scope.loadingMessage = loadingMessage;
             });
         },
 
-        template : '<div class="container-fluid"  ng-show="loading" ><h3><img src="/images/loader.gif" width="32px" height="32px"/>{{loadingMessage}}</h3></div>'
+        template: '<div class="container-fluid"  ng-show="loading" ><h3><img src="/images/loader.gif" width="32px" height="32px"/>{{loadingMessage}}</h3></div>'
 
-    }
+    };
 });

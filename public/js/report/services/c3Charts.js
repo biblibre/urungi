@@ -1,4 +1,4 @@
-/* global c3:false, d3: false */
+/* global c3:false */
 
 app.service('c3Charts', function () {
     this.rebuildChart = function (report) {
@@ -12,9 +12,6 @@ app.service('c3Charts', function () {
         var query = report.query;
         var chart = report.properties.chart;
         var queryID = report.query.id;
-
-        console.log(chart);
-        console.log(report);
 
         var axisField = '';
         if (chart.dataAxis) { axisField = chart.dataAxis.id; }
@@ -135,7 +132,6 @@ app.service('c3Charts', function () {
         let canvasArgs;
 
         switch (chart.type) {
-        
         case 'pie':
         case 'donut':
             var theColumns = [];
@@ -221,7 +217,6 @@ app.service('c3Charts', function () {
 
         console.log(canvasArgs);
         chart.chartCanvas = c3.generate(canvasArgs);
-        
     };
 
     this.deleteChartColumn = function (chart, column) {
@@ -237,7 +232,6 @@ app.service('c3Charts', function () {
     };
 
     this.changeChartColumnType = function (chart, column) {
-
         if (chart.stacked) {
             for (const key of chart.stackKeys[column.id]) {
                 chart.chartCanvas.transform(column.type, key);
@@ -260,5 +254,4 @@ app.service('c3Charts', function () {
         html = html + '</c3chart>';
         return html;
     };
-
 });

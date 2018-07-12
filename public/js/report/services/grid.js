@@ -16,7 +16,7 @@ app.service('grid', function () {
         } else {
             id = report.id;
         }
-        
+
         var theProperties = report.properties;
         var pageBlock = 'page-block';
 
@@ -67,17 +67,17 @@ app.service('grid', function () {
 
         // header
         htmlCode += '<div class="container-fluid" style="' + headerStyle + '">';
-        for (let col of columns) {
+        for (const col of columns) {
             htmlCode += getHeaderColumn(col);
         }
         htmlCode += '</div>';
 
-        htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: ' 
-            + theProperties.headerHeight + 'px;" scrolly="gridGetMoreData(\'' + id + '\')">';
+        htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: ' +
+            theProperties.headerHeight + 'px;" scrolly="gridGetMoreData(\'' + id + '\')">';
 
         htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in report.query.data | filter:theFilter | orderBy:report.predicate:report.reverse  " style="' + rowStyle + '"  >';
 
-        for (let i = 0; i<columns.length; i++) {
+        for (let i = 0; i < columns.length; i++) {
             htmlCode += getDataCell(columns[i], id, i, columnDefaultStyle);
         }
 
@@ -208,7 +208,6 @@ app.service('grid', function () {
         var value = 0;
 
         for (var row of $scope.report.query.data) {
-
             if (row[column.id]) {
                 if (typeof row[column.id] !== 'undefined') { value += Number(row[column.id]); }
             }
@@ -233,22 +232,20 @@ app.service('grid', function () {
         var count = 0;
 
         for (var row in $scope.report.query.data) {
-
             if (row[column.id]) {
                 if (typeof row[column.id] !== 'undefined') {
                     count += 1;
-                    value += Number(row[column.id]);
+                    sum += Number(row[column.id]);
                 }
             }
         }
-        return value / count;
+        return sum / count;
     }
 
     function calculateMinimumForColumn (column) {
         var lastValue;
 
         for (var row in $scope.report.query.data) {
-
             if (row[column.id]) {
                 if (typeof row[column.id] !== 'undefined') {
                     if (typeof lastValue === 'undefined') { lastValue = row[column.id]; }
@@ -264,7 +261,6 @@ app.service('grid', function () {
         var lastValue;
 
         for (var row in $scope.report.query.data) {
-
             if (row[column.id]) {
                 if (typeof row[column.id] !== 'undefined') {
                     if (typeof lastValue === 'undefined') { lastValue = row[column.id]; }
@@ -275,7 +271,6 @@ app.service('grid', function () {
         }
         return lastValue;
     }
-
 });
 
 app.directive('scrolly', function () {

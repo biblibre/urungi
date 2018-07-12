@@ -8,7 +8,6 @@ app.service('dataElements', function () {
     };
 
     this.getElementValue = function (element, dataColumnClass) {
-
         var htmlCode = '';
         var columnDefaultStyle = '';
 

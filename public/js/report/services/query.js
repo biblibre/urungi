@@ -1,8 +1,7 @@
 app.service('queryModel', function (uuid2, reportModel) {
-
-    query = {};
-    layers = [];
-    layer = {};
+    var query = {};
+    var layers = [];
+    var layer = {};
 
     this.newQuery = function () {
         query = {};
@@ -15,7 +14,7 @@ app.service('queryModel', function (uuid2, reportModel) {
 
     this.loadQuery = function (theQuery) {
         query = theQuery;
-    }
+    };
 
     this.loadLayers = function (loadedLayers) {
         layers = loadedLayers;
@@ -62,9 +61,8 @@ app.service('queryModel', function (uuid2, reportModel) {
     * Prepares the query so that it can be used to run a database request
     */
     this.processQuery = async function () {
-
         layer = layers.find(l => l._id === query.selectedLayerID);
-        if(!layer){
+        if (!layer) {
             console.log('no layer found');
             return;
         }
@@ -78,7 +76,6 @@ app.service('queryModel', function (uuid2, reportModel) {
         processStructure();
         // checkChoosedElements(); // TODO : figure out what this does and why it exists
         cleanQuery();
-
     };
 
     function cleanQuery () {
@@ -99,12 +96,11 @@ app.service('queryModel', function (uuid2, reportModel) {
         /*
         * Get add to the query some columns to count all of the y keys
         */
-        function isPivotTableCount(id){
-            console.log(id);
-            return (id.substring(id.length - 3, id.length) === 'ptc' );
+        function isPivotTableCount (id) {
+            return (id.substring(id.length - 3, id.length) === 'ptc');
         }
-        for(var i = query.columns.length - 1; i >= 0; i--){
-            if( isPivotTableCount(query.columns[i].id) ){
+        for (var i = query.columns.length - 1; i >= 0; i--) {
+            if (isPivotTableCount(query.columns[i].id)) {
                 query.columns.splice(i, 1);
             }
         }
@@ -316,7 +312,6 @@ app.service('queryModel', function (uuid2, reportModel) {
     }
 
     this.onDrop = function (item, queryBind) {
-
         switch (queryBind) {
         case 'column':
             if (!query.columns) { query.columns = []; }
@@ -349,12 +344,9 @@ app.service('queryModel', function (uuid2, reportModel) {
     };
 
     this.changeZone = function (column, newZone) {
-
-        var col = query.columns.find( c => c.id = column.id);
+        var col = query.columns.find(c => c.id === column.id);
         col.zone = newZone;
-        
     };
-
 
     this.hideColumn = function (elementID, hidden) {
         for (var i in query.columns) {
@@ -404,22 +396,21 @@ app.service('queryModel', function (uuid2, reportModel) {
                 query.groupFilters[i].conditionLabel = 'AND';
             }
         }
-    }
+    };
 
     /*
     *   Internal functions
     */
 
-
-    function checkChoosedElements () {
-        if (query.columns.length > 1) {
-            for (var e = query.columns.length - 1; e >= 0; e--) {
-                if (thereIsAJoinForMe(query, query.columns[e]) === 0) {
-                    query.columns.splice(e, 1);
-                }
-            }
-        }
-    }
+    // function checkChoosedElements () {
+    //     if (query.columns.length > 1) {
+    //         for (var e = query.columns.length - 1; e >= 0; e--) {
+    //             if (thereIsAJoinForMe(query, query.columns[e]) === 0) {
+    //                 query.columns.splice(e, 1);
+    //             }
+    //         }
+    //     }
+    // }
 
     /*
     * Initialize query.datasources with all of the datasources used by the query.
@@ -547,36 +538,35 @@ app.service('queryModel', function (uuid2, reportModel) {
         }
     }
 
-    function thereIsAJoinForMe (element) {
-        var found = 0;
-        for (const i in query.columns) {
-            if (element.elementID !== query.columns[i].elementID) {
-                if (joinExists(element.collectionID, query.columns[i].collectionID) || (element.collectionID === query.columns[i].collectionID)) {
-                    found = found + 1;
-                }
-            }
-        }
+    // function thereIsAJoinForMe (element) {
+    //     var found = 0;
+    //     for (const i in query.columns) {
+    //         if (element.elementID !== query.columns[i].elementID) {
+    //             if (joinExists(element.collectionID, query.columns[i].collectionID) || (element.collectionID === query.columns[i].collectionID)) {
+    //                 found = found + 1;
+    //             }
+    //         }
+    //     }
 
-        return found;
-    }
+    //     return found;
+    // }
 
-    function joinExists (collection1, collection2) {
-        var found = false;
+    // function joinExists (collection1, collection2) {
+    //     var found = false;
 
+    //     if (!layer || !layer.params || !layer.params.joins) return false;
 
-        if (!layer || !layer.params || !layer.params.joins) return false;
+    //     if (collection1 !== collection2) {
+    //         for (var j in layer.params.joins) {
+    //             if ((layer.params.joins[j].sourceCollectionID === collection1 && layer.params.joins[j].targetCollectionID === collection2) ||
+    //                 (layer.params.joins[j].sourceCollectionID === collection2 && layer.params.joins[j].targetCollectionID === collection1)) {
+    //                 found = true;
+    //             }
+    //         }
+    //     } else { found = true; }
 
-        if (collection1 !== collection2) {
-            for (var j in layer.params.joins) {
-                if ((layer.params.joins[j].sourceCollectionID === collection1 && layer.params.joins[j].targetCollectionID === collection2) ||
-                    (layer.params.joins[j].sourceCollectionID === collection2 && layer.params.joins[j].targetCollectionID === collection1)) {
-                    found = true;
-                }
-            }
-        } else { found = true; }
-
-        return found;
-    }
+    //     return found;
+    // }
 
     function filtersUpdated (theFilters, mainFilters) {
         theFilters = (theFilters) || query.groupFilters;
@@ -739,7 +729,6 @@ app.service('queryModel', function (uuid2, reportModel) {
         return this.datePatternFilters;
     };
 
-
     this.isfilterComplete = function (filter) {
         var result = true;
         if ((filter.searchValue === '' || typeof filter.searchValue === 'undefined' || filter.searchValue === 'Invalid Date')) {
@@ -751,12 +740,11 @@ app.service('queryModel', function (uuid2, reportModel) {
         if ((filter.filterType === 'null' || filter.filterType === 'notNull')) { result = true; }
 
         return result;
-    }
+    };
 
     this.setDatePatternFilterType = function (filter, option) {
         filter.searchValue = option.value;
         filter.filterText1 = option.value;
         filter.filterLabel1 = option.label;
     };
-
 });

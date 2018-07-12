@@ -33,8 +33,6 @@ app.service('pivot', function () {
             }
         }
 
-        console.log(dimensionList);
-
         for (const dim in dimensionList) {
             var valueList = [];
 
@@ -97,8 +95,6 @@ app.service('pivot', function () {
             reduce: reduce
         };
 
-        console.log(params);
-
         return {
             html: '<div id="' + pivotID + '" > ERROR - could not display pivot table </div>',
             params: params,
@@ -142,7 +138,6 @@ app.service('pivot', function () {
     }
 
     function reduce (mapItems) {
-
         var aggregValues = {};
 
         for (const field of this.valueDataFields) {

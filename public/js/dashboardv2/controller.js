@@ -191,16 +191,11 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             $scope.mode = 'add';
         };
         if ($routeParams.mode === 'edit') { // editing
-
-            console.log('init edit');
-
             if ($scope.dashboardID) {
                 $scope.mode = 'edit';
 
                 connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, {id: $scope.dashboardID}, function (data) {
                     $scope.selectedDashboard = data.item;
-
-                    console.log($scope.selectedDashboard);
 
                     if ($scope.selectedDashboard.backgroundColor) { $('#designArea').css({'background-color': $scope.selectedDashboard.backgroundColor}); }
 
@@ -225,7 +220,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
                     $scope.getPrompts();
 
-                    $scope.$broadcast('repaint', { fetchData : true});
+                    $scope.$broadcast('repaint', { fetchData: true });
                 });
             }
         }
@@ -272,7 +267,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
                         $scope.getPrompts();
 
-                        $scope.$broadcast('repaint', { fetchData : true });
+                        $scope.$broadcast('repaint', { fetchData: true });
                     });
                 }
             }
@@ -310,7 +305,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             });
             $scope.getPrompts();
 
-            $scope.$broadcast('repaint', { fetchData : true });
+            $scope.$broadcast('repaint', { fetchData: true });
             // cleanAll('pageViewer');
         });
     };
@@ -472,7 +467,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     } else {
                         const html = reportModel.getReportContainerHTML(customObjectData.reportID);
                         createOnDesignArea(html, function () {
-                            $scope.$broadcast('repaint', { fetchData : true });
+                            $scope.$broadcast('repaint', { fetchData: true });
                         });
                     }
                 }
@@ -622,7 +617,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     $scope.selectedDashboard.reports[r].query.groupFilters[f].dateCustomFilterLabel = values.dateCustomFilterLabel;
                     $scope.selectedDashboard.reports[r].query.groupFilters[f].filterText2 = values.filterText2;
 
-                    $scope.$broadcast('repaint', { fetchData : true });
+                    $scope.$broadcast('repaint', { fetchData: true });
                 }
             }
         }
@@ -788,7 +783,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             //         });
             //     }
             // }
-            $scope.$broadcast('repaint', { fetchData : true });
+            $scope.$broadcast('repaint', { fetchData: true });
         }
     };
 
@@ -921,8 +916,8 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     }
 
     $scope.getReport = function (reportID) {
-        return $scope.selectedDashboard.reports.find( r => (r.id === reportID) );
-    }
+        return $scope.selectedDashboard.reports.find(r => (r.id === reportID));
+    };
 
     // function getQueryData (index, done) {
     //     if (!$scope.selectedDashboard.reports[index]) {
@@ -1114,5 +1109,4 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     $scope.$on('element.reselected', function (e, node) {
         $scope.tabs.selected = 'settings';
     });
-
 });

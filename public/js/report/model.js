@@ -1,8 +1,6 @@
 /* global XLSX: false, saveAs: false, Blob: false, datenum: false */
 
 app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2) {
-    var report = {};
-
     this.getReportDefinition = async function (id, isLinked) {
         const data = await connection.get('/api/reports/get-report/' + id, {id: id, mode: 'preview', linked: isLinked});
         if (data.item) {
@@ -21,93 +19,86 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
 
         var layers = data.items;
 
-        for(layer of layers){
+        for (var layer of layers) {
             layer.rootItem = {
                 elementLabel: '',
                 elementRole: 'root',
                 elements: layer.objects
-            }
+            };
             calculateIdForAllElements(layer.rootItem.elements);
         }
 
         return layers;
     };
 
-    /* 
+    /*
     * Fetches all of the data associated to the report's query, and stores it in report.query.data
     */
-    this.fetchData = async function (query, params){
-
-        if(query.columns.length === 0){
+    this.fetchData = async function (query, params) {
+        if (query.columns.length === 0) {
             console.log('nothing to fetch');
             return {};
         }
 
         var request = {};
 
-        if(!params){
+        if (!params) {
             params = {};
         }
 
-        if(params.page !== undefined){ 
+        if (params.page !== undefined) {
             request.page = params.page;
-        }else{
+        } else {
             request.page = 1;
         }
 
         request.query = clone(query);
 
-        if(!query.recordLimit && params.selectedRecordLimit){
+        if (!query.recordLimit && params.selectedRecordLimit) {
             request.query.recordLimit = params.selectedRecordLimit;
         }
 
-        console.log('request : ');
-        console.log(request);
-
         var result = await connection.get('/api/reports/get-data', request);
 
-        console.log(result);
-
-        if(result.result === 0){
+        if (result.result === 0) {
             noty({text: result.msg, timeout: 2000, type: 'error'});
             return {
-                data : []
-            }
+                data: []
+            };
         }
 
         var data = result.data;
-        
+
         // processData(data);
         // TODO : figure out what that does
 
         query.data = result.data;
 
         return {
-            data : data,
-            sql : result.sql,
-            time : result.time
-        }
-    }
-
-    function processData (data){
-        var dateTimeReviver = function (key, value) {
-            var a;
-            if (typeof value === 'string') {
-                a = /\/Date\((\d*)\)\//.exec(value);
-                if (a) {
-                    return new Date(+a[1]);
-                }
-            }
-            return value;
+            data: data,
+            sql: result.sql,
+            time: result.time
         };
+    };
 
-        return JSON.parse(JSON.stringify(data), dateTimeReviver);
-    }
-  
+    // function processData (data) {
+    //     var dateTimeReviver = function (key, value) {
+    //         var a;
+    //         if (typeof value === 'string') {
+    //             a = /\/Date\((\d*)\)\//.exec(value);
+    //             if (a) {
+    //                 return new Date(+a[1]);
+    //             }
+    //         }
+    //         return value;
+    //     };
+
+    //     return JSON.parse(JSON.stringify(data), dateTimeReviver);
+    // }
+
     this.initChart = function (report) {
-
         var chart = {
-            id : 'Chart' + uuid2.newguid(),
+            id: 'Chart' + uuid2.newguid(),
             dataPoints: [],
             dataColumns: [],
             datax: {},
@@ -116,24 +107,23 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
             queryName: null
         };
 
-        switch(report.reportType){
-            case 'chart-line':
-                chart.type = 'line';
-                break;
-            case 'chart-donut':
-                chart.type = 'donut';
-                break;
-            case 'chart-pie':
-                chart.type = 'pie';
-                break;
-            case 'gauge':
-                chart.type = 'gauge';
-                break;
+        switch (report.reportType) {
+        case 'chart-line':
+            chart.type = 'line';
+            break;
+        case 'chart-donut':
+            chart.type = 'donut';
+            break;
+        case 'chart-pie':
+            chart.type = 'pie';
+            break;
+        case 'gauge':
+            chart.type = 'gauge';
+            break;
         }
 
-        if ( ['chart-line', 'chart-donut','chart-pie'].indexOf(report.reportType) >= 0 && 
+        if (['chart-line', 'chart-donut', 'chart-pie'].indexOf(report.reportType) >= 0 &&
             report.properties.xkeys.length > 0 && report.properties.ykeys.length > 0) {
-
             chart.dataColumns = report.properties.ykeys;
 
             const dataAxisInfo = report.properties.xkeys[0];
@@ -145,38 +135,38 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
                 type: 'bar',
                 color: '#000000'};
 
-                if(report.properties.xkeys.length > 1){
-                    const stackDimensionInfo = report.properties.xkeys[1];
-                    chart.stackDimension = {
-                        elementName: stackDimensionInfo.elementName,
-                        queryName: 'query1',
-                        elementLabel: stackDimensionInfo.objectLabel,
-                        id: stackDimensionInfo.id,
-                        type: 'bar',
-                        color: '#000000'};
-                }
+            if (report.properties.xkeys.length > 1) {
+                const stackDimensionInfo = report.properties.xkeys[1];
+                chart.stackDimension = {
+                    elementName: stackDimensionInfo.elementName,
+                    queryName: 'query1',
+                    elementLabel: stackDimensionInfo.objectLabel,
+                    id: stackDimensionInfo.id,
+                    type: 'bar',
+                    color: '#000000'};
+            }
         }
 
-        if(report.reportType === 'gauge'){
+        if (report.reportType === 'gauge') {
             chart.dataColumns = report.properties.ykeys;
         }
 
         report.properties.chart = chart;
     };
 
-    this.getColumnId = function (element){
+    this.getColumnId = function (element) {
         return getColumnId(element);
     };
 
     this.changeColumnId = function (oldId, newAggregation) {
-        return oldId.substring(0, oldId.length-3) + newAggregation.substring(0, 3);
+        return oldId.substring(0, oldId.length - 3) + newAggregation.substring(0, 3);
     };
 
-    function getColumnId(element){
+    function getColumnId (element) {
         var columnId;
 
         var aggregation = element.aggregation || element.defaultAggregation;
-        
+
         if (!aggregation) {
             columnId = 'wst' + element.elementID.toLowerCase() + 'raw';
         } else {
@@ -191,7 +181,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
         return columnId;
     }
 
-    function calculateIdForAllElements(elements) {
+    function calculateIdForAllElements (elements) {
         for (var element of elements) {
             if (element.collectionID) {
                 element.id = getColumnId(element);
@@ -199,33 +189,6 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
 
             if (element.elements) { calculateIdForAllElements(element.elements); }
         }
-    };
-
-    function generateNoDataHTML () {
-        var htmlCode = '<span style="font-size: small;color: darkgrey;padding: 5px;">' + report.reportName + '</span><div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>';
-        var el = document.getElementById(report.parentDiv);
-        if (el) {
-            angular.element(el).empty();
-            var $div = $(htmlCode);
-            angular.element(el).append($div);
-            angular.element(document).injector().invoke(function ($compile) {
-                var scope = angular.element($div).scope();
-                $compile($div)(scope);
-                // hideOverlay('OVERLAY_'+report.parentDiv);
-                hideOverlay(report.parentDiv);
-            });
-        }
-    }
-    function showOverlay (referenceId) {
-        bsLoadingOverlayService.start({
-            referenceId: referenceId
-        });
-    };
-
-    function hideOverlay (referenceId) {
-        bsLoadingOverlayService.stop({
-            referenceId: referenceId
-        });
     };
 
     var selectedColumn;
@@ -274,7 +237,6 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
         }
         report.query.order = [];
         report.query.order.push(theColumn);
-        showOverlay('OVERLAY_' + hashedID);
 
         // queryModel.getQueryData(report.query).then(data => {
         //     report.query.data = data.data;
@@ -429,8 +391,8 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
 
         var html = '<div page-block  class="container-fluid featurette ndContainer"  ndType="container" style="height:100%;padding:0px;">' +
                         '<div page-block class="col-md-12 ndContainer" ndType="column" style="height:100%;padding:0px;">' +
-                            '<div page-block class="container-fluid" id="' + containerID
-                             + '" report-view report="getReport(\'' + reportID +'\')" style="padding:0px;position: relative;height: 100%;"></div>' +
+                            '<div page-block class="container-fluid" id="' + containerID +
+                             '" report-view report="getReport(\'' + reportID + '\')" style="padding:0px;position: relative;height: 100%;"></div>' +
                         '</div>' +
                     '</div>';
 
@@ -442,5 +404,4 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
 
         return html;
     };
-
 });

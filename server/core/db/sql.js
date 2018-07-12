@@ -291,7 +291,6 @@ function processCollections (req, query, collections, dataSource, params, thereA
             elements.push(field);
 
             if (field.hidden !== true) {
-
                 if (field.aggregation) {
                     switch (field.aggregation) {
                     case 'sum': fields.push('SUM(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
@@ -306,7 +305,7 @@ function processCollections (req, query, collections, dataSource, params, thereA
                     }
                 } else {
                     fields.push(table.collectionID + '.' + field.elementName + ' as ' + field.id);
-                    if (dataSource.type !== 'BIGQUERY') { groupBy.push(table.collectionID + '.' + field.elementName); } else { groupBy.push(theElementID); }
+                    if (dataSource.type !== 'BIGQUERY') { groupBy.push(table.collectionID + '.' + field.elementName); } else { groupBy.push(field.id); }
                 }
             }
         }

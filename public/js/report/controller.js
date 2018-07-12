@@ -7,7 +7,6 @@
  */
 
 app.controller('reportCtrl', function ($scope, connection, $compile, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, grid, uuid2, c3Charts, reportModel, widgetsCommon, $location, PagerService) {
-    
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
     $scope.dateModal = 'partials/report/dateModal.html';
     $scope.linkModal = 'partials/report/linkModal.html';
@@ -149,30 +148,24 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     }
 
     $scope.init = async function () {
-        console.log('init');
         await $scope.initLayers();
-        console.log('layers initiated');
         await $scope.initForm();
-        console.log('form initiated');
         await $scope.refresh();
-        console.log('refreshed');
 
         // TODO : initialize the right things at the right time
         // Right now, init() is called often and not always necessary
-        
-    }
+    };
 
     $scope.initLayers = async function () {
         $scope.layers = await reportModel.getLayers();
         queryModel.loadLayers($scope.layers);
-        if($scope.layers.length > 0){
+        if ($scope.layers.length > 0) {
             $scope.selectedLayerID = $scope.layers[0]._id;
             $scope.rootItem = $scope.layers[0].rootItem;
         }
     };
 
     $scope.newForm = function () {
-
         var query = queryModel.newQuery();
 
         $scope.selectedReport = {};
@@ -205,7 +198,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.selectedReport.properties.rowBottomLineWidth = 2;
         $scope.selectedReport.properties.columnLineWidht = 0;
 
-
         $scope.selectedReport.reportType = 'grid';
         $scope.mode = 'add';
     };
@@ -219,9 +211,9 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
                 queryModel.loadQuery(report.query);
                 $scope.mode = 'edit';
                 $scope.cleanForm();
-                if(report.query.selectedLayerID){
+                if (report.query.selectedLayerID) {
                     $scope.selectedLayerID = report.query.selectedLayerID;
-                    var layer = $scope.layers.find( l => l._id === $scope.selectedLayerID);
+                    var layer = $scope.layers.find(l => l._id === $scope.selectedLayerID);
                     $scope.rootItem = layer.rootItem;
                 }
             } else {
@@ -467,7 +459,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.changeLayer = function (selectedLayerID) {
         $scope.selectedLayerID = selectedLayerID;
         $scope.selectedReport.query.selectedLayerID = selectedLayerID;
-        var layer = $scope.layers.find( l => l._id === $scope.selectedLayerID);
+        var layer = $scope.layers.find(l => l._id === $scope.selectedLayerID);
         $scope.rootItem = layer.rootItem;
     };
 
@@ -491,19 +483,15 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     };
 
     $scope.refresh = async function () {
-
         await queryModel.processQuery();
 
-        console.log('second : ');
-        console.log($scope.selectedReport.query);
-
-        if( ['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0 ){
+        if (['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0) {
             reportModel.initChart($scope.selectedReport);
         }
 
-        params = {
-            mode : $scope.mode,
-            selectedRecordLimit : $scope.selectedRecordLimit.value
+        const params = {
+            mode: $scope.mode,
+            selectedRecordLimit: $scope.selectedRecordLimit.value
         };
 
         $scope.$broadcast('showLoadingMessage', 'Fetching data ...');
@@ -513,11 +501,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.sql = result.sql;
         $scope.time = result.time;
 
-        $scope.$broadcast('repaint', { fetchData : false });
+        $scope.$broadcast('repaint', { fetchData: false });
 
         $scope.$digest();
-        
-    }
+    };
 
     $scope.getDatePatternFilters = function () {
         return queryModel.getDatePatternFilters();
@@ -583,89 +570,88 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         };
     };
 
-    $scope.autoChooseArea = function(item, chooseColumn){
+    $scope.autoChooseArea = function (item, chooseColumn) {
         var choice;
 
         switch ($scope.selectedReport.reportType) {
-            case 'grid':
-            case 'vertical-grid':
+        case 'grid':
+        case 'vertical-grid':
+            choice = {
+                propertyBind: $scope.selectedReport.properties.columns,
+                zone: 'columns',
+                queryBind: 'column'
+            };
+            break;
+
+        case 'pivot':
+            if ($scope.selectedReport.properties.pivotKeys.rows.length === 0) {
                 choice = {
-                    propertyBind: $scope.selectedReport.properties.columns,
-                    zone: 'columns',
-                    queryBind: 'column'
+                    propertyBind: $scope.selectedReport.properties.pivotKeys.rows,
+                    zone: 'prow',
+                    queryBind: 'column',
+                    forbidAggregation: true
                 };
-                break;
-    
-            case 'pivot':
-                if ($scope.selectedReport.properties.pivotKeys.rows.length === 0) {
+            } else {
+                if ($scope.selectedReport.properties.pivotKeys.columns.length === 0) {
                     choice = {
-                        propertyBind: $scope.selectedReport.properties.pivotKeys.rows,
-                        zone: 'prow',
+                        propertyBind: $scope.selectedReport.properties.pivotKeys.columns,
+                        zone: 'pcol',
                         queryBind: 'column',
-                        forbidAggregation : true
+                        forbidAggregation: true
                     };
                 } else {
-                    if ($scope.selectedReport.properties.pivotKeys.columns.length === 0) {
-                        choice = {
-                            propertyBind: $scope.selectedReport.properties.pivotKeys.columns,
-                            zone: 'pcol',
-                            queryBind: 'column',
-                            forbidAggregation : true
-                        };
-                    } else {
-                        choice = {
-                            propertyBind: $scope.selectedReport.properties.ykeys,
-                            zone: 'ykeys',
-                            queryBind: 'column'
-                        };
-                    }
-                }
-                break;
-    
-            case 'chart-bar':
-            case 'chart-line':
-            case 'chart-area':
-            case 'chart-pie':
-            case 'chart-donut':
-                if ($scope.selectedReport.properties.xkeys.length === 0) {
                     choice = {
-                        propertyBind: $scope.selectedReport.properties.xkeys,
-                        zone: 'xkeys',
+                        propertyBind: $scope.selectedReport.properties.ykeys,
+                        zone: 'ykeys',
+                        queryBind: 'column'
+                    };
+                }
+            }
+            break;
+
+        case 'chart-bar':
+        case 'chart-line':
+        case 'chart-area':
+        case 'chart-pie':
+        case 'chart-donut':
+            if ($scope.selectedReport.properties.xkeys.length === 0) {
+                choice = {
+                    propertyBind: $scope.selectedReport.properties.xkeys,
+                    zone: 'xkeys',
+                    queryBind: 'column'
+                };
+            } else {
+                if ($scope.selectedReport.properties.ykeys.length === 0 || $scope.selectedReport.properties.order.length > 0 || chooseColumn) {
+                    choice = {
+                        propertyBind: $scope.selectedReport.properties.ykeys,
+                        zone: 'ykeys',
                         queryBind: 'column'
                     };
                 } else {
-                    if ($scope.selectedReport.properties.ykeys.length === 0 || $scope.selectedReport.properties.order.length > 0 || chooseColumn) {
-                        choice = {
-                            propertyBind: $scope.selectedReport.properties.ykeys,
-                            zone: 'ykeys',
-                            queryBind: 'column'
-                        };
-                    } else {
-                        choice = {
-                            propertyBind: $scope.selectedReport.properties.order,
-                            zone: 'order',
-                            queryBind: 'order'
-                        };
-                    }
+                    choice = {
+                        propertyBind: $scope.selectedReport.properties.order,
+                        zone: 'order',
+                        queryBind: 'order'
+                    };
                 }
-                break;
-    
-            case 'indicator':
-            case 'vectorMap':
-            case 'gauge':
-                choice = {
-                    propertyBind: $scope.selectedReport.properties.ykeys,
-                    zone: 'ykeys',
-                    queryBind: 'column'
-                };
-                break;
             }
-    
+            break;
+
+        case 'indicator':
+        case 'vectorMap':
+        case 'gauge':
+            choice = {
+                propertyBind: $scope.selectedReport.properties.ykeys,
+                zone: 'ykeys',
+                queryBind: 'column'
+            };
+            break;
+        }
+
         return choice;
-    }
+    };
 
     $scope.autoFill = function (ngModelItem) {
-
         const newItem = $scope.toReportItem(ngModelItem);
         var choice = $scope.autoChooseArea(newItem);
         newItem.zone = choice.zone;
@@ -756,29 +742,28 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     };
 
     $scope.changeReportType = function (newReportType) {
-
         $scope.selectedReport.query.countYKeys = false;
         $scope.$broadcast('clearReport');
 
         var movedColumns = [];
 
-        function clear(list){
-            while(list.length){
+        function clear (list) {
+            while (list.length) {
                 movedColumns.push(list.pop());
             }
         }
 
-        function keep(lists){
-            if(lists.indexOf('columns') < 0){
+        function keep (lists) {
+            if (lists.indexOf('columns') < 0) {
                 clear($scope.selectedReport.properties.columns);
             }
-            if(lists.indexOf('xkeys') < 0){
+            if (lists.indexOf('xkeys') < 0) {
                 clear($scope.selectedReport.properties.xkeys);
             }
-            if(lists.indexOf('ykeys') < 0){
+            if (lists.indexOf('ykeys') < 0) {
                 clear($scope.selectedReport.properties.ykeys);
             }
-            if(lists.indexOf('pivot') < 0){
+            if (lists.indexOf('pivot') < 0) {
                 clear($scope.selectedReport.properties.pivotKeys.columns);
                 clear($scope.selectedReport.properties.pivotKeys.rows);
             }
@@ -861,13 +846,12 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             break;
         }
 
-
-        for(const col of movedColumns){
+        for (const col of movedColumns) {
             const choice = $scope.autoChooseArea(col, true);
             col.zone = choice.zone;
             queryModel.changeZone(col, choice.zone);
             choice.propertyBind.push(col);
-            if(choice.forbidAggregation){
+            if (choice.forbidAggregation) {
                 $scope.aggregationChoosed(col, {name: 'Raw', value: 'raw'});
             }
         }
@@ -968,17 +952,15 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             $scope.reportNameSave();
         }
     };
-    
-    $scope.reportNameSave = async function () {
 
+    $scope.reportNameSave = async function () {
         await queryModel.processQuery();
 
         await reportModel.saveAsReport($scope.selectedReport, $scope.mode);
-        
+
         $('#theReportNameModal').modal('hide');
         $('.modal-backdrop').hide();
         $scope.goBack();
-    
     };
 
     $scope.pushToDash = function () {
@@ -1000,7 +982,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     };
 
     $scope.aggregationChoosed = function (column, option) {
-
         if (typeof column.originalLabel === 'undefined') {
             column.originalLabel = column.elementLabel;
         }
@@ -1016,7 +997,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             column.objectLabel = column.originalLabel + ' (' + option.name + ')';
             column.id = reportModel.changeColumnId(column.id, option.value);
         }
-
     };
 
     $scope.hideColumn = function (column, hidden) {
@@ -1091,10 +1071,4 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.$digest();
         $('#publishModal').modal('hide');
     };
-
-    $scope.util = function () {
-        console.log($scope.selectedReport.properties.columns[0]);
-        console.log($scope.selectedReport.properties.columns[1]);
-    }
-
 });
