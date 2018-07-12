@@ -61,7 +61,12 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
             request.query.recordLimit = params.selectedRecordLimit;
         }
 
+        console.log('request : ');
+        console.log(request);
+
         var result = await connection.get('/api/reports/get-data', request);
+
+        console.log(result);
 
         if(result.result === 0){
             noty({text: result.msg, timeout: 2000, type: 'error'});
@@ -169,11 +174,13 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
 
     function getColumnId(element){
         var columnId;
+
+        var aggregation = element.aggregation || element.defaultAggregation;
         
-        if (!element.aggregation) {
+        if (!aggregation) {
             columnId = 'wst' + element.elementID.toLowerCase() + 'raw';
         } else {
-            columnId = 'wst' + element.elementID.toLowerCase() + element.aggregation.substring(0, 3);
+            columnId = 'wst' + element.elementID.toLowerCase() + aggregation.substring(0, 3);
         }
 
         columnId = columnId.replace(/[^a-zA-Z ]/g, '');

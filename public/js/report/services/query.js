@@ -68,13 +68,16 @@ app.service('queryModel', function (uuid2, reportModel) {
             console.log('no layer found');
             return;
         }
+        setupCount();
 
         generateDataSourceList();
+        // This function fills query.datasources with all the query information.
+        // Any change to the query fields in the query processing must be ran before this function
+
         detectLayerJoins();
         processStructure();
         // checkChoosedElements(); // TODO : figure out what this does and why it exists
         cleanQuery();
-        setupCount();
 
     };
 

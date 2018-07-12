@@ -492,7 +492,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
     $scope.refresh = async function () {
 
-        await queryModel.processQuery($scope.selectedReport.query);
+        await queryModel.processQuery();
+
+        console.log('second : ');
+        console.log($scope.selectedReport.query);
 
         if( ['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0 ){
             reportModel.initChart($scope.selectedReport);
@@ -857,7 +860,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             // TODO signal error
             break;
         }
-        // TODO: only generate the visualization not requery all data again
+
 
         for(const col of movedColumns){
             const choice = $scope.autoChooseArea(col, true);

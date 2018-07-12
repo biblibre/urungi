@@ -11,9 +11,10 @@ app.service('c3Charts', function () {
 
         var query = report.query;
         var chart = report.properties.chart;
-        var reportID = report.id || report._id;
+        var queryID = report.query.id;
 
         console.log(chart);
+        console.log(report);
 
         var axisField = '';
         if (chart.dataAxis) { axisField = chart.dataAxis.id; }
@@ -31,92 +32,6 @@ app.service('c3Charts', function () {
             console.log('no data to display');
             return;
         }
-
-        // if (chart.dataAxis) {
-        //     for (const d in query.datasources) {
-        //         for (const c in query.datasources[d].collections) {
-        //             for (const element of query.datasources[d].collections[c].columns) {
-        //                 var columnID = getColumnId(element);
-        //                 if (columnID === chart.dataAxis.id) {
-        //                     axisIsInQuery = true;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-
-        // if (!axisIsInQuery) {
-        //     axisField = null;
-        //     if (chart.dataAxis) { chart.dataAxis.id = null; }
-        // }
-
-        // if (chart.stackDimension) {
-        //     for (const d in query.datasources) {
-        //         for (const c in query.datasources[d].collections) {
-        //             for (const qc in query.datasources[d].collections[c].columns) {
-        //             // var elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName;
-        //                 elementID = 'wst' + query.datasources[d].collections[c].columns[qc].elementID.toLowerCase();
-        //                 elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-
-        //                 if (query.datasources[d].collections[c].columns[qc].aggregation) {
-        //                 // elementName = query.datasources[d].collections[c].columns[qc].collectionID.toLowerCase()+'_'+query.datasources[d].collections[c].columns[qc].elementName+query.datasources[d].collections[c].columns[qc].aggregation;
-        //                     elementID = 'wst' + query.datasources[d].collections[c].columns[qc].elementID.toLowerCase() + query.datasources[d].collections[c].columns[qc].aggregation;
-        //                     elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-        //                 }
-
-        //                 if (elementName === chart.stackDimension.id) {
-        //                     stackIsInQuery = true;
-        //                     chart.stacked = true;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // if (!stackIsInQuery) {
-        //     stackField = null;
-        //     if (chart.stackDimension) { chart.stackDimension.id = null; }
-        //     chart.stacked = false;
-        // }
-
-        // var columnsForDelete = [];
-        // for (const i in chart.dataColumns) {
-        //     var columnFound = false;
-        //     // remove column if not in query
-        //     for (const qc in query.columns) {
-        //         // var elementName = query.columns[qc].collectionID.toLowerCase()+'_'+query.columns[qc].elementName;
-        //         elementID = 'wst' + query.columns[qc].elementID.toLowerCase();
-        //         elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-
-        //         if (query.columns[qc].aggregation) {
-        //             elementID = 'wst' + query.columns[qc].elementID.toLowerCase() + query.columns[qc].aggregation;
-        //             elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-        //         }
-
-        //         if (chart.dataColumns[i].id === elementName) {
-        //             columnFound = true; // columnsForDelete.push(i);
-        //         }
-        //     }
-
-        //     if (!columnFound) {
-        //         /// /columnsForDelete.push(i);
-        //     }
-        // }
-
-        // for (var cfd in columnsForDelete) {
-        //     chart.dataColumns.splice(columnsForDelete[cfd], 1);
-        // }
-
-        // remove query if not dataColumns and not data Axis
-
-        // if (!axisIsInQuery && chart.dataColumns.length) {
-        //     // this is not suitable for gauge as there is not dataColumns, only metrics, so I comented the 2 lines below
-        //     // chart.query = null;
-        //     // chart.queryName = null;
-        // }
-
-        // Instead of doing all that, how about we initialize our chart and our query properly, then assume that they were initialized properly
 
         for (const dtc of chart.dataColumns) {
             theValues.push(dtc.id);
@@ -213,7 +128,7 @@ app.service('c3Charts', function () {
             theGroups = undefined;
         }
 
-        var theChartCode = '#CHART_' + reportID;
+        var theChartCode = '#CHART_' + queryID;
 
         if (!chart.height) { chart.height = 300; }
 
@@ -335,7 +250,7 @@ app.service('c3Charts', function () {
     this.getChartHTML = function (report, mode) {
         var html = '';
 
-        const theChartID = report.id || report._id;
+        const theChartID = report.query.id;
 
         if (mode === 'edit') {
             html = '<c3chart page-block ndType="c3Chart" bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
