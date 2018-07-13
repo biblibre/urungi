@@ -72,7 +72,7 @@ app.directive('wstDropzone', function () {
             };
         },
 
-        templateUrl: 'partials/widgets/wstDropzone.html'
+        templateUrl: 'partials/report/directives/wstDropzone.html'
 
     };
 });

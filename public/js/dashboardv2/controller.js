@@ -3,7 +3,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
     $scope.reportModal = 'partials/report/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
-    $scope.publishModal = 'partials/report/publishModal.html';
+    $scope.publishModal = 'partials/report/modals/publishModal.html';
     $scope.settingsHtml = 'partials/pages/settings.html';
     $scope.queriesHtml = 'partials/pages/queries.html';
     $scope.settingsTemplate = 'partials/widgets/inspector.html';

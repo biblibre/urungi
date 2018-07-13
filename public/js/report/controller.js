@@ -8,16 +8,16 @@
 
 app.controller('reportCtrl', function ($scope, connection, $compile, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, grid, uuid2, c3Charts, reportModel, widgetsCommon, $location, PagerService) {
     $scope.promptsBlock = 'partials/report/promptsBlock.html';
-    $scope.dateModal = 'partials/report/dateModal.html';
-    $scope.linkModal = 'partials/report/linkModal.html';
+    $scope.dateModal = 'partials/report/modals/dateModal.html';
+    $scope.linkModal = 'partials/report/modals/linkModal.html';
     $scope.repeaterTemplate = 'partials/report/repeater.html';
-    $scope.publishModal = 'partials/report/publishModal.html';
-    $scope.columnFormatModal = 'partials/report/columnFormatModal.html';
-    $scope.columnSignalsModal = 'partials/report/columnSignalsModal.html';
-    $scope.filterPromptModal = 'partials/report/filter-prompt-modal.html';
+    $scope.publishModal = 'partials/report/modals/publishModal.html';
+    $scope.columnFormatModal = 'partials/report/modals/columnFormatModal.html';
+    $scope.columnSignalsModal = 'partials/report/modals/columnSignalsModal.html';
+    $scope.filterPromptModal = 'partials/report/modals/filter-prompt-modal.html';
     $scope.dropArea = 'partials/report/drop-area.html';
-    $scope.reportNameModal = 'partials/report/reportNameModal.html';
-    $scope.dashListModal = 'partials/report/dashboardListModal.html';
+    $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
+    $scope.dashListModal = 'partials/report/modals/dashboardListModal.html';
     $scope.settingsTemplate = 'partials/widgets/common.html';
     $scope.tabs = {selected: 'elements'};
 
