@@ -137,8 +137,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
         await $scope.initLayers();
 
-        if (/reports\/new/.test($location.path())) {
+        if ( /reports\/new/.test($location.path()) ) {
             $scope.mode = 'new';
+            $scope.newForm();
+        } else if( /explore/.test($location.path()) ){
+            $scope.mode = 'explore';
             $scope.newForm();
         } else {
             $scope.selectedReport = await reportModel.getReportDefinition($routeParams.reportID, false);
