@@ -109,6 +109,11 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
         });
+        $routeProvider.when('/reports/fullscreen/:reportID/', {
+            templateUrl: 'partials/report/fullscreen.html',
+            controller: 'reportCtrl'
+        });
+
         // Data sources
 
         $routeProvider.when('/data-sources', {

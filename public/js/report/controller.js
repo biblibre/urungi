@@ -273,6 +273,17 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         });
     };
 
+    $scope.loadReportForView = async function (){
+        const report = await reportModel.getReportDefinition($routeParams.reportID, false);
+        console.log(report);
+        if (report) {
+            $scope.selectedReport = report;
+            $scope.mode = 'view';
+            $scope.$digest();
+            $scope.$broadcast('repaint', {fetchData : true});
+        }
+    }
+
     $scope.viewDuplicationForm = function (report) {
         $scope.duplicateOptions.report = report;
         $scope.duplicateOptions.newName = report.reportName + ' copy';

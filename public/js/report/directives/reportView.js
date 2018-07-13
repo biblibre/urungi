@@ -35,6 +35,8 @@ app.directive('reportView', function (reportModel, $compile, c3Charts, reportHtm
                     await reportModel.fetchData($scope.report.query);
                 }
 
+                console.log($scope.report);
+
                 $scope.loadingMessage = 'Repainting report ...';
 
                 switch ($scope.report.reportType) {
