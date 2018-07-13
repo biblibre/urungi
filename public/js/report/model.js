@@ -162,6 +162,11 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
     };
 
     function getColumnId (element) {
+        /*
+        * The id of a column (column.id) differs from the id of the element which that column uses (column.elementID)
+        * this allows for multiple columns which use the same element, for example to use different aggregations
+        */
+
         var columnId;
 
         var aggregation = element.aggregation || element.defaultAggregation;
@@ -386,6 +391,8 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
     }
 
     this.getReportContainerHTML = function (reportID) {
+        // returns a container for the report, to be inserted in the dashboard html
+
         var containerID = 'REPORT_CONTAINER_' + reportID;
 
         var html = '<div page-block  class="container-fluid featurette ndContainer"  ndType="container" style="height:100%;padding:0px;">' +

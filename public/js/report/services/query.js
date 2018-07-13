@@ -1,7 +1,19 @@
-app.service('queryModel', function (uuid2, reportModel) {
+app.service('queryModel', function (uuid2) {
+    /*
+    * The purpose of this service is to provide functions for updating the query object as a report is edited
+    * The query object will be the argument used when data is fetched
+    *
+    * The query should be loaded in this service when the report edition begins
+    * This service should not be used in any other context than report edition
+    */
+
     var query = {};
     var layers = [];
     var layer = {};
+
+    /*
+    *   Initialisation
+    */
 
     this.newQuery = function () {
         query = {};
@@ -20,11 +32,77 @@ app.service('queryModel', function (uuid2, reportModel) {
         layers = loadedLayers;
     };
 
-    this.getElementFilterOptions = function (elementType) {
-        if (elementType === 'array') { return this.filterArrayOptions; }
-        if (elementType === 'string') { return this.filterStringOptions; }
-        if (elementType === 'number') { return this.filterNumberOptions; }
-        if (elementType === 'date') { return this.filterDateOptions; }
+    /*
+    *   Update functions
+    *
+    * these functions are used as the columns are moved and changes, to keep the query synchronized
+    */
+
+    this.onDateEndSet = function (newDate, oldDate, filter) {
+        if (angular.isDate(newDate)) {
+            var year = newDate.getFullYear();
+            var month = this.pad(newDate.getMonth() + 1, 2);
+            var day = this.pad(newDate.getDate(), 2);
+            var theDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
+            filter.filterText2 = theDate;
+            filter.dateCustomFilterLabel = undefined;
+        }
+    };
+
+    this.pad = function (num, size) {
+        var s = num + '';
+        while (s.length < size) s = '0' + s;
+        while (s.length < size) s = '0' + s;
+        return s;
+    };
+
+    this.onDateSet = function (newDate, oldDate, filter) {
+        if (angular.isDate(newDate)) {
+            var year = newDate.getFullYear();
+            var month = this.pad(newDate.getMonth() + 1, 2);
+            var day = this.pad(newDate.getDate(), 2);
+            var theDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
+            if (filter.filterType === 'in' || filter.filterType === 'notIn') {
+                if (!filter.filterText1) { filter.filterText1 = []; }
+                filter.filterText1.push(theDate);
+            } else { filter.filterText1 = theDate; }
+
+            filter.searchValue = theDate;
+            filter.filterValue = theDate;
+            filter.dateCustomFilterLabel = undefined;
+        }
+    };
+
+    this.onDrop = function (item, queryBind) {
+        switch (queryBind) {
+        case 'column':
+            if (!query.columns) { query.columns = []; }
+            query.columns.push(item);
+            break;
+
+        case 'order':
+            item.sortType = -1;
+            query.order.push(item);
+            break;
+
+        case 'filter':
+            if (query.groupFilters.length > 0) {
+                item.condition = 'AND';
+                item.conditionLabel = 'AND';
+            }
+
+            query.groupFilters.push(item);
+            filtersUpdated();
+            break;
+
+        case 'group':
+            query.groupFilters.push(item);
+            filtersUpdated();
+            break;
+
+        default:
+            console.log('Invalid bind');
+        }
     };
 
     this.removeQueryItem = function (object, type) {
@@ -57,10 +135,72 @@ app.service('queryModel', function (uuid2, reportModel) {
         }
     };
 
+    this.changeZone = function (column, newZone) {
+        var col = query.columns.find(c => c.id === column.id);
+        col.zone = newZone;
+    };
+
+    this.hideColumn = function (elementID, hidden) {
+        for (var i in query.columns) {
+            if (query.columns[i].elementID === elementID) {
+                query.columns[i].hidden = hidden;
+            }
+        }
+    };
+
+    this.updateCondition = function (filter, condition) {
+        // TODO : figure out what this does
+        filter.conditionType = condition.conditionType;
+        filter.conditionLabel = condition.conditionLabel;
+        this.processStructure();
+    };
+
+    this.setFilterType = function (filter, filterOption) {
+        filter.filterType = filterOption.value;
+        filter.filterTypeLabel = filterOption.label;
+
+        if (filter.filterType === 'in' || filter.filterType === 'notIn') {
+            filter.filterText1 = [];
+            filter.filterLabel1 = [];
+        } else {
+            filter.filterText1 = '';
+            filter.filterLabel1 = '';
+            filter.filterText2 = '';
+            filter.filterLabel2 = '';
+        }
+        // set the appropiate interface for the choosed filter relation
+    };
+
+    this.orderColumn = function (predicate) {
+        this.reverse = (this.predicate === predicate) ? !this.reverse : false;
+        this.predicate = predicate;
+    };
+
+    this.reorderFilters = function () {
+        if (query.groupFilters.length > 0) {
+            delete (query.groupFilters[0].condition);
+            delete (query.groupFilters[0].conditionLabel);
+        }
+
+        for (let i = 1; i < query.groupFilters.length; ++i) {
+            if (typeof query.groupFilters[i].condition === 'undefined') {
+                query.groupFilters[i].condition = 'AND';
+                query.groupFilters[i].conditionLabel = 'AND';
+            }
+        }
+    };
+
     /*
-    * Prepares the query so that it can be used to run a database request
+    *   Process functions
+    *
+    * These functions are used when processQuery is called
     */
+
     this.processQuery = async function () {
+        /*
+        * Prepares the query so that it can be used to run a database request
+        */
+
         layer = layers.find(l => l._id === query.selectedLayerID);
         if (!layer) {
             console.log('no layer found');
@@ -129,95 +269,6 @@ app.service('queryModel', function (uuid2, reportModel) {
             objectLabel: col.objectLabel + ' count'
         };
     }
-
-    this.getFilterValues = function (attribute, done) {
-        var theQuery = {};
-        theQuery.id = uuid2.newguid();
-        theQuery.datasources = [];
-        theQuery.columns = [];
-        theQuery.order = [];
-
-        var datasourcesList = [];
-        var layersList = [];
-        layersList.push(theQuery.selectedLayerID);
-        datasourcesList.push(attribute.datasourceID);
-        layersList.push(attribute.layerID);
-
-        for (var i in datasourcesList) {
-            var dtsObject = {};
-            dtsObject.datasourceID = datasourcesList[i];
-            dtsObject.collections = [];
-
-            var dtsCollections = [];
-            dtsCollections.push(attribute.collectionID);
-
-            for (var n in dtsCollections) {
-                var collection = {};
-                collection.collectionID = dtsCollections[n];
-
-                collection.columns = [];
-                collection.columns.push(attribute);
-
-                collection.order = [];
-                collection.order.push(attribute);
-
-                for (var n1 in theQuery.order) {
-                    if (theQuery.order[n1].collectionID === dtsCollections[n]) {
-                        collection.order.push(theQuery.order[n1]);
-                    }
-                }
-
-                dtsObject.collections.push(collection);
-            }
-            theQuery.datasources.push(dtsObject);
-        }
-
-        theQuery.layers = layersList;
-        // query.order = [];
-        // query.order.push(attribute);
-
-        this.getData(theQuery, {page: 0}, function (data, sql) {
-            if (data.items) { data = data.items; }
-
-            attribute.data = data;
-            done(data, sql);
-        });
-    };
-
-    this.onDateSet = function (newDate, oldDate, filter) {
-        if (angular.isDate(newDate)) {
-            var year = newDate.getFullYear();
-            var month = this.pad(newDate.getMonth() + 1, 2);
-            var day = this.pad(newDate.getDate(), 2);
-            var theDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
-            if (filter.filterType === 'in' || filter.filterType === 'notIn') {
-                if (!filter.filterText1) { filter.filterText1 = []; }
-                filter.filterText1.push(theDate);
-            } else { filter.filterText1 = theDate; }
-
-            filter.searchValue = theDate;
-            filter.filterValue = theDate;
-            filter.dateCustomFilterLabel = undefined;
-        }
-    };
-
-    this.onDateEndSet = function (newDate, oldDate, filter) {
-        if (angular.isDate(newDate)) {
-            var year = newDate.getFullYear();
-            var month = this.pad(newDate.getMonth() + 1, 2);
-            var day = this.pad(newDate.getDate(), 2);
-            var theDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
-            filter.filterText2 = theDate;
-            filter.dateCustomFilterLabel = undefined;
-        }
-    };
-
-    this.pad = function (num, size) {
-        var s = num + '';
-        while (s.length < size) s = '0' + s;
-        while (s.length < size) s = '0' + s;
-        return s;
-    };
 
     function detectLayerJoins () {
         if (layers.length === 0) {
@@ -311,93 +362,6 @@ app.service('queryModel', function (uuid2, reportModel) {
         }
     }
 
-    this.onDrop = function (item, queryBind) {
-        switch (queryBind) {
-        case 'column':
-            if (!query.columns) { query.columns = []; }
-            query.columns.push(item);
-            break;
-
-        case 'order':
-            item.sortType = -1;
-            query.order.push(item);
-            break;
-
-        case 'filter':
-            if (query.groupFilters.length > 0) {
-                item.condition = 'AND';
-                item.conditionLabel = 'AND';
-            }
-
-            query.groupFilters.push(item);
-            filtersUpdated();
-            break;
-
-        case 'group':
-            query.groupFilters.push(item);
-            filtersUpdated();
-            break;
-
-        default:
-            console.log('Invalid bind');
-        }
-    };
-
-    this.changeZone = function (column, newZone) {
-        var col = query.columns.find(c => c.id === column.id);
-        col.zone = newZone;
-    };
-
-    this.hideColumn = function (elementID, hidden) {
-        for (var i in query.columns) {
-            if (query.columns[i].elementID === elementID) {
-                query.columns[i].hidden = hidden;
-            }
-        }
-    };
-
-    this.updateCondition = function (filter, condition) {
-        // TODO : figure out what this does
-        filter.conditionType = condition.conditionType;
-        filter.conditionLabel = condition.conditionLabel;
-        this.processStructure();
-    };
-
-    this.setFilterType = function (filter, filterOption) {
-        filter.filterType = filterOption.value;
-        filter.filterTypeLabel = filterOption.label;
-
-        if (filter.filterType === 'in' || filter.filterType === 'notIn') {
-            filter.filterText1 = [];
-            filter.filterLabel1 = [];
-        } else {
-            filter.filterText1 = '';
-            filter.filterLabel1 = '';
-            filter.filterText2 = '';
-            filter.filterLabel2 = '';
-        }
-        // set the appropiate interface for the choosed filter relation
-    };
-
-    this.orderColumn = function (predicate) {
-        this.reverse = (this.predicate === predicate) ? !this.reverse : false;
-        this.predicate = predicate;
-    };
-
-    this.reorderFilters = function () {
-        if (query.groupFilters.length > 0) {
-            delete (query.groupFilters[0].condition);
-            delete (query.groupFilters[0].conditionLabel);
-        }
-
-        for (let i = 1; i < query.groupFilters.length; ++i) {
-            if (typeof query.groupFilters[i].condition === 'undefined') {
-                query.groupFilters[i].condition = 'AND';
-                query.groupFilters[i].conditionLabel = 'AND';
-            }
-        }
-    };
-
     /*
     *   Internal functions
     */
@@ -412,10 +376,11 @@ app.service('queryModel', function (uuid2, reportModel) {
     //     }
     // }
 
-    /*
-    * Initialize query.datasources with all of the datasources used by the query.
-    */
     function generateDataSourceList () {
+        /*
+        * Initialize query.datasources with all of the datasources used by the query.
+        */
+
         query.id = uuid2.newguid();
         query.datasources = [];
         var datasourcesList = [];
@@ -497,9 +462,9 @@ app.service('queryModel', function (uuid2, reportModel) {
             }
         }
     }
+
     /*
-    function getGroupCollections(theGroup,dtsCollections,dtsID,isRoot,done)
-    {
+    function getGroupCollections(theGroup,dtsCollections,dtsID,isRoot,done){
             for (var ff in theGroup)
                 {
                     if (theGroup[ff].datasourceID)
@@ -525,7 +490,8 @@ app.service('queryModel', function (uuid2, reportModel) {
                 done();
 
     }
-*/
+    */
+
     function processStructure () {
         this.wrongFilters = [];
         checkFilters(this.wrongFilters, query.groupFilters);
@@ -578,6 +544,102 @@ app.service('queryModel', function (uuid2, reportModel) {
 
         if (index > -1) array.splice(index, 1);
     }
+
+    /*
+    *   Getters and setters
+    *
+    * Some of these functions are used outside of report edition, in violation of the above recommendation
+    * this is bad organisation and needs to be changed
+    * TODO : fix that
+    */
+
+    this.getElementFilterOptions = function (elementType) {
+        if (elementType === 'array') { return this.filterArrayOptions; }
+        if (elementType === 'string') { return this.filterStringOptions; }
+        if (elementType === 'number') { return this.filterNumberOptions; }
+        if (elementType === 'date') { return this.filterDateOptions; }
+    };
+
+    this.getFilterValues = function (attribute, done) {
+        var theQuery = {};
+        theQuery.id = uuid2.newguid();
+        theQuery.datasources = [];
+        theQuery.columns = [];
+        theQuery.order = [];
+
+        var datasourcesList = [];
+        var layersList = [];
+        layersList.push(theQuery.selectedLayerID);
+        datasourcesList.push(attribute.datasourceID);
+        layersList.push(attribute.layerID);
+
+        for (var i in datasourcesList) {
+            var dtsObject = {};
+            dtsObject.datasourceID = datasourcesList[i];
+            dtsObject.collections = [];
+
+            var dtsCollections = [];
+            dtsCollections.push(attribute.collectionID);
+
+            for (var n in dtsCollections) {
+                var collection = {};
+                collection.collectionID = dtsCollections[n];
+
+                collection.columns = [];
+                collection.columns.push(attribute);
+
+                collection.order = [];
+                collection.order.push(attribute);
+
+                for (var n1 in theQuery.order) {
+                    if (theQuery.order[n1].collectionID === dtsCollections[n]) {
+                        collection.order.push(theQuery.order[n1]);
+                    }
+                }
+
+                dtsObject.collections.push(collection);
+            }
+            theQuery.datasources.push(dtsObject);
+        }
+
+        theQuery.layers = layersList;
+        // query.order = [];
+        // query.order.push(attribute);
+
+        this.getData(theQuery, {page: 0}, function (data, sql) {
+            if (data.items) { data = data.items; }
+
+            attribute.data = data;
+            done(data, sql);
+        });
+    };
+
+    this.getDatePatternFilters = function () {
+        return this.datePatternFilters;
+    };
+
+    this.isfilterComplete = function (filter) {
+        var result = true;
+        if ((filter.searchValue === '' || typeof filter.searchValue === 'undefined' || filter.searchValue === 'Invalid Date')) {
+            result = false;
+        } else {
+            if ((filter.filterType === 'between' || filter.filterType === 'notBetween') && (typeof filter.filterText2 === 'undefined' || filter.filterText2 === '' || filter.filterText2 === 'Invalid Date')) { result = false; }
+        }
+
+        if ((filter.filterType === 'null' || filter.filterType === 'notNull')) { result = true; }
+
+        return result;
+    };
+
+    this.setDatePatternFilterType = function (filter, option) {
+        filter.searchValue = option.value;
+        filter.filterText1 = option.value;
+        filter.filterLabel1 = option.label;
+    };
+
+    /*
+    *   Options
+    */
 
     this.filterStringOptions = [
         {value: 'equal', label: 'equal'},
@@ -720,31 +782,4 @@ app.service('queryModel', function (uuid2, reportModel) {
         {conditionType: 'andNot', conditionLabel: 'AND NOT'},
         {conditionType: 'orNot', conditionLabel: 'OR NOT'}
     ];
-
-    /*
-    *   "Static" functions (do not use the loaded query)
-    */
-
-    this.getDatePatternFilters = function () {
-        return this.datePatternFilters;
-    };
-
-    this.isfilterComplete = function (filter) {
-        var result = true;
-        if ((filter.searchValue === '' || typeof filter.searchValue === 'undefined' || filter.searchValue === 'Invalid Date')) {
-            result = false;
-        } else {
-            if ((filter.filterType === 'between' || filter.filterType === 'notBetween') && (typeof filter.filterText2 === 'undefined' || filter.filterText2 === '' || filter.filterText2 === 'Invalid Date')) { result = false; }
-        }
-
-        if ((filter.filterType === 'null' || filter.filterType === 'notNull')) { result = true; }
-
-        return result;
-    };
-
-    this.setDatePatternFilterType = function (filter, option) {
-        filter.searchValue = option.value;
-        filter.filterText1 = option.value;
-        filter.filterLabel1 = option.label;
-    };
 });

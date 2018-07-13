@@ -253,4 +253,50 @@ app.service('c3Charts', function () {
         html = html + '</c3chart>';
         return html;
     };
+
+    this.chartColumnTypeOptions = [
+        {
+            id: 'spline',
+            name: 'Spline',
+            image: 'images/spline.png'
+        },
+        {
+            id: 'bar',
+            name: 'Bar',
+            icon: 'fa fa-bar-chart'
+        },
+        {
+            id: 'area',
+            name: 'Area',
+            icon: 'fa fa-area-chart'
+        },
+        {
+            id: 'line',
+            name: 'Line',
+            icon: 'fa fa-line-chart'
+        },
+        {
+            id: 'area-spline',
+            name: 'Area spline',
+            image: 'images/area-spline.png'
+        },
+        {
+            id: 'scatter',
+            name: 'Scatter',
+            image: 'images/scatter.png'
+        }
+    ];
+
+    this.chartSectorTypeOptions = [
+        {
+            id: 'pie',
+            name: 'Pie',
+            image: 'images/pie.png'
+        },
+        {
+            id: 'donut',
+            name: 'Donut',
+            image: 'images/donut.png'
+        }
+    ];
 });

@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('reportCtrl', function ($scope, connection, $compile, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, grid, uuid2, c3Charts, reportModel, widgetsCommon, $location, PagerService) {
+app.controller('reportCtrl', function ($scope, connection, $compile, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, c3Charts, reportModel, widgetsCommon, $location, PagerService) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dateModal = 'partials/report/modals/dateModal.html';
     $scope.linkModal = 'partials/report/modals/linkModal.html';
@@ -67,53 +67,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.colors = widgetsCommon.colors;
     $scope.signalOptions = widgetsCommon.signalOptions;
 
-    $scope.getPrompts = function () {
-        if ($scope.selectedReport.query) { return $scope.selectedReport.query.groupFilters; };
-    };
-
-    $scope.getSQLPanel = function () {
-        $scope.showSQL = !$scope.showSQL;
-    };
-
-    $scope.onDateSet = function (newDate, oldDate, filter) {
-        queryModel.onDateSet(newDate, oldDate, filter);
-    };
-
-    $scope.onDateEndSet = function (newDate, oldDate, filter) {
-        queryModel.onDateEndSet(newDate, oldDate, filter);
-    };
-
-    $scope.removeItem = function (item, collection) {
-        var id = collection.indexOf(item);
-        collection.splice(id, 1);
-    };
-
-    $scope.showOverlay = function (referenceId) {
-        bsLoadingOverlayService.start({
-            referenceId: referenceId
-        });
-    };
-
-    $scope.hideOverlay = function (referenceId) {
-        bsLoadingOverlayService.stop({
-            referenceId: referenceId
-        });
-    };
-
-    $scope.saveReportStructure = function () {
-        var clonedReport = $scope.selectedReport;
-        reportService.addReport(clonedReport);
-    };
-
-    $scope.stringVariables = [
-        {value: 'toUpper', label: 'To Upper'},
-        {value: 'toLower', label: 'To Lower'}
-    ];
-
-    if ($routeParams.extra === 'intro') {
-        $timeout(function () { $scope.showIntro(); }, 1000);
-    }
-
     /*
     *   Initialisation
     */
@@ -137,10 +90,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
         await $scope.initLayers();
 
-        if ( /reports\/new/.test($location.path()) ) {
+        if (/reports\/new/.test($location.path())) {
             $scope.mode = 'new';
             $scope.newForm();
-        } else if( /explore/.test($location.path()) ){
+        } else if (/explore/.test($location.path())) {
             $scope.mode = 'explore';
             $scope.newForm();
         } else {
@@ -270,188 +223,58 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.pager = PagerService.GetPager($scope.reports.items.length, data.page, 10, data.pages);
     };
 
-    $scope.viewDuplicationForm = function (report) {
-        $scope.duplicateOptions.report = report;
-        $scope.duplicateOptions.newName = report.reportName + ' copy';
-        $('#duplicateModal').modal('show');
+    /*
+    * Getters and setters
+    */
+
+    $scope.getPrompts = function () {
+        if ($scope.selectedReport.query) { return $scope.selectedReport.query.groupFilters; };
     };
 
-    $scope.duplicateReport = async function () {
-        $scope.duplicateOptions.freeze = true;
-        await reportModel.duplicateReport($scope.duplicateOptions);
-        $scope.getReports($scope.page, '', ['reportName', 'reportType', 'isPublic', 'owner', 'reportDescription']);
-        $scope.duplicateOptions.freeze = false;
-        $('#duplicateModal').modal('hide');
+    $scope.getSQLPanel = function () {
+        $scope.showSQL = !$scope.showSQL;
     };
+
+    $scope.onDateSet = function (newDate, oldDate, filter) {
+        queryModel.onDateSet(newDate, oldDate, filter);
+    };
+
+    $scope.onDateEndSet = function (newDate, oldDate, filter) {
+        queryModel.onDateEndSet(newDate, oldDate, filter);
+    };
+
+    $scope.removeItem = function (item, collection) {
+        var id = collection.indexOf(item);
+        collection.splice(id, 1);
+    };
+
+    $scope.showOverlay = function (referenceId) {
+        bsLoadingOverlayService.start({
+            referenceId: referenceId
+        });
+    };
+
+    $scope.hideOverlay = function (referenceId) {
+        bsLoadingOverlayService.stop({
+            referenceId: referenceId
+        });
+    };
+
+    $scope.saveReportStructure = function () {
+        var clonedReport = $scope.selectedReport;
+        reportService.addReport(clonedReport);
+    };
+
+    $scope.stringVariables = [
+        {value: 'toUpper', label: 'To Upper'},
+        {value: 'toLower', label: 'To Lower'}
+    ];
+
+    if ($routeParams.extra === 'intro') {
+        $timeout(function () { $scope.showIntro(); }, 1000);
+    }
 
     $scope.duplicateOptions.duplicate = $scope.duplicateReport;
-
-    $scope.IntroOptions = {
-        // IF width > 300 then you will face problems with mobile devices in responsive mode
-        steps: [
-            {
-                element: '#parentIntroReports',
-                html: '<div><h3>Reports</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Here you can create and execute reports.</span><br/><br/><iframe width="350" height="225" src="https://www.youtube.com/embed/_g1NcBIgGQU" frameborder="0" allowfullscreen></iframe><br/><br/><span>Watch this short tutorial to see how to create a report.</span></div>',
-                width: '500px',
-                objectArea: false,
-                verticalAlign: 'top',
-                height: '400px'
-            },
-            {
-                element: '#parentIntroReports',
-                html: '<div><h3>Reports</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span>Choose a report type and drag and drop elements from the selected layer to compose your report.</span><br/><br/><span>You can also add runtime filters to split your data in real time.</span><br/><br/><span></span></div>',
-                width: '350px',
-                objectArea: false,
-                verticalAlign: 'top',
-                height: '200px'
-            },
-            {
-                element: '#newReportBtn',
-                html: '<div><h3>New Report</h3><span style="font-weight:bold;">Click here to create a new report.</span><br/><span></span></div>',
-                width: '300px',
-                height: '150px',
-                areaColor: 'transparent',
-                horizontalAlign: 'right',
-                areaLineColor: '#fff'
-            },
-            {
-                element: '#reportList',
-                html: '<div><h3>Reports list</h3><span style="font-weight:bold;">Here all your reports are listed.</span><br/><span>Click over a report\'s name to execute it.<br/><br/>You can also modify or drop the report, clicking into the modify or delete buttons.</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                verticalAlign: 'top',
-                height: '180px'
-
-            },
-            {
-                element: '#reportListItem',
-                html: '<div><h3>Report</h3><span style="font-weight:bold;">This is one of your reports.</span><br/><span>On every line (report) you can edit or drop it. If the report is published a green "published" label will be shown.</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#72A230',
-                height: '180px'
-
-            },
-            {
-                element: '#reportListItemName',
-                html: '<div><h3>Report name</h3><span style="font-weight:bold;">The name for the report.</span><br/><br/><span>You can setup the name you want for your report, but think about make it descriptive enought, and take care about not duplicating names across the company, specially if the report is going to be published.</span><br/><br/><span>You can click here to execute the report.</span></div>',
-                width: '400px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                height: '250px'
-
-            },
-            {
-                element: '#reportListItemDetails',
-                html: '<div><h3>Report description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using this report.</span><br/><span></span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                height: '180px'
-
-            },
-            {
-                element: '#reportListItemEditBtn',
-                html: '<div><h3>Report edit</h3><span style="font-weight:bold;">Click here to modify the report.</span><br/><br/><span></span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                horizontalAlign: 'right',
-                height: '200px'
-
-            },
-            {
-                element: '#reportListItemDeleteBtn',
-                html: '<div><h3>Report delete</h3><span style="font-weight:bold;">Click here to delete the report.</span><br/><br/><span>Once deleted the report will not be recoverable again.</span><br/><br/><span>Requires 2 step confirmation.</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                horizontalAlign: 'right',
-                height: '200px'
-
-            },
-            {
-                element: '#reportListItemPublished',
-                html: '<div><h3>Report published</h3><span style="font-weight:bold;">This label indicates that this report is public.</span><br/><br/><span>If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report.</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                horizontalAlign: 'right',
-                height: '200px'
-
-            },
-            {
-                element: '#dataObjectsIntroBlock',
-                html: '<div><h3>The layer catalog</h3><span style="font-weight:bold;">Access here the different data elements of every layer that you have access on</span><br/><span>Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)</span></div>',
-                width: '300px',
-                height: '250px'
-            },
-            {
-                element: '#selectLayer',
-                html: '<div><h3>The layer selector</h3><span style="font-weight:bold;">Select here the layer where your query will be based on.</span><br/><span>One query can only be baes in just one layer, you can not mix elements from different layers in the same query</span></div>',
-                width: '300px',
-                height: '250px',
-                areaColor: 'transparent',
-                areaLineColor: '#8DC63F'
-
-            },
-
-            {
-                element: '#reportType',
-                html: '<div><h3>Report Type selector</h3><span style="font-weight:bold;">Click over one of the different report types to change the visualization of the data you choose</span><br/><span></span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                height: '180px'
-            },
-            {
-                element: '#columnsPanel',
-                html: '<div><h3>Columns / results drop zone</h3><span style="font-weight:bold;">Drop here the elements you want to have in the results of the query</span><br/><span>A query must hold at least one element here to be executed</span></div>',
-                width: '300px',
-                height: '180px'
-            },
-            {
-                element: '#orderByPanel',
-                html: '<div><h3>Order By drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;"> Drop here the elements that you want to use to order the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results</span></div>',
-                width: '300px',
-                height: '250px'
-            },
-            {
-                element: '#filtersPanel',
-                html: '<div><h3>Filters drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Drop here the elements that you want to use to filter the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results</span></div>',
-                width: '300px',
-                height: '250px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff'
-            },
-            {
-                element: '#reportLayout',
-                html: '<div><h3>Results area</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">As you define the query draging and droping in the areas above, the results of the query will appear here</span><br/><span></span></div>',
-                width: '300px',
-                height: '150px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff'
-            },
-            {
-                element: '#queryRefresh',
-                html: '<div><h3>Query refresh</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Use this button to refresh the results</span><br/><span>The query will be sent again to the server an executed to get the most up to date data</span></div>',
-                width: '300px',
-                height: '150px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff'
-            },
-            {
-                element: '#saveQueryForPageBtn',
-                html: '<div><h3>Save query for page report</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Once you complete your query, click this button to save the query and back to the page report design</span><br/><span>The results of the query will be then used in the page report to create charts and data grids across the page.</span></div>',
-                width: '300px',
-                height: '200px',
-                horizontalAlign: 'right',
-                areaColor: 'transparent',
-                areaLineColor: '#fff'
-            }
-
-        ]
-    };
 
     $scope.changeLayer = function (selectedLayerID) {
         $scope.selectedLayerID = selectedLayerID;
@@ -478,6 +301,107 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         }
         return null;
     };
+
+    /*
+    *   Modals and navigation buttons
+    */
+
+    $scope.viewDuplicationForm = function (report) {
+        $scope.duplicateOptions.report = report;
+        $scope.duplicateOptions.newName = report.reportName + ' copy';
+        $('#duplicateModal').modal('show');
+    };
+
+    $scope.duplicateReport = async function () {
+        $scope.duplicateOptions.freeze = true;
+        await reportModel.duplicateReport($scope.duplicateOptions);
+        $scope.getReports($scope.page, '', ['reportName', 'reportType', 'isPublic', 'owner', 'reportDescription']);
+        $scope.duplicateOptions.freeze = false;
+        $('#duplicateModal').modal('hide');
+    };
+
+    $scope.delete = function (reportID, reportName) {
+        $scope.modalOptions = {};
+        $scope.modalOptions.headerText = 'Confirm delete report';
+        $scope.modalOptions.bodyText = 'Are you sure you want to delete the report:' + ' ' + reportName;
+        $scope.modalOptions.ID = reportID;
+        $('#deleteModal').modal('show');
+    };
+
+    $scope.deleteConfirmed = function (reportID) {
+        connection.post('/api/reports/delete/' + reportID, {id: reportID}, function (result) {
+            if (result.result === 1) {
+                $('#deleteModal').modal('hide');
+
+                var nbr = -1;
+                for (var i in $scope.reports.items) {
+                    if ($scope.reports.items[i]._id === reportID) { nbr = i; }
+                }
+
+                if (nbr > -1) { $scope.reports.items.splice(nbr, 1); }
+            }
+        });
+    };
+
+    $scope.reportName = function () {
+        if ($scope.mode === 'add') {
+            $('#theReportNameModal').modal('show');
+        } else {
+            $scope.reportNameSave();
+        }
+    };
+
+    $scope.reportNameSave = async function () {
+        await queryModel.processQuery();
+
+        await reportModel.saveAsReport($scope.selectedReport, $scope.mode);
+
+        $('#theReportNameModal').modal('hide');
+        $('.modal-backdrop').hide();
+        $scope.goBack();
+    };
+
+    $scope.pushToDash = function () {
+        var params = {};
+
+        connection.get('/api/dashboardsv2/find-all', params, function (data) {
+            $scope.dashboards = data;
+            $('#dashListModal').modal('show');
+        });
+    };
+
+    $scope.reportPushed2Dash = function (dashboardID) {
+        $('modal-backdrop').visible = false;
+        $('modal-backdrop').remove();
+        $('#dashListModal').modal('hide');
+        $scope.saveReportStructure();
+
+        $location.path('/dashboardsv2/push/' + dashboardID);
+    };
+
+    $scope.publishReport = function () {
+        $scope.objectToPublish = $scope.selectedReport;
+        $('#publishModal').modal('show');
+    };
+
+    $scope.unPublish = async function () {
+        await connection.post('/api/reports/unpublish', {_id: $scope.selectedReport._id});
+        $scope.selectedReport.isPublic = false;
+        $scope.$digest();
+        $('#publishModal').modal('hide');
+    };
+
+    $scope.selectThisFolder = async function (folderID) {
+        await connection.post('/api/reports/publish-report', {_id: $scope.selectedReport._id, parentFolder: folderID});
+        $scope.selectedReport.parentFolder = folderID;
+        $scope.selectedReport.isPublic = true;
+        $scope.$digest();
+        $('#publishModal').modal('hide');
+    };
+
+    /*
+    *   Report edition
+    */
 
     $scope.refresh = async function () {
         await queryModel.processQuery();
@@ -679,29 +603,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         }
     };
 
-    $scope.delete = function (reportID, reportName) {
-        $scope.modalOptions = {};
-        $scope.modalOptions.headerText = 'Confirm delete report';
-        $scope.modalOptions.bodyText = 'Are you sure you want to delete the report:' + ' ' + reportName;
-        $scope.modalOptions.ID = reportID;
-        $('#deleteModal').modal('show');
-    };
-
-    $scope.deleteConfirmed = function (reportID) {
-        connection.post('/api/reports/delete/' + reportID, {id: reportID}, function (result) {
-            if (result.result === 1) {
-                $('#deleteModal').modal('hide');
-
-                var nbr = -1;
-                for (var i in $scope.reports.items) {
-                    if ($scope.reports.items[i]._id === reportID) { nbr = i; }
-                }
-
-                if (nbr > -1) { $scope.reports.items.splice(nbr, 1); }
-            }
-        });
-    };
-
     $scope.onDragOver = function (event) {
         // ...
     };
@@ -843,6 +744,8 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             break;
         }
 
+        // The columns in dropzones which become hidden are moved to new dropzones
+        // This ensures that there are no hidden columns in the query, which results in strange behaviour
         for (const col of movedColumns) {
             const choice = $scope.autoChooseArea(col, true);
             col.zone = choice.zone;
@@ -854,52 +757,9 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         }
     };
 
-    $scope.chartColumnTypeOptions = [
-        {
-            id: 'spline',
-            name: 'Spline',
-            image: 'images/spline.png'
-        },
-        {
-            id: 'bar',
-            name: 'Bar',
-            icon: 'fa fa-bar-chart'
-        },
-        {
-            id: 'area',
-            name: 'Area',
-            icon: 'fa fa-area-chart'
-        },
-        {
-            id: 'line',
-            name: 'Line',
-            icon: 'fa fa-line-chart'
-        },
-        {
-            id: 'area-spline',
-            name: 'Area spline',
-            image: 'images/area-spline.png'
-        },
-        {
-            id: 'scatter',
-            name: 'Scatter',
-            image: 'images/scatter.png'
-        }
+    $scope.chartColumnTypeOptions = c3Charts.chartColumnTypeOptions;
 
-    ];
-
-    $scope.chartSectorTypeOptions = [
-        {
-            id: 'pie',
-            name: 'Pie',
-            image: 'images/pie.png'
-        },
-        {
-            id: 'donut',
-            name: 'Donut',
-            image: 'images/donut.png'
-        }
-    ];
+    $scope.chartSectorTypeOptions = c3Charts.chartSectorTypeOptions;
 
     $scope.changeChartColumnType = function (column, type) {
         column.type = type;
@@ -940,42 +800,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
     $scope.orderColumn = function (columnIndex, desc, hashedID) {
         reportModel.orderColumn($scope.selectedReport, columnIndex, desc, hashedID);
-    };
-
-    $scope.reportName = function () {
-        if ($scope.mode === 'add') {
-            $('#theReportNameModal').modal('show');
-        } else {
-            $scope.reportNameSave();
-        }
-    };
-
-    $scope.reportNameSave = async function () {
-        await queryModel.processQuery();
-
-        await reportModel.saveAsReport($scope.selectedReport, $scope.mode);
-
-        $('#theReportNameModal').modal('hide');
-        $('.modal-backdrop').hide();
-        $scope.goBack();
-    };
-
-    $scope.pushToDash = function () {
-        var params = {};
-
-        connection.get('/api/dashboardsv2/find-all', params, function (data) {
-            $scope.dashboards = data;
-            $('#dashListModal').modal('show');
-        });
-    };
-
-    $scope.reportPushed2Dash = function (dashboardID) {
-        $('modal-backdrop').visible = false;
-        $('modal-backdrop').remove();
-        $('#dashListModal').modal('hide');
-        $scope.saveReportStructure();
-
-        $location.path('/dashboardsv2/push/' + dashboardID);
     };
 
     $scope.aggregationChoosed = function (column, option) {
@@ -1048,24 +872,174 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.selectedReport.hideErrorMessage = true;
     };
 
-    /** ******PUBLISH******/
-    $scope.publishReport = function () {
-        $scope.objectToPublish = $scope.selectedReport;
-        $('#publishModal').modal('show');
-    };
+    /*
+    *   Other
+    */
 
-    $scope.unPublish = async function () {
-        await connection.post('/api/reports/unpublish', {_id: $scope.selectedReport._id});
-        $scope.selectedReport.isPublic = false;
-        $scope.$digest();
-        $('#publishModal').modal('hide');
-    };
+    $scope.IntroOptions = {
+        // IF width > 300 then you will face problems with mobile devices in responsive mode
+        steps: [
+            {
+                element: '#parentIntroReports',
+                html: '<div><h3>Reports</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Here you can create and execute reports.</span><br/><br/><iframe width="350" height="225" src="https://www.youtube.com/embed/_g1NcBIgGQU" frameborder="0" allowfullscreen></iframe><br/><br/><span>Watch this short tutorial to see how to create a report.</span></div>',
+                width: '500px',
+                objectArea: false,
+                verticalAlign: 'top',
+                height: '400px'
+            },
+            {
+                element: '#parentIntroReports',
+                html: '<div><h3>Reports</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span>Choose a report type and drag and drop elements from the selected layer to compose your report.</span><br/><br/><span>You can also add runtime filters to split your data in real time.</span><br/><br/><span></span></div>',
+                width: '350px',
+                objectArea: false,
+                verticalAlign: 'top',
+                height: '200px'
+            },
+            {
+                element: '#newReportBtn',
+                html: '<div><h3>New Report</h3><span style="font-weight:bold;">Click here to create a new report.</span><br/><span></span></div>',
+                width: '300px',
+                height: '150px',
+                areaColor: 'transparent',
+                horizontalAlign: 'right',
+                areaLineColor: '#fff'
+            },
+            {
+                element: '#reportList',
+                html: '<div><h3>Reports list</h3><span style="font-weight:bold;">Here all your reports are listed.</span><br/><span>Click over a report\'s name to execute it.<br/><br/>You can also modify or drop the report, clicking into the modify or delete buttons.</span></div>',
+                width: '300px',
+                areaColor: 'transparent',
+                areaLineColor: '#fff',
+                verticalAlign: 'top',
+                height: '180px'
 
-    $scope.selectThisFolder = async function (folderID) {
-        await connection.post('/api/reports/publish-report', {_id: $scope.selectedReport._id, parentFolder: folderID});
-        $scope.selectedReport.parentFolder = folderID;
-        $scope.selectedReport.isPublic = true;
-        $scope.$digest();
-        $('#publishModal').modal('hide');
+            },
+            {
+                element: '#reportListItem',
+                html: '<div><h3>Report</h3><span style="font-weight:bold;">This is one of your reports.</span><br/><span>On every line (report) you can edit or drop it. If the report is published a green "published" label will be shown.</span></div>',
+                width: '300px',
+                areaColor: 'transparent',
+                areaLineColor: '#72A230',
+                height: '180px'
+
+            },
+            {
+                element: '#reportListItemName',
+                html: '<div><h3>Report name</h3><span style="font-weight:bold;">The name for the report.</span><br/><br/><span>You can setup the name you want for your report, but think about make it descriptive enought, and take care about not duplicating names across the company, specially if the report is going to be published.</span><br/><br/><span>You can click here to execute the report.</span></div>',
+                width: '400px',
+                areaColor: 'transparent',
+                areaLineColor: '#fff',
+                height: '250px'
+
+            },
+            {
+                element: '#reportListItemDetails',
+                html: '<div><h3>Report description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using this report.</span><br/><span></span></div>',
+                width: '300px',
+                areaColor: 'transparent',
+                areaLineColor: '#fff',
+                height: '180px'
+
+            },
+            {
+                element: '#reportListItemEditBtn',
+                html: '<div><h3>Report edit</h3><span style="font-weight:bold;">Click here to modify the report.</span><br/><br/><span></span></div>',
+                width: '300px',
+                areaColor: 'transparent',
+                areaLineColor: '#fff',
+                horizontalAlign: 'right',
+                height: '200px'
+
+            },
+            {
+                element: '#reportListItemDeleteBtn',
+                html: '<div><h3>Report delete</h3><span style="font-weight:bold;">Click here to delete the report.</span><br/><br/><span>Once deleted the report will not be recoverable again.</span><br/><br/><span>Requires 2 step confirmation.</span></div>',
+                width: '300px',
+                areaColor: 'transparent',
+                areaLineColor: '#fff',
+                horizontalAlign: 'right',
+                height: '200px'
+
+            },
+            {
+                element: '#reportListItemPublished',
+                html: '<div><h3>Report published</h3><span style="font-weight:bold;">This label indicates that this report is public.</span><br/><br/><span>If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report.</span></div>',
+                width: '300px',
+                areaColor: 'transparent',
+                areaLineColor: '#fff',
+                horizontalAlign: 'right',
+                height: '200px'
+
+            },
+            {
+                element: '#dataObjectsIntroBlock',
+                html: '<div><h3>The layer catalog</h3><span style="font-weight:bold;">Access here the different data elements of every layer that you have access on</span><br/><span>Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)</span></div>',
+                width: '300px',
+                height: '250px'
+            },
+            {
+                element: '#selectLayer',
+                html: '<div><h3>The layer selector</h3><span style="font-weight:bold;">Select here the layer where your query will be based on.</span><br/><span>One query can only be baes in just one layer, you can not mix elements from different layers in the same query</span></div>',
+                width: '300px',
+                height: '250px',
+                areaColor: 'transparent',
+                areaLineColor: '#8DC63F'
+
+            },
+
+            {
+                element: '#reportType',
+                html: '<div><h3>Report Type selector</h3><span style="font-weight:bold;">Click over one of the different report types to change the visualization of the data you choose</span><br/><span></span></div>',
+                width: '300px',
+                areaColor: 'transparent',
+                height: '180px'
+            },
+            {
+                element: '#columnsPanel',
+                html: '<div><h3>Columns / results drop zone</h3><span style="font-weight:bold;">Drop here the elements you want to have in the results of the query</span><br/><span>A query must hold at least one element here to be executed</span></div>',
+                width: '300px',
+                height: '180px'
+            },
+            {
+                element: '#orderByPanel',
+                html: '<div><h3>Order By drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;"> Drop here the elements that you want to use to order the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results</span></div>',
+                width: '300px',
+                height: '250px'
+            },
+            {
+                element: '#filtersPanel',
+                html: '<div><h3>Filters drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Drop here the elements that you want to use to filter the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results</span></div>',
+                width: '300px',
+                height: '250px',
+                areaColor: 'transparent',
+                areaLineColor: '#fff'
+            },
+            {
+                element: '#reportLayout',
+                html: '<div><h3>Results area</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">As you define the query draging and droping in the areas above, the results of the query will appear here</span><br/><span></span></div>',
+                width: '300px',
+                height: '150px',
+                areaColor: 'transparent',
+                areaLineColor: '#fff'
+            },
+            {
+                element: '#queryRefresh',
+                html: '<div><h3>Query refresh</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Use this button to refresh the results</span><br/><span>The query will be sent again to the server an executed to get the most up to date data</span></div>',
+                width: '300px',
+                height: '150px',
+                areaColor: 'transparent',
+                areaLineColor: '#fff'
+            },
+            {
+                element: '#saveQueryForPageBtn',
+                html: '<div><h3>Save query for page report</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Once you complete your query, click this button to save the query and back to the page report design</span><br/><span>The results of the query will be then used in the page report to create charts and data grids across the page.</span></div>',
+                width: '300px',
+                height: '200px',
+                horizontalAlign: 'right',
+                areaColor: 'transparent',
+                areaLineColor: '#fff'
+            }
+
+        ]
     };
 });
