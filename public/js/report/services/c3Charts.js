@@ -215,7 +215,6 @@ app.service('c3Charts', function () {
             break;
         }
 
-        console.log(canvasArgs);
         chart.chartCanvas = c3.generate(canvasArgs);
     };
 

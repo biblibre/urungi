@@ -36,7 +36,6 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
     */
     this.fetchData = async function (query, params) {
         if (query.columns.length === 0) {
-            console.log('nothing to fetch');
             return {};
         }
 

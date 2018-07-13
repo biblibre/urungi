@@ -83,7 +83,6 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                 console.log('watch backgroundColor');
                 if (!$scope.gettingElementProperties) {
                     if ($scope.selectedChart) {
-                        console.log($scope.selectedChart);
                         $scope.selectedChart.backgroundColor = $scope.backgroundColor;
                     }
 

@@ -20,7 +20,6 @@ app.directive('reportView', function (reportModel, $compile, c3Charts, reportHtm
 
                 element.html(html);
                 $compile(element.contents())($scope);
-                $scope.$digest();
             };
 
             $scope.$on('repaint', async function (event, args) {
@@ -34,8 +33,6 @@ app.directive('reportView', function (reportModel, $compile, c3Charts, reportHtm
                     $scope.loadingMessage = 'Fetching data ...';
                     await reportModel.fetchData($scope.report.query);
                 }
-
-                console.log($scope.report);
 
                 $scope.loadingMessage = 'Repainting report ...';
 

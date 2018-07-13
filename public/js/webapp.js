@@ -86,22 +86,22 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/report/list.html',
             controller: 'reportCtrl'
         });
-        $routeProvider.when('/report/:extra', {
-            templateUrl: 'partials/report/list.html',
-            controller: 'reportCtrl'
-        });
+        // $routeProvider.when('/report/:extra', {
+        //     templateUrl: 'partials/report/list.html',
+        //     controller: 'reportCtrl'
+        // });
 
-        $routeProvider.when('/reports/:reportID/', {
+        $routeProvider.when('/reports/view/:reportID/', {
             templateUrl: 'partials/report/view.html',
             controller: 'reportCtrl'
         });
 
-        $routeProvider.when('/reports/:reportID/:elementID/:elementValue', {
-            templateUrl: 'partials/report/view.html',
-            controller: 'reportCtrl'
-        });
+        // $routeProvider.when('/reports/:reportID/:elementID/:elementValue', {
+        //     templateUrl: 'partials/report/view.html',
+        //     controller: 'reportCtrl'
+        // });
 
-        $routeProvider.when('/reports/new/:reportID/', {
+        $routeProvider.when('/reports/new/', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
         });

@@ -7,15 +7,15 @@
  */
 
 app.controller('reportCtrl', function ($scope, connection, $compile, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, grid, uuid2, c3Charts, reportModel, widgetsCommon, $location, PagerService) {
-    $scope.promptsBlock = 'partials/report/promptsBlock.html';
+    $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dateModal = 'partials/report/modals/dateModal.html';
     $scope.linkModal = 'partials/report/modals/linkModal.html';
-    $scope.repeaterTemplate = 'partials/report/repeater.html';
+    $scope.repeaterTemplate = 'partials/report/partials/repeater.html';
     $scope.publishModal = 'partials/report/modals/publishModal.html';
     $scope.columnFormatModal = 'partials/report/modals/columnFormatModal.html';
     $scope.columnSignalsModal = 'partials/report/modals/columnSignalsModal.html';
     $scope.filterPromptModal = 'partials/report/modals/filter-prompt-modal.html';
-    $scope.dropArea = 'partials/report/drop-area.html';
+    $scope.dropArea = 'partials/report/partials/drop-area.html';
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
     $scope.dashListModal = 'partials/report/modals/dashboardListModal.html';
     $scope.settingsTemplate = 'partials/widgets/common.html';
@@ -61,15 +61,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.rootItem = {};
 
     $scope.textAlign = widgetsCommon.textAlign;
-
     $scope.fontSizes = widgetsCommon.fontSizes;
-
     $scope.fontWeights = widgetsCommon.fontWeights;
-
     $scope.fontStyles = widgetsCommon.fontStyles;
-
     $scope.colors = widgetsCommon.colors;
-
     $scope.signalOptions = widgetsCommon.signalOptions;
 
     $scope.getPrompts = function () {
@@ -92,34 +87,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         var id = collection.indexOf(item);
         collection.splice(id, 1);
     };
-
-    $scope.$on('newReport', function (event, args) {
-        // $scope.initReport();
-    });
-
-    $scope.$on('newReportForDash', function (event, args) {
-        $scope.mode = 'add';
-        $scope.isForDash = true;
-
-        $scope.newForm();
-
-        $scope.selectedReport.query = queryModel.newQuery();
-    });
-
-    $scope.$on('loadReportStrucutureForDash', async function (event, args) {
-        var report = args.report;
-        $scope.isForDash = true;
-        $scope.showOverlay('OVERLAY_reportLayout');
-        $scope.selectedReport = report;
-        $scope.layers = await reportModel.getLayers();
-        queryModel.loadQuery(report.query);
-        queryModel.loadLayers($scope.layers);
-        $scope.mode = 'edit';
-        await queryModel.processQuery(report.query);
-        reportModel.getReport(report, 'reportLayout', $scope.mode).then(() => {
-            $scope.hideOverlay('OVERLAY_reportLayout');
-        });
-    });
 
     $scope.showOverlay = function (referenceId) {
         bsLoadingOverlayService.start({
@@ -147,22 +114,67 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $timeout(function () { $scope.showIntro(); }, 1000);
     }
 
-    $scope.init = async function () {
-        await $scope.initLayers();
-        await $scope.initForm();
-        await $scope.refresh();
+    /*
+    *   Initialisation
+    */
 
-        // TODO : initialize the right things at the right time
-        // Right now, init() is called often and not always necessary
+    $scope.initReportList = async function () {
+        const fields = ['reportName', 'reportType', 'isPublic', 'owner', 'reportDescription'];
+        await $scope.getReports(1, '', fields);
+        $scope.$digest();
+        $scope.mode = 'list';
     };
+
+    $scope.initReportView = async function () {
+        $scope.selectedReport = await reportModel.getReportDefinition($routeParams.reportID, false);
+        $scope.$digest();
+        $scope.$broadcast('repaint', {fetchData: true});
+        $scope.mode = 'view';
+    };
+
+    $scope.initReportEdit = async function () {
+        $scope.showOverlay('OVERLAY_reportLayout');
+
+        await $scope.initLayers();
+
+        if (/reports\/new/.test($location.path())) {
+            $scope.mode = 'new';
+            $scope.newForm();
+        } else {
+            $scope.selectedReport = await reportModel.getReportDefinition($routeParams.reportID, false);
+            $scope.initForm();
+            $scope.mode = 'edit';
+        }
+
+        $scope.hideOverlay('OVERLAY_reportLayout');
+
+        await $scope.refresh();
+    };
+
+    $scope.$on('newReportForDash', function (event, args) {
+        $scope.mode = 'add';
+        $scope.isForDash = true;
+
+        $scope.initLayers().then($scope.newForm);
+    });
+
+    $scope.$on('loadReportStrucutureForDash', async function (event, args) {
+        var report = args.report;
+        await $scope.initLayers;
+
+        $scope.selectedReport = report;
+        $scope.mode = 'edit';
+        $scope.isForDash = true;
+
+        await $scope.initLayers();
+        $scope.initForm();
+    });
 
     $scope.initLayers = async function () {
         $scope.layers = await reportModel.getLayers();
         queryModel.loadLayers($scope.layers);
-        if ($scope.layers.length > 0) {
-            $scope.selectedLayerID = $scope.layers[0]._id;
-            $scope.rootItem = $scope.layers[0].rootItem;
-        }
+        $scope.selectedLayerID = $scope.layers[0]._id;
+        $scope.rootItem = $scope.layers[0].rootItem;
     };
 
     $scope.newForm = function () {
@@ -203,52 +215,35 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     };
 
     $scope.initForm = async function () {
-        if ($routeParams.reportID && $routeParams.reportID !== 'true') {
-            const report = await reportModel.getReportDefinition($routeParams.reportID, false);
-            if (report) {
-                $scope.showOverlay('OVERLAY_reportLayout');
-                $scope.selectedReport = report;
-                queryModel.loadQuery(report.query);
-                $scope.mode = 'edit';
-                $scope.cleanForm();
-                if (report.query.selectedLayerID) {
-                    $scope.selectedLayerID = report.query.selectedLayerID;
-                    var layer = $scope.layers.find(l => l._id === $scope.selectedLayerID);
-                    $scope.rootItem = layer.rootItem;
-                }
-            } else {
-
-                // TODO:No report found message
-            }
-        } else {
-            $scope.newForm();
+        queryModel.loadQuery($scope.selectedReport.query);
+        $scope.mode = 'edit';
+        $scope.cleanForm();
+        if ($scope.selectedReport.query.selectedLayerID) {
+            $scope.selectedLayerID = $scope.selectedReport.query.selectedLayerID;
+            var layer = $scope.layers.find(l => l._id === $scope.selectedLayerID);
+            $scope.rootItem = layer.rootItem;
         }
     };
 
     $scope.cleanForm = function () {
-        if (!$scope.selectedReport.properties) {
-            $scope.initForm();
-        } else {
-            if (!$scope.selectedReport.properties.xkeys) { $scope.selectedReport.properties.xkeys = []; }
-            if (!$scope.selectedReport.properties.ykeys) { $scope.selectedReport.properties.ykeys = []; }
-            if (!$scope.selectedReport.properties.columns) { $scope.selectedReport.properties.columns = []; }
-            if (!$scope.selectedReport.properties.order) { $scope.selectedReport.properties.order = []; }
-            if (!$scope.selectedReport.properties.pivotKeys) { $scope.selectedReport.properties.pivotKeys = {}; }
-            if (!$scope.selectedReport.properties.pivotKeys.columns) { $scope.selectedReport.properties.pivotKeys.columns = []; }
-            if (!$scope.selectedReport.properties.pivotKeys.rows) { $scope.selectedReport.properties.pivotKeys.rows = []; }
-            if (!$scope.selectedReport.properties.order) { $scope.selectedReport.properties.order = []; }
+        const report = $scope.selectedReport;
+
+        if (!report.properties) {
+            console.log('invalid report');
+            return;
         }
+
+        if (!report.properties.xkeys) { report.properties.xkeys = []; }
+        if (!report.properties.ykeys) { report.properties.ykeys = []; }
+        if (!report.properties.columns) { report.properties.columns = []; }
+        if (!report.properties.order) { report.properties.order = []; }
+        if (!report.properties.pivotKeys) { report.properties.pivotKeys = {}; }
+        if (!report.properties.pivotKeys.columns) { report.properties.pivotKeys.columns = []; }
+        if (!report.properties.pivotKeys.rows) { report.properties.pivotKeys.rows = []; }
+        if (!report.properties.order) { report.properties.order = []; }
     };
 
-    $scope.getReports = function (params) {
-        params = params || {};
-
-        connection.get('/api/reports/find-all', params, function (data) {
-            $scope.reports = data;
-        });
-    };
-
-    $scope.getReports = function (page, search, fields) {
+    $scope.getReports = async function (page, search, fields) {
         var params = {};
 
         params.page = (page) || 1;
@@ -264,25 +259,13 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
         if (fields) params.fields = fields;
 
-        connection.get('/api/reports/find-all', params, function (data) {
-            $scope.reports = data;
-            // $scope.items = data.items;
-            $scope.page = data.page;
-            $scope.pages = data.pages;
-            $scope.pager = PagerService.GetPager($scope.reports.items.length, data.page, 10, data.pages);
-        });
+        const data = await connection.get('/api/reports/find-all', params);
+        $scope.reports = data;
+        // $scope.items = data.items;
+        $scope.page = data.page;
+        $scope.pages = data.pages;
+        $scope.pager = PagerService.GetPager($scope.reports.items.length, data.page, 10, data.pages);
     };
-
-    $scope.loadReportForView = async function (){
-        const report = await reportModel.getReportDefinition($routeParams.reportID, false);
-        console.log(report);
-        if (report) {
-            $scope.selectedReport = report;
-            $scope.mode = 'view';
-            $scope.$digest();
-            $scope.$broadcast('repaint', {fetchData : true});
-        }
-    }
 
     $scope.viewDuplicationForm = function (report) {
         $scope.duplicateOptions.report = report;

@@ -4,7 +4,6 @@
     <a ng-if="selectedReport && ((selectedReport.owner == user._id) || isWSTADMIN)" ng-click="publishReport()"  
     class="btn btn-success pull-right" style="margin-right: 5px"><span ng-hide="selectedReport.isPublic">Publish</span><span ng-show="selectedReport.isPublic">Un-Publish</span></a>
     <a ng-click="goBack()" class="btn btn-default pull-right">Cancel</a>
-    <a ng-click="changeColumnSignals(0)" class="btn btn-default pull-right">Change signals</a>
 </div>
 
     <div ng-show="selectedReport.reportType == 'grid'" class="container-fluid " style="padding-bottom: 5px;position:relative">
@@ -13,7 +12,7 @@
 
 </div>
 
-<div class="container-fluid " ng-init="init()" style="position: absolute;
+<div class="container-fluid " ng-init="initReportView()" style="position: absolute;
     left: 15px;
     right: 0px;
     top: 100px;
@@ -26,7 +25,7 @@
 
     <div ng-include src="promptsBlock" class=" prompts-block" style="position:relative"></div>
 
-    <div report-view report="selectedReport" mode="preview" style="height:100%"></div>
+    <div report-view report="selectedReport" mode="mode" style="height:100%"></div>
     
 
     <!-- <div id="reportLayout" ng-init="getReportDiv()" class="container-fluid" style="min-height:200px;position:relative;padding-left:0px;padding-right:0px;height:100%"  
