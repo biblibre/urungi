@@ -52,7 +52,6 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             $scope.openImageGallery = function (target) {
                 $rootScope.openGalleryModal(function (url) {
                     $scope.setBackgroundImage(url);
-                    console.log(url);
                 });
             };
 
@@ -80,7 +79,6 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             };
 
             $scope.$watch('backgroundColor', function () {
-                console.log('watch backgroundColor');
                 if (!$scope.gettingElementProperties) {
                     if ($scope.selectedChart) {
                         $scope.selectedChart.backgroundColor = $scope.backgroundColor;
@@ -105,7 +103,6 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             });
 
             $scope.$watch('properties', function () {
-                console.log('the properties');
                 $scope.gettingElementProperties = true;
                 getElementProperties();
                 if ($scope.properties) {
@@ -118,19 +115,16 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                     $scope.headerBackgroundColor = $scope.properties.headerBackgroundColor;
                     $scope.headerHeight = $scope.properties.headerHeight;
                     $scope.height = $scope.properties.height;
-                    console.log('alarm');
                     // $scope.headerBottomLineColor = $scope.properties.headerBottomLineColor;
                     $scope.headerBottomLineWidth = $scope.properties.headerBottomLineWidth;
                     $scope.rowBottomLineWidth = $scope.properties.rowBottomLineWidth;
                     $scope.rowBorderColor = $scope.properties.rowBorderColor;
-                    console.log('this is the row color', $scope.rowBorderColor);
                     $scope.columnLineWidth = $scope.properties.columnLineWidth;
                 }
                 $scope.gettingElementProperties = false;
             });
 
             $scope.$watch('properties.headerBottomLineColor', function () {
-                console.log('visto', $scope.gettingElementProperties);
                 if (!$scope.gettingElementProperties) { $scope.onChange(); }
             });
 
@@ -207,8 +201,6 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             };
 
             $scope.changeHeaderBackgroundcolor = function (headerBackgroundColor) {
-                console.log('changeHeaderBackgroundcolor changeHeaderBackgroundcolor changed');
-
                 $scope.headerBackgroundColor = headerBackgroundColor;
                 // saveProperties();
             };
@@ -408,7 +400,6 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
             };
 
             function getElementProperties () {
-                console.log('getElementProperties');
                 // $scope.gettingElementProperties = true;
                 // $scope.tabs.selected = 'settings';
                 $scope.selectedElementType = '';

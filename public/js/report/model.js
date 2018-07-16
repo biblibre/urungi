@@ -68,8 +68,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
 
         var data = result.data;
 
-        // processData(data);
-        // TODO : figure out what that does
+        processDates(data);
 
         query.data = result.data;
 
@@ -80,20 +79,19 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
         };
     };
 
-    // function processData (data) {
-    //     var dateTimeReviver = function (key, value) {
-    //         var a;
-    //         if (typeof value === 'string') {
-    //             a = /\/Date\((\d*)\)\//.exec(value);
-    //             if (a) {
-    //                 return new Date(+a[1]);
-    //             }
-    //         }
-    //         return value;
-    //     };
-
-    //     return JSON.parse(JSON.stringify(data), dateTimeReviver);
-    // }
+    function processDates (data) {
+        console.log(data);
+        for (const item of data) {
+            for (const key in item) {
+                if (typeof item[key] === 'string') {
+                    var a = /\/Date\((\d*)\)\//.exec(item[key]);
+                    if (a) {
+                        item[key] = new Date(+a[1]);
+                    }
+                }
+            }
+        }
+    }
 
     this.initChart = function (report) {
         var chart = {
@@ -232,7 +230,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
         $('#columnSignalsModal').modal('show');
     };
 
-    this.orderColumn = function (report, columnIndex, desc, hashedID) {
+    this.orderColumn = function (report, columnIndex, desc) {
         var theColumn = report.query.columns[columnIndex];
         if (desc) {
             theColumn.sortType = 1;
@@ -241,12 +239,6 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
         }
         report.query.order = [];
         report.query.order.push(theColumn);
-
-        // queryModel.getQueryData(report.query).then(data => {
-        //     report.query.data = data.data;
-        //     hideOverlay('OVERLAY_' + hashedID);
-        // });
-        // get the column index, identify the report.query.column by  index, then add to query.order taking care about the sortType -1 / 1
     };
 
     function clone (obj) {

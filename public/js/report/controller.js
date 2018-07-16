@@ -185,7 +185,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         const report = $scope.selectedReport;
 
         if (!report.properties) {
-            console.log('invalid report');
+            noty({text: 'invalid report', timeout: 2000, type: 'error'});
             return;
         }
 
@@ -645,102 +645,109 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
         var movedColumns = [];
 
-        function clear (list) {
-            while (list.length) {
-                movedColumns.push(list.pop());
-            }
+        function moveContent (a, b) {
+            b.push.apply(b, a.splice(0));
         }
 
-        function keep (lists) {
-            if (lists.indexOf('columns') < 0) {
-                clear($scope.selectedReport.properties.columns);
-            }
-            if (lists.indexOf('xkeys') < 0) {
-                clear($scope.selectedReport.properties.xkeys);
-            }
-            if (lists.indexOf('ykeys') < 0) {
-                clear($scope.selectedReport.properties.ykeys);
-            }
-            if (lists.indexOf('pivot') < 0) {
-                clear($scope.selectedReport.properties.pivotKeys.columns);
-                clear($scope.selectedReport.properties.pivotKeys.rows);
-            }
-        }
-
+        const report = $scope.selectedReport;
         switch (newReportType) {
         case 'grid':
-            $scope.selectedReport.reportType = 'grid';
-            keep(['columns']);
+            report.reportType = 'grid';
+            moveContent(report.properties.xkeys, movedColumns);
+            moveContent(report.properties.ykeys, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
             break;
 
         case 'vertical-grid':
-            keep(['columns']);
-            $scope.selectedReport.reportType = 'vertical-grid';
+            report.reportType = 'vertical-grid';
+            moveContent(report.properties.xkeys, movedColumns);
+            moveContent(report.properties.ykeys, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
             break;
 
         case 'pivot':
-            keep(['pivot', 'ykeys']);
-            $scope.selectedReport.query.countYKeys = true;
-            $scope.selectedReport.reportType = 'pivot';
+            moveContent(report.properties.xkeys, movedColumns);
+            moveContent(report.properties.columns, movedColumns);
+            report.query.countYKeys = true;
+            report.reportType = 'pivot';
             break;
 
         case 'chart-bar':
-            keep(['xkeys', 'ykeys']);
-            $scope.selectedReport.reportType = 'chart-bar';
+            moveContent(report.properties.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
+            report.reportType = 'chart-bar';
             break;
 
         case 'chart-line':
-            keep(['xkeys', 'ykeys']);
-            $scope.selectedReport.reportType = 'chart-line';
+            moveContent(report.properties.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
+            report.reportType = 'chart-line';
             break;
 
         case 'chart-area':
-            keep(['xkeys', 'ykeys']);
-            $scope.selectedReport.reportType = 'chart-area';
+            moveContent(report.properties.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
+            report.reportType = 'chart-area';
             break;
 
         case 'chart-donut':
-            keep(['xkeys', 'ykeys']);
-            $scope.selectedReport.reportType = 'chart-donut';
+            moveContent(report.properties.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
+            report.reportType = 'chart-donut';
             break;
 
         case 'indicator':
-            keep(['ykeys']);
-            $scope.selectedReport.reportType = 'indicator';
-            if (!$scope.selectedReport.properties.style) { $scope.selectedReport.properties.style = 'style1'; }
-            if (!$scope.selectedReport.properties.backgroundColor) { $scope.selectedReport.properties.backgroundColor = '#fff'; }
-            if (!$scope.selectedReport.properties.reportIcon) { $scope.selectedReport.properties.reportIcon = 'fa-bolt'; }
-            if (!$scope.selectedReport.properties.mainFontColor) { $scope.selectedReport.properties.mainFontColor = '#000000'; }
-            if (!$scope.selectedReport.properties.descFontColor) { $scope.selectedReport.properties.descFontColor = '#CCCCCC'; }
+            moveContent(report.properties.columns, movedColumns);
+            moveContent(report.properties.xkeys, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
+            report.reportType = 'indicator';
+            if (!report.properties.style) { report.properties.style = 'style1'; }
+            if (!report.properties.backgroundColor) { report.properties.backgroundColor = '#fff'; }
+            if (!report.properties.reportIcon) { report.properties.reportIcon = 'fa-bolt'; }
+            if (!report.properties.mainFontColor) { report.properties.mainFontColor = '#000000'; }
+            if (!report.properties.descFontColor) { report.properties.descFontColor = '#CCCCCC'; }
             break;
 
         case 'vectorMap':
-            keep(['ykeys']);
-            $scope.selectedReport.reportType = 'vectorMap';
+            moveContent(report.properties.columns, movedColumns);
+            moveContent(report.properties.xkeys, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
+            report.reportType = 'vectorMap';
             break;
 
         case 'gauge':
-            keep(['ykeys']);
-            $scope.selectedReport.reportType = 'gauge';
+            moveContent(report.properties.columns, movedColumns);
+            moveContent(report.properties.xkeys, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
+            report.reportType = 'gauge';
 
-            if (!$scope.selectedReport.properties.lines) { $scope.selectedReport.properties.lines = 20; } // The number of lines to draw    12
-            if (!$scope.selectedReport.properties.angle) { $scope.selectedReport.properties.angle = 15; } // The length of each line
-            if (!$scope.selectedReport.properties.lineWidth) { $scope.selectedReport.properties.lineWidth = 44; } // The line thickness
-            if (!$scope.selectedReport.properties.pointerLength) { $scope.selectedReport.properties.pointerLength = 70; }
-            if (!$scope.selectedReport.properties.pointerStrokeWidth) { $scope.selectedReport.properties.pointerStrokeWidth = 35; }
-            if (!$scope.selectedReport.properties.pointerColor) { $scope.selectedReport.properties.pointerColor = '#000000'; }
-            if (!$scope.selectedReport.properties.limitMax) { $scope.selectedReport.properties.limitMax = 'false'; } // If true, the pointer will not go past the end of the gauge
-            if (!$scope.selectedReport.properties.colorStart) { $scope.selectedReport.properties.colorStart = '#6FADCF'; } // Colors
-            if (!$scope.selectedReport.properties.colorStop) { $scope.selectedReport.properties.colorStop = '#8FC0DA'; } // just experiment with them
-            if (!$scope.selectedReport.properties.strokeColor) { $scope.selectedReport.properties.strokeColor = '#E0E0E0'; } // to see which ones work best for you
-            if (!$scope.selectedReport.properties.generateGradient) { $scope.selectedReport.properties.generateGradient = true; }
-            if (!$scope.selectedReport.properties.minValue) { $scope.selectedReport.properties.minValue = 0; }
-            if (!$scope.selectedReport.properties.maxValue) { $scope.selectedReport.properties.maxValue = 100; }
-            if (!$scope.selectedReport.properties.animationSpeed) { $scope.selectedReport.properties.animationSpeed = 32; }
+            if (!report.properties.lines) { report.properties.lines = 20; } // The number of lines to draw    12
+            if (!report.properties.angle) { report.properties.angle = 15; } // The length of each line
+            if (!report.properties.lineWidth) { report.properties.lineWidth = 44; } // The line thickness
+            if (!report.properties.pointerLength) { report.properties.pointerLength = 70; }
+            if (!report.properties.pointerStrokeWidth) { report.properties.pointerStrokeWidth = 35; }
+            if (!report.properties.pointerColor) { report.properties.pointerColor = '#000000'; }
+            if (!report.properties.limitMax) { report.properties.limitMax = 'false'; } // If true, the pointer will not go past the end of the gauge
+            if (!report.properties.colorStart) { report.properties.colorStart = '#6FADCF'; } // Colors
+            if (!report.properties.colorStop) { report.properties.colorStop = '#8FC0DA'; } // just experiment with them
+            if (!report.properties.strokeColor) { report.properties.strokeColor = '#E0E0E0'; } // to see which ones work best for you
+            if (!report.properties.generateGradient) { report.properties.generateGradient = true; }
+            if (!report.properties.minValue) { report.properties.minValue = 0; }
+            if (!report.properties.maxValue) { report.properties.maxValue = 100; }
+            if (!report.properties.animationSpeed) { report.properties.animationSpeed = 32; }
             break;
 
         default:
-            // TODO signal error
+            noty({ msg: 'report type does not exist', timeout: 2000, type: 'error' });
             break;
         }
 

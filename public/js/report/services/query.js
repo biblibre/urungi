@@ -101,7 +101,7 @@ app.service('queryModel', function (uuid2) {
             break;
 
         default:
-            console.log('Invalid bind');
+            noty({text: 'Invalid query bind', timeout: 2000, type: 'error'});
         }
     };
 
@@ -196,14 +196,14 @@ app.service('queryModel', function (uuid2) {
     * These functions are used when processQuery is called
     */
 
-    this.processQuery = async function () {
+    this.processQuery = function () {
         /*
         * Prepares the query so that it can be used to run a database request
         */
 
         layer = layers.find(l => l._id === query.selectedLayerID);
         if (!layer) {
-            console.log('no layer found');
+            noty({text: 'Layer not found', timeout: 2000, type: 'error'});
             return;
         }
         setupCount();
@@ -214,7 +214,6 @@ app.service('queryModel', function (uuid2) {
 
         detectLayerJoins();
         processStructure();
-        // checkChoosedElements(); // TODO : figure out what this does and why it exists
         cleanQuery();
     };
 
@@ -366,16 +365,6 @@ app.service('queryModel', function (uuid2) {
     *   Internal functions
     */
 
-    // function checkChoosedElements () {
-    //     if (query.columns.length > 1) {
-    //         for (var e = query.columns.length - 1; e >= 0; e--) {
-    //             if (thereIsAJoinForMe(query, query.columns[e]) === 0) {
-    //                 query.columns.splice(e, 1);
-    //             }
-    //         }
-    //     }
-    // }
-
     function generateDataSourceList () {
         /*
         * Initialize query.datasources with all of the datasources used by the query.
@@ -499,40 +488,10 @@ app.service('queryModel', function (uuid2) {
             $('#reportLayout').empty();
             return (query.columns.length > 0);
         } else {
-            // var errorMsg = 'There are incomplete filters'
-            // noty({text: errorMsg,  timeout: 6000, type: 'error'});
+            var errorMsg = 'There are incomplete filters';
+            noty({text: errorMsg, timeout: 6000, type: 'error'});
         }
     }
-
-    // function thereIsAJoinForMe (element) {
-    //     var found = 0;
-    //     for (const i in query.columns) {
-    //         if (element.elementID !== query.columns[i].elementID) {
-    //             if (joinExists(element.collectionID, query.columns[i].collectionID) || (element.collectionID === query.columns[i].collectionID)) {
-    //                 found = found + 1;
-    //             }
-    //         }
-    //     }
-
-    //     return found;
-    // }
-
-    // function joinExists (collection1, collection2) {
-    //     var found = false;
-
-    //     if (!layer || !layer.params || !layer.params.joins) return false;
-
-    //     if (collection1 !== collection2) {
-    //         for (var j in layer.params.joins) {
-    //             if ((layer.params.joins[j].sourceCollectionID === collection1 && layer.params.joins[j].targetCollectionID === collection2) ||
-    //                 (layer.params.joins[j].sourceCollectionID === collection2 && layer.params.joins[j].targetCollectionID === collection1)) {
-    //                 found = true;
-    //             }
-    //         }
-    //     } else { found = true; }
-
-    //     return found;
-    // }
 
     function filtersUpdated (theFilters, mainFilters) {
         theFilters = (theFilters) || query.groupFilters;

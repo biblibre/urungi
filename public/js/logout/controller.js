@@ -5,7 +5,6 @@ app.controller('logOutCtrl', function ($scope, $http, $sessionStorage, $localSto
             $sessionStorage.removeObject('user');
             $localStorage.setObject('user', undefined);
             $localStorage.removeObject('user');
-            console.log('successfull logout');
         })
         .error(function (data, status, headers, config) {
             $sessionStorage.setObject('user', undefined);

@@ -1083,7 +1083,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     $compile($div)(scope);
                 });
             } else {
-                console.log('no target prompt found');
+                noty({text: 'No target prompt found', timeout: 2000, type: 'error'});
             }
         }
     }
