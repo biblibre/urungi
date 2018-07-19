@@ -86,6 +86,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     };
 
     $scope.initReportEdit = async function () {
+        if (/dashboards/.test($location.path())) {
+            console.log('no need to init');
+            return;
+        }
+
         $scope.showOverlay('OVERLAY_reportLayout');
 
         await $scope.initLayers();
