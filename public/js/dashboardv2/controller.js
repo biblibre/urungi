@@ -218,9 +218,9 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
                     cleanAllSelected();
 
-                    $scope.getPrompts();
+                    $scope.initPrompts();
 
-                    $scope.$broadcast('repaint', { fetchData: true });
+                    repaintReports();
                 });
             }
         }
@@ -265,9 +265,9 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
                         cleanAllSelected();
 
-                        $scope.getPrompts();
+                        $scope.initPrompts();
 
-                        $scope.$broadcast('repaint', { fetchData: true });
+                        repaintReports();
                     });
                 }
             }
@@ -303,9 +303,9 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             angular.element(document).injector().invoke(function ($compile) {
                 $compile($div)($scope);
             });
-            $scope.getPrompts();
+            $scope.initPrompts();
 
-            $scope.$broadcast('repaint', { fetchData: true });
+            repaintReports();
             // cleanAll('pageViewer');
         });
     };
@@ -388,11 +388,11 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         } else {
             var updatedReport = angular.copy(qstructure);
             $scope.selectedDashboard.reports.splice($scope.editingReportIndex, 1, updatedReport);
-            reportModel.getReport(updatedReport, 'REPORT_' + qstructure.id, $scope.mode, function (sql) {});
+            // reportModel.getReport(updatedReport, 'REPORT_' + qstructure.id, $scope.mode, function (sql) {});
         }
         $scope.reportInterface = false;
         // getAllPageColumns();
-        $scope.getPrompts();
+        $scope.initPrompts();
     };
 
     $scope.getQuery = function (queryID) {
@@ -467,7 +467,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
                     } else {
                         const html = reportModel.getReportContainerHTML(customObjectData.reportID);
                         createOnDesignArea(html, function () {
-                            $scope.$broadcast('repaint', { fetchData: true });
+                            repaintReports();
                         });
                     }
                 }
@@ -475,15 +475,13 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         }
 
         if (customObjectData.objectType === 'queryFilter') {
-            for (const i in $scope.prompts) {
-                if ($scope.prompts[i].elementID === customObjectData.promptID) {
-                    if (angular.element('#PROMPT_' + $scope.prompts[i].elementID).length) {
-                        noty({text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error'});
-                    } else {
-                        const html = reportModel.getPromptHTML($scope.prompts[i]);
-                        createOnDesignArea(html, function () {});
-                    }
-                }
+            console.log(customObjectData);
+            if (angular.element('#PROMPT_' + customObjectData.promptID).length) {
+                noty({text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error'});
+            } else {
+                const html = reportModel.getPromptHTML(customObjectData);
+                console.log(html);
+                createOnDesignArea(html, function () {});
             }
         }
 
@@ -540,14 +538,11 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         let html;
 
         if (customObjectData.objectType === 'queryFilter') {
-            for (const i in $scope.prompts) {
-                if ($scope.prompts[i].elementID === customObjectData.promptID) {
-                    if (angular.element('#PROMPT_' + $scope.prompts[i].elementID).length) {
-                        noty({text: 'Sorry, that filter is already on the board', timeout: 6000, type: 'error'});
-                    } else {
-                        html = reportModel.getPromptHTML($scope.prompts[i]);
-                    }
-                }
+            var pid = customObjectData.id + customObjectData.filterType;
+            if (angular.element('#PROMPT_' + pid).length) {
+                noty({text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error'});
+            } else {
+                html = reportModel.getPromptHTML(customObjectData);
             }
         }
 
@@ -581,47 +576,24 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         }
     };
 
-    $scope.getPromptAsArray = function (promptID) {
-        for (var p in $scope.prompts) {
-            if ($scope.prompts[p].elementID === promptID) {
-                var theResult = [];
-                theResult.push($scope.prompts[p]);
-                return theResult;
-            }
-        }
-    };
-
-    $scope.getFilter = function (elementID) {
-        for (var p in $scope.prompts) {
-            if ($scope.prompts[p].elementID === elementID) { return $scope.prompts[p]; }
-        }
-    };
-
-    $scope.getPrompt = function (elementID) {
-        for (var p in $scope.prompts) {
-            if ($scope.prompts[p].elementID === elementID) { return $scope.prompts[p]; }
-        }
-    };
-
-    $scope.afterPromptGetValues = function (filter, data) {
-        $scope.selectedfilter = filter;
-    };
-
     $scope.promptChanged = function (elementID, values) {
-        for (var r in $scope.selectedDashboard.reports) {
-            for (var f in $scope.selectedDashboard.reports[r].query.groupFilters) {
-                if ($scope.selectedDashboard.reports[r].query.groupFilters[f].elementID === elementID && $scope.selectedDashboard.reports[r].query.groupFilters[f].filterPrompt) {
-                    $scope.selectedDashboard.reports[r].query.groupFilters[f].filterText1 = values.filterText1;
-                    $scope.selectedDashboard.reports[r].query.groupFilters[f].searchValue = values.searchValue;
-                    $scope.selectedDashboard.reports[r].query.groupFilters[f].filterValue = values.filterValue;
-                    $scope.selectedDashboard.reports[r].query.groupFilters[f].dateCustomFilterLabel = values.dateCustomFilterLabel;
-                    $scope.selectedDashboard.reports[r].query.groupFilters[f].filterText2 = values.filterText2;
-
-                    $scope.$broadcast('repaint', { fetchData: true });
-                }
-            }
-        }
+        repaintReports();
     };
+
+    function repaintReports () {
+        var filterCriteria = {};
+        for (const i in $scope.prompts) {
+            filterCriteria[i] = $scope.prompts[i].criterion;
+        }
+
+        console.log('repainting with these criteria ');
+        console.log(filterCriteria);
+
+        $scope.$broadcast('repaint', {
+            fetchData: true,
+            filterCriteria: filterCriteria
+        });
+    }
 
     function createOnDesignArea (html, done) {
         var $div = $(html);
@@ -783,7 +755,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             //         });
             //     }
             // }
-            $scope.$broadcast('repaint', { fetchData: true });
+            repaintReports();
         }
     };
 
@@ -826,11 +798,11 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             $(theElement.childNodes[i]).removeClass('Block500');
             $(theElement.childNodes[i]).removeAttr('vs-repeat');
 
-            var elementType = $(theElement.childNodes[i]).attr('ndType');
+            // var elementType = $(theElement.childNodes[i]).attr('ndType');
 
-            if (elementType === 'ndPrompt') {
-                $(theElement.childNodes[i]).children().remove();
-            }
+            // if (elementType === 'ndPrompt') {
+            //     $(theElement.childNodes[i]).children().remove();
+            // }
 
             if (theElement.childNodes[i].hasChildNodes()) { cleanElement(theElement.childNodes[i]); }
         }
@@ -882,7 +854,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
 
         theHTML = theHTML.replace('vs-repeat', ' ');
 
-        getPromptsWidget();
+        // getPromptsWidget();
 
         $scope.selectedDashboard.properties.designerHTML = theHTML;
 
@@ -1037,56 +1009,60 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         });
     };
 
-    $scope.getPrompts = function () {
-        $scope.prompts = [];
+    $scope.initPrompts = function () {
+        $scope.prompts = {};
 
-        for (var r in $scope.selectedDashboard.reports) {
-            for (var f in $scope.selectedDashboard.reports[r].query.groupFilters) {
-                if ($scope.selectedDashboard.reports[r].query.groupFilters[f].filterPrompt) {
-                    $scope.prompts.push($scope.selectedDashboard.reports[r].query.groupFilters[f]);
+        for (var report of $scope.selectedDashboard.reports) {
+            for (var filter of report.query.groupFilters) {
+                if (filter.filterPrompt) {
+                    var prompt = {};
+                    for (const i in filter) {
+                        prompt[i] = filter[i];
+                    }
+                    prompt.criterion = {};
+                    $scope.prompts[prompt.id + prompt.filterType] = prompt;
                 }
             }
         }
-        getPromptsWidget();
     };
 
     function clearPrompts () {
-        for (var r in $scope.selectedDashboard.reports) {
-            for (var f in $scope.selectedDashboard.reports[r].query.groupFilters) {
-                if ($scope.selectedDashboard.reports[r].query.groupFilters[f].filterPrompt) {
-                    var targetPrompt = document.getElementById('PROMPT_' + $scope.selectedDashboard.reports[r].query.groupFilters[f].elementID);
-
-                    $(targetPrompt).children().remove();
-                }
+        for (var i in $scope.prompts) {
+            for (var c in $scope.prompts[i].criterion) {
+                $scope.prompts[i].criterion[c] = undefined;
             }
         }
     }
 
-    function getPromptsWidget () {
-        for (var p in $scope.prompts) {
-            var thePrompt = $scope.prompts[p];
+    $scope.getPrompts = function () {
+        return $scope.prompts && Object.values($scope.prompts);
+    };
 
-            var targetPrompt = document.getElementById('PROMPT_' + thePrompt.elementID);
+    // function getPromptsWidget () {
+    //     for (var p in $scope.prompts) {
+    //         var thePrompt = $scope.prompts[p];
 
-            if (typeof targetPrompt !== 'undefined') {
-                if (typeof thePrompt.name === 'undefined') {
-                    thePrompt.name = thePrompt.collectionID.toLowerCase() + '_' + thePrompt.elementName;
-                }
+    //         var targetPrompt = document.getElementById('PROMPT_' + thePrompt.elementID);
 
-                $(targetPrompt).children().remove();
-                var html = '<nd-prompt  filter="getFilter(' + "'" + thePrompt.elementID + "'" + ')"  element-id="' + thePrompt.elementID + '" label="' + thePrompt.objectLabel + '" description="' + thePrompt.promptInstructions + '" value-field="' + thePrompt.name + '" show-field="' + thePrompt.name + '" selected-value="' + thePrompt.filterText1 + '" prompts="prompts" on-change="promptChanged" after-get-values="afterPromptGetValues" ng-model="lastPromptSelectedValue"></nd-prompt>';
+    //         if (typeof targetPrompt !== 'undefined') {
+    //             if (typeof thePrompt.name === 'undefined') {
+    //                 thePrompt.name = thePrompt.collectionID.toLowerCase() + '_' + thePrompt.elementName;
+    //             }
 
-                var $div = $(html);
-                $(targetPrompt).append($div);
-                angular.element(document).injector().invoke(function ($compile) {
-                    var scope = angular.element($div).scope();
-                    $compile($div)(scope);
-                });
-            } else {
-                noty({text: 'No target prompt found', timeout: 2000, type: 'error'});
-            }
-        }
-    }
+    //             $(targetPrompt).children().remove();
+    //             var html = '<nd-prompt  filter="getFilter(' + "'" + thePrompt.elementID + "'" + ')"  element-id="' + thePrompt.elementID + '" label="' + thePrompt.objectLabel + '" description="' + thePrompt.promptInstructions + '" value-field="' + thePrompt.name + '" show-field="' + thePrompt.name + '" selected-value="' + thePrompt.filterText1 + '" prompts="prompts" on-change="promptChanged" after-get-values="afterPromptGetValues" ng-model="lastPromptSelectedValue"></nd-prompt>';
+
+    //             var $div = $(html);
+    //             $(targetPrompt).append($div);
+    //             angular.element(document).injector().invoke(function ($compile) {
+    //                 var scope = angular.element($div).scope();
+    //                 $compile($div)(scope);
+    //             });
+    //         } else {
+    //             noty({text: 'No target prompt found', timeout: 2000, type: 'error'});
+    //         }
+    //     }
+    // }
 
     $scope.getReportColumnDefs = function (reportID) {
         for (var i in $scope.selectedDashboard.reports) {

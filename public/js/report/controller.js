@@ -6,7 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
-app.controller('reportCtrl', function ($scope, connection, $compile, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, c3Charts, reportModel, widgetsCommon, $location, PagerService) {
+app.controller('reportCtrl', function ($scope, connection, $compile, reportService, queryModel, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, c3Charts,
+    reportModel, widgetsCommon, $location, PagerService) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dateModal = 'partials/report/modals/dateModal.html';
     $scope.linkModal = 'partials/report/modals/linkModal.html';
@@ -14,10 +15,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.publishModal = 'partials/report/modals/publishModal.html';
     $scope.columnFormatModal = 'partials/report/modals/columnFormatModal.html';
     $scope.columnSignalsModal = 'partials/report/modals/columnSignalsModal.html';
-    $scope.filterPromptModal = 'partials/report/modals/filter-prompt-modal.html';
     $scope.dropArea = 'partials/report/partials/drop-area.html';
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
     $scope.dashListModal = 'partials/report/modals/dashboardListModal.html';
+    $scope.filterPromptModal = 'partials/report/modals/filter-prompt-modal.html';
     $scope.settingsTemplate = 'partials/widgets/common.html';
     $scope.tabs = {selected: 'elements'};
 
@@ -53,7 +54,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.layers = [];
     $scope.mode = 'preview';
     $scope.isForDash = false;
-    $scope.showPrompts = true;
     $scope.pager = {};
 
     $scope.selectedRecordLimit = { value: 500 };
@@ -80,14 +80,14 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
     $scope.initReportView = async function () {
         $scope.selectedReport = await reportModel.getReportDefinition($routeParams.reportID, false);
+        $scope.initPrompts();
         $scope.$digest();
-        $scope.$broadcast('repaint', {fetchData: true});
+        $scope.repaintWithPrompts();
         $scope.mode = 'view';
     };
 
     $scope.initReportEdit = async function () {
         if (/dashboards/.test($location.path())) {
-            console.log('no need to init');
             return;
         }
 
@@ -228,12 +228,39 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.pager = PagerService.GetPager($scope.reports.items.length, data.page, 10, data.pages);
     };
 
+    $scope.initPrompts = function () {
+        $scope.prompts = {};
+
+        for (var filter of $scope.selectedReport.query.groupFilters) {
+            if (filter.filterPrompt) {
+                var prompt = {};
+                for (const i in filter) {
+                    prompt[i] = filter[i];
+                }
+                prompt.criterion = {};
+                $scope.prompts[prompt.id + prompt.filterType] = prompt;
+            }
+        }
+    };
+
     /*
     * Getters and setters
     */
 
+    $scope.repaintWithPrompts = function () {
+        var filterCriteria = {};
+        for (const i in $scope.prompts) {
+            filterCriteria[i] = $scope.prompts[i].criterion;
+        }
+
+        $scope.$broadcast('repaint', {
+            fetchData: true,
+            filterCriteria: filterCriteria
+        });
+    };
+
     $scope.getPrompts = function () {
-        if ($scope.selectedReport.query) { return $scope.selectedReport.query.groupFilters; };
+        return $scope.prompts && Object.values($scope.prompts);
     };
 
     $scope.getSQLPanel = function () {
@@ -404,6 +431,16 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $('#publishModal').modal('hide');
     };
 
+    $scope.showFilterModal = function (filter) {
+        $scope.selectedFilter = filter;
+        $('#filterPromptsModal').modal('show');
+    };
+
+    $scope.confirmFilterModal = function () {
+        $('#filterPromptsModal').modal('hide');
+        $scope.selectedFilter.filterPrompt = !$scope.selectedFilter.filterPrompt;
+    };
+
     /*
     *   Report edition
     */
@@ -420,6 +457,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             selectedRecordLimit: $scope.selectedRecordLimit.value
         };
 
+        $scope.$broadcast('updateFilters');
         $scope.$broadcast('showLoadingMessage', 'Fetching data ...');
 
         const result = await reportModel.fetchData($scope.selectedReport.query, params);
@@ -439,6 +477,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.onDropOnFilter = function (data, event, type, group) {
         var item = data['json/custom-object'];
         event.stopPropagation();
+        item.criterion = {
+            text1: '',
+            text2: '',
+            textList: []
+        };
         $scope.onDropField(item, 'filter');
     };
 
@@ -623,25 +666,8 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $('#' + element).css('height', height);
     };
 
-    $scope.setFilterPrompt = function (filter) {
-        $('#filterPromptsModal').modal('hide');
-        if (filter.filterPrompt) {
-            filter.filterPrompt = false;
-        } else { filter.filterPrompt = true; }
-    };
-
     $scope.getButtonFilterPromptMessage = function (filter) {
         if (filter.filterPrompt) { return 'Select to deactivate the runtime'; } else { return 'Make this filter appear in the report interface.'; }
-    };
-
-    $scope.filterPromptsClick = function (filter) {
-        $scope.selectedFilter = filter;
-        if (!$scope.selectedFilter.promptTitle || $scope.selectedFilter.promptTitle === '') { $scope.selectedFilter.promptTitle = $scope.selectedFilter.objectLabel; }
-        $('#filterPromptsModal').modal('show');
-    };
-
-    $scope.isfilterComplete = function (filter) {
-        return queryModel.isfilterComplete(filter);
     };
 
     $scope.changeReportType = function (newReportType) {

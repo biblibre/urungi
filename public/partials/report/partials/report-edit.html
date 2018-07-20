@@ -1,14 +1,8 @@
-
-
-
-<div ng-include src="filterPromptModal"></div>
-
 <div class="container-fluid" style="width:100%" ng-include src="dropArea" >
-
-
 
 </div>
 
+<div ng-include src="filterPromptModal"></div>
 
 <!--choose a widget to see your data-->
 <div id="reportType" class="container-fluid" ng-hide="queryID" style="width:100%">
@@ -44,7 +38,7 @@
     <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left:5px;">Push it to a Dashboard</button>
 </div>
 <div class="container-fluid" ng-show="sql && isForDash" style="width:100%">
-    <button class="btn btn-success pull-right"  style="margin-left:5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();">Push it to the Dashboard</button>
+    <button class="btn btn-success pull-right"  style="margin-left:5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();">Save</button>
 </div>
 
 
@@ -74,8 +68,6 @@
         </div>
     
 </div>
-
-<div ng-include src="promptsBlock" class=" prompts-block"></div>
 
 <div class="container-fluid" ng-if="gettingData == true">
     <h3><img src="/images/loader.gif" width="32px" height="32px"/>getting data ....</h3>

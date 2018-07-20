@@ -57,6 +57,14 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
             request.query.recordLimit = params.selectedRecordLimit;
         }
 
+        if (params.filterCriteria) {
+            for (const filter of request.query.groupFilters) {
+                if (params.filterCriteria[filter.id + filter.filterType]) {
+                    filter.criterion = params.filterCriteria[filter.id + filter.filterType];
+                }
+            }
+        }
+
         var result = await connection.get('/api/reports/get-data', request);
 
         if (result.result === 0) {
@@ -80,7 +88,6 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
     };
 
     function processDates (data) {
-        console.log(data);
         for (const item of data) {
             for (const key in item) {
                 if (typeof item[key] === 'string') {
@@ -245,7 +252,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
         if (obj == null || typeof obj !== 'object') return obj;
         var copy = obj.constructor();
         for (var attr in obj) {
-            if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
         }
         return copy;
     }
@@ -398,7 +405,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
     };
 
     this.getPromptHTML = function (prompt) {
-        var html = '<div id="PROMPT_' + prompt.elementID + '" page-block class="ndContainer" ndType="ndPrompt"><nd-prompt  filter="getFilter(' + "'" + prompt.elementID + "'" + ')" element-id="' + prompt.elementID + '" label="' + prompt.objectLabel + '" value-field="' + prompt.name + '" show-field="' + prompt.name + '" prompts="prompts" after-get-values="afterPromptGetValues" on-change="promptChanged" ng-model="lastPromptSelectedValue"></nd-prompt></div>';
+        var html = '<div id="PROMPT_' + prompt.promptID + '" page-block class="ndContainer" ndType="ndPrompt"><nd-prompt is-prompt="true" filter="prompts[\'' + prompt.promptID + '\']" on-change="promptChanged" ></nd-prompt></div>';
 
         return html;
     };

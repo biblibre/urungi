@@ -530,149 +530,157 @@ function getFilters (query, done) {
 function getFilterSQL (filter, isHaving) {
     var result = '';
 
-    if (((filter.filterText1 && filter.filterText1 !== '') || filter.filterType === 'notNull' || filter.filterType === 'null')) {
-        var filterValue = filter.filterText1;
-        var filterSecondValue = filter.filterText2;
-        let filterElementName;
-        if (!filter.aggregation) {
-            filterElementName = filter.collectionID + '.' + filter.elementName;
+    const numericalFilters = ['equal', 'diferentThan', 'biggerThan', 'notGreaterThan', 'biggerOrEqualThan', 'lessThan', 'lessOrEqualThan', 'between', 'notBetween'];
+
+    var filterValue = filter.criterion.text1;
+    var filterSecondValue = filter.criterion.text2;
+    var filterValueList = filter.criterion.textList;
+    let filterElementName;
+
+    if (!filter.aggregation) {
+        filterElementName = filter.collectionID + '.' + filter.elementName;
+    } else {
+        filterElementName = filter.aggregation + '(' + filter.collectionID + '.' + filter.elementName + ')';
+    }
+
+    if (filter.elementType === 'date' && (numericalFilters + ['in', 'notIn']).indexOf(filter.filterType) >= 0) {
+        return dateFilter(filterElementName, filter);
+    }
+
+    switch (filter.filterType) {
+    case 'null':
+    case 'notNull':
+        break;
+    case 'in':
+    case 'notIn':
+        if (!filterValueList.length) {
+            return '';
+        }
+        break;
+    case 'between':
+    case 'notBetween':
+        if (!(filterValue && filterSecondValue)) {
+            return '';
+        }
+        break;
+    default:
+        if (!filterValue) {
+            return '';
+        }
+    }
+
+    if (filter.elementType === 'number') {
+        if (filter.filterType !== 'in' && filter.filterType !== 'notIn') {
+            filterValue = Number(filterValue);
+        }
+    }
+
+    if (filter.elementType !== 'number' && numericalFilters.indexOf(filter.filterType) >= 0) {
+        filterValue = '\'' + filterValue + '\'';
+        if (filterSecondValue) {
+            filterSecondValue = '\'' + filterSecondValue + '\'';
+        }
+    }
+
+    switch (filter.filterType) {
+    case 'equal':
+        result = filterElementName + ' = ' + filterValue;
+        break;
+
+    case 'diferentThan' :
+        result = (filterElementName + ' <> ' + filterValue);
+        break;
+
+    case 'biggerThan':
+        result = (filterElementName + ' > ' + filterValue);
+        break;
+
+    case 'notGreaterThan':
+        result = (filterElementName + ' <= ' + filterValue);
+        break;
+
+    case 'biggerOrEqualThan':
+        result = (filterElementName + ' >= ' + filterValue);
+        break;
+
+    case 'lessThan':
+        result = (filterElementName + ' < ' + filterValue);
+        break;
+
+    case 'lessOrEqualThan':
+        result = (filterElementName + ' <= ' + filterValue);
+        break;
+
+    case 'between':
+        result = (filterElementName + ' BETWEEN ' + filterValue + ' AND ' + filter.filterText2);
+        break;
+
+    case 'notBetween':
+        result = (filterElementName + ' NOT BETWEEN ' + filterValue + ' AND ' + filter.filterText2);
+        break;
+
+    case 'contains':
+        result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '%\'');
+        break;
+
+    case 'notContains':
+        result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '%\'');
+        break;
+
+    case 'startWith':
+        result = (filterElementName + ' LIKE ' + '\'' + filterValue + '%\'');
+        break;
+
+    case 'notStartWith':
+        result = (filterElementName + ' NOT LIKE ' + '\'' + filterValue + '%\'');
+        break;
+
+    case 'endsWith':
+        result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '\'');
+        break;
+
+    case 'notEndsWith':
+        result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '\'');
+        break;
+
+    case 'like':
+        result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '%\'');
+        break;
+
+    case 'notLike':
+        result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '%\'');
+        break;
+
+    case 'null':
+        result = (filterElementName + ' IS NULL ');
+        break;
+
+    case 'notNull':
+        result = (filterElementName + ' IS NOT NULL ');
+        break;
+
+    case 'in':
+    case 'notIn':
+        let filterSTR = '';
+        for (const i in filterValueList) {
+            if (i !== '0') {
+                filterSTR += ', ';
+            }
+            if (filter.elementType === 'number') {
+                filterSTR += filterValueList[i];
+            } else {
+                filterSTR += "'" + filterValueList[i] + "'";
+            }
+        }
+        if (filter.filterType === 'in') {
+            result = (filterElementName + ' IN ' + '(' + filterSTR + ')');
         } else {
-            filterElementName = filter.aggregation + '(' + filter.collectionID + '.' + filter.elementName + ')';
+            result = (filterElementName + ' NOT IN ' + '(' + filterSTR + ')');
         }
+        break;
 
-        const numericalFilters = ['equal', 'diferentThan', 'biggerThan', 'notGreaterThan', 'biggerOrEqualThan', 'lessThan', 'lessOrEqualThan', 'between', 'notBetween'];
-
-        if (filter.elementType === 'number') {
-            if (filter.filterType !== 'in' && filter.filterType !== 'notIn') {
-                filterValue = Number(filterValue);
-            }
-        }
-
-        if (filter.elementType !== 'number' && numericalFilters.indexOf(filter.filterType) >= 0) {
-            filterValue = '\'' + filterValue + '\'';
-            if (filterSecondValue) {
-                filterSecondValue = '\'' + filterSecondValue + '\'';
-            }
-        }
-
-        if (filter.elementType === 'date' && (numericalFilters + ['in', 'notIn']).indexOf(filter.filterType) >= 0) {
-            return dateFilter(filterElementName, filterValue, filter);
-        }
-
-        switch (filter.filterType) {
-        case 'equal':
-            result = filterElementName + ' = ' + filterValue;
-            break;
-
-        case 'diferentThan' :
-            result = (filterElementName + ' <> ' + filterValue);
-            break;
-
-        case 'biggerThan':
-            result = (filterElementName + ' > ' + filterValue);
-            break;
-
-        case 'notGreaterThan':
-            result = (filterElementName + ' <= ' + filterValue);
-            break;
-
-        case 'biggerOrEqualThan':
-            result = (filterElementName + ' >= ' + filterValue);
-            break;
-
-        case 'lessThan':
-            result = (filterElementName + ' < ' + filterValue);
-            break;
-
-        case 'lessOrEqualThan':
-            result = (filterElementName + ' <= ' + filterValue);
-            break;
-
-        case 'between':
-            result = (filterElementName + ' BETWEEN ' + filterValue + ' AND ' + filter.filterText2);
-            break;
-
-        case 'notBetween':
-            result = (filterElementName + ' NOT BETWEEN ' + filterValue + ' AND ' + filter.filterText2);
-            break;
-
-        case 'contains':
-            result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '%\'');
-            break;
-
-        case 'notContains':
-            result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '%\'');
-            break;
-
-        case 'startWith':
-            result = (filterElementName + ' LIKE ' + '\'' + filterValue + '%\'');
-            break;
-
-        case 'notStartWith':
-            result = (filterElementName + ' NOT LIKE ' + '\'' + filterValue + '%\'');
-            break;
-
-        case 'endsWith':
-            result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '\'');
-            break;
-
-        case 'notEndsWith':
-            result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '\'');
-            break;
-
-        case 'like':
-            result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '%\'');
-            break;
-
-        case 'notLike':
-            result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '%\'');
-            break;
-
-        case 'null':
-            result = (filterElementName + ' IS NULL ');
-            break;
-
-        case 'notNull':
-            result = (filterElementName + ' IS NOT NULL ');
-            break;
-
-        case 'in':
-            if (filter.elementType === 'number') {
-                result = (filterElementName + ' IN ' + '(' + filterValue.split(';') + ')');
-            } else {
-                const theSplit = filterValue.split(';');
-                let filterSTR = '';
-                for (const s in theSplit) {
-                    if (s === 0) {
-                        filterSTR += "'" + theSplit[s] + "'";
-                    } else {
-                        filterSTR += ",'" + theSplit[s] + "'";
-                    }
-                }
-                result = (filterElementName + ' IN ' + '(' + filterSTR + ')');
-            }
-            break;
-
-        case 'notIn':
-            if (filter.elementType === 'number') {
-                result = (filterElementName + ' NOT IN ' + '(' + String(filterValue).split(';') + ')');
-            } else {
-                const theSplit = filterValue.split(';');
-                let filterSTR = '';
-                for (const s in theSplit) {
-                    if (s === 0) {
-                        filterSTR += "'" + theSplit[s] + "'";
-                    } else {
-                        filterSTR += ",'" + theSplit[s] + "'";
-                    }
-                }
-                result = (filterElementName + ' NOT IN ' + '(' + filterSTR + ')');
-            }
-            break;
-
-        default:
-            break;
-        }
+    default:
+        break;
     }
 
     return result;
@@ -724,7 +732,7 @@ function pad (num, size) {
     return s;
 }
 
-function dateFilter (filterElementName, filterValue, filter) {
+function dateFilter (filterElementName, filter) {
     // NOTE:This is not valid for date-time values... the equal always take the whole day without taking care about the time
 
     var today = new Date();
@@ -732,169 +740,162 @@ function dateFilter (filterElementName, filterValue, filter) {
     var month = pad(today.getMonth() + 1, 2);
     var day = pad(today.getDate(), 2);
 
-    var found = false;
-
     let firstDate;
     let lastDate;
-    if (filterValue === '#WST-TODAY#') {
-        firstDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
-        const tomorrow = new Date(today);
-        tomorrow.setDate(today.getDate() + 1);
-        const year1 = tomorrow.getFullYear();
-        const month1 = pad(tomorrow.getMonth() + 1, 2);
-        const day1 = pad(tomorrow.getDate(), 2);
 
-        lastDate = new Date(year1 + '-' + month1 + '-' + day1 + 'T00:00:00.000Z');
-        found = true;
-    }
+    const patterns = [];
 
-    if (filterValue === '#WST-YESTERDAY#') {
-        lastDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-        const year1 = yesterday.getFullYear();
-        const month1 = pad(yesterday.getMonth() + 1, 2);
-        const day1 = pad(yesterday.getDate(), 2);
+    if (patterns.indexOf(filter.filterType) >= 0) {
+        let year1;
+        let month1;
+        let day1;
+        let curr;
+        let first;
+        let last;
+        let lwday;
 
-        firstDate = new Date(year1 + '-' + month1 + '-' + day1 + 'T00:00:00.000Z');
-        found = true;
-    }
+        switch (filter.criterion.datePattern) {
+        case '#WST-TODAY#':
+            firstDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            year1 = tomorrow.getFullYear();
+            month1 = pad(tomorrow.getMonth() + 1, 2);
+            day1 = pad(tomorrow.getDate(), 2);
 
-    if (filterValue === '#WST-THISWEEK#') { // TODO: first day monday instead sunday
-        const curr = new Date(); // get current date
-        curr.setHours(0, 0, 0, 0);
-        const first = curr.getDate() - (curr.getDay() - 1); // First day is the day of the month - the day of the week
-        const last = first + 7; // last day is the first day + 6 one more day 7 because is a less than
+            lastDate = new Date(year1 + '-' + month1 + '-' + day1 + 'T00:00:00.000Z');
+            break;
 
-        firstDate = new Date(curr.setDate(first));
-        lastDate = new Date(curr.setDate(last));
-        found = true;
-    }
+        case '#WST-YESTERDAY#':
+            lastDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            year1 = yesterday.getFullYear();
+            month1 = pad(yesterday.getMonth() + 1, 2);
+            day1 = pad(yesterday.getDate(), 2);
 
-    if (filterValue === '#WST-LASTWEEK#') { // TODO: first day monday instead sunday
-        const curr = new Date(); // get current date
-        curr.setHours(0, 0, 0, 0);
-        const lwday = new Date(curr);
-        lwday.setDate(curr.getDate() - 7);
+            firstDate = new Date(year1 + '-' + month1 + '-' + day1 + 'T00:00:00.000Z');
+            break;
 
-        const first = lwday.getDate() - (lwday.getDay() - 1); // First day is the day of the month - the day of the week
-        const last = first + 7; // last day is the first day + 6 one more day 7 because is a less than
+        case '#WST-THISWEEK#': // TODO: first day monday instead sunday
+            curr = new Date(); // get current date
+            curr.setHours(0, 0, 0, 0);
+            first = curr.getDate() - (curr.getDay() - 1); // First day is the day of the month - the day of the week
+            last = first + 7; // last day is the first day + 6 one more day 7 because is a less than
 
-        firstDate = new Date(curr.setDate(first));
-        lastDate = new Date(curr.setDate(last));
-        found = true;
-    }
+            firstDate = new Date(curr.setDate(first));
+            lastDate = new Date(curr.setDate(last));
+            break;
 
-    if (filterValue === '#WST-THISMONTH#') {
-        firstDate = new Date(year + '-' + month + '-01T00:00:00.000Z');
+        case '#WST-LASTWEEK#': // TODO: first day monday instead sunday
+            curr = new Date(); // get current date
+            curr.setHours(0, 0, 0, 0);
+            lwday = new Date(curr);
+            lwday.setDate(curr.getDate() - 7);
 
-        if (month === 12) {
+            first = lwday.getDate() - (lwday.getDay() - 1); // First day is the day of the month - the day of the week
+            last = first + 7; // last day is the first day + 6 one more day 7 because is a less than
+
+            firstDate = new Date(curr.setDate(first));
+            lastDate = new Date(curr.setDate(last));
+            break;
+
+        case '#WST-THISMONTH#':
+            firstDate = new Date(year + '-' + month + '-01T00:00:00.000Z');
+
+            if (month === 12) {
+                lastDate = new Date((year + 1) + '-01-01T00:00:00.000Z');
+            } else {
+                month1 = pad(today.getMonth() + 2, 2);
+                lastDate = new Date(year + '-' + month1 + '-01T00:00:00.000Z');
+            }
+            break;
+
+        case '#WST-LASTMONTH#':
+            if (month === 1) {
+                firstDate = new Date((year - 1) + '-12-01T00:00:00.000Z');
+            } else {
+                month1 = pad(today.getMonth(), 2);
+                firstDate = new Date(year + '-' + month1 + '-01T00:00:00.000Z');
+            }
+
+            lastDate = new Date(year + '-' + month + '-01T00:00:00.000Z');
+            break;
+
+        case '#WST-THISYEAR#':
+            firstDate = new Date(year + '-01-01T00:00:00.000Z');
             lastDate = new Date((year + 1) + '-01-01T00:00:00.000Z');
-        } else {
-            const month1 = pad(today.getMonth() + 2, 2);
-            lastDate = new Date(year + '-' + month1 + '-01T00:00:00.000Z');
+            break;
+
+        case '#WST-LASTYEAR#':
+            firstDate = new Date((year - 1) + '-01-01T00:00:00.000Z');
+            lastDate = new Date((year) + '-01-01T00:00:00.000Z');
+            break;
+
+        case '#WST-FIRSTQUARTER#':
+            firstDate = new Date(year + '-01-01T00:00:00.000Z');
+            lastDate = new Date(year + '-04-01T00:00:00.000Z');
+            break;
+
+        case '#WST-SECONDQUARTER#':
+            firstDate = new Date(year + '-04-01T00:00:00.000Z');
+            lastDate = new Date(year + '-07-01T00:00:00.000Z');
+            break;
+
+        case '#WST-THIRDQUARTER#':
+            firstDate = new Date(year + '-07-01T00:00:00.000Z');
+            lastDate = new Date(year + '-10-01T00:00:00.000Z');
+            break;
+
+        case '#WST-FOURTHQUARTER#':
+            firstDate = new Date(year + '-10-01T00:00:00.000Z');
+            lastDate = new Date((year + 1) + '-01-01T00:00:00.000Z');
+            break;
+
+        case '#WST-FIRSTSEMESTER#':
+            firstDate = new Date(year + '-01-01T00:00:00.000Z');
+            lastDate = new Date(year + '-07-01T00:00:00.000Z');
+            break;
+
+        case '#WST-SECONDSEMESTER#':
+            firstDate = new Date(year + '-07-01T00:00:00.000Z');
+            lastDate = new Date((year + 1) + '-01-01T00:00:00.000Z');
+            break;
+
+        case '#WST-LYFIRSTQUARTER#':
+            firstDate = new Date((year - 1) + '-01-01T00:00:00.000Z');
+            lastDate = new Date((year - 1) + '-04-01T00:00:00.000Z');
+            break;
+
+        case '#WST-LYSECONDQUARTER#':
+            firstDate = new Date((year - 1) + '-04-01T00:00:00.000Z');
+            lastDate = new Date((year - 1) + '-07-01T00:00:00.000Z');
+            break;
+
+        case '#WST-LYTHIRDQUARTER#':
+            firstDate = new Date((year - 1) + '-07-01T00:00:00.000Z');
+            lastDate = new Date((year - 1) + '-10-01T00:00:00.000Z');
+            break;
+
+        case '#WST-LYFOURTHQUARTER#':
+            firstDate = new Date((year - 1) + '-10-01T00:00:00.000Z');
+            lastDate = new Date(year + '-01-01T00:00:00.000Z');
+            break;
+
+        case '#WST-LYFIRSTSEMESTER#':
+            firstDate = new Date((year - 1) + '-01-01T00:00:00.000Z');
+            lastDate = new Date((year - 1) + '-07-01T00:00:00.000Z');
+            break;
+
+        case '#WST-LYSECONDSEMESTER#':
+            firstDate = new Date((year - 1) + '-07-01T00:00:00.000Z');
+            lastDate = new Date(year + '-01-01T00:00:00.000Z');
+            break;
+
+        default:
+            return '';
         }
-        found = true;
-    }
 
-    if (filterValue === '#WST-LASTMONTH#') {
-        if (month === 1) {
-            firstDate = new Date((year - 1) + '-12-01T00:00:00.000Z');
-        } else {
-            const month1 = pad(today.getMonth(), 2);
-            firstDate = new Date(year + '-' + month1 + '-01T00:00:00.000Z');
-        }
-
-        lastDate = new Date(year + '-' + month + '-01T00:00:00.000Z');
-        found = true;
-    }
-
-    if (filterValue === '#WST-THISYEAR#') {
-        firstDate = new Date(year + '-01-01T00:00:00.000Z');
-        lastDate = new Date((year + 1) + '-01-01T00:00:00.000Z');
-        found = true;
-    }
-
-    if (filterValue === '#WST-LASTYEAR#') {
-        firstDate = new Date((year - 1) + '-01-01T00:00:00.000Z');
-        lastDate = new Date((year) + '-01-01T00:00:00.000Z');
-        found = true;
-    }
-    if (filterValue === '#WST-FIRSTQUARTER#') {
-        firstDate = new Date(year + '-01-01T00:00:00.000Z');
-        lastDate = new Date(year + '-04-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-    if (filterValue === '#WST-SECONDQUARTER#') {
-        firstDate = new Date(year + '-04-01T00:00:00.000Z');
-        lastDate = new Date(year + '-07-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-    if (filterValue === '#WST-THIRDQUARTER#') {
-        firstDate = new Date(year + '-07-01T00:00:00.000Z');
-        lastDate = new Date(year + '-10-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-    if (filterValue === '#WST-FOURTHQUARTER#') {
-        firstDate = new Date(year + '-10-01T00:00:00.000Z');
-        lastDate = new Date((year + 1) + '-01-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-    if (filterValue === '#WST-FIRSTSEMESTER#') {
-        firstDate = new Date(year + '-01-01T00:00:00.000Z');
-        lastDate = new Date(year + '-07-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-    if (filterValue === '#WST-SECONDSEMESTER#') {
-        firstDate = new Date(year + '-07-01T00:00:00.000Z');
-        lastDate = new Date((year + 1) + '-01-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-    if (filterValue === '#WST-LYFIRSTQUARTER#') {
-        firstDate = new Date((year - 1) + '-01-01T00:00:00.000Z');
-        lastDate = new Date((year - 1) + '-04-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-    if (filterValue === '#WST-LYSECONDQUARTER#') {
-        firstDate = new Date((year - 1) + '-04-01T00:00:00.000Z');
-        lastDate = new Date((year - 1) + '-07-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-    if (filterValue === '#WST-LYTHIRDQUARTER#') {
-        firstDate = new Date((year - 1) + '-07-01T00:00:00.000Z');
-        lastDate = new Date((year - 1) + '-10-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-    if (filterValue === '#WST-LYFOURTHQUARTER#') {
-        firstDate = new Date((year - 1) + '-10-01T00:00:00.000Z');
-        lastDate = new Date(year + '-01-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-    if (filterValue === '#WST-LYFIRSTSEMESTER#') {
-        firstDate = new Date((year - 1) + '-01-01T00:00:00.000Z');
-        lastDate = new Date((year - 1) + '-07-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-
-    if (filterValue === '#WST-LYSECONDSEMESTER#') {
-        firstDate = new Date((year - 1) + '-07-01T00:00:00.000Z');
-        lastDate = new Date(year + '-01-01T00:00:00.000Z');
-        found = true;
-        // return {$gte: firstDate, $lt: lastDate};
-    }
-
-    if (found === true) {
         const fyear = firstDate.getFullYear();
         const fmonth = pad(firstDate.getMonth() + 1, 2);
         const fday = pad(firstDate.getDate(), 2);
@@ -905,19 +906,27 @@ function dateFilter (filterElementName, filterValue, filter) {
         const queryFirstDate = fyear + '/' + fmonth + '/' + fday;
         const queryLastDate = lyear + '/' + lmonth + '/' + lday;
 
-        if (filter.filterType === 'equal-pattern') { return '(' + filterElementName + " >= '" + queryFirstDate + "' AND " + filterElementName + " < '" + queryLastDate + "')"; }
+        switch (filter.filterType) {
+        case 'equal-pattern':
+            return '(' + filterElementName + " >= '" + queryFirstDate + "' AND " + filterElementName + " < '" + queryLastDate + "')";
 
-        if (filter.filterType === 'diferentThan-pattern') { return '(' + filterElementName + " < '" + queryFirstDate + "' OR " + filterElementName + " >= '" + queryLastDate + "')"; }
+        case 'diferentThan-pattern':
+            return '(' + filterElementName + " < '" + queryFirstDate + "' OR " + filterElementName + " >= '" + queryLastDate + "')";
 
-        if (filter.filterType === 'biggerThan-pattern') { return '(' + filterElementName + " > '" + queryLastDate + "')"; }
+        case 'biggerThan-pattern':
+            return '(' + filterElementName + " > '" + queryLastDate + "')";
 
-        if (filter.filterType === 'biggerOrEqualThan-pattern') { return '(' + filterElementName + " >= '" + queryFirstDate + "')"; }
+        case 'biggerOrEqualThan-pattern':
+            return '(' + filterElementName + " >= '" + queryFirstDate + "')";
 
-        if (filter.filterType === 'lessThan-pattern') { return '(' + filterElementName + " < '" + queryFirstDate + "')"; }
+        case 'lessThan-pattern':
+            return '(' + filterElementName + " < '" + queryFirstDate + "')";
 
-        if (filter.filterType === 'lessOrEqualThan-pattern') { return '(' + filterElementName + " <= '" + queryLastDate + "')"; }
+        case 'lessOrEqualThan-pattern':
+            return '(' + filterElementName + " <= '" + queryLastDate + "')";
+        }
     } else {
-        const searchDate = new Date(filterValue);
+        const searchDate = new Date(filter.criterion.date1);
         const theNextDay = new Date(searchDate);
         theNextDay.setDate(searchDate.getDate() + 1);
         const qyear = searchDate.getFullYear();
@@ -929,8 +938,8 @@ function dateFilter (filterElementName, filterValue, filter) {
         const qday2 = pad(theNextDay.getDate(), 2);
 
         let queryLastDate;
-        if (filter.filterText2) {
-            lastDate = new Date(filter.filterText2);
+        if (filter.criterion.date2) {
+            lastDate = new Date(filter.criterion.filterText2);
             const qlyear = lastDate.getFullYear();
             const qlmonth = pad(lastDate.getMonth() + 1, 2);
             const qlday = pad(lastDate.getDate(), 2);
@@ -941,50 +950,41 @@ function dateFilter (filterElementName, filterValue, filter) {
 
         const querySearchDate2 = qyear2 + '/' + qmonth2 + '/' + qday2;
 
-        if (filter.filterType === 'equal') {
-            // return filterElementName + " = '"+ querySearchDate+"'";
+        switch (filter.filterType) {
+        case 'equal':
             return '(' + filterElementName + " >= '" + querySearchDate + "' AND " + filterElementName + " < '" + querySearchDate2 + "')";
-        }
 
-        if (filter.filterType === 'diferentThan' && found === false) {
-            // return filterElementName + " <> '"+ querySearchDate+"'";
+        case 'diferentThan':
             return '(' + filterElementName + " < '" + querySearchDate + "' OR " + filterElementName + " >= '" + querySearchDate2 + "')";
-        }
 
-        if (filter.filterType === 'biggerThan') {
+        case 'biggerThan':
             return filterElementName + " > '" + querySearchDate + "'";
-        }
 
-        if (filter.filterType === 'notGreaterThan') {
+        case 'notGreaterThan':
             return filterElementName + " <= '" + querySearchDate + "'";
-        }
 
-        if (filter.filterType === 'biggerOrEqualThan') {
+        case 'biggerOrEqualThan':
             return filterElementName + " >= '" + querySearchDate + "'";
-        }
 
-        if (filter.filterType === 'lessThan') {
+        case 'lessThan':
             return filterElementName + " < '" + querySearchDate + "'";
-        }
 
-        if (filter.filterType === 'lessOrEqualThan') {
+        case 'lessOrEqualThan':
             return filterElementName + " <= '" + querySearchDate + "'";
-        }
 
-        if (filter.filterType === 'between') {
+        case 'between':
             return filterElementName + " > '" + querySearchDate + "' AND " + filterElementName + " <= '" + queryLastDate + "'";
-        }
 
-        if (filter.filterType === 'notBetween') {
+        case 'notBetween':
             return filterElementName + " < '" + querySearchDate + "' OR " + filterElementName + " > '" + queryLastDate + "'";
-        }
 
-        if (filter.filterType === 'in' || filter.filterType === 'notIn') {
+        case 'in':
+        case 'notIn':
             var theFilter = filterElementName;
             if (filter.filterType === 'in') { theFilter = theFilter + ' IN ('; }
             if (filter.filterType === 'notIn') { theFilter = theFilter + ' NOT IN ('; }
 
-            var dates = String(filterValue).split(',');
+            var dates = filter.criterion.dateList;
             for (var d in dates) {
                 var theDate = new Date(dates[d]);
                 var Inyear = theDate.getFullYear();
@@ -995,8 +995,8 @@ function dateFilter (filterElementName, filterValue, filter) {
                 theFilter = theFilter + "'" + InquerySearchDate + "'";
                 if (d < dates.length - 1) { theFilter = theFilter + ', '; }
             }
-
-            return theFilter + ')';
         }
+
+        return theFilter + ')';
     }
 }

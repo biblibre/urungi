@@ -1,0 +1,148 @@
+
+<!-- Date -->
+<div class="form-group" ng-if="(filter.elementType == 'date' && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
+
+        <!--preformated date selector -->
+        <div class="input-group" dropdown ng-if="filter.filterType == 'equal-pattern' || filter.filterType == 'diferentThan-pattern' || filter.filterType == 'biggerThan-pattern' || filter.filterType == 'biggerOrEqualThan-pattern' || filter.filterType == 'lessThan-pattern' || filter.filterType == 'lessOrEqualThan-pattern'">
+                <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="criterion.label" ng-readonly="true">
+            <span class="input-group-btn" >
+                <span class="dropdown" >
+                    <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa-caret-down"></i>
+                    </button>
+                        <ul class="dropdown-menu shorter-menu" aria-labelledby="dropdownMenu4b" >
+                            <li ng-repeat="option in datePatternFilters"><a ng-click="setDatePatternFilterType(option);">{{option.label}}</a></li>
+
+                        </ul>
+                </span>
+            </span>
+            <span ng-if="filter.promptMandatory != true || !isPrompt" class="input-group-btn" >
+
+                    <button type="button" class="btn btn-white" ng-click="clearFilter()">
+                        <i class="fa-times"></i>
+                    </button>
+
+            </span>
+
+            </div>
+        <!-- date input -->
+        <div class="input-group" ng-if="(filter.elementType == 'date' && (filter.filterType == 'equal' || filter.filterType == 'diferentThan' || filter.filterType == 'biggerThan' || filter.filterType == 'biggerOrEqualThan' || filter.filterType == 'lessThan'  || filter.filterType == 'lessOrEqualThan' || filter.filterType == 'between'  || filter.filterType == 'notBetween'))" style="width:150px;">
+
+        <input type="text" class="form-control no-right-border form-focus-green" ng-model="criterion.date1 | date:'yyyy-MM-dd'" ng-readonly="true">
+            <span class="input-group-btn" >
+                <span class="dropdown" >
+                    <a class="btn btn-primary popover-primary ng-scope"  id="dropdown1" role="button" data-toggle="dropdown" data-target="#" ><i class="fa fa-calendar"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <datetimepicker ng-model='criterion.date1' data-on-set-time="onChange()" data-datetimepicker-config="{ dropdownSelector: '#dropdown1', startView:'day', minView:'day'  }"/>
+                    </ul>
+                </span>
+            </span>
+        </div>
+
+
+        <span ng-show="filter.filterType == 'in' || filter.filterType == 'notIn'">
+            <!--<span class="filter-in-list" ng-repeat="oneDate in filter.filterText1">
+                {{oneDate | date:'yyyy-MM-dd'}} <i class="fa fa-remove filter-in-list-remove hand-cursor" ng-click="removeItem(oneDate,filter.filterText1)"></i>
+            </span>-->
+
+        </span>
+
+
+        <!--between for date -->
+        <span class="filter-label-value" ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'" style="color:#0000FF;"> and </span>
+
+        <div class="input-group" ng-if="(filter.filterType == 'between' || filter.filterType == 'notBetween') && filter.elementType == 'date'" style="width:150px;">
+        <input type="text" class="form-control no-right-border form-focus-green" ng-model="criterion.date2 | date:'yyyy-MM-dd'" ng-readonly="true">
+            <span class="input-group-btn" >
+                <span class="dropdown" >
+                    <a class="btn btn-primary popover-primary ng-scope"  id="dropdown2" role="button" data-toggle="dropdown" data-target="#" ><i class="fa fa-calendar"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <datetimepicker ng-model="criterion.date2"  data-on-set-time="onChange()" data-datetimepicker-config="{ dropdownSelector: '#dropdown2', startView:'day', minView:'day'  }"/>
+                    </ul>
+                </span>
+            </span>
+        </div>
+    </div>
+    <!-- END Date -->
+
+<!--equal, in, etc ...-->
+
+    <span ng-if="filter.elementType !== 'date'" ng-init="update()">
+
+        <span class="input-group" dropdown 
+        ng-show="!(filter.filterType == 'null' || filter.filterType == 'notNull') && ( filter.elementType != 'array') && ( filter.elementType != 'date') && (filter.filterType != 'notIn') && (filter.filterType != 'in')">
+            
+            <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="criterion.text1" 
+            ng-change="inputChanged(filter)"  ng-required="filter.promptMandatory == true" style="height: 30px;border-right: 0px">
+            
+            <span class="input-group-btn" >
+                
+                <span class="dropdown" >
+                    <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
+                    style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" 
+                    tooltip="Click here to select a value" tooltip-placement="bottom">
+                        <i class="fa-caret-down"></i>
+                    </button>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu5b" >
+                        <li ng-repeat="value in values"><a ng-click="selectFirstValue(value)">{{value}}</a></li>
+                        <!-- <li ng-if="filter.promptMandatory != true">
+                        <a ng-click="clearFilter(filter)">Clear filter</a>
+                        </li> -->
+                    </ul>
+
+                </span>
+
+                <button type="button" ng-if="!( isPrompt && filter.promptMandatory )" class="btn btn-white" ng-click="clearFilter(filter)" style="padding: 5px;width: 21px;    background-color: #ccc;" tooltip="Click here to clear the selected value" tooltip-placement="bottom">
+                    <i class="fa-times"></i>
+                </button>
+
+            </span>
+            
+
+        </span>
+
+
+        <ui-select ng-show="(filter.filterType == 'notIn' || filter.filterType == 'in')" multiple  ng-model="criterion.textList" theme="bootstrap" ng-disabled="disabled" style="width: 300px;">
+                <ui-select-match placeholder="{{filter.promptTitle}}">{{$item}}</ui-select-match>
+                <ui-select-choices repeat="value in values | filter:$select.search">
+                    {{value}}
+                </ui-select-choices>
+        </ui-select>
+
+        <!--between-->
+
+        <span ng-show="filter.filterType == 'between' || filter.filterType == 'notBetween'">AND</span>
+
+        <span class="input-group" dropdown ng-show="filter.filterType == 'between' || filter.filterType == 'notBetween'">
+
+            <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="criterion.text2" 
+            ng-change="inputChanged(filter)"  ng-required="filter.promptMandatory == true" style="height: 30px;border-right: 0px">
+
+            <span class="input-group-btn" >
+                <span class="dropdown" >
+                    <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
+                    style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" 
+                    tooltip="Click here to select a value" tooltip-placement="bottom">
+                        <i class="fa-caret-down"></i>
+                    </button>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu5b" >
+                        <li ng-repeat="value in values"><a ng-click="selectSecondValue(value)">{{value}}</a></li>
+                        <li ng-if="filter.promptMandatory != true">
+                        <a ng-click="clearFilter(filter)">Clear filter</a>
+                        </li>
+                    </ul>
+
+                </span>
+
+                <button type="button" class="btn btn-white" ng-if="!( isPrompt && filter.promptMandatory )" ng-click="clearFilter(filter)" style="padding: 5px;width: 21px;    background-color: #ccc;" tooltip="Click here to clear the selected value" tooltip-placement="bottom">
+                    <i class="fa-times"></i>
+                </button>
+    
+            </span>
+            
+
+        </span>
+
+    </span>

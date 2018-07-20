@@ -45,7 +45,7 @@
 
     <div class="modal-footer ng-scope">
         <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-        <button ng-show="selectedFilter.filterPrompt == true" type="button" class="btn btn-danger"  ng-click="setFilterPrompt(selectedFilter)">Deactivate Filter</button>
-        <button ng-show="selectedFilter.filterPrompt == false" type="button" class="btn btn-info"  ng-click="setFilterPrompt(selectedFilter)">Activate Filter</button>
+        <button ng-show="selectedFilter.filterPrompt" type="button" class="btn btn-danger"  ng-click="confirmFilterModal()">Deactivate Filter</button>
+        <button ng-show="!selectedFilter.filterPrompt" type="button" class="btn btn-info"  ng-click="confirmFilterModal()">Activate Filter</button>
     </div>
 </nd-modal>
