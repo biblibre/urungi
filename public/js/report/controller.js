@@ -787,7 +787,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         for (const col of movedColumns) {
             const choice = $scope.autoChooseArea(col, true);
             col.zone = choice.zone;
-            queryModel.changeZone(col, choice.zone);
+            queryModel.updateColumnField(col, 'zone', choice.zone);
             choice.propertyBind.push(col);
             if (choice.forbidAggregation) {
                 $scope.aggregationChoosed(col, {name: 'Raw', value: 'raw'});
@@ -860,7 +860,14 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
     $scope.hideColumn = function (column, hidden) {
         column['hidden'] = hidden;
-        queryModel.hideColumn(column.elementID, hidden);
+        // queryModel.hideColumn(column.elementID, hidden);
+        queryModel.updateColumnField(column, 'hidden', hidden);
+    };
+
+    $scope.stackBars = function (column, stacked) {
+        column.doNotStack = !stacked;
+        queryModel.updateColumnField(column, 'doNotStack', !stacked);
+        c3Charts.changeStack($scope.selectedReport.properties.chart);
     };
 
     $scope.saveToExcel = function (reportHash) {

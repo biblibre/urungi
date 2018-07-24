@@ -14,6 +14,7 @@ app.directive('wstDropzone', function () {
             hideColumn: '=',
             setSortType: '=',
             changeAxis: '=',
+            stackBars: '=',
 
             zoneInfo: '=',
             removeToolTip: '='
