@@ -23,7 +23,14 @@
     overflow-x: hidden;
     /* background-color: #CCCCCC; */">
 
-    <div ng-include src="promptsBlock" class=" prompts-block" style="position:relative"></div>
+    <div id="promptsModal" ng-show="getPrompts().length  > 0" class=" prompts-block" style="position:relative">
+
+        <div class="container-fluid" ng-repeat="prompt in getPrompts()" style="padding-bottom: 5px; max-width: 800px">
+    
+            <nd-prompt is-prompt="true" filter="prompt" on-change="repaintWithPrompts"></nd-prompt>
+    
+        </div>
+    </div>
 
     <div report-view report="selectedReport" mode="mode" style="height:100%"></div>
     

@@ -12,7 +12,7 @@ app.directive('ndPrompt', function (queryModel, reportModel) {
             setPrompt: '='
         },
 
-        templateUrl: 'partials/prompts/promptsDirective.html',
+        templateUrl: 'partials/report/directives/promptsDirective.html',
 
         // append
         replace: true,
@@ -20,7 +20,7 @@ app.directive('ndPrompt', function (queryModel, reportModel) {
         restrict: 'E',
         // linking method
         link: function ($scope, element, attrs) {
-            $scope.criteriaInput = 'partials/prompts/criteriaInput.html';
+            $scope.criteriaInput = 'partials/report/directives/criteriaInput.html';
 
             $scope.criterion = $scope.filter.criterion;
 
