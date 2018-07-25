@@ -6,6 +6,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     $scope.elementModal = 'partials/layer/elementModal.html';
     $scope.statusInfoModal = 'partials/common/statusInfo.html';
     $scope.setupModal = 'partials/layer/setupModal.html';
+    $scope.addAllModal = 'partials/layer/addAllModal.html';
     $scope.ReadOnlyDataSourceSelector = false;
     $scope.items = [];
     $scope.pager = {};
@@ -878,6 +879,30 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         $scope.selectedElement = element;
         $scope.elementEditing = false;
         $('#elementModal').modal('show');
+    };
+
+    $scope.promptAddAll = function (collection) {
+        $scope.selectedCollection = collection;
+        $('#addAllModal').modal('show');
+    };
+
+    $scope.addAllElements = function () {
+        $('#addAllModal').modal('hide');
+        for (const el of $scope.selectedCollection.elements) {
+            if (!el.elementRole) {
+                el.elementRole = 'dimension';
+                $scope._Layer.objects.push(el);
+            }
+        }
+    };
+
+    $scope.allElementsAdded = function (collection) {
+        for (const el of collection.elements) {
+            if (!el.elementRole) {
+                return false;
+            }
+        }
+        return true;
     };
 
     $scope.editElement = function (element) {

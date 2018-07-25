@@ -234,13 +234,19 @@
 
                     <div id="{{collection.collectionID}}" class=" jtk-header " style="overflow: hidden;padding-left:2px" ng-click="selectCollection(collection,$event)">
 
-                        <table style="border: 0px;">
-                            <tr>
-                                <td class="jtk-field-icon" style="color:white;marging-left:2px;margin-right:2px;"><i ng-show="!element.elementRole" class="fa fa-database"></i></td>
+                        
+                        <div class="row">
+                            <span class="col-md-1 jtk-field-icon" style="color:white"><i ng-show="!element.elementRole" class="fa fa-database"></i></span>
 
-                                <td class="jtk-header-label"  style="overflow: hidden;padding-left:2px">{{collection.collectionName}}</td>
-                            </tr>
-                        </table>
+                            <span class="col-md-8 jtk-header-label"  style="overflow: hidden; text-align:left">{{collection.collectionName}}</span>
+
+                            <span class="col-md-2" >
+                                <i ng-hide="allElementsAdded(collection)" class="jtk-field-icon fa fa-plus-square" ng-click="promptAddAll(collection)" 
+                                tooltip="Add all" ></i>
+                                <i ng-show="allElementsAdded(collection)" class="jtk-field-selected fa fa-check-square" ></i>
+                            </span>
+                        </div>
+                        
                     </div>
 
 
@@ -286,4 +292,5 @@
 <!--<div ng-include src="datasetModal"></div>-->
 <div ng-include src="elementModal"></div>
 <div ng-include src="sqlModal"></div>
+<div ng-include src="addAllModal"></div>
 <!--<div ng-include src="setupModal"></div>-->
