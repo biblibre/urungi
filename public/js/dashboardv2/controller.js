@@ -1,4 +1,4 @@
-app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons, colors,
+app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons, colors,
     htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout, $rootScope, PagerService, gettext) {
     $scope.loadUserObjects();
 
@@ -86,146 +86,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     $scope.IntroOptions = {
         // IF width > 300 then you will face problems with mobile devices in responsive mode
         steps: [
-            {
-                element: '#parentIntro',
-                html: '<div><h3>' +
-                gettext('Dashboards') +
-                '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettext('In here you can create and execute dashboards like web pages.') +
-                '</span><br/><br/><span>' +
-                gettext('Define several reports using filters and dragging and dropping from different layers.') +
-                '</span><br/><br/><span>' +
-                gettext('After you define the report/s to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it.') +
-                '</span><br/><br/><span></span></div>',
-                width: '500px',
-                objectArea: false,
-                verticalAlign: 'top',
-                height: '300px'
-            },
-            {
-                element: '#newReportBtn',
-                html: '<div><h3>' +
-                gettext('New Dashboard') +
-                '</h3><span style="font-weight:bold;">' +
-                gettext('Click here to create a new dashboard.') +
-                '</span><br/><span></span></div>',
-                width: '300px',
-                height: '150px',
-                areaColor: 'transparent',
-                horizontalAlign: 'right',
-                areaLineColor: '#fff'
-            },
-            {
-                element: '#reportList',
-                html: '<div><h3>' +
-                gettext('Dashboards list') +
-                '</h3><span style="font-weight:bold;">' +
-                gettext('Here all your dashboards are listed.') +
-                '</span><br/><span>' +
-                gettext('Click over a dashboard\'s name to execute it.') +
-                '<br/><br/>' +
-                gettext('You can also modify or drop the dashboard, clicking into the modify or delete buttons.') +
-                '</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                verticalAlign: 'top',
-                height: '180px'
-
-            },
-            {
-                element: '#reportListItem',
-                html: '<div><h3>' +
-                gettext('Dashboard') +
-                '</h3><span style="font-weight:bold;">' +
-                gettext('This is one of your dashboards.') +
-                '</span><br/><span>' +
-                gettext('On every line (dashboard) you can edit or drop it. If the dashboard is published a green "published" label will be shown.') +
-                '</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#72A230',
-                height: '180px'
-
-            },
-            {
-                element: '#reportListItemName',
-                html: '<div><h3>' +
-                gettext('Dashboard name') +
-                '</h3><span style="font-weight:bold;">' +
-                gettext('The name for the dashboard.') +
-                '</span><br/><br/><span>' +
-                gettext('You can setup the name you want for your dashboard, but think about make it descriptive enought, and take care about not duplicating names across the company, specially if the dashboard is going to be published.') +
-                '</span><br/><br/><span>' +
-                gettext('You can click here to execute the dashboard.') +
-                '</span></div>',
-                width: '400px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                height: '250px'
-
-            },
-            {
-                element: '#reportListItemDetails',
-                html: '<div><h3>' +
-                gettext('Dashboard description') +
-                '</h3><span style="font-weight:bold;">' +
-                gettext('Use the description to give your users more information about the data or kind of data they will access using this dashboard.') +
-                '</span><br/><span></span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                height: '180px'
-
-            },
-            {
-                element: '#reportListItemEditBtn',
-                html: '<div><h3>' +
-                gettext('Dashboard edit') +
-                '</h3><span style="font-weight:bold;">' +
-                gettext('Click here to modify the dashboard.') +
-                '</span><br/><br/><span></span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                horizontalAlign: 'right',
-                height: '200px'
-
-            },
-            {
-                element: '#reportListItemDeleteBtn',
-                html: '<div><h3>' +
-                gettext('Dashboard delete') +
-                '</h3><span style="font-weight:bold;">' +
-                gettext('Click here to delete the dashboard.') +
-                '</span><br/><br/><span>' +
-                gettext('Once deleted the dashboard will not be recoverable again.') +
-                '</span><br/><br/><span>' +
-                gettext('Requires 2 step confirmation.') +
-                '</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                horizontalAlign: 'right',
-                height: '200px'
-
-            },
-            {
-                element: '#reportListItemPublished',
-                html: '<div><h3>' +
-                gettext('Dashboard published') +
-                '</h3><span style="font-weight:bold;">' +
-                gettext('This label indicates that this dashboard is public.') +
-                '</span><br/><br/><span>' +
-                gettext('If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard.') +
-                '</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                horizontalAlign: 'right',
-                height: '200px'
-
-            }
         ]
     };
 
@@ -251,91 +111,58 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     $scope.initForm = function () {
         $scope.mode = 'preview';
 
-        if ($routeParams.newDashboard === 'true') {
-            $scope.selectedDashboard = {dashboardName: 'New Dashboard', backgroundColor: '#999999', reports: [], items: [], properties: {}, dashboardType: 'DEFAULT'};
+        if (/new/.test($location.path())) {
             $scope.mode = 'add';
-        };
-        if ($routeParams.mode === 'edit') { // editing
-            if ($scope.dashboardID) {
-                $scope.mode = 'edit';
-
-                connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, {id: $scope.dashboardID}, function (data) {
-                    $scope.selectedDashboard = data.item;
-
-                    if ($scope.selectedDashboard.backgroundColor) { $('#designArea').css({'background-color': $scope.selectedDashboard.backgroundColor}); }
-
-                    if ($scope.selectedDashboard.backgroundImage && $scope.selectedDashboard.backgroundImage !== 'none') {
-                        $('#designArea').css({ 'background-image': "url('" + $scope.selectedDashboard.backgroundImage + "')" });
-                        $('#designArea').css({'-webkit-background-size': 'cover'});
-                        $('#designArea').css({'-moz-background-size': 'cover'});
-                        $('#designArea').css({'-o-background-size': 'cover'});
-                        $('#designArea').css({'background-size': 'cover'});
-                    }
-
-                    // getAllPageColumns();
-
-                    var $div = $($scope.selectedDashboard.properties.designerHTML);
-                    var el = angular.element(document.getElementById('designArea'));
-                    el.append($div);
-                    angular.element(document).injector().invoke(function ($compile) {
-                        $compile($div)($scope);
-                    });
-
-                    cleanAllSelected();
-
-                    $scope.initPrompts();
-
-                    repaintReports();
-                });
-            }
         }
 
-        if ($routeParams.mode === 'push') { // editing
-            if ($scope.dashboardID) {
-                if ($scope.dashboardID === 'new') {
-                    $scope.selectedDashboard = {dashboardName: 'New Dashboard', backgroundColor: '#999999', reports: [], items: [], properties: {}, dashboardType: 'DEFAULT'};
-                    $scope.mode = 'add';
+        if (/edit/.test($location.path())) {
+            $scope.mode = 'edit';
+        }
 
-                    var qstructure = reportService.getReport();
-                    qstructure.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
-                    qstructure.id = uuid2.newguid();
-                    $scope.selectedDashboard.reports.push(qstructure);
-                    $('modal-backdrop').remove();
-                } else {
-                    connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, {id: $scope.dashboardID}, function (data) {
-                        $scope.selectedDashboard = data.item;
-                        var qstructure = reportService.getReport();
-                        qstructure.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
-                        qstructure.id = uuid2.newguid();
-                        $scope.selectedDashboard.reports.push(qstructure);
+        if ($scope.mode === 'add') {
+            $scope.selectedDashboard = {
+                dashboardName: 'New Dashboard',
+                backgroundColor: '#999999',
+                reports: [],
+                items: [],
+                properties: {},
+                dashboardType: 'DEFAULT'
+            };
+        };
 
-                        if ($scope.selectedDashboard.backgroundColor) { $('#designArea').css({'background-color': $scope.selectedDashboard.backgroundColor}); }
-
-                        if ($scope.selectedDashboard.backgroundImage && $scope.selectedDashboard.backgroundImage !== 'none') {
-                            $('#designArea').css({ 'background-image': "url('" + $scope.selectedDashboard.backgroundImage + "')" });
-                            $('#designArea').css({'-webkit-background-size': 'cover'});
-                            $('#designArea').css({'-moz-background-size': 'cover'});
-                            $('#designArea').css({'-o-background-size': 'cover'});
-                            $('#designArea').css({'background-size': 'cover'});
-                        }
-
-                        // getAllPageColumns();
-
-                        var $div = $($scope.selectedDashboard.properties.designerHTML);
-                        var el = angular.element(document.getElementById('designArea'));
-                        el.append($div);
-                        angular.element(document).injector().invoke(function ($compile) {
-                            $compile($div)($scope);
-                        });
-
-                        cleanAllSelected();
-
-                        $scope.initPrompts();
-
-                        repaintReports();
-                    });
-                }
+        if ($scope.mode === 'edit') {
+            if (!$scope.dashboardID) {
+                noty({ text: 'Could not load dashboard : missing id', type: 'error', timeout: 4000 });
             }
+
+            connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, {id: $scope.dashboardID}, function (data) {
+                $scope.selectedDashboard = data.item;
+
+                if ($scope.selectedDashboard.backgroundColor) { $('#designArea').css({'background-color': $scope.selectedDashboard.backgroundColor}); }
+
+                if ($scope.selectedDashboard.backgroundImage && $scope.selectedDashboard.backgroundImage !== 'none') {
+                    $('#designArea').css({ 'background-image': "url('" + $scope.selectedDashboard.backgroundImage + "')" });
+                    $('#designArea').css({'-webkit-background-size': 'cover'});
+                    $('#designArea').css({'-moz-background-size': 'cover'});
+                    $('#designArea').css({'-o-background-size': 'cover'});
+                    $('#designArea').css({'background-size': 'cover'});
+                }
+
+                // getAllPageColumns();
+
+                var $div = $($scope.selectedDashboard.properties.designerHTML);
+                var el = angular.element(document.getElementById('designArea'));
+                el.append($div);
+                angular.element(document).injector().invoke(function ($compile) {
+                    $compile($div)($scope);
+                });
+
+                cleanAllSelected();
+
+                $scope.initPrompts();
+
+                repaintReports();
+            });
         }
     };
 

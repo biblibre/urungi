@@ -15,6 +15,7 @@ var DashboardsSchema = new mongoose.Schema({
     parentFolder: {type: String},
     isPublic: {type: Boolean},
     createdBy: {type: String},
+    author: {type: String},
     createdOn: {type: Date}
 }, { collection: 'wst_Dashboards' });
 

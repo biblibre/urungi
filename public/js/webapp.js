@@ -21,74 +21,29 @@ var app = angular.module('WideStage', [
             controller: 'homeCtrl'
         });
 
-        $routeProvider.when('/dashboards', {
-            templateUrl: 'partials/dashboard/list.html',
-            controller: 'dashBoardCtrl'
+        $routeProvider.when('/dashboards/list/', {
+            templateUrl: 'partials/menu-list/dashboardList.html',
+            controller: 'dashboardListCtrl'
         });
 
-        $routeProvider.when('/dashboard/:extra', {
-            templateUrl: 'partials/dashboard/list.html',
-            controller: 'dashBoardCtrl'
-        });
-
-        $routeProvider.when('/dashboards/:dashboardID', {
-            templateUrl: 'partials/dashboard/view.html',
-            controller: 'dashBoardCtrl'
-        });
-
-        $routeProvider.when('/dashboards/:dashboardID/:elementID/:elementValue', {
-            templateUrl: 'partials/dashboard/view.html',
-            controller: 'dashBoardCtrl'
+        $routeProvider.when('/dashboards/view/:dashboardID', {
+            templateUrl: 'partials/dashboardv2/view.html',
+            controller: 'dashBoardv2Ctrl'
         });
 
         $routeProvider.when('/dashboards/new/:newDashboard/', {
-            templateUrl: 'partials/dashboard/edit.html',
-            controller: 'dashBoardCtrl'
+            templateUrl: 'partials/dashboardv2/edit.html',
+            controller: 'dashBoardv2Ctrl'
         });
+
         $routeProvider.when('/dashboards/edit/:dashboardID/', {
-            templateUrl: 'partials/dashboard/edit.html',
-            controller: 'dashBoardCtrl'
-        });
-
-        // dashboards v2
-
-        $routeProvider.when('/dashboardv2', {
-            templateUrl: 'partials/dashboardv2/list.html',
-            controller: 'dashBoardv2Ctrl'
-        });
-        $routeProvider.when('/dashboardv2/:extra', {
-            templateUrl: 'partials/dashboardv2/list.html',
-            controller: 'dashBoardv2Ctrl'
-        });
-
-        $routeProvider.when('/dashboardsv2/:dashboardID', {
-            templateUrl: 'partials/dashboardv2/view.html',
-            controller: 'dashBoardv2Ctrl'
-        });
-
-        $routeProvider.when('/dashboardsv2/:dashboardID/:elementID/:elementValue', {
-            templateUrl: 'partials/dashboardv2/view.html',
-            controller: 'dashBoardv2Ctrl'
-        });
-
-        $routeProvider.when('/dashboardsv2/new/:newDashboard/', {
             templateUrl: 'partials/dashboardv2/edit.html',
             controller: 'dashBoardv2Ctrl'
         });
-        /* $routeProvider.when('/dashboardsv2/edit/:dashboardID/', {
-            templateUrl: 'partials/dashboardv2/edit.html',
-            controller: 'dashBoardv2Ctrl'
-        }); */
-        $routeProvider.when('/dashboardsv2/:mode/:dashboardID/', {
-            templateUrl: 'partials/dashboardv2/edit.html',
-            controller: 'dashBoardv2Ctrl'
-        });
-
-        // reports
 
         $routeProvider.when('/reports', {
-            templateUrl: 'partials/report/list.html',
-            controller: 'reportCtrl'
+            templateUrl: 'partials/menu-list/reportList.html',
+            controller: 'reportListCtrl'
         });
         // $routeProvider.when('/report/:extra', {
         //     templateUrl: 'partials/report/list.html',
@@ -153,22 +108,12 @@ var app = angular.module('WideStage', [
         // layers
 
         $routeProvider.when('/layers', {
-            templateUrl: 'partials/layer/list.html',
-            controller: 'layerCtrl'
-        });
-
-        $routeProvider.when('/layer/:extra', {
-            templateUrl: 'partials/layer/list.html',
-            controller: 'layerCtrl'
+            templateUrl: 'partials/menu-list/layerList.html',
+            controller: 'layerListCtrl'
         });
 
         $routeProvider.when('/layers/:layerID/', {
             templateUrl: 'partials/layer/view.html',
-            controller: 'layerCtrl'
-        });
-
-        $routeProvider.when('/layer/edit/:layerID/', {
-            templateUrl: 'partials/layer/edit.html',
             controller: 'layerCtrl'
         });
 
@@ -312,8 +257,6 @@ var app = angular.module('WideStage', [
         };
     }]);
 
-app.factory('PagerService', PagerService);
-
 app.directive('sizeelement', function ($window) {
     return {
         scope: true,
@@ -440,71 +383,4 @@ function isWSTADMIN ($rootScope) {
     }
 
     return found;
-}
-
-function PagerService () {
-    // service definition
-    var service = {};
-
-    service.GetPager = GetPager;
-
-    return service;
-
-    // service implementation
-    function GetPager (totalItems, currentPage, pageSize, totalPages) {
-        // default to first page
-        currentPage = currentPage || 1;
-
-        // default page size is 10
-        pageSize = pageSize || 10;
-
-        // calculate total pages
-        // totalPages = totalPages Math.ceil(totalItems / pageSize);
-
-        var startPage, endPage;
-        if (totalPages <= 10) {
-            // less than 10 total pages so show all
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            // more than 10 total pages so calculate start and end pages
-            if (currentPage <= 6) {
-                startPage = 1;
-                endPage = 10;
-            } else if (currentPage + 4 >= totalPages) {
-                startPage = totalPages - 9;
-                endPage = totalPages;
-            } else {
-                startPage = currentPage - 5;
-                endPage = currentPage + 4;
-            }
-        }
-
-        // calculate start and end item indexes
-        var startIndex = (currentPage - 1) * pageSize;
-        var endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
-
-        // create an array of pages to ng-repeat in the pager control
-        // var pages = range(startPage, endPage + 1,1);
-
-        var pages = [];
-        var i = startPage;
-        while (i < endPage + 1) {
-            pages.push(i);
-            i++;
-        }
-
-        // return object with all pager properties required by the view
-        return {
-            totalItems: totalItems,
-            currentPage: currentPage,
-            pageSize: pageSize,
-            totalPages: totalPages,
-            startPage: startPage,
-            endPage: endPage,
-            startIndex: startIndex,
-            endIndex: endIndex,
-            pages: pages
-        };
-    }
 }

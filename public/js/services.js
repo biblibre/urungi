@@ -12,7 +12,6 @@ app.service('Constants', function () {
 
     return constants;
 })
-
     .service('connection', function ($http, Constants) {
         this.get = function (url, params, done, options) {
             options = {

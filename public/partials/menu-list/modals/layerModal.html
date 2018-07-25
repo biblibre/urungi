@@ -12,7 +12,7 @@
                 <div class="form-group">
                     <label for="field-3" class="control-label" translate>Layer Name</label>
 
-                    <input type="text" class="form-control" id="field-3"  ng-model="_Layer.name" required>
+                    <input type="text" class="form-control" id="field-3"  ng-model="layerOptions.name" required>
                 </div>
 
             </div>
@@ -27,7 +27,7 @@
                 <div class="form-group no-margin">
                     <label for="field-7" class="control-label" translate>Layer description</label>
 
-                    <textarea ng-model="_Layer.description" class="form-control autogrow" id="field-7"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
+                    <textarea ng-model="layerOptions.description" class="form-control autogrow" id="field-7"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
                 </div>
 
 
@@ -41,6 +41,6 @@
 
     <div class="modal-footer ng-scope">
         <button type="button" class="btn btn-white" data-dismiss="modal" translate>Cancel</button>
-        <button type="button" class="btn btn-info"  ng-click="save()" translate>Save layer</button>
+        <button type="button" class="btn btn-info"  ng-click="saveLayer()" translate>Save layer</button>
     </div>
 </nd-modal>

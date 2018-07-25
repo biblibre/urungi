@@ -103,10 +103,10 @@
         color: #979898;
         margin-left: 7px;
         line-height: 1;">x</button>-->
-                            <a id="reportListItemDeleteBtn" href="" class="pull-right  list-delete-button" ng-click="deleteReport(item.id,item.reportName)"  tooltip="{{'Click here to delete this report' | translate}}" tooltip-placement="bottom">
+                            <a id="reportListItemDeleteBtn" href="" class="pull-right  list-button btn-delete" ng-click="deleteReport(item.id,item.reportName)"  tooltip="{{ 'Click here to delete this report' | translate }}" tooltip-placement="bottom">
                                 <i class="fa fa-trash-o "  ></i>
                             </a>
-                            <a id="reportListItemEditBtn" class="pull-right  list-edit-button" ng-click="loadReport(item)"  tooltip="{{'Click here to edit this report' | translate}}" tooltip-placement="bottom">
+                            <a id="reportListItemEditBtn" class="pull-right  list-button" ng-click="loadReport(item)"  tooltip="{{ 'Click here to edit this report' | translate }}" tooltip-placement="bottom">
                                 <i class="fa fa-pencil" ></i>
                             </a>
                             </div>

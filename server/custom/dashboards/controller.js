@@ -67,6 +67,8 @@ exports.DashboardsCreate = function (req, res) {
         req.body.owner = req.user._id;
         req.body.isPublic = false;
 
+        req.body.author = req.user.userName;
+
         controller.create(req, function (result) {
             serverResponse(req, res, 200, result);
         });

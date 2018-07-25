@@ -10,6 +10,7 @@ var ReportsSchema = new mongoose.Schema({
     query: {type: Object},
     owner: {type: String},
     createdBy: {type: String},
+    author: {type: String},
     createdOn: {type: Date},
     history: [],
     parentFolder: {type: String},
