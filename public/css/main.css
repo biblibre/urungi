@@ -3768,3 +3768,21 @@ a.list-group-item {
 .about-page a:visited {
     color: purple;
 }
+
+.scroll-list {
+    height : 300px;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: scroll;
+    border: 1px #DDDDDD solid;
+    border-radius: 5px;
+}
+
+.scroll-list li{
+    text-align: left;
+}
+
+.scroll-list .scroll-list-selected{
+    color:blue;
+    background-color: #cccccc;
+}

@@ -12,10 +12,10 @@
     <script type="text/ng-template" id="nestable_item.html">
         <div id="layerObjects">
             <div class="schema-element-report schema-item-report"  
-            ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure') && ngModelItem.enabled != false" >
+            ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure')">
 
                 <a id="ELEMENT_{{ngModelItem.elementID}}" class="list-group-item data-source-element schema-item-report" 
-                ng-if=" !ngModelItem.defaultAggregation  || ngModelItem.defaultAggregation == 'value' "
+                ng-if="isUsable(ngModelItem)"
                 ng-click="autoFill(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
                 draggable-data="{
                         elementName: ngModelItem.elementName,
@@ -31,38 +31,35 @@
                         filterPrompt: false,
                         filterTypeLabel:'equal',
                         format:ngModelItem.format,
-                        values:ngModelItem.values}">
-                            <i class="fa fa-cube wst-main-color" ng-show="ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count' && (!ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)"></i>
-                            <i class="fa fa-reorder wst-main-color" ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
+                        isCustom:ngModelItem.isCustom,
+                        expression:ngModelItem.expression,
+                        arguments:ngModelItem.arguments,
+                        values:ngModelItem.values,
+                        component:ngModelItem.component}">
+                            <i class="fa fa-cube wst-main-color" 
+                            ng-show="ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count' && (!ngModelItem.defaultAggregation)" 
+                            data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)"></i>
+                            <i class="fa fa-reorder wst-main-color" 
+                            ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" 
+                            data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
 
 
-                        {{ngModelItem.elementLabel}}
+                            <span ng-hide="ngModelItem.defaultAggregation" ng-bind="ngModelItem.elementLabel"></span>
+                            <span ng-show="ngModelItem.defaultAggregation" ng-bind="ngModelItem.elementLabel + '(' + ngModelItem.defaultAggregation + ')'"></span>
 
                 </a>
 
-                <a class="list-group-item data-source-element schema-item-report" ng-if="(ngModelItem.elementType == 'number' || ngModelItem.elementType == 'string') &&  ngModelItem.defaultAggregation && ngModelItem.defaultAggregation != 'value' " 
-                ng-click="autoFill(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
-                draggable-data="{
-                        elementName: ngModelItem.elementName,
-                        objectLabel: ngModelItem.elementLabel+' ('+ngModelItem.defaultAggregation+')',
-                        datasourceID:ngModelItem.datasourceID,
-                        collectionID:ngModelItem.collectionID,
-                        id:ngModelItem.id,
-                        elementLabel:ngModelItem.elementLabel,
-                        elementID: ngModelItem.elementID,
-                        elementType: ngModelItem.elementType,
-                        layerID: selectedReport.selectedLayerID,
-                        filterType: 'equal',
-                        filterPrompt: false,
-                        filterTypeLabel:'equal',
-                        format:ngModelItem.format,
-                        values:ngModelItem.values,
-                        aggregation: ngModelItem.defaultAggregation}">
-                            <i class="fa fa-cube wst-main-color" ng-show="ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count' && (!ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)" ></i>
-                            <i class="fa fa-reorder wst-main-color" ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
+                <a ng-if="!isUsable(ngModelItem)" class="element-disabled">
+                    <i class="fa fa-cube" 
+                    ng-show="ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count' && (!ngModelItem.defaultAggregation)" 
+                    data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)"></i>
+                    <i class="fa fa-reorder" 
+                    ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" 
+                    data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
 
-                        {{ngModelItem.elementLabel +' ('+ngModelItem.defaultAggregation+')'}}
 
+                    <span ng-hide="ngModelItem.defaultAggregation" ng-bind="ngModelItem.elementLabel"></span>
+                    <span ng-show="ngModelItem.defaultAggregation" ng-bind="ngModelItem.elementLabel + '(' + ngModelItem.defaultAggregation + ')'"></span>
                 </a>
 
             </div>

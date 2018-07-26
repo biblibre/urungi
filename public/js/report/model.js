@@ -189,22 +189,17 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
         var aggregation = element.aggregation || element.defaultAggregation;
 
         if (!aggregation) {
-            columnId = 'wst' + element.elementID.toLowerCase() + 'raw';
+            columnId = 'e' + element.elementID.toLowerCase() + 'raw';
         } else {
-            columnId = 'wst' + element.elementID.toLowerCase() + aggregation.substring(0, 3);
+            columnId = 'e' + element.elementID.toLowerCase() + aggregation.substring(0, 3);
         }
-
-        columnId = columnId.replace(/[^a-zA-Z ]/g, '');
-        // this threatens unicity in theory
-        // Two elements with different ids could have the same transformed id after all numbers are removed
-        // It's unlikely, but if it happens it will result in a bug which is nightmarish to understand
 
         return columnId;
     }
 
     function calculateIdForAllElements (elements) {
         for (var element of elements) {
-            if (element.collectionID) {
+            if (element.elementRole === 'dimension') {
                 element.id = getColumnId(element);
             }
 

@@ -72,11 +72,12 @@
 
                     <section id="elementsTab" class="results infinite layer-elements ng-hide " ng-show="tabs.selected == 'elements'">
 
-                        <div class="container-fluid tool-set">
-                            <div class="container-fluid">
-                                <button type="button" class="btn btn-primary pull-right"  ng-click="addFolder()" translate>New Folder</button>
-                            </div>
+                        <div class="container-fluid">
+                            <button type="button" class="btn btn-primary pull-right"  ng-click="addFolder()" translate>New Folder</button>
+                            <span class="pull-right"> &nbsp; </span>
+                            <button type="button" class="btn btn-primary pull-right"  ng-click="createComposedElement()" translate>New Element</button>
                         </div>
+                       
 
                         <section class="layer scrollPane">
 
@@ -95,6 +96,7 @@
                                                         <i class="fa fa-reorder wst-main-color" ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
                                                         <i class="fa fa-calendar-o wst-main-color" ng-show="ngModelItem.elementType == 'date'" data-toggle="tooltip" data-placement="top"></i>
                                            <span ng-if="!ngModelItem.editing == true">{{ngModelItem.elementLabel}}</span>
+                                           <i class="fa fa-wrench" style="color:#999999" ng-show="ngModelItem.isCustom"></i>
                                            <div ng-if="!ngModelItem.editing == true" class="schema-element-btn">
                                                 <div class="btn btn-warning btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(ngModelItem)" translate>Remove</div>
                                                 <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="editElement(ngModelItem)" translate>Edit</div>

@@ -70,7 +70,14 @@ function processQuery (query, queryLayer, escape, warnings) {
     processedQuery.order = [];
     processedQuery.filters = [];
 
-    var elementSet = new Set();
+    var elementSet = {
+        content: [],
+        add: function (element) {
+            if (!this.content.find(el => el.elementID === element.elementID)) {
+                this.content.push(element);
+            }
+        }
+    };
     var groupKeys = new Set();
 
     processedQuery.joinTree = {};
@@ -78,6 +85,18 @@ function processQuery (query, queryLayer, escape, warnings) {
     processedQuery.datasourceID = queryLayer.params.schema[0].datasourceID;
     // For now, a good portion of the code is written to enable the use of multiple datasources in a report
     // This is why the layer does not have a single datasourceID field
+
+    function addElement (element, elementSet) {
+        if (!element.isCustom) {
+            elementSet.add(element);
+        } else {
+            for (const argElement of element.arguments) {
+                if (!argElement.isCustom) {
+                    elementSet.add(argElement);
+                }
+            }
+        }
+    }
 
     for (const col of query.columns) {
         const element = findElement(queryLayer.objects, col.elementID);
@@ -87,7 +106,8 @@ function processQuery (query, queryLayer, escape, warnings) {
             continue;
         }
 
-        elementSet.add(element);
+        addElement(element, elementSet);
+
         const validCol = validateColumn(col, element, warnings);
         processedQuery.columns.push(validCol);
         if (!validCol.aggregation) {
@@ -102,7 +122,7 @@ function processQuery (query, queryLayer, escape, warnings) {
             continue;
         }
 
-        elementSet.add(element);
+        addElement(element, elementSet);
         processedQuery.order.push(validateOrder(col, element, warnings));
     }
 
@@ -113,7 +133,7 @@ function processQuery (query, queryLayer, escape, warnings) {
             continue;
         }
 
-        elementSet.add(element);
+        addElement(element, elementSet);
         const vf = validateFilter(col, element, escape, warnings);
         if (vf) {
             processedQuery.filters.push(vf);
@@ -126,7 +146,8 @@ function processQuery (query, queryLayer, escape, warnings) {
 
     processedQuery.page = validatePage(query.page);
 
-    processedQuery.elements = Array.from(elementSet.values());
+    processedQuery.elements = elementSet.content;
+
     processedQuery.groupKeys = Array.from(groupKeys.values());
 
     processedQuery.layer = queryLayer;
@@ -275,7 +296,10 @@ function validateColumn (column, element, warnings) {
         elementID: element.elementID,
         elementName: element.elementName,
         elementType: element.elementType,
-        layerID: element.layerID
+        layerID: element.layerID,
+        isCustom: Boolean(element.isCustom),
+        expression: element.expression,
+        arguments: element.arguments
     };
 
     if (column.aggregation) {

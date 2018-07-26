@@ -148,7 +148,11 @@ function generateQueryText (query) {
 function getIdentifier (column) {
     var name;
 
-    name = column.elementID;
+    if (column.isCustom) {
+        name = column.expression;
+    } else {
+        name = column.elementID;
+    }
 
     name = '(' + name + ')';
 
@@ -208,7 +212,7 @@ function generateTableQuery (joinTree) {
         var firstElementName;
         var secondElementID;
 
-        if (node.parentJoin.sourceCollectionId === joinTree.collection.collectionID) {
+        if (node.parentJoin.sourceCollectionID === joinTree.collection.collectionID) {
             firstElementName = node.parentJoin.sourceElementName;
             secondElementID = node.parentJoin.targetElementID;
         } else {

@@ -176,10 +176,10 @@ function getSQLResultsSchema (collectionName, queryResults, sqlQuery, done) {
 
 function getCollectionSchema (collection, queryResults, done) {
     var collectionName = collection.name;
-    var collectionID = 'WST' + generateShortUID();
+    // var collectionID = 'WST' + generateShortUID();
 
-    collectionID = collectionID.replace(new RegExp('-', 'g'), '');
-    var theCollection = {collectionID: collectionID, collectionName: collectionName, visible: true, collectionLabel: collectionName};
+    // collectionID = collectionID.replace(new RegExp('-', 'g'), '');
+    var theCollection = {collectionName: collectionName, visible: true, collectionLabel: collectionName};
     theCollection.elements = [];
 
     for (var d = 0; d < queryResults.length; d++) {
@@ -219,9 +219,9 @@ function getCollectionSchema (collection, queryResults, done) {
 
             if (queryResults[d].data_type === 'boolean') { type = 'boolean'; }
 
-            var elementID = generateShortUID();
+            // var elementID = generateShortUID();
             var isVisible = true;
-            theCollection.elements.push({elementID: elementID, elementName: name, elementType: type, visible: isVisible, elementLabel: name, data_type: queryResults[d].data_type});
+            theCollection.elements.push({elementName: name, elementType: type, visible: isVisible, elementLabel: name, data_type: queryResults[d].data_type});
         }
     }
 

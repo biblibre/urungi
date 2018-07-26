@@ -175,11 +175,8 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.initForm = async function () {
         $scope.mode = 'edit';
         $scope.cleanForm();
-        if ($scope.selectedReport.query.selectedLayerID) {
-            $scope.selectedReport.selectedLayerID = $scope.selectedReport.query.selectedLayerID;
-            var layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
-            $scope.rootItem = layer.rootItem;
-        }
+        var layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
+        $scope.rootItem = layer.rootItem;
     };
 
     $scope.cleanForm = function () {
@@ -194,7 +191,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         if (!report.properties.ykeys) { report.properties.ykeys = []; }
         if (!report.properties.columns) { report.properties.columns = []; }
         if (!report.properties.order) { report.properties.order = []; }
-        if (!report.properties.order) { report.properties.filters = []; }
+        if (!report.properties.filters) { report.properties.filters = []; }
         if (!report.properties.pivotKeys) { report.properties.pivotKeys = {}; }
         if (!report.properties.pivotKeys.columns) { report.properties.pivotKeys.columns = []; }
         if (!report.properties.pivotKeys.rows) { report.properties.pivotKeys.rows = []; }
@@ -574,7 +571,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             newItem.objectLabel = newItem.originalLabel;
         }
 
-        $scope.selectedReport.properties.connectedComponent = newItem.connectedComponent;
+        $scope.selectedReport.properties.connectedComponent = newItem.component;
     };
 
     $scope.onRemoveFilter = function (filterIndex) {
@@ -637,6 +634,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             filterTypeLabel: 'equal',
             format: ngModelItem.format,
             values: ngModelItem.values,
+            isCustom: ngModelItem.isCustom,
+            expression: ngModelItem.expression,
+            arguments: ngModelItem.arguments,
+            component: ngModelItem.component,
             aggregation: agg
         };
     };
@@ -892,8 +893,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     };
 
     $scope.isUsable = function (item) {
-        return $scope.selectedReport &&
+        return $scope.selectedReport.properties &&
+            item.component !== -1 &&
             ($scope.selectedReport.properties.connectedComponent === undefined || // connectedComponent can be 0, which is why we can't just test it's truthyness
+            item.component === undefined ||
             item.component === $scope.selectedReport.properties.connectedComponent);
     };
 
