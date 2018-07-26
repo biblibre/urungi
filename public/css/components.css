@@ -1454,7 +1454,7 @@ lesshat-selector {
   background-color: #2c2e2f;
 }
 .calendar-env .calendar-main .fc .fc-event.event-color-success {
-  background-color: #8dc63f;
+  background-color: #3742fa;
 }
 .calendar-env .calendar-main .fc .fc-event.event-color-danger {
   background-color: #cc3f44;
@@ -1547,7 +1547,7 @@ lesshat-selector {
   background-clip: padding-box;
 }
 .profile-env .user-info-sidebar .user-status.is-online {
-  background-color: #8dc63f;
+  background-color: #3742fa;
 }
 .profile-env .user-info-sidebar .user-status.is-idle {
   background-color: #ffba00;
@@ -1975,7 +1975,7 @@ lesshat-selector {
   color: #fff;
 }
 .page-body .main-content .cbp_tmtimeline > li .cbp_tmicon.timeline-bg-success {
-  background-color: #8dc63f;
+  background-color: #3742fa;
   color: #fff;
 }
 .page-body .main-content .cbp_tmtimeline > li .cbp_tmicon.timeline-bg-info {
@@ -2203,7 +2203,7 @@ lesshat-selector {
   color: #fff;
 }
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.timeline-bg-success {
-  background-color: #8dc63f;
+  background-color: #3742fa;
   color: #fff;
 }
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.timeline-bg-info {
@@ -2911,7 +2911,7 @@ button.toast-close-button {
   background-color: #030303;
 }
 .toast-success {
-  background-color: #8dc63f;
+  background-color:#3742fa;
 }
 .toast-error {
   background-color: #cc3f44;
@@ -3553,7 +3553,7 @@ button.toast-close-button {
 .xe-widget.xe-counter.xe-counter-success .xe-icon i,
 .xe-widget.xe-counter-block .xe-upper.xe-counter-success .xe-icon i,
 .xe-widget.xe-progress-counter .xe-upper.xe-counter-success .xe-icon i {
-  background-color: #8dc63f;
+  background-color: #3742fa;
   color: #ffffff;
 }
 .xe-widget.xe-counter.xe-counter-warning .xe-icon i,
@@ -3730,15 +3730,15 @@ button.toast-close-button {
 }
 .xe-widget.xe-counter-block.xe-counter-block-success,
 .xe-widget.xe-progress-counter.xe-counter-block-success {
-  background: #8dc63f;
+  background: #3742fa;
 }
 .xe-widget.xe-counter-block.xe-counter-block-success .xe-upper,
 .xe-widget.xe-progress-counter.xe-counter-block-success .xe-upper {
-  background: #8dc63f;
+  background: #3742fa;
 }
 .xe-widget.xe-counter-block.xe-counter-block-success .xe-upper .xe-icon i,
 .xe-widget.xe-progress-counter.xe-counter-block-success .xe-upper .xe-icon i {
-  background-color: #8dc63f;
+  background-color: #3742fa;
   color: #ffffff;
 }
 .xe-widget.xe-counter-block.xe-counter-block-success .xe-upper .xe-label .num,
@@ -4217,7 +4217,7 @@ button.toast-close-button {
   background-color: transparent;
 }
 .xe-widget.xe-progress-counter.xe-progress-counter-success {
-  background-color: #8dc63f;
+  background-color: #3742fa;
 }
 .xe-widget.xe-progress-counter.xe-progress-counter-success .xe-background {
   color: #ffffff;
@@ -4346,7 +4346,7 @@ button.toast-close-button {
   color: rgba(255, 255, 255, 0.95);
 }
 .xe-widget.xe-vertical-counter.xe-vertical-counter-success {
-  background: #8dc63f;
+  background: #3742fa;
   color: #ffffff;
 }
 .xe-widget.xe-vertical-counter.xe-vertical-counter-success .xe-label span {
@@ -4569,7 +4569,7 @@ button.toast-close-button {
   color: rgba(255, 255, 255, 0.9);
 }
 .xe-widget.xe-todo-list.xe-todo-list-success {
-  background: #8dc63f;
+  background: #3742fa;
   color: #ffffff;
 }
 .xe-widget.xe-todo-list.xe-todo-list-success .xe-header {
@@ -5956,7 +5956,7 @@ button.toast-close-button {
   filter: alpha(opacity=80);
 }
 .members-table tbody tr td.action-links a.edit {
-  color: #8dc63f;
+  color: #3742fa;
 }
 .members-table tbody tr td.action-links a.delete {
   color: #cc3f44;
@@ -5986,7 +5986,7 @@ button.toast-close-button {
   margin-left: 30px;
 }
 .members-table-actions .selected-actions .edit {
-  color: #8dc63f;
+  color: #3742fa;
 }
 .members-table-actions .selected-actions .delete {
   color: #cc3f44;

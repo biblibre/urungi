@@ -19,7 +19,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                 steps: [
                     {
                         element: '#mainMenu',
-                        html: '<div><h3>The main menu</h3><span style="font-weight:bold;">Here you can access the basic operations in widestage</span><br/><span>The "white" part of the menu is common for all users, the "green" part is only for widestage administrators</span></div>',
+                        html: '<div><h3>The main menu</h3><span style="font-weight:bold;">Here you can access the basic operations in Urungi</span><br/><span>The "white" part of the menu is common for all users, the "green" part is only for Urungi administrators</span></div>',
                         width: '300px',
                         height: '180px'
                     },
@@ -44,7 +44,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                     },
                     {
                         element: '#usersMainMenu',
-                        html: '<div><h3>Users</h3><span style="font-weight:bold;color:#8DC63F">This link is only available for widestage administrators.</span><br/><span style="font-weight:bold;">Access users to create new widestage users and to manage them</span><br/><span></span></div>',
+                        html: '<div><h3>Users</h3><span style="font-weight:bold;color:#8DC63F">This link is only available for Urungi administrators.</span><br/><span style="font-weight:bold;">Access users to create new Urungi users and to manage them</span><br/><span></span></div>',
                         width: '300px',
                         height: '180px',
                         position: 'right',
@@ -53,7 +53,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                     },
                     {
                         element: '#rolesMainMenu',
-                        html: '<div><h3>Roles</h3><span style="font-weight:bold;color:#8DC63F">This link is only available for widestage administrators.</span><br/><span style="font-weight:bold;">Access roles to create, manage roles, and grant or revoque permissions</span><br/><span></span></div>',
+                        html: '<div><h3>Roles</h3><span style="font-weight:bold;color:#8DC63F">This link is only available for Urungi administrators.</span><br/><span style="font-weight:bold;">Access roles to create, manage roles, and grant or revoque permissions</span><br/><span></span></div>',
                         width: '300px',
                         height: '180px',
                         position: 'right',
@@ -62,7 +62,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                     },
                     {
                         element: '#datasourcesMainMenu',
-                        html: '<div><h3>Data sources</h3><span style="font-weight:bold;color:#8DC63F">This link is only available for widestage administrators.</span><br/><span style="font-weight:bold;">Access here to define the connections to the different sources of your information</span><br/><span>You will define here your database connections to get the data used in the reports that will be created by the users</span></div>',
+                        html: '<div><h3>Data sources</h3><span style="font-weight:bold;color:#8DC63F">This link is only available for Urungi administrators.</span><br/><span style="font-weight:bold;">Access here to define the connections to the different sources of your information</span><br/><span>You will define here your database connections to get the data used in the reports that will be created by the users</span></div>',
                         width: '300px',
                         height: '250px',
                         position: 'right',
@@ -71,7 +71,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                     },
                     {
                         element: '#layersMainMenu',
-                        html: '<div><h3>Layers</h3><span style="font-weight:bold;color:#8DC63F">This link is only available for widestage administrators.</span><br/><span style="font-weight:bold;">Here you can define the semantic layer used by your users to access the data in the different data sources.</span><br/><span>You will define here the labels to use for every field, the joins between the different entities (tables), etc... All the necessary stuff to allow your users to create a report without any knowlegde of the structure of your data</span></div>',
+                        html: '<div><h3>Layers</h3><span style="font-weight:bold;color:#8DC63F">This link is only available for Urungi administrators.</span><br/><span style="font-weight:bold;">Here you can define the semantic layer used by your users to access the data in the different data sources.</span><br/><span>You will define here the labels to use for every field, the joins between the different entities (tables), etc... All the necessary stuff to allow your users to create a report without any knowlegde of the structure of your data</span></div>',
                         width: '300px',
                         height: '300px',
                         position: 'right',
@@ -80,21 +80,12 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                     },
                     {
                         element: '#publicSpaceMainMenu',
-                        html: '<div><h3>Public space</h3><span style="font-weight:bold;color:#8DC63F">This link is only available for widestage administrators.</span><br/><span style="font-weight:bold;">Define here the folder structure for the public area</span><br/><span></span></div>',
+                        html: '<div><h3>Public space</h3><span style="font-weight:bold;color:#8DC63F">This link is only available for Urungi administrators.</span><br/><span style="font-weight:bold;">Define here the folder structure for the public area</span><br/><span></span></div>',
                         width: '300px',
                         height: '180px',
                         position: 'right',
                         areaColor: 'transparent',
                         areaLineColor: '#fff'
-                    },
-                    {
-                        element: '#myProfileMainMenu',
-                        html: '<div><h3>My profile</h3><span style="font-weight:bold;color:#8DC63F">This link is available for all users.</span><br/><span style="font-weight:bold;">Access this to view info about your profile, change your password, etc...</span><br/><span></span></div>',
-                        width: '300px',
-                        height: '180px',
-                        position: 'right',
-                        areaColor: 'transparent',
-                        areaLineColor: '#8DC63F'
                     },
                     {
                         element: '#exploreMainMenu',
@@ -158,7 +149,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                 steps: [
                     {
                         element: '#mainMenu',
-                        html: '<div><h3>The main menu</h3><span style="font-weight:bold;">Here you can access the basic operations in widestage</span><br/><span></span></div>',
+                        html: '<div><h3>The main menu</h3><span style="font-weight:bold;">Here you can access the basic operations in Urungi</span><br/><span></span></div>',
                         width: '300px',
                         height: '180px'
                     },
@@ -180,15 +171,6 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                         html: '<div><h3>Most Executed</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">This area display your 10 most executed elements and the number of executions per element</span><br/><span></span></div>',
                         width: '300px',
                         height: '180px'
-                    },
-                    {
-                        element: '#myProfileMainMenu',
-                        html: '<div><h3>My profile</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span style="font-weight:bold;">Access this to view info about your profile, change your password, etc...</span><br/><span></span></div>',
-                        width: '300px',
-                        height: '180px',
-                        position: 'right',
-                        areaColor: 'transparent',
-                        areaLineColor: '#8DC63F'
                     },
                     {
                         element: '#exploreMainMenu',

@@ -403,26 +403,6 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 height: '180px'
             },
             {
-                element: '#columnsPanel',
-                html: '<div><h3>Columns / results drop zone</h3><span style="font-weight:bold;">Drop here the elements you want to have in the results of the query</span><br/><span>A query must hold at least one element here to be executed</span></div>',
-                width: '300px',
-                height: '180px'
-            },
-            {
-                element: '#orderByPanel',
-                html: '<div><h3>Order By drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;"> Drop here the elements that you want to use to order the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results</span></div>',
-                width: '300px',
-                height: '250px'
-            },
-            {
-                element: '#filtersPanel',
-                html: '<div><h3>Filters drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Drop here the elements that you want to use to filter the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results</span></div>',
-                width: '300px',
-                height: '250px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff'
-            },
-            {
                 element: '#reportLayout',
                 html: '<div><h3>Results area</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">As you define the query draging and droping in the areas above, the results of the query will appear here</span><br/><span></span></div>',
                 width: '300px',
@@ -444,6 +424,26 @@ app.controller('report_v2Ctrl', function ($scope, connection, $compile, queryMod
                 width: '300px',
                 height: '200px',
                 horizontalAlign: 'right',
+                areaColor: 'transparent',
+                areaLineColor: '#fff'
+            },
+            {
+                element: '#columnsPanel',
+                html: '<div><h3>Columns / results drop zone</h3><span style="font-weight:bold;">Drop here the elements you want to have in the results of the query</span><br/><span>A query must hold at least one element here to be executed</span></div>',
+                width: '300px',
+                height: '180px'
+            },
+            {
+                element: '#orderByPanel',
+                html: '<div><h3>Order By drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;"> Drop here the elements that you want to use to order the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results</span></div>',
+                width: '300px',
+                height: '250px'
+            },
+            {
+                element: '#filtersPanel',
+                html: '<div><h3>Filters drop zone</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Drop here the elements that you want to use to filter the results of the query</span><br/><span> The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results</span></div>',
+                width: '300px',
+                height: '250px',
                 areaColor: 'transparent',
                 areaLineColor: '#fff'
             }

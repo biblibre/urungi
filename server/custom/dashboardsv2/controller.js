@@ -160,7 +160,6 @@ exports.getDashboard = function (req, res) {
 
         if (result) {
             // Annotate the execution in statistics
-
             var statistics = connection.model('statistics');
             var stat = {};
             stat.type = 'Dashboard';

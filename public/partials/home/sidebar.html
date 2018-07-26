@@ -14,10 +14,6 @@
     <a id="exploreMainMenu" ng-if="user.exploreData" href="/#/explore" class="list-group-item">
         <span><i class="fa fa-sun-o"></i></span> Explore
     </a>
-    <a id="myProfileMainMenu" href="/#/users/{{user._id}}/" class="list-group-item">
-        <span><i class="fa fa-user"></i></span> My profile
-    </a>
-
     <a id="publicSpaceMainMenu" ng-show="isWSTADMIN" href="/#/public-space" class="list-group-item admin-menu"  >
         <span><i class="fa fa-sitemap"></i></span> Public space
     </a>
@@ -33,7 +29,8 @@
     <a id="usersMainMenu" ng-show="isWSTADMIN" href="/#/users" class="list-group-item admin-menu" >
         <span><i class="fa fa-user"></i></span> Users  <span class="badge">{{counts.users}}</span>
     </a>
+    <a ng-if="!getUserContextHelp('homeIndex')" class="list-group-item admin-menu" ng-click="showIntro()">Guided tour</a>
     <span class="list-group-item main-menu-logo" >
-        <img src="images/logocustom.png" class="img-responsive">
+        <img src="images/urungi.png" class="img-responsive">
     </span>
 </div>
