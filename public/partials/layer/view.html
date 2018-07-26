@@ -229,21 +229,31 @@
             <div id="collections" class="canvas-parent" ng-click="selectedCanvas($event)" style="left: 300px">
             <div  class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan canvas-er" id="canvas" style="cursor:default">
 
-                <div id="{{collection.collectionID}}-parent"  class="window jtk-node  jsplumb-draggable" ng-style="{'left': collection.left, 'top': collection.top}" ng-repeat="collection in _Layer.params.schema">
+                <div id="{{collection.collectionID}}-parent"  class="window jtk-node  jsplumb-draggable" ng-style="{'left': collection.left, 'top': collection.top}"
+                ng-repeat="collection in _Layer.params.schema">
 
 
-                    <div id="{{collection.collectionID}}" class=" jtk-header " style="overflow: hidden;padding-left:2px" ng-click="selectCollection(collection,$event)">
+                    <div id="{{collection.collectionID}}" class=" jtk-header " style="overflow: hidden;padding-left:2px">
 
                         
                         <div class="row">
                             <span class="col-md-1 jtk-field-icon" style="color:white"><i ng-show="!element.elementRole" class="fa fa-database"></i></span>
 
-                            <span class="col-md-8 jtk-header-label"  style="overflow: hidden; text-align:left">{{collection.collectionName}}</span>
+                            <span class="col-md-6 jtk-header-label"  style="overflow: hidden; text-align:left" ng-click="selectCollection(collection,$event)">
+                                {{collection.collectionName}}
+                            </span>
 
-                            <span class="col-md-2" >
-                                <i ng-hide="allElementsAdded(collection)" class="jtk-field-icon fa fa-plus-square" ng-click="promptAddAll(collection)" 
-                                tooltip="Add all" ></i>
-                                <i ng-show="allElementsAdded(collection)" class="jtk-field-selected fa fa-check-square" ></i>
+                            <span class="col-md-4">
+                                <span ng-click="toggleFolded(collection)" >
+                                    <i ng-hide="collection.folded" class="jtk-field-selected fa fa-minus-square"></i>
+                                    <i ng-show="collection.folded" class="jtk-field-selected fa fa-plus-square"></i>
+                                </span>
+                            
+                                <span>
+                                    <i ng-hide="allElementsAdded(collection)" class="jtk-field-icon fa fa-plus-square" ng-click="promptAddAll(collection)" 
+                                    tooltip="Add all" ></i>
+                                    <i ng-show="allElementsAdded(collection)" class="jtk-field-selected fa fa-check-square" ></i>
+                                </span>
                             </span>
                         </div>
                         
@@ -254,8 +264,9 @@
                     <!--
                     <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{'flowchart'+element.elementID}}" ng-repeat="element in collection.elements" popover-trigger="mouseenter" popover-placement="bottom" popover-title="{{element.elementName}}" popover="..." title="<h1><b>Another</b> <em>one</em> here too</h1>" data-html="true" rel="tooltip">{{element.elementName}}</div>
                     -->
-                    <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{element.elementID}}" ng-repeat="element in collection.elements"  title="{{element.elementName}}" data-html="true" rel="tooltip" ng-class="{'isPK': element.isPK}" ng-click="selectElement(element,$event)">
-
+                    <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{element.elementID}}" 
+                    ng-repeat="element in collection.elements"  title="{{element.elementName}}" data-html="true" rel="tooltip" 
+                    ng-class="{'isPK': element.isPK}" ng-click="selectElement(element,$event)" ng-hide="collection.folded && !isInAJoin(element)">
 
                         <table style="border: 0px;">
                             <tr>
@@ -267,7 +278,6 @@
                             </tr>
 
                         </table>
-
 
 
                     </div>
