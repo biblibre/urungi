@@ -25,6 +25,9 @@ app.service('c3Charts', function () {
         // Indicates that for a single (axisField * stackField) value there are multiple entries
         // This causes some of the charts to display weird or misleading results
 
+        var legend = {};
+        var padding = {};
+
         if (!query.data) {
             noty({text: 'no data to display', timeout: 2000, type: 'warning'});
             return;
@@ -135,6 +138,35 @@ app.service('c3Charts', function () {
 
         if (!chart.height) { chart.height = 300; }
 
+        if (report.properties.chart.legendPosition === 'top') {
+            padding = {
+                top: 50
+            };
+            legend = {
+                position: 'inset',
+                inset: {
+                    anchor: 'top-left',
+                    x: 10,
+                    y: -50,
+                    step: undefined
+                }
+            };
+        } else if (report.properties.chart.legendPosition === 'bottom') {
+            padding = {
+                top: 0
+            };
+            legend = {
+                position: 'bottom'
+            };
+        } else {
+            padding = {
+                top: 0
+            };
+            legend = {
+                position: 'right'
+            };
+        }
+
         let canvasArgs;
 
         switch (chart.type) {
@@ -158,7 +190,8 @@ app.service('c3Charts', function () {
 
                 size: {
                     height: chart.height
-                }
+                },
+                legend: legend
             };
             break;
 
@@ -215,7 +248,9 @@ app.service('c3Charts', function () {
                 },
                 size: {
                     height: chart.height
-                }
+                },
+                legend: legend,
+                padding: padding
             };
 
             break;
