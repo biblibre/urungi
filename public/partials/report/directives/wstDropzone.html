@@ -35,8 +35,15 @@
                                 <li class="divider" ng-show="hideColumn"></li>
 
                                 <li ng-show="hideColumn">
-                                    <a ng-if="!item.hidden" ng-click="hideColumn(item,true);">Hide Column</a>
-                                    <a ng-if="item.hidden" ng-click="hideColumn(item,false);">Show Column</a>
+                                    <a ng-hide="item.hidden" ng-click="hideColumn(item,true);">Hide Column</a>
+                                    <a ng-show="item.hidden" ng-click="hideColumn(item,false);">Show Column</a>
+                                </li>
+
+                                <li class="divider" ng-show="stackBars"></li>
+
+                                <li ng-show="stackBars">
+                                    <a ng-show="item.doNotStack" ng-click="stackBars(item,true);">Stack column</a>
+                                    <a ng-hide="item.doNotStack" ng-click="stackBars(item,false);">unstack Column</a>
                                 </li>
 
                            </ul>

@@ -13,6 +13,7 @@
     wst-dropzone="true" list-model="selectedReport.properties.ykeys" zone="'ykeys'"
     display-options="chartColumnTypeOptions"
     display-callback="changeChartColumnType"
+    stack-bars="(selectedReport.properties.xkeys.length > 1) && stackBars"
     query-bind="'column'" zone-info="'Drop here your metrics'"></div>
 
     <div ng-if="selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'chart-pie'"

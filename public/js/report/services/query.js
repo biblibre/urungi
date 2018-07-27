@@ -135,18 +135,23 @@ app.service('queryModel', function (uuid2) {
         }
     };
 
-    this.changeZone = function (column, newZone) {
+    this.updateColumnField = function (column, field, newValue) {
         var col = loadedQuery.columns.find(c => c.id === column.id);
-        col.zone = newZone;
+        col[field] = newValue;
     };
 
-    this.hideColumn = function (elementID, hidden) {
-        for (var i in loadedQuery.columns) {
-            if (loadedQuery.columns[i].elementID === elementID) {
-                loadedQuery.columns[i].hidden = hidden;
-            }
-        }
-    };
+    // this.changeZone = function (column, newZone) {
+    //     var col = loadedQuery.columns.find(c => c.id === column.id);
+    //     col.zone = newZone;
+    // };
+
+    // this.hideColumn = function (elementID, hidden) {
+    //     for (var i in loadedQuery.columns) {
+    //         if (loadedQuery.columns[i].elementID === elementID) {
+    //             loadedQuery.columns[i].hidden = hidden;
+    //         }
+    //     }
+    // };
 
     this.updateCondition = function (filter, condition) {
         // TODO : figure out what this does

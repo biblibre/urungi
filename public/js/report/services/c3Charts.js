@@ -113,7 +113,10 @@ app.service('c3Charts', function () {
             theValues = [];
             theGroups = [];
             for (const valueKey in theStackValues) {
-                theGroups.push(theStackValues[valueKey]);
+                var col = chart.dataColumns.find(c => c.id === valueKey);
+                if (!col.doNotStack) {
+                    theGroups.push(theStackValues[valueKey]);
+                }
                 theValues = theValues.concat(theStackValues[valueKey]);
             }
 
@@ -238,6 +241,17 @@ app.service('c3Charts', function () {
         } else {
             chart.chartCanvas.transform(column.type, column.id);
         }
+    };
+
+    this.changeStack = function (chart) {
+        var theGroups = [];
+        for (const valueKey in chart.stackKeys) {
+            var col = chart.dataColumns.find(c => c.id === valueKey);
+            if (!col.doNotStack) {
+                theGroups.push(chart.stackKeys[valueKey]);
+            }
+        }
+        chart.chartCanvas.groups(theGroups);
     };
 
     this.getChartHTML = function (report, mode) {

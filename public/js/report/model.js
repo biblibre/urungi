@@ -259,7 +259,10 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
 
     this.saveAsReport = async function (report, mode) {
         // Cleaning up the report object
-        var clonedReport = clone(report);
+
+        // var clonedReport = clone(report);
+        // Is this necessary ? It causes c3 to crash, so I will remove it until I find a reason for it
+        var clonedReport = report;
         if (clonedReport.properties.chart) {
             clonedReport.properties.chart.chartCanvas = undefined;
             clonedReport.properties.chart.data = undefined;
