@@ -195,7 +195,6 @@ angular.module('dbteam.builder', [])
                         // loop trough both objects and only act if there's a difference in their values
                         for (var prop in newValue) {
                             if (newValue[prop] && oldValue[prop] && newValue[prop].removeQoutes() !== oldValue[prop].removeQoutes()) {
-                                console.log('changed vlaue');
                                 return inspector.applyCss(prop.toDashedCase(), newValue[prop], oldValue[prop]);
                             }
                         }

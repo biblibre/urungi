@@ -410,7 +410,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     $scope.editSQL = function () {
         var selectedCollection = $scope.theSelectedElement;
         if (!selectedCollection.isSQL) {
-            console.log('Error : cannot modify sql of an object which is not an sql request');
+            noty({text: 'Cannot modify sql of an object which is not an sql request', timeout: 2000, type: 'error'});
             return;
         }
 

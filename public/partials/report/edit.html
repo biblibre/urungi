@@ -1,58 +1,79 @@
-<!--<div  class="container-fluid mainArea" >  -->
+<div id="parentIntroReports" class="explorer-main-container" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroOptions" >
 
-    <div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroDesignerOptions" class="container-fluid" style="padding-bottom: 5px;padding-top: 5px;height: 40px;" ng-init="initForm()">
-        <h3 class="pull-left">Single query report</h3>
-        <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-hide="queryID" style="margin-right: 5px" tooltip="Click here to save the report" tooltip-placement="bottom">Save Report</a>
-        <a data-ng-click="saveQuery()" class="btn btn-success pull-right"  ng-hide="reportID" style="margin-right: 5px">Save Query</a>
-        <a ng-click="goBack()" class="btn btn-default pull-right" tooltip="Click here to cancel and get back" tooltip-placement="bottom">Cancel</a>
-        <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour to design a single query reports" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+<div class="explorer-container">
+
+    <div class="explorer-header" ng-init="initReportEdit()">
+
+        <div class="explorer-header-title">
+                <h3  ng-if="mode == 'preview' && !selectedReport.reportName">Explorer</h3>
+                <h3  editable-text="selectedReport.reportName"> </h3>
+
+        </div>
+
+    <div class="explorer-header-buttons">
+                <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-if="mode == 'edit' && !isForDash" style="margin-left: 5px" tooltip="Click here to save the report changes" tooltip-placement="bottom">Save</a>
+
+                <a ng-if="isForDash != true" ng-click="goBack();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
+                <a ng-if="isForDash == true" ng-click="cancelReport(selectedReport);" class="btn btn-default pull-right" tooltip="Click here to cancel and back to the dashboard" tooltip-placement="bottom">Cancel</a>
+                <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for data explorer" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
 
     </div>
 
-    <!--<div ui-layout id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="IntroDesignerOptions">-->
+</div>
 
-        <!--<div ui-layout-container class="html-back" size="40px" style="padding-top: 5px" >-->
+    <div class="explorer-body">
 
+    <section id="objectPanel">
 
+                <div class="object-panel-header">
+                        <div class="object-panel-header-icon" ng-click="tabs.selected = 'settings'" ng-class="{'active': tabs.selected == 'settings'}">
+                            <i class="fa fa-gear" ></i>
+                        </div>
+                        <div class="object-panel-header-inner">
+                                <!--<i class="toggle-button fa-minus-circle"  ng-click="toggle();$event.stopPropagation()" role="button" tabindex="0" style="right: 5px;
+                position: absolute;
+                font-size: 20px;"></i>-->
 
-        <!--</div>-->
+                        </div>
 
+                </div>
 
+        <div id="dataObjectsIntroBlock"></div>
+        <menu>
+            <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'elements'}">
+                <a  ng-click="tabs.selected = 'elements'" >
+                    <i class="fa fa-newspaper-o fa-2" aria-hidden="true"></i>
+                    <div class="objectPanel-menu-label rotate">Elements</div>
+                </a>
+            </li>
+        </menu>
 
-        <section id="dataObjects">
-            <div id="dataObjectsIntroBlock"></div>
-            <section class="layer scrollPane" ng-include="'partials/query/data-objects.html'">
-                <!--<div id="dataObjects" class="col-md-3" style="height: 100%" ng-include="'partials/query/data-objects.html'"> -->
+        <section class="content" >
+            <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
+                            <section class="layer scrollPane" style="padding: 0px 10px 0px 5px;">
+                               <wst-widget-properties element="selectedElement" wst-mode="report-designer" properties="selectedReport.properties" on-change="onChangeElementProperties"></wst-widget-properties>
+                            </section>
+                            <div class="scrollTrack vScrollTrack">
+                                <div class="scrollThumb" style="height: 72px; transform: translateY(0px);"></div>
+                            </div>
+                            <div class="scrollTrack hScrollTrack">
+                                <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0px);"></div>
+                            </div>
+            </section>
+            <section id="elementsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'elements'">
+                <section id="dataObjectsInner" class="layer scrollPane" ng-include="'partials/report/partials/data-objects.html'">
 
+                </section>
             </section>
 
         </section>
-        <section id="dropZone" class="scrollPane multiPage rendered ng-scope" style="padding:10px;" ng-include="'partials/report/pivot-edit.html'">
+    </section>
+    
+    <section id="dropZone" class="scrollPane multiPage rendered ng-scope" ng-include="'partials/report/partials/report-edit.html'">
+    </section>
 
-            <!--<div id="dropZone" class="col-md-9" style="height: 100%;border-left:1px solid #000000;" ng-include="'partials/query/query-edit.html'">
+    </div>
 
-                </div> -->
-        </section>
+</div>
 
-        <!--
-        <div ui-layout-container>
-            <div  ui-layout="{flow : 'column'}" >
-                <div  ui-layout-container class=" html-back" size="250px" >
-                    <div id="dataObjects" style="height: 100%" ng-include="'partials/query/data-objects.html'">
-
-                    </div>
-                </div>
-                <div ui-layout-container class=" js-back" >
-                    <div class="main col-md-10" style="width: 100%; height: 100%" ng-include="'partials/report/pivot-edit.html'">
-
-                    </div>
-
-
-                </div>
-
-            </div>
-        </div>  -->
-
-    <!--</div>-->
-
-<!--</div>-->
+</div>

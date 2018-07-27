@@ -84,35 +84,36 @@ var app = angular.module('WideStage', [
 
         $routeProvider.when('/reports', {
             templateUrl: 'partials/report/list.html',
-            controller: 'report_v2Ctrl'
+            controller: 'reportCtrl'
         });
-        $routeProvider.when('/report/:extra', {
-            templateUrl: 'partials/report/list.html',
-            controller: 'report_v2Ctrl'
-        });
+        // $routeProvider.when('/report/:extra', {
+        //     templateUrl: 'partials/report/list.html',
+        //     controller: 'reportCtrl'
+        // });
 
-        $routeProvider.when('/reports/:reportID/', {
-            templateUrl: 'partials/report-view/view.html',
-            controller: 'report_viewCtrl'
-        });
-
-        $routeProvider.when('/reports/:reportID/:elementID/:elementValue', {
+        $routeProvider.when('/reports/view/:reportID/', {
             templateUrl: 'partials/report/view.html',
-            controller: 'report_v2Ctrl'
+            controller: 'reportCtrl'
         });
 
-        $routeProvider.when('/reports/new/:reportID/', {
-            /* templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl' */
-            templateUrl: 'partials/report_v2/edit.html',
-            controller: 'report_v2Ctrl'
+        // $routeProvider.when('/reports/:reportID/:elementID/:elementValue', {
+        //     templateUrl: 'partials/report/view.html',
+        //     controller: 'reportCtrl'
+        // });
+
+        $routeProvider.when('/reports/new/', {
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
         });
         $routeProvider.when('/reports/edit/:reportID/', {
-            /* templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl' */
-            templateUrl: 'partials/report_v2/edit.html',
-            controller: 'report_v2Ctrl'
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
         });
+        $routeProvider.when('/reports/fullscreen/:reportID/', {
+            templateUrl: 'partials/report/fullscreen.html',
+            controller: 'reportCtrl'
+        });
+
         // Data sources
 
         $routeProvider.when('/data-sources', {
@@ -240,29 +241,15 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/pages/edit.html',
             controller: 'pagesCtrl'
         });
-        // queries
-
-        $routeProvider.when('/query/new/:queryID', {
-            templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl'
-        });
-        $routeProvider.when('/query/edit/:queryID', {
-            templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl'
-        });
 
         // explore
         $routeProvider.when('/explore', {
-            // templateUrl: 'partials/query/exploreIndex.html',
-            // controller: 'queryCtrl'
-            templateUrl: 'partials/report_v2/edit.html',
-            controller: 'report_v2Ctrl'
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
         });
         $routeProvider.when('/explore/:extra', {
-            // templateUrl: 'partials/query/exploreIndex.html',
-            // controller: 'queryCtrl'
-            templateUrl: 'partials/report_v2/edit.html',
-            controller: 'report_v2Ctrl'
+            templateUrl: 'partials/report/edit.html',
+            controller: 'reportCtrl'
         });
 
         // catalog
@@ -345,23 +332,6 @@ app.directive('ngEnter', function () {
                 event.preventDefault();
             }
         });
-    };
-});
-
-app.service('queryService', function () {
-    var theQuery = {};
-
-    var addQuery = function (newObj) {
-        theQuery = newObj;
-    };
-
-    var getQuery = function () {
-        return theQuery;
-    };
-
-    return {
-        addQuery: addQuery,
-        getQuery: getQuery
     };
 });
 

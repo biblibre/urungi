@@ -80,17 +80,21 @@ class Controller {
         if (mandatoryFilters.length > 0) { find = {$and: mandatoryFilters}; }
 
         Model.find(find, fields, params, function (err, items) {
-            if (err) throw err;
-
-            Model.count(find, function (err, count) {
-                if (err) throw err;
-
-                if (req.query.page > 0) {
-                    done({result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items});
-                } else {
-                    done({result: 1, page: 1, pages: 1, items: items});
-                }
-            });
+            if (err) {
+                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
+            } else {
+                Model.count(find, function (err, count) {
+                    if (err) {
+                        done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
+                    } else {
+                        if (req.query.page > 0) {
+                            done({result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items});
+                        } else {
+                            done({result: 1, page: 1, pages: 1, items: items});
+                        }
+                    }
+                });
+            }
         });
     }
 
@@ -103,9 +107,9 @@ class Controller {
         var find = generateFindFields(req, req.query.id);
 
         this.model.findOne(find, {}, function (err, item) {
-            if (err) throw err;
-
-            if (!item) {
+            if (err) {
+                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
+            } else if (!item) {
                 done({result: 0, msg: 'Item not found.'});
             } else {
                 done({result: 1, item: item.toObject()});
@@ -122,8 +126,9 @@ class Controller {
         var find = generateFindFields(req, req.query.id);
 
         this.model.findOne(find, {}, function (err, item) {
-            if (err) throw err;
-            if (!item) {
+            if (err) {
+                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
+            } else if (!item) {
                 done({result: 0, msg: 'Item not found.'});
             } else {
                 done({result: 1, item: item});
@@ -158,9 +163,11 @@ class Controller {
         });
 
         this.model.create(data, function (err, item) {
-            if (err) throw err;
-
-            done({result: 1, msg: 'Item created', item: item.toObject()});
+            if (err) {
+                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
+            } else {
+                done({result: 1, msg: 'Item created', item: item.toObject()});
+            }
         });
     }
 
@@ -191,14 +198,16 @@ class Controller {
         });
 
         this.model.update(find, { $set: data }, function (err, result) {
-            if (err) throw err;
-
-            var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
-
-            if (numAffected > 0) {
-                done({result: 1, msg: numAffected + ' record updated.'});
+            if (err) {
+                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
             } else {
-                done({result: 0, msg: 'Error updating record, no record have been updated'});
+                var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
+
+                if (numAffected > 0) {
+                    done({result: 1, msg: numAffected + ' record updated.'});
+                } else {
+                    done({result: 0, msg: 'Error updating record, no record have been updated'});
+                }
             }
         });
     }
@@ -211,14 +220,17 @@ class Controller {
 
         var find = generateFindFields(req, req.params.id);
         this.model.remove(find, function (err, result) {
-            if (err) throw err;
-            result = result.result;
-            var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
-
-            if (numAffected > 0) {
-                done({result: 1, msg: numAffected + ' items deleted.'});
+            if (err) {
+                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
             } else {
-                done({result: 0, msg: 'Error deleting items, no item have been deleted'});
+                result = result.result;
+                var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
+
+                if (numAffected > 0) {
+                    done({result: 1, msg: numAffected + ' items deleted.'});
+                } else {
+                    done({result: 0, msg: 'Error deleting items, no item have been deleted'});
+                }
             }
         });
     }

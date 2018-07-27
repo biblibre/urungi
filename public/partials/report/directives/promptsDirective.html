@@ -1,0 +1,90 @@
+<div>
+    <span ng-if="!isPrompt">
+
+        <span class="pull-right" style="padding: 7px 0;">
+            <i class="fa fa-times hand-cursor" ng-click="removeFilter()"></i>
+        </span>
+
+        <div class="container-fluid form-inline">
+            <span class="col-md-1">
+
+                <button class="btn popover-primary ng-scope" ng-class="{'btn-black': filter.filterPrompt == true, 'btn-white': filter.filterPrompt == false}" 
+                ng-click="makePrompt()" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Runtime Filter" popover="{{getButtonFilterPromptMessage(filter)}}">
+                    <i class="fa fa-filter"></i><i class="fa fa-question"></i>
+                </button>
+
+            </span>
+            <span class="col-md-11">
+                
+                <form role="form" class="form-inline" name="FORM_filter">
+                        <!--<p  class="prompt-label">{{filter.promptTitle}}</p>
+                        <div  class="container-fluid" ng-show="filter.promptInstructions && filter.promptInstructions != ''">
+                            <p style="padding: 10px 15px;background-color: #cc3f44;color: #ffffff;">{{filter.promptInstructions}}</p>
+                        </div>-->
+                    <label class="control-label">{{filter.promptInstructions}}</label>
+
+                    <!-- <div class="form-group" ng-class="{'has-error': filter.promptMandatory == true && (filter.filterText1 == '' || filter.filterText1 == undefined) && isPrompt}"> -->
+
+                    <!-- and, or, and not, or not-->
+
+                    <span ng-if="filter.condition" class="btn-group" dropdown="">
+                        <button type="button" class="btn " ng-bind="filter.conditionLabel"></button>
+                        <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-caret-down"></i>
+                        </button>
+
+                        <ul ng-if="filter.condition" class="dropdown-menu" aria-labelledby="dropdownMenu4" >
+                            <li ng-repeat="theCondition in conditionTypes">
+                                <a ng-click="updateCondition(filter,theCondition)" ng-bind="theCondition.conditionLabel"></a>
+                            </li>
+                        </ul>
+                    </span>
+
+                    <!-- Column label -->
+
+                    <div class="input-group" dropdown ng-if="isPrompt == 'false'" >
+                        <input type="text" class="form-control" ng-model="filter.objectLabel" ng-readonly="true">
+                        <span class="input-group-btn">
+                            <span class="dropdown" >
+                                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="getDistinctValues(filter)" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" tooltip="Click here to select a value" tooltip-placement="bottom">
+                                    <i class="fa-caret-down"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu5b" >
+                                    <li ng-repeat="variable in fieldsAggregations.number">
+                                        <a ng-click="aggregationChoosed(filter,variable)">{{variable.name}}</a>
+                                    </li>
+                                </ul>
+                            </span>
+                        </span>
+                    </div>
+
+                    <!-- equal, not equal, bigger than, etc...-->
+
+                    <span ng-if="!isPrompt" class="btn-group" dropdown="">
+                        <button type="button" class="btn " ng-bind="filter.filterTypeLabel"></button>
+                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-caret-down"></i>
+                        </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
+                                <li ng-repeat="option in getElementFilterOptions()"><a ng-click="setFilterType(option)">{{option.label}}</a></li>
+                            </ul>
+                    </span>
+
+                    <!-- criterion -->
+
+                    <span ng-include="criteriaInput"></span>
+
+                </form>
+            </span>
+        </div>
+
+    </span>
+
+    <div ng-if="isPrompt"  ng-class="{'incomplete-filter': !isComplete()}" >
+
+        <span ng-include="criteriaInput"></span>
+        
+        <!-- <span class="has-error-message" ng-show="filter.promptMandatory == true && (filter.filterText1 == '' || filter.filterText1 == undefined) && isPrompt" class="help-inline">This field is required</span> -->
+
+    </div>
+</div>

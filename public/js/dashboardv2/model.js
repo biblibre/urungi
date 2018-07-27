@@ -59,9 +59,6 @@ app.service('dashboardv2Model', function ($http, $q, connection, reportService) 
         delete newDashboard.createdOn;
         newDashboard.dashboardName = duplicateOptions.newName;
 
-        const data = await connection.post('/api/dashboardsv2/create', newDashboard);
-        if (data.result === 1) {
-            // TODO indicate error
-        }
+        await connection.post('/api/dashboardsv2/create', newDashboard);
     };
 });

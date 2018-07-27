@@ -22,8 +22,6 @@ app.service('dataSourceNameModal', ['$modal', function ($modal) {
         bodyText: ''
     };
 
-    console.log('loading dataSourceName service');
-
     this.showModal = function (customModalDefaults, customModalOptions) {
         if (!customModalDefaults) customModalDefaults = {};
         customModalDefaults.backdrop = 'static';

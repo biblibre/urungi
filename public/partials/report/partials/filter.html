@@ -1,0 +1,21 @@
+<li class="filter-box" style="margin-left: 90px;"
+    drop="onDropOnFilter($data, $event, filter)" drop-effect="copy" drop-accept="['json/custom-object','json/column']" 
+    ng-repeat="filter in selectedReport.query.groupFilters" >
+    
+    <nd-prompt is-prompt="false" filter="filter" on-change="filterChanged" set-prompt="showFilterModal"></nd-prompt>
+</li>
+
+<li class="filter-box" style="margin-left: 90px;" ng-show="selectedReport.query.recordLimit!=undefined">
+    <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="forgetRecordLimit();"></i></span>
+
+    <div class="container-fluid form-inline">
+        <div class="col-md-11">
+
+            Only show the first
+            <input type="number" ng-model="selectedReport.query.recordLimit" size="8">
+            elements
+
+        </div>
+
+    </div>
+</li>

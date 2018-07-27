@@ -128,7 +128,10 @@
                 <section class="tab">
                     <section class="layer scrollPane">
                         <div class="layer-inner-reports">
-                            <div ng-repeat="prompt in prompts" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'queryFilter',promptID:'{{prompt.elementID}}'}" style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " id="{{item.id}}" class="dashboard-filter-prompt-item">
+                            <div ng-repeat="prompt in getPrompts()" draggable="true" draggable-type="custom-object" 
+                            draggable-data="{objectType: 'queryFilter', promptID:'{{prompt.id + prompt.filterType}}'}" 
+                            style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " 
+                            id="{{item.id}}" class="dashboard-filter-prompt-item">
                               <span>
                                   <i class="fa fa-filter"></i>
                                     <i class="fa fa-question"></i>
@@ -274,7 +277,7 @@
     </div>
 </div>
 
-<div ng-show="reportInterface" id="reportModal" ng-controller="report_v2Ctrl" ng-include src="reportModal"></div>
+<div ng-show="reportInterface" id="reportModal" ng-controller="reportCtrl" ng-include src="reportModal"></div>
 
 <nd-modal id="dashboardNameModal">
     <div class="modal-body">

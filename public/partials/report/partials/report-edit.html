@@ -1,0 +1,83 @@
+<!--choose a widget to see your data-->
+<div id="reportType" class="container-fluid" ng-hide="queryID" style="width:100%">
+    <!-- TYPE OF REPORT SELECTION -->
+    <a id="reportTypeGrid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'grid', 'report-unselected-btn': selectedReport.reportType != 'grid'}" ng-click="changeReportType('grid')"><img src="/images/grid.png"></a>
+    <a id="reportTypeVerticalGrid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'vertical-grid', 'report-unselected-btn': selectedReport.reportType != 'vertical-grid'}" ng-click="changeReportType('vertical-grid')"><img src="/images/vertical_grid.png"></a>
+    <a id="reportTypeCrossTable" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'pivot', 'report-unselected-btn': selectedReport.reportType != 'pivot'}" ng-click="changeReportType('pivot')"><img src="/images/pivot_table.png"></a>
+    <a id="reportTypeChartLine" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'chart-line', 'report-unselected-btn': selectedReport.reportType != 'chart-line'}" ng-click="changeReportType('chart-line')"><img src="/images/chart_line.png"></a>
+    <a id="reportTypeChartDonut" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'chart-donut', 'report-unselected-btn': selectedReport.reportType != 'chart-donut'}" ng-click="changeReportType('chart-donut')"><img src="/images/chart_donut.png"></a>
+    <a id="reportTypeIndicator" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'indicator', 'report-unselected-btn': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="/images/indicator.png"></a>
+    <a id="reportTypeGauge" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'gauge', 'report-unselected-btn': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="/images/gauge.png"></a>
+</div>
+
+<div ng-include src="filterPromptModal"></div>
+
+<div class="container-fluid" style="width:100%" ng-include src="dropArea"></div>
+
+<div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width:100%">
+    <span ng-show="selectedReport.query.recordLimit == undefined">
+        Quick display with
+        <input type="number" ng-model="selectedRecordLimit.value" size="8">
+        results.
+        <button id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
+    </span>
+    <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
+    <span class="pull-right">
+        <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" class="pull-right" ng-click="refresh();" style="padding: 3px 10px;">
+            <i class="fa fa-refresh hand-cursor"></i>
+            Refresh data
+            <span ng-if="time !== undefined">({{time}}ms)</span>
+        </button>
+    </span>
+</div>
+
+<div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width:100%">
+    <button class="btn btn-success pull-right" ng-if="user.reportsCreate" ng-click="reportName()" style="margin-left:5px;">Save as a report</button>
+    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left:5px;">Push it to a Dashboard</button>
+</div>
+<div class="container-fluid" ng-show="sql && isForDash" style="width:100%">
+    <button class="btn btn-success pull-right"  style="margin-left:5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();">Save</button>
+</div>
+
+
+<div ng-show="showSQL" class="panel panel-default" style="z-index:100">
+    <div class="panel-heading">
+        <h3 class="panel-title">SQL query</h3>
+
+        <div class="panel-options">
+            <a ng-click="getSQLPanel();" data-toggle="remove" style="cursor: pointer;">x</a>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <p>{{sql}}</p>
+    </div>
+</div>
+
+<div class="panel panel-danger" ng-if="selectedReport.reportType === 'chart-line' && selectedReport.properties.chart.noUnicityWarning && !selectedReport.hideErrorMessage">
+        <div class="container-fluid form-inline">
+            <div class="col-md-10">
+                Warning. The data you've requested contains multiple values for some of the data points. This may result in the chart being strange or misleading.
+                To fix this, make sure to choose an aggregation for your metrics, and do not use more than 1 or 2 dimensions.
+            </div>
+            <div class="col-md-2">
+                <button ng-click="hideErrorMessage()">Hide</button>
+            </div>
+        </div>
+    
+</div>
+
+<div class="container-fluid" ng-if="gettingData == true">
+    <h3><img src="/images/loader.gif" width="32px" height="32px"/>getting data ....</h3>
+</div>
+
+<div report-view report="selectedReport" style="height:100%;position:relative" mode="mode" ></div>
+
+
+<div ng-include src="dateModal"></div>
+<div ng-include src="dateFromToModal"></div>
+<div ng-include src="linkModal"></div>
+<div ng-include src="columnFormatModal"></div>
+<div ng-include src="columnSignalsModal"></div>
+<div ng-include src="reportNameModal"></div>
+<div ng-include src="dashListModal"></div>
