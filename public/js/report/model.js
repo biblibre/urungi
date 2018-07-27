@@ -65,7 +65,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
             }
         }
 
-        var result = await connection.get('/api/reports/get-data', request);
+        var result = await connection.post('/api/reports/get-data', request);
 
         if (result.result === 0) {
             noty({text: result.msg, timeout: 2000, type: 'error'});
