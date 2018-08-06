@@ -97,3 +97,7 @@ exports.testConnection = function (req, data, setresult) {
         }
     });
 };
+
+exports.escape = function (param) {
+    return mysql.escape(param);
+};

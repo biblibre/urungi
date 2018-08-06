@@ -1,15 +1,17 @@
 'use strict';
 
-app.directive('ndPrompt', function (queryModel, reportModel) {
+app.directive('ndPrompt', function (reportModel) {
     return {
         transclude: true,
         scope: {
 
             isPrompt: '=',
             filter: '=',
+            index: '=',
             onChange: '=',
 
-            setPrompt: '='
+            setPrompt: '=',
+            getQuery: '='
         },
 
         templateUrl: 'partials/report/directives/promptsDirective.html',
@@ -25,7 +27,7 @@ app.directive('ndPrompt', function (queryModel, reportModel) {
             $scope.criterion = $scope.filter.criterion;
 
             $scope.removeFilter = function () {
-                $scope.$parent.onRemoveField($scope.filter, 'filter');
+                $scope.$parent.onRemoveFilter($scope.filter, 'filter');
             };
 
             $scope.setDatePatternFilterType = function (option) {
@@ -113,9 +115,9 @@ app.directive('ndPrompt', function (queryModel, reportModel) {
             $scope.update = function () {
                 if (!$scope.isPrompt) {
                     if ($scope.filter.filterPrompt) {
-                        $scope.filter.filterValuesQuery = queryModel.getFilterValuesQuery($scope.filter);
+                        $scope.filter.filterValuesQuery = $scope.getQuery($scope.filter, $scope.index);
                     } else {
-                        $scope.filterValuesQuery = queryModel.getFilterValuesQuery($scope.filter);
+                        $scope.filterValuesQuery = $scope.getQuery($scope.filter, $scope.index);
                     }
                 }
                 $scope.loadFilterValues();
@@ -199,10 +201,7 @@ app.directive('ndPrompt', function (queryModel, reportModel) {
             $scope.updateCondition = function (filter, condition) {
                 filter.conditionType = condition.conditionType;
                 filter.conditionLabel = condition.conditionLabel;
-                queryModel.updateCondition(filter, condition);
             };
-
-            $scope.conditionTypes = queryModel.conditionTypes;
 
             $scope.getElementFilterOptions = function () {
                 switch ($scope.filter.elementType) {
@@ -236,8 +235,6 @@ app.directive('ndPrompt', function (queryModel, reportModel) {
                 // }
             };
 
-            $scope.fieldsAggregations = queryModel.fieldsAggregations;
-
             $scope.aggregationChoosed = function (column, variable) {
                 if (variable.value === 'original') {
                     delete (column.aggregation);
@@ -256,8 +253,6 @@ app.directive('ndPrompt', function (queryModel, reportModel) {
                     column.elementLabel = column.originalLabel + ' (' + variable.name + ')';
                     column.objectLabel = column.originalLabel + ' (' + variable.name + ')';
                 }
-
-                queryModel.processStructure();
             };
 
             $scope.isComplete = function () {
@@ -289,6 +284,15 @@ app.directive('ndPrompt', function (queryModel, reportModel) {
             //         $scope.onChange($scope.elementId, values);
             //     }
             // }
+
+            $scope.fieldAggregations = $scope.$parent.fieldAggregations;
+
+            $scope.conditionTypes = [
+                {conditionType: 'and', conditionLabel: 'AND'},
+                {conditionType: 'or', conditionLabel: 'OR'},
+                {conditionType: 'andNot', conditionLabel: 'AND NOT'},
+                {conditionType: 'orNot', conditionLabel: 'OR NOT'}
+            ];
 
             $scope.filterStringOptions = [
                 {value: 'equal', label: 'equal'},

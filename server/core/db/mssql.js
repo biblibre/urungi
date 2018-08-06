@@ -98,3 +98,8 @@ exports.testConnection = function (req, data, setresult) {
         });
     });
 };
+
+// TODO : find a better way to escape arguments
+exports.escape = function (param) {
+    return '\'' + param.replace(/['"\\]/g, '') + '\'';
+};

@@ -3,6 +3,7 @@ const debug = require('debug')('urungi:server');
 var Reports = connection.model('Reports');
 
 const Controller = require('../../core/controller.js');
+const QueryProcessor = require('../../core/queryProcessor');
 
 class ReportsController extends Controller {
     constructor () {
@@ -191,12 +192,20 @@ exports.PreviewQuery = function (req, res) {
     });
 };
 
-exports.ReportsGetData = function (req, res) {
+exports.ReportsGetData = async function (req, res) {
     var data = req.body;
     var query = data.query;
-    processDataSources(req, query.datasources, query.layers, {page: (data.page) ? data.page : 1}, query, function (result) {
-        serverResponse(req, res, 200, result);
-    });
+    // processDataSources(req, query.datasources, query.layers, {page: (data.page) ? data.page : 1}, query, function (result) {
+    //     serverResponse(req, res, 200, result);
+    // });
+    var result;
+    try {
+        result = await QueryProcessor.execute(query);
+    } catch (err) {
+        console.error(err);
+        result = {result: 0, msg: (err.msg) ? err.msg : String(err), error: err};
+    }
+    serverResponse(req, res, 200, result);
 };
 
 function processDataSources (req, dataSources, layers, params, query, done, result, index) {
@@ -221,30 +230,29 @@ function processDataSources (req, dataSources, layers, params, query, done, resu
                 if (err) { console.error(err); }
 
                 if (dts) {
-                    for (const l in theLayers) {
-                        for (const s in theLayers[l].params.schema) {
-                            for (const j in dataSource.collections) {
-                                if (theLayers[l].params.schema[s].collectionID === dataSource.collections[j].collectionID) {
-                                    dataSource.collections[j]['schema'] = theLayers[l].params.schema[s];
+                    for (const layer of theLayers) {
+                        for (const schemaColl of layer.params.schema) {
+                            for (const collection of dataSource.collections) {
+                                if (schemaColl.collectionID === collection.collectionID) {
+                                    collection.schema = schemaColl;
                                 }
                             }
                         }
 
-                        for (const n in theLayers[l].params.joins) {
-                            for (const j in dataSource.collections) {
-                                if (theLayers[l].params.joins[n].sourceCollectionID === dataSource.collections[j].collectionID || theLayers[l].params.joins[n].targetCollectionID === dataSource.collections[j].collectionID) {
+                        for (const join of layer.params.joins) {
+                            for (const collection of dataSource.collections) {
+                                if (join.sourceCollectionID === collection.collectionID || join.targetCollectionID === collection.collectionID) {
                                     let theOther;
-                                    if (theLayers[l].params.joins[n].sourceCollectionID === dataSource.collections[j].collectionID) {
-                                        theOther = theLayers[l].params.joins[n].targetCollectionID;
-                                    }
-                                    if (theLayers[l].params.joins[n].targetCollectionID === dataSource.collections[j].collectionID) {
-                                        theOther = theLayers[l].params.joins[n].sourceCollectionID;
+                                    if (join.sourceCollectionID === collection.collectionID) {
+                                        theOther = join.targetCollectionID;
+                                    } else {
+                                        theOther = join.sourceCollectionID;
                                     }
 
                                     if (isTargetInvolved(dataSource.collections, theOther)) {
-                                        if (!dataSource.collections[j]['joins']) { dataSource.collections[j]['joins'] = []; }
+                                        if (!collection.joins) { collection.joins = []; }
 
-                                        dataSource.collections[j]['joins'].push(theLayers[l].params.joins[n]);
+                                        collection.joins.push(join);
 
                                         thereAreJoins = true;
                                     }

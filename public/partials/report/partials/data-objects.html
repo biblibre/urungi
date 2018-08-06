@@ -2,9 +2,9 @@
 
     <div id="selectLayerContainer" class="container-fluid"  ng-if="layers.length > 1" >
     <span translate>Choose a layer:</span>
-    <select id="selectLayer" ng-disabled="selectedReport.properties.columns.length > 0 || selectedReport.properties.order.length > 0 || selectedReport.query.groupFilters.length > 0" 
-        class="form-control" ng-model="selectedLayerID" ng-options="obj._id as obj.name for obj in layers"
-                                            ng-change="changeLayer(selectedLayerID)"></select>
+    <select id="selectLayer" ng-disabled="selectedReport.properties.columns.length > 0 || selectedReport.properties.order.length > 0 || selectedReport.properties.filters.length > 0" 
+        class="form-control" ng-model="selectedReport.selectedLayerID" ng-options="obj._id as obj.name for obj in layers"
+                                            ng-change="changeLayer(selectedReport.selectedLayerID)"></select>
     </div>
     <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">
     </tg-dynamic-directive>
@@ -26,7 +26,7 @@
                         collectionID:ngModelItem.collectionID,
                         elementID: ngModelItem.elementID,
                         elementType: ngModelItem.elementType,
-                        layerID: selectedLayerID,
+                        layerID: selectedReport.selectedLayerID,
                         filterType: 'equal',
                         filterPrompt: false,
                         filterTypeLabel:'equal',
@@ -51,7 +51,7 @@
                         elementLabel:ngModelItem.elementLabel,
                         elementID: ngModelItem.elementID,
                         elementType: ngModelItem.elementType,
-                        layerID: selectedLayerID,
+                        layerID: selectedReport.selectedLayerID,
                         filterType: 'equal',
                         filterPrompt: false,
                         filterTypeLabel:'equal',
