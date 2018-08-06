@@ -58,7 +58,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
         }
 
         if (params.filterCriteria) {
-            for (const filter of request.query.groupFilters) {
+            for (const filter of request.query.filters) {
                 if (params.filterCriteria[filter.id + filter.filterType]) {
                     filter.criterion = params.filterCriteria[filter.id + filter.filterType];
                 }
@@ -67,10 +67,18 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
 
         var result = await connection.post('/api/reports/get-data', request);
 
+        if (result.warnings) {
+            for (const w of result.warnings) {
+                noty({text: w.msg, timeout: 3000, type: 'warning'});
+            }
+        }
+
         if (result.result === 0) {
-            noty({text: result.msg, timeout: 2000, type: 'error'});
+            noty({text: result.msg, timeout: 3000, type: 'error'});
             return {
-                data: []
+                data: [],
+                sql: result.sql,
+                errorToken: result
             };
         }
 
@@ -83,7 +91,8 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
         return {
             data: data,
             sql: result.sql,
-            time: result.time
+            time: result.time,
+            warnings: result.warnings
         };
     };
 
