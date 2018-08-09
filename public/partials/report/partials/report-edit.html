@@ -15,34 +15,36 @@
 <div class="container-fluid" style="width:100%" ng-include src="dropArea"></div>
 
 <div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width:100%">
+
     <span ng-show="selectedReport.query.recordLimit == undefined">
-        Quick display with
+        <span translate>Quick display with</span>
         <input type="number" ng-model="selectedRecordLimit.value" size="8">
-        results.
+        <span translate>results.</span>
         <button id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
     </span>
-    <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;">View SQL</button>
+    <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
     <span class="pull-right">
         <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" class="pull-right" ng-click="refresh();" style="padding: 3px 10px;">
             <i class="fa fa-refresh hand-cursor"></i>
-            Refresh data
+            <span translate>Refresh data</span>
             <span ng-if="time !== undefined">({{time}}ms)</span>
         </button>
     </span>
 </div>
 
 <div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width:100%">
-    <button class="btn btn-success pull-right" ng-if="user.reportsCreate" ng-click="reportName()" style="margin-left:5px;">Save as a report</button>
-    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left:5px;">Push it to a Dashboard</button>
+
+    <button class="btn btn-success pull-right" ng-if="user.reportsCreate" ng-click="reportName()" style="margin-left:5px;"translate>Save as a report</button>
+    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left:5px;"translate>Push it to a Dashboard</button>
 </div>
 <div class="container-fluid" ng-show="sql && isForDash" style="width:100%">
-    <button class="btn btn-success pull-right"  style="margin-left:5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();">Save</button>
+    <button class="btn btn-success pull-right"  style="margin-left:5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();" translate>Save</button>
 </div>
 
 
 <div ng-show="showSQL" class="panel panel-default" style="z-index:100">
     <div class="panel-heading">
-        <h3 class="panel-title">SQL query</h3>
+        <h3 class="panel-title" translate>SQL query</h3>
 
         <div class="panel-options">
             <a ng-click="getSQLPanel();" data-toggle="remove" style="cursor: pointer;">x</a>
@@ -56,7 +58,7 @@
 
 <div class="panel panel-danger" ng-if="selectedReport.reportType === 'chart-line' && selectedReport.properties.chart.noUnicityWarning && !selectedReport.hideErrorMessage">
         <div class="container-fluid form-inline">
-            <div class="col-md-10">
+            <div class="col-md-10" translate>
                 Warning. The data you've requested contains multiple values for some of the data points. This may result in the chart being strange or misleading.
                 To fix this, make sure to choose an aggregation for your metrics, and do not use more than 1 or 2 dimensions.
             </div>
@@ -68,7 +70,9 @@
 </div>
 
 <div class="container-fluid" ng-if="gettingData == true">
-    <h3><img src="/images/loader.gif" width="32px" height="32px"/>getting data ....</h3>
+
+    <img src="/images/loader.gif" width="32px" height="32px"/><h3 translate>getting data ...</h3>
+
 </div>
 
 <div report-view report="selectedReport" style="height:100%;position:relative" mode="mode" ></div>

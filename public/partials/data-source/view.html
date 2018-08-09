@@ -1,24 +1,24 @@
 <script src="libs/jsplumb/jquery.jsPlumb-1.7.6-min.js"></script>
 
 <div class="container-fluid branded-border-panel" >
-    <a href="/#/data-sources" class="btn btn-default pull-left">Cancel</a>
-    <a href="/#/data-sources/edit/{{_dataSource._id}}/" class="btn btn-warning pull-right" style="margin-left: 5px;margin-right: 5px;">Edit</a>
+    <a href="/#/data-sources" class="btn btn-default pull-left" translate>Cancel</a>
+    <a href="/#/data-sources/edit/{{_dataSource._id}}/" class="btn btn-warning pull-right" style="margin-left: 5px;margin-right: 5px;" translate>Edit</a>
 
 </div>
 
 <div class="container-fluid" ng-init="view()">
 
     <div class="container-fluid" style="margin-bottom: 10px">
-        <h3 class="pull-left">Data Source: {{_dataSource.name}}</h3>
+        <h3 class="pull-left" translate>Data Source: {{_dataSource.name}}</h3>
     </div>
 
     <div class="list-group" style="margin-bottom: 0px;">
         <div class="list-group-item">
-            <h4 class="list-group-item-heading">{{_dataSource.type}}</h4>
+            <h4 class="list-group-item-heading" translate>{{_dataSource.type}}</h4>
             <p class="list-group-item-text ng-binding">
-                <label class="small" style="margin-right: 5px">host: </label>{{_dataSource.params[0].connection.host}}
-                <label class="small" style="margin-right: 5px">port: </label>{{_dataSource.params[0].connection.port}}
-                <label class="small" style="margin-right: 5px">database: </label>{{_dataSource.params[0].connection.database}}
+                <label class="small" style="margin-right: 5px" translate>host: </label>{{_dataSource.params[0].connection.host}}
+                <label class="small" style="margin-right: 5px" translate>port: </label>{{_dataSource.params[0].connection.port}}
+                <label class="small" style="margin-right: 5px" translate>database: </label>{{_dataSource.params[0].connection.database}}
             </p>
         </div>
     </div>
@@ -57,7 +57,7 @@
     <span ng-init="erDiagramInit()"></span>
 
     <div class="container-fluid branded-border-panel" >
-        <h3 class="pull-left">Collections</h3>
+        <h3 class="pull-left" translate>Collections</h3>
     </div>
 
     <accordion close-others="false">
@@ -65,17 +65,17 @@
             <accordion-heading>
                 {{collection.collectionLabel}} - {{collection.collectionName}}
                 <div class="pull-right">
-                    <small>Show Fields</small>
+                    <small translate>Show Fields</small>
                     <span class="caret" style="color:#0000FF;"></span>
                 </div>
             </accordion-heading>
             <table class="table table-condensed">
                 <thead>
                 <tr>
-                    <th>Label</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Visible</th>
+                    <th translate>Label</th>
+                    <th translate>Name</th>
+                    <th translate>Type</th>
+                    <th translate>Visible</th>
                 </tr>
                 </thead>
                 <tbody>

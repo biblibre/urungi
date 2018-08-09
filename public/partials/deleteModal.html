@@ -8,14 +8,14 @@
         <br/>
         <br/>
             <div class="form-group">
-                <label>Please, type DELETE to confirm</label>
+                <label translate>Please, type DELETE to confirm</label>
                 <input name="reportName" type="text" class="form-control" ng-model="modalOptions.deleteString" ng-required="true" required >
-                <span ng-show="modalOptions.deleteString != 'DELETE'" class="help-inline">This field is required</span>
+                <span ng-show="modalOptions.deleteString != 'DELETE'" class="help-inline" translate>This field is required</span>
             </div>
     </div>
     <div class="modal-footer">
-        <button data-ng-click="deleteConfirmed(modalOptions.ID);" ng-disabled="modalOptions.deleteString != 'DELETE'"  class="btn btn-danger pull-right"  >Delete</button>
-        <button type="button" class="btn pull-right" data-dismiss="modal" style="margin-right: 5px;">Cancel</button>
+        <button data-ng-click="deleteConfirmed(modalOptions.ID);" ng-disabled="modalOptions.deleteString != 'DELETE'"  class="btn btn-danger pull-right"   translate>Delete</button>
+        <button type="button" class="btn pull-right" data-dismiss="modal" style="margin-right: 5px;" translate>Cancel</button>
 
     </div>
 </nd-modal>

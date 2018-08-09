@@ -10,8 +10,8 @@
                 <h3 class="pull-left" editable-text="_Layer.name"></h3>
             </div>
             <div class="explorer-header-buttons">
-                <a ng-click="save()" class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;">Save layer</a>
-                <a href="/#/layers" class="btn btn-default pull-right">Cancel</a>
+                <a ng-click="save()" class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;" translate>Save layer</a>
+                <a href="/#/layers" class="btn btn-default pull-right" translate>Cancel</a>
             </div>
         </div>
 
@@ -42,20 +42,20 @@
                     <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'elements'}">
                         <a  ng-click="tabs.selected = 'elements'">
                             <i class="fa fa-newspaper-o fa-2" aria-hidden="true"></i><!--<br/>Layer<br/>Elements-->
-                            <div class="objectPanel-menu-label">Layer<br/>Elements</div>
+                            <div class="objectPanel-menu-label" translate>Layer<br/>Elements</div>
 
                         </a>
                     </li>
                     <li id="sourcesTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'sources'}">
                         <a  ng-click="tabs.selected = 'sources'">
                             <i class="fa fa-plug fa-2" aria-hidden="true"></i> <!--<br/><br/> Sources-->
-                            <div class="objectPanel-menu-label">Sources</div>
+                            <div class="objectPanel-menu-label" translate>Sources</div>
                         </a>
                     </li>
                     <li id="queriesTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'queries'}">
                         <a  ng-click="tabs.selected = 'queries'">
                             <i class="fa fa-question-circle fa-2" aria-hidden="true"></i> <!--<br/>SQL<br/> Queries-->
-                            <div class="objectPanel-menu-label">Queries</div>
+                            <div class="objectPanel-menu-label" translate>Queries</div>
                         </a>
                     </li>
                 </menu>
@@ -74,7 +74,7 @@
 
                         <div class="container-fluid tool-set">
                             <div class="container-fluid">
-                                <button type="button" class="btn btn-primary pull-right"  ng-click="addFolder()">New Folder</button>
+                                <button type="button" class="btn btn-primary pull-right"  ng-click="addFolder()" translate>New Folder</button>
                             </div>
                         </div>
 
@@ -96,8 +96,8 @@
                                                         <i class="fa fa-calendar-o wst-main-color" ng-show="ngModelItem.elementType == 'date'" data-toggle="tooltip" data-placement="top"></i>
                                            <span ng-if="!ngModelItem.editing == true">{{ngModelItem.elementLabel}}</span>
                                            <div ng-if="!ngModelItem.editing == true" class="schema-element-btn">
-                                                <div class="btn btn-warning btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(ngModelItem)">Remove</div>
-                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="editElement(ngModelItem)">Edit</div>
+                                                <div class="btn btn-warning btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(ngModelItem)" translate>Remove</div>
+                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="editElement(ngModelItem)" translate>Edit</div>
                                             </div>
 
 
@@ -109,11 +109,11 @@
                                             <span ng-if="ngModelItem.editing == true" class=""><input type="text" ng-model="ngModelItem.elementLabel" style="width:100px"></span>
 
                                             <div ng-if="!ngModelItem.editing == true" class="schema-element-btn">
-                                                <div class="btn btn-danger btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(ngModelItem)">Delete</div>
+                                                <div class="btn btn-danger btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(ngModelItem)" translate>Delete</div>
                                                 <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="ngModelItem.editing = true; elementEditing = true;">Edit</div>
                                             </div>
 
-                                            <div ng-if="ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o save-folder-element-btn-icon" tooltip="Save folder label"></i></div>
+                                            <div ng-if="ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o save-folder-element-btn-icon" tooltip="{{'Save folder label' | translate}}"></i></div>
                                         </div>
                                         <ul ng-if="ngModelItem.elementRole == 'folder' || ngModelItem.elementRole == 'root'" class="schema-container list-group" ui-sortable="sortableOptions" ng-model="ngModelItem.elements"
                                             ng-class="{'schema-element-container-placeholder': onDrag, 'schema-element-container-default': !onDrag}">
@@ -178,7 +178,7 @@
                                                         {{subItem.name}}
                                                     </td>
                                                     <td>
-                                                        <button type="button" ng-click="addDatasetToLayer(item._id,subItem)" class="btn btn-info btn-xs add-to-layer-btn" style="font-" ng-if="selectedDts.id == undefined || selectedDts.id == item._id">Add</button>
+                                                        <button type="button" ng-click="addDatasetToLayer(item._id,subItem)" class="btn btn-info btn-xs add-to-layer-btn" style="font-" ng-if="selectedDts.id == undefined || selectedDts.id == item._id" translate>Add</button>
                                                     </td>
                                                 </tr>
                                               </table>
@@ -217,7 +217,7 @@
                 </div>
             </section>
             <section id="queriesTab" class="results infinite ng-hide" ng-show="tabs.selected == 'queries'" style="padding:5px;">
-                    <a ng-click="addSQL()" class="btn btn-info pull-right" style="margin-left: 5px;margin-right: 5px;">Add SQL</a>
+                    <a ng-click="addSQL()" class="btn btn-info pull-right" style="margin-left: 5px;margin-right: 5px;" translate>Add SQL</a>
                 <div ng-if="collection.sql" ng-repeat="collection in _Layer.params.schema">{{collection.collectionName}}</div>
             </section>
                 </section>

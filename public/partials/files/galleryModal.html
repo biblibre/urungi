@@ -12,7 +12,7 @@
 
                 <li ng-repeat="file in files">
                     <a class="hand-cursor file-selection" ng-click="onFileSelected(file)">
-                        <span ng-show="file.loaded" class="label label-success dz-label" style="">success</span>
+                        <span ng-show="file.loaded" class="label label-success dz-label" style="" translate>success</span>
 
                         <img class="dz-image" alt="{{file.description}}" ng-src="{{file.url}}" />
                     </a>

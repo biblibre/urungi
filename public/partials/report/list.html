@@ -7,28 +7,27 @@
         </div>
         <div class="main col-md-9">
             <div class="container-fluid">
-
-                <div class="container-fluid branded-border-panel" >
-                    <h3 class="pull-left" >Reports</h3>
-                    <a id="newReportBtn" ng-if="user.reportsCreate" href="/#/reports/new/" class="btn btn-success pull-right" tooltip="Click here to create a new single query report" tooltip-placement="bottom">New Report</a>
-                    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to start the guided tour for reports" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+                <div class="container-fluid branded-border-panel">
+                    <h3 class="pull-left" translate>Reports</h3>
+                    <a id="newReportBtn" ng-if="user.reportsCreate" href="/#/reports/new/" class="btn btn-success pull-right" tooltip="{{'Click here to create a new single query report' | translate}}" tooltip-placement="bottom" translate>New Report</a>
+                    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="{{'Click here to start the guided tour for reports' | translate}}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
                 </div>
 
                 <div id="reportList" class="list-group">
 
                     <div id="reportListItem" class="list-group-item" ng-repeat="report in reports.items">
-                        <a id="reportListItemDeleteBtn" href="" class="pull-right list-delete-button" ng-click="delete(report._id,report.reportName)" tooltip="Click here to delete this report" tooltip-placement="bottom">
+                        <a id="reportListItemDeleteBtn" href="" class="pull-right list-delete-button" ng-click="delete(report._id,report.reportName)" tooltip="{{'Click here to delete this report' | translate}}" tooltip-placement="bottom">
                             <i class="fa fa-trash-o "  ></i>
                         </a>
-                        <a id="reportListItemDuplicateBtn" class="pull-right list-duplicate-button" href="" ng-click="viewDuplicationForm(report)" tooltip="Click here to duplicate the SQ report" tooltip-placement="bottom">
+                        <a id="reportListItemDuplicateBtn" class="pull-right list-duplicate-button" href="" ng-click="viewDuplicationForm(report)" tooltip="{{'Click here to duplicate the SQ report' | translate}}" tooltip-placement="bottom">
                             <i class="fas fa-copy" ></i>
                         </a>
-                        <a id="reportListItemEditBtn" class="pull-right list-edit-button" href="/#/reports/edit/{{report._id}}"  tooltip="Click here to modify the SQ report" tooltip-placement="bottom">
+                        <a id="reportListItemEditBtn" class="pull-right list-edit-button" href="/#/reports/edit/{{report._id}}"  tooltip="{{'Click here to modify the SQ report' | translate}}" tooltip-placement="bottom">
                             <i class="fa fa-pencil" ></i>
                         </a>
-                        <span id="reportListItemPublished" ng-if="report.isPublic" class="badge badge-success pull-right published-tag">published</span>
+                        <span id="reportListItemPublished" ng-if="report.isPublic" class="badge badge-success pull-right published-tag" translate>published</span>
 
-                        <a href="/#/reports/view/{{report._id}}" tooltip="Click here to execute the report" tooltip-placement="bottom">
+                        <a href="/#/reports/view/{{report._id}}" tooltip="{{'Click here to execute the report' | translate}}" tooltip-placement="bottom">
                             <h4 id="reportListItemName" class="list-group-item-heading" ng-bind="report.reportName"></h4>
                             <p id="reportListItemDetails" class="list-group-item-text" ng-bind="report.reportDescription"></p>
                         </a>
@@ -37,7 +36,7 @@
                     <div class="container-fluid">
                      <ul ng-if="pager.pages.length" class="pagination">
                         <li ng-class="{disabled:pager.currentPage === 1}">
-                            <a ng-click="getReports(1,'',['reportName','reportType','isPublic','owner','reportDescription'])">First</a>
+                            <a ng-click="getReports(1,'',['reportName','reportType','isPublic','owner','reportDescription'])" translate>First</a>
                         </li>
                         <li ng-class="{disabled:pager.currentPage === 1}">
                             <a ng-click="getReports(pager.currentPage - 1,'',['reportName','reportType','isPublic','owner','reportDescription'])">Previous</a>
@@ -46,10 +45,10 @@
                             <a ng-click="getReports(page,'',['reportName','reportType','isPublic','owner','reportDescription'])">{{page}}</a>
                         </li>
                         <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                            <a ng-click="getReports(pager.currentPage + 1,'',['reportName','reportType','isPublic','owner','reportDescription'])">Next</a>
+                            <a ng-click="getReports(pager.currentPage + 1,'',['reportName','reportType','isPublic','owner','reportDescription'])" translate>Next</a>
                         </li>
                         <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                            <a ng-click="getReports(pager.totalPages,'',['reportName','reportType','isPublic','owner','reportDescription'])">Last</a>
+                            <a ng-click="getReports(pager.totalPages,'',['reportName','reportType','isPublic','owner','reportDescription'])" translate>Last</a>
                         </li>
                     </ul>
 

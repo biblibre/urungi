@@ -4,17 +4,17 @@
         <div class="modal-content" >
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Select Date</h4>
+                <h4 class="modal-title" id="myModalLabel" translate>Select Date</h4>
             </div>
             <div class="modal-body"  >
 
                 <!--<div class="datepicker" style="display: block;" ng-model="selectedFilter.filterLabel1" ></div> -->
                 <datetimepicker data-ng-model="selectedFilter.filterLabel1"
                                 data-datetimepicker-config="{ startView:'day', minView:'day' }" />
-                {{selectedFilter.filterLabel1}}
+                {{selectedFilter.filterLabel1 | translate}}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" translate>Cancel</button>
 
             </div>
         </div><!-- /.modal-content -->

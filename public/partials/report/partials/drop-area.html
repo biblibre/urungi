@@ -26,23 +26,23 @@
 
     <div ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid'"
     wst-dropzone="true" list-model="selectedReport.properties.columns" hide-column="hideColumn" zone="'columns'"
-    query-bind="'column'" zone-info="'Drop here your columns'"></div>
+    query-bind="'column'" zone-info="'Drop here your columns'|translate"></div>
 
     <!--dimensions for pivot tables -->
 
     <div ng-if="selectedReport.reportType == 'pivot'" wst-dropzone="true" list-model="selectedReport.properties.pivotKeys.columns"
     forbid-aggregation="true"
-    query-bind="'column'" zone-info="'Drop here the table columns'"  zone="'pcol'"></div>
+    query-bind="'column'" zone-info="'Drop here the table columns'|translate"  zone="'pcol'"></div>
 
     <div ng-if="selectedReport.reportType == 'pivot'" wst-dropzone="true" list-model="selectedReport.properties.pivotKeys.rows"
     forbid-aggregation="true"
-    query-bind="'column'" zone-info="'Drop here the table rows'"  zone="'prow'"></div>
+    query-bind="'column'" zone-info="'Drop here the table rows'|translate"  zone="'prow'"></div>
 
     <!--dimensions for charts -->
 
     <div ng-if="selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'chart-line' || selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'chart-pie'"
     wst-dropzone="true" list-model="selectedReport.properties.xkeys" zone="'xkeys'"
-    query-bind="'column'" zone-info="'Drop here the dimension field'"></div>
+    query-bind="'column'" zone-info="'Drop here the dimension field'|translate"></div>
 
     <!-- Filters -->
 

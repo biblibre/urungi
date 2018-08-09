@@ -1,7 +1,7 @@
 <div class="object-tree" style="">
 
     <div id="selectLayerContainer" class="container-fluid"  ng-if="layers.length > 1" >
-    <span>Choose a layer:</span>
+    <span translate>Choose a layer:</span>
     <select id="selectLayer" ng-disabled="selectedReport.properties.columns.length > 0 || selectedReport.properties.order.length > 0 || selectedReport.query.groupFilters.length > 0" 
         class="form-control" ng-model="selectedLayerID" ng-options="obj._id as obj.name for obj in layers"
                                             ng-change="changeLayer(selectedLayerID)"></select>

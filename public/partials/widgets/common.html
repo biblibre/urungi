@@ -6,14 +6,14 @@
                 <!--background color-->
 
                 <div class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Background color</label>
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;" translate>Background color</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
                                 <wst-color ng-model="backgroundColor"></wst-color>
                             </div>
                     </div>
                 </div>
                 <div class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Background image</label>
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;" translate>Background image</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
                                 <wst-image ng-model="backgroundImage"></wst-image>
                             </div>
@@ -23,7 +23,7 @@
 
             <div class="row" style="width:200px;text-align: center;padding: 10px;padding-left:15px;" >
                     <div class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Opacity</label>
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;" translate>Opacity</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
                                 <input class="sliderInput" ng-model="imageFilters.opacity" type="range" step="1" min="0" max="100" value="100" ng-change="changeOpacity()">
                             </div>
@@ -32,7 +32,7 @@
             <div >
                 <!--font color-->
     <div class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Font color</label>
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;" translate>Font color</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
                                 <wst-color ng-model="fontColor"></wst-color>
                             </div>
@@ -40,7 +40,7 @@
             </div>
 <!--Hidden in-->
     <div ng-if="selectedElementType != 'page'" class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Hidden in</label>
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;" translate>Hidden in</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
                                 <wst-hidden ng-model="hiddenIn" on-change="changeHiddenIn"></wst-hidden>
                             </div>
@@ -48,7 +48,7 @@
 
 
         <div ng-if="selectedElementType != 'page'" class="form-group designer_form_group row">
-                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;">Height</label>
+                            <label for="floatEdit" class="col-md-4 col-sm-4 col-xs-4  control-label designer_control_label" style="font-weight: normal;" translate>Height</label>
                             <div class="col-md-8 col-sm-8 col-xs-8">
                                 <input type="number" class="form-control" id="objectHeight" ng-model='objectHeight' placeholder="Height" ng-change="changeHeight(objectHeight)">
                             </div>
@@ -58,10 +58,10 @@
             <table ng-if="canMoveSelectedElement">
                 <tr>
                     <td>
-                      <button class="btn btn-info btn-small"  ng-click="moveElementUp()" style="width:90px;"><i class="fa fa-arrow-up"></i> Up</button>
+                      <button class="btn btn-info btn-small"  ng-click="moveElementUp()" style="width:90px;"><i class="fa fa-arrow-up"></i> <span translate>Up</span></button>
                     </td>
                     <td>
-                      <button class="btn btn-info btn-small" ng-click="moveElementDown()" style="width:90px;"><i class="fa fa-arrow-down"></i> Down</button>
+                      <button class="btn btn-info btn-small" ng-click="moveElementDown()" style="width:90px;"><i class="fa fa-arrow-down"></i> <span translate>Down</span></button>
                     </td>
                 </tr>
             </table>
@@ -82,7 +82,7 @@
     <v-pane-content>
         <form role="form" class="form-horizontal">
                     <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectMargin">Margin</label>
+						<label class="col-sm-4 control-label" for="objectMargin" translate>Margin</label>
 
 						<div class="col-sm-8">
 							<input type="number" class="form-control" id="objectMargin" ng-model='objectMargin' placeholder="margin" ng-change="changeCSS('margin',objectMargin)">
@@ -90,28 +90,28 @@
 					</div>
         <div ng-if="objectMargin == undefined || objectMargin == ''">
             <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectMarginLeft">Margin left</label>
+						<label class="col-sm-4 control-label" for="objectMarginLeft" translate>Margin left</label>
 
 						<div class="col-sm-8">
 							<input type="number" class="form-control" id="objectMarginLeft" ng-model='objectMarginLeft' placeholder="margin left" ng-change="changeCSS('margin-left',objectMarginLeft)">
 						</div>
 					</div>
             <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectMarginRight">Margin right</label>
+						<label class="col-sm-4 control-label" for="objectMarginRight" translate>Margin right</label>
 
 						<div class="col-sm-8">
 							<input type="number" class="form-control" id="objectMarginRight" ng-model='objectMarginRight' placeholder="margin right" ng-change="changeCSS('margin-right',objectMarginRight)">
 						</div>
 					</div>
              <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectMarginTop">Margin top</label>
+						<label class="col-sm-4 control-label" for="objectMarginTop" translate>Margin top</label>
 
 						<div class="col-sm-8">
 							<input type="number" class="form-control" id="objectMarginTop" ng-model='objectMarginTop' placeholder="margin top" ng-change="changeCSS('margin-top',objectMarginTop)">
 						</div>
 					</div>
             <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectMarginBottom">Margin bottom</label>
+						<label class="col-sm-4 control-label" for="objectMarginBottom" translate>Margin bottom</label>
 
 						<div class="col-sm-8">
 							<input type="number" class="form-control" id="objectMarginBottom" ng-model='objectMarginBottom' placeholder="margin bottom" ng-change="changeCSS('margin-bottom',objectMarginBottom)">
@@ -129,7 +129,7 @@
     <v-pane-content>
         <form role="form" class="form-horizontal">
                     <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectPadding">Padding</label>
+						<label class="col-sm-4 control-label" for="objectPadding" translate>Padding</label>
 
 						<div class="col-sm-8">
 							<input type="number" class="form-control" id="objectPadding" ng-model='objectPadding' placeholder="Padding" ng-change="changeCSS('padding',objectPadding)">
@@ -137,28 +137,28 @@
 					</div>
         <div ng-if="objectPadding == undefined || objectPadding == ''">
             <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectPaddingLeft">Padding left</label>
+						<label class="col-sm-4 control-label" for="objectPaddingLeft" translate>Padding left</label>
 
 						<div class="col-sm-8">
 							<input type="number" class="form-control" id="objectPaddingLeft" ng-model='objectPaddingLeft' placeholder="Padding left" ng-change="changeCSS('padding-left',objectPaddingLeft)">
 						</div>
 					</div>
             <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectPaddingRight">Padding right</label>
+						<label class="col-sm-4 control-label" for="objectPaddingRight" translate>Padding right</label>
 
 						<div class="col-sm-8">
 							<input type="number" class="form-control" id="objectPaddingRight" ng-model='objectPaddingRight' placeholder="Padding right" ng-change="changeCSS('padding-right',objectPaddingRight)">
 						</div>
 					</div>
              <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectPaddingTop">Padding top</label>
+						<label class="col-sm-4 control-label" for="objectPaddingTop" translate>Padding top</label>
 
 						<div class="col-sm-8">
 							<input type="number" class="form-control" id="objectPaddingTop" ng-model='objectPaddingTop' placeholder="Padding top" ng-change="changeCSS('padding-top',objectPaddingTop)">
 						</div>
 					</div>
             <div class="form-group">
-						<label class="col-sm-4 control-label" for="objectPaddingBottom">Padding bottom</label>
+						<label class="col-sm-4 control-label" for="objectPaddingBottom" translate>Padding bottom</label>
 
 						<div class="col-sm-8">
 							<input type="number" class="form-control" id="objectPaddingBottom" ng-model='objectPaddingBottom' placeholder="Padding bottom" ng-change="changeCSS('padding-bottom',objectPaddingBottom)">
@@ -173,7 +173,7 @@
 
 
   <v-pane ng-if="selectedElementType == 'c3Chart'">
-      <v-pane-header>
+      <v-pane-header translate>
       Chart Elements
     </v-pane-header>
 
@@ -186,7 +186,7 @@
                     <td style="width:10%"></td>
                 </tr>
              </table>
-            <div><strong>   Data</strong></div>
+            <div><strong translate>   Data</strong></div>
             <table>
                 <tr ng-repeat="column in selectedChart.ykeys">
                     <td style="width:80%;overflow:hidden;"> {{column.elementLabel}}</td>
@@ -202,7 +202,7 @@
     <grid-properties grid="selectedRepeater" ng-if="selectedElementType == 'repeaterGrid'"></grid-properties>
 
     <v-pane ng-if="selectedElementType == 'tabsContainer'">
-      <v-pane-header>
+      <v-pane-header translate>
       Tabs
     </v-pane-header>
 

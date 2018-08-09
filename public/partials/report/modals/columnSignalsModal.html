@@ -3,11 +3,11 @@
 
 
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>Conditional formating for column</h4>
+        <h4 translate>Conditional formating for column</h4>
     </div>
     <div class="modal-body">
         <button class="btn" ng-click="selectedColumn.signals.push({filter:'biggerThan',filterLabel:signalOptions[2].label,color:'#000','background-color':'#EEEEEE','text-align':'left','font-size':'12px','font-weight':'normal','font-style':'normal'})">add new format</button>
-        <span>for <span class="branded-strong-label" >{{selectedColumn.objectLabel}}</span></span>
+        <span> <span translate>for</span> <span class="branded-strong-label" >{{selectedColumn.objectLabel}}</span></span>
         <div class="container-fluid">
             <div class="container-fluid" ng-repeat="signal in selectedColumn.signals" style="border: 1px #ccc solid;margin-bottom: 5px;">
 
@@ -45,7 +45,7 @@
                                     <button type="button" class="btn btn-primary iconpicker-component" style="height:32px; background-color: {{signal.color}}" ng-style="{color: (selectedReport.properties.mainFontColor == '#FFFFFF') ? '#000000' : '#FFFFFF'}">Font Color</button>
                                     <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="height:32px; background-color: {{signal.color}}" ng-style="{color: (signal.color == '#FFFFFF') ? '#000000' : '#FFFFFF'}">
                                         <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
+                                        <span class="sr-only" translate>Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
                                         <div class="iconpicker-items">
@@ -58,7 +58,7 @@
                                     <button type="button" class="btn btn-primary iconpicker-component" style="height:32px; background-color: {{signal['background-color']}}" ng-style="{color: (selectedReport.properties.mainFontColor == '#FFFFFF') ? '#000000' : '#FFFFFF'}">Background Color</button>
                                     <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle iconpicker-element" data-selected="fa-car" data-toggle="dropdown" style="height:32px; background-color: {{signal['background-color']}}" ng-style="{color: (signal['background-color'] == '#FFFFFF') ? '#000000' : '#FFFFFF'}">
                                         <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
+                                        <span class="sr-only" translate>Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu iconpicker-container"><div class="iconpicker-popover popover fade in inline" style="top: auto; right: auto; bottom: auto; left: auto; max-width: none;"><div class="arrow"></div><div class="popover-content"><div class="iconpicker">
                                         <div class="iconpicker-items">
@@ -70,19 +70,19 @@
                 <div class="row">
                     <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label" for="FontSize">Font Size</label>
+                                    <label class="control-label" for="FontSize" translate>Font Size</label>
                                     <select id="FontSize" class="form-control" ng-model="signal['font-size']" ng-options="obj.value as obj.name for obj in fontSizes"></select>
                                 </div>
                     </div>
                     <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label" for="FontWeight">Font Weight</label>
+                                    <label class="control-label" for="FontWeight" translate>Font Weight</label>
                                     <select id="FontWeight" class="form-control" ng-model="signal['font-weight']" ng-options="obj.value as obj.name for obj in fontWeights"></select>
                                 </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label" for="FontStyle">Font Style</label>
+                            <label class="control-label" for="FontStyle" translate>Font Style</label>
                             <select id="FontStyle" class="form-control" ng-model="signal['font-style']" ng-options="obj.value as obj.name for obj in fontStyles"></select>
                         </div>
                     </div>
@@ -96,8 +96,8 @@
 
     </div>
     <div class="modal-footer">
-        <a ng-click="setColumnFormat()" class="btn btn-primary pull-right">Apply</a>
-        <button type="button" class="btn pull-right" data-dismiss="modal">Cancel</button>
+        <a ng-click="setColumnFormat()" class="btn btn-primary pull-right" translate>Apply</a>
+        <button type="button" class="btn pull-right" data-dismiss="modal" translate>Cancel</button>
 
 
     </div>
