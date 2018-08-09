@@ -1,7 +1,7 @@
 <nd-modal id="elementModal">
     <div class="modal-header ng-scope">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-close"></i></button>
-        <h4 class="modal-title">Add element to schema</h4>
+        <h4 class="modal-title" translate>Add element to schema</h4>
         <h5 class="modal-title">{{selectedElement.elementName}}</h5>
     </div>
 
@@ -15,14 +15,14 @@
 
                     <ul class="nav nav-tabs">
                         <li ng-class="{'active': tabbed_panel_active == 1}" class="active">
-                            <a  ng-click="tabbed_panel_active = 1">General</a>
+                            <a  ng-click="tabbed_panel_active = 1" translate>General</a>
                         </li>
                         <li  ng-class="{'active': tabbed_panel_active == 2}" class="">
-                            <a  ng-click="tabbed_panel_active = 2">Format</a>
+                            <a  ng-click="tabbed_panel_active = 2" translate>Format</a>
                         </li>
 
                         <li ng-class="{'active': tabbed_panel_active == 3}" class="">
-                            <a  ng-click="tabbed_panel_active = 3">Advanced</a>
+                            <a  ng-click="tabbed_panel_active = 3" translate>Advanced</a>
                         </li>
 
                     </ul>
@@ -38,13 +38,13 @@
                             <div class="col-md-6">
 
                                 <div class="form-group">
-                                    <label for="field-3" class="control-label">Label</label>
+                                    <label for="field-3" class="control-label" translate>Label</label>
                                     <input id="field-3" class="form-control" ng-model="selectedElement.elementLabel" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="field-4" class="control-label">Type</label>
+                                    <label for="field-4" class="control-label" translate>Type</label>
                                     <select id="field-4" class="form-control" ng-model="selectedElement.elementType" ng-options="obj.value as obj.name for obj in elementTypes"
                                             ng-change="onElementTypeChange(selectedElement)"></select>
                                 </div>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="field-4b" class="control-label">Default aggregation</label>
+                                    <label for="field-4b" class="control-label" translate>Default aggregation</label>
                                     <select id="field-4b" class="form-control" ng-model="selectedElement.defaultAggregation" ng-options="obj.value as obj.name for obj in numberDefaultAggregation"></select>
                                 </div>
 
@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="field-4b" class="control-label">Default aggregation</label>
+                                    <label for="field-4b" class="control-label" translate>Default aggregation</label>
                                     <select id="field-4b" class="form-control" ng-model="selectedElement.defaultAggregation" ng-options="obj.value as obj.name for obj in stringDefaultAggregation"></select>
                                 </div>
 
@@ -85,7 +85,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="field-5" class="control-label">Description</label>
+                                    <label for="field-5" class="control-label" translate>Description</label>
                                     <textarea ng-model="selectedElement.description" class="form-control autogrow" id="field-5"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
                                 </div>
 
@@ -96,7 +96,7 @@
                             <div class="col-md-12">
                                 <div class="form-group" ng-if="selectedElement.elementType == 'array'">
 
-                                    <label class="control-label">Array values</label>
+                                    <label class="control-label" translate>Array values</label>
                                     <div ng-repeat="value in selectedElement.values">
                                         <span class="form-control" style="width: 47%;float: left;font-weight: bold;">{{value.value}} </span>
                                         <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
@@ -114,17 +114,17 @@
 
                                 <div class="form-group" ng-if="selectedElement.elementType == 'lookup'">
 
-                                    <label class="control-label">Lookup setup</label>
+                                    <label class="control-label" translate>Lookup setup</label>
                                     <div>
-                                        <span class="form-control" style="width: 47%;float: left;font-weight: bold;">Join Dataset </span>
+                                        <span class="form-control" style="width: 47%;float: left;font-weight: bold;" translate>Join Dataset </span>
                                         <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
                                     </div>
                                     <div>
-                                        <span class="form-control" style="width: 47%;float: left;font-weight: bold;">Join Field </span>
+                                        <span class="form-control" style="width: 47%;float: left;font-weight: bold;" translate>Join Field </span>
                                         <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
                                     </div>
                                     <div>
-                                        <span class="form-control" style="width: 47%;float: left;font-weight: bold;">Shown Field </span>
+                                        <span class="form-control" style="width: 47%;float: left;font-weight: bold;" translate>Shown Field </span>
                                         <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
                                     </div>
                                 </div>
@@ -136,19 +136,19 @@
                 <div   class="tab-pane" ng-class="{'active': tabbed_panel_active == 2}">
                        <div ng-if="selectedElement.elementType == 'number' || selectedElement.elementType == 'date'" >
                             <div class="form-group">
-                                <label for="field-format" class="control-label">Format</label>
+                                <label for="field-format" class="control-label" translate>Format</label>
                                 <input id="field-format" class="form-control" ng-model="selectedElement.format" placeholder="format..." style="width: 100%;">
                             </div>
                             <div ng-if="selectedElement.elementType == 'number'">
-                                <h5 >Format examples</h5>
-                                <a class="btn btn-link pull-right" href="http://numeraljs.com/" target="_blank">more examples...</a>
+                                <h5 translate>Format examples</h5>
+                                <a class="btn btn-link pull-right" href="http://numeraljs.com/" target="_blank" translate>more examples...</a>
 
                                 <table id="format-numbers" class="table-condensed striped bordered">
                                     <thead>
                                     <tr>
-                                        <th>Number</th>
-                                        <th>Format</th>
-                                        <th>String</th>
+                                        <th translate>Number</th>
+                                        <th translate>Format</th>
+                                        <th translate>String</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -168,15 +168,15 @@
                             </div>
 
                             <div ng-if="selectedElement.elementType == 'date'">
-                                <h5 >Format examples</h5>
-                                <a class="btn btn-link pull-right" href="http://momentjs.com/docs/#/displaying/" target="_blank">more examples...</a>
+                                <h5 translate>Format examples</h5>
+                                <a class="btn btn-link pull-right" href="http://momentjs.com/docs/#/displaying/" target="_blank" translate>more examples...</a>
 
                                 <table id="format-numbers" class="table-condensed striped bordered">
                                     <thead>
                                     <tr>
 
-                                        <th>Format</th>
-                                        <th>Result</th>
+                                        <th translate>Format</th>
+                                        <th translate>Result</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -196,7 +196,7 @@
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" ng-model="selectedElement.extractFromString">
-                                Extract from String
+                                <span translate>Extract from String</span>
                             </label>
                         </div>
 
@@ -205,23 +205,23 @@
                                 <thead>
                                 <tr>
                                     <td></td>
-                                    <td><label>position from</label></td>
-                                    <td><label>position to</label></td>
+                                    <td><label translate>position from</label></td>
+                                    <td><label translate>position to</label></td>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td><label>Year</label></td>
+                                    <td><label translate>Year</label></td>
                                     <td><input id="yearfrom" type="text" class="form-control" ng-model="selectedElement.yearPositionFrom"></td>
                                     <td><input id="yearto" type="text" class="form-control" ng-model="selectedElement.yearPositionTo" ></td>
                                 </tr>
                                 <tr>
-                                    <td><label>Month</label></td>
+                                    <td><label translate>Month</label></td>
                                     <td><input id="monthfrom" type="text" class="form-control" ng-model="selectedElement.monthPositionFrom" ></td>
                                     <td><input id="monthto" type="text" class="form-control" ng-model="selectedElement.monthPositionTo" ></td>
                                 </tr>
                                 <tr>
-                                    <td><label>Day</label></td>
+                                    <td><label translate>Day</label></td>
                                     <td><input id="dayfrom" type="text" class="form-control" ng-model="selectedElement.dayPositionFrom" ></td>
                                     <td><input id="dayto" type="text" class="form-control" ng-model="selectedElement.dayPositionTo" ></td>
                                 </tr>
@@ -235,11 +235,11 @@
                     <div ng-if="selectedElement.elementType != 'date' && selectedElement.elementType != 'number'">
                         <div class="form-group">
 
-                            <h4 >Associated elements</h4>
+                            <h4 translate>Associated elements</h4>
                             <table style="width: 100%;">
                                 <thead>
                                 <td></td>
-                                <td>Visible</td>
+                                <td translate>Visible</td>
                                 <td></td>
                                 </thead>
                                 <tbody>
@@ -284,8 +284,8 @@
 
 
     <div class="modal-footer ng-scope">
-        <button type="button" class="btn btn-white" data-dismiss="modal" ng-click="elementEditing = false">Cancel</button>
-        <button  type="button" class="btn btn-info"  ng-click="saveElement()">Save</button>
+        <button type="button" class="btn btn-white" data-dismiss="modal" ng-click="elementEditing = false" translate>Cancel</button>
+        <button  type="button" class="btn btn-info"  ng-click="saveElement()" translate>Save</button>
 
     </div>
 </nd-modal>

@@ -1,10 +1,10 @@
 <section class="layer scrollPane">
 <div style="width: 180px;">
 
-            <button class="button buttonBlock fileUploadButton" ng-click="newQuery()">New Query</button>
+            <button class="button buttonBlock fileUploadButton" ng-click="newQuery()" translate>New Query</button>
 
-            <div ng-if="prompts.length > 0" style="padding-top;5px;padding-bottom:5px;">
-            <div style="border-bottom:2px solid #fff">Filters</div>
+            <div ng-if="prompts.length > 0" style="padding-top:5px;padding-bottom:5px;">
+            <div style="border-bottom:2px solid #fff" translate>Filters</div>
 
                 <div class="filter_element" ng-repeat="filter in prompts" draggable="true" effect-allowed="copy" draggable-type="custom-object" draggable-data="{
                                elementName: filter.elementName,
@@ -32,10 +32,10 @@
                         <table>
                             <tr>
                                 <td>
-                                  <button class="btn btn-danger btn-xs"  ng-click="deleteQuery(query)" style="width:90px;"><i class="fa fa-trash"></i> Delete</button>
+                                  <button class="btn btn-danger btn-xs"  ng-click="deleteQuery(query)" style="width:90px;"><i class="fa fa-trash"></i> <span translate>Delete</span></button>
                                 </td>
                                 <td>
-                                  <button class="btn btn-primary btn-xs" ng-click="loadQS(query)" style="width:90px;"><i class="fa fa-pencil"></i> Edit</button>
+                                  <button class="btn btn-primary btn-xs" ng-click="loadQS(query)" style="width:90px;"><i class="fa fa-pencil"></i> <span translate>Edit</span></button>
                                 </td>
                             </tr>
 

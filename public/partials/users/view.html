@@ -4,14 +4,14 @@
     <div class="well">
 
         <div  class="pull-right" >
-            <button ng-click="goBack()" class="btn btn-default">Cancel</button>
-            <a ng-if="_User._id == user._id" href="/#/logout" class="btn btn-danger">logout</a>
-            <button ng-if="_User._id == user._id" class="btn btn-inverse" ng-click="changeMyPassword()">Change my password</button>
-            <button ng-click="editUser()" ng-if="isWSTADMIN" class="btn btn-success">Edit</button>
+            <button ng-click="goBack()" class="btn btn-default" translate>Cancel</button>
+            <a ng-if="_User._id == user._id" href="/#/logout" class="btn btn-danger" translate>logout</a>
+            <button ng-if="_User._id == user._id" class="btn btn-inverse" ng-click="changeMyPassword()" translate>Change my password</button>
+            <button ng-click="editUser()" ng-if="isWSTADMIN" class="btn btn-success" translate>Edit</button>
 
         </div>
-            <h1 class="title">User</h1>
-            <p class="description">User profile and permissions</p>
+            <h1 class="title" translate>User</h1>
+            <p class="description" translate>User profile and permissions</p>
 
 
 
@@ -63,7 +63,7 @@
                          <i ng-if="isWSTADMIN" class="fa fa-trash-o" style="color: #FF0000" ng-click="deleteRole(role)"></i>   {{getRoleName(role)}}
                         </li>
                         <li ng-if="isWSTADMIN" style="margin-top:10px;">
-                            <span>Add role</span>
+                            <span translate>Add role</span>
                             <select ng-model="selectedRole" placeholder="Add a new role..." ng-class="selectedRole" id="roleSelect" class="form-control" ng-change="selectedRoleChanged = true" ng-options="role._id as role.name for role in getRolesNotInUser()" style="width: 80%;float: left;"></select>
                             <div ng-show="selectedRoleChanged == true && selectedRole != ''" ng-click="_User.roles.push(selectedRole);save();selectedRole = '';selectedRoleChanged = false;" style="width: 20%;float: left;text-align:center;vertical-align: middle;" ><i class="fa fa-plus" style="color:#00A000;"></i>  </div>
 
@@ -77,21 +77,21 @@
                     <ul class="list-unstyled user-friends-count">
                         <li>
                             <span>{{userCounts.publishedReports}}</span>
-                            Published reports
+                            <span translate>Published reports</span>
                         </li>
                         <li>
                             <span>{{userCounts.publishedDashBoards}}</span>
-                            Published Dashboards
+                            <span translate>Published Dashboards</span>
                         </li>
                     </ul>
                     <ul class="list-unstyled user-friends-count">
                         <li>
                             <span>{{userCounts.privateReports}}</span>
-                            Private reports
+                            <span translate>Private reports</span>
                         </li>
                         <li>
                             <span>{{userCounts.privateDashBoards}}</span>
-                            Private Dashboards
+                            <span translate>Private Dashboards</span>
                         </li>
                     </ul>
                     <!--
@@ -109,11 +109,11 @@
                     <div class="col-sm-6">
 
                         <div class="panel panel-default ng-scope">
-                            <div class="panel-heading hidden-print">Reports</div>
+                            <div class="panel-heading hidden-print" translate>Reports</div>
                             <div class="panel-body">
                                 <div class="list-group">
                                     <div class="list-group-item" ng-repeat="report in userReports">
-                                        <span ng-if="report.isPublic" class="badge badge-success pull-right">public</span>
+                                        <span ng-if="report.isPublic" class="badge badge-success pull-right" translate>public</span>
                                         <a href="/#/reports/{{report._id}}">
                                             <h4 class="list-group-item-heading" ng-bind="report.reportName"></h4>
                                             <p class="list-group-item-text" ng-bind="report.reportDescription"></p>
@@ -130,11 +130,11 @@
                     <div class="col-sm-6">
 
                         <div class="panel panel-default ng-scope">
-                            <div class="panel-heading hidden-print">Dashboards</div>
+                            <div class="panel-heading hidden-print" translate>Dashboards</div>
                             <div class="panel-body">
                                 <div class="list-group">
                                     <div class="list-group-item" ng-repeat="dsh in userDashboards">
-                                        <span ng-if="dsh.isPublic" class="badge badge-success pull-right">public</span>
+                                        <span ng-if="dsh.isPublic" class="badge badge-success pull-right" translate>public</span>
                                         <a href="/#/dashboards/{{dsh._id}}">
                                         <h4 class="list-group-item-heading" ng-bind="dsh.dashboardName"></h4>
                                         <p class="list-group-item-text" ng-bind="dsh.dashboardDescription"></p>

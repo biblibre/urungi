@@ -9,15 +9,15 @@
             <div class="container-fluid">
 
                 <div class="container-fluid branded-border-panel" >
-                    <h3 class="pull-left" >Layers</h3>
-                    <a id="newLayerBtn" ng-click="newLayer()" class="btn btn-success pull-right" tooltip="Click here to create a new layer" tooltip-placement="bottom">New Layer</a>
-                    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for layers" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+                    <h3 class="pull-left" translate>Layers</h3>
+                    <a id="newLayerBtn" ng-click="newLayer()" class="btn btn-success pull-right" tooltip="{{'Click here to create a new layer' | translate}}" tooltip-placement="bottom" translate>New Layer</a>
+                    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="{{'Click here to conduct the guided tour for layers'| translate}}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
                 </div>
 
                 <div id="layerList" class="list-group" ng-init="getLayers(1,'',['name','status','description'])">
                     <div id="layerListItem" href="/#/layers/{{layer._id}}" class="list-group-item" ng-repeat="layer in items">
                         <a id="layerListItemStatus" class="badge pull-right" ng-class="{'badge-success': layer.status == 'active', 'badge-danger': layer.status == 'Not active'}" ng-click="changeLayerStatus(layer)" tooltip="Click here to change the status of the layer" tooltip-placement="left">{{layer.status}}</a>
-                        <a href="/#/layers/{{layer._id}}" tooltip="Click here to view/modify the layer" tooltip-placement="top">
+                        <a href="/#/layers/{{layer._id}}" tooltip="{{'Click here to view/modify the layer'| translate}}" tooltip-placement="top">
                             <h4 id="layerListItemName" class="list-group-item-heading">{{layer.name}}</h4>
                         </a>
                             <p id="layerListItemDetails" class="list-group-item-text">
@@ -31,19 +31,19 @@
                 <div class="container-fluid">
                      <ul ng-if="pager.pages.length" class="pagination">
                         <li ng-class="{disabled:pager.currentPage === 1}">
-                            <a ng-click="getLayers(1,'',['name','status','description'])">First</a>
+                            <a ng-click="getLayers(1,'',['name','status','description'])"translate>First</a>
                         </li>
                         <li ng-class="{disabled:pager.currentPage === 1}">
-                            <a ng-click="getLayers(pager.currentPage - 1,'',['name','status','description'])">Previous</a>
+                            <a ng-click="getLayers(pager.currentPage - 1,'',['name','status','description'])"translate>Previous</a>
                         </li>
                         <li ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
                             <a ng-click="getLayers(page,'',['name','status','description'])">{{page}}</a>
                         </li>
                         <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                            <a ng-click="getLayers(pager.currentPage + 1,'',['name','status','description'])">Next</a>
+                            <a ng-click="getLayers(pager.currentPage + 1,'',['name','status','description'])"translate>Next</a>
                         </li>
                         <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                            <a ng-click="getLayers(pager.totalPages,'',['name','status','description'])">Last</a>
+                            <a ng-click="getLayers(pager.totalPages,'',['name','status','description'])"translate>Last</a>
                         </li>
                     </ul>
 

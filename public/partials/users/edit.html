@@ -1,8 +1,8 @@
 
     <div class="modal-header ng-scope">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-close"></i></button>
-        <h4 ng-if="mode == 'new'" class="modal-title">New User</h4>
-        <h4 ng-if="mode != 'new'" class="modal-title">Edit User</h4>
+        <h4 ng-if="mode == 'new'" class="modal-title" translate>New User</h4>
+        <h4 ng-if="mode != 'new'" class="modal-title" translate>Edit User</h4>
     </div>
 
     <div class="modal-body ng-scope" ng-init="tabbed_panel_active = 1">
@@ -15,7 +15,7 @@
 
                     <ul class="nav nav-tabs">
                         <li ng-class="{'active': tabbed_panel_active == 1}" class="active">
-                            <a  ng-click="tabbed_panel_active = 1">General</a>
+                            <a  ng-click="tabbed_panel_active = 1" translate>General</a>
                         </li>
                         <!--
                         <li  ng-class="{'active': tabbed_panel_active == 2}" class="">
@@ -38,35 +38,35 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="username" class="control-label">User Nick</label>
+                                    <label for="username" class="control-label" translate>User Nick</label>
                                     <input id="username"  ng-disabled="mode != 'new'" class="form-control" ng-model="_User.userName" required>
-                                    <div role="alert"><span class="error" ng-show="myForm.username.$error.required">User Nick is required</span> </div>
+                                    <div role="alert"><span class="error" ng-show="myForm.username.$error.required" translate>User Nick is required</span> </div>
 
                                 </div>
                                 <div class="form-group">
-                                    <label for="fname" class="control-label">First Name</label>
+                                    <label for="fname" class="control-label" translate>First Name</label>
                                     <input id="fname" class="form-control" ng-model="_User.firstName" required>
-                                    <div role="alert"><span class="error" ng-show="myForm.fname.$error.required">First Name is required</span> </div>
+                                    <div role="alert"><span class="error" ng-show="myForm.fname.$error.required" translate>First Name is required</span> </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="lname" class="control-label">Last Name</label>
+                                    <label for="lname" class="control-label" translate>Last Name</label>
                                     <input id="lname" class="form-control" ng-model="_User.lastName" required>
-                                    <div role="alert"><span class="error" ng-show="myForm.lname.$error.required">Last Name is required</span> </div>
+                                    <div role="alert"><span class="error" ng-show="myForm.lname.$error.required" translate>Last Name is required</span> </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email" class="control-label">email</label>
+                                    <label for="email" class="control-label" translate>email</label>
                                     <input id="email" class="form-control" ng-model="_User.email" required>
-                                    <div role="alert"><span class="error" ng-show="myForm.email.$error.required">email is required</span> </div>
+                                    <div role="alert"><span class="error" ng-show="myForm.email.$error.required" translate>email is required</span> </div>
                                 </div>
                                 <div ng-if="mode == 'new'" class="checkbox">
                                     <label>
                                         <input type="checkbox" id="sendPassword" ng-model="_User.sendPassword" >
-                                        Send password through email
+                                        <p translate>Send password through email</p>
                                     </label>
                                 </div>
 
                                 <div  ng-show="(_User.sendPassword == false && mode == 'new') || (mode == 'edit')" class="form-group">
-                                    <label for="email" class="control-label">Password</label>
+                                    <label for="email" class="control-label" translate>Password</label>
                                     <table>
                                         <tr>
                                             <td>
@@ -83,30 +83,30 @@
 
                                 <div  ng-show="(mode == 'edit' && _User.email)" class="form-group">
 
-                                      <button class="btn btn-warning">Reset user password</button>
+                                      <button class="btn btn-warning" translate>Reset user password</button>
 
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="title" class="control-label">Title</label>
+                                    <label for="title" class="control-label" translate>Title</label>
                                     <input id="title" class="form-control" ng-model="_User.title" >
                                 </div>
                                 <div class="form-group">
-                                    <label for="department" class="control-label">Department</label>
+                                    <label for="department" class="control-label" translate>Department</label>
                                     <input id="department" class="form-control" ng-model="_User.department" >
                                 </div>
                                 <div class="form-group">
-                                    <label for="businessUnit" class="control-label">Business unit</label>
+                                    <label for="businessUnit" class="control-label" translate>Business unit</label>
                                     <input id="businessUnit" class="form-control" ng-model="_User.businessUnit" >
                                 </div>
                                 <div class="form-group">
-                                    <label for="unit" class="control-label">Unit</label>
+                                    <label for="unit" class="control-label" translate>Unit</label>
                                     <input id="unit" class="form-control" ng-model="_User.unit" >
                                 </div>
                                 <div class="form-group">
-                                    <label for="brand" class="control-label">Brand</label>
+                                    <label for="brand" class="control-label" translate>Brand</label>
                                     <input id="brand" class="form-control" ng-model="_User.brand" >
                                 </div>
 
@@ -175,8 +175,8 @@
         <div ng-if="alertMessage && alertMessage != ''" class="alert-block">{{alertMessage}}</div>
 
         <div class="container-fluid">
-            <button type="button" class="btn btn-info ng-pristine ng-valid pull-right"  ng-click="checkForNewUser()">Save</button>
-            <button type="button" class="btn btn-white pull-right" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-info ng-pristine ng-valid pull-right"  ng-click="checkForNewUser()" translate>Save</button>
+            <button type="button" class="btn btn-white pull-right" data-dismiss="modal" translate>Close</button>
 
         </div>
         </form>

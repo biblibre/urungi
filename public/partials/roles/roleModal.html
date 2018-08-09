@@ -40,10 +40,10 @@
                 <div class="panel-options">
                     <ul class="nav nav-tabs">
                         <li ng-class="{'active': tabbed_panel_active == 1}" class="active">
-                            <a  ng-click="tabbed_panel_active = 1">General</a>
+                            <a  ng-click="tabbed_panel_active = 1" translate>General</a>
                         </li>
                         <li  ng-class="{'active': tabbed_panel_active == 2}" class="">
-                            <a  ng-click="tabbed_panel_active = 2">Public space permissions</a>
+                            <a  ng-click="tabbed_panel_active = 2" translate>Public space permissions</a>
                         </li>
 
                     </ul>
@@ -61,7 +61,7 @@
                             <div class="col-md-6">
 
                                 <div class="form-group">
-                                    <label for="field-3" class="control-label">Role name</label>
+                                    <label for="field-3" class="control-label" translate>Role name</label>
                                     <input id="field-3" class="form-control" ng-model="_Role.name" required>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="field-5" class="control-label">Description</label>
+                                    <label for="field-5" class="control-label" translate>Description</label>
                                     <textarea ng-model="_Role.description" class="form-control autogrow" id="field-5"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
                                 </div>
 
@@ -86,7 +86,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
 
-                                    <label class="control-label">Permissions</label>
+                                    <label class="control-label" translate>Permissions</label>
 
                                     <table class="table table-bordered table-striped table-condensed table-hover">
                                         <thead>
@@ -97,23 +97,23 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <th>Create reports</th>
+                                                <th translate>Create reports</th>
                                                 <td style="text-align: center"><input type="checkbox" ng-model="_Role.reportsCreate"></td>
                                             </tr>
                                             <tr>
-                                                <th>Create dashboards</th>
+                                                <th translate>Create dashboards</th>
                                                 <td style="text-align: center"><input type="checkbox" ng-model="_Role.dashboardsCreate"></td>
                                             </tr>
                                             <tr>
-                                                <th>Create pages</th>
+                                                <th translate>Create pages</th>
                                                 <td style="text-align: center"><input type="checkbox" ng-model="_Role.pagesCreate"></td>
                                             </tr>
                                             <tr>
-                                                <th>Explore data</th>
+                                                <th translate>Explore data</th>
                                                 <td style="text-align: center"><input type="checkbox" ng-model="_Role.exploreData"></td>
                                             </tr>
                                             <tr>
-                                                <th>See SQL</th>
+                                                <th translate>See SQL</th>
                                                 <td style="text-align: center"><input type="checkbox" ng-model="_Role.viewSQL"></td>
                                             </tr>
                                         </tbody>
@@ -135,10 +135,10 @@
 
                 <div   class="tab-pane" ng-class="{'active': tabbed_panel_active == 2}">
                     <div class="row tree-node-content">
-                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden">Execute pages</span>
-                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden">Execute reports</span>
-                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden">Execute dashboards</span>
-                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden">Publish</span>
+                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute pages</span>
+                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute reports</span>
+                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute dashboards</span>
+                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Publish</span>
                     </div>
                     <div ui-tree id="tree-root">
                         <ol ui-tree-nodes ng-model="publicSpace">
@@ -155,7 +155,7 @@
     <div ng-if="roleEditingWarning && roleEditingWarning != ''" class="alert-block">{{roleEditingWarning}}</div>
 
     <div class="modal-footer ng-scope">
-        <button type="button" class="btn btn-info pull-right"  ng-click="save()" style="margin-right: 3px">Save</button> 
-        <button type="button" class="btn btn-white  pull-right" data-dismiss="modal" style="margin-right: 3px">Cancel</button>
+        <button type="button" class="btn btn-info pull-right"  ng-click="save()" style="margin-right: 3px" translate>Save</button> 
+        <button type="button" class="btn btn-white  pull-right" data-dismiss="modal" style="margin-right: 3px" translate>Cancel</button>
     </div>
 </nd-modal>

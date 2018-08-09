@@ -5,18 +5,17 @@
     <div class="explorer-header" ng-init="initReportEdit()">
 
         <div class="explorer-header-title">
-                <h3  ng-if="mode == 'preview' && !selectedReport.reportName">Explorer</h3>
+                <h3  ng-if="mode == 'preview' && !selectedReport.reportName" translate>Explorer</h3>
                 <h3  editable-text="selectedReport.reportName"> </h3>
 
         </div>
 
     <div class="explorer-header-buttons">
-                <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-if="mode == 'edit' && !isForDash" style="margin-left: 5px" tooltip="Click here to save the report changes" tooltip-placement="bottom">Save</a>
+                <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-if="mode == 'edit' && !isForDash" style="margin-left: 5px" tooltip="{{'Click here to save the report changes' | translate}}" tooltip-placement="bottom" translate>Save</a>
 
-                <a ng-if="isForDash != true" ng-click="goBack();" class="btn btn-default pull-right" tooltip="Click here to cancel and backtrack" tooltip-placement="bottom">Cancel</a>
-                <a ng-if="isForDash == true" ng-click="cancelReport(selectedReport);" class="btn btn-default pull-right" tooltip="Click here to cancel and back to the dashboard" tooltip-placement="bottom">Cancel</a>
-                <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="Click here to conduct the guided tour for data explorer" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
-
+                <a ng-if="isForDash != true" ng-click="goBack();" class="btn btn-default pull-right" tooltip="{{'Click here to cancel and backtrack' | translate}}" tooltip-placement="bottom" translate>Cancel</a>
+                <a ng-if="isForDash == true" ng-click="cancelReport(selectedReport);" class="btn btn-default pull-right" tooltip="{{'Click here to cancel and back to the dashboard' | translate}}" tooltip-placement="bottom" translate>Cancel</a>
+                <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="{{'Click here to conduct the guided tour for data explorer' | translate}}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
     </div>
 
 </div>
@@ -43,7 +42,7 @@
             <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'elements'}">
                 <a  ng-click="tabs.selected = 'elements'" >
                     <i class="fa fa-newspaper-o fa-2" aria-hidden="true"></i>
-                    <div class="objectPanel-menu-label rotate">Elements</div>
+                    <div class="objectPanel-menu-label rotate" translate>Elements</div>
                 </a>
             </li>
         </menu>

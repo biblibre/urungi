@@ -1,4 +1,5 @@
-app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons, colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout, $rootScope, PagerService) {
+app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons, colors,
+    htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout, $rootScope, PagerService, gettext) {
     $scope.loadUserObjects();
 
     $scope.reportModal = 'partials/report/edit.html';
@@ -87,7 +88,15 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         steps: [
             {
                 element: '#parentIntro',
-                html: '<div><h3>Dashboards</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">In here you can create and execute dashboards like web pages.</span><br/><br/><span>Define several reports using filters and dragging and dropping from different layers.</span><br/><br/><span>After you define the report/s to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it.</span><br/><br/><span></span></div>',
+                html: '<div><h3>' +
+                gettext('Dashboards') +
+                '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
+                gettext('In here you can create and execute dashboards like web pages.') +
+                '</span><br/><br/><span>' +
+                gettext('Define several reports using filters and dragging and dropping from different layers.') +
+                '</span><br/><br/><span>' +
+                gettext('After you define the report/s to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it.') +
+                '</span><br/><br/><span></span></div>',
                 width: '500px',
                 objectArea: false,
                 verticalAlign: 'top',
@@ -95,7 +104,11 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             },
             {
                 element: '#newReportBtn',
-                html: '<div><h3>New Dashboard</h3><span style="font-weight:bold;">Click here to create a new dashboard.</span><br/><span></span></div>',
+                html: '<div><h3>' +
+                gettext('New Dashboard') +
+                '</h3><span style="font-weight:bold;">' +
+                gettext('Click here to create a new dashboard.') +
+                '</span><br/><span></span></div>',
                 width: '300px',
                 height: '150px',
                 areaColor: 'transparent',
@@ -104,7 +117,15 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             },
             {
                 element: '#reportList',
-                html: '<div><h3>Dashboards list</h3><span style="font-weight:bold;">Here all your dashboards are listed.</span><br/><span>Click over a dashboard\'s name to execute it.<br/><br/>You can also modify or drop the dashboard, clicking into the modify or delete buttons.</span></div>',
+                html: '<div><h3>' +
+                gettext('Dashboards list') +
+                '</h3><span style="font-weight:bold;">' +
+                gettext('Here all your dashboards are listed.') +
+                '</span><br/><span>' +
+                gettext('Click over a dashboard\'s name to execute it.') +
+                '<br/><br/>' +
+                gettext('You can also modify or drop the dashboard, clicking into the modify or delete buttons.') +
+                '</span></div>',
                 width: '300px',
                 areaColor: 'transparent',
                 areaLineColor: '#fff',
@@ -114,7 +135,13 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             },
             {
                 element: '#reportListItem',
-                html: '<div><h3>Dashboard</h3><span style="font-weight:bold;">This is one of your dashboards.</span><br/><span>On every line (dashboard) you can edit or drop it. If the dashboard is published a green "published" label will be shown.</span></div>',
+                html: '<div><h3>' +
+                gettext('Dashboard') +
+                '</h3><span style="font-weight:bold;">' +
+                gettext('This is one of your dashboards.') +
+                '</span><br/><span>' +
+                gettext('On every line (dashboard) you can edit or drop it. If the dashboard is published a green "published" label will be shown.') +
+                '</span></div>',
                 width: '300px',
                 areaColor: 'transparent',
                 areaLineColor: '#72A230',
@@ -123,7 +150,15 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             },
             {
                 element: '#reportListItemName',
-                html: '<div><h3>Dashboard name</h3><span style="font-weight:bold;">The name for the dashboard.</span><br/><br/><span>You can setup the name you want for your dashboard, but think about make it descriptive enought, and take care about not duplicating names across the company, specially if the dashboard is going to be published.</span><br/><br/><span>You can click here to execute the dashboard.</span></div>',
+                html: '<div><h3>' +
+                gettext('Dashboard name') +
+                '</h3><span style="font-weight:bold;">' +
+                gettext('The name for the dashboard.') +
+                '</span><br/><br/><span>' +
+                gettext('You can setup the name you want for your dashboard, but think about make it descriptive enought, and take care about not duplicating names across the company, specially if the dashboard is going to be published.') +
+                '</span><br/><br/><span>' +
+                gettext('You can click here to execute the dashboard.') +
+                '</span></div>',
                 width: '400px',
                 areaColor: 'transparent',
                 areaLineColor: '#fff',
@@ -132,7 +167,11 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             },
             {
                 element: '#reportListItemDetails',
-                html: '<div><h3>Dashboard description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using this dashboard.</span><br/><span></span></div>',
+                html: '<div><h3>' +
+                gettext('Dashboard description') +
+                '</h3><span style="font-weight:bold;">' +
+                gettext('Use the description to give your users more information about the data or kind of data they will access using this dashboard.') +
+                '</span><br/><span></span></div>',
                 width: '300px',
                 areaColor: 'transparent',
                 areaLineColor: '#fff',
@@ -141,7 +180,11 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             },
             {
                 element: '#reportListItemEditBtn',
-                html: '<div><h3>Dashboard edit</h3><span style="font-weight:bold;">Click here to modify the dashboard.</span><br/><br/><span></span></div>',
+                html: '<div><h3>' +
+                gettext('Dashboard edit') +
+                '</h3><span style="font-weight:bold;">' +
+                gettext('Click here to modify the dashboard.') +
+                '</span><br/><br/><span></span></div>',
                 width: '300px',
                 areaColor: 'transparent',
                 areaLineColor: '#fff',
@@ -151,7 +194,15 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             },
             {
                 element: '#reportListItemDeleteBtn',
-                html: '<div><h3>Dashboard delete</h3><span style="font-weight:bold;">Click here to delete the dashboard.</span><br/><br/><span>Once deleted the dashboard will not be recoverable again.</span><br/><br/><span>Requires 2 step confirmation.</span></div>',
+                html: '<div><h3>' +
+                gettext('Dashboard delete') +
+                '</h3><span style="font-weight:bold;">' +
+                gettext('Click here to delete the dashboard.') +
+                '</span><br/><br/><span>' +
+                gettext('Once deleted the dashboard will not be recoverable again.') +
+                '</span><br/><br/><span>' +
+                gettext('Requires 2 step confirmation.') +
+                '</span></div>',
                 width: '300px',
                 areaColor: 'transparent',
                 areaLineColor: '#fff',
@@ -161,7 +212,13 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             },
             {
                 element: '#reportListItemPublished',
-                html: '<div><h3>Dashboard published</h3><span style="font-weight:bold;">This label indicates that this dashboard is public.</span><br/><br/><span>If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard.</span></div>',
+                html: '<div><h3>' +
+                gettext('Dashboard published') +
+                '</h3><span style="font-weight:bold;">' +
+                gettext('This label indicates that this dashboard is public.') +
+                '</span><br/><br/><span>' +
+                gettext('If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard.') +
+                '</span></div>',
                 width: '300px',
                 areaColor: 'transparent',
                 areaLineColor: '#fff',
@@ -175,7 +232,15 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     if ($rootScope.user.reportsCreate || $rootScope.counts.reports > 0) {
         $scope.IntroOptions.steps.push({
             element: '#parentIntroReports',
-            html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Reports </span><br/><br/>See how you can create reports that shows your data using charts and data grids<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">Go to report designer and continue tour</a></span></div>',
+            html: '<div><h3>' +
+            gettext('Next Step') +
+            '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
+            gettext('Reports') +
+            '</span><br/><br/>' +
+            gettext('See how you can create reports that shows your data using charts and data grids') +
+            '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">' +
+            gettext('Go to report designer and continue tour') +
+            '</a></span></div>',
             width: '500px',
             objectArea: false,
             verticalAlign: 'top',

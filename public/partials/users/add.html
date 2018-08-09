@@ -81,10 +81,10 @@
 
     <section class="content-header">
         <h1>
-            Users
+            {{Users | translate}}
             <small>
-                <a href="#/admin/users/add">Add New</a> |
-                <a href="#/admin/users/change-user">Change User</a>
+                <a href="#/admin/users/add" translate>Add New</a> |
+                <a href="#/admin/users/change-user" translate>Change User</a>
             </small>
         </h1>
         <ol class="breadcrumb" ng-include="breadcrumb"></ol>
@@ -96,43 +96,43 @@
         <form novalidate id="users-form" name="users-form" role="form" ng-submit="addUser(data)">
             <!-- Nav tabs -->
             <ul id="user-tabs" class="nav nav-tabs" style="height: 34px;">
-                <li><a href="/#user-data" data-toggle="tab">User Data</a></li>
-                <li><a href="/#filters" data-toggle="tab">Filters</a></li>
+                <li><a href="/#user-data" data-toggle="tab" translate>User Data</a></li>
+                <li><a href="/#filters" data-toggle="tab" translate>Filters</a></li>
             </ul>
 
             <div class="tab-content">
                 <div class="tab-pane fade in active" id="user-data">
                     <div class="form-group">
-                        <label>Status</label>
+                        <label translate>Status</label>
                         <select name="status" class="form-control" ng-model="data.status" ng-options="l.name for l in statuses"></select>
                         <!--<span class="help-block" ng-bind-html="showContext('user-status')"></span>-->
                     </div>
                     <div class="form-group">
-                        <label>Username</label>
+                        <label translate>Username</label>
                         <input name="username" type="text" class="form-control" ng-model="data.username">
                     </div>
                     <div class="form-group">
-                        <label>Company ID</label>
+                        <label translate>Company ID</label>
                         <input name="companyID" type="text" class="form-control" ng-model="data.companyID">
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
+                        <label translate>Email</label>
                         <input name="email" type="email" class="form-control" ng-model="data.email">
                     </div>
                     <div class="form-group">
-                        <label>Password</label>
+                        <label translate>Password</label>
                         <input name="password" type="password" class="form-control" ng-model="data.password">
                     </div>
                     <div class="form-group">
-                        <label>Repeat Password</label>
+                        <label translate>Repeat Password</label>
                         <input name="confirmation" type="password" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Language</label>
+                        <label translate>Language</label>
                         <select name="language" class="form-control" ng-model="data.language" ng-options="obj.value as obj.name for obj in languages"></select>
                     </div>
                     <div class="form-group">
-                        <label>Roles</label>
+                        <label translate>Roles</label>
                         <select multiple id="user-roles" class="form-control" ng-model="data.roles">
                             <option ng-repeat="role in roles" value="{{role._id}}">{{role.name}}</option>
                         </select>
@@ -144,8 +144,8 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>Filter</th>
-                            <th>Value</th>
+                            <th translate>Filter</th>
+                            <th translate>Value</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -154,12 +154,12 @@
                         </tbody>
                     </table>
 
-                    <a id="add-filter" class="btn btn-success">Add New</a>
+                    <a id="add-filter" class="btn btn-success" translate>Add New</a>
 
                 </div>
 
             </div>
-            <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+            <button type="submit" class="btn btn-primary submit-btn" translate>Submit</button>
         </form>
 
     </section><!-- /.content -->
@@ -174,8 +174,8 @@
             </select>
             <input class="filter-name manually-filter" style="display: none; height: 30px;"/>
             <br />
-            <a class="list-filter enter-manually-btn hand-cursor" style="font-size: 10px;">Enter manually</a>
-            <a class="manually-filter choose-from-list-btn hand-cursor" style="display: none; font-size: 10px;">Choose from list</a>
+            <a class="list-filter enter-manually-btn hand-cursor" style="font-size: 10px;" translate>Enter manually</a>
+            <a class="manually-filter choose-from-list-btn hand-cursor" style="display: none; font-size: 10px;" translate>Choose from list</a>
         </td>
         <td class="filter-value">
             <input class="filter-value" style="width: 100%; height: 30px;"/>

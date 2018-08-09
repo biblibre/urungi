@@ -57,19 +57,22 @@
     "tungus": "0.0.5"
   },
   "devDependencies": {
+    "angular-gettext-cli": "^1.2.0",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "chai": "^4.1.2",
-    "chai-http": "^4.0.0",
     "mocha": "^5.1.1"
   },
   "scripts": {
     "start": "node server.js",
-    "test": "mocha"
+    "test": "mocha",
+    "gettext-extract": "angular-gettext-cli --files './public/+(js|partials)/**/*+(.js|.html)' --dest './language/extract.pot'",
+    "gettext-compile": "angular-gettext-cli --compile --files './language/*.po' --dest './public/js/gettext.js' --format javascript --module WideStage"
   },
   "repository": {
     "type": "git",

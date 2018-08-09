@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Select report or dashboard to link</h4>
+                <h4 class="modal-title" id="myModalLabel" translate>Select report or dashboard to link</h4>
             </div>
             <div id="linkModalBody"  class="modal-body" ng-init="setHeight('linkModalBody', 'full', -118)">
                <div ng-if="linkWizardStep == 1" class="container-fluid" >
@@ -44,7 +44,7 @@
                </div>
                <div ng-if="linkWizardStep == 2" class="container-fluid" >
 
-                   <div class="alert alert-danger" ng-if="prompts.length == 0">
+                   <div class="alert alert-danger" ng-if="prompts.length == 0" translate>
                        There are no prompts for this report... you have to choose a report with prompts to make the link...
                    </div>
 
@@ -53,7 +53,7 @@
                            <div class="radio">
                                <label>
                                    <input type="radio" name="searchReport" value="{{prompt.elementID}}" ng-model="selectedLink.promptElementID">
-                                   <i class="fa fa-table"> </i> {{prompt.objectLabel}}
+                                   <i class="fa fa-table"> </i> {{prompt.objectLabel | translate}}
                                </label>
                            </div>
 
@@ -66,11 +66,11 @@
 
             </div>
             <div class="modal-footer">
-                <a ng-if="linkWizardStep == 2" ng-click="saveLinkForColumn()" class="btn btn-primary pull-right">Set Link</a>
-                <a ng-if="linkWizardStep == 1" ng-click="getPromptForLink()"  class="btn btn-primary pull-right">Next</a>
-                <button ng-if="linkWizardStep == 2" class="btn btn-default pull-right" ng-click="linkBack()">Back</button>
-                <button ng-if="linkWizardStep == 1" type="button" class="btn btn-default pull-right" data-dismiss="modal">Cancel</button>
-                <button ng-if="linkWizardStep == 1" class="btn btn-danger pull-right" ng-click="linkDelete()">Delete Link</button>
+                <a ng-if="linkWizardStep == 2" ng-click="saveLinkForColumn()" class="btn btn-primary pull-right" translate>Set Link</a>
+                <a ng-if="linkWizardStep == 1" ng-click="getPromptForLink()"  class="btn btn-primary pull-right" translate>Next</a>
+                <button ng-if="linkWizardStep == 2" class="btn btn-default pull-right" ng-click="linkBack()" translate>Back</button>
+                <button ng-if="linkWizardStep == 1" type="button" class="btn btn-default pull-right" data-dismiss="modal" translate>Cancel</button>
+                <button ng-if="linkWizardStep == 1" class="btn btn-danger pull-right" ng-click="linkDelete()" translate>Delete Link</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

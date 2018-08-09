@@ -1,11 +1,11 @@
 <div id="layerObjectProperties">
         <div class="container-fluid tool-set" ng-if="objectType != 'layer' && objectType != '' && objectType != undefined">
             <div class="container-fluid">
-                    <span ng-if="objectType == 'join'">Join</span>
-                    <span ng-if="objectType == 'collection'">Dataset</span>
-                    <span ng-if="objectType == 'element'">Element</span>
-                    <button ng-if="objectType != 'element'" type="button" class="btn btn-danger pull-right"  ng-click="delete()">Delete</button>
-                    <button ng-if="objectType == 'collection' && object.isSQL" type="button" class="btn pull-right query-edit-btn"  ng-click="onEdit()">Edit</button>
+                    <span ng-if="objectType == 'join'" translate>Join</span>
+                    <span ng-if="objectType == 'collection'" translate>Dataset</span>
+                    <span ng-if="objectType == 'element'" translate>Element</span>
+                    <button ng-if="objectType != 'element'" type="button" class="btn btn-danger pull-right"  ng-click="delete()" translate>Delete</button>
+                    <button ng-if="objectType == 'collection' && object.isSQL" type="button" class="btn pull-right query-edit-btn"  ng-click="onEdit()" translate>Edit</button>
                     <button ng-if="!object.elementRole && objectType == 'element'" type="button" class="btn btn-success pull-right" ng-click="publishElement()" data-toggle="tooltip" data-placement="bottom" title="Add to layer's elements">+</button>
                     <button ng-if="object.elementRole && objectType == 'element'" type="button" class="btn btn-warning pull-right" ng-click="removeElement()" data-toggle="tooltip" data-placement="bottom" title="Remove from layer's elements">-</button>
 
@@ -27,14 +27,14 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="field-3" class="control-label properties">Name</label>
+                    <label for="field-3" class="control-label properties" translate>Name</label>
                     <input id="field-3" class="form-control" ng-model="object.collectionName" required>
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="field-3" class="control-label properties">Label</label>
+                    <label for="field-3" class="control-label properties" translate>Label</label>
                     <input id="field-3" class="form-control" ng-model="object.collectionLabel" required>
                 </div>
             </div>
@@ -43,7 +43,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="field-5" class="control-label properties">Description</label>
+                    <label for="field-5" class="control-label properties" translate>Description</label>
                     <textarea ng-model="object.description" class="form-control autogrow" id="field-5"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
                 </div>
             </div>
@@ -52,7 +52,7 @@
         <div class="row" ng-if="object.sqlQuery">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="field-5" class="control-label">SQL</label>
+                    <label for="field-5" class="control-label" translate>SQL</label>
                     <textarea ng-model="object.sqlQuery" class="form-control autogrow" id="field-5"></textarea>
                 </div>
             </div>
@@ -67,10 +67,10 @@
 
         <ul class="nav nav-tabs active" ng-class="{'nav-stacked': vertical, 'nav-justified': justified}" >
 			<li ng-class="{'active': tabbed_panel_active == 1}" heading="Home" >
-                <a ng-click="tabbed_panel_active = 1"  >General</a>
+                <a ng-click="tabbed_panel_active = 1" translate>General</a>
             </li>
 			<li ng-class="{'active': tabbed_panel_active == 2}" heading="Profile" >
-                <a ng-click="tabbed_panel_active = 2"  >Advanced</a>
+                <a ng-click="tabbed_panel_active = 2" translate>Advanced</a>
             </li>
 
 
@@ -83,7 +83,7 @@
                 <div class="row" >
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label  class="control-label properties">Name</label>
+                                <label  class="control-label properties" translate>Name</label>
                                     <input type="text" class="form-control" placeholder="{{object.elementName}}" disabled="">
                             </div>
 
@@ -92,7 +92,7 @@
                     <div class="row" >
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label  class="control-label properties">Label</label>
+                                <label  class="control-label properties" translate>Label</label>
                                     <input type="text" class="form-control" ng-model="object.elementLabel">
                             </div>
 
@@ -101,7 +101,7 @@
                     <div class="row" >
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="field-4" class="control-label">Type</label>
+                                <label for="field-4" class="control-label" translate>Type</label>
                                                 <select id="field-4" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="object.elementType" ng-options="obj.value as obj.name for obj in elementTypes" ng-change="onElementTypeChange(selectedElement)"></select>
                             </div>
 
@@ -111,7 +111,7 @@
 
                         <div class="col-md-6" ng-if="object.elementType != 'number'">
                             <div class="form-group">
-                                <label for="field-4" class="control-label">Default Aggregation</label>
+                                <label for="field-4" class="control-label" translate>Default Aggregation</label>
                                                 <select  id="field-4b" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="object.defaultAggregation" ng-options="obj.value as obj.name for obj in stringDefaultAggregation"></select>
                             </div>
 
@@ -120,7 +120,7 @@
 
                         <div class="col-md-6" ng-if="object.elementType == 'number'">
                             <div class="form-group">
-                                <label for="field-4" class="control-label">Default Aggregation</label>
+                                <label for="field-4" class="control-label" translate>Default Aggregation</label>
                                                 <select  id="field-4b" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="object.defaultAggregation" ng-options="obj.value as obj.name for obj in numberDefaultAggregation"></select>
                             </div>
 
@@ -130,9 +130,9 @@
                     <div class="row" ng-if="object.elementType == 'number' || selectedElement.elementType == 'date'">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label  class="control-label properties">Format</label>
+                                <label  class="control-label properties" translate>Format</label>
                                 <input type="text" class="form-control" ng-model="object.format" placeholder="format...">
-                                <p class="help-block"><a class="pull-right" href="http://numeraljs.com/" target="_blank">More Info</a></p>
+                                <p class="help-block"><a class="pull-right" href="http://numeraljs.com/" target="_blank" translate>More Info</a></p>
                             </div>
 
                         </div>
@@ -159,26 +159,26 @@
     <div class="container-fluid main-properties-container">
                 <div class="row" style="margin-top:20px;">
                     <div class="col-md-12">
-                            <label  class="control-label properties">Source</label>
+                            <label  class="control-label properties" translate>Source</label>
                         <input type="text" class="form-control" placeholder="{{object.sourceCollectionName+'.'+object.sourceElementName}}" disabled="">
                     </div>
                 </div>
                 <div class="row" style="margin-top:20px;">
                     <div class="col-md-12">
-                            <label  class="control-label properties">Target</label>
+                            <label  class="control-label properties" translate>Target</label>
                             <input type="text" class="form-control" placeholder="{{object.targetCollectionName+'.'+object.targetElementName}}" disabled="">
 
                     </div>
                 </div>
                  <div class="row" style="margin-top:20px;">
                     <div class="col-md-12">
-                            <label  class="control-label properties">Join type</label>
+                            <label  class="control-label properties" translate>Join type</label>
                                 <div class="btn-group btn-group-justified" style="width:100%">
-                                    <a type="button" class="btn btn-sm" ng-class="{'btn-info': object.joinType == 'left','btn-white': object.joinType != 'left'}"   ng-click="changeJoinType('left')">Left</a>
+                                    <a type="button" class="btn btn-sm" ng-class="{'btn-info': object.joinType == 'left','btn-white': object.joinType != 'left'}"   ng-click="changeJoinType('left')" translate>Left</a>
 
-                                    <a type="button" class="btn btn-sm" ng-class="{'btn-info': object.joinType == 'default','btn-white': object.joinType != 'default'}"  ng-click="changeJoinType('default')">Inner</a>
+                                    <a type="button" class="btn btn-sm" ng-class="{'btn-info': object.joinType == 'default','btn-white': object.joinType != 'default'}"  ng-click="changeJoinType('default')" translate>Inner</a>
 
-                                    <a type="button" class="btn btn-sm" ng-class="{'btn-info': object.joinType == 'right','btn-white': object.joinType != 'right'}"  ng-click="changeJoinType('right')">Right</a>
+                                    <a type="button" class="btn btn-sm" ng-class="{'btn-info': object.joinType == 'right','btn-white': object.joinType != 'right'}"  ng-click="changeJoinType('right')" translate>Right</a>
                                 </div>
 
                     </div>
@@ -194,7 +194,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="field-3" class="control-label properties">Layer Name</label>
+                    <label for="field-3" class="control-label properties" translate>Layer Name</label>
                     <input id="field-3" class="form-control" ng-model="object.name" required>
                 </div>
             </div>
@@ -204,7 +204,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="field-5" class="control-label properties">Description</label>
+                    <label for="field-5" class="control-label properties" translate>Description</label>
                     <textarea ng-model="object.description" class="form-control autogrow" id="field-5"></textarea>
                 </div>
             </div>
