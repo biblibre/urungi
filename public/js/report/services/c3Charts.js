@@ -44,6 +44,8 @@ app.service('c3Charts', function () {
             * the name of the data column will be [name of ykey] + '-' + [ field value ]
             */
 
+            chart.stacked = true;
+
             var mapOnAxis = {};
 
             for (const valueKey of theValues) {
@@ -126,6 +128,7 @@ app.service('c3Charts', function () {
         } else {
             theData = query.data;
             theGroups = undefined;
+            chart.stacked = false;
         }
 
         var theChartCode = '#CHART_' + queryID;
