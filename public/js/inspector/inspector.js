@@ -995,9 +995,15 @@ angular.module('wst.inspector', [])
                 };
 
                 $scope.openImageGallery = function (target) {
-                    $rootScope.openGalleryModal(function (url) {
+                    $scope.$parent.$broadcast('showFileModal', {addFile: function (file) {
+                        var url = file.url;
+                        if (file.source1400) {
+                            url = file.source1400;
+                        } else if (file.source700) {
+                            url = file.source700;
+                        }
                         $scope.setBackgroundImage(url);
-                    });
+                    } });
                 };
 
                 $scope.setBackgroundImage = function (url) {

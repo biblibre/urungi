@@ -54,10 +54,6 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: '50mb'})); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var multer = require('multer');
-// app.use(multer());
-app.use(multer({dest: './uploads'}).any());
-
 var authentication = true;
 
 global.authentication = authentication;
@@ -93,6 +89,8 @@ if (cluster.isMaster && process.env.NODE_ENV !== 'test') {
     require('./server/config/routes')(app, passport);
 
     var fs = require('fs');
+
+    app.use('/uploads', restrict, express.static(path.join(__dirname, 'uploads')));
 
     // Custom routes
     var routes_dir = path.join(__dirname, 'server', 'custom');
