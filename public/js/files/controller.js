@@ -252,7 +252,6 @@ app.controller('filesCtrl', function ($scope, connection, $q, $rootScope, $modal
     };
 
     $rootScope.openGalleryModal = function (targetElement, params) {
-        console.log('openGalleryModal');
         currentTargetElement = targetElement;
         fileFormat = (params && params.format) ? params.format : null;
         autoSubmit = (params && params.autoSubmit) ? params.autoSubmit : false;
