@@ -17,10 +17,12 @@ exports.execute = async function (query) {
     }
     const dts = dtsList[0];
 
-    const escape = getEscapeFunction(dts);
-
-    const processedQuery = await processQuery(query, queryLayer, escape, warnings);
+    const processedQuery = await processQuery(query, queryLayer, warnings);
     buildJoinTree(processedQuery, warnings);
+
+    const queryBuilder = require('./sqlQueryBuilder');
+    var Db;
+    var db;
 
     switch (dts.type) {
     case 'MONGODB':
@@ -33,34 +35,91 @@ exports.execute = async function (query) {
             return {result: 0, msg: String(err)};
         }
 
-    case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL': case 'BIGQUERY': case 'JDBC-ORACLE':
-        const sql = require('./db/new_sql.js');
+    case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL':
 
-        try {
-            const result = await sql.runQuery(dts, processedQuery);
-            result.warnings = warnings;
-            return result;
-        } catch (err) {
-            if (err.msg) {
-                return {result: 0, msg: err.msg, error: err};
-            } else {
-                return {result: 0, msg: String(err)};
-            }
+        Db = require('./connection').Db;
+
+        db = new Db(dts, warnings);
+
+        const queryFunction = queryBuilder.build(processedQuery);
+
+        const result = await db.runQuery(queryFunction);
+
+        if (result.result === 1) {
+            queryBuilder.processData(processedQuery, result.data);
+        } else {
+            console.log(result.msg);
         }
+
+        result.warnings = warnings;
+        return result;
+
+    case 'JDBC-ORACLE': case 'BIGQUERY':
+        /*
+        * Neither JDBC nor bigquery are supported by knex.js
+        * This is an attempt to keep the support of these libraries with pre-existing code
+        *
+        * These libraries have not been tested as the changes to query resolution were made,
+        * and there is no guarantee of how well they work
+        *
+        * It is also unclear what the purpose of jdbc-oracle is when oracle is supported
+        */
+
+        if (dts.type === 'JDBC-ORACLE') {
+            Db = require('./legacy/jdbc-oracle').Db;
+        }
+        if (dts.type === 'BIGQUERY') {
+            Db = require('./legacy/bigquery').Db;
+        }
+
+        const legacySQLBuilder = require('./legacy/new_sql.js');
+
+        const sqlText = legacySQLBuilder.generateQueryText(processedQuery);
+
+        db = new Db(dts.connection);
+
+        return new Promise((resolve, reject) => {
+            db.connect(dts.connection, function (err, connection) {
+                if (err) {
+                    resolve({ result: 0, msg: String(err) });
+                    return;
+                }
+
+                const start = Date.now();
+
+                db.query(sqlText, function (err, result) {
+                    if (err) {
+                        resolve({ result: 0, msg: String(err) });
+                        return;
+                    }
+
+                    const time = Date.now() - start;
+
+                    const data = result.rows;
+
+                    queryBuilder.processData(processedQuery, data);
+
+                    resolve({ result: 1, data: data, sql: sqlText, time: time });
+                });
+            });
+        });
 
     default:
         throw new Error('Invalid datasource type : ' + dts.type);
     }
 };
 
-function processQuery (query, queryLayer, escape, warnings) {
+function processQuery (query, queryLayer, warnings) {
     /*
     * Connects the query with the layer and creates a processedQuery object which can be used to build the sql query text or the mongoDB query
     *
-    * This function ensures the database security
+    * This function ensures part of the database security
     *   - the query object comes from the client, and cannot be trusted
     *   - the queryLayer object was created by an administrator, and should be trusted
-    *   - the processQuery object which is returned has to be trustworthy, and will not be subjected to any further security
+    *   - the processQuery object is built by using the layer as an interface. the report does not have direct access to the database
+    *
+    * This function does not need to protect against sql injections : Knex.js will do that
+    *   - Strings coming from the user are still validated as an extra precaution, and to prevent invalid input
     *
     */
 
@@ -347,7 +406,7 @@ function validateFilter (filter, element, escape, warnings) {
 
     const validFilter = validateColumn(filter, element, warnings);
 
-    validFilter.filterType = plainText(filter.filterType, warnings);
+    validFilter.filterType = String(filter.filterType);
 
     if (filter.conditionType) {
         validFilter.conditionType = plainText(filter.conditionType, warnings);
@@ -355,21 +414,17 @@ function validateFilter (filter, element, escape, warnings) {
 
     validFilter.criterion = {};
 
-    for (const crit of ['date1', 'date2', 'text1', 'text2']) {
+    for (const crit of ['date1', 'date2', 'datePattern', 'text1', 'text2']) {
         if (filter.criterion[crit]) {
-            validFilter.criterion[crit] = escape(String(filter.criterion[crit]));
+            validFilter.criterion[crit] = String(filter.criterion[crit]);
         }
     }
 
     if (filter.criterion.textList) {
-        var validTextList = '(';
-        for (const i in filter.criterion.textList) {
-            if (i !== '0') {
-                validTextList += ', ';
-            }
-            validTextList += escape(String(filter.criterion.textList[i]));
+        var validTextList = [];
+        for (const item of filter.criterion.textList) {
+            validTextList.push(String(item));
         }
-        validTextList += ')';
         validFilter.criterion.textList = validTextList;
     }
 
@@ -393,7 +448,7 @@ function plainText (text, warnings) {
 }
 
 function validateLimit (limit) {
-    var lim = Math.floor(limit); // guarantees that the result is a number (and therefore not an sql injection)
+    var lim = Math.floor(limit);
     if (lim && lim > 0) {
         return lim;
     }
@@ -405,27 +460,5 @@ function validatePage (page) {
         return validPage;
     } else {
         return 1;
-    }
-}
-
-function getEscapeFunction (dts) {
-    switch (dts.type) {
-    case 'MySQL':
-        return require('./db/mysql.js').escape;
-    case 'POSTGRE':
-        return require('./db/postgresql.js').escape;
-    case 'ORACLE':
-        return require('./db/oracle.js').escape;
-    case 'MSSQL':
-        return require('./db/mssql.js').escape;
-    case 'BIGQUERY':
-        return require('./db/bigQuery.js').escape;
-    case 'JDBC-ORACLE':
-        return require('./db/jdbc-oracle.js').escape;
-    case 'MONGODB':
-        return (arg) => String(arg);
-        // TODO find out about mongoDB injection vulnerability and learn if this is enough
-    default:
-        return (arg) => '';
     }
 }

@@ -306,7 +306,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         params.page = 0; // All data
 
-        params.fields = ['name', 'type', 'status', 'statusInfo', 'params.connection.host', 'params.connection.port', 'params.connection.database'];
+        params.fields = ['name', 'type', 'status', 'statusInfo', 'connection.host', 'connection.port', 'connection.database'];
 
         datasourceModel.getDataSources(params, function (data) {
             $scope.datasources = data.items;
@@ -354,7 +354,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         $scope.temporarySQLCollection = {};
         $scope.temporarySQLCollection.mode = 'edit';
-        $scope.temporarySQLCollection.sql = selectedCollection.sqlQuery;
+        $scope.temporarySQLCollection.sqlQuery = selectedCollection.sqlQuery;
         $scope.temporarySQLCollection.name = selectedCollection.collectionName;
 
         $scope.selectedDts = {};
@@ -414,36 +414,46 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.addSqlToLayer = function () {
         datasourceModel.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection, function (result) {
-            if (result.result === 1) {
-                for (const collection of result.items) {
-                    collection.collectionID = 'C' + $scope.newID();
-                    collection.datasourceID = $scope.selectedDts.id;
-
-                    for (const element of collection.elements) {
-                        element.elementID = $scope.newID();
-                        element.datasourceID = $scope.selectedDts.id;
-                        element.collectionID = collection.collectionID;
-                        element.collectionName = collection.collectionName;
-                    }
-
-                    if (!$scope._Layer.params) { $scope._Layer.params = {}; }
-                    if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
-
-                    $scope._Layer.params.schema.push(collection);
-
-                    setTimeout(function () {
-                        for (var element in collection.elements) {
-                            if (!collection.elements[element].painted) {
-                                _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
-                            }
-                        }
-                        setDraggable('#' + collection.collectionID + '-parent');
-                    }, 100);
-                }
-
-                $('#sqlModal').modal('hide');
-                $scope.erDiagramInit();
+            if (result.result !== 1) {
+                $scope.errorToken = result;
+                return;
             }
+
+            if(!result.isValid){
+                $scope.temporarySQLCollection.invalidSql = true;
+                return;
+            }
+
+            const collection = result.schema;
+
+            collection.collectionID = 'C' + $scope.newID();
+            collection.datasourceID = $scope.selectedDts.id;
+
+            for (const element of collection.elements) {
+                element.elementID = $scope.newID();
+                element.datasourceID = $scope.selectedDts.id;
+                element.collectionID = collection.collectionID;
+                element.collectionName = collection.collectionName;
+            }
+
+            if (!$scope._Layer.params) { $scope._Layer.params = {}; }
+            if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
+
+            $scope._Layer.params.schema.push(collection);
+
+            setTimeout(function () {
+                for (var element in collection.elements) {
+                    if (!collection.elements[element].painted) {
+                        _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
+                    }
+                }
+                setDraggable('#' + collection.collectionID + '-parent');
+            }, 100);
+            
+
+            $('#sqlModal').modal('hide');
+            $scope.erDiagramInit();
+            
         });
     };
 
@@ -1415,6 +1425,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         if (!theDataSource.loading) {
             theDataSource.loading = true;
             connection.get('/api/data-sources/getEntities', {id: _id}, function (data) {
+                console.log(data);
                 theDataSource.loading = false;
                 if (data.result === 1) {
                     theDataSource.entities = data.items;
@@ -1429,7 +1440,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     $scope.getFieldsForThisEntity = function (dataSourceID, entity, theEntity) {
-        datasourceModel.getEntitiesSchema([dataSourceID], [entity], function (result) {
+        datasourceModel.getEntitiesSchema([dataSourceID], entity, function (result) {
             if (result.result === 1) {
                 theEntity.fields = result.items[0].elements;
             }
@@ -1519,37 +1530,40 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.addDatasetToLayer = function (datasourceID, entity) {
         if (typeof $scope.selectedDts.id === 'undefined' || $scope.selectedDts.id === datasourceID) {
-            datasourceModel.getEntitiesSchema(datasourceID, [entity], function (result) {
-                if (result.result === 1) {
-                    for (const collection of result.items) {
-                        collection.collectionID = 'C' + $scope.newID();
-
-                        collection.datasourceID = datasourceID;
-                        $scope.selectedDts.id = datasourceID;
-
-                        for (const element of collection.elements) {
-                            element.elementID = $scope.newID();
-                            element.datasourceID = datasourceID;
-                            element.collectionID = collection.collectionID;
-                            element.collectionName = collection.collectionName;
-                        }
-
-                        if (!$scope._Layer.params) { $scope._Layer.params = {}; }
-                        if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
-
-                        $scope._Layer.params.schema.push(collection);
-
-                        setTimeout(function () {
-                            for (const element in collection.elements) {
-                                if (!collection.elements[element].painted) {
-                                    _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
-                                }
-                            }
-                            setDraggable('#' + collection.collectionID + '-parent');
-                        }, 100);
-                    }
-                    $scope.erDiagramInit();
+            datasourceModel.getEntitiesSchema(datasourceID, entity, function (result) {
+                if (result.result !== 1) {
+                    return;
                 }
+
+                const collection = result.schema;
+
+                collection.collectionID = 'C' + $scope.newID();
+
+                collection.datasourceID = datasourceID;
+                $scope.selectedDts.id = datasourceID;
+
+                for (const element of collection.elements) {
+                    element.elementID = $scope.newID();
+                    element.datasourceID = datasourceID;
+                    element.collectionID = collection.collectionID;
+                    element.collectionName = collection.collectionName;
+                }
+
+                if (!$scope._Layer.params) { $scope._Layer.params = {}; }
+                if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
+
+                $scope._Layer.params.schema.push(collection);
+
+                setTimeout(function () {
+                    for (const element in collection.elements) {
+                        if (!collection.elements[element].painted) {
+                            _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
+                        }
+                    }
+                    setDraggable('#' + collection.collectionID + '-parent');
+                }, 100);
+
+                $scope.erDiagramInit();
             });
         } else {
             noty({text: 'Datasource must be the same for all entities', timeout: 2000, type: 'error'});

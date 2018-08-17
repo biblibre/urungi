@@ -14,14 +14,13 @@ class ReportsController extends Controller {
 
 var controller = new ReportsController();
 
-exports.ReportsFindAll = function (req, res) {
+exports.ReportsFindAll = async function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
     req.user = {};
     req.user.companyID = 'COMPID';
-    controller.findAll(req, function (result) {
-        serverResponse(req, res, 200, result);
-    });
+    const result = await controller.findAll(req);
+    serverResponse(req, res, 200, result);
 };
 
 exports.GetReport = function (req, res) {

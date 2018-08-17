@@ -36,7 +36,7 @@ exports.runQuery = async function (dataSource, query) {
         });
     }
 
-    await tempPromiseWrapper(db.connect.bind(db), dataSource.params[0].connection);
+    await tempPromiseWrapper(db.connect.bind(db), dataSource.connection);
 
     let result;
 
@@ -65,6 +65,8 @@ exports.runQuery = async function (dataSource, query) {
         time: time
     };
 };
+
+exports.generateQueryText = generateQueryText;
 
 function generateQueryText (query) {
     var queryText = '';
@@ -253,9 +255,9 @@ function getFilterText (filter, notFirst) {
 
     const numericalFilters = ['equal', 'diferentThan', 'biggerThan', 'notGreaterThan', 'biggerOrEqualThan', 'lessThan', 'lessOrEqualThan', 'between', 'notBetween'];
 
-    var filterValue = filter.criterion.text1;
-    var filterSecondValue = filter.criterion.text2;
-    var filterValueList = filter.criterion.textList;
+    var filterValue = escape(filter.criterion.text1);
+    var filterSecondValue = escape(filter.criterion.text2);
+    var filterValueList = escapeList(filter.criterion.textList);
 
     var filterIdentifier = getIdentifier(filter);
 
@@ -624,6 +626,28 @@ function getDateFilterText (filterIdentifier, filter) {
 
         return theFilter + ')';
     }
+}
+
+function escape (value) {
+    var escapedString = String(value);
+    const dangerousCharacters = [ '\\', '\'', '"', '`', ';', '-' ];
+    for (const c of dangerousCharacters) {
+        escapedString = escapedString.replace(c, '\\' + c);
+    }
+    return '`' + escapedString + '`';
+}
+
+function escapeList (list) {
+    var res = '';
+    res += '( ';
+    for (const i in list) {
+        if (i !== '0') {
+            res += ', ';
+        }
+        res += escape(list[i]);
+    }
+    res += ' )';
+    return res;
 }
 
 function formatResult (columns, rows) {

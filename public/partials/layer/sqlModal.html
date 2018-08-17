@@ -21,9 +21,9 @@
                                 <h4 class="list-group-item-heading">{{dts.type}}</h4>
                                 <p class="list-group-item-text">
 
-                                    <label class="small" style="margin-right: 5px" translate>host: </label>{{dts.params[0].connection.host}}
-                                    <label class="small" style="margin-right: 5px" translate>port: </label>{{dts.params[0].connection.port}}
-                                    <label class="small" style="margin-right: 5px" translate>database: </label>{{dts.params[0].connection.database}}
+                                    <label class="small" style="margin-right: 5px" translate>host: </label>{{dts.connection.host}}
+                                    <label class="small" style="margin-right: 5px" translate>port: </label>{{dts.connection.port}}
+                                    <label class="small" style="margin-right: 5px" translate>database: </label>{{dts.connection.database}}
                                 </p>
                             </option>
 
@@ -40,13 +40,15 @@
                 </div>
                 <div class="form-group" ng-class="{ 'has-error': sqlLayerForm.sql.$invalid }">
                     <label class="control-label" for="field-sql" translate>SQL query</label>
-                    <textarea class="form-control autogrow" cols="20" id="field-sql" name="sql" ng-model="temporarySQLCollection.sql" ng-required="true" required></textarea>
+                    <textarea class="form-control autogrow" cols="20" id="field-sql" name="sql" ng-model="temporarySQLCollection.sqlQuery" ng-required="true" required></textarea>
                     <span ng-show="sqlLayerForm.sql.$invalid" class="help-inline" ng-bind="getTranslation('You have to enter an SQL query')"></span>
                 </div>
 
             </div>
 
-
+            <div class="container-fluid" ng-show="temporarySQLCollection.invalidSql">
+                There is an error in your sql syntax.
+            </div>
 
         </div>
 

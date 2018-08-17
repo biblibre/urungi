@@ -35,13 +35,11 @@ async function seed () {
                 name: 'dummy db',
                 type: 'MySQL',
                 status: 1,
-                params: [{
-                    packetSize: 500,
-                    connection: {
-                        database: 'non_existent_db',
-                        host: 'localhost'
-                    }
-                }],
+                packetSize: 500,
+                connection: {
+                    database: 'non_existent_db',
+                    host: 'localhost'
+                },
                 nd_trash_deleted: false
             }
         ),
@@ -51,13 +49,11 @@ async function seed () {
                 name: 'sql db',
                 type: 'MySQL',
                 status: 1,
-                params: [{
-                    packetSize: 500,
-                    connection: {
-                        database: 'will_need_to_be_created',
-                        host: 'localhost'
-                    }
-                }]
+                packetSize: 500,
+                connection: {
+                    database: 'will_need_to_be_created',
+                    host: 'localhost'
+                }
             }
         )
     ];
@@ -77,7 +73,8 @@ function verifyItem (item) {
     expect(item).to.have.property('status');
     expect(item).to.have.property('nd_trash_deleted');
     expect(item).to.have.property('__v');
-    expect(item).to.have.property('params');
+    expect(item).to.have.property('connection');
+    expect(item).to.have.property('packetSize');
 };
 
 async function authentifyAgent (agent) {
@@ -304,13 +301,11 @@ describe('/api/data-sources', function () {
                     name: 'non existent db',
                     type: 'MONGODB',
                     status: 1,
-                    params: [{
-                        packetSize: 500,
-                        connection: {
-                            database: 'database_name',
-                            host: 'localhost'
-                        }
-                    }]
+                    packetSize: 500,
+                    connection: {
+                        database: 'database_name',
+                        host: 'localhost'
+                    }
                 }));
 
             const decrypted = decrypt(res.text);
@@ -320,7 +315,7 @@ describe('/api/data-sources', function () {
             expect(decrypted).to.have.property('item');
             verifyItem(decrypted.item);
 
-            expect(decrypted.item.params[0].connection.database)
+            expect(decrypted.item.connection.database)
                 .to.equal('database_name');
 
             await DataSources.deleteOne({_id: decrypted.item._id});
@@ -352,11 +347,9 @@ describe('/api/data-sources', function () {
                     _id: entryID,
                     name: 'renamed dummy db',
                     type: 'MongoDB',
-                    params: [{
-                        connection: {
-                            database: 'modified_name'
-                        }
-                    }]
+                    connection: {
+                        database: 'modified_name'
+                    }
                 }));
             expect(res).to.have.status(200);
 
@@ -372,7 +365,7 @@ describe('/api/data-sources', function () {
 
             expect(decrypted.item.name).to.equal('renamed dummy db');
             expect(decrypted.item.type).to.equal('MongoDB');
-            expect(decrypted.item.params[0].connection.database)
+            expect(decrypted.item.connection.database)
                 .to.equal('modified_name');
         });
     });
