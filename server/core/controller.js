@@ -88,61 +88,52 @@ class Controller {
 
         if (mandatoryFilters.length > 0) { find = {$and: mandatoryFilters}; }
 
-        Model.find(find, fields, params, function (err, items) {
-            if (err) {
-                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
-            } else {
-                Model.count(find, function (err, count) {
-                    if (err) {
-                        done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
-                    } else {
-                        if (req.query.page > 0) {
-                            done({result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items});
-                        } else {
-                            done({result: 1, page: 1, pages: 1, items: items});
-                        }
-                    }
-                });
-            }
+        const p = Model.find(find, fields, params).exec().then(function (items) {
+            return Model.count(find).exec().then(function (count) {
+                return {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items};
+            });
+        }).catch(function (err) {
+            return {result: 0, msg: 'A database error has occured : ' + String(err), error: err};
         });
+
+        if (done) {
+            console.warn('Using a callback with findAll is deprecated. Use the returned promise instead');
+            return p.then(done);
+        }
+
+        return p;
     }
 
     findOne (req, done) {
         if (!req.query.id) {
-            done({result: 0, msg: "'id' is required."});
-            return;
+            const p = Promise.resolve({result: 0, msg: "'id' is required."});
+
+            if (done) {
+                console.warn('Using a callback with findOne is deprecated. Use the returned promise instead');
+                return p.then(done);
+            }
+
+            return p;
         }
 
         var find = generateFindFields(req, req.query.id);
 
-        this.model.findOne(find, {}, function (err, item) {
-            if (err) {
-                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
-            } else if (!item) {
-                done({result: 0, msg: 'Item not found.'});
-            } else {
-                done({result: 1, item: item.toObject()});
+        const p = this.model.findOne(find, {}).exec().then(function (item) {
+            if (!item) {
+                return {result: 0, msg: 'Item not found.'};
             }
-        });
-    }
 
-    findOneForServer (req, done) {
-        if (!req.query.id) {
-            done({result: 0, msg: "'id' is required."});
-            return;
+            return {result: 1, item: item.toObject()};
+        }).catch(function (err) {
+            return {result: 0, msg: 'A database error has occured : ' + String(err), error: err};
+        });
+
+        if (done) {
+            console.warn('Using a callback with findOne is deprecated. Use the returned promise instead');
+            return p.then(done);
         }
 
-        var find = generateFindFields(req, req.query.id);
-
-        this.model.findOne(find, {}, function (err, item) {
-            if (err) {
-                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
-            } else if (!item) {
-                done({result: 0, msg: 'Item not found.'});
-            } else {
-                done({result: 1, item: item});
-            }
-        });
+        return p;
     }
 
     create (req, done) {
@@ -173,38 +164,28 @@ class Controller {
 
         const Model = this.model;
 
-        Model.find({_id: data._id}, function (err, item) {
-            if (err) {
-                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
-                return;
-            }
-
+        const p = Model.find({_id: data._id}).exec().then(function (item) {
             if (item.length > 0) {
                 if (!item[0].nd_trash_deleted) {
-                    done({result: 0, msg: 'Failed to create item : item already exists'});
+                    throw new Error('Item already exists');
                 } else {
-                    Model.deleteOne({_id: data._id}, function (err, res) {
-                        if (err) {
-                            done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
-                            return;
-                        }
-                        next();
-                    });
+                    return Model.deleteOne({_id: data._id}).exec();
                 }
-            } else {
-                next();
             }
-
-            function next () {
-                Model.create(data, function (err, item) {
-                    if (err) {
-                        done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
-                    } else {
-                        done({result: 1, msg: 'Item created', item: item.toObject()});
-                    }
-                });
-            }
+        }).then(function () {
+            return Model.create(data).then(function (item) {
+                return {result: 1, msg: 'Item created', item: item.toObject()};
+            });
+        }).catch(function (err) {
+            return {result: 0, msg: 'A database error has occured : ' + String(err), error: err};
         });
+
+        if (done) {
+            console.warn('Using a callback with create is deprecated. Use the returned promise instead');
+            return p.then(done);
+        }
+
+        return p;
     }
 
     update (req, done) {
@@ -233,42 +214,58 @@ class Controller {
             user_companyName: (req.isAuthenticated()) ? req.user.companyName : null
         });
 
-        this.model.update(find, { $set: data }, function (err, result) {
-            if (err) {
-                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
-            } else {
-                var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
+        const p = this.model.update(find, { $set: data }).exec().then(function (result) {
+            var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
 
-                if (numAffected > 0) {
-                    done({result: 1, msg: numAffected + ' record updated.'});
-                } else {
-                    done({result: 0, msg: 'Error updating record, no record have been updated'});
-                }
+            if (numAffected > 0) {
+                return {result: 1, msg: numAffected + ' record updated.'};
+            } else {
+                return {result: 0, msg: 'Error updating record, no record have been updated'};
             }
+        }).catch(function (err) {
+            return {result: 0, msg: 'A database error has occured : ' + String(err), error: err};
         });
+
+        if (done) {
+            console.warn('Using a callback with update is deprecated. Use the returned promise instead');
+            return p.then(done);
+        }
+
+        return p;
     }
 
     remove (req, done) {
         if (!req.params.id) {
-            done({result: 0, msg: "'id' is required."});
-            return;
+            const p = Promise.resolve({result: 0, msg: "'id' is required."});
+
+            if (done) {
+                console.warn('Using a callback with remove is deprecated. Use the returned promise instead');
+                return p.then(done);
+            }
+
+            return p;
         }
 
         var find = generateFindFields(req, req.params.id);
-        this.model.remove(find, function (err, result) {
-            if (err) {
-                done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
-            } else {
-                result = result.result;
-                var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
+        const p = this.model.remove(find).exec().then(function (result) {
+            result = result.result;
+            var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
 
-                if (numAffected > 0) {
-                    done({result: 1, msg: numAffected + ' items deleted.'});
-                } else {
-                    done({result: 0, msg: 'Error deleting items, no item have been deleted'});
-                }
+            if (numAffected > 0) {
+                return {result: 1, msg: numAffected + ' items deleted.'};
+            } else {
+                return {result: 0, msg: 'Error deleting items, no item have been deleted'};
             }
+        }).catch(function (err) {
+            return {result: 0, msg: 'A database error has occured : ' + String(err), error: err};
         });
+
+        if (done) {
+            console.warn('Using a callback with remove is deprecated. Use the returned promise instead');
+            return p.then(done);
+        }
+
+        return p;
     }
 }
 
