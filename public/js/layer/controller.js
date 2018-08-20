@@ -419,7 +419,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 return;
             }
 
-            if(!result.isValid){
+            if (!result.isValid) {
                 $scope.temporarySQLCollection.invalidSql = true;
                 return;
             }
@@ -449,11 +449,9 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 }
                 setDraggable('#' + collection.collectionID + '-parent');
             }, 100);
-            
 
             $('#sqlModal').modal('hide');
             $scope.erDiagramInit();
-            
         });
     };
 
@@ -1298,15 +1296,28 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     }
 
     $scope.onElementTypeChange = function (element) {
-        var params = {datasourceID: element.datasourceID, layerID: $scope._Layer._id, collectionID: element.collectionID, collectionName: element.collectionName, elementName: element.elementName, defaultAggregation: element.defaultAggregation};
+        /*
+        * An unfinished piece of code for handling array elements (a column can hold an array in some SQL databases)
+        * Array support on the whole is unfinished, and would be an interesting feature
+        *
+        */
 
-        if (element.elementType === 'array') {
-            connection.get('/api/data-sources/get-element-distinct-values', params, function (data) {
-                for (var i in data.items) {
-                    $scope.addValueToElement(element, data.items[i]['_id'][element.elementName], data.items[i]['_id'][element.elementName]);
-                }
-            });
-        }
+        // var params = {
+        //     datasourceID: element.datasourceID,
+        //     layerID: $scope._Layer._id,
+        //     collectionID: element.collectionID,
+        //     collectionName: element.collectionName,
+        //     elementName: element.elementName,
+        //     defaultAggregation: element.defaultAggregation
+        // };
+
+        // if (element.elementType === 'array') {
+        //     connection.get('/api/data-sources/get-element-distinct-values', params, function (data) {
+        //         for (var i in data.items) {
+        //             $scope.addValueToElement(element, data.items[i]['_id'][element.elementName], data.items[i]['_id'][element.elementName]);
+        //         }
+        //     });
+        // }
     };
 
     // Drag & drop elements
@@ -1401,17 +1412,6 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                             if ($scope._Layer.params.schema[e].collectionID === collectionID) { return $scope._Layer.params.schema[e].elements; }
                         }
                     }
-                }
-            }
-        }
-    };
-
-    $scope.checkIfMongoDbForSQL = function () {
-        for (var i in $scope.datasources) {
-            if ($scope.selectedDts.id === $scope.datasources[i]._id) {
-                if ($scope.datasources[i].type === 'MONGODB') {
-                    $window.alert('SQL Queries are not compatible with MONGODB datasources');
-                    $scope.selectedDts.id = undefined;
                 }
             }
         }

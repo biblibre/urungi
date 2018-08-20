@@ -108,20 +108,6 @@ exports.getEntities = async function (req, res) {
     var data;
 
     switch (dts.type) {
-    case 'MONGODB':
-        var mongodb = require('../../core/db/mongodb.js');
-        data = {};
-
-        data.host = dts.params[0].connection.host;
-        data.port = dts.params[0].connection.port;
-        data.database = dts.params[0].connection.database;
-        data.userName = dts.params[0].connection.userName;
-        data.password = dts.params[0].connection.password;
-        data.datasourceID = dts._id;
-        mongodb.testConnection(req, data, function (result) {
-            serverResponse(req, res, 200, result);
-        });
-        break;
     case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL':
         const db = new Db(dts);
 
@@ -152,14 +138,6 @@ exports.testConnection = async function (req, res) {
     req.body.companyID = req.user.companyID;
 
     switch (req.body.type) {
-    case 'MONGODB' :
-        var mongodb = require('../../core/db/mongodb.js');
-
-        mongodb.testConnection(req, req.body, function (result) {
-            serverResponse(req, res, 200, result);
-        });
-        break;
-
     case 'MySQL' : case 'POSTGRE': case 'ORACLE': case 'MSSQL': case 'BIGQUERY': case 'JDBC-ORACLE':
 
         const connectionParams = req.body;
@@ -197,24 +175,9 @@ exports.getEntitySchema = async function (req, res) {
     const dts = result.item;
 
     var data;
+    var collectionSchema;
 
     switch (dts.type) {
-    case 'MONGODB':
-        var mongodb = require('../../core/db/mongodb.js');
-        data = {};
-        data.host = result.item.params[0].connection.host;
-        data.port = result.item.params[0].connection.port;
-        data.database = result.item.params[0].connection.database;
-        data.userName = result.item.params[0].connection.userName;
-        data.password = result.item.params[0].connection.password;
-        data.entities = [theEntity];
-        mongodb.getSchemas(data, function (result) {
-            serverResponse(req, res, 200, result);
-        });
-        break;
-
-        var collectionSchema;
-
     case 'POSTGRE': case 'MySQL': case 'ORACLE': case 'MSSQL':
 
         const db = new Db(dts);
@@ -270,24 +233,6 @@ exports.getEntitySchema = async function (req, res) {
         break;
     default:
         serverResponse(req, res, 200, { result: 0, msg: 'Invalid database type' });
-    // case 'BIGQUERY':
-    //     var bquery = require('../../core/db/bigQuery.js');
-    //     const data = {
-    //         companyID: req.user.companyID,
-    //         type: result.item.type,
-    //         host: result.item.params[0].connection.host,
-    //         port: result.item.params[0].connection.port,
-    //         userName: result.item.params[0].connection.userName,
-    //         password: result.item.params[0].connection.password,
-    //         database: result.item.params[0].connection.database,
-    //         file: result.item.params[0].connection.file,
-    //         entities: theEntities
-    //     };
-
-    //     bquery.getSchemas(data, function (result) {
-    //         serverResponse(req, res, 200, result);
-    //     });
-    // break;
     }
 };
 
@@ -313,9 +258,6 @@ exports.getsqlQuerySchema = async function (req, res) {
         const connection = result.item.connection;
         let data;
         switch(result.item.type){
-        case 'MONGODB':
-            serverResponse(req, res, 200, result);
-            break;
         case 'POSTGRE': case 'MySQL': case 'ORACLE': case 'MSSQL':
 
             data = {
@@ -358,7 +300,7 @@ exports.getsqlQuerySchema = async function (req, res) {
             };
 
             sql.getSqlQuerySchema(data, function (result) {
-                if(result.result === 1){
+                if (result.result === 1) {
                     result.isValid = true;
                 }
                 serverResponse(req, res, 200, result);
@@ -378,7 +320,7 @@ exports.getsqlQuerySchema = async function (req, res) {
             };
 
             bquery.getSqlQuerySchema(data, function (result) {
-                if(result.result === 1){
+                if (result.result === 1) {
                     result.isValid = true;
                 }
                 serverResponse(req, res, 200, result);
@@ -389,32 +331,6 @@ exports.getsqlQuerySchema = async function (req, res) {
         console.error(err);
         serverResponse(req, res, 200, {result: 0, msg: String(err)});
     }
-};
-
-exports.getMongoSchemas = function (req, res) {
-    var mongodb = require('../../core/db/mongodb.js');
-
-    mongodb.getSchemas(req.body, function (result) {
-        serverResponse(req, res, 200, result);
-    });
-};
-
-exports.getElementDistinctValues = function (req, res) {
-    var data = req.query;
-
-    data.group = {};
-    data.sort = {};
-
-    data.fields = [data.elementName];
-
-    data.group[data.elementName] = '$' + data.elementName;
-    data.sort[data.elementName] = 1;
-
-    var mongodb = require('../../core/db/mongodb.js');
-
-    mongodb.execOperation('aggregate', data, function (result) {
-        serverResponse(req, res, 200, result);
-    });
 };
 
 exports.DataSourcesFindAll = function (req, res) {

@@ -13,7 +13,7 @@
                 <div class="form-group" ng-if="!ReadOnlyDataSourceSelector" ng-class="{ 'has-error': sqlLayerForm.datasource.$invalid }">
                         <label for="field-3" class="control-label" translate>1.- Choose a data source</label>
 
-                        <select  class="form-control" name="datasource" ng-model="selectedDts.id" ng-change="checkIfMongoDbForSQL()" ng-required="true" required>
+                        <select  class="form-control" name="datasource" ng-model="selectedDts.id" ng-required="true" required>
 
                             <option value="{{dts._id}}" ng-repeat="dts in datasources">
 

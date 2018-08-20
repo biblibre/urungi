@@ -256,9 +256,9 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
     };
 
     function clone (obj) {
-        if(!obj){return obj;}
-        if(Object.getPrototypeOf(obj) === Date.prototype){return new Date(obj)}
-        if (typeof obj !== 'object'){return obj;}
+        if (!obj) { return obj; }
+        if (Object.getPrototypeOf(obj) === Date.prototype) { return new Date(obj); }
+        if (typeof obj !== 'object') { return obj; }
         var copy = obj.constructor();
         for (var attr in obj) {
             if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);

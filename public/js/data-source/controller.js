@@ -128,7 +128,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 $scope._dataSource.connection = {};
                 $scope._dataSource.packetSize = 500;
                 $scope._dataSource.status = 1;
-                $scope._dataSource.type = 'MONGODB';
+                $scope._dataSource.type = 'MySQL';
 
                 $scope.mode = 'add';
             }

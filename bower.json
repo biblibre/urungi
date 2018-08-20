@@ -4,12 +4,12 @@
   "authors": [
     "Hermenegildo Romero <hromero@db-team.com>"
   ],
-  "description": "Open source reporting tool for mongodb",
+  "description": "Open source reporting tool for sql",
   "main": "server.js",
   "keywords": [
     "reports",
     "reporting",
-    "mongodb"
+    "sql"
   ],
   "license": "MIT",
   "homepage": "www.widestage.com",

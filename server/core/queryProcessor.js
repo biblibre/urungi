@@ -25,16 +25,6 @@ exports.execute = async function (query) {
     var db;
 
     switch (dts.type) {
-    case 'MONGODB':
-        const mongodb = require('../../core/db/mongodb.js');
-
-        try {
-            const data = mongodb.runQuery(processedQuery);
-            return {result: 1, items: data};
-        } catch (err) {
-            return {result: 0, msg: String(err)};
-        }
-
     case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL':
 
         Db = require('./connection').Db;
@@ -111,7 +101,7 @@ exports.execute = async function (query) {
 
 function processQuery (query, queryLayer, warnings) {
     /*
-    * Connects the query with the layer and creates a processedQuery object which can be used to build the sql query text or the mongoDB query
+    * Connects the query with the layer and creates a processedQuery object which can be used to build the sql query text
     *
     * This function ensures part of the database security
     *   - the query object comes from the client, and cannot be trusted

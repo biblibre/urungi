@@ -11,7 +11,6 @@
             <div class="form-group">
                 <label class="control-label" translate>Connection Type II</label>
                 <select ng-model="_dataSource.type" placeholder="Select a datasource type..." id="type" class="form-control" ng-change="selectedRoleChanged = true">
-                    <option label="MONGODB" value="MONGODB" translate>MONGODB</option>
                     <option label="MySQL" value="MySQL" translate>MySQL</option>
                     <option label="PostgreSql" value="POSTGRE" translate>PostgreSql</option>
                     <option label="MSSQL" value="MSSQL" translate>MSSQL</option>
@@ -38,7 +37,7 @@
         <div class="col-md-12"  ng-if="_dataSource.type != 'BIGQUERY'">
             <div class="form-group">
                 <label class="control-label" for="port" translate>Port</label>
-                <input class="form-control" name="port" id="port" ng-model="_dataSource.connection.port" data-validate="required" placeholder="Insert here the port to access the MongoDB instance" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="port" id="port" ng-model="_dataSource.connection.port" data-validate="required" placeholder="Insert here the port to access the SQL instance" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
@@ -46,7 +45,7 @@
             <div class="form-group">
                 <label class="control-label" for="database" ng-if="_dataSource.type != 'BIGQUERY'" translate>Database</label>
                 <label class="control-label" for="database" ng-if="_dataSource.type == 'BIGQUERY'" translate>Project ID</label>
-                <input class="form-control" name="database" id="database" ng-model="_dataSource.connection.database" data-validate="required" placeholder="Set here the name of the MongoDB Database to connect" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="database" id="database" ng-model="_dataSource.connection.database" data-validate="required" placeholder="Set here the name of the SQL Database to connect" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
