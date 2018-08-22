@@ -10,6 +10,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
     $scope.settingsTemplate = 'partials/widgets/inspector.html';
     $scope.filterWidget = 'partials/report/filterWidget.html';
     $scope.promptModal = 'partials/widgets/promptModal.html';
+    $scope.reportImportModal = 'partials/dashboardv2/reportImportModal.html';
 
     $scope.selectedDashboard = {reports: [], containers: [], prompts: []};
     $scope.dashboardID = $routeParams.dashboardID;
@@ -33,6 +34,22 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
     $scope.duplicateOptions = {};
     $scope.duplicateOptions.freeze = false;
     $scope.duplicateOptions.header = 'Duplicate dashboard';
+
+    // Parameters for the report navigation list used in report import
+    $scope.nav = {};
+    $scope.nav.apiFetchUrl = '/api/reports/find-all';
+    $scope.nav.editButtons = false;
+    $scope.nav.layerButtons = false;
+    $scope.nav.itemsPerPage = 6;
+    $scope.nav.fetchFields = ['reportName', 'reportType', 'isPublic', 'owner', 'reportDescription', 'author', 'createdOn'];
+    $scope.nav.nameField = 'reportName';
+    $scope.nav.infoFields = [
+        {
+            name: 'reportName',
+            label: 'Name',
+            widthClass: 'col-md-6'
+        }
+    ];
 
     $scope.textAlign = [
         {name: 'left', value: 'left'},
@@ -73,6 +90,23 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
         $scope.reportInterface = true;
         $scope.editingReport = null;
         $scope.$broadcast('newReportForDash', {});
+    };
+
+    $scope.importReport = function () {
+        $('#reportImportModal').modal('show');
+    };
+
+    $scope.nav.clickItem = async function (item) {
+        const report = await reportModel.getReportDefinition(item._id);
+
+        if (report) {
+            report.id = report._id;
+            $scope.selectedDashboard.reports.push(report);
+        } else {
+            noty({ text: 'Error : failed to import report', type: 'error', timeout: 3000 });
+        }
+
+        $('#reportImportModal').modal('hide');
     };
 
     $scope.$on('cancelReport', function (event, args) {
