@@ -41,6 +41,8 @@ exports.execute = async function (query) {
             console.log(result.msg);
         }
 
+        db.close();
+
         result.warnings = warnings;
         return result;
 
@@ -424,11 +426,11 @@ function validateFilter (filter, element, escape, warnings) {
 function plainText (text, warnings) {
     var secureText;
     try {
-        secureText = String(text).replace(/[^a-zA-Z]/g, '');
+        secureText = String(text).replace(/[^a-zA-Z0-9]/g, '');
     } catch (err) {
         secureText = '';
     }
-    if (secureText !== text) {
+    if (secureText !== String(text)) {
         warnings.push({
             msg: 'A text fields has been modified to prevent sql injections',
             text: text

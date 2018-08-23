@@ -113,6 +113,8 @@ exports.getEntities = async function (req, res) {
 
         result = await db.getCollections();
 
+        db.close();
+
         serverResponse(req, res, 200, result);
         break;
     case 'BIGQUERY': case 'JDBC-ORACLE':
@@ -191,6 +193,8 @@ exports.getEntitySchema = async function (req, res) {
         }
 
         collectionSchema = processCollectionSchema(theEntity, rawSchema.items);
+
+        db.close();
 
         serverResponse(req, res, 200, { result: 1, schema: collectionSchema });
 
@@ -273,6 +277,8 @@ exports.getsqlQuerySchema = async function (req, res) {
 
             const db = new Db(data);
             const queryResult = await db.executeRawQuery(collectionRef.sqlQuery);
+
+            db.close();
 
             if (!queryResult) {
                 result = { result: 1, isValid: false };

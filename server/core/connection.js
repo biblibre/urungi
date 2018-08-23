@@ -153,6 +153,10 @@ Db.prototype.executeRawQuery = async function (sqlQuery) {
     return result;
 };
 
+Db.prototype.close = async function () {
+    await this.knex.destroy();
+};
+
 exports.testConnection = async function (params) {
     var testQueries;
 
@@ -186,6 +190,8 @@ exports.testConnection = async function (params) {
         for (const query of testQueries) {
             await query(testDb.knex);
         }
+
+        testDb.close();
     } catch (err) {
         return {result: 0, msg: 'Error executing test connection SQL : ' + err, code: 'MY-002', actionCode: 'MESSAGEWST'};
     }
