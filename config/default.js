@@ -8,6 +8,8 @@ module.exports = {
     // See https://docs.mongodb.com/manual/reference/connection-string/
     db: undefined,
 
+    sql_db: false,
+
     crypto: {
         enabled: true,
         secret: 'SecretPassphrase',
