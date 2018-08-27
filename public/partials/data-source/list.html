@@ -11,7 +11,7 @@
                 <div class="container-fluid branded-border-panel" >
                     <h3 class="pull-left" translate>Data sources</h3>
                     <a id="newDataSourceBtn" href="/#/data_sources/new/true" class="btn btn-success pull-right" tooltip="{{'Click here to create a new data source' | translate}}" tooltip-placement="bottom" translate>New Data Source</a>
-                    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="{{ 'Click here to conduct the guided tour for data sources' | translate}}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+                    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="{{ 'Click here to conduct the guided tour for data sources' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
                 </div>
 
                 <div id="datasourceList" class="list-group" ng-init="getDataSources(1,'',['name','type','params.connection.host','params.connection.port','params.connection.database'])">

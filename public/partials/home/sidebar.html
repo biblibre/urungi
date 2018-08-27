@@ -18,22 +18,27 @@
     <a id="exploreMainMenu" ng-if="user.exploreData" href="/#/explore" class="list-group-item">
         <i class="fa fa-sun-o"></i><span translate> &nbsp;Explore</span>
     </a>
-    <a id="publicSpaceMainMenu" ng-show="isWSTADMIN" href="/#/public-space" class="list-group-item admin-menu"  >
+    <a id="publicSpaceMainMenu" ng-show="isWSTADMIN" href="/#/public-space" class="list-group-item">
         <i class="fa fa-sitemap"></i><span translate>&nbsp; Public space</span>
     </a>
-    <a id="layersMainMenu" ng-show="isWSTADMIN" href="/#/layers" class="list-group-item admin-menu" >
+    <a id="layersMainMenu" ng-show="isWSTADMIN" href="/#/layers" class="list-group-item">
         <i class="fa fa-map-o"></i><span translate>&nbsp; Layers </span> <span class="badge">{{counts.layers}}</span>
     </a>
-    <a id="datasourcesMainMenu" ng-show="isWSTADMIN" href="/#/data-sources" class="list-group-item admin-menu" >
+    <a id="datasourcesMainMenu" ng-show="isWSTADMIN" href="/#/data-sources" class="list-group-item">
         <i class="fa fa-database"></i><span translate>&nbsp; Data sources </span> <span class="badge">{{counts.dataSources}}</span>
     </a>
-    <a id="rolesMainMenu" ng-show="isWSTADMIN" href="/#/roles" class="list-group-item admin-menu" >
+    <a id="rolesMainMenu" ng-show="isWSTADMIN" href="/#/roles" class="list-group-item">
         <i class="fa fa-users"></i><span translate>&nbsp; Roles  </span><span class="badge">{{counts.roles}}</span>
     </a>
-    <a id="usersMainMenu" ng-show="isWSTADMIN" href="/#/users" class="list-group-item admin-menu" >
+    <a id="usersMainMenu" ng-show="isWSTADMIN" href="/#/users" class="list-group-item">
         <i class="fa fa-user"></i> <span translate>&nbsp;Users  </span><span class="badge">{{counts.users}}</span>
     </a>
-    <a ng-if="!getUserContextHelp('homeIndex')" class="list-group-item admin-menu" ng-click="showIntro()" translate>Guided tour</a>
+    <a ng-if="!getUserContextHelp('homeIndex')" class="list-group-item admin-menu" ng-click="showIntro()">
+        <i class="fa fa-map"></i> <span translate>Guided tour</span>
+    </a>
+    <a id="aboutMenu" href="/#/about" class="list-group-item">
+        <i class="fa fa-question-circle"></i> <span translate>About</span>
+    </a>
     <span class="list-group-item main-menu-logo" >
         <img src="images/urungi.png" class="img-responsive">
     </span>

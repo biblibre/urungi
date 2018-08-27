@@ -15,10 +15,17 @@ var app = angular.module('WideStage', [
             templateUrl: 'partials/home/index.html',
             controller: 'homeCtrl'
         });
+
+        $routeProvider.when('/about', {
+            templateUrl: 'partials/home/about.html',
+            controller: 'homeCtrl'
+        });
+
         $routeProvider.when('/dashboards', {
             templateUrl: 'partials/dashboard/list.html',
             controller: 'dashBoardCtrl'
         });
+
         $routeProvider.when('/dashboard/:extra', {
             templateUrl: 'partials/dashboard/list.html',
             controller: 'dashBoardCtrl'
