@@ -6,6 +6,10 @@ var theParent;
 var mode;
 
 module.directive('elementDraggable', ['$rootScope', 'uuid', '$compile', '$parse', function ($rootScope, uuid, $compile, $parse) {
+    /*
+    *   Currently not used
+    */
+
     return {
         restrict: 'A',
 

@@ -483,152 +483,115 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
         $scope.$broadcast('loadReportStrucutureForDash', {report: reportBackup});
     };
 
-    $scope.onDrop = function (data, event, type, group) {
-        // DROP OVER THE DASHBOARD PARENT DIV
+    async function getDroppableObjectHtml (data) {
+        switch (data.objectType) {
+        case 'jumbotron':
+            return htmlWidgets.getJumbotronHTML();
 
-        event.stopPropagation();
-        var customObjectData = data['json/custom-object'];
+        case '4colscta':
+            return htmlWidgets.get4colsctaHTML();
 
-        if (customObjectData.objectType === 'jumbotron') {
-            const html = getJumbotronHTML();
-            createOnDesignArea(html, function () {});
-        }
+        case '3colscta':
+            return htmlWidgets.get3colsctaHTML();
 
-        if (customObjectData.objectType === '4colscta') {
-            const html = get4colsctaHTML();
-            createOnDesignArea(html, function () {});
-        }
+        case '2colscta':
+            return htmlWidgets.get2colsctaHTML();
 
-        if (customObjectData.objectType === '3colscta') {
-            const html = get3colsctaHTML();
-            createOnDesignArea(html, function () {});
-        }
+        case 'divider':
+            return htmlWidgets.getDivider();
 
-        if (customObjectData.objectType === '2colscta') {
-            const html = get2colsctaHTML();
-            createOnDesignArea(html, function () {});
-        }
+        case 'imageTextLarge':
+            return htmlWidgets.getImageTextLargeHTML();
 
-        if (customObjectData.objectType === 'divider') {
-            const html = htmlWidgets.getDivider();
-            createOnDesignArea(html, function () {});
-        }
+        case 'textImageLarge':
+            return htmlWidgets.getTextImageLargeHTML();
 
-        if (customObjectData.objectType === 'imageTextLarge') {
-            const html = getImageTextLargeHTML();
-            createOnDesignArea(html, function () {});
-        }
-
-        if (customObjectData.objectType === 'textImageLarge') {
-            const html = getTextImageLargeHTML();
-            createOnDesignArea(html, function () {});
-        }
-
-        if (customObjectData.objectType === 'report') {
-            for (const i in $scope.selectedDashboard.reports) {
-                if ($scope.selectedDashboard.reports[i].id === customObjectData.reportID) {
-                    if (angular.element('#REPORT_' + $scope.selectedDashboard.reports[i].id).length) {
-                        noty({text: 'Sorry, that report is already on the dash', timeout: 6000, type: 'error'});
-                    } else {
-                        const html = reportModel.getReportContainerHTML(customObjectData.reportID);
-                        createOnDesignArea(html, function () {
-                            repaintReports();
-                        });
-                    }
-                }
+        case 'report':
+            const report = $scope.selectedDashboard.reports.find(r => r.id === data.reportID);
+            if (!report) {
+                noty({text: 'Could not find report', timeout: 6000, type: 'error'});
+                return;
             }
-        }
+            if (angular.element('#REPORT_' + report.id).length) {
+                noty({text: 'Sorry, that report is already on the dash', timeout: 6000, type: 'error'});
+                return;
+            }
+            return reportModel.getReportContainerHTML(data.reportID);
 
-        if (customObjectData.objectType === 'queryFilter') {
-            console.log(customObjectData);
-            if (angular.element('#PROMPT_' + customObjectData.promptID).length) {
+        case 'queryFilter':
+            if (angular.element('#PROMPT_' + data.promptID).length) {
                 noty({text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error'});
-            } else {
-                const html = reportModel.getPromptHTML(customObjectData);
-                console.log(html);
-                createOnDesignArea(html, function () {});
+                return;
             }
-        }
+            return reportModel.getPromptHTML(data);
 
-        if (customObjectData.objectType === 'tabs') {
+        case 'tabs':
             var theid = 'TABS_' + uuid2.newguid();
             var theTabs = [{label: 'tab1', active: true, id: uuid2.newguid()}, {label: 'tab2', active: false, id: uuid2.newguid()}, {label: 'tab3', active: false, id: uuid2.newguid()}, {label: 'tab4', active: false, id: uuid2.newguid()}];
             var tabsElement = {id: theid, type: 'tabs', properties: {tabs: theTabs}};
             if (!$scope.selectedDashboard.containers) { $scope.selectedDashboard.containers = []; }
             $scope.selectedDashboard.containers.push(tabsElement);
 
-            const html = getTabsHTML(theid, theTabs);
-            createOnDesignArea(html, function () {});
-        }
+            return htmlWidgets.getTabsHTML(theid, theTabs);
 
-        if (customObjectData.objectType === 'image') {
-            $rootScope.openGalleryModal(function (url) {
-                const html = htmlWidgets.getImage(url);
-                createOnDesignArea(html, function () {});
+        case 'image':
+            return new Promise((resolve, reject) => {
+                $rootScope.openGalleryModal(function (url) {
+                    resolve(htmlWidgets.getImage(url));
+                });
             });
-        }
 
-        if (customObjectData.objectType === 'video') {
-            const html = htmlWidgets.getVideo();
-            createOnDesignArea(html, function () {});
-        }
+        case 'video':
+            return htmlWidgets.getVideo();
 
-        if (customObjectData.objectType === 'paragraph') {
-            const html = htmlWidgets.getParagraph();
-            createOnDesignArea(html, function () {});
-        }
+        case 'paragraph':
+            return htmlWidgets.getParagraph();
 
-        if (customObjectData.objectType === 'heading') {
-            const html = htmlWidgets.getHeading();
-            createOnDesignArea(html, function () {});
-        }
+        case 'heading':
+            return htmlWidgets.getHeading();
 
-        if (customObjectData.objectType === 'pageHeader') {
-            const html = htmlWidgets.getPageHeader();
-            createOnDesignArea(html, function () {});
-        }
+        case 'pageHeader':
+            return htmlWidgets.getPageHeader();
 
-        if (customObjectData.objectType === 'definitionList') {
-            const html = htmlWidgets.getDefinitionList();
-            createOnDesignArea(html, function () {});
+        case 'definitionList':
+            return htmlWidgets.getDefinitionList();
+        }
+    }
+
+    $scope.onDrop = async function (data, event, type, group) {
+        // DROP OVER THE DASHBOARD PARENT DIV
+
+        event.stopPropagation();
+        var customObjectData = data['json/custom-object'];
+
+        var html = await getDroppableObjectHtml(customObjectData);
+
+        var $div = $(html);
+        $('#designArea').append($div);
+        angular.element(document).injector().invoke(function ($compile) {
+            var scope = angular.element($div).scope();
+            $compile($div)(scope);
+        });
+
+        if (customObjectData.objectType === 'report') {
+            repaintReports();
         }
     };
 
-    $scope.onDropObject = function (data, event, type, group) {
+    $scope.onDropObject = async function (data, event, type, group) {
         // DROP OVER AN HTML CONTAINER
 
         event.stopPropagation();
         var customObjectData = data['json/custom-object'];
 
-        let html;
+        const authorisedObjects = ['imageTextLarge', 'textImageLarge', 'report', 'queryFilter', 'image', 'video', 'paragraph', 'heading', 'pageHeader'];
 
-        if (customObjectData.objectType === 'queryFilter') {
-            var pid = customObjectData.id + customObjectData.filterType;
-            if (angular.element('#PROMPT_' + pid).length) {
-                noty({text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error'});
-            } else {
-                html = reportModel.getPromptHTML(customObjectData);
-            }
+        if (authorisedObjects.indexOf(customObjectData.objectType) === -1) {
+            noty({text: 'You are not allowed to put this object inside a component', timeout: 6000, type: 'warning'});
+            return;
         }
 
-        /*
-        if (customObjectData.objectType === 'image') {
-
-        }
-        */
-
-        if (customObjectData.objectType === 'report') {
-            for (const i in $scope.selectedDashboard.reports) {
-                if ($scope.selectedDashboard.reports[i].id === customObjectData.reportID) {
-                    if (angular.element('#REPORT_' + $scope.selectedDashboard.reports[i].id).length) {
-                        noty({text: 'Sorry, that report is already on the board', timeout: 6000, type: 'error'});
-                    } else {
-                        html = reportModel.getReportContainerHTML(customObjectData.reportID);
-                        // createOnDesignArea(html,function(){});
-                    }
-                }
-            }
-        }
+        var html = await getDroppableObjectHtml(customObjectData);
 
         if (html) {
             var $div = $(html);
@@ -651,23 +614,10 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
             filterCriteria[i] = $scope.prompts[i].criterion;
         }
 
-        console.log('repainting with these criteria ');
-        console.log(filterCriteria);
-
         $scope.$broadcast('repaint', {
             fetchData: true,
             filterCriteria: filterCriteria
         });
-    }
-
-    function createOnDesignArea (html, done) {
-        var $div = $(html);
-        $('#designArea').append($div);
-        angular.element(document).injector().invoke(function ($compile) {
-            var scope = angular.element($div).scope();
-            $compile($div)(scope);
-        });
-        done();
     }
 
     $scope.getElementProperties = function (element, elementID) {
@@ -701,34 +651,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, reportService, connection, $
     $scope.overChartDragging = function () {
 
     };
-
-    function getJumbotronHTML () {
-        return htmlWidgets.getJumbotronHTML();
-    }
-
-    function get4colsctaHTML () {
-        return htmlWidgets.get4colsctaHTML();
-    }
-
-    function get3colsctaHTML () {
-        return htmlWidgets.get3colsctaHTML();
-    }
-
-    function get2colsctaHTML () {
-        return htmlWidgets.get2colsctaHTML();
-    }
-
-    function getImageTextLargeHTML () {
-        return htmlWidgets.getImageTextLargeHTML();
-    }
-
-    function getTextImageLargeHTML () {
-        return htmlWidgets.getTextImageLargeHTML();
-    }
-
-    function getTabsHTML (id, tabs) {
-        return htmlWidgets.getTabsHTML(id, tabs);
-    }
 
     $scope.getTabs = function (id) {
         for (var c in $scope.selectedDashboard.containers) {
