@@ -190,7 +190,7 @@ exports.PreviewQuery = function (req, res) {
 };
 
 exports.ReportsGetData = function (req, res) {
-    var data = req.query;
+    var data = req.body;
     var query = data.query;
     processDataSources(req, query.datasources, query.layers, {page: (data.page) ? data.page : 1}, query, function (result) {
         serverResponse(req, res, 200, result);

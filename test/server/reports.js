@@ -118,7 +118,7 @@ describe('post /api/reports/delete:id', function () {
         expect(decrypted).to.have.property('msg', '1 items deleted.');
     });
 });
-describe('get /api/reports/get-data', function () {
+describe('post /api/reports/get-data', function () {
     it('should return data ');
 });
 
