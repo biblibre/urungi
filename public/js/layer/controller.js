@@ -176,18 +176,24 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     var _addEndpoints = function (toId, sourceAnchors, targetAnchors) {
+        var newEndpoints = [];
         for (var i = 0; i < sourceAnchors.length; i++) {
             var sourceUUID = toId + sourceAnchors[i];
 
-            instance.addEndpoint(toId, sourceEndpoint, {
+            const nedp = instance.addEndpoint(toId, sourceEndpoint, {
                 anchor: sourceAnchors[i], uuid: sourceUUID
             });
+            newEndpoints.push(nedp.getUuid());
         }
         for (var j = 0; j < targetAnchors.length; j++) {
             var targetUUID = toId + targetAnchors[j];
 
-            instance.addEndpoint(toId, targetEndpoint, { anchor: targetAnchors[j], uuid: targetUUID });
+            const nedp = instance.addEndpoint(toId, targetEndpoint, {
+                anchor: targetAnchors[j], uuid: targetUUID
+            });
+            newEndpoints.push(nedp.getUuid());
         }
+        return newEndpoints;
     };
 
     $scope.newLayer = function () {
@@ -478,27 +484,27 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     $scope.addSqlToLayer = function () {
         datasourceModel.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection, function (result) {
             if (result.result === 1) {
-                for (const i in result.items) {
-                    result.items[i].datasourceID = $scope.selectedDts.id;
+                for (const collection of result.items) {
+                    collection.datasourceID = $scope.selectedDts.id;
 
-                    for (const e in result.items[i].elements) {
-                        result.items[i].elements[e].datasourceID = $scope.selectedDts.id;
-                        result.items[i].elements[e].collectionID = result.items[i].collectionID;
-                        result.items[i].elements[e].collectionName = result.items[i].collectionName;
+                    for (const e in collection.elements) {
+                        collection.elements[e].datasourceID = $scope.selectedDts.id;
+                        collection.elements[e].collectionID = collection.collectionID;
+                        collection.elements[e].collectionName = collection.collectionName;
                     }
 
                     if (!$scope._Layer.params) { $scope._Layer.params = {}; }
                     if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
 
-                    $scope._Layer.params.schema.push(result.items[i]);
+                    $scope._Layer.params.schema.push(collection);
 
                     setTimeout(function () {
-                        for (var element in result.items[i].elements) {
-                            if (!result.items[i].elements[element].painted) {
-                                _addEndpoints(result.items[i].elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
+                        for (var element in collection.elements) {
+                            if (!collection.elements[element].painted) {
+                                _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
                             }
                         }
-                        setDraggable('.window');
+                        setDraggable('#' + collection.collectionID + '-parent');
                     }, 100);
                 }
 
@@ -874,6 +880,33 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         $scope.theSelectedElement = join;
         $scope.$apply();
     }
+
+    $scope.isInAJoin = function (element) {
+        // if(element.elementName === 'title' || element.elementName === 'pages'){
+        //     return true;
+        // }
+        if (!$scope._Layer.params.joins) {
+            return false;
+        }
+        for (const j of $scope._Layer.params.joins) {
+            if (j.sourceCollectionID === element.collectionID && j.sourceElementID === element.elementID) {
+                return true;
+            }
+            if (j.targetCollectionID === element.collectionID && j.targetElementID === element.elementID) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    $scope.toggleFolded = function (collection) {
+        collection.folded = !collection.folded;
+        setTimeout(function () {
+            var collectionObject = $('#' + collection.collectionID + '-parent')[0];
+            instance.recalculateOffsets(collectionObject);
+            instance.repaintEverything();
+        }, 100);
+    };
 
     $scope.elementAdd = function (element) {
         $scope.selectedElement = element;
@@ -1375,28 +1408,28 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         if (typeof $scope.selectedDts.id === 'undefined' || $scope.selectedDts.id === datasourceID) {
             datasourceModel.getEntitiesSchema(datasourceID, [entity], function (result) {
                 if (result.result === 1) {
-                    for (const i in result.items) {
-                        result.items[i].datasourceID = datasourceID;
+                    for (const collection of result.items) {
+                        collection.datasourceID = datasourceID;
                         $scope.selectedDts.id = datasourceID;
 
-                        for (const e in result.items[i].elements) {
-                            result.items[i].elements[e].datasourceID = datasourceID;
-                            result.items[i].elements[e].collectionID = result.items[i].collectionID;
-                            result.items[i].elements[e].collectionName = result.items[i].collectionName;
+                        for (const e in collection.elements) {
+                            collection.elements[e].datasourceID = datasourceID;
+                            collection.elements[e].collectionID = collection.collectionID;
+                            collection.elements[e].collectionName = collection.collectionName;
                         }
 
                         if (!$scope._Layer.params) { $scope._Layer.params = {}; }
                         if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
 
-                        $scope._Layer.params.schema.push(result.items[i]);
+                        $scope._Layer.params.schema.push(collection);
 
                         setTimeout(function () {
-                            for (const element in result.items[i].elements) {
-                                if (!result.items[i].elements[element].painted) {
-                                    _addEndpoints(result.items[i].elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
+                            for (const element in collection.elements) {
+                                if (!collection.elements[element].painted) {
+                                    _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
                                 }
                             }
-                            setDraggable('.window');
+                            setDraggable('#' + collection.collectionID + '-parent');
                         }, 100);
                     }
                     $scope.erDiagramInit();
