@@ -1007,27 +1007,17 @@ angular.module('wst.inspector', [])
                 };
 
                 $scope.setBackgroundImage = function (url) {
-                    $scope.backgroundImage = url;
-
                     if ($scope.selectedElement) {
                         var theElement = $scope.selectedElement;
 
-                        if (typeof $scope.backgroundImage !== 'undefined' && $scope.backgroundImage !== 'none') {
-                            theElement.css({'background-image': "url('" + $scope.backgroundImage + "')"});
+                        if (url) {
+                            theElement.css({'background-image': "url('" + url + "')"});
                             theElement.css({'-webkit-background-size': 'cover'});
                             theElement.css({'-moz-background-size': 'cover'});
                             theElement.css({'-o-background-size': 'cover'});
                             theElement.css({'background-size': 'cover'});
                         } else {
                             theElement.css({ 'background-image': 'none' });
-                        }
-
-                        if ($scope.dashboard) {
-                            if (typeof $scope.backgroundImage !== 'undefined' && $scope.backgroundImage !== 'none') {
-                                $scope.dashboard.backgroundImage = $scope.backgroundImage;
-                            } else {
-                                $scope.dashboard.backgroundImage = 'none';
-                            }
                         }
                     }
                 };
