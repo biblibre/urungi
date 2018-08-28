@@ -191,7 +191,8 @@ app.service('c3Charts', function () {
                 size: {
                     height: chart.height
                 },
-                legend: legend
+                legend: legend,
+                padding: padding
             };
             break;
 
@@ -217,7 +218,8 @@ app.service('c3Charts', function () {
 
                 size: {
                     height: chart.height
-                }
+                },
+                padding: padding
             };
             break;
 
