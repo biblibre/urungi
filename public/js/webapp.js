@@ -6,7 +6,7 @@ var app = angular.module('WideStage', [
     'infinite-scroll', 'angular-canv-gauge', 'ui.bootstrap-slider', 'widestage.directives', 'ngSanitize', 'ui.select', 'tg.dynamicDirective', 'angularUUID2', 'vs-repeat',
     'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'gridshore.c3js.chart', 'vAccordion', 'bsLoadingOverlay', 'gg.editableText',
     'intro.help', 'ngTagsInput', 'ui.codemirror', '720kb.socialshare', 'ngFileUpload', 'colorpicker.module', 'angularSpectrumColorpicker',
-    'wst.inspector', 'gettext'
+    'wst.inspector', 'gettext', 'ngFileSaver'
 ])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
@@ -216,6 +216,23 @@ var app = angular.module('WideStage', [
         $routeProvider.when('/setup', {
             templateUrl: 'partials/setup/index.html',
             controller: 'setupCtrl'
+        });
+
+        // imports and exports
+
+        $routeProvider.when('/import', {
+            templateUrl: 'partials/io/import.html',
+            controller: 'ioCtrl'
+        });
+
+        $routeProvider.when('/export', {
+            templateUrl: 'partials/io/export.html',
+            controller: 'ioCtrl'
+        });
+
+        $routeProvider.when('/export/download', {
+            templateUrl: 'partials/io/export.html',
+            controller: 'ioCtrl'
         });
     }])
     .factory('$sessionStorage', ['$window', function ($window) {

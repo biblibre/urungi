@@ -171,11 +171,38 @@ class Controller {
             user_companyName: (req.isAuthenticated()) ? req.user.companyName : null
         });
 
-        this.model.create(data, function (err, item) {
+        const Model = this.model;
+
+        Model.find({_id: data._id}, function (err, item) {
             if (err) {
                 done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
+                return;
+            }
+
+            if (item.length > 0) {
+                if (!item[0].nd_trash_deleted) {
+                    done({result: 0, msg: 'Failed to create item : item already exists'});
+                } else {
+                    Model.deleteOne({_id: data._id}, function (err, res) {
+                        if (err) {
+                            done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
+                            return;
+                        }
+                        next();
+                    });
+                }
             } else {
-                done({result: 1, msg: 'Item created', item: item.toObject()});
+                next();
+            }
+
+            function next () {
+                Model.create(data, function (err, item) {
+                    if (err) {
+                        done({result: 0, msg: 'A database error has occured : ' + String(err), error: err});
+                    } else {
+                        done({result: 1, msg: 'Item created', item: item.toObject()});
+                    }
+                });
             }
         });
     }

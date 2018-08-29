@@ -1,6 +1,6 @@
-/* global XLSX: false, saveAs: false, Blob: false, datenum: false */
+/* global XLSX: false, Blob: false, datenum: false */
 
-app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2) {
+app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2, FileSaver) {
     this.getReportDefinition = async function (id, isLinked) {
         const data = await connection.get('/api/reports/get-report/' + id, {id: id, mode: 'preview', linked: isLinked});
         if (data.item) {
@@ -320,7 +320,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2)
             return buf;
         }
 
-        saveAs(new Blob([s2ab(wbout)], {type: ''}), ws_name + '.xlsx');
+        FileSaver.saveAs(new Blob([s2ab(wbout)], {type: ''}), ws_name + '.xlsx');
     };
 
     function Workbook () {
