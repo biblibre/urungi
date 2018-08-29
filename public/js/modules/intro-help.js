@@ -30,6 +30,10 @@ module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', fu
                 scope._onKeyDown(e);
             });
 
+            scope.$on('showIntro', function () {
+                scope.ngIntroMethod();
+            });
+
             var strElm = '<div id="introHelpOverlay"  class="introjs-overlay"></div>' +
                                 '<div id="introHelpCallout" class="panel callout bottom-left">{{intro}}<div id="introHelpCalloutContent"></div>' +
                                     '<div style="position: absolute;bottom: 0;left: 0;width:100%;padding:3px;border-top:1px #999 solid">' +

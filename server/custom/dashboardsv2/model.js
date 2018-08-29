@@ -18,6 +18,7 @@ var Dashboardsv2Schema = new mongoose.Schema({
     parentFolder: {type: String},
     isPublic: {type: Boolean},
     createdBy: {type: String},
+    author: {type: String},
     createdOn: {type: Date}
 }, { collection: 'wst_Dashboardsv2' });
 

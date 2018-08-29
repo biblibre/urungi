@@ -9,7 +9,7 @@
     <a id="homeMainMenu" href="/#/home" class="list-group-item ">
         <i class="fa fa-home"></i><span translate>&nbsp; Home</span>
     </a>
-    <a id="dashboardsMainMenu" ng-if="user.dashboardsCreate || counts.dashBoards > 0" href="/#/dashboardv2" class="list-group-item ">
+    <a id="dashboardsMainMenu" ng-if="user.dashboardsCreate || counts.dashBoards > 0" href="/#/dashboards/list" class="list-group-item ">
        <i class="fa fa-dashboard"></i> <span translate> &nbsp;My Dashboards </span> <span class="badge">{{counts.dashBoards}}</span>
     </a>
     <a id="reportsMainMenu" ng-if="user.reportsCreate || counts.reports > 0" href="/#/reports" class="list-group-item">

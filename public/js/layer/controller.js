@@ -44,78 +44,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     $scope.IntroOptions = {
         // IF width > 300 then you will face problems with mobile devices in responsive mode
         steps: [
-            {
-                element: '#parentIntro',
-                html: '<div><h3>Layers</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Layers define the interface for your users to access the data.</span><br/><br/><span>Layers allow your users to create reports dragging and droping familiar elements that points in the background to the fields contained in tables in your data surces.</span><br/><br/><span>Here you can create and manage the layers that later will be used by your users to create reports or explore data.</span><br/><br/><span>You can create several layers depending on your necessities, but you have to define one at least.</span></div>',
-                width: '500px',
-                objectArea: false,
-                verticalAlign: 'top',
-                height: '300px'
-            },
-            {
-                element: '#newLayerBtn',
-                html: '<div><h3>New Layer</h3><span style="font-weight:bold;">Click here to create a new layer.</span><br/><span></span></div>',
-                width: '300px',
-                height: '150px',
-                areaColor: 'transparent',
-                horizontalAlign: 'right',
-                areaLineColor: '#fff'
-            },
-            {
-                element: '#layerList',
-                html: '<div><h3>Layers list</h3><span style="font-weight:bold;">Here all the layers are listed.</span><br/><span>You can edit the layer to configure the tables, elements and joins between tables.<br/><br/>You can also activate or deactivate layers.</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                verticalAlign: 'top',
-                height: '180px'
 
-            },
-            {
-                element: '#layerListItem',
-                html: '<div><h3>Layer</h3><span style="font-weight:bold;">This is one layer.</span><br/><span></span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#72A230',
-                height: '180px'
-
-            },
-            {
-                element: '#layerListItemName',
-                html: '<div><h3>Layer name</h3><span style="font-weight:bold;">The name for the layer.</span><br/><br/><span>You can setup the name you want for your layer, but think about make it descriptive enough, specially if users will have to choose between several layers.</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                height: '200px'
-
-            },
-            {
-                element: '#layerListItemDetails',
-                html: '<div><h3>Layer description</h3><span style="font-weight:bold;">Use the description to give your users more information about the data or kind of data they will access using the layer.</span><br/><span></span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                height: '180px'
-
-            },
-            {
-                element: '#layerListItemStatus',
-                html: '<div><h3>Layer status</h3><span style="font-weight:bold;">The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data.</span><br/><br/><span>You can change the status of the layer simply clicking over this label</span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                horizontalAlign: 'right',
-                height: '200px'
-
-            },
-            {
-                element: '#parentIntro',
-                html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Design your company public space</span><br/><br/>The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/public-space/intro">Go to the public space definition and continue tour</a></span></div>',
-                width: '500px',
-                objectArea: false,
-                verticalAlign: 'top',
-                height: '250px'
-            }
         ]
     };
 

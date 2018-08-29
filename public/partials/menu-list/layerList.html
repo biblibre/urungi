@@ -1,0 +1,27 @@
+<div id="parentIntro" intro-help ng-intro-method="showIntro"  ng-intro-options="introOptions"
+class="container-fluid root-container">
+
+    <div class="main col-md-3" ng-include="'partials/home/sidebar.html'">
+    </div>
+    
+    <div class="main col-md-9">
+        <div class="container-fluid">
+
+            <div class="container-fluid branded-border-panel" >
+                <h3 class="pull-left" translate>Layers</h3>
+
+                <a id="newLayerButton" ng-if="layerButtons" ng-click="newLayer()" class="btn btn-success pull-right" 
+                tooltip="Click here to create a new single query report" tooltip-placement="bottom" translate>New layer</a>
+                <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" 
+                tooltip="{{ 'Follow the guided tour for data sources' | translate }}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+
+            </div>
+
+            <div id="layerList" ng-include="listView"></div>
+
+        </div>
+    </div>
+
+    <div ng-include src="'partials/menu-list/modals/layerModal.html'"></div>
+
+</div>

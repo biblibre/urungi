@@ -24,7 +24,7 @@
 
     <!-- Column entries -->
 
-    <div ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid'"
+    <div id="columnsDropzone" ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid'"
     wst-dropzone="true" list-model="selectedReport.properties.columns" hide-column="hideColumn" zone="'columns'"
     query-bind="'column'" zone-info="'Drop here your columns'|translate"></div>
 
@@ -46,7 +46,7 @@
 
     <!-- Filters -->
 
-    <div id="filtersPanel"  class="container-fluid column-zone no-padding" drop="onDropOnFilter($data, $event, 'filter')" 
+    <div id="filtersDropzone"  class="container-fluid column-zone no-padding" drop="onDropOnFilter($data, $event, 'filter')" 
     drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
         <div class="filter-zone-label pull-right" ng-hide="selectedReport.query.groupFilters.length > 0 || selectedReport.query.recordLimit != undefined">Drop here your filters</div>
         <ul class="ul-drop no-padding" ng-model="selectedReport.properties.filters" ui-sortable="filterSortableOptions" ng-include="'partials/report/partials/filter.html'"></ul>
@@ -54,6 +54,6 @@
 
     <!-- Order keys -->
 
-    <div ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'"
+    <div id="orderByDropzone" ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'"
     wst-dropzone="true" list-model="selectedReport.properties.order" set-sort-type="setSortType" zone="'order'"
     query-bind="'order'" zone-info="'Drop here your order keys'"></div>

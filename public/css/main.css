@@ -6,6 +6,11 @@ body {
     background-color: #eeeeee;
 }
 
+.root-container {
+    padding-top: 10px;
+    height:100%;
+}
+
 .form-control {
     font-size: inherit;
 }
@@ -2502,7 +2507,7 @@ Palette
 	margin-top: -20px;
 }
 
-.list-edit-button {
+.list-button {
     font-size: 14px;
     margin-right: 3px;
     margin-left: 3px;
@@ -2513,21 +2518,10 @@ Palette
     border-radius: 5px;
     color: white;
     background-color: silver;
+
 }
 
-.list-duplicate-button {
-    font-size: 14px;
-    margin-right: 3px;
-    margin-left: 3px;
-    padding: 2px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 3px;
-    border-radius: 5px;
-    color: white;
-    background-color: silver;
-}
-.list-delete-button {
+.btn-delete {
     color: #FFFFFF;
     font-size: 16px;
     margin-right: 5px;
@@ -2540,6 +2534,10 @@ Palette
     margin-bottom: 3px;
     border-radius: 5px;
     background-color: #cc3f44;
+}
+
+.btn-selected {
+    background-color: #3d87fc;
 }
 
 .published-tag {
@@ -3427,6 +3425,12 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 .list-group-item {
     background-color: transparent;
     color: #bbbbbb;
+    cursor : pointer;
+}
+
+.list-head {
+    color : #111111;
+    background-color : #EEEEEE;
 }
 
 a.list-group-item {
