@@ -15,31 +15,23 @@
 
 <div id="dropArea" class="container-fluid" style="width:100%" ng-include src="dropArea"></div>
 
-<div ng-show="['chart-line', 'chart-pie', 'chart-donut'].indexOf(selectedReport.reportType) >= 0" >
-    legend position :
-    <select ng-model='selectedReport.properties.legendPosition'>
-        <option value="top" >top</option>
-        <option value="right">right</option>
-        <option value="bottom">bottom</option>
-    </select>
-</div>
-
 <div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width:100%">
-
-    <span ng-show="selectedReport.query.recordLimit == undefined">
-        <span translate>Quick display with</span>
-        <input type="number" ng-model="selectedRecordLimit.value" size="8">
-        <span translate>results.</span>
-        <button id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
-    </span>
-    <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
-    <span class="pull-right">
-        <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" class="pull-right" ng-click="refresh();" style="padding: 3px 10px;">
-            <i class="fa fa-refresh hand-cursor"></i>
-            <span translate>Refresh data</span>
-            <span ng-if="time !== undefined">({{time}}ms)</span>
-        </button>
-    </span>
+    <div>
+        <span ng-show="selectedReport.query.recordLimit == undefined">
+            <span translate>Quick display with</span>
+            <input type="number" ng-model="selectedRecordLimit.value" size="8">
+            <span translate>results.</span>
+            <button id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
+        </span>
+        <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
+        <span class="pull-right">
+            <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" class="pull-right" ng-click="refresh();" style="padding: 3px 10px;">
+                <i class="fa fa-refresh hand-cursor"></i>
+                <span translate>Refresh data</span>
+                <span ng-if="time !== undefined">({{time}}ms)</span>
+            </button>
+        </span>
+    </div>
 </div>
 
 <div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width:100%">
