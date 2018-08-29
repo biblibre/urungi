@@ -1,24 +1,28 @@
-<div class="files-gallery">
+<nd-modal id="fileGalleryModal" class="files-gallery" ng-init="init()">
     <button id="close-gallery-btn" type="button" class="close" ng-click="modalOptions.close()">X</button>
 
     <tabset class="nav-tabs-justified">
         <tab heading="My Images">
 
-            <form class="dropzone" id="dropzone" style="min-height: 0px;padding: 80px;" ng-init="setDropzone()"></form>
+            <!-- <form class="dropzone" id="dropzone" style="min-height: 0px;padding: 80px;" ng-init="setDropzone()"></form> -->
 
             <p id="extensionMSG" style="color: red;"></p>
 
             <ul id="file-list" class="ace-thumbnails files-modal-list">
 
                 <li ng-repeat="file in files">
-                    <a class="hand-cursor file-selection" ng-click="onFileSelected(file)">
-                        <span ng-show="file.loaded" class="label label-success dz-label" style="" translate>success</span>
-
-                        <img class="dz-image" alt="{{file.description}}" ng-src="{{file.url}}" />
+                    <a class="hand-cursor file-selection" ng-hide="file.loading" ng-click="onFileSelected(file)">
+                        <!-- <span class="label label-success dz-label" translate>success</span> -->
+                        <img class="dz-image" alt="{{file.description}}" tooltip="{{file.name}}" ng-src="{{file.url}}" />
+                    </a>
+                    <a class="hand-cursor file-selection" ng-show="file.loading">
+                        <img class="dz-image" src="/images/loader.gif" />
                     </a>
                 </li>
 
             </ul>
+
+            <div class="btn btn-default" ng-app="fileUpload" ngf-select="upload($file)">Choose image to upload</div>
 
         </tab>
         <tab heading="Public Images">
@@ -26,7 +30,7 @@
             <ul id="file-list" class="ace-thumbnails files-modal-list">
 
                 <li ng-repeat="file in catalogImages">
-                    <a class="hand-cursor file-selection" ng-click="onTumbnailSelected(file)">
+                    <a class="hand-cursor file-selection" ng-click="onFileSelected(file)">
                         <img class="dz-image" ng-src="{{file.url}}" />
                     </a>
                 </li>
@@ -65,8 +69,9 @@
             </a>
         </li>
     </div>
-</div>
 
-<div id="loader-overlay" class="files-loader-overlay" style="display: none;">
-    <img class="loader-img" src="/images/loader.gif" style="padding-top: 140px;margin-left: -25px;" />
-</div>
+    <div id="loader-overlay" class="files-loader-overlay" style="display: none;">
+        <img class="loader-img" src="/images/loader.gif" style="padding-top: 140px;margin-left: -25px;" />
+    </div>        
+
+</nd-modal>

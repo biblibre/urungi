@@ -310,7 +310,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
         $scope.$broadcast('loadReportStrucutureForDash', {report: reportBackup});
     };
 
-    async function getDroppableObjectHtml (data) {
+    async function getDroppableObjectHtml (data, context) {
         switch (data.objectType) {
         case 'jumbotron':
             return htmlWidgets.getJumbotronHTML();
@@ -363,9 +363,18 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
 
         case 'image':
             return new Promise((resolve, reject) => {
-                $rootScope.openGalleryModal(function (url) {
+                $scope.$broadcast('showFileModal', {addFile: function (file) {
+                    var url = file.url;
+                    if (context) {
+                        if (context.preferedSize === '700' && file.source700) {
+                            url = file.source700;
+                        }
+                        if (context.preferedSize === '1400' && file.source1400) {
+                            url = file.source1400;
+                        }
+                    }
                     resolve(htmlWidgets.getImage(url));
-                });
+                } });
             });
 
         case 'video':
@@ -391,7 +400,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
         event.stopPropagation();
         var customObjectData = data['json/custom-object'];
 
-        var html = await getDroppableObjectHtml(customObjectData);
+        var html = await getDroppableObjectHtml(customObjectData, {preferedSize: '1400'});
 
         var $div = $(html);
         $('#designArea').append($div);
@@ -418,7 +427,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
             return;
         }
 
-        var html = await getDroppableObjectHtml(customObjectData);
+        var html = await getDroppableObjectHtml(customObjectData, {preferedSize: '700'});
 
         if (html) {
             var $div = $(html);
