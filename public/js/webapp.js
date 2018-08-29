@@ -41,6 +41,11 @@ var app = angular.module('WideStage', [
             controller: 'dashBoardv2Ctrl'
         });
 
+        $routeProvider.when('/dashboards/push/:dashboardID/', {
+            templateUrl: 'partials/dashboardv2/edit.html',
+            controller: 'dashBoardv2Ctrl'
+        });
+
         $routeProvider.when('/reports', {
             templateUrl: 'partials/menu-list/reportList.html',
             controller: 'reportListCtrl'
