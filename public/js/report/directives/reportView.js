@@ -23,8 +23,6 @@ app.directive('reportView', function (reportModel, $compile, c3Charts, reportHtm
             };
 
             $scope.$on('repaint', async function (event, args) {
-                console.log('repainting');
-
                 $scope.loading = true;
 
                 if (!args) {
