@@ -336,11 +336,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         });
     };
 
-    $scope.saveReportStructure = function () {
-        var clonedReport = $scope.selectedReport;
-        reportService.addReport(clonedReport);
-    };
-
     $scope.stringVariables = [
         {value: 'toUpper', label: 'To Upper'},
         {value: 'toLower', label: 'To Lower'}
@@ -413,9 +408,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $('modal-backdrop').visible = false;
         $('modal-backdrop').remove();
         $('#dashListModal').modal('hide');
-        $scope.saveReportStructure();
+        reportService.addReport($scope.selectedReport);
 
-        $location.path('/dashboardsv2/push/' + dashboardID);
+        console.log('/dashboards/push/' + dashboardID);
+
+        $location.path('/dashboards/push/' + dashboardID);
     };
 
     $scope.publishReport = function () {
