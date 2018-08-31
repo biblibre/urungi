@@ -107,6 +107,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
             dataColumns: [],
             datax: {},
             height: 300,
+            legendPosition: report.properties.legendPosition,
             query: report.query,
             queryName: null
         };
@@ -137,7 +138,8 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
                 elementLabel: dataAxisInfo.objectLabel,
                 id: dataAxisInfo.id,
                 type: 'bar',
-                color: '#000000'};
+                color: '#000000'
+            };
 
             if (report.properties.xkeys.length > 1) {
                 const stackDimensionInfo = report.properties.xkeys[1];
@@ -147,7 +149,8 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
                     elementLabel: stackDimensionInfo.objectLabel,
                     id: stackDimensionInfo.id,
                     type: 'bar',
-                    color: '#000000'};
+                    color: '#000000'
+                };
             }
         }
 

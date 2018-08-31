@@ -1171,9 +1171,18 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     cursor: pointer;
 }
 
-.object-tree {
+.editor-panel {
     width: 100%;
     height: 100%;
+    color : white;
+}
+
+.editor-panel .content-section {
+    margin-left: 15px;
+}
+
+.editor-panel select{
+    color : black;
 }
 
 .tree-cube-sublabel {

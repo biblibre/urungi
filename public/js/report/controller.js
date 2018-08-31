@@ -39,7 +39,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.selectedReport.properties.order = [];
     $scope.selectedReport.reportType = 'grid';
     $scope.selectedReport.query = {};
-
+    $scope.selectedReport.properties.legendPosition = 'bottom';
     $scope.duplicateOptions = {};
     $scope.duplicateOptions.freeze = false;
     $scope.duplicateOptions.header = 'Duplicate report';
@@ -186,6 +186,8 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.selectedReport.properties.rowBorderColor = '#CCCCCC';
         $scope.selectedReport.properties.rowBottomLineWidth = 2;
         $scope.selectedReport.properties.columnLineWidht = 0;
+
+        $scope.selectedReport.properties.legendPosition = 'bottom';
 
         $scope.selectedReport.reportType = 'grid';
         $scope.mode = 'add';
@@ -387,6 +389,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
     $scope.reportNameSave = async function () {
         await queryModel.processQuery();
+
+        if (['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0) {
+            reportModel.initChart($scope.selectedReport);
+        }
 
         await reportModel.saveAsReport($scope.selectedReport, $scope.mode);
 

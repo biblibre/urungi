@@ -1,3 +1,6 @@
+
+<div ng-include src="filterPromptModal"></div>
+
 <!--choose a widget to see your data-->
 <div id="reportType" class="container-fluid" ng-hide="queryID" style="width:100%">
     <!-- TYPE OF REPORT SELECTION -->
@@ -10,26 +13,25 @@
     <a id="reportTypeGauge" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'gauge', 'report-unselected-btn': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="/images/gauge.png"></a>
 </div>
 
-<div ng-include src="filterPromptModal"></div>
-
 <div id="dropArea" class="container-fluid" style="width:100%" ng-include src="dropArea"></div>
 
 <div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width:100%">
-
-    <span ng-show="selectedReport.query.recordLimit == undefined">
-        <span translate>Quick display with</span>
-        <input type="number" ng-model="selectedRecordLimit.value" size="8">
-        <span translate>results.</span>
-        <button id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
-    </span>
-    <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
-    <span class="pull-right">
-        <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" class="pull-right" ng-click="refresh();" style="padding: 3px 10px;">
-            <i class="fa fa-refresh hand-cursor"></i>
-            <span translate>Refresh data</span>
-            <span ng-if="time !== undefined">({{time}}ms)</span>
-        </button>
-    </span>
+    <div>
+        <span ng-show="selectedReport.query.recordLimit == undefined">
+            <span translate>Quick display with</span>
+            <input type="number" ng-model="selectedRecordLimit.value" size="8">
+            <span translate>results.</span>
+            <button id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
+        </span>
+        <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
+        <span class="pull-right">
+            <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" class="pull-right" ng-click="refresh();" style="padding: 3px 10px;">
+                <i class="fa fa-refresh hand-cursor"></i>
+                <span translate>Refresh data</span>
+                <span ng-if="time !== undefined">({{time}}ms)</span>
+            </button>
+        </span>
+    </div>
 </div>
 
 <div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width:100%">
