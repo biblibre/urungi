@@ -338,6 +338,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         });
     };
 
+    $scope.saveReportStructure = function () {
+        reportService.addReport($scope.selectedReport);
+    };
+
     $scope.stringVariables = [
         {value: 'toUpper', label: 'To Upper'},
         {value: 'toLower', label: 'To Lower'}
