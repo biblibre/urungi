@@ -15,11 +15,11 @@
                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu5" >
 
                                 <li ng-if="item.elementType == 'number'" ng-repeat="option in fieldsAggregations.number">
-                                    <a ng-click="aggregationChoosed(item, option, queryBind)">{{option.name | translate}}</a>
+                                    <a ng-click="aggregationChoosed(item, option, role)">{{option.name}}</a>
                                 </li>
 
                                 <li ng-if="item.elementType == 'string'" ng-repeat="option in fieldsAggregations.string">
-                                    <a ng-click="aggregationChoosed(item, option, queryBind)">{{option.name | translate}}</a>
+                                    <a ng-click="aggregationChoosed(item, option, role)">{{option.name}}</a>
                                 </li>
 
                                 <li class="divider" ng-show="displayOptions"></li>

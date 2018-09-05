@@ -895,7 +895,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
         $scope.prompts = {};
 
         for (var report of $scope.selectedDashboard.reports) {
-            for (var filter of report.query.groupFilters) {
+            for (var filter of report.properties.filters) {
                 if (filter.filterPrompt) {
                     var prompt = {};
                     for (const i in filter) {

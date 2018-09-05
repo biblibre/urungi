@@ -31,7 +31,10 @@ app.directive('reportView', function (reportModel, $compile, c3Charts, reportHtm
 
                 if (args.fetchData) {
                     $scope.loadingMessage = 'Fetching data ...';
-                    await reportModel.fetchData($scope.report.query, args);
+                    const result = await reportModel.fetchData($scope.report.query, args);
+                    if (result.errorToken) {
+                        $scope.errorToken = result.errorToken;
+                    }
                 }
 
                 $scope.loadingMessage = 'Repainting report ...';
