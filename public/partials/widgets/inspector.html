@@ -1,4 +1,4 @@
-<div id="inspector"  bl-panels-accordion>
+<div id="inspector" ng-show="selectedElement" bl-panels-accordion>
 
   <div class="container-fluid">
     <span> {{elementType}}</span>
@@ -144,8 +144,9 @@
         <h4 class="accordion-heading">{{ 'backgroundImage' | translate }} <i class="fa fa-angle-down pull-right"></i></h4>
 
         <div class="accordion-body" >
-            <div >
-                <button type="button" ng-click="openImageGallery('companyLogo')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
+            <div class="btn-group">
+                <button type="btn" ng-click="openImageGallery('companyLogo')" class="btn btn-primary btn-block" translate>Upload image</button>
+                <button type="btn" ng-click="setBackgroundImage()" class="btn btn-primary btn-block" translate>Delete background</button>
             </div>
             <div id="texturePresets">
                 <h5>{{ 'textures' | translate }}</h5>

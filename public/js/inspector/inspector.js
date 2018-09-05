@@ -1007,27 +1007,17 @@ angular.module('wst.inspector', [])
                 };
 
                 $scope.setBackgroundImage = function (url) {
-                    $scope.backgroundImage = url;
-
                     if ($scope.selectedElement) {
                         var theElement = $scope.selectedElement;
 
-                        if (typeof $scope.backgroundImage !== 'undefined' && $scope.backgroundImage !== 'none') {
-                            theElement.css({'background-image': "url('" + $scope.backgroundImage + "')"});
+                        if (url) {
+                            theElement.css({'background-image': "url('" + url + "')"});
                             theElement.css({'-webkit-background-size': 'cover'});
                             theElement.css({'-moz-background-size': 'cover'});
                             theElement.css({'-o-background-size': 'cover'});
                             theElement.css({'background-size': 'cover'});
                         } else {
                             theElement.css({ 'background-image': 'none' });
-                        }
-
-                        if ($scope.dashboard) {
-                            if (typeof $scope.backgroundImage !== 'undefined' && $scope.backgroundImage !== 'none') {
-                                $scope.dashboard.backgroundImage = $scope.backgroundImage;
-                            } else {
-                                $scope.dashboard.backgroundImage = 'none';
-                            }
                         }
                     }
                 };
@@ -1133,12 +1123,12 @@ angular.module('wst.inspector', [])
                 };
 
                 $scope.$watchCollection('inspector.styles.source', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.attr('src', newProps);
                     }
                 });
                 $scope.$watchCollection('inspector.styles.headingType', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         var html = '<' + newProps + ' page-block ndtype="heading" class="editable">' + $scope.selectedElement[0].innerHTML + '</' + newProps + '>';
                         var $div = $(html);
 
@@ -1174,7 +1164,7 @@ angular.module('wst.inspector', [])
                 };
 
                 $scope.$watchCollection('properties', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         for (var prop in newProps) {
                             if (newProps[prop] && newProps[prop] !== oldProps[prop]) {
                                 // handle previews in inspector - image
@@ -1202,7 +1192,7 @@ angular.module('wst.inspector', [])
                 });
 
                 $scope.$watchCollection('inspector.styles.text', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         for (var prop in newProps) {
                             if (newProps[prop] && newProps[prop] !== oldProps[prop]) {
                                 $scope.selectedElement.css(prop, newProps[prop]);
@@ -1213,7 +1203,7 @@ angular.module('wst.inspector', [])
                 });
 
                 $scope.$watchCollection('inspector.styles.height', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         if (newProps && newProps !== oldProps) {
                             var val = newProps.replace(/[A-Za-z]/g, '') + 'px';
                             $scope.selectedElement.css('height', val);
@@ -1223,7 +1213,7 @@ angular.module('wst.inspector', [])
                 });
 
                 $scope.$watchCollection('inspector.styles.padding', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         var top = '0px';
                         var right = '0px';
                         var bottom = '0px';
@@ -1245,7 +1235,7 @@ angular.module('wst.inspector', [])
                 });
 
                 $scope.$watchCollection('inspector.styles.margin', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         var top = '0px';
                         var right = '0px';
                         var bottom = '0px';
@@ -1268,31 +1258,33 @@ angular.module('wst.inspector', [])
                 });
 
                 $scope.$watchCollection('inspector.styles.border', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
-                        var top = '0px';
-                        var right = '0px';
-                        var bottom = '0px';
-                        var left = '0px';
+                    if ($scope.selectedElement) {
+                        if (!$scope.selecting && !$scope.dragging) {
+                            var top = '0px';
+                            var right = '0px';
+                            var bottom = '0px';
+                            var left = '0px';
 
-                        for (var prop in newProps) {
-                            if (newProps[prop]) {
-                                if (prop === 'top') { top = newProps[prop]; }
-                                if (prop === 'right') { right = newProps[prop]; }
-                                if (prop === 'bottom') { bottom = newProps[prop]; }
-                                if (prop === 'left') { left = newProps[prop]; }
-                                if (prop === 'color') { $scope.selectedElement.css('border-color', newProps[prop]); }
-                                if (prop === 'style') { $scope.selectedElement.css('border-style', newProps[prop]); }
+                            for (var prop in newProps) {
+                                if (newProps[prop]) {
+                                    if (prop === 'top') { top = newProps[prop]; }
+                                    if (prop === 'right') { right = newProps[prop]; }
+                                    if (prop === 'bottom') { bottom = newProps[prop]; }
+                                    if (prop === 'left') { left = newProps[prop]; }
+                                    if (prop === 'color') { $scope.selectedElement.css('border-color', newProps[prop]); }
+                                    if (prop === 'style') { $scope.selectedElement.css('border-style', newProps[prop]); }
+                                }
                             }
                         }
-                    }
 
-                    var styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
-                    $scope.selectedElement.css('border-width', styleVal);
-                    repositionSelectBox();
+                        var styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
+                        $scope.selectedElement.css('border-width', styleVal);
+                        repositionSelectBox();
+                    }
                 });
 
                 $scope.$watchCollection('inspector.styles.border.radius', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.css('border-radius', newProps);
                         $scope.selectedElement.css('border-top-left-radius', newProps);
                         $scope.selectedElement.css('border-top-right-radius', newProps);
@@ -1308,7 +1300,7 @@ angular.module('wst.inspector', [])
                 });
 
                 $scope.$watchCollection('inspector.styles.border.radiusTopLeft', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if (!$scope.selectedElement && $scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.css('border-top-left-radius', newProps);
                     }
 
@@ -1316,7 +1308,7 @@ angular.module('wst.inspector', [])
                 });
 
                 $scope.$watchCollection('inspector.styles.border.radiusTopRight', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.css('border-top-right-radius', newProps);
                     }
 
@@ -1324,7 +1316,7 @@ angular.module('wst.inspector', [])
                 });
 
                 $scope.$watchCollection('inspector.styles.border.radiusBottomLeft', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.css('border-bottom-left-radius', newProps);
                     }
 
@@ -1332,7 +1324,7 @@ angular.module('wst.inspector', [])
                 });
 
                 $scope.$watchCollection('inspector.styles.border.radiusBottomRight', function (newProps, oldProps) {
-                    if (!$scope.selecting && !$scope.dragging) {
+                    if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.css('border-bottom-right-radius', newProps);
                     }
 
@@ -1361,17 +1353,19 @@ angular.module('wst.inspector', [])
                 });
 
                 function repositionSelectBox () {
-                    var pos = $scope.selectedElement[0].getBoundingClientRect();
+                    if ($scope.selectedElement) {
+                        var pos = $scope.selectedElement[0].getBoundingClientRect();
 
-                    var elementTop = pos.top - 2;
-                    var elementLeft = pos.left - 2;
-                    var elementWidth = pos.width + 4;
-                    var elementHeight = pos.height + 4;
+                        var elementTop = pos.top - 2;
+                        var elementLeft = pos.left - 2;
+                        var elementWidth = pos.width + 4;
+                        var elementHeight = pos.height + 4;
 
-                    $('#select-box').css('top', elementTop);
-                    $('#select-box').css('left', elementLeft);
-                    $('#select-box').css('width', elementWidth);
-                    $('#select-box').css('height', elementHeight);
+                        $('#select-box').css('top', elementTop);
+                        $('#select-box').css('left', elementLeft);
+                        $('#select-box').css('width', elementWidth);
+                        $('#select-box').css('height', elementHeight);
+                    }
                 }
             }
 
