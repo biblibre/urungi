@@ -84,15 +84,11 @@ More info at https://github.com/oracle/node-oracledb
 
 ## Tests
 
-[![Build Status](https://travis-ci.org/biblibre/Urungi.svg?branch=master)](https://travis-ci.org/biblibre/Urungi)
+[![Build Status](https://travis-ci.org/biblibre/urungi.svg?branch=master)](https://travis-ci.org/biblibre/urungi)
 
 To run the tests:
 
     npm test
-
-To run a single test suite:
-
-    npm test test/file-name.js
 
 
 ## License
