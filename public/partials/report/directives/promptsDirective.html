@@ -27,13 +27,13 @@
 
                     <!-- and, or, and not, or not-->
 
-                    <span ng-if="filter.condition" class="btn-group" dropdown="">
-                        <button type="button" class="btn " ng-bind="filter.conditionLabel"></button>
+                    <span ng-if="index > 0" class="btn-group dropdown">
                         <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span ng-bind="filter.conditionLabel"></span>
                             <i class="fa-caret-down"></i>
                         </button>
 
-                        <ul ng-if="filter.condition" class="dropdown-menu" aria-labelledby="dropdownMenu4" >
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
                             <li ng-repeat="theCondition in conditionTypes">
                                 <a ng-click="updateCondition(filter,theCondition)" ng-bind="theCondition.conditionLabel"></a>
                             </li>
@@ -42,7 +42,7 @@
 
                     <!-- Column label -->
 
-                    <div class="input-group" dropdown ng-if="isPrompt == 'false'" >
+                    <div class="input-group" dropdown>
                         <input type="text" class="form-control" ng-model="filter.objectLabel" ng-readonly="true">
                         <span class="input-group-btn">
                             <span class="dropdown" >
@@ -60,7 +60,7 @@
 
                     <!-- equal, not equal, bigger than, etc...-->
 
-                    <span ng-if="!isPrompt" class="btn-group" dropdown="">
+                    <span class="btn-group" dropdown="">
                         <button type="button" class="btn " ng-bind="filter.filterTypeLabel"></button>
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa-caret-down"></i>

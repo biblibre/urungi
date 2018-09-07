@@ -1,5 +1,5 @@
 /* global jsPlumb: false, $modal: false, bsLoadingOverlayService: false */
-app.controller('layerCtrl', function ($scope, $rootScope, connection, $routeParams, datasourceModel, uuid2, $timeout, PagerService, $window) {
+app.controller('layerCtrl', function ($scope, $rootScope, connection, $routeParams, datasourceModel, uuid2, $timeout, PagerService, $window, gettext) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
@@ -247,6 +247,8 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     $scope.save = function () {
         var theLayer = $scope._Layer;
 
+        $scope.calculateComponents();
+
         // clean up
 
         for (var collection in theLayer.params.schema) {
@@ -304,7 +306,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         params.page = 0; // All data
 
-        params.fields = ['name', 'type', 'status', 'statusInfo', 'params.connection.host', 'params.connection.port', 'params.connection.database'];
+        params.fields = ['name', 'type', 'status', 'statusInfo', 'connection.host', 'connection.port', 'connection.database'];
 
         datasourceModel.getDataSources(params, function (data) {
             $scope.datasources = data.items;
@@ -352,7 +354,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         $scope.temporarySQLCollection = {};
         $scope.temporarySQLCollection.mode = 'edit';
-        $scope.temporarySQLCollection.sql = selectedCollection.sqlQuery;
+        $scope.temporarySQLCollection.sqlQuery = selectedCollection.sqlQuery;
         $scope.temporarySQLCollection.name = selectedCollection.collectionName;
 
         $scope.selectedDts = {};
@@ -412,34 +414,44 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.addSqlToLayer = function () {
         datasourceModel.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection, function (result) {
-            if (result.result === 1) {
-                for (const collection of result.items) {
-                    collection.datasourceID = $scope.selectedDts.id;
-
-                    for (const e in collection.elements) {
-                        collection.elements[e].datasourceID = $scope.selectedDts.id;
-                        collection.elements[e].collectionID = collection.collectionID;
-                        collection.elements[e].collectionName = collection.collectionName;
-                    }
-
-                    if (!$scope._Layer.params) { $scope._Layer.params = {}; }
-                    if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
-
-                    $scope._Layer.params.schema.push(collection);
-
-                    setTimeout(function () {
-                        for (var element in collection.elements) {
-                            if (!collection.elements[element].painted) {
-                                _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
-                            }
-                        }
-                        setDraggable('#' + collection.collectionID + '-parent');
-                    }, 100);
-                }
-
-                $('#sqlModal').modal('hide');
-                $scope.erDiagramInit();
+            if (result.result !== 1) {
+                $scope.errorToken = result;
+                return;
             }
+
+            if (!result.isValid) {
+                $scope.temporarySQLCollection.invalidSql = true;
+                return;
+            }
+
+            const collection = result.schema;
+
+            collection.collectionID = 'C' + $scope.newID();
+            collection.datasourceID = $scope.selectedDts.id;
+
+            for (const element of collection.elements) {
+                element.elementID = $scope.newID();
+                element.datasourceID = $scope.selectedDts.id;
+                element.collectionID = collection.collectionID;
+                element.collectionName = collection.collectionName;
+            }
+
+            if (!$scope._Layer.params) { $scope._Layer.params = {}; }
+            if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
+
+            $scope._Layer.params.schema.push(collection);
+
+            setTimeout(function () {
+                for (var element in collection.elements) {
+                    if (!collection.elements[element].painted) {
+                        _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
+                    }
+                }
+                setDraggable('#' + collection.collectionID + '-parent');
+            }, 100);
+
+            $('#sqlModal').modal('hide');
+            $scope.erDiagramInit();
         });
     };
 
@@ -539,7 +551,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         if (!found) {
             var join = {};
-            join.joinID = uuid2.newguid();
+            join.joinID = 'J' + $scope.newID();
 
             for (var collection in $scope._Layer.params.schema) {
                 for (var element in $scope._Layer.params.schema[collection].elements) {
@@ -590,6 +602,71 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
             }
         }
     }
+
+    $scope.calculateComponents = function () {
+        /*
+        * The collections form a graph, and the joins are edges
+        * A query can only contain elements from a single connected component,
+        * otherwise it is impossible to join the collections
+        */
+
+        for (const i in $scope._Layer.params.schema) {
+            $scope._Layer.params.schema[i].component = { pointer: null, index: Number(i) };
+        }
+
+        function getRepresentative (c) {
+            if (c.pointer) {
+                return getRepresentative(c.pointer);
+            } else {
+                return c;
+            }
+        }
+
+        if (!$scope._Layer.params.joins) {
+            $scope._Layer.params.joins = [];
+        }
+
+        for (const join of $scope._Layer.params.joins) {
+            const c1 = $scope._Layer.params.schema.find(col => col.collectionID === join.sourceCollectionID);
+            const c2 = $scope._Layer.params.schema.find(col => col.collectionID === join.targetCollectionID);
+
+            const r1 = getRepresentative(c1.component);
+            const r2 = getRepresentative(c2.component);
+
+            r2.pointer = r1;
+        }
+
+        const cRef = {};
+
+        for (const collection of $scope._Layer.params.schema) {
+            collection.component = getRepresentative(collection.component).index;
+            cRef[collection.collectionID] = collection.component;
+        }
+
+        $scope.forAllElements(function (element) {
+            if (!element.isCustom) {
+                element.component = cRef[element.collectionID];
+            } else {
+                element.component = undefined;
+                for (const argument of element.arguments) {
+                    if (argument.isCustom) {
+                        continue;
+                    }
+                    const comp = cRef[argument.collectionID];
+                    if (element.component !== undefined && element.component !== comp) {
+                        element.component = -1;
+                        noty({
+                            text: gettext('One of the custom elements uses elements from tables which aren\'t joined. This custom elemnt cannot be fetched'),
+                            type: 'warning',
+                            timeout: 8000
+                        });
+                        return;
+                    }
+                    element.component = comp;
+                }
+            }
+        });
+    };
 
     var instance;
 
@@ -837,9 +914,124 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         }, 100);
     };
 
-    $scope.elementAdd = function (element) {
-        $scope.selectedElement = element;
+    $scope.createComposedElement = function () {
+        $scope.calculateComponents();
+
+        var element = {};
+
+        element.isCustom = true;
+        element.elementID = $scope.newID();
+
+        element.viewExpression = '';
+
+        element.tempArguments = [];
+
+        element.dataSourceID = '5b2a494717d5db0dc123c945';
+        element.elementName = 'comp';
+
+        $scope.selectedCollection = undefined;
+
+        $scope.modalElement = element;
+        $scope.modalCycle = false;
         $scope.elementEditing = false;
+        $scope.tabbed_panel_active = 0;
+        $('#elementModal').modal('show');
+    };
+
+    $scope.selectModalCollection = function (collection) {
+        $scope.selectedModalCollection = collection;
+    };
+
+    $scope.addElementToExpression = function (element) {
+        if (!$scope.modalElement.viewExpression) {
+            $scope.modalElement.viewExpression = '';
+        }
+        $scope.modalElement.viewExpression += ('#' + element.elementID);
+        $scope.modalElement.tempArguments.push(element);
+        $scope.modalElement.component = element.component;
+    };
+
+    $scope.validateCustomElement = function () {
+        if ($scope.compileExpression()) {
+            $scope.tabbed_panel_active = 1;
+        }
+    };
+
+    $scope.compileExpression = function () {
+        const elements = $scope.modalElement.viewExpression.match(/#[a-z0-9]*/g);
+
+        if (!elements) {
+            $scope.modalElement.expression = $scope.modalElement.viewExpression;
+            $scope.modalElement.arguments = [];
+            return false;
+            // custom elements without arguments will break the GROUP BY clause. They're disabled for now.
+            // To enable them, we need to modify queryProcessor so it doesn't add them to group Keys
+        }
+
+        for (const elementTag of elements) {
+            if (!$scope.modalElement.tempArguments.find(arg => arg.elementID === elementTag.substring(1))) {
+                const matchedElement = $scope.findElement(elementTag.substring(1));
+                if (matchedElement) {
+                    $scope.modalElement.tempArguments.push(matchedElement);
+                }
+            }
+        }
+
+        const expressions = {};
+        if (!$scope.modalElement.component) { $scope.modalElement.component = $scope.modalElement.tempArguments[0].component; }
+
+        var customArguments = [];
+        for (const arg of $scope.modalElement.tempArguments) {
+            if (elements.indexOf('#' + arg.elementID) >= 0 && arg.component === $scope.modalElement.component) {
+                customArguments.push(arg);
+                if (!arg.isCustom) {
+                    expressions['#' + arg.elementID] = arg.elementID;
+                } else {
+                    const cycle = testForCycle($scope.modalElement, arg);
+                    if (cycle) {
+                        $scope.modalCycle = cycle;
+                        return false;
+                    }
+                    expressions['#' + arg.elementID] = '(' + arg.expression + ')';
+                    customArguments = customArguments.concat(arg.arguments);
+                }
+            }
+        }
+        $scope.modalElement.expression = $scope.modalElement.viewExpression.replace(/#[a-z0-9]*/g, (match) => {
+            if (expressions[match]) {
+                return expressions[match];
+            } else {
+                return match;
+            }
+        });
+        $scope.modalElement.arguments = customArguments;
+
+        // possible feature : build a new route server side to test an element
+        // This would enable to validate the expression in report edition
+
+        return true;
+
+        function testForCycle (startElement, currentElement) {
+            if (currentElement.elementID === startElement.elementID) {
+                return [currentElement];
+            }
+            if (!currentElement.isCustom) {
+                return false;
+            } else {
+                for (const arg of currentElement.arguments) {
+                    const cycle = testForCycle(startElement, arg);
+                    if (cycle) {
+                        return [currentElement].concat(cycle);
+                    }
+                }
+            }
+        }
+    };
+
+    $scope.elementAdd = function (element) {
+        $scope.modalElement = element;
+        $scope.elementEditing = false;
+        $scope.tabbed_panel_active = 1;
         $('#elementModal').modal('show');
     };
 
@@ -868,28 +1060,35 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     $scope.editElement = function (element) {
-        $scope.layerSelectedElement = element;
-        for (var collection in $scope._Layer.params.schema) {
-            if ($scope._Layer.params.schema[collection].collectionID === element.collectionID) {
-                for (var e in $scope._Layer.params.schema[collection].elements) {
-                    if ($scope._Layer.params.schema[collection].elements[e].elementID === element.elementID) {
-                        var tempElement = {};
-                        tempElement = $scope._Layer.params.schema[collection].elements[e];
-                        $scope.selectedElement = tempElement;
-                        $scope.elementEditing = true;
-                        $('#elementModal').modal('show');
-                    }
-                }
-            }
+        $scope.selectedElement = element;
+        $scope.modalElement = Object.create(element);
+
+        if ($scope.modalElement.isCustom) {
+            $scope.modalElement.tempArguments = $scope.modalElement.arguments;
         }
+
+        $scope.elementEditing = true;
+        $scope.tabbed_panel_active = 1;
+        $('#elementModal').modal('show');
     };
 
     $scope.saveElement = function () {
+        console.log($scope.modalElement);
+        if ($scope.modalElement.isCustom && !$scope.compileExpression()) {
+            return;
+        }
         if (!$scope.elementEditing) {
             if (!$scope._Layer.objects) { $scope._Layer.objects = []; }
 
-            $scope.selectedElement.elementRole = 'dimension';
-            $scope._Layer.objects.push($scope.selectedElement);
+            $scope.modalElement.elementRole = 'dimension';
+            $scope._Layer.objects.push($scope.modalElement);
+
+            if ($scope.modalElement.isCustom) {
+                if (!$scope._Layer.customElements) {
+                    $scope._Layer.customElements = [];
+                }
+                $scope._Layer.customElements.push($scope.modalElement);
+            }
 
             $('#elementModal').modal('hide');
         } else {
@@ -898,36 +1097,21 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     function saveEditElement () {
-        var element = $scope.selectedElement;
+        var element = $scope.modalElement;
 
-        checkElementOk(element, function (result) {
-            if (result.result === 1) {
-                for (var collection in $scope._Layer.params.schema) {
-                    if ($scope._Layer.params.schema[collection].collectionID === element.collectionID) {
-                        for (var e in $scope._Layer.params.schema[collection].elements) {
-                            if ($scope._Layer.params.schema[collection].elements[e].elementID === element.elementID) {
-                                $scope._Layer.params.schema[collection].elements[e] = element;
+        var result = checkElementOk(element);
+        if (!result.result) {
+            $scope.elementEditingWarning = result.message;
+            return;
+        }
 
-                                $scope.layerSelectedElement.elementRole = element.elementRole;
-                                $scope.layerSelectedElement.elementType = element.elementType;
-                                $scope.layerSelectedElement.elementLabel = element.elementLabel;
-                                if (element.defaultAggregation) { $scope.layerSelectedElement.defaultAggregation = element.defaultAggregation; }
-                                if (element.values) { $scope.layerSelectedElement.values = element.values; }
-                                if (element.format) { $scope.layerSelectedElement.format = element.format; }
-                                if (element.associatedElements) { $scope.layerSelectedElement.associatedElements = element.associatedElements; }
-                                $scope.elementEditing = false;
-                                $('#elementModal').modal('hide');
-                            }
-                        }
-                    }
-                }
-            } else {
-                $scope.elementEditingWarning = result.message;
-            }
-        });
+        $.extend($scope.selectedElement, element);
+
+        $scope.elementEditing = false;
+        $('#elementModal').modal('hide');
     }
 
-    function checkElementOk (element, done) {
+    function checkElementOk (element) {
         var isOk = true;
         var message = '';
 
@@ -975,8 +1159,8 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         theResult.message = message;
 
-        done(theResult);
-    }
+        return theResult;
+    };
 
     $scope.zoom = function (ratio) {
         var theWidth = 200 * ratio + 'px';
@@ -1037,7 +1221,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     $scope.addFolder = function () {
-        var elementID = uuid2.newguid();
+        var elementID = 'F' + $scope.newID();
 
         var element = {};
         element.elementLabel = 'my folder';
@@ -1066,6 +1250,14 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
             }
         }
 
+        if (element.isCustom) {
+            for (const i in $scope._Layer.customElements) {
+                if ($scope._Layer.customElements[i].elementID === elementID) {
+                    $scope._Layer.customElements.splice(i, 1);
+                }
+            }
+        }
+
         checkfordelete($scope.rootItem.elements, elementID);
     };
 
@@ -1077,7 +1269,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 return;
             } else {
                 if (elements[i].elements) {
-                    if (elements[i].elements.length > 0) { checkfordelete(elements[i].elements, elementID); }
+                    checkfordelete(elements[i].elements, elementID);
                 }
             }
         }
@@ -1104,15 +1296,28 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     }
 
     $scope.onElementTypeChange = function (element) {
-        var params = {datasourceID: element.datasourceID, layerID: $scope._Layer._id, collectionID: element.collectionID, collectionName: element.collectionName, elementName: element.elementName, defaultAggregation: element.defaultAggregation};
+        /*
+        * An unfinished piece of code for handling array elements (a column can hold an array in some SQL databases)
+        * Array support on the whole is unfinished, and would be an interesting feature
+        *
+        */
 
-        if (element.elementType === 'array') {
-            connection.get('/api/data-sources/get-element-distinct-values', params, function (data) {
-                for (var i in data.items) {
-                    $scope.addValueToElement(element, data.items[i]['_id'][element.elementName], data.items[i]['_id'][element.elementName]);
-                }
-            });
-        }
+        // var params = {
+        //     datasourceID: element.datasourceID,
+        //     layerID: $scope._Layer._id,
+        //     collectionID: element.collectionID,
+        //     collectionName: element.collectionName,
+        //     elementName: element.elementName,
+        //     defaultAggregation: element.defaultAggregation
+        // };
+
+        // if (element.elementType === 'array') {
+        //     connection.get('/api/data-sources/get-element-distinct-values', params, function (data) {
+        //         for (var i in data.items) {
+        //             $scope.addValueToElement(element, data.items[i]['_id'][element.elementName], data.items[i]['_id'][element.elementName]);
+        //         }
+        //     });
+        // }
     };
 
     // Drag & drop elements
@@ -1212,17 +1417,6 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         }
     };
 
-    $scope.checkIfMongoDbForSQL = function () {
-        for (var i in $scope.datasources) {
-            if ($scope.selectedDts.id === $scope.datasources[i]._id) {
-                if ($scope.datasources[i].type === 'MONGODB') {
-                    $window.alert('SQL Queries are not compatible with MONGODB datasources');
-                    $scope.selectedDts.id = undefined;
-                }
-            }
-        }
-    };
-
     $scope.openSetup = function () {
         $rootScope.currentModal = $modal.open({templateUrl: 'setupModal', scope: $scope});
     };
@@ -1231,6 +1425,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         if (!theDataSource.loading) {
             theDataSource.loading = true;
             connection.get('/api/data-sources/getEntities', {id: _id}, function (data) {
+                console.log(data);
                 theDataSource.loading = false;
                 if (data.result === 1) {
                     theDataSource.entities = data.items;
@@ -1245,7 +1440,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     $scope.getFieldsForThisEntity = function (dataSourceID, entity, theEntity) {
-        datasourceModel.getEntitiesSchema([dataSourceID], [entity], function (result) {
+        datasourceModel.getEntitiesSchema([dataSourceID], entity, function (result) {
             if (result.result === 1) {
                 theEntity.fields = result.items[0].elements;
             }
@@ -1335,34 +1530,40 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
     $scope.addDatasetToLayer = function (datasourceID, entity) {
         if (typeof $scope.selectedDts.id === 'undefined' || $scope.selectedDts.id === datasourceID) {
-            datasourceModel.getEntitiesSchema(datasourceID, [entity], function (result) {
-                if (result.result === 1) {
-                    for (const collection of result.items) {
-                        collection.datasourceID = datasourceID;
-                        $scope.selectedDts.id = datasourceID;
-
-                        for (const e in collection.elements) {
-                            collection.elements[e].datasourceID = datasourceID;
-                            collection.elements[e].collectionID = collection.collectionID;
-                            collection.elements[e].collectionName = collection.collectionName;
-                        }
-
-                        if (!$scope._Layer.params) { $scope._Layer.params = {}; }
-                        if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
-
-                        $scope._Layer.params.schema.push(collection);
-
-                        setTimeout(function () {
-                            for (const element in collection.elements) {
-                                if (!collection.elements[element].painted) {
-                                    _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
-                                }
-                            }
-                            setDraggable('#' + collection.collectionID + '-parent');
-                        }, 100);
-                    }
-                    $scope.erDiagramInit();
+            datasourceModel.getEntitiesSchema(datasourceID, entity, function (result) {
+                if (result.result !== 1) {
+                    return;
                 }
+
+                const collection = result.schema;
+
+                collection.collectionID = 'C' + $scope.newID();
+
+                collection.datasourceID = datasourceID;
+                $scope.selectedDts.id = datasourceID;
+
+                for (const element of collection.elements) {
+                    element.elementID = $scope.newID();
+                    element.datasourceID = datasourceID;
+                    element.collectionID = collection.collectionID;
+                    element.collectionName = collection.collectionName;
+                }
+
+                if (!$scope._Layer.params) { $scope._Layer.params = {}; }
+                if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
+
+                $scope._Layer.params.schema.push(collection);
+
+                setTimeout(function () {
+                    for (const element in collection.elements) {
+                        if (!collection.elements[element].painted) {
+                            _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
+                        }
+                    }
+                    setDraggable('#' + collection.collectionID + '-parent');
+                }, 100);
+
+                $scope.erDiagramInit();
             });
         } else {
             noty({text: 'Datasource must be the same for all entities', timeout: 2000, type: 'error'});
@@ -1384,5 +1585,52 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         if ($scope.selectedItem === 'collection' && $scope.theSelectedElement.isSQL) {
             $scope.editSQL();
         }
+    };
+
+    $scope.newID = function () {
+        let counter = $scope._Layer.idCounter;
+        if (counter === undefined) {
+            counter = 0;
+        }
+        counter = (counter + 1) % 676; // 676 === 26**2
+        $scope._Layer.idCounter = counter;
+        var uid = 'abcdefghijklmnopqrstuvwxyz'.charAt(Math.floor(counter / 26)) +
+            'abcdefghijklmnopqrstuvwxyz'.charAt(counter % 26);
+        const rand = Math.floor(Math.random() * 676);
+        uid += 'abcdefghijklmnopqrstuvwxyz'.charAt(Math.floor(rand / 26)) +
+        'abcdefghijklmnopqrstuvwxyz'.charAt(rand % 26);
+        // I couldn't decide between using a counter to guarantee unique ids in theory,
+        // or using random characters to be certain the ids are very different from each other in practice
+        // so I ended up doing both.
+        return uid;
+    };
+
+    $scope.findElement = function (elID) {
+        function explore (elementList) {
+            for (const el of elementList) {
+                if (el.elementID === elID) {
+                    return el;
+                }
+                if (el.elements) {
+                    explore(el.elements);
+                }
+            }
+        }
+
+        explore($scope._Layer.objects);
+    };
+
+    $scope.forAllElements = function (f) {
+        function explore (elementList) {
+            for (const el of elementList) {
+                if (el.elements) {
+                    explore(el.elements);
+                } else {
+                    f(el);
+                }
+            }
+        }
+
+        explore($scope._Layer.objects);
     };
 });

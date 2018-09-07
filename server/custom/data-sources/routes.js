@@ -8,7 +8,6 @@ module.exports = function (app) {
     app.post('/api/data-sources/upload-config-file', restrictRole(['WSTADMIN']), DataSources.DataSourcesUploadConfigFile);
     app.post('/api/data-sources/update/:id', restrictRole(['WSTADMIN']), DataSources.DataSourcesUpdate);
     app.post('/api/data-sources/testConnection', restrictRole(['WSTADMIN']), DataSources.testConnection);
-    app.get('/api/data-sources/get-element-distinct-values', restrictRole(['WSTADMIN']), DataSources.getElementDistinctValues);
     app.get('/api/data-sources/getEntities', restrictRole(['WSTADMIN']), DataSources.getEntities);
     app.get('/api/data-sources/getEntitySchema', restrictRole(['WSTADMIN']), DataSources.getEntitySchema);
     app.get('/api/data-sources/getsqlQuerySchema', restrictRole(['WSTADMIN']), DataSources.getsqlQuerySchema);

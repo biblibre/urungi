@@ -37,5 +37,5 @@ module.exports = {
         const decrypted = CryptoJS.AES.decrypt(object.data, 'SecretPassphrase');
 
         return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-    },
+    }
 };

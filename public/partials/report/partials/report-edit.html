@@ -17,7 +17,7 @@
 
 <div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width:100%">
     <div>
-        <span ng-show="selectedReport.query.recordLimit == undefined">
+        <span ng-show="selectedReport.properties.recordLimit == undefined">
             <span translate>Quick display with</span>
             <input type="number" ng-model="selectedRecordLimit.value" size="8">
             <span translate>results.</span>

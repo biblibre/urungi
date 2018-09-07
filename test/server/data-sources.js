@@ -12,36 +12,14 @@ async function seed () {
         new DataSources(
             {
                 companyID: 'COMPID',
-                name: 'widestage',
-                type: 'MONGODB',
-                status: 1,
-                params: [{
-                    packetSize: 500,
-                    connection: {
-                        database: 'widestage_test',
-                        host: 'localhost',
-                        port: '27017'
-
-                    }
-                }],
-
-                nd_trash_deleted: false
-                // This field is necessary for the search to return this entry
-            }
-        ),
-        new DataSources(
-            {
-                companyID: 'COMPID',
                 name: 'dummy db',
                 type: 'MySQL',
                 status: 1,
-                params: [{
-                    packetSize: 500,
-                    connection: {
-                        database: 'non_existent_db',
-                        host: 'localhost'
-                    }
-                }],
+                packetSize: 500,
+                connection: {
+                    database: 'non_existent_db',
+                    host: 'localhost'
+                },
                 nd_trash_deleted: false
             }
         ),
@@ -51,13 +29,11 @@ async function seed () {
                 name: 'sql db',
                 type: 'MySQL',
                 status: 1,
-                params: [{
-                    packetSize: 500,
-                    connection: {
-                        database: 'will_need_to_be_created',
-                        host: 'localhost'
-                    }
-                }]
+                packetSize: 500,
+                connection: {
+                    database: 'will_need_to_be_created',
+                    host: 'localhost'
+                }
             }
         )
     ];
@@ -77,7 +53,8 @@ function verifyItem (item) {
     expect(item).to.have.property('status');
     expect(item).to.have.property('nd_trash_deleted');
     expect(item).to.have.property('__v');
-    expect(item).to.have.property('params');
+    expect(item).to.have.property('connection');
+    expect(item).to.have.property('packetSize');
 };
 
 async function authentifyAgent (agent) {
@@ -132,7 +109,7 @@ describe('/api/data-sources', function () {
             expect(decrypted).to.have.property('pages');
             expect(decrypted.items).to.be.a('array');
 
-            expect(decrypted.items).to.have.lengthOf.above(1);
+            expect(decrypted.items).to.have.lengthOf(1);
             // We cannot expect the length to be equal to 2,
             // because other simultaneous tests may add entries to the database
             verifyItem(decrypted.items[0]);
@@ -170,128 +147,6 @@ describe('/api/data-sources', function () {
         });
     });
 
-    describe('/api/data-sources/get-element-distinct-values', function () {
-        testUnidentifiedConnection(agent, '/api/data-sources/get-element-distinct-values');
-
-        it('should return no result due to data source not found', async function () {
-            await authentifyAgent(agent);
-
-            var res = await agent.get('/api/data-sources/get-element-distinct-values');
-            expect(res).to.have.status(200);
-            var decrypted = decrypt(res.text);
-            expect(decrypted.result).to.equal(0);
-        });
-
-        it('should return distinct values for the given element', async function () {
-            await authentifyAgent(agent);
-
-            const entryId = await getValidID(agent, 0);
-
-            // const ds = await DataSources.findOne({_id: entryID});
-            // console.log(ds);
-
-            var res = await agent.get('/api/data-sources/get-element-distinct-values')
-                .query(encrypt({
-                    datasourceID: entryId,
-                    collectionName: 'wst_DataSources',
-                    elementName: 'name'
-                }));
-            expect(res).to.have.status(200);
-            var decrypted = decrypt(res.text);
-
-            expect(decrypted.result).to.equal(1);
-            expect(decrypted).to.have.property('items');
-            expect(decrypted.items).to.be.a('array');
-            expect(decrypted.items[0]).to.have.property('_id');
-            expect(decrypted.items[0]._id).to.have.property('name');
-        });
-    });
-
-    describe('/api/data-sources/getEntities', function () {
-        testUnidentifiedConnection(agent, '/api/data-sources/getEntities');
-
-        it("should access the widestage_test database and read it's content", async function () {
-            await authentifyAgent(agent);
-
-            const entryID = await getValidID(agent, 0);
-
-            var res = await agent.get('/api/data-sources/getEntities')
-                .query(encrypt({id: entryID}));
-            expect(res).to.have.status(200);
-            var decrypted = decrypt(res.text);
-
-            expect(decrypted.result).to.equal(1);
-            expect(decrypted).to.have.property('items');
-            expect(decrypted.items).to.be.a('array');
-            expect(decrypted.items).to.have.lengthOf.above(1);
-            expect(decrypted.items[0]).to.have.property('name');
-        });
-    });
-
-    describe('/api/data-sources/getEntitySchema', function () {
-        testUnidentifiedConnection(agent, '/api/data-sources/getEntitySchema');
-
-        it("should access the widestage_test database and read it's schema", async function () {
-            await authentifyAgent(agent);
-
-            const entryID = await getValidID(agent, 0);
-
-            var res = await agent.get('/api/data-sources/getEntitySchema')
-                .query(encrypt({
-                    datasourceID: entryID,
-                    misc_field: [
-                        {f1: 'v1', f2: 'v2'},
-                        {f1: 'v3', f2: 'v4'}
-                    ],
-                    entities: [ { name: 'wst_Users',
-                        type: 'collection',
-                        options: {}},
-                    { name: 'wst_Sessions',
-                        type: 'collection',
-                        options: {}},
-                    { name: 'wst_Companies',
-                        type: 'collection',
-                        options: {}},
-                    { name: 'wst_Logs',
-                        type: 'collection',
-                        options: {}},
-                    { name: 'wst_DataSources',
-                        type: 'collection',
-                        options: {}} ]
-                }));
-
-            expect(res).to.have.status(200);
-            var decrypted = decrypt(res.text);
-
-            expect(decrypted.result).to.equal(1);
-            expect(decrypted).to.have.property('items');
-            expect(decrypted.items).to.be.a('array');
-            expect(decrypted.items).to.have.lengthOf.above(1);
-
-            expect(decrypted.items[0]).to.have.property('collectionID');
-            expect(decrypted.items[0]).to.have.property('collectionName');
-            expect(decrypted.items[0]).to.have.property('visible');
-            expect(decrypted.items[0]).to.have.property('collectionLabel');
-            expect(decrypted.items[0]).to.have.property('elements');
-            expect(decrypted.items[0].elements).to.be.a('array');
-        });
-    });
-
-    describe('/api/data-sources/getsqlQuerySchema', function () {
-        it('should return a 400 error due to interogating a mongoDB database', async function () {
-            await authentifyAgent(agent);
-            var entryID = await getValidID(agent, 0);
-
-            var res = await agent.get('/api/data-sources/getsqlQuerySchema')
-                .query(encrypt({
-                    datasourceID: entryID
-                }));
-            expect(res).to.have.status(400);
-        });
-
-    // We would need a sql database to run an interesting test
-    });
-
     describe('/api/data-sources/create', function () {
     // TODO : preliminary tests where the post is expected to fail
     // TODO : creating a post as an unauthentified user ?
@@ -302,15 +157,13 @@ describe('/api/data-sources', function () {
             var res = await agent.post('/api/data-sources/create')
                 .send(encrypt({
                     name: 'non existent db',
-                    type: 'MONGODB',
+                    type: 'MySQL',
                     status: 1,
-                    params: [{
-                        packetSize: 500,
-                        connection: {
-                            database: 'database_name',
-                            host: 'localhost'
-                        }
-                    }]
+                    packetSize: 500,
+                    connection: {
+                        database: 'database_name',
+                        host: 'localhost'
+                    }
                 }));
 
             const decrypted = decrypt(res.text);
@@ -320,7 +173,7 @@ describe('/api/data-sources', function () {
             expect(decrypted).to.have.property('item');
             verifyItem(decrypted.item);
 
-            expect(decrypted.item.params[0].connection.database)
+            expect(decrypted.item.connection.database)
                 .to.equal('database_name');
 
             await DataSources.deleteOne({_id: decrypted.item._id});
@@ -345,18 +198,16 @@ describe('/api/data-sources', function () {
             await authentifyAgent(agent);
 
             var res = await agent.get('/api/data-sources/find-all');
-            const entryID = decrypt(res.text).items[1]._id;
+            const entryID = decrypt(res.text).items[0]._id;
 
             res = await agent.post('/api/data-sources/update/' + String(entryID))
                 .send(encrypt({
                     _id: entryID,
                     name: 'renamed dummy db',
-                    type: 'MongoDB',
-                    params: [{
-                        connection: {
-                            database: 'modified_name'
-                        }
-                    }]
+                    type: 'MySQL',
+                    connection: {
+                        database: 'modified_name'
+                    }
                 }));
             expect(res).to.have.status(200);
 
@@ -371,53 +222,9 @@ describe('/api/data-sources', function () {
             verifyItem(decrypted.item);
 
             expect(decrypted.item.name).to.equal('renamed dummy db');
-            expect(decrypted.item.type).to.equal('MongoDB');
-            expect(decrypted.item.params[0].connection.database)
+            expect(decrypted.item.type).to.equal('MySQL');
+            expect(decrypted.item.connection.database)
                 .to.equal('modified_name');
-        });
-    });
-
-    describe('/api/data-sources/testConnection', function () {
-        it('should recieve a connection error', async function () {
-            await authentifyAgent(agent);
-
-            var res = await agent.post('/api/data-sources/testConnection')
-                .send(encrypt({ type: 'MONGODB' }));
-            expect(res).to.have.status(200);
-            var decrypted = decrypt(res.text);
-            expect(decrypted.result).to.equal(0);
-        });
-
-        it('should recieve no result due to invalid database type', async function () {
-            await authentifyAgent(agent);
-
-            var res = await agent.post('/api/data-sources/testConnection');
-            expect(res).to.have.status(200);
-            var decrypted = decrypt(res.text);
-            expect(decrypted.result).to.equal(0);
-        });
-
-        it('should successfully connect to the projects own database', async function () {
-            await authentifyAgent(agent);
-
-            var res = await agent.post('/api/data-sources/testConnection')
-                .send(encrypt({
-                    companyID: 'COMPID',
-                    name: 'widestage',
-                    type: 'MONGODB',
-
-                    userName: '',
-                    password: '',
-                    host: 'localhost',
-                    port: '27017',
-                    database: 'widestage_test'
-                }));
-            expect(res).to.have.status(200);
-            var decrypted = decrypt(res.text);
-
-            expect(decrypted.result).to.equal(1);
-            expect(decrypted).to.have.property('items');
-            expect(decrypted.items).to.be.a('array');
         });
     });
 });

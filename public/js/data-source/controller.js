@@ -124,18 +124,18 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     function init () {
         if ($routeParams.newDataSource) {
             if ($routeParams.newDataSource === 'true') {
-                $scope._DataSource = {};
-                $scope._DataSource.params = [];
-                $scope._DataSource.params.push({connection: {}, packetSize: 500});
-                $scope._DataSource.status = 1;
-                $scope._DataSource.type = 'MONGODB';
+                $scope._dataSource = {};
+                $scope._dataSource.connection = {};
+                $scope._dataSource.packetSize = 500;
+                $scope._dataSource.status = 1;
+                $scope._dataSource.type = 'MySQL';
 
                 $scope.mode = 'add';
             }
         } else {
             if ($routeParams.dataSourceID) {
                 connection.get('/api/data-sources/find-one', {id: $routeParams.dataSourceID}, function (data) {
-                    $scope._DataSource = data.item;
+                    $scope._dataSource = data.item;
                 });
             };
         }
@@ -143,12 +143,12 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
     $scope.save = function () {
         if ($scope.mode === 'add') {
-            var data = $scope._DataSource;
+            var data = $scope._dataSource;
             connection.post('/api/data-sources/create', data, function (data) {
                 window.history.back();
             });
         } else {
-            connection.post('/api/data-sources/update/' + $scope._DataSource._id, $scope._DataSource, function (result) {
+            connection.post('/api/data-sources/update/' + $scope._dataSource._id, $scope._dataSource, function (result) {
                 if (result.result === 1) {
                     window.history.back();
                 }
@@ -158,7 +158,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
     $scope.upload = function (file) {
         if (file) {
-            $scope._DataSource.params[0].connection.file = file.name;
+            $scope._dataSource.connection.file = file.name;
 
             var fd = new FormData();
 
@@ -194,19 +194,20 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     };
 
     $scope.enableTestConnection = function () {
-        var result = false;
+        if (!$scope._dataSource) {
+            return false;
+        }
 
-        if ($scope._DataSource.type !== 'BIGQUERY' &&
-            ($scope._DataSource.params[0].connection.host && $scope._DataSource.params[0].connection.port && $scope._DataSource.params[0].connection.database)
-        ) { result = true; }
+        if ($scope._dataSource.type !== 'BIGQUERY' &&
+            // ($scope._dataSource.connection.host && $scope._dataSource.connection.port && $scope._dataSource.connection.database)
+            ($scope._dataSource.connection.host && $scope._dataSource.connection.database)
+        ) { return true; }
 
-        if ($scope._DataSource.type === 'BIGQUERY' &&
-            ($scope._DataSource.params[0].connection.database && $scope._DataSource.params[0].connection.file && $scope.fileUploadSuccess)
-        ) { result = true; }
+        if ($scope._dataSource.type === 'BIGQUERY' &&
+            ($scope._dataSource.connection.database && $scope._dataSource.connection.file && $scope.fileUploadSuccess)
+        ) { return true; }
 
-        if ($scope.testingConnection) { result = false; }
-
-        return result;
+        return false;
     };
 
     $scope.fileSourceSelected = function () {
@@ -243,16 +244,18 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         $scope.testConnection = {};
         var data = {};
         $scope.testingConnection = true;
-        data.type = $scope._DataSource.type;
-        data.host = $scope._DataSource.params[0].connection.host;
-        data.port = $scope._DataSource.params[0].connection.port;
-        data.database = $scope._DataSource.params[0].connection.database;
-        data.userName = $scope._DataSource.params[0].connection.userName;
-        data.password = $scope._DataSource.params[0].connection.password;
+        data.type = $scope._dataSource.type;
+        data.host = $scope._dataSource.connection.host;
+        data.port = $scope._dataSource.connection.port;
+        data.database = $scope._dataSource.connection.database;
+        data.userName = $scope._dataSource.connection.userName;
+        data.password = $scope._dataSource.connection.password;
 
-        if ($scope._DataSource.params[0].connection.file) data.file = $scope._DataSource.params[0].connection.file;
+        if ($scope._dataSource.connection.file) data.file = $scope._dataSource.connection.file;
 
+        console.log('calling');
         connection.post('/api/data-sources/testConnection', data, function (result) {
+            console.log(result);
             if (result.result === 1) {
                 $scope.testConnection = {result: 1, message: 'Successful database connection.'};
                 $scope.testingConnection = false;
@@ -304,15 +307,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             connection.get('/api/data-sources/find-one', {id: $routeParams.dataSourceID}, function (data) {
                 $scope._dataSource = data.item;
 
-                for (var i in $scope._dataSource.params[0].schema) {
-                    $scope._dataSource.params[0].schema[i].selected = true;
-
-                    for (var j in $scope._dataSource.params[0].schema[i].elements) {
-                        $scope._dataSource.params[0].schema[i].elements[j].selected = true;
-                    }
-                }
-
-                connection.post('/api/data-sources/testMongoConnection', $scope._dataSource.params[0].connection, function (result) {
+                connection.post('/api/data-sources/testMongoConnection', $scope._dataSource.connection, function (result) {
                     var collections = [];
 
                     for (var i in result.items) {
@@ -320,9 +315,9 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                     }
 
                     var params = {
-                        host: $scope._dataSource.params[0].connection.host,
-                        port: $scope._dataSource.params[0].connection.port,
-                        database: $scope._dataSource.params[0].connection.database,
+                        host: $scope._dataSource.connection.host,
+                        port: $scope._dataSource.connection.port,
+                        database: $scope._dataSource.connection.database,
                         collections: collections
                     };
 
@@ -333,29 +328,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
 
                         for (const i in result.items) {
                             var found = false;
-
-                            for (const j in $scope._dataSource.params[0].schema) {
-                                if (result.items[i].collectionName === $scope._dataSource.params[0].schema[j].collectionName) {
-                                    for (const e in result.items[i].elements) {
-                                        var elementFound = false;
-
-                                        for (const ej in $scope._dataSource.params[0].schema[j].elements) {
-                                            if (result.items[i].elements[e].elementName === $scope._dataSource.params[0].schema[j].elements[ej].elementName) {
-                                                elementFound = true;
-                                                break;
-                                            }
-                                        }
-
-                                        if (!elementFound) {
-                                            result.items[i].elements[e].isNew = true;
-                                            $scope._dataSource.params[0].schema[j].elements.push(result.items[i].elements[e]);
-                                        }
-                                    }
-
-                                    found = true;
-                                    break;
-                                }
-                            }
 
                             if (!found) {
                                 result.items[i].isNew = true;

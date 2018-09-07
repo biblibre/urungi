@@ -58,7 +58,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
         }
 
         if (params.filterCriteria) {
-            for (const filter of request.query.groupFilters) {
+            for (const filter of request.query.filters) {
                 if (params.filterCriteria[filter.id + filter.filterType]) {
                     filter.criterion = params.filterCriteria[filter.id + filter.filterType];
                 }
@@ -67,10 +67,18 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
 
         var result = await connection.post('/api/reports/get-data', request);
 
+        if (result.warnings) {
+            for (const w of result.warnings) {
+                noty({text: w.msg, timeout: 3000, type: 'warning'});
+            }
+        }
+
         if (result.result === 0) {
-            noty({text: result.msg, timeout: 2000, type: 'error'});
+            noty({text: result.msg, timeout: 3000, type: 'error'});
             return {
-                data: []
+                data: [],
+                sql: result.sql,
+                errorToken: result
             };
         }
 
@@ -83,7 +91,8 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
         return {
             data: data,
             sql: result.sql,
-            time: result.time
+            time: result.time,
+            warnings: result.warnings
         };
     };
 
@@ -180,22 +189,17 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
         var aggregation = element.aggregation || element.defaultAggregation;
 
         if (!aggregation) {
-            columnId = 'wst' + element.elementID.toLowerCase() + 'raw';
+            columnId = 'e' + element.elementID.toLowerCase() + 'raw';
         } else {
-            columnId = 'wst' + element.elementID.toLowerCase() + aggregation.substring(0, 3);
+            columnId = 'e' + element.elementID.toLowerCase() + aggregation.substring(0, 3);
         }
-
-        columnId = columnId.replace(/[^a-zA-Z ]/g, '');
-        // this threatens unicity in theory
-        // Two elements with different ids could have the same transformed id after all numbers are removed
-        // It's unlikely, but if it happens it will result in a bug which is nightmarish to understand
 
         return columnId;
     }
 
     function calculateIdForAllElements (elements) {
         for (var element of elements) {
-            if (element.collectionID) {
+            if (element.elementRole === 'dimension') {
                 element.id = getColumnId(element);
             }
 
@@ -252,7 +256,9 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
     };
 
     function clone (obj) {
-        if (obj == null || typeof obj !== 'object') return obj;
+        if (!obj) { return obj; }
+        if (Object.getPrototypeOf(obj) === Date.prototype) { return new Date(obj); }
+        if (typeof obj !== 'object') { return obj; }
         var copy = obj.constructor();
         for (var attr in obj) {
             if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);

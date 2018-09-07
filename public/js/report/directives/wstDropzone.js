@@ -4,7 +4,7 @@ app.directive('wstDropzone', function () {
         scope: {
 
             listModel: '=',
-            queryBind: '=',
+            role: '=',
 
             forbidAggregation: '=',
 
@@ -50,7 +50,7 @@ app.directive('wstDropzone', function () {
                     // Handle this
                 }
 
-                scope.$parent.onDropField(newItem, scope.queryBind);
+                scope.$parent.onDropField(newItem, scope.role);
             };
 
             scope.onRemove = function (item, event) {
@@ -65,7 +65,7 @@ app.directive('wstDropzone', function () {
                     // handle this case
                 }
 
-                scope.$parent.onRemoveField(item, scope.queryBind);
+                scope.$parent.onRemoveField(item, scope.role);
             };
 
             scope.onDragOver = function (event) {

@@ -78,6 +78,13 @@ exports.getSchemas = function (data, setresult) {
 
         var query = db.getSchemaQuery(newSchemas, newTables);
 
+        /*
+        *   SELECT table_schema, table_name, column_name, data_type
+        *   FROM information_schema.columns
+        *   WHERE table_schema in ( newSchemas )
+        *   AND table_name in ( newTables )
+        */
+
         db.query(query, function (err, result) {
             if (err) {
                 setresult({result: 0, msg: 'Error getting the element schemas : ' + err});
@@ -144,11 +151,15 @@ exports.getSqlQuerySchema = function (data, setresult) {
     });
 };
 
-function getSQLResultsSchema (collectionName, queryResults, sqlQuery, done) {
-    var collectionID = 'WST' + generateShortUID();
+function getSQLResultsSchema (collectionRef, queryResults, sqlQuery, done) {
+    var theCollection = {
+        collectionName: collectionRef.collectionName,
+        visible: true,
+        collectionLabel: collectionRef.collectionName,
+        isSQL: true,
+        sqlQuery: sqlQuery
+    };
 
-    collectionID = collectionID.replace(new RegExp('-', 'g'), '');
-    var theCollection = {collectionID: collectionID, collectionName: collectionName, visible: true, collectionLabel: collectionName, isSQL: true, sqlQuery: sqlQuery};
     theCollection.elements = [];
 
     for (var key in queryResults[0]) {
@@ -176,10 +187,10 @@ function getSQLResultsSchema (collectionName, queryResults, sqlQuery, done) {
 
 function getCollectionSchema (collection, queryResults, done) {
     var collectionName = collection.name;
-    var collectionID = 'WST' + generateShortUID();
+    // var collectionID = 'WST' + generateShortUID();
 
-    collectionID = collectionID.replace(new RegExp('-', 'g'), '');
-    var theCollection = {collectionID: collectionID, collectionName: collectionName, visible: true, collectionLabel: collectionName};
+    // collectionID = collectionID.replace(new RegExp('-', 'g'), '');
+    var theCollection = {collectionName: collectionName, visible: true, collectionLabel: collectionName};
     theCollection.elements = [];
 
     for (var d = 0; d < queryResults.length; d++) {
@@ -219,9 +230,9 @@ function getCollectionSchema (collection, queryResults, done) {
 
             if (queryResults[d].data_type === 'boolean') { type = 'boolean'; }
 
-            var elementID = generateShortUID();
+            // var elementID = generateShortUID();
             var isVisible = true;
-            theCollection.elements.push({elementID: elementID, elementName: name, elementType: type, visible: isVisible, elementLabel: name, data_type: queryResults[d].data_type});
+            theCollection.elements.push({elementName: name, elementType: type, visible: isVisible, elementLabel: name, data_type: queryResults[d].data_type});
         }
     }
 
@@ -414,8 +425,8 @@ function processCollections (req, query, collections, dataSource, params, thereA
                 SQLstring = db.setLimitToSQL(SQLstring, query.recordLimit, ((params.page - 1) * query.recordLimit));
             }
         } else {
-            if (dataSource.params[0].packetSize) {
-                if (dataSource.params[0].packetSize !== -1) { SQLstring = db.setLimitToSQL(SQLstring, dataSource.params[0].packetSize, ((params.page - 1) * dataSource.params[0].packetSize)); }
+            if (dataSource.packetSize) {
+                if (dataSource.packetSize !== -1) { SQLstring = db.setLimitToSQL(SQLstring, dataSource.packetSize, ((params.page - 1) * dataSource.packetSize)); }
             } else {
                 if (config.get('query.defaultRecordsPerPage') > 1) {
                     SQLstring = db.setLimitToSQL(SQLstring, config.get('query.defaultRecordsPerPage'), ((params.page - 1) * config.get('query.defaultRecordsPerPage')));
@@ -429,7 +440,7 @@ function processCollections (req, query, collections, dataSource, params, thereA
         // console.log(SQLstring);
 
         if (dataSource.type !== 'BIGQUERY') {
-            db.connect(dataSource.params[0].connection, function (err, connection) {
+            db.connect(dataSource.connection, function (err, connection) {
                 if (err) {
                     setresult({result: 0, msg: 'Connection Error: ' + err});
                     return console.error('Connection Error: ', err);
@@ -455,10 +466,10 @@ function processCollections (req, query, collections, dataSource, params, thereA
                 });
             });
         } else {
-            dataSource.params[0].connection.companyID = req.user.companyID;
+            dataSource.connection.companyID = req.user.companyID;
 
             const start = Date.now();
-            db.executeSQLQuery(dataSource.params[0].connection, SQLstring, function (result) {
+            db.executeSQLQuery(dataSource.connection, SQLstring, function (result) {
                 const time = Date.now() - start;
 
                 getFormatedResult(elements, result, function (finalResults) {

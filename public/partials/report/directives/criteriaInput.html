@@ -4,7 +4,7 @@
 
         <!--preformated date selector -->
         <div class="input-group" dropdown ng-if="filter.filterType == 'equal-pattern' || filter.filterType == 'diferentThan-pattern' || filter.filterType == 'biggerThan-pattern' || filter.filterType == 'biggerOrEqualThan-pattern' || filter.filterType == 'lessThan-pattern' || filter.filterType == 'lessOrEqualThan-pattern'">
-                <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="criterion.label" ng-readonly="true">
+                <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-value="criterion.label" ng-readonly="true">
             <span class="input-group-btn" >
                 <span class="dropdown" >
                     <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -28,7 +28,7 @@
         <!-- date input -->
         <div class="input-group" ng-if="(filter.elementType == 'date' && (filter.filterType == 'equal' || filter.filterType == 'diferentThan' || filter.filterType == 'biggerThan' || filter.filterType == 'biggerOrEqualThan' || filter.filterType == 'lessThan'  || filter.filterType == 'lessOrEqualThan' || filter.filterType == 'between'  || filter.filterType == 'notBetween'))" style="width:150px;">
 
-        <input type="text" class="form-control no-right-border form-focus-green" ng-model="criterion.date1 | date:'yyyy-MM-dd'" ng-readonly="true">
+        <input type="text" class="form-control no-right-border form-focus-green" ng-value="criterion.date1 | date:'yyyy-MM-dd'" ng-readonly="true">
             <span class="input-group-btn" >
                 <span class="dropdown" >
                     <a class="btn btn-primary popover-primary ng-scope"  id="dropdown1" role="button" data-toggle="dropdown" data-target="#" ><i class="fa fa-calendar"></i></a>

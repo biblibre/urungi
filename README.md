@@ -92,6 +92,13 @@ To run the tests:
 
     npm test
 
+Some of the tests need a SQL database to connect to. Setup this database, then
+put all of the connection information in the sql_db field of your config file.
+
+To disable tests which require a sql database, set this field to false.
+
+To run the tests on multiple databases (to test for all clients for example),
+set the field to an array of database config objects.
 
 ## License
 
