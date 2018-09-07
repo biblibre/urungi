@@ -38,7 +38,7 @@ not going to explore MondoDB data.
 3. Download and install dependencies
 
     ```
-    npm install
+    npm ci
     bower install
     ```
 
