@@ -9,6 +9,7 @@ addons:
 before_install:
     - mysql -e 'CREATE DATABASE urungi_tests'
     - mysql -e 'GRANT ALL ON urungi_tests.* TO urungi@localhost IDENTIFIED BY "urungi"'
+    - npm i -g npm
 install:
     - npm ci
 cache:
