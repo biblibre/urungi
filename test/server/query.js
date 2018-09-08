@@ -8,8 +8,6 @@ const expect = chai.expect;
 var DataSources = connection.model('DataSources');
 var Layers = connection.model('Layers');
 
-const entries = [];
-
 const userInfo = {
     userName: 'administrator',
     password: 'widestage',
@@ -357,8 +355,8 @@ const testData = [
             {
                 columnName: 'singerId',
                 elementID: 'eedd',
-                type: 'string',
-                elementType: 'string'
+                type: 'integer',
+                elementType: 'number'
             }
         ],
         tableData: [
@@ -465,266 +463,6 @@ for (const table of testData) {
     }
 }
 
-const customQuery1 = 'SELECT name, id as gemId, colour FROM gems ORDER BY gemId';
-const customQuery2 = 'SELECT characters.id, characters.name, isFusion, weapons.name as weapon, Title as song FROM ( SELECT * FROM (SELECT id, name, isFusion FROM gems) g UNION (SELECT id, name, isFusion FROM humans)) characters LEFT JOIN songs ON characters.id = songs.singerId LEFT JOIN weapons ON weapons.gemId = characters.id GROUP BY characters.id HAVING name != \'Jasper\' ORDER BY name';
-
-const complexLayer = {
-    createdBy: userInfo.id,
-    companyID: userInfo.compID,
-    name: 'complex',
-    description: 'A more complex layer, to test special cases',
-    status: 1,
-    nd_trash_deleted: false,
-
-    objects: [
-        {
-            elementRole: 'folder',
-            elements: [
-                {
-                    elementRole: 'dimension',
-                    elementID: 'eeab'
-                },
-                {
-                    elementRole: 'dimension',
-                    elementID: 'eeac',
-                    collectionName: 'thisShouldntBreakAnything'
-                },
-                {
-                    elementRole: 'folder',
-                    elements: [
-                        {
-                            elementRole: 'folder',
-                            elements: [
-                                {
-                                    elementRole: 'dimension',
-                                    elementID: 'eeda'
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            elementRole: 'dimension',
-            elementID: 'eeaa'
-        },
-        {
-            elementRole: 'folder',
-            elements: [
-                {elementID: 'eead'},
-                {elementID: 'eeba'},
-                {elementID: 'eebb'},
-                {elementID: 'eeca'},
-                {elementID: 'eecb'},
-                {elementID: 'eecc'},
-                {elementID: 'eeda'},
-                {elementID: 'eedb'},
-                {elementID: 'eedc'},
-            ]
-        },
-        {
-            // For now, the join fails unless the elements needed for the join are in the layer
-            // If this is ever changed, test it by removing this folder
-            // It's elements are never queried, but they are used for joins
-            elementRole: 'folder',
-            elements: [
-                {elementID: 'eebc'},
-                {elementID: 'eedd'},
-                {elementID: 'eeca'}
-            ]
-        },
-        {
-            // Elements from the simple custom query
-            elementRole: 'folder',
-            elements: [
-                {
-                    elementRole: 'dimension',
-                    elementID: 'eeua',
-                    elementName: 'name',
-                    collectionID: 'Cuuaa',
-                    collectionName: 'thisShouldntBreakAnything',
-                    component: 1,
-                    elementType: 'string'
-                },
-                {
-                    elementRole: 'dimension',
-                    elementID: 'eeub',
-                    elementName: 'gemId',
-                    collectionID: 'Cuuaa',
-                    component: 1,
-                    elementType: 'number'
-                },
-                {
-                    elementRole: 'dimension',
-                    elementID: 'eeuc',
-                    elementName: 'colour',
-                    collectionID: 'Cuuaa',
-                    component: 1,
-                    elementType: 'string'
-                }
-            ]
-        },
-        {
-            // Elements from the complex custom query
-            elementRole: 'folder',
-            elements: [
-                {
-                    elementRole: 'dimension',
-                    elementID: 'eeva',
-                    elementName: 'name',
-                    collectionID: 'Cuuab',
-                    component: 3,
-                    elementType: 'string'
-                },
-                {
-                    elementRole: 'dimension',
-                    elementID: 'eevb',
-                    elementName: 'id',
-                    collectionID: 'Cuuab',
-                    component: 3,
-                    elementType: 'string'
-                },
-                {
-                    elementRole: 'dimension',
-                    elementID: 'eevc',
-                    elementName: 'isFusion',
-                    collectionID: 'Cuuab',
-                    component: 3,
-                    elementType: 'string'
-                },
-                {
-                    elementRole: 'dimension',
-                    elementID: 'eevd',
-                    elementName: 'weapon',
-                    collectionID: 'Cuuab',
-                    component: 3,
-                    elementType: 'string'
-                },
-                {
-                    elementRole: 'dimension',
-                    elementID: 'eeve',
-                    elementName: 'song',
-                    collectionID: 'Cuuab',
-                    component: 3,
-                    elementType: 'string'
-                },
-            ]
-        },
-        {
-            // Custom elements
-            elementRole: 'folder',
-            elements: [
-                {
-                    elementID: 'eepa',
-                    isCustom: 'true',
-                    expression: 'eeaa + 1',
-                    arguments: [
-                        {
-                            elementID: 'eeaa'
-                        }
-                    ],
-
-                    component: 0
-                }
-            ]
-        }
-    ],
-
-    params: {
-        joins: [
-            {
-                joinID: 'Jjjba',
-                joinType: 'default',
-                sourceCollectionID: 'Caaab',
-                sourceCollectionName: 'weapons',
-                sourceElementID: 'eebc',
-                sourceElementName: 'gemId',
-                targetCollectionID: 'Caaaa',
-                targetCollectionName: 'gems',
-                targetElementID: 'eeaa',
-                targetElementName: 'id'
-            },
-            {
-                joinID: 'Jjjbb',
-                joinType: 'default',
-                sourceCollectionID: 'Caaaa',
-                sourceCollectionName: 'gems',
-                sourceElementID: 'eeaa',
-                sourceElementName: 'id',
-                targetCollectionID: 'Caaad',
-                targetCollectionName: 'songs',
-                targetElementID: 'eedd',
-                targetElementName: 'singerId'
-            },
-            {
-                joinID: 'Jjjbc',
-                joinType: 'default',
-                sourceCollectionID: 'Caaac',
-                sourceCollectionName: 'episodes',
-                sourceElementID: 'eeca',
-                sourceElementName: 'id',
-                targetCollectionID: 'Caaad',
-                targetCollectionName: 'songs',
-                targetElementID: 'eedc',
-                targetElementName: 'episodeId'
-            },
-            {
-                joinID: 'Jjjbd',
-                joinType: 'default',
-                sourceCollectionID: 'Cuuab',
-                sourceCollectionName: 'rawsql',
-                sourceElementID: 'eeve',
-                sourceElementName: 'song',
-                targetCollectionID: 'Caaad',
-                targetCollectionName: 'songs',
-                targetElementID: 'eedb',
-                targetElementName: 'Title'
-            },
-        ],
-        schema: [
-            {
-                collectionID: 'Cuuaa',
-                component: 0,
-                datasourceID: dtsId,
-                isSQL: true,
-                sqlQuery: customQuery1
-            },
-            {
-                collectionID: 'Cuuab',
-                component: 3,
-                datasourceID: dtsId,
-                isSQL: true,
-                sqlQuery: customQuery2
-            }
-        ]
-    },
-    customElements: []
-};
-
-for (const table of testData) {
-    const collectionID = table.collectionID;
-    const collectionName = table.tableName;
-
-    complexLayer.params.schema.push({
-        collectionID,
-        collectionName,
-        component: 0,
-        datasourceId: dtsId,
-    });
-
-    for (const element of table.tableColumns) {
-        findElement(element.elementID, complexLayer.objects, function (found) {
-            found.elementRole = 'dimension';
-            found.collectionID = collectionID;
-            found.collectionName = collectionName;
-            found.component = 0;
-            found.elementType = element.elementType;
-            found.elementName = element.columnName;
-        });
-    }
-}
-
 function findElement (elementID, list, f) {
     for (const el of list) {
         if (el.elementID === elementID) {
@@ -756,6 +494,8 @@ const generateTestSuite = (dbConfig) => function () {
         break;
     }
 
+    const entries = [];
+
     var agent;
     var knex;
 
@@ -765,12 +505,15 @@ const generateTestSuite = (dbConfig) => function () {
 
         // Test connection to database and skip the whole suite if needed
         try {
-            knex.raw('SELECT 1 AS connection_ok');
+            await knex.raw('SELECT 1 AS connection_ok');
         } catch (e) {
+            await agent.close();
+            await knex.destroy();
             // This is needed to skip child suites
             // https://github.com/mochajs/mocha/issues/2819
             this.test.parent.pending = true;
             this.skip();
+            return;
         }
 
         for (const table of testData) {
@@ -827,6 +570,7 @@ const generateTestSuite = (dbConfig) => function () {
         simpleId = createdSL._id;
         entries.push(createdSL);
 
+        const complexLayer = buildComplexLayer(knex);
         for (const collection of complexLayer.params.schema) {
             collection.datasourceID = dtsId;
         }
@@ -956,7 +700,8 @@ const generateTestSuite = (dbConfig) => function () {
 
             const sourceData = testDataRef['gems'].tableColumns.map((item) => ({
                 elementName: item.columnName,
-                elementType: item.elementType
+                elementType: item.elementType,
+                type: item.type,
             })).sort(compareOn(a => a.elementName));
 
             expect(schema.elements).to.have.lengthOf(sourceData.length);
@@ -964,7 +709,7 @@ const generateTestSuite = (dbConfig) => function () {
             for (const i in schema.elements) {
                 const element = schema.elements[i];
                 expect(element.elementName).to.equal(sourceData[i].elementName);
-                expect(element.elementType).to.equal(sourceData[i].elementType);
+                expect(element.elementType).to.equal(jsTypeFromDbType(dbConfig.client, sourceData[i].type));
                 expect(element).to.have.property('elementLabel');
             }
         });
@@ -1077,7 +822,7 @@ const generateTestSuite = (dbConfig) => function () {
             expect(data).to.have.lengthOf(sourceData.length);
 
             for (const i in data) {
-                expect(data[i].countfield).to.equal(sourceData[i].count);
+                expect(+data[i].countfield).to.equal(sourceData[i].count);
                 expect(data[i].colourfield).to.equal(sourceData[i].colour);
             }
         });
@@ -1159,12 +904,6 @@ const generateTestSuite = (dbConfig) => function () {
                     filters: []
                 }
             ];
-            const expectedErrorMessages = [
-                'Layer not found',
-                'query.columns is not iterable',
-                'No collection needed to be joined',
-                'No collection needed to be joined',
-            ];
 
             for (const i in invalidQueries) {
                 const query = invalidQueries[i];
@@ -1183,7 +922,6 @@ const generateTestSuite = (dbConfig) => function () {
                 expect(result.result).to.equal(0);
                 expect(result).to.have.property('msg');
                 expect(error).to.be.an.instanceof(Error);
-                expect(error.message).to.equal(expectedErrorMessages[i]);
             }
         });
     });
@@ -1364,10 +1102,6 @@ const generateTestSuite = (dbConfig) => function () {
             expect(data).to.have.lengthOf(5);
         });
 
-        it('Should test several kinds of aggregation to make sure they all work');
-
-        it('Should test several filters to make sure they all work');
-
         it('Should run a query with a simple custom element', async function () {
             const query = {
                 layerID: complexId,
@@ -1400,8 +1134,6 @@ const generateTestSuite = (dbConfig) => function () {
                 expect(data[i].gemname).to.equal(sourceData[i].gemname);
             }
         });
-
-        it('Should run a query with more ambitious custom elements');
 
         it('Should run a query with a simple custom SQL collection', async function () {
             const query = {
@@ -1444,16 +1176,60 @@ const generateTestSuite = (dbConfig) => function () {
 
             const data = await fetchData(agent, query);
 
-            const cq1Data = await knex.select().from(knex.raw('(' + customQuery1 + ') rawtable'));
-            const sourceData = cq1Data.filter((item) => item.colour !== 'purple');
+            expect(data).to.have.lengthOf(10);
 
-            expect(data).to.have.lengthOf(sourceData.length);
-
-            for (const i in data) {
-                expect(data[i].gemname).to.equal(sourceData[i].name);
-                expect(data[i].gemid).to.equal(sourceData[i].gemId);
-                expect(data[i].gemcolour).to.equal(sourceData[i].colour);
-            }
+            expect(data).to.eql([
+                {
+                    gemname: 'pearl',
+                    gemid: 1,
+                    gemcolour: 'white',
+                },
+                {
+                    gemcolour: 'green',
+                    gemid: 3,
+                    gemname: 'peridot',
+                },
+                {
+                    gemcolour: 'blue',
+                    gemid: 4,
+                    gemname: 'Lapis-Lazuli',
+                },
+                {
+                    gemcolour: 'blue',
+                    gemid: 7,
+                    gemname: 'Opal',
+                },
+                {
+                    gemcolour: 'yellow',
+                    gemid: 8,
+                    gemname: 'Jasper',
+                },
+                {
+                    gemcolour: 'green',
+                    gemid: 9,
+                    gemname: 'Malachite',
+                },
+                {
+                    gemcolour: 'red',
+                    gemid: 10,
+                    gemname: 'Ruby',
+                },
+                {
+                    gemcolour: 'blue',
+                    gemid: 11,
+                    gemname: 'Saphire',
+                },
+                {
+                    gemcolour: 'pink',
+                    gemid: 101,
+                    gemname: 'Steven',
+                },
+                {
+                    gemcolour: 'pink',
+                    gemid: 103,
+                    gemname: 'Stevonie',
+                },
+            ]);
         });
 
         it('Should run a query is a more ambitious custom sql collection', async function () {
@@ -1493,6 +1269,10 @@ const generateTestSuite = (dbConfig) => function () {
                 elementID: 'eevb',
                 sortType: 1
             });
+            query.order.push({
+                elementID: 'eeve',
+                sortType: 1
+            });
 
             query.filters.push({
                 elementID: 'eevd',
@@ -1502,36 +1282,61 @@ const generateTestSuite = (dbConfig) => function () {
 
             const data = await fetchData(agent, query);
 
-            const cq2Data = await knex.select().from(knex.raw('(' + customQuery2 + ') rawtable'));
-            const sourceData = cq2Data.filter((item) => (item.weapon && item.song)).sort(compareOn(a => a.id));
+            expect(data).to.have.lengthOf(5);
 
-            expect(data).to.have.lengthOf(sourceData.length);
-
-            for (const i in data) {
-                expect(data[i].charname).to.equal(sourceData[i].name);
-                expect(data[i].fusion).to.equal(sourceData[i].isFusion);
-                expect(data[i].weapon).to.equal(sourceData[i].weapon);
-                expect(data[i].song).to.equal(sourceData[i].song);
+            let _false = false;
+            let _true = true;
+            if (dbConfig.client === 'mysql') {
+                _false = 0;
+                _true = 1;
             }
-        });
 
-        it('Should run some more queries, just to have more chances of catching if something broke');
+            expect(data).to.eql([
+                {
+                    'charname': 'pearl',
+                    'episodetitle': 'Sworn to the sword',
+                    'fusion': _false,
+                    'song': 'You do it for him',
+                    'weapon': 'spear',
+                },
+                {
+                    'charname': 'garnet',
+                    'episodetitle': 'Jail Break',
+                    'fusion': _true,
+                    'song': 'Stronger than you',
+                    'weapon': 'fists',
+                },
+                {
+                    'charname': 'Ruby',
+                    'episodetitle': 'The question',
+                    'fusion': _false,
+                    'song': 'Ruby rider',
+                    'weapon': 'fist',
+                },
+                {
+                    'charname': 'Steven',
+                    'episodetitle': 'Full Disclosure',
+                    'fusion': _false,
+                    'song': 'Full disclosure',
+                    'weapon': 'Shield',
+                },
+                {
+                    'charname': 'Steven',
+                    'episodetitle': 'Giant Woman',
+                    'fusion': _false,
+                    'song': 'Giant Woman',
+                    'weapon': 'Shield',
+                }
+            ]);
+        });
     });
 };
 
-var testCount = 0;
-
-const datasources = config.get('tests.datasources');
-for (const client in datasources) {
-    describe(`Queries and data access for ${client} database`, generateTestSuite(datasources[client]));
-    ++testCount;
-}
-
-if (testCount === 0) {
-    describe('Queries and data access', async function () {
-        it('Query tests are disabled - setup a SQL test database to test queries');
-    });
-}
+describe('Queries and data access', function () {
+    describe('MySQL', generateTestSuite(config.get('tests.datasources.mysql')));
+    describe('PostgreSQL', generateTestSuite(config.get('tests.datasources.postgresql')));
+    // TODO Tests other databases
+});
 
 async function fetchData (agent, query) {
     const params = { query: query };
@@ -1570,4 +1375,306 @@ function compareOn (f, inverse) {
         }
         return 0;
     };
+}
+
+function jsTypeFromDbType (client, dbType) {
+    const jsTypes = {
+        mysql: {
+            'boolean': 'number',
+            'integer': 'number',
+            'string': 'string',
+            'date': 'date',
+        },
+        pg: {
+            'boolean': 'boolean',
+            'integer': 'number',
+            'string': 'string',
+            'date': 'date',
+        },
+    };
+
+    if (client in jsTypes && dbType in jsTypes[client]) {
+        return jsTypes[client][dbType];
+    }
+}
+
+function buildComplexLayer (knex) {
+    const customQuery1 = knex.select('name', knex.ref('id').as('gemId'), 'colour')
+        .from('gems')
+        .orderBy('gemId')
+        .toString();
+
+    const customQuery2 = knex.select('characters.id', 'characters.name', 'isFusion', knex.ref('weapons.name').as('weapon'), knex.ref('Title').as('song'))
+        .from(function () {
+            this.select().from(function () {
+                this.select('id', 'name', 'isFusion').from('gems').as('g').union(function () {
+                    this.select('id', 'name', 'isFusion').from('humans');
+                });
+            }).as('characters');
+        })
+        .leftJoin('songs', 'characters.id', 'songs.singerId')
+        .leftJoin('weapons', 'weapons.gemId', 'characters.id')
+        .groupBy('characters.id', 'characters.name', 'isFusion', 'weapon', 'song')
+        .having('characters.name', '!=', 'Jasper')
+        .orderBy('characters.name')
+        .toString();
+
+    const complexLayer = {
+        createdBy: userInfo.id,
+        companyID: userInfo.compID,
+        name: 'complex',
+        description: 'A more complex layer, to test special cases',
+        status: 1,
+        nd_trash_deleted: false,
+
+        objects: [
+            {
+                elementRole: 'folder',
+                elements: [
+                    {
+                        elementRole: 'dimension',
+                        elementID: 'eeab'
+                    },
+                    {
+                        elementRole: 'dimension',
+                        elementID: 'eeac',
+                        collectionName: 'thisShouldntBreakAnything'
+                    },
+                    {
+                        elementRole: 'folder',
+                        elements: [
+                            {
+                                elementRole: 'folder',
+                                elements: [
+                                    {
+                                        elementRole: 'dimension',
+                                        elementID: 'eeda'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                elementRole: 'dimension',
+                elementID: 'eeaa'
+            },
+            {
+                elementRole: 'folder',
+                elements: [
+                    {elementID: 'eead'},
+                    {elementID: 'eeba'},
+                    {elementID: 'eebb'},
+                    {elementID: 'eeca'},
+                    {elementID: 'eecb'},
+                    {elementID: 'eecc'},
+                    {elementID: 'eeda'},
+                    {elementID: 'eedb'},
+                    {elementID: 'eedc'},
+                ]
+            },
+            {
+                // For now, the join fails unless the elements needed for the join are in the layer
+                // If this is ever changed, test it by removing this folder
+                // It's elements are never queried, but they are used for joins
+                elementRole: 'folder',
+                elements: [
+                    {elementID: 'eebc'},
+                    {elementID: 'eedd'},
+                    {elementID: 'eeca'}
+                ]
+            },
+            {
+                // Elements from the simple custom query
+                elementRole: 'folder',
+                elements: [
+                    {
+                        elementRole: 'dimension',
+                        elementID: 'eeua',
+                        elementName: 'name',
+                        collectionID: 'Cuuaa',
+                        collectionName: 'thisShouldntBreakAnything',
+                        component: 1,
+                        elementType: 'string'
+                    },
+                    {
+                        elementRole: 'dimension',
+                        elementID: 'eeub',
+                        elementName: 'gemId',
+                        collectionID: 'Cuuaa',
+                        component: 1,
+                        elementType: 'number'
+                    },
+                    {
+                        elementRole: 'dimension',
+                        elementID: 'eeuc',
+                        elementName: 'colour',
+                        collectionID: 'Cuuaa',
+                        component: 1,
+                        elementType: 'string'
+                    }
+                ]
+            },
+            {
+                // Elements from the complex custom query
+                elementRole: 'folder',
+                elements: [
+                    {
+                        elementRole: 'dimension',
+                        elementID: 'eeva',
+                        elementName: 'name',
+                        collectionID: 'Cuuab',
+                        component: 3,
+                        elementType: 'string'
+                    },
+                    {
+                        elementRole: 'dimension',
+                        elementID: 'eevb',
+                        elementName: 'id',
+                        collectionID: 'Cuuab',
+                        component: 3,
+                        elementType: 'string'
+                    },
+                    {
+                        elementRole: 'dimension',
+                        elementID: 'eevc',
+                        elementName: 'isFusion',
+                        collectionID: 'Cuuab',
+                        component: 3,
+                        elementType: 'string'
+                    },
+                    {
+                        elementRole: 'dimension',
+                        elementID: 'eevd',
+                        elementName: 'weapon',
+                        collectionID: 'Cuuab',
+                        component: 3,
+                        elementType: 'string'
+                    },
+                    {
+                        elementRole: 'dimension',
+                        elementID: 'eeve',
+                        elementName: 'song',
+                        collectionID: 'Cuuab',
+                        component: 3,
+                        elementType: 'string'
+                    },
+                ]
+            },
+            {
+                // Custom elements
+                elementRole: 'folder',
+                elements: [
+                    {
+                        elementID: 'eepa',
+                        isCustom: 'true',
+                        expression: 'eeaa + 1',
+                        arguments: [
+                            {
+                                elementID: 'eeaa'
+                            }
+                        ],
+
+                        component: 0
+                    }
+                ]
+            }
+        ],
+
+        params: {
+            joins: [
+                {
+                    joinID: 'Jjjba',
+                    joinType: 'default',
+                    sourceCollectionID: 'Caaab',
+                    sourceCollectionName: 'weapons',
+                    sourceElementID: 'eebc',
+                    sourceElementName: 'gemId',
+                    targetCollectionID: 'Caaaa',
+                    targetCollectionName: 'gems',
+                    targetElementID: 'eeaa',
+                    targetElementName: 'id'
+                },
+                {
+                    joinID: 'Jjjbb',
+                    joinType: 'default',
+                    sourceCollectionID: 'Caaaa',
+                    sourceCollectionName: 'gems',
+                    sourceElementID: 'eeaa',
+                    sourceElementName: 'id',
+                    targetCollectionID: 'Caaad',
+                    targetCollectionName: 'songs',
+                    targetElementID: 'eedd',
+                    targetElementName: 'singerId'
+                },
+                {
+                    joinID: 'Jjjbc',
+                    joinType: 'default',
+                    sourceCollectionID: 'Caaac',
+                    sourceCollectionName: 'episodes',
+                    sourceElementID: 'eeca',
+                    sourceElementName: 'id',
+                    targetCollectionID: 'Caaad',
+                    targetCollectionName: 'songs',
+                    targetElementID: 'eedc',
+                    targetElementName: 'episodeId'
+                },
+                {
+                    joinID: 'Jjjbd',
+                    joinType: 'default',
+                    sourceCollectionID: 'Cuuab',
+                    sourceCollectionName: 'rawsql',
+                    sourceElementID: 'eeve',
+                    sourceElementName: 'song',
+                    targetCollectionID: 'Caaad',
+                    targetCollectionName: 'songs',
+                    targetElementID: 'eedb',
+                    targetElementName: 'Title'
+                },
+            ],
+            schema: [
+                {
+                    collectionID: 'Cuuaa',
+                    component: 0,
+                    datasourceID: dtsId,
+                    isSQL: true,
+                    sqlQuery: customQuery1
+                },
+                {
+                    collectionID: 'Cuuab',
+                    component: 3,
+                    datasourceID: dtsId,
+                    isSQL: true,
+                    sqlQuery: customQuery2
+                }
+            ]
+        },
+        customElements: []
+    };
+
+    for (const table of testData) {
+        const collectionID = table.collectionID;
+        const collectionName = table.tableName;
+
+        complexLayer.params.schema.push({
+            collectionID,
+            collectionName,
+            component: 0,
+            datasourceId: dtsId,
+        });
+
+        for (const element of table.tableColumns) {
+            findElement(element.elementID, complexLayer.objects, function (found) {
+                found.elementRole = 'dimension';
+                found.collectionID = collectionID;
+                found.collectionName = collectionName;
+                found.component = 0;
+                found.elementType = element.elementType;
+                found.elementName = element.columnName;
+            });
+        }
+    }
+
+    return complexLayer;
 }

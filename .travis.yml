@@ -4,11 +4,13 @@ node_js:
 services:
     - mongodb
     - mysql
+    - postgresql
 addons:
     mariadb: '10.1'
 before_install:
     - mysql -e 'CREATE DATABASE urungi_tests'
     - mysql -e 'GRANT ALL ON urungi_tests.* TO urungi@localhost IDENTIFIED BY "urungi"'
+    - psql -c 'create database urungi_tests;' -U postgres
     - npm i -g npm
 install:
     - npm ci

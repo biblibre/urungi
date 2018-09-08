@@ -46,7 +46,7 @@ var Db = function (datasource, warnings) {
 
     this.knex = knex({
         client: client,
-        connection: connection
+        connection: connection,
     });
 };
 
@@ -56,11 +56,18 @@ Db.prototype.getCollections = async function () {
     var query;
 
     switch (this.type) {
-    case 'MySQL': case 'POSTGRE':
+    case 'MySQL':
         query = (knex) =>
             knex.select('table_schema', knex.ref('table_name').as('name'))
                 .from('information_schema.tables').as('tables_info')
                 .where('table_schema', '=', this.connection.database);
+        break;
+    case 'POSTGRE':
+        query = (knex) =>
+            knex.select('table_catalog', knex.ref('table_name').as('name'))
+                .from('information_schema.tables').as('tables_info')
+                .where('table_catalog', '=', this.connection.database)
+                .andWhere('table_schema', '=', 'public');
         break;
     case 'ORACLE':
         query = (knex) =>
@@ -91,12 +98,19 @@ Db.prototype.getSchema = async function (collection) {
     var query;
 
     switch (this.type) {
-    case 'MySQL': case 'POSTGRE': case 'MSSQL':
+    case 'MySQL': case 'MSSQL':
         query = (knex) =>
             knex.select('table_schema', 'table_name', 'column_name', 'data_type')
                 .from('information_schema.columns')
                 .where('table_schema', this.connection.database)
                 .where('table_name', collection.name);
+        break;
+    case 'POSTGRE':
+        query = (knex) =>
+            knex.select('table_schema', 'table_name', 'column_name', 'data_type')
+                .from('information_schema.columns')
+                .where('table_catalog', this.connection.database)
+                .andWhere('table_name', collection.name);
         break;
     case 'ORACLE':
         query = (knex) =>

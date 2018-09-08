@@ -14,7 +14,15 @@ module.exports = {
                     password: 'urungi',
                     database: 'urungi_tests',
                 }
-            }
+            },
+            postgresql: {
+                client: 'pg',
+                connection: {
+                    host: 'localhost',
+                    user: 'postgres',
+                    database: 'urungi_tests',
+                }
+            },
         }
     }
 };

@@ -28,6 +28,13 @@ exports.build = function (query) {
             } else {
                 qb = qb.orderBy(getRef(knex, order), 'asc');
             }
+
+            // If there is a GROUP BY clause, it should contain all columns
+            // used in the ORDER BY clause.
+            // https://dev.mysql.com/doc/refman/5.7/en/group-by-handling.html
+            if (query.groupKeys.length > 0 && !query.groupKeys.some(e => e.elementID === order.elementID)) {
+                qb.groupBy(getRef(knex, order));
+            }
         }
 
         var packetSize = 500;

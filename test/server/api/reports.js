@@ -124,9 +124,6 @@ describe('Reports API', function () {
             expect(decrypted).to.have.property('msg', '1 items deleted.');
         });
     });
-    describe('POST /api/reports/get-data', function () {
-        it('should return data ');
-    });
 
     describe('POST /api/reports/get-report/:id', function () {
         it('should get report', async function () {
