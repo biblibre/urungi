@@ -72,6 +72,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha",
+    "posttest": "eslint .",
     "gettext-extract": "angular-gettext-cli --files './public/+(js|partials)/**/*+(.js|.html)' --dest './language/extract.pot'",
     "gettext-compile": "angular-gettext-cli --compile --files './language/*.po' --dest './public/js/gettext.js' --format javascript --module WideStage"
   },

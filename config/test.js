@@ -3,15 +3,18 @@ module.exports = {
     ip: '127.0.0.1',
     port: 8080,
     db: 'mongodb://localhost:27017/widestage_test',
-    sql_db: {
-        client: 'mysql',
-        // possiblities are 'mysql', 'pg', 'oracledb' and 'mssql'
-
-        connection: {
-            host: 'localhost',
-            user: 'koha',
-            password: 'koha',
-            database: 'QueryTests'
+    tests: {
+        datasources: {
+            // See https://knexjs.org/#Installation-client for configuration
+            mysql: {
+                client: 'mysql',
+                connection: {
+                    host: 'localhost',
+                    user: 'urungi',
+                    password: 'urungi',
+                    database: 'urungi_tests',
+                }
+            }
         }
     }
 };

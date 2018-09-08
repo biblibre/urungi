@@ -2,8 +2,6 @@ const Knex = require('knex');
 
 const { app, encrypt, decrypt } = require('../common');
 
-const dbParameters = config.get('sql_db');
-
 const chai = require('chai');
 const expect = chai.expect;
 
@@ -758,13 +756,86 @@ const generateTestSuite = (dbConfig) => function () {
         break;
     }
 
-    var cq1Data;
-    var cq2Data;
-
     var agent;
+    var knex;
 
     before(async function () {
         agent = chai.request.agent(app);
+        knex = Knex(dbConfig);
+
+        // Test connection to database and skip the whole suite if needed
+        try {
+            knex.raw('SELECT 1 AS connection_ok');
+        } catch (e) {
+            // This is needed to skip child suites
+            // https://github.com/mochajs/mocha/issues/2819
+            this.test.parent.pending = true;
+            this.skip();
+        }
+
+        for (const table of testData) {
+            await knex.schema.dropTableIfExists(table.tableName);
+            await knex.schema.createTable(table.tableName, function (builder) {
+                for (const column of table.tableColumns) {
+                    switch (column.type) {
+                    case 'string':
+                        builder.string(column.columnName);
+                        break;
+                    case 'integer':
+                        builder.integer(column.columnName);
+                        break;
+                    case 'date':
+                        builder.dateTime(column.columnName);
+                        break;
+                    case 'boolean':
+                        builder.boolean(column.columnName);
+                    }
+                }
+            });
+
+            await knex(table.tableName).insert(table.tableData);
+        }
+
+        const dts = new DataSources({
+            createdOn: new Date(),
+            name: 'query tests',
+            createdBy: userInfo.id,
+            companyID: userInfo.compID,
+            packetSize: 500,
+            status: 1,
+            type: dbType,
+            connection: {
+                database: dbConfig.connection.database,
+                host: dbConfig.connection.host,
+                password: dbConfig.connection.password,
+                userName: dbConfig.connection.user
+            }
+        });
+
+        const createdDts = await dts.save();
+
+        dtsId = createdDts._id;
+
+        entries.push(createdDts);
+
+        for (const collection of simpleLayer.params.schema) {
+            collection.datasourceID = dtsId;
+        }
+
+        const createdSL = await Layers.create(simpleLayer);
+
+        simpleId = createdSL._id;
+        entries.push(createdSL);
+
+        for (const collection of complexLayer.params.schema) {
+            collection.datasourceID = dtsId;
+        }
+
+        const createdCL = await Layers.create(complexLayer);
+
+        expect(createdCL).to.have.property('_id');
+        complexId = createdCL._id;
+        entries.push(createdCL);
     });
 
     after(async function () {
@@ -772,132 +843,15 @@ const generateTestSuite = (dbConfig) => function () {
         for (const entry of entries) {
             await entry.remove();
         }
-    });
-
-    describe('Prepare databases for query tests', function () {
-        var knex;
-
-        before(function () {
-            knex = Knex(dbConfig);
-        });
-
-        after(async function () {
-            await knex.destroy();
-        });
-
-        it('Should connect knex to the test database', async function () {
-            var testResult;
-
-            testResult = await knex.select().from('information_schema.tables');
-
-            expect(testResult).to.be.a('array');
-        });
-
-        it('Should drop all tables', async function () {
-            const tableList = await knex.select('table_name')
-                .from('information_schema.tables')
-                .where('table_schema', '=', dbConfig.connection.database);
-
-            for (const table of tableList) {
-                await knex.schema.dropTableIfExists(table.table_name);
-            }
-        });
-
-        it('Should create and seed some tables', async function () {
-            for (const table of testData) {
-                const creation = await knex.schema.createTable(table.tableName, function (builder) {
-                    for (const column of table.tableColumns) {
-                        switch (column.type) {
-                        case 'string':
-                            builder.string(column.columnName);
-                            break;
-                        case 'integer':
-                            builder.integer(column.columnName);
-                            break;
-                        case 'date':
-                            builder.dateTime(column.columnName);
-                            break;
-                        case 'boolean':
-                            builder.boolean(column.columnName);
-                        }
-                    }
-                });
-
-                const insertion = await knex(table.tableName).insert(table.tableData);
-
-                expect(creation).to.be.an('array');
-                expect(insertion).to.be.an('array');
-            }
-
-            cq1Data = await knex.select().from(knex.raw('(' + customQuery1 + ') rawtable'));
-            cq2Data = await knex.select().from(knex.raw('(' + customQuery2 + ') rawtable'));
-        });
-
-        it('Should Add datasource and layers to the urungi database', async function () {
-            expect(['mysql', 'pg', 'oracledb', 'mssql']).to.include(dbConfig.client);
-
-            const dts = new DataSources({
-
-                createdOn: new Date(),
-                name: 'query tests',
-                createdBy: userInfo.id,
-                companyID: userInfo.compID,
-                packetSize: 500,
-                status: 1,
-
-                type: dbType,
-                connection: {
-                    database: dbConfig.connection.database,
-                    host: dbConfig.connection.host,
-                    password: dbConfig.connection.password,
-                    userName: dbConfig.connection.user
-                }
-            });
-
-            const createdDts = await dts.save();
-
-            expect(createdDts).to.have.property('_id');
-            dtsId = createdDts._id;
-
-            entries.push(createdDts);
-
-            for (const collection of simpleLayer.params.schema) {
-                collection.datasourceID = dtsId;
-            }
-
-            const createdSL = await Layers.create(simpleLayer);
-
-            expect(createdSL).to.have.property('_id');
-            simpleId = createdSL._id;
-            entries.push(createdSL);
-
-            for (const collection of complexLayer.params.schema) {
-                collection.datasourceID = dtsId;
-            }
-
-            const createdCL = await Layers.create(complexLayer);
-
-            expect(createdCL).to.have.property('_id');
-            complexId = createdCL._id;
-            entries.push(createdCL);
-        });
-
-        it('Should login successfully', async function () {
-            var res = await agent.post('/api/login')
-                .send(encrypt({ userName: 'administrator', password: 'widestage' }));
-            expect(res).to.have.status(200);
-
-            res = await agent.get('/api/layers/find-all');
-            expect(res).to.have.status(200);
-            var layers = decrypt(res.text);
-
-            expect(layers.result).to.equal(1);
-            expect(layers.items).to.be.an('array');
-            expect(layers.items).to.have.lengthOf(2);
-        });
+        await knex.destroy();
     });
 
     describe('Test datasource queries', function () {
+        before(function () {
+            return agent.post('/api/login')
+                .send(encrypt({ userName: 'administrator', password: 'widestage' }));
+        });
+
         it('Should test /api/data-sources/testConnection', async function () {
             const params = {
                 type: dbType,
@@ -1477,6 +1431,7 @@ const generateTestSuite = (dbConfig) => function () {
 
             const data = await fetchData(agent, query);
 
+            const cq1Data = await knex.select().from(knex.raw('(' + customQuery1 + ') rawtable'));
             const sourceData = cq1Data.filter((item) => item.colour !== 'purple');
 
             expect(data).to.have.lengthOf(sourceData.length);
@@ -1534,6 +1489,7 @@ const generateTestSuite = (dbConfig) => function () {
 
             const data = await fetchData(agent, query);
 
+            const cq2Data = await knex.select().from(knex.raw('(' + customQuery2 + ') rawtable'));
             const sourceData = cq2Data.filter((item) => (item.weapon && item.song)).sort(compareOn(a => a.id));
 
             expect(data).to.have.lengthOf(sourceData.length);
@@ -1552,17 +1508,9 @@ const generateTestSuite = (dbConfig) => function () {
 
 var testCount = 0;
 
-if (dbParameters) {
-    if (Array.isArray(dbParameters)) {
-        for (const dbc of dbParameters) {
-            var info = 'Queries and data access for test database number ' + testCount + ' ( ' + dbc.client + ' database )';
-            describe(info, generateTestSuite(dbc));
-            testCount += 1;
-        }
-    } else {
-        describe('Queries and data access', generateTestSuite(dbParameters));
-        testCount += 1;
-    }
+const datasources = config.get('tests.datasources');
+for (const client in datasources) {
+    describe(`Queries and data access for ${client} database`, generateTestSuite(datasources[client]));
 }
 
 if (testCount === 0) {

@@ -261,7 +261,7 @@ exports.getsqlQuerySchema = async function (req, res) {
     try {
         const connection = result.item.connection;
         let data;
-        switch(result.item.type){
+        switch (result.item.type) {
         case 'POSTGRE': case 'MySQL': case 'ORACLE': case 'MSSQL':
 
             data = {

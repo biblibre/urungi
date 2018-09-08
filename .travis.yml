@@ -3,6 +3,11 @@ node_js:
     - "lts/*"
 services:
     - mongodb
+    - mysql
+addons:
+    mariadb: '10.1'
+before_install:
+    - mysql -e 'CREATE DATABASE urungi_tests'
+    - mysql -e 'GRANT ALL ON urungi_tests.* TO urungi@localhost IDENTIFIED BY "urungi"'
 script:
     - npm test
-    - ./node_modules/.bin/eslint .
