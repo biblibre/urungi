@@ -60,38 +60,6 @@ exports.DataSourcesUpdate = function (req, res) {
     });
 };
 
-exports.saveS3Configuration = function (req, res) {
-
-};
-
-exports.getS3Files = function (req, res) {
-    var AWS = require('aws-sdk');
-
-    AWS.config.update({
-        accessKeyId: req.body.accessKey,
-        secretAccessKey: req.body.secret,
-        region: req.body.region
-    });
-
-    var s3 = new AWS.S3();
-
-    var allKeys = [];
-
-    s3.listObjects({Bucket: req.body.bucket, Marker: req.body.marker}, function (err, data) {
-        if (err) { console.error(err); }
-
-        for (let i = 0; i < data.Contents.length; i++) {
-            var theFile = {};
-            theFile.fileName = data.Contents[i].Key;
-            theFile.LastModified = data.Contents[i].LastModified;
-
-            allKeys.push(theFile);
-        }
-
-        serverResponse(req, res, 200, allKeys);
-    });
-};
-
 exports.getEntities = async function (req, res) {
     req.query.companyid = true;
     req.user = {};

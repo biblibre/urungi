@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "async": "~1.4.2",
-    "aws-sdk": "~2.1.34",
     "bigquery": "0.0.6",
     "body-parser": "^1.18.3",
     "config": "^1.30.0",
