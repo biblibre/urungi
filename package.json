@@ -16,7 +16,7 @@
     "crypto-js": "~3.1.5",
     "debug": "^3.1.0",
     "ejs": "~2.3.4",
-    "email-templates": "~2.0.1",
+    "email-templates": "^5.0.0",
     "express": "^4.16.3",
     "express-ejs-layouts": "~1.1.0",
     "express-session": "^1.15.6",

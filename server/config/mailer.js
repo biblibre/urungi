@@ -31,12 +31,19 @@ global.sendEmail = sendEmail;
 
 function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
     var path = require('path');
-    var EmailTemplate = require('email-templates').EmailTemplate;
+    const Email = require('email-templates');
     var nodemailer = require('nodemailer');
     var async = require('async');
 
-    var templatesDir = path.resolve(__dirname, '../../', 'email_templates/' + theEmailTemplate);
-    var template = new EmailTemplate(templatesDir);
+    var templatesDir = path.resolve(__dirname, '../../', 'email_templates');
+    var template = new Email({
+        views: {
+            root: templatesDir,
+            options: {
+                extension: 'ejs',
+            },
+        },
+    });
     var transport;
     if (config.get('mailer.service') !== 'SMTP') {
         transport = nodemailer.createTransport({
@@ -62,8 +69,7 @@ function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
     async.mapLimit(recipients, 10, function (item, next) {
         if (!item.firstName) { item.firstName = ' '; }
         if (!item.lastName) { item.lastName = ' '; }
-        template.render(item, function (err, results) {
-            if (err) return next(err);
+        template.renderAll(theEmailTemplate, item).then(function (results) {
             transport.sendMail({
                 from: config.get('mailer.from'),
                 to: item[emailField],
@@ -76,6 +82,8 @@ function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
                 }
                 next(null, responseStatus.message);
             });
+        }).catch(function (err) {
+            next(err);
         });
     }, function (err) {
         if (err) {
