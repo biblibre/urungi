@@ -1,4 +1,4 @@
-/* global ObjectId: false, jsPlumb: false */
+/* global jsPlumb: false */
 
 app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal, datasourceModel, $timeout, PagerService, $http, Constants, gettext) {
     $scope.activeForm = 'partials/data-source/source_wizard_index.html';
@@ -201,36 +201,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
         return false;
     };
 
-    $scope.fileSourceSelected = function () {
-        $scope.activeForm = 'partials/data-source/source_wizard_file1.html';
-    };
-
-    $scope.fileSourceFileSelected = function () {
-        $scope.activeForm = 'partials/data-source/source_wizard_file1.html';
-    };
-
-    $scope.fileSourceS3Selected = function () {
-        $scope.activeForm = 'partials/data-source/source_wizard_file2_s3.html';
-        $scope._Parameters = {};
-        $scope._Parameters.draft = true;
-        $scope._Parameters.badgeStatus = 0;
-        $scope._Parameters.exportable = true;
-        $scope._Parameters.badgeMode = 1;
-    };
-
-    $scope.mongoSourceSelected = function () {
-        $scope.activeForm = '/partials/data-source/source_wizard_mongo.html';
-        $scope.mongoStep = 1;
-        $scope._Parameters = {};
-        $scope._Parameters.port = 27017;
-        $scope._Parameters.host = '54.154.195.107';
-        $scope._Parameters.database = 'testIntalligent';
-    };
-
-    $scope.setMongoStep = function (step) {
-        $scope.mongoStep = step;
-    };
-
     $scope.doTestConnection = function () {
         $scope.testConnection = {};
         var data = {};
@@ -279,9 +249,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             $scope.pages = data.pages;
             $scope.pager = PagerService.GetPager($scope.items.length, data.page, 10, data.pages);
         });
-    };
-
-    $scope.getDataSource = function () {
     };
 
     $scope.elementTypes = [
@@ -336,35 +303,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 });
             });
         }
-    };
-
-    $scope.onCollectionSelectionChange = function (collection) {
-        for (var i in collection.elements) {
-            collection.elements[i].selected = collection.selected;
-        }
-    };
-    $scope.onElementSelectionChange = function (collection) {
-        var selected = false;
-
-        for (var i in collection.elements) {
-            if (collection.elements[i].selected) {
-                selected = true;
-                break;
-            }
-        }
-
-        collection.selected = selected;
-    };
-    $scope.addNewElement = function (collection) {
-        var element = {
-            selected: true,
-            elementLabel: '',
-            visible: true,
-            elementType: 'string',
-            elementName: '',
-            elementID: new ObjectId().toString()
-        };
-        collection.elements.push(element);
     };
 });
 
