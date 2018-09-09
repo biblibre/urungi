@@ -188,31 +188,6 @@ usersSchema.statics.isValidUserPassword = function (username, password, done) {
     });
 };
 
-usersSchema.statics.rememberPassword = function (email, url, done) {
-    var crypto = require('crypto');
-    var hash_change_password = crypto.createHash('md5').update(email).digest('hex');
-
-    var postData = {
-        id: '52d66ea2c6b91ae01f00000a',
-        email: email,
-        tags: '{"CHANGEPWDURL": "' + url + 'login/#/change-password/' + hash_change_password + '"}'
-    };
-
-    this.update({
-        'email': email
-    }, {
-        $set: {
-            'hash_change_password': hash_change_password
-        }
-    }, function (err) {
-        if (err) throw err;
-
-        sendCommunication(postData);
-
-        done({result: 1, msg: 'Check your email for instructions'});
-    });
-};
-
 usersSchema.statics.findOrCreateGoogleUser = function (profile, done) {
     var User = this;
     this.findOne({ 'google.email': profile.emails[0].value }, function (err, user) {

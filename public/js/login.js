@@ -153,22 +153,6 @@ angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
 
             $scope.login();
         }
-
-        $scope.rememberPassword = function () {
-            var data = {'email': $scope.email};
-
-            if ($scope.email !== undefined) {
-                $http({method: 'POST', url: '/api/remember-password', data: data})
-                    .success(function (data, status, headers, config) {
-                        noty({text: data.msg, timeout: 2000, type: 'success'});
-
-                        window.location.hash = '/login';
-                    })
-                    .error(function (data, status, headers, config) {
-                        noty({text: data.msg, timeout: 2000, type: 'error'});
-                    });
-            }
-        };
     });
 
 angular.module('widestage-login').run(['$http', '$rootScope', '$sce', '$sessionStorage', 'connection',

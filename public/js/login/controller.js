@@ -63,22 +63,6 @@ function PublicCtrl ($scope, $http, $rootScope, $sessionStorage) {
             }
         }
     };
-
-    $scope.rememberPassword = function () {
-        var data = {'email': $scope.email};
-
-        if ($scope.email !== undefined) {
-            $http({method: 'POST', url: '/api/remember-password', data: data})
-                .success(function (data, status, headers, config) {
-                    noty({text: data.msg, timeout: 2000, type: 'success'});
-
-                    window.location.hash = '/login';
-                })
-                .error(function (data, status, headers, config) {
-                    noty({text: data.msg, timeout: 2000, type: 'error'});
-                });
-        }
-    };
 }
 PublicCtrl.$inject = ['$scope', '$http', '$rootScope', '$sessionStorage'];
 

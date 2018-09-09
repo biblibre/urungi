@@ -18,7 +18,6 @@ module.exports = {
         restrictRole: false,
         saveToLog: false,
         sendEmailTemplate: false,
-        sendCommunication: false,
 
         // Browser
         angular: false,

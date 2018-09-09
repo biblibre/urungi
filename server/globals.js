@@ -45,12 +45,3 @@ function saveToLog (req, text, type, code, otherInfo, associatedID) {
     });
 };
 global.saveToLog = saveToLog;
-
-function sendCommunication (data) {
-    var Communications = connection.model('Communications');
-
-    Communications.sendEmail(data, function (result) {
-
-    });
-};
-global.sendCommunication = sendCommunication;

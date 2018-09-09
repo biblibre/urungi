@@ -98,23 +98,6 @@ exports.logout = function (req, res) {
     res.end();
 };
 
-exports.rememberPassword = function (req, res) {
-    var body = req.body;
-    var url = 'http://' + req.headers.host + '/';
-
-    Users.findOne({ email: body.email }, function (err, findUser) {
-        if (err) { console.error(err); }
-
-        if (findUser) {
-            Users.rememberPassword(body.email, url, function (result) {
-                res.status(200).json(result);
-            });
-        } else {
-            res.status(200).send({result: 0, msg: 'Email not registered'});
-        }
-    });
-};
-
 exports.changeMyPassword = function (req, res) {
     if (req.body.pwd1 && req.body.pwd2) {
         if (req.body.pwd1 === req.body.pwd2) {
