@@ -1,6 +1,6 @@
 const Knex = require('knex');
 
-const { app, encrypt, decrypt } = require('../common');
+const { app } = require('../common');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -814,7 +814,7 @@ const generateTestSuite = (dbConfig) => function () {
 
         const createdDts = await dts.save();
 
-        dtsId = createdDts._id;
+        dtsId = createdDts._id.toString();
 
         entries.push(createdDts);
 
@@ -849,7 +849,7 @@ const generateTestSuite = (dbConfig) => function () {
     describe('Test datasource queries', function () {
         before(function () {
             return agent.post('/api/login')
-                .send(encrypt({ userName: 'administrator', password: 'widestage' }));
+                .send({ userName: 'administrator', password: 'widestage' });
         });
 
         it('Should test /api/data-sources/testConnection', async function () {
@@ -867,18 +867,18 @@ const generateTestSuite = (dbConfig) => function () {
 
             expect(res).to.have.status(200);
 
-            const result = decrypt(res.text);
+            const result = JSON.parse(res.text);
 
             expect(result.result).to.equal(1);
         });
 
         it('Should test /api/data-sources/getEntities', async function () {
             const res = await agent.get('/api/data-sources/getEntities')
-                .query(encrypt({ id: dtsId }));
+                .query({ id: dtsId });
 
             expect(res).to.have.status(200);
 
-            const result = decrypt(res.text);
+            const result = JSON.parse(res.text);
 
             expect(result.result).to.equal(1);
             expect(result.items).to.be.an('array');
@@ -904,17 +904,17 @@ const generateTestSuite = (dbConfig) => function () {
             for (const table of testData) {
                 const params = {
                     datasourceID: dtsId,
-                    entity: {
+                    entity: JSON.stringify({
                         database: dbConfig.connection.database,
                         name: table.tableName
-                    }
+                    })
                 };
 
-                const res = await agent.get('/api/data-sources/getEntitySchema').query(encrypt(params));
+                const res = await agent.get('/api/data-sources/getEntitySchema').query(params);
 
                 expect(res).to.have.status(200);
 
-                const result = decrypt(res.text);
+                const result = JSON.parse(res.text);
 
                 expect(result.result).to.equal(1);
 
@@ -938,11 +938,11 @@ const generateTestSuite = (dbConfig) => function () {
                 }
             };
 
-            const res = await agent.get('/api/data-sources/getsqlQuerySchema').query(encrypt(params));
+            const res = await agent.get('/api/data-sources/getsqlQuerySchema').query(params);
 
             expect(res).to.have.status(200);
 
-            const result = decrypt(res.text);
+            const result = JSON.parse(res.text);
 
             expect(result.result).to.equal(1);
 
@@ -1163,12 +1163,12 @@ const generateTestSuite = (dbConfig) => function () {
             ];
 
             for (const query of invalidQueries) {
-                const params = encrypt({ query: query });
+                const params = { query: query };
 
                 const res = await agent.post('/api/reports/get-data').send(params);
 
                 expect(res).to.have.status(200);
-                const result = decrypt(res.text);
+                const result = JSON.parse(res.text);
                 expect(result.result).to.equal(0);
                 expect(result).to.have.property('msg');
             }
@@ -1520,13 +1520,13 @@ if (testCount === 0) {
 }
 
 async function fetchData (agent, query) {
-    const params = encrypt({ query: query });
+    const params = { query: query };
 
     const res = await agent.post('/api/reports/get-data').send(params);
 
     expect(res).to.have.status(200);
 
-    const result = decrypt(res.text);
+    const result = JSON.parse(res.text);
 
     if (result.result === 0) {
         console.log(result);

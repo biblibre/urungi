@@ -1,4 +1,3 @@
-/* global CryptoJS: false */
 // Declare app level module which depends on filters, and services
 // var app = angular.module('widestage-login', ['ui.router','myApp.filters', 'myApp.services', 'myApp.directives']).
 angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
@@ -7,8 +6,6 @@ angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
     }]).service('Constants', function () {
         var constants = {
             DEBUGMODE: false,
-            CRYPTO: true,
-            SECRET: 'SecretPassphrase'
         };
 
         return constants;
@@ -56,19 +53,9 @@ angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
 
             if (options.showLoader) $('#loader-overlay').show();
 
-            if (Constants.CRYPTO) {
-                var encrypted = CryptoJS.AES.encrypt(JSON.stringify(params), Constants.SECRET);
-                params = {data: String(encrypted)};
-            }
-
             $http({method: 'GET', url: url, params: params})
                 .success(angular.bind(this, function (data, status, headers, config) {
                     if (typeof data === 'string') window.location.href = '/';
-
-                    if (Constants.CRYPTO) {
-                        var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
-                        data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-                    }
 
                     if (typeof done !== 'undefined' && done) { done(data); }
 
@@ -97,19 +84,9 @@ angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
 
             if (typeof data._id !== 'undefined') data.id = data._id;
 
-            if (Constants.CRYPTO) {
-                var encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), Constants.SECRET);
-                data = {data: String(encrypted)};
-            }
-
             $http.post(url, data)
                 .success(angular.bind(this, function (data, status, headers, config) {
                     if (typeof data === 'string') window.location.href = '/';
-
-                    if (Constants.CRYPTO) {
-                        var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
-                        data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-                    }
 
                     if (typeof done !== 'undefined' && done) { done(data); }
 

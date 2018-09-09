@@ -10,10 +10,6 @@ module.exports = {
 
     sql_db: false,
 
-    crypto: {
-        enabled: true,
-        secret: 'SecretPassphrase',
-    },
     mailer: {
         service: 'SMTP', // SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
         host: 'smtp.yourserver.com', // hostname

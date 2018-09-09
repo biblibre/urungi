@@ -25,10 +25,6 @@ module.exports = function (app, passport) {
         }
     );
 
-    /* PASSTHROUGH */
-    app.get('*', passthrough);
-    app.post('*', passthrough);
-
     app.post('/api/login', function (req, res, next) {
         var Users = connection.model('Users');
         var Companies = connection.model('Companies');

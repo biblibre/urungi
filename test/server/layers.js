@@ -1,4 +1,4 @@
-const { app, decrypt } = require('../common');
+const { app } = require('../common');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -18,7 +18,7 @@ describe('get /api/layers/find-all', function () {
         expect(res).to.have.status(200);
         res = await agent.get('/api/layers/find-all');
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');
@@ -33,7 +33,7 @@ describe('get /api/layers/find-one', function () {
         expect(res).to.have.status(200);
         res = await agent.post('/api/layers/create')
             .send({companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.get('/api/layers/find-one').query({id: decrypted.item._id});
         expect(res).to.have.status(200);
         expect(decrypted).to.have.property('result', 1);
@@ -56,7 +56,7 @@ describe('post /api/layers/create', function () {
         res = await agent.post('/api/layers/create')
             .send({companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false});
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', 'Item created');
         expect(decrypted).to.have.property('item');
@@ -78,11 +78,11 @@ describe('post /api/layers/update/:id', function () {
         var datasource = await DataSources.create({companyID: 'COMPID', name: 'DataSource', type: 'DataSource', status: 1, nd_trash_deleted: false});
         res = await agent.post('/api/layers/create')
             .send({companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.post('/api/layers/update/' + decrypted.item._id)
             .send({_id: decrypted.item._id, params: {schema: [{datasourceID: datasource.id}]}});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 record updated.');
         res = await Layers.deleteOne({name: 'layer'});
@@ -98,12 +98,12 @@ describe('post /api/layers/change-layer-status', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/layers/create')
             .send({companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
 
         res = await agent.post('/api/layers/change-layer-status')
             .send({layerID: decrypted.item._id, status: 'active'});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', 'Status updated.');
         res = await Layers.deleteOne({name: 'layer'});
@@ -118,7 +118,7 @@ describe('get /api/layers/get-layers', function () {
         res = await agent.post('/api/layers/create')
             .send({companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false});
         res = await agent.get('/api/layers/get-layers');
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');

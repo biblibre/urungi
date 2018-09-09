@@ -9,7 +9,7 @@ class Controller {
         var page = (req.query.page) ? req.query.page : 1;
         var find = {};
         var searchText = (req.query.search) ? req.query.search : false;
-        var filters = (req.query.filters) ? req.query.filters : false;
+        var filters = (req.query.filters) ? JSON.parse(req.query.filters) : false;
         var fields = {};
         var fieldsToGet = (req.query.fields) ? req.query.fields : false;
         if (req.query.page > 0) { var params = (req.query.page) ? {skip: (page - 1) * perPage, limit: perPage} : {}; }

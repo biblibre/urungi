@@ -1,4 +1,4 @@
-const { app, decrypt } = require('../common');
+const { app } = require('../common');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -22,7 +22,7 @@ describe('get /api/admin/users/find-all', function () {
         expect(res).to.have.status(200);
         res = await agent.get('/api/admin/users/find-all');
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.be.a('object');
         expect(decrypted).to.have.property('result');
         expect(decrypted).to.have.property('page');
@@ -52,7 +52,7 @@ describe('get /api/admin/users/find-one', function () {
         expect(res).to.have.status(200);
         res = await agent.get('/api/admin/users/find-one');
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 0);
         expect(decrypted).to.have.property('msg');
     });
@@ -64,7 +64,7 @@ describe('get /api/admin/users/find-one', function () {
         var User = await Users.findOne({userName: 'administrator'});
         res = await agent.get('/api/admin/users/find-one').query({id: User.id});
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('item');
         expect(decrypted.item).to.have.property('_id');
@@ -91,7 +91,7 @@ describe('post /api/admin/users/create', function () {
         res = await agent.post('/api/admin/users/create')
             .send({userName: 'test', pwd1: 'widestage'});
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', 'User created.');
         expect(decrypted).to.have.property('user');
@@ -122,7 +122,7 @@ describe('post /api/admin/users/update/:id', function () {
         res = await agent.post('/api/admin/users/update/' + User.id)
             .send({email: 'admin@example.com', _id: User.id, firstName: 'update'});
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 record updated.');
         User = await Users.findOne({userName: 'administrator'});
@@ -142,7 +142,7 @@ describe('post /api/admin/users/update/:id with new user', function () {
         res = await agent.post('/api/admin/users/update/' + User.id)
             .send({email: 'new@example.com', _id: User.id, firstName: 'update'});
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 record updated.');
         User = await Users.findOne({userName: 'new'});
@@ -164,7 +164,7 @@ describe('post /api/admin/users/delete/:id', function () {
         res = await agent.post('/api/admin/users/delete/' + User.id)
             .send({_id: User.id});
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 items deleted.');
     });
@@ -181,7 +181,7 @@ describe('post /api/admin/users/change-user-status', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/admin/users/change-user-status')
             .send({userID: User.id, status: 'Not active'});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', 'Status updated.');
         res = await Users.deleteOne({userName: 'new'});
@@ -205,7 +205,7 @@ describe('post /api/change-my-password', function () {
         res = await agent.post('/api/change-my-password')
             .send({pwd1: 'widestage', pwd2: 'widestage'});
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', 'Password changed');
     });
@@ -215,7 +215,7 @@ describe('post /api/change-my-password', function () {
         expect(res).to.have.status(200);
         res = await agent.post('/api/change-my-password')
             .send({pwd1: 'widestage1', pwd2: 'widestage'});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 0);
         expect(decrypted).to.have.property('msg', 'Passwords do not match');
     });
@@ -246,7 +246,7 @@ describe('get /api/get-counts', function () {
         expect(res).to.have.status(200);
         var count = await agent.get('/api/get-counts');
         expect(count).to.have.status(200);
-        var decrypted = decrypt(count.text);
+        var decrypted = JSON.parse(count.text);
         expect(decrypted).to.have.property('reports', 1);
         expect(decrypted).to.have.property('dashBoards', 1);
         expect(decrypted).to.have.property('pages');
@@ -268,7 +268,7 @@ describe('get /api/get-user-counts/:id', function () {
         var count = await agent.get('/api/get-user-counts/' + User.id)
             .query({userID: User.id});
         expect(count).to.have.status(200);
-        var decrypted = decrypt(count.text);
+        var decrypted = JSON.parse(count.text);
         expect(decrypted).to.have.property('publishedReports', 1);
         expect(decrypted).to.have.property('publishedDashBoards', 1);
         expect(decrypted).to.have.property('privateReports');
@@ -288,7 +288,7 @@ describe('get(/api/get-user-reports/:id', function () {
         res = await agent.get('/api/get-user-reports/' + User.id)
             .query({userID: User.id});
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');
@@ -312,7 +312,7 @@ describe('get(/api/get-user-dashboards/:id', function () {
         var dashboard = await Dashboards.create({companyID: 'COMPID', dashboardName: 'Dashboardget', owner: User.id, nd_trash_deleted: false, isPublic: true, dashboardDescription: 'dashboard Description', dashboardType: 'dashboard'});
         res = await agent.get('/api/get-user-dashboards/' + User.id)
             .query({userID: User.id});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');
@@ -344,7 +344,7 @@ describe('get(/api/get-user-data with new user', function () {
         expect(res).to.have.status(200);
         res = await agent.get('/api/get-user-data');
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');
@@ -386,7 +386,7 @@ describe('get(/api/get-user-data with administrator', function () {
         expect(res).to.have.status(200);
         res = await agent.get('/api/get-user-data');
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');
@@ -445,7 +445,7 @@ describe('get(/api/get-user-last-executions', function () {
         var res = await agent.post('/api/login')
             .send({ userName: 'administrator', password: 'widestage' });
         res = await agent.get('/api/get-user-last-executions');
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');
@@ -493,7 +493,7 @@ describe('get (/api/get-user-objects', function () {
         var report = await Reports.create({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isPublic: true, parentFolder: 'root'});
         var dashboard = await Dashboards.create({companyID: 'COMPID', dashboardName: 'Dashboard', owner: User.id, nd_trash_deleted: false, isPublic: true, parentFolder: 'root'});
         res = await agent.get('/api/get-user-objects');
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');
@@ -515,7 +515,7 @@ describe('get (/api/get-user-other-data', function () {
             .send({ userName: 'administrator', password: 'widestage' });
         res = await Users.findOne({userName: 'administrator'});
         res = await agent.get('/api/get-user-other-data');
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');

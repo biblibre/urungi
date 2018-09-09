@@ -127,7 +127,7 @@ exports.testConnection = async function (req, res) {
 
 exports.getEntitySchema = async function (req, res) {
     var theDatasourceID = req.query.datasourceID;
-    var theEntity = req.query.entity;
+    var theEntity = JSON.parse(req.query.entity);
     req.query = {};
     req.query.companyid = true;
     req.query.id = theDatasourceID;

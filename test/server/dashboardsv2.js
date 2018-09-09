@@ -1,4 +1,4 @@
-const { app, decrypt } = require('../common');
+const { app } = require('../common');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -17,7 +17,7 @@ describe('get /api/dashboardsv2/find-all', function () {
         expect(res).to.have.status(200);
         res = await agent.get('/api/dashboardsv2/find-all');
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');
@@ -34,10 +34,10 @@ describe('get /api/dashboardsv2/find-one', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/dashboardsv2/create')
             .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.get('/api/dashboardsv2/find-one').query({id: decrypted.item._id});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('item');
         expect(decrypted.item).to.have.property('__v');
@@ -66,7 +66,7 @@ describe('post /api/dashboardsv2/create', function () {
         res = await agent.post('/api/dashboardsv2/create')
             .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', 'Item created');
         expect(decrypted).to.have.property('item');
@@ -98,7 +98,7 @@ describe('post /api/dashboardsv2/duplicate', function () {
         expect(res).to.have.status(200);
         res = await agent.post('/api/dashboardsv2/duplicate')
             .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', 'Item created');
         expect(decrypted).to.have.property('item');
@@ -128,10 +128,10 @@ describe('post /api/dashboardsv2/update:id', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/dashboardsv2/create')
             .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.post('/api/dashboardsv2/update/' + decrypted.item._id)
             .send({_id: decrypted.item._id});
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 record updated.');
         res = await Dashboardsv2.deleteOne({dashboardName: 'Dashboard'});
@@ -147,10 +147,10 @@ describe('post /api/dashboardsv2/delete:id', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/dashboardsv2/create')
             .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.post('/api/dashboardsv2/delete/' + decrypted.item._id)
             .send({id: decrypted.item._id});
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 record updated.');
         res = await Dashboardsv2.deleteOne({dashboardName: 'Dashboard'});
@@ -166,10 +166,10 @@ describe('get /api/dashboardsv2/get/:id', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/dashboardsv2/create')
             .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.get('/api/dashboardsv2/get/' + decrypted.item._id)
             .query({id: decrypted.item._id});
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('item');
         expect(decrypted.item).to.have.property('_id');
@@ -197,11 +197,11 @@ describe('post /api/dashboardsv2/publish-page', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/dashboardsv2/create')
             .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.post('/api/dashboardsv2/publish-page')
             .send({_id: decrypted.item._id});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 record updated.');
         res = await Dashboardsv2.deleteOne({dashboardName: 'Dashboard'});
@@ -217,11 +217,11 @@ describe('post /api/dashboardsv2/unpublish', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/dashboardsv2/create')
             .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.post('/api/dashboardsv2/unpublish')
             .send({_id: decrypted.item._id});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 record updated.');
         res = await Dashboardsv2.deleteOne({dashboardName: 'Dashboard'});

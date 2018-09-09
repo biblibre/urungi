@@ -1,13 +1,9 @@
-/* global CryptoJS: false */
-
 angular.module('myApp.services', [])
     .value('version', '0.1');
 
 app.service('Constants', function () {
     var constants = {
         DEBUGMODE: false,
-        CRYPTO: true,
-        SECRET: 'SecretPassphrase'
     };
 
     return constants;
@@ -21,21 +17,11 @@ app.service('Constants', function () {
 
             if (options.showLoader) $('#loader-overlay').show();
 
-            if (Constants.CRYPTO) {
-                var encrypted = CryptoJS.AES.encrypt(JSON.stringify(params), Constants.SECRET);
-                params = {data: String(encrypted)};
-            }
-
             const p = $http.get(url, {params: params})
                 .then(response => {
-                    let data = response.data;
+                    const data = response.data;
 
                     if (typeof data === 'string') window.location.href = '/';
-
-                    if (Constants.CRYPTO) {
-                        var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
-                        data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-                    }
 
                     if (data.result === 1 && data.msg && options.showMsg) {
                         noty({text: data.msg, timeout: 2000, type: 'success'});
@@ -65,21 +51,11 @@ app.service('Constants', function () {
 
             $('#loader-overlay').show();
 
-            if (Constants.CRYPTO) {
-                var encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), Constants.SECRET);
-                data = {data: String(encrypted)};
-            }
-
             const p = $http.post(url, data)
                 .then(response => {
-                    let data = response.data;
+                    const data = response.data;
 
                     if (typeof data === 'string') window.location.href = '/';
-
-                    if (Constants.CRYPTO) {
-                        var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
-                        data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-                    }
 
                     if (data.result === 1 && data.msg) {
                         noty({text: data.msg, timeout: 2000, type: 'success'});

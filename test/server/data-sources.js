@@ -1,4 +1,4 @@
-const { app, encrypt, decrypt } = require('../common');
+const { app } = require('../common');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -59,7 +59,7 @@ function verifyItem (item) {
 
 async function authentifyAgent (agent) {
     const res = await agent.post('/api/login')
-        .send(encrypt({ userName: 'administrator', password: 'widestage' }));
+        .send({ userName: 'administrator', password: 'widestage' });
     expect(res).to.have.status(200);
 }
 
@@ -70,7 +70,7 @@ async function getValidID (agent, index) {
 
     var res = await agent.get('/api/data-sources/find-all');
     expect(res).to.have.status(200);
-    return decrypt(res.text).items[index]._id;
+    return JSON.parse(res.text).items[index]._id;
 };
 
 async function testUnidentifiedConnection (agent, url) {
@@ -101,7 +101,7 @@ describe('/api/data-sources', function () {
 
             var res = await agent.get('/api/data-sources/find-all');
             expect(res).to.have.status(200);
-            var decrypted = decrypt(res.text);
+            var decrypted = JSON.parse(res.text);
 
             expect(decrypted).to.be.a('object');
             expect(decrypted).to.have.property('result');
@@ -124,7 +124,7 @@ describe('/api/data-sources', function () {
 
             var res = await agent.get('/api/data-sources/find-one');
             expect(res).to.have.status(200);
-            var decrypted = decrypt(res.text);
+            var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result');
             expect(decrypted.result).to.equal(0);
         });
@@ -135,9 +135,9 @@ describe('/api/data-sources', function () {
             const entryID = await getValidID(agent, 0);
 
             var res = await agent.get('/api/data-sources/find-one')
-                .query(encrypt({id: entryID}));
+                .query({id: entryID});
             expect(res).to.have.status(200);
-            var decrypted = decrypt(res.text);
+            var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result');
             expect(decrypted.result).to.equal(1);
 
@@ -155,7 +155,7 @@ describe('/api/data-sources', function () {
             await authentifyAgent(agent);
 
             var res = await agent.post('/api/data-sources/create')
-                .send(encrypt({
+                .send({
                     name: 'non existent db',
                     type: 'MySQL',
                     status: 1,
@@ -164,9 +164,9 @@ describe('/api/data-sources', function () {
                         database: 'database_name',
                         host: 'localhost'
                     }
-                }));
+                });
 
-            const decrypted = decrypt(res.text);
+            const decrypted = JSON.parse(res.text);
 
             expect(decrypted).to.have.property('result');
             expect(decrypted.result).to.equal(1);
@@ -198,27 +198,27 @@ describe('/api/data-sources', function () {
             await authentifyAgent(agent);
 
             var res = await agent.get('/api/data-sources/find-all');
-            const entryID = decrypt(res.text).items[0]._id;
+            const entryID = JSON.parse(res.text).items[0]._id;
 
             res = await agent.post('/api/data-sources/update/' + String(entryID))
-                .send(encrypt({
+                .send({
                     _id: entryID,
                     name: 'renamed dummy db',
                     type: 'MySQL',
                     connection: {
                         database: 'modified_name'
                     }
-                }));
+                });
             expect(res).to.have.status(200);
 
-            var decrypted = decrypt(res.text);
+            var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result');
             expect(decrypted.result).to.equal(1);
 
             res = await agent.get('/api/data-sources/find-one')
-                .query(encrypt({id: entryID}));
+                .query({id: entryID});
             expect(res).to.have.status(200);
-            decrypted = decrypt(res.text);
+            decrypted = JSON.parse(res.text);
             verifyItem(decrypted.item);
 
             expect(decrypted.item.name).to.equal('renamed dummy db');

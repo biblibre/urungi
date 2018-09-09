@@ -1,4 +1,4 @@
-const { app, decrypt } = require('../common');
+const { app } = require('../common');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -17,7 +17,7 @@ describe('get /api/reports/find-all', function () {
         expect(res).to.have.status(200);
         res = await agent.get('/api/reports/find-all');
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('page');
         expect(decrypted).to.have.property('pages');
@@ -34,10 +34,10 @@ describe('get /api/reports/find-one', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/reports/create')
             .send({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, owner: User.id, isPublic: false});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.get('/api/reports/find-one').query({id: decrypted.item._id});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result');
         expect(decrypted).to.have.property('item');
         expect(decrypted.item).to.have.property('__v');
@@ -64,7 +64,7 @@ describe('post /api/reports/create', function () {
         res = await agent.post('/api/reports/create')
             .send({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, owner: User.id, isPublic: false});
         expect(res).to.have.status(200);
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', 'Item created');
         expect(decrypted).to.have.property('item');
@@ -90,11 +90,11 @@ describe('post /api/reports/update:id', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/reports/create')
             .send({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, owner: User.id, isPublic: false});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.post('/api/reports/update/' + decrypted.item._id)
             .send({_id: decrypted.item._id});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 record updated.');
         res = await Reports.deleteOne({reportName: 'Report'});
@@ -109,11 +109,11 @@ describe('post /api/reports/delete:id', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/reports/create')
             .send({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, owner: User.id, isPublic: false});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.post('/api/reports/delete/' + decrypted.item._id)
             .send({_id: decrypted.item._id});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 items deleted.');
     });
@@ -130,11 +130,11 @@ describe('get /api/reports/get-report/:id', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/reports/create')
             .send({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, owner: User.id, isPublic: false});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.get('/api/reports/get-report/' + decrypted.item._id)
             .query({id: decrypted.item._id});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('item');
         expect(decrypted.item).to.have.property('_id');
@@ -160,11 +160,11 @@ describe('post /api/reports/publish-report', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/reports/create')
             .send({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, owner: User.id, isPublic: false});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.post('/api/reports/publish-report')
             .send({_id: decrypted.item._id});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 record updated.');
         res = await Reports.deleteOne({reportName: 'Report'});
@@ -180,11 +180,11 @@ describe('post /api/reports/unpublish', function () {
         res = await agent.get('/api/get-user-data');
         res = await agent.post('/api/reports/create')
             .send({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, owner: User.id, isPublic: true});
-        var decrypted = decrypt(res.text);
+        var decrypted = JSON.parse(res.text);
         res = await agent.post('/api/reports/unpublish')
             .send({_id: decrypted.item._id});
         expect(res).to.have.status(200);
-        decrypted = decrypt(res.text);
+        decrypted = JSON.parse(res.text);
         expect(decrypted).to.have.property('result', 1);
         expect(decrypted).to.have.property('msg', '1 record updated.');
         res = await Reports.deleteOne({reportName: 'Report'});

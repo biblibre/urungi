@@ -1,4 +1,4 @@
-/* global CryptoJS: false, ObjectId: false, jsPlumb: false */
+/* global ObjectId: false, jsPlumb: false */
 
 app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal, datasourceModel, $timeout, PagerService, $http, Constants, gettext) {
     $scope.activeForm = 'partials/data-source/source_wizard_index.html';
@@ -169,10 +169,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 headers: {'Content-Type': undefined}
             })
                 .success(angular.bind(this, function (data, status, headers, config) {
-                    if (Constants.CRYPTO) {
-                        var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
-                        data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-                    }
                     if (data.result === 1) {
                         $scope.fileUploadSuccess = true;
                         $scope.fileUploadMessage = 'File uploaded successfully';
@@ -182,11 +178,6 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                     }
                 }))
                 .error(function (data, status) {
-                    if (Constants.CRYPTO) {
-                        var decrypted = CryptoJS.AES.decrypt(data.data, Constants.SECRET);
-                        data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-                    }
-
                     $scope.fileUploadSuccess = false;
                     $scope.fileUploadMessage = 'File upload failed [' + data.msg + ']';
                 });

@@ -18,7 +18,6 @@ module.exports = {
         generateUserFilterValue: false,
         getNextSequence: false,
         isAllowed: false,
-        passthrough: false,
         restrict: false,
         restrictRole: false,
         saveToLog: false,

@@ -19,41 +19,6 @@ function restrict (req, res, next) {
 }
 global.restrict = restrict;
 
-function passthrough (req, res, next) {
-    if (config.crypto.enabled) {
-        var CryptoJS = require('crypto-js');
-
-        if (req.query.data) {
-            const decrypted = CryptoJS.AES.decrypt(req.query.data, config.crypto.secret);
-            req.query = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-            req.query = stripInvalidChars(req.query);
-            return next();
-        } else if (req.body.data) {
-            const decrypted = CryptoJS.AES.decrypt(req.body.data, config.crypto.secret);
-            req.body = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-            req.body = stripInvalidChars(req.body);
-            return next();
-        } else {
-            return next();
-        }
-    } else {
-        return next();
-    }
-}
-global.passthrough = passthrough;
-
-function stripInvalidChars (obj) {
-    delete (obj['$$hashKey']);
-
-    if (typeof obj === 'object') {
-        for (var i in obj) {
-            if (obj[i]) stripInvalidChars(obj[i]);
-        }
-    }
-
-    return obj;
-}
-
 function restrictRole (roles) {
     return function (req, res, next) {
         if (req.isAuthenticated()) {
@@ -159,20 +124,7 @@ function isAllowed (req, area) {
 global.isAllowed = isAllowed;
 
 function serverResponse (req, res, status, obj) {
-    if (config.crypto.enabled) {
-        var CryptoJS = require('crypto-js');
-
-        var encrypted = CryptoJS.AES.encrypt(JSON.stringify(obj), config.crypto.secret);
-        obj = {data: String(encrypted)};
-
-        const result = ")]}',\n" + JSON.stringify(obj);
-
-        res.status(status).send(result);
-    } else {
-        const result = ")]}',\n" + JSON.stringify(obj);
-
-        res.status(status).send(result);
-    }
+    res.status(status).json(obj);
 }
 
 global.serverResponse = serverResponse;

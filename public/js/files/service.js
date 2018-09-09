@@ -1,5 +1,3 @@
-/* global CryptoJS: false */
-
 app.service('fileService', function (connection, Constants) {
     this.getFiles = async function () {
         const params = {};
@@ -20,13 +18,7 @@ app.service('fileService', function (connection, Constants) {
 
             XHR.addEventListener('load', function (event) {
                 try {
-                    const response = JSON.parse(XHR.responseText.split(',')[1]);
-                    var data = response.data;
-
-                    if (Constants.CRYPTO) {
-                        var decrypted = CryptoJS.AES.decrypt(data, Constants.SECRET);
-                        data = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
-                    }
+                    const data = JSON.parse(XHR.responseText);
 
                     if (data.result !== 1 && data.msg) {
                         noty({text: data.msg, timeout: 2000, type: 'error'});
