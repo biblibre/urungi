@@ -17,7 +17,7 @@ exports.Dashboardsv2FindAll = function (req, res) {
     req.user = {};
     req.user.companyID = 'COMPID';
     controller.findAll(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -28,13 +28,13 @@ exports.Dashboardsv2FindOne = function (req, res) {
     req.query.companyid = true;
 
     controller.findOne(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
 exports.Dashboardsv2Create = function (req, res) {
     if (!req.session.Dashboardsv2Create && !req.session.isWSTADMIN) {
-        serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to create Dashboards'});
+        res.status(401).json({result: 0, msg: 'You don´t have permissions to create Dashboards'});
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -46,14 +46,14 @@ exports.Dashboardsv2Create = function (req, res) {
         req.body.author = req.user.userName;
 
         controller.create(req).then(function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
 
 exports.Dashboardsv2Duplicate = function (req, res) {
     if (!req.session.Dashboardsv2Create && !req.session.isWSTADMIN) {
-        serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to create Dashboardsv2'});
+        res.status(401).json({result: 0, msg: 'You don´t have permissions to create Dashboardsv2'});
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -64,7 +64,7 @@ exports.Dashboardsv2Duplicate = function (req, res) {
         req.body.owner = req.user._id;
         req.body.isPublic = false;
         controller.create(req).then(function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -81,15 +81,15 @@ exports.Dashboardsv2Update = function (req, res) {
             if (err) throw err;
             if (item) {
                 controller.update(req).then(function (result) {
-                    serverResponse(req, res, 200, result);
+                    res.status(200).json(result);
                 });
             } else {
-                serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to update this Dashboard'});
+                res.status(401).json({result: 0, msg: 'You don´t have permissions to update this Dashboard'});
             }
         });
     } else {
         controller.update(req).then(function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -112,15 +112,15 @@ exports.Dashboardsv2Delete = function (req, res) {
             if (err) throw err;
             if (item) {
                 controller.update(req).then(function (result) {
-                    serverResponse(req, res, 200, result);
+                    res.status(200).json(result);
                 });
             } else {
-                serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to delete this Dashboard'});
+                res.status(401).json({result: 0, msg: 'You don´t have permissions to delete this Dashboard'});
             }
         });
     } else {
         controller.update(req).then(function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -170,7 +170,7 @@ exports.getDashboard = function (req, res) {
                         }
                     }
 
-                    serverResponse(req, res, 200, result);
+                    res.status(200).json(result);
                 } else {
                 // TODO: NO REPORTS FOUND
                 }
@@ -200,10 +200,10 @@ exports.PublishDashboard = function (req, res) {
             req.body = Dashboard;
 
             controller.update(req).then(function (result) {
-                serverResponse(req, res, 200, result);
+                res.status(200).json(result);
             });
         } else {
-            serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to publish this Dashboard, or this Dashboard do not exists'});
+            res.status(401).json({result: 0, msg: 'You don´t have permissions to publish this Dashboard, or this Dashboard do not exists'});
         }
     });
 };
@@ -225,10 +225,10 @@ exports.UnpublishDashboard = function (req, res) {
             req.body = Dashboard;
 
             controller.update(req).then(function (result) {
-                serverResponse(req, res, 200, result);
+                res.status(200).json(result);
             });
         } else {
-            serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to unpublish this Dashboard, or this Dashboard do not exists'});
+            res.status(401).json({result: 0, msg: 'You don´t have permissions to unpublish this Dashboard, or this Dashboard do not exists'});
         }
     });
 };

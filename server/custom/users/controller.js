@@ -35,7 +35,7 @@ exports.UsersCreate = function (req, res) {
             sendEmailTemplate('newUserAndPassword', recipients, 'email', 'welcome to widestage');
         }
 
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -52,16 +52,16 @@ exports.UsersUpdate = function (req, res) {
                 req.body.salt = salt;
                 req.body.hash = hash;
                 controller.update(req).then(function (result) {
-                    serverResponse(req, res, 200, result);
+                    res.status(200).json(result);
                 });
             });
         } else {
             var result = {result: 0, msg: 'Passwords do not match'};
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         }
     } else {
         controller.update(req).then(function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -69,7 +69,7 @@ exports.UsersUpdate = function (req, res) {
 exports.UsersDelete = function (req, res) {
     req.query.trash = true;
     controller.remove(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -78,7 +78,7 @@ exports.UsersFindAll = function (req, res) {
     req.query.companyid = true;
 
     controller.findAll(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -86,7 +86,7 @@ exports.UsersFindOne = function (req, res) {
     req.query.companyid = true;
 
     controller.findOne(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -107,7 +107,7 @@ exports.rememberPassword = function (req, res) {
 
         if (findUser) {
             Users.rememberPassword(body.email, url, function (result) {
-                serverResponse(req, res, 200, result);
+                res.status(200).json(result);
             });
         } else {
             res.status(200).send({result: 0, msg: 'Email not registered'});
@@ -125,25 +125,25 @@ exports.changeMyPassword = function (req, res) {
                     if (err) { console.error(err); }
 
                     const result = {result: 1, msg: 'Password changed'};
-                    serverResponse(req, res, 200, result);
+                    res.status(200).json(result);
                 });
             });
         } else {
             const result = {result: 0, msg: 'Passwords do not match'};
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         }
     }
 };
 
 exports.changeUserStatus = function (req, res) {
     Users.setStatus(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
 exports.setViewedContextHelp = function (req, res) {
     Users.setViewedContextHelp(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -205,7 +205,7 @@ exports.getCounts = function (req, res) {
 
                                     theCounts.roles = rolesCount;
                                     // send the response
-                                    serverResponse(req, res, 200, theCounts);
+                                    res.status(200).json(theCounts);
                                 });
                             });
                         });
@@ -231,7 +231,7 @@ exports.getCounts = function (req, res) {
                     if (err) { console.error(err); }
 
                     theCounts.pages = pageCount;
-                    serverResponse(req, res, 200, theCounts);
+                    res.status(200).json(theCounts);
                 });
             });
         });
@@ -266,7 +266,7 @@ exports.getCountsForUser = function (req, res) {
                     if (err) { console.error(err); }
 
                     theCounts.privateDashBoards = privateDashCount;
-                    serverResponse(req, res, 200, theCounts);
+                    res.status(200).json(theCounts);
                 });
             });
         });
@@ -281,7 +281,7 @@ exports.getUserReports = function (req, res) {
     Reports.find({companyID: companyID, owner: userID, nd_trash_deleted: false}, {reportName: 1, parentFolder: 1, isPublic: 1, reportType: 1, reportDescription: 1, status: 1}, function (err, reports) {
         if (err) { console.error(err); }
 
-        serverResponse(req, res, 200, {result: 1, page: page, pages: 1, items: reports});
+        res.status(200).json({result: 1, page: page, pages: 1, items: reports});
     });
 };
 
@@ -293,7 +293,7 @@ exports.getUserDashboards = function (req, res) {
     Dashboards.find({companyID: companyID, owner: userID, nd_trash_deleted: false}, {dashboardName: 1, parentFolder: 1, isPublic: 1, dashboardDescription: 1, status: 1}, function (err, privateDashCount) {
         if (err) { console.error(err); }
 
-        serverResponse(req, res, 200, {result: 1, page: page, pages: 1, items: privateDashCount});
+        res.status(200).json({result: 1, page: page, pages: 1, items: privateDashCount});
     });
 };
 
@@ -305,7 +305,7 @@ exports.getUserPages = function (req, res) {
     Pages.find({companyID: companyID, owner: userID, nd_trash_deleted: false}, {pageName: 1, parentFolder: 1, isPublic: 1, dashboardDescription: 1, status: 1}, function (err, pages) {
         if (err) { console.error(err); }
 
-        serverResponse(req, res, 200, {result: 1, page: page, pages: 1, items: pages});
+        res.status(200).json({result: 1, page: page, pages: 1, items: pages});
     });
 };
 
@@ -406,11 +406,11 @@ exports.getUserData = function (req, res) {
                 theUserData.publishReports = publishReports;
                 theUserData.publishDashboards = publishDashboards;
 
-                serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {user: theUserData, companyData: company, rolesData: roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL}});
+                res.status(200).json({result: 1, page: 1, pages: 1, items: {user: theUserData, companyData: company, rolesData: roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL}});
             });
         } else {
             // var user = (req.user) ? req.user : false;
-            serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: {user: theUserData, companyData: company, rolesData: [], reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL, isWSTADMIN: isWSTADMIN}});
+            res.status(200).json({result: 1, page: 1, pages: 1, items: {user: theUserData, companyData: company, rolesData: [], reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL, isWSTADMIN: isWSTADMIN}});
         }
     });
 };
@@ -419,7 +419,7 @@ exports.getUserOtherData = function (req, res) {
     Users.findOne({_id: req.user._id}, {}, function (err, user) {
         if (err) { console.error(err); }
 
-        serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: user});
+        res.status(200).json({result: 1, page: 1, pages: 1, items: user});
     });
 };
 
@@ -466,7 +466,7 @@ exports.getUserObjects = async function (req, res) {
         items: folders,
         userCanPublish: canPublish
     };
-    serverResponse(req, res, 200, body);
+    res.status(200).json(body);
 };
 
 async function navigateRoles (folders, rolesData) {
@@ -691,7 +691,7 @@ exports.getUserLastExecutions = function (req, res) {
                 return;
             }
             var mergeResults = { theLastExecutions: lastExecutions, theMostExecuted: mostExecuted };
-            serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: mergeResults});
+            res.status(200).json({result: 1, page: 1, pages: 1, items: mergeResults});
         });
     });
 };

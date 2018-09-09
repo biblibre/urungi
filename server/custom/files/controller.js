@@ -10,7 +10,7 @@ exports.getFiles = function (req, res) {
     Files.find(find, {}, {sort: {created: -1}}, function (err, files) {
         if (err) throw err;
 
-        serverResponse(req, res, 200, {result: 1, files: files});
+        res.status(200).json({result: 1, files: files});
     });
 };
 
@@ -19,7 +19,7 @@ exports.registerUpload = async function (req, res) {
     // const params = req.body;
 
     if (!req.file) {
-        serverResponse(req, res, 200, { result: 0, msg: 'Upload failed' });
+        res.status(200).json({ result: 0, msg: 'Upload failed' });
         return;
     }
 
@@ -37,9 +37,9 @@ exports.registerUpload = async function (req, res) {
 
     try {
         const createdFile = await Files.create(fileInfo);
-        serverResponse(req, res, 200, { result: 1, item: createdFile });
+        res.status(200).json({ result: 1, item: createdFile });
     } catch (err) {
         console.error(err);
-        serverResponse(req, res, 200, { result: 0, msg: String(err), error: err });
+        res.status(200).json({ result: 0, msg: String(err), error: err });
     }
 };

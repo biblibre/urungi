@@ -19,13 +19,13 @@ exports.LayersCreate = function (req, res) {
     req.body.companyID = 'COMPID';
 
     controller.create(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
 exports.LayersUpdate = function (req, res) {
     controller.update(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -35,7 +35,7 @@ exports.LayersFindAll = function (req, res) {
     req.user = {};
     req.user.companyID = 'COMPID';
     controller.findAll(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -50,7 +50,7 @@ exports.GetLayers = function (req, res) {
     req.query.find.push({status: 'active'});
 
     controller.findAll(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -60,12 +60,12 @@ exports.LayersFindOne = function (req, res) {
     req.user.companyID = 'COMPID';
 
     controller.findOne(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
 exports.changeLayerStatus = function (req, res) {
     Layers.setStatus(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };

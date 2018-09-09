@@ -4,7 +4,7 @@ exports.getCompanyData = function (req, res) {
     Companies.findOne({companyID: req.user.companyID, nd_trash_deleted: false}, {}, function (err, company) {
         if (err) throw err;
 
-        serverResponse(req, res, 200, {result: 1, page: 1, pages: 1, items: company});
+        res.status(200).json({result: 1, page: 1, pages: 1, items: company});
     });
 };
 
@@ -21,7 +21,7 @@ exports.savePublicSpace = function (req, res) {
             result = {result: 0, msg: 'Error updating record, no record have been updated'};
         }
 
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -38,7 +38,7 @@ exports.saveCustomCSS = function (req, res) {
             result = {result: 0, msg: 'Error updating record, no record have been updated'};
         }
 
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -55,6 +55,6 @@ exports.saveCustomLogo = function (req, res) {
             result = {result: 0, msg: 'Error updating record, no record have been updated'};
         }
 
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };

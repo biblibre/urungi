@@ -18,7 +18,7 @@ exports.DataSourcesCreate = function (req, res) {
     req.body.companyID = 'COMPID';
 
     controller.create(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -26,7 +26,7 @@ exports.DataSourcesUploadConfigFile = function (req, res) {
     var file = req.files[0];
 
     if (!file) {
-        return serverResponse(req, res, 200, {result: 0, msg: 'file is undefined'});
+        return res.status(200).json({result: 0, msg: 'file is undefined'});
     }
     var fs = require('fs');
     var companyID = 'COMPID';
@@ -40,22 +40,22 @@ exports.DataSourcesUploadConfigFile = function (req, res) {
 
     fs.readFile(file.path, function (err, data) {
         if (err) {
-            return serverResponse(req, res, 200, {result: 0, msg: err.message});
+            return res.status(200).json({result: 0, msg: err.message});
         }
 
         fs.writeFile(filePath, data, function (err) {
             if (err) {
-                return serverResponse(req, res, 200, {result: 0, msg: err.message});
+                return res.status(200).json({result: 0, msg: err.message});
             }
 
-            serverResponse(req, res, 200, {result: 1, msg: 'File uploaded successfully'});
+            res.status(200).json({result: 1, msg: 'File uploaded successfully'});
         });
     });
 };
 
 exports.DataSourcesUpdate = function (req, res) {
     controller.update(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -66,7 +66,7 @@ exports.getEntities = async function (req, res) {
 
     let result = await controller.findOne(req);
     if (result.result !== 1) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
         return;
     }
 
@@ -82,7 +82,7 @@ exports.getEntities = async function (req, res) {
 
         db.close();
 
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
         break;
     case 'BIGQUERY': case 'JDBC-ORACLE':
         data = {
@@ -98,7 +98,7 @@ exports.getEntities = async function (req, res) {
         if (result.item.connection.file) data.file = result.item.connection.file;
 
         db.testConnection(req, data, function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -115,11 +115,11 @@ exports.testConnection = async function (req, res) {
 
         const result = await con.testConnection(connectionParams);
 
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
         break;
 
     default:
-        serverResponse(req, res, 200, {result: 0, msg: 'Invalid database type'});
+        res.status(200).json({result: 0, msg: 'Invalid database type'});
         break;
     };
 };
@@ -137,7 +137,7 @@ exports.getEntitySchema = async function (req, res) {
     const result = await controller.findOne(req);
 
     if (result.result !== 1) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
         return;
     }
 
@@ -154,7 +154,7 @@ exports.getEntitySchema = async function (req, res) {
         const rawSchema = await db.getSchema(theEntity);
 
         if (rawSchema.result !== 1) {
-            serverResponse(req, res, 200, rawSchema);
+            res.status(200).json(rawSchema);
             db.close();
             return;
         }
@@ -163,7 +163,7 @@ exports.getEntitySchema = async function (req, res) {
 
         db.close();
 
-        serverResponse(req, res, 200, { result: 1, schema: collectionSchema });
+        res.status(200).json({ result: 1, schema: collectionSchema });
 
         break;
     case 'JDBC-ORACLE':
@@ -181,7 +181,7 @@ exports.getEntitySchema = async function (req, res) {
         };
 
         sql.getSchemas(data, function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
         break;
     case 'BIGQUERY':
@@ -199,11 +199,11 @@ exports.getEntitySchema = async function (req, res) {
         };
 
         bquery.getSchemas(data, function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
         break;
     default:
-        serverResponse(req, res, 200, { result: 0, msg: 'Invalid database type' });
+        res.status(200).json({ result: 0, msg: 'Invalid database type' });
     }
 };
 
@@ -221,7 +221,7 @@ exports.getsqlQuerySchema = async function (req, res) {
     let result = await controller.findOne(req);
 
     if (result.result !== 1) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
         return;
     }
 
@@ -249,7 +249,7 @@ exports.getsqlQuerySchema = async function (req, res) {
 
             if (!queryResult) {
                 result = { result: 1, isValid: false };
-                serverResponse(req, res, 200, result);
+                res.status(200).json(result);
                 return;
             }
 
@@ -257,7 +257,7 @@ exports.getsqlQuerySchema = async function (req, res) {
 
             result = { result: 1, isValid: true, schema: collection };
 
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
 
             break;
         case 'JDBC-ORACLE':
@@ -276,7 +276,7 @@ exports.getsqlQuerySchema = async function (req, res) {
                 if (result.result === 1) {
                     result.isValid = true;
                 }
-                serverResponse(req, res, 200, result);
+                res.status(200).json(result);
             });
 
             break;
@@ -296,13 +296,13 @@ exports.getsqlQuerySchema = async function (req, res) {
                 if (result.result === 1) {
                     result.isValid = true;
                 }
-                serverResponse(req, res, 200, result);
+                res.status(200).json(result);
             });
         }
     } catch (err) {
         console.log('caught here');
         console.error(err);
-        serverResponse(req, res, 200, {result: 0, msg: String(err)});
+        res.status(200).json({result: 0, msg: String(err)});
     }
 };
 
@@ -313,7 +313,7 @@ exports.DataSourcesFindAll = function (req, res) {
     req.user.companyID = 'COMPID';
 
     controller.findAll(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -323,7 +323,7 @@ exports.DataSourcesFindOne = function (req, res) {
     req.user.companyID = 'COMPID';
 
     controller.findOne(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 

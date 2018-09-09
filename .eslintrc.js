@@ -24,7 +24,6 @@ module.exports = {
         sendEmailTemplate: false,
         sendCommunication: false,
         sendNotification: false,
-        serverResponse: false,
 
         // Browser
         angular: false,

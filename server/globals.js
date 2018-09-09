@@ -122,9 +122,3 @@ function isAllowed (req, area) {
     return req.user.companyData[area];
 };
 global.isAllowed = isAllowed;
-
-function serverResponse (req, res, status, obj) {
-    res.status(status).json(obj);
-}
-
-global.serverResponse = serverResponse;

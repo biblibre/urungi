@@ -29,7 +29,7 @@ exports.PagesFindAll = function (req, res) {
             if (err) { console.error(err); }
 
             var result = {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items};
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     });
 };
@@ -41,13 +41,13 @@ exports.PagesFindOne = function (req, res) {
     req.query.companyid = true;
 
     controller.findOne(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
 exports.PagesCreate = function (req, res) {
     if (!req.session.pagesCreate && !req.session.isWSTADMIN) {
-        serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to create Pages'});
+        res.status(401).json({result: 0, msg: 'You don´t have permissions to create Pages'});
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -56,14 +56,14 @@ exports.PagesCreate = function (req, res) {
         req.body.owner = req.user._id;
         req.body.isPublic = false;
         controller.create(req, function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
 
 exports.PagesDuplicate = function (req, res) {
     if (!req.session.pagesCreate && !req.session.isWSTADMIN) {
-        serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to create Pages'});
+        res.status(401).json({result: 0, msg: 'You don´t have permissions to create Pages'});
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -74,7 +74,7 @@ exports.PagesDuplicate = function (req, res) {
         req.body.owner = req.user._id;
         req.body.isPublic = false;
         controller.create(req, function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -91,15 +91,15 @@ exports.PagesUpdate = function (req, res) {
             if (err) throw err;
             if (item) {
                 controller.update(req, function (result) {
-                    serverResponse(req, res, 200, result);
+                    res.status(200).json(result);
                 });
             } else {
-                serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to update this page'});
+                res.status(401).json({result: 0, msg: 'You don´t have permissions to update this page'});
             }
         });
     } else {
         controller.update(req, function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -122,15 +122,15 @@ exports.PagesDelete = function (req, res) {
             if (err) throw err;
             if (item) {
                 controller.update(req, function (result) {
-                    serverResponse(req, res, 200, result);
+                    res.status(200).json(result);
                 });
             } else {
-                serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to delete this page'});
+                res.status(401).json({result: 0, msg: 'You don´t have permissions to delete this page'});
             }
         });
     } else {
         controller.update(req, function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -181,7 +181,7 @@ exports.getPage = function (req, res) {
                         }
                     }
 
-                    serverResponse(req, res, 200, result);
+                    res.status(200).json(result);
                 } else {
                 // TODO: NO REPORTS FOUND
                 }
@@ -212,13 +212,13 @@ exports.PublishPage = function (req, res) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
-                    serverResponse(req, res, 200, {result: 1, msg: numAffected + ' page published.'});
+                    res.status(200).json({result: 1, msg: numAffected + ' page published.'});
                 } else {
-                    serverResponse(req, res, 200, {result: 0, msg: 'Error publishing page, no page have been published'});
+                    res.status(200).json({result: 0, msg: 'Error publishing page, no page have been published'});
                 }
             });
         } else {
-            serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to publish this page, or this page do not exists'});
+            res.status(401).json({result: 0, msg: 'You don´t have permissions to publish this page, or this page do not exists'});
         }
     });
 };
@@ -240,13 +240,13 @@ exports.UnpublishPage = function (req, res) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
-                    serverResponse(req, res, 200, {result: 1, msg: numAffected + ' page unpublished.'});
+                    res.status(200).json({result: 1, msg: numAffected + ' page unpublished.'});
                 } else {
-                    serverResponse(req, res, 200, {result: 0, msg: 'Error unpublishing page, no page have been unpublished'});
+                    res.status(200).json({result: 0, msg: 'Error unpublishing page, no page have been unpublished'});
                 }
             });
         } else {
-            serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to unpublish this page, or this page do not exists'});
+            res.status(401).json({result: 0, msg: 'You don´t have permissions to unpublish this page, or this page do not exists'});
         }
     });
 };

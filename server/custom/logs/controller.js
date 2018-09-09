@@ -3,13 +3,13 @@ var Logs = connection.model('Logs');
 /* LOGS */
 exports.logsSaveToLog = function (req, res) {
     Logs.saveToLog(req, req.body, '', function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
 exports.adminLogsFindAll = function (req, res) {
     Logs.adminFindAll(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 

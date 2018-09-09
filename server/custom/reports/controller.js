@@ -18,7 +18,7 @@ exports.ReportsFindAll = async function (req, res) {
     req.user = {};
     req.user.companyID = 'COMPID';
     const result = await controller.findAll(req);
-    serverResponse(req, res, 200, result);
+    res.status(200).json(result);
 };
 
 exports.GetReport = function (req, res) {
@@ -26,7 +26,7 @@ exports.GetReport = function (req, res) {
     req.query.companyid = true;
 
     controller.findOne(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
         if ((req.query.mode === 'execute' || req.query.mode === 'preview') && result.item) {
             // Note the execution in statistics
             var statistics = connection.model('statistics');
@@ -48,13 +48,13 @@ exports.ReportsFindOne = function (req, res) {
     req.query.companyid = true;
 
     controller.findOne(req).then(function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
 exports.ReportsCreate = function (req, res) {
     if (!req.session.reportsCreate && !req.session.isWSTADMIN) {
-        serverResponse(req, res, 401, {result: 0, msg: 'You do not have permissions to create reports'});
+        res.status(401).json({result: 0, msg: 'You do not have permissions to create reports'});
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -66,7 +66,7 @@ exports.ReportsCreate = function (req, res) {
         req.body.author = req.user.userName;
 
         controller.create(req).then(function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -82,15 +82,15 @@ exports.ReportsUpdate = function (req, res) {
             if (err) throw err;
             if (item) {
                 controller.update(req).then(function (result) {
-                    serverResponse(req, res, 200, result);
+                    res.status(200).json(result);
                 });
             } else {
-                serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to update this report, or this report do not exists'});
+                res.status(401).json({result: 0, msg: 'You don´t have permissions to update this report, or this report do not exists'});
             }
         });
     } else {
         controller.update(req).then(function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -114,10 +114,10 @@ exports.PublishReport = function (req, res) {
             req.body = report;
 
             controller.update(req).then(function (result) {
-                serverResponse(req, res, 200, result);
+                res.status(200).json(result);
             });
         } else {
-            serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to publish this report, or this report do not exists'});
+            res.status(401).json({result: 0, msg: 'You don´t have permissions to publish this report, or this report do not exists'});
         }
     });
 };
@@ -139,10 +139,10 @@ exports.UnpublishReport = function (req, res) {
             req.body = report;
 
             controller.update(req).then(function (result) {
-                serverResponse(req, res, 200, result);
+                res.status(200).json(result);
             });
         } else {
-            serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to unpublish this report, or this report do not exists'});
+            res.status(401).json({result: 0, msg: 'You don´t have permissions to unpublish this report, or this report do not exists'});
         }
     });
 };
@@ -165,15 +165,15 @@ exports.ReportsDelete = function (req, res) {
             if (err) throw err;
             if (item) {
                 controller.remove(req).then(function (result) {
-                    serverResponse(req, res, 200, result);
+                    res.status(200).json(result);
                 });
             } else {
-                serverResponse(req, res, 401, {result: 0, msg: 'You don´t have permissions to delete this report'});
+                res.status(401).json({result: 0, msg: 'You don´t have permissions to delete this report'});
             }
         });
     } else {
         controller.remove(req).then(function (result) {
-            serverResponse(req, res, 200, result);
+            res.status(200).json(result);
         });
     }
 };
@@ -182,7 +182,7 @@ exports.ReportsGetData = async function (req, res) {
     var data = req.body;
     var query = data.query;
     // processDataSources(req, query.datasources, query.layers, {page: (data.page) ? data.page : 1}, query, function (result) {
-    //     serverResponse(req, res, 200, result);
+    //     res.status(200).json(result);
     // });
     var result;
     try {
@@ -191,5 +191,5 @@ exports.ReportsGetData = async function (req, res) {
         console.error(err);
         result = {result: 0, msg: (err.msg) ? err.msg : String(err), error: err};
     }
-    serverResponse(req, res, 200, result);
+    res.status(200).json(result);
 };

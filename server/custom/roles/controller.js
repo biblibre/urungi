@@ -17,7 +17,7 @@ exports.RolesCreate = function (req, res) {
     req.query.companyid = true;
     req.body.companyID = 'COMPID';
     controller.create(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -26,7 +26,7 @@ exports.RolesUpdate = function (req, res) {
     // req.query.companyid = true;
 
     controller.update(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -37,7 +37,7 @@ exports.RolesFindAll = function (req, res) {
     req.user.companyID = 'COMPID';
 
     controller.findAll(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -50,7 +50,7 @@ exports.GetRoles = function (req, res) {
     req.query.fields = ['name', 'description', 'permissions'];
 
     controller.findAll(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -60,7 +60,7 @@ exports.RolesFindOne = function (req, res) {
     req.user.companyID = 'COMPID';
 
     controller.findOne(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
 
@@ -77,6 +77,6 @@ exports.RolesDelete = function (req, res) {
     req.body = data;
 
     controller.update(req, function (result) {
-        serverResponse(req, res, 200, result);
+        res.status(200).json(result);
     });
 };
