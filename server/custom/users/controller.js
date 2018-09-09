@@ -51,7 +51,7 @@ exports.UsersUpdate = function (req, res) {
                 req.body.password = '';
                 req.body.salt = salt;
                 req.body.hash = hash;
-                controller.update(req, function (result) {
+                controller.update(req).then(function (result) {
                     serverResponse(req, res, 200, result);
                 });
             });
@@ -60,7 +60,7 @@ exports.UsersUpdate = function (req, res) {
             serverResponse(req, res, 200, result);
         }
     } else {
-        controller.update(req, function (result) {
+        controller.update(req).then(function (result) {
             serverResponse(req, res, 200, result);
         });
     }
@@ -68,7 +68,7 @@ exports.UsersUpdate = function (req, res) {
 
 exports.UsersDelete = function (req, res) {
     req.query.trash = true;
-    controller.remove(req, function (result) {
+    controller.remove(req).then(function (result) {
         serverResponse(req, res, 200, result);
     });
 };
@@ -77,7 +77,7 @@ exports.UsersFindAll = function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
 
-    controller.findAll(req, function (result) {
+    controller.findAll(req).then(function (result) {
         serverResponse(req, res, 200, result);
     });
 };
@@ -85,7 +85,7 @@ exports.UsersFindAll = function (req, res) {
 exports.UsersFindOne = function (req, res) {
     req.query.companyid = true;
 
-    controller.findOne(req, function (result) {
+    controller.findOne(req).then(function (result) {
         serverResponse(req, res, 200, result);
     });
 };

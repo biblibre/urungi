@@ -152,7 +152,6 @@ function processQuery (query, queryLayer, warnings) {
     for (const col of query.columns) {
         const element = findElement(queryLayer.objects, col.elementID);
         if (!element) {
-            console.log('not found');
             warnings.push({msg: 'element ' + col.objectLabel + ' could not be found. Are you sure it has not been deleted ?'});
             continue;
         }

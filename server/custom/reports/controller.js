@@ -25,7 +25,7 @@ exports.GetReport = function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
 
-    controller.findOne(req, function (result) {
+    controller.findOne(req).then(function (result) {
         serverResponse(req, res, 200, result);
         if ((req.query.mode === 'execute' || req.query.mode === 'preview') && result.item) {
             // Note the execution in statistics
@@ -47,7 +47,7 @@ exports.ReportsFindOne = function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
 
-    controller.findOne(req, function (result) {
+    controller.findOne(req).then(function (result) {
         serverResponse(req, res, 200, result);
     });
 };
@@ -65,7 +65,7 @@ exports.ReportsCreate = function (req, res) {
 
         req.body.author = req.user.userName;
 
-        controller.create(req, function (result) {
+        controller.create(req).then(function (result) {
             serverResponse(req, res, 200, result);
         });
     }
@@ -81,7 +81,7 @@ exports.ReportsUpdate = function (req, res) {
         Reports.findOne({_id: data._id, owner: req.user._id, companyID: req.user.companyID}, {_id: 1}, {}, function (err, item) {
             if (err) throw err;
             if (item) {
-                controller.update(req, function (result) {
+                controller.update(req).then(function (result) {
                     serverResponse(req, res, 200, result);
                 });
             } else {
@@ -89,7 +89,7 @@ exports.ReportsUpdate = function (req, res) {
             }
         });
     } else {
-        controller.update(req, function (result) {
+        controller.update(req).then(function (result) {
             serverResponse(req, res, 200, result);
         });
     }
@@ -113,7 +113,7 @@ exports.PublishReport = function (req, res) {
 
             req.body = report;
 
-            controller.update(req, function (result) {
+            controller.update(req).then(function (result) {
                 serverResponse(req, res, 200, result);
             });
         } else {
@@ -138,7 +138,7 @@ exports.UnpublishReport = function (req, res) {
 
             req.body = report;
 
-            controller.update(req, function (result) {
+            controller.update(req).then(function (result) {
                 serverResponse(req, res, 200, result);
             });
         } else {
@@ -164,7 +164,7 @@ exports.ReportsDelete = function (req, res) {
         Reports.findOne({_id: data._id, owner: req.user._id}, {_id: 1}, {}, function (err, item) {
             if (err) throw err;
             if (item) {
-                controller.remove(req, function (result) {
+                controller.remove(req).then(function (result) {
                     serverResponse(req, res, 200, result);
                 });
             } else {
@@ -172,7 +172,7 @@ exports.ReportsDelete = function (req, res) {
             }
         });
     } else {
-        controller.remove(req, function (result) {
+        controller.remove(req).then(function (result) {
             serverResponse(req, res, 200, result);
         });
     }

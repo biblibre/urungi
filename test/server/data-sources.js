@@ -80,7 +80,7 @@ async function testUnidentifiedConnection (agent, url) {
     });
 }
 
-describe('/api/data-sources', function () {
+describe('Data sources API', function () {
     let entries;
     before(async function () {
         entries = await seed();
@@ -93,7 +93,7 @@ describe('/api/data-sources', function () {
         }
     });
 
-    describe('/api/data-sources/find-all', function () {
+    describe('GET /api/data-sources/find-all', function () {
         testUnidentifiedConnection(agent, '/api/data-sources/find-all');
 
         it('should return all data sources', async function () {
@@ -116,7 +116,7 @@ describe('/api/data-sources', function () {
         });
     });
 
-    describe('api/data-sources/find-one', function () {
+    describe('GET /api/data-sources/find-one', function () {
         testUnidentifiedConnection(agent, '/api/data-sources/find-one');
 
         it('should find no valid item', async function () {
@@ -147,7 +147,7 @@ describe('/api/data-sources', function () {
         });
     });
 
-    describe('/api/data-sources/create', function () {
+    describe('POST /api/data-sources/create', function () {
     // TODO : preliminary tests where the post is expected to fail
     // TODO : creating a post as an unauthentified user ?
 
@@ -180,7 +180,7 @@ describe('/api/data-sources', function () {
         });
     });
 
-    describe('/api/data-sources/upload-config-file', function () {
+    describe('POST /api/data-sources/upload-config-file', function () {
         it('Should return an error because the file is undefined', async function () {
             await authentifyAgent(agent);
 
@@ -193,7 +193,7 @@ describe('/api/data-sources', function () {
         });
     });
 
-    describe('/api/data-sources/update', function () {
+    describe('POST /api/data-sources/update', function () {
         it('should modify a database entry successfully', async function () {
             await authentifyAgent(agent);
 

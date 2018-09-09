@@ -16,9 +16,8 @@ exports.DataSourcesCreate = function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
     req.body.companyID = 'COMPID';
-    console.log(req.body);
 
-    controller.create(req, function (result) {
+    controller.create(req).then(function (result) {
         serverResponse(req, res, 200, result);
     });
 };
@@ -55,7 +54,7 @@ exports.DataSourcesUploadConfigFile = function (req, res) {
 };
 
 exports.DataSourcesUpdate = function (req, res) {
-    controller.update(req, function (result) {
+    controller.update(req).then(function (result) {
         serverResponse(req, res, 200, result);
     });
 };
@@ -312,10 +311,8 @@ exports.DataSourcesFindAll = function (req, res) {
     req.query.companyid = true;
     req.user = {};
     req.user.companyID = 'COMPID';
-    console.log(req.query);
 
-    controller.findAll(req, function (result) {
-        console.log(result);
+    controller.findAll(req).then(function (result) {
         serverResponse(req, res, 200, result);
     });
 };
@@ -325,7 +322,7 @@ exports.DataSourcesFindOne = function (req, res) {
     req.user = {};
     req.user.companyID = 'COMPID';
 
-    controller.findOne(req, function (result) {
+    controller.findOne(req).then(function (result) {
         serverResponse(req, res, 200, result);
     });
 };

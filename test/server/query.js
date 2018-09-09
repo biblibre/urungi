@@ -1139,8 +1139,6 @@ const generateTestSuite = (dbConfig) => function () {
         });
 
         it('Should handle all errors and return a result of 0', async function () {
-            console.log('The console is now going to log some errors. This is part of the testing, and not a sign that there is an issue.');
-
             const invalidQueries = [
                 {},
                 {
@@ -1161,16 +1159,31 @@ const generateTestSuite = (dbConfig) => function () {
                     filters: []
                 }
             ];
+            const expectedErrorMessages = [
+                'Layer not found',
+                'query.columns is not iterable',
+                'No collection needed to be joined',
+                'No collection needed to be joined',
+            ];
 
-            for (const query of invalidQueries) {
+            for (const i in invalidQueries) {
+                const query = invalidQueries[i];
                 const params = { query: query };
 
+                let error;
+                const oldConsoleError = console.error;
+                console.error = function (err) { error = err; };
+
                 const res = await agent.post('/api/reports/get-data').send(params);
+
+                console.error = oldConsoleError;
 
                 expect(res).to.have.status(200);
                 const result = JSON.parse(res.text);
                 expect(result.result).to.equal(0);
                 expect(result).to.have.property('msg');
+                expect(error).to.be.an.instanceof(Error);
+                expect(error.message).to.equal(expectedErrorMessages[i]);
             }
         });
     });
@@ -1511,6 +1524,7 @@ var testCount = 0;
 const datasources = config.get('tests.datasources');
 for (const client in datasources) {
     describe(`Queries and data access for ${client} database`, generateTestSuite(datasources[client]));
+    ++testCount;
 }
 
 if (testCount === 0) {
