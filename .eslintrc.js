@@ -14,16 +14,11 @@ module.exports = {
 
         // defined in server/globals.js
         appRoot: false,
-        generateUserFilter: false,
-        generateUserFilterValue: false,
-        getNextSequence: false,
-        isAllowed: false,
         restrict: false,
         restrictRole: false,
         saveToLog: false,
         sendEmailTemplate: false,
         sendCommunication: false,
-        sendNotification: false,
 
         // Browser
         angular: false,

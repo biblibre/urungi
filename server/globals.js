@@ -46,29 +46,6 @@ function saveToLog (req, text, type, code, otherInfo, associatedID) {
 };
 global.saveToLog = saveToLog;
 
-function getNextSequence (name) {
-    var Counters = connection.model('Counters');
-    var ret = Counters.findAndModify(
-        {
-            query: { _id: name },
-            update: { $inc: { seq: 1 } },
-            new: true
-        }
-    );
-
-    return ret.seq;
-}
-global.getNextSequence = getNextSequence;
-
-function sendNotification (req, user_id, text, type, communication_id, accept_url) {
-    var Notifications = connection.model('Notifications');
-
-    var data = {user_id: user_id, sender_id: req.user.id, text: text, type: type, communication_id: communication_id, accept_url: accept_url};
-
-    Notifications.sendNotification(data);
-};
-global.sendNotification = sendNotification;
-
 function sendCommunication (data) {
     var Communications = connection.model('Communications');
 
@@ -77,48 +54,3 @@ function sendCommunication (data) {
     });
 };
 global.sendCommunication = sendCommunication;
-
-function generateUserFilter (req, filters) {
-    if (typeof filters === 'string') filters = [filters];
-
-    var userFilters = {};
-
-    if (req.user.filters) {
-        for (var i in filters) {
-            for (var j in req.user.filters) {
-                if (String(req.user.filters[j].name).toLowerCase() === String(filters[i]).toLowerCase()) {
-                    if (!userFilters.hasOwnProperty(filters[i])) { userFilters[filters[i]] = []; }
-
-                    userFilters[filters[i]].push(req.user.filters[j].value);
-                }
-            }
-        }
-    }
-
-    return userFilters;
-};
-global.generateUserFilter = generateUserFilter;
-
-function generateUserFilterValue (req, filter) {
-    var userFilterValue = [];
-
-    if (req.user.filters) {
-        for (var i in req.user.filters) {
-            if (String(req.user.filters[i].name).toLowerCase() === String(filter).toLowerCase()) {
-                userFilterValue.push(req.user.filters[i].value);
-            }
-        }
-    }
-
-    return userFilterValue;
-};
-global.generateUserFilterValue = generateUserFilterValue;
-
-function isAllowed (req, area) {
-    if (!req.user) { return false; }
-    if (!req.user.companyData) { return false; }
-    if (!req.user.companyData[area]) { return false; }
-
-    return req.user.companyData[area];
-};
-global.isAllowed = isAllowed;
