@@ -1,4 +1,4 @@
-const { app } = require('../common');
+const { app } = require('../../common');
 
 const chai = require('chai');
 const expect = chai.expect;
