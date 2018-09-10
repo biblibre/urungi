@@ -98,7 +98,7 @@ Db.prototype.getSchema = async function (collection) {
     var query;
 
     switch (this.type) {
-    case 'MySQL': case 'MSSQL':
+    case 'MySQL':
         query = (knex) =>
             knex.select('table_schema', 'table_name', 'column_name', 'data_type')
                 .from('information_schema.columns')
@@ -106,6 +106,13 @@ Db.prototype.getSchema = async function (collection) {
                 .where('table_name', collection.name);
         break;
     case 'POSTGRE':
+        query = (knex) =>
+            knex.select('table_schema', 'table_name', 'column_name', 'data_type')
+                .from('information_schema.columns')
+                .where('table_catalog', this.connection.database)
+                .andWhere('table_name', collection.name);
+        break;
+    case 'MSSQL':
         query = (knex) =>
             knex.select('table_schema', 'table_name', 'column_name', 'data_type')
                 .from('information_schema.columns')

@@ -291,42 +291,42 @@ const testData = [
             {
                 'id': 'ijosd3-qs2dqo98k-qs',
                 'title': 'Laser Light Canon',
-                'publishDate': new Date(2013, 11, 4)
+                'publishDate': new Date('2013-12-04')
             },
             {
                 'id': 'oudh7khs-54fdt12-s',
                 'title': 'Steven\'s Lion',
-                'publishDate': new Date(2014, 1, 27)
+                'publishDate': new Date('2014-02-27')
             },
             {
                 'id': 'oijs7g2-dgc09-qjds',
                 'title': 'Giant Woman',
-                'publishDate': new Date(2014, 2, 24)
+                'publishDate': new Date('2014-03-24')
             },
             {
                 'id': 'ipjqd56-ftfls2-4',
                 'title': 'Jail Break',
-                'publishDate': new Date(2015, 4, 12)
+                'publishDate': new Date('2015-05-12')
             },
             {
                 'id': 'ujsd-2-sijd67jisql',
                 'title': 'Full Disclosure',
-                'publishDate': new Date(2015, 4, 13)
+                'publishDate': new Date('2015-05-13')
             },
             {
                 'id': 'okpsd123-hidsi77-d',
                 'title': 'Sworn to the sword',
-                'publishDate': new Date(2015, 6, 15)
+                'publishDate': new Date('2015-07-15')
             },
             {
                 'id': 'nfsujis7_dyiq-2',
                 'title': 'It could\'ve been great',
-                'publishDate': new Date(2016, 1, 6)
+                'publishDate': new Date('2016-02-06')
             },
             {
                 'id': 'ojoqjdo0099098',
                 'title': 'The question',
-                'publishDate': new Date(2018, 6, 4)
+                'publishDate': new Date('2018-07-04')
             }
         ]
     },
@@ -709,7 +709,7 @@ const generateTestSuite = (dbConfig) => function () {
             for (const i in schema.elements) {
                 const element = schema.elements[i];
                 expect(element.elementName).to.equal(sourceData[i].elementName);
-                expect(element.elementType).to.equal(jsTypeFromDbType(dbConfig.client, sourceData[i].type));
+                expect(element.elementType).to.equal(jsTypeFromDbType(dbConfig.client, sourceData[i].type), sourceData[i].type);
                 expect(element).to.have.property('elementLabel');
             }
         });
@@ -1003,14 +1003,14 @@ const generateTestSuite = (dbConfig) => function () {
                 elementID: 'eecc',
                 filterType: 'diferentThan',
                 criterion: {
-                    date1: new Date(2014, 2, 24)
+                    date1: new Date('2014-03-24')
                 }
             });
 
             const data = await fetchData(agent, query);
 
             const sourceData = testDataRef['episodes'].tableData
-                .filter((item) => (item.publishDate.getTime() !== (new Date(2014, 2, 24)).getTime()))
+                .filter((item) => (item.publishDate.getTime() !== (new Date('2014-03-24')).getTime()))
                 .sort(compareOn(a => a.publishDate));
 
             expect(data).to.have.lengthOf(sourceData.length);
@@ -1335,6 +1335,7 @@ const generateTestSuite = (dbConfig) => function () {
 describe('Queries and data access', function () {
     describe('MySQL', generateTestSuite(config.get('tests.datasources.mysql')));
     describe('PostgreSQL', generateTestSuite(config.get('tests.datasources.postgresql')));
+    describe('MS SQL Server', generateTestSuite(config.get('tests.datasources.mssql')));
     // TODO Tests other databases
 });
 
@@ -1391,6 +1392,12 @@ function jsTypeFromDbType (client, dbType) {
             'string': 'string',
             'date': 'date',
         },
+        mssql: {
+            'boolean': 'boolean',
+            'integer': 'number',
+            'string': 'string',
+            'date': 'date',
+        },
     };
 
     if (client in jsTypes && dbType in jsTypes[client]) {
@@ -1402,6 +1409,7 @@ function buildComplexLayer (knex) {
     const customQuery1 = knex.select('name', knex.ref('id').as('gemId'), 'colour')
         .from('gems')
         .orderBy('gemId')
+        .limit(500)
         .toString();
 
     const customQuery2 = knex.select('characters.id', 'characters.name', 'isFusion', knex.ref('weapons.name').as('weapon'), knex.ref('Title').as('song'))
@@ -1414,9 +1422,10 @@ function buildComplexLayer (knex) {
         })
         .leftJoin('songs', 'characters.id', 'songs.singerId')
         .leftJoin('weapons', 'weapons.gemId', 'characters.id')
-        .groupBy('characters.id', 'characters.name', 'isFusion', 'weapon', 'song')
+        .groupBy('characters.id', 'characters.name', 'isFusion', 'weapons.name', 'Title')
         .having('characters.name', '!=', 'Jasper')
         .orderBy('characters.name')
+        .limit(500)
         .toString();
 
     const complexLayer = {

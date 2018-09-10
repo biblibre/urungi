@@ -23,6 +23,15 @@ module.exports = {
                     database: 'urungi_tests',
                 }
             },
+            mssql: {
+                client: 'mssql',
+                connection: {
+                    host: 'localhost',
+                    user: 'SA',
+                    password: 'Micros0ft',
+                    database: 'urungi_tests',
+                }
+            },
         }
     }
 };
