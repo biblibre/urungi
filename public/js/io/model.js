@@ -1,119 +1,87 @@
 app.service('ioModel', function (connection) {
-    async function exportDataSource (datasourceID) {
-        var params = {
-            id: datasourceID
-        };
-
-        const result = await connection.get('/api/data-sources/find-one', params);
-
-        return result.item;
+    function exportDatasource (datasourceID) {
+        return connection.get('/api/data-sources/find-one', {id: datasourceID})
+            .then(response => response.item);
     }
 
-    async function exportLayer (layerID, requiredDataSources) {
-        var params = {
-            id: layerID
-        };
+    function exportLayer (layerID) {
+        return connection.get('/api/layers/find-one', {id: layerID})
+            .then(response => response.item);
+    }
 
-        var result = await connection.get('/api/layers/find-one', params);
+    function exportReport (reportID) {
+        return connection.get('/api/reports/find-one', {id: reportID})
+            .then(response => {
+                delete response.item.query.data;
+                return response.item;
+            });
+    }
 
-        function exploreElements (elements) {
-            for (const el of elements) {
-                if (el.datasourceID) {
-                    requiredDataSources.add(el.datasourceID);
+    function exportDashboard (dashboardID) {
+        return connection.get('/api/dashboardsv2/find-one', {id: dashboardID})
+            .then(response => {
+                for (const report of response.item.reports) {
+                    delete report.query.data;
                 }
-                if (el.elements) {
-                    exploreElements(el.elements);
-                }
-            }
-        }
-
-        exploreElements(result.item.objects);
-
-        return result.item;
+                return response.item;
+            });
     }
 
-    async function exportReport (reportID, requiredLayers, requiredDataSources) {
-        var params = {
-            id: reportID
-        };
-
-        var result = await connection.get('/api/reports/find-one', params);
-        for (const layerID of result.item.query.layers) {
-            requiredLayers.add(layerID);
-        }
-
-        for (const datasource of result.item.query.datasources) {
-            requiredDataSources.add(datasource.datasourceID);
-        }
-
-        delete result.item.query.data;
-
-        return result.item;
-    }
-
-    async function exportDashboard (dashboardID, requiredLayers, requiredDataSources) {
-        var params = {
-            id: dashboardID
-        };
-
-        var result = await connection.get('/api/dashboardsv2/find-one', params);
-
-        for (const report of result.item.reports) {
-            for (const layerID of report.query.layers) {
-                requiredLayers.add(layerID);
-            }
-            for (const datasource of report.query.datasources) {
-                requiredDataSources.add(datasource.datasourceID);
-            }
-
-            delete report.query.data;
-        }
-
-        return result.item;
-    }
-
-    this.makeExportBundle = async function (dashboardIDs, reportIDs, layerIDs) {
-        var requiredLayers = new Set();
-        var requiredDataSources = new Set();
-
-        var dashboardExports = [];
-        var reportExports = [];
-        var layerExports = [];
-        var datasourceExports = [];
+    this.makeExportBundle = function (dashboardIDs, reportIDs, layerIDs) {
+        const requiredLayers = new Set();
+        const requiredDatasources = new Set();
+        const bundle = {};
 
         for (const layerID of layerIDs) {
             requiredLayers.add(layerID);
         }
 
-        for (const reportID of reportIDs) {
-            reportExports.push(await exportReport(reportID, requiredLayers, requiredDataSources));
-        }
+        const reportPromise = Promise.all(reportIDs.map(id => exportReport(id)))
+            .then(reports => {
+                bundle.reports = reports;
+                for (const report of reports) {
+                    requiredLayers.add(report.query.layerID);
+                }
+            });
 
-        for (const dashboardID of dashboardIDs) {
-            dashboardExports.push(await exportDashboard(dashboardID, requiredLayers, requiredDataSources));
-        }
+        const dashboardPromise = Promise.all(dashboardIDs.map(id => exportDashboard(id)))
+            .then(dashboards => {
+                bundle.dashboards = dashboards;
+                for (const dashboard of dashboards) {
+                    for (const report of dashboard.reports) {
+                        requiredLayers.add(report.query.layerID);
+                    }
+                }
+            });
 
-        for (const layerID of requiredLayers.entries()) {
-            layerExports.push(await exportLayer(layerID, requiredDataSources));
-        }
-
-        for (const datasourceID of requiredDataSources.entries()) {
-            datasourceExports.push(await exportDataSource(datasourceID));
-        }
-
-        return {
-            dashboardExports,
-            reportExports,
-            layerExports,
-            datasourceExports
-        };
+        return Promise.all([reportPromise, dashboardPromise])
+            .then(() => {
+                return Promise.all(Array.from(requiredLayers).map(layerID => exportLayer(layerID)));
+            })
+            .then(layers => {
+                bundle.layers = layers;
+                for (const layer of layers) {
+                    for (const schema of layer.params.schema) {
+                        requiredDatasources.add(schema.datasourceID);
+                    }
+                }
+            })
+            .then(() => {
+                return Promise.all(Array.from(requiredDatasources).map(id => exportDatasource(id)));
+            })
+            .then(datasources => {
+                bundle.datasources = datasources;
+            })
+            .then(() => {
+                return bundle;
+            });
     };
 
     async function importLayer (layer, datasourceRef, additions) {
         var params = {
-            find: [
+            find: JSON.stringify([
                 { _id: layer._id }
-            ]
+            ])
         };
 
         var existingLayer = await connection.get('/api/layers/find-all', params);
@@ -146,9 +114,9 @@ app.service('ioModel', function (connection) {
 
     async function importReport (report, datasourceRef, additions) {
         var params = {
-            find: [
+            find: JSON.stringify([
                 { _id: report._id }
-            ]
+            ])
         };
 
         var existingReport = await connection.get('/api/reports/find-all', params);
@@ -161,8 +129,8 @@ app.service('ioModel', function (connection) {
             report.properties.columns.concat(
                 report.properties.xkeys,
                 report.properties.ykeys,
-                report.properties.pivotTable.rows,
-                report.properties.pivotTable.columns,
+                report.properties.pivotKeys.rows,
+                report.properties.pivotKeys.columns,
                 report.query.columns,
                 report.query.order,
                 report.query.groupFilters
@@ -172,10 +140,6 @@ app.service('ioModel', function (connection) {
             }
         }
 
-        for (const dts of report.query.datasources) {
-            dts.datasourceID = datasourceRef[dts.datasourceID];
-        }
-
         var newReport = await connection.post('/api/reports/create', report);
 
         additions.push(newReport);
@@ -183,9 +147,9 @@ app.service('ioModel', function (connection) {
 
     async function importDashboard (dashboard, datasourceRef, additions) {
         var params = {
-            find: [
+            find: JSON.stringify([
                 { _id: dashboard._id }
-            ]
+            ])
         };
 
         var existingDashboard = await connection.get('/api/dashboardsv2/find-all', params);
@@ -199,20 +163,15 @@ app.service('ioModel', function (connection) {
                 report.properties.columns.concat(
                     report.properties.xkeys,
                     report.properties.ykeys,
-                    report.properties.pivotTable.rows,
-                    report.properties.pivotTable.columns,
+                    report.properties.pivotKeys.rows,
+                    report.properties.pivotKeys.columns,
                     report.query.columns,
                     report.query.order,
                     report.query.groupFilters
                 )) {
-                // TODO : uncomment the lines above after the merge with pivot table changes
                 if (object && object.datasourceID) {
                     object.datasourceID = datasourceRef[object.datasourceID];
                 }
-            }
-
-            for (const dts of report.query.datasources) {
-                dts.datasourceID = datasourceRef[dts.datasourceID];
             }
         }
 
@@ -224,15 +183,15 @@ app.service('ioModel', function (connection) {
     this.importBundle = async function (bundle, datasourceRef) {
         var additions = [];
 
-        for (const layer of bundle.layerExports) {
+        for (const layer of bundle.layers) {
             await importLayer(layer, datasourceRef, additions);
         }
 
-        for (const report of bundle.reportExports) {
+        for (const report of bundle.reports) {
             await importReport(report, datasourceRef, additions);
         }
 
-        for (const dashboard of bundle.dashboardExports) {
+        for (const dashboard of bundle.dashboards) {
             await importDashboard(dashboard, datasourceRef, additions);
         }
 

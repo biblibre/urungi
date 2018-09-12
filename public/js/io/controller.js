@@ -22,32 +22,20 @@ app.controller('ioCtrl', function ($scope, $rootScope, connection, $routeParams,
         $scope.fileReader = new FileReader();
     };
 
-    $scope.downloadExport = async function () {
-        var layerIDs = [];
-        var reportIDs = [];
-        var dashboardIDs = [];
+    $scope.downloadExport = function () {
+        const getCheckedIds = function (items) {
+            return items.filter(i => i.checked).map(i => i._id);
+        };
 
-        for (const layer of $scope.layers) {
-            if (layer.checked) {
-                layerIDs.push(layer._id);
-            }
-        }
+        const layerIDs = getCheckedIds($scope.layers);
+        const reportIDs = getCheckedIds($scope.reports);
+        const dashboardIDs = getCheckedIds($scope.dashboards);
 
-        for (const report of $scope.reports) {
-            if (report.checked) {
-                reportIDs.push(report._id);
-            }
-        }
-
-        for (const dashboard of $scope.dashboards) {
-            if (dashboard.checked) {
-                dashboardIDs.push(dashboard._id);
-            }
-        }
-
-        const bundle = await ioModel.makeExportBundle(dashboardIDs, reportIDs, layerIDs);
-
-        FileSaver.saveAs(new Blob([JSON.stringify(bundle)]), $scope.exportName + '.json');
+        ioModel.makeExportBundle(dashboardIDs, reportIDs, layerIDs)
+            .then(bundle => {
+                const blob = new Blob([JSON.stringify(bundle, null, 2)]);
+                FileSaver.saveAs(blob, $scope.exportName + '.json');
+            });
     };
 
     $scope.upload = function (file) {
@@ -55,8 +43,8 @@ app.controller('ioCtrl', function ($scope, $rootScope, connection, $routeParams,
         $scope.fileReader.onload = function () {
             try {
                 $scope.importFile = JSON.parse($scope.fileReader.result);
-                if (!($scope.importFile.layerExports && $scope.importFile.reportExports &&
-                    $scope.importFile.datasourceExports && $scope.importFile.dashboardExports)) {
+                if (!($scope.importFile.layers && $scope.importFile.reports &&
+                    $scope.importFile.datasources && $scope.importFile.dashboards)) {
                     var error = Object();
                     error['msg'] = 'missing fields';
                     throw error;
@@ -81,7 +69,7 @@ app.controller('ioCtrl', function ($scope, $rootScope, connection, $routeParams,
     $scope.startImport = async function () {
         $scope.datasourceMatch = {};
         $scope.localDataSources = await ioModel.getDataSources();
-        for (const dts of $scope.importFile.datasourceExports) {
+        for (const dts of $scope.importFile.datasources) {
             $scope.datasourceMatch[dts._id] = autoDetect(dts);
         }
 

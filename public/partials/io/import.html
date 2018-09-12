@@ -7,7 +7,7 @@
             <h5>Layers</h5>
     
             <ul>
-                <li ng-repeat="layer in importFile.layerExports">
+                <li ng-repeat="layer in importFile.layers">
                     <div>
                         <span> {{layer.name}}</span>
                     </div>
@@ -17,7 +17,7 @@
             <h5>Reports</h5>
     
             <ul>
-                <li ng-repeat="report in importFile.reportExports">
+                <li ng-repeat="report in importFile.reports">
                     <div>
                         <span> {{report.reportName}}</span>
                     </div>
@@ -27,7 +27,7 @@
             <h5>Dashboards</h5>
     
             <ul>
-                <li ng-repeat="dashboard in importFile.dashboardExports">
+                <li ng-repeat="dashboard in importFile.dashboards">
                     <div>
                         <span> {{dashboard.dashboardName}}</span>
                     </div>
@@ -65,7 +65,7 @@
                 <div class="col-md-4">
                     <h5>Imported data sources</h5>
                     <ul>
-                        <li ng-repeat="dts in importFile.datasourceExports">
+                        <li ng-repeat="dts in importFile.datasources">
                             <div>
                                 <span>{{dts.name}}</span>
                                 <span>
