@@ -448,6 +448,17 @@ for (const table of testData) {
         collectionName,
         component: 0,
         datasourceId: dtsId,
+        elements: table.tableColumns.map(element => {
+            return {
+                collectionID,
+                component: 0,
+
+                elementID: element.elementID,
+                elementRole: 'dimension',
+                elementType: element.elementType,
+                elementName: element.columnName
+            };
+        }),
     });
 
     for (const element of table.tableColumns) {
@@ -1484,17 +1495,6 @@ function buildComplexLayer (knex) {
                 ]
             },
             {
-                // For now, the join fails unless the elements needed for the join are in the layer
-                // If this is ever changed, test it by removing this folder
-                // It's elements are never queried, but they are used for joins
-                elementRole: 'folder',
-                elements: [
-                    {elementID: 'eebc'},
-                    {elementID: 'eedd'},
-                    {elementID: 'eeca'}
-                ]
-            },
-            {
                 // Elements from the simple custom query
                 elementRole: 'folder',
                 elements: [
@@ -1655,7 +1655,49 @@ function buildComplexLayer (knex) {
                     component: 3,
                     datasourceID: dtsId,
                     isSQL: true,
-                    sqlQuery: customQuery2
+                    sqlQuery: customQuery2,
+                    elements: [
+                        {
+                            elementRole: 'dimension',
+                            elementID: 'eeva',
+                            elementName: 'name',
+                            collectionID: 'Cuuab',
+                            component: 3,
+                            elementType: 'string'
+                        },
+                        {
+                            elementRole: 'dimension',
+                            elementID: 'eevb',
+                            elementName: 'id',
+                            collectionID: 'Cuuab',
+                            component: 3,
+                            elementType: 'string'
+                        },
+                        {
+                            elementRole: 'dimension',
+                            elementID: 'eevc',
+                            elementName: 'isFusion',
+                            collectionID: 'Cuuab',
+                            component: 3,
+                            elementType: 'string'
+                        },
+                        {
+                            elementRole: 'dimension',
+                            elementID: 'eevd',
+                            elementName: 'weapon',
+                            collectionID: 'Cuuab',
+                            component: 3,
+                            elementType: 'string'
+                        },
+                        {
+                            elementRole: 'dimension',
+                            elementID: 'eeve',
+                            elementName: 'song',
+                            collectionID: 'Cuuab',
+                            component: 3,
+                            elementType: 'string'
+                        },
+                    ],
                 }
             ]
         },
@@ -1671,6 +1713,16 @@ function buildComplexLayer (knex) {
             collectionName,
             component: 0,
             datasourceId: dtsId,
+            elements: table.tableColumns.map(element => {
+                return {
+                    collectionID: collectionID,
+                    component: 0,
+                    elementID: element.elementID,
+                    elementRole: 'dimension',
+                    elementType: element.elementType,
+                    elementName: element.columnName,
+                };
+            }),
         });
 
         for (const element of table.tableColumns) {
