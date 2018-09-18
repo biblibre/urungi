@@ -17,7 +17,7 @@ describe('Login API', function () {
         describe('with valid credentials', () => {
             it('should return a user object', () => {
                 return chai.request(app).post('/api/login')
-                    .send({ userName: 'administrator', password: 'widestage' })
+                    .send({ userName: 'administrator', password: 'urungi' })
                     .then(res => {
                         expect(res).to.have.status(200);
                         expect(res.body).to.be.a('object');

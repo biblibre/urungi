@@ -19,7 +19,7 @@ describe('Dashboards API', function () {
     describe('GET /api/dashboardsv2/find-all', function () {
         it('should find all dashboards and their data', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.get('/api/dashboardsv2/find-all');
             expect(res).to.have.status(200);
@@ -34,7 +34,7 @@ describe('Dashboards API', function () {
     describe('GET /api/dashboardsv2/find-one', function () {
         it('should find one dashboard and its data', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var user = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -65,7 +65,7 @@ describe('Dashboards API', function () {
     describe('POST /api/dashboardsv2/create', function () {
         it('should create a dashboard', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var user = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -95,7 +95,7 @@ describe('Dashboards API', function () {
     describe('POST /api/dashboardsv2/duplicate', function () {
         it('should duplicate a dashboard', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var user = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -128,7 +128,7 @@ describe('Dashboards API', function () {
     describe('POST /api/dashboardsv2/update:id', function () {
         it('should update a dashboard', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -147,7 +147,7 @@ describe('Dashboards API', function () {
     describe('POST /api/dashboardsv2/delete:id', function () {
         it('should delete a dashboard', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -166,7 +166,7 @@ describe('Dashboards API', function () {
     describe('GET /api/dashboardsv2/get/:id', function () {
         it('should get a dashboard and its data', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var user = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -197,7 +197,7 @@ describe('Dashboards API', function () {
     describe('POST /api/dashboardsv2/publish-page', function () {
         it('should publish a dashboard', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -217,7 +217,7 @@ describe('Dashboards API', function () {
     describe('POST /api/dashboardsv2/unpublish', function () {
         it('should unpublish a dashboard', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');

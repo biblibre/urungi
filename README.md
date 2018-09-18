@@ -79,7 +79,7 @@ More info at https://github.com/oracle/node-oracledb
 3. Enter the credentials
 
     - Username: `administrator`
-    - Password: `widestage`
+    - Password: `urungi`
 
 4. Enjoy!!!
 

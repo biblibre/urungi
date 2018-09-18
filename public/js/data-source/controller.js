@@ -19,7 +19,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
                 '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
                 gettext('Data sources are connections to the databases you are going to generate reports for.') +
                 '</span><br/><span>' +
-                gettext('Create and manage here the connections to databases that holds the data you want to be able to create reports using Widestage.') +
+                gettext('Create and manage here the connections to databases that holds the data you want to be able to create reports using Urungi.') +
                 '</span><br/><span>' +
                 gettext('At least one data source must be defined, unless you do not define some data source you and your users will not be able to create reports.') +
                 '</span></div>',

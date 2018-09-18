@@ -59,7 +59,7 @@ function verifyItem (item) {
 
 async function authentifyAgent (agent) {
     const res = await agent.post('/api/login')
-        .send({ userName: 'administrator', password: 'widestage' });
+        .send({ userName: 'administrator', password: 'urungi' });
     expect(res).to.have.status(200);
 }
 

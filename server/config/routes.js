@@ -36,7 +36,7 @@ module.exports = function (app, passport) {
                 debug('no records in the users model, this is the initial setup!');
                 var theCompany = {};
                 theCompany.companyID = 'COMPID';
-                theCompany.createdBy = 'widestage setup';
+                theCompany.createdBy = 'urungi setup';
                 theCompany.nd_trash_deleted = false;
                 Companies.create(theCompany, function (result) {
                 });
@@ -49,7 +49,7 @@ module.exports = function (app, passport) {
                 adminUser.status = 'active';
                 adminUser.nd_trash_deleted = false;
 
-                hash('widestage', function (err, salt, hash) {
+                hash('urungi', function (err, salt, hash) {
                     if (err) throw err;
 
                     adminUser.salt = salt;

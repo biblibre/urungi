@@ -1,6 +1,6 @@
 // Declare app level module which depends on filters, and services
-// var app = angular.module('widestage-login', ['ui.router','myApp.filters', 'myApp.services', 'myApp.directives']).
-angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
+// var app = angular.module('urungi-login', ['ui.router','myApp.filters', 'myApp.services', 'myApp.directives']).
+angular.module('urungi-login', ['ui.router', '720kb.socialshare'])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
     }]).service('Constants', function () {
@@ -155,7 +155,7 @@ angular.module('widestage-login', ['ui.router', '720kb.socialshare'])
         }
     });
 
-angular.module('widestage-login').run(['$http', '$rootScope', '$sce', '$sessionStorage', 'connection',
+angular.module('urungi-login').run(['$http', '$rootScope', '$sce', '$sessionStorage', 'connection',
     function ($http, $rootScope, $sce, $sessionStorage, connection) {
         $rootScope.loginRedirect = function () {
             window.location.href = '/#/home';

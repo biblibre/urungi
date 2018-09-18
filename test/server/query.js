@@ -10,7 +10,7 @@ var Layers = connection.model('Layers');
 
 const userInfo = {
     userName: 'administrator',
-    password: 'widestage',
+    password: 'urungi',
     id: '5b7e6bc911485d03a6afe1c7',
     compID: 'COMPID'
 };
@@ -593,7 +593,7 @@ const generateTestSuite = (dbConfig) => function () {
     describe('Test datasource queries', function () {
         before(function () {
             return agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
         });
 
         it('Should test /api/data-sources/testConnection', async function () {

@@ -32,7 +32,7 @@ exports.UsersCreate = function (req, res) {
         if (req.body.sendPassword && typeof thePassword !== 'undefined') {
             var recipients = [];
             recipients.push(req.body);
-            sendEmailTemplate('newUserAndPassword', recipients, 'email', 'welcome to widestage');
+            sendEmailTemplate('newUserAndPassword', recipients, 'email', 'welcome to urungi');
         }
 
         res.status(200).json(result);

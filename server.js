@@ -33,7 +33,7 @@ app.locals.mongooseConnection = mongooseConnection;
 app.use(cookieParser());
 
 app.use(session({
-    secret: 'ndwidestagev0',
+    secret: 'ndurungiv0',
     cookie: {
         httpOnly: true,
         secure: false,

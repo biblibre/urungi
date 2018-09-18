@@ -6,7 +6,7 @@ function attrDefault ($el, data_var, default_val) {
     return default_val;
 }
 
-angular.module('widestage.directives', [])
+angular.module('urungi.directives', [])
     .directive('spinner', function () {
         return {
             restrict: 'AC',

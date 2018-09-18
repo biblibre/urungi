@@ -19,7 +19,7 @@ describe('Reports API', function () {
     describe('GET /api/reports/find-all', function () {
         it('should find all reports and their data', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.get('/api/reports/find-all');
             expect(res).to.have.status(200);
@@ -34,7 +34,7 @@ describe('Reports API', function () {
     describe('GET /api/reports/find-one', function () {
         it('should find one report and its data', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var User = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -63,7 +63,7 @@ describe('Reports API', function () {
     describe('POST /api/reports/create', function () {
         it('should create a report', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var User = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -90,7 +90,7 @@ describe('Reports API', function () {
     describe('POST /api/reports/update:id', function () {
         it('should update a report', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var User = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -109,7 +109,7 @@ describe('Reports API', function () {
     describe('POST /api/reports/delete:id', function () {
         it('should delete a report', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var User = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -128,7 +128,7 @@ describe('Reports API', function () {
     describe('POST /api/reports/get-report/:id', function () {
         it('should get report', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             var User = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
             res = await agent.post('/api/reports/create')
@@ -157,7 +157,7 @@ describe('Reports API', function () {
     describe('POST /api/reports/publish-report', function () {
         it('should publish a report', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var User = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -177,7 +177,7 @@ describe('Reports API', function () {
     describe('POST /api/reports/unpublish', function () {
         it('should unpublish a report', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var User = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');

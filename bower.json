@@ -1,5 +1,5 @@
 {
-  "name": "widestage",
+  "name": "urungi",
   "version": "0.9",
   "authors": [
     "Hermenegildo Romero <hromero@db-team.com>"
@@ -12,7 +12,7 @@
     "sql"
   ],
   "license": "MIT",
-  "homepage": "www.widestage.com",
+  "homepage": "https://github.com/biblibre/urungi",
   "private": true,
   "ignore": [
     "**/.*",

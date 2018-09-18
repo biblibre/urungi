@@ -20,7 +20,7 @@ describe('Layers API', function () {
     describe('GET /api/layers/find-all', function () {
         it('should find all layers and their data', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.get('/api/layers/find-all');
             expect(res).to.have.status(200);
@@ -35,7 +35,7 @@ describe('Layers API', function () {
     describe('GET /api/layers/find-one', function () {
         it('should find one layer and its data', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/layers/create')
                 .send({companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false});
@@ -57,7 +57,7 @@ describe('Layers API', function () {
     describe('POST /api/layers/create', function () {
         it('should create a layer', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/layers/create')
                 .send({companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false});
@@ -79,7 +79,7 @@ describe('Layers API', function () {
     describe('POST /api/layers/update/:id', function () {
         it('should update one layer ', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var datasource = await DataSources.create({companyID: 'COMPID', name: 'DataSource', type: 'DataSource', status: 1, nd_trash_deleted: false});
             res = await agent.post('/api/layers/create')
@@ -98,7 +98,7 @@ describe('Layers API', function () {
     describe('POST /api/layers/change-layer-status', function () {
         it('should change layer status', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await Users.findOne({userName: 'administrator'});
             res = await agent.get('/api/get-user-data');
@@ -118,7 +118,7 @@ describe('Layers API', function () {
     describe('GET /api/layers/get-layers', function () {
         it('should get layers', async function () {
             var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'widestage' });
+                .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
 
             res = await agent.post('/api/layers/create')

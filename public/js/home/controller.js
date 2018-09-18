@@ -22,9 +22,9 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                         html: '<div><h3>' +
                         gettext('The main menu') +
                         '</h3><span style="font-weight:bold;">' +
-                        gettext('Here you can access the basic operations in widestage') +
+                        gettext('Here you can access the basic operations in urungi') +
                         '</span><br/><span>' +
-                        gettext('The "white" part of the menu is common for all users, the "green" part is only for widestage administrators') +
+                        gettext('The "white" part of the menu is common for all users, the "green" part is only for urungi administrators') +
                         '</span></div>',
                         width: '300px',
                         height: '180px'
@@ -67,9 +67,9 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                         html: '<div><h3>' +
                         gettext('Users') +
                         '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                        gettext('This link is only available for widestage administrators.') +
+                        gettext('This link is only available for urungi administrators.') +
                         '</span><br/><span style="font-weight:bold;">' +
-                        gettext('Access users to create new widestage users and to manage them') +
+                        gettext('Access users to create new urungi users and to manage them') +
                         '</span><br/><span></span></div>',
                         width: '300px',
                         height: '180px',
@@ -82,7 +82,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                         html: '<div><h3>' +
                         gettext('Roles') +
                         '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                        gettext('This link is only available for widestage administrators.') +
+                        gettext('This link is only available for urungi administrators.') +
                         '</span><br/><span style="font-weight:bold;">' +
                         gettext('Access roles to create, manage roles, and grant or revoque permissions') +
                         '</span><br/><span></span></div>',
@@ -97,7 +97,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                         html: '<div><h3>' +
                         gettext('Data sources') +
                         '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                        gettext('This link is only available for widestage administrators.') +
+                        gettext('This link is only available for urungi administrators.') +
                         '</span><br/><span style="font-weight:bold;">' +
                         gettext('Access here to define the connections to the different sources of your information') +
                         '</span><br/><span>' +
@@ -114,7 +114,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                         html: '<div><h3>' +
                         gettext('Layers') +
                         '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                        gettext('This link is only available for widestage administrators.') +
+                        gettext('This link is only available for urungi administrators.') +
                         '</span><br/><span style="font-weight:bold;">' +
                         gettext('Here you can define the semantic layer used by your users to access the data in the different data sources.') +
                         '</span><br/><span>' +
@@ -131,7 +131,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                         html: '<div><h3>' +
                         gettext('Public space') +
                         '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                        gettext('This link is only available for widestage administrators.') +
+                        gettext('This link is only available for urungi administrators.') +
                         '</span><br/><span style="font-weight:bold;">' +
                         gettext('Define here the folder structure for the public area') +
                         '</span><br/><span></span></div>',
@@ -265,7 +265,7 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
                         html: '<div><h3>' +
                         gettext('The main menu') +
                         '</h3><span style="font-weight:bold;">' +
-                        gettext('Here you can access the basic operations in widestage') +
+                        gettext('Here you can access the basic operations in urungi') +
                         '</span><br/><span></span></div>',
                         width: '300px',
                         height: '180px'
