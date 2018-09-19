@@ -129,8 +129,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     });
 
     $scope.initLayers = async function () {
-        $scope.layers = await reportModel.getLayers();
-        $scope.rootItem = $scope.layers[0].rootItem;
+        const layers = await reportModel.getLayers();
+        layers.sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+        $scope.rootItem = layers[0].rootItem;
+        $scope.layers = layers;
     };
 
     $scope.newForm = function () {
