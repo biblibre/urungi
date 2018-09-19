@@ -298,7 +298,7 @@ function joinCollections (collectionRef, layer, currentID, previousID, safetyCou
             if (result.shouldJoin) {
                 shouldJoin = true;
                 result.node.parentJoin = join;
-                const joinElement = findElement(layer.objects, joinElementID);
+                const joinElement = findElement(layer.params.schema, joinElementID);
                 if (!joinElement) {
                     warnings.push({ msg: 'Unable to join a table due to missing join field' });
                     continue;
