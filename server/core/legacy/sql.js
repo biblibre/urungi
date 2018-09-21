@@ -1,9 +1,5 @@
 const debug = require('debug')('urungi:server');
 
-exports.processCollections = function (req, query, collections, dataSource, params, thereAreJoins, done) {
-    processCollections(req, query, collections, dataSource, params, thereAreJoins, done);
-};
-
 function generateShortUID () {
     return ('0000' + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
 }
@@ -11,14 +7,6 @@ function generateShortUID () {
 exports.getSchemas = function (data, setresult) {
     let db;
     switch (data.type) {
-    case 'MySQL': db = 'mysql';
-        break;
-    case 'POSTGRE': db = 'postgresql';
-        break;
-    case 'ORACLE': db = 'oracle';
-        break;
-    case 'MSSQL': db = 'mssql';
-        break;
     case 'JDBC-ORACLE': db = 'jdbc-oracle';
         break;
     case 'BIGQUERY': db = 'bigQuery';
@@ -110,14 +98,6 @@ exports.getSchemas = function (data, setresult) {
 exports.getSqlQuerySchema = function (data, setresult) {
     let db;
     switch (data.type) {
-    case 'MySQL': db = 'mysql';
-        break;
-    case 'POSTGRE': db = 'postgresql';
-        break;
-    case 'ORACLE': db = 'oracle';
-        break;
-    case 'MSSQL': db = 'mssql';
-        break;
     case 'JDBC-ORACLE': db = 'jdbc-oracle';
         break;
     case 'BIGQUERY': db = 'bigQuery';
@@ -239,457 +219,288 @@ function getCollectionSchema (collection, queryResults, done) {
     done(theCollection);
 }
 
-function processCollections (req, query, collections, dataSource, params, thereAreJoins, setresult, index) {
-    var from = [];
-    var fields = [];
-    var groupBy = [];
-    var processedCollections = [];
-    var elements = [];
-    var leadTable = {};
-    var leadTableJoinsCount = 0;
-    if (collections.length === 1) {
-        leadTable = collections[0];
+exports.generateQueryText = generateQueryText;
+
+function generateQueryText (query) {
+    var queryText = '';
+
+    queryText += 'SELECT ';
+
+    for (const i in query.columns) {
+        if (i !== '0') {
+            queryText += ', ';
+        }
+        const column = query.columns[i];
+        queryText += getIdentifier(column);
+        queryText += ' AS ';
+        queryText += column.id;
+        // for example : SUM([column.elementID]) as [column.id]
     }
 
-    for (const c in collections) {
-        const table = collections[c];
-        table.joinsCount = 0;
+    queryText += ' FROM ';
 
-        for (const j in table.joins) {
-            const join = table.joins[j];
-            if (join.sourceCollectionID === table.collectionID) {
-                table.joinsCount = table.joinsCount + 1;
-            }
+    queryText += generateTableQuery(query.joinTree);
 
-            if (join.targetCollectionID === table.collectionID) {
-                table.joinsCount = table.joinsCount + 1;
-            }
+    queryText += ' WSTmain ';
+
+    if (query.filters.length > 0) {
+        queryText += 'WHERE ';
+        for (const i in query.filters) {
+            queryText += getFilterText(query.filters[i], i !== '0');
         }
-
-        if (table.joinsCount > leadTableJoinsCount) {
-            leadTable = table;
-            leadTableJoinsCount = table.joinsCount;
+        queryText += ' ';
+    }
+    if (query.groupKeys.length > 0) {
+        queryText += 'GROUP BY ';
+        for (const i in query.groupKeys) {
+            if (i !== '0') {
+                queryText += ', ';
+            }
+            queryText += getIdentifier(query.groupKeys[i]);
         }
+        queryText += ' ';
     }
 
-    for (const c in collections) {
-        const table = collections[c];
-        var strJoin = '';
+    var packetSize = 500;
 
-        for (var j in table.joins) {
-            const join = table.joins[j];
+    var offset = packetSize * (query.page - 1); // pages start at 1
+    var limit;
 
-            if (join.sourceCollectionID === table.collectionID) {
-                if (join.joinType === 'default') { strJoin = ' INNER JOIN '; }
-
-                processedCollections.push(join.targetCollectionID);
-
-                strJoin = strJoin + join.targetCollectionName + ' ' + join.targetCollectionID + ' ON (';
-
-                strJoin = strJoin + join.sourceCollectionID + '.' + join.sourceElementName + ' = ' + join.targetCollectionID + '.' + join.targetElementName;
-                strJoin = strJoin + ')';
-            }
-        }
-
-        if (processedCollections.indexOf(table.collectionID) === -1) {
-            from.push(table.collectionName + ' ' + table.collectionID + strJoin);
-        }
-
-        processedCollections.push(table.collectionID);
-
-        for (var e in table.columns) {
-            var field = table.columns[e];
-            elements.push(field);
-
-            if (field.hidden !== true) {
-                if (field.aggregation) {
-                    switch (field.aggregation) {
-                    case 'sum': fields.push('SUM(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
-                        break;
-                    case 'avg': fields.push('AVG(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
-                        break;
-                    case 'min': fields.push('MIN(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
-                        break;
-                    case 'max': fields.push('MAX(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
-                        break;
-                    case 'count': fields.push('COUNT(' + table.collectionID + '.' + field.elementName + ')' + ' as ' + field.id);
-                    }
-                } else {
-                    fields.push(table.collectionID + '.' + field.elementName + ' as ' + field.id);
-                    if (dataSource.type !== 'BIGQUERY') { groupBy.push(table.collectionID + '.' + field.elementName); } else { groupBy.push(field.id); }
-                }
-            }
-        }
-    }
-
-    var SQLstring = 'SELECT ';
-
-    SQLstring += fields.join(', ');
-
-    if (leadTable.schema) {
-        if (leadTable.schema.isSQL === true) {
-            SQLstring = SQLstring + ' FROM (' + leadTable.schema.sqlQuery + ') ' + leadTable.collectionID + getJoins(leadTable.collectionID, collections, []);
-        } else {
-            SQLstring = SQLstring + ' FROM ' + leadTable.schema.collectionName + ' ' + leadTable.collectionID + getJoins(leadTable.collectionID, collections, []);
-        }
+    if (query.recordLimit) {
+        limit = Math.min(query.recordLimit - offset, packetSize);
     } else {
-        if (leadTable.isSQL === true) {
-            SQLstring = SQLstring + ' FROM (' + leadTable.sqlQuery + ') ' + leadTable.collectionID + getJoins(leadTable.collectionID, collections, []);
-        } else {
-            SQLstring = SQLstring + ' FROM ' + leadTable.collectionName + ' ' + leadTable.collectionID + getJoins(leadTable.collectionID, collections, []);
-        }
+        limit = packetSize;
     }
 
-    var havings = [];
-    getFilters(query, function (filtersResult, havingsResult) {
-        if (filtersResult.length > 0) { SQLstring += ' WHERE '; }
+    if (limit < 0) {
+        limit = 0;
+    }
 
-        for (var fr in filtersResult) { SQLstring += filtersResult[fr]; }
-        havings = havingsResult;
-
-        if (groupBy.length > 0) {
-            SQLstring += ' GROUP BY ';
-            SQLstring += groupBy.join(', ');
-        }
-
-        if (havings.length > 0) { SQLstring += ' HAVING '; }
-
-        for (var h in havings) { SQLstring += havings[h]; }
-
-        if (query.order) {
-            if (query.order.length > 0) {
-                var theOrderByString = '';
-
-                for (const f in query.order) {
-                    var theOrderField = query.order[f];
-                    var theOrderFieldName = '';
-
-                    let theSortOrderFieldName;
-                    if (theOrderField.aggregation) {
-                        var AGG = theOrderField.aggregation.toUpperCase();
-
-                        theSortOrderFieldName = AGG + '(' + theOrderField.collectionID + '.' + theOrderField.elementName + ')';
-                        theOrderFieldName = theSortOrderFieldName + ' as ' + theOrderField.id;
-                    } else {
-                        theSortOrderFieldName = theOrderField.collectionID + '.' + theOrderField.elementName;
-                        theOrderFieldName = theSortOrderFieldName + ' as ' + theOrderField.id;
-                    }
-
-                    var sortType = '';
-                    if (query.order[f].sortType === 1) { sortType = ' DESC'; }
-
-                    var theIndex = fields.indexOf(theOrderFieldName);
-
-                    if (theIndex >= 0) {
-                    // The order by field is in the result set
-                        if (theOrderByString === '') {
-                            theOrderByString += (theIndex + 1) + sortType;
-                        } else {
-                            theOrderByString += ', ' + (theIndex + 1) + sortType;
-                        }
-                    } else {
-                        // No index, the field is not in the result set
-                        if (theOrderByString === '') {
-                            theOrderByString += theSortOrderFieldName + sortType;
-                        } else {
-                            theOrderByString += ', ' + theSortOrderFieldName + sortType;
-                        }
-                    }
-                }
-
-                console.log('order by string', theOrderByString);
-
-                if (theOrderByString !== '') { SQLstring += ' ORDER BY ' + theOrderByString; }
+    if (query.order.length > 0) {
+        queryText += 'ORDER BY ';
+        for (let i = 0; i < query.order.length; i++) {
+            if (i > 0) {
+                queryText += ', ';
             }
-        }
-
-        let dbController;
-        switch (dataSource.type) {
-        case 'MySQL': dbController = require('./mysql.js');
-            break;
-        case 'POSTGRE': dbController = require('./postgresql.js');
-            break;
-        case 'ORACLE': dbController = require('./oracle.js');
-            break;
-        case 'MSSQL': dbController = require('./mssql.js');
-            break;
-        case 'BIGQUERY': dbController = require('./bigQuery.js');
-            break;
-        case 'JDBC-ORACLE': dbController = require('./jdbc-oracle.js');
-        }
-
-        var db = new dbController.Db();
-
-        if (query.recordLimit) {
-            if (query.recordLimit > 0) {
-                SQLstring = db.setLimitToSQL(SQLstring, query.recordLimit, ((params.page - 1) * query.recordLimit));
-            }
-        } else {
-            if (dataSource.packetSize) {
-                if (dataSource.packetSize !== -1) { SQLstring = db.setLimitToSQL(SQLstring, dataSource.packetSize, ((params.page - 1) * dataSource.packetSize)); }
+            queryText += getIdentifier(query.order[i]);
+            if (query.order[i].sortDesc) {
+                queryText += ' DESC';
             } else {
-                if (config.get('query.defaultRecordsPerPage') > 1) {
-                    SQLstring = db.setLimitToSQL(SQLstring, config.get('query.defaultRecordsPerPage'), ((params.page - 1) * config.get('query.defaultRecordsPerPage')));
-                }
+                queryText += ' ASC';
             }
         }
+        queryText += ' ';
+    }
 
-        // Fix for filters with having and normal filters
-        SQLstring = SQLstring.replace('WHERE  AND', 'WHERE');
+    queryText += 'LIMIT ';
+    queryText += String(limit);
+    queryText += ' OFFSET ';
+    queryText += String(offset);
 
-        // console.log(SQLstring);
+    return queryText;
+}
 
-        if (dataSource.type !== 'BIGQUERY') {
-            db.connect(dataSource.connection, function (err, connection) {
-                if (err) {
-                    setresult({result: 0, msg: 'Connection Error: ' + err});
-                    return console.error('Connection Error: ', err);
-                }
+function getIdentifier (column) {
+    var name;
 
-                const start = Date.now();
-                db.query(SQLstring, function (err, result) {
-                    if (err) {
-                        setresult({result: 0, msg: 'Generated SQL Error: ' + SQLstring, sql: SQLstring});
-                        saveToLog(req, 'SQL Error: ' + err + ' (' + SQLstring + ')', 300, 'SQL-002', 'QUERY: (' + JSON.stringify(query) + ')', undefined);
-                    } else {
-                        const time = Date.now() - start;
+    if (column.isCustom) {
+        name = column.expression;
+    } else {
+        name = column.elementID;
+    }
 
-                        getFormatedResult(elements, result.rows, function (finalResults) {
-                            setresult({result: 1, data: finalResults, sql: SQLstring, time: time});
-                            if (result) {
-                                saveToLog(req, SQLstring, 400, 'SQL-001', 'QUERY: (' + JSON.stringify(query) + ')', undefined);
-                            }
-                        });
-                    }
+    name = '(' + name + ')';
 
-                    db.end();
-                });
-            });
+    switch (column.aggregation) {
+    case 'sum':
+        return 'SUM' + name;
+    case 'avg':
+        return 'AVG' + name;
+    case 'min':
+        return 'MIN' + name;
+    case 'max':
+        return 'MAX' + name;
+    case 'count':
+        return 'COUNT' + name;
+    default:
+        return name;
+    }
+
+    // TODO : handle dates
+}
+
+function generateTableQuery (joinTree) {
+    var tableText = '';
+
+    tableText += '( SELECT ';
+
+    for (const i in joinTree.fetchFields) {
+        if (i !== '0') {
+            tableText += ', ';
+        }
+        const field = joinTree.fetchFields[i];
+        tableText += field.collectionID + '.' + field.elementName + ' AS ' + field.elementID;
+    }
+
+    for (const field of joinTree.carryFields) {
+        tableText += ', ' + field.elementID;
+    }
+
+    tableText += ' FROM ';
+
+    if (joinTree.collection.isSQL) {
+        tableText += '( ' + joinTree.collection.sqlQuery + ' )';
+    } else {
+        tableText += joinTree.collection.collectionName;
+    }
+
+    tableText += ' ';
+
+    tableText += joinTree.collection.collectionID;
+
+    for (const node of joinTree.joins) {
+        tableText += ' JOIN ';
+        tableText += generateTableQuery(node);
+        tableText += ' ';
+        tableText += node.collection.collectionID;
+
+        var firstElementName;
+        var secondElementID;
+
+        if (node.parentJoin.sourceCollectionID === joinTree.collection.collectionID) {
+            firstElementName = node.parentJoin.sourceElementName;
+            secondElementID = node.parentJoin.targetElementID;
         } else {
-            dataSource.connection.companyID = req.user.companyID;
-
-            const start = Date.now();
-            db.executeSQLQuery(dataSource.connection, SQLstring, function (result) {
-                const time = Date.now() - start;
-
-                getFormatedResult(elements, result, function (finalResults) {
-                    setresult({result: 1, data: finalResults, sql: SQLstring, time: time});
-                });
-            });
+            firstElementName = node.parentJoin.targetElementName;
+            secondElementID = node.parentJoin.sourceElementID;
         }
-    });
-}
 
-function getFormatedResult (elementSchema, results, done) {
-    var finalResults = [];
-    var moment = require('moment');
-
-    if (results) {
-        for (var r in results) {
-            for (var es in elementSchema) {
-                var newRecord = {};
-
-                if (elementSchema[es].elementType === 'date' && elementSchema[es].format) {
-                    results[r][elementSchema[es].id + '_original'] = results[r][elementSchema[es].id];
-                    if (results[r][elementSchema[es].id]) {
-                        var date = new Date(results[r][elementSchema[es].id]);
-                        results[r][elementSchema[es].id] = moment(date).format(elementSchema[es].format);
-                    }
-                }
-
-                for (var f in results[r]) {
-                    newRecord[f.toLowerCase()] = results[r][f];
-                }
-            }
-
-            finalResults.push(newRecord);
-        }
+        tableText += ' ON ';
+        tableText += joinTree.collection.collectionID + '.' + firstElementName;
+        tableText += ' = ';
+        tableText += node.collection.collectionID + '.' + secondElementID;
     }
 
-    done(finalResults);
+    tableText += ' )';
+
+    return tableText;
 }
 
-function getFilters (query, done) {
-    var filters = [];
-    var havings = [];
-
-    for (var f in query.groupFilters) {
-        var previousRelational = '';
-
-        if (query.groupFilters[f].conditionLabel) {
-            previousRelational = ' ' + query.groupFilters[f].conditionLabel + ' ';
-        }
-
-        var filterSQL = getFilterSQL(query.groupFilters[f]);
-
-        if (filterSQL !== '') {
-            if (!query.groupFilters[f].aggregation) {
-                if (f > 0) { filterSQL = previousRelational + filterSQL; }
-
-                filters.push(filterSQL);
-            } else {
-                if (havings.length > 0) { filterSQL = previousRelational + filterSQL; }
-
-                havings.push(filterSQL);
-            }
-        }
-    }
-
-    done(filters, havings);
-}
-
-function getFilterSQL (filter, isHaving) {
+function getFilterText (filter, notFirst) {
     var result = '';
+
+    if (notFirst) {
+        switch (filter.conditionType) {
+        case 'and':
+            result += ' AND ';
+            break;
+        case 'or':
+            result += ' OR ';
+            break;
+        case 'andNot':
+            result += ' AND NOT ';
+            break;
+        case 'orNot':
+            result += ' AND NOT ';
+            break;
+        }
+    }
 
     const numericalFilters = ['equal', 'diferentThan', 'biggerThan', 'notGreaterThan', 'biggerOrEqualThan', 'lessThan', 'lessOrEqualThan', 'between', 'notBetween'];
 
-    var filterValue = filter.criterion.text1;
-    var filterSecondValue = filter.criterion.text2;
-    var filterValueList = filter.criterion.textList;
-    let filterElementName;
+    var filterValue = escape(filter.criterion.text1);
+    var filterSecondValue = escape(filter.criterion.text2);
+    var filterValueList = escapeList(filter.criterion.textList);
 
-    if (!filter.aggregation) {
-        filterElementName = filter.collectionID + '.' + filter.elementName;
-    } else {
-        filterElementName = filter.aggregation + '(' + filter.collectionID + '.' + filter.elementName + ')';
-    }
+    var filterIdentifier = getIdentifier(filter);
 
     if (filter.elementType === 'date' && (numericalFilters + ['in', 'notIn']).indexOf(filter.filterType) >= 0) {
-        return dateFilter(filterElementName, filter);
-    }
-
-    switch (filter.filterType) {
-    case 'null':
-    case 'notNull':
-        break;
-    case 'in':
-    case 'notIn':
-        if (!filterValueList.length) {
-            return '';
-        }
-        break;
-    case 'between':
-    case 'notBetween':
-        if (!(filterValue && filterSecondValue)) {
-            return '';
-        }
-        break;
-    default:
-        if (!filterValue) {
-            return '';
-        }
-    }
-
-    if (filter.elementType === 'number') {
-        if (filter.filterType !== 'in' && filter.filterType !== 'notIn') {
-            filterValue = Number(filterValue);
-        }
-    }
-
-    if (filter.elementType !== 'number' && numericalFilters.indexOf(filter.filterType) >= 0) {
-        filterValue = '\'' + filterValue + '\'';
-        if (filterSecondValue) {
-            filterSecondValue = '\'' + filterSecondValue + '\'';
-        }
+        return getDateFilterText(filterIdentifier, filter);
     }
 
     switch (filter.filterType) {
     case 'equal':
-        result = filterElementName + ' = ' + filterValue;
+        result += filterIdentifier + ' = ' + filterValue;
         break;
 
     case 'diferentThan' :
-        result = (filterElementName + ' <> ' + filterValue);
+        result += (filterIdentifier + ' <> ' + filterValue);
         break;
 
     case 'biggerThan':
-        result = (filterElementName + ' > ' + filterValue);
+        result += (filterIdentifier + ' > ' + filterValue);
         break;
 
     case 'notGreaterThan':
-        result = (filterElementName + ' <= ' + filterValue);
+        result += (filterIdentifier + ' <= ' + filterValue);
         break;
 
     case 'biggerOrEqualThan':
-        result = (filterElementName + ' >= ' + filterValue);
+        result += (filterIdentifier + ' >= ' + filterValue);
         break;
 
     case 'lessThan':
-        result = (filterElementName + ' < ' + filterValue);
+        result += (filterIdentifier + ' < ' + filterValue);
         break;
 
     case 'lessOrEqualThan':
-        result = (filterElementName + ' <= ' + filterValue);
+        result += (filterIdentifier + ' <= ' + filterValue);
         break;
 
     case 'between':
-        result = (filterElementName + ' BETWEEN ' + filterValue + ' AND ' + filter.filterText2);
+        result += (filterIdentifier + ' BETWEEN ' + filterValue + ' AND ' + filterSecondValue);
         break;
 
     case 'notBetween':
-        result = (filterElementName + ' NOT BETWEEN ' + filterValue + ' AND ' + filter.filterText2);
+        result += (filterIdentifier + ' NOT BETWEEN ' + filterValue + ' AND ' + filterSecondValue);
         break;
 
     case 'contains':
-        result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '%\'');
+        result += (filterIdentifier + ' LIKE ' + '\'%' + filterValue + '%\'');
         break;
 
     case 'notContains':
-        result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '%\'');
+        result += (filterIdentifier + ' NOT LIKE ' + '\'%' + filterValue + '%\'');
         break;
 
     case 'startWith':
-        result = (filterElementName + ' LIKE ' + '\'' + filterValue + '%\'');
+        result += (filterIdentifier + ' LIKE ' + '\'' + filterValue + '%\'');
         break;
 
     case 'notStartWith':
-        result = (filterElementName + ' NOT LIKE ' + '\'' + filterValue + '%\'');
+        result += (filterIdentifier + ' NOT LIKE ' + '\'' + filterValue + '%\'');
         break;
 
     case 'endsWith':
-        result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '\'');
+        result += (filterIdentifier + ' LIKE ' + '\'%' + filterValue + '\'');
         break;
 
     case 'notEndsWith':
-        result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '\'');
+        result += (filterIdentifier + ' NOT LIKE ' + '\'%' + filterValue + '\'');
         break;
 
     case 'like':
-        result = (filterElementName + ' LIKE ' + '\'%' + filterValue + '%\'');
+        result += (filterIdentifier + ' LIKE ' + '\'%' + filterValue + '%\'');
         break;
 
     case 'notLike':
-        result = (filterElementName + ' NOT LIKE ' + '\'%' + filterValue + '%\'');
+        result += (filterIdentifier + ' NOT LIKE ' + '\'%' + filterValue + '%\'');
         break;
 
     case 'null':
-        result = (filterElementName + ' IS NULL ');
+        result += (filterIdentifier + ' IS NULL ');
         break;
 
     case 'notNull':
-        result = (filterElementName + ' IS NOT NULL ');
+        result += (filterIdentifier + ' IS NOT NULL ');
         break;
 
     case 'in':
-    case 'notIn':
-        let filterSTR = '';
-        for (const i in filterValueList) {
-            if (i !== '0') {
-                filterSTR += ', ';
-            }
-            if (filter.elementType === 'number') {
-                filterSTR += filterValueList[i];
-            } else {
-                filterSTR += "'" + filterValueList[i] + "'";
-            }
-        }
-        if (filter.filterType === 'in') {
-            result = (filterElementName + ' IN ' + '(' + filterSTR + ')');
-        } else {
-            result = (filterElementName + ' NOT IN ' + '(' + filterSTR + ')');
-        }
+        result += (filterIdentifier + ' IN ' + filterValueList);
         break;
-
+    case 'notIn':
+        result += (filterIdentifier + ' NOT IN ' + filterValueList);
+        break;
     default:
         break;
     }
@@ -697,59 +508,17 @@ function getFilterSQL (filter, isHaving) {
     return result;
 }
 
-function getJoins (collectionID, collections, processedCollections) {
-    var fromSQL = '';
-    for (var c in collections) {
-        if (collections[c].collectionID === collectionID && (processedCollections.indexOf(collectionID) === -1)) {
-            var table = collections[c];
-            processedCollections.push(collectionID);
-
-            for (var j in table.joins) {
-                var join = table.joins[j];
-
-                if (join.sourceCollectionID === table.collectionID && (processedCollections.indexOf(join.targetCollectionID) === -1)) {
-                    if (join.joinType === 'default') { fromSQL = fromSQL + ' INNER JOIN '; }
-                    if (join.joinType === 'left') { fromSQL = fromSQL + ' LEFT JOIN '; }
-                    if (join.joinType === 'right') { fromSQL = fromSQL + ' RIGHT JOIN '; }
-
-                    fromSQL = fromSQL + join.targetCollectionName + ' ' + join.targetCollectionID;
-
-                    fromSQL = fromSQL + ' ON (' + join.sourceCollectionID + '.' + join.sourceElementName + ' = ' + join.targetCollectionID + '.' + join.targetElementName + ')';
-                    fromSQL = fromSQL + getJoins(join.targetCollectionID, collections, processedCollections);
-                }
-
-                if (join.targetCollectionID === table.collectionID && (processedCollections.indexOf(join.sourceCollectionID) === -1)) {
-                    if (join.joinType === 'default') { fromSQL = fromSQL + ' INNER JOIN '; }
-                    if (join.joinType === 'left') { fromSQL = fromSQL + ' LEFT JOIN '; }
-                    if (join.joinType === 'right') { fromSQL = fromSQL + ' RIGHT JOIN '; }
-
-                    fromSQL = fromSQL + join.sourceCollectionName + ' ' + join.sourceCollectionID;
-
-                    fromSQL = fromSQL + ' ON (' + join.targetCollectionID + '.' + join.targetElementName + ' = ' + join.sourceCollectionID + '.' + join.sourceElementName + ')';
-
-                    fromSQL = fromSQL + getJoins(join.sourceCollectionID, collections, processedCollections);
-                }
-            }
-        }
-    }
-
-    return fromSQL;
-}
-
-function pad (num, size) {
-    var s = num + '';
-    while (s.length < size) s = '0' + s;
-    while (s.length < size) s = '0' + s;
-    return s;
-}
-
-function dateFilter (filterElementName, filter) {
+function getDateFilterText (filterIdentifier, filter) {
     // NOTE:This is not valid for date-time values... the equal always take the whole day without taking care about the time
+
+    function pad (value) {
+        return String(value).padStart(2, '0');
+    }
 
     var today = new Date();
     var year = today.getFullYear();
-    var month = pad(today.getMonth() + 1, 2);
-    var day = pad(today.getDate(), 2);
+    var month = pad(today.getMonth() + 1);
+    var day = pad(today.getDate());
 
     let firstDate;
     let lastDate;
@@ -771,8 +540,8 @@ function dateFilter (filterElementName, filter) {
             const tomorrow = new Date(today);
             tomorrow.setDate(today.getDate() + 1);
             year1 = tomorrow.getFullYear();
-            month1 = pad(tomorrow.getMonth() + 1, 2);
-            day1 = pad(tomorrow.getDate(), 2);
+            month1 = pad(tomorrow.getMonth() + 1);
+            day1 = pad(tomorrow.getDate());
 
             lastDate = new Date(year1 + '-' + month1 + '-' + day1 + 'T00:00:00.000Z');
             break;
@@ -782,8 +551,8 @@ function dateFilter (filterElementName, filter) {
             const yesterday = new Date(today);
             yesterday.setDate(today.getDate() - 1);
             year1 = yesterday.getFullYear();
-            month1 = pad(yesterday.getMonth() + 1, 2);
-            day1 = pad(yesterday.getDate(), 2);
+            month1 = pad(yesterday.getMonth() + 1);
+            day1 = pad(yesterday.getDate());
 
             firstDate = new Date(year1 + '-' + month1 + '-' + day1 + 'T00:00:00.000Z');
             break;
@@ -817,7 +586,7 @@ function dateFilter (filterElementName, filter) {
             if (month === 12) {
                 lastDate = new Date((year + 1) + '-01-01T00:00:00.000Z');
             } else {
-                month1 = pad(today.getMonth() + 2, 2);
+                month1 = pad(today.getMonth() + 2);
                 lastDate = new Date(year + '-' + month1 + '-01T00:00:00.000Z');
             }
             break;
@@ -826,7 +595,7 @@ function dateFilter (filterElementName, filter) {
             if (month === 1) {
                 firstDate = new Date((year - 1) + '-12-01T00:00:00.000Z');
             } else {
-                month1 = pad(today.getMonth(), 2);
+                month1 = pad(today.getMonth());
                 firstDate = new Date(year + '-' + month1 + '-01T00:00:00.000Z');
             }
 
@@ -908,52 +677,52 @@ function dateFilter (filterElementName, filter) {
         }
 
         const fyear = firstDate.getFullYear();
-        const fmonth = pad(firstDate.getMonth() + 1, 2);
-        const fday = pad(firstDate.getDate(), 2);
+        const fmonth = pad(firstDate.getMonth() + 1);
+        const fday = pad(firstDate.getDate());
         const lyear = lastDate.getFullYear();
-        const lmonth = pad(lastDate.getMonth() + 1, 2);
-        const lday = pad(lastDate.getDate(), 2);
+        const lmonth = pad(lastDate.getMonth() + 1);
+        const lday = pad(lastDate.getDate());
 
         const queryFirstDate = fyear + '/' + fmonth + '/' + fday;
         const queryLastDate = lyear + '/' + lmonth + '/' + lday;
 
         switch (filter.filterType) {
         case 'equal-pattern':
-            return '(' + filterElementName + " >= '" + queryFirstDate + "' AND " + filterElementName + " < '" + queryLastDate + "')";
+            return '(' + filterIdentifier + " >= '" + queryFirstDate + "' AND " + filterIdentifier + " < '" + queryLastDate + "')";
 
         case 'diferentThan-pattern':
-            return '(' + filterElementName + " < '" + queryFirstDate + "' OR " + filterElementName + " >= '" + queryLastDate + "')";
+            return '(' + filterIdentifier + " < '" + queryFirstDate + "' OR " + filterIdentifier + " >= '" + queryLastDate + "')";
 
         case 'biggerThan-pattern':
-            return '(' + filterElementName + " > '" + queryLastDate + "')";
+            return '(' + filterIdentifier + " > '" + queryLastDate + "')";
 
         case 'biggerOrEqualThan-pattern':
-            return '(' + filterElementName + " >= '" + queryFirstDate + "')";
+            return '(' + filterIdentifier + " >= '" + queryFirstDate + "')";
 
         case 'lessThan-pattern':
-            return '(' + filterElementName + " < '" + queryFirstDate + "')";
+            return '(' + filterIdentifier + " < '" + queryFirstDate + "')";
 
         case 'lessOrEqualThan-pattern':
-            return '(' + filterElementName + " <= '" + queryLastDate + "')";
+            return '(' + filterIdentifier + " <= '" + queryLastDate + "')";
         }
     } else {
         const searchDate = new Date(filter.criterion.date1);
         const theNextDay = new Date(searchDate);
         theNextDay.setDate(searchDate.getDate() + 1);
         const qyear = searchDate.getFullYear();
-        const qmonth = pad(searchDate.getMonth() + 1, 2);
-        const qday = pad(searchDate.getDate(), 2);
+        const qmonth = pad(searchDate.getMonth() + 1);
+        const qday = pad(searchDate.getDate());
 
         const qyear2 = theNextDay.getFullYear();
-        const qmonth2 = pad(theNextDay.getMonth() + 1, 2);
-        const qday2 = pad(theNextDay.getDate(), 2);
+        const qmonth2 = pad(theNextDay.getMonth() + 1);
+        const qday2 = pad(theNextDay.getDate());
 
         let queryLastDate;
         if (filter.criterion.date2) {
             lastDate = new Date(filter.criterion.filterText2);
             const qlyear = lastDate.getFullYear();
-            const qlmonth = pad(lastDate.getMonth() + 1, 2);
-            const qlday = pad(lastDate.getDate(), 2);
+            const qlmonth = pad(lastDate.getMonth() + 1);
+            const qlday = pad(lastDate.getDate());
             queryLastDate = qlyear + '/' + qlmonth + '/' + qlday;
         }
 
@@ -963,35 +732,35 @@ function dateFilter (filterElementName, filter) {
 
         switch (filter.filterType) {
         case 'equal':
-            return '(' + filterElementName + " >= '" + querySearchDate + "' AND " + filterElementName + " < '" + querySearchDate2 + "')";
+            return '(' + filterIdentifier + " >= '" + querySearchDate + "' AND " + filterIdentifier + " < '" + querySearchDate2 + "')";
 
         case 'diferentThan':
-            return '(' + filterElementName + " < '" + querySearchDate + "' OR " + filterElementName + " >= '" + querySearchDate2 + "')";
+            return '(' + filterIdentifier + " < '" + querySearchDate + "' OR " + filterIdentifier + " >= '" + querySearchDate2 + "')";
 
         case 'biggerThan':
-            return filterElementName + " > '" + querySearchDate + "'";
+            return filterIdentifier + " > '" + querySearchDate + "'";
 
         case 'notGreaterThan':
-            return filterElementName + " <= '" + querySearchDate + "'";
+            return filterIdentifier + " <= '" + querySearchDate + "'";
 
         case 'biggerOrEqualThan':
-            return filterElementName + " >= '" + querySearchDate + "'";
+            return filterIdentifier + " >= '" + querySearchDate + "'";
 
         case 'lessThan':
-            return filterElementName + " < '" + querySearchDate + "'";
+            return filterIdentifier + " < '" + querySearchDate + "'";
 
         case 'lessOrEqualThan':
-            return filterElementName + " <= '" + querySearchDate + "'";
+            return filterIdentifier + " <= '" + querySearchDate + "'";
 
         case 'between':
-            return filterElementName + " > '" + querySearchDate + "' AND " + filterElementName + " <= '" + queryLastDate + "'";
+            return filterIdentifier + " > '" + querySearchDate + "' AND " + filterIdentifier + " <= '" + queryLastDate + "'";
 
         case 'notBetween':
-            return filterElementName + " < '" + querySearchDate + "' OR " + filterElementName + " > '" + queryLastDate + "'";
+            return filterIdentifier + " < '" + querySearchDate + "' OR " + filterIdentifier + " > '" + queryLastDate + "'";
 
         case 'in':
         case 'notIn':
-            var theFilter = filterElementName;
+            var theFilter = filterIdentifier;
             if (filter.filterType === 'in') { theFilter = theFilter + ' IN ('; }
             if (filter.filterType === 'notIn') { theFilter = theFilter + ' NOT IN ('; }
 
@@ -999,8 +768,8 @@ function dateFilter (filterElementName, filter) {
             for (var d in dates) {
                 var theDate = new Date(dates[d]);
                 var Inyear = theDate.getFullYear();
-                var Inmonth = pad(theDate.getMonth() + 1, 2);
-                var Inday = pad(theDate.getDate(), 2);
+                var Inmonth = pad(theDate.getMonth() + 1);
+                var Inday = pad(theDate.getDate());
                 var InquerySearchDate = Inyear + '/' + Inmonth + '/' + Inday;
 
                 theFilter = theFilter + "'" + InquerySearchDate + "'";
@@ -1010,4 +779,26 @@ function dateFilter (filterElementName, filter) {
 
         return theFilter + ')';
     }
+}
+
+function escape (value) {
+    var escapedString = String(value);
+    const dangerousCharacters = [ '\\', '\'', '"', '`', ';', '-' ];
+    for (const c of dangerousCharacters) {
+        escapedString = escapedString.replace(c, '\\' + c);
+    }
+    return '`' + escapedString + '`';
+}
+
+function escapeList (list) {
+    var res = '';
+    res += '( ';
+    for (const i in list) {
+        if (i !== '0') {
+            res += ', ';
+        }
+        res += escape(list[i]);
+    }
+    res += ' )';
+    return res;
 }

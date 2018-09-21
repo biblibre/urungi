@@ -64,7 +64,7 @@ exports.execute = async function (query) {
             Db = require('./legacy/bigquery').Db;
         }
 
-        const legacySQLBuilder = require('./legacy/new_sql.js');
+        const legacySQLBuilder = require('./legacy/sql');
 
         const sqlText = legacySQLBuilder.generateQueryText(processedQuery);
 
