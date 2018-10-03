@@ -1,42 +1,42 @@
 /* global XLSX: false, Blob: false, datenum: false */
 
-app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2, FileSaver) {
-    this.getReportDefinition = async function (id, isLinked) {
-        const data = await connection.get('/api/reports/get-report/' + id, {id: id, mode: 'preview', linked: isLinked});
-        if (data.item) {
-            // report = data.item;
+app.service('reportModel', function ($q, bsLoadingOverlayService, connection, uuid2, FileSaver) {
+    this.getReportDefinition = function (id, isLinked) {
+        const url = '/api/reports/get-report/' + id;
+        const params = { id: id, mode: 'preview', linked: isLinked };
+
+        return connection.get(url, params).then(function (data) {
             return data.item;
-        } else {
-            return null;
-        }
+        });
     };
 
-    this.getLayers = async function () {
-        var data = await connection.get('/api/layers/get-layers', {});
-        if (data.result !== 1) {
-            throw new Error(data.msg);
-        }
+    this.getLayers = function () {
+        return connection.get('/api/layers/get-layers', {}).then(function (data) {
+            if (data.result !== 1) {
+                throw new Error(data.msg);
+            }
 
-        var layers = data.items;
+            var layers = data.items;
 
-        for (var layer of layers) {
-            layer.rootItem = {
-                elementLabel: '',
-                elementRole: 'root',
-                elements: layer.objects
-            };
-            calculateIdForAllElements(layer.rootItem.elements);
-        }
+            for (var layer of layers) {
+                layer.rootItem = {
+                    elementLabel: '',
+                    elementRole: 'root',
+                    elements: layer.objects
+                };
+                calculateIdForAllElements(layer.rootItem.elements);
+            }
 
-        return layers;
+            return layers;
+        });
     };
 
     /*
     * Fetches all of the data associated to the report's query, and stores it in report.query.data
     */
-    this.fetchData = async function (query, params) {
+    this.fetchData = function (query, params) {
         if (query.columns.length === 0) {
-            return {};
+            return $q.resolve({});
         }
 
         var request = {};
@@ -65,35 +65,35 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
             }
         }
 
-        var result = await connection.post('/api/reports/get-data', request);
-
-        if (result.warnings) {
-            for (const w of result.warnings) {
-                noty({text: w.msg, timeout: 3000, type: 'warning'});
+        return connection.post('/api/reports/get-data', request).then(function (result) {
+            if (result.warnings) {
+                for (const w of result.warnings) {
+                    noty({text: w.msg, timeout: 3000, type: 'warning'});
+                }
             }
-        }
 
-        if (result.result === 0) {
-            noty({text: result.msg, timeout: 3000, type: 'error'});
+            if (result.result === 0) {
+                noty({text: result.msg, timeout: 3000, type: 'error'});
+                return {
+                    data: [],
+                    sql: result.sql,
+                    errorToken: result
+                };
+            }
+
+            var data = result.data;
+
+            processDates(data);
+
+            query.data = result.data;
+
             return {
-                data: [],
+                data: data,
                 sql: result.sql,
-                errorToken: result
+                time: result.time,
+                warnings: result.warnings
             };
-        }
-
-        var data = result.data;
-
-        processDates(data);
-
-        query.data = result.data;
-
-        return {
-            data: data,
-            sql: result.sql,
-            time: result.time,
-            warnings: result.warnings
-        };
+        });
     };
 
     function processDates (data) {
@@ -266,7 +266,7 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
         return copy;
     }
 
-    this.saveAsReport = async function (report, mode) {
+    this.saveAsReport = function (report, mode) {
         // Cleaning up the report object
 
         // var clonedReport = clone(report);
@@ -280,31 +280,31 @@ app.service('reportModel', function (bsLoadingOverlayService, connection, uuid2,
         if (clonedReport.query.data) { clonedReport.query.data = undefined; }
         clonedReport.parentDiv = undefined;
 
-        var result;
-
+        let url;
         if (mode === 'add') {
-            result = await connection.post('/api/reports/create', clonedReport);
+            url = '/api/reports/create';
         } else {
-            result = await connection.post('/api/reports/update/' + report._id, clonedReport);
+            url = '/api/reports/update/' + report._id;
         }
 
-        if (result.result === 1) {
-            await new Promise(resolve => setTimeout(resolve, 400));
-        }
+        return connection.post(url, clonedReport);
     };
 
-    this.duplicateReport = async function (duplicateOptions) {
+    this.duplicateReport = function (duplicateOptions) {
         const params = { id: duplicateOptions.report._id };
-        var newReport = (await connection.get('/api/reports/find-one', params)).item;
+        return connection.get('/api/reports/find-one', params).then(function (result) {
+            const newReport = result.item;
 
-        delete newReport._id;
-        delete newReport.createdOn;
-        newReport.reportName = duplicateOptions.newName;
+            delete newReport._id;
+            delete newReport.createdOn;
+            newReport.reportName = duplicateOptions.newName;
 
-        const data = await connection.post('/api/reports/create', newReport);
-        if (data.result !== 1) {
-            // TODO indicate error
-        }
+            return connection.post('/api/reports/create', newReport).then(function (data) {
+                if (data.result !== 1) {
+                    // TODO indicate error
+                }
+            });
+        });
     };
 
     this.saveToExcel = function ($scope, reportHash) {

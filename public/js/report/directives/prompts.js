@@ -123,7 +123,7 @@ app.directive('ndPrompt', function (reportModel) {
                 $scope.loadFilterValues();
             };
 
-            $scope.loadFilterValues = async function () {
+            $scope.loadFilterValues = function () {
                 var fQuery;
                 if ($scope.filter.filterPrompt) {
                     fQuery = $scope.filter.filterValuesQuery;
@@ -131,14 +131,14 @@ app.directive('ndPrompt', function (reportModel) {
                     fQuery = $scope.filterValuesQuery;
                 }
 
-                var result = await reportModel.fetchData(fQuery);
+                return reportModel.fetchData(fQuery).then(function (result) {
+                    var possibleValues = new Set();
+                    for (const item of result.data) {
+                        possibleValues.add(item.f);
+                    }
 
-                var possibleValues = new Set();
-                for (const item of result.data) {
-                    possibleValues.add(item.f);
-                }
-
-                $scope.values = Array.from(possibleValues.values());
+                    $scope.values = Array.from(possibleValues.values());
+                });
             };
 
             $scope.selectFirstValue = function (selectedValue) {

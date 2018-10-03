@@ -67,46 +67,55 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     *   Initialisation
     */
 
-    $scope.initReportList = async function () {
+    $scope.initReportList = function () {
         $scope.navigation.page = 1;
-        await $scope.getReports();
-        $scope.$digest();
-        $scope.mode = 'list';
+
+        return $scope.getReports().then(function () {
+            $scope.mode = 'list';
+        });
     };
 
-    $scope.initReportView = async function () {
-        $scope.selectedReport = await reportModel.getReportDefinition($routeParams.reportID, false);
-        $scope.initForm();
-        $scope.initPrompts();
-        $scope.$digest();
-        $scope.repaintWithPrompts();
-        $scope.mode = 'view';
+    $scope.initReportView = function () {
+        return reportModel.getReportDefinition($routeParams.reportID, false).then(function (report) {
+            $scope.selectedReport = report;
+            return $scope.initLayers().then(function () {
+                $scope.initForm();
+                $scope.initPrompts();
+                $scope.repaintWithPrompts();
+                $scope.mode = 'view';
+            });
+        });
     };
 
-    $scope.initReportEdit = async function () {
+    $scope.initReportEdit = function () {
+        // FIXME There should be another way...
         if (/dashboards/.test($location.path())) {
             return;
         }
 
         $scope.showOverlay('OVERLAY_reportLayout');
 
-        await $scope.initLayers();
+        return $scope.initLayers().then(function () {
+            if (/reports\/new/.test($location.path())) {
+                $scope.mode = 'new';
+                $scope.newForm();
+            } else if (/explore/.test($location.path())) {
+                $scope.mode = 'explore';
+                $scope.newForm();
+            } else {
+                return reportModel.getReportDefinition($routeParams.reportID, false).then(function (report) {
+                    $scope.selectedReport = report;
+                    $scope.initForm();
+                    $scope.mode = 'edit';
+                    $scope.hideOverlay('OVERLAY_reportLayout');
+                    return $scope.refresh();
+                });
+            }
 
-        if (/reports\/new/.test($location.path())) {
-            $scope.mode = 'new';
-            $scope.newForm();
-        } else if (/explore/.test($location.path())) {
-            $scope.mode = 'explore';
-            $scope.newForm();
-        } else {
-            $scope.selectedReport = await reportModel.getReportDefinition($routeParams.reportID, false);
-            $scope.initForm();
-            $scope.mode = 'edit';
-        }
+            $scope.hideOverlay('OVERLAY_reportLayout');
 
-        $scope.hideOverlay('OVERLAY_reportLayout');
-
-        await $scope.refresh();
+            return $scope.refresh();
+        });
     };
 
     $scope.$on('newReportForDash', function (event, args) {
@@ -116,24 +125,25 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.initLayers().then($scope.newForm);
     });
 
-    $scope.$on('loadReportStrucutureForDash', async function (event, args) {
+    $scope.$on('loadReportStrucutureForDash', function (event, args) {
         var report = args.report;
-        await $scope.initLayers;
 
         $scope.selectedReport = report;
         $scope.mode = 'edit';
         $scope.isForDash = true;
 
-        await $scope.initLayers();
-        $scope.initForm();
+        return $scope.initLayers().then(function () {
+            $scope.initForm();
+        });
     });
 
-    $scope.initLayers = async function () {
-        const layers = await reportModel.getLayers();
-        layers.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    $scope.initLayers = function () {
+        return reportModel.getLayers().then(function (layers) {
+            layers.sort(function (a, b) { return a.name.localeCompare(b.name); });
 
-        $scope.rootItem = layers[0].rootItem;
-        $scope.layers = layers;
+            $scope.rootItem = layers[0].rootItem;
+            $scope.layers = layers;
+        });
     };
 
     $scope.newForm = function () {
@@ -175,7 +185,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.mode = 'add';
     };
 
-    $scope.initForm = async function () {
+    $scope.initForm = function () {
         $scope.mode = 'edit';
         $scope.cleanForm();
         var layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
@@ -201,7 +211,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         if (!report.properties.order) { report.properties.order = []; }
     };
 
-    $scope.getReports = async function (params) {
+    $scope.getReports = function (params) {
         /*
         * The possbile fields in params are
         * fields
@@ -245,12 +255,13 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             }
         }
 
-        const data = await connection.get('/api/reports/find-all', params);
-        $scope.reports = data.items;
-        // $scope.items = data.items;
-        $scope.navigation.page = data.page;
-        $scope.navigation.pages = data.pages;
-        $scope.navigation.pager = PagerService.GetPager($scope.reports.length, data.page, 10, data.pages);
+        return connection.get('/api/reports/find-all', params).then(function (data) {
+            $scope.reports = data.items;
+            // $scope.items = data.items;
+            $scope.navigation.page = data.page;
+            $scope.navigation.pages = data.pages;
+            $scope.navigation.pager = PagerService.GetPager($scope.reports.length, data.page, 10, data.pages);
+        });
     };
 
     $scope.initPrompts = function () {
@@ -362,24 +373,24 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         }
     };
 
-    $scope.reportNameSave = async function () {
+    $scope.reportNameSave = function () {
         $scope.selectedReport.query = $scope.generateQuery();
 
         if (['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0) {
             reportModel.initChart($scope.selectedReport);
         }
 
-        await reportModel.saveAsReport($scope.selectedReport, $scope.mode);
-
-        $('#theReportNameModal').modal('hide');
-        $('.modal-backdrop').hide();
-        $scope.goBack();
+        return reportModel.saveAsReport($scope.selectedReport, $scope.mode).then(function () {
+            $('#theReportNameModal').modal('hide');
+            $('.modal-backdrop').hide();
+            $scope.goBack();
+        });
     };
 
     $scope.pushToDash = function () {
         var params = {};
 
-        connection.get('/api/dashboardsv2/find-all', params, function (data) {
+        return connection.get('/api/dashboardsv2/find-all', params, function (data) {
             $scope.dashboards = data;
             $('#dashListModal').modal('show');
         });
@@ -401,19 +412,22 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $('#publishModal').modal('show');
     };
 
-    $scope.unPublish = async function () {
-        await connection.post('/api/reports/unpublish', {_id: $scope.selectedReport._id});
-        $scope.selectedReport.isPublic = false;
-        $scope.$digest();
-        $('#publishModal').modal('hide');
+    $scope.unPublish = function () {
+        return connection.post('/api/reports/unpublish', {_id: $scope.selectedReport._id}).then(function () {
+            $scope.selectedReport.isPublic = false;
+            $('#publishModal').modal('hide');
+        });
     };
 
-    $scope.selectThisFolder = async function (folderID) {
-        await connection.post('/api/reports/publish-report', {_id: $scope.selectedReport._id, parentFolder: folderID});
-        $scope.selectedReport.parentFolder = folderID;
-        $scope.selectedReport.isPublic = true;
-        $scope.$digest();
-        $('#publishModal').modal('hide');
+    $scope.selectThisFolder = function (folderID) {
+        const url = '/api/reports/publish-report';
+        const params = {_id: $scope.selectedReport._id, parentFolder: folderID};
+
+        return connection.post(url, params).then(function () {
+            $scope.selectedReport.parentFolder = folderID;
+            $scope.selectedReport.isPublic = true;
+            $('#publishModal').modal('hide');
+        });
     };
 
     $scope.showFilterModal = function (filter) {
@@ -430,7 +444,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     *   Report edition
     */
 
-    $scope.refresh = async function () {
+    $scope.refresh = function () {
         $scope.selectedReport.query = $scope.generateQuery();
 
         if (['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0) {
@@ -445,18 +459,16 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         $scope.$broadcast('updateFilters');
         $scope.$broadcast('showLoadingMessage', 'Fetching data ...');
 
-        const result = await reportModel.fetchData($scope.selectedReport.query, params);
+        return reportModel.fetchData($scope.selectedReport.query, params).then(function (result) {
+            if (result.errorToken) {
+                $scope.errorToken = result.errorToken;
+            }
 
-        if (result.errorToken) {
-            $scope.errorToken = result.errorToken;
-        }
+            $scope.sql = result.sql;
+            $scope.time = result.time;
 
-        $scope.sql = result.sql;
-        $scope.time = result.time;
-
-        $scope.$broadcast('repaint', { fetchData: false });
-
-        $scope.$digest();
+            $scope.$broadcast('repaint', { fetchData: false });
+        });
     };
 
     $scope.generateQuery = function () {
@@ -771,7 +783,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     };
 
     $scope.changeReportType = function (newReportType) {
-        $scope.selectedReport.query.countYKeys = false;
+        const report = $scope.selectedReport;
+        if (report.query) {
+            report.query.countYKeys = false;
+        }
+
         $scope.$broadcast('clearReport');
 
         var movedColumns = [];
@@ -780,7 +796,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             b.push.apply(b, a.splice(0));
         }
 
-        const report = $scope.selectedReport;
         switch (newReportType) {
         case 'grid':
             report.reportType = 'grid';
@@ -801,7 +816,9 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         case 'pivot':
             moveContent(report.properties.xkeys, movedColumns);
             moveContent(report.properties.columns, movedColumns);
-            report.query.countYKeys = true;
+            if (report.query) {
+                report.query.countYKeys = true;
+            }
             report.reportType = 'pivot';
             break;
 

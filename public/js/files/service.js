@@ -1,12 +1,12 @@
 app.service('fileService', function (connection, Constants) {
-    this.getFiles = async function () {
+    this.getFiles = function () {
         const params = {};
 
-        var result = await connection.get('/api/files/get-files', params);
-
-        if (result.result === 1) {
-            return result.files;
-        }
+        return connection.get('/api/files/get-files', params).then(function (result) {
+            if (result.result === 1) {
+                return result.files;
+            }
+        });
     };
 
     this.uploadFile = function (file) {
