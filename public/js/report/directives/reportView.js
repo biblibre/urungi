@@ -31,7 +31,7 @@ app.directive('reportView', function ($q, $timeout, reportModel, $compile, c3Cha
 
                 let promise = $q.resolve(0);
 
-                if (args.fetchData) {
+                if (args.fetchData && $scope.report.query) {
                     $scope.loadingMessage = 'Fetching data ...';
                     promise = reportModel.fetchData($scope.report.query, args).then(function (result) {
                         if (result.errorToken) {
@@ -76,7 +76,7 @@ app.directive('reportView', function ($q, $timeout, reportModel, $compile, c3Cha
                             $scope.loading = false;
                         });
                     default:
-                        $scope.changeContent('<span style="font-size: small;color: darkgrey;padding: 5px;">' + $scope.report.reportName + '</span><div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>');
+                        $scope.changeContent('<div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>');
                     }
 
                     $scope.loading = false;
