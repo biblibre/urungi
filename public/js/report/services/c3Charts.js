@@ -11,7 +11,6 @@ app.service('c3Charts', function () {
 
         var query = report.query;
         var chart = report.properties.chart;
-        var queryID = report.query.id;
 
         var axisField = '';
         if (chart.dataAxis) { axisField = chart.dataAxis.id; }
@@ -134,7 +133,7 @@ app.service('c3Charts', function () {
             chart.stacked = false;
         }
 
-        var theChartCode = '#CHART_' + queryID;
+        var theChartCode = '#CHART_' + report.id;
 
         if (!chart.height) { chart.height = 300; }
 
@@ -297,7 +296,7 @@ app.service('c3Charts', function () {
     this.getChartHTML = function (report, mode) {
         var html = '';
 
-        const theChartID = report.query.id;
+        const theChartID = report.id;
 
         if (mode === 'edit') {
             html = '<c3chart page-block ndType="c3Chart" bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
