@@ -499,6 +499,10 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService
                 angular.element(document).injector().invoke(function ($compile) {
                     var scope = angular.element($div).scope();
                     $compile($div)(scope);
+
+                    if (customObjectData.objectType === 'report') {
+                        repaintReports();
+                    }
                 });
             }
         });
