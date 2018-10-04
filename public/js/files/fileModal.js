@@ -4,7 +4,7 @@ app.directive('fileModal', function ($http, fileService) {
         templateUrl: '/partials/files/galleryModal.html',
 
         link: function ($scope) {
-            $scope.init = async function () {
+            $scope.init = function () {
                 $scope.catalogImages = [];
 
                 for (var i = 1; i < 100; ++i) {
@@ -19,7 +19,9 @@ app.directive('fileModal', function ($http, fileService) {
                     $scope.catalogImages.push(image);
                 }
 
-                $scope.files = await fileService.getFiles();
+                return fileService.getFiles().then(function (files) {
+                    $scope.files = files;
+                });
             };
 
             $scope.$on('showFileModal', function (event, args) {
@@ -27,7 +29,6 @@ app.directive('fileModal', function ($http, fileService) {
 
                 fileService.getFiles().then(res => {
                     $scope.files = res;
-                    $scope.$digest();
                 });
 
                 $('#fileGalleryModal').modal('show');

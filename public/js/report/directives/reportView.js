@@ -1,4 +1,4 @@
-app.directive('reportView', function (reportModel, $compile, c3Charts, reportHtmlWidgets, grid,
+app.directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid,
     verticalGrid, pivot) {
     return {
 
@@ -22,60 +22,65 @@ app.directive('reportView', function (reportModel, $compile, c3Charts, reportHtm
                 $compile(element.contents())($scope);
             };
 
-            $scope.$on('repaint', async function (event, args) {
+            $scope.$on('repaint', function (event, args) {
                 $scope.loading = true;
 
                 if (!args) {
                     args = {};
                 }
 
-                if (args.fetchData) {
+                let promise = $q.resolve(0);
+
+                if (args.fetchData && $scope.report.query) {
                     $scope.loadingMessage = 'Fetching data ...';
-                    const result = await reportModel.fetchData($scope.report.query, args);
-                    if (result.errorToken) {
-                        $scope.errorToken = result.errorToken;
-                    }
-                }
-
-                $scope.loadingMessage = 'Repainting report ...';
-
-                switch ($scope.report.reportType) {
-                case 'grid':
-                    $scope.changeContent(grid.extendedGridV2($scope.report, $scope.mode));
-                    break;
-                case 'vertical-grid':
-                    $scope.changeContent(verticalGrid.getVerticalGrid($scope.report, $scope.mode));
-                    break;
-                case 'pivot':
-                    var result = pivot.getPivotTableSetup($scope.report);
-                    $scope.changeContent(result.html);
-                    $scope.loading = false;
-                    $scope.$digest();
-                    $(result.jquerySelector).cypivot(result.params);
-                    break;
-                case 'chart-line':
-                case 'chart-donut':
-                case 'chart-pie':
-                case 'gauge':
-                    $scope.changeContent(c3Charts.getChartHTML($scope.report, '$scope.mode'));
-                    await new Promise(resolve => {
-                        setTimeout(function () {
-                            c3Charts.rebuildChart($scope.report);
-                            resolve();
-                        }, 100);
+                    promise = reportModel.fetchData($scope.report.query, args).then(function (result) {
+                        if (result.errorToken) {
+                            $scope.errorToken = result.errorToken;
+                        }
                     });
-                    break;
-                case 'indicator':
-                    $scope.changeContent(reportHtmlWidgets.generateIndicator($scope.report));
-                    c3Charts.rebuildChart($scope.report);
-                    break;
-                default:
-                    $scope.changeContent('<span style="font-size: small;color: darkgrey;padding: 5px;">' + $scope.report.reportName + '</span><div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>');
                 }
 
-                $scope.loading = false;
+                return promise.then(function () {
+                    $scope.loadingMessage = 'Repainting report ...';
 
-                $scope.$digest();
+                    switch ($scope.report.reportType) {
+                    case 'grid':
+                        $scope.changeContent(grid.extendedGridV2($scope.report, $scope.mode));
+                        break;
+                    case 'vertical-grid':
+                        $scope.changeContent(verticalGrid.getVerticalGrid($scope.report, $scope.mode));
+                        break;
+                    case 'pivot':
+                        var result = pivot.getPivotTableSetup($scope.report);
+                        $scope.changeContent(result.html);
+                        $(result.jquerySelector).cypivot(result.params);
+                        break;
+                    case 'chart-line':
+                    case 'chart-donut':
+                    case 'chart-pie':
+                    case 'gauge':
+                        $scope.changeContent(c3Charts.getChartHTML($scope.report, $scope.mode));
+
+                        // FIXME $timeout should not be necessary here, but
+                        // without it the chart is shown and automatically
+                        // replaced by an empty chart
+                        return $timeout(function () {}, 0).then(function () {
+                            c3Charts.rebuildChart($scope.report);
+                            $scope.loading = false;
+                        });
+                    case 'indicator':
+                        $scope.changeContent(reportHtmlWidgets.generateIndicator($scope.report));
+
+                        return $timeout(function () {}, 0).then(function () {
+                            c3Charts.rebuildChart($scope.report);
+                            $scope.loading = false;
+                        });
+                    default:
+                        $scope.changeContent('<div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>');
+                    }
+
+                    $scope.loading = false;
+                });
             });
 
             $scope.$on('clearReport', function () {

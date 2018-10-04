@@ -51,14 +51,17 @@ app.service('dashboardv2Model', function ($http, $q, connection, reportService) 
         });
     };
 
-    this.duplicateDashboard = async function (duplicateOptions) {
+    this.duplicateDashboard = function (duplicateOptions) {
         const params = { id: duplicateOptions.dashboard._id };
-        var newDashboard = (await connection.get('/api/dashboardsv2/find-one', params)).item;
 
-        delete newDashboard._id;
-        delete newDashboard.createdOn;
-        newDashboard.dashboardName = duplicateOptions.newName;
+        return connection.get('/api/dashboardsv2/find-one', params).then(function (result) {
+            const newDashboard = result.item;
 
-        await connection.post('/api/dashboardsv2/create', newDashboard);
+            delete newDashboard._id;
+            delete newDashboard.createdOn;
+            newDashboard.dashboardName = duplicateOptions.newName;
+
+            return connection.post('/api/dashboardsv2/create', newDashboard);
+        });
     };
 });

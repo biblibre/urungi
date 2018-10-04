@@ -1,4 +1,4 @@
-app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons, colors,
+app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons, colors,
     htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout, $rootScope, PagerService, gettext) {
     $scope.loadUserObjects();
 
@@ -95,17 +95,17 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
         $('#reportImportModal').modal('show');
     };
 
-    $scope.nav.clickItem = async function (item) {
-        const report = await reportModel.getReportDefinition(item._id);
+    $scope.nav.clickItem = function (item) {
+        return reportModel.getReportDefinition(item._id).then(function (report) {
+            if (report) {
+                report.id = report._id;
+                $scope.selectedDashboard.reports.push(report);
+            } else {
+                noty({ text: 'Error : failed to import report', type: 'error', timeout: 3000 });
+            }
 
-        if (report) {
-            report.id = report._id;
-            $scope.selectedDashboard.reports.push(report);
-        } else {
-            noty({ text: 'Error : failed to import report', type: 'error', timeout: 3000 });
-        }
-
-        $('#reportImportModal').modal('hide');
+            $('#reportImportModal').modal('hide');
+        });
     };
 
     $scope.$on('cancelReport', function (event, args) {
@@ -141,7 +141,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
         });
     }
 
-    $scope.initForm = async function () {
+    $scope.initForm = function () {
         if (/new/.test($location.path())) {
             $scope.mode = 'add';
         }
@@ -184,42 +184,41 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
                 noty({ text: 'Could not load dashboard : missing id', type: 'error', timeout: 4000 });
             }
 
-            const data = await connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, {id: $scope.dashboardID});
-            $scope.selectedDashboard = data.item;
+            return connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, {id: $scope.dashboardID}).then(function (data) {
+                $scope.selectedDashboard = data.item;
 
-            if (/push/.test($location.path())) {
-                const pushedReport = reportService.getReport();
-                pushedReport.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
-                pushedReport.id = uuid2.newguid();
-                $scope.selectedDashboard.reports.push(pushedReport);
-            }
+                if (/push/.test($location.path())) {
+                    const pushedReport = reportService.getReport();
+                    pushedReport.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
+                    pushedReport.id = uuid2.newguid();
+                    $scope.selectedDashboard.reports.push(pushedReport);
+                }
 
-            if ($scope.selectedDashboard.backgroundColor) { $('#designArea').css({'background-color': $scope.selectedDashboard.backgroundColor}); }
+                if ($scope.selectedDashboard.backgroundColor) { $('#designArea').css({'background-color': $scope.selectedDashboard.backgroundColor}); }
 
-            if ($scope.selectedDashboard.backgroundImage && $scope.selectedDashboard.backgroundImage !== 'none') {
-                $('#designArea').css({ 'background-image': "url('" + $scope.selectedDashboard.backgroundImage + "')" });
-                $('#designArea').css({'-webkit-background-size': 'cover'});
-                $('#designArea').css({'-moz-background-size': 'cover'});
-                $('#designArea').css({'-o-background-size': 'cover'});
-                $('#designArea').css({'background-size': 'cover'});
-            }
+                if ($scope.selectedDashboard.backgroundImage && $scope.selectedDashboard.backgroundImage !== 'none') {
+                    $('#designArea').css({ 'background-image': "url('" + $scope.selectedDashboard.backgroundImage + "')" });
+                    $('#designArea').css({'-webkit-background-size': 'cover'});
+                    $('#designArea').css({'-moz-background-size': 'cover'});
+                    $('#designArea').css({'-o-background-size': 'cover'});
+                    $('#designArea').css({'background-size': 'cover'});
+                }
 
-            // getAllPageColumns();
+                // getAllPageColumns();
 
-            var $div = $($scope.selectedDashboard.properties.designerHTML);
-            var el = angular.element(document.getElementById('designArea'));
-            el.append($div);
-            angular.element(document).injector().invoke(function ($compile) {
-                $compile($div)($scope);
+                var $div = $($scope.selectedDashboard.properties.designerHTML);
+                var el = angular.element(document.getElementById('designArea'));
+                el.append($div);
+                angular.element(document).injector().invoke(function ($compile) {
+                    $compile($div)($scope);
+                });
+
+                cleanAllSelected();
+
+                $scope.initPrompts();
+
+                repaintReports();
             });
-
-            cleanAllSelected();
-
-            $scope.initPrompts();
-
-            repaintReports();
-
-            $scope.$digest();
         }
     };
 
@@ -311,12 +310,14 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
         $('#duplicateModal').modal('show');
     };
 
-    $scope.duplicateDashboard = async function () {
+    $scope.duplicateDashboard = function () {
         $scope.duplicateOptions.freeze = true;
-        await dashboardv2Model.duplicateDashboard($scope.duplicateOptions);
-        $scope.getDashboards($scope.page, '', ['dashboardName', 'isPublic', 'owner', 'dashboardDescription']);
-        $scope.duplicateOptions.freeze = false;
-        $('#duplicateModal').modal('hide');
+
+        return dashboardv2Model.duplicateDashboard($scope.duplicateOptions).then(function () {
+            $scope.getDashboards($scope.page, '', ['dashboardName', 'isPublic', 'owner', 'dashboardDescription']);
+            $scope.duplicateOptions.freeze = false;
+            $('#duplicateModal').modal('hide');
+        });
     };
 
     $scope.duplicateOptions.duplicate = $scope.duplicateDashboard;
@@ -369,111 +370,115 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
         $scope.$broadcast('loadReportStrucutureForDash', {report: reportBackup});
     };
 
-    async function getDroppableObjectHtml (data, context) {
-        switch (data.objectType) {
-        case 'jumbotron':
-            return htmlWidgets.getJumbotronHTML();
+    function getDroppableObjectHtml (data, context) {
+        return $q.resolve(0).then(function () {
+            switch (data.objectType) {
+            case 'jumbotron':
+                return htmlWidgets.getJumbotronHTML();
 
-        case '4colscta':
-            return htmlWidgets.get4colsctaHTML();
+            case '4colscta':
+                return htmlWidgets.get4colsctaHTML();
 
-        case '3colscta':
-            return htmlWidgets.get3colsctaHTML();
+            case '3colscta':
+                return htmlWidgets.get3colsctaHTML();
 
-        case '2colscta':
-            return htmlWidgets.get2colsctaHTML();
+            case '2colscta':
+                return htmlWidgets.get2colsctaHTML();
 
-        case 'divider':
-            return htmlWidgets.getDivider();
+            case 'divider':
+                return htmlWidgets.getDivider();
 
-        case 'imageTextLarge':
-            return htmlWidgets.getImageTextLargeHTML();
+            case 'imageTextLarge':
+                return htmlWidgets.getImageTextLargeHTML();
 
-        case 'textImageLarge':
-            return htmlWidgets.getTextImageLargeHTML();
+            case 'textImageLarge':
+                return htmlWidgets.getTextImageLargeHTML();
 
-        case 'report':
-            const report = $scope.selectedDashboard.reports.find(r => r.id === data.reportID);
-            if (!report) {
-                noty({text: 'Could not find report', timeout: 6000, type: 'error'});
-                return;
-            }
-            if (angular.element('#REPORT_' + report.id).length) {
-                noty({text: 'Sorry, that report is already on the dash', timeout: 6000, type: 'error'});
-                return;
-            }
-            return reportModel.getReportContainerHTML(data.reportID);
+            case 'report':
+                const report = $scope.selectedDashboard.reports.find(r => r.id === data.reportID);
+                if (!report) {
+                    noty({text: 'Could not find report', timeout: 6000, type: 'error'});
+                    return;
+                }
+                if (angular.element('#REPORT_' + report.id).length) {
+                    noty({text: 'Sorry, that report is already on the dash', timeout: 6000, type: 'error'});
+                    return;
+                }
+                return reportModel.getReportContainerHTML(data.reportID);
 
-        case 'queryFilter':
-            if (angular.element('#PROMPT_' + data.promptID).length) {
-                noty({text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error'});
-                return;
-            }
-            return reportModel.getPromptHTML(data);
+            case 'queryFilter':
+                if (angular.element('#PROMPT_' + data.promptID).length) {
+                    noty({text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error'});
+                    return;
+                }
+                return reportModel.getPromptHTML(data);
 
-        case 'tabs':
-            var theid = 'TABS_' + uuid2.newguid();
-            var theTabs = [{label: 'tab1', active: true, id: uuid2.newguid()}, {label: 'tab2', active: false, id: uuid2.newguid()}, {label: 'tab3', active: false, id: uuid2.newguid()}, {label: 'tab4', active: false, id: uuid2.newguid()}];
-            var tabsElement = {id: theid, type: 'tabs', properties: {tabs: theTabs}};
-            if (!$scope.selectedDashboard.containers) { $scope.selectedDashboard.containers = []; }
-            $scope.selectedDashboard.containers.push(tabsElement);
+            case 'tabs':
+                var theid = 'TABS_' + uuid2.newguid();
+                var theTabs = [{label: 'tab1', active: true, id: uuid2.newguid()}, {label: 'tab2', active: false, id: uuid2.newguid()}, {label: 'tab3', active: false, id: uuid2.newguid()}, {label: 'tab4', active: false, id: uuid2.newguid()}];
+                var tabsElement = {id: theid, type: 'tabs', properties: {tabs: theTabs}};
+                if (!$scope.selectedDashboard.containers) { $scope.selectedDashboard.containers = []; }
+                $scope.selectedDashboard.containers.push(tabsElement);
 
-            return htmlWidgets.getTabsHTML(theid, theTabs);
+                return htmlWidgets.getTabsHTML(theid, theTabs);
 
-        case 'image':
-            return new Promise((resolve, reject) => {
-                $scope.$broadcast('showFileModal', {addFile: function (file) {
-                    var url = file.url;
-                    if (context) {
-                        if (context.preferedSize === '700' && file.source700) {
-                            url = file.source700;
+            case 'image':
+                const deferred = $q.defer();
+                $scope.$broadcast('showFileModal', {
+                    addFile: function (file) {
+                        var url = file.url;
+                        if (context) {
+                            if (context.preferedSize === '700' && file.source700) {
+                                url = file.source700;
+                            }
+                            if (context.preferedSize === '1400' && file.source1400) {
+                                url = file.source1400;
+                            }
                         }
-                        if (context.preferedSize === '1400' && file.source1400) {
-                            url = file.source1400;
-                        }
+                        deferred.resolve(htmlWidgets.getImage(url));
                     }
-                    resolve(htmlWidgets.getImage(url));
-                } });
-            });
+                });
+                return deferred.promise;
 
-        case 'video':
-            return htmlWidgets.getVideo();
+            case 'video':
+                return htmlWidgets.getVideo();
 
-        case 'paragraph':
-            return htmlWidgets.getParagraph();
+            case 'paragraph':
+                return htmlWidgets.getParagraph();
 
-        case 'heading':
-            return htmlWidgets.getHeading();
+            case 'heading':
+                return htmlWidgets.getHeading();
 
-        case 'pageHeader':
-            return htmlWidgets.getPageHeader();
+            case 'pageHeader':
+                return htmlWidgets.getPageHeader();
 
-        case 'definitionList':
-            return htmlWidgets.getDefinitionList();
-        }
+            case 'definitionList':
+                return htmlWidgets.getDefinitionList();
+            }
+        });
     }
 
-    $scope.onDrop = async function (data, event, type, group) {
+    $scope.onDrop = function (data, event, type, group) {
         // DROP OVER THE DASHBOARD PARENT DIV
 
         event.stopPropagation();
         var customObjectData = data['json/custom-object'];
 
-        var html = await getDroppableObjectHtml(customObjectData, {preferedSize: '1400'});
+        return getDroppableObjectHtml(customObjectData, {preferedSize: '1400'}).then(function (html) {
+            var $div = $(html);
+            $('#designArea').append($div);
+            angular.element(document).injector().invoke(function ($compile) {
+                var scope = angular.element($div).scope();
+                $compile($div)(scope);
+            });
 
-        var $div = $(html);
-        $('#designArea').append($div);
-        angular.element(document).injector().invoke(function ($compile) {
-            var scope = angular.element($div).scope();
-            $compile($div)(scope);
+            if (customObjectData.objectType === 'report') {
+                repaintReports();
+            }
         });
-
-        if (customObjectData.objectType === 'report') {
-            repaintReports();
-        }
     };
 
-    $scope.onDropObject = async function (data, event, type, group) {
+    $scope.onDropObject = function (data, event, type, group) {
         // DROP OVER AN HTML CONTAINER
 
         event.stopPropagation();
@@ -486,17 +491,21 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, reportService, co
             return;
         }
 
-        var html = await getDroppableObjectHtml(customObjectData, {preferedSize: '700'});
+        return getDroppableObjectHtml(customObjectData, {preferedSize: '700'}).then(function (html) {
+            if (html) {
+                var $div = $(html);
+                var el = angular.element(event.target);
+                el.append($div);
+                angular.element(document).injector().invoke(function ($compile) {
+                    var scope = angular.element($div).scope();
+                    $compile($div)(scope);
 
-        if (html) {
-            var $div = $(html);
-            var el = angular.element(event.target);
-            el.append($div);
-            angular.element(document).injector().invoke(function ($compile) {
-                var scope = angular.element($div).scope();
-                $compile($div)(scope);
-            });
-        }
+                    if (customObjectData.objectType === 'report') {
+                        repaintReports();
+                    }
+                });
+            }
+        });
     };
 
     $scope.promptChanged = function (elementID, values) {

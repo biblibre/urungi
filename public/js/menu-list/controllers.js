@@ -59,7 +59,7 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
         $scope.nav.refreshItems();
     };
 
-    $scope.nav.refreshItems = async function () {
+    $scope.nav.refreshItems = function () {
         var params = {
             fields: $scope.nav.fetchFields,
             page: $scope.nav.page,
@@ -74,17 +74,15 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
             }
         }
 
-        const result = await connection.get($scope.nav.apiFetchUrl, params);
+        return connection.get($scope.nav.apiFetchUrl, params).then(function (result) {
+            if (result.result === 0) {
+                return;
+            }
 
-        if (result.result === 0) {
-            return;
-        }
-
-        $scope.nav.items = result.items;
-        $scope.nav.page = result.page;
-        $scope.nav.pager = PagerService.GetPager($scope.nav.items.length, result.page, $scope.nav.itemsPerPage, result.pages);
-
-        $scope.$digest();
+            $scope.nav.items = result.items;
+            $scope.nav.page = result.page;
+            $scope.nav.pager = PagerService.GetPager($scope.nav.items.length, result.page, $scope.nav.itemsPerPage, result.pages);
+        });
     };
 })
     .controller('reportListCtrl', function ($scope, $location, connection, reportModel, gettext) {
@@ -144,18 +142,20 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
             return '/#/reports/edit/' + item._id;
         };
 
-        $scope.duplicate = async function () {
+        $scope.duplicate = function () {
             $scope.duplicateOptions.freeze = true;
-            await reportModel.duplicateReport({report: $scope.duplicateOptions.item, newName: $scope.duplicateOptions.newName});
-            $scope.nav.refreshItems();
-            $scope.duplicateOptions.freeze = false;
-            $('#duplicateModal').modal('hide');
+            return reportModel.duplicateReport({report: $scope.duplicateOptions.item, newName: $scope.duplicateOptions.newName}).then(function () {
+                $scope.nav.refreshItems();
+                $scope.duplicateOptions.freeze = false;
+                $('#duplicateModal').modal('hide');
+            });
         };
 
-        $scope.delete = async function () {
-            await connection.post('/api/reports/delete/' + $scope.deleteOptions.id, {id: $scope.deleteOptions.id});
-            $scope.nav.refreshItems();
-            $('#deleteModal').modal('hide');
+        $scope.delete = function () {
+            return connection.post('/api/reports/delete/' + $scope.deleteOptions.id, {id: $scope.deleteOptions.id}).then(function () {
+                $scope.nav.refreshItems();
+                $('#deleteModal').modal('hide');
+            });
         };
 
         $scope.introOptions = {
@@ -333,18 +333,20 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
             deleteBody: 'Are you sure you want to delete the dashboard: '
         };
 
-        $scope.duplicate = async function () {
+        $scope.duplicate = function () {
             $scope.duplicateOptions.freeze = true;
-            await dashboardv2Model.duplicateDashboard({ dashboard: $scope.duplicateOptions.item, newName: $scope.duplicateOptions.newName });
-            $scope.nav.refreshItems();
-            $scope.duplicateOptions.freeze = false;
-            $('#duplicateModal').modal('hide');
+            return dashboardv2Model.duplicateDashboard({ dashboard: $scope.duplicateOptions.item, newName: $scope.duplicateOptions.newName }).then(function () {
+                $scope.nav.refreshItems();
+                $scope.duplicateOptions.freeze = false;
+                $('#duplicateModal').modal('hide');
+            });
         };
 
-        $scope.delete = async function () {
-            await connection.post('/api/dashboardsv2/delete/' + $scope.deleteOptions.id, {id: $scope.deleteOptions.id});
-            $scope.nav.refreshItems();
-            $('#deleteModal').modal('hide');
+        $scope.delete = function () {
+            return connection.post('/api/dashboardsv2/delete/' + $scope.deleteOptions.id, {id: $scope.deleteOptions.id}).then(function () {
+                $scope.nav.refreshItems();
+                $('#deleteModal').modal('hide');
+            });
         };
 
         $scope.nav.clickItem = function (item) {
@@ -500,11 +502,12 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
             $('#layerModal').modal('show');
         };
 
-        $scope.saveLayer = async function () {
+        $scope.saveLayer = function () {
             var data = $scope.layerOptions;
-            await connection.post('/api/layers/create', data);
-            $scope.nav.refreshItems();
-            $('#layerModal').modal('hide');
+            return connection.post('/api/layers/create', data).then(function () {
+                $scope.nav.refreshItems();
+                $('#layerModal').modal('hide');
+            });
         };
 
         $scope.nav.clickItem = function (item) {
