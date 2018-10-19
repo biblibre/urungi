@@ -1,4 +1,4 @@
-app.controller('ioCtrl', function ($scope, $rootScope, connection, $routeParams, ioModel, FileSaver, Upload) {
+app.controller('ioCtrl', function ($scope, $rootScope, $q, connection, $routeParams, ioModel, FileSaver, Upload) {
     $scope.layers = [];
     $scope.reports = [];
     $scope.dashboards = [];
@@ -9,14 +9,15 @@ app.controller('ioCtrl', function ($scope, $rootScope, connection, $routeParams,
 
     $scope.matchAllDatasourcesMessage = false;
 
-    $scope.initExport = async function () {
-        $scope.layers = await ioModel.getLayers();
-        $scope.reports = await ioModel.getReports();
-        $scope.dashboards = await ioModel.getDashboards();
-        $scope.$digest();
+    $scope.initExport = function () {
+        return $q.all([
+            ioModel.getLayers().then(layers => { $scope.layers = layers; }),
+            ioModel.getReports().then(reports => { $scope.reports = reports; }),
+            ioModel.getDashboards().then(dashboards => { $scope.dashboards = dashboards; }),
+        ]);
     };
 
-    $scope.initImport = async function () {
+    $scope.initImport = function () {
         $scope.importFile = undefined;
         $scope.state = 1;
         $scope.fileReader = new FileReader();
@@ -45,9 +46,7 @@ app.controller('ioCtrl', function ($scope, $rootScope, connection, $routeParams,
                 $scope.importFile = JSON.parse($scope.fileReader.result);
                 if (!($scope.importFile.layers && $scope.importFile.reports &&
                     $scope.importFile.datasources && $scope.importFile.dashboards)) {
-                    var error = Object();
-                    error['msg'] = 'missing fields';
-                    throw error;
+                    throw new Error('missing fields');
                 }
             } catch (err) {
                 console.log('invalid file format');
@@ -66,15 +65,17 @@ app.controller('ioCtrl', function ($scope, $rootScope, connection, $routeParams,
         }
     }
 
-    $scope.startImport = async function () {
+    $scope.startImport = function () {
         $scope.datasourceMatch = {};
-        $scope.localDataSources = await ioModel.getDataSources();
-        for (const dts of $scope.importFile.datasources) {
-            $scope.datasourceMatch[dts._id] = autoDetect(dts);
-        }
 
-        $scope.state = 2;
-        $scope.$digest();
+        return ioModel.getDataSources().then(datasources => {
+            $scope.localDataSources = datasources;
+            for (const dts of $scope.importFile.datasources) {
+                $scope.datasourceMatch[dts._id] = autoDetect(dts);
+            }
+
+            $scope.state = 2;
+        });
     };
 
     $scope.confirmImport = function () {
@@ -88,14 +89,13 @@ app.controller('ioCtrl', function ($scope, $rootScope, connection, $routeParams,
         }
         ioModel.importBundle($scope.importFile, datasourceRef).then(function (result) {
             $scope.state = 3;
-            $scope.created = result;
-            $scope.$digest();
+            $scope.created = result.additions;
+            $scope.messages = result.messages;
         },
         function (error) {
             $scope.state = 4;
             $scope.created = false;
             $scope.creationError = error;
-            $scope.$digest();
         });
     };
 

@@ -1,4 +1,4 @@
-app.service('ioModel', function (connection) {
+app.service('ioModel', function (connection, $q) {
     function exportDatasource (datasourceID) {
         return connection.get('/api/data-sources/find-one', {id: datasourceID})
             .then(response => response.item);
@@ -77,19 +77,7 @@ app.service('ioModel', function (connection) {
             });
     };
 
-    async function importLayer (layer, datasourceRef, additions) {
-        var params = {
-            find: JSON.stringify([
-                { _id: layer._id }
-            ])
-        };
-
-        var existingLayer = await connection.get('/api/layers/find-all', params);
-
-        if (existingLayer.items.length > 0) {
-            return;
-        }
-
+    function importLayer (layer, datasourceRef) {
         function exploreElements (elements) {
             for (const el of elements) {
                 if (el.datasourceID) {
@@ -107,24 +95,10 @@ app.service('ioModel', function (connection) {
             col.datasourceID = datasourceRef[col.datasourceID];
         }
 
-        var newLayer = await connection.post('/api/layers/create', layer);
-
-        additions.push(newLayer);
+        return connection.post('/api/layers/create', layer);
     }
 
-    async function importReport (report, datasourceRef, additions) {
-        var params = {
-            find: JSON.stringify([
-                { _id: report._id }
-            ])
-        };
-
-        var existingReport = await connection.get('/api/reports/find-all', params);
-
-        if (existingReport.items.length > 0) {
-            return;
-        }
-
+    function importReport (report, datasourceRef) {
         for (const object of
             report.properties.columns.concat(
                 report.properties.xkeys,
@@ -140,101 +114,128 @@ app.service('ioModel', function (connection) {
             }
         }
 
-        var newReport = await connection.post('/api/reports/create', report);
-
-        additions.push(newReport);
+        return connection.post('/api/reports/create', report);
     }
 
-    async function importDashboard (dashboard, datasourceRef, additions) {
-        var params = {
-            find: JSON.stringify([
-                { _id: dashboard._id }
-            ])
-        };
-
-        var existingDashboard = await connection.get('/api/dashboardsv2/find-all', params);
-
-        if (existingDashboard.items.length > 0) {
-            return;
-        }
-
+    function importDashboard (dashboard, datasourceRef) {
         for (const report of dashboard.reports) {
-            for (const object of
-                report.properties.columns.concat(
-                    report.properties.xkeys,
-                    report.properties.ykeys,
-                    report.properties.pivotKeys.rows,
-                    report.properties.pivotKeys.columns,
-                    report.query.columns,
-                    report.query.order,
-                    report.query.groupFilters
-                )) {
+            for (const object of report.properties.columns.concat(
+                report.properties.xkeys,
+                report.properties.ykeys,
+                report.properties.pivotKeys.rows,
+                report.properties.pivotKeys.columns,
+                report.query.columns,
+                report.query.order,
+                report.query.groupFilters
+            )) {
                 if (object && object.datasourceID) {
                     object.datasourceID = datasourceRef[object.datasourceID];
                 }
             }
         }
 
-        var newDashboard = await connection.post('/api/dashboardsv2/create', dashboard);
-
-        additions.push(newDashboard);
+        return connection.post('/api/dashboardsv2/create', dashboard);
     }
 
-    this.importBundle = async function (bundle, datasourceRef) {
-        var additions = [];
+    this.importBundle = function (bundle, datasourceRef) {
+        const additions = [];
+        const messages = [];
 
+        const layerPromises = [];
         for (const layer of bundle.layers) {
-            await importLayer(layer, datasourceRef, additions);
+            const p = getLayer(layer._id).then(l => {
+                if (l) {
+                    messages.push('Layer was not imported because it already exists in database: ' + l.name);
+                    return;
+                }
+
+                return importLayer(l, datasourceRef).then(l => {
+                    additions.push(l);
+                });
+            });
+            layerPromises.push(p);
         }
 
-        for (const report of bundle.reports) {
-            await importReport(report, datasourceRef, additions);
-        }
+        return $q.all(layerPromises).then(() => {
+            const promises = [];
+            for (const report of bundle.reports) {
+                const p = getReport(report._id).then(r => {
+                    if (r) {
+                        messages.push('Report was not imported because it already exists in database: ' + r.reportName);
+                        return;
+                    }
 
-        for (const dashboard of bundle.dashboards) {
-            await importDashboard(dashboard, datasourceRef, additions);
-        }
+                    return importReport(r, datasourceRef).then(r => {
+                        additions.push(r);
+                    });
+                });
+                promises.push(p);
+            }
 
-        return additions;
+            for (const dashboard of bundle.dashboards) {
+                const p = getDashboard(dashboard._id).then(d => {
+                    if (d) {
+                        messages.push('Dashboard was not imported because it already exists in database: ' + d.dashboardName);
+                        return;
+                    }
+
+                    return importDashboard(dashboard, datasourceRef).then(d => {
+                        additions.push(d);
+                    });
+                });
+                promises.push(p);
+            }
+
+            return $q.all(promises).then(() => {
+                return {
+                    additions: additions,
+                    messages: messages,
+                };
+            });
+        });
     };
 
-    this.getDataSources = async function () {
+    this.getDataSources = function () {
         const params = {
             fields: ['_id', 'name']
         };
 
-        var result = await connection.get('/api/data-sources/find-all', params);
-
-        return result.items;
+        return connection.get('/api/data-sources/find-all', params).then(r => r.items);
     };
 
-    this.getLayers = async function () {
+    function getLayer (id) {
+        return connection.get('/api/layers/find-one', {id: id}).then(r => r.item);
+    }
+
+    this.getLayers = function () {
         var params = {
             fields: ['_id', 'name']
         };
 
-        var result = await connection.get('/api/layers/find-all', params);
-
-        return result.items;
+        return connection.get('/api/layers/find-all', params).then(r => r.items);
     };
 
-    this.getReports = async function () {
+    function getReport (id) {
+        return connection.get('/api/reports/find-one', {id: id}).then(r => r.item);
+    }
+
+    this.getReports = function () {
         var params = {
             fields: ['_id', 'reportName']
         };
 
-        var result = await connection.get('/api/reports/find-all', params);
-
-        return result.items;
+        return connection.get('/api/reports/find-all', params).then(r => r.items);
     };
 
-    this.getDashboards = async function () {
+    function getDashboard (id) {
+        return connection.get('/api/dashboardsv2/find-one', {id: id}).then(r => r.item);
+    }
+
+    this.getDashboards = function () {
         var params = {
             fields: ['_id', 'dashboardName']
         };
 
-        var result = await connection.get('/api/dashboardsv2/find-all', params);
-
-        return result.items;
+        return connection.get('/api/dashboardsv2/find-all', params).then(r => r.items);
     };
 });
