@@ -43,7 +43,6 @@
     "angular-treeview": "*",
     "noty": "~2.3.7",
     "checklist-model": "~0.6.0",
-    "tg-dynamic-directive": "*",
     "angular-uuid2": "*",
     "angular-vs-repeat": "~1.0.0-rc9",
     "bootstrap-datepicker": "~1.4.1",

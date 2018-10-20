@@ -354,13 +354,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         return $scope.selectedReport.properties.columnDefs;
     };
 
-    $scope.getView = function (item) {
-        if (item) {
-            return 'nestable_item.html';
-        }
-        return null;
-    };
-
     /*
     *   Modals and navigation buttons
     */
