@@ -39,7 +39,6 @@
     "angular-ui-router": "~0.2.15",
     "jquery-nestable": "*",
     "ui-bootstrap": "~0.14.2",
-    "angular-treeview": "*",
     "noty": "~2.3.7",
     "angular-uuid2": "*",
     "angular-vs-repeat": "~1.0.0-rc9",
