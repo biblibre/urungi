@@ -5,7 +5,7 @@ var app = angular.module('Urungi', [
     'ngRoute', 'ui.sortable', 'gridster', 'ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'ng-nestable',
     'infinite-scroll', 'angular-canv-gauge', 'ui.bootstrap-slider', 'urungi.directives', 'ngSanitize', 'ui.select', 'angularUUID2', 'vs-repeat',
     'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'bsLoadingOverlay', 'xeditable',
-    'intro.help', 'ngTagsInput', 'ui.codemirror', '720kb.socialshare', 'ngFileUpload', 'colorpicker.module',
+    'intro.help', 'ngTagsInput', 'ui.codemirror', 'ngFileUpload', 'colorpicker.module',
     'wst.inspector', 'gettext', 'ngFileSaver'
 ])
     .config(['$routeProvider', function ($routeProvider) {
