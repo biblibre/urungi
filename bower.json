@@ -43,7 +43,6 @@
     "c3": "~0.4.10",
     "angular-loading-overlay": "~0.3.1",
     "ui-select": "angular-ui-select#~0.14.9",
-    "angular-daterangepicker": "~0.2.2",
     "ng-tags-input": "3.0.0",
     "angular-ui-select": "~0.19.4",
     "angular-ui-codemirror": "^0.3.0",
