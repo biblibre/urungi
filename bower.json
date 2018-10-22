@@ -39,7 +39,6 @@
     "bootstrap-datepicker": "~1.4.1",
     "moment": "~2.10.6",
     "numeral": "~1.5.3",
-    "angular-csv-import": "~0.0.26",
     "angular-bootstrap-datetimepicker": "~0.3.14",
     "angular-bootstrap-slider": "~0.1.18",
     "c3": "~0.4.10",
