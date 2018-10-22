@@ -194,21 +194,15 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService
                     $scope.selectedDashboard.reports.push(pushedReport);
                 }
 
-                if ($scope.selectedDashboard.backgroundColor) { $('#designArea').css({'background-color': $scope.selectedDashboard.backgroundColor}); }
-
-                if ($scope.selectedDashboard.backgroundImage && $scope.selectedDashboard.backgroundImage !== 'none') {
-                    $('#designArea').css({ 'background-image': "url('" + $scope.selectedDashboard.backgroundImage + "')" });
-                    $('#designArea').css({'-webkit-background-size': 'cover'});
-                    $('#designArea').css({'-moz-background-size': 'cover'});
-                    $('#designArea').css({'-o-background-size': 'cover'});
-                    $('#designArea').css({'background-size': 'cover'});
-                }
-
                 // getAllPageColumns();
 
                 var $div = $($scope.selectedDashboard.properties.designerHTML);
                 var el = angular.element(document.getElementById('designArea'));
                 el.append($div);
+                if ($scope.selectedDashboard.properties.rootStyle) {
+                    el.attr('style', $scope.selectedDashboard.properties.rootStyle);
+                }
+
                 angular.element(document).injector().invoke(function ($compile) {
                     $compile($div)($scope);
                 });
@@ -231,16 +225,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService
             $scope.selectedDashboard = data.item;
             if (!$scope.selectedDashboard.containers) { $scope.selectedDashboard.containers = []; }
 
-            if ($scope.selectedDashboard.backgroundColor) { $('#pageViewer').css({'background-color': $scope.selectedDashboard.backgroundColor}); }
-
-            if ($scope.selectedDashboard.backgroundImage && $scope.selectedDashboard.backgroundImage !== 'none') {
-                $('#pageViewer').css({ 'background-image': "url('" + $scope.selectedDashboard.backgroundImage + "')" });
-                $('#pageViewer').css({'-webkit-background-size': 'cover'});
-                $('#pageViewer').css({'-moz-background-size': 'cover'});
-                $('#pageViewer').css({'-o-background-size': 'cover'});
-                $('#pageViewer').css({'background-size': 'cover'});
-            }
-
             // getAllPageColumns();
 
             var theHTML = $scope.selectedDashboard.html;
@@ -250,6 +234,10 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService
             var $div = $(theHTML);
             var el = angular.element(document.getElementById('pageViewer'));
             el.append($div);
+            if ($scope.selectedDashboard.properties.rootStyle) {
+                el.attr('style', $scope.selectedDashboard.properties.rootStyle);
+            }
+
             angular.element(document).injector().invoke(function ($compile) {
                 $compile($div)($scope);
             });
@@ -748,6 +736,7 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService
         // getPromptsWidget();
 
         $scope.selectedDashboard.properties.designerHTML = theHTML;
+        $scope.selectedDashboard.properties.rootStyle = container.attr('style');
 
         var previewContainer = $('#previewContainer');
 
