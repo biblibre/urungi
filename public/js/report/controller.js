@@ -19,7 +19,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
     $scope.dashListModal = 'partials/report/modals/dashboardListModal.html';
     $scope.filterPromptModal = 'partials/report/modals/filter-prompt-modal.html';
-    $scope.settingsTemplate = 'partials/widgets/common.html';
     $scope.tabs = {selected: 'elements'};
 
     $scope.selectedReport = {};
