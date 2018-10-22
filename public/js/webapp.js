@@ -4,7 +4,7 @@
 var app = angular.module('Urungi', [
     'ngRoute', 'ui.sortable', 'gridster', 'ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
     'infinite-scroll', 'angular-canv-gauge', 'ui.bootstrap-slider', 'urungi.directives', 'ngSanitize', 'ui.select', 'angularUUID2', 'vs-repeat',
-    'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'bsLoadingOverlay', 'gg.editableText',
+    'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'bsLoadingOverlay', 'xeditable',
     'intro.help', 'ngTagsInput', 'ui.codemirror', '720kb.socialshare', 'ngFileUpload', 'colorpicker.module', 'angularSpectrumColorpicker',
     'wst.inspector', 'gettext', 'ngFileSaver'
 ])
@@ -386,6 +386,11 @@ app.run(function (bsLoadingOverlayService) {
         templateUrl: 'partials/loading-overlay-template.html' // Template url for overlay element. If not specified - no overlay element is created.
     });
 });
+
+// Set default options for xeditable
+app.run(['editableOptions', function (editableOptions) {
+    editableOptions.buttons = 'no';
+}]);
 
 function isWSTADMIN ($rootScope) {
     var found = false;

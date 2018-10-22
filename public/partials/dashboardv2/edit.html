@@ -5,7 +5,7 @@
     <div class="explorer-header" ng-init="initForm()" style="">
 
         <div class="explorer-header-title">
-            <h3 class="pull-left" editable-text="selectedDashboard.dashboardName"></h3>
+            <h3 class="pull-left" editable-text="selectedDashboard.dashboardName">{{ selectedDashboard.dashboardName }}</h3>
         </div>
 
         <div class="explorer-header-buttons">
@@ -100,7 +100,7 @@
                             <img ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
                         </span>
                         <div style="width:100%">
-                        <span style="color: white; font-size: 10px; width:100%;text-align: left" editable-text="item.reportName"></span>
+                        <span style="color: white; font-size: 10px; width:100%;text-align: left" editable-text="item.reportName">{{ item.reportName }}</span>
                             <br/>
                         <!--<button class="btn btn-small" style="display: inline-block;
         color: #979898;
