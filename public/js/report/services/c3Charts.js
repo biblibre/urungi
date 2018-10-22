@@ -242,6 +242,15 @@ app.service('c3Charts', function () {
                             culling: {
                                 max: 20
                             },
+                            format: function (i) {
+                                const max = 20;
+                                let name = this.config.axis_x_categories[i];
+                                if (name.length > max) {
+                                    name = name.substr(0, max - 1) + '…';
+                                }
+
+                                return name;
+                            },
                             multiline: false,
                             rotate: 45
                         }
@@ -299,11 +308,11 @@ app.service('c3Charts', function () {
         const theChartID = report.id;
 
         if (mode === 'edit') {
-            html = '<c3chart page-block ndType="c3Chart" bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
+            html = '<div page-block ndType="c3Chart" bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
         } else {
-            html = '<c3chart bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
+            html = '<div bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
         }
-        html = html + '</c3chart>';
+        html = html + '</div>';
         return html;
     };
 

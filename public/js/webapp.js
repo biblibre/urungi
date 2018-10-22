@@ -4,7 +4,7 @@
 var app = angular.module('Urungi', [
     'ngRoute', 'ui.sortable', 'gridster', 'ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
     'infinite-scroll', 'angular-canv-gauge', 'ui.bootstrap-slider', 'urungi.directives', 'ngSanitize', 'ui.select', 'tg.dynamicDirective', 'angularUUID2', 'vs-repeat',
-    'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'gridshore.c3js.chart', 'vAccordion', 'bsLoadingOverlay', 'gg.editableText',
+    'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'vAccordion', 'bsLoadingOverlay', 'gg.editableText',
     'intro.help', 'ngTagsInput', 'ui.codemirror', '720kb.socialshare', 'ngFileUpload', 'colorpicker.module', 'angularSpectrumColorpicker',
     'wst.inspector', 'gettext', 'ngFileSaver'
 ])
