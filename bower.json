@@ -32,7 +32,6 @@
     "bootstrap": "~3.3.5",
     "angular-draganddrop": "~0.2.2",
     "angular-route": "1.5.5",
-    "angular-ui-router": "~0.2.15",
     "ui-bootstrap": "~0.14.2",
     "noty": "~2.3.7",
     "angular-uuid2": "*",
