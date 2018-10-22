@@ -24,7 +24,6 @@
   "dependencies": {
     "angular-sanitize": "1.5.5",
     "angular-ui-tree": "^2.16.0",
-    "blob": "*",
     "angular-file-saver": "^1.1.3",
     "js-xlsx": "~0.8.0",
     "jquery": "~2.1.4",
