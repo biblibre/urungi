@@ -56,7 +56,14 @@ class Controller {
         }
 
         if (req.query.find) {
-            for (var i in req.query.find) { mandatoryFilters.push(req.query.find[i]); }
+            let find = req.query.find;
+            if (typeof find === 'string') {
+                find = JSON.parse(find);
+            }
+
+            for (var f of find) {
+                mandatoryFilters.push(f);
+            }
         }
 
         var searchFind = {};

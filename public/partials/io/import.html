@@ -4,35 +4,41 @@
 
     <span ng-if="state === 1">
         <span ng-if="importFile">
-            <h5>Layers</h5>
-    
-            <ul>
-                <li ng-repeat="layer in importFile.layerExports">
-                    <div>
-                        <span> {{layer.name}}</span>
-                    </div>
-                </li>
-            </ul>
-    
-            <h5>Reports</h5>
-    
-            <ul>
-                <li ng-repeat="report in importFile.reportExports">
-                    <div>
-                        <span> {{report.reportName}}</span>
-                    </div>
-                </li>
-            </ul>
-    
-            <h5>Dashboards</h5>
-    
-            <ul>
-                <li ng-repeat="dashboard in importFile.dashboardExports">
-                    <div>
-                        <span> {{dashboard.dashboardName}}</span>
-                    </div>
-                </li>
-            </ul>
+            <div ng-if="importFile.layers.length">
+                <h4>Layers</h4>
+
+                <ul>
+                    <li ng-repeat="layer in importFile.layers">
+                        <div>
+                            <span> {{layer.name}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div ng-if="importFile.reports.length">
+                <h4>Reports</h4>
+
+                <ul>
+                    <li ng-repeat="report in importFile.reports">
+                        <div>
+                            <span> {{report.reportName}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div ng-if="importFile.dashboards.length">
+                <h4>Dashboards</h4>
+
+                <ul>
+                    <li ng-repeat="dashboard in importFile.dashboards">
+                        <div>
+                            <span> {{dashboard.dashboardName}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </span>
     
         <button class="btn btn-success" ng-click="startImport()" ng-show="importFile">import</button>
@@ -43,87 +49,75 @@
     </span>
 
     <span ng-if="state === 2">
-        <h5>Please associate the imported data sources to the local ones</h5>
-        </br>
-    
-            <!-- <style type="text/css">
-                #wrap {
-                width:800px;
-                margin:0 auto;
-                }
-                #left_col {
-                float:left;
-                width:500px;
-                }
-                #right_col {
-                float:right;
-                width:300px;
-                }
-            </style> -->
-            
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>Imported data sources</h5>
-                    <ul>
-                        <li ng-repeat="dts in importFile.datasourceExports">
-                            <div>
-                                <span>{{dts.name}}</span>
-                                <span>
-                                    -> 
-                                    <select ng-model="datasourceMatch[dts._id]" ng-options="dts as dts.name for dts in localDataSources"></select>
-                                </span>
-                            </div>
-                        </li>
-                    </ul>
+        <h4>Please associate the imported data sources to the local ones</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <h5>Imported data sources</h5>
+                <ul>
+                    <li ng-repeat="dts in importFile.datasources">
+                        <div>
+                            <span>{{dts.name}}</span>
+                            <span>
+                                -&gt;
+                                <select ng-model="datasourceMatch[dts._id]" ng-options="dts as dts.name for dts in localDataSources"></select>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
 
-
-                    </br>
-                    <div ng-show="matchAllDatasourcesMessage">Please match all datasources</div>
-                    </br>
-                    <button ng-click="confirmImport()">confirm</button>
-                    </br>
-                    <button ng-click="cancelImport()">cancel</button>
-
-                </div>
-                <div class="col-md-4">
-                    <h5>Existing data sources</h5>
-                    <ul>
-                        <li ng-repeat="dts in localDataSources">
-                            <div>
-                                {{dts.name}}
-                            </div>
-                        </li>
-                    </ul>
-
-                </div>
+                <div ng-show="matchAllDatasourcesMessage">Please match all datasources</div>
+                <button ng-click="confirmImport()">confirm</button>
+                <button ng-click="cancelImport()">cancel</button>
 
             </div>
-    </span>    
-    
+            <div class="col-md-4">
+                <h5>Existing data sources</h5>
+                <ul>
+                    <li ng-repeat="dts in localDataSources">
+                        <div>
+                            {{dts.name}}
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </span>
+
     <span ng-if="state === 3">
-        <h5>Import successful</h5>
+        <h4>Import successful</h4>
+
+        <h5>Created items</h5>
         <div ng-if="created.length">
-            The following items have been created : </br>
             <ul>
                 <li ng-repeat="item in created">
-                    {{item.item.name || item.item.reportName}}
+                    {{item.item.name || item.item.reportName || item.item.dashboardName}}
                 </li>
             </ul>
         </div>
         <div ng-if="!created.length">
             No new item has been created.
         </div>
+
+        <div ng-if="messages.length">
+            <h5>Messages</h5>
+            <ul>
+                <li ng-repeat="message in messages">
+                    {{ message }}
+                </li>
+            </ul>
+        </div>
+
         <button ng-click="initImport()">Import new file</button>
         <a class="button" href="/#/home">Back to main page</a>
     </span>
 
     <span ng-if="state === 4">
-        <h5>An error has occurred</h5>
+        <h4>An error has occurred</h4>
         <button ng-click="logError()">log error in console</button>
         </br>
         <button ng-click="initImport()">Import new file</button>
         <a class="button" href="/#/home">Back to main page</a>
     </span>
-
 </div>
 
