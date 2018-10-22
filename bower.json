@@ -23,7 +23,7 @@
   ],
   "dependencies": {
     "angular-gridster": "~0.13.5",
-    "angular-sanitize": "~1.4.7",
+    "angular-sanitize": "1.5.5",
     "angular-ui-layout": "~1.3.0",
     "angular-ui-tree": "~2.9.0",
     "file-saver": "*",
@@ -35,7 +35,7 @@
     "jquery-validate": "~1.14.0",
     "bootstrap": "~3.3.5",
     "angular-draganddrop": "~0.2.2",
-    "angular-route": "~1.4.7",
+    "angular-route": "1.5.5",
     "angular-ui-router": "~0.2.15",
     "raphael": "~2.1.4",
     "jquery-nestable": "*",
