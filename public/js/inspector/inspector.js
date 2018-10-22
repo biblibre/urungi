@@ -1461,52 +1461,6 @@ angular.module('wst.inspector', [])
         };
     }])
 
-    .directive('blRangeSlider', ['$rootScope', '$parse', 'inspector', function ($rootScope, $parse, inspector) {
-        return {
-            restrict: 'A',
-            link: function ($scope, el, attrs) {
-                var model = $parse(attrs.blRangeSlider);
-
-                // initiate slider
-                el.slider({
-                    min: 0,
-                    step: 1,
-                    max: attrs.max ? attrs.max : 100,
-                    range: 'min',
-                    animate: true,
-                    slide: function (e, ui) {
-                        if (attrs.blRangeSlider.indexOf('props') > -1) {
-                            $scope.$apply(function () { model.assign($scope, ui.value); });
-                        } else {
-                            inspector.applySliderValue(attrs.blRangeSlider, ui.value, 'px');
-                        }
-                    }
-                });
-
-                // reset slider when user selects a different DOM element or different
-                // style directions (top, bot, left, right)
-                $scope.$on('element.reselected', function () { el.slider('value', 0); });
-                $scope.$on(attrs.blRangeSlider + '.directions.changed', function () { el.slider('value', 0); });
-
-                el.on('slidestart', function (event, ui) {
-                    inspector.sliding = true;
-                    $scope.$broadcast(attrs.blRangeSlider.replace(/[A-Z][a-z]+/g, '') + '.slidestart', attrs.blRangeSlider);
-
-                    // hide select and hover box while user is dragging
-                    // as their positions will get messed up
-                    // MENE $scope.selectBox.add($scope.hoverBox).hide();
-                });
-
-                el.on('slidestop', function (event, ui) {
-                    $scope.$broadcast(attrs.blRangeSlider.replace(/[A-Z][a-z]+/g, '') + '.slidestop', attrs.blRangeSlider);
-                    $scope.repositionBox('select');
-                    inspector.sliding = false;
-                    $rootScope.$broadcast('builder.css.changed');
-                });
-            }
-        };
-    }])
-
     .directive('blCheckboxes', ['$compile', function ($compile) {
         return {
             restrict: 'A',
