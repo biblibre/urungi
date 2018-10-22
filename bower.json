@@ -22,7 +22,6 @@
     "tests"
   ],
   "dependencies": {
-    "angular-gridster": "~0.13.5",
     "angular-sanitize": "1.5.5",
     "angular-ui-layout": "~1.3.0",
     "angular-ui-tree": "^2.16.0",
