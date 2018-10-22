@@ -717,7 +717,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             break;
 
         case 'indicator':
-        case 'vectorMap':
         case 'gauge':
             choice = {
                 propertyBind: $scope.selectedReport.properties.ykeys,
@@ -853,14 +852,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             if (!report.properties.reportIcon) { report.properties.reportIcon = 'fa-bolt'; }
             if (!report.properties.mainFontColor) { report.properties.mainFontColor = '#000000'; }
             if (!report.properties.descFontColor) { report.properties.descFontColor = '#CCCCCC'; }
-            break;
-
-        case 'vectorMap':
-            moveContent(report.properties.columns, movedColumns);
-            moveContent(report.properties.xkeys, movedColumns);
-            moveContent(report.properties.pivotKeys.columns, movedColumns);
-            moveContent(report.properties.pivotKeys.rows, movedColumns);
-            report.reportType = 'vectorMap';
             break;
 
         case 'gauge':
