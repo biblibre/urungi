@@ -53,6 +53,7 @@
     "angular-gettext": "^2.4.0",
     "angular-xeditable": "^0.9.0",
     "angular-ui-sortable": "^0.14.4",
-    "angular-bootstrap": "^0.14.3"
+    "angular-bootstrap": "^0.14.3",
+    "jsPlumb": "1.7.6"
   }
 }
