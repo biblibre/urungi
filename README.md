@@ -18,7 +18,6 @@ and others, see [Supported databases](#supported-databases)
 
 - [nodejs](https://nodejs.org)
 - [npm](https://www.npmjs.com)
-- [bower](http://bower.io)
 - [MongoDB](https://www.mongodb.org)
 - [OpenJDK](http://openjdk.java.net/install/)
 - g++ and make (package build-essential on Debian-based distributions)
@@ -41,7 +40,6 @@ not going to explore MondoDB data.
 
     ```
     npm ci
-    bower install
     ```
 
 
