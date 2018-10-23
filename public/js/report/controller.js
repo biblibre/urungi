@@ -13,8 +13,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.linkModal = 'partials/report/modals/linkModal.html';
     $scope.repeaterTemplate = 'partials/report/partials/repeater.html';
     $scope.publishModal = 'partials/report/modals/publishModal.html';
-    $scope.columnFormatModal = 'partials/report/modals/columnFormatModal.html';
-    $scope.columnSignalsModal = 'partials/report/modals/columnSignalsModal.html';
     $scope.dropArea = 'partials/report/partials/drop-area.html';
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
     $scope.dashListModal = 'partials/report/modals/dashboardListModal.html';
@@ -916,20 +914,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         if (type === 'pie') { $scope.selectedReport.reportType = 'chart-pie'; }
         if (type === 'donut') { $scope.selectedReport.reportType = 'chart-donut'; }
         reportModel.repaintReport($scope.selectedReport, $scope.mode);
-    };
-
-    $scope.changeColumnStyle = function (columnIndex, hashedID) {
-        reportModel.changeColumnStyle($scope.selectedReport, columnIndex, hashedID);
-        $scope.selectedColumn = reportModel.selectedColumn();
-        $scope.selectedColumnHashedID = reportModel.selectedColumnHashedID();
-        $scope.selectedColumnIndex = reportModel.selectedColumnIndex();
-    };
-
-    $scope.changeColumnSignals = function (columnIndex, hashedID) {
-        reportModel.changeColumnSignals($scope.selectedReport, columnIndex, hashedID);
-        $scope.selectedColumn = reportModel.selectedColumn();
-        $scope.selectedColumnHashedID = reportModel.selectedColumnHashedID();
-        $scope.selectedColumnIndex = reportModel.selectedColumnIndex();
     };
 
     $scope.changeColumnColor = function (color) {
