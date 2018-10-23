@@ -1,14 +1,23 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
 const decomment = require('gulp-decomment');
+const gettext = require('gulp-angular-gettext');
 const merge = require('merge-stream');
 const del = require('del');
 
-gulp.task('clean', function () {
-    return del('dist/**/*');
+gulp.task('clean:js', function () {
+    return del('dist/js/*');
 });
 
-gulp.task('dist:js', ['clean'], function () {
+gulp.task('clean:css', function () {
+    return del('dist/css/*');
+});
+
+gulp.task('clean:translations', function () {
+    return del('dist/translations/*');
+});
+
+gulp.task('dist:js', ['clean:js'], function () {
     const paths = [
         'node_modules/jquery/dist/jquery.min.js',
         'node_modules/jquery-validation/dist/jquery.validate.min.js',
@@ -57,7 +66,7 @@ gulp.task('dist:js', ['clean'], function () {
     return merge(bundle, copy);
 });
 
-gulp.task('dist:css', ['clean'], function () {
+gulp.task('dist:css', ['clean:css'], function () {
     const paths = [
         'node_modules/bootstrap/dist/css/bootstrap.min.css',
         'node_modules/ui-select/dist/select.min.css',
@@ -75,6 +84,28 @@ gulp.task('dist:css', ['clean'], function () {
         .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('dist', ['dist:css', 'dist:js']);
+gulp.task('dist:translations', ['clean:translations'], function () {
+    return gulp.src(['language/*.po'])
+        .pipe(gettext.compile({ format: 'json' }))
+        .pipe(gulp.dest('dist/translations'));
+});
+
+gulp.task('dist', ['dist:js', 'dist:css', 'dist:translations']);
+
+gulp.task('pot', function () {
+    return gulp.src(['public/js/**/*.js', 'public/partials/**/*.html'], { base: '.' })
+        .pipe(gettext.extract('template.pot'))
+        .pipe(gulp.dest('language'));
+});
+
+gulp.task('po:update', ['pot'], function () {
+    const execSync = require('child_process').execSync;
+    const fs = require('fs');
+    fs.readdirSync('language').forEach(path => {
+        if (path.endsWith('.po')) {
+            execSync('msgmerge --quiet -U language/' + path + ' language/template.pot');
+        }
+    });
+});
 
 gulp.task('default', ['dist']);

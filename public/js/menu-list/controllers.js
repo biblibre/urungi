@@ -85,7 +85,7 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
         });
     };
 })
-    .controller('reportListCtrl', function ($scope, $location, connection, reportModel, gettext) {
+    .controller('reportListCtrl', function ($scope, $location, connection, reportModel, gettextCatalog) {
         $scope.listView = '/partials/menu-list/list.html';
 
         $scope.duplicateOptions = {};
@@ -163,11 +163,11 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '#parentIntro',
                     html: '<div><h3>' +
-                gettext('Reports') +
+                gettextCatalog.getString('Reports') +
                 '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettext('Here you can create and execute reports.') +
+                gettextCatalog.getString('Here you can create and execute reports.') +
                 '</span><br/><br/><iframe width="350" height="225" src="https://www.youtube.com/embed/_g1NcBIgGQU" frameborder="0" allowfullscreen></iframe><br/><br/><span>' +
-                gettext('Watch this short tutorial to see how to create a report.') +
+                gettextCatalog.getString('Watch this short tutorial to see how to create a report.') +
                 '</span></div>',
                     width: '500px',
                     objectArea: false,
@@ -177,11 +177,11 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '#parentIntro',
                     html: '<div><h3>' +
-                gettext('Reports') +
+                gettextCatalog.getString('Reports') +
                 '</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span>' +
-                gettext('Choose a report type and drag and drop elements from the selected layer to compose your report.') +
+                gettextCatalog.getString('Choose a report type and drag and drop elements from the selected layer to compose your report.') +
                 '</span><br/><br/><span>' +
-                gettext('You can also add runtime filters to split your data in real time.') +
+                gettextCatalog.getString('You can also add runtime filters to split your data in real time.') +
                 '</span><br/><br/><span></span></div>',
                     width: '350px',
                     objectArea: false,
@@ -191,9 +191,9 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '#newReportButton',
                     html: '<div><h3>' +
-                gettext('New Report') +
+                gettextCatalog.getString('New Report') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Click here to create a new report.') +
+                gettextCatalog.getString('Click here to create a new report.') +
                 '</span><br/><span></span></div>',
                     width: '300px',
                     height: '150px',
@@ -204,13 +204,13 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '#reportList',
                     html: '<div><h3>' +
-                gettext('Reports list') +
+                gettextCatalog.getString('Reports list') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Here all your reports are listed.') +
+                gettextCatalog.getString('Here all your reports are listed.') +
                 '</span><br/><span>' +
-                gettext('Click over a report\'s name to execute it.') +
+                gettextCatalog.getString('Click over a report\'s name to execute it.') +
                 '<br/><br/>' +
-                gettext('You can also modify or drop the report, clicking into the modify or delete buttons.') +
+                gettextCatalog.getString('You can also modify or drop the report, clicking into the modify or delete buttons.') +
                 '</span></div>',
                     width: '300px',
                     areaColor: 'transparent',
@@ -222,9 +222,9 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '.btn-edit',
                     html: '<div><h3>' +
-                gettext('Edit report') +
+                gettextCatalog.getString('Edit report') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Click here to modify the report.') +
+                gettextCatalog.getString('Click here to modify the report.') +
                 '</span><br/><br/><span></span></div>',
                     width: '300px',
                     areaColor: 'transparent',
@@ -236,13 +236,13 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '.btn-delete',
                     html: '<div><h3>' +
-                gettext('Delete report') +
+                gettextCatalog.getString('Delete report') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Click here to delete the report.') +
+                gettextCatalog.getString('Click here to delete the report.') +
                 '</span><br/><br/><span>' +
-                gettext('Once deleted the report will not be recoverable again.') +
+                gettextCatalog.getString('Once deleted the report will not be recoverable again.') +
                 '</span><br/><br/><span>' +
-                gettext('Requires 2 step confirmation.') +
+                gettextCatalog.getString('Requires 2 step confirmation.') +
                 '</span></div>',
                     width: '300px',
                     areaColor: 'transparent',
@@ -254,9 +254,9 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '.btn-duplicate',
                     html: '<div><h3>' +
-                gettext('Duplicate report') +
+                gettextCatalog.getString('Duplicate report') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Click here to duplicate the report.') +
+                gettextCatalog.getString('Click here to duplicate the report.') +
                 '</span></div>',
                     width: '300px',
                     areaColor: 'transparent',
@@ -268,11 +268,11 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '.published-tag',
                     html: '<div><h3>' +
-                gettext('Report published') +
+                gettextCatalog.getString('Report published') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('This label indicates that this report is public.') +
+                gettextCatalog.getString('This label indicates that this report is public.') +
                 '</span><br/><br/><span>' +
-                gettext('If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report.') +
+                gettextCatalog.getString('If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report.') +
                 '</span></div>',
                     width: '300px',
                     areaColor: 'transparent',
@@ -284,7 +284,7 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
             ]
         };
     })
-    .controller('dashboardListCtrl', function ($scope, $location, connection, dashboardv2Model, gettext) {
+    .controller('dashboardListCtrl', function ($scope, $location, connection, dashboardv2Model, gettextCatalog) {
         $scope.listView = '/partials/menu-list/list.html';
 
         $scope.duplicateOptions = {};
@@ -362,13 +362,13 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '#parentIntro',
                     html: '<div><h3>' +
-            gettext('Dashboards') +
+            gettextCatalog.getString('Dashboards') +
             '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-            gettext('In here you can create and execute dashboards like web pages.') +
+            gettextCatalog.getString('In here you can create and execute dashboards like web pages.') +
             '</span><br/><br/><span>' +
-            gettext('Define several reports using filters and dragging and dropping from different layers.') +
+            gettextCatalog.getString('Define several reports using filters and dragging and dropping from different layers.') +
             '</span><br/><br/><span>' +
-            gettext('After you define the report/s to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it.') +
+            gettextCatalog.getString('After you define the report/s to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it.') +
             '</span><br/><br/><span></span></div>',
                     width: '500px',
                     objectArea: false,
@@ -378,9 +378,9 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '#newDashboardButton',
                     html: '<div><h3>' +
-            gettext('New Dashboard') +
+            gettextCatalog.getString('New Dashboard') +
             '</h3><span style="font-weight:bold;">' +
-            gettext('Click here to create a new dashboard.') +
+            gettextCatalog.getString('Click here to create a new dashboard.') +
             '</span><br/><span></span></div>',
                     width: '300px',
                     height: '150px',
@@ -391,13 +391,13 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '#dashboardList',
                     html: '<div><h3>' +
-            gettext('Dashboards list') +
+            gettextCatalog.getString('Dashboards list') +
             '</h3><span style="font-weight:bold;">' +
-            gettext('Here all your dashboards are listed.') +
+            gettextCatalog.getString('Here all your dashboards are listed.') +
             '</span><br/><span>' +
-            gettext('Click over a dashboard\'s name to execute it.') +
+            gettextCatalog.getString('Click over a dashboard\'s name to execute it.') +
             '<br/><br/>' +
-            gettext('You can also modify or drop the dashboard, clicking into the modify or delete buttons.') +
+            gettextCatalog.getString('You can also modify or drop the dashboard, clicking into the modify or delete buttons.') +
             '</span></div>',
                     width: '300px',
                     areaColor: 'transparent',
@@ -409,9 +409,9 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '.btn-edit',
                     html: '<div><h3>' +
-            gettext('Dashboard edit') +
+            gettextCatalog.getString('Dashboard edit') +
             '</h3><span style="font-weight:bold;">' +
-            gettext('Click here to modify the dashboard.') +
+            gettextCatalog.getString('Click here to modify the dashboard.') +
             '</span><br/><br/><span></span></div>',
                     width: '300px',
                     areaColor: 'transparent',
@@ -423,13 +423,13 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '.btn-delete',
                     html: '<div><h3>' +
-            gettext('Dashboard delete') +
+            gettextCatalog.getString('Dashboard delete') +
             '</h3><span style="font-weight:bold;">' +
-            gettext('Click here to delete the dashboard.') +
+            gettextCatalog.getString('Click here to delete the dashboard.') +
             '</span><br/><br/><span>' +
-            gettext('Once deleted the dashboard will not be recoverable again.') +
+            gettextCatalog.getString('Once deleted the dashboard will not be recoverable again.') +
             '</span><br/><br/><span>' +
-            gettext('Requires 2 step confirmation.') +
+            gettextCatalog.getString('Requires 2 step confirmation.') +
             '</span></div>',
                     width: '300px',
                     areaColor: 'transparent',
@@ -441,11 +441,11 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 {
                     element: '.published-tag',
                     html: '<div><h3>' +
-            gettext('Dashboard published') +
+            gettextCatalog.getString('Dashboard published') +
             '</h3><span style="font-weight:bold;">' +
-            gettext('This label indicates that this dashboard is public.') +
+            gettextCatalog.getString('This label indicates that this dashboard is public.') +
             '</span><br/><br/><span>' +
-            gettext('If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard.') +
+            gettextCatalog.getString('If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard.') +
             '</span></div>',
                     width: '300px',
                     areaColor: 'transparent',
@@ -457,7 +457,7 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
             ]
         };
     })
-    .controller('layerListCtrl', function ($scope, $rootScope, $location, connection, gettext) {
+    .controller('layerListCtrl', function ($scope, $rootScope, $location, connection, gettextCatalog) {
         $scope.layerOptions = {};
 
         $scope.listView = '/partials/menu-list/list.html';
@@ -532,7 +532,17 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
             steps: [
                 {
                     element: '#parentIntro',
-                    html: '<div><h3>Layers</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Layers define the interface for your users to access the data.</span><br/><br/><span>Layers allow your users to create reports dragging and droping familiar elements that points in the background to the fields contained in tables in your data surces.</span><br/><br/><span>Here you can create and manage the layers that later will be used by your users to create reports or explore data.</span><br/><br/><span>You can create several layers depending on your necessities, but you have to define one at least.</span></div>',
+                    html: '<div><h3>' +
+                        gettextCatalog.getString('Layers') +
+                        '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
+                        gettextCatalog.getString('Layers define the interface for your users to access the data.') +
+                        '</span><br/><br/><span>' +
+                        gettextCatalog.getString('Layers allow your users to create reports dragging and droping familiar elements that points in the background to the fields contained in tables in your data sources.') +
+                        '</span><br/><br/><span>' +
+                        gettextCatalog.getString('Here you can create and manage the layers that later will be used by your users to create reports or explore data.') +
+                        '</span><br/><br/><span>' +
+                        gettextCatalog.getString('You can create several layers depending on your necessities, but you have to define one at least.') +
+                        '</span></div>',
                     width: '500px',
                     objectArea: false,
                     verticalAlign: 'top',
@@ -540,7 +550,11 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 },
                 {
                     element: '#newLayerButton',
-                    html: '<div><h3>New Layer</h3><span style="font-weight:bold;">Click here to create a new layer.</span><br/><span></span></div>',
+                    html: '<div><h3>' +
+                        gettextCatalog.getString('New Layer') +
+                        '</h3><span style="font-weight:bold;">' +
+                        gettextCatalog.getString('Click here to create a new layer.') +
+                        '</span><br/><span></span></div>',
                     width: '300px',
                     height: '150px',
                     areaColor: 'transparent',
@@ -549,7 +563,15 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 },
                 {
                     element: '#layerList',
-                    html: '<div><h3>Layers list</h3><span style="font-weight:bold;">Here all the layers are listed.</span><br/><span>You can edit the layer to configure the tables, elements and joins between tables.<br/><br/>You can also activate or deactivate layers.</span></div>',
+                    html: '<div><h3>' +
+                        gettextCatalog.getString('Layers list') +
+                        '</h3><span style="font-weight:bold;">' +
+                        gettextCatalog.getString('Here all the layers are listed.') +
+                        '</span><br/><span>' +
+                        gettextCatalog.getString('You can edit the layer to configure the tables, elements and joins between tables.') +
+                        '<br/><br/>' +
+                        gettextCatalog.getString('You can also activate or deactivate layers.') +
+                        '</span></div>',
                     width: '300px',
                     areaColor: 'transparent',
                     areaLineColor: '#fff',
@@ -559,7 +581,13 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 },
                 {
                     element: '#layerListItemStatus',
-                    html: '<div><h3>Layer status</h3><span style="font-weight:bold;">The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data.</span><br/><br/><span>You can change the status of the layer simply clicking over this label</span></div>',
+                    html: '<div><h3>' +
+                        gettextCatalog.getString('Layer status') +
+                        '</h3><span style="font-weight:bold;">' +
+                        gettextCatalog.getString('The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data.') +
+                        '</span><br/><br/><span>' +
+                        gettextCatalog.getString('You can change the status of the layer simply clicking over this label') +
+                        '</span></div>',
                     width: '300px',
                     areaColor: 'transparent',
                     areaLineColor: '#fff',
@@ -569,7 +597,15 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                 },
                 {
                     element: '#parentIntro',
-                    html: '<div><h3>Next Step</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">Design your company public space</span><br/><br/>The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/public-space/intro">Go to the public space definition and continue tour</a></span></div>',
+                    html: '<div><h3>' +
+                        gettextCatalog.getString('Next Step') +
+                        '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
+                        gettextCatalog.getString('Design your company public space') +
+                        '</span><br/><br/>' +
+                        gettextCatalog.getString('The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space') +
+                        '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/public-space/intro">' +
+                        gettextCatalog.getString('Go to the public space definition and continue tour') +
+                        '</a></span></div>',
                     width: '500px',
                     objectArea: false,
                     verticalAlign: 'top',

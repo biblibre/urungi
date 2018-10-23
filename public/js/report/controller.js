@@ -7,7 +7,7 @@
  */
 
 app.controller('reportCtrl', function ($scope, connection, $compile, reportService, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, c3Charts,
-    reportModel, widgetsCommon, $location, PagerService, gettext) {
+    reportModel, widgetsCommon, $location, PagerService, gettextCatalog) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dateModal = 'partials/report/modals/dateModal.html';
     $scope.linkModal = 'partials/report/modals/linkModal.html';
@@ -1045,26 +1045,26 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
     $scope.fieldsAggregations = {
         'number': [
-            {name: gettext('Sum'), value: 'sum'},
-            {name: gettext('Avg'), value: 'avg'},
-            {name: gettext('Min'), value: 'min'},
-            {name: gettext('Max'), value: 'max'},
-            {name: gettext('Count'), value: 'count'},
-            {name: gettext('Raw'), value: 'raw'}
+            {name: gettextCatalog.getString('Sum'), value: 'sum'},
+            {name: gettextCatalog.getString('Avg'), value: 'avg'},
+            {name: gettextCatalog.getString('Min'), value: 'min'},
+            {name: gettextCatalog.getString('Max'), value: 'max'},
+            {name: gettextCatalog.getString('Count'), value: 'count'},
+            {name: gettextCatalog.getString('Raw'), value: 'raw'}
         ],
         'date': [
-            {name: gettext('Year'), value: 'year'},
-            {name: gettext('Month'), value: 'month'},
-            {name: gettext('Day'), value: 'day'},
-            {name: gettext('Count'), value: 'count'},
-            {name: gettext('Raw'), value: 'raw'}
+            {name: gettextCatalog.getString('Year'), value: 'year'},
+            {name: gettextCatalog.getString('Month'), value: 'month'},
+            {name: gettextCatalog.getString('Day'), value: 'day'},
+            {name: gettextCatalog.getString('Count'), value: 'count'},
+            {name: gettextCatalog.getString('Raw'), value: 'raw'}
             /* {name: 'Semester', value: 'semester'},
             {name: 'Quarter', value: 'quarter'},
             {name: 'Trimester', value: 'trimester'} */
         ],
         'string': [
-            {name: gettext('Count'), value: 'count'},
-            {name: gettext('Raw'), value: 'raw'}
+            {name: gettextCatalog.getString('Count'), value: 'count'},
+            {name: gettextCatalog.getString('Raw'), value: 'raw'}
         ]
     };
 
@@ -1074,11 +1074,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             {
                 element: '#dataObjectsIntroBlock',
                 html: '<div><h3>' +
-                gettext('The layer catalog') +
+                gettextCatalog.getString('The layer catalog') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Access here the different data elements of every layer that you have access on') +
+                gettextCatalog.getString('Access here the different data elements of every layer that you have access on') +
                 '</span><br/><span>' +
-                gettext('Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)') +
+                gettextCatalog.getString('Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)') +
                 '</span></div>',
                 width: '300px',
                 height: '250px'
@@ -1086,11 +1086,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             {
                 element: '#selectLayer',
                 html: '<div><h3>' +
-                gettext('The layer selector') +
+                gettextCatalog.getString('The layer selector') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Select here the layer where your query will be based on.') +
+                gettextCatalog.getString('Select here the layer where your query will be based on.') +
                 '</span><br/><span>' +
-                gettext('One query can only be baes in just one layer, you can not mix elements from different layers in the same query') +
+                gettextCatalog.getString('One query can only be baes in just one layer, you can not mix elements from different layers in the same query') +
                 '</span></div>',
                 width: '300px',
                 height: '250px',
@@ -1101,9 +1101,9 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             {
                 element: '#reportType',
                 html: '<div><h3>' +
-                gettext('Report Type selector') +
+                gettextCatalog.getString('Report Type selector') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Click over one of the different report types to change the visualization of the data you choose') +
+                gettextCatalog.getString('Click over one of the different report types to change the visualization of the data you choose') +
                 '</span><br/><span></span></div>',
                 width: '300px',
                 areaColor: 'transparent',
@@ -1112,9 +1112,9 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             {
                 element: '#dropArea',
                 html: '<div><h3>' +
-                gettext('Results area') +
+                gettextCatalog.getString('Results area') +
                 '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettext('As you define the query draging and droping in the areas above, the results of the query will appear here') +
+                gettextCatalog.getString('As you define the query draging and droping in the areas above, the results of the query will appear here') +
                 '</span><br/><span></span></div>',
                 width: '300px',
                 height: '150px',
@@ -1124,11 +1124,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             {
                 element: '#queryRefresh',
                 html: '<div><h3>' +
-                gettext('Query refresh') +
+                gettextCatalog.getString('Query refresh') +
                 '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettext('Use this button to refresh the results') +
+                gettextCatalog.getString('Use this button to refresh the results') +
                 '</span><br/><span>' +
-                gettext('After building your query, refresh to view the report.') +
+                gettextCatalog.getString('After building your query, refresh to view the report.') +
                 '</span></div>',
                 width: '300px',
                 height: '150px',
@@ -1139,11 +1139,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             {
                 element: '#columnsDropzone',
                 html: '<div><h3>' +
-                gettext('Columns / results drop zone') +
+                gettextCatalog.getString('Columns / results drop zone') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Drop here the elements you want to have in the results of the query') +
+                gettextCatalog.getString('Drop here the elements you want to have in the results of the query') +
                 '</span><br/><span>' +
-                gettext('A query must hold at least one element here to be executed') +
+                gettextCatalog.getString('A query must hold at least one element here to be executed') +
                 '</span></div>',
                 width: '300px',
                 height: '180px'
@@ -1151,11 +1151,11 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             {
                 element: '#orderByDropzone',
                 html: '<div><h3>' +
-                gettext('Order By drop zone') +
+                gettextCatalog.getString('Order By drop zone') +
                 '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettext('Drop here the elements that you want to use to order the results of the query') +
+                gettextCatalog.getString('Drop here the elements that you want to use to order the results of the query') +
                 '</span><br/><span>' +
-                gettext('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results') +
+                gettextCatalog.getString('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results') +
                 '</span></div>',
                 width: '300px',
                 height: '250px'
@@ -1163,7 +1163,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             {
                 element: '#filtersDropzone',
                 html: '<div><h3>' +
-                gettext('Filters drop zone') +
+                gettextCatalog.getString('Filters drop zone') +
                 '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
                 'Drop here the elements that you want to use to filter the results of the query' +
                 '</span><br/><span>' +

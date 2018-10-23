@@ -1,0 +1,2308 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+
+#: public/partials/home/sidebar.html:28
+msgid "&nbsp; Data sources"
+msgstr ""
+
+#: public/partials/home/sidebar.html:10
+msgid "&nbsp; Home"
+msgstr ""
+
+#: public/partials/home/sidebar.html:25
+msgid "&nbsp; Layers"
+msgstr ""
+
+#: public/partials/home/sidebar.html:22
+msgid "&nbsp; Public space"
+msgstr ""
+
+#: public/partials/home/sidebar.html:31
+msgid "&nbsp; Roles"
+msgstr ""
+
+#: public/partials/home/sidebar.html:19
+msgid "&nbsp;Explore"
+msgstr ""
+
+#: public/partials/home/sidebar.html:13
+msgid "&nbsp;My Dashboards"
+msgstr ""
+
+#: public/partials/home/sidebar.html:16
+msgid "&nbsp;My Reports"
+msgstr ""
+
+#: public/partials/home/sidebar.html:34
+msgid "&nbsp;Users"
+msgstr ""
+
+#: public/partials/layer/datasetModal.html:13
+#: public/partials/layer/sqlModal.html:14
+msgid "1.- Choose a data source"
+msgstr ""
+
+#: public/partials/layer/datasetModal.html:40
+msgid "2.- Click on the datasets you want to add to the layer"
+msgstr ""
+
+#: public/js/report/controller.js:1116
+msgid "A query must hold at least one element here to be executed"
+msgstr ""
+
+#: public/partials/home/sidebar.html:40
+msgid "About"
+msgstr ""
+
+#: public/js/report/controller.js:1049
+msgid "Access here the different data elements of every layer that you have access on"
+msgstr ""
+
+#: public/js/home/controller.js:102
+msgid "Access here to define the connections to the different sources of your information"
+msgstr ""
+
+#: public/js/home/controller.js:87
+msgid "Access roles to create, manage roles, and grant or revoque permissions"
+msgstr ""
+
+#: public/js/home/controller.js:151
+#: public/js/home/controller.js:311
+msgid "Access this to view info about your profile, change your password, etc..."
+msgstr ""
+
+#: public/js/home/controller.js:72
+msgid "Access users to create new urungi users and to manage them"
+msgstr ""
+
+#: public/partials/report/modals/filter-prompt-modal.html:49
+msgid "Activate Filter"
+msgstr ""
+
+#: public/partials/layer/view.html:181
+msgid "Add"
+msgstr ""
+
+#: public/partials/users/add.html:157
+#: public/partials/users/add.html:86
+msgid "Add New"
+msgstr ""
+
+#: public/partials/layer/view.html:220
+msgid "Add SQL"
+msgstr ""
+
+#: public/partials/layer/datasetModal.html:4
+msgid "Add dataset"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:4
+msgid "Add element to schema"
+msgstr ""
+
+#: public/partials/spaces/public.html:40
+msgid "Add folder"
+msgstr ""
+
+#: public/partials/layer/sqlModal.html:5
+msgid "Add new SQL"
+msgstr ""
+
+#: public/partials/users/view.html:67
+msgid "Add role"
+msgstr ""
+
+#: public/js/spaces/controller.js:110
+msgid "Add subfolder"
+msgstr ""
+
+#: public/partials/layer/datasetModal.html:51
+#: public/partials/layer/sqlModal.html:57
+msgid "Add to layer"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:28
+#: public/partials/layer/objectProperties.html:73
+msgid "Advanced"
+msgstr ""
+
+#: public/js/report/controller.js:1101
+msgid "After building your query, refresh to view the report."
+msgstr ""
+
+#: public/js/spaces/controller.js:82
+msgid "After clicking here a text box with the name of the folder will appear, change then the name there and click on the small save button that will appear beside the edit box."
+msgstr ""
+
+#: public/js/spaces/controller.js:114
+#: public/js/spaces/controller.js:50
+msgid "After creating the folder you can drag and drop it across the public space."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:371
+msgid "After you define the report/s to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it."
+msgstr ""
+
+#: public/partials/report/modals/filter-prompt-modal.html:29
+msgid "Allow Multiple selection"
+msgstr ""
+
+#: public/partials/report/modals/filter-prompt-modal.html:23
+msgid "Answer required (mandatory filter)"
+msgstr ""
+
+#: public/partials/dashboardv2/chartModal.html:75
+msgid "Apply changes"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:27
+msgid "Apply rupture"
+msgstr ""
+
+#: public/js/report/controller.js:1087
+msgid "As you define the query draging and droping in the areas above, the results of the query will appear here"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:13
+msgid "Ascending"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:285
+msgid "Associated elements"
+msgstr ""
+
+#: public/js/data-source/controller.js:24
+msgid "At least one data source must be defined, unless you do not define some data source you and your users will not be able to create reports."
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:35
+msgid "Average"
+msgstr ""
+
+#: public/js/report/controller.js:1019
+msgid "Avg"
+msgstr ""
+
+#: public/partials/dashboardv2/chartModal.html:21
+msgid "Axis data source"
+msgstr ""
+
+#: public/partials/report/modals/linkModal.html:71
+msgid "Back"
+msgstr ""
+
+#: public/partials/logout/index.html:41
+msgid "Back to login"
+msgstr ""
+
+#: public/partials/users/edit.html:109
+msgid "Brand"
+msgstr ""
+
+#: public/partials/users/edit.html:101
+msgid "Business unit"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:31
+msgid "Calculate"
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:276
+#: public/partials/dashboardv2/reportImportModal.html:10
+#: public/partials/dashboardv2/view.html:5
+#: public/partials/data-source/dataSourceName.html:15
+#: public/partials/data-source/edit.html:3
+#: public/partials/deleteModal.html:18
+#: public/partials/layer/datasetModal.html:52
+#: public/partials/layer/elementModal.html:341
+#: public/partials/layer/folderModal.html:43
+#: public/partials/layer/sqlModal.html:109
+#: public/partials/layer/sqlModal.html:56
+#: public/partials/layer/view.html:14
+#: public/partials/menu-list/modals/deleteModal.html:18
+#: public/partials/menu-list/modals/duplicateModal.html:19
+#: public/partials/menu-list/modals/layerModal.html:43
+#: public/partials/report/edit.html:16
+#: public/partials/report/edit.html:17
+#: public/partials/report/modals/dateModal.html:17
+#: public/partials/report/modals/linkModal.html:72
+#: public/partials/report/modals/publishModal.html:25
+#: public/partials/report/modals/reportNameModal.html:15
+#: public/partials/report/view.html:8
+#: public/partials/roles/roleModal.html:159
+#: public/partials/users/changePassword.html:29
+#: public/partials/users/view.html:7
+msgid "Cancel"
+msgstr ""
+
+#: public/partials/users/changePassword.html:5
+msgid "Change Password"
+msgstr ""
+
+#: public/partials/users/add.html:87
+msgid "Change User"
+msgstr ""
+
+#: public/partials/users/view.html:9
+msgid "Change my password"
+msgstr ""
+
+#: public/partials/users/changePassword.html:28
+msgid "Change password"
+msgstr ""
+
+#: public/partials/dashboardv2/chartModal.html:14
+msgid "Chart Title"
+msgstr ""
+
+#: public/partials/dashboardv2/chartModal.html:29
+msgid "Chart columns"
+msgstr ""
+
+#: public/partials/dashboardv2/chartModal.html:4
+msgid "Chart properties"
+msgstr ""
+
+#: public/partials/report/partials/data-objects.html:4
+msgid "Choose a layer:"
+msgstr ""
+
+#: public/partials/menu-list/modals/duplicateModal.html:11
+msgid "Choose a new name for the copy :"
+msgstr ""
+
+#: public/partials/dashboardv2/reportImportModal.html:4
+msgid "Choose a report to add to the dashboard"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:182
+msgid "Choose a report type and drag and drop elements from the selected layer to compose your report."
+msgstr ""
+
+#: public/partials/users/add.html:178
+msgid "Choose from list"
+msgstr ""
+
+#: public/partials/spaces/public.html:40
+msgid "Click here to add a new folder to the public space"
+msgstr ""
+
+#: public/partials/spaces/public.html:24
+msgid "Click here to add a new subfolder inside this"
+msgstr ""
+
+#: public/partials/report/edit.html:17
+msgid "Click here to cancel and back to the dashboard"
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:14
+#: public/partials/dashboardv2/view.html:5
+#: public/partials/report/edit.html:16
+msgid "Click here to cancel and backtrack"
+msgstr ""
+
+#: public/js/spaces/controller.js:80
+msgid "Click here to change the folder&quot;s name."
+msgstr ""
+
+#: public/partials/spaces/public.html:18
+msgid "Click here to change the name of the folder"
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:16
+#: public/partials/dashboardv2/view.html:6
+msgid "Click here to conduct the guided tour for dashboards"
+msgstr ""
+
+#: public/partials/report/edit.html:18
+msgid "Click here to conduct the guided tour for data explorer"
+msgstr ""
+
+#: public/partials/data-source/list.html:14
+msgid "Click here to conduct the guided tour for data sources"
+msgstr ""
+
+#: public/partials/layer/list.html:14
+msgid "Click here to conduct the guided tour for layers"
+msgstr ""
+
+#: public/partials/spaces/public.html:42
+msgid "Click here to conduct the guided tour for the public space"
+msgstr ""
+
+#: public/partials/report/modals/dashboardListModal.html:10
+msgid "Click here to create a new dashboard and push this report in"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:383
+msgid "Click here to create a new dashboard."
+msgstr ""
+
+#: public/partials/data-source/list.html:13
+msgid "Click here to create a new data source"
+msgstr ""
+
+#: public/js/data-source/controller.js:36
+msgid "Click here to create a new datasource."
+msgstr ""
+
+#: public/js/spaces/controller.js:48
+msgid "Click here to create a new folder in the root of the public space."
+msgstr ""
+
+#: public/js/spaces/controller.js:112
+msgid "Click here to create a new folder inside the actual folder."
+msgstr ""
+
+#: public/partials/layer/list.html:13
+msgid "Click here to create a new layer"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:556
+msgid "Click here to create a new layer."
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:13
+msgid "Click here to create a new page report"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:196
+msgid "Click here to create a new report."
+msgstr ""
+
+#: public/partials/report/list.html:12
+msgid "Click here to create a new single query report"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:428
+msgid "Click here to delete the dashboard."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:241
+msgid "Click here to delete the report."
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:20
+msgid "Click here to delete this dashboard"
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:109
+msgid "Click here to delete this report"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:259
+msgid "Click here to duplicate the report."
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:112
+msgid "Click here to edit this report"
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:31
+msgid "Click here to execute this dashboard"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:414
+msgid "Click here to modify the dashboard."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:227
+msgid "Click here to modify the report."
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:26
+#: public/partials/report/modals/dashboardListModal.html:15
+msgid "Click here to modify this dashboard"
+msgstr ""
+
+#: public/partials/report/directives/wstDropzone.html:57
+msgid "Click here to order ascendent using this field"
+msgstr ""
+
+#: public/partials/report/directives/wstDropzone.html:54
+msgid "Click here to order descendent using this field"
+msgstr ""
+
+#: public/js/spaces/controller.js:96
+msgid "Click here to remove the folder."
+msgstr ""
+
+#: public/partials/spaces/public.html:21
+msgid "Click here to remove this folder (will remove all children folders)"
+msgstr ""
+
+#: public/partials/spaces/public.html:41
+msgid "Click here to save changes to the public space"
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:12
+msgid "Click here to save the dashboard changes"
+msgstr ""
+
+#: public/partials/spaces/public.html:13
+msgid "Click here to save the name of the folder and to get out of the edit mode"
+msgstr ""
+
+#: public/partials/report/edit.html:14
+msgid "Click here to save the report changes"
+msgstr ""
+
+#: public/partials/data-source/list.html:20
+msgid "Click here to see or set data source details"
+msgstr ""
+
+#: public/partials/report/modals/dashboardListModal.html:19
+msgid "Click here to select this dashboard"
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:14
+msgid "Click here to start the guided tour for page reports"
+msgstr ""
+
+#: public/partials/report/list.html:13
+msgid "Click here to start the guided tour for reports"
+msgstr ""
+
+#: public/partials/layer/list.html:20
+msgid "Click here to view/modify the layer"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:398
+msgid "Click over a dashboard's name to execute it."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:211
+msgid "Click over a report's name to execute it."
+msgstr ""
+
+#: public/js/report/controller.js:1076
+msgid "Click over one of the different report types to change the visualization of the data you choose"
+msgstr ""
+
+#: public/partials/dashboardv2/chartModal.html:74
+#: public/partials/users/edit.html:179
+msgid "Close"
+msgstr ""
+
+#: public/partials/dashboardv2/chartModal.html:47
+msgid "Color"
+msgstr ""
+
+#: public/js/report/controller.js:1112
+msgid "Columns / results drop zone"
+msgstr ""
+
+#: public/partials/users/add.html:115
+msgid "Company ID"
+msgstr ""
+
+#: public/partials/layer/sqlModal.html:110
+msgid "Confirm"
+msgstr ""
+
+#: public/partials/data-source/edit.html:12
+msgid "Connection Type II"
+msgstr ""
+
+#: public/js/spaces/controller.js:143
+msgid "Continue tour"
+msgstr ""
+
+#: public/js/report/controller.js:1022
+#: public/js/report/controller.js:1029
+#: public/js/report/controller.js:1036
+#: public/partials/report/partials/repeater.html:34
+msgid "Count"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:24
+msgid "Create Section"
+msgstr ""
+
+#: public/js/data-source/controller.js:22
+msgid "Create and manage here the connections to databases that holds the data you want to be able to create reports using Urungi."
+msgstr ""
+
+#: public/partials/roles/roleModal.html:104
+msgid "Create dashboards"
+msgstr ""
+
+#: public/js/spaces/controller.js:36
+msgid "Create folders and drag and drop them across to structure it."
+msgstr ""
+
+#: public/partials/menu-list/dashboardList.html:12
+msgid "Create new dashboard"
+msgstr ""
+
+#: public/partials/menu-list/reportList.html:13
+msgid "Create new report"
+msgstr ""
+
+#: public/partials/roles/roleModal.html:108
+msgid "Create pages"
+msgstr ""
+
+#: public/partials/roles/roleModal.html:100
+msgid "Create reports"
+msgstr ""
+
+#: public/js/spaces/controller.js:141
+msgid "Creating a new data source"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:331
+msgid "Cyclic definition :"
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:268
+msgid "Dashboard Name"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:426
+msgid "Dashboard delete"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:412
+msgid "Dashboard edit"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:444
+msgid "Dashboard published"
+msgstr ""
+
+#: public/js/home/controller.js:456
+#: public/js/menu-list/controllers.js:365
+#: public/partials/menu-list/dashboardList.html:10
+#: public/partials/users/view.html:134
+msgid "Dashboards"
+msgstr ""
+
+#: public/js/home/controller.js:219
+msgid "Dashboards allow the user to group several single query reports in just one interface, when creating dashboards you can define the area, size and position of every single query report into the dashboard"
+msgstr ""
+
+#: public/js/home/controller.js:217
+msgid "Dashboards allow users to create dashboards using single query reports."
+msgstr ""
+
+#: public/js/home/controller.js:369
+msgid "Dashboards allows you to create (if granted) and manage dashboards using your previous defined single query reports."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:394
+msgid "Dashboards list"
+msgstr ""
+
+#: public/partials/data-source/edit.html:82
+msgid "Data Packet size"
+msgstr ""
+
+#: public/partials/data-source/dataSourceName.html:8
+msgid "Data Source Name"
+msgstr ""
+
+#: public/js/data-source/controller.js:63
+#: public/partials/dashboardv2/chartModal.html:41
+msgid "Data source"
+msgstr ""
+
+#: public/js/data-source/controller.js:91
+msgid "Data source connection details"
+msgstr ""
+
+#: public/js/data-source/controller.js:76
+msgid "Data source name & type"
+msgstr ""
+
+#: public/js/data-source/controller.js:18
+#: public/js/home/controller.js:98
+#: public/partials/data-source/list.html:12
+msgid "Data sources"
+msgstr ""
+
+#: public/js/data-source/controller.js:20
+msgid "Data sources are connections to the databases you are going to generate reports for."
+msgstr ""
+
+#: public/partials/data-source/edit.html:46
+msgid "Database"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:5
+msgid "Dataset"
+msgstr ""
+
+#: public/js/report/controller.js:1028
+msgid "Day"
+msgstr ""
+
+#: public/partials/report/modals/filter-prompt-modal.html:48
+msgid "Deactivate Filter"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:114
+#: public/partials/layer/objectProperties.html:123
+msgid "Default Aggregation"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:110
+#: public/partials/layer/elementModal.html:124
+msgid "Default aggregation"
+msgstr ""
+
+#: public/js/home/controller.js:136
+msgid "Define here the folder structure for the public area"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:369
+msgid "Define several reports using filters and dragging and dropping from different layers."
+msgstr ""
+
+#: public/partials/deleteModal.html:17
+#: public/partials/layer/objectProperties.html:7
+#: public/partials/layer/view.html:113
+#: public/partials/menu-list/modals/deleteModal.html:17
+msgid "Delete"
+msgstr ""
+
+#: public/partials/report/modals/linkModal.html:73
+msgid "Delete Link"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:149
+msgid "Delete background"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:239
+msgid "Delete report"
+msgstr ""
+
+#: public/partials/users/edit.html:97
+msgid "Department"
+msgstr ""
+
+#: public/js/home/controller.js:39
+msgid "Depending on their permissions the users can access different folders and/or elements"
+msgstr ""
+
+#: public/js/home/controller.js:280
+msgid "Depending on your permissions you will be able to access different folders and/or elements"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:14
+msgid "Descending"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:207
+#: public/partials/layer/objectProperties.html:46
+#: public/partials/roles/roleModal.html:78
+msgid "Description"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:603
+msgid "Design your company public space"
+msgstr ""
+
+#: public/partials/report/edit.html:53
+msgid "Display settings"
+msgstr ""
+
+#: public/partials/home/main.html:9
+msgid "Do not show this block again"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:15
+msgid "Down"
+msgstr ""
+
+#: public/js/spaces/controller.js:67
+msgid "Drag if from left to right to move it inside another existing folder."
+msgstr ""
+
+#: public/partials/report/partials/drop-area.html:43
+msgid "Drop here the dimension field"
+msgstr ""
+
+#: public/js/report/controller.js:1126
+msgid "Drop here the elements that you want to use to order the results of the query"
+msgstr ""
+
+#: public/js/report/controller.js:1114
+msgid "Drop here the elements you want to have in the results of the query"
+msgstr ""
+
+#: public/partials/report/partials/drop-area.html:33
+msgid "Drop here the table columns"
+msgstr ""
+
+#: public/partials/report/partials/drop-area.html:37
+msgid "Drop here the table rows"
+msgstr ""
+
+#: public/partials/report/partials/drop-area.html:27
+msgid "Drop here your columns"
+msgstr ""
+
+#: public/partials/menu-list/modals/duplicateModal.html:20
+msgid "Duplicate"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:257
+msgid "Duplicate report"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:8
+#: public/partials/layer/view.html:101
+#: public/partials/users/view.html:10
+msgid "Edit"
+msgstr ""
+
+#: public/partials/dashboardv2/view.html:3
+msgid "Edit Dashboard"
+msgstr ""
+
+#: public/partials/report/view.html:5
+msgid "Edit Report"
+msgstr ""
+
+#: public/partials/users/edit.html:5
+msgid "Edit User"
+msgstr ""
+
+#: public/js/spaces/controller.js:78
+msgid "Edit folder"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:225
+msgid "Edit report"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:6
+msgid "Element"
+msgstr ""
+
+#: public/partials/report/edit.html:45
+msgid "Elements"
+msgstr ""
+
+#: public/partials/users/add.html:119
+msgid "Email"
+msgstr ""
+
+#: public/partials/users/add.html:177
+msgid "Enter manually"
+msgstr ""
+
+#: public/partials/roles/roleModal.html:140
+msgid "Execute dashboards"
+msgstr ""
+
+#: public/partials/roles/roleModal.html:138
+msgid "Execute pages"
+msgstr ""
+
+#: public/partials/roles/roleModal.html:139
+msgid "Execute reports"
+msgstr ""
+
+#: public/js/home/controller.js:162
+#: public/js/home/controller.js:322
+msgid "Explore"
+msgstr ""
+
+#: public/js/home/controller.js:166
+msgid "Explore allow users to surf across the data without creating a report for that."
+msgstr ""
+
+#: public/js/home/controller.js:324
+msgid "Explore allows you to surf across the data without creating a report for that."
+msgstr ""
+
+#: public/js/home/controller.js:402
+#: public/partials/roles/roleModal.html:112
+msgid "Explore data"
+msgstr ""
+
+#: public/partials/report/edit.html:8
+msgid "Explorer"
+msgstr ""
+
+#: public/partials/report/view.html:12
+msgid "Export Data"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:18
+msgid "Expression"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:246
+msgid "Extract from String"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:18
+#: public/partials/users/add.html:147
+msgid "Filter"
+msgstr ""
+
+#: public/partials/report/modals/filter-prompt-modal.html:38
+msgid "Filter Instructions"
+msgstr ""
+
+#: public/partials/users/add.html:100
+msgid "Filters"
+msgstr ""
+
+#: public/js/report/controller.js:1136
+msgid "Filters drop zone"
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:41
+#: public/partials/data-source/list.html:33
+#: public/partials/layer/list.html:34
+#: public/partials/roles/list.html:24
+#: public/partials/users/list.html:34
+msgid "First"
+msgstr ""
+
+#: public/partials/users/edit.html:47
+msgid "First Name"
+msgstr ""
+
+#: public/partials/users/edit.html:49
+msgid "First Name is required"
+msgstr ""
+
+#: public/js/spaces/controller.js:61
+msgid "Folder"
+msgstr ""
+
+#: public/partials/menu-list/dashboardList.html:15
+#: public/partials/menu-list/layerList.html:16
+#: public/partials/menu-list/reportList.html:16
+msgid "Follow the guided tour for data sources"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:197
+#: public/partials/layer/elementModal.html:225
+#: public/partials/layer/elementModal.html:24
+#: public/partials/layer/objectProperties.html:133
+#: public/partials/report/partials/repeater.html:21
+msgid "Format"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:21
+#: public/partials/layer/objectProperties.html:70
+#: public/partials/roles/roleModal.html:43
+#: public/partials/users/edit.html:18
+msgid "General"
+msgstr ""
+
+#: public/partials/home/main.html:4
+msgid "Getting started with Urungi?"
+msgstr ""
+
+#: public/js/home/controller.js:460
+msgid "Go to dashboards and continue tour"
+msgstr ""
+
+#: public/js/home/controller.js:406
+msgid "Go to data explorer and continue tour"
+msgstr ""
+
+#: public/js/home/controller.js:249
+msgid "Go to data sources and continue tour"
+msgstr ""
+
+#: public/js/data-source/controller.js:112
+msgid "Go to layers and continue tour"
+msgstr ""
+
+#: public/js/home/controller.js:424
+msgid "Go to pages designer and continue tour"
+msgstr ""
+
+#: public/js/dashboardv2/controller.js:137
+msgid "Go to report designer and continue tour"
+msgstr ""
+
+#: public/js/home/controller.js:442
+msgid "Go to single query report designer and continue tour"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:607
+msgid "Go to the public space definition and continue tour"
+msgstr ""
+
+#: public/partials/data-source/edit.html:17
+msgid "Google Big query"
+msgstr ""
+
+#: public/partials/data-source/edit.html:54
+msgid "Google Cloud JSON authorization file"
+msgstr ""
+
+#: public/partials/home/sidebar.html:37
+msgid "Guided tour"
+msgstr ""
+
+#: public/js/data-source/controller.js:49
+msgid "Here all the data sources (database connections) will be listed."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:569
+msgid "Here all the layers are listed."
+msgstr ""
+
+#: public/js/home/controller.js:37
+msgid "Here all the public shared elements (reports, dashboards, pages) are displayed to be accesed by the users"
+msgstr ""
+
+#: public/js/home/controller.js:278
+msgid "Here all the public shared elements (reports, dashboards, pages) that you can execute"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:396
+msgid "Here all your dashboards are listed."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:209
+msgid "Here all your reports are listed."
+msgstr ""
+
+#: public/js/home/controller.js:50
+msgid "Here are displayed the 10 latest element executions by the connected user, along with the last execution time"
+msgstr ""
+
+#: public/js/home/controller.js:291
+msgid "Here are displayed your 10 latest element executions, along with the last execution time"
+msgstr ""
+
+#: public/js/home/controller.js:25
+#: public/js/home/controller.js:268
+msgid "Here you can access the basic operations in urungi"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:168
+msgid "Here you can create and execute reports."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:542
+msgid "Here you can create and manage the layers that later will be used by your users to create reports or explore data."
+msgstr ""
+
+#: public/js/home/controller.js:119
+msgid "Here you can define the semantic layer used by your users to access the data in the different data sources."
+msgstr ""
+
+#: public/js/spaces/controller.js:20
+msgid "Here you can define the structure in folders of the public space."
+msgstr ""
+
+#: public/partials/report/directives/wstDropzone.html:38
+msgid "Hide Column"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:45
+msgid "Hide components"
+msgstr ""
+
+#: public/js/home/controller.js:230
+#: public/js/home/controller.js:382
+#: public/partials/home/header.html:10
+msgid "Home"
+msgstr ""
+
+#: public/partials/data-source/edit.html:32
+msgid "Host"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:448
+msgid "If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:275
+msgid "If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report."
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:90
+msgid "Import Report"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:367
+msgid "In here you can create and execute dashboards like web pages."
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:179
+msgid "Inner"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:4
+msgid "Join"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:175
+msgid "Join type"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:88
+#: public/partials/layer/objectProperties.html:37
+#: public/partials/layer/objectProperties.html:95
+msgid "Label"
+msgstr ""
+
+#: public/partials/users/add.html:131
+msgid "Language"
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:53
+#: public/partials/data-source/list.html:45
+#: public/partials/layer/list.html:46
+#: public/partials/roles/list.html:36
+#: public/partials/users/list.html:46
+msgid "Last"
+msgstr ""
+
+#: public/partials/users/edit.html:52
+msgid "Last Name"
+msgstr ""
+
+#: public/partials/users/edit.html:54
+msgid "Last Name is required"
+msgstr ""
+
+#: public/js/spaces/controller.js:22
+msgid "Later using roles you can grant or deny access to the different folders of the public space to users that have the appropiate role to execute or publish reports along the public space."
+msgstr ""
+
+#: public/js/home/controller.js:289
+#: public/js/home/controller.js:48
+#: public/partials/home/main.html:43
+msgid "Latest executions"
+msgstr ""
+
+#: public/partials/layer/folderModal.html:13
+#: public/partials/layer/objectProperties.html:197
+#: public/partials/menu-list/modals/layerModal.html:13
+msgid "Layer Name"
+msgstr ""
+
+#: public/partials/layer/folderModal.html:4
+#: public/partials/menu-list/modals/layerModal.html:4
+msgid "Layer Properties"
+msgstr ""
+
+#: public/partials/layer/folderModal.html:28
+#: public/partials/menu-list/modals/layerModal.html:28
+msgid "Layer description"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:585
+msgid "Layer status"
+msgstr ""
+
+#: public/partials/layer/view.html:45
+msgid "Layer<br>Elements"
+msgstr ""
+
+#: public/js/data-source/controller.js:106
+#: public/js/data-source/controller.js:108
+#: public/js/home/controller.js:115
+#: public/js/menu-list/controllers.js:536
+#: public/partials/layer/list.html:12
+#: public/partials/menu-list/layerList.html:11
+msgid "Layers"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:540
+msgid "Layers allow your users to create reports dragging and droping familiar elements that points in the background to the fields contained in tables in your data sources."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:538
+msgid "Layers define the interface for your users to access the data."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:567
+msgid "Layers list"
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:63
+msgid "Layouts"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:177
+msgid "Left"
+msgstr ""
+
+#: public/partials/report/edit.html:56
+msgid "Legend position :"
+msgstr ""
+
+#: public/partials/home/header2.html:37
+msgid "Lisa Doe"
+msgstr ""
+
+#: public/js/data-source/controller.js:47
+msgid "List of data sources"
+msgstr ""
+
+#: public/partials/home/header2.html:50
+msgid "Lock"
+msgstr ""
+
+#: public/partials/home/header2.html:56
+msgid "Log Out"
+msgstr ""
+
+#: public/partials/data-source/edit.html:16
+msgid "MSSQL"
+msgstr ""
+
+#: public/js/report/controller.js:1021
+msgid "Max"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:37
+msgid "Maximum"
+msgstr ""
+
+#: public/js/report/controller.js:1020
+msgid "Min"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:36
+msgid "Minimum"
+msgstr ""
+
+#: public/js/report/controller.js:1027
+msgid "Month"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:135
+msgid "More Info"
+msgstr ""
+
+#: public/js/home/controller.js:299
+#: public/js/home/controller.js:58
+msgid "Most Executed"
+msgstr ""
+
+#: public/partials/home/main.html:67
+msgid "Most executed"
+msgstr ""
+
+#: public/partials/home/header2.html:44
+msgid "My Tasks"
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:12
+msgid "My dashboards"
+msgstr ""
+
+#: public/js/home/controller.js:147
+#: public/js/home/controller.js:309
+msgid "My profile"
+msgstr ""
+
+#: public/partials/data-source/edit.html:14
+msgid "MySQL"
+msgstr ""
+
+#: public/partials/data-source/edit.html:25
+#: public/partials/layer/objectProperties.html:30
+#: public/partials/layer/objectProperties.html:86
+msgid "Name"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:381
+#: public/partials/dashboardv2/list.html:13
+#: public/partials/report/modals/dashboardListModal.html:10
+msgid "New Dashboard"
+msgstr ""
+
+#: public/partials/data-source/list.html:13
+msgid "New Data Source"
+msgstr ""
+
+#: public/partials/layer/view.html:78
+msgid "New Element"
+msgstr ""
+
+#: public/partials/layer/view.html:76
+msgid "New Folder"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:554
+#: public/partials/layer/list.html:13
+msgid "New Layer"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:194
+#: public/partials/dashboardv2/edit.html:89
+#: public/partials/report/list.html:12
+msgid "New Report"
+msgstr ""
+
+#: public/partials/roles/list.html:12
+msgid "New Role"
+msgstr ""
+
+#: public/partials/users/edit.html:4
+#: public/partials/users/list.html:14
+msgid "New User"
+msgstr ""
+
+#: public/js/data-source/controller.js:34
+msgid "New datasource"
+msgstr ""
+
+#: public/js/spaces/controller.js:46
+msgid "New folder"
+msgstr ""
+
+#: public/partials/menu-list/layerList.html:13
+msgid "New layer"
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:50
+#: public/partials/data-source/list.html:42
+#: public/partials/layer/elementModal.html:342
+#: public/partials/layer/list.html:43
+#: public/partials/report/modals/linkModal.html:70
+#: public/partials/roles/list.html:33
+#: public/partials/users/list.html:43
+msgid "Next"
+msgstr ""
+
+#: public/js/dashboardv2/controller.js:131
+#: public/js/data-source/controller.js:104
+#: public/js/home/controller.js:245
+#: public/js/home/controller.js:400
+#: public/js/home/controller.js:418
+#: public/js/home/controller.js:436
+#: public/js/home/controller.js:454
+#: public/js/menu-list/controllers.js:601
+#: public/js/spaces/controller.js:139
+msgid "Next Step"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:196
+msgid "Number"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:430
+msgid "Once deleted the dashboard will not be recoverable again."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:243
+msgid "Once deleted the report will not be recoverable again."
+msgstr ""
+
+#: public/js/spaces/controller.js:128
+msgid "Once you get the structure you want save it to make it available for your users."
+msgstr ""
+
+#: public/js/layer/controller.js:659
+msgid "One of the custom elements uses elements from tables which aren't joined. This custom element cannot be fetched"
+msgstr ""
+
+#: public/js/report/controller.js:1063
+msgid "One query can only be baes in just one layer, you can not mix elements from different layers in the same query"
+msgstr ""
+
+#: public/partials/report/partials/filter.html:13
+msgid ""
+"Only show the first\n"
+"            <input type=\"number\" ng-model=\"selectedReport.properties.recordLimit\" size=\"8\">\n"
+"            elements"
+msgstr ""
+
+#: public/partials/data-source/edit.html:19
+msgid "Oracle"
+msgstr ""
+
+#: public/partials/data-source/edit.html:18
+msgid "Oracle JDBC"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:11
+msgid "Order"
+msgstr ""
+
+#: public/js/report/controller.js:1124
+msgid "Order By drop zone"
+msgstr ""
+
+#: public/js/home/controller.js:179
+#: public/js/home/controller.js:337
+#: public/js/home/controller.js:420
+msgid "Page reports"
+msgstr ""
+
+#: public/js/home/controller.js:183
+msgid "Pages allow users to create and manage report pages."
+msgstr ""
+
+#: public/js/home/controller.js:339
+msgid "Pages allows you to create (if granted) and manage report pages."
+msgstr ""
+
+#: public/partials/data-source/edit.html:74
+#: public/partials/users/add.html:123
+#: public/partials/users/edit.html:69
+msgid "Password"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:38
+msgid "Percent"
+msgstr ""
+
+#: public/partials/roles/roleModal.html:89
+msgid "Permissions"
+msgstr ""
+
+#: public/partials/layer/sqlModal.html:70
+msgid "Please confirm your modification"
+msgstr ""
+
+#: public/partials/deleteModal.html:11
+#: public/partials/menu-list/modals/deleteModal.html:11
+msgid "Please, type DELETE to confirm"
+msgstr ""
+
+#: public/partials/data-source/edit.html:39
+msgid "Port"
+msgstr ""
+
+#: public/partials/data-source/edit.html:15
+msgid "PostgreSql"
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:44
+#: public/partials/data-source/list.html:36
+#: public/partials/layer/list.html:37
+#: public/partials/roles/list.html:27
+#: public/partials/users/list.html:37
+msgid "Previous"
+msgstr ""
+
+#: public/partials/users/view.html:95
+msgid "Private Dashboards"
+msgstr ""
+
+#: public/partials/users/view.html:91
+msgid "Private reports"
+msgstr ""
+
+#: public/partials/data-source/edit.html:47
+msgid "Project ID"
+msgstr ""
+
+#: public/partials/home/main.html:25
+msgid "Public Area"
+msgstr ""
+
+#: public/js/home/controller.js:132
+#: public/js/spaces/controller.js:16
+msgid "Public space"
+msgstr ""
+
+#: public/partials/roles/roleModal.html:46
+msgid "Public space permissions"
+msgstr ""
+
+#: public/js/spaces/controller.js:32
+msgid "Public space structure area"
+msgstr ""
+
+#: public/partials/dashboardv2/view.html:4
+#: public/partials/report/modals/publishModal.html:7
+#: public/partials/report/view.html:7
+#: public/partials/roles/roleModal.html:141
+msgid "Publish"
+msgstr ""
+
+#: public/partials/users/view.html:85
+msgid "Published Dashboards"
+msgstr ""
+
+#: public/partials/users/view.html:81
+msgid "Published reports"
+msgstr ""
+
+#: public/partials/report/partials/report-edit.html:40
+msgid "Push it to a Dashboard"
+msgstr ""
+
+#: public/partials/layer/view.html:58
+msgid "Queries"
+msgstr ""
+
+#: public/js/report/controller.js:1097
+msgid "Query refresh"
+msgstr ""
+
+#: public/partials/report/partials/report-edit.html:21
+msgid "Quick display with"
+msgstr ""
+
+#: public/js/report/controller.js:1023
+#: public/js/report/controller.js:1030
+#: public/js/report/controller.js:1037
+msgid "Raw"
+msgstr ""
+
+#: public/partials/report/partials/report-edit.html:30
+msgid "Refresh data"
+msgstr ""
+
+#: public/partials/layer/view.html:100
+msgid "Remove"
+msgstr ""
+
+#: public/js/spaces/controller.js:94
+msgid "Remove Folder"
+msgstr ""
+
+#: public/partials/users/add.html:127
+msgid "Repeat Password"
+msgstr ""
+
+#: public/partials/report/modals/reportNameModal.html:7
+msgid "Report Name"
+msgstr ""
+
+#: public/js/report/controller.js:1074
+msgid "Report Type selector"
+msgstr ""
+
+#: public/js/home/controller.js:185
+msgid "Report pages are webpages that can be compromised of data in the form of charts or data grids, along with other HTML elements that allows to customize the report at the highest level"
+msgstr ""
+
+#: public/js/home/controller.js:341
+msgid "Report pages are webpages that can be compromised of data in the form of charts or data grids, along with other HTML elements that allows you to customize the report at the highest level"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:271
+msgid "Report published"
+msgstr ""
+
+#: public/js/dashboardv2/controller.js:133
+#: public/js/menu-list/controllers.js:166
+#: public/js/menu-list/controllers.js:180
+#: public/partials/dashboardv2/edit.html:51
+#: public/partials/menu-list/reportList.html:11
+#: public/partials/report/list.html:11
+#: public/partials/users/view.html:113
+msgid "Reports"
+msgstr ""
+
+#: public/js/home/controller.js:200
+msgid "Reports allow users to create and manage single query reports."
+msgstr ""
+
+#: public/js/home/controller.js:354
+msgid "Reports allows you to create (if granted) and manage your single query reports."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:207
+msgid "Reports list"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:245
+#: public/js/menu-list/controllers.js:432
+msgid "Requires 2 step confirmation."
+msgstr ""
+
+#: public/partials/users/edit.html:86
+msgid "Reset user password"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:226
+msgid "Result"
+msgstr ""
+
+#: public/js/report/controller.js:1085
+msgid "Results area"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:181
+msgid "Right"
+msgstr ""
+
+#: public/partials/roles/roleModal.html:64
+msgid "Role name"
+msgstr ""
+
+#: public/js/home/controller.js:83
+#: public/partials/roles/list.html:11
+#: public/partials/users/add.html:135
+msgid "Roles"
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:57
+msgid "Run time<br>Filters"
+msgstr ""
+
+#: public/partials/report/modals/filter-prompt-modal.html:12
+msgid "Runtime Filter Label"
+msgstr ""
+
+#: public/partials/report/modals/filter-prompt-modal.html:4
+msgid "Runtime Filter properties"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:55
+msgid "SQL"
+msgstr ""
+
+#: public/partials/layer/sqlModal.html:42
+#: public/partials/report/partials/report-edit.html:49
+msgid "SQL query"
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:12
+#: public/partials/dashboardv2/edit.html:275
+#: public/partials/data-source/dataSourceName.html:17
+#: public/partials/layer/elementModal.html:343
+#: public/partials/report/edit.html:14
+#: public/partials/report/modals/reportNameModal.html:14
+#: public/partials/report/partials/report-edit.html:43
+#: public/partials/roles/roleModal.html:158
+#: public/partials/spaces/public.html:41
+#: public/partials/users/edit.html:178
+msgid "Save"
+msgstr ""
+
+#: public/partials/data-source/edit.html:2
+msgid "Save Datasource"
+msgstr ""
+
+#: public/partials/report/partials/report-edit.html:39
+msgid "Save as a report"
+msgstr ""
+
+#: public/partials/layer/sqlModal.html:59
+msgid "Save changes"
+msgstr ""
+
+#: public/partials/layer/view.html:117
+msgid "Save folder label"
+msgstr ""
+
+#: public/partials/layer/folderModal.html:44
+#: public/partials/layer/view.html:13
+#: public/partials/menu-list/modals/layerModal.html:44
+msgid "Save layer"
+msgstr ""
+
+#: public/js/spaces/controller.js:126
+msgid "Save public space"
+msgstr ""
+
+#: public/partials/roles/roleModal.html:116
+msgid "See SQL"
+msgstr ""
+
+#: public/js/home/controller.js:458
+msgid "See how to create dashboards composed with a set of single query reports"
+msgstr ""
+
+#: public/js/home/controller.js:422
+msgid "See how you can create customized web pages that shows your data using charts and data grids along with HTML components"
+msgstr ""
+
+#: public/js/dashboardv2/controller.js:135
+msgid "See how you can create reports that shows your data using charts and data grids"
+msgstr ""
+
+#: public/js/home/controller.js:440
+msgid "See how you can create single query reports that shows your data using charts and data grids"
+msgstr ""
+
+#: public/js/home/controller.js:404
+msgid "See how you can explore data creating queries easily without any technical knowledge"
+msgstr ""
+
+#: public/partials/report/modals/dateModal.html:7
+msgid "Select Date"
+msgstr ""
+
+#: public/js/report/controller.js:1051
+msgid "Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)"
+msgstr ""
+
+#: public/js/report/controller.js:1061
+msgid "Select here the layer where your query will be based on."
+msgstr ""
+
+#: public/partials/report/modals/linkModal.html:7
+msgid "Select report or dashboard to link"
+msgstr ""
+
+#: public/partials/report/modals/dashboardListModal.html:9
+msgid "Select the dashboard to push this report to"
+msgstr ""
+
+#: public/partials/users/edit.html:64
+msgid "Send password through email"
+msgstr ""
+
+#: public/partials/report/modals/linkModal.html:69
+msgid "Set Link"
+msgstr ""
+
+#: public/js/home/controller.js:247
+msgid "Setup a data source"
+msgstr ""
+
+#: public/partials/report/directives/wstDropzone.html:39
+msgid "Show Column"
+msgstr ""
+
+#: public/partials/report/partials/repeater.html:42
+msgid "Signals"
+msgstr ""
+
+#: public/js/home/controller.js:202
+msgid "Single Reports allow the user to configure a query against the data and get the results using different charts or a data grid, single reports are the elements that you use to create a dashboard"
+msgstr ""
+
+#: public/js/home/controller.js:213
+#: public/js/home/controller.js:367
+msgid "Single query dashboards"
+msgstr ""
+
+#: public/js/home/controller.js:196
+#: public/js/home/controller.js:352
+#: public/js/home/controller.js:438
+msgid "Single query reports"
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:162
+msgid "Source"
+msgstr ""
+
+#: public/partials/layer/view.html:52
+msgid "Sources"
+msgstr ""
+
+#: public/partials/home/header2.html:7
+msgid "Square"
+msgstr ""
+
+#: public/partials/report/directives/wstDropzone.html:45
+msgid "Stack column"
+msgstr ""
+
+#: public/partials/home/main.html:10
+msgid "Start guided tour"
+msgstr ""
+
+#: public/partials/users/add.html:106
+msgid "Status"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:198
+msgid "String"
+msgstr ""
+
+#: public/partials/users/add.html:162
+msgid "Submit"
+msgstr ""
+
+#: public/js/report/controller.js:1018
+#: public/partials/report/partials/repeater.html:33
+msgid "Sum"
+msgstr ""
+
+#: public/partials/home/main.html:5
+msgid "Take our guided tour to familiarize yourself..."
+msgstr ""
+
+#: public/partials/layer/objectProperties.html:168
+msgid "Target"
+msgstr ""
+
+#: public/partials/data-source/edit.html:89
+msgid "Test Connection"
+msgstr ""
+
+#: public/partials/logout/index.html:16
+msgid "Thanks for using Urungi"
+msgstr ""
+
+#: public/js/home/controller.js:27
+msgid "The \"white\" part of the menu is common for all users, the \"green\" part is only for urungi administrators"
+msgstr ""
+
+#: public/partials/dashboardv2/edit.html:270
+msgid "The dashboard name is required"
+msgstr ""
+
+#: public/js/report/controller.js:1128
+msgid "The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results"
+msgstr ""
+
+#: public/partials/layer/sqlModal.html:85
+msgid "The following columns will be added :"
+msgstr ""
+
+#: public/partials/layer/sqlModal.html:75
+msgid "The following columns will be kept :"
+msgstr ""
+
+#: public/partials/layer/sqlModal.html:95
+msgid "The following columns will be removed :"
+msgstr ""
+
+#: public/js/report/controller.js:1047
+msgid "The layer catalog"
+msgstr ""
+
+#: public/js/report/controller.js:1059
+msgid "The layer selector"
+msgstr ""
+
+#: public/js/data-source/controller.js:93
+msgid "The main connection details for the data source."
+msgstr ""
+
+#: public/js/home/controller.js:23
+#: public/js/home/controller.js:266
+msgid "The main menu"
+msgstr ""
+
+#: public/js/data-source/controller.js:78
+msgid "The name for the data source and the type of connection (end database)."
+msgstr ""
+
+#: public/js/home/controller.js:276
+#: public/js/home/controller.js:35
+msgid "The public area"
+msgstr ""
+
+#: public/js/spaces/controller.js:18
+msgid "The public space is the place where you or your users will publish reports to be available for other users or the hole company."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:605
+msgid "The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space"
+msgstr ""
+
+#: public/partials/report/modals/reportNameModal.html:9
+msgid "The report name is required"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:587
+msgid "The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data."
+msgstr ""
+
+#: public/partials/report/modals/linkModal.html:47
+msgid "There are no prompts for this report... you have to choose a report with prompts to make the link..."
+msgstr ""
+
+#: public/js/home/controller.js:60
+msgid "This area display the 10 most executed elements for the hole company and the number of executions per element"
+msgstr ""
+
+#: public/js/home/controller.js:301
+msgid "This area display your 10 most executed elements and the number of executions per element"
+msgstr ""
+
+#: public/js/spaces/controller.js:63
+msgid "This area represents a folder in the public space"
+msgstr ""
+
+#: public/partials/data-source/dataSourceName.html:10
+#: public/partials/deleteModal.html:13
+#: public/partials/menu-list/modals/deleteModal.html:13
+msgid "This field is required"
+msgstr ""
+
+#: public/js/data-source/controller.js:65
+msgid "This is one data source."
+msgstr ""
+
+#: public/js/spaces/controller.js:34
+msgid "This is the area where you can define the structure for the public space."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:446
+msgid "This label indicates that this dashboard is public."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:273
+msgid "This label indicates that this report is public."
+msgstr ""
+
+#: public/js/home/controller.js:164
+msgid "This link is available for all users that have the grant for explore data."
+msgstr ""
+
+#: public/js/home/controller.js:215
+msgid "This link is available for all users that have the grant to create dashboards."
+msgstr ""
+
+#: public/js/home/controller.js:181
+msgid "This link is available for all users that have the grant to create pages."
+msgstr ""
+
+#: public/js/home/controller.js:198
+msgid "This link is available for all users that have the grant to create reports."
+msgstr ""
+
+#: public/js/home/controller.js:149
+#: public/js/home/controller.js:232
+msgid "This link is available for all users."
+msgstr ""
+
+#: public/js/home/controller.js:100
+#: public/js/home/controller.js:117
+#: public/js/home/controller.js:134
+#: public/js/home/controller.js:70
+#: public/js/home/controller.js:85
+msgid "This link is only available for urungi administrators."
+msgstr ""
+
+#: public/js/spaces/controller.js:98
+msgid "This will remove all child nodes as well."
+msgstr ""
+
+#: public/partials/users/edit.html:93
+msgid "Title"
+msgstr ""
+
+#: public/partials/dashboardv2/chartModal.html:35
+#: public/partials/layer/elementModal.html:94
+#: public/partials/layer/objectProperties.html:104
+msgid "Type"
+msgstr ""
+
+#: public/partials/layer/sqlModal.html:37
+msgid "Type a name for this dataset"
+msgstr ""
+
+#: public/partials/spaces/public.html:12
+msgid "Type here the new name of the folder"
+msgstr ""
+
+#: public/partials/report/view.html:7
+msgid "Un-Publish"
+msgstr ""
+
+#: public/partials/users/edit.html:105
+msgid "Unit"
+msgstr ""
+
+#: public/partials/report/modals/publishModal.html:6
+msgid "Unpublish"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:12
+msgid "Up"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:148
+msgid "Upload image"
+msgstr ""
+
+#: public/js/report/controller.js:1099
+msgid "Use this button to refresh the results"
+msgstr ""
+
+#: public/js/home/controller.js:168
+#: public/js/home/controller.js:326
+msgid "Use this if you want to query your data but is not necessary for you to save it for a later use"
+msgstr ""
+
+#: public/js/home/controller.js:234
+#: public/js/home/controller.js:384
+msgid "Use this link to back to this page"
+msgstr ""
+
+#: public/partials/users/view.html:13
+msgid "User"
+msgstr ""
+
+#: public/partials/users/add.html:99
+msgid "User Data"
+msgstr ""
+
+#: public/partials/users/edit.html:41
+msgid "User Nick"
+msgstr ""
+
+#: public/partials/users/edit.html:43
+msgid "User Nick is required"
+msgstr ""
+
+#: public/partials/data-source/edit.html:67
+msgid "User name"
+msgstr ""
+
+#: public/partials/users/view.html:14
+msgid "User profile and permissions"
+msgstr ""
+
+#: public/partials/users/add.html:111
+msgid "Username"
+msgstr ""
+
+#: public/js/home/controller.js:68
+#: public/partials/users/list.html:13
+msgid "Users"
+msgstr ""
+
+#: public/js/home/controller.js:371
+msgid "Using single query dashboards you can group several single query reports in just one interface, you can define the area, size and position of every single query report into the dashboard"
+msgstr ""
+
+#: public/js/home/controller.js:356
+msgid "Using single query reports you can configure a query against the data and get the results using different charts or a simple data grid."
+msgstr ""
+
+#: public/partials/users/add.html:148
+msgid "Value"
+msgstr ""
+
+#: public/partials/report/partials/report-edit.html:26
+msgid "View SQL"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:289
+msgid "Visible"
+msgstr ""
+
+#: public/partials/report/partials/report-edit.html:63
+msgid ""
+"Warning. The data you've requested contains multiple values for some of the data points. This may result in the chart being strange or misleading.\n"
+"                To fix this, make sure to choose an aggregation for your metrics, and do not use more than 1 or 2 dimensions."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:170
+msgid "Watch this short tutorial to see how to create a report."
+msgstr ""
+
+#: public/js/report/controller.js:1026
+msgid "Year"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:573
+msgid "You can also activate or deactivate layers."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:184
+msgid "You can also add runtime filters to split your data in real time."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:400
+msgid "You can also modify or drop the dashboard, clicking into the modify or delete buttons."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:213
+msgid "You can also modify or drop the report, clicking into the modify or delete buttons."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:589
+msgid "You can change the status of the layer simply clicking over this label"
+msgstr ""
+
+#: public/js/menu-list/controllers.js:544
+msgid "You can create several layers depending on your necessities, but you have to define one at least."
+msgstr ""
+
+#: public/js/spaces/controller.js:65
+msgid "You can drag it down or up across the structure to move the folder at the same level."
+msgstr ""
+
+#: public/js/data-source/controller.js:51
+msgid "You can edit the connection details for every data source, delete a data source or activate/deactivate a datasource."
+msgstr ""
+
+#: public/js/menu-list/controllers.js:571
+msgid "You can edit the layer to configure the tables, elements and joins between tables."
+msgstr ""
+
+#: public/js/data-source/controller.js:80
+msgid "You can setup the name you want for data sources."
+msgstr ""
+
+#: public/js/home/controller.js:121
+msgid "You will define here the labels to use for every field, the joins between the different entities (tables), etc... All the necessary stuff to allow your users to create a report without any knowlegde of the structure of your data"
+msgstr ""
+
+#: public/js/home/controller.js:104
+msgid "You will define here your database connections to get the data used in the reports that will be created by the users"
+msgstr ""
+
+#: public/partials/users/list.html:21
+#: public/partials/users/view.html:40
+msgid "active"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:120
+#: public/partials/widgets/inspector.html:171
+msgid "alignment"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:116
+#: public/partials/widgets/inspector.html:167
+msgid "all"
+msgstr ""
+
+#: public/js/data-source/controller.js:110
+msgid "allow your users to access and understand your data without any knowledge of SQL or how the database is structured in tables and fields..."
+msgstr ""
+
+#: public/partials/widgets/inspector.html:22
+msgid "attributes"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:96
+msgid "background"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:80
+msgid "backgroundColor"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:144
+msgid "backgroundImage"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:276
+msgid "border"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:282
+msgid "borderColor"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:302
+msgid "borderRoundness"
+msgstr ""
+
+#: public/partials/report/edit.html:60
+msgid "bottom"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:202
+#: public/partials/widgets/inspector.html:84
+msgid "color"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:287
+msgid "dashed"
+msgstr ""
+
+#: public/partials/data-source/list.html:25
+#: public/partials/layer/datasetModal.html:25
+#: public/partials/layer/sqlModal.html:26
+msgid "database:"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:288
+msgid "dotted"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:289
+msgid "double"
+msgstr ""
+
+#: public/partials/users/edit.html:57
+msgid "email"
+msgstr ""
+
+#: public/partials/users/edit.html:59
+msgid "email is required"
+msgstr ""
+
+#: public/partials/files/gallery.html:17
+msgid "error"
+msgstr ""
+
+#: public/partials/report/partials/report-edit.html:76
+msgid "getting data ..."
+msgstr ""
+
+#: public/partials/widgets/inspector.html:89
+msgid "gradient"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:127
+#: public/partials/widgets/inspector.html:178
+msgid "gradients"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:290
+msgid "groove"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:57
+msgid "heading"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:47
+msgid "height"
+msgstr ""
+
+#: public/partials/dashboardv2/chartModal.html:32
+msgid "hello"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:114
+#: public/partials/widgets/inspector.html:165
+msgid "horizontal"
+msgstr ""
+
+#: public/partials/data-source/list.html:23
+#: public/partials/layer/datasetModal.html:23
+#: public/partials/layer/sqlModal.html:24
+msgid "host:"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:88
+msgid "image"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:108
+#: public/partials/widgets/inspector.html:159
+msgid "imageProperties"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:292
+msgid "inset"
+msgstr ""
+
+#: public/partials/users/view.html:8
+msgid "logout"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:260
+msgid "margin"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:113
+#: public/partials/widgets/inspector.html:164
+#: public/partials/widgets/inspector.html:285
+msgid "none"
+msgstr ""
+
+#: public/partials/users/list.html:22
+#: public/partials/users/view.html:41
+msgid "not active"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:293
+msgid "outset"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:251
+msgid "padding"
+msgstr ""
+
+#: public/partials/data-source/list.html:24
+#: public/partials/layer/datasetModal.html:24
+#: public/partials/layer/sqlModal.html:25
+msgid "port:"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:255
+msgid "position from"
+msgstr ""
+
+#: public/partials/layer/elementModal.html:256
+msgid "position to"
+msgstr ""
+
+#: public/partials/users/view.html:117
+#: public/partials/users/view.html:138
+msgid "public"
+msgstr ""
+
+#: public/partials/dashboardv2/list.html:29
+msgid "published"
+msgstr ""
+
+#: public/partials/report/modals/dashboardListModal.html:15
+msgid "push"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:111
+#: public/partials/widgets/inspector.html:162
+msgid "repeat"
+msgstr ""
+
+#: public/partials/report/partials/report-edit.html:23
+msgid "results."
+msgstr ""
+
+#: public/partials/widgets/inspector.html:291
+msgid "ridge"
+msgstr ""
+
+#: public/partials/report/edit.html:59
+msgid "right"
+msgstr ""
+
+#: public/partials/report/modals/publishModal.html:13
+msgid "root folder"
+msgstr ""
+
+#: public/partials/report/modals/publishModal.html:14
+#: public/partials/report/modals/publishModal.html:34
+msgid "select"
+msgstr ""
+
+#: public/partials/report/modals/publishModal.html:15
+#: public/partials/report/modals/publishModal.html:35
+msgid "selected"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:286
+msgid "solid"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:52
+msgid "source"
+msgstr ""
+
+#: public/partials/files/gallery.html:18
+msgid "success"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:191
+msgid "textStyle"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:101
+#: public/partials/widgets/inspector.html:152
+msgid "textures"
+msgstr ""
+
+#: public/partials/report/edit.html:58
+msgid "top"
+msgstr ""
+
+#: public/partials/report/directives/wstDropzone.html:46
+msgid "unstack Column"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:69
+#: public/partials/widgets/inspector.html:98
+msgid "uploadImage"
+msgstr ""
+
+#: public/partials/widgets/inspector.html:115
+#: public/partials/widgets/inspector.html:166
+msgid "vertical"
+msgstr ""
+
+#: public/partials/logout/index.html:14
+msgid "you have logout!!!"
+msgstr ""
