@@ -225,25 +225,6 @@ app.service('reportModel', function ($q, bsLoadingOverlayService, connection, uu
         return selectedColumnIndex;
     };
 
-    this.changeColumnStyle = function (report, columnIndex, hashedID) {
-        selectedColumn = report.properties.columns[columnIndex];
-        selectedColumnHashedID = hashedID;
-        selectedColumnIndex = columnIndex;
-
-        if (!selectedColumn.columnStyle) { selectedColumn.columnStyle = {color: '#000', 'background-color': '#EEEEEE', 'text-align': 'left', 'font-size': '12px', 'font-weight': 'normal', 'font-style': 'normal'}; }
-
-        $('#columnFormatModal').modal('show');
-    };
-
-    this.changeColumnSignals = function (report, columnIndex, hashedID) {
-        selectedColumn = report.properties.columns[columnIndex];
-        selectedColumnHashedID = hashedID;
-        selectedColumnIndex = columnIndex;
-
-        if (!selectedColumn.signals) { selectedColumn.signals = []; }
-        $('#columnSignalsModal').modal('show');
-    };
-
     this.orderColumn = function (report, columnIndex, desc) {
         var theColumn = report.query.columns[columnIndex];
         if (desc) {

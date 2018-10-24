@@ -1,3 +1,5 @@
+<script src="js/xlsx.core.min.js"></script>
+
 <div class="container-fluid branded-border-panel" style="height: 40px">
     <h3 class="pull-left"  ng-bind="selectedReport.reportName"></h3>
     <a ng-if="selectedReport && ((selectedReport.owner == user._id) || isWSTADMIN)" href="/#/reports/edit/{{selectedReport._id}}"  class="btn btn-success pull-right" style="margin-right: 5px" translate>Edit Report</a>
@@ -42,5 +44,3 @@
 </div>
 
 <div ng-include src="publishModal"></div>
-<div ng-include src="columnFormatModal"></div>
-<div ng-include src="columnSignalsModal"></div>

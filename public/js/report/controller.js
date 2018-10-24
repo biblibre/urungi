@@ -13,13 +13,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.linkModal = 'partials/report/modals/linkModal.html';
     $scope.repeaterTemplate = 'partials/report/partials/repeater.html';
     $scope.publishModal = 'partials/report/modals/publishModal.html';
-    $scope.columnFormatModal = 'partials/report/modals/columnFormatModal.html';
-    $scope.columnSignalsModal = 'partials/report/modals/columnSignalsModal.html';
     $scope.dropArea = 'partials/report/partials/drop-area.html';
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
     $scope.dashListModal = 'partials/report/modals/dashboardListModal.html';
     $scope.filterPromptModal = 'partials/report/modals/filter-prompt-modal.html';
-    $scope.settingsTemplate = 'partials/widgets/common.html';
     $scope.tabs = {selected: 'elements'};
 
     $scope.selectedReport = {};
@@ -352,13 +349,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
     $scope.getReportColumnDefs = function (reportID) {
         return $scope.selectedReport.properties.columnDefs;
-    };
-
-    $scope.getView = function (item) {
-        if (item) {
-            return 'nestable_item.html';
-        }
-        return null;
     };
 
     /*
@@ -725,7 +715,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             break;
 
         case 'indicator':
-        case 'vectorMap':
         case 'gauge':
             choice = {
                 propertyBind: $scope.selectedReport.properties.ykeys,
@@ -863,14 +852,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             if (!report.properties.descFontColor) { report.properties.descFontColor = '#CCCCCC'; }
             break;
 
-        case 'vectorMap':
-            moveContent(report.properties.columns, movedColumns);
-            moveContent(report.properties.xkeys, movedColumns);
-            moveContent(report.properties.pivotKeys.columns, movedColumns);
-            moveContent(report.properties.pivotKeys.rows, movedColumns);
-            report.reportType = 'vectorMap';
-            break;
-
         case 'gauge':
             moveContent(report.properties.columns, movedColumns);
             moveContent(report.properties.xkeys, movedColumns);
@@ -933,20 +914,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         if (type === 'pie') { $scope.selectedReport.reportType = 'chart-pie'; }
         if (type === 'donut') { $scope.selectedReport.reportType = 'chart-donut'; }
         reportModel.repaintReport($scope.selectedReport, $scope.mode);
-    };
-
-    $scope.changeColumnStyle = function (columnIndex, hashedID) {
-        reportModel.changeColumnStyle($scope.selectedReport, columnIndex, hashedID);
-        $scope.selectedColumn = reportModel.selectedColumn();
-        $scope.selectedColumnHashedID = reportModel.selectedColumnHashedID();
-        $scope.selectedColumnIndex = reportModel.selectedColumnIndex();
-    };
-
-    $scope.changeColumnSignals = function (columnIndex, hashedID) {
-        reportModel.changeColumnSignals($scope.selectedReport, columnIndex, hashedID);
-        $scope.selectedColumn = reportModel.selectedColumn();
-        $scope.selectedColumnHashedID = reportModel.selectedColumnHashedID();
-        $scope.selectedColumnIndex = reportModel.selectedColumnIndex();
     };
 
     $scope.changeColumnColor = function (color) {

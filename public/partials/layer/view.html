@@ -1,4 +1,4 @@
-<script src="libs/jsplumb/jquery.jsPlumb-1.7.6-min.js"></script>
+<script src="js/jquery.jsPlumb-1.7.6-min.js"></script>
 
 
 <div class="explorer-main-container">
@@ -7,7 +7,7 @@
 
         <div class="explorer-header">
             <div class="explorer-header-title">
-                <h3 class="pull-left" editable-text="_Layer.name"></h3>
+                <h3 class="pull-left" editable-text="_Layer.name">{{ _Layer.name }}</h3>
             </div>
             <div class="explorer-header-buttons">
                 <a ng-click="save()" class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;" translate>Save layer</a>
@@ -82,46 +82,44 @@
                         <section class="layer scrollPane">
 
                             <div    class="layer-elements-tree">
-                                <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">
-                                </tg-dynamic-directive>
+                                <ng-include src="'nestable_item.html'"></ng-include>
 
                                 <script type="text/ng-template" id="nestable_item.html">
-                                    <!--<layer-element element="ngModelItem" on-element-edit-click="editElement" on-element-delete-click="deleteSchemaElement"></layer-element>-->
+                                    <!--<layer-element element="rootItem" on-element-edit-click="editElement" on-element-delete-click="deleteSchemaElement"></layer-element>-->
                                 <div>
 
 
 
-                                       <div class="schema-element"  ng-if="ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure'" >
-                                           <i class="fa fa-cube wst-main-color" ng-show="ngModelItem.elementType != 'date' && ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count' && (!ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)"></i>
-                                                        <i class="fa fa-reorder wst-main-color" ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
-                                                        <i class="fa fa-calendar-o wst-main-color" ng-show="ngModelItem.elementType == 'date'" data-toggle="tooltip" data-placement="top"></i>
-                                           <span ng-if="!ngModelItem.editing == true">{{ngModelItem.elementLabel}}</span>
-                                           <i class="fa fa-wrench" style="color:#999999" ng-show="ngModelItem.isCustom"></i>
-                                           <div ng-if="!ngModelItem.editing == true" class="schema-element-btn">
-                                                <div class="btn btn-warning btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(ngModelItem)" translate>Remove</div>
-                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="editElement(ngModelItem)" translate>Edit</div>
+                                       <div class="schema-element"  ng-if="rootItem.elementRole == 'dimension' || rootItem.elementRole == 'measure'" >
+                                           <i class="fa fa-cube wst-main-color" ng-show="rootItem.elementType != 'date' && rootItem.elementType != 'number' && rootItem.elementType != 'count' && (!rootItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Dimmension)"></i>
+                                                        <i class="fa fa-reorder wst-main-color" ng-show="rootItem.elementType == 'number' || rootItem.elementType == 'count' || (rootItem.elementType == 'string' && rootItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Metric)"></i>
+                                                        <i class="fa fa-calendar-o wst-main-color" ng-show="rootItem.elementType == 'date'" data-toggle="tooltip" data-placement="top"></i>
+                                           <span ng-if="!rootItem.editing == true">{{rootItem.elementLabel}}</span>
+                                           <i class="fa fa-wrench" style="color:#999999" ng-show="rootItem.isCustom"></i>
+                                           <div ng-if="!rootItem.editing == true" class="schema-element-btn">
+                                                <div class="btn btn-warning btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(rootItem)" translate>Remove</div>
+                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="editElement(rootItem)" translate>Edit</div>
                                             </div>
 
 
                                         </div>
 
-                                        <div class="schema-folder"  ng-if="ngModelItem.elementRole == 'folder'" >
+                                        <div class="schema-folder"  ng-if="rootItem.elementRole == 'folder'" >
                                            <i class="fa fa-caret-down"></i>
-                                            <span ng-if="!ngModelItem.editing == true" class="" >{{ngModelItem.elementLabel}}</span>
-                                            <span ng-if="ngModelItem.editing == true" class=""><input type="text" ng-model="ngModelItem.elementLabel" style="width:100px"></span>
+                                            <span ng-if="!rootItem.editing == true" class="" >{{rootItem.elementLabel}}</span>
+                                            <span ng-if="rootItem.editing == true" class=""><input type="text" ng-model="rootItem.elementLabel" style="width:100px"></span>
 
-                                            <div ng-if="!ngModelItem.editing == true" class="schema-element-btn">
-                                                <div class="btn btn-danger btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(ngModelItem)" translate>Delete</div>
-                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="ngModelItem.editing = true; elementEditing = true;">Edit</div>
+                                            <div ng-if="!rootItem.editing == true" class="schema-element-btn">
+                                                <div class="btn btn-danger btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(rootItem)" translate>Delete</div>
+                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="rootItem.editing = true; elementEditing = true;">Edit</div>
                                             </div>
 
-                                            <div ng-if="ngModelItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="ngModelItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o save-folder-element-btn-icon" tooltip="{{'Save folder label' | translate}}"></i></div>
+                                            <div ng-if="rootItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="rootItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o save-folder-element-btn-icon" tooltip="{{'Save folder label' | translate}}"></i></div>
                                         </div>
-                                        <ul ng-if="ngModelItem.elementRole == 'folder' || ngModelItem.elementRole == 'root'" class="schema-container list-group" ui-sortable="sortableOptions" ng-model="ngModelItem.elements"
+                                        <ul ng-if="rootItem.elementRole == 'folder' || rootItem.elementRole == 'root'" class="schema-container list-group" ui-sortable="sortableOptions" ng-model="rootItem.elements"
                                             ng-class="{'schema-element-container-placeholder': onDrag, 'schema-element-container-default': !onDrag}">
-                                            <li class="innerCont list-group-item hand-cursor" ng-repeat="innerItem in ngModelItem.elements" >
-                                                <tg-dynamic-directive ng-model="innerItem" tg-dynamic-directive-view="getView">
-                                                </tg-dynamic-directive>
+                                            <li class="innerCont list-group-item hand-cursor" ng-repeat="rootItem in rootItem.elements" >
+                                                <ng-include src="'nestable_item.html'"></ng-include>
                                             </li>
                                         </ul>
                                     </div>

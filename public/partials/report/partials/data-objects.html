@@ -6,80 +6,78 @@
         class="form-control" ng-model="selectedReport.selectedLayerID" ng-options="obj._id as obj.name for obj in layers"
                                             ng-change="changeLayer(selectedReport.selectedLayerID)"></select>
     </div>
-    <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">
-    </tg-dynamic-directive>
+    <ng-include src="'nestable_item.html'"></ng-include>
 
     <script type="text/ng-template" id="nestable_item.html">
         <div id="layerObjects">
             <div class="schema-element-report schema-item-report"  
-            ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure')">
+            ng-if="(rootItem.elementRole == 'dimension' || rootItem.elementRole == 'measure')">
 
-                <a id="ELEMENT_{{ngModelItem.elementID}}" class="list-group-item data-source-element schema-item-report" 
-                ng-if="isUsable(ngModelItem)"
-                ng-click="autoFill(ngModelItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
+                <a id="ELEMENT_{{rootItem.elementID}}" class="list-group-item data-source-element schema-item-report" 
+                ng-if="isUsable(rootItem)"
+                ng-click="autoFill(rootItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
                 draggable-data="{
-                        elementName: ngModelItem.elementName,
-                        objectLabel: ngModelItem.elementLabel,
-                        datasourceID:ngModelItem.datasourceID,
-                        id:ngModelItem.id,
-                        elementLabel:ngModelItem.elementLabel,
-                        collectionID:ngModelItem.collectionID,
-                        elementID: ngModelItem.elementID,
-                        elementType: ngModelItem.elementType,
+                        elementName: rootItem.elementName,
+                        objectLabel: rootItem.elementLabel,
+                        datasourceID:rootItem.datasourceID,
+                        id:rootItem.id,
+                        elementLabel:rootItem.elementLabel,
+                        collectionID:rootItem.collectionID,
+                        elementID: rootItem.elementID,
+                        elementType: rootItem.elementType,
                         layerID: selectedReport.selectedLayerID,
                         filterType: 'equal',
                         filterPrompt: false,
                         filterTypeLabel:'equal',
-                        format:ngModelItem.format,
-                        isCustom:ngModelItem.isCustom,
-                        expression:ngModelItem.expression,
-                        arguments:ngModelItem.arguments,
-                        values:ngModelItem.values,
-                        component:ngModelItem.component}">
+                        format:rootItem.format,
+                        isCustom:rootItem.isCustom,
+                        expression:rootItem.expression,
+                        arguments:rootItem.arguments,
+                        values:rootItem.values,
+                        component:rootItem.component}">
                             <i class="fa fa-cube wst-main-color" 
-                            ng-show="ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count' && (!ngModelItem.defaultAggregation)" 
-                            data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)"></i>
+                            ng-show="rootItem.elementType != 'number' && rootItem.elementType != 'count' && (!rootItem.defaultAggregation)" 
+                            data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Dimmension)"></i>
                             <i class="fa fa-reorder wst-main-color" 
-                            ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" 
-                            data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
+                            ng-show="rootItem.elementType == 'number' || rootItem.elementType == 'count' || (rootItem.elementType == 'string' && rootItem.defaultAggregation)" 
+                            data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Metric)"></i>
 
 
-                            <span ng-hide="ngModelItem.defaultAggregation" ng-bind="ngModelItem.elementLabel"></span>
-                            <span ng-show="ngModelItem.defaultAggregation" ng-bind="ngModelItem.elementLabel + '(' + ngModelItem.defaultAggregation + ')'"></span>
+                            <span ng-hide="rootItem.defaultAggregation" ng-bind="rootItem.elementLabel"></span>
+                            <span ng-show="rootItem.defaultAggregation" ng-bind="rootItem.elementLabel + '(' + rootItem.defaultAggregation + ')'"></span>
 
                 </a>
 
-                <a ng-if="!isUsable(ngModelItem)" class="element-disabled">
+                <a ng-if="!isUsable(rootItem)" class="element-disabled">
                     <i class="fa fa-cube" 
-                    ng-show="ngModelItem.elementType != 'number' && ngModelItem.elementType != 'count' && (!ngModelItem.defaultAggregation)" 
-                    data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Dimmension)"></i>
+                    ng-show="rootItem.elementType != 'number' && rootItem.elementType != 'count' && (!rootItem.defaultAggregation)" 
+                    data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Dimmension)"></i>
                     <i class="fa fa-reorder" 
-                    ng-show="ngModelItem.elementType == 'number' || ngModelItem.elementType == 'count' || (ngModelItem.elementType == 'string' && ngModelItem.defaultAggregation)" 
-                    data-toggle="tooltip" data-placement="top" title="{{ngModelItem.elementLabel}} (Metric)"></i>
+                    ng-show="rootItem.elementType == 'number' || rootItem.elementType == 'count' || (rootItem.elementType == 'string' && rootItem.defaultAggregation)" 
+                    data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Metric)"></i>
 
 
-                    <span ng-hide="ngModelItem.defaultAggregation" ng-bind="ngModelItem.elementLabel"></span>
-                    <span ng-show="ngModelItem.defaultAggregation" ng-bind="ngModelItem.elementLabel + '(' + ngModelItem.defaultAggregation + ')'"></span>
+                    <span ng-hide="rootItem.defaultAggregation" ng-bind="rootItem.elementLabel"></span>
+                    <span ng-show="rootItem.defaultAggregation" ng-bind="rootItem.elementLabel + '(' + rootItem.defaultAggregation + ')'"></span>
                 </a>
 
             </div>
 
-            <div class="schema-element-report schema-item-report"  ng-if="(ngModelItem.elementRole == 'dimension' || ngModelItem.elementRole == 'measure') && ngModelItem.enabled == false" >
-                <span class="list-group-item data-source-element schema-item-report element-disabled" style="color: #85878c;">{{ngModelItem.elementLabel}}</span>
+            <div class="schema-element-report schema-item-report"  ng-if="(rootItem.elementRole == 'dimension' || rootItem.elementRole == 'measure') && rootItem.enabled == false" >
+                <span class="list-group-item data-source-element schema-item-report element-disabled" style="color: #85878c;">{{rootItem.elementLabel}}</span>
             </div>
 
-            <div class="schema-folder-report"  ng-if="ngModelItem.elementRole == 'folder'" >
-                <i ng-if="!ngModelItem.isCollapsed" class="fa fa-plus-square" ng-click="ngModelItem.isCollapsed = !ngModelItem.isCollapsed" ></i>
-                <i ng-if="ngModelItem.isCollapsed" class="fa fa-minus-square" ng-click="ngModelItem.isCollapsed = !ngModelItem.isCollapsed" ></i>
-                <a  role="button" ng-click="ngModelItem.isCollapsed = !ngModelItem.isCollapsed" >
-                    {{ngModelItem.elementLabel}}
+            <div class="schema-folder-report"  ng-if="rootItem.elementRole == 'folder'" >
+                <i ng-if="!rootItem.isCollapsed" class="fa fa-plus-square" ng-click="rootItem.isCollapsed = !rootItem.isCollapsed" ></i>
+                <i ng-if="rootItem.isCollapsed" class="fa fa-minus-square" ng-click="rootItem.isCollapsed = !rootItem.isCollapsed" ></i>
+                <a  role="button" ng-click="rootItem.isCollapsed = !rootItem.isCollapsed" >
+                    {{rootItem.elementLabel}}
                 </a>
             </div>
-            <div collapse="!ngModelItem.isCollapsed && ngModelItem.elementRole != 'root'" style="padding-left=10px">
-            <ul ng-if="ngModelItem.elementRole == 'folder' || ngModelItem.elementRole == 'root'" class="schema-container-report list-group" ng-class="">
-                <li class="innerCont list-group-item hand-cursor schema-item-report" ng-repeat="innerItem in ngModelItem.elements">
-                    <tg-dynamic-directive ng-model="innerItem" tg-dynamic-directive-view="getView">
-                    </tg-dynamic-directive>
+            <div collapse="!rootItem.isCollapsed && rootItem.elementRole != 'root'" style="padding-left=10px">
+            <ul ng-if="rootItem.elementRole == 'folder' || rootItem.elementRole == 'root'" class="schema-container-report list-group" ng-class="">
+                <li class="innerCont list-group-item hand-cursor schema-item-report" ng-repeat="rootItem in rootItem.elements">
+                    <ng-include src="'nestable_item.html'"></ng-include>
                 </li>
             </ul>
             </div>

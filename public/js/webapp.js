@@ -2,10 +2,10 @@
 'use strict';
 
 var app = angular.module('Urungi', [
-    'ngRoute', 'ui.sortable', 'gridster', 'ui.layout', 'draganddrop', 'ui.bootstrap', 'ngCsvImport', 'checklist-model', 'ng-nestable',
-    'infinite-scroll', 'angular-canv-gauge', 'ui.bootstrap-slider', 'urungi.directives', 'ngSanitize', 'ui.select', 'tg.dynamicDirective', 'angularUUID2', 'vs-repeat',
-    'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'vAccordion', 'bsLoadingOverlay', 'gg.editableText',
-    'intro.help', 'ngTagsInput', 'ui.codemirror', '720kb.socialshare', 'ngFileUpload', 'colorpicker.module', 'angularSpectrumColorpicker',
+    'ngRoute', 'ui.sortable', 'draganddrop', 'ui.bootstrap',
+    'urungi.directives', 'ngSanitize', 'ui.select', 'angularUUID2', 'vs-repeat',
+    'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'bsLoadingOverlay', 'xeditable',
+    'intro.help', 'ngFileUpload', 'colorpicker.module',
     'wst.inspector', 'gettext', 'ngFileSaver'
 ])
     .config(['$routeProvider', function ($routeProvider) {
@@ -216,13 +216,6 @@ var app = angular.module('Urungi', [
             controller: 'catalogCtrl'
         });
 
-        /* setup */
-
-        $routeProvider.when('/setup', {
-            templateUrl: 'partials/setup/index.html',
-            controller: 'setupCtrl'
-        });
-
         // imports and exports
 
         $routeProvider.when('/import', {
@@ -386,6 +379,11 @@ app.run(function (bsLoadingOverlayService) {
         templateUrl: 'partials/loading-overlay-template.html' // Template url for overlay element. If not specified - no overlay element is created.
     });
 });
+
+// Set default options for xeditable
+app.run(['editableOptions', function (editableOptions) {
+    editableOptions.buttons = 'no';
+}]);
 
 function isWSTADMIN ($rootScope) {
     var found = false;

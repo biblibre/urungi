@@ -1232,13 +1232,6 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         $scope._Layer.objects.push(element);
     };
 
-    $scope.getView = function (item) {
-        if (item) {
-            return 'nestable_item.html';
-        }
-        return null;
-    };
-
     $scope.deleteSchemaElement = function (element) {
         var elementID = element.elementID;
 

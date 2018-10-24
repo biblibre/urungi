@@ -1,9 +1,6 @@
 // Declare app level module which depends on filters, and services
-// var app = angular.module('urungi-login', ['ui.router','myApp.filters', 'myApp.services', 'myApp.directives']).
-angular.module('urungi-login', ['ui.router', '720kb.socialshare'])
-    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise('/');
-    }]).service('Constants', function () {
+angular.module('urungi-login', [])
+    .service('Constants', function () {
         var constants = {
             DEBUGMODE: false,
         };
