@@ -979,10 +979,37 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     };
 
     $scope.previewAvailable = function () {
-        return $scope.selectedReport && $scope.selectedReport.properties &&
-        ($scope.selectedReport.properties.columns.length > 0 || ($scope.selectedReport.properties.ykeys.length > 0 &&
-            ($scope.selectedReport.properties.xkeys.length > 0 ||
-                ($scope.selectedReport.properties.pivotKeys.columns.length > 0 && $scope.selectedReport.properties.pivotKeys.rows.length > 0))));
+        const report = $scope.selectedReport;
+        if (!report || !report.properties) {
+            return false;
+        }
+
+        let available = false;
+        switch (report.reportType) {
+        case 'grid':
+        case 'vertical-grid':
+            available = report.properties.columns.length > 0;
+            break;
+
+        case 'pivot':
+            available = report.properties.ykeys.length > 0 &&
+                report.properties.pivotKeys.columns.length > 0 &&
+                report.properties.pivotKeys.rows.length > 0;
+            break;
+
+        case 'chart-line':
+        case 'chart-donut':
+            available = report.properties.xkeys.length > 0 &&
+                report.properties.ykeys.length > 0;
+            break;
+
+        case 'indicator':
+        case 'gauge':
+            available = report.properties.ykeys.length > 0;
+            break;
+        }
+
+        return available;
     };
 
     $scope.gridGetMoreData = function (reportID) {
