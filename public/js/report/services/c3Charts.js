@@ -269,18 +269,6 @@ app.service('c3Charts', function () {
         chart.chartCanvas = c3.generate(canvasArgs);
     };
 
-    this.deleteChartColumn = function (chart, column) {
-        var index = chart.dataColumns.indexOf(column);
-        if (index > -1) {
-            chart.dataColumns.splice(index, 1);
-
-            this.rebuildChart(chart);
-        } else {
-            // seems that this chart has a query that changed and the column cant be found in
-
-        }
-    };
-
     this.changeChartColumnType = function (chart, column) {
         if (chart.stacked) {
             for (const key of chart.stackKeys[column.id]) {

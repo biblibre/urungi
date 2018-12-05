@@ -532,10 +532,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService
 
     };
 
-    $scope.deleteChartColumn = function (chart, column) {
-        c3Charts.deleteChartColumn(chart, column);
-    };
-
     $scope.changeChartColumnType = function (chart, column) {
         c3Charts.changeChartColumnType(chart, column);
     };
