@@ -72,7 +72,6 @@ gulp.task('dist:css', ['clean'], function () {
 
     return gulp.src(paths)
         .pipe(concat('bundle.min.css'))
-        .pipe(decomment.text())
         .pipe(gulp.dest('dist/css'));
 });
 
