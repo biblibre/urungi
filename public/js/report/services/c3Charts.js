@@ -1,7 +1,7 @@
 /* global c3:false */
 
 app.service('c3Charts', function () {
-    this.rebuildChart = function (report) {
+    this.rebuildChart = function (report, id) {
         var theValues = [];
         var theStackValues = {};
         var theTypes = {};
@@ -133,7 +133,7 @@ app.service('c3Charts', function () {
             chart.stacked = false;
         }
 
-        var theChartCode = '#CHART_' + report.id;
+        var theChartCode = '#' + id;
 
         if (!chart.height) { chart.height = 300; }
 
@@ -302,15 +302,13 @@ app.service('c3Charts', function () {
         chart.chartCanvas.groups(theGroups);
     };
 
-    this.getChartHTML = function (report, mode) {
+    this.getChartHTML = function (report, mode, id) {
         var html = '';
 
-        const theChartID = report.id;
-
         if (mode === 'edit') {
-            html = '<div page-block ndType="c3Chart" bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
+            html = '<div page-block ndType="c3Chart" id="' + id + '" >';
         } else {
-            html = '<div bindto-id="CHART_' + theChartID + '" id="CHART_' + theChartID + '" >';
+            html = '<div id="' + id + '" >';
         }
         html = html + '</div>';
         return html;

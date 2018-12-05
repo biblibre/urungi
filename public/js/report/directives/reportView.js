@@ -1,5 +1,4 @@
-app.directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid,
-    verticalGrid, pivot) {
+app.directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, verticalGrid, pivot, uuid2) {
     return {
 
         scope: {
@@ -59,13 +58,15 @@ app.directive('reportView', function ($q, $timeout, reportModel, $compile, c3Cha
                     case 'chart-donut':
                     case 'chart-pie':
                     case 'gauge':
-                        $scope.changeContent(c3Charts.getChartHTML($scope.report, $scope.mode));
+                        const id = 'CHART_' + $scope.report.id + '-' + uuid2.newuuid();
+                        const html = c3Charts.getChartHTML($scope.report, $scope.mode, id);
+                        $scope.changeContent(html);
 
                         // FIXME $timeout should not be necessary here, but
                         // without it the chart is shown and automatically
                         // replaced by an empty chart
                         return $timeout(function () {}, 0).then(function () {
-                            c3Charts.rebuildChart($scope.report);
+                            c3Charts.rebuildChart($scope.report, id);
                             $scope.loading = false;
                         });
                     case 'indicator':
