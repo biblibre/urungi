@@ -199,7 +199,9 @@ app.service('c3Charts', function () {
             canvasArgs = {
                 bindto: theChartCode,
                 data: {
-                    columns: [theValues[0], query.data[0][theValues[0]]],
+                    columns: [
+                        [theValues[0], query.data[0][theValues[0]]]
+                    ],
                     type: chart.type
                 },
                 gauge: {

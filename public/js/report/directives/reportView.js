@@ -71,11 +71,8 @@ app.directive('reportView', function ($q, $timeout, reportModel, $compile, c3Cha
                         });
                     case 'indicator':
                         $scope.changeContent(reportHtmlWidgets.generateIndicator($scope.report));
+                        break;
 
-                        return $timeout(function () {}, 0).then(function () {
-                            c3Charts.rebuildChart($scope.report);
-                            $scope.loading = false;
-                        });
                     default:
                         $scope.changeContent('<div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>');
                     }

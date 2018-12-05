@@ -1,6 +1,6 @@
 app.service('reportHtmlWidgets', function () {
-    this.generateIndicator = function (parentElementID, report) {
-        return generateIndicator(parentElementID, report);
+    this.generateIndicator = function (report) {
+        return generateIndicator(report);
     };
 
     function generateIndicator (report) {
@@ -10,12 +10,9 @@ app.service('reportHtmlWidgets', function () {
         if (theData) {
             if (!report.properties.style) { report.properties.style = 'style1'; }
 
-            // var theYKey = report.properties.ykeys[0].collectionID.toLowerCase()+'_'+report.properties.ykeys[0].elementName;
-            var theYKey = 'wst' + report.properties.ykeys[0].elementID.toLowerCase();
+            var theYKey = report.properties.ykeys[0].id;
 
             theYKey = theYKey.replace(/[^a-zA-Z ]/g, '');
-
-            if (report.properties.ykeys[0].aggregation) { theYKey += report.properties.ykeys[0].aggregation; }
 
             var theValue = '{{' + theData[0][theYKey] + '| number}}';
 
