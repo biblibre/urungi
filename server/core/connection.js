@@ -162,16 +162,8 @@ Db.prototype.runQuery = async function (queryFunction) {
     };
 };
 
-Db.prototype.executeRawQuery = async function (sqlQuery) {
-    var result;
-
-    try {
-        result = await this.knex.select().from(this.knex.raw('(' + sqlQuery + ') Wstmain'));
-    } catch (err) {
-        return false;
-    }
-
-    return result;
+Db.prototype.executeRawQuery = function (sqlQuery) {
+    return this.knex.select().from(this.knex.raw('(' + sqlQuery + ') Wstmain'));
 };
 
 Db.prototype.close = async function () {

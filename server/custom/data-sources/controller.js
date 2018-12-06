@@ -209,7 +209,7 @@ exports.getEntitySchema = async function (req, res) {
 
 exports.getsqlQuerySchema = async function (req, res) {
     var theDatasourceID = req.query.datasourceID;
-    var collectionRef = req.query.collection;
+    var collectionRef = JSON.parse(req.query.collection);
 
     req.query = {};
     req.query.companyid = true;
@@ -300,7 +300,6 @@ exports.getsqlQuerySchema = async function (req, res) {
             });
         }
     } catch (err) {
-        console.log('caught here');
         console.error(err);
         res.status(200).json({result: 0, msg: String(err)});
     }
@@ -385,9 +384,9 @@ function processCollectionSchema (collectionRef, items) {
 
 function processSqlQuerySchema (collectionRef, queryResult) {
     var collection = {
-        collectionName: collectionRef.collectionName,
+        collectionName: collectionRef.name,
         visible: true,
-        collectionLabel: collectionRef.collectionName,
+        collectionLabel: collectionRef.name,
         isSQL: true,
         sqlQuery: collectionRef.sqlQuery
     };
