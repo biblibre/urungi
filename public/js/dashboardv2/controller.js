@@ -900,6 +900,8 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService
                 }
             }
         }
+
+        getPromptsWidget();
     };
 
     function clearPrompts () {
@@ -914,31 +916,33 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService
         return $scope.prompts && Object.values($scope.prompts);
     };
 
-    // function getPromptsWidget () {
-    //     for (var p in $scope.prompts) {
-    //         var thePrompt = $scope.prompts[p];
+    function getPromptsWidget () {
+        for (var p in $scope.prompts) {
+            var thePrompt = $scope.prompts[p];
 
-    //         var targetPrompt = document.getElementById('PROMPT_' + thePrompt.elementID);
+            thePrompt.promptID = p;
+            var targetPrompt = document.getElementById('PROMPT_' + thePrompt.promptID);
 
-    //         if (typeof targetPrompt !== 'undefined') {
-    //             if (typeof thePrompt.name === 'undefined') {
-    //                 thePrompt.name = thePrompt.collectionID.toLowerCase() + '_' + thePrompt.elementName;
-    //             }
+            if (targetPrompt) {
+                if (typeof thePrompt.name === 'undefined') {
+                    thePrompt.name = thePrompt.collectionID.toLowerCase() + '_' + thePrompt.elementName;
+                }
 
-    //             $(targetPrompt).children().remove();
-    //             var html = '<nd-prompt  filter="getFilter(' + "'" + thePrompt.elementID + "'" + ')"  element-id="' + thePrompt.elementID + '" label="' + thePrompt.objectLabel + '" description="' + thePrompt.promptInstructions + '" value-field="' + thePrompt.name + '" show-field="' + thePrompt.name + '" selected-value="' + thePrompt.filterText1 + '" prompts="prompts" on-change="promptChanged" after-get-values="afterPromptGetValues" ng-model="lastPromptSelectedValue"></nd-prompt>';
+                var html = reportModel.getPromptHTML(thePrompt);
+                $(targetPrompt).replaceWith(html);
+                targetPrompt = document.getElementById('PROMPT_' + thePrompt.promptID);
+                if ($scope.mode === 'preview') {
+                    targetPrompt.removeAttribute('page-block');
+                }
 
-    //             var $div = $(html);
-    //             $(targetPrompt).append($div);
-    //             angular.element(document).injector().invoke(function ($compile) {
-    //                 var scope = angular.element($div).scope();
-    //                 $compile($div)(scope);
-    //             });
-    //         } else {
-    //             noty({text: 'No target prompt found', timeout: 2000, type: 'error'});
-    //         }
-    //     }
-    // }
+                angular.element(document).injector().invoke(function ($compile) {
+                    const el = angular.element(targetPrompt);
+                    const scope = el.scope();
+                    $compile(el)(scope);
+                });
+            }
+        }
+    }
 
     $scope.getReportColumnDefs = function (reportID) {
         for (var i in $scope.selectedDashboard.reports) {
