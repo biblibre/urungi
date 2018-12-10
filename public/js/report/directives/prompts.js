@@ -184,19 +184,9 @@ app.directive('ndPrompt', function (reportModel) {
                 }
             };
 
-            //     $scope.inputChanged = function (filter) {
-            //         filter.searchValue = filter.filterText1;
-            //         filter.filterValue = filter.filterText1;
-
-            //         /*  var values = {};
-            // values.filterText1 = filter.filterText1;
-            // values.searchValue = filter.searchValue;
-            // values.filterValue = filter.filterValue;
-            // values.dateCustomFilterLabel = filter.dateCustomFilterLabel;
-            // if (filter.filterType == 'between' && (filter.filterText2 != undefined || filter.filterText2 != '') )
-            //     $scope.onChange($scope.elementId,values); */
-            //         checkForOnChange(filter);
-            //     };
+            $scope.inputChanged = function (filter) {
+                $scope.onChange();
+            };
 
             $scope.updateCondition = function (filter, condition) {
                 filter.conditionType = condition.conditionType;
