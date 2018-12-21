@@ -247,7 +247,9 @@ app.service('c3Charts', function () {
                             format: function (i) {
                                 const max = 20;
                                 let name = this.config.axis_x_categories[i];
-                                if (name.length > max) {
+                                if (name === null) {
+                                    name = 'NULL';
+                                } else if (name.length > max) {
                                     name = name.substr(0, max - 1) + '…';
                                 }
 
