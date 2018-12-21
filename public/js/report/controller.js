@@ -334,7 +334,9 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
     $scope.changeLayer = function (selectedLayerID) {
         $scope.selectedReport.selectedLayerID = selectedLayerID;
-        $scope.selectedReport.query.selectedLayerID = selectedLayerID;
+        if ($scope.selectedReport.query) {
+            $scope.selectedReport.query.selectedLayerID = selectedLayerID;
+        }
         var layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
         $scope.rootItem = layer.rootItem;
     };
