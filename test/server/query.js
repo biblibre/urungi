@@ -687,10 +687,10 @@ const generateTestSuite = (dbConfig) => function () {
         it('Should test /api/data-sources/getsqlQuerySchema', async function () {
             const params = {
                 datasourceID: dtsId,
-                collection: {
+                collection: JSON.stringify({
                     sqlQuery: 'select * from gems',
-                    collectionName: 'simple query'
-                }
+                    name: 'simple query'
+                })
             };
 
             const res = await agent.get('/api/data-sources/getsqlQuerySchema').query(params);
