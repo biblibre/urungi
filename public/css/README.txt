@@ -1,14 +1,7 @@
 Here are the colors used in Urungi
 
-BibLibre blue: #0063ff
-BibLibre orange: #f68010
-
-Darker blue: #0047b8 and #00378d
-Lighter blue: #136eff and #3d87fc
-Very light blue: #d6e6ff
-
-Darker orange: #d55600
-Lighter orange: #ff802a
-Very light orange: #f6ebe0
-
-Soft grey-blue: #557fc2
+Dark grey : #666666        rgb(102, 102, 102)
+Green :     #afe9c6        rgb(175, 233, 198)
+Pink:       #de87aa        rgb(222, 135, 170)
+Blue:       #afe9dd        rgb(175, 233, 221)
+Yellow:     #ffeeaa        rgb(255, 238, 170)
