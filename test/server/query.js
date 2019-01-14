@@ -1579,6 +1579,7 @@ function buildComplexLayer (knex) {
                         elementID: 'eepa',
                         isCustom: 'true',
                         expression: 'eeaa + 1',
+                        viewExpression: '#eeaa + 1',
                         arguments: [
                             {
                                 elementID: 'eeaa'

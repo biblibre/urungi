@@ -161,6 +161,7 @@ function processQuery (query, queryLayer, warnings) {
         const validCol = validateColumn(col, element, warnings);
         processedQuery.columns.push(validCol);
         if (!validCol.aggregation) {
+            // FIXME No need to GROUP BY if no aggregate functions is used at all
             groupKeys.add(element);
         }
     }
@@ -349,6 +350,7 @@ function validateColumn (column, element, warnings) {
         layerID: element.layerID,
         isCustom: Boolean(element.isCustom),
         expression: element.expression,
+        viewExpression: element.viewExpression,
         arguments: element.arguments
     };
 

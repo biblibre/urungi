@@ -1,32 +1,41 @@
 exports.build = function (query) {
     return function (knex) {
-        var qb = knex;
-
-        for (const column of query.columns) {
-            qb = qb.select(getRef(knex, column).as(column.id));
-            // for example : SUM([column.elementID]) as [column.id]
+        const qb = knex(getTable(knex, query.joinTree.collection));
+        for (const join of query.joinTree.joins) {
+            buildJoin(knex, qb, join);
         }
 
-        qb = qb.from(buildTable(knex, query.joinTree)).as('WSTmain');
+        const aggregations = ['sum', 'avg', 'min', 'max', 'count'];
+        for (const column of query.columns) {
+            const c = {
+                [column.id]: getRef(knex, column),
+            };
+
+            if (aggregations.includes(column.aggregation)) {
+                qb[column.aggregation](c);
+            } else {
+                qb.select(c);
+            }
+        }
 
         for (const i in query.filters) {
             const filter = query.filters[i];
             if (filter.elementType === 'date') {
-                qb = applyDateFilter(knex, qb, filter, i === '0');
+                applyDateFilter(knex, qb, filter, i === '0');
             } else {
-                qb = applyFilter(knex, qb, filter, i === '0');
+                applyFilter(knex, qb, filter, i === '0');
             }
         }
 
         for (const column of query.groupKeys) {
-            qb = qb.groupBy(getRef(knex, column));
+            qb.groupBy(getRef(knex, column));
         }
 
         for (const order of query.order) {
             if (order.sortDesc) {
-                qb = qb.orderBy(getRef(knex, order), 'desc');
+                qb.orderBy(getRef(knex, order), 'desc');
             } else {
-                qb = qb.orderBy(getRef(knex, order), 'asc');
+                qb.orderBy(getRef(knex, order), 'asc');
             }
 
             // If there is a GROUP BY clause, it should contain all columns
@@ -52,85 +61,78 @@ exports.build = function (query) {
             limit = 0;
         }
 
-        qb = qb.limit(limit).offset(offset);
+        qb.limit(limit).offset(offset);
 
         return qb;
     };
 };
 
 function getRef (knex, column) {
-    var name;
+    let ref;
 
     if (column.isCustom) {
-        name = knex.raw(column.expression);
+        const args = [];
+        const expr = column.viewExpression.replace(/#([a-z0-9]+)/g, function (match, p1) {
+            const arg = column.arguments.find(a => a.elementID === p1);
+            args.push(arg.collectionID + '.' + arg.elementName);
+            return '??';
+        });
+        ref = knex.raw(expr, args);
     } else {
-        name = column.elementID;
+        ref = knex.ref(column.collectionID + '.' + column.elementName);
     }
 
-    switch (column.aggregation) {
-    case 'sum':
-        return knex.sum(name);
-    case 'avg':
-        return knex.avg(name);
-    case 'min':
-        return knex.min(name);
-    case 'max':
-        return knex.max(name);
-    case 'count':
-        return knex.count(name);
-    default:
-        return knex.ref(name);
-    }
+    return ref;
 }
 
-function buildTable (knex, joinTree) {
-    return function () {
-        var qb = this;
+function getTable (knex, collection) {
+    let tableExpr;
+    if (collection.isSQL) {
+        tableExpr = knex.raw('(' + collection.sqlQuery + ')');
+    } else {
+        tableExpr = collection.collectionName;
+    }
 
-        var collectionName;
-        if (!joinTree.collection.isSQL) {
-            collectionName = joinTree.collection.collectionName;
-        } else {
-            collectionName = 'rawsql';
-        }
-
-        for (const field of joinTree.fetchFields) {
-            qb = qb.select(knex.ref(field.elementName).withSchema(collectionName).as(field.elementID));
-        }
-
-        for (const field of joinTree.carryFields) {
-            qb = qb.select(field.elementID);
-        }
-
-        if (!joinTree.collection.isSQL) {
-            qb = qb.from(joinTree.collection.collectionName);
-        } else {
-            qb = qb.from(knex.raw('(' + joinTree.collection.sqlQuery + ') rawsql'));
-        }
-
-        qb = qb.as(joinTree.collection.collectionID);
-
-        for (const node of joinTree.joins) {
-            var firstElementName;
-            var secondElementID;
-
-            if (node.parentJoin.sourceCollectionID === joinTree.collection.collectionID) {
-                firstElementName = node.parentJoin.sourceElementName;
-                secondElementID = node.parentJoin.targetElementID;
-            } else {
-                firstElementName = node.parentJoin.targetElementName;
-                secondElementID = node.parentJoin.sourceElementID;
-            }
-            qb = qb.join(
-                buildTable(knex, node),
-                joinTree.collection.collectionName + '.' + firstElementName,
-                '=',
-                node.collection.collectionID + '.' + secondElementID
-            );
-        }
-
-        return qb;
+    const table = {
+        [collection.collectionID]: tableExpr,
     };
+
+    return table;
+}
+
+function buildJoin (knex, qb, join) {
+    let joinType = join.parentJoin.joinType;
+
+    if (join.collection.collectionID === join.parentJoin.sourceCollectionID) {
+        if (joinType === 'left') {
+            joinType = 'right';
+        } else if (joinType === 'right') {
+            joinType = 'left';
+        }
+    }
+
+    let joinFunc;
+    switch (joinType) {
+    case 'left':
+        joinFunc = qb.leftJoin;
+        break;
+
+    case 'right':
+        joinFunc = qb.rightJoin;
+        break;
+
+    default:
+        joinFunc = qb.innerJoin;
+        break;
+    }
+
+    joinFunc.call(qb, getTable(knex, join.collection),
+        join.parentJoin.sourceCollectionID + '.' + join.parentJoin.sourceElementName,
+        join.parentJoin.targetCollectionID + '.' + join.parentJoin.targetElementName);
+
+    for (const childJoin of join.joins) {
+        buildJoin(knex, qb, childJoin);
+    }
 }
 
 function applyFilter (knex, qb, filter, first) {
