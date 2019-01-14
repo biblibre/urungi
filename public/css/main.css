@@ -1200,6 +1200,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     color : white;
 }
 
+
 .editor-panel .content-section {
     margin-left: 15px;
 }
@@ -1593,7 +1594,6 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     border: 0px solid #ddd;
 }
 
-
 .schema-container-report .list-group-item {
     position: relative;
     display: block;
@@ -1620,7 +1620,9 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     border-radius: 2px;
 }
 
-
+.list-group-item.data-source-element {
+  color: #666666;
+}
 
 .delete-schema-element-btn {
     font-size: xx-small;
@@ -2693,7 +2695,7 @@ label[for] {
 }
 
 .wst-main-color {
-    color:#ffeeaa;
+    color:#de87aa;
 }
 
 .filter-label-value {
