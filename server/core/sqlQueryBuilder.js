@@ -4,68 +4,64 @@ class SqlQueryBuilder {
     }
 
     build (query) {
-        const qb = this.knex(this.getTable(query.joinTree.collection));
-        for (const join of query.joinTree.joins) {
-            this.buildJoin(qb, join);
-        }
+        const sqb = this;
+        const qb = this.knex.select().from(function () {
+            const qb = this.from(sqb.getTable(query.joinTree.collection));
+            for (const join of query.joinTree.joins) {
+                sqb.buildJoin(qb, join);
+            }
+
+            const columns = query.columns.concat(query.order).reduce((acc, col) => {
+                acc[col.elementID] = sqb.getRef(col);
+                return acc;
+            }, {});
+            qb.select(columns);
+
+            for (const i in query.filters) {
+                const filter = query.filters[i];
+                if (filter.elementType === 'date') {
+                    sqb.applyDateFilter(qb, filter, i === '0');
+                } else {
+                    sqb.applyFilter(qb, filter, i === '0');
+                }
+            }
+
+            if (query.quickResultLimit) {
+                qb.limit(query.quickResultLimit);
+            }
+
+            qb.as('sub');
+        });
 
         const aggregations = ['sum', 'avg', 'min', 'max', 'count'];
         for (const column of query.columns) {
-            const c = {
-                [column.id]: this.getRef(column),
-            };
+            const c = { [column.id]: column.elementID };
+            const f = aggregations.includes(column.aggregation)
+                ? column.aggregation
+                : 'select';
 
-            if (aggregations.includes(column.aggregation)) {
-                qb[column.aggregation](c);
-            } else {
-                qb.select(c);
-            }
-        }
-
-        for (const i in query.filters) {
-            const filter = query.filters[i];
-            if (filter.elementType === 'date') {
-                this.applyDateFilter(qb, filter, i === '0');
-            } else {
-                this.applyFilter(qb, filter, i === '0');
-            }
+            qb[f](c);
         }
 
         for (const column of query.groupKeys) {
-            qb.groupBy(this.getRef(column));
+            qb.groupBy(column.elementID);
         }
 
         for (const order of query.order) {
-            if (order.sortDesc) {
-                qb.orderBy(this.getRef(order), 'desc');
-            } else {
-                qb.orderBy(this.getRef(order), 'asc');
-            }
+            const direction = order.sortDesc ? 'desc' : 'asc';
+            qb.orderBy(order.elementID, direction);
 
             // If there is a GROUP BY clause, it should contain all columns
             // used in the ORDER BY clause.
             // https://dev.mysql.com/doc/refman/5.7/en/group-by-handling.html
             if (query.groupKeys.length > 0 && !query.groupKeys.some(e => e.elementID === order.elementID)) {
-                qb.groupBy(this.getRef(order));
+                qb.groupBy(order.elementID);
             }
         }
 
-        var packetSize = 500;
-
-        var offset = packetSize * (query.page - 1); // pages start at 1
-        var limit;
-
         if (query.recordLimit) {
-            limit = Math.min(query.recordLimit - offset, packetSize);
-        } else {
-            limit = packetSize;
+            qb.limit(query.recordLimit);
         }
-
-        if (limit < 0) {
-            limit = 0;
-        }
-
-        qb.limit(limit).offset(offset);
 
         return qb;
     }

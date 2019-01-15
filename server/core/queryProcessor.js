@@ -158,7 +158,7 @@ function processQuery (query, queryLayer, warnings) {
         processedQuery.columns.push(validCol);
         if (!validCol.aggregation) {
             // FIXME No need to GROUP BY if no aggregate functions is used at all
-            groupKeys.add(element);
+            groupKeys.add(col);
         }
     }
 
@@ -189,6 +189,9 @@ function processQuery (query, queryLayer, warnings) {
 
     if (query.recordLimit) {
         processedQuery.recordLimit = validateLimit(query.recordLimit);
+    }
+    if (query.quickResultLimit) {
+        processedQuery.quickResultLimit = validateLimit(query.quickResultLimit);
     }
 
     processedQuery.page = validatePage(query.page);
