@@ -924,10 +924,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService
             var targetPrompt = document.getElementById('PROMPT_' + thePrompt.promptID);
 
             if (targetPrompt) {
-                if (typeof thePrompt.name === 'undefined') {
-                    thePrompt.name = thePrompt.collectionID.toLowerCase() + '_' + thePrompt.elementName;
-                }
-
                 var html = reportModel.getPromptHTML(thePrompt);
                 $(targetPrompt).replaceWith(html);
                 targetPrompt = document.getElementById('PROMPT_' + thePrompt.promptID);
