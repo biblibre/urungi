@@ -47,14 +47,12 @@ app.service('reportModel', function ($q, bsLoadingOverlayService, connection, uu
 
         if (params.page !== undefined) {
             request.page = params.page;
-        } else {
-            request.page = 1;
         }
 
         request.query = clone(query);
 
         if (!query.recordLimit && params.selectedRecordLimit) {
-            request.query.recordLimit = params.selectedRecordLimit;
+            request.query.quickResultLimit = params.selectedRecordLimit;
         }
 
         if (params.filterCriteria) {

@@ -20,7 +20,6 @@ exports.execute = async function (query) {
     const processedQuery = await processQuery(query, queryLayer, warnings);
     buildJoinTree(processedQuery, warnings);
 
-    const queryBuilder = require('./sqlQueryBuilder');
     var Db;
     var db;
 
@@ -30,13 +29,10 @@ exports.execute = async function (query) {
         Db = require('./connection').Db;
 
         db = new Db(dts, warnings);
-
-        const queryFunction = queryBuilder.build(processedQuery);
-
-        const result = await db.runQuery(queryFunction);
+        const result = await db.runQuery(processedQuery);
 
         if (result.result === 1) {
-            queryBuilder.processData(processedQuery, result.data);
+            processData(processedQuery, result.data);
         } else {
             console.log(result.msg);
         }
@@ -89,7 +85,7 @@ exports.execute = async function (query) {
 
                     const data = result.rows;
 
-                    queryBuilder.processData(processedQuery, data);
+                    processData(processedQuery, data);
 
                     resolve({ result: 1, data: data, sql: sqlText, time: time });
                 });
@@ -161,7 +157,8 @@ function processQuery (query, queryLayer, warnings) {
         const validCol = validateColumn(col, element, warnings);
         processedQuery.columns.push(validCol);
         if (!validCol.aggregation) {
-            groupKeys.add(element);
+            // FIXME No need to GROUP BY if no aggregate functions is used at all
+            groupKeys.add(col);
         }
     }
 
@@ -192,6 +189,9 @@ function processQuery (query, queryLayer, warnings) {
 
     if (query.recordLimit) {
         processedQuery.recordLimit = validateLimit(query.recordLimit);
+    }
+    if (query.quickResultLimit) {
+        processedQuery.quickResultLimit = validateLimit(query.quickResultLimit);
     }
 
     processedQuery.page = validatePage(query.page);
@@ -349,6 +349,7 @@ function validateColumn (column, element, warnings) {
         layerID: element.layerID,
         isCustom: Boolean(element.isCustom),
         expression: element.expression,
+        viewExpression: element.viewExpression,
         arguments: element.arguments
     };
 
@@ -453,3 +454,19 @@ function validatePage (page) {
         return 1;
     }
 }
+
+function processData (query, data) {
+    var moment = require('moment');
+
+    for (var row of data) {
+        for (var col of query.columns) {
+            if (col.elementType === 'date' && col.format) {
+                if (row[col.id]) {
+                    row[col.id + '_original'] = row[col.id];
+                    var date = new Date(row[col.id]);
+                    row[col.id] = moment(date).format(col.format);
+                }
+            }
+        }
+    }
+};

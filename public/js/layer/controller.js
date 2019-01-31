@@ -603,60 +603,61 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         }
     }
 
+    /*
+     * The collections form a graph, and the joins are edges
+     * A query can only contain elements from a single connected component,
+     * otherwise it is impossible to join the collections
+     */
     $scope.calculateComponents = function () {
-        /*
-        * The collections form a graph, and the joins are edges
-        * A query can only contain elements from a single connected component,
-        * otherwise it is impossible to join the collections
-        */
-
-        for (const i in $scope._Layer.params.schema) {
-            $scope._Layer.params.schema[i].component = { pointer: null, index: Number(i) };
-        }
-
-        function getRepresentative (c) {
-            if (c.pointer) {
-                return getRepresentative(c.pointer);
-            } else {
-                return c;
-            }
-        }
-
         if (!$scope._Layer.params.joins) {
             $scope._Layer.params.joins = [];
         }
 
-        for (const join of $scope._Layer.params.joins) {
-            const c1 = $scope._Layer.params.schema.find(col => col.collectionID === join.sourceCollectionID);
-            const c2 = $scope._Layer.params.schema.find(col => col.collectionID === join.targetCollectionID);
+        const collections = new Map($scope._Layer.params.schema.map(c => [c.collectionID, c]));
 
-            const r1 = getRepresentative(c1.component);
-            const r2 = getRepresentative(c2.component);
+        // Assign componentIdx to collection given in parameters and all
+        // connected collections
+        function visitComponent (collection, componentIdx) {
+            collection.component = componentIdx;
+            for (const join of $scope._Layer.params.joins) {
+                let c;
+                if (join.sourceCollectionID === collection.collectionID) {
+                    c = collections.get(join.targetCollectionID);
+                } else if (join.targetCollectionID === collection.collectionID) {
+                    c = collections.get(join.sourceCollectionID);
+                }
 
-            r2.pointer = r1;
+                if (c && !c.component) {
+                    visitComponent(c, componentIdx);
+                }
+            }
         }
 
-        const cRef = {};
-
-        for (const collection of $scope._Layer.params.schema) {
-            collection.component = getRepresentative(collection.component).index;
-            cRef[collection.collectionID] = collection.component;
-        }
+        let componentIdx = 1;
+        collections.forEach(c => { c.component = 0; });
+        collections.forEach(c => {
+            if (!c.component) {
+                visitComponent(c, componentIdx);
+                componentIdx++;
+            }
+        });
 
         $scope.forAllElements(function (element) {
             if (!element.isCustom) {
-                element.component = cRef[element.collectionID];
+                const collection = collections.get(element.collectionID);
+                element.component = collection.component;
             } else {
                 element.component = undefined;
                 for (const argument of element.arguments) {
                     if (argument.isCustom) {
                         continue;
                     }
-                    const comp = cRef[argument.collectionID];
+                    const collection = collections.get(argument.collectionID);
+                    const comp = collection.component;
                     if (element.component !== undefined && element.component !== comp) {
                         element.component = -1;
                         noty({
-                            text: gettext('One of the custom elements uses elements from tables which aren\'t joined. This custom elemnt cannot be fetched'),
+                            text: gettext('One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched'),
                             type: 'warning',
                             timeout: 8000
                         });
@@ -1075,6 +1076,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     $scope.saveElement = function () {
         console.log($scope.modalElement);
         if ($scope.modalElement.isCustom && !$scope.compileExpression()) {
+            console.error('cannot compile');
             return;
         }
         if (!$scope.elementEditing) {

@@ -1,4 +1,5 @@
 var knex = require('knex');
+const SqlQueryBuilder = require('./sqlQueryBuilder');
 
 var Db = function (datasource, warnings) {
     if (warnings) {
@@ -137,14 +138,16 @@ Db.prototype.getSchema = async function (collection) {
     }
 };
 
-Db.prototype.runQuery = async function (queryFunction) {
+Db.prototype.runQuery = async function (query) {
     const start = Date.now();
 
     var result;
     var runData;
 
     try {
-        result = await queryFunction(this.knex).on('query', (data) => { runData = data; });
+        const sqlQueryBuilder = new SqlQueryBuilder(this.knex);
+        const q = sqlQueryBuilder.build(query);
+        result = await q.on('query', (data) => { runData = data; });
     } catch (err) {
         return {
             result: 0,
