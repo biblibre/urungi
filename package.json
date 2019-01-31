@@ -64,7 +64,6 @@
     "ui-select": "^0.19.8"
   },
   "devDependencies": {
-    "angular-gettext-cli": "^1.2.0",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "del": "^3.0.0",
@@ -75,6 +74,7 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
     "gulp": "^3.9.1",
+    "gulp-angular-gettext": "^2.2.0",
     "gulp-concat": "^2.6.1",
     "gulp-decomment": "^0.2.0",
     "merge-stream": "^1.0.1",
@@ -83,9 +83,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha",
-    "posttest": "eslint .",
-    "gettext-extract": "angular-gettext-cli --files './public/+(js|partials)/**/*+(.js|.html)' --dest './language/extract.pot'",
-    "gettext-compile": "angular-gettext-cli --compile --files './language/*.po' --dest './public/js/gettext.js' --format javascript --module Urungi"
+    "posttest": "eslint ."
   },
   "repository": {
     "type": "git",

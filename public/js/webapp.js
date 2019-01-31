@@ -385,6 +385,10 @@ app.run(['editableOptions', function (editableOptions) {
     editableOptions.buttons = 'no';
 }]);
 
+app.run(['language', function (language) {
+    language.setLanguageFromLocalStorage();
+}]);
+
 function isWSTADMIN ($rootScope) {
     var found = false;
     for (var i in $rootScope.user.roles) {

@@ -1,6 +1,6 @@
 /* global jsPlumb: false */
 
-app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal, datasourceModel, $timeout, PagerService, $http, Constants, gettext) {
+app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal, datasourceModel, $timeout, PagerService, $http, Constants, gettextCatalog) {
     $scope.activeForm = 'partials/data-source/source_wizard_index.html';
     $scope.selectedCollections = [];
     $scope.pager = {};
@@ -15,13 +15,13 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             {
                 element: '#parentIntro',
                 html: '<div><h3>' +
-                gettext('Data sources') +
+                gettextCatalog.getString('Data sources') +
                 '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettext('Data sources are connections to the databases you are going to generate reports for.') +
+                gettextCatalog.getString('Data sources are connections to the databases you are going to generate reports for.') +
                 '</span><br/><span>' +
-                gettext('Create and manage here the connections to databases that holds the data you want to be able to create reports using Urungi.') +
+                gettextCatalog.getString('Create and manage here the connections to databases that holds the data you want to be able to create reports using Urungi.') +
                 '</span><br/><span>' +
-                gettext('At least one data source must be defined, unless you do not define some data source you and your users will not be able to create reports.') +
+                gettextCatalog.getString('At least one data source must be defined, unless you do not define some data source you and your users will not be able to create reports.') +
                 '</span></div>',
                 width: '500px',
                 objectArea: false,
@@ -31,9 +31,9 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             {
                 element: '#newDataSourceBtn',
                 html: '<div><h3>' +
-                gettext('New datasource') +
+                gettextCatalog.getString('New datasource') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Click here to create a new datasource.') +
+                gettextCatalog.getString('Click here to create a new datasource.') +
                 '</span><br/><span></span></div>',
                 width: '300px',
                 height: '150px',
@@ -44,11 +44,11 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             {
                 element: '#datasourceList',
                 html: '<div><h3>' +
-                gettext('List of data sources') +
+                gettextCatalog.getString('List of data sources') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('Here all the data sources (database connections) will be listed.') +
+                gettextCatalog.getString('Here all the data sources (database connections) will be listed.') +
                 '</span><br/><span>' +
-                gettext('You can edit the connection details for every data source, delete a data source or activate/deactivate a datasource.') +
+                gettextCatalog.getString('You can edit the connection details for every data source, delete a data source or activate/deactivate a datasource.') +
                 '</span></div>',
                 width: '300px',
                 areaColor: 'transparent',
@@ -60,9 +60,9 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             {
                 element: '#datasourceListItem',
                 html: '<div><h3>' +
-                gettext('Data source') +
+                gettextCatalog.getString('Data source') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('This is one data source.') +
+                gettextCatalog.getString('This is one data source.') +
                 '</span><br/><span></span></div>',
                 width: '300px',
                 areaColor: 'transparent',
@@ -73,11 +73,11 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             {
                 element: '#datasourceListItemName',
                 html: '<div><h3>' +
-                gettext('Data source name & type') +
+                gettextCatalog.getString('Data source name & type') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('The name for the data source and the type of connection (end database).') +
+                gettextCatalog.getString('The name for the data source and the type of connection (end database).') +
                 '</span><br/><span>' +
-                gettext('You can setup the name you want for data sources.') +
+                gettextCatalog.getString('You can setup the name you want for data sources.') +
                 '</span></div>',
                 width: '300px',
                 areaColor: 'transparent',
@@ -88,9 +88,9 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             {
                 element: '#datasourceListItemDetails',
                 html: '<div><h3>' +
-                gettext('Data source connection details') +
+                gettextCatalog.getString('Data source connection details') +
                 '</h3><span style="font-weight:bold;">' +
-                gettext('The main connection details for the data source.') +
+                gettextCatalog.getString('The main connection details for the data source.') +
                 '</span><br/><span></span></div>',
                 width: '300px',
                 areaColor: 'transparent',
@@ -101,15 +101,15 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
             {
                 element: '#parentIntro',
                 html: '<div><h3>' +
-                gettext('Next Step') +
+                gettextCatalog.getString('Next Step') +
                 '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettext('Layers') +
+                gettextCatalog.getString('Layers') +
                 '</span><br/><br/><br/>' +
-                gettext('Layers') +
+                gettextCatalog.getString('Layers') +
                 '(<a href="https://en.wikipedia.org/wiki/Semantic_layer" target="_blank">semantic layers</a>)' +
-                gettext(' allow your users to access and understand your data without any knowledge of SQL or how the database is structured in tables and fields...') +
+                gettextCatalog.getString(' allow your users to access and understand your data without any knowledge of SQL or how the database is structured in tables and fields...') +
                 '<br/><br/><span> <a class="btn btn-info pull-right" href="/#/layer/intro">' +
-                gettext('Go to layers and continue tour') +
+                gettextCatalog.getString('Go to layers and continue tour') +
                 '</a></span></div>',
                 width: '500px',
                 objectArea: false,

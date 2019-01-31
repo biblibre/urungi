@@ -15,20 +15,28 @@ For more information, see https://angular-gettext.rocketeer.be/dev-guide/
 
 The command to do that is
 
-> npm run-script gettext-extract
+> gulp pot
 
-This will generate the file language/extract.pot
+This will generate the file language/template.pot
 
 # 3 - create the translation
 
 Use software like Poedit to create or update translations based on the
-extract.pot file.
+template.pot file.
 All translations must be stored as .po files in the language folder.
+
+To add new strings in po files, you can use this command:
+
+> gulp po:update
 
 # 4 - compile the translation
 
 The command is
 
-> npm run-script gettext-compile
+> gulp dist:translations
 
 This will update urungi with the new translations.
+
+If you add a new language, add the language option to the language service
+(public/js/services/language.js) and languageSelect directive
+(public/js/directives/wst-directives.js)

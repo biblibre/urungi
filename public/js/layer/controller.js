@@ -1,5 +1,5 @@
 /* global jsPlumb: false, $modal: false, bsLoadingOverlayService: false */
-app.controller('layerCtrl', function ($scope, $rootScope, connection, $routeParams, datasourceModel, uuid2, $timeout, PagerService, $window, gettext) {
+app.controller('layerCtrl', function ($scope, $rootScope, connection, $routeParams, datasourceModel, uuid2, $timeout, PagerService, $window, gettextCatalog) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
@@ -657,7 +657,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                     if (element.component !== undefined && element.component !== comp) {
                         element.component = -1;
                         noty({
-                            text: gettext('One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched'),
+                            text: gettextCatalog.getString('One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched'),
                             type: 'warning',
                             timeout: 8000
                         });

@@ -1,5 +1,7 @@
-app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons, colors,
-    htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout, $rootScope, PagerService, gettext) {
+app.controller('dashBoardv2Ctrl', function ($scope, $location, $q,
+    reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons,
+    colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout,
+    $rootScope, PagerService, gettextCatalog) {
     $scope.loadUserObjects();
 
     $scope.reportModal = 'partials/report/edit.html';
@@ -126,13 +128,13 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q, reportService
         $scope.IntroOptions.steps.push({
             element: '#parentIntroReports',
             html: '<div><h3>' +
-            gettext('Next Step') +
+            gettextCatalog.getString('Next Step') +
             '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-            gettext('Reports') +
+            gettextCatalog.getString('Reports') +
             '</span><br/><br/>' +
-            gettext('See how you can create reports that shows your data using charts and data grids') +
+            gettextCatalog.getString('See how you can create reports that shows your data using charts and data grids') +
             '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">' +
-            gettext('Go to report designer and continue tour') +
+            gettextCatalog.getString('Go to report designer and continue tour') +
             '</a></span></div>',
             width: '500px',
             objectArea: false,
