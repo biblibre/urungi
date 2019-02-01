@@ -1,3 +1,5 @@
+const layerUtils = require('../../shared/layerUtils.js');
+
 exports.execute = async function (query) {
     const warnings = [];
 
@@ -18,7 +20,7 @@ exports.execute = async function (query) {
     const dts = dtsList[0];
 
     const processedQuery = await processQuery(query, queryLayer, warnings);
-    buildJoinTree(processedQuery, warnings);
+    buildJoinTree(processedQuery, queryLayer, warnings);
 
     var Db;
     var db;
@@ -129,15 +131,16 @@ function processQuery (query, queryLayer, warnings) {
 
     processedQuery.joinTree = {};
 
-    processedQuery.datasourceID = queryLayer.params.schema[0].datasourceID;
-    // For now, a good portion of the code is written to enable the use of multiple datasources in a report
+    // For now, a good portion of the code is written to enable the use of
+    // multiple datasources in a report
     // This is why the layer does not have a single datasourceID field
+    processedQuery.datasourceID = queryLayer.params.schema[0].datasourceID;
 
     function addElement (element, elementSet) {
         if (!element.isCustom) {
             elementSet.add(element);
         } else {
-            for (const argElement of element.arguments) {
+            for (const argElement of layerUtils.getElementsUsedInCustomExpression(element.viewExpression, queryLayer)) {
                 if (!argElement.isCustom) {
                     elementSet.add(argElement);
                 }
@@ -217,7 +220,7 @@ function findElement (elementList, elementID) {
     }
 }
 
-function buildJoinTree (query, warnings) {
+function buildJoinTree (query, queryLayer, warnings) {
     /*
     * Creates the join tree object, which will be used to create the join clause in the SQL query
     *
@@ -233,8 +236,14 @@ function buildJoinTree (query, warnings) {
 
     var collectionRef = {}; // a reference of which collections need to be added to the join
 
-    for (const element of query.elements) {
-        collectionRef[element.collectionID] = true;
+    for (const column of query.columns) {
+        if (column.isCustom) {
+            for (const element of layerUtils.getElementsUsedInCustomExpression(column.viewExpression, queryLayer)) {
+                collectionRef[element.collectionID] = true;
+            }
+        } else {
+            collectionRef[column.collectionID] = true;
+        }
     }
 
     const rootID = Object.keys(collectionRef)[0];
@@ -350,7 +359,6 @@ function validateColumn (column, element, warnings) {
         isCustom: Boolean(element.isCustom),
         expression: element.expression,
         viewExpression: element.viewExpression,
-        arguments: element.arguments
     };
 
     if (column.aggregation) {

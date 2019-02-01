@@ -644,7 +644,6 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             isCustom: ngModelItem.isCustom,
             expression: ngModelItem.expression,
             viewExpression: ngModelItem.viewExpression,
-            arguments: ngModelItem.arguments,
             component: ngModelItem.component,
             aggregation: agg
         };

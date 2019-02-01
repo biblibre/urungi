@@ -7,7 +7,6 @@ var LayersSchema = new mongoose.Schema({
     status: {type: String, required: true},
     params: {type: Object},
     objects: [],
-    customElements: [],
     nd_trash_deleted: {type: Boolean},
     nd_trash_deleted_date: {type: Date},
     createdBy: {type: String},

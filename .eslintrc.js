@@ -23,6 +23,7 @@ module.exports = {
         angular: false,
         app: false,
         noty: false,
+        layerUtils: false,
     },
     rules: {
         'no-console': 'off',

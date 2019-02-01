@@ -4,6 +4,7 @@ class SqlQueryBuilder {
     }
 
     build (query) {
+        this.query = query;
         const sqb = this;
         const qb = this.knex.select().from(function () {
             const qb = this.from(sqb.getTable(query.joinTree.collection));
@@ -71,9 +72,21 @@ class SqlQueryBuilder {
 
         if (column.isCustom) {
             const args = [];
-            const expr = column.viewExpression.replace(/#([a-z0-9]+)/g, function (match, p1) {
-                const arg = column.arguments.find(a => a.elementID === p1);
-                args.push(arg.collectionID + '.' + arg.elementName);
+            const expr = column.viewExpression.replace(/#([a-z0-9]+)/g, (match, elementID) => {
+                let element;
+                for (const collection of this.query.layer.params.schema) {
+                    const el = collection.elements.find(e => e.elementID === elementID);
+                    if (el !== undefined) {
+                        element = el;
+                        break;
+                    }
+                }
+
+                if (element === undefined) {
+                    throw new Error('Error in custom expression, element not found: #' + elementID);
+                }
+
+                args.push(element.collectionID + '.' + element.elementName);
                 return '??';
             });
             ref = this.knex.raw(expr, args);

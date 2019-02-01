@@ -436,7 +436,6 @@ const simpleLayer = {
         ],
         schema: []
     },
-    customElements: []
 };
 
 for (const table of testData) {
@@ -1649,7 +1648,17 @@ function buildComplexLayer (knex) {
                     component: 0,
                     datasourceID: dtsId,
                     isSQL: true,
-                    sqlQuery: customQuery1
+                    sqlQuery: customQuery1,
+                    elements: [
+                        {
+                            elementRole: 'dimension',
+                            elementID: 'ffaa',
+                            elementName: 'name',
+                            collectionID: 'Cuuaa',
+                            component: 0,
+                            elementType: 'string',
+                        },
+                    ],
                 },
                 {
                     collectionID: 'Cuuab',
@@ -1702,7 +1711,6 @@ function buildComplexLayer (knex) {
                 }
             ]
         },
-        customElements: []
     };
 
     for (const table of testData) {

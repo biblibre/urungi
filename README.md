@@ -82,6 +82,31 @@ More info at https://github.com/oracle/node-oracledb
 4. Enjoy!!!
 
 
+## Upgrade
+
+To upgrade Urungi to the latest version, follow these steps:
+
+1. Update sources
+
+    ```
+    git pull --rebase
+    ```
+
+2. Update dependencies
+
+    ```
+    npm ci
+    ```
+
+3. Update database
+
+    ```
+    npx migrate-mongo up
+    ```
+
+4. Restart the server
+
+
 ## Tests
 
 [![Build Status](https://travis-ci.org/biblibre/urungi.svg?branch=master)](https://travis-ci.org/biblibre/urungi)
