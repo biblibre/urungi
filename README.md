@@ -16,7 +16,7 @@ and others, see [Supported databases](#supported-databases)
 
 ## Requirements
 
-- [nodejs](https://nodejs.org)
+- [nodejs](https://nodejs.org) (>= 8.x)
 - [npm](https://www.npmjs.com)
 - [MongoDB](https://www.mongodb.org)
 - [OpenJDK](http://openjdk.java.net/install/)
