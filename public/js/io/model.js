@@ -149,7 +149,7 @@ app.service('ioModel', function (connection, $q) {
                     return;
                 }
 
-                return importLayer(l, datasourceRef).then(l => {
+                return importLayer(layer, datasourceRef).then(l => {
                     additions.push(l);
                 });
             });
@@ -165,7 +165,7 @@ app.service('ioModel', function (connection, $q) {
                         return;
                     }
 
-                    return importReport(r, datasourceRef).then(r => {
+                    return importReport(report, datasourceRef).then(r => {
                         additions.push(r);
                     });
                 });
