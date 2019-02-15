@@ -85,7 +85,7 @@
 
             <span ng-if="(filter.filterType == 'notIn' || filter.filterType == 'in')">
                 <div class="input-group">
-                    <ui-select multiple ng-model="criterion.textList" theme="bootstrap" ng-disabled="disabled" style="width: 300px;">
+                    <ui-select multiple ng-model="criterion.textList" theme="bootstrap" ng-disabled="disabled" class="input-in">
                         <ui-select-match placeholder="{{filter.promptTitle}}">{{$item}}</ui-select-match>
                         <ui-select-choices repeat="value in values | filter:$select.search">
                             {{value}}
