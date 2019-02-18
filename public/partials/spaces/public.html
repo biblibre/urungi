@@ -1,6 +1,7 @@
 
 <script type="text/ng-template" id="nodes_renderer.html">
-    <div id="publicSpaceItem" ui-tree-handle class="tree-node tree-node-content">
+    <div id="publicSpaceItem" class="tree-node tree-node-content">
+        <span ui-tree-handle><i class="fa fa-arrows"></i></span>
         <a class="btn btn-white btn-xs btn-round" ng-if="node.nodes && node.nodes.length > 0" data-nodrag ng-click="toggle(this)"><span
                 class="fa"
                 ng-class="{
@@ -8,12 +9,12 @@
           'fa-chevron-down': !collapsed
         }"></span></a>
         <span ng-if="!node.editing" ng-dblclick="node.editing = true">{{node.title}}</span>
-        <div ng-if="node.editing">
+        <span ng-if="node.editing">
             <input id="node{{node.id}}" type="text" ng-model="node.title" style="height: 25px; width: 150px; border: 1px dotted;" tooltip="{{'Type here the new name of the folder' | translate}}" tooltip-placement="bottom"/>
             <a class=" btn btn-white btn-xs btn-round" data-nodrag ng-click="node.editing = false" tooltip="{{'Click here to save the name of the folder and to get out of the edit mode' | translate}}" tooltip-placement="bottom">
                 <span class="fa fa-save"></span>
             </a>
-        </div>
+        </span>
         <div class="pull-right" ng-if="!node.editing">
             <a id="publicSpaceItemEdit" class=" btn btn-danger-white btn-xs btn-round" data-nodrag ng-click="node.editing = true; " tooltip="{{'Click here to change the name of the folder' | translate}}" tooltip-placement="bottom">
                 <span class="fa fa-edit"></span>
