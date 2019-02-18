@@ -1,7 +1,7 @@
 app.service('PagerService', function () {
     this.GetPager = function (totalItems, currentPage, pageSize, totalPages) {
     // default to first page
-        currentPage = currentPage || 1;
+        currentPage = parseFloat(currentPage) || 1;
 
         // default page size is 10
         pageSize = pageSize || 10;
