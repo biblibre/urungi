@@ -1261,8 +1261,8 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
     padding: 5px;
     z-index: 0;
     background-color: #FFF;
-    margin-left: 90px;
-    margin-right: 25px;
+    margin-left: 15px;
+    margin-right: 15px;
     border-radius: 10px;
 
     /*float:left;*/
@@ -2687,6 +2687,41 @@ label[for] {
     height: 25px;
 }
 
+@media(min-width:1269px){
+    .input-in{
+        min-width:400px;
+    }
+}
+
+@media(max-width:1268px){
+    .input-in{
+        min-width:350px;
+    }
+}
+
+@media(max-width:1000px){
+    .input-in{
+        min-width:300px;
+    }
+}
+
+@media(max-width:900px){
+    .input-in{
+        min-width:250px;
+    }
+}
+
+@media(max-width:800px){
+    .input-in{
+        min-width:200px;
+    }
+}
+
+@media(max-width:750px){
+    .input-in{
+        min-width:150px;
+    }
+}
 
 .ui-select-multiple.ui-select-bootstrap {
     width: 100%;

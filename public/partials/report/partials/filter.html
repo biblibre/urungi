@@ -1,4 +1,4 @@
-<li class="filter-box" style="margin-left: 90px;"
+<li class="filter-box"
     drop="onDropOnFilter($data, $event, filter)" drop-effect="copy" drop-accept="['json/custom-object','json/column']" 
     ng-repeat="filter in selectedReport.properties.filters" >
     
@@ -6,7 +6,7 @@
     index="$index" get-query="getQueryForFilter"></nd-prompt>
 </li>
 
-<li class="filter-box" style="margin-left: 90px;" ng-show="selectedReport.properties.recordLimit!=undefined">
+<li class="filter-box" ng-show="selectedReport.properties.recordLimit!=undefined">
     <span class="pull-right" style="padding: 7px 0;"><i class="fa fa-times hand-cursor" ng-click="forgetRecordLimit();"></i></span>
 
     <div class="container-fluid form-inline">
