@@ -42,27 +42,17 @@
                     <div class="container-fluid row">
                         <div class="col-md-6">
                             <ul class="scroll-list btn-group-vertical">
-                                <li class="btn" ng-repeat="collection in _Layer.params.schema" 
+                                <li class="btn" ng-repeat="collection in customExpressionCollections()"
                                 ng-class="{ 'scroll-list-selected' :  selectedModalCollection === collection }"
                                 ng-show="modalElement.component === undefined ||  collection.component === modalElement.component"
                                 ng-click="selectModalCollection(collection)">
                                     <span >{{collection.collectionLabel}}</span>
-                                </li>
-                                <li class="btn" ng-show="_Layer.customElements && _Layer.customElements.length > 0"
-                                ng-class="{ 'scroll-list-selected' :  selectedModalCollection === _Layer.customElements }"
-                                ng-click="selectModalCollection(_Layer.customElements)">
-                                    <span >Custom elements</span>
                                 </li>
                             </ul>
                         </div>
                         <div class="col-md-6" ng-show="selectedModalCollection">
                             <ul class="scroll-list btn-group-vertical">
                                 <li class="btn" ng-repeat="element in selectedModalCollection.elements" ng-click="addElementToExpression(element)">
-                                    <span>{{element.elementLabel}}</span>
-                                </li>
-                                <li class="btn" ng-if="selectedModalCollection === _Layer.customElements" 
-                                ng-repeat="element in selectedModalCollection" ng-click="addElementToExpression(element)"
-                                ng-show="modalElement.component === undefined ||  element.component === modalElement.component">
                                     <span>{{element.elementLabel}}</span>
                                 </li>
                             </ul>

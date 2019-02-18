@@ -12,6 +12,12 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     $scope.pager = {};
     $scope.datasources = [];
     $scope.selectedDts = {};
+
+    $scope.customElements = {
+        elements: [],
+        collectionLabel: 'Custom elements',
+    };
+
     $scope.initiated = false;
 
     $scope.elementTypes = [{name: 'object', value: 'object'},
@@ -164,25 +170,6 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         });
     }
 
-    /** *****   *******/
-
-    $scope.initForm = function () {
-        if ($routeParams.layerID) {
-            connection.get('/api/layers/find-one', {id: $routeParams.layerID}, function (data) {
-                $scope._Layer = data.item;
-                $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
-                $scope.mode = 'edit';
-                $scope.erDiagramInit();
-            });
-        } else {
-            $scope._Layer = {};
-            $scope._Layer.params = {};
-            $scope._Layer.status = 'Not active';
-            $scope.mode = 'add';
-            $scope.erDiagramInit();
-        }
-    };
-
     $scope.changeLayerStatus = function (layer) {
         if ($rootScope.isWSTADMIN) {
             let newStatus;
@@ -210,6 +197,12 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 }
                 $scope.mode = 'edit';
                 $scope.rootItem.elements = $scope._Layer.objects;
+
+                $scope.forAllElements((element) => {
+                    if (element.isCustom) {
+                        $scope.customElements.elements.push(element);
+                    }
+                });
 
                 if ($scope._Layer.params) {
                     $scope.erDiagramInit();
@@ -648,22 +641,29 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
                 element.component = collection.component;
             } else {
                 element.component = undefined;
-                for (const argument of element.arguments) {
-                    if (argument.isCustom) {
-                        continue;
+
+                try {
+                    for (const el of layerUtils.getElementsUsedInCustomExpression(element.viewExpression, $scope._Layer)) {
+                        if (el.isCustom) {
+                            continue;
+                        }
+                        const collection = collections.get(el.collectionID);
+                        const comp = collection.component;
+                        if (element.component !== undefined && element.component !== comp) {
+                            element.component = -1;
+                            noty({
+                                text: gettextCatalog.getString('One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched'),
+                                type: 'warning',
+                                timeout: 8000
+                            });
+                            return;
+                        }
+                        element.component = comp;
                     }
-                    const collection = collections.get(argument.collectionID);
-                    const comp = collection.component;
-                    if (element.component !== undefined && element.component !== comp) {
-                        element.component = -1;
-                        noty({
-                            text: gettextCatalog.getString('One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched'),
-                            type: 'warning',
-                            timeout: 8000
-                        });
-                        return;
-                    }
-                    element.component = comp;
+                } catch (error) {
+                    const message = 'Failed to parse expression for element ' +
+                        element.elementLabel + ' : ' + error.message;
+                    noty({ type: 'warning', text: message, timeout: 5000 });
                 }
             }
         });
@@ -925,8 +925,6 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
 
         element.viewExpression = '';
 
-        element.tempArguments = [];
-
         element.dataSourceID = '5b2a494717d5db0dc123c945';
         element.elementName = 'comp';
 
@@ -948,7 +946,6 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
             $scope.modalElement.viewExpression = '';
         }
         $scope.modalElement.viewExpression += ('#' + element.elementID);
-        $scope.modalElement.tempArguments.push(element);
         $scope.modalElement.component = element.component;
     };
 
@@ -959,75 +956,50 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
     };
 
     $scope.compileExpression = function () {
-        const elements = $scope.modalElement.viewExpression.match(/#[a-z0-9]*/g);
+        const elements = layerUtils.getElementsUsedInCustomExpression($scope.modalElement.viewExpression, $scope._Layer);
 
-        if (!elements) {
+        if (elements.length === 0) {
+            // custom elements without arguments will break the GROUP BY clause.
+            // They're disabled for now.  To enable them, we need to modify
+            // queryProcessor so it doesn't add them to group Keys
             $scope.modalElement.expression = $scope.modalElement.viewExpression;
-            $scope.modalElement.arguments = [];
             return false;
-            // custom elements without arguments will break the GROUP BY clause. They're disabled for now.
-            // To enable them, we need to modify queryProcessor so it doesn't add them to group Keys
         }
 
-        for (const elementTag of elements) {
-            if (!$scope.modalElement.tempArguments.find(arg => arg.elementID === elementTag.substring(1))) {
-                const matchedElement = $scope.findElement(elementTag.substring(1));
-                if (matchedElement) {
-                    $scope.modalElement.tempArguments.push(matchedElement);
+        if (!$scope.modalElement.component) {
+            $scope.modalElement.component = elements[0].component;
+        }
+
+        for (const element of elements) {
+            if (element.isCustom) {
+                const cycle = testForCycle($scope.modalElement, element);
+                if (cycle) {
+                    $scope.modalCycle = cycle;
+                    return false;
                 }
             }
         }
-
-        const expressions = {};
-        if (!$scope.modalElement.component) { $scope.modalElement.component = $scope.modalElement.tempArguments[0].component; }
-
-        var customArguments = [];
-        for (const arg of $scope.modalElement.tempArguments) {
-            if (elements.indexOf('#' + arg.elementID) >= 0 && arg.component === $scope.modalElement.component) {
-                customArguments.push(arg);
-                if (!arg.isCustom) {
-                    expressions['#' + arg.elementID] = arg.elementID;
-                } else {
-                    const cycle = testForCycle($scope.modalElement, arg);
-                    if (cycle) {
-                        $scope.modalCycle = cycle;
-                        return false;
-                    }
-                    expressions['#' + arg.elementID] = '(' + arg.expression + ')';
-                    customArguments = customArguments.concat(arg.arguments);
-                }
-            }
-        }
-        $scope.modalElement.expression = $scope.modalElement.viewExpression.replace(/#[a-z0-9]*/g, (match) => {
-            if (expressions[match]) {
-                return expressions[match];
-            } else {
-                return match;
-            }
-        });
-        $scope.modalElement.arguments = customArguments;
-
-        // possible feature : build a new route server side to test an element
-        // This would enable to validate the expression in report edition
 
         return true;
+    };
 
-        function testForCycle (startElement, currentElement) {
-            if (currentElement.elementID === startElement.elementID) {
-                return [currentElement];
-            }
-            if (!currentElement.isCustom) {
-                return false;
-            } else {
-                for (const arg of currentElement.arguments) {
-                    const cycle = testForCycle(startElement, arg);
-                    if (cycle) {
-                        return [currentElement].concat(cycle);
-                    }
+    function testForCycle (startElement, currentElement) {
+        if (currentElement.elementID === startElement.elementID) {
+            return [currentElement];
+        }
+
+        if (currentElement.isCustom) {
+            const elements = layerUtils.getElementsUsedInCustomExpression(currentElement.viewExpression, $scope._Layer);
+            for (const element of elements) {
+                const cycle = testForCycle(startElement, element);
+                if (cycle) {
+                    return [currentElement].concat(cycle);
                 }
             }
         }
-    };
+
+        return false;
+    }
 
     $scope.elementAdd = function (element) {
         $scope.modalElement = element;
@@ -1064,17 +1036,12 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         $scope.selectedElement = element;
         $scope.modalElement = Object.create(element);
 
-        if ($scope.modalElement.isCustom) {
-            $scope.modalElement.tempArguments = $scope.modalElement.arguments;
-        }
-
         $scope.elementEditing = true;
         $scope.tabbed_panel_active = 1;
         $('#elementModal').modal('show');
     };
 
     $scope.saveElement = function () {
-        console.log($scope.modalElement);
         if ($scope.modalElement.isCustom && !$scope.compileExpression()) {
             console.error('cannot compile');
             return;
@@ -1086,10 +1053,7 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
             $scope._Layer.objects.push($scope.modalElement);
 
             if ($scope.modalElement.isCustom) {
-                if (!$scope._Layer.customElements) {
-                    $scope._Layer.customElements = [];
-                }
-                $scope._Layer.customElements.push($scope.modalElement);
+                $scope.customElements.elements.push($scope.modalElement);
             }
 
             $('#elementModal').modal('hide');
@@ -1246,9 +1210,9 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         }
 
         if (element.isCustom) {
-            for (const i in $scope._Layer.customElements) {
-                if ($scope._Layer.customElements[i].elementID === elementID) {
-                    $scope._Layer.customElements.splice(i, 1);
+            for (const i in $scope.customElements.elements) {
+                if ($scope.customElements.elements[i].elementID === elementID) {
+                    $scope.customElements.elements.splice(i, 1);
                 }
             }
         }
@@ -1627,5 +1591,13 @@ app.controller('layerCtrl', function ($scope, $rootScope, connection, $routePara
         }
 
         explore($scope._Layer.objects);
+    };
+
+    $scope.customExpressionCollections = function () {
+        if (!$scope._Layer) {
+            return [];
+        }
+
+        return $scope._Layer.params.schema.concat($scope.customElements);
     };
 });
