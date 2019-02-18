@@ -7,6 +7,8 @@ describe('Layers API', function () {
     const Users = connection.model('Users');
     const Layers = connection.model('Layers');
     const DataSources = connection.model('DataSources');
+    const Reports = connection.model('Reports');
+    const Dashboardsv2 = connection.model('Dashboardsv2');
     let agent;
 
     before(function () {
@@ -95,6 +97,75 @@ describe('Layers API', function () {
             res = await DataSources.deleteOne({name: 'DataSource'});
         });
     });
+    describe('POST /api/layers/delete:id', function () {
+        it('should delete a layer', async function () {
+            var res = await agent.post('/api/login')
+                .send({ userName: 'administrator', password: 'urungi' });
+            expect(res).to.have.status(200);
+            var User = await Users.findOne({userName: 'administrator'});
+            res = await agent.get('/api/get-user-data');
+            res = await agent.post('/api/layers/create')
+                .send({companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, owner: User.id, isPublic: false});
+            var layer = JSON.parse(res.text).item;
+            res = await agent.post('/api/layers/delete/' + layer._id)
+                .send({_id: layer._id});
+            expect(res).to.have.status(200);
+            var response = JSON.parse(res.text);
+            expect(response).to.have.property('result', 1);
+            expect(response).to.have.property('msg', '1 items deleted.');
+            var Layer = await Layers.findOne({_id: layer._id});
+            expect(Layer).to.be.a('null');
+        });
+    });
+
+    describe('POST /api/layers/delete:id', function () {
+        it('should not delete a layer with dashboard conflict', async function () {
+            var res = await agent.post('/api/login')
+                .send({ userName: 'administrator', password: 'urungi' });
+            expect(res).to.have.status(200);
+            var User = await Users.findOne({userName: 'administrator'});
+            res = await agent.get('/api/get-user-data');
+            res = await agent.post('/api/layers/create')
+                .send({companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, owner: User.id, isPublic: false});
+            var layer = JSON.parse(res.text).item;
+            res = await agent.post('/api/dashboardsv2/create')
+                .send({companyID: 'COMPID', dashboardName: 'Dashboard', nd_trash_deleted: false, reports: [{selectedLayerID: layer._id}]});
+            var response = JSON.parse(res.text).item;
+            res = await agent.post('/api/layers/delete/' + layer._id)
+                .send({id: layer._id});
+            expect(res).to.have.status(200);
+            response = JSON.parse(res.text);
+            expect(response).to.have.property('result', 0);
+            expect(response).to.have.property('msg', 'This layer cannot be deleted because at least one dashboard is using it (Dashboard)');
+            res = await Dashboardsv2.deleteOne({dashboardName: 'Dashboard'});
+            res = await Layers.deleteOne({name: 'layer'});
+        });
+    });
+
+    describe('POST /api/layers/delete:id', function () {
+        it('should not delete a layer with reports', async function () {
+            var res = await agent.post('/api/login')
+                .send({ userName: 'administrator', password: 'urungi' });
+            expect(res).to.have.status(200);
+            var User = await Users.findOne({userName: 'administrator'});
+            res = await agent.get('/api/get-user-data');
+            res = await agent.post('/api/layers/create')
+                .send({companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, owner: User.id, isPublic: false});
+            var layer = JSON.parse(res.text).item;
+            res = await agent.post('/api/reports/create')
+                .send({companyID: 'COMPID', reportName: 'Report', selectedLayerID: layer._id, nd_trash_deleted: false, owner: User.id, isPublic: true});
+            var response = JSON.parse(res.text);
+            res = await agent.post('/api/layers/delete/' + layer._id)
+                .send({id: layer._id});
+            expect(res).to.have.status(200);
+            response = JSON.parse(res.text);
+            expect(response).to.have.property('result', 0);
+            expect(response).to.have.property('msg', 'This layer cannot be deleted because at least one report is using it (Report)');
+            res = await Reports.deleteOne({reportName: 'Report'});
+            res = await Layers.deleteOne({name: 'layer'});
+        });
+    });
+
     describe('POST /api/layers/change-layer-status', function () {
         it('should change layer status', async function () {
             var res = await agent.post('/api/login')
