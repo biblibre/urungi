@@ -22,5 +22,19 @@ var Dashboardsv2Schema = new mongoose.Schema({
     createdOn: {type: Date}
 }, { collection: 'wst_Dashboardsv2' });
 
+Dashboardsv2Schema.methods.publish = async function (folderId) {
+    this.parentFolder = folderId;
+    this.isPublic = true;
+
+    return this.save();
+};
+
+Dashboardsv2Schema.methods.unpublish = async function () {
+    this.parentFolder = undefined;
+    this.isPublic = false;
+
+    return this.save();
+};
+
 var Dashboardsv2 = connection.model('Dashboardsv2', Dashboardsv2Schema);
 module.exports = Dashboardsv2;

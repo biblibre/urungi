@@ -362,14 +362,6 @@ app.run(['$rootScope', '$sessionStorage', 'connection', function ($rootScope, $s
     } else {
         $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
     }
-
-    $rootScope.loadUserObjects = function () {
-        connection.get('/api/get-user-objects', {}).then(data => {
-            $rootScope.userObjects = data.items;
-            $rootScope.user.canPublish = data.userCanPublish;
-        });
-    };
-    $rootScope.loadUserObjects();
 }]);
 
 app.run(function (bsLoadingOverlayService) {

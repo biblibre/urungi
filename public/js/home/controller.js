@@ -1,16 +1,11 @@
 /* global moment: false */
 
-app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connection', 'gettextCatalog', function ($scope, $rootScope, $sessionStorage, connection, gettextCatalog) {
+app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connection', 'gettextCatalog', 'usersModel', function ($scope, $rootScope, $sessionStorage, connection, gettextCatalog, usersModel) {
     $scope.dashboardsNbr = 3;
     $scope.reportsNbr = 10;
     $scope.notificationsNbr = 0;
     $scope.alertsNbr = 0;
     $scope.subPage = 'js/report/list.html';
-
-    connection.get('/api/get-counts', {}, function (data) {
-        $rootScope.counts = data;
-        getIntraOptions();
-    });
 
     function getIntraOptions () {
         if ($rootScope.isWSTADMIN) {
@@ -518,9 +513,8 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
     };
 
     $scope.refreshHome = function () {
-        connection.get('/api/get-user-objects', {}, function (data) {
-            $rootScope.userObjects = data.items;
-            $rootScope.user.canPublish = data.userCanPublish;
+        usersModel.getUserObjects().then(userObjects => {
+            $scope.userObjects = userObjects;
         });
 
         connection.get('/api/get-counts', {}, function (data) {
@@ -528,4 +522,5 @@ app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connecti
             getIntraOptions();
         });
     };
+    $scope.refreshHome();
 }]);
