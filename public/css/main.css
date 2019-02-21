@@ -2274,12 +2274,6 @@ div.callout {
           transition: all 0.3s ease-out;
 }
 
-#objectPanel.catalogSidebar
-{
-    top: 75px;
-    width: 300px;
-}
-
 .jtk-field
 {
     /*width: 180px;
@@ -3153,7 +3147,7 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 
 #objectPanel {
     position: absolute;
-    top: 44px;
+    top: 50px;
     left: 0;
     bottom: 0;
     /*z-index: 100;*/
