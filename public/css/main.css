@@ -176,6 +176,38 @@ accordion .panel-body {
     min-height: 400px;
 }
 
+.jumbotron{
+    background-color:#888888;
+    color:#FFFFFF;
+    border:none;
+    text-align:center;
+}
+
+.featurette-divider {
+    border:solid #444444 3px;
+}
+
+.jumbotron p {
+    color:#FFFFFF;
+    text-align:center;
+}
+
+.ndContainer > h3 {
+    background-color:#444444;
+    color:#FFFFFF;
+    border:none;
+    text-align:center;
+}
+
+.ndContainer > p {
+    color:#444444;
+    border:none;
+}
+
+#pageViewer {
+    background-color:#DDDDDD;
+}
+
 .page-container {
     display: table;
     width: 100%;
@@ -3457,9 +3489,10 @@ filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     padding: 0 18px 18px 0;
     box-sizing: border-box;
     overflow-y: auto;
-        margin-left: 5px;
+    margin-left: 5px;
     margin-bottom: 10px;
     margin-right:5px;
+    background-color:#DDDDDD;
 }
 
 .scrollPane {
