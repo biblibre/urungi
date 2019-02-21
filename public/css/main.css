@@ -668,8 +668,8 @@ body {
 
 <!-- INDICATORS -->
 
-widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress-counter .xe-upper {
-    background: #fff;
+.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress-counter .xe-upper {
+    background-color: transparent;
     padding: 28px;
     line-height: 1;
     display: table;
@@ -717,7 +717,7 @@ widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress
 
 /* INDICATOR REPORT STYLE1 */
 .xe-widget.xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress-counter .xe-upper {
-    background: #fff;
+    background: transparent;
     padding: 0px;
     line-height: 1;
     display: table;
