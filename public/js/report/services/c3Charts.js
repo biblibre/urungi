@@ -271,6 +271,7 @@ app.service('c3Charts', function () {
         }
 
         chart.chartCanvas = c3.generate(canvasArgs);
+        chart.chartCanvas.ygrids([{value: 0}]);
     };
 
     this.changeChartColumnType = function (chart, column) {
