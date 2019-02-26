@@ -30,7 +30,7 @@
                     <span ng-if="index > 0" class="btn-group dropdown">
                         <button type="button" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span ng-bind="filter.conditionLabel"></span>
-                            <i class="fa-caret-down"></i>
+                            <i class="fa fa-caret-down"></i>
                         </button>
 
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
@@ -47,7 +47,7 @@
                         <span class="input-group-btn">
                             <span class="dropdown" >
                                 <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="getDistinctValues(filter)" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" tooltip="Click here to select a value" tooltip-placement="bottom">
-                                    <i class="fa-caret-down"></i>
+                                    <i class="fa fa-caret-down"></i>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu5b" >
                                     <li ng-repeat="variable in fieldsAggregations.number">
@@ -63,7 +63,7 @@
                     <span class="btn-group" dropdown="">
                         <button type="button" class="btn " ng-bind="filter.filterTypeLabel"></button>
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa-caret-down"></i>
+                            <i class="fa fa-caret-down"></i>
                         </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu4" >
                                 <li ng-repeat="option in getElementFilterOptions()"><a ng-click="setFilterType(option)">{{option.label}}</a></li>
