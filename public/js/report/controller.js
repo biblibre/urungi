@@ -848,8 +848,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
             moveContent(report.properties.pivotKeys.rows, movedColumns);
             report.reportType = 'indicator';
             if (!report.properties.style) { report.properties.style = 'style1'; }
-            if (!report.properties.backgroundColor) { report.properties.backgroundColor = '#fff'; }
-            if (!report.properties.reportIcon) { report.properties.reportIcon = 'fa-bolt'; }
+            if (!report.properties.backgroundColor) { report.properties.backgroundColor = 'transparent'; }
             if (!report.properties.mainFontColor) { report.properties.mainFontColor = '#000000'; }
             if (!report.properties.descFontColor) { report.properties.descFontColor = '#CCCCCC'; }
             break;
