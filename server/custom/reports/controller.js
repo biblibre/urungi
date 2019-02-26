@@ -95,86 +95,45 @@ exports.ReportsUpdate = function (req, res) {
     }
 };
 
-exports.PublishReport = function (req, res) {
-    var data = req.body;
-    var parentFolder = data.parentFolder;
-
-    // have the connected user permissions to publish?
-    var Reports = connection.model('Reports');
-    var find = {_id: data._id, owner: req.user._id, companyID: req.user.companyID};
-
-    if (req.session.isWSTADMIN) { find = {_id: data._id, companyID: req.user.companyID}; }
-
-    Reports.findOne(find, {}, {}, function (err, report) {
-        if (err) throw err;
-        if (report) {
-            report.parentFolder = parentFolder;
-            report.isPublic = true;
-
-            req.body = report;
-
-            controller.update(req).then(function (result) {
-                res.status(200).json(result);
-            });
-        } else {
-            res.status(401).json({result: 0, msg: 'You don´t have permissions to publish this report, or this report do not exists'});
-        }
-    });
-};
-
-exports.UnpublishReport = function (req, res) {
-    var data = req.body;
-
-    // TODO:tiene el usuario conectado permisos para publicar?
-    var Reports = connection.model('Reports');
-    var find = {_id: data._id, owner: req.user._id, companyID: req.user.companyID};
-
-    if (req.session.isWSTADMIN) { find = {_id: data._id, companyID: req.user.companyID}; }
-
-    Reports.findOne(find, {}, {}, function (err, report) {
-        if (err) throw err;
-        if (report) {
-            report.isPublic = false;
-
-            req.body = report;
-
-            controller.update(req).then(function (result) {
-                res.status(200).json(result);
-            });
-        } else {
-            res.status(401).json({result: 0, msg: 'You don´t have permissions to unpublish this report, or this report do not exists'});
-        }
-    });
-};
-
-exports.ReportsDelete = function (req, res) {
-    var data = req.body;
-
-    req.query.trash = true;
-    req.query.companyid = true;
-
-    data._id = data.id;
-    data.nd_trash_deleted = true;
-    data.nd_trash_deleted_date = new Date();
-
-    req.body = data;
-
-    if (!req.session.isWSTADMIN) {
-        var Reports = connection.model('Reports');
-        Reports.findOne({_id: data._id, owner: req.user._id}, {_id: 1}, {}, function (err, item) {
-            if (err) throw err;
-            if (item) {
-                controller.remove(req).then(function (result) {
-                    res.status(200).json(result);
-                });
-            } else {
-                res.status(401).json({result: 0, msg: 'You don´t have permissions to delete this report'});
-            }
+exports.PublishReport = async function (req, res) {
+    const report = await getReportFromRequest(req);
+    if (report) {
+        report.publish(req.body.parentFolder).then(() => {
+            res.status(200).json({ result: 1, msg: 'Report published' });
+        }, err => {
+            console.error(err);
+            res.status(500).json({ result: 0, msg: 'Error publishing report' });
         });
     } else {
-        controller.remove(req).then(function (result) {
-            res.status(200).json(result);
+        res.status(404).json({ result: 0, msg: 'This report does not exist' });
+    }
+};
+
+exports.UnpublishReport = async function (req, res) {
+    const report = await getReportFromRequest(req);
+    if (report) {
+        report.unpublish().then(() => {
+            res.status(200).json({ result: 1, msg: 'Report unpublished' });
+        }, err => {
+            console.error(err);
+            res.status(500).json({ result: 0, msg: 'Error unpublishing report' });
         });
+    } else {
+        res.status(404).json({ result: 0, msg: 'This report does not exist' });
+    }
+};
+
+exports.ReportsDelete = async function (req, res) {
+    const report = await getReportFromRequest(req);
+    if (report) {
+        report.remove().then(() => {
+            res.status(200).json({ result: 1, msg: 'Report deleted' });
+        }, err => {
+            console.error(err);
+            res.status(500).json({ result: 0, msg: 'Error deleting report' });
+        });
+    } else {
+        res.status(404).json({ result: 0, msg: 'This report does not exist' });
     }
 };
 
@@ -193,3 +152,16 @@ exports.ReportsGetData = async function (req, res) {
     }
     res.status(200).json(result);
 };
+
+function getReportFromRequest (req) {
+    const conditions = {
+        _id: req.body._id || req.body.id,
+        companyID: req.user.companyID,
+    };
+
+    if (!req.session.isWSTADMIN) {
+        conditions.owner = req.user._id;
+    }
+
+    return Reports.findOne(conditions);
+}

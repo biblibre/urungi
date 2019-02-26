@@ -144,22 +144,26 @@ describe('Dashboards API', function () {
         });
     });
 
-    describe('POST /api/dashboardsv2/delete:id', function () {
+    describe('POST /api/dashboardsv2/delete/:id', function () {
+        let dashboard;
+
+        beforeEach(async function createDashboard () {
+            dashboard = await Dashboardsv2.create({
+                companyID: 'COMPID',
+                dashboardName: 'Dashboard',
+            });
+            await dashboard.publish('root');
+        });
+        afterEach(async function removeDashboard () {
+            return dashboard.remove();
+        });
+
         it('should delete a dashboard', async function () {
-            var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'urungi' });
-            expect(res).to.have.status(200);
-            res = await Users.findOne({userName: 'administrator'});
-            res = await agent.get('/api/get-user-data');
-            res = await agent.post('/api/dashboardsv2/create')
-                .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
-            var decrypted = JSON.parse(res.text);
-            res = await agent.post('/api/dashboardsv2/delete/' + decrypted.item._id)
-                .send({id: decrypted.item._id});
-            decrypted = JSON.parse(res.text);
-            expect(decrypted).to.have.property('result', 1);
-            expect(decrypted).to.have.property('msg', '1 record updated.');
-            res = await Dashboardsv2.deleteOne({dashboardName: 'Dashboard'});
+            const res = await agent.post('/api/dashboardsv2/delete/' + dashboard.id)
+                .send({id: dashboard.id});
+            const result = JSON.parse(res.text);
+            expect(result).to.have.property('result', 1);
+            expect(result).to.have.property('msg', 'Dashboard deleted');
         });
     });
 
@@ -195,42 +199,56 @@ describe('Dashboards API', function () {
     });
 
     describe('POST /api/dashboardsv2/publish-page', function () {
+        let dashboard;
+
+        beforeEach(async function createDashboard () {
+            dashboard = await Dashboardsv2.create({
+                companyID: 'COMPID',
+                dashboardName: 'Dashboard',
+            });
+        });
+        afterEach(async function removeDashboard () {
+            return dashboard.remove();
+        });
         it('should publish a dashboard', async function () {
-            var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'urungi' });
+            const res = await agent.post('/api/dashboardsv2/publish-page')
+                .send({_id: dashboard.id, parentFolder: 'root'});
             expect(res).to.have.status(200);
-            res = await Users.findOne({userName: 'administrator'});
-            res = await agent.get('/api/get-user-data');
-            res = await agent.post('/api/dashboardsv2/create')
-                .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
-            var decrypted = JSON.parse(res.text);
-            res = await agent.post('/api/dashboardsv2/publish-page')
-                .send({_id: decrypted.item._id});
-            expect(res).to.have.status(200);
-            decrypted = JSON.parse(res.text);
-            expect(decrypted).to.have.property('result', 1);
-            expect(decrypted).to.have.property('msg', '1 record updated.');
-            res = await Dashboardsv2.deleteOne({dashboardName: 'Dashboard'});
+            const result = JSON.parse(res.text);
+            expect(result).to.have.property('result', 1);
+            expect(result).to.have.property('msg', 'Dashboard published');
+
+            const d = await Dashboardsv2.findById(dashboard.id);
+            expect(d).to.have.property('isPublic', true);
+            expect(d).to.have.property('parentFolder', 'root');
         });
     });
 
     describe('POST /api/dashboardsv2/unpublish', function () {
+        let dashboard;
+
+        beforeEach(async function createDashboard () {
+            dashboard = await Dashboardsv2.create({
+                companyID: 'COMPID',
+                dashboardName: 'Dashboard',
+            });
+            await dashboard.publish('root');
+        });
+        afterEach(async function removeDashboard () {
+            return dashboard.remove();
+        });
+
         it('should unpublish a dashboard', async function () {
-            var res = await agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'urungi' });
+            const res = await agent.post('/api/dashboardsv2/unpublish')
+                .send({_id: dashboard._id});
             expect(res).to.have.status(200);
-            res = await Users.findOne({userName: 'administrator'});
-            res = await agent.get('/api/get-user-data');
-            res = await agent.post('/api/dashboardsv2/create')
-                .send({companyID: 'COMPID', dashboardName: 'Dashboard'});
-            var decrypted = JSON.parse(res.text);
-            res = await agent.post('/api/dashboardsv2/unpublish')
-                .send({_id: decrypted.item._id});
-            expect(res).to.have.status(200);
-            decrypted = JSON.parse(res.text);
-            expect(decrypted).to.have.property('result', 1);
-            expect(decrypted).to.have.property('msg', '1 record updated.');
-            res = await Dashboardsv2.deleteOne({dashboardName: 'Dashboard'});
+            const result = JSON.parse(res.text);
+            expect(result).to.have.property('result', 1);
+            expect(result).to.have.property('msg', 'Dashboard unpublished');
+
+            const d = await Dashboardsv2.findById(dashboard.id);
+            expect(d).to.have.property('isPublic', false);
+            expect(d).to.have.property('parentFolder', undefined);
         });
     });
 });

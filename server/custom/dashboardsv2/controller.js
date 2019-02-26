@@ -1,4 +1,4 @@
-var Dashboardsv2 = connection.model('Dashboardsv2');
+const Dashboardsv2 = connection.model('Dashboardsv2');
 
 const Controller = require('../../core/controller.js');
 
@@ -63,6 +63,7 @@ exports.Dashboardsv2Duplicate = function (req, res) {
         req.body.dashboardName = 'Copy of ' + req.body.dashboardName;
         req.body.owner = req.user._id;
         req.body.isPublic = false;
+        req.body.parentFolder = undefined;
         controller.create(req).then(function (result) {
             res.status(200).json(result);
         });
@@ -76,7 +77,6 @@ exports.Dashboardsv2Update = function (req, res) {
     var data = req.body;
 
     if (!req.session.isWSTADMIN) {
-        var Dashboardsv2 = connection.model('Dashboardsv2');
         Dashboardsv2.findOne({_id: data._id, owner: req.user._id}, {_id: 1}, {}, function (err, item) {
             if (err) throw err;
             if (item) {
@@ -94,33 +94,22 @@ exports.Dashboardsv2Update = function (req, res) {
     }
 };
 
-exports.Dashboardsv2Delete = function (req, res) {
-    var data = req.body;
+exports.Dashboardsv2Delete = async function (req, res) {
+    const dashboard = await getDashboardFromRequest(req);
+    if (dashboard) {
+        dashboard.nd_trash_deleted = true;
+        dashboard.nd_trash_deleted_date = new Date();
 
-    req.query.trash = true;
-    req.query.companyid = true;
-
-    data._id = data.id;
-    data.nd_trash_deleted = true;
-    data.nd_trash_deleted_date = new Date();
-
-    req.body = data;
-
-    if (!req.session.isWSTADMIN) {
-        var Dashboardsv2 = connection.model('Dashboardsv2');
-        Dashboardsv2.findOne({_id: data._id, owner: req.user._id}, {_id: 1}, {}, function (err, item) {
-            if (err) throw err;
-            if (item) {
-                controller.update(req).then(function (result) {
-                    res.status(200).json(result);
-                });
-            } else {
-                res.status(401).json({result: 0, msg: 'You don´t have permissions to delete this Dashboard'});
-            }
+        dashboard.save().then(() => {
+            res.status(200).json({ result: 1, msg: 'Dashboard deleted' });
+        }, err => {
+            console.error(err);
+            res.status(500).json({ result: 0, msg: 'Error deleting dashboard' });
         });
     } else {
-        controller.update(req).then(function (result) {
-            res.status(200).json(result);
+        res.status(404).json({
+            result: 0,
+            msg: 'This dashboard does not exist',
         });
     }
 };
@@ -181,54 +170,51 @@ exports.getDashboard = function (req, res) {
     });
 };
 
-exports.PublishDashboard = function (req, res) {
-    var data = req.body;
-    var parentFolder = data.parentFolder;
-
-    // Has the connected user grants to publish?
-    var Dashboardsv2 = connection.model('Dashboardsv2');
-    var find = {_id: data._id, owner: req.user._id, companyID: req.user.companyID};
-
-    if (req.session.isWSTADMIN) { find = {_id: data._id, companyID: req.user.companyID}; }
-
-    Dashboardsv2.findOne(find, {}, {}, function (err, Dashboard) {
-        if (err) throw err;
-        if (Dashboard) {
-            Dashboard.parentFolder = parentFolder;
-            Dashboard.isPublic = true;
-
-            req.body = Dashboard;
-
-            controller.update(req).then(function (result) {
-                res.status(200).json(result);
-            });
-        } else {
-            res.status(401).json({result: 0, msg: 'You don´t have permissions to publish this Dashboard, or this Dashboard do not exists'});
-        }
-    });
+exports.PublishDashboard = async function (req, res) {
+    // TODO: Check if the connected user has the permission to publish
+    const dashboard = await getDashboardFromRequest(req);
+    if (dashboard) {
+        dashboard.publish(req.body.parentFolder).then(() => {
+            res.status(200).json({ result: 1, msg: 'Dashboard published' });
+        }, err => {
+            console.error(err);
+            res.status(500).json({ result: 0, msg: 'Error publishing dashboard' });
+        });
+    } else {
+        res.status(404).json({
+            result: 0,
+            msg: 'This dashboard does not exist',
+        });
+    }
 };
 
-exports.UnpublishDashboard = function (req, res) {
-    var data = req.body;
-
-    // TODO:tiene el usuario conectado permisos para publicar?
-    var Dashboardsv2 = connection.model('Dashboardsv2');
-    var find = {_id: data._id, owner: req.user._id, companyID: req.user.companyID};
-
-    if (req.session.isWSTADMIN) { find = {_id: data._id, companyID: req.user.companyID}; }
-
-    Dashboardsv2.findOne(find, {}, {}, function (err, Dashboard) {
-        if (err) throw err;
-        if (Dashboard) {
-            Dashboard.isPublic = false;
-
-            req.body = Dashboard;
-
-            controller.update(req).then(function (result) {
-                res.status(200).json(result);
-            });
-        } else {
-            res.status(401).json({result: 0, msg: 'You don´t have permissions to unpublish this Dashboard, or this Dashboard do not exists'});
-        }
-    });
+exports.UnpublishDashboard = async function (req, res) {
+    // TODO: Check if logged in user has the permission to publish
+    const dashboard = await getDashboardFromRequest(req);
+    if (dashboard) {
+        dashboard.unpublish().then(() => {
+            res.status(200).json({ result: 1, msg: 'Dashboard unpublished' });
+        }, err => {
+            console.error(err);
+            res.status(500).json({ result: 0, msg: 'Error unpublishing dashboard' });
+        });
+    } else {
+        res.status(404).json({
+            result: 0,
+            msg: 'This dashboard does not exist',
+        });
+    }
 };
+
+function getDashboardFromRequest (req) {
+    const conditions = {
+        _id: req.body._id || req.body.id,
+        companyID: req.user.companyID,
+    };
+
+    if (!req.session.isWSTADMIN) {
+        conditions.owner = req.user._id;
+    }
+
+    return Dashboardsv2.findOne(conditions).exec();
+}

@@ -1,8 +1,11 @@
 app.controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons,
     colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout,
-    $rootScope, PagerService, gettextCatalog) {
-    $scope.loadUserObjects();
+    $rootScope, PagerService, gettextCatalog, usersModel
+) {
+    usersModel.getUserObjects().then(userObjects => {
+        $scope.userObjects = userObjects;
+    });
 
     $scope.reportModal = 'partials/report/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';

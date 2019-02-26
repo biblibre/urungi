@@ -7,7 +7,11 @@
  */
 
 app.controller('reportCtrl', function ($scope, connection, $compile, reportService, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, c3Charts,
-    reportModel, widgetsCommon, $location, PagerService, gettextCatalog) {
+    reportModel, widgetsCommon, $location, PagerService, gettextCatalog, usersModel) {
+    usersModel.getUserObjects().then(userObjects => {
+        $scope.userObjects = userObjects;
+    });
+
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dateModal = 'partials/report/modals/dateModal.html';
     $scope.linkModal = 'partials/report/modals/linkModal.html';

@@ -211,16 +211,6 @@ class Controller {
             data.companyID = (req.isAuthenticated()) ? req.user.companyID : null;
         }
 
-        var user = (req.isAuthenticated()) ? req.user.username : 'unsigned user';
-        if (!data.nd_history) data.nd_history = [];
-
-        data.nd_history.push({text: 'Updated on ' + new Date() + ' by ' + user,
-            user_id: (req.isAuthenticated()) ? req.user._id : null,
-            user_name: (req.isAuthenticated()) ? req.user.username : null,
-            user_companyID: (req.isAuthenticated()) ? req.user.companyID : null,
-            user_companyName: (req.isAuthenticated()) ? req.user.companyName : null
-        });
-
         const p = this.model.update(find, { $set: data }).exec().then(function (result) {
             var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
 

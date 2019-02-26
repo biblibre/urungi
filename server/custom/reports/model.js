@@ -20,5 +20,19 @@ var ReportsSchema = new mongoose.Schema({
     selectedLayerID: {type: String}
 }, { collection: 'wst_Reports' });
 
+ReportsSchema.methods.publish = async function (folderId) {
+    this.parentFolder = folderId;
+    this.isPublic = true;
+
+    return this.save();
+};
+
+ReportsSchema.methods.unpublish = async function () {
+    this.parentFolder = undefined;
+    this.isPublic = false;
+
+    return this.save();
+};
+
 var Reports = connection.model('Reports', ReportsSchema);
 module.exports = Reports;
