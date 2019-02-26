@@ -9,7 +9,7 @@
                 <span>{{field.label}}</span>
                 <a class="list-button" ng-class="{ 'btn-selected' : (nav.sort === field.name) }" ng-click="clickOnSort(field)">
                     <i ng-hide="nav.sortTypes[field.name] === -1" class="fa fa-angle-down" ></i>
-                    <i ng-show="nav.sortTypes[field.name] === -1" class="fas fa-angle-up" ></i>
+                    <i ng-show="nav.sortTypes[field.name] === -1" class="fa fa-angle-up" ></i>
                 </a>
                 </h4>
                 </br>
@@ -39,7 +39,7 @@
 
             <a class="pull-right list-button btn-duplicate" ng-click="viewDuplicateModal(item)" 
             tooltip="{{nav.tooltips.duplicate}}" tooltip-placement="bottom">
-                <i class="fas fa-copy" ></i>
+                <i class="fa fa-copy" ></i>
             </a>
 
             <a class="pull-right list-button btn-edit" href="{{getEditLink(item)}}"  

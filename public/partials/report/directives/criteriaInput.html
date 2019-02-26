@@ -12,7 +12,7 @@
                 <span class="input-group-btn" >
                     <span class="dropdown" >
                         <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa-caret-down"></i>
+                            <i class="fa fa-caret-down"></i>
                         </button>
                         <ul class="dropdown-menu shorter-menu" aria-labelledby="dropdownMenu4b" >
                             <li ng-repeat="option in datePatternFilters"><a ng-click="setDatePatternFilterType(option);">{{option.label}}</a></li>
@@ -22,7 +22,7 @@
                 </span>
                 <span ng-if="filter.promptMandatory != true || !isPrompt" class="input-group-btn" >
                     <button type="button" class="btn btn-white" ng-click="clearFilter()">
-                        <i class="fa-times"></i>
+                        <i class="fa fa-times"></i>
                     </button>
                 </span>
 
@@ -67,7 +67,7 @@
                     <span class="input-group-btn" >
                         <span class="dropdown" >
                             <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" tooltip="Click here to select a value" tooltip-placement="bottom">
-                                <i class="fa-caret-down"></i>
+                                <i class="fa fa-caret-down"></i>
                             </button>
 
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu5b" >
@@ -76,7 +76,7 @@
                         </span>
 
                         <button type="button" ng-if="!( isPrompt && filter.promptMandatory )" class="btn btn-sm btn-white" ng-click="clearFilter(filter)" style="padding: 5px;width: 21px;    background-color: #ccc;" tooltip="Click here to clear the selected value" tooltip-placement="bottom">
-                            <i class="fa-times"></i>
+                            <i class="fa fa-times"></i>
                         </button>
 
                     </span>
@@ -105,7 +105,7 @@
                     <span class="dropdown" >
                         <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" 
                         tooltip="Click here to select a value" tooltip-placement="bottom">
-                            <i class="fa-caret-down"></i>
+                            <i class="fa fa-caret-down"></i>
                         </button>
 
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu5b" >
@@ -118,7 +118,7 @@
                     </span>
 
                     <button type="button" class="btn btn-white" ng-if="!( isPrompt && filter.promptMandatory )" ng-click="clearFilter(filter)" style="padding: 5px;width: 21px;    background-color: #ccc;" tooltip="Click here to clear the selected value" tooltip-placement="bottom">
-                        <i class="fa-times"></i>
+                        <i class="fa fa-times"></i>
                     </button>
 
                 </span>
