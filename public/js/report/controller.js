@@ -491,7 +491,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         }
 
         if ($scope.selectedReport.reportType === 'pivot') {
-            for (const c in prop.ykeys) {
+            for (const c of prop.ykeys) {
                 query.columns.push(countColumn(c));
             }
         }
@@ -504,7 +504,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
                 elementID: col.elementID,
                 elementLabel: col.elementLabel,
                 elementName: col.elementName,
-                elementType: col.elementName,
+                elementType: col.elementType,
                 filterPrompt: false,
                 id: col.id + 'ptc',
                 layerID: col.layerID,
