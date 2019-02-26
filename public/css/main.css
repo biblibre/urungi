@@ -698,7 +698,7 @@ body {
     background-color: #eee;
 }
 
-<!-- INDICATORS -->
+/* INDICATORS */
 
 .xe-counter, .xe-widget.xe-counter-block .xe-upper, .xe-widget.xe-progress-counter .xe-upper {
     background-color: transparent;
@@ -2336,7 +2336,7 @@ div.callout {
    position: absolute;
     top: 75px;
     left: 260px;
-    height: 35px:
+    height: 35px;
 }
 
 .canvas-parent {
@@ -3656,7 +3656,7 @@ a.list-group-item:hover {
     line-height: 32px;
     vertical-align: middle;
     padding-left: 5px;
-    color: #666666;"
+    color: #666666;
 }
 
 #elementsTab .tool-set .container-fluid
