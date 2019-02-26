@@ -642,7 +642,7 @@ user agent stylesheetarticle, aside, footer, header, hgroup, main, nav, section 
 .Block500 {
     width: 100%;
     background-color:transparent;
-    border: dotted 3px #002a80;
+    border: solid #CCCCCC 1px;
     min-height: 50px;
     padding:10px;
 }
