@@ -3885,3 +3885,11 @@ a.list-group-item:hover {
     color:blue;
     background-color: #cccccc;
 }
+
+.cypivot .div22 {
+    overflow: initial;
+}
+
+.report-view {
+    overflow: auto;
+}
