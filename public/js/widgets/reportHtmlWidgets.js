@@ -14,14 +14,14 @@ app.service('reportHtmlWidgets', function () {
 
             theYKey = theYKey.replace(/[^a-zA-Z ]/g, '');
 
-            var theValue = '{{' + theData[0][theYKey] + '| number}}';
+            var theValue = theData[0][theYKey];
 
             if (report.properties.valueType === 'percentage') {
-                theValue = '{{' + theData[0].value + '| number}} %';
+                theValue = theData[0].value;
             }
 
             if (report.properties.valueType === 'currency' && report.properties.currencySymbol) {
-                theValue = '{{' + theData[0].value + '| number}}' + ' ' + report.properties.currencySymbol;
+                theValue = theData[0].value + ' ' + report.properties.currencySymbol;
             }
 
             var theValueText = '';
