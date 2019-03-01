@@ -3708,6 +3708,10 @@ a.list-group-item:hover {
     padding: 30px;
 }
 
+.c3-grid line {
+    stroke: #000;
+}
+
 .about-page {
     line-height: 2;
 }
