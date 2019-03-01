@@ -6,11 +6,11 @@
 
             <span ng-repeat="field in nav.infoFields" ng-class="field.widthClass">
                 <h4>
-                <span>{{field.label}}</span>
-                <a class="list-button" ng-class="{ 'btn-selected' : (nav.sort === field.name) }" ng-click="clickOnSort(field)">
-                    <i ng-hide="nav.sortTypes[field.name] === -1" class="fa fa-angle-down" ></i>
-                    <i ng-show="nav.sortTypes[field.name] === -1" class="fa fa-angle-up" ></i>
-                </a>
+                    <span>{{field.label}}</span>
+                    <a class="list-button" ng-class="{ 'btn-selected' : (nav.sort === field.name) }" ng-click="clickOnSort(field)">
+                        <i ng-hide="nav.sortTypes[field.name] === -1" class="fa fa-angle-down" ></i>
+                        <i ng-show="nav.sortTypes[field.name] === -1" class="fa fa-angle-up" ></i>
+                    </a>
                 </h4>
                 </br>
                 <input ng-if="!field.date" type="text" ng-model="nav.filters[field.name]" 
@@ -21,40 +21,49 @@
     </div>
 
     <div id="reportListItem" class="list-group-item row" ng-repeat="item in nav.items">
-        <a class="col-md-10" ng-click="nav.clickItem(item)" tooltip="{{nav.tooltips.itemClick}}" tooltip-placement="bottom">
+        <span class="col-md-10">
+        
+            <a  ng-click="nav.clickItem(item)" tooltip="{{nav.tooltips.itemClick}}" tooltip-placement="bottom">
 
-            <span ng-repeat="field in nav.infoFields" ng-class="field.widthClass">
-                <h5 ng-if="!field.date">{{item[field.name]}}</h5>
-                <h6 ng-if="field.date">{{item[field.name] | date}}</h5>
-            </span>
+                <span ng-repeat="field in nav.infoFields" ng-class="field.widthClass">
+                    <h5 ng-if="!field.date">{{item[field.name]}}</h5>
+                    <h6 ng-if="field.date">{{item[field.name] | date}}</h5>
+                </span>
 
-        </a>
-
-        <span ng-if="nav.editButtons" class="col-md-2">
-
-            <a class="pull-right list-button btn-delete" ng-click="viewDeleteModal(item)" 
-            tooltip="{{nav.tooltips.delete}}" tooltip-placement="bottom">
-                <i class="fa fa-trash-o "  ></i>
             </a>
-
-            <a class="pull-right list-button btn-duplicate" ng-click="viewDuplicateModal(item)" 
-            tooltip="{{nav.tooltips.duplicate}}" tooltip-placement="bottom">
-                <i class="fa fa-copy" ></i>
-            </a>
-
-            <a class="pull-right list-button btn-edit" href="{{getEditLink(item)}}"  
-            tooltip="{{nav.tooltips.edit}}" tooltip-placement="bottom">
-                <i class="fa fa-pencil" ></i>
-            </a>
-
-            <span ng-if="item.isPublic" class="badge badge-success pull-right published-tag">published</span>    
-        </span>
-
-        <span ng-if="layerButtons" class="col-md-2">
+            <span ng-if="layerButtons">
                 <a id="layerListItemStatus" class="badge pull-right"  ng-click="toggleActive(item)"
                 ng-class="{'badge-success': item.status == 'active', 'badge-danger': item.status == 'Not active'}" 
                 ng-click="changeLayerStatus(item)" tooltip="Click here to change the status of the layer" tooltip-placement="left">{{item.status}}</a>
+            </span>
         </span>
+
+        <span  class="col-md-2">
+            <span ng-if="nav.deleteButtons">
+                <a class="pull-right list-button btn-delete" ng-click="viewDeleteModal(item)" 
+                tooltip="{{nav.tooltips.delete}}" tooltip-placement="bottom">
+                <i class="fa fa-trash-o "  ></i>
+                </a>
+            </span>
+            <span ng-if="nav.editButtons">
+
+            
+
+                <a class="pull-right list-button btn-duplicate" ng-click="viewDuplicateModal(item)" 
+                tooltip="{{nav.tooltips.duplicate}}" tooltip-placement="bottom">
+                    <i class="fa fa-copy" ></i>
+                </a>
+
+                <a class="pull-right list-button btn-edit" href="{{getEditLink(item)}}"  
+                tooltip="{{nav.tooltips.edit}}" tooltip-placement="bottom">
+                <i class="fa fa-pencil" ></i>
+                </a>
+
+                <span ng-if="item.isPublic" class="badge badge-success pull-right published-tag">published</span>    
+            </span>
+        </span>
+
+        
 
     </div>
 

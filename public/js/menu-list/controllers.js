@@ -96,6 +96,7 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
         $scope.nav.apiFetchUrl = '/api/reports/find-all';
         $scope.creationAuthorised = $scope.user.reportsCreate;
         $scope.nav.editButtons = true;
+        $scope.nav.deleteButtons = true;
         $scope.nav.layerButtons = false;
         $scope.nav.itemsPerPage = 10;
 
@@ -295,6 +296,7 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
         $scope.nav.apiFetchUrl = '/api/dashboardsv2/find-all';
         $scope.creationAuthorised = $scope.user.dashboardsCreate;
         $scope.nav.editButtons = true;
+        $scope.nav.deleteButtons = true;
         $scope.nav.layerButtons = false;
         $scope.nav.itemsPerPage = 10;
 
@@ -459,6 +461,7 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
     })
     .controller('layerListCtrl', function ($scope, $rootScope, $location, connection, gettextCatalog) {
         $scope.layerOptions = {};
+        $scope.deleteOptions = {};
 
         $scope.listView = '/partials/menu-list/list.html';
 
@@ -466,7 +469,8 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
 
         $scope.nav.apiFetchUrl = '/api/layers/find-all';
         $scope.creationAuthorised = true;
-        $scope.editButtons = false;
+        $scope.nav.deleteButtons = true;
+        $scope.nav.editButtons = false;
         $scope.layerButtons = true;
         $scope.nav.itemsPerPage = 10;
 
@@ -487,7 +491,9 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
         ];
 
         $scope.tooltips = {
-            itemClick: 'View this layer'
+            itemClick: 'View this layer',
+            delete: 'Delete this layer',
+            duplicate: 'Duplicate this layer',
         };
 
         $scope.text = {
@@ -500,6 +506,13 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
             $scope.layerOptions.params = {};
             $scope.layerOptions.status = 'Not active';
             $('#layerModal').modal('show');
+        };
+
+        $scope.delete = function () {
+            return connection.post('/api/layers/delete/' + $scope.deleteOptions.id, {id: $scope.deleteOptions.id}).then(function () {
+                $scope.nav.refreshItems();
+                $('#deleteModal').modal('hide');
+            });
         };
 
         $scope.saveLayer = function () {
@@ -588,6 +601,25 @@ app.controller('listCtrl', function ($scope, $rootScope, connection, PagerServic
                         '</span><br/><br/><span>' +
                         gettextCatalog.getString('You can change the status of the layer simply clicking over this label') +
                         '</span></div>',
+                    width: '300px',
+                    areaColor: 'transparent',
+                    areaLineColor: '#fff',
+                    horizontalAlign: 'right',
+                    height: '200px'
+
+                },
+
+                {
+                    element: '.btn-delete',
+                    html: '<div><h3>' +
+            gettextCatalog.getString('Layer delete') +
+            '</h3><span style="font-weight:bold;">' +
+            gettextCatalog.getString('Click here to delete the layer.') +
+            '</span><br/><br/><span>' +
+            gettextCatalog.getString('Once deleted the layer will not be recoverable again.') +
+            '</span><br/><br/><span>' +
+            gettextCatalog.getString('Requires 2 step confirmation.') +
+            '</span></div>',
                     width: '300px',
                     areaColor: 'transparent',
                     areaLineColor: '#fff',
