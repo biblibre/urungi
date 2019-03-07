@@ -24,9 +24,6 @@ app.service('c3Charts', function () {
         // Indicates that for a single (axisField * stackField) value there are multiple entries
         // This causes some of the charts to display weird or misleading results
 
-        var legend = {};
-        var padding = {};
-
         if (!query.data) {
             noty({text: 'no data to display', timeout: 2000, type: 'warning'});
             return;
@@ -137,11 +134,18 @@ app.service('c3Charts', function () {
 
         if (!chart.height) { chart.height = 300; }
 
+        const c3Config = {
+            bindto: theChartCode,
+            size: {
+                height: chart.height,
+            },
+        };
+
         if (report.properties.chart.legendPosition === 'top') {
-            padding = {
-                top: 50
+            c3Config.padding = {
+                top: 50,
             };
-            legend = {
+            c3Config.legend = {
                 position: 'inset',
                 inset: {
                     anchor: 'top-left',
@@ -150,23 +154,11 @@ app.service('c3Charts', function () {
                     step: undefined
                 }
             };
-        } else if (report.properties.chart.legendPosition === 'bottom') {
-            padding = {
-                top: 0
-            };
-            legend = {
-                position: 'bottom'
-            };
-        } else {
-            padding = {
-                top: 0
-            };
-            legend = {
-                position: 'right'
+        } else if (report.properties.chart.legendPosition === 'right') {
+            c3Config.legend = {
+                position: 'right',
             };
         }
-
-        let canvasArgs;
 
         switch (chart.type) {
         case 'pie':
@@ -180,98 +172,75 @@ app.service('c3Charts', function () {
                 }
             }
 
-            canvasArgs = {
-                bindto: theChartCode,
-                data: {
-                    columns: theColumns,
-                    type: chart.type
-                },
-
-                size: {
-                    height: chart.height
-                },
-                legend: legend,
-                padding: padding
+            c3Config.data = {
+                columns: theColumns,
+                type: chart.type
             };
             break;
 
         case 'gauge':
-            canvasArgs = {
-                bindto: theChartCode,
-                data: {
-                    columns: [
-                        [theValues[0], query.data[0][theValues[0]]]
-                    ],
-                    type: chart.type
-                },
-                gauge: {
-                    //        label: {
-                    //            format: function(value, ratio) {
-                    //                return value;
-                    //            },
-                    //            show: false // to turn off the min/max labels.
-                    //        },
-                    //    min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
-                    //    max: (query.data[0][theValues[0]]*2), // 100 is default
-                    //    units: '' //' %',
-                    //    width: 39 // for adjusting arc thickness
-                },
-
-                size: {
-                    height: chart.height
-                },
-                padding: padding
+            c3Config.data = {
+                columns: [
+                    [theValues[0], query.data[0][theValues[0]]]
+                ],
+                type: chart.type
             };
             break;
 
         case 'line' :
-            canvasArgs = {
-                bindto: theChartCode,
-                data: {
-                    json: theData,
-                    keys: {
-                        x: axisField,
-                        value: theValues
-                    },
-                    types: theTypes,
-                    names: theNames,
-                    groups: theGroups
+            c3Config.data = {
+                json: theData,
+                keys: {
+                    x: axisField,
+                    value: theValues
                 },
-                axis: {
-                    x: {
-                        type: 'category',
-                        tick: {
-                            culling: {
-                                max: 20
-                            },
-                            format: function (i) {
-                                const max = 20;
-                                let name = this.config.axis_x_categories[i];
-                                if (name === null) {
-                                    name = 'NULL';
-                                } else if (name.length > max) {
-                                    name = name.substr(0, max - 1) + '…';
-                                }
-
-                                return name;
-                            },
-                            multiline: false,
-                            rotate: 45
-                        }
-                    }
-                },
-                size: {
-                    height: chart.height
-                },
-                legend: legend,
-                padding: padding
+                types: theTypes,
+                names: theNames,
+                groups: theGroups
             };
+            c3Config.axis = {
+                x: {
+                    type: 'category',
+                    tick: {
+                        culling: {
+                            max: 20
+                        },
+                        format: function (i) {
+                            const max = 20;
+                            let name = this.config.axis_x_categories[i];
+                            if (name === null) {
+                                name = 'NULL';
+                            } else if (name.length > max) {
+                                name = name.substr(0, max - 1) + '…';
+                            }
+
+                            return name;
+                        },
+                        multiline: false,
+                        rotate: 45
+                    }
+                }
+            };
+
+            const hasNegativeValues = theData.some(row => {
+                return theValues.some(key => {
+                    return row[key] < 0;
+                });
+            });
+            if (hasNegativeValues) {
+                c3Config.grid = {
+                    y: {
+                        lines: [
+                            { value: 0 },
+                        ],
+                    },
+                };
+            }
 
             break;
         }
 
-        chart.chartCanvas = c3.generate(canvasArgs);
-        chart.chartCanvas.ygrids([{value: 0}]);
+        chart.chartCanvas = c3.generate(c3Config);
     };
 
     this.changeChartColumnType = function (chart, column) {
