@@ -396,7 +396,7 @@ app.service('reportModel', function ($q, bsLoadingOverlayService, connection, uu
     };
 
     this.getPromptHTML = function (prompt) {
-        var html = '<div id="PROMPT_' + prompt.promptID + '" page-block class="ndContainer" ndType="ndPrompt"><nd-prompt is-prompt="true" filter="prompts[\'' + prompt.promptID + '\']" on-change="promptChanged" ></nd-prompt></div>';
+        var html = '<div id="PROMPT_' + prompt.promptID + '" page-block class="ndContainer" ndType="ndPrompt"><nd-prompt is-prompt="true" filter="prompts[\'' + prompt.promptID + '\']" on-change="promptChanged" get-query="getQueryForFilter" ></nd-prompt></div>';
 
         return html;
     };

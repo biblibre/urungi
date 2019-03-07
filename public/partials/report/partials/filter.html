@@ -3,7 +3,7 @@
     ng-repeat="filter in selectedReport.properties.filters" >
     
     <nd-prompt is-prompt="false" filter="filter" on-change="filterChanged" set-prompt="showFilterModal" 
-    index="$index" get-query="getQueryForFilter"></nd-prompt>
+    get-query="getQueryForFilter"></nd-prompt>
 </li>
 
 <li class="filter-box" ng-show="selectedReport.properties.recordLimit!=undefined">
