@@ -66,6 +66,7 @@ app.directive('reportView', function ($q, $timeout, reportModel, $compile, c3Cha
                         // without it the chart is shown and automatically
                         // replaced by an empty chart
                         return $timeout(function () {}, 0).then(function () {
+                            reportModel.initChart($scope.report);
                             c3Charts.rebuildChart($scope.report, id);
                             $scope.loading = false;
                         });

@@ -914,7 +914,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
     $scope.changeChartSectorType = function (column, type) {
         if (type === 'pie') { $scope.selectedReport.reportType = 'chart-pie'; }
         if (type === 'donut') { $scope.selectedReport.reportType = 'chart-donut'; }
-        reportModel.repaintReport($scope.selectedReport, $scope.mode);
+        $scope.$broadcast('repaint');
     };
 
     $scope.changeColumnColor = function (color) {
@@ -1000,6 +1000,7 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
 
         case 'chart-line':
         case 'chart-donut':
+        case 'chart-pie':
             available = report.properties.xkeys.length > 0 &&
                 report.properties.ykeys.length > 0;
             break;
