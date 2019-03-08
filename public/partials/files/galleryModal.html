@@ -1,8 +1,8 @@
 <nd-modal id="fileGalleryModal" class="files-gallery" ng-init="init()">
     <button id="close-gallery-btn" type="button" class="close" ng-click="modalOptions.close()">X</button>
 
-    <tabset class="nav-tabs-justified">
-        <tab heading="My Images">
+    <uib-tabset class="nav-tabs-justified">
+        <uib-tab heading="My Images">
 
             <!-- <form class="dropzone" id="dropzone" style="min-height: 0px;padding: 80px;" ng-init="setDropzone()"></form> -->
 
@@ -24,8 +24,8 @@
 
             <div class="btn btn-default" ng-app="fileUpload" ngf-select="upload($file)">Choose image to upload</div>
 
-        </tab>
-        <tab heading="Public Images">
+        </uib-tab>
+        <uib-tab heading="Public Images">
 
             <ul id="file-list" class="ace-thumbnails files-modal-list">
 
@@ -37,9 +37,9 @@
 
             </ul>
 
-        </tab>
+        </uib-tab>
 
-        <tab heading="Online Images">
+        <uib-tab heading="Online Images">
 
             <input type="text" ng-model="onlineSearchTerm" ng-enter="searchOnline(onlineSearchTerm)"
                 style="width: 100%;height: 30px;font-size: 15px;" placeholder="Search...">
@@ -54,8 +54,8 @@
 
             </ul>
 
-        </tab>
-    </tabset>
+        </uib-tab>
+    </uib-tabset>
 
     <div id="dropzone-item" class="hidden">
         <li class="dz-item">
