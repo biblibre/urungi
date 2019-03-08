@@ -1,19 +1,22 @@
 .canvas-wide {
     margin-left: 0;
 }
+
 .canvas {
     height: 500px;
     max-height: 700px;
-    border: 1px solid #CCC;
+    border: 1px solid #ccc;
     background-color: white;
     overflow: scroll !important;
 }
+
 .jtk-surface-nopan {
     overflow: scroll !important;
     cursor: default;
 }
+
 .jtk-surface {
-    /*overflow: hidden !important;*/
+    /* overflow: hidden !important; */
     position: relative;
     cursor: move;
     cursor: -moz-grab;
@@ -26,21 +29,22 @@
 }
 
 .jtk-node {
-    /*background-color: #234b5e;*/
-    /*border-radius: 14px;
+    /* background-color: #234b5e; */
+
+    /* border-radius: 14px;
     border: 1px solid #CCC;
-    box-shadow: 0 0 5px #CCC;*/
+    box-shadow: 0 0 5px #CCC; */
     cursor: pointer;
     position: absolute;
     z-index: 11;
-    /*overflow: hidden;*/
-    width: 125px;
+
+    /* overflow: hidden; */
     height: 15px;
     width: auto;
 }
 
 .window {
-   /* border: 1px solid #346789;
+    /* border: 1px solid #346789;
     box-shadow: 2px 2px 19px #aaa;
     -o-box-shadow: 2px 2px 19px #aaa;
     -webkit-box-shadow: 2px 2px 19px #aaa;
@@ -50,16 +54,21 @@
     opacity: 0.8;
     filter: alpha(opacity=80);   */
     width: 200px;
-    /*min-height: 80px;*/
-    /*line-height: 80px;*/
+
+    /* min-height: 80px; */
+
+    /* line-height: 80px; */
     cursor: pointer;
-    /*text-align: center;*/
+
+    /* text-align: center; */
     z-index: 20;
     position: absolute;
-    /*background-color: #eeeeef;*/
+
+    /* background-color: #eeeeef; */
     color: black;
-    font-family: helvetica;
-    /*padding: 0.5em;*/
+    font-family: helvetica, serif;
+
+    /* padding: 0.5em; */
     font-size: 0.9em;
     -webkit-transition: -webkit-box-shadow 0.15s ease-in;
     -moz-transition: -moz-box-shadow 0.15s ease-in;
@@ -67,23 +76,20 @@
     transition: box-shadow 0.15s ease-in;
 }
 
-
-
-
 .jtk-field {
-    border: 1px solid #CCC;
+    border: 1px solid #ccc;
     cursor: pointer;
     z-index: 11;
     overflow: hidden;
     padding-left: 10px;
-    padding-top: 0px;
+    padding-top: 0;
     width: 200px;
     background-color: #d5d5d5;
     height: 20px;
 }
 
 .jtk-field-icon {
-    color:#00A000;
+    color: #00a000;
     font-size: 14px;
 }
 
@@ -98,10 +104,10 @@
 }
 
 .jtk-header {
-    color: #FFFFFF;
-    background-color: #999999;
-    border: 1px solid #CCC;
-    padding-top: 0px;
+    color: #fff;
+    background-color: #999;
+    border: 1px solid #ccc;
+    padding-top: 0;
     cursor: pointer;
     z-index: 11;
     overflow: hidden;
@@ -109,12 +115,3 @@
     width: 200px;
     height: 20px;
 }
-
-
-
-.jtk-node {
-    position: absolute;
-}
-
-
-
