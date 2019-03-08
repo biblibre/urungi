@@ -236,7 +236,7 @@ function buildJoinTree (query, queryLayer, warnings) {
 
     var collectionRef = {}; // a reference of which collections need to be added to the join
 
-    for (const column of query.columns) {
+    for (const column of query.columns.concat(query.filters, query.order)) {
         if (column.isCustom) {
             for (const element of layerUtils.getElementsUsedInCustomExpression(column.viewExpression, queryLayer)) {
                 collectionRef[element.collectionID] = true;
