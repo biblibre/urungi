@@ -10,19 +10,19 @@
         }"></span></a>
         <span ng-if="!node.editing" ng-dblclick="node.editing = true">{{node.title}}</span>
         <span ng-if="node.editing">
-            <input id="node{{node.id}}" type="text" ng-model="node.title" style="height: 25px; width: 150px; border: 1px dotted;" tooltip="{{'Type here the new name of the folder' | translate}}" tooltip-placement="bottom"/>
-            <a class=" btn btn-white btn-xs btn-round" data-nodrag ng-click="node.editing = false" tooltip="{{'Click here to save the name of the folder and to get out of the edit mode' | translate}}" tooltip-placement="bottom">
+            <input id="node{{node.id}}" type="text" ng-model="node.title" style="height: 25px; width: 150px; border: 1px dotted;" uib-tooltip="{{'Type here the new name of the folder' | translate}}" tooltip-placement="bottom"/>
+            <a class=" btn btn-white btn-xs btn-round" data-nodrag ng-click="node.editing = false" uib-tooltip="{{'Click here to save the name of the folder and to get out of the edit mode' | translate}}" tooltip-placement="bottom">
                 <span class="fa fa-save"></span>
             </a>
         </span>
         <div class="pull-right" ng-if="!node.editing">
-            <a id="publicSpaceItemEdit" class=" btn btn-danger-white btn-xs btn-round" data-nodrag ng-click="node.editing = true; " tooltip="{{'Click here to change the name of the folder' | translate}}" tooltip-placement="bottom">
+            <a id="publicSpaceItemEdit" class=" btn btn-danger-white btn-xs btn-round" data-nodrag ng-click="node.editing = true; " uib-tooltip="{{'Click here to change the name of the folder' | translate}}" tooltip-placement="bottom">
                 <span class="fa fa-edit"></span>
             </a>
-            <a id="publicSpaceItemRemove" class=" btn btn-danger-white btn-xs btn-round" data-nodrag ng-click="remove(this)" tooltip="{{'Click here to remove this folder (will remove all children folders)' | translate}}" tooltip-placement="bottom">
+            <a id="publicSpaceItemRemove" class=" btn btn-danger-white btn-xs btn-round" data-nodrag ng-click="remove(this)" uib-tooltip="{{'Click here to remove this folder (will remove all children folders)' | translate}}" tooltip-placement="bottom">
                 <span class="fa fa-remove"></span>
             </a>
-            <a id="publicSpaceItemAdd" class=" btn btn-success-white btn-xs btn-round" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;" tooltip="{{'Click here to add a new subfolder inside this' | translate}}" tooltip-placement="bottom">
+            <a id="publicSpaceItemAdd" class=" btn btn-success-white btn-xs btn-round" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;" uib-tooltip="{{'Click here to add a new subfolder inside this' | translate}}" tooltip-placement="bottom">
                 <span class="fa fa-plus"></span>
             </a>
         </div>
@@ -38,9 +38,9 @@
 
 <div class="row">
 
-    <a id="publicSpaceNewFolderBtn" class="btn btn-success" ng-click="newSubItem(this)" tooltip="{{'Click here to add a new folder to the public space' | translate}}" tooltip-placement="bottom" translate>Add folder</a>
-    <a id="publicSpaceSaveBtn" class="btn btn-success pull-right"  ng-click="save()" tooltip="{{'Click here to save changes to the public space' | translate}}" tooltip-placement="bottom" translate>Save</a>
-    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="{{'Click here to conduct the guided tour for the public space' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
+    <a id="publicSpaceNewFolderBtn" class="btn btn-success" ng-click="newSubItem(this)" uib-tooltip="{{'Click here to add a new folder to the public space' | translate}}" tooltip-placement="bottom" translate>Add folder</a>
+    <a id="publicSpaceSaveBtn" class="btn btn-success pull-right"  ng-click="save()" uib-tooltip="{{'Click here to save changes to the public space' | translate}}" tooltip-placement="bottom" translate>Save</a>
+    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" uib-tooltip="{{'Click here to conduct the guided tour for the public space' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
 
 </div>
 

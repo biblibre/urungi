@@ -66,7 +66,7 @@
                     <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="criterion.text1" ng-required="filter.promptMandatory == true" style="height: 30px;border-right: 0px">
                     <span class="input-group-btn" >
                         <span class="dropdown" >
-                            <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" tooltip="Click here to select a value" tooltip-placement="bottom">
+                            <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" uib-tooltip="Click here to select a value" tooltip-placement="bottom">
                                 <i class="fa fa-caret-down"></i>
                             </button>
 
@@ -75,7 +75,7 @@
                             </ul>
                         </span>
 
-                        <button type="button" ng-if="!( isPrompt && filter.promptMandatory )" class="btn btn-sm btn-white" ng-click="clearFilter(filter)" style="padding: 5px;width: 21px;    background-color: #ccc;" tooltip="Click here to clear the selected value" tooltip-placement="bottom">
+                        <button type="button" ng-if="!( isPrompt && filter.promptMandatory )" class="btn btn-sm btn-white" ng-click="clearFilter(filter)" style="padding: 5px;width: 21px;    background-color: #ccc;" uib-tooltip="Click here to clear the selected value" tooltip-placement="bottom">
                             <i class="fa fa-times"></i>
                         </button>
 
@@ -104,7 +104,7 @@
                 <span class="input-group-btn" >
                     <span class="dropdown" >
                         <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" 
-                        tooltip="Click here to select a value" tooltip-placement="bottom">
+                        uib-tooltip="Click here to select a value" tooltip-placement="bottom">
                             <i class="fa fa-caret-down"></i>
                         </button>
 
@@ -117,7 +117,7 @@
 
                     </span>
 
-                    <button type="button" class="btn btn-white" ng-if="!( isPrompt && filter.promptMandatory )" ng-click="clearFilter(filter)" style="padding: 5px;width: 21px;    background-color: #ccc;" tooltip="Click here to clear the selected value" tooltip-placement="bottom">
+                    <button type="button" class="btn btn-white" ng-if="!( isPrompt && filter.promptMandatory )" ng-click="clearFilter(filter)" style="padding: 5px;width: 21px;    background-color: #ccc;" uib-tooltip="Click here to clear the selected value" tooltip-placement="bottom">
                         <i class="fa fa-times"></i>
                     </button>
 

@@ -9,8 +9,8 @@
             <div class="container-fluid">
                 <div class="container-fluid branded-border-panel">
                     <h3 class="pull-left" translate>Reports</h3>
-                    <a id="newReportBtn" ng-if="user.reportsCreate" href="/#/reports/new/" class="btn btn-success pull-right" tooltip="{{'Click here to create a new single query report' | translate}}" tooltip-placement="bottom" translate>New Report</a>
-                    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" tooltip="{{'Click here to start the guided tour for reports' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
+                    <a id="newReportBtn" ng-if="user.reportsCreate" href="/#/reports/new/" class="btn btn-success pull-right" uib-tooltip="{{'Click here to create a new single query report' | translate}}" tooltip-placement="bottom" translate>New Report</a>
+                    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" uib-tooltip="{{'Click here to start the guided tour for reports' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
                 </div>
 
                 <div id="reportList" class="list-group">
@@ -52,7 +52,7 @@
                     </div>
 
                     <div id="reportListItem" class="list-group-item row" ng-repeat="report in reports">
-                        <a class="col-md-10" href="/#/reports/view/{{report._id}}" tooltip="Click here to view the report" tooltip-placement="bottom">
+                        <a class="col-md-10" href="/#/reports/view/{{report._id}}" uib-tooltip="Click here to view the report" tooltip-placement="bottom">
                             <span class="col-md-6">
                                 <h4 id="reportListItemName" class="list-group-item-heading" ng-bind="report.reportName"></h4>
                                 <p id="reportListItemDetails" class="list-group-item-text" ng-bind="report.reportDescription"></p>
@@ -66,13 +66,13 @@
                         </a>
 
                         <span class="col-md-2">
-                            <a id="reportListItemDeleteBtn" href="" class="pull-right list-button btn-delete" ng-click="delete(report._id,report.reportName)" tooltip="Click here to delete this report" tooltip-placement="bottom">
+                            <a id="reportListItemDeleteBtn" href="" class="pull-right list-button btn-delete" ng-click="delete(report._id,report.reportName)" uib-tooltip="Click here to delete this report" tooltip-placement="bottom">
                                 <i class="fa fa-trash-o "  ></i>
                             </a>
-                            <a id="reportListItemDuplicateBtn" class="pull-right list-button btn-duplicate" href="" ng-click="viewDuplicationForm(report)" tooltip="Click here to duplicate the SQ report" tooltip-placement="bottom">
+                            <a id="reportListItemDuplicateBtn" class="pull-right list-button btn-duplicate" href="" ng-click="viewDuplicationForm(report)" uib-tooltip="Click here to duplicate the SQ report" tooltip-placement="bottom">
                                 <i class="fa fa-copy" ></i>
                             </a>
-                            <a id="reportListItemEditBtn" class="pull-right list-button btn-edit" href="/#/reports/edit/{{report._id}}"  tooltip="Click here to modify the SQ report" tooltip-placement="bottom">
+                            <a id="reportListItemEditBtn" class="pull-right list-button btn-edit" href="/#/reports/edit/{{report._id}}"  uib-tooltip="Click here to modify the SQ report" tooltip-placement="bottom">
                                 <i class="fa fa-pencil" ></i>
                             </a>
                             <span id="reportListItemPublished" ng-if="report.isPublic" class="badge badge-success pull-right published-tag">published</span>    

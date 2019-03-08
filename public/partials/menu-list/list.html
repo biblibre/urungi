@@ -23,7 +23,7 @@
     <div id="reportListItem" class="list-group-item row" ng-repeat="item in nav.items">
         <span class="col-md-10">
         
-            <a  ng-click="nav.clickItem(item)" tooltip="{{nav.tooltips.itemClick}}" tooltip-placement="bottom">
+            <a  ng-click="nav.clickItem(item)" uib-tooltip="{{nav.tooltips.itemClick}}" tooltip-placement="bottom">
 
                 <span ng-repeat="field in nav.infoFields" ng-class="field.widthClass">
                     <h5 ng-if="!field.date">{{item[field.name]}}</h5>
@@ -34,14 +34,14 @@
             <span ng-if="layerButtons">
                 <a id="layerListItemStatus" class="badge pull-right"  ng-click="toggleActive(item)"
                 ng-class="{'badge-success': item.status == 'active', 'badge-danger': item.status == 'Not active'}" 
-                ng-click="changeLayerStatus(item)" tooltip="Click here to change the status of the layer" tooltip-placement="left">{{item.status}}</a>
+                ng-click="changeLayerStatus(item)" uib-tooltip="Click here to change the status of the layer" tooltip-placement="left">{{item.status}}</a>
             </span>
         </span>
 
         <span  class="col-md-2">
             <span ng-if="nav.deleteButtons">
                 <a class="pull-right list-button btn-delete" ng-click="viewDeleteModal(item)" 
-                tooltip="{{nav.tooltips.delete}}" tooltip-placement="bottom">
+                uib-tooltip="{{nav.tooltips.delete}}" tooltip-placement="bottom">
                 <i class="fa fa-trash-o "  ></i>
                 </a>
             </span>
@@ -50,12 +50,12 @@
             
 
                 <a class="pull-right list-button btn-duplicate" ng-click="viewDuplicateModal(item)" 
-                tooltip="{{nav.tooltips.duplicate}}" tooltip-placement="bottom">
+                uib-tooltip="{{nav.tooltips.duplicate}}" tooltip-placement="bottom">
                     <i class="fa fa-copy" ></i>
                 </a>
 
                 <a class="pull-right list-button btn-edit" href="{{getEditLink(item)}}"  
-                tooltip="{{nav.tooltips.edit}}" tooltip-placement="bottom">
+                uib-tooltip="{{nav.tooltips.edit}}" tooltip-placement="bottom">
                 <i class="fa fa-pencil" ></i>
                 </a>
 

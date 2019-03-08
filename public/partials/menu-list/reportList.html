@@ -11,9 +11,9 @@ class="container-fluid root-container" >
                 <h3 class="pull-left" translate>Reports</h3>
 
                 <a id="newReportButton" ng-if="creationAuthorised" href="/#/reports/new/" class="btn btn-success pull-right" 
-                tooltip="Click here to create a new single query report" tooltip-placement="bottom" translate>Create new report</a>
+                uib-tooltip="Click here to create a new single query report" tooltip-placement="bottom" translate>Create new report</a>
                 <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" 
-                tooltip="{{ 'Follow the guided tour for data sources' | translate }}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+                uib-tooltip="{{ 'Follow the guided tour for data sources' | translate }}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
 
             </div>
 

@@ -7,16 +7,16 @@
 
 
                 <h4 class="modal-title" id="myModalLabel" translate>Select the dashboard to push this report to</h4>
-                <a id="newDashboardBtn" ng-if="user.dashboardsCreate"  class="btn btn-success pull-right" ng-click="reportPushed2Dash('new')" tooltip="{{'Click here to create a new dashboard and push this report in' | translate}}" tooltip-placement="bottom" translate>New Dashboard</a>
+                <a id="newDashboardBtn" ng-if="user.dashboardsCreate"  class="btn btn-success pull-right" ng-click="reportPushed2Dash('new')" uib-tooltip="{{'Click here to create a new dashboard and push this report in' | translate}}" tooltip-placement="bottom" translate>New Dashboard</a>
             </div>
             <div id="searchModalBody" class="modal-body" ng-init="setHeight('searchModalBody', 'full', -118)">
                 <div  id="reportListItem" class="list-group-item" ng-repeat="dashboard in dashboards.items">
 
-                        <a id="pushToDashBtn" ng-click="reportPushed2Dash(dashboard._id)" class="pull-right" style="color:#000080; font-size: 16px;margin-right: 3px;" tooltip="{{'Click here to modify this dashboard' | translate}}" tooltip-placement="bottom" translate>
+                        <a id="pushToDashBtn" ng-click="reportPushed2Dash(dashboard._id)" class="pull-right" style="color:#000080; font-size: 16px;margin-right: 3px;" uib-tooltip="{{'Click here to modify this dashboard' | translate}}" tooltip-placement="bottom" translate>
                             push
                         </a>
 
-                        <a   ng-click="reportPushed2Dash(dashboard._id)"  tooltip="{{'Click here to select this dashboard' | translate}}" tooltip-placement="bottom">
+                        <a   ng-click="reportPushed2Dash(dashboard._id)"  uib-tooltip="{{'Click here to select this dashboard' | translate}}" tooltip-placement="bottom">
                             <h4 id="reportListItemName" class="list-group-item-heading" ng-bind="dashboard.dashboardName"></h4>
                             <p id="reportListItemDetails" class="list-group-item-text" ng-bind="dashboard.dashboardDescription"></p>
                         </a>

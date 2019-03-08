@@ -114,7 +114,7 @@
                                                 <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="rootItem.editing = true; elementEditing = true;">Edit</div>
                                             </div>
 
-                                            <div ng-if="rootItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="rootItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o save-folder-element-btn-icon" tooltip="{{'Save folder label' | translate}}"></i></div>
+                                            <div ng-if="rootItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="rootItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o save-folder-element-btn-icon" uib-tooltip="{{'Save folder label' | translate}}"></i></div>
                                         </div>
                                         <ul ng-if="rootItem.elementRole == 'folder' || rootItem.elementRole == 'root'" class="schema-container list-group" ui-sortable="sortableOptions" ng-model="rootItem.elements"
                                             ng-class="{'schema-element-container-placeholder': onDrag, 'schema-element-container-default': !onDrag}">
@@ -193,7 +193,7 @@
                                                                 <i class="fa fa-cube wst-main-color" ng-show="field.elementType == 'string'" data-toggle="tooltip" data-placement="top" ng-class="{'unselected-datasource': (selectedDts.id && selectedDts.id != item._id)}"></i>
                                                                 <i class="fa fa-calendar-o wst-main-color" ng-show="field.elementType == 'date'" data-toggle="tooltip" data-placement="top" ng-class="{'unselected-datasource': (selectedDts.id && selectedDts.id != item._id)}"></i>
                                                             </td>
-                                                            <td class="layer-tree-td-name" tooltip="{{field.elementName}}"> {{field.elementName}}</td>
+                                                            <td class="layer-tree-td-name" uib-tooltip="{{field.elementName}}"> {{field.elementName}}</td>
 
                                                         </tr>
                                                       </table>
@@ -251,7 +251,7 @@
                             
                                 <span>
                                     <i ng-hide="allElementsAdded(collection)" class="jtk-field-icon fa fa-plus-square" ng-click="promptAddAll(collection)" 
-                                    tooltip="Add all" ></i>
+                                    uib-tooltip="Add all" ></i>
                                     <i ng-show="allElementsAdded(collection)" class="jtk-field-selected fa fa-check-square" ></i>
                                 </span>
                             </span>

@@ -21,7 +21,7 @@
             <span translate>Quick display with</span>
             <input type="number" ng-model="selectedRecordLimit.value" size="8">
             <span translate>results.</span>
-            <button id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
+            <button id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" uib-tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
         </span>
         <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
         <span class="pull-right">

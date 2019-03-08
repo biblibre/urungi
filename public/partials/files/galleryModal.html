@@ -13,7 +13,7 @@
                 <li ng-repeat="file in files">
                     <a class="hand-cursor file-selection" ng-hide="file.loading" ng-click="onFileSelected(file)">
                         <!-- <span class="label label-success dz-label" translate>success</span> -->
-                        <img class="dz-image" alt="{{file.description}}" tooltip="{{file.name}}" ng-src="{{file.url}}" />
+                        <img class="dz-image" alt="{{file.description}}" uib-tooltip="{{file.name}}" ng-src="{{file.url}}" />
                     </a>
                     <a class="hand-cursor file-selection" ng-show="file.loading">
                         <img class="dz-image" src="/images/loader.gif" />

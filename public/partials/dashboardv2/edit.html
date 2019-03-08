@@ -9,11 +9,11 @@
         </div>
 
         <div class="explorer-header-buttons">
-            <a id="saveDashboardBtn" data-ng-click="dashboardName()" class="btn btn-success" style="margin-left: 5px" tooltip="{{'Click here to save the dashboard changes' | translate}}" tooltip-placement="bottom" translate>Save</a>
+            <a id="saveDashboardBtn" data-ng-click="dashboardName()" class="btn btn-success" style="margin-left: 5px" uib-tooltip="{{'Click here to save the dashboard changes' | translate}}" tooltip-placement="bottom" translate>Save</a>
 
-            <a ng-click="goBack();" class="btn btn-default" tooltip="{{'Click here to cancel and backtrack' | translate}}" tooltip-placement="bottom">Cancel</a>
+            <a ng-click="goBack();" class="btn btn-default" uib-tooltip="{{'Click here to cancel and backtrack' | translate}}" tooltip-placement="bottom">Cancel</a>
 
-            <a class="btn btn-info" ng-click="showIntro()" style="margin-right:3px;" tooltip="{{'Click here to conduct the guided tour for dashboards' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
+            <a class="btn btn-info" ng-click="showIntro()" style="margin-right:3px;" uib-tooltip="{{'Click here to conduct the guided tour for dashboards' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
         </div>
 
     </div>
@@ -105,10 +105,10 @@
         color: #979898;
         margin-left: 7px;
         line-height: 1;">x</button>-->
-                            <a id="reportListItemDeleteBtn" href="" class="pull-right  list-button btn-delete" ng-click="deleteReport(item.id,item.reportName)"  tooltip="{{ 'Click here to delete this report' | translate }}" tooltip-placement="bottom">
+                            <a id="reportListItemDeleteBtn" href="" class="pull-right  list-button btn-delete" ng-click="deleteReport(item.id,item.reportName)"  uib-tooltip="{{ 'Click here to delete this report' | translate }}" tooltip-placement="bottom">
                                 <i class="fa fa-trash-o "  ></i>
                             </a>
-                            <a id="reportListItemEditBtn" class="pull-right  list-button" ng-click="loadReport(item)"  tooltip="{{ 'Click here to edit this report' | translate }}" tooltip-placement="bottom">
+                            <a id="reportListItemEditBtn" class="pull-right  list-button" ng-click="loadReport(item)"  uib-tooltip="{{ 'Click here to edit this report' | translate }}" tooltip-placement="bottom">
                                 <i class="fa fa-pencil" ></i>
                             </a>
                             </div>
