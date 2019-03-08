@@ -196,7 +196,7 @@ a:focus {
 }
 
 .featurette-divider {
-    border: solid #444 3px;
+    border-top: 3px solid #ccc;
 }
 
 .jumbotron p {
@@ -205,8 +205,8 @@ a:focus {
 }
 
 .ndContainer > h3 {
-    background-color: #444;
-    color: #fff;
+    background-color: #ccc;
+    color: #444;
     border: none;
     text-align: center;
 }

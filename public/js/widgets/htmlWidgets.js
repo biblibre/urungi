@@ -125,7 +125,7 @@ app.service('htmlWidgets', function () {
     };
 
     this.getDivider = function () {
-        return '<hr page-block class="featurette-divider" ndType="featureteDivider" style="padding: 5px;">';
+        return '<hr page-block class="featurette-divider" ndType="featureteDivider">';
     };
 
     this.getImage = function (imageURL) {
