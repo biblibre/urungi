@@ -7,7 +7,7 @@
         <span ng-if="(filter.elementType == 'date' && (filter.filterType != 'null' && filter.filterType != 'notNull'))">
 
             <!--preformated date selector -->
-            <div class="input-group" dropdown ng-if="filter.filterType == 'equal-pattern' || filter.filterType == 'diferentThan-pattern' || filter.filterType == 'biggerThan-pattern' || filter.filterType == 'biggerOrEqualThan-pattern' || filter.filterType == 'lessThan-pattern' || filter.filterType == 'lessOrEqualThan-pattern'">
+            <div class="input-group" uib-dropdown ng-if="filter.filterType == 'equal-pattern' || filter.filterType == 'diferentThan-pattern' || filter.filterType == 'biggerThan-pattern' || filter.filterType == 'biggerOrEqualThan-pattern' || filter.filterType == 'lessThan-pattern' || filter.filterType == 'lessOrEqualThan-pattern'">
                 <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-value="criterion.label" ng-readonly="true">
                 <span class="input-group-btn" >
                     <span class="dropdown" >
@@ -97,7 +97,7 @@
             <!--between-->
             <span ng-show="filter.filterType == 'between' || filter.filterType == 'notBetween'">AND</span>
 
-            <span class="input-group" dropdown ng-show="filter.filterType == 'between' || filter.filterType == 'notBetween'">
+            <span class="input-group" uib-dropdown ng-show="filter.filterType == 'between' || filter.filterType == 'notBetween'">
 
                 <input placeholder="{{filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="criterion.text2" ng-required="filter.promptMandatory == true" style="height: 30px;border-right: 0px">
 
