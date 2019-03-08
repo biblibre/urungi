@@ -7,7 +7,6 @@ app.directive('ndPrompt', function (reportModel) {
 
             isPrompt: '=',
             filter: '=',
-            index: '=',
             onChange: '=',
 
             setPrompt: '=',
@@ -113,23 +112,11 @@ app.directive('ndPrompt', function (reportModel) {
             });
 
             $scope.update = function () {
-                if (!$scope.isPrompt) {
-                    if ($scope.filter.filterPrompt) {
-                        $scope.filter.filterValuesQuery = $scope.getQuery($scope.filter, $scope.index);
-                    } else {
-                        $scope.filterValuesQuery = $scope.getQuery($scope.filter, $scope.index);
-                    }
-                }
                 $scope.loadFilterValues();
             };
 
             $scope.loadFilterValues = function () {
-                var fQuery;
-                if ($scope.filter.filterPrompt) {
-                    fQuery = $scope.filter.filterValuesQuery;
-                } else {
-                    fQuery = $scope.filterValuesQuery;
-                }
+                const fQuery = $scope.getQuery($scope.filter);
 
                 return reportModel.fetchData(fQuery).then(function (result) {
                     var possibleValues = new Set();

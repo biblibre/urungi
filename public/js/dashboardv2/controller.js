@@ -348,6 +348,27 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q,
         }
     };
 
+    $scope.getQueryForFilter = function (filter) {
+        const query = {
+            layerID: filter.layerID,
+            columns: [
+                {
+                    id: 'f',
+                    collectionID: filter.collectionID,
+                    datasourceID: filter.datasourceID,
+                    elementID: filter.elementID,
+                    elementName: filter.elementName,
+                    elementType: filter.elementType,
+                    layerID: filter.layerID,
+                }
+            ],
+            order: [],
+            filters: [],
+        };
+
+        return query;
+    };
+
     var reportBackup;
     $scope.loadReport = function (report) {
         $scope.reportInterface = true;

@@ -525,14 +525,10 @@ app.controller('reportCtrl', function ($scope, connection, $compile, reportServi
         return query;
     };
 
-    $scope.getQueryForFilter = function (filter, filterIndex) {
+    $scope.getQueryForFilter = function (filter) {
         const query = $scope.generateQuery();
 
-        query.filters.splice(filterIndex, 1);
-
-        for (var fil of query.filters) {
-            delete fil.filterValuesQuery;
-        }
+        query.filters = query.filters.filter(f => f !== filter);
 
         var newColumn = {
             id: 'f',

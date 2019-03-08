@@ -29,7 +29,7 @@
 
         <div class="container-fluid" ng-repeat="prompt in getPrompts()" style="padding-bottom: 5px; max-width: 800px">
     
-            <nd-prompt is-prompt="true" filter="prompt" on-change="repaintWithPrompts"></nd-prompt>
+            <nd-prompt is-prompt="true" filter="prompt" on-change="repaintWithPrompts" get-query="getQueryForFilter"></nd-prompt>
     
         </div>
     </div>
