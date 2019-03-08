@@ -73,7 +73,7 @@
                     {{rootItem.elementLabel}}
                 </a>
             </div>
-            <div collapse="!rootItem.isCollapsed && rootItem.elementRole != 'root'" style="padding-left=10px">
+            <div uib-collapse="!rootItem.isCollapsed && rootItem.elementRole != 'root'" style="padding-left=10px">
             <ul ng-if="rootItem.elementRole == 'folder' || rootItem.elementRole == 'root'" class="schema-container-report list-group" ng-class="">
                 <li class="innerCont list-group-item hand-cursor schema-item-report" ng-repeat="rootItem in rootItem.elements">
                     <ng-include src="'nestable_item.html'"></ng-include>
