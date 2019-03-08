@@ -1,6 +1,7 @@
 /* LOGIN */
 
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -15,7 +16,7 @@ html, body {
 
 .row .login-header {
     padding: 20px;
-    width:500px;
+    width: 500px;
 }
 
 .page-container {
@@ -38,7 +39,6 @@ html, body {
     padding: 0 30px;
 }
 
-
 .login-page .login-form {
     position: relative;
     padding: 30px;
@@ -50,14 +50,13 @@ html, body {
     -webkit-opacity: 0;
     -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-filter: alpha(opacity=0);
--webkit-transition: all 800ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
--moz-transition: all 800ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
--o-transition: all 800ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
-transition: all 800ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
-    }
-
+    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
+    filter: alpha(opacity=0);
+    -webkit-transition: all 800ms cubic-bezier(0.39, 0.575, 0.565, 1);
+    -moz-transition: all 800ms cubic-bezier(0.39, 0.575, 0.565, 1);
+    -o-transition: all 800ms cubic-bezier(0.39, 0.575, 0.565, 1);
+    transition: all 800ms cubic-bezier(0.39, 0.575, 0.565, 1);
+}
 
 .login-page .login-form.fade-in-effect.in {
     left: 0;
@@ -65,32 +64,32 @@ transition: all 800ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
     -webkit-opacity: 1;
     -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-filter: alpha(opacity=100);
-    }
+    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
+    filter: alpha(opacity=100);
+}
 
 .login-page .login-form .login-header {
     margin-bottom: 40px;
-
 }
 
 .login-page .login-form .login-header .logo {
     display: block;
-        
 }
-.logo{
+
+.logo {
     width: 500px;
 }
-a.logo{
+
+a.logo {
     width: 500px;
 }
+
 .login-page .login-form .login-header p {
     color: #979898;
     font-size: 13px;
     margin: 0;
     margin-top: 10px;
 }
-
 
 .login-page .login-form .form-group {
     position: relative;
@@ -103,17 +102,17 @@ a.logo{
     -webkit-opacity: 0;
     -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-filter: alpha(opacity=0);
--webkit-transition: all 500ms ease-out;
--moz-transition: all 500ms ease-out;
--o-transition: all 500ms ease-out;
-transition: all 500ms ease-out;
--webkit-transition-delay: 150ms;
--moz-transition-delay: 150ms;
--o-transition-delay: 150ms;
-transition-delay: 150ms;
-    }
+    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
+    filter: alpha(opacity=0);
+    -webkit-transition: all 500ms ease-out;
+    -moz-transition: all 500ms ease-out;
+    -o-transition: all 500ms ease-out;
+    transition: all 500ms ease-out;
+    -webkit-transition-delay: 150ms;
+    -moz-transition-delay: 150ms;
+    -o-transition-delay: 150ms;
+    transition-delay: 150ms;
+}
 
 .login-page .login-form.fade-in-effect.in .form-group {
     top: 0;
@@ -121,9 +120,9 @@ transition-delay: 150ms;
     -webkit-opacity: 1;
     -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-filter: alpha(opacity=100);
-    }
+    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
+    filter: alpha(opacity=100);
+}
 
 .login-page .login-form .form-group .control-label {
     line-height: 40px;
@@ -182,9 +181,8 @@ filter: alpha(opacity=100);
     color: rgba(151, 152, 152, 0.7);
 }
 
-#login-btn
-{
- background-color: #de87aa;
+#login-btn {
+    background-color: #de87aa;
 }
 
 .button {
@@ -220,7 +218,7 @@ filter: alpha(opacity=100);
     width: 100%;
 }
 
-.button-gapps:before {
+.button-gapps::before {
     background: url(/images/google.svg);
     background-size: cover;
     content: "";
@@ -233,33 +231,9 @@ filter: alpha(opacity=100);
 
 footer {
     background: #2c2e2f;
-    padding:25px;
+    padding: 25px;
 }
 
 footer a {
-    color:white;
+    color: white;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
