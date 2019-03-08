@@ -1,11 +1,12 @@
-/* Urungi palette
-
-#666666 	rgb(102, 102, 102)
-#afe9c6 	rgb(175, 233, 198)
-#de87aa 	rgb(222, 135, 170)
-#afe9dd 	rgb(175, 233, 221)
-#ffeeaa 	rgb(255, 238, 170)
-*/
+/*
+ * Urungi palette
+ *
+ * Dark grey   #666666 rgb(102, 102, 102)
+ * Green       #afe9c6 rgb(175, 233, 198)
+ * Pink        #de87aa rgb(222, 135, 170)
+ * Blue        #afe9dd rgb(175, 233, 221)
+ * Yellow      #ffeeaa rgb(255, 238, 170)
+ */
 
 html {
     background-color: #f9f9f9;
