@@ -1,12 +1,9 @@
-/* global fontAwesomeIconsList: false */
-
 angular.module('dbteam.builder', [])
 
     .factory('textStyles', function () {
         return {
             fontSizes: [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72],
             fontWeights: [100, 200, 300, 400, 500, 600, 700, 800, 900, 'bold', 'bolder', 'light', 'lighter', 'normal'],
-            fontAwesomeIconList: fontAwesomeIconsList,
             baseFonts: [
                 {name: 'Impact', css: 'Impact, Charcoal, sans-serif'},
                 {name: 'Comic Sans', css: '"Comic Sans MS", cursive, sans-serif'},

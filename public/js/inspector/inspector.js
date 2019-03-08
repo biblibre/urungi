@@ -901,7 +901,7 @@ angular.module('wst.inspector', [])
         };
     }])
 
-    .directive('wstInspector', function ($compile, icons, c3Charts, $rootScope, textStyles, $window) {
+    .directive('wstInspector', function ($compile, c3Charts, $rootScope, textStyles, $window) {
         return {
             transclude: true,
             scope: {

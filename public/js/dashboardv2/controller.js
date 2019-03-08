@@ -1,5 +1,5 @@
 app.controller('dashBoardv2Ctrl', function ($scope, $location, $q,
-    reportService, connection, $routeParams, reportModel, c3Charts, uuid2, icons,
+    reportService, connection, $routeParams, reportModel, c3Charts, uuid2,
     colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout,
     $rootScope, PagerService, gettextCatalog, usersModel
 ) {
@@ -21,7 +21,6 @@ app.controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     $scope.lastElementID = 0;
     $scope.dataPool = [];
 
-    // $scope.faList = icons.faList;
     // $scope.colors = colors.colors;
     $scope.hiddenXS = false;
     $scope.hiddenSM = false;

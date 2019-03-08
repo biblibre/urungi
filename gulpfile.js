@@ -13,6 +13,10 @@ gulp.task('clean:css', function () {
     return del('dist/css/*');
 });
 
+gulp.task('clean:fonts', function () {
+    return del('dist/fonts/*');
+});
+
 gulp.task('clean:translations', function () {
     return del('dist/translations/*');
 });
@@ -77,11 +81,21 @@ gulp.task('dist:css', ['clean:css'], function () {
         'node_modules/angular-bootstrap-colorpicker/css/colorpicker.min.css',
         'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
         'node_modules/cynteka-pivot-table-jquery/dist/jquery.cy-pivot.min.css',
+        'node_modules/font-awesome/css/font-awesome.min.css',
     ];
 
     return gulp.src(paths)
         .pipe(concat('bundle.min.css'))
         .pipe(gulp.dest('dist/css'));
+});
+
+gulp.task('dist:fonts', ['clean:fonts'], function () {
+    const paths = [
+        'node_modules/font-awesome/fonts/*',
+    ];
+
+    return gulp.src(paths)
+        .pipe(gulp.dest('dist/fonts'));
 });
 
 gulp.task('dist:translations', ['clean:translations'], function () {
@@ -90,7 +104,7 @@ gulp.task('dist:translations', ['clean:translations'], function () {
         .pipe(gulp.dest('dist/translations'));
 });
 
-gulp.task('dist', ['dist:js', 'dist:css', 'dist:translations']);
+gulp.task('dist', ['dist:js', 'dist:css', 'dist:fonts', 'dist:translations']);
 
 gulp.task('pot', function () {
     return gulp.src(['public/js/**/*.js', 'public/partials/**/*.html'], { base: '.' })

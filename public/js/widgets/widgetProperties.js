@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootScope, Inspector) {
+app.directive('wstWidgetProperties', function ($compile, c3Charts, $rootScope, Inspector) {
     return {
         transclude: true,
         scope: {
@@ -66,7 +66,6 @@ app.directive('wstWidgetProperties', function ($compile, icons, c3Charts, $rootS
                 // getElementProperties();
             });
 
-            $scope.faList = icons.faList;
             $scope.imageFilters = [];
             $scope.imageFilters.opacity = 100;
 

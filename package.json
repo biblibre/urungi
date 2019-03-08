@@ -39,6 +39,7 @@
     "express": "^4.16.3",
     "express-ejs-layouts": "~1.1.0",
     "express-session": "^1.15.6",
+    "font-awesome": "^4.7.0",
     "jdbc": "^0.6.3",
     "jquery": "^2.1.4",
     "jquery-validation": "^1.18.0",
