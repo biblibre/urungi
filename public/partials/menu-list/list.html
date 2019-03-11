@@ -12,7 +12,7 @@
                         <i ng-show="nav.sortTypes[field.name] === -1" class="fa fa-angle-up" ></i>
                     </a>
                 </h4>
-                </br>
+                <br>
                 <input ng-if="!field.date" type="text" ng-model="nav.filters[field.name]" 
                 ng-keydown="filterKeydown($event)" ng-blur="filterBlur($event)">
             </span>
@@ -27,14 +27,14 @@
 
                 <span ng-repeat="field in nav.infoFields" ng-class="field.widthClass">
                     <h5 ng-if="!field.date">{{item[field.name]}}</h5>
-                    <h6 ng-if="field.date">{{item[field.name] | date}}</h5>
+                    <h6 ng-if="field.date">{{item[field.name] | date}}</h6>
                 </span>
 
             </a>
             <span ng-if="layerButtons">
                 <a id="layerListItemStatus" class="badge pull-right"  ng-click="toggleActive(item)"
                 ng-class="{'badge-success': item.status == 'active', 'badge-danger': item.status == 'Not active'}" 
-                ng-click="changeLayerStatus(item)" uib-tooltip="Click here to change the status of the layer" tooltip-placement="left">{{item.status}}</a>
+                uib-tooltip="Click here to change the status of the layer" tooltip-placement="left">{{item.status}}</a>
             </span>
         </span>
 

@@ -25,7 +25,7 @@
                                     <i ng-show="navigation.sortTypes.reportName === -1" class="fa fa-angle-up" ></i>
                                 </a>
                                 </h4>
-                                </br>
+                                <br>
                                 <input type="text" ng-model="navigation.filters.reportName" ng-keydown="listFilterKeydown($event)">
                             </span>
                             <span class="col-md-3">
@@ -36,7 +36,7 @@
                                     <i ng-show="navigation.sortTypes.author === -1" class="fa fa-angle-up" ></i>
                                 </a>
                                 </h4>
-                                </br>
+                                <br>
                                 <input type="text" ng-model="navigation.filters.author" ng-keydown="listFilterKeydown($event)">
                             </span>
                             <span class="col-md-3">
@@ -58,7 +58,7 @@
                                 <p id="reportListItemDetails" class="list-group-item-text" ng-bind="report.reportDescription"></p>
                             </span>
                             <span class="col-md-3">
-                                <h5 ng-bind="report.author"></h6>
+                                <h5 ng-bind="report.author"></h5>
                             </span>
                             <span class="col-md-3">
                                 <h6 ng-bind="report.createdOn | date"></h6>
@@ -81,27 +81,26 @@
                     </div>
 
                     <div ng-if="navigation.pager.totalPages > 1" class="container-fluid">
-                     <ul class="pagination">
-                        <li ng-class="{disabled:navigation.pager.currentPage === 1}">
-                            <a ng-click="gotToPage(1)">First</a>
-                        </li>
-                        <li ng-class="{disabled:navigation.pager.currentPage === 1}">
-                            <a ng-click="gotToPage(navigation.pager.currentPage - 1)">Previous</a>
-                        </li>
-                        <li ng-repeat="page in navigation.pager.pages" ng-class="{active:navigation.pager.currentPage === page}">
-                            <a ng-click="gotToPage(page)">{{page}}</a>
-                        </li>
-                        <li ng-class="{disabled:navigation.pager.currentPage === navigation.pager.totalPages}">
-                            <a ng-click="gotToPage(navigation.pager.currentPage + 1)">Next</a>
-                        </li>
-                        <li ng-class="{disabled:navigation.pager.currentPage === navigation.pager.totalPages}">
-                            <a ng-click="gotToPage(navigation.pager.totalPages)">Last</a>
-                        </li>
-                    </ul>
-
+                        <ul class="pagination">
+                            <li ng-class="{disabled:navigation.pager.currentPage === 1}">
+                                <a ng-click="gotToPage(1)">First</a>
+                            </li>
+                            <li ng-class="{disabled:navigation.pager.currentPage === 1}">
+                                <a ng-click="gotToPage(navigation.pager.currentPage - 1)">Previous</a>
+                            </li>
+                            <li ng-repeat="page in navigation.pager.pages" ng-class="{active:navigation.pager.currentPage === page}">
+                                <a ng-click="gotToPage(page)">{{page}}</a>
+                            </li>
+                            <li ng-class="{disabled:navigation.pager.currentPage === navigation.pager.totalPages}">
+                                <a ng-click="gotToPage(navigation.pager.currentPage + 1)">Next</a>
+                            </li>
+                            <li ng-class="{disabled:navigation.pager.currentPage === navigation.pager.totalPages}">
+                                <a ng-click="gotToPage(navigation.pager.totalPages)">Last</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                </div>
+            </div>
         </div>
     </div>
 </div>
-

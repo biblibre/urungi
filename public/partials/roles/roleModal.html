@@ -51,106 +51,107 @@
 
                 </div>
             </div>
-        <div class="panel-body">
+            <div class="panel-body">
 
-            <div class="tab-content" >
-                <div class="tab-pane " ng-class="{'active': tabbed_panel_active == 1}">
-                <div class="container-fluid" >
+                <div class="tab-content" >
+                    <div class="tab-pane " ng-class="{'active': tabbed_panel_active == 1}">
+                    <div class="container-fluid" >
 
-                        <div class="row">
-                            <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
 
-                                <div class="form-group">
-                                    <label for="field-3" class="control-label" translate>Role name</label>
-                                    <input id="field-3" class="form-control" ng-model="_Role.name" required>
+                                    <div class="form-group">
+                                        <label for="field-3" class="control-label" translate>Role name</label>
+                                        <input id="field-3" class="form-control" ng-model="_Role.name" required>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-
-
-                            </div>
-                        </div>
-
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="field-5" class="control-label" translate>Description</label>
-                                    <textarea ng-model="_Role.description" class="form-control autogrow" id="field-5"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-
-                                    <label class="control-label" translate>Permissions</label>
-
-                                    <table class="table table-bordered table-striped table-condensed table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th translate>Create reports</th>
-                                                <td style="text-align: center"><input type="checkbox" ng-model="_Role.reportsCreate"></td>
-                                            </tr>
-                                            <tr>
-                                                <th translate>Create dashboards</th>
-                                                <td style="text-align: center"><input type="checkbox" ng-model="_Role.dashboardsCreate"></td>
-                                            </tr>
-                                            <tr>
-                                                <th translate>Create pages</th>
-                                                <td style="text-align: center"><input type="checkbox" ng-model="_Role.pagesCreate"></td>
-                                            </tr>
-                                            <tr>
-                                                <th translate>Explore data</th>
-                                                <td style="text-align: center"><input type="checkbox" ng-model="_Role.exploreData"></td>
-                                            </tr>
-                                            <tr>
-                                                <th translate>See SQL</th>
-                                                <td style="text-align: center"><input type="checkbox" ng-model="_Role.viewSQL"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-
-
+                                <div class="col-md-6">
 
 
                                 </div>
-
-
                             </div>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="field-5" class="control-label" translate>Description</label>
+                                        <textarea ng-model="_Role.description" class="form-control autogrow" id="field-5"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+
+                                        <label class="control-label" translate>Permissions</label>
+
+                                        <table class="table table-bordered table-striped table-condensed table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th translate>Create reports</th>
+                                                    <td style="text-align: center"><input type="checkbox" ng-model="_Role.reportsCreate"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th translate>Create dashboards</th>
+                                                    <td style="text-align: center"><input type="checkbox" ng-model="_Role.dashboardsCreate"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th translate>Create pages</th>
+                                                    <td style="text-align: center"><input type="checkbox" ng-model="_Role.pagesCreate"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th translate>Explore data</th>
+                                                    <td style="text-align: center"><input type="checkbox" ng-model="_Role.exploreData"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th translate>See SQL</th>
+                                                    <td style="text-align: center"><input type="checkbox" ng-model="_Role.viewSQL"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+
+
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                    </div>  <!--container-fluid-->
+
+                </div>  <!--tab 1-->
+
+                    <div   class="tab-pane" ng-class="{'active': tabbed_panel_active == 2}">
+                        <div class="row tree-node-content">
+                            <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute pages</span>
+                            <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute reports</span>
+                            <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute dashboards</span>
+                            <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Publish</span>
                         </div>
-
-                </div>  <!--container-fluid-->
-
-            </div>  <!--tab 1-->
-
-                <div   class="tab-pane" ng-class="{'active': tabbed_panel_active == 2}">
-                    <div class="row tree-node-content">
-                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute pages</span>
-                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute reports</span>
-                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute dashboards</span>
-                        <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Publish</span>
-                    </div>
-                    <div ui-tree id="tree-root">
-                        <ol ui-tree-nodes ng-model="publicSpace">
-                            <li ng-repeat="node in publicSpace" ui-tree-node ng-include="'role_grant_renderer.html'"></li>
-                        </ol>
-                    </div>
-                </div> <!--tab 2-->
+                        <div ui-tree id="tree-root">
+                            <ol ui-tree-nodes ng-model="publicSpace">
+                                <li ng-repeat="node in publicSpace" ui-tree-node ng-include="'role_grant_renderer.html'"></li>
+                            </ol>
+                        </div>
+                    </div> <!--tab 2-->
 
 
-            </div> <!--tab content-->
-        </div> <!--body-->
-    </div><!--panel-->
+                </div> <!--tab content-->
+            </div> <!--body-->
+        </div><!--panel-->
+    </div>
 
     <div ng-if="roleEditingWarning && roleEditingWarning != ''" class="alert-block">{{roleEditingWarning}}</div>
 

@@ -59,21 +59,20 @@
             <button type="button" class="btn btn-info" ng-disabled="sqlLayerForm.$invalid  || sqlLayerForm.$pristine" 
             ng-if="temporarySQLCollection.mode === 'edit'" ng-click="saveSQLChanges()" translate>Save changes</button>
         </div>
-        </form>
-
     </span>
+    </form>
 
     <span ng-if="newSQLCollection">
 
         <div class="modal-body ng-scope">
 
             <h4 translate>Please confirm your modification</h4>
-            </br>
+            <br>
 
             <div class="row">
                 <div class="col-md-4">
                     <h6 translate>The following columns will be kept :</h6>
-                    </br>
+                    <br>
                     <ul>
                         <li ng-repeat="el in matchedElements">
                             {{el.elementName}}
@@ -83,7 +82,7 @@
 
                 <div class="col-md-4">
                     <h6 translate>The following columns will be added :</h6>
-                    </br>
+                    <br>
                     <ul>
                         <li ng-repeat="el in newElements">
                             {{el.elementName}}
@@ -93,7 +92,7 @@
 
                 <div class="col-md-4">
                     <h6 translate>The following columns will be removed :</h6>
-                    </br>
+                    <br>
                     <ul>
                         <li ng-repeat="el in lostElements">
                             {{el.elementName}}

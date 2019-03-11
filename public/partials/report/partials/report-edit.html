@@ -21,11 +21,11 @@
             <span translate>Quick display with</span>
             <input type="number" ng-model="selectedRecordLimit.value" size="8">
             <span translate>results.</span>
-            <button id="setLimit" class="btn btn-default" class="pull-right" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" uib-tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
+            <button id="setLimit" class="btn btn-default" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" uib-tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
         </span>
-        <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" class="pull-right" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
+        <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
         <span class="pull-right">
-            <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" class="pull-right" ng-click="refresh();" style="padding: 3px 10px;">
+            <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" ng-click="refresh();" style="padding: 3px 10px;">
                 <i class="fa fa-refresh hand-cursor"></i>
                 <span translate>Refresh data</span>
                 <span ng-if="time !== undefined">({{time}}ms)</span>
@@ -36,8 +36,8 @@
 
 <div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width:100%">
 
-    <button class="btn btn-success pull-right" ng-if="user.reportsCreate" ng-click="reportName()" style="margin-left:5px;"translate>Save as a report</button>
-    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left:5px;"translate>Push it to a Dashboard</button>
+    <button class="btn btn-success pull-right" ng-if="user.reportsCreate" ng-click="reportName()" style="margin-left:5px;" translate>Save as a report</button>
+    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left:5px;" translate>Push it to a Dashboard</button>
 </div>
 <div class="container-fluid" ng-show="sql && isForDash" style="width:100%">
     <button class="btn btn-success pull-right"  style="margin-left:5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();" translate>Save</button>

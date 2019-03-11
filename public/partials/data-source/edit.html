@@ -1,4 +1,4 @@
-<div class="container-fluid" class="branded-border-panel" >
+<div class="container-fluid">
     <a ng-click="save()" ng-disabled="(!_dataSource.type == 'BIGQUERY' && (!_dataSource.connection.host || !_dataSource.connection.port || !_dataSource.connection.database || testingConnection)) || (_dataSource.type == 'BIGQUERY' && (!_dataSource.connection.database) || testingConnection) " class="btn btn-success pull-right" style="margin-left: 5px;margin-right: 5px;" translate>Save Datasource</a>
     <a href="/#/data-sources" class="btn btn-default  pull-right" translate>Cancel</a>
 </div>

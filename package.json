@@ -79,6 +79,7 @@
     "gulp-angular-gettext": "^2.2.0",
     "gulp-concat": "^2.6.1",
     "gulp-decomment": "^0.2.0",
+    "htmlhint": "^0.11.0",
     "merge-stream": "^1.0.1",
     "mocha": "^5.1.1",
     "npm-run-all": "^4.1.5",
@@ -90,7 +91,8 @@
     "test": "mocha",
     "posttest": "run-s -s -c lint:*",
     "lint:js": "eslint .",
-    "lint:css": "stylelint public/css"
+    "lint:css": "stylelint public/css",
+    "lint:html": "htmlhint"
   },
   "repository": {
     "type": "git",

@@ -144,7 +144,7 @@
                             <li  ng-repeat="item in datasources" ui-tree-node>
                               <div ui-tree-handle class="layer-tree-datasource" style="cursor: pointer"  ng-class="{'unselected-datasource': ((selectedDts.id && selectedDts.id != item._id) || item.status == -1),  'selected-datasource': selectedDts.id == item._id }">
 
-                                    <i ng-if="!item.isCollapsed" ng-click="getDatasetsForThisDts(item._id,item)" class="fa fa-plus-square" ng-click="item.isCollapsed = !item.isCollapsed" ></i>
+                                    <i ng-if="!item.isCollapsed" ng-click="getDatasetsForThisDts(item._id,item)" class="fa fa-plus-square"></i>
                                     <i ng-if="item.isCollapsed" class="fa fa-minus-square" ng-click="item.isCollapsed = !item.isCollapsed" ></i>
 
 

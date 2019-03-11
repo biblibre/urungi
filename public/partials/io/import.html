@@ -42,9 +42,9 @@
         </span>
     
         <button class="btn btn-success" ng-click="startImport()" ng-show="importFile">import</button>
-        </br>
+        <br>
         <div class="btn btn-default" ng-app="fileUpload" ngf-select="upload($file)">Choose file to import</div>
-        </br>
+        <br>
         <a class="btn btn-default" href="/#/home">back</a>
     </span>
 
@@ -115,7 +115,7 @@
     <span ng-if="state === 4">
         <h4>An error has occurred</h4>
         <button ng-click="logError()">log error in console</button>
-        </br>
+        <br>
         <button ng-click="initImport()">Import new file</button>
         <a class="button" href="/#/home">Back to main page</a>
     </span>
