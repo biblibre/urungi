@@ -1,4 +1,4 @@
-app.service('colors', function () {
+angular.module('app').service('colors', function () {
     this.colors = [
         '#FFFFFF',
         '#CCCCCC',

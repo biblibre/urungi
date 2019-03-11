@@ -1,4 +1,4 @@
-app.directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, verticalGrid, pivot, uuid2) {
+angular.module('app').directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, verticalGrid, pivot, uuid2) {
     return {
 
         scope: {

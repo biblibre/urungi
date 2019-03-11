@@ -1,6 +1,6 @@
 /* global c3:false */
 
-app.service('c3Charts', function () {
+angular.module('app').service('c3Charts', function () {
     this.rebuildChart = function (report, id) {
         var theValues = [];
         var theStackValues = {};

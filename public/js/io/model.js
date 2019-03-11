@@ -1,4 +1,4 @@
-app.service('ioModel', function (connection, $q) {
+angular.module('app').service('ioModel', function (connection, $q) {
     function exportDatasource (datasourceID) {
         return connection.get('/api/data-sources/find-one', {id: datasourceID})
             .then(response => response.item);

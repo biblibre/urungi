@@ -1,4 +1,4 @@
-app.directive('fileModal', function ($http, fileService) {
+angular.module('app').directive('fileModal', function ($http, fileService) {
     return {
 
         templateUrl: '/partials/files/galleryModal.html',

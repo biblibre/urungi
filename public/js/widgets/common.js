@@ -1,4 +1,4 @@
-app.service('widgetsCommon', function () {
+angular.module('app').service('widgetsCommon', function () {
     this.textAlign = [
         {name: 'left', value: 'left'},
         {name: 'right', value: 'right'},

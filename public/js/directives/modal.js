@@ -1,4 +1,4 @@
-app.directive('ndModal', function (connection, $timeout) {
+angular.module('app').directive('ndModal', function (connection, $timeout) {
     return {
         restrict: 'E',
         transclude: true,

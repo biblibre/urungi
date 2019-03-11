@@ -1,4 +1,4 @@
-app.service('reportHtmlWidgets', function () {
+angular.module('app').service('reportHtmlWidgets', function () {
     this.generateIndicator = function (report) {
         return generateIndicator(report);
     };

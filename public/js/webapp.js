@@ -1,7 +1,7 @@
 
 'use strict';
 
-var app = angular.module('Urungi', [
+angular.module('app', [
     'ngRoute', 'ui.sortable', 'draganddrop', 'ui.bootstrap',
     'urungi.directives', 'ngSanitize', 'ui.select', 'angularUUID2', 'vs-repeat',
     'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'bsLoadingOverlay', 'xeditable',
@@ -272,7 +272,7 @@ var app = angular.module('Urungi', [
         };
     }]);
 
-app.directive('ngEnter', function () {
+angular.module('app').directive('ngEnter', function () {
     return function (scope, element, attrs) {
         element.bind('keydown keypress', function (event) {
             if (event.which === 13) {
@@ -286,7 +286,7 @@ app.directive('ngEnter', function () {
     };
 });
 
-app.service('reportService', function () {
+angular.module('app').service('reportService', function () {
     var theReport = {};
 
     var addReport = function (newObj) {
@@ -303,7 +303,7 @@ app.service('reportService', function () {
     };
 });
 
-app.run(['$rootScope', '$sessionStorage', 'connection', function ($rootScope, $sessionStorage, connection) {
+angular.module('app').run(['$rootScope', '$sessionStorage', 'connection', function ($rootScope, $sessionStorage, connection) {
     $rootScope.removeFromArray = function (array, item) {
         var index = array.indexOf(item);
 
@@ -364,7 +364,7 @@ app.run(['$rootScope', '$sessionStorage', 'connection', function ($rootScope, $s
     }
 }]);
 
-app.run(function (bsLoadingOverlayService) {
+angular.module('app').run(function (bsLoadingOverlayService) {
     bsLoadingOverlayService.setGlobalConfig({
         delay: 0, // Minimal delay to hide loading overlay in ms.
         activeClass: undefined, // Class that is added to the element where bs-loading-overlay is applied when the overlay is active.
@@ -373,11 +373,11 @@ app.run(function (bsLoadingOverlayService) {
 });
 
 // Set default options for xeditable
-app.run(['editableOptions', function (editableOptions) {
+angular.module('app').run(['editableOptions', function (editableOptions) {
     editableOptions.buttons = 'no';
 }]);
 
-app.run(['language', function (language) {
+angular.module('app').run(['language', function (language) {
     language.setLanguageFromLocalStorage();
 }]);
 

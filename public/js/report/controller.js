@@ -1,13 +1,5 @@
-/**
- * Created with JetBrains WebStorm.
- * User: hermenegildoromero
- * Date: 07/07/16
- * Time: 09:17
- * To change this template use File | Settings | File Templates.
- */
-
-app.controller('reportCtrl', function ($scope, connection, $compile, reportService, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, c3Charts,
-    reportModel, widgetsCommon, $location, PagerService, gettextCatalog, usersModel) {
+angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportService, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, c3Charts,
+    reportModel, widgetsCommon, $location, PagerService, gettextCatalog, usersModel, $q) {
     usersModel.getUserObjects().then(userObjects => {
         $scope.userObjects = userObjects;
     });

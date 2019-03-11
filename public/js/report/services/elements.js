@@ -1,4 +1,4 @@
-app.service('dataElements', function () {
+angular.module('app').service('dataElements', function () {
     this.getElementLabel = function (element) {
         var htmlCode = '';
 

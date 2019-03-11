@@ -1,6 +1,6 @@
 /* global uuid2: false */
 
-app.service('dashboardv2Model', function ($http, $q, connection, reportService) {
+angular.module('app').service('dashboardv2Model', function ($http, $q, connection, reportService) {
     this.getDashBoard = function (dashboardID, isLinked, done) {
         connection.get('/api/dashboardsv2/get/' + dashboardID, {id: dashboardID, linked: isLinked}, function (data) {
             done(data.item);

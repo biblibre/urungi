@@ -1,7 +1,7 @@
 angular.module('myApp.services', [])
     .value('version', '0.1');
 
-app.service('Constants', function () {
+angular.module('app').service('Constants', function () {
     var constants = {
         DEBUGMODE: false,
     };

@@ -1,4 +1,4 @@
-app.directive('layerObjectProperties', function ($compile, c3Charts) {
+angular.module('app').directive('layerObjectProperties', function ($compile, c3Charts) {
     return {
         transclude: true,
         scope: {

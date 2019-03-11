@@ -1,4 +1,4 @@
-app.service('pivot', function () {
+angular.module('app').service('pivot', function () {
     this.getPivotTableSetup = function (report) {
         const pivotKeys = report.properties.pivotKeys;
         const data = report.query.data;

@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('wstWidgetProperties', function ($compile, c3Charts, $rootScope, Inspector) {
+angular.module('app').directive('wstWidgetProperties', function ($compile, c3Charts, $rootScope, Inspector) {
     return {
         transclude: true,
         scope: {

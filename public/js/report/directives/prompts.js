@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('ndPrompt', function (reportModel) {
+angular.module('app').directive('ndPrompt', function (reportModel) {
     return {
         transclude: true,
         scope: {

@@ -1,6 +1,6 @@
 /* global jsPlumb: false */
 
-app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal, datasourceModel, $timeout, PagerService, $http, Constants, gettextCatalog) {
+angular.module('app').controller('dataSourceCtrl', function ($scope, connection, $routeParams, dataSourceNameModal, datasourceModel, $timeout, PagerService, $http, Constants, gettextCatalog) {
     $scope.activeForm = 'partials/data-source/source_wizard_index.html';
     $scope.selectedCollections = [];
     $scope.pager = {};
@@ -306,7 +306,7 @@ app.controller('dataSourceCtrl', function ($scope, connection, $routeParams, dat
     };
 });
 
-app.directive('postRender', [ '$timeout', function ($timeout) {
+angular.module('app').directive('postRender', [ '$timeout', function ($timeout) {
     var def = {
         restrict: 'A',
         terminal: true,
@@ -322,7 +322,7 @@ app.directive('postRender', [ '$timeout', function ($timeout) {
 // now we extend html with <div plumb-item>, we can define a template <> to replace it with "proper" html, or we can
 // replace it with something more sophisticated, e.g. setting jsPlumb arguments and attach it to a double-click
 // event
-app.directive('plumbItem', function () {
+angular.module('app').directive('plumbItem', function () {
     return {
         replace: true,
         controller: 'PlumbCtrl',
@@ -353,7 +353,7 @@ app.directive('plumbItem', function () {
 // This directive should allow an element to be dragged onto the main canvas. Then after it is dropped, it should be
 // painted again on its original position, and the full module should be displayed on the dragged to location.
 //
-app.directive('plumbMenuItem', function () {
+angular.module('app').directive('plumbMenuItem', function () {
     return {
         replace: true,
         controller: 'PlumbCtrl',
@@ -365,7 +365,7 @@ app.directive('plumbMenuItem', function () {
     };
 });
 
-app.directive('plumbConnect', function () {
+angular.module('app').directive('plumbConnect', function () {
     return {
         replace: true,
         link: function (scope, element, attrs) {

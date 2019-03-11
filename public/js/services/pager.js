@@ -1,4 +1,4 @@
-app.service('PagerService', function () {
+angular.module('app').service('PagerService', function () {
     this.GetPager = function (totalItems, currentPage, pageSize, totalPages) {
     // default to first page
         currentPage = parseFloat(currentPage) || 1;

@@ -21,7 +21,6 @@ module.exports = {
 
         // Browser
         angular: false,
-        app: false,
         noty: false,
         layerUtils: false,
     },

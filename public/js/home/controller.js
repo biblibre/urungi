@@ -1,6 +1,6 @@
 /* global moment: false */
 
-app.controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connection', 'gettextCatalog', 'usersModel', function ($scope, $rootScope, $sessionStorage, connection, gettextCatalog, usersModel) {
+angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$sessionStorage', 'connection', 'gettextCatalog', 'usersModel', function ($scope, $rootScope, $sessionStorage, connection, gettextCatalog, usersModel) {
     $scope.dashboardsNbr = 3;
     $scope.reportsNbr = 10;
     $scope.notificationsNbr = 0;

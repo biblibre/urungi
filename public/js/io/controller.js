@@ -1,4 +1,4 @@
-app.controller('ioCtrl', function ($scope, $rootScope, $q, connection, $routeParams, ioModel, FileSaver, Upload) {
+angular.module('app').controller('ioCtrl', function ($scope, $rootScope, $q, connection, $routeParams, ioModel, FileSaver, Upload) {
     $scope.layers = [];
     $scope.reports = [];
     $scope.dashboards = [];

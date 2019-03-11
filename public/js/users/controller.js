@@ -1,12 +1,4 @@
-/**
- * Created with JetBrains WebStorm.
- * User: hermenegildoromero
- * Date: 27/10/13
- * Time: 19:42
- * To change this template use File | Settings | File Templates.
- */
-
-app.controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window, $routeParams, $rootScope, PagerService) {
+angular.module('app').controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window, $routeParams, $rootScope, PagerService) {
     $scope.deleteModal = '/partial/private/deleteModal.html';
     $scope.changePasswordModal = '/partials/users/changePassword.html';
     $scope.page = null;

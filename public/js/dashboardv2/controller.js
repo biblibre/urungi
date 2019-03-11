@@ -1,4 +1,4 @@
-app.controller('dashBoardv2Ctrl', function ($scope, $location, $q,
+angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportService, connection, $routeParams, reportModel, c3Charts, uuid2,
     colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout,
     $rootScope, PagerService, gettextCatalog, usersModel

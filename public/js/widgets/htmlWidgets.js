@@ -1,4 +1,4 @@
-app.service('htmlWidgets', function () {
+angular.module('app').service('htmlWidgets', function () {
     this.getJumbotronHTML = function () {
         return '<div page-block class="jumbotron" ndType="jumbotron">' +
                         '<h1 page-block  class="editable" ndType="header" contenteditable="false">  Hello, world! </h1>' +

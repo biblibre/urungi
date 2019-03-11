@@ -1,4 +1,4 @@
-app.service('verticalGrid', function (dataElements) {
+angular.module('app').service('verticalGrid', function (dataElements) {
     this.getVerticalGrid = function (report, mode) {
         let id;
         if (typeof report.id === 'undefined') {

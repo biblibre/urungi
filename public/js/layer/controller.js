@@ -1,5 +1,5 @@
 /* global jsPlumb: false, $modal: false, bsLoadingOverlayService: false */
-app.controller('layerCtrl', function ($scope, $rootScope, connection, $routeParams, datasourceModel, uuid2, $timeout, PagerService, $window, gettextCatalog) {
+angular.module('app').controller('layerCtrl', function ($scope, $rootScope, connection, $routeParams, datasourceModel, uuid2, $timeout, PagerService, $window, gettextCatalog) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';

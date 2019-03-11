@@ -1,4 +1,4 @@
-app.directive('wstDropdown', function ($rootScope) {
+angular.module('app').directive('wstDropdown', function ($rootScope) {
     return {
         restrict: 'E',
         templateUrl: 'partials/widgets/wstDropdown.html',

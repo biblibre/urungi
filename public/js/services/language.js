@@ -1,4 +1,4 @@
-angular.module('Urungi')
+angular.module('app')
     .factory('language', ['gettextCatalog', function (gettextCatalog) {
         const defaultLanguage = 'en';
         const availableLanguages = ['en', 'fr'];

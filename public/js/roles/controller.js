@@ -1,4 +1,4 @@
-app.controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $rootScope, PagerService) {
+angular.module('app').controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $rootScope, PagerService) {
     $scope.items = [];
     $scope.roleModal = 'partials/roles/roleModal.html';
     $scope.pager = {};

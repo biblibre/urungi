@@ -1,6 +1,6 @@
 /* global XLSX: false, Blob: false, datenum: false */
 
-app.service('reportModel', function ($q, bsLoadingOverlayService, connection, uuid2, FileSaver) {
+angular.module('app').service('reportModel', function ($q, bsLoadingOverlayService, connection, uuid2, FileSaver) {
     this.getReportDefinition = function (id, isLinked) {
         const url = '/api/reports/get-report/' + id;
         const params = { id: id, mode: 'preview', linked: isLinked };

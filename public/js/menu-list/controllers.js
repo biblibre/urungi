@@ -1,4 +1,4 @@
-app.controller('listCtrl', function ($scope, $rootScope, connection, PagerService, $routeParams, $timeout) {
+angular.module('app').controller('listCtrl', function ($scope, $rootScope, connection, PagerService, $routeParams, $timeout) {
     $scope.init = function () {
         $scope.nav.page = 1;
 

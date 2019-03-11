@@ -1,12 +1,4 @@
-/**
- * Created with JetBrains WebStorm.
- * User: hermenegildoromero
- * Date: 05/05/15
- * Time: 11:53
- * To change this template use File | Settings | File Templates.
- */
-
-app.service('dataSourceNameModal', ['$modal', function ($modal) {
+angular.module('app').service('dataSourceNameModal', ['$modal', function ($modal) {
     var modalDefaults = {
         backdrop: true,
         keyboard: true,

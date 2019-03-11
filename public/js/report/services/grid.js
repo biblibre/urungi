@@ -1,6 +1,6 @@
 /* global numeral:false, $scope:false */
 
-app.service('grid', function () {
+angular.module('app').service('grid', function () {
     var colClass = '';
     var colWidth = '';
     var columns = [];
@@ -273,7 +273,7 @@ app.service('grid', function () {
     }
 });
 
-app.directive('scrolly', function () {
+angular.module('app').directive('scrolly', function () {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {

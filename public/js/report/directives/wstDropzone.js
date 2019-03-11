@@ -1,4 +1,4 @@
-app.directive('wstDropzone', function () {
+angular.module('app').directive('wstDropzone', function () {
     return {
 
         scope: {

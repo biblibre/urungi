@@ -1,4 +1,4 @@
-app.service('datasourceModel', function ($http, $q, $filter, connection) {
+angular.module('app').service('datasourceModel', function ($http, $q, $filter, connection) {
     this.getDataSources = function (params, done) {
         connection.get('/api/data-sources/find-all', params, done);
     };
