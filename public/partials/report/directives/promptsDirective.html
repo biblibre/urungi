@@ -8,14 +8,14 @@
         <div class="container-fluid form-inline">
             <span class="col-md-1">
 
-                <button class="btn popover-primary ng-scope" ng-class="{'btn-black': filter.filterPrompt == true, 'btn-white': filter.filterPrompt == false}" 
+                <button class="btn popover-primary ng-scope" ng-class="{'btn-black': filter.filterPrompt == true, 'btn-white': filter.filterPrompt == false}"
                 ng-click="makePrompt()" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Runtime Filter" popover="{{getButtonFilterPromptMessage(filter)}}">
                     <i class="fa fa-filter"></i><i class="fa fa-question"></i>
                 </button>
 
             </span>
             <span class="col-md-11">
-                
+
                 <form role="form" class="form-inline" name="FORM_filter">
                         <!--<p  class="prompt-label">{{filter.promptTitle}}</p>
                         <div  class="container-fluid" ng-show="filter.promptInstructions && filter.promptInstructions != ''">
@@ -49,7 +49,7 @@
                                 <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="getDistinctValues(filter)" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" uib-tooltip="Click here to select a value" tooltip-placement="bottom">
                                     <i class="fa fa-caret-down"></i>
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu5b" >
+                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu5b" >
                                     <li ng-repeat="variable in fieldsAggregations.number">
                                         <a ng-click="aggregationChoosed(filter,variable)">{{variable.name}}</a>
                                     </li>
