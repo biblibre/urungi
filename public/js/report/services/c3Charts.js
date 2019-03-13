@@ -246,6 +246,9 @@ angular.module('app').service('c3Charts', function () {
         }
 
         chart.chartCanvas = c3.generate(c3Config);
+        $(theChartCode).parent().on('overflow', function () {
+            chart.chartCanvas.flush();
+        });
     };
 
     this.changeChartColumnType = function (chart, column) {

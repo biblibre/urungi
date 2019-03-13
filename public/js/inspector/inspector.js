@@ -1197,11 +1197,8 @@ angular.module('wst.inspector', [])
 
                 $scope.$watchCollection('inspector.styles.height', function (newProps, oldProps) {
                     if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
-                        if (newProps && newProps !== oldProps) {
-                            var val = newProps.replace(/[A-Za-z]/g, '') + 'px';
-                            $scope.selectedElement.css('height', val);
-                            repositionSelectBox();
-                        }
+                        $scope.selectedElement.css('height', newProps);
+                        repositionSelectBox();
                     }
                 });
 
