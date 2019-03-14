@@ -1041,6 +1041,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             {name: gettextCatalog.getString('Min'), value: 'min'},
             {name: gettextCatalog.getString('Max'), value: 'max'},
             {name: gettextCatalog.getString('Count'), value: 'count'},
+            {name: gettextCatalog.getString('Count distinct'), value: 'countDistinct'},
             {name: gettextCatalog.getString('Raw'), value: 'raw'}
         ],
         'date': [
@@ -1048,6 +1049,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             {name: gettextCatalog.getString('Month'), value: 'month'},
             {name: gettextCatalog.getString('Day'), value: 'day'},
             {name: gettextCatalog.getString('Count'), value: 'count'},
+            {name: gettextCatalog.getString('Count distinct'), value: 'countDistinct'},
             {name: gettextCatalog.getString('Raw'), value: 'raw'}
             /* {name: 'Semester', value: 'semester'},
             {name: 'Quarter', value: 'quarter'},
@@ -1055,7 +1057,9 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         ],
         'string': [
             {name: gettextCatalog.getString('Count'), value: 'count'},
+            {name: gettextCatalog.getString('Count distinct'), value: 'countDistinct'},
             {name: gettextCatalog.getString('Raw'), value: 'raw'}
+
         ]
     };
 

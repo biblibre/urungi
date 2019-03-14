@@ -34,7 +34,7 @@ class SqlQueryBuilder {
             qb.as('sub');
         });
 
-        const aggregations = ['sum', 'avg', 'min', 'max', 'count'];
+        const aggregations = ['sum', 'avg', 'min', 'max', 'count', 'countDistinct'];
         for (const column of query.columns) {
             const c = { [column.id]: column.elementID };
             const f = aggregations.includes(column.aggregation)
