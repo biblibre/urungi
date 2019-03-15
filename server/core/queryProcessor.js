@@ -359,6 +359,7 @@ function validateColumn (column, element, warnings) {
         isCustom: Boolean(element.isCustom),
         expression: element.expression,
         viewExpression: element.viewExpression,
+        format: element.format,
     };
 
     if (column.aggregation) {
