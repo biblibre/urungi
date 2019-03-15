@@ -122,11 +122,8 @@ Db.prototype.getSchema = async function (collection) {
         break;
     case 'ORACLE':
         query = (knex) =>
-            knex.select(knex.raw('t.owner').as('table_schema'), 'c.table_name', 'c.column_name', knex.raw('LOWER(c.data_type)').as('data_type'))
-                .from('user_tab_columns').as('c')
-                .join(function () {
-                    this.select('table_name').from('all_tables').where('owner', collection.database).where('table_name', collection.name).as('t');
-                }).on('t.table_name', '=', 'c.table_name');
+            knex.select({ table_schema: 'owner' }, 'table_name', 'column_name', knex.raw('LOWER(data_type)').as('data_type'))
+                .from('user_tab_columns');
         break;
     }
 
@@ -187,11 +184,8 @@ exports.testConnection = async function (params) {
         break;
     case 'ORACLE':
         testQueries = [
-            (qb) => qb.select('t.owner', 'c.table_name', 'c.column_name', 'c.data_type')
-                .from('user_tab_columns').as('c')
-                .join(function () {
-                    this.select('table_name').from('all_tables').as('t');
-                }).on('t.table_name', '=', 'c.table_name')
+            (qb) => qb.select('owner', 'table_name', 'column_name', 'data_type')
+                .from('user_tab_columns')
         ];
         break;
     }
