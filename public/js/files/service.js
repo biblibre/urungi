@@ -1,4 +1,4 @@
-angular.module('app').service('fileService', function (connection, Constants) {
+angular.module('app').service('fileService', function (connection) {
     this.getFiles = function () {
         const params = {};
 

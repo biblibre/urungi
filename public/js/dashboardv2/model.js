@@ -2,14 +2,14 @@
 
 angular.module('app').service('dashboardv2Model', function ($http, $q, connection, reportService) {
     this.getDashBoard = function (dashboardID, isLinked, done) {
-        connection.get('/api/dashboardsv2/get/' + dashboardID, {id: dashboardID, linked: isLinked}, function (data) {
+        connection.get('/api/dashboardsv2/get/' + dashboardID, {id: dashboardID, linked: isLinked}).then(function (data) {
             done(data.item);
         });
     };
 
     this.getDashboards = function (params, done) {
         params = params || {};
-        connection.get('/api/dashboardsv2/find-all', params, function (data) {
+        connection.get('/api/dashboardsv2/find-all', params).then(function (data) {
             done(data);
         });
     };
@@ -42,7 +42,7 @@ angular.module('app').service('dashboardv2Model', function ($http, $q, connectio
     }
 
     this.pushReport2Dashboard = function (dashboardID) {
-        connection.get('/api/dashboardsv2/get/' + dashboardID, {id: dashboardID, linked: false}, function (data) {
+        connection.get('/api/dashboardsv2/get/' + dashboardID, {id: dashboardID, linked: false}).then(function (data) {
             var selectedDashboard = data.item;
             var qstructure = reportService.getReport();
             qstructure.reportName = 'report_' + (selectedDashboard.reports.length + 1);

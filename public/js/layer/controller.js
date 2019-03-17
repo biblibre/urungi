@@ -1,5 +1,5 @@
 /* global jsPlumb: false, $modal: false, bsLoadingOverlayService: false */
-angular.module('app').controller('layerCtrl', function ($scope, $rootScope, connection, $routeParams, datasourceModel, uuid2, $timeout, PagerService, $window, gettextCatalog) {
+angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api, connection, $routeParams, uuid2, $timeout, pager, $window, gettextCatalog) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
@@ -178,7 +178,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
 
             var data = {layerID: layer._id, status: newStatus};
 
-            connection.post('/api/layers/change-layer-status', data, function (result) {
+            connection.post('/api/layers/change-layer-status', data).then(function (result) {
                 layer.status = newStatus;
             });
         }
@@ -186,7 +186,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
 
     $scope.view = function () {
         if ($routeParams.layerID) {
-            connection.get('/api/layers/find-one', {id: $routeParams.layerID}, function (data) {
+            connection.get('/api/layers/find-one', {id: $routeParams.layerID}).then(function (data) {
                 $scope._Layer = data.item;
                 if ($scope._Layer.params) {
                     if ($scope._Layer.params.schema) {
@@ -257,12 +257,12 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
         if ($scope.mode === 'add') {
             theLayer.objects = $scope.rootItem.elements;
             var data = theLayer;
-            connection.post('/api/layers/create', data, function (data) {
+            connection.post('/api/layers/create', data).then(function (data) {
                 $scope.items.push(data.item);
                 $('#layerModal').modal('hide');
             });
         } else {
-            connection.post('/api/layers/update/' + theLayer._id, theLayer, function (result) {
+            connection.post('/api/layers/update/' + theLayer._id, theLayer).then(function (result) {
                 if (result.result === 1) {
                     window.history.back();
                 }
@@ -286,11 +286,11 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
 
         if (fields) params.fields = fields;
 
-        connection.get('/api/layers/find-all', params, function (data) {
+        connection.get('/api/layers/find-all', params).then(function (data) {
             $scope.items = data.items;
             $scope.page = data.page;
             $scope.pages = data.pages;
-            $scope.pager = PagerService.GetPager($scope.items.length, data.page, 10, data.pages);
+            $scope.pager = pager.getPager(data.page, data.pages);
         });
     };
 
@@ -301,7 +301,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
 
         params.fields = ['name', 'type', 'status', 'statusInfo', 'connection.host', 'connection.port', 'connection.database'];
 
-        datasourceModel.getDataSources(params, function (data) {
+        api.getDataSources(params).then(function (data) {
             $scope.datasources = data.items;
         });
     };
@@ -366,47 +366,9 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
             $scope.selectedEntities.splice(index, 1);
         }
     };
-    /*
-    $scope.addToLayer = function ()
-    {
-        if ($scope.selectedEntities.length > 0)
-        {
-            datasourceModel.getEntitiesSchema($scope.selectedDts.id,$scope.selectedEntities,function(result){
-
-                if (result.result === 1)
-                {
-                    for (i in result.items)
-                    {
-                        result.items[i].datasourceID = $scope.selectedDts.id;
-
-                        for (e in result.items[i].elements)
-                        {
-                            result.items[i].elements[e].datasourceID = $scope.selectedDts.id;
-                            result.items[i].elements[e].collectionID = result.items[i].collectionID;
-                            result.items[i].elements[e].collectionName = result.items[i].collectionName;
-                        }
-
-                        if (!$scope._Layer.params)
-                            $scope._Layer.params = {};
-                        if (!$scope._Layer.params.schema)
-                            $scope._Layer.params.schema = [];
-
-                        $scope._Layer.params.schema.push(result.items[i]);
-
-                    }
-
-                    $('#datasetModal').modal('hide');
-                    $scope.erDiagramInit();
-
-                }
-            });
-        }
-    }
-
-    */
 
     $scope.addSqlToLayer = function () {
-        datasourceModel.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection, function (result) {
+        api.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection).then(function (result) {
             if (result.result !== 1) {
                 $scope.errorToken = result;
                 return;
@@ -449,7 +411,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
     };
 
     $scope.saveSQLChanges = function () {
-        datasourceModel.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection, function (result) {
+        api.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection).then(function (result) {
             if (result.result === 1 && result.items.length > 0) {
                 // The result is an array but I think it never holds more than one element.
 
@@ -1254,31 +1216,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
         }
     }
 
-    $scope.onElementTypeChange = function (element) {
-        /*
-        * An unfinished piece of code for handling array elements (a column can hold an array in some SQL databases)
-        * Array support on the whole is unfinished, and would be an interesting feature
-        *
-        */
-
-        // var params = {
-        //     datasourceID: element.datasourceID,
-        //     layerID: $scope._Layer._id,
-        //     collectionID: element.collectionID,
-        //     collectionName: element.collectionName,
-        //     elementName: element.elementName,
-        //     defaultAggregation: element.defaultAggregation
-        // };
-
-        // if (element.elementType === 'array') {
-        //     connection.get('/api/data-sources/get-element-distinct-values', params, function (data) {
-        //         for (var i in data.items) {
-        //             $scope.addValueToElement(element, data.items[i]['_id'][element.elementName], data.items[i]['_id'][element.elementName]);
-        //         }
-        //     });
-        // }
-    };
-
     // Drag & drop elements
     $scope.onDrag = false;
     $scope.sortableOptions = {
@@ -1383,8 +1320,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
     $scope.getDatasetsForThisDts = function (_id, theDataSource) {
         if (!theDataSource.loading) {
             theDataSource.loading = true;
-            connection.get('/api/data-sources/getEntities', {id: _id}, function (data) {
-                console.log(data);
+            connection.get('/api/data-sources/getEntities', {id: _id}).then(function (data) {
                 theDataSource.loading = false;
                 if (data.result === 1) {
                     theDataSource.entities = data.items;
@@ -1399,7 +1335,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
     };
 
     $scope.getFieldsForThisEntity = function (dataSourceID, entity, theEntity) {
-        datasourceModel.getEntitiesSchema([dataSourceID], entity, function (result) {
+        api.getEntitiesSchema(dataSourceID, entity).then(function (result) {
             if (result.result === 1) {
                 theEntity.fields = result.items[0].elements;
             }
@@ -1489,7 +1425,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, conn
 
     $scope.addDatasetToLayer = function (datasourceID, entity) {
         if (typeof $scope.selectedDts.id === 'undefined' || $scope.selectedDts.id === datasourceID) {
-            datasourceModel.getEntitiesSchema(datasourceID, entity, function (result) {
+            api.getEntitiesSchema(datasourceID, entity).then(function (result) {
                 if (result.result !== 1) {
                     return;
                 }

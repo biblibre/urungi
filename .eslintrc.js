@@ -4,6 +4,7 @@ module.exports = {
         browser: true,
         jquery: true,
         mocha: true,
+        jasmine: true,
     },
     globals: {
         // defined in server.js
@@ -23,6 +24,9 @@ module.exports = {
         angular: false,
         noty: false,
         layerUtils: false,
+
+        // Angular mocks
+        inject: false,
     },
     rules: {
         'no-console': 'off',

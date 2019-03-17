@@ -66,6 +66,7 @@
     "ui-select": "^0.19.8"
   },
   "devDependencies": {
+    "angular-mocks": "^1.5.11",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "del": "^3.0.0",
@@ -80,16 +81,23 @@
     "gulp-concat": "^2.6.1",
     "gulp-decomment": "^0.2.0",
     "htmlhint": "^0.11.0",
+    "jasmine-core": "^3.3.0",
+    "jsdom": "^14.0.0",
+    "karma": "^4.0.1",
+    "karma-jasmine": "^2.0.1",
+    "karma-jsdom-launcher": "^7.1.0",
     "merge-stream": "^1.0.1",
-    "mocha": "^5.1.1",
+    "mocha": "^6.0.2",
     "npm-run-all": "^4.1.5",
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0"
   },
   "scripts": {
     "start": "node server.js",
-    "test": "mocha",
+    "test": "run-s -s -c test:*",
     "posttest": "run-s -s -c lint:*",
+    "test:server": "mocha",
+    "test:client": "karma start",
     "lint:js": "eslint .",
     "lint:css": "stylelint public/css",
     "lint:html": "htmlhint"

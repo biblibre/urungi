@@ -1,4 +1,4 @@
-angular.module('app').controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $rootScope, PagerService) {
+angular.module('app').controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $rootScope, pager) {
     $scope.items = [];
     $scope.roleModal = 'partials/roles/roleModal.html';
     $scope.pager = {};
@@ -20,7 +20,7 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
 
     $scope.view = function (roleID) {
         if (roleID) {
-            connection.get('/api/roles/find-one', {id: roleID}, function (data) {
+            connection.get('/api/roles/find-one', {id: roleID}).then(function (data) {
                 $scope._Role = data.item;
                 $scope.mode = 'edit';
                 $scope.clearNodes($scope.publicSpace);
@@ -35,12 +35,12 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
         if ($scope.mode === 'add') {
             var data = $scope._Role;
 
-            connection.post('/api/roles/create', data, function (data) {
+            connection.post('/api/roles/create', data).then(function (data) {
                 $scope.items.push(data.item);
                 $('#roleModal').modal('hide');
             });
         } else {
-            connection.post('/api/roles/update/' + $scope._Role._id, $scope._Role, function (result) {
+            connection.post('/api/roles/update/' + $scope._Role._id, $scope._Role).then(function (result) {
                 if (result.result === 1) {
                     $('#roleModal').modal('hide');
                 }
@@ -64,11 +64,11 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
 
         if (fields) params.fields = fields;
 
-        connection.get('/api/roles/find-all', params, function (data) {
+        connection.get('/api/roles/find-all', params).then(function (data) {
             $scope.items = data.items;
             $scope.page = data.page;
             $scope.pages = data.pages;
-            $scope.pager = PagerService.GetPager($scope.items.length, data.page, 10, data.pages);
+            $scope.pager = pager.getPager(data.page, data.pages);
         });
     };
 

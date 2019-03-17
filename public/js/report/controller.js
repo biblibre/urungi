@@ -1,5 +1,5 @@
 angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportService, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, c3Charts,
-    reportModel, widgetsCommon, $location, PagerService, gettextCatalog, usersModel, $q) {
+    reportModel, widgetsCommon, $location, pager, gettextCatalog, usersModel, $q) {
     usersModel.getUserObjects().then(userObjects => {
         $scope.userObjects = userObjects;
     });
@@ -253,7 +253,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             // $scope.items = data.items;
             $scope.navigation.page = data.page;
             $scope.navigation.pages = data.pages;
-            $scope.navigation.pager = PagerService.GetPager($scope.reports.length, data.page, 10, data.pages);
+            $scope.navigation.pager = pager.getPager(data.page, data.pages);
         });
     };
 
@@ -378,7 +378,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.pushToDash = function () {
         var params = {};
 
-        return connection.get('/api/dashboardsv2/find-all', params, function (data) {
+        return connection.get('/api/dashboardsv2/find-all', params).then(function (data) {
             $scope.dashboards = data;
             $('#dashListModal').modal('show');
         });

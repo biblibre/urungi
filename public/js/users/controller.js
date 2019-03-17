@@ -1,4 +1,4 @@
-angular.module('app').controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window, $routeParams, $rootScope, PagerService) {
+angular.module('app').controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window, $routeParams, $rootScope, pager) {
     $scope.deleteModal = '/partial/private/deleteModal.html';
     $scope.changePasswordModal = '/partials/users/changePassword.html';
     $scope.page = null;
@@ -80,7 +80,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
         if ($scope._User.pwd1.length >= 8 && $scope._User.pwd1 === $scope._User.pwd2) { isOk = true; }
 
         if (isOk) {
-            connection.post('/api/change-my-password', {pwd1: $scope._User.pwd1, pwd2: $scope._User.pwd2}, function (data) {
+            connection.post('/api/change-my-password', {pwd1: $scope._User.pwd1, pwd2: $scope._User.pwd2}).then(function (data) {
                 $('#changePasswordModal').modal('hide');
             });
         }
@@ -90,20 +90,20 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
         if ($routeParams.userID) {
             if (!$scope.roles) { loadRoles(); }
 
-            connection.get('/api/admin/users/find-one', {id: $routeParams.userID}, function (data) {
+            connection.get('/api/admin/users/find-one', {id: $routeParams.userID}).then(function (data) {
                 $scope._User = data.item;
                 $scope.mode = 'edit';
             });
 
-            connection.get('/api/get-user-counts/' + $routeParams.userID, {userID: $routeParams.userID}, function (data) {
+            connection.get('/api/get-user-counts/' + $routeParams.userID, {userID: $routeParams.userID}).then(function (data) {
                 $scope.userCounts = data;
             });
 
-            connection.get('/api/get-user-reports/' + $routeParams.userID, {userID: $routeParams.userID}, function (data) {
+            connection.get('/api/get-user-reports/' + $routeParams.userID, {userID: $routeParams.userID}).then(function (data) {
                 $scope.userReports = data.items;
             });
 
-            connection.get('/api/get-user-dashboards/' + $routeParams.userID, {userID: $routeParams.userID}, function (data) {
+            connection.get('/api/get-user-dashboards/' + $routeParams.userID, {userID: $routeParams.userID}).then(function (data) {
                 $scope.userDashboards = data.items;
             });
         };
@@ -111,12 +111,12 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
 
     $scope.save = function () {
         if ($scope.mode === 'new') {
-            connection.post('/api/admin/users/create', $scope._User, function (data) {
+            connection.post('/api/admin/users/create', $scope._User).then(function (data) {
                 $('#editUserModal').modal('hide');
                 $scope.users.push($scope._User);
             });
         } else {
-            connection.post('/api/admin/users/update/' + $scope._User._id, $scope._User, function (data) {
+            connection.post('/api/admin/users/update/' + $scope._User._id, $scope._User).then(function (data) {
                 $('#editUserModal').modal('hide');
             });
         }
@@ -130,7 +130,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
 
             var data = {userID: user._id, status: newStatus};
 
-            connection.post('/api/admin/users/change-user-status', data, function (result) {
+            connection.post('/api/admin/users/change-user-status', data).then(function (result) {
                 user.status = newStatus;
             });
         }
@@ -167,11 +167,11 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
 
         if (fields) params.fields = fields;
 
-        connection.get('/api/admin/users/find-all', params, function (data) {
+        connection.get('/api/admin/users/find-all', params).then(function (data) {
             $scope.users = data.items;
             $scope.page = data.page;
             $scope.pages = data.pages;
-            $scope.pager = PagerService.GetPager($scope.users.length, data.page, 10, data.pages);
+            $scope.pager = pager.getPager(data.page, data.pages);
         });
     };
 
@@ -188,21 +188,11 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
         if ($('#users-form').valid()) {
             data.filters = getFilters();
 
-            connection.post('/api/admin/users/create', data, function (data) {
+            connection.post('/api/admin/users/create', data).then(function (data) {
                 if (data.result === 1) window.location.hash = '/admin/users';
             });
         }
     };
-    /*
-    $scope.editUser = function(data) {
-        //if ($('#users-form').valid()) {
-            data.filters = getFilters();
-
-            connection.post('/api/admin/users/update/'+data._id, data, function(data) {
-                if (data.result === 1) window.location.hash = '/admin/users';
-            });
-        //}
-    }; */
 
     $scope.editUser = function () {
         $('#editUserModal').modal('show');
@@ -240,13 +230,13 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
     $scope.confirmDelete = function (id) {
         $('#deleteModal').modal('hide');
 
-        connection.post('/api/admin/users/delete/' + $scope.delete_id, {id: $scope.delete_id}, function (data) {
+        connection.post('/api/admin/users/delete/' + $scope.delete_id, {id: $scope.delete_id}).then(function (data) {
             $('#' + $scope.delete_id).remove();
         });
     };
 
     $scope.changeUser = function (data) {
-        connection.post('/api/login?s=change-user', {userName: data.userName}, function (data) {
+        connection.post('/api/login?s=change-user', {userName: data.userName}).then(function (data) {
             $window.location.href = '/home';
         });
     };
@@ -259,7 +249,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
     }
 
     function loadLanguages (callLater) {
-        connection.get('/api/admin/languages/find-all', {}, function (data) {
+        connection.get('/api/admin/languages/find-all', {}).then(function (data) {
             $scope.languages = [];
 
             for (var i in data.items) { $scope.languages.push({name: data.items[i].description, value: data.items[i].language}); }
@@ -269,7 +259,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
     }
 
     function loadRoles (callLater) {
-        connection.get('/api/roles/find-all', {}, function (data) {
+        connection.get('/api/roles/find-all', {}).then(function (data) {
             $scope.roles = data.items;
 
             var adminRole = {_id: 'WSTADMIN', name: 'Urungi Administrator'};
@@ -280,7 +270,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
     }
 
     function loadFilters (callLater) {
-        connection.get('/api/admin/configurations/find-user-filters', {}, function (data) {
+        connection.get('/api/admin/configurations/find-user-filters', {}).then(function (data) {
             $scope.filters = data.filters;
 
             if (typeof callLater !== 'undefined') { callLater(); }

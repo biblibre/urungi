@@ -1,7 +1,7 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportService, connection, $routeParams, reportModel, c3Charts, uuid2,
     colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout,
-    $rootScope, PagerService, gettextCatalog, usersModel
+    $rootScope, pager, gettextCatalog, usersModel
 ) {
     usersModel.getUserObjects().then(userObjects => {
         $scope.userObjects = userObjects;
@@ -225,7 +225,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
         $scope.dashboardID = $routeParams.dashboardID;
 
-        connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, {id: $scope.dashboardID}, function (data) {
+        connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, {id: $scope.dashboardID}).then(function (data) {
             $scope.selectedDashboard = data.item;
             if (!$scope.selectedDashboard.containers) { $scope.selectedDashboard.containers = []; }
 
@@ -292,7 +292,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             $scope.dashboards = data;
             $scope.page = data.page;
             $scope.pages = data.pages;
-            $scope.pager = PagerService.GetPager($scope.dashboards.items.length, data.page, 10, data.pages);
+            $scope.pager = pager.getPager(data.page, data.pages);
         });
     };
 
@@ -774,13 +774,13 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         $scope.selectedDashboard.html = previewContainer.html();
 
         if ($scope.mode === 'add') {
-            connection.post('/api/dashboardsv2/create', dashboard, function (data) {
+            connection.post('/api/dashboardsv2/create', dashboard).then(function (data) {
                 if (data.result === 1) {
 
                 }
             });
         } else {
-            connection.post('/api/dashboardsv2/update/' + dashboard._id, dashboard, function (result) {
+            connection.post('/api/dashboardsv2/update/' + dashboard._id, dashboard).then(function (result) {
                 if (result.result === 1) {
 
                 }
@@ -859,14 +859,14 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     };
 
     $scope.unPublish = function () {
-        connection.post('/api/dashboardsv2/unpublish', {_id: $scope.selectedDashboard._id}, function (data) {
+        connection.post('/api/dashboardsv2/unpublish', {_id: $scope.selectedDashboard._id}).then(function (data) {
             $scope.selectedDashboard.isPublic = false;
             $('#publishModal').modal('hide');
         });
     };
 
     $scope.selectThisFolder = function (folderID) {
-        connection.post('/api/dashboardsv2/publish-page', {_id: $scope.selectedDashboard._id, parentFolder: folderID}, function (data) {
+        connection.post('/api/dashboardsv2/publish-page', {_id: $scope.selectedDashboard._id, parentFolder: folderID}).then(function (data) {
             $scope.selectedDashboard.parentFolder = folderID;
             $scope.selectedDashboard.isPublic = true;
             $('#publishModal').modal('hide');
@@ -896,7 +896,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     };
 
     $scope.deleteConfirmed = function (dashboardID) {
-        connection.post('/api/dashboardsv2/delete/' + dashboardID, {id: dashboardID}, function (result) {
+        connection.post('/api/dashboardsv2/delete/' + dashboardID, {id: dashboardID}).then(function (result) {
             if (result.result === 1) {
                 $('#deleteModal').modal('hide');
 
