@@ -204,7 +204,7 @@ angular.module('app').service('ioModel', function (connection, $q) {
     };
 
     function getLayer (id) {
-        return connection.get('/api/layers/find-one', { id: id }).then(r => r.item);
+        return connection.get('/api/layers/find-one', { id: id }, undefined, { showMsg: false }).then(r => r.item);
     }
 
     this.getLayers = function () {
@@ -216,7 +216,7 @@ angular.module('app').service('ioModel', function (connection, $q) {
     };
 
     function getReport (id) {
-        return connection.get('/api/reports/find-one', { id: id }).then(r => r.item);
+        return connection.get('/api/reports/find-one', { id: id }, undefined, { showMsg: false }).then(r => r.item);
     }
 
     this.getReports = function () {
@@ -228,7 +228,7 @@ angular.module('app').service('ioModel', function (connection, $q) {
     };
 
     function getDashboard (id) {
-        return connection.get('/api/dashboardsv2/find-one', { id: id }).then(r => r.item);
+        return connection.get('/api/dashboardsv2/find-one', { id: id }, undefined, { showMsg: false }).then(r => r.item);
     }
 
     this.getDashboards = function () {
