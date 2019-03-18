@@ -165,6 +165,12 @@ angular.module('app').service('c3Charts', function () {
             };
         }
 
+        if (report.properties.chart.legendPosition === 'none') {
+            c3Config.legend = {
+                hide: true,
+            };
+        }
+
         switch (chart.type) {
         case 'pie':
         case 'donut':
