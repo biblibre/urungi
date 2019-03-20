@@ -767,6 +767,7 @@ const generateTestSuite = (dbConfig) => function () {
 
             query.order.push({
                 elementID: 'eeab',
+                id: 'namefield',
                 sortType: 1
             });
 
@@ -812,6 +813,7 @@ const generateTestSuite = (dbConfig) => function () {
 
             query.order.push({
                 elementID: 'eeac',
+                id: 'colourfield',
                 sortType: 1
             });
 
@@ -856,12 +858,18 @@ const generateTestSuite = (dbConfig) => function () {
             });
 
             query.columns.push({
+                elementID: 'eeaa',
+                id: 'countfield',
+            });
+
+            query.columns.push({
                 elementID: 'eebb',
                 id: 'weaponname',
             });
 
             query.order.push({
                 elementID: 'eeaa',
+                id: 'countfield',
                 sortType: -1
             });
 
@@ -951,12 +959,18 @@ const generateTestSuite = (dbConfig) => function () {
             });
 
             query.columns.push({
+                id: 'countfield',
+                elementID: 'eeaa'
+            });
+
+            query.columns.push({
                 id: 'gemquote',
                 elementID: 'eedb'
             });
 
             query.order.push({
                 elementID: 'eeaa',
+                id: 'countfield',
                 sortType: 1
             });
 
@@ -1006,11 +1020,13 @@ const generateTestSuite = (dbConfig) => function () {
 
             query.order.push({
                 elementID: 'eecc',
+                id: 'datefield',
                 sortType: 1
             });
 
             query.filters.push({
                 elementID: 'eecc',
+                id: 'datefield',
                 filterType: 'diferentThan',
                 criterion: {
                     date1: new Date('2014-03-24')
@@ -1048,13 +1064,20 @@ const generateTestSuite = (dbConfig) => function () {
                 elementID: 'eecb'
             });
 
+            query.columns.push({
+                id: 'wid',
+                elementID: 'eeba'
+            });
+
             query.order.push({
                 elementID: 'eeba',
+                id: 'wid',
                 sortType: 1
             });
 
             query.order.push({
                 elementID: 'eecb',
+                id: 'episodetitle',
                 sortType: 1
             });
 
@@ -1170,6 +1193,7 @@ const generateTestSuite = (dbConfig) => function () {
 
             query.order.push({
                 elementID: 'eeub',
+                id: 'gemid',
                 sortType: 1
             });
             // In an ideal world, the order of the custom SQL query would be preserved by the main query
@@ -1178,6 +1202,7 @@ const generateTestSuite = (dbConfig) => function () {
 
             query.filters.push({
                 elementID: 'eeuc',
+                id: 'gemcolour',
                 filterType: 'diferentThan',
                 criterion: {
                     text1: 'purple'
@@ -1275,17 +1300,25 @@ const generateTestSuite = (dbConfig) => function () {
                 elementID: 'eeve'
             });
 
+            query.columns.push({
+                id: 'id',
+                elementID: 'eevb'
+            });
+
             query.order.push({
                 elementID: 'eevb',
+                id: 'id',
                 sortType: 1
             });
             query.order.push({
                 elementID: 'eeve',
+                id: 'song',
                 sortType: 1
             });
 
             query.filters.push({
                 elementID: 'eevd',
+                id: 'weapon',
                 filterType: 'notNull',
                 criterion: {}
             });
@@ -1306,6 +1339,7 @@ const generateTestSuite = (dbConfig) => function () {
                     'charname': 'pearl',
                     'episodetitle': 'Sworn to the sword',
                     'fusion': _false,
+                    'id': 1,
                     'song': 'You do it for him',
                     'weapon': 'spear',
                 },
@@ -1313,6 +1347,7 @@ const generateTestSuite = (dbConfig) => function () {
                     'charname': 'garnet',
                     'episodetitle': 'Jail Break',
                     'fusion': _true,
+                    'id': 2,
                     'song': 'Stronger than you',
                     'weapon': 'fists',
                 },
@@ -1320,6 +1355,7 @@ const generateTestSuite = (dbConfig) => function () {
                     'charname': 'Ruby',
                     'episodetitle': 'The question',
                     'fusion': _false,
+                    'id': 10,
                     'song': 'Ruby rider',
                     'weapon': 'fist',
                 },
@@ -1327,6 +1363,7 @@ const generateTestSuite = (dbConfig) => function () {
                     'charname': 'Steven',
                     'episodetitle': 'Full Disclosure',
                     'fusion': _false,
+                    'id': 101,
                     'song': 'Full disclosure',
                     'weapon': 'Shield',
                 },
@@ -1334,6 +1371,7 @@ const generateTestSuite = (dbConfig) => function () {
                     'charname': 'Steven',
                     'episodetitle': 'Giant Woman',
                     'fusion': _false,
+                    'id': 101,
                     'song': 'Giant Woman',
                     'weapon': 'Shield',
                 }
