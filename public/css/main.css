@@ -3713,6 +3713,10 @@ a.list-group-item:hover {
     stroke: #000;
 }
 
+.c3 svg {
+    display: block;
+}
+
 .about-page {
     line-height: 2;
 }
