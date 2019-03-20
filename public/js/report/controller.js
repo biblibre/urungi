@@ -162,7 +162,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $scope.selectedReport.reportType = 'grid';
 
         $scope.selectedReport.properties.backgroundColor = '#FFFFFF';
-        $scope.selectedReport.properties.height = 400;
+        $scope.selectedReport.properties.height = 300;
         $scope.selectedReport.properties.headerHeight = 60;
         $scope.selectedReport.properties.rowHeight = 35;
         $scope.selectedReport.properties.headerBackgroundColor = '#FFFFFF';

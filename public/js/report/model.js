@@ -113,7 +113,7 @@ angular.module('app').service('reportModel', function ($q, bsLoadingOverlayServi
             dataPoints: [],
             dataColumns: [],
             datax: {},
-            height: 300,
+            height: report.properties.height,
             legendPosition: report.properties.legendPosition,
             query: report.query,
             queryName: null

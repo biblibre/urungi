@@ -60,6 +60,11 @@
                                 <option value="bottom" translate>bottom</option>
                             </select>
                         </div>
+                        <br>
+                        <div ng-show="selectedReport.reportType.startsWith('chart')">
+                          <span translate>Height :</span>
+                          <input ng-model="selectedReport.properties.height" type="number" id="Height">
+                        </div>
                     </section>
                             <!-- <section class="layer scrollPane" style="padding: 0px 10px 0px 5px;">
                                <wst-widget-properties element="selectedElement" wst-mode="report-designer" properties="selectedReport.properties" on-change="onChangeElementProperties"></wst-widget-properties>

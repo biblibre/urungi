@@ -113,7 +113,6 @@ angular.module('app').directive('wstWidgetProperties', function ($compile, c3Cha
                     $scope.headerRowHeight = $scope.properties.headerRowHeight;
                     $scope.headerBackgroundColor = $scope.properties.headerBackgroundColor;
                     $scope.headerHeight = $scope.properties.headerHeight;
-                    $scope.height = $scope.properties.height;
                     // $scope.headerBottomLineColor = $scope.properties.headerBottomLineColor;
                     $scope.headerBottomLineWidth = $scope.properties.headerBottomLineWidth;
                     $scope.rowBottomLineWidth = $scope.properties.rowBottomLineWidth;
