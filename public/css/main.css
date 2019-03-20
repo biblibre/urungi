@@ -74,6 +74,7 @@ a:focus {
 .pagination > li > a,
 .pagination > li > span {
     color: #666;
+    cursor: pointer;
 }
 
 .list-group-item.active > .badge,
