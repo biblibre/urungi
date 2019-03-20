@@ -70,7 +70,7 @@
                                 <i class="fa fa-caret-down"></i>
                             </button>
 
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu5b" >
+                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu5b" >
                                 <li ng-repeat="value in values"><a ng-click="selectFirstValue(value)">{{value}}</a></li>
                             </ul>
                         </span>
@@ -103,12 +103,12 @@
 
                 <span class="input-group-btn" >
                     <span class="dropdown" >
-                        <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;" 
+                        <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 5px;width: 21px;;background-color: #ddd; border-top:1px solid #ccc;border-bottom:1px solid #ccc;border-right:1px solid #ccc;"
                         uib-tooltip="Click here to select a value" tooltip-placement="bottom">
                             <i class="fa fa-caret-down"></i>
                         </button>
 
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu5b" >
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu5b" >
                             <li ng-repeat="value in values"><a ng-click="selectSecondValue(value)">{{value}}</a></li>
                             <li ng-if="filter.promptMandatory != true">
                             <a ng-click="ClearFilter(filter)">Clear filter</a>

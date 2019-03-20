@@ -76,6 +76,20 @@
 <script>
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
+        $(document).on('shown.bs.dropdown', '.dropdown', function (e) {
+            const dropdownMenu = $(e.target).find('.dropdown-menu');
+            const pos = dropdownMenu.offset();
+            var widthMenu = dropdownMenu.width();
+            const window_width = $(window).width();
+            if (pos.left < 0) {
+                dropdownMenu.offset({ top: pos.top, left: 5 })
+                dropdownMenu.css('right', 'auto');
+            }
+
+            if ((pos.left + widthMenu) > window_width) {
+                dropdownMenu.offset({ top: pos.top, left: window_width - widthMenu })
+            }
+        });
     });
 </script>
 
