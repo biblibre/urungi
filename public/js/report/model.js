@@ -388,7 +388,7 @@ angular.module('app').service('reportModel', function ($q, bsLoadingOverlayServi
         var html = '<div page-block  class="container-fluid featurette ndContainer"  ndType="container" style="height:100%;padding:0px;">' +
                         '<div page-block class="col-md-12 ndContainer" ndType="column" style="height:100%;padding:0px;">' +
                             '<div page-block class="container-fluid" id="' + containerID +
-                             '" report-view report="getReport(\'' + reportID + '\')" style="padding:0px;position: relative;height: 100%;"></div>' +
+                             '" report-view report="getReport(\'' + reportID + '\')" style="padding:0px;position: relative;height: 100%;font-size:30px;"></div>' +
                         '</div>' +
                     '</div>';
 
