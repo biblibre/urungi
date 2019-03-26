@@ -1,5 +1,3 @@
-/* global numeral:false, $scope:false */
-
 angular.module('app').service('grid', function () {
     var colClass = '';
     var colWidth = '';
@@ -87,11 +85,7 @@ angular.module('app').service('grid', function () {
 
         htmlCode += '</div>';
 
-        htmlCode += '<div class="repeater-data">';
-        for (const col of columns) {
-            htmlCode += '<div class=" calculus-data-column ' + colClass + ' " style="' + colWidth + '"> ' + calculateForColumn(col) + ' </div>';
-        }
-        htmlCode += '</div> </div>';
+        htmlCode += '</div>';
 
         return htmlCode;
     };
@@ -107,7 +101,7 @@ angular.module('app').service('grid', function () {
         var htmlCode = '';
 
         var theValue = '<div style="overflow:hidden;height:100%;">{{item.' + column.id + '}}</div>';
-        if (column.elementType === 'number') { theValue = '<div style="overflow:hidden;height:100%;">{{item.' + column.id + ' | number}}</div>'; }
+        if (column.elementType === 'number') { theValue = '<div style="overflow:hidden;height:100%;">{{item.' + column.id + '}}</div>'; }
 
         if (column.signals) {
             var theStyle = '<style>';
@@ -150,7 +144,7 @@ angular.module('app').service('grid', function () {
             }
             htmlCode += theStyle + '</style>';
 
-            if (column.elementType === 'number') { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + column.id + ' | number}}</div>'; } else { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + column.id + '}}</div>'; }
+            if (column.elementType === 'number') { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + column.id + '}}</div>'; } else { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + column.id + '}}</div>'; }
         }
 
         if (column.link) {
@@ -177,99 +171,6 @@ angular.module('app').service('grid', function () {
         htmlCode += '<div id="ROW_' + gridID + '" class="repeater-data-column ' + colClass + '" style="' + columnDefaultStyle + columnStyle + colWidth + defaultAligment + '" >' + theValue + ' </div>';
 
         return htmlCode;
-    }
-
-    function calculateForColumn (column) {
-        var htmlCode = '';
-
-        if (column.operationSum === true) {
-            htmlCode += '<div  style=""><span class="calculus-label">SUM:</span><span class="calculus-value"> ' + numeral(calculateSumForColumn(column)).format('0,0.00') + '</span> </div>';
-        }
-
-        if (column.operationAvg === true) {
-            htmlCode += '<div  style=""><span class="calculus-label">AVG:</span><span class="calculus-value"> ' + numeral(calculateAvgForColumn(column)).format('0,0.00') + '</span> </div>';
-        }
-
-        if (column.operationCount === true) {
-            htmlCode += '<div  style=""><span class="calculus-label">COUNT:</span><span class="calculus-value"> ' + numeral(calculateCountForColumn(column)).format('0,0.00') + '</span> </div>';
-        }
-
-        if (column.operationMin === true) {
-            htmlCode += '<div  style=""><span class="calculus-label">MIN:</span><span class="calculus-value"> ' + numeral(calculateMinimumForColumn(column)).format('0,0.00') + '</span> </div>';
-        }
-        if (column.operationMax === true) {
-            htmlCode += '<div  style=""><span class="calculus-label">MAX:</span><span class="calculus-value"> ' + numeral(calculateMaximumForColumn(column)).format('0,0.00') + '</span> </div>';
-        }
-
-        return htmlCode;
-    }
-
-    function calculateSumForColumn (column) {
-        var value = 0;
-
-        for (var row of $scope.report.query.data) {
-            if (row[column.id]) {
-                if (typeof row[column.id] !== 'undefined') { value += Number(row[column.id]); }
-            }
-        }
-        return value;
-    }
-
-    function calculateCountForColumn (column) {
-        var count = 0;
-        for (var row of $scope.report.query.data) {
-            if (row[column.id]) {
-                if (typeof row[column.id] !== 'undefined') {
-                    count += 1;
-                }
-            }
-        }
-        return count;
-    }
-
-    function calculateAvgForColumn (column) {
-        var sum = 0;
-        var count = 0;
-
-        for (var row in $scope.report.query.data) {
-            if (row[column.id]) {
-                if (typeof row[column.id] !== 'undefined') {
-                    count += 1;
-                    sum += Number(row[column.id]);
-                }
-            }
-        }
-        return sum / count;
-    }
-
-    function calculateMinimumForColumn (column) {
-        var lastValue;
-
-        for (var row in $scope.report.query.data) {
-            if (row[column.id]) {
-                if (typeof row[column.id] !== 'undefined') {
-                    if (typeof lastValue === 'undefined') { lastValue = row[column.id]; }
-
-                    if (row[column.id] < lastValue) { lastValue = row[column.id]; }
-                }
-            }
-        }
-        return lastValue;
-    }
-
-    function calculateMaximumForColumn ($scope, column) {
-        var lastValue;
-
-        for (var row in $scope.report.query.data) {
-            if (row[column.id]) {
-                if (typeof row[column.id] !== 'undefined') {
-                    if (typeof lastValue === 'undefined') { lastValue = row[column.id]; }
-
-                    if (row[column.id] > lastValue) { lastValue = row[column.id]; }
-                }
-            }
-        }
-        return lastValue;
     }
 });
 
