@@ -18,7 +18,7 @@ var ReportsSchema = new mongoose.Schema({
     isShared: { type: Boolean },
     nd_trash_deleted: { type: Boolean },
     nd_trash_deleted_date: { type: Date },
-    selectedLayerID: { type: String }
+    selectedLayerID: mongoose.Schema.Types.ObjectId
 }, { collection: 'wst_Reports' });
 
 ReportsSchema.methods.publish = async function () {

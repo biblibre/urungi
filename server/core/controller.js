@@ -7,17 +7,46 @@ class Controller {
         var Model = this.model;
         var perPage = config.get('pagination.itemsPerPage');
         var page = (req.query.page) ? req.query.page : 1;
+
+        var component = this.findAllParams(req);
+
+        var find = component.find;
+        var fields = component.fields;
+        var params = component.params;
+
+        const p = Model.find(find, fields, params).exec().then(function (items) {
+            return Model.count(find).exec().then(function (count) {
+                return { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
+            });
+        }).catch(function (err) {
+            return { result: 0, msg: 'A database error has occurred : ' + String(err), error: err };
+        });
+
+        if (done) {
+            console.warn('Using a callback with findAll is deprecated. Use the returned promise instead');
+            return p.then(done);
+        }
+
+        return p;
+    }
+
+    findAllParams (req) {
+        var perPage = config.get('pagination.itemsPerPage');
+        var page = (req.query.page) ? req.query.page : 1;
         var find = {};
         var searchText = (req.query.search) ? req.query.search : false;
         var filters = (req.query.filters) ? JSON.parse(req.query.filters) : false;
         var fields = {};
         var fieldsToGet = (req.query.fields) ? req.query.fields : false;
-        if (req.query.page > 0) { var params = (req.query.page) ? { skip: (page - 1) * perPage, limit: perPage } : {}; }
+        var params = {};
+        if (req.query.page > 0) { params = (req.query.page) ? { skip: (page - 1) * perPage, limit: perPage } : {}; }
 
         if (req.query.sort) {
             var sortField = {};
 
             sortField[req.query.sort] = (req.query.sortType) ? req.query.sortType : 1;
+
+            sortField[req.query.sort] = Number(sortField[req.query.sort]);
 
             params['sort'] = sortField;
         }
@@ -95,20 +124,7 @@ class Controller {
 
         if (mandatoryFilters.length > 0) { find = { $and: mandatoryFilters }; }
 
-        const p = Model.find(find, fields, params).exec().then(function (items) {
-            return Model.count(find).exec().then(function (count) {
-                return { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
-            });
-        }).catch(function (err) {
-            return { result: 0, msg: 'A database error has occurred : ' + String(err), error: err };
-        });
-
-        if (done) {
-            console.warn('Using a callback with findAll is deprecated. Use the returned promise instead');
-            return p.then(done);
-        }
-
-        return p;
+        return { find: find, fields: fields, params: params };
     }
 
     findOne (req, done) {
