@@ -73,9 +73,9 @@ Db.prototype.getCollections = async function () {
     case 'ORACLE':
         query = (knex) =>
             knex.select({
-                'table_schema': 'user',
-                'name': 'table_name'
-            }).from('user_tables');
+                'table_schema': knex.raw('user'),
+                'name': 'TABLE_NAME'
+            }).from('USER_TABLES');
         break;
     case 'MSSQL':
         query = (knex) =>
@@ -122,8 +122,9 @@ Db.prototype.getSchema = async function (collection) {
         break;
     case 'ORACLE':
         query = (knex) =>
-            knex.select({ table_schema: 'owner' }, 'table_name', 'column_name', knex.raw('LOWER(data_type)').as('data_type'))
-                .from('user_tab_columns');
+            knex.select({ table_schema: knex.raw('user') }, {table_name: 'TABLE_NAME'}, {column_name: 'COLUMN_NAME'}, { data_type: knex.raw('LOWER(data_type)') })
+                .from('USER_TAB_COLUMNS')
+                .where('TABLE_NAME', collection.name);
         break;
     }
 
@@ -184,8 +185,8 @@ exports.testConnection = async function (params) {
         break;
     case 'ORACLE':
         testQueries = [
-            (qb) => qb.select('owner', 'table_name', 'column_name', 'data_type')
-                .from('user_tab_columns')
+            (qb) => qb.select('TABLE_NAME', 'COLUMN_NAME', 'DATA_TYPE')
+                .from('USER_TAB_COLUMNS')
         ];
         break;
     }
