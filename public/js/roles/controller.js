@@ -1,7 +1,6 @@
-angular.module('app').controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $rootScope, pager) {
+angular.module('app').controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $rootScope) {
     $scope.items = [];
     $scope.roleModal = 'partials/roles/roleModal.html';
-    $scope.pager = {};
 
     $scope.publicSpace = $rootScope.user.companyData.publicSpace;
 
@@ -68,8 +67,11 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
             $scope.items = data.items;
             $scope.page = data.page;
             $scope.pages = data.pages;
-            $scope.pager = pager.getPager(data.page, data.pages);
         });
+    };
+
+    $scope.goToPage = function (page) {
+        $scope.getRoles(page, '', ['name', 'description']);
     };
 
     $scope.clickedExecutePagesForTheNode = function (node) {

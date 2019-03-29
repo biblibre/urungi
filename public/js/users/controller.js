@@ -1,4 +1,4 @@
-angular.module('app').controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window, $routeParams, $rootScope, pager) {
+angular.module('app').controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window, $routeParams, $rootScope) {
     $scope.deleteModal = '/partial/private/deleteModal.html';
     $scope.changePasswordModal = '/partials/users/changePassword.html';
     $scope.page = null;
@@ -6,7 +6,6 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
     $scope.search = null;
     $scope.selectedRole = '';
     $scope.editUserModal = 'partials/users/edit.html';
-    $scope.pager = {};
 
     $scope.breadcrumbs = [
         {label: 'Home', url: '#/home', icon: 'fa-home'},
@@ -171,8 +170,11 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
             $scope.users = data.items;
             $scope.page = data.page;
             $scope.pages = data.pages;
-            $scope.pager = pager.getPager(data.page, data.pages);
         });
+    };
+
+    $scope.goToPage = function (page) {
+        $scope.getUsers(page, '', ['userName', 'lastName', 'status']);
     };
 
     $scope.clearData = function () {

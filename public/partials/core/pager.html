@@ -1,0 +1,19 @@
+<div ng-if="vm.totalPages > 1" class="container-fluid">
+    <ul class="pagination">
+        <li ng-class="{disabled:vm.currentPage === 1}">
+            <a ng-click="vm.goToPage(1)">First</a>
+        </li>
+        <li ng-class="{disabled:vm.currentPage === 1}">
+            <a ng-click="vm.goToPage(vm.currentPage - 1)">Previous</a>
+        </li>
+        <li ng-repeat="page in vm.pages" ng-class="{active:vm.currentPage === page}">
+            <a ng-click="vm.goToPage(page)">{{page}}</a>
+        </li>
+        <li ng-class="{disabled:vm.currentPage === vm.totalPages}">
+            <a ng-click="vm.goToPage(vm.currentPage + 1)">Next</a>
+        </li>
+        <li ng-class="{disabled:vm.currentPage === vm.totalPages}">
+            <a ng-click="vm.goToPage(vm.totalPages)">Last</a>
+        </li>
+    </ul>
+</div>

@@ -1,7 +1,7 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportService, connection, $routeParams, reportModel, c3Charts, uuid2,
     colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout,
-    $rootScope, pager, gettextCatalog, usersModel
+    $rootScope, gettextCatalog, usersModel
 ) {
     usersModel.getUserObjects().then(userObjects => {
         $scope.userObjects = userObjects;
@@ -32,7 +32,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     // $scope.imageFilters.opacity = 10;
     $scope.theData = [];
     $scope.mode = 'preview';
-    $scope.pager = {};
 
     $scope.duplicateOptions = {};
     $scope.duplicateOptions.freeze = false;
@@ -261,38 +260,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     $scope.hideOverlay = function (referenceId) {
         bsLoadingOverlayService.stop({
             referenceId: referenceId
-        });
-    };
-    /*
-    $scope.getDashboards = function(params) {
-
-        dashboardv2Model.getDashboards(params, function(data){
-            $scope.dashboards = data;
-        })
-    };
-
-  */
-    $scope.getDashboards = function (page, search, fields) {
-        var params = {};
-
-        params.page = (page) || 1;
-
-        if (search) {
-            $scope.search = search;
-        } else if (page === 1) {
-            $scope.search = '';
-        }
-        if ($scope.search) {
-            params.search = $scope.search;
-        }
-
-        if (fields) params.fields = fields;
-
-        dashboardv2Model.getDashboards(params, function (data) {
-            $scope.dashboards = data;
-            $scope.page = data.page;
-            $scope.pages = data.pages;
-            $scope.pager = pager.getPager(data.page, data.pages);
         });
     };
 

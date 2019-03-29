@@ -27,26 +27,7 @@
                     </a>
                 </div>
 
-                <div class="container-fluid">
-                     <ul ng-if="vm.pager.pages.length" class="pagination">
-                        <li ng-class="{disabled:vm.pager.currentPage === 1}">
-                            <a ng-click="vm.getDataSources(1,'',['name','type','connection.host','connection.port','connection.database'])" translate>First</a>
-                        </li>
-                        <li ng-class="{disabled:vm.pager.currentPage === 1}">
-                            <a ng-click="vm.getDataSources(vm.pager.currentPage - 1,'',['name','type','connection.host','connection.port','connection.database'])" translate>Previous</a>
-                        </li>
-                        <li ng-repeat="page in vm.pager.pages" ng-class="{active:vm.pager.currentPage === page}">
-                            <a ng-click="vm.getDataSources(vm.page,'',['name','type','connection.host','connection.port','connection.database'])">{{page}}</a>
-                        </li>
-                        <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
-                            <a ng-click="vm.getDataSources(vm.pager.currentPage + 1,'',['name','type','connection.host','connection.port','connection.database'])" translate>Next</a>
-                        </li>
-                        <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
-                            <a ng-click="vm.getDataSources(vm.pager.totalPages,'',['name','type','connection.host','connection.port','connection.database'])" translate>Last</a>
-                        </li>
-                    </ul>
-
-                </div>
+                <app-pager current-page="vm.page" total-pages="vm.pages" on-page-change="vm.goToPage(page)"></app-pager>
             </div>
         </div>
     </div>

@@ -3,12 +3,15 @@
 
     angular.module('app.data-sources').controller('DataSourcesListController', DataSourcesListController);
 
-    DataSourcesListController.$inject = ['$location', '$timeout', 'connection', 'api', 'pager', 'gettextCatalog'];
+    DataSourcesListController.$inject = ['$location', '$timeout', 'connection', 'api', 'gettextCatalog'];
 
-    function DataSourcesListController ($location, $timeout, connection, api, pager, gettextCatalog) {
+    function DataSourcesListController ($location, $timeout, connection, api, gettextCatalog) {
         const vm = this;
-        vm.pager = {};
         vm.IntroOptions = {};
+        vm.getDataSources = getDataSources;
+        vm.goToPage = goToPage;
+        vm.page = 1;
+        vm.pages = 1;
 
         activate();
 
@@ -131,7 +134,7 @@
             };
         }
 
-        vm.getDataSources = function (page, search, fields) {
+        function getDataSources (page, search, fields) {
             var params = {};
 
             params.page = (page) || 1;
@@ -151,8 +154,11 @@
                 vm.items = data.items;
                 vm.page = data.page;
                 vm.pages = data.pages;
-                vm.pager = pager.getPager(data.page, data.pages);
             });
-        };
-    };
+        }
+
+        function goToPage (page) {
+            vm.getDataSources(page, '', ['name', 'type', 'connection.host', 'connection.port', 'connection.database']);
+        }
+    }
 })();

@@ -28,26 +28,7 @@
                     </div>
                 </div>
 
-                <div class="container-fluid">
-                     <ul ng-if="pager.pages.length > 1" class="pagination">
-                        <li ng-class="{disabled:pager.currentPage === 1}">
-                            <a ng-click="getUsers(1,'',['userName','lastName','status'])" translate>First</a>
-                        </li>
-                        <li ng-class="{disabled:pager.currentPage === 1}">
-                            <a ng-click="getUsers(pager.currentPage - 1,'',['userName','lastName','status'])" translate>Previous</a>
-                        </li>
-                        <li ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
-                            <a ng-click="getUsers(page,'',['userName','lastName','status'])">{{page}}</a>
-                        </li>
-                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                            <a ng-click="getUsers(pager.currentPage + 1,'',['userName','lastName','status'])" translate>Next</a>
-                        </li>
-                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                            <a ng-click="getUsers(pager.totalPages,'',['userName','lastName','status'])" translate>Last</a>
-                        </li>
-                    </ul>
-
-                </div>
+                <app-pager current-page="page" total-pages="pages" on-page-change="goToPage(page)"></app-pager>
             </div>
         </div>
     </div>

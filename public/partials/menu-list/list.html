@@ -67,23 +67,5 @@
 
     </div>
 
-    <div ng-if="nav.pager.totalPages > 1" class="container-fluid">
-        <ul class="pagination">
-            <li ng-class="{disabled:nav.pager.currentPage === 1}">
-                <a ng-click="goToPage(1)">First</a>
-            </li>
-            <li ng-class="{disabled:nav.pager.currentPage === 1}">
-                <a ng-click="goToPage(nav.pager.currentPage - 1)">Previous</a>
-            </li>
-            <li ng-repeat="page in nav.pager.pages" ng-class="{active:nav.pager.currentPage === page}">
-                <a ng-click="goToPage(page)">{{page}}</a>
-            </li>
-            <li ng-class="{disabled:nav.pager.currentPage === nav.pager.totalPages}">
-                <a ng-click="goToPage(nav.pager.currentPage + 1)">Next</a>
-            </li>
-            <li ng-class="{disabled:nav.pager.currentPage === nav.pager.totalPages}">
-                <a ng-click="goToPage(nav.pager.totalPages)">Last</a>
-            </li>
-        </ul>
-    </div>
+    <app-pager current-page="nav.currentPage" total-pages="nav.pages" on-page-change="goToPage(page)"></app-pager>
 </div>

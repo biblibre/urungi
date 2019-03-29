@@ -1,5 +1,5 @@
 /* global jsPlumb: false, $modal: false, bsLoadingOverlayService: false */
-angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api, connection, $routeParams, uuid2, $timeout, pager, $window, gettextCatalog) {
+angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api, connection, $routeParams, uuid2, $timeout, $window, gettextCatalog) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
@@ -9,7 +9,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
     $scope.addAllModal = 'partials/layer/addAllModal.html';
     $scope.ReadOnlyDataSourceSelector = false;
     $scope.items = [];
-    $scope.pager = {};
     $scope.datasources = [];
     $scope.selectedDts = {};
 
@@ -268,30 +267,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
                 }
             });
         }
-    };
-
-    $scope.getLayers = function (page, search, fields) {
-        var params = {};
-
-        params.page = (page) || 1;
-
-        if (search) {
-            $scope.search = search;
-        } else if (page === 1) {
-            $scope.search = '';
-        }
-        if ($scope.search) {
-            params.search = $scope.search;
-        }
-
-        if (fields) params.fields = fields;
-
-        connection.get('/api/layers/find-all', params).then(function (data) {
-            $scope.items = data.items;
-            $scope.page = data.page;
-            $scope.pages = data.pages;
-            $scope.pager = pager.getPager(data.page, data.pages);
-        });
     };
 
     $scope.getDatasources = function () {
