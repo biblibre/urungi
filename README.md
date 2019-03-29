@@ -1,12 +1,11 @@
 # Urungi
 
-Lightweight Business Intelligence tool for reporting MongoDB, PostgreSQL, MySQL
+Lightweight Business Intelligence tool for reporting PostgreSQL, MySQL
 and others, see [Supported databases](#supported-databases)
 
 
 ## Supported databases
 
-- MongoDB
 - PostgreSQL
 - MySQL
 - MS SQL Server
