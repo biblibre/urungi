@@ -61,6 +61,12 @@
 
                     <input class="form-control" ng-model="modalElement.viewExpression" required>
 
+                    <ul id="legend-field-3">
+                      <li ng-repeat="element in getElementsUsedInCustomExpression()">
+                    {{'#' + element.elementID + ' ' + '='+ ' '  + element.elementLabel + '(' + element.collectionName + ')'}}
+                    </li>
+                    </ul>
+
                     <!-- <div exp-editor
                         class="form-control"
                         element-ref="modalElement.availableElements"
