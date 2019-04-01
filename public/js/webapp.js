@@ -23,6 +23,7 @@
         'page.block',
         'app.core',
         'app.inspector',
+        'app.sidebar',
         'app.data-sources',
         'app.reports',
         'app.dashboards',

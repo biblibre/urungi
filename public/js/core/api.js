@@ -8,6 +8,7 @@
     function api (connection) {
         const service = {
             getCounts: getCounts,
+            getUserData: getUserData,
 
             getDataSources: getDataSources,
             getEntitiesSchema: getEntitiesSchema,
@@ -38,6 +39,10 @@
 
         function getCounts () {
             return connection.get('/api/get-counts');
+        }
+
+        function getUserData () {
+            return connection.get('/api/get-user-data');
         }
 
         function getDataSources (params) {

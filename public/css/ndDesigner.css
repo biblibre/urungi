@@ -206,17 +206,6 @@ pre strong {
     transition: transform 0.3s ease-out;
 }
 
-ul,
-menu,
-dir {
-    display: block;
-    list-style-type: disc;
-    -webkit-margin-before: 0;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
-}
-
 article,
 blockquote,
 body,
@@ -226,20 +215,12 @@ dt,
 fieldset,
 figure,
 form,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
 header,
 li,
 menu,
 nav,
-ol,
 p,
-section,
-ul {
+section {
     margin: 0;
     border: 0 none #fff;
     padding: 0;

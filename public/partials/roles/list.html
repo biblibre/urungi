@@ -1,26 +1,23 @@
 <div class="container-fluid root-container" ng-init="getRoles(1,'',['name','description'])">
-    <div class="container-fluid">
-
-        <div class="main col-md-3" ng-include="'partials/home/sidebar.html'">
-
+    <div class="row">
+        <div class="col-md-3">
+            <app-sidebar></app-sidebar>
         </div>
-        <div class="main col-md-9">
-            <div class="container-fluid">
 
-                <div class="container-fluid branded-border-panel" >
-                    <h3 class="pull-left" translate>Roles</h3>
-                    <a ng-click="newRole()" class="btn btn-success pull-right" translate>New Role</a>
-                </div>
-
-                <div class="list-group">
-                    <a ng-click="view(role._id)" class="list-group-item" ng-repeat="role in items">
-                        <h4 class="list-group-item-heading" ng-bind="role.name"></h4>
-                        <p class="list-group-item-text" ng-bind="role.description"></p>
-                    </a>
-                </div>
-
-                <app-pager current-page="page" total-pages="pages" on-page-change="goToPage(page)"></app-pager>
+        <div class="col-md-9">
+            <div class="page-header">
+                <span class="h3" translate>Roles</span>
+                <a ng-click="newRole()" class="btn btn-success pull-right" translate>New Role</a>
             </div>
+
+            <div class="list-group">
+                <a ng-click="view(role._id)" class="list-group-item" ng-repeat="role in items">
+                    <h4 class="list-group-item-heading" ng-bind="role.name"></h4>
+                    <p class="list-group-item-text" ng-bind="role.description"></p>
+                </a>
+            </div>
+
+            <app-pager current-page="page" total-pages="pages" on-page-change="goToPage(page)"></app-pager>
         </div>
     </div>
 </div>
