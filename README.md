@@ -17,7 +17,7 @@ and others, see [Supported databases](#supported-databases)
 
 - [nodejs](https://nodejs.org) (>= 8.x)
 - [npm](https://www.npmjs.com)
-- [MongoDB](https://www.mongodb.org)
+- [MongoDB](https://www.mongodb.org) (>= 3.4)
 - [OpenJDK](http://openjdk.java.net/install/)
 - g++ and make (package build-essential on Debian-based distributions)
 
