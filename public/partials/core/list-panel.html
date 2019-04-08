@@ -1,0 +1,23 @@
+<div class="panel panel-default app-list-panel">
+    <div class="panel-heading">
+        <div class="row">
+            <span ng-repeat="column in vm.columns" class="col-md-{{column.width}}">
+
+                <div ng-if="column.label">
+                    <span class="panel-title">{{column.label}}</span>
+                    <span class="sort-button" ng-class="{ 'active' : (vm.sort === column.name) }" ng-click="vm.onSortClick(column)">
+                        <i ng-class="{ 'fa fa-sort': vm.sort !== column.name, 'fa fa-sort-asc': vm.sort === column.name && vm.sortDir === 1, 'fa fa-sort-desc': vm.sort === column.name && vm.sortDir === -1}"></i>
+                    </span>
+                </div>
+
+                <br>
+
+                <input ng-if="column.filter" type="text" ng-model="vm.filters[column.filterField || column.name]" ng-keydown="vm.onFilterKeydown()" ng-blur="vm.onFilterBlur()">
+            </span>
+        </div>
+    </div>
+
+    <div class="list-group paginated-list" ng-transclude></div>
+</div>
+
+<app-pager current-page="vm.currentPage" total-pages="vm.pages" on-page-change="vm.goToPage(page)"></app-pager>

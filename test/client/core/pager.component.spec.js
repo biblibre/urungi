@@ -1,13 +1,13 @@
 describe('appPager', function () {
     beforeEach(module('app.core'));
+    beforeEach(module('app.templates'));
 
-    let $componentController, $compile, $rootScope, $httpBackend;
+    let $componentController, $compile, $rootScope;
 
-    beforeEach(inject(function (_$componentController_, _$compile_, _$rootScope_, _$httpBackend_) {
+    beforeEach(inject(function (_$componentController_, _$compile_, _$rootScope_) {
         $componentController = _$componentController_;
         $compile = _$compile_;
         $rootScope = _$rootScope_;
-        $httpBackend = _$httpBackend_;
     }));
 
     describe('PagerController', function () {
@@ -43,18 +43,18 @@ describe('appPager', function () {
 
     describe('component', function () {
         it('should replace the element with appropriate content', function () {
-            // TODO Consider using karma-ng-html2js-preprocessor to use the real template
-            const template = 'currentPage: {{ vm.currentPage }}, ' +
-                'totalPages: {{ vm.totalPages }}';
-            $httpBackend.expect('GET', 'partials/core/pager.html')
-                .respond(template);
-
             const html = '<app-pager current-page="10" total-pages="15"></app-pager>';
             const element = $compile(html)($rootScope);
-            $httpBackend.flush();
             $rootScope.$digest();
 
-            expect(element.html()).toBe('currentPage: 10, totalPages: 15');
+            expect(element.find('ul').hasClass('pagination')).toBe(true);
+            expect(element.find('ul > li').length).toBe(14);
+            expect(element.find('ul > li').eq(0).text().trim()).toBe('First');
+            expect(element.find('ul > li').eq(1).text().trim()).toBe('Previous');
+            expect(element.find('ul > li').eq(2).text().trim()).toBe('5');
+            expect(element.find('ul > li').eq(11).text().trim()).toBe('14');
+            expect(element.find('ul > li').eq(12).text().trim()).toBe('Next');
+            expect(element.find('ul > li').eq(13).text().trim()).toBe('Last');
         });
     });
 });

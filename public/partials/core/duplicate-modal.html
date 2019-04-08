@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="vm.dismiss()" aria-hidden="true">&times;</button>
+    <h3 translate>Duplicate '{{vm.resolve.name}}' ?</h3>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <label translate for="duplicate-modal-new-name">Choose a new name for the copy :</label>
+        <input id="duplicate-modal-new-name" type="text" class="form-control" ng-model="vm.newName" ng-required="true">
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn" ng-click="vm.dismiss()" translate>Cancel</button>
+    <button ng-click="vm.onDuplicate();" class="btn btn-info" translate>Duplicate</button>
+</div>

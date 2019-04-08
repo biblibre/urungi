@@ -6,39 +6,8 @@
     </div>
 
     <div class="modal-body ng-scope">
-        <div class="panel panel-default panel-tabs">
-
-            <div class="panel-heading">
-                <h3 class="panel-title"></h3>
-
-                <div class="panel-options">
-
-                    <ul class="nav nav-tabs">
-                        <li ng-show="modalElement.isCustom" ng-class="{'active': tabbed_panel_active === 0}">
-                            <a  ng-click="tabbed_panel_active = 0" translate>Expression</a>
-                        </li>
-                        <li ng-class="{'active': tabbed_panel_active === 1}">
-                            <a  ng-click="tabbed_panel_active = 1" translate>General</a>
-                        </li>
-                        <li  ng-class="{'active': tabbed_panel_active === 2}">
-                            <a  ng-click="tabbed_panel_active = 2" translate>Format</a>
-                        </li>
-
-                        <li ng-class="{'active': tabbed_panel_active === 3}">
-                            <a  ng-click="tabbed_panel_active = 3" translate>Advanced</a>
-                        </li>
-
-                    </ul>
-
-                </div>
-            </div>
-        <div class="panel-body">
-
-            <div class="tab-content" >
-
-
-                <div class="tab-pane form-group " ng-class="{'active': tabbed_panel_active == 0}">
-
+        <uib-tabset active="tab.active">
+            <uib-tab index="0" ng-show="modalElement.isCustom" heading="{{ 'Expression' | translate }}">
                     <div class="container-fluid row">
                         <div class="col-md-6">
                             <ul class="scroll-list btn-group-vertical">
@@ -66,17 +35,8 @@
                     {{'#' + element.elementID + ' ' + '='+ ' '  + element.elementLabel + '(' + element.collectionName + ')'}}
                     </li>
                     </ul>
-
-                    <!-- <div exp-editor
-                        class="form-control"
-                        element-ref="modalElement.availableElements"
-                        contenteditable="true"
-                        ng-model="viewExpression">This is editable</div> -->
-
-                </div>
-
-                <div class="tab-pane " ng-class="{'active': tabbed_panel_active == 1}">
-
+            </uib-tab>
+            <uib-tab index="1" heading="{{ 'General' | translate }}">
                     <div class="row">
                         <div class="col-md-6">
 
@@ -172,10 +132,8 @@
                             </div>
                         </div>
                     </div>
-
-
-                </div> <!--tab pane 1-->
-                <div   class="tab-pane" ng-class="{'active': tabbed_panel_active == 2}">
+            </uib-tab>
+            <uib-tab index="2" heading="{{ 'Format' | translate }}">
                        <div ng-if="modalElement.elementType == 'number' || modalElement.elementType == 'date'" >
                             <div class="form-group">
                                 <label for="field-format" class="control-label">Format</label>
@@ -231,8 +189,8 @@
 
                             </div>
                     </div>
-                </div>  <!--tab pane 2-->
-                <div class="tab-pane" ng-class="{'active': tabbed_panel_active == 3}">
+            </uib-tab>
+            <uib-tab index="3" heading="{{ 'Advanced' | translate }}">
                     <div ng-if="modalElement.elementType == 'date'">
 
                         <div class="checkbox">
@@ -317,10 +275,9 @@
 
                         </div>
                     </div>
-                </div>  <!--tab pane 3-->
-        </div> <!--tab content-->
-        </div> <!--body-->
-    </div><!--panel-->
+            </uib-tab>
+        </uib-tabset>
+
         <div ng-if="elementEditingWarning && elementEditingWarning != ''" class="alert-block">{{elementEditingWarning}}</div>
         <div ng-if="modalCycle" class="alert-block">
             <div translate>Cyclic definition : </div>

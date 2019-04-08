@@ -1,7 +1,7 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportService, connection, $routeParams, reportModel, c3Charts, uuid2,
     colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout,
-    $rootScope, gettextCatalog, usersModel
+    $rootScope, gettextCatalog, usersModel, $uibModal
 ) {
     $scope.reportModal = 'partials/report/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
@@ -10,7 +10,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     $scope.settingsTemplate = 'partials/widgets/inspector.html';
     $scope.filterWidget = 'partials/report/filterWidget.html';
     $scope.promptModal = 'partials/widgets/promptModal.html';
-    $scope.reportImportModal = 'partials/dashboardv2/reportImportModal.html';
 
     $scope.selectedDashboard = { reports: [], containers: [], prompts: [] };
     $scope.lastElementID = 0;
@@ -27,26 +26,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     // $scope.imageFilters.opacity = 10;
     $scope.theData = [];
     $scope.mode = 'preview';
-
-    $scope.duplicateOptions = {};
-    $scope.duplicateOptions.freeze = false;
-    $scope.duplicateOptions.header = 'Duplicate dashboard';
-
-    // Parameters for the report navigation list used in report import
-    $scope.nav = {};
-    $scope.nav.apiFetchUrl = '/api/reports/find-all';
-    $scope.nav.editButtons = false;
-    $scope.nav.layerButtons = false;
-    $scope.nav.itemsPerPage = 6;
-    $scope.nav.fetchFields = ['reportName', 'reportType', 'isPublic', 'owner', 'reportDescription', 'author', 'createdOn'];
-    $scope.nav.nameField = 'reportName';
-    $scope.nav.infoFields = [
-        {
-            name: 'reportName',
-            label: 'Name',
-            widthClass: 'col-md-6'
-        }
-    ];
 
     $scope.textAlign = [
         { name: 'left', value: 'left' },
@@ -90,19 +69,18 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     };
 
     $scope.importReport = function () {
-        $('#reportImportModal').modal('show');
-    };
-
-    $scope.nav.clickItem = function (item) {
-        return reportModel.getReportDefinition(item._id).then(function (report) {
-            if (report) {
-                report.id = report._id;
-                $scope.selectedDashboard.reports.push(report);
-            } else {
-                noty({ text: 'Error : failed to import report', type: 'error', timeout: 3000 });
-            }
-
-            $('#reportImportModal').modal('hide');
+        const modal = $uibModal.open({
+            component: 'appReportsImportModal',
+        });
+        modal.result.then(reportID => {
+            reportModel.getReportDefinition(reportID).then(function (report) {
+                if (report) {
+                    report.id = report._id;
+                    $scope.selectedDashboard.reports.push(report);
+                } else {
+                    noty({ text: 'Error : failed to import report', type: 'error', timeout: 3000 });
+                }
+            });
         });
     };
 
@@ -225,24 +203,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             referenceId: referenceId
         });
     };
-
-    $scope.viewDuplicationForm = function (dashboard) {
-        $scope.duplicateOptions.dashboard = dashboard;
-        $scope.duplicateOptions.newName = dashboard.dashboardName + ' copy';
-        $('#duplicateModal').modal('show');
-    };
-
-    $scope.duplicateDashboard = function () {
-        $scope.duplicateOptions.freeze = true;
-
-        return dashboardv2Model.duplicateDashboard($scope.duplicateOptions).then(function () {
-            $scope.getDashboards($scope.page, '', ['dashboardName', 'isPublic', 'owner', 'dashboardDescription']);
-            $scope.duplicateOptions.freeze = false;
-            $('#duplicateModal').modal('hide');
-        });
-    };
-
-    $scope.duplicateOptions.duplicate = $scope.duplicateDashboard;
 
     $scope.cancelReport = function (report) {
         $scope.reportInterface = false;
@@ -729,14 +689,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         return copy;
     }
 
-    $scope.delete = function (dashboardID, dashboardName) {
-        $scope.modalOptions = {};
-        $scope.modalOptions.headerText = 'Confirm delete dashboard';
-        $scope.modalOptions.bodyText = 'Are you sure you want to delete the dashboard:' + ' ' + dashboardName;
-        $scope.modalOptions.ID = dashboardID;
-        $('#deleteModal').modal('show');
-    };
-
     $scope.deleteReport = function (reportID, reportName) {
         for (var i in $scope.selectedDashboard.reports) {
             if ($scope.selectedDashboard.reports[i].id === reportID) {
@@ -749,21 +701,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
     $scope.editReport = function (reportID, reportName) {
 
-    };
-
-    $scope.deleteConfirmed = function (dashboardID) {
-        connection.post('/api/dashboardsv2/delete/' + dashboardID, { id: dashboardID }).then(function (result) {
-            if (result.result === 1) {
-                $('#deleteModal').modal('hide');
-
-                var nbr = -1;
-                for (var i in $scope.dashboards.items) {
-                    if ($scope.dashboards.items[i]._id === dashboardID) { nbr = i; }
-                }
-
-                if (nbr > -1) { $scope.dashboards.items.splice(nbr, 1); }
-            }
-        });
     };
 
     $scope.initPrompts = function () {

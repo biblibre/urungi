@@ -44,12 +44,11 @@
 </div>
 
 
-<div ng-show="showSQL" class="panel panel-default" style="z-index:100">
+<div ng-show="showSQL" class="panel" style="z-index:100">
     <div class="panel-heading">
-        <h3 class="panel-title" translate>SQL query</h3>
-
-        <div class="panel-options">
-            <a ng-click="getSQLPanel();" data-toggle="remove" style="cursor: pointer;">x</a>
+        <div class="panel-title">
+            <span translate>SQL query</span>
+            <button type="button" class="close" ng-click="getSQLPanel();">&times;</button>
         </div>
     </div>
 

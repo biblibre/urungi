@@ -11,6 +11,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
     $scope.items = [];
     $scope.datasources = [];
     $scope.selectedDts = {};
+    $scope.tab = { active: 1 };
 
     $scope.customElements = {
         elements: [],
@@ -873,7 +874,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
         $scope.modalElement = element;
         $scope.modalCycle = false;
         $scope.elementEditing = false;
-        $scope.tabbed_panel_active = 0;
+        $scope.tab.active = 0;
         $('#elementModal').modal('show');
     };
 
@@ -891,7 +892,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
 
     $scope.validateCustomElement = function () {
         if ($scope.compileExpression()) {
-            $scope.tabbed_panel_active = 1;
+            $scope.tab.active = 1;
         }
     };
 
@@ -951,7 +952,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
     $scope.elementAdd = function (element) {
         $scope.modalElement = element;
         $scope.elementEditing = false;
-        $scope.tabbed_panel_active = 1;
+        $scope.tab.active = 1;
         $('#elementModal').modal('show');
     };
 
@@ -984,7 +985,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
         $scope.modalElement = Object.create(element);
 
         $scope.elementEditing = true;
-        $scope.tabbed_panel_active = 1;
+        $scope.tab.active = 1;
         $('#elementModal').modal('show');
     };
 

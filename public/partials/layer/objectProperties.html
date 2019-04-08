@@ -62,97 +62,67 @@
 </div>
 
 <div ng-if="objectType == 'element'">
-
-    <div class="nav-tabs-justified" ng-init="tabbed_panel_active = 1">
-
-        <ul class="nav nav-tabs active" ng-class="{'nav-stacked': vertical, 'nav-justified': justified}" >
-			<li ng-class="{'active': tabbed_panel_active == 1}" heading="Home" >
-                <a ng-click="tabbed_panel_active = 1" translate>General</a>
-            </li>
-			<li ng-class="{'active': tabbed_panel_active == 2}" heading="Profile" >
-                <a ng-click="tabbed_panel_active = 2" translate>Advanced</a>
-            </li>
-
-
-		</ul>
-    <div class="tab-content">
-            <div class="tab-pane" ng-class="{'active': tabbed_panel_active == 1}" >
-
-                <div class="container-fluid tab-container">
-
+    <uib-tabset justified="true">
+        <uib-tab heading="{{ 'General' | translate }}">
+            <div class="container-fluid tab-container">
                 <div class="row" >
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label  class="control-label properties" translate>Name</label>
-                                    <input type="text" class="form-control" placeholder="{{object.elementName}}" disabled="">
-                            </div>
-
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label  class="control-label properties" translate>Name</label>
+                            <input type="text" class="form-control" placeholder="{{object.elementName}}" disabled="">
                         </div>
                     </div>
-                    <div class="row" >
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label  class="control-label properties" translate>Label</label>
-                                    <input type="text" class="form-control" ng-model="object.elementLabel">
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="row" >
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-4" class="control-label" translate>Type</label>
-                                <select id="field-4" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="object.elementType" ng-options="obj.value as obj.name for obj in elementTypes"></select>
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="col-md-6" ng-if="object.elementType != 'number'">
-                            <div class="form-group">
-                                <label for="field-4" class="control-label" translate>Default Aggregation</label>
-                                                <select  id="field-4b" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="object.defaultAggregation" ng-options="obj.value as obj.name for obj in stringDefaultAggregation"></select>
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-md-6" ng-if="object.elementType == 'number'">
-                            <div class="form-group">
-                                <label for="field-4" class="control-label" translate>Default Aggregation</label>
-                                                <select  id="field-4b" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="object.defaultAggregation" ng-options="obj.value as obj.name for obj in numberDefaultAggregation"></select>
-                            </div>
-
-                        </div>
-
-                    </div>
-                    <div class="row" ng-if="object.elementType == 'number' || selectedElement.elementType == 'date'">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label  class="control-label properties" translate>Format</label>
-                                <input type="text" class="form-control" ng-model="object.format" placeholder="format...">
-                                <p class="help-block"><a class="pull-right" href="http://numeraljs.com/" target="_blank" translate>More Info</a></p>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-
-			</div>
-      </div>
-      <div class="tab-pane"  ng-class="{'active': tabbed_panel_active == 2}" >
-                <div class="container-fluid tab-container">
-
                 </div>
 
-			</div>
+                <div class="row" >
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label  class="control-label properties" translate>Label</label>
+                            <input type="text" class="form-control" ng-model="object.elementLabel">
+                        </div>
+                    </div>
+                </div>
 
+                <div class="row" >
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="field-4" class="control-label" translate>Type</label>
+                            <select id="field-4" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="object.elementType" ng-options="obj.value as obj.name for obj in elementTypes"></select>
+                        </div>
+                    </div>
 
-        </div>
-    </div>
+                    <div class="col-md-6" ng-if="object.elementType != 'number'">
+                        <div class="form-group">
+                            <label for="field-4" class="control-label" translate>Default Aggregation</label>
+                            <select  id="field-4b" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="object.defaultAggregation" ng-options="obj.value as obj.name for obj in stringDefaultAggregation"></select>
+                        </div>
+                    </div>
 
+                    <div class="col-md-6" ng-if="object.elementType == 'number'">
+                        <div class="form-group">
+                            <label for="field-4" class="control-label" translate>Default Aggregation</label>
+                            <select  id="field-4b" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="object.defaultAggregation" ng-options="obj.value as obj.name for obj in numberDefaultAggregation"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-if="object.elementType == 'number' || selectedElement.elementType == 'date'">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label  class="control-label properties" translate>Format</label>
+                            <input type="text" class="form-control" ng-model="object.format" placeholder="format...">
+                            <p class="help-block"><a class="pull-right" href="http://numeraljs.com/" target="_blank" translate>More Info</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+
+        <uib-tab heading="{{ 'Advanced' | translate }}">
+            <div class="container-fluid tab-container">
+            </div>
+        </uib-tab>
+    </uib-tabset>
 </div>
 
 <div ng-if="objectType == 'join'">
