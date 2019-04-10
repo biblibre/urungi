@@ -41,6 +41,11 @@ not going to explore MondoDB data.
     npm ci
     ```
 
+4. Run MongoDB migrations
+
+    ```
+    npx migrate-mongo up
+    ```
 
 ## Configuration
 
