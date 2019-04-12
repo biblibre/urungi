@@ -1,158 +1,165 @@
-<h2>Import layers, reports and dashboards </h2>
+<div class="container-fluid root-container" ng-init="initImport()">
+    <div class="row">
+        <div class="col-md-3">
+            <app-sidebar></app-sidebar>
+        </div>
 
-<div class="container-fluid branded-border-panel" ng-init="initImport()">
-
-    <span ng-if="state === 1">
-        <span ng-if="importFile">
-            <div ng-if="importFile.layers.length">
-                <h4>Layers</h4>
-
-                <ul>
-                    <li ng-repeat="layer in importFile.layers">
-                        <div>
-                            <span> {{layer.name}}</span>
-                        </div>
-                    </li>
-                </ul>
+        <div class="col-md-9">
+            <div class="page-header">
+                <h3 translate>Import layers, reports and dashboards</h3>
             </div>
 
-            <div ng-if="importFile.reports.length">
-                <h4>Reports</h4>
+            <span ng-if="state === 1">
+                <span ng-if="importFile">
+                    <div ng-if="importFile.layers.length">
+                        <h4>Layers</h4>
 
-                <ul>
-                    <li ng-repeat="report in importFile.reports">
-                        <div>
-                            <span> {{report.reportName}}</span>
+                        <ul>
+                            <li ng-repeat="layer in importFile.layers">
+                                <div>
+                                    <span> {{layer.name}}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div ng-if="importFile.reports.length">
+                        <h4>Reports</h4>
+
+                        <ul>
+                            <li ng-repeat="report in importFile.reports">
+                                <div>
+                                    <span> {{report.reportName}}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div ng-if="importFile.dashboards.length">
+                        <h4>Dashboards</h4>
+
+                        <ul>
+                            <li ng-repeat="dashboard in importFile.dashboards">
+                                <div>
+                                    <span> {{dashboard.dashboardName}}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </span>
+
+                <button class="btn btn-success" ng-click="startImport()" ng-show="importFile">import</button>
+                <br>
+                <div class="btn btn-default" ngf-select="upload($file)">Choose file to import</div>
+            </span>
+
+            <span ng-if="state === 2">
+                <div class="row">
+                    <div class="col-md-3">
+                      <h4 translate>Please associate the imported data sources to the local ones:</h4>
+                      <br>
+                        <h5 translate>Imported data sources:</h5>
+                        <ul>
+                            <li ng-repeat="dts in importFile.datasources">
+                                <div>
+                                    <span>{{dts.name}}</span>
+                                    <span>
+                                        -&gt;
+                                        <select ng-model="datasourceMatch[dts._id]" ng-options="dts as dts.name for dts in localDataSources"></select>
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div ng-show="matchAllDatasourcesMessage">Please match all datasources</div>
+                        <button ng-click="confirmImport()">confirm</button>
+                        <button ng-click="cancelImport()">cancel</button>
+
+                    </div>
+                    <h4 translate>The following elements already exist. Please select the ones you want to overwrite. The others will not be imported:</h4>
+                    <br>
+                    <div class="col-md-3">
+                        <h5 translate>Existing Layers:</h5>
+
+                        <div class="checkbox" ng-repeat="item in importFile.layers">
+                            <label>
+                                <input type="checkbox" ng-model="item.replace">
+                                {{item.name}}
+                            </label>
                         </div>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 translate>Existing Reports:</h5>
 
-            <div ng-if="importFile.dashboards.length">
-                <h4>Dashboards</h4>
-
-                <ul>
-                    <li ng-repeat="dashboard in importFile.dashboards">
-                        <div>
-                            <span> {{dashboard.dashboardName}}</span>
+                        <div class="checkbox" ng-repeat="item in importFile.reports">
+                            <label>
+                                <input type="checkbox" ng-model="item.replace">
+                                {{item.reportName}}
+                            </label>
                         </div>
-                    </li>
-                </ul>
-            </div>
-        </span>
-
-        <button class="btn btn-success" ng-click="startImport()" ng-show="importFile">import</button>
-        <br>
-        <div class="btn btn-default" ng-app="fileUpload" ngf-select="upload($file)">Choose file to import</div>
-        <br>
-        <a class="btn btn-default" href="/#/home">back</a>
-    </span>
-
-    <span ng-if="state === 2">
-        <div class="row">
-            <div class="col-md-3">
-              <h4 translate>Please associate the imported data sources to the local ones:</h4>
-              <br>
-                <h5 translate>Imported data sources:</h5>
-                <ul>
-                    <li ng-repeat="dts in importFile.datasources">
-                        <div>
-                            <span>{{dts.name}}</span>
-                            <span>
-                                -&gt;
-                                <select ng-model="datasourceMatch[dts._id]" ng-options="dts as dts.name for dts in localDataSources"></select>
-                            </span>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 translate>Existing Dashboards:</h5>
+                        <div class="checkbox" ng-repeat="item in importFile.dashboards">
+                            <label>
+                                <input type="checkbox" ng-model="item.replace">
+                                {{item.dashboardName}}
+                            </label>
                         </div>
-                    </li>
-                </ul>
-
-                <div ng-show="matchAllDatasourcesMessage">Please match all datasources</div>
-                <button ng-click="confirmImport()">confirm</button>
-                <button ng-click="cancelImport()">cancel</button>
-
-            </div>
-            <h4 translate>The following elements already exist. Please select the ones you want to overwrite. The others will not be imported:</h4>
-            <br>
-            <div class="col-md-3">
-                <h5 translate>Existing Layers:</h5>
-
-                <div class="checkbox" ng-repeat="item in importFile.layers">
-                    <label>
-                        <input type="checkbox" ng-model="item.replace">
-                        {{item.name}}
-                    </label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <h5 translate>Existing Reports:</h5>
+            </span>
 
-                <div class="checkbox" ng-repeat="item in importFile.reports">
-                    <label>
-                        <input type="checkbox" ng-model="item.replace">
-                        {{item.reportName}}
-                    </label>
+            <span ng-if="state === 3">
+                <h4>Import successful</h4>
+
+                <h5>Created items</h5>
+                <div ng-if="created.length">
+                    <ul>
+                        <li ng-repeat="item in created">
+                            {{item.item.name || item.item.reportName || item.item.dashboardName}}
+                        </li>
+                    </ul>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <h5 translate>Existing Dashboards:</h5>
-                <div class="checkbox" ng-repeat="item in importFile.dashboards">
-                    <label>
-                        <input type="checkbox" ng-model="item.replace">
-                        {{item.dashboardName}}
-                    </label>
+                <div ng-if="!created.length">
+                    No new item has been created.
                 </div>
-            </div>
+
+                <h5>Items updated</h5>
+                <div ng-if="replace.length">
+                    <ul>
+                        <li ng-repeat="item in replace">
+                            {{item.name || item.reportName || item.dashboardName}}
+                        </li>
+                    </ul>
+                </div>
+                <div ng-if="!replace.length" translate>
+                    No item has been updated.
+                </div>
+
+                <div ng-if="messages.length">
+                    <details class="details">
+                        <summary translate>Messages (Log)</summary>
+
+                        <ul class="dropdownImport">
+                            <li ng-repeat="message in messages">
+                                {{ message }}
+                            </li>
+                        </ul>
+                    </details>
+                </div>
+
+                <button ng-click="initImport()">Import new file</button>
+                <a class="button" href="/#/home">Back to main page</a>
+            </span>
+
+            <span ng-if="state === 4">
+                <h4>An error has occurred</h4>
+                <button ng-click="logError()">log error in console</button>
+                <br>
+                <button ng-click="initImport()">Import new file</button>
+                <a class="button" href="/#/home">Back to main page</a>
+            </span>
         </div>
-    </span>
-
-    <span ng-if="state === 3">
-        <h4>Import successful</h4>
-
-        <h5>Created items</h5>
-        <div ng-if="created.length">
-            <ul>
-                <li ng-repeat="item in created">
-                    {{item.item.name || item.item.reportName || item.item.dashboardName}}
-                </li>
-            </ul>
-        </div>
-        <div ng-if="!created.length">
-            No new item has been created.
-        </div>
-
-        <h5>Items updated</h5>
-        <div ng-if="replace.length">
-            <ul>
-                <li ng-repeat="item in replace">
-                    {{item.name || item.reportName || item.dashboardName}}
-                </li>
-            </ul>
-        </div>
-        <div ng-if="!replace.length" translate>
-            No item has been updated.
-        </div>
-
-        <div ng-if="messages.length">
-            <details class="details">
-                <summary translate>Messages (Log)</summary>
-
-                <ul class="dropdownImport">
-                    <li ng-repeat="message in messages">
-                        {{ message }}
-                    </li>
-                </ul>
-            </details>
-        </div>
-
-        <button ng-click="initImport()">Import new file</button>
-        <a class="button" href="/#/home">Back to main page</a>
-    </span>
-
-    <span ng-if="state === 4">
-        <h4>An error has occurred</h4>
-        <button ng-click="logError()">log error in console</button>
-        <br>
-        <button ng-click="initImport()">Import new file</button>
-        <a class="button" href="/#/home">Back to main page</a>
-    </span>
+    </div>
 </div>

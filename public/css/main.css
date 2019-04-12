@@ -20,6 +20,10 @@ body {
     background-color: #f9f9f9;
 }
 
+summary {
+    display: list-item;
+}
+
 .root-container {
     padding-top: 10px;
     height: 100%;
@@ -1408,6 +1412,25 @@ img.img-cirlce {
 
 .report-repeater-column-header .btn {
     height: 27px;
+}
+
+.dropdownExport {
+    background-color: #eee;
+    padding: 5px;
+}
+
+.dropdownExport .checkbox {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.details {
+    background-color: #f5f5f5;
+}
+
+.details > summary {
+    border-bottom: 1px solid #000;
+    padding: 2px 5px;
 }
 
 .dropdown-submenu {

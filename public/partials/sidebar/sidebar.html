@@ -52,6 +52,14 @@
         <span translate>Users</span>
         <span class="badge">{{vm.counts.users}}</span>
     </a>
+    <a id="usersImport" ng-show="vm.user.isWSTADMIN" href="/#/import" class="list-group-item">
+        <i class="fa fa-fw fa-upload"></i>
+        <span translate>Import</span>
+    </a>
+    <a id="usersExport" ng-show="vm.user.isWSTADMIN" href="/#/export" class="list-group-item">
+        <i class="fa fa-fw fa-download"></i>
+        <span translate>Export</span>
+    </a>
     <a ng-if="vm.showIntro && vm.user.contextHelp.includes('homeIndex')" href="" class="list-group-item admin-menu" ng-click="vm.showIntro()">
         <i class="fa fa-fw fa-map"></i>
         <span translate>Guided tour</span>
