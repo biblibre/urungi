@@ -1,16 +1,16 @@
 angular.module('app').service('ioModel', function (connection, $q) {
     function exportDatasource (datasourceID) {
-        return connection.get('/api/data-sources/find-one', {id: datasourceID})
+        return connection.get('/api/data-sources/find-one', { id: datasourceID })
             .then(response => response.item);
     }
 
     function exportLayer (layerID) {
-        return connection.get('/api/layers/find-one', {id: layerID})
+        return connection.get('/api/layers/find-one', { id: layerID })
             .then(response => response.item);
     }
 
     function exportReport (reportID) {
-        return connection.get('/api/reports/find-one', {id: reportID})
+        return connection.get('/api/reports/find-one', { id: reportID })
             .then(response => {
                 delete response.item.query.data;
                 return response.item;
@@ -18,7 +18,7 @@ angular.module('app').service('ioModel', function (connection, $q) {
     }
 
     function exportDashboard (dashboardID) {
-        return connection.get('/api/dashboardsv2/find-one', {id: dashboardID})
+        return connection.get('/api/dashboardsv2/find-one', { id: dashboardID })
             .then(response => {
                 for (const report of response.item.reports) {
                     delete report.query.data;
@@ -204,7 +204,7 @@ angular.module('app').service('ioModel', function (connection, $q) {
     };
 
     function getLayer (id) {
-        return connection.get('/api/layers/find-one', {id: id}).then(r => r.item);
+        return connection.get('/api/layers/find-one', { id: id }).then(r => r.item);
     }
 
     this.getLayers = function () {
@@ -216,7 +216,7 @@ angular.module('app').service('ioModel', function (connection, $q) {
     };
 
     function getReport (id) {
-        return connection.get('/api/reports/find-one', {id: id}).then(r => r.item);
+        return connection.get('/api/reports/find-one', { id: id }).then(r => r.item);
     }
 
     this.getReports = function () {
@@ -228,7 +228,7 @@ angular.module('app').service('ioModel', function (connection, $q) {
     };
 
     function getDashboard (id) {
-        return connection.get('/api/dashboardsv2/find-one', {id: id}).then(r => r.item);
+        return connection.get('/api/dashboardsv2/find-one', { id: id }).then(r => r.item);
     }
 
     this.getDashboards = function () {

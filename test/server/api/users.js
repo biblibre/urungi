@@ -66,8 +66,8 @@ describe('Users API', function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
-            var User = await Users.findOne({userName: 'administrator'});
-            res = await agent.get('/api/admin/users/find-one').query({id: User.id});
+            var User = await Users.findOne({ userName: 'administrator' });
+            res = await agent.get('/api/admin/users/find-one').query({ id: User.id });
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
@@ -94,7 +94,7 @@ describe('Users API', function () {
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/admin/users/create')
-                .send({userName: 'test', pwd1: 'urungi'});
+                .send({ userName: 'test', pwd1: 'urungi' });
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
@@ -114,7 +114,7 @@ describe('Users API', function () {
             expect(decrypted.user).to.have.property('contextHelp');
             expect(decrypted.user).to.have.property('filters');
             expect(decrypted.user).to.have.property('roles');
-            res = await Users.deleteOne({userName: 'test'});
+            res = await Users.deleteOne({ userName: 'test' });
         });
     });
 
@@ -122,15 +122,15 @@ describe('Users API', function () {
         it('should update administrator data', async function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
-            var User = await Users.findOne({userName: 'administrator'});
+            var User = await Users.findOne({ userName: 'administrator' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/admin/users/update/' + User.id)
-                .send({email: 'admin@example.com', _id: User.id, firstName: 'update'});
+                .send({ email: 'admin@example.com', _id: User.id, firstName: 'update' });
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
             expect(decrypted).to.have.property('msg', '1 record updated.');
-            User = await Users.findOne({userName: 'administrator'});
+            User = await Users.findOne({ userName: 'administrator' });
             expect(User.firstName).to.equal('update');
             expect(User.email).to.equal('admin@example.com');
         });
@@ -142,18 +142,18 @@ describe('Users API', function () {
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/admin/users/create')
-                .send({userName: 'new', pwd1: 'urungi'});
-            var User = await Users.findOne({userName: 'new'});
+                .send({ userName: 'new', pwd1: 'urungi' });
+            var User = await Users.findOne({ userName: 'new' });
             res = await agent.post('/api/admin/users/update/' + User.id)
-                .send({email: 'new@example.com', _id: User.id, firstName: 'update'});
+                .send({ email: 'new@example.com', _id: User.id, firstName: 'update' });
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
             expect(decrypted).to.have.property('msg', '1 record updated.');
-            User = await Users.findOne({userName: 'new'});
+            User = await Users.findOne({ userName: 'new' });
             expect(User.firstName).to.equal('update');
             expect(User.email).to.equal('new@example.com');
-            res = await Users.deleteOne({userName: 'new'});
+            res = await Users.deleteOne({ userName: 'new' });
         });
     });
 
@@ -163,11 +163,11 @@ describe('Users API', function () {
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/admin/users/create')
-                .send({userName: 'new', pwd1: 'urungi'});
-            var User = await Users.findOne({userName: 'new'});
+                .send({ userName: 'new', pwd1: 'urungi' });
+            var User = await Users.findOne({ userName: 'new' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/admin/users/delete/' + User.id)
-                .send({_id: User.id});
+                .send({ _id: User.id });
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
@@ -181,15 +181,15 @@ describe('Users API', function () {
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/admin/users/create')
-                .send({userName: 'new', pwd1: 'urungi'});
-            var User = await Users.findOne({userName: 'new'});
+                .send({ userName: 'new', pwd1: 'urungi' });
+            var User = await Users.findOne({ userName: 'new' });
             res = await agent.get('/api/get-user-data');
             res = await agent.post('/api/admin/users/change-user-status')
-                .send({userID: User.id, status: 'Not active'});
+                .send({ userID: User.id, status: 'Not active' });
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
             expect(decrypted).to.have.property('msg', 'Status updated.');
-            res = await Users.deleteOne({userName: 'new'});
+            res = await Users.deleteOne({ userName: 'new' });
         });
     });
 
@@ -208,7 +208,7 @@ describe('Users API', function () {
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/change-my-password')
-                .send({pwd1: 'urungi', pwd2: 'urungi'});
+                .send({ pwd1: 'urungi', pwd2: 'urungi' });
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
@@ -219,7 +219,7 @@ describe('Users API', function () {
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/change-my-password')
-                .send({pwd1: 'urungi1', pwd2: 'urungi'});
+                .send({ pwd1: 'urungi1', pwd2: 'urungi' });
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 0);
             expect(decrypted).to.have.property('msg', 'Passwords do not match');
@@ -229,11 +229,11 @@ describe('Users API', function () {
     describe('GET /api/get-counts', function () {
         let datasource, layer, report, dashboard;
         beforeEach(async function () {
-            datasource = await DataSources.create({companyID: 'COMPID', name: 'DataSource', type: 'DataSource', status: 1, nd_trash_deleted: false});
-            layer = await Layers.create({companyID: 'COMPID', name: 'Layer', type: 'Layer', status: '1', nd_trash_deleted: false, createdBy: 'administrator'});
-            var User = await Users.findOne({userName: 'administrator'});
-            report = await Reports.create({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, selectedLayerID: layer.id, isPublic: true});
-            dashboard = await Dashboards.create({companyID: 'COMPID', dashboardName: 'Dashboard1', owner: User.id, nd_trash_deleted: false});
+            datasource = await DataSources.create({ companyID: 'COMPID', name: 'DataSource', type: 'DataSource', status: 1, nd_trash_deleted: false });
+            layer = await Layers.create({ companyID: 'COMPID', name: 'Layer', type: 'Layer', status: '1', nd_trash_deleted: false, createdBy: 'administrator' });
+            var User = await Users.findOne({ userName: 'administrator' });
+            report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, selectedLayerID: layer.id, isPublic: true });
+            dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboard1', owner: User.id, nd_trash_deleted: false });
         });
 
         afterEach(async function () {
@@ -267,11 +267,11 @@ describe('Users API', function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
-            var User = await Users.findOne({userName: 'administrator'});
-            var report = await Reports.create({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isPublic: true});
-            var dashboard = await Dashboards.create({companyID: 'COMPID', dashboardName: 'Dashboardcount', owner: User.id, nd_trash_deleted: false, isPublic: true});
+            var User = await Users.findOne({ userName: 'administrator' });
+            var report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isPublic: true });
+            var dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboardcount', owner: User.id, nd_trash_deleted: false, isPublic: true });
             var count = await agent.get('/api/get-user-counts/' + User.id)
-                .query({userID: User.id});
+                .query({ userID: User.id });
             expect(count).to.have.status(200);
             var decrypted = JSON.parse(count.text);
             expect(decrypted).to.have.property('publishedReports', 1);
@@ -288,10 +288,10 @@ describe('Users API', function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
-            var User = await Users.findOne({userName: 'administrator'});
-            var report = await Reports.create({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isPublic: true, parentFolder: 'parent', reportDescription: 'report Description', reportType: 'report'});
+            var User = await Users.findOne({ userName: 'administrator' });
+            var report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isPublic: true, parentFolder: 'parent', reportDescription: 'report Description', reportType: 'report' });
             res = await agent.get('/api/get-user-reports/' + User.id)
-                .query({userID: User.id});
+                .query({ userID: User.id });
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
@@ -313,10 +313,10 @@ describe('Users API', function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
-            var User = await Users.findOne({userName: 'administrator'});
-            var dashboard = await Dashboards.create({companyID: 'COMPID', dashboardName: 'Dashboardget', owner: User.id, nd_trash_deleted: false, isPublic: true, dashboardDescription: 'dashboard Description', dashboardType: 'dashboard'});
+            var User = await Users.findOne({ userName: 'administrator' });
+            var dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboardget', owner: User.id, nd_trash_deleted: false, isPublic: true, dashboardDescription: 'dashboard Description', dashboardType: 'dashboard' });
             res = await agent.get('/api/get-user-dashboards/' + User.id)
-                .query({userID: User.id});
+                .query({ userID: User.id });
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
             expect(decrypted).to.have.property('page');
@@ -334,18 +334,18 @@ describe('Users API', function () {
         it('should return status 200 ', async function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
-            await Users.findOne({userName: 'administrator'});
+            await Users.findOne({ userName: 'administrator' });
             expect(res).to.have.status(200);
             res = await agent.post('/api/admin/users/create')
-                .send({userName: 'new', pwd1: 'urungi'});
-            var newUser = await Users.findOne({userName: 'new'});
+                .send({ userName: 'new', pwd1: 'urungi' });
+            var newUser = await Users.findOne({ userName: 'new' });
             expect(res).to.have.status(200);
             res = await agent.get('/api/get-user-data');
             res = await agent.post('/api/logout');
             expect(res).to.have.status(200);
             res = await agent.post('/api/login')
                 .send({ userName: 'new', password: 'urungi' });
-            newUser = await Users.findOne({userName: 'new'});
+            newUser = await Users.findOne({ userName: 'new' });
             expect(res).to.have.status(200);
             res = await agent.get('/api/get-user-data');
             expect(res).to.have.status(200);
@@ -387,7 +387,7 @@ describe('Users API', function () {
         it('should get administrator data ', async function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
-            await Users.findOne({userName: 'administrator'});
+            await Users.findOne({ userName: 'administrator' });
             expect(res).to.have.status(200);
             res = await agent.get('/api/get-user-data');
             expect(res).to.have.status(200);
@@ -434,10 +434,10 @@ describe('Users API', function () {
     describe('GET /api/get-user-last-executions', function () {
         let statistics1, statistics2, statistics3;
         beforeEach(async function () {
-            var User = await Users.findOne({userName: 'administrator'});
-            statistics1 = await statistics.create({type: 'report', relationedName: 'report1', action: 'execute', companyID: 'COMPID', userID: User.id, userName: 'administrator', createdBy: User.id});
-            statistics2 = await statistics.create({type: 'report', relationedName: 'report1', action: 'execute', companyID: 'COMPID', userID: User.id, userName: 'administrator', createdBy: User.id});
-            statistics3 = await statistics.create({type: 'report', relationedName: 'report2', action: 'execute', companyID: 'COMPID', userID: User.id, userName: 'administrator', createdBy: User.id});
+            var User = await Users.findOne({ userName: 'administrator' });
+            statistics1 = await statistics.create({ type: 'report', relationedName: 'report1', action: 'execute', companyID: 'COMPID', userID: User.id, userName: 'administrator', createdBy: User.id });
+            statistics2 = await statistics.create({ type: 'report', relationedName: 'report1', action: 'execute', companyID: 'COMPID', userID: User.id, userName: 'administrator', createdBy: User.id });
+            statistics3 = await statistics.create({ type: 'report', relationedName: 'report2', action: 'execute', companyID: 'COMPID', userID: User.id, userName: 'administrator', createdBy: User.id });
         });
         afterEach(async function () {
             await Promise.all([
@@ -483,10 +483,10 @@ describe('Users API', function () {
         it('should return status 200', async function () {
             await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
-            var User = await Users.findOne({userName: 'administrator'});
+            var User = await Users.findOne({ userName: 'administrator' });
             expect(User).to.have.property('contextHelp').to.be.an('array').that.is.empty;// eslint-disable-line no-unused-expressions
-            await agent.get('/api/set-viewed-context-help').query({contextHelpName: 'homeIndex'});
-            User = await Users.findOne({userName: 'administrator'});
+            await agent.get('/api/set-viewed-context-help').query({ contextHelpName: 'homeIndex' });
+            User = await Users.findOne({ userName: 'administrator' });
             expect(User).to.have.deep.property('contextHelp', ['homeIndex']);
         });
     });
@@ -494,9 +494,9 @@ describe('Users API', function () {
         it('should get report and dashboard id and title which was created by administrator', async function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
-            var User = await Users.findOne({userName: 'administrator'});
-            var report = await Reports.create({companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isPublic: true, parentFolder: 'root'});
-            var dashboard = await Dashboards.create({companyID: 'COMPID', dashboardName: 'Dashboard', owner: User.id, nd_trash_deleted: false, isPublic: true, parentFolder: 'root'});
+            var User = await Users.findOne({ userName: 'administrator' });
+            var report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isPublic: true, parentFolder: 'root' });
+            var dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboard', owner: User.id, nd_trash_deleted: false, isPublic: true, parentFolder: 'root' });
             res = await agent.get('/api/get-user-objects');
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
@@ -518,7 +518,7 @@ describe('Users API', function () {
         it('should get administrator other data which is not get by get user data function', async function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
-            res = await Users.findOne({userName: 'administrator'});
+            res = await Users.findOne({ userName: 'administrator' });
             res = await agent.get('/api/get-user-other-data');
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);

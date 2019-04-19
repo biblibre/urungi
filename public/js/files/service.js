@@ -21,7 +21,7 @@ angular.module('app').service('fileService', function (connection) {
                     const data = JSON.parse(XHR.responseText);
 
                     if (data.result !== 1 && data.msg) {
-                        noty({text: data.msg, timeout: 2000, type: 'error'});
+                        noty({ text: data.msg, timeout: 2000, type: 'error' });
                     }
 
                     if (data.result === 1) {
@@ -37,7 +37,7 @@ angular.module('app').service('fileService', function (connection) {
             });
 
             XHR.addEventListener('error', function (event) {
-                noty({text: 'Unexpected server error', timeout: 2000, type: 'error'});
+                noty({ text: 'Unexpected server error', timeout: 2000, type: 'error' });
                 console.log('Unexpected server error :');
                 console.log(event);
                 resolve();

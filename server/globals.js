@@ -32,7 +32,7 @@ function restrictRole (roles) {
         req.session.error = 'Access denied!';
         // TODO: Log annotation security issue
         debug('Access denied!');
-        res.status(401).send({result: 0, msg: 'You don´t have access to this function'});
+        res.status(401).send({ result: 0, msg: 'You don´t have access to this function' });
     };
 }
 global.restrictRole = restrictRole;
@@ -40,7 +40,7 @@ global.restrictRole = restrictRole;
 function saveToLog (req, text, type, code, otherInfo, associatedID) {
     var Logs = connection.model('Logs');
 
-    Logs.saveToLog(req, {text: text, type: type, code: code, associatedID: associatedID}, otherInfo, function () {
+    Logs.saveToLog(req, { text: text, type: type, code: code, associatedID: associatedID }, otherInfo, function () {
 
     });
 };

@@ -1,16 +1,16 @@
 var Files = connection.model('Files');
 
 exports.getFiles = function (req, res) {
-    var find = {'type': new RegExp('image', 'i'), 'upload_user_id': req.user._id};
+    var find = { 'type': new RegExp('image', 'i'), 'upload_user_id': req.user._id };
 
     if (req.query.format) {
         find['extension'] = req.query.format;
     }
 
-    Files.find(find, {}, {sort: {created: -1}}, function (err, files) {
+    Files.find(find, {}, { sort: { created: -1 } }, function (err, files) {
         if (err) throw err;
 
-        res.status(200).json({result: 1, files: files});
+        res.status(200).json({ result: 1, files: files });
     });
 };
 

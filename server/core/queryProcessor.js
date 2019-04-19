@@ -151,7 +151,7 @@ function processQuery (query, queryLayer, warnings) {
     for (const col of query.columns) {
         const element = findElement(queryLayer.objects, col.elementID);
         if (!element) {
-            warnings.push({msg: 'element ' + col.objectLabel + ' could not be found. Are you sure it has not been deleted ?'});
+            warnings.push({ msg: 'element ' + col.objectLabel + ' could not be found. Are you sure it has not been deleted ?' });
             continue;
         }
 
@@ -168,7 +168,7 @@ function processQuery (query, queryLayer, warnings) {
     for (const col of query.order) {
         const element = findElement(queryLayer.objects, col.elementID);
         if (!element) {
-            warnings.push({msg: 'element ' + col.objectLabel + ' could not be found. Are you sure it has not been deleted ?'});
+            warnings.push({ msg: 'element ' + col.objectLabel + ' could not be found. Are you sure it has not been deleted ?' });
             continue;
         }
 
@@ -179,7 +179,7 @@ function processQuery (query, queryLayer, warnings) {
     for (const col of query.filters) {
         const element = findElement(queryLayer.objects, col.elementID);
         if (!element) {
-            warnings.push({msg: 'element ' + col.objectLabel + ' could not be found. Are you sure it has not been deleted ?'});
+            warnings.push({ msg: 'element ' + col.objectLabel + ' could not be found. Are you sure it has not been deleted ?' });
             continue;
         }
 
@@ -279,8 +279,8 @@ function joinCollections (collectionRef, layer, currentID, previousID, safetyCou
     node.collection = layer.params.schema.find(c => c.collectionID === currentID);
 
     if (!node.collection) {
-        warnings.push({msg: 'A join was found linking to a collection which does not exist', obj: node});
-        return {shouldJoin: false};
+        warnings.push({ msg: 'A join was found linking to a collection which does not exist', obj: node });
+        return { shouldJoin: false };
     }
 
     node.joins = [];

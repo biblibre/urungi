@@ -21,7 +21,7 @@ var usersSchema = new mongoose.Schema({
     dialogs: [],
     accessToken: String,
     startDate: { type: Date, default: Date.now },
-    endDate: {type: Date},
+    endDate: { type: Date },
     history: String,
     title: String,
     companyName: String,
@@ -52,15 +52,15 @@ var usersSchema = new mongoose.Schema({
         email: String,
         name: String
     },
-    last_login_date: {type: Date},
-    last_login_ip: {type: String},
+    last_login_date: { type: Date },
+    last_login_ip: { type: String },
     privateSpace: [],
-    defaultDocument: {type: String},
-    defaultDocumentType: {type: String},
-    nd_trash_deleted: {type: Boolean},
-    nd_trash_deleted_date: {type: Date},
-    createdBy: {type: String},
-    createdOn: {type: Date},
+    defaultDocument: { type: String },
+    defaultDocumentType: { type: String },
+    nd_trash_deleted: { type: Boolean },
+    nd_trash_deleted_date: { type: Date },
+    createdBy: { type: String },
+    createdOn: { type: Date },
     companyData: {}
 }, { collection: 'wst_Users' });
 
@@ -75,14 +75,14 @@ usersSchema.options.toObject.transform = function (doc, user, options) {
 usersSchema.statics.createTheUser = function (req, res, userData, done) {
     var User = this;
     if (!userData.userName) {
-        done({result: 0, msg: "'Username' is required."});
+        done({ result: 0, msg: "'Username' is required." });
         return;
     }
 
     User.findOne({ 'userName': userData.userName, companyID: req.user.companyID }, {}, function (err, user) {
         if (err) throw err;
         if (user) {
-            done({result: 0, msg: 'userName already in use.'});
+            done({ result: 0, msg: 'userName already in use.' });
         } else {
             if (userData.pwd1) {
                 hash(userData.pwd1, function (err, salt, hash) {
@@ -94,11 +94,11 @@ usersSchema.statics.createTheUser = function (req, res, userData, done) {
 
                     User.create(userData, function (err, user) {
                         if (err) throw err;
-                        done({result: 1, msg: 'User created.', user: user});
+                        done({ result: 1, msg: 'User created.', user: user });
                     });
                 });
             } else {
-                done({result: 0, msg: "'No Password set for the new user."});
+                done({ result: 0, msg: "'No Password set for the new user." });
             }
         }
     });
@@ -107,7 +107,7 @@ usersSchema.statics.createTheUser = function (req, res, userData, done) {
 usersSchema.statics.setViewedContextHelp = function (req, done) {
     var userID = req.user._id;
 
-    this.findOne({'_id': userID}, function (err, findUser) {
+    this.findOne({ '_id': userID }, function (err, findUser) {
         if (err) { console.error(err); }
 
         if (findUser) {
@@ -132,10 +132,10 @@ usersSchema.statics.setViewedContextHelp = function (req, done) {
             }, function (err, numAffected) {
                 if (err) throw err;
 
-                done({result: 1, msg: 'context Help dialogs updated.', items: findUser.contextHelp});
+                done({ result: 1, msg: 'context Help dialogs updated.', items: findUser.contextHelp });
             });
         } else {
-            done({result: 0, msg: 'No user found, can´t update the user context help'});
+            done({ result: 0, msg: 'No user found, can´t update the user context help' });
         }
     });
 };
@@ -146,10 +146,10 @@ usersSchema.statics.setStatus = function (req, done) {
         var userStatus = req.body.status;
 
         if (!userID || typeof userID === 'undefined') {
-            done({result: 0, msg: "'id' and 'status' are required."});
+            done({ result: 0, msg: "'id' and 'status' are required." });
             return;
         }
-        this.findOne({'_id': userID, 'companyID': req.user.companyID}, function (err, findUser) {
+        this.findOne({ '_id': userID, 'companyID': req.user.companyID }, function (err, findUser) {
             if (err) { console.error(err); }
 
             if (findUser) {
@@ -162,17 +162,17 @@ usersSchema.statics.setStatus = function (req, done) {
                 }, function (err, numAffected) {
                     if (err) throw err;
 
-                    done({result: 1, msg: 'Status updated.'});
+                    done({ result: 1, msg: 'Status updated.' });
                 });
             } else {
-                done({result: 0, msg: 'No user found for this company, can´t update the user status'});
+                done({ result: 0, msg: 'No user found for this company, can´t update the user status' });
             }
         });
     }
 };
 
 usersSchema.statics.isValidUserPassword = function (username, password, done) {
-    this.findOne({$or: [ {'userName': username}, {'email': username} ], status: 'active'}, function (err, user) {
+    this.findOne({ $or: [ { 'userName': username }, { 'email': username } ], status: 'active' }, function (err, user) {
         if (err) return done(err);
         if (!user) return done(null, false, { message: 'User' + ' ' + username + ' ' + 'does not exists or is inactive' });
         if (user.status === 0) return done(null, false, { message: 'User not verified ' + username });

@@ -75,12 +75,14 @@ angular.module('app').directive('fileModal', function ($http, fileService) {
             };
 
             $scope.searchOnline = function (search) {
-                $http({method: 'GET',
+                $http({
+                    method: 'GET',
                     url: 'https://api.unsplash.com/search/photos/',
                     params: {
                         client_id: '65d94c5d3440b6da10c6cd390059fd709a1f33ffc8f46f46ed44d6b6c6759559',
                         query: search
-                    }}).success(angular.bind(this, function (data, status, headers, config) {
+                    },
+                }).success(angular.bind(this, function (data, status, headers, config) {
                     $scope.onlineImages = [];
 
                     for (var i in data.results) {

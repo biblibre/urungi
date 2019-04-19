@@ -23,9 +23,9 @@ exports.DashboardsFindAll = function (req, res) {
      if (isWSTADMIN)
      var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"}]}
      else */
-    var find = {'$and': [{'nd_trash_deleted': false}, {'companyID': 'COMPID'}, {owner: req.user._id}]};
+    var find = { '$and': [{ 'nd_trash_deleted': false }, { 'companyID': 'COMPID' }, { owner: req.user._id }] };
     // var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{"$or": [{owner: req.user._id},{owner: { $exists: false }}]}]}
-    var fields = {dashboardName: 1, owner: 1, isPublic: 1};
+    var fields = { dashboardName: 1, owner: 1, isPublic: 1 };
     var params = {};
 
     var Dashboards = connection.model('Dashboards');
@@ -35,7 +35,7 @@ exports.DashboardsFindAll = function (req, res) {
         Dashboards.count(find, function (err, count) {
             if (err) throw err;
 
-            var result = {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items};
+            var result = { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
             res.status(200).json(result);
         });
     });
@@ -54,7 +54,7 @@ exports.DashboardsFindOne = function (req, res) {
 
 exports.DashboardsCreate = function (req, res) {
     if (!req.session.dashboardsCreate && !req.session.isWSTADMIN) {
-        res.status(401).json({result: 0, msg: 'You don´t have permissions to create dashboards'});
+        res.status(401).json({ result: 0, msg: 'You don´t have permissions to create dashboards' });
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -79,14 +79,14 @@ exports.DashboardsUpdate = function (req, res) {
 
     if (!req.session.isWSTADMIN) {
         var Dashboards = connection.model('Dashboards');
-        Dashboards.findOne({_id: data._id, owner: req.user._id}, {_id: 1}, {}, function (err, item) {
+        Dashboards.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
                 controller.update(req, function (result) {
                     res.status(200).json(result);
                 });
             } else {
-                res.status(401).json({result: 0, msg: 'You don´t have permissions to update this dashboard'});
+                res.status(401).json({ result: 0, msg: 'You don´t have permissions to update this dashboard' });
             }
         });
     } else {
@@ -110,14 +110,14 @@ exports.DashboardsDelete = function (req, res) {
 
     if (!req.session.isWSTADMIN) {
         var Dashboards = connection.model('Dashboards');
-        Dashboards.findOne({_id: data._id, owner: req.user._id}, {_id: 1}, {}, function (err, item) {
+        Dashboards.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
                 controller.update(req, function (result) {
                     res.status(200).json(result);
                 });
             } else {
-                res.status(401).json({result: 0, msg: 'You don´t have permissions to delete this dashboard'});
+                res.status(401).json({ result: 0, msg: 'You don´t have permissions to delete this dashboard' });
             }
         });
     } else {
@@ -161,7 +161,7 @@ exports.getDashboard = function (req, res) {
             // Get all the reports...
             var Reports = connection.model('Reports');
 
-            Reports.find({ _id: {$in: theReports} }, function (err, reports) {
+            Reports.find({ _id: { $in: theReports } }, function (err, reports) {
                 if (err) { console.error(err); }
 
                 if (reports) {
@@ -190,9 +190,9 @@ exports.PublishDashboard = function (req, res) {
 
     // tiene el usuario conectado permisos para publicar?
     var Dashboards = connection.model('Dashboards');
-    var find = {_id: data._id, owner: req.user._id, companyID: req.user.companyID};
+    var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
-    if (req.session.isWSTADMIN) { find = {_id: data._id, companyID: req.user.companyID}; }
+    if (req.session.isWSTADMIN) { find = { _id: data._id, companyID: req.user.companyID }; }
 
     Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;
@@ -200,17 +200,17 @@ exports.PublishDashboard = function (req, res) {
             Dashboard.parentFolder = parentFolder;
             Dashboard.isPublic = true;
 
-            Dashboards.update({_id: data._id}, { $set: Dashboard.toObject() }, function (err, numAffected) {
+            Dashboards.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
-                    res.status(200).json({result: 1, msg: numAffected + ' dashboard published.'});
+                    res.status(200).json({ result: 1, msg: numAffected + ' dashboard published.' });
                 } else {
-                    res.status(200).json({result: 0, msg: 'Error publishing dashboard, no dashboard have been published'});
+                    res.status(200).json({ result: 0, msg: 'Error publishing dashboard, no dashboard have been published' });
                 }
             });
         } else {
-            res.status(401).json({result: 0, msg: 'You don´t have permissions to publish this dashboard, or this dashboard do not exists'});
+            res.status(401).json({ result: 0, msg: 'You don´t have permissions to publish this dashboard, or this dashboard do not exists' });
         }
     });
 };
@@ -220,25 +220,25 @@ exports.UnpublishDashboard = function (req, res) {
 
     // TODO:tiene el usuario conectado permisos para publicar?
     var Dashboards = connection.model('Dashboards');
-    var find = {_id: data._id, owner: req.user._id, companyID: req.user.companyID};
+    var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
-    if (req.session.isWSTADMIN) { find = {_id: data._id, companyID: req.user.companyID}; }
+    if (req.session.isWSTADMIN) { find = { _id: data._id, companyID: req.user.companyID }; }
 
     Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;
         if (Dashboard) {
             Dashboard.isPublic = false;
-            Dashboards.update({_id: data._id}, { $set: Dashboard.toObject() }, function (err, numAffected) {
+            Dashboards.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
-                    res.status(200).json({result: 1, msg: numAffected + ' dashboard unpublished.'});
+                    res.status(200).json({ result: 1, msg: numAffected + ' dashboard unpublished.' });
                 } else {
-                    res.status(200).json({result: 0, msg: 'Error unpublishing dashboard, no dashboard have been unpublished'});
+                    res.status(200).json({ result: 0, msg: 'Error unpublishing dashboard, no dashboard have been unpublished' });
                 }
             });
         } else {
-            res.status(401).json({result: 0, msg: 'You don´t have permissions to unpublish this dashboard, or this dashboard do not exists'});
+            res.status(401).json({ result: 0, msg: 'You don´t have permissions to unpublish this dashboard, or this dashboard do not exists' });
         }
     });
 };

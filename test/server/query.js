@@ -641,7 +641,7 @@ const generateTestSuite = (dbConfig) => function () {
 
             const sourceData = [];
             for (const table of testData) {
-                sourceData.push({name: table.tableName});
+                sourceData.push({ name: table.tableName });
             }
 
             data.sort(compareOn(a => a.name));
@@ -1520,15 +1520,15 @@ function buildComplexLayer (knex) {
             {
                 elementRole: 'folder',
                 elements: [
-                    {elementID: 'eead'},
-                    {elementID: 'eeba'},
-                    {elementID: 'eebb'},
-                    {elementID: 'eeca'},
-                    {elementID: 'eecb'},
-                    {elementID: 'eecc'},
-                    {elementID: 'eeda'},
-                    {elementID: 'eedb'},
-                    {elementID: 'eedc'},
+                    { elementID: 'eead' },
+                    { elementID: 'eeba' },
+                    { elementID: 'eebb' },
+                    { elementID: 'eeca' },
+                    { elementID: 'eecb' },
+                    { elementID: 'eecc' },
+                    { elementID: 'eeda' },
+                    { elementID: 'eedb' },
+                    { elementID: 'eedc' },
                 ]
             },
             {

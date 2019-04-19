@@ -52,7 +52,7 @@ describe('Reports API', function () {
 
     describe('GET /api/reports/find-one', function () {
         it('should find one report and its data', async function () {
-            const res = await agent.get('/api/reports/find-one').query({id: report.id});
+            const res = await agent.get('/api/reports/find-one').query({ id: report.id });
             expect(res).to.have.status(200);
             const decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result');
@@ -99,7 +99,7 @@ describe('Reports API', function () {
     describe('POST /api/reports/update/:id', function () {
         it('should update a report', async function () {
             const res = await agent.post('/api/reports/update/' + report.id)
-                .send({_id: report.id});
+                .send({ _id: report.id });
             expect(res).to.have.status(200);
             const decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
@@ -158,7 +158,7 @@ describe('Reports API', function () {
             await report.publish('root');
 
             const res = await agent.post('/api/reports/unpublish')
-                .send({_id: report.id});
+                .send({ _id: report.id });
             expect(res).to.have.status(200);
             const decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);

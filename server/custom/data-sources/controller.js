@@ -26,7 +26,7 @@ exports.DataSourcesUploadConfigFile = function (req, res) {
     var file = req.files[0];
 
     if (!file) {
-        return res.status(200).json({result: 0, msg: 'file is undefined'});
+        return res.status(200).json({ result: 0, msg: 'file is undefined' });
     }
     var fs = require('fs');
     var companyID = 'COMPID';
@@ -40,15 +40,15 @@ exports.DataSourcesUploadConfigFile = function (req, res) {
 
     fs.readFile(file.path, function (err, data) {
         if (err) {
-            return res.status(200).json({result: 0, msg: err.message});
+            return res.status(200).json({ result: 0, msg: err.message });
         }
 
         fs.writeFile(filePath, data, function (err) {
             if (err) {
-                return res.status(200).json({result: 0, msg: err.message});
+                return res.status(200).json({ result: 0, msg: err.message });
             }
 
-            res.status(200).json({result: 1, msg: 'File uploaded successfully'});
+            res.status(200).json({ result: 1, msg: 'File uploaded successfully' });
         });
     });
 };
@@ -119,7 +119,7 @@ exports.testConnection = async function (req, res) {
         break;
 
     default:
-        res.status(200).json({result: 0, msg: 'Invalid database type'});
+        res.status(200).json({ result: 0, msg: 'Invalid database type' });
         break;
     };
 };
@@ -301,7 +301,7 @@ exports.getsqlQuerySchema = async function (req, res) {
         }
     } catch (err) {
         console.error(err);
-        res.status(200).json({result: 0, msg: String(err)});
+        res.status(200).json({ result: 0, msg: String(err) });
     }
 };
 

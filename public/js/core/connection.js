@@ -18,21 +18,21 @@
                 showMsg: (options && typeof options.showMsg !== 'undefined') ? options.showMsg : true
             };
 
-            return $http.get(url, {params: params})
+            return $http.get(url, { params: params })
                 .then(response => {
                     const data = response.data;
 
                     if (typeof data === 'string') window.location.href = '/';
 
                     if (data.result === 1 && data.msg && options.showMsg) {
-                        noty({text: data.msg, timeout: 5000, type: 'success'});
+                        noty({ text: data.msg, timeout: 5000, type: 'success' });
                     } else if (data.result === 0 && data.msg && options.showMsg) {
-                        noty({text: data.msg, timeout: 5000, type: 'error'});
+                        noty({ text: data.msg, timeout: 5000, type: 'error' });
                     }
 
                     return data;
                 }, response => {
-                    noty({text: 'Error', timeout: 5000, type: 'error'});
+                    noty({ text: 'Error', timeout: 5000, type: 'error' });
 
                     throw new Error(response.statusText);
                 });
@@ -48,14 +48,14 @@
                     if (typeof data === 'string') window.location.href = '/';
 
                     if (data.result === 1 && data.msg) {
-                        noty({text: data.msg, timeout: 5000, type: 'success'});
+                        noty({ text: data.msg, timeout: 5000, type: 'success' });
                     } else if (data.result === 0 && data.msg) {
-                        noty({text: data.msg, timeout: 5000, type: 'error'});
+                        noty({ text: data.msg, timeout: 5000, type: 'error' });
                     }
 
                     return data;
                 }, response => {
-                    noty({text: 'Error', timeout: 5000, type: 'error'});
+                    noty({ text: 'Error', timeout: 5000, type: 'error' });
 
                     throw new Error(response.statusText);
                 });

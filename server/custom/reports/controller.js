@@ -54,7 +54,7 @@ exports.ReportsFindOne = function (req, res) {
 
 exports.ReportsCreate = function (req, res) {
     if (!req.session.reportsCreate && !req.session.isWSTADMIN) {
-        res.status(401).json({result: 0, msg: 'You do not have permissions to create reports'});
+        res.status(401).json({ result: 0, msg: 'You do not have permissions to create reports' });
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -78,14 +78,14 @@ exports.ReportsUpdate = function (req, res) {
 
     if (!req.session.isWSTADMIN) {
         var Reports = connection.model('Reports');
-        Reports.findOne({_id: data._id, owner: req.user._id, companyID: req.user.companyID}, {_id: 1}, {}, function (err, item) {
+        Reports.findOne({ _id: data._id, owner: req.user._id, companyID: req.user.companyID }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
                 controller.update(req).then(function (result) {
                     res.status(200).json(result);
                 });
             } else {
-                res.status(401).json({result: 0, msg: 'You don´t have permissions to update this report, or this report do not exists'});
+                res.status(401).json({ result: 0, msg: 'You don´t have permissions to update this report, or this report do not exists' });
             }
         });
     } else {
@@ -148,7 +148,7 @@ exports.ReportsGetData = async function (req, res) {
         result = await QueryProcessor.execute(query);
     } catch (err) {
         console.error(err);
-        result = {result: 0, msg: (err.msg) ? err.msg : String(err), error: err};
+        result = { result: 0, msg: (err.msg) ? err.msg : String(err), error: err };
     }
     res.status(200).json(result);
 };

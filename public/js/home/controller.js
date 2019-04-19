@@ -478,7 +478,6 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$sessionS
         for (var l in data.items.theLastExecutions) {
             if (l < 10) {
                 data.items.theLastExecutions[l]._id['lastDate'] = moment(data.items.theLastExecutions[l].lastDate).fromNow();
-                data.items.theLastExecutions[l]._id['relationedName'] = data.items.theLastExecutions[l]._id.relationedName;
                 $scope.lastExecutions.push(data.items.theLastExecutions[l]._id);
             }
         }

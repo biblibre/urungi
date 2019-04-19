@@ -29,7 +29,7 @@
 
                 vm.mode = 'add';
             } else {
-                connection.get('/api/data-sources/find-one', {id: $routeParams.dataSourceID}).then(function (data) {
+                connection.get('/api/data-sources/find-one', { id: $routeParams.dataSourceID }).then(function (data) {
                     vm._dataSource = data.item;
                 });
             }
@@ -66,10 +66,10 @@
             connection.post('/api/data-sources/testConnection', data).then(function (result) {
                 console.log(result);
                 if (result.result === 1) {
-                    vm.testConnection = {result: 1, message: 'Successful database connection.'};
+                    vm.testConnection = { result: 1, message: 'Successful database connection.' };
                     vm.testingConnection = false;
                 } else {
-                    vm.testConnection = {result: 0, message: 'Database connection failed.', errorMessage: result.msg};
+                    vm.testConnection = { result: 0, message: 'Database connection failed.', errorMessage: result.msg };
                     vm.testingConnection = false;
                 }
             });
@@ -101,7 +101,7 @@
 
                 $http.post('/api/data-sources/upload-config-file', fd, {
                     transformRequest: angular.identity,
-                    headers: {'Content-Type': undefined}
+                    headers: { 'Content-Type': undefined }
                 })
                     .success(angular.bind(this, function (data, status, headers, config) {
                         if (data.result === 1) {

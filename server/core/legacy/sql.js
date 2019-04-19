@@ -22,7 +22,7 @@ exports.getSchemas = function (data, setresult) {
     db.connect(data, function (err, connection) {
         if (err) {
             console.log(data.type + ' default connection error: ', err);
-            setresult({result: 0, msg: 'Connection Error: ' + err});
+            setresult({ result: 0, msg: 'Connection Error: ' + err });
             return console.error('Connection Error: ', err);
         }
 
@@ -50,12 +50,12 @@ exports.getSchemas = function (data, setresult) {
 
             if (typeof schema !== 'undefined') {
                 if (schemasTables.indexOf(schema + '.' + table) === -1) {
-                    const stable = {name: schema + '.' + table, schema: schema, table: table};
+                    const stable = { name: schema + '.' + table, schema: schema, table: table };
                     schemasTables.push(stable);
                 }
             } else {
                 if (schemasTables.indexOf(table) === -1) {
-                    const stable = {name: table, schema: schema, table: table};
+                    const stable = { name: table, schema: schema, table: table };
                     schemasTables.push(stable);
                 }
             }
@@ -75,7 +75,7 @@ exports.getSchemas = function (data, setresult) {
 
         db.query(query, function (err, result) {
             if (err) {
-                setresult({result: 0, msg: 'Error getting the element schemas : ' + err});
+                setresult({ result: 0, msg: 'Error getting the element schemas : ' + err });
                 console.log('Error getting the element schemas : ', err);
             } else {
                 var schemas = [];
@@ -87,8 +87,8 @@ exports.getSchemas = function (data, setresult) {
                         });
                     }
                 }
-                debug({result: 1, items: schemas});
-                setresult({result: 1, items: schemas});
+                debug({ result: 1, items: schemas });
+                setresult({ result: 1, items: schemas });
             }
             db.end();
         });
@@ -109,7 +109,7 @@ exports.getSqlQuerySchema = function (data, setresult) {
     db.connect(data, function (err, connection) {
         if (err) {
             console.log(data.type + ' default connection error: ', err);
-            setresult({result: 0, msg: 'Connection Error: ' + err});
+            setresult({ result: 0, msg: 'Connection Error: ' + err });
             return console.error('Connection Error: ', err);
         }
 
@@ -120,11 +120,11 @@ exports.getSqlQuerySchema = function (data, setresult) {
                 getSQLResultsSchema(data.sqlQuery.name, finalresult.rows, data.sqlQuery.sql, function (collection) {
                     var schemas = [];
                     schemas.push(collection);
-                    debug({result: 1, items: schemas});
-                    setresult({result: 1, items: schemas});
+                    debug({ result: 1, items: schemas });
+                    setresult({ result: 1, items: schemas });
                 });
             } else {
-                setresult({result: 0, msg: err});
+                setresult({ result: 0, msg: err });
             }
             db.end();
         });
@@ -158,7 +158,7 @@ function getSQLResultsSchema (collectionRef, queryResults, sqlQuery, done) {
         var isVisible = true;
 
         if (name !== 'wst_rnum') {
-            theCollection.elements.push({elementID: elementID, elementName: name, elementType: type, visible: isVisible, elementLabel: name});
+            theCollection.elements.push({ elementID: elementID, elementName: name, elementType: type, visible: isVisible, elementLabel: name });
         }
     }
 
@@ -170,7 +170,7 @@ function getCollectionSchema (collection, queryResults, done) {
     // var collectionID = 'WST' + generateShortUID();
 
     // collectionID = collectionID.replace(new RegExp('-', 'g'), '');
-    var theCollection = {collectionName: collectionName, visible: true, collectionLabel: collectionName};
+    var theCollection = { collectionName: collectionName, visible: true, collectionLabel: collectionName };
     theCollection.elements = [];
 
     for (var d = 0; d < queryResults.length; d++) {
@@ -212,7 +212,7 @@ function getCollectionSchema (collection, queryResults, done) {
 
             // var elementID = generateShortUID();
             var isVisible = true;
-            theCollection.elements.push({elementName: name, elementType: type, visible: isVisible, elementLabel: name, data_type: queryResults[d].data_type});
+            theCollection.elements.push({ elementName: name, elementType: type, visible: isVisible, elementLabel: name, data_type: queryResults[d].data_type });
         }
     }
 

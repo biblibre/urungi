@@ -6,14 +6,14 @@ var logsSchema = new mongoose.Schema({
     userID: String,
     otherInfo: String,
     ip: String,
-    companyID: {type: String},
-    relationID: {type: String},
-    relationCollection: {type: String},
-    action: {type: String}, // 'create', 'update', 'delete'
-    code: {type: String},
+    companyID: { type: String },
+    relationID: { type: String },
+    relationCollection: { type: String },
+    action: { type: String }, // 'create', 'update', 'delete'
+    code: { type: String },
     associatedID: String,
     createdOn: { type: Date, default: Date.now },
-    createdBy: {type: String}
+    createdBy: { type: String }
 }, { collection: 'wst_Logs' });
 
 // Log Types
@@ -47,7 +47,7 @@ logsSchema.statics.saveToLog = function (req, data, otherInfo, done) {
     this.create(log, function (err, log) {
         if (err) throw err;
 
-        if (typeof done !== 'undefined') done({result: 1, msg: 'Log created', log: log.toObject()});
+        if (typeof done !== 'undefined') done({ result: 1, msg: 'Log created', log: log.toObject() });
     });
 };
 
@@ -60,15 +60,15 @@ logsSchema.statics.adminFindAll = function (req, done) {
     var find = {};
     var searchText = (req.query.search) ? req.query.search : false;
 
-    if (searchText) { find = {$or: [ {text: {$regex: searchText}}, {user_id: {$regex: searchText}} ]}; }
+    if (searchText) { find = { $or: [ { text: { $regex: searchText } }, { user_id: { $regex: searchText } } ] }; }
 
-    this.find(find, {}, {skip: (page - 1) * perPage, limit: perPage, sort: {created: -1}}, function (err, logs) {
+    this.find(find, {}, { skip: (page - 1) * perPage, limit: perPage, sort: { created: -1 } }, function (err, logs) {
         if (err) throw err;
 
         Log.count(find, function (err, count) {
             if (err) { console.error(err); }
 
-            done({result: 1, page: page, pages: Math.ceil(count / perPage), logs: logs});
+            done({ result: 1, page: page, pages: Math.ceil(count / perPage), logs: logs });
         });
     });
 };

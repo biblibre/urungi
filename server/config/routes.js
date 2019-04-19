@@ -90,7 +90,7 @@ function authenticate (passport, Users, req, res, next) {
             // insert the company's Data into the user to avoid a 2nd server query'
             var Companies = connection.model('Companies');
 
-            Companies.findOne({companyID: user.companyID}, {}, function (err, company) {
+            Companies.findOne({ companyID: user.companyID }, {}, function (err, company) {
                 if (err) throw err;
 
                 if (!company) {

@@ -5,12 +5,12 @@ var statisticsSchema = new mongoose.Schema({
     userID: String,
     userName: String,
     ip: String,
-    companyID: {type: String},
-    relationedID: {type: String},
-    relationedName: {type: String},
-    action: {type: String}, // 'create', 'update', 'delete'
+    companyID: { type: String },
+    relationedID: { type: String },
+    relationedName: { type: String },
+    action: { type: String }, // 'create', 'update', 'delete'
     createdOn: { type: Date, default: Date.now },
-    createdBy: {type: String}
+    createdBy: { type: String }
 }, { collection: 'wst_Statistics' });
 
 statisticsSchema.statics.save = function (req, data, done) {
@@ -31,7 +31,7 @@ statisticsSchema.statics.save = function (req, data, done) {
     this.create(statistic, function (err, statistic) {
         if (err) throw err;
 
-        if (typeof done !== 'undefined') done({result: 1, msg: 'Statistic created', statistic: statistic.toObject()});
+        if (typeof done !== 'undefined') done({ result: 1, msg: 'Statistic created', statistic: statistic.toObject() });
     });
 };
 

@@ -1,29 +1,29 @@
 var mongoose = require('mongoose');
 
 var DataSourcesSchema = new mongoose.Schema({
-    companyID: {type: String, required: false},
-    name: {type: String, required: true},
-    type: {type: String, required: true},
-    status: {type: Number, required: true}, // -1 error, 0 not active, 1 active
-    connection: {type: Object},
-    packetSize: {type: Number},
-    nd_trash_deleted: {type: Boolean},
-    nd_trash_deleted_date: {type: Date},
-    createdBy: {type: String},
-    createdOn: {type: Date},
-    statusInfo: {type: Object}
+    companyID: { type: String, required: false },
+    name: { type: String, required: true },
+    type: { type: String, required: true },
+    status: { type: Number, required: true }, // -1 error, 0 not active, 1 active
+    connection: { type: Object },
+    packetSize: { type: Number },
+    nd_trash_deleted: { type: Boolean },
+    nd_trash_deleted_date: { type: Date },
+    createdBy: { type: String },
+    createdOn: { type: Date },
+    statusInfo: { type: Object }
 }, { collection: 'wst_DataSources' });
 
 DataSourcesSchema.statics.changeStatus = function (req, datasourceID, status, done) {
 // -1 error, 0 not active, 1 active
 
-    DataSources.update({_id: datasourceID}, {$set: {status: status}}, function (err, result) {
+    DataSources.update({ _id: datasourceID }, { $set: { status: status } }, function (err, result) {
         if (err) throw err;
         var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
         if (numAffected > 0) {
-            done({result: 1, msg: numAffected + ' datasource updated.'});
+            done({ result: 1, msg: numAffected + ' datasource updated.' });
         } else {
-            done({result: 0, msg: 'Error updating datasource, no record have been updated for datasource: ' + datasourceID});
+            done({ result: 0, msg: 'Error updating datasource, no record have been updated for datasource: ' + datasourceID });
         }
     });
 };
@@ -31,13 +31,13 @@ DataSourcesSchema.statics.changeStatus = function (req, datasourceID, status, do
 DataSourcesSchema.statics.setStatusInfo = function (req, datasourceID, status, done) {
 // -1 error, 0 not active, 1 active
 
-    DataSources.update({_id: datasourceID}, {$set: {status: status}}, function (err, result) {
+    DataSources.update({ _id: datasourceID }, { $set: { status: status } }, function (err, result) {
         if (err) throw err;
         var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
         if (numAffected > 0) {
-            done({result: 1, msg: numAffected + ' record updated.'});
+            done({ result: 1, msg: numAffected + ' record updated.' });
         } else {
-            done({result: 0, msg: 'Error updating record, no record have been updated for datasource: ' + datasourceID});
+            done({ result: 0, msg: 'Error updating record, no record have been updated for datasource: ' + datasourceID });
         }
     });
 };
@@ -53,16 +53,16 @@ DataSourcesSchema.statics.invalidateDatasource = function (req, datasourceID, er
     // DataSources.changeStatus(req,datasourceID,-1,function(result){
     // console.log('change status',result);
 
-    var statusInfo = {type: 'ALERT', errorCode: errorcode, actionCode: actioncode, message: msg, lastDate: new Date()};
+    var statusInfo = { type: 'ALERT', errorCode: errorcode, actionCode: actioncode, message: msg, lastDate: new Date() };
     // });
 
-    DataSources.update({_id: datasourceID}, {$set: {status: -1, statusInfo: statusInfo}}, function (err, result) {
+    DataSources.update({ _id: datasourceID }, { $set: { status: -1, statusInfo: statusInfo } }, function (err, result) {
         if (err) throw err;
         var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
         if (numAffected > 0) {
-            done({result: 1, msg: numAffected + ' record updated.'});
+            done({ result: 1, msg: numAffected + ' record updated.' });
         } else {
-            done({result: 0, msg: 'Error updating record, no record have been updated for datasource: ' + datasourceID});
+            done({ result: 0, msg: 'Error updating record, no record have been updated for datasource: ' + datasourceID });
         }
     });
 };

@@ -25,7 +25,7 @@ angular.module('app').service('c3Charts', function () {
         // This causes some of the charts to display weird or misleading results
 
         if (!query.data) {
-            noty({text: 'no data to display', timeout: 2000, type: 'warning'});
+            noty({ text: 'no data to display', timeout: 2000, type: 'warning' });
             return;
         }
 

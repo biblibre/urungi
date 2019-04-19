@@ -8,9 +8,9 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
     $scope.editUserModal = 'partials/users/edit.html';
 
     $scope.breadcrumbs = [
-        {label: 'Home', url: '#/home', icon: 'fa-home'},
-        {label: 'Admin', url: '#/admin'},
-        {label: 'Users'}
+        { label: 'Home', url: '#/home', icon: 'fa-home' },
+        { label: 'Admin', url: '#/admin' },
+        { label: 'Users' }
     ];
 
     init();
@@ -79,7 +79,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
         if ($scope._User.pwd1.length >= 8 && $scope._User.pwd1 === $scope._User.pwd2) { isOk = true; }
 
         if (isOk) {
-            connection.post('/api/change-my-password', {pwd1: $scope._User.pwd1, pwd2: $scope._User.pwd2}).then(function (data) {
+            connection.post('/api/change-my-password', { pwd1: $scope._User.pwd1, pwd2: $scope._User.pwd2 }).then(function (data) {
                 $('#changePasswordModal').modal('hide');
             });
         }
@@ -89,20 +89,20 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
         if ($routeParams.userID) {
             if (!$scope.roles) { loadRoles(); }
 
-            connection.get('/api/admin/users/find-one', {id: $routeParams.userID}).then(function (data) {
+            connection.get('/api/admin/users/find-one', { id: $routeParams.userID }).then(function (data) {
                 $scope._User = data.item;
                 $scope.mode = 'edit';
             });
 
-            connection.get('/api/get-user-counts/' + $routeParams.userID, {userID: $routeParams.userID}).then(function (data) {
+            connection.get('/api/get-user-counts/' + $routeParams.userID, { userID: $routeParams.userID }).then(function (data) {
                 $scope.userCounts = data;
             });
 
-            connection.get('/api/get-user-reports/' + $routeParams.userID, {userID: $routeParams.userID}).then(function (data) {
+            connection.get('/api/get-user-reports/' + $routeParams.userID, { userID: $routeParams.userID }).then(function (data) {
                 $scope.userReports = data.items;
             });
 
-            connection.get('/api/get-user-dashboards/' + $routeParams.userID, {userID: $routeParams.userID}).then(function (data) {
+            connection.get('/api/get-user-dashboards/' + $routeParams.userID, { userID: $routeParams.userID }).then(function (data) {
                 $scope.userDashboards = data.items;
             });
         };
@@ -127,7 +127,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
             if (user.status === 'active') { newStatus = 'Not active'; }
             if (user.status === 'Not active') { newStatus = 'active'; }
 
-            var data = {userID: user._id, status: newStatus};
+            var data = { userID: user._id, status: newStatus };
 
             connection.post('/api/admin/users/change-user-status', data).then(function (result) {
                 user.status = newStatus;
@@ -219,7 +219,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
 
                 if ($(this).children('.filter-name').hasClass('list-filter') && $(this).children('.filter-name').children('select').val()) { filterName = $(this).children('.filter-name').children('select').val(); } else if ($(this).children('.filter-name').children('input').val()) { filterName = $(this).children('.filter-name').children('input').val(); }
 
-                if (filterName) filters.push({name: filterName, value: filterValue});
+                if (filterName) filters.push({ name: filterName, value: filterValue });
             }
         });
         return filters;
@@ -232,21 +232,21 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
     $scope.confirmDelete = function (id) {
         $('#deleteModal').modal('hide');
 
-        connection.post('/api/admin/users/delete/' + $scope.delete_id, {id: $scope.delete_id}).then(function (data) {
+        connection.post('/api/admin/users/delete/' + $scope.delete_id, { id: $scope.delete_id }).then(function (data) {
             $('#' + $scope.delete_id).remove();
         });
     };
 
     $scope.changeUser = function (data) {
-        connection.post('/api/login?s=change-user', {userName: data.userName}).then(function (data) {
+        connection.post('/api/login?s=change-user', { userName: data.userName }).then(function (data) {
             $window.location.href = '/home';
         });
     };
 
     function loadStatuses () {
         $scope.statuses = [
-            {name: 'Active', value: 1},
-            {name: 'Not Active', value: 0}
+            { name: 'Active', value: 1 },
+            { name: 'Not Active', value: 0 }
         ];
     }
 
@@ -254,7 +254,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
         connection.get('/api/admin/languages/find-all', {}).then(function (data) {
             $scope.languages = [];
 
-            for (var i in data.items) { $scope.languages.push({name: data.items[i].description, value: data.items[i].language}); }
+            for (var i in data.items) { $scope.languages.push({ name: data.items[i].description, value: data.items[i].language }); }
 
             if (typeof callLater !== 'undefined') { callLater(); }
         });
@@ -264,7 +264,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
         connection.get('/api/roles/find-all', {}).then(function (data) {
             $scope.roles = data.items;
 
-            var adminRole = {_id: 'WSTADMIN', name: 'Urungi Administrator'};
+            var adminRole = { _id: 'WSTADMIN', name: 'Urungi Administrator' };
             $scope.roles.push(adminRole);
 
             if (typeof callLater !== 'undefined') { callLater(); }
@@ -281,7 +281,7 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
 
     $scope.deleteRole = function (roleID) {
         if ($scope._User.userName === 'administrator' && roleID === 'WSTADMIN') {
-            noty({text: "The role 'Urungi Administrator' can't be removed from the user administrator", timeout: 6000, type: 'warning'});
+            noty({ text: "The role 'Urungi Administrator' can't be removed from the user administrator", timeout: 6000, type: 'warning' });
         } else {
             var roleName = $scope.getRoleName(roleID);
             $scope.modalOptions = {};

@@ -66,12 +66,12 @@ angular.module('app').service('reportModel', function ($q, bsLoadingOverlayServi
         return connection.post('/api/reports/get-data', request).then(function (result) {
             if (result.warnings) {
                 for (const w of result.warnings) {
-                    noty({text: w.msg, timeout: 3000, type: 'warning'});
+                    noty({ text: w.msg, timeout: 3000, type: 'warning' });
                 }
             }
 
             if (result.result === 0) {
-                noty({text: result.msg, timeout: 3000, type: 'error'});
+                noty({ text: result.msg, timeout: 3000, type: 'error' });
                 return {
                     data: [],
                     sql: result.sql,
@@ -308,7 +308,7 @@ angular.module('app').service('reportModel', function ($q, bsLoadingOverlayServi
             return buf;
         }
 
-        FileSaver.saveAs(new Blob([s2ab(wbout)], {type: ''}), ws_name + '.xlsx');
+        FileSaver.saveAs(new Blob([s2ab(wbout)], { type: '' }), ws_name + '.xlsx');
     };
 
     function Workbook () {
@@ -321,7 +321,7 @@ angular.module('app').service('reportModel', function ($q, bsLoadingOverlayServi
         var data = $scope.selectedReport.query.data;
         var report = $scope.selectedReport;
         var ws = {};
-        var range = {s: {c: 10000000, r: 10000000}, e: { c: 0, r: 0 }};
+        var range = { s: { c: 10000000, r: 10000000 }, e: { c: 0, r: 0 } };
         for (var i = 0; i < report.properties.columns.length; i++) {
             if (range.s.r > 0) range.s.r = 0;
             if (range.s.c > i) range.s.c = i;
@@ -329,7 +329,7 @@ angular.module('app').service('reportModel', function ($q, bsLoadingOverlayServi
             if (range.e.c < i) range.e.c = i;
 
             var cell = { v: report.properties.columns[i].objectLabel };
-            var cell_ref = XLSX.utils.encode_cell({c: i, r: 0});
+            var cell_ref = XLSX.utils.encode_cell({ c: i, r: 0 });
             if (typeof cell.v === 'number') cell.t = 'n';
             else if (typeof cell.v === 'boolean') cell.t = 'b';
             else if (cell.v instanceof Date) {
@@ -362,7 +362,7 @@ angular.module('app').service('reportModel', function ($q, bsLoadingOverlayServi
                 } else {
                     cell = { v: data[R][elementName] };
                 }
-                cell_ref = XLSX.utils.encode_cell({c: i, r: R + 1});
+                cell_ref = XLSX.utils.encode_cell({ c: i, r: R + 1 });
                 if (typeof cell.v === 'number') cell.t = 'n';
                 else if (typeof cell.v === 'boolean') cell.t = 'b';
                 else if (cell.v instanceof Date) {

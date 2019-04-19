@@ -18,8 +18,8 @@ exports.PagesFindAll = function (req, res) {
 
     var perPage = config.pagination.itemsPerPage;
     var page = (req.query.page) ? req.query.page : 1;
-    var find = {'$and': [{'nd_trash_deleted': false}, {'companyID': 'COMPID'}, {owner: req.user._id}]};
-    var fields = {pageName: 1, owner: 1, isPublic: 1};
+    var find = { '$and': [{ 'nd_trash_deleted': false }, { 'companyID': 'COMPID' }, { owner: req.user._id }] };
+    var fields = { pageName: 1, owner: 1, isPublic: 1 };
     var params = {};
 
     var Pages = connection.model('Pages');
@@ -28,7 +28,7 @@ exports.PagesFindAll = function (req, res) {
         Pages.count(find, function (err, count) {
             if (err) { console.error(err); }
 
-            var result = {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items};
+            var result = { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
             res.status(200).json(result);
         });
     });
@@ -47,7 +47,7 @@ exports.PagesFindOne = function (req, res) {
 
 exports.PagesCreate = function (req, res) {
     if (!req.session.pagesCreate && !req.session.isWSTADMIN) {
-        res.status(401).json({result: 0, msg: 'You don´t have permissions to create Pages'});
+        res.status(401).json({ result: 0, msg: 'You don´t have permissions to create Pages' });
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -63,7 +63,7 @@ exports.PagesCreate = function (req, res) {
 
 exports.PagesDuplicate = function (req, res) {
     if (!req.session.pagesCreate && !req.session.isWSTADMIN) {
-        res.status(401).json({result: 0, msg: 'You don´t have permissions to create Pages'});
+        res.status(401).json({ result: 0, msg: 'You don´t have permissions to create Pages' });
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -87,14 +87,14 @@ exports.PagesUpdate = function (req, res) {
 
     if (!req.session.isWSTADMIN) {
         var Pages = connection.model('Pages');
-        Pages.findOne({_id: data._id, owner: req.user._id}, {_id: 1}, {}, function (err, item) {
+        Pages.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
                 controller.update(req, function (result) {
                     res.status(200).json(result);
                 });
             } else {
-                res.status(401).json({result: 0, msg: 'You don´t have permissions to update this page'});
+                res.status(401).json({ result: 0, msg: 'You don´t have permissions to update this page' });
             }
         });
     } else {
@@ -118,14 +118,14 @@ exports.PagesDelete = function (req, res) {
 
     if (!req.session.isWSTADMIN) {
         var Pages = connection.model('Pages');
-        Pages.findOne({_id: data._id, owner: req.user._id}, {_id: 1}, {}, function (err, item) {
+        Pages.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
                 controller.update(req, function (result) {
                     res.status(200).json(result);
                 });
             } else {
-                res.status(401).json({result: 0, msg: 'You don´t have permissions to delete this page'});
+                res.status(401).json({ result: 0, msg: 'You don´t have permissions to delete this page' });
             }
         });
     } else {
@@ -169,7 +169,7 @@ exports.getPage = function (req, res) {
             // Get all the reports...
             var Reports = connection.model('Reports');
 
-            Reports.find({ _id: {$in: theReports} }, function (err, reports) {
+            Reports.find({ _id: { $in: theReports } }, function (err, reports) {
                 if (err) { console.error(err); }
 
                 if (reports) {
@@ -198,9 +198,9 @@ exports.PublishPage = function (req, res) {
 
     // tiene el usuario conectado permisos para publicar?
     var Pages = connection.model('Pages');
-    var find = {_id: data._id, owner: req.user._id, companyID: req.user.companyID};
+    var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
-    if (req.session.isWSTADMIN) { find = {_id: data._id, companyID: req.user.companyID}; }
+    if (req.session.isWSTADMIN) { find = { _id: data._id, companyID: req.user.companyID }; }
 
     Pages.findOne(find, {}, {}, function (err, Page) {
         if (err) throw err;
@@ -208,17 +208,17 @@ exports.PublishPage = function (req, res) {
             Page.parentFolder = parentFolder;
             Page.isPublic = true;
 
-            Pages.update({_id: data._id}, { $set: Page.toObject() }, function (err, numAffected) {
+            Pages.update({ _id: data._id }, { $set: Page.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
-                    res.status(200).json({result: 1, msg: numAffected + ' page published.'});
+                    res.status(200).json({ result: 1, msg: numAffected + ' page published.' });
                 } else {
-                    res.status(200).json({result: 0, msg: 'Error publishing page, no page have been published'});
+                    res.status(200).json({ result: 0, msg: 'Error publishing page, no page have been published' });
                 }
             });
         } else {
-            res.status(401).json({result: 0, msg: 'You don´t have permissions to publish this page, or this page do not exists'});
+            res.status(401).json({ result: 0, msg: 'You don´t have permissions to publish this page, or this page do not exists' });
         }
     });
 };
@@ -228,25 +228,25 @@ exports.UnpublishPage = function (req, res) {
 
     // TODO:tiene el usuario conectado permisos para publicar?
     var Pages = connection.model('Pages');
-    var find = {_id: data._id, owner: req.user._id, companyID: req.user.companyID};
+    var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
-    if (req.session.isWSTADMIN) { find = {_id: data._id, companyID: req.user.companyID}; }
+    if (req.session.isWSTADMIN) { find = { _id: data._id, companyID: req.user.companyID }; }
 
     Pages.findOne(find, {}, {}, function (err, Page) {
         if (err) throw err;
         if (Page) {
             Page.isPublic = false;
-            Pages.update({_id: data._id}, { $set: Page.toObject() }, function (err, numAffected) {
+            Pages.update({ _id: data._id }, { $set: Page.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
-                    res.status(200).json({result: 1, msg: numAffected + ' page unpublished.'});
+                    res.status(200).json({ result: 1, msg: numAffected + ' page unpublished.' });
                 } else {
-                    res.status(200).json({result: 0, msg: 'Error unpublishing page, no page have been unpublished'});
+                    res.status(200).json({ result: 0, msg: 'Error unpublishing page, no page have been unpublished' });
                 }
             });
         } else {
-            res.status(401).json({result: 0, msg: 'You don´t have permissions to unpublish this page, or this page do not exists'});
+            res.status(401).json({ result: 0, msg: 'You don´t have permissions to unpublish this page, or this page do not exists' });
         }
     });
 };

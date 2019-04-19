@@ -19,26 +19,29 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
 
     $scope.initiated = false;
 
-    $scope.elementTypes = [{name: 'object', value: 'object'},
-        {name: 'string', value: 'string'},
-        {name: 'number', value: 'number'},
-        {name: 'boolean', value: 'boolean'},
-        {name: 'date', value: 'date'},
-        {name: 'array', value: 'array'}
+    $scope.elementTypes = [
+        { name: 'object', value: 'object' },
+        { name: 'string', value: 'string' },
+        { name: 'number', value: 'number' },
+        { name: 'boolean', value: 'boolean' },
+        { name: 'date', value: 'date' },
+        { name: 'array', value: 'array' }
     ];
 
-    $scope.numberDefaultAggregation = [{name: 'raw', value: 'value'},
-        {name: 'SUM', value: 'sum'},
-        {name: 'AVG', value: 'avg'},
-        {name: 'MIN', value: 'min'},
-        {name: 'MAX', value: 'max'},
-        {name: 'COUNT', value: 'count'}
+    $scope.numberDefaultAggregation = [
+        { name: 'raw', value: 'value' },
+        { name: 'SUM', value: 'sum' },
+        { name: 'AVG', value: 'avg' },
+        { name: 'MIN', value: 'min' },
+        { name: 'MAX', value: 'max' },
+        { name: 'COUNT', value: 'count' }
     ];
-    $scope.stringDefaultAggregation = [{name: 'raw', value: 'value'},
-        {name: 'COUNT', value: 'count'}
+    $scope.stringDefaultAggregation = [
+        { name: 'raw', value: 'value' },
+        { name: 'COUNT', value: 'count' }
     ];
 
-    $scope.rootItem = {elementLabel: '', elementRole: 'root', elements: []};
+    $scope.rootItem = { elementLabel: '', elementRole: 'root', elements: [] };
 
     $scope.deletingJoin = false;
 
@@ -175,7 +178,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
             if (layer.status === 'active') { newStatus = 'Not active'; }
             if (layer.status === 'Not active') { newStatus = 'active'; }
 
-            var data = {layerID: layer._id, status: newStatus};
+            var data = { layerID: layer._id, status: newStatus };
 
             connection.post('/api/layers/change-layer-status', data).then(function (result) {
                 layer.status = newStatus;
@@ -185,7 +188,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
 
     $scope.view = function () {
         if ($routeParams.layerID) {
-            connection.get('/api/layers/find-one', {id: $routeParams.layerID}).then(function (data) {
+            connection.get('/api/layers/find-one', { id: $routeParams.layerID }).then(function (data) {
                 $scope._Layer = data.item;
                 if ($scope._Layer.params) {
                     if ($scope._Layer.params.schema) {
@@ -316,7 +319,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
     $scope.editSQL = function () {
         var selectedCollection = $scope.theSelectedElement;
         if (!selectedCollection.isSQL) {
-            noty({text: 'Cannot modify sql of an object which is not an sql request', timeout: 2000, type: 'error'});
+            noty({ text: 'Cannot modify sql of an object which is not an sql request', timeout: 2000, type: 'error' });
             return;
         }
 
@@ -614,7 +617,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
             setTimeout(function () {
                 instance = jsPlumb.getInstance({
                 // default drag options
-                    Endpoint: ['Dot', {radius: 2}],
+                    Endpoint: ['Dot', { radius: 2 }],
 
                     DragOptions: { cursor: 'pointer', zIndex: 2000 },
                     // the overlays to decorate each connection with.  note that the label overlay uses a function to generate the label text; in this
@@ -632,7 +635,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
                     hoverPaintStyle: { strokeStyle: 'blue' },
                     overlays: [
                     // ["Diamond" , { location: 1 }]
-                        ['Label', { location: 0.88, label: '[right]', labelStyle: {cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center'} }]
+                        ['Label', { location: 0.88, label: '[right]', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
                     ]
 
                 };
@@ -641,11 +644,11 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
                     connector: 'StateMachine',
                     paintStyle: { strokeStyle: '#61B7CF', lineWidth: 4 },
                     hoverPaintStyle: { strokeStyle: 'blue' },
-                    params: {margin: 40},
+                    params: { margin: 40 },
                     overlays: [
                     // ["Diamond" , { location: 0 }]
                     // zero one many ["Label" , { location: 0.02,label:'>|*',labelStyle:{cssClass:'leftJoinType',color:'#61B7CF',font:'bold 42px ER',fill:' #fff no-repeat fixed center'} }]
-                        ['Label', { location: 0.10, label: '[left]', labelStyle: {cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center'} }]
+                        ['Label', { location: 0.10, label: '[left]', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
                     ]
 
                 };
@@ -665,7 +668,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
                     joinstyle: 'round',
                     outlineColor: 'white',
                     outlineWidth: 2,
-                    params: {margin: 40} // Distance from element to start and end connectors, in pixels.
+                    params: { margin: 40 } // Distance from element to start and end connectors, in pixels.
                 };
                 // .. and this is the hover style.
                 var connectorHoverStyle = {
@@ -1114,13 +1117,13 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
     $scope.addValueToElement = function (element, value, label) {
         if (!element.values) element.values = [];
 
-        element.values.push({value: value, label: label});
+        element.values.push({ value: value, label: label });
     };
 
     $scope.addAssociatedElementToElement = function (element, associatedElement, isVisible) {
         if (!element.associatedElements) element.associatedElements = [];
 
-        element.associatedElements.push({element: associatedElement, visible: isVisible});
+        element.associatedElements.push({ element: associatedElement, visible: isVisible });
     };
 
     $scope.addFolder = function () {
@@ -1252,7 +1255,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
                     for (var j in $scope._Layer.params.joins) {
                         if (($scope._Layer.params.joins[j].sourceElementID === $scope._Layer.params.schema[o].elements[e].elementID) ||
                                             ($scope._Layer.params.joins[j].targetElementID === $scope._Layer.params.schema[o].elements[e].elementID)) {
-                            joinsToDelete.push({sourceElementID: $scope._Layer.params.joins[j].sourceElementID, targetElementID: $scope._Layer.params.joins[j].targetElementID});
+                            joinsToDelete.push({ sourceElementID: $scope._Layer.params.joins[j].sourceElementID, targetElementID: $scope._Layer.params.joins[j].targetElementID });
                         }
                     }
                 }
@@ -1289,20 +1292,20 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
     };
 
     $scope.openSetup = function () {
-        $rootScope.currentModal = $modal.open({templateUrl: 'setupModal', scope: $scope});
+        $rootScope.currentModal = $modal.open({ templateUrl: 'setupModal', scope: $scope });
     };
 
     $scope.getDatasetsForThisDts = function (_id, theDataSource) {
         if (!theDataSource.loading) {
             theDataSource.loading = true;
-            connection.get('/api/data-sources/getEntities', {id: _id}).then(function (data) {
+            connection.get('/api/data-sources/getEntities', { id: _id }).then(function (data) {
                 theDataSource.loading = false;
                 if (data.result === 1) {
                     theDataSource.entities = data.items;
                 } else {
                     if (data.actionCode === 'INVALIDATEDTS') {
                         theDataSource.status = -1;
-                        theDataSource.statusInfo = {errorCode: data.code, actionCode: data.actionCode, message: data.msg, lastDate: new Date()};
+                        theDataSource.statusInfo = { errorCode: data.code, actionCode: data.actionCode, message: data.msg, lastDate: new Date() };
                     }
                 }
             });
@@ -1314,7 +1317,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
             if (result.result === 1) {
                 theEntity.fields = result.items[0].elements;
             }
-            bsLoadingOverlayService.stop({referenceId: 'layerView'});
+            bsLoadingOverlayService.stop({ referenceId: 'layerView' });
         });
     };
 
@@ -1436,7 +1439,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
                 $scope.erDiagramInit();
             });
         } else {
-            noty({text: 'Datasource must be the same for all entities', timeout: 2000, type: 'error'});
+            noty({ text: 'Datasource must be the same for all entities', timeout: 2000, type: 'error' });
         }
     };
 

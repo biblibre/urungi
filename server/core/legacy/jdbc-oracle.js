@@ -57,7 +57,7 @@ db.prototype.query = function (theQuery, done) {
     query(this.connection, theQuery, function (error, results) {
         if (error) {
             done('Query Error: ' + error);
-        } else { done(false, {rows: results.rows}); }
+        } else { done(false, { rows: results.rows }); }
     });
 };
 
@@ -96,7 +96,7 @@ function query (connection, query, done) {
                                                                 console.log('ID: ' + results[0].ID);
                                                             }
 
-                                                            done(false, {rows: results});
+                                                            done(false, { rows: results });
                                                         }
                                                     });
                                                 }
@@ -145,7 +145,7 @@ exports.testConnection = function (req, data, setresult) {
     var theQuery = 'SELECT user as table_schema, table_name as name FROM user_tables';
     db.prototype.connect(data, function (error, connection) {
         if (error) {
-            setresult({result: 0, msg: 'Error testing connection: ' + error, code: 'JO-001', actionCode: 'INVALIDATEDTS'});
+            setresult({ result: 0, msg: 'Error testing connection: ' + error, code: 'JO-001', actionCode: 'INVALIDATEDTS' });
             saveToLog(req, 'Error testing connection: ' + error, 200, 'JO-001', '', data.datasourceID);
             DataSources.invalidateDatasource(req, data.datasourceID, 'JO-001', 'INVALIDATEDTS', 'Error testing connection: ' + error, function (result) {
                 // console.log('change status',result);
@@ -153,13 +153,13 @@ exports.testConnection = function (req, data, setresult) {
         } else {
             query(connection, theQuery, function (err, results) {
                 if (err) {
-                    setresult({result: 0, msg: 'Error testing connection: ' + err, code: 'JO-001', actionCode: 'INVALIDATEDTS'});
+                    setresult({ result: 0, msg: 'Error testing connection: ' + err, code: 'JO-001', actionCode: 'INVALIDATEDTS' });
                     saveToLog(req, 'Error testing connection: ' + err, 200, 'JO-001', '', data.datasourceID);
                     DataSources.invalidateDatasource(req, data.datasourceID, 'JO-001', 'INVALIDATEDTS', 'Error testing connection: ' + err, function (result) {
                         // console.log('change status',result);
                     });
                 } else {
-                    setresult({result: 1, items: results.rows});
+                    setresult({ result: 1, items: results.rows });
                 }
             });
         }

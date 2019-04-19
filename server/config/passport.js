@@ -10,7 +10,7 @@ module.exports = function (passport) {
         if (user.companyID) {
             var Companies = connection.model('Companies');
 
-            Companies.findOne({companyCode: user.companyID}, function (err, company) {
+            Companies.findOne({ companyCode: user.companyID }, function (err, company) {
                 if (company) {
                     user['companyData'] = company;
                 }
@@ -35,7 +35,7 @@ module.exports = function (passport) {
 
     passport.use(new RememberMeStrategy(
         function (token, done) {
-            Users.findOne({accessToken: token}, {}, function (err, user) {
+            Users.findOne({ accessToken: token }, {}, function (err, user) {
                 if (err) { return done(err); }
                 if (!user) { return done(null, false); }
                 return done(null, user);

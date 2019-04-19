@@ -135,7 +135,7 @@ describe('Data sources API', function () {
             const entryID = await getValidID(agent, 0);
 
             var res = await agent.get('/api/data-sources/find-one')
-                .query({id: entryID});
+                .query({ id: entryID });
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result');
@@ -176,7 +176,7 @@ describe('Data sources API', function () {
             expect(decrypted.item.connection.database)
                 .to.equal('database_name');
 
-            await DataSources.deleteOne({_id: decrypted.item._id});
+            await DataSources.deleteOne({ _id: decrypted.item._id });
         });
     });
 
@@ -216,7 +216,7 @@ describe('Data sources API', function () {
             expect(decrypted.result).to.equal(1);
 
             res = await agent.get('/api/data-sources/find-one')
-                .query({id: entryID});
+                .query({ id: entryID });
             expect(res).to.have.status(200);
             decrypted = JSON.parse(res.text);
             verifyItem(decrypted.item);

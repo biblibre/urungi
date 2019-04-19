@@ -19,7 +19,7 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
 
     $scope.view = function (roleID) {
         if (roleID) {
-            connection.get('/api/roles/find-one', {id: roleID}).then(function (data) {
+            connection.get('/api/roles/find-one', { id: roleID }).then(function (data) {
                 $scope._Role = data.item;
                 $scope.mode = 'edit';
                 $scope.clearNodes($scope.publicSpace);

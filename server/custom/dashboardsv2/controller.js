@@ -34,7 +34,7 @@ exports.Dashboardsv2FindOne = function (req, res) {
 
 exports.Dashboardsv2Create = function (req, res) {
     if (!req.session.Dashboardsv2Create && !req.session.isWSTADMIN) {
-        res.status(401).json({result: 0, msg: 'You don´t have permissions to create Dashboards'});
+        res.status(401).json({ result: 0, msg: 'You don´t have permissions to create Dashboards' });
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -53,7 +53,7 @@ exports.Dashboardsv2Create = function (req, res) {
 
 exports.Dashboardsv2Duplicate = function (req, res) {
     if (!req.session.Dashboardsv2Create && !req.session.isWSTADMIN) {
-        res.status(401).json({result: 0, msg: 'You don´t have permissions to create Dashboardsv2'});
+        res.status(401).json({ result: 0, msg: 'You don´t have permissions to create Dashboardsv2' });
     } else {
         req.query.trash = true;
         req.query.companyid = true;
@@ -77,14 +77,14 @@ exports.Dashboardsv2Update = function (req, res) {
     var data = req.body;
 
     if (!req.session.isWSTADMIN) {
-        Dashboardsv2.findOne({_id: data._id, owner: req.user._id}, {_id: 1}, {}, function (err, item) {
+        Dashboardsv2.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
                 controller.update(req).then(function (result) {
                     res.status(200).json(result);
                 });
             } else {
-                res.status(401).json({result: 0, msg: 'You don´t have permissions to update this Dashboard'});
+                res.status(401).json({ result: 0, msg: 'You don´t have permissions to update this Dashboard' });
             }
         });
     } else {
@@ -147,7 +147,7 @@ exports.getDashboard = function (req, res) {
             // Get all the reports...
             var Reports = connection.model('Reports');
 
-            Reports.find({ _id: {$in: theReports} }, function (err, reports) {
+            Reports.find({ _id: { $in: theReports } }, function (err, reports) {
                 if (err) { console.error(err); }
 
                 if (reports) {

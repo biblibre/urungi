@@ -13,7 +13,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
     $scope.dashListModal = 'partials/report/modals/dashboardListModal.html';
     $scope.filterPromptModal = 'partials/report/modals/filter-prompt-modal.html';
-    $scope.tabs = {selected: 'elements'};
+    $scope.tabs = { selected: 'elements' };
 
     $scope.selectedReport = {};
 
@@ -174,7 +174,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         const report = $scope.selectedReport;
 
         if (!report.properties) {
-            noty({text: 'invalid report', timeout: 2000, type: 'error'});
+            noty({ text: 'invalid report', timeout: 2000, type: 'error' });
             return;
         }
 
@@ -250,8 +250,8 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.stringVariables = [
-        {value: 'toUpper', label: 'To Upper'},
-        {value: 'toLower', label: 'To Lower'}
+        { value: 'toUpper', label: 'To Upper' },
+        { value: 'toLower', label: 'To Lower' }
     ];
 
     if ($routeParams.extra === 'intro') {
@@ -333,7 +333,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.unPublish = function () {
-        return connection.post('/api/reports/unpublish', {_id: $scope.selectedReport._id}).then(function () {
+        return connection.post('/api/reports/unpublish', { _id: $scope.selectedReport._id }).then(function () {
             $scope.selectedReport.isPublic = false;
             $('#publishModal').modal('hide');
         });
@@ -341,7 +341,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.selectThisFolder = function (folderID) {
         const url = '/api/reports/publish-report';
-        const params = {_id: $scope.selectedReport._id, parentFolder: folderID};
+        const params = { _id: $scope.selectedReport._id, parentFolder: folderID };
 
         return connection.post(url, params).then(function () {
             $scope.selectedReport.parentFolder = folderID;
@@ -813,7 +813,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             // queryModel.updateColumnField(col, 'zone', choice.zone);
             choice.propertyBind.push(col);
             if (choice.forbidAggregation) {
-                $scope.aggregationChoosed(col, {name: 'Raw', value: 'raw'});
+                $scope.aggregationChoosed(col, { name: 'Raw', value: 'raw' });
             }
         }
     };
@@ -968,29 +968,29 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.fieldsAggregations = {
         'number': [
-            {name: gettextCatalog.getString('Sum'), value: 'sum'},
-            {name: gettextCatalog.getString('Avg'), value: 'avg'},
-            {name: gettextCatalog.getString('Min'), value: 'min'},
-            {name: gettextCatalog.getString('Max'), value: 'max'},
-            {name: gettextCatalog.getString('Count'), value: 'count'},
-            {name: gettextCatalog.getString('Count distinct'), value: 'countDistinct'},
-            {name: gettextCatalog.getString('Raw'), value: 'raw'}
+            { name: gettextCatalog.getString('Sum'), value: 'sum' },
+            { name: gettextCatalog.getString('Avg'), value: 'avg' },
+            { name: gettextCatalog.getString('Min'), value: 'min' },
+            { name: gettextCatalog.getString('Max'), value: 'max' },
+            { name: gettextCatalog.getString('Count'), value: 'count' },
+            { name: gettextCatalog.getString('Count distinct'), value: 'countDistinct' },
+            { name: gettextCatalog.getString('Raw'), value: 'raw' }
         ],
         'date': [
-            {name: gettextCatalog.getString('Year'), value: 'year'},
-            {name: gettextCatalog.getString('Month'), value: 'month'},
-            {name: gettextCatalog.getString('Day'), value: 'day'},
-            {name: gettextCatalog.getString('Count'), value: 'count'},
-            {name: gettextCatalog.getString('Count distinct'), value: 'countDistinct'},
-            {name: gettextCatalog.getString('Raw'), value: 'raw'}
+            { name: gettextCatalog.getString('Year'), value: 'year' },
+            { name: gettextCatalog.getString('Month'), value: 'month' },
+            { name: gettextCatalog.getString('Day'), value: 'day' },
+            { name: gettextCatalog.getString('Count'), value: 'count' },
+            { name: gettextCatalog.getString('Count distinct'), value: 'countDistinct' },
+            { name: gettextCatalog.getString('Raw'), value: 'raw' }
             /* {name: 'Semester', value: 'semester'},
             {name: 'Quarter', value: 'quarter'},
             {name: 'Trimester', value: 'trimester'} */
         ],
         'string': [
-            {name: gettextCatalog.getString('Count'), value: 'count'},
-            {name: gettextCatalog.getString('Count distinct'), value: 'countDistinct'},
-            {name: gettextCatalog.getString('Raw'), value: 'raw'}
+            { name: gettextCatalog.getString('Count'), value: 'count' },
+            { name: gettextCatalog.getString('Count distinct'), value: 'countDistinct' },
+            { name: gettextCatalog.getString('Raw'), value: 'raw' }
 
         ]
     };

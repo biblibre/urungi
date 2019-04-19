@@ -41,20 +41,20 @@ exports.testConnection = function (req, data, setresult) {
     bq.dataset.list(data.database, function (e, r, d) {
         if (e) {
             console.log(e);
-            setresult({result: 0, msg: 'Connection Error: ' + e});
+            setresult({ result: 0, msg: 'Connection Error: ' + e });
         }
 
         var jsonObj = JSON.parse(d);
 
         if (jsonObj.error) {
             console.log(jsonObj.error);
-            return setresult({result: 0, msg: 'Connection Error: ' + jsonObj.error.message});
+            return setresult({ result: 0, msg: 'Connection Error: ' + jsonObj.error.message });
         }
 
         var rows = [];
         if (d) {
             getBigqueryDataset(bq, data.database, jsonObj, 0, rows, function () {
-                setresult({result: 1, items: rows});
+                setresult({ result: 1, items: rows });
             });
         }
     });
@@ -69,7 +69,7 @@ function getBigqueryDataset (bq, database, jsonObj, index, rows, done) {
             var jsonObj2 = JSON.parse(d);
 
             for (var z in jsonObj2.tables) {
-                rows.push({name: jsonObj2.tables[z].id});
+                rows.push({ name: jsonObj2.tables[z].id });
             }
 
             getBigqueryDataset(bq, database, jsonObj, index + 1, rows, done);
@@ -97,8 +97,8 @@ exports.getSchemas = function (data, setresult) {
         if (datasets.indexOf(dataset) === -1) { datasets.push(dataset); }
         if (tables.indexOf(table) === -1) { tables.push(table); }
 
-        if (schemasTables.indexOf({name: collections[i].name, project: project, dataset: dataset, table: table}) === -1) {
-            var stable = {name: collections[i].name, project: project, dataset: dataset, table: table};
+        if (schemasTables.indexOf({ name: collections[i].name, project: project, dataset: dataset, table: table }) === -1) {
+            var stable = { name: collections[i].name, project: project, dataset: dataset, table: table };
             schemasTables.push(stable);
         }
     }
@@ -106,7 +106,7 @@ exports.getSchemas = function (data, setresult) {
     var jsonFile = path.join(appRoot, 'server', 'keys', data.companyID, data.file);
 
     getTableFields(jsonFile, schemasTables, 0, [], function (fields) {
-        setresult({result: 1, items: fields});
+        setresult({ result: 1, items: fields });
     });
 };
 
@@ -120,7 +120,7 @@ function getTableFields (jsonFile, tables, index, fields, done) {
     } else {
         var collectionID = 'WST' + generateShortUID();
         var collectionName = tables[index].dataset + '.' + tables[index].table;
-        var theCollection = {collectionID: collectionID, collectionName: collectionName, visible: true, collectionLabel: tables[index].table};
+        var theCollection = { collectionID: collectionID, collectionName: collectionName, visible: true, collectionLabel: tables[index].table };
         theCollection.elements = [];
 
         bq.init({
@@ -139,7 +139,7 @@ function getTableFields (jsonFile, tables, index, fields, done) {
                 if (jsonObj.schema.fields[i].type === 'TIMESTAMP') { type = 'date'; }
                 if (jsonObj.schema.fields[i].type === 'BOOLEAN') { type = 'boolean'; }
 
-                theCollection.elements.push({elementID: elementID, elementName: jsonObj.schema.fields[i].name, elementType: type, visible: isVisible, elementLabel: jsonObj.schema.fields[i].name});
+                theCollection.elements.push({ elementID: elementID, elementName: jsonObj.schema.fields[i].name, elementType: type, visible: isVisible, elementLabel: jsonObj.schema.fields[i].name });
                 // table_schema, c.table_name, c.column_name, c.data_type
             }
 

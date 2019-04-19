@@ -72,7 +72,7 @@ module.exports = {
 
             delete layer.customElements;
 
-            return db.collection('wst_Layers').replaceOne({_id: layer._id}, layer);
+            return db.collection('wst_Layers').replaceOne({ _id: layer._id }, layer);
         });
     },
 

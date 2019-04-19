@@ -87,9 +87,9 @@ Db.prototype.getCollections = async function () {
 
     try {
         const data = await query(this.knex);
-        return {result: 1, items: data};
+        return { result: 1, items: data };
     } catch (err) {
-        return {result: 0, msg: String(err)};
+        return { result: 0, msg: String(err) };
     }
 };
 
@@ -122,7 +122,7 @@ Db.prototype.getSchema = async function (collection) {
         break;
     case 'ORACLE':
         query = (knex) =>
-            knex.select({ table_schema: knex.raw('user') }, {table_name: 'TABLE_NAME'}, {column_name: 'COLUMN_NAME'}, { data_type: knex.raw('LOWER(data_type)') })
+            knex.select({ table_schema: knex.raw('user') }, { table_name: 'TABLE_NAME' }, { column_name: 'COLUMN_NAME' }, { data_type: knex.raw('LOWER(data_type)') })
                 .from('USER_TAB_COLUMNS')
                 .where('TABLE_NAME', collection.name);
         break;
@@ -130,9 +130,9 @@ Db.prototype.getSchema = async function (collection) {
 
     try {
         const data = await query(this.knex);
-        return {result: 1, items: data};
+        return { result: 1, items: data };
     } catch (err) {
-        return {result: 0, msg: String(err)};
+        return { result: 0, msg: String(err) };
     }
 };
 
@@ -204,10 +204,10 @@ exports.testConnection = async function (params) {
 
         testDb.close();
     } catch (err) {
-        return {result: 0, msg: 'Error executing test connection SQL : ' + err, code: 'MY-002', actionCode: 'MESSAGEWST'};
+        return { result: 0, msg: 'Error executing test connection SQL : ' + err, code: 'MY-002', actionCode: 'MESSAGEWST' };
     }
 
-    return {result: 1};
+    return { result: 1 };
 };
 
 exports.Db = Db;

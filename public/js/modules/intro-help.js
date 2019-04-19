@@ -53,7 +53,7 @@ module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', fu
             scope.showHelpForElement = function (theElement) {
                 // Is visible the element?
                 if ($(theElement).offset()) {
-                    if (scope.previousElement) { $(scope.previousElement).css({'z-index': 0}); }
+                    if (scope.previousElement) { $(scope.previousElement).css({ 'z-index': 0 }); }
 
                     $('#introHelpOverlay').show();
                     $('#introHelpObjectArea').hide();
@@ -94,10 +94,10 @@ module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', fu
                         var areaLineColor = '#000';
                         if (scope.introElements[scope.actualStep].areaColor) { areaLineColor = scope.introElements[scope.actualStep].areaLineColor; }
 
-                        $('#introHelpObjectArea').css({'background-color': areaColor, 'z-index': 400, left: elementOffset.left, top: elementOffset.top, width: elementOffset.width, height: elementOffset.height, border: '2px ' + areaLineColor + ' solid'});
+                        $('#introHelpObjectArea').css({ 'background-color': areaColor, 'z-index': 400, left: elementOffset.left, top: elementOffset.top, width: elementOffset.width, height: elementOffset.height, border: '2px ' + areaLineColor + ' solid' });
 
                         $('#introHelpObjectArea').show();
-                        $(theElement).css({'z-index': 555});
+                        $(theElement).css({ 'z-index': 555 });
                         scope.previousElement = theElement;
                     }
                 }

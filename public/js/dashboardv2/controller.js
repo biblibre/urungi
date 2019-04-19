@@ -17,7 +17,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     $scope.promptModal = 'partials/widgets/promptModal.html';
     $scope.reportImportModal = 'partials/dashboardv2/reportImportModal.html';
 
-    $scope.selectedDashboard = {reports: [], containers: [], prompts: []};
+    $scope.selectedDashboard = { reports: [], containers: [], prompts: [] };
     $scope.lastElementID = 0;
     $scope.dataPool = [];
 
@@ -54,38 +54,38 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     ];
 
     $scope.textAlign = [
-        {name: 'left', value: 'left'},
-        {name: 'right', value: 'right'},
-        {name: 'center', value: 'center'}
+        { name: 'left', value: 'left' },
+        { name: 'right', value: 'right' },
+        { name: 'center', value: 'center' }
     ];
 
     $scope.fontSizes = [
-        {name: '8px', value: '8px'},
-        {name: '9px', value: '9px'},
-        {name: '10px', value: '10px'},
-        {name: '11px', value: '11px'},
-        {name: '12px', value: '12px'},
-        {name: '13px', value: '13px'},
-        {name: '14px', value: '14px'},
-        {name: '15px', value: '15px'},
-        {name: '16px', value: '16px'},
-        {name: '17px', value: '17px'},
-        {name: '18px', value: '18px'},
-        {name: '19px', value: '19px'},
-        {name: '20px', value: '20px'}
+        { name: '8px', value: '8px' },
+        { name: '9px', value: '9px' },
+        { name: '10px', value: '10px' },
+        { name: '11px', value: '11px' },
+        { name: '12px', value: '12px' },
+        { name: '13px', value: '13px' },
+        { name: '14px', value: '14px' },
+        { name: '15px', value: '15px' },
+        { name: '16px', value: '16px' },
+        { name: '17px', value: '17px' },
+        { name: '18px', value: '18px' },
+        { name: '19px', value: '19px' },
+        { name: '20px', value: '20px' }
     ];
 
     $scope.fontWeights = [
-        {name: 'normal', value: 'normal'},
-        {name: 'bold', value: 'bold'},
-        {name: 'bolder', value: 'bolder'},
-        {name: 'lighter', value: 'lighter'}
+        { name: 'normal', value: 'normal' },
+        { name: 'bold', value: 'bold' },
+        { name: 'bolder', value: 'bolder' },
+        { name: 'lighter', value: 'lighter' }
     ];
 
     $scope.fontStyles = [
-        {name: 'normal', value: 'normal'},
-        {name: 'italic', value: 'italic'},
-        {name: 'oblique', value: 'oblique'}
+        { name: 'normal', value: 'normal' },
+        { name: 'italic', value: 'italic' },
+        { name: 'oblique', value: 'oblique' }
     ];
 
     $scope.newReport = function () {
@@ -187,7 +187,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                 noty({ text: 'Could not load dashboard : missing id', type: 'error', timeout: 4000 });
             }
 
-            return connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, {id: $scope.dashboardID}).then(function (data) {
+            return connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, { id: $scope.dashboardID }).then(function (data) {
                 $scope.selectedDashboard = data.item;
 
                 if (/push/.test($location.path())) {
@@ -224,7 +224,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
         $scope.dashboardID = $routeParams.dashboardID;
 
-        connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, {id: $scope.dashboardID}).then(function (data) {
+        connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, { id: $scope.dashboardID }).then(function (data) {
             $scope.selectedDashboard = data.item;
             if (!$scope.selectedDashboard.containers) { $scope.selectedDashboard.containers = []; }
 
@@ -347,7 +347,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                 $scope.editingReportIndex = i;
             }
         }
-        $scope.$broadcast('loadReportStrucutureForDash', {report: reportBackup});
+        $scope.$broadcast('loadReportStrucutureForDash', { report: reportBackup });
     };
 
     function getDroppableObjectHtml (data, context) {
@@ -377,26 +377,26 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             case 'report':
                 const report = $scope.selectedDashboard.reports.find(r => r.id === data.reportID);
                 if (!report) {
-                    noty({text: 'Could not find report', timeout: 6000, type: 'error'});
+                    noty({ text: 'Could not find report', timeout: 6000, type: 'error' });
                     return;
                 }
                 if (angular.element('#REPORT_' + report.id).length) {
-                    noty({text: 'Sorry, that report is already on the dash', timeout: 6000, type: 'error'});
+                    noty({ text: 'Sorry, that report is already on the dash', timeout: 6000, type: 'error' });
                     return;
                 }
                 return reportModel.getReportContainerHTML(data.reportID);
 
             case 'queryFilter':
                 if (angular.element('#PROMPT_' + data.promptID).length) {
-                    noty({text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error'});
+                    noty({ text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error' });
                     return;
                 }
                 return reportModel.getPromptHTML(data);
 
             case 'tabs':
                 var theid = 'TABS_' + uuid2.newguid();
-                var theTabs = [{label: 'tab1', active: true, id: uuid2.newguid()}, {label: 'tab2', active: false, id: uuid2.newguid()}, {label: 'tab3', active: false, id: uuid2.newguid()}, {label: 'tab4', active: false, id: uuid2.newguid()}];
-                var tabsElement = {id: theid, type: 'tabs', properties: {tabs: theTabs}};
+                var theTabs = [{ label: 'tab1', active: true, id: uuid2.newguid() }, { label: 'tab2', active: false, id: uuid2.newguid() }, { label: 'tab3', active: false, id: uuid2.newguid() }, { label: 'tab4', active: false, id: uuid2.newguid() }];
+                var tabsElement = { id: theid, type: 'tabs', properties: { tabs: theTabs } };
                 if (!$scope.selectedDashboard.containers) { $scope.selectedDashboard.containers = []; }
                 $scope.selectedDashboard.containers.push(tabsElement);
 
@@ -444,7 +444,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         event.stopPropagation();
         var customObjectData = data['json/custom-object'];
 
-        return getDroppableObjectHtml(customObjectData, {preferedSize: '1400'}).then(function (html) {
+        return getDroppableObjectHtml(customObjectData, { preferedSize: '1400' }).then(function (html) {
             var $div = $(html);
             $('#designArea').append($div);
             angular.element(document).injector().invoke(function ($compile) {
@@ -467,11 +467,11 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         const authorisedObjects = ['imageTextLarge', 'textImageLarge', 'report', 'queryFilter', 'image', 'video', 'paragraph', 'heading', 'pageHeader'];
 
         if (authorisedObjects.indexOf(customObjectData.objectType) === -1) {
-            noty({text: 'You are not allowed to put this object inside a component', timeout: 6000, type: 'warning'});
+            noty({ text: 'You are not allowed to put this object inside a component', timeout: 6000, type: 'warning' });
             return;
         }
 
-        return getDroppableObjectHtml(customObjectData, {preferedSize: '700'}).then(function (html) {
+        return getDroppableObjectHtml(customObjectData, { preferedSize: '700' }).then(function (html) {
             if (html) {
                 var $div = $(html);
                 var el = angular.element(event.target);
@@ -826,14 +826,14 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     };
 
     $scope.unPublish = function () {
-        connection.post('/api/dashboardsv2/unpublish', {_id: $scope.selectedDashboard._id}).then(function (data) {
+        connection.post('/api/dashboardsv2/unpublish', { _id: $scope.selectedDashboard._id }).then(function (data) {
             $scope.selectedDashboard.isPublic = false;
             $('#publishModal').modal('hide');
         });
     };
 
     $scope.selectThisFolder = function (folderID) {
-        connection.post('/api/dashboardsv2/publish-page', {_id: $scope.selectedDashboard._id, parentFolder: folderID}).then(function (data) {
+        connection.post('/api/dashboardsv2/publish-page', { _id: $scope.selectedDashboard._id, parentFolder: folderID }).then(function (data) {
             $scope.selectedDashboard.parentFolder = folderID;
             $scope.selectedDashboard.isPublic = true;
             $('#publishModal').modal('hide');
@@ -863,7 +863,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     };
 
     $scope.deleteConfirmed = function (dashboardID) {
-        connection.post('/api/dashboardsv2/delete/' + dashboardID, {id: dashboardID}).then(function (result) {
+        connection.post('/api/dashboardsv2/delete/' + dashboardID, { id: dashboardID }).then(function (result) {
             if (result.result === 1) {
                 $('#deleteModal').modal('hide');
 

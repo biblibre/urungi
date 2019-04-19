@@ -265,112 +265,112 @@ angular.module('app').directive('ndPrompt', function (reportModel) {
             $scope.fieldAggregations = $scope.$parent.fieldAggregations;
 
             $scope.conditionTypes = [
-                {conditionType: 'and', conditionLabel: 'AND'},
-                {conditionType: 'or', conditionLabel: 'OR'},
-                {conditionType: 'andNot', conditionLabel: 'AND NOT'},
-                {conditionType: 'orNot', conditionLabel: 'OR NOT'}
+                { conditionType: 'and', conditionLabel: 'AND' },
+                { conditionType: 'or', conditionLabel: 'OR' },
+                { conditionType: 'andNot', conditionLabel: 'AND NOT' },
+                { conditionType: 'orNot', conditionLabel: 'OR NOT' }
             ];
 
             $scope.filterStringOptions = [
-                {value: 'equal', label: 'equal'},
-                {value: 'in', label: 'in'},
-                {value: 'diferentThan', label: 'different than'},
-                {value: 'notIn', label: 'not in'},
-                {value: 'biggerThan', label: 'bigger than'},
-                {value: 'biggerOrEqualThan', label: 'bigger or equal than'},
-                {value: 'lessThan', label: 'less than'},
-                {value: 'lessOrEqualThan', label: 'less or equal than'},
-                {value: 'between', label: 'between'},
-                {value: 'notBetween', label: 'not between'},
-                {value: 'contains', label: 'contains'},
-                {value: 'notContains', label: 'not contains'},
-                {value: 'startWith', label: 'start with'},
-                {value: 'notStartWith', label: 'not start with'},
-                {value: 'endsWith', label: 'ends with'},
-                {value: 'notEndsWith', label: 'not ends with'},
-                {value: 'like', label: 'like'},
-                {value: 'notLike', label: 'not like'},
-                {value: 'null', label: 'is null'},
-                {value: 'notNull', label: 'is not null'}
+                { value: 'equal', label: 'equal' },
+                { value: 'in', label: 'in' },
+                { value: 'diferentThan', label: 'different than' },
+                { value: 'notIn', label: 'not in' },
+                { value: 'biggerThan', label: 'bigger than' },
+                { value: 'biggerOrEqualThan', label: 'bigger or equal than' },
+                { value: 'lessThan', label: 'less than' },
+                { value: 'lessOrEqualThan', label: 'less or equal than' },
+                { value: 'between', label: 'between' },
+                { value: 'notBetween', label: 'not between' },
+                { value: 'contains', label: 'contains' },
+                { value: 'notContains', label: 'not contains' },
+                { value: 'startWith', label: 'start with' },
+                { value: 'notStartWith', label: 'not start with' },
+                { value: 'endsWith', label: 'ends with' },
+                { value: 'notEndsWith', label: 'not ends with' },
+                { value: 'like', label: 'like' },
+                { value: 'notLike', label: 'not like' },
+                { value: 'null', label: 'is null' },
+                { value: 'notNull', label: 'is not null' }
 
             ];
             $scope.filterArrayOptions = [
-                {value: 'equal', label: 'equal'},
-                {value: 'diferentThan', label: 'different than'}, // TODO: el different than no está funcionando
-                {value: 'null', label: 'is null'},
-                {value: 'notNull', label: 'is not null'},
-                {value: 'in', label: 'in'},
-                {value: 'notIn', label: 'not in'}
+                { value: 'equal', label: 'equal' },
+                { value: 'diferentThan', label: 'different than' }, // TODO: el different than no está funcionando
+                { value: 'null', label: 'is null' },
+                { value: 'notNull', label: 'is not null' },
+                { value: 'in', label: 'in' },
+                { value: 'notIn', label: 'not in' }
             ];
 
             $scope.filterNumberOptions = [
-                {value: 'equal', label: 'equal'},
-                {value: 'in', label: 'in'},
-                {value: 'diferentThan', label: 'different than'},
-                {value: 'notIn', label: 'not in'},
-                {value: 'biggerThan', label: 'bigger than'},
-                {value: 'biggerOrEqualThan', label: 'bigger or equal than'},
-                {value: 'lessThan', label: 'less than'},
-                {value: 'lessOrEqualThan', label: 'less or equal than'},
-                {value: 'between', label: 'between'},
-                {value: 'notBetween', label: 'not between'},
-                {value: 'null', label: 'is null'},
-                {value: 'notNull', label: 'is not null'}
+                { value: 'equal', label: 'equal' },
+                { value: 'in', label: 'in' },
+                { value: 'diferentThan', label: 'different than' },
+                { value: 'notIn', label: 'not in' },
+                { value: 'biggerThan', label: 'bigger than' },
+                { value: 'biggerOrEqualThan', label: 'bigger or equal than' },
+                { value: 'lessThan', label: 'less than' },
+                { value: 'lessOrEqualThan', label: 'less or equal than' },
+                { value: 'between', label: 'between' },
+                { value: 'notBetween', label: 'not between' },
+                { value: 'null', label: 'is null' },
+                { value: 'notNull', label: 'is not null' }
             ];
 
             $scope.signalOptions = [
-                {value: 'equal', label: 'equal'},
-                {value: 'diferentThan', label: 'different than'},
-                {value: 'biggerThan', label: 'bigger than'},
-                {value: 'biggerOrEqualThan', label: 'bigger or equal than'},
-                {value: 'lessThan', label: 'less than'},
-                {value: 'lessOrEqualThan', label: 'less or equal than'},
-                {value: 'between', label: 'between'},
-                {value: 'notBetween', label: 'not between'}
+                { value: 'equal', label: 'equal' },
+                { value: 'diferentThan', label: 'different than' },
+                { value: 'biggerThan', label: 'bigger than' },
+                { value: 'biggerOrEqualThan', label: 'bigger or equal than' },
+                { value: 'lessThan', label: 'less than' },
+                { value: 'lessOrEqualThan', label: 'less or equal than' },
+                { value: 'between', label: 'between' },
+                { value: 'notBetween', label: 'not between' }
             ];
 
             $scope.datePatternFilters = [
-                {value: '#WST-TODAY#', label: 'Today'},
-                {value: '#WST-THISWEEK#', label: 'This week'},
-                {value: '#WST-THISMONTH#', label: 'This month'},
-                {value: '#WST-THISYEAR#', label: 'This year'},
-                {value: '#WST-FIRSTQUARTER#', label: 'First quarter'},
-                {value: '#WST-SECONDQUARTER#', label: 'Second quarter'},
-                {value: '#WST-THIRDQUARTER#', label: 'Third quarter'},
-                {value: '#WST-FOURTHQUARTER#', label: 'Fourth quarter'},
-                {value: '#WST-FIRSTSEMESTER#', label: 'First semester'},
-                {value: '#WST-SECONDSEMESTER#', label: 'Second semester'},
-                {value: '#WST-YESTERDAY#', label: 'Yesterday'},
-                {value: '#WST-LASTWEEK#', label: 'Last week'},
-                {value: '#WST-LASTMONTH#', label: 'Last month'},
-                {value: '#WST-LASTYEAR#', label: 'Last year'},
-                {value: '#WST-LYFIRSTQUARTER#', label: 'Last year first quarter'},
-                {value: '#WST-LYSECONDQUARTER#', label: 'Last year second quarter'},
-                {value: '#WST-LYTHIRDQUARTER#', label: 'Last year third quarter'},
-                {value: '#WST-LYFOURTHQUARTER#', label: 'Last year fourth quarter'},
-                {value: '#WST-LYFIRSTSEMESTER#', label: 'Last year first semester'},
-                {value: '#WST-LYSECONDSEMESTER#', label: 'Last year second semester'}
+                { value: '#WST-TODAY#', label: 'Today' },
+                { value: '#WST-THISWEEK#', label: 'This week' },
+                { value: '#WST-THISMONTH#', label: 'This month' },
+                { value: '#WST-THISYEAR#', label: 'This year' },
+                { value: '#WST-FIRSTQUARTER#', label: 'First quarter' },
+                { value: '#WST-SECONDQUARTER#', label: 'Second quarter' },
+                { value: '#WST-THIRDQUARTER#', label: 'Third quarter' },
+                { value: '#WST-FOURTHQUARTER#', label: 'Fourth quarter' },
+                { value: '#WST-FIRSTSEMESTER#', label: 'First semester' },
+                { value: '#WST-SECONDSEMESTER#', label: 'Second semester' },
+                { value: '#WST-YESTERDAY#', label: 'Yesterday' },
+                { value: '#WST-LASTWEEK#', label: 'Last week' },
+                { value: '#WST-LASTMONTH#', label: 'Last month' },
+                { value: '#WST-LASTYEAR#', label: 'Last year' },
+                { value: '#WST-LYFIRSTQUARTER#', label: 'Last year first quarter' },
+                { value: '#WST-LYSECONDQUARTER#', label: 'Last year second quarter' },
+                { value: '#WST-LYTHIRDQUARTER#', label: 'Last year third quarter' },
+                { value: '#WST-LYFOURTHQUARTER#', label: 'Last year fourth quarter' },
+                { value: '#WST-LYFIRSTSEMESTER#', label: 'Last year first semester' },
+                { value: '#WST-LYSECONDSEMESTER#', label: 'Last year second semester' }
             ];
 
             $scope.filterDateOptions = [
-                {value: 'equal', label: 'equal'},
-                {value: 'equal-pattern', label: 'equal (pattern)'},
+                { value: 'equal', label: 'equal' },
+                { value: 'equal-pattern', label: 'equal (pattern)' },
                 // {value:"in",label:"in"},
-                {value: 'diferentThan', label: 'different than'},
-                {value: 'diferentThan-pattern', label: 'different than (pattern)'},
+                { value: 'diferentThan', label: 'different than' },
+                { value: 'diferentThan-pattern', label: 'different than (pattern)' },
                 // {value:"notIn",label:"not in"},
-                {value: 'biggerThan', label: 'bigger than'},
-                {value: 'biggerThan-pattern', label: 'bigger than (pattern)'},
-                {value: 'biggerOrEqualThan', label: 'bigger or equal than'},
-                {value: 'biggerOrEqualThan-pattern', label: 'bigger or equal than (pattern)'},
-                {value: 'lessThan', label: 'less than'},
-                {value: 'lessThan-pattern', label: 'less than (pattern)'},
-                {value: 'lessOrEqualThan', label: 'less or equal than'},
-                {value: 'lessOrEqualThan-pattern', label: 'less or equal than (pattern)'},
-                {value: 'between', label: 'between'},
-                {value: 'notBetween', label: 'not between'},
-                {value: 'null', label: 'is null'},
-                {value: 'notNull', label: 'is not null'}
+                { value: 'biggerThan', label: 'bigger than' },
+                { value: 'biggerThan-pattern', label: 'bigger than (pattern)' },
+                { value: 'biggerOrEqualThan', label: 'bigger or equal than' },
+                { value: 'biggerOrEqualThan-pattern', label: 'bigger or equal than (pattern)' },
+                { value: 'lessThan', label: 'less than' },
+                { value: 'lessThan-pattern', label: 'less than (pattern)' },
+                { value: 'lessOrEqualThan', label: 'less or equal than' },
+                { value: 'lessOrEqualThan-pattern', label: 'less or equal than (pattern)' },
+                { value: 'between', label: 'between' },
+                { value: 'notBetween', label: 'not between' },
+                { value: 'null', label: 'is null' },
+                { value: 'notNull', label: 'is not null' }
                 // TODO: in , not in or date elements
             ];
         }

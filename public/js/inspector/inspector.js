@@ -7,18 +7,18 @@ angular.module('wst.inspector', [])
             fontSizes: [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72],
             fontWeights: [100, 200, 300, 400, 500, 600, 700, 800, 900, 'bold', 'bolder', 'light', 'lighter', 'normal'],
             baseFonts: [
-                {name: 'Impact', css: 'Impact, Charcoal, sans-serif'},
-                {name: 'Comic Sans', css: '"Comic Sans MS", cursive, sans-serif'},
-                {name: 'Arial Black', css: '"Arial Black", Gadget, sans-serif'},
-                {name: 'Century Gothic', css: 'Century Gothic, sans-serif'},
-                {name: 'Courier New', css: '"Courier New", Courier, monospace'},
-                {name: 'Lucida Sans', css: '"Lucida Sans Unicode", "Lucida Grande", sans-serif'},
-                {name: 'Times New Roman', css: '"Times New Roman", Times, serif'},
-                {name: 'Lucida Console', css: '"Lucida Console", Monaco, monospace'},
-                {name: 'Andele Mono', css: '"Andele Mono", monospace, sans-serif'},
-                {name: 'Verdana', css: 'Verdana, Geneva, sans-serif'},
-                {name: 'Helvetica Neue', css: '"Helvetica Neue", Helvetica, Arial, sans-serif'},
-                {name: 'Open Sans', css: '"Open Sans", Helvetica, Arial, sans-serif'}
+                { name: 'Impact', css: 'Impact, Charcoal, sans-serif' },
+                { name: 'Comic Sans', css: '"Comic Sans MS", cursive, sans-serif' },
+                { name: 'Arial Black', css: '"Arial Black", Gadget, sans-serif' },
+                { name: 'Century Gothic', css: 'Century Gothic, sans-serif' },
+                { name: 'Courier New', css: '"Courier New", Courier, monospace' },
+                { name: 'Lucida Sans', css: '"Lucida Sans Unicode", "Lucida Grande", sans-serif' },
+                { name: 'Times New Roman', css: '"Times New Roman", Times, serif' },
+                { name: 'Lucida Console', css: '"Lucida Console", Monaco, monospace' },
+                { name: 'Andele Mono', css: '"Andele Mono", monospace, sans-serif' },
+                { name: 'Verdana', css: 'Verdana, Geneva, sans-serif' },
+                { name: 'Helvetica Neue', css: '"Helvetica Neue", Helvetica, Arial, sans-serif' },
+                { name: 'Open Sans', css: '"Open Sans", Helvetica, Arial, sans-serif' }
             ]
         };
     })
@@ -804,7 +804,7 @@ angular.module('wst.inspector', [])
                 var old = css.getValueFor($rootScope.selected.selector, name);
                 var val = value.replace(/[A-Za-z]/g, '') + 'px';
 
-                this.styles[name] = {top: val, left: val, right: val, bottom: val};
+                this.styles[name] = { top: val, left: val, right: val, bottom: val };
 
                 if ($rootScope.selected.path && !$scope.selecting) {
                     css.add(false, name, this.styles[name], old);
@@ -850,7 +850,7 @@ angular.module('wst.inspector', [])
     // styles for every select option
         $.widget('builder.prettyselect', $.ui.selectmenu, {
             _renderItem: function (ul, item) {
-                var li = $('<li>', {text: item.label});
+                var li = $('<li>', { text: item.label });
 
                 // grab any styles stored on options and apply them
                 $.each(item.element.data(), function (i, v) {
@@ -957,21 +957,22 @@ angular.module('wst.inspector', [])
                     return result;
                 };
 
-                $scope.inspector = {styles: {
-                    height: 100,
-                    source: '',
-                    headingType: '',
-                    padding: {},
-                    margin: {},
-                    border: {},
-                    color: {},
-                    attributes: {
-                        class: [],
-                        id: '',
-                        float: '',
-                    },
-                    text: {},
-                }
+                $scope.inspector = {
+                    styles: {
+                        height: 100,
+                        source: '',
+                        headingType: '',
+                        padding: {},
+                        margin: {},
+                        border: {},
+                        color: {},
+                        attributes: {
+                            class: [],
+                            id: '',
+                            float: '',
+                        },
+                        text: {},
+                    }
                 };
 
                 $scope.previews = {
@@ -988,15 +989,17 @@ angular.module('wst.inspector', [])
                 };
 
                 $scope.openImageGallery = function (target) {
-                    $scope.$parent.$broadcast('showFileModal', {addFile: function (file) {
-                        var url = file.url;
-                        if (file.source1400) {
-                            url = file.source1400;
-                        } else if (file.source700) {
-                            url = file.source700;
+                    $scope.$parent.$broadcast('showFileModal', {
+                        addFile: function (file) {
+                            var url = file.url;
+                            if (file.source1400) {
+                                url = file.source1400;
+                            } else if (file.source700) {
+                                url = file.source700;
+                            }
+                            $scope.setBackgroundImage(url);
                         }
-                        $scope.setBackgroundImage(url);
-                    } });
+                    });
                 };
 
                 $scope.setBackgroundImage = function (url) {
@@ -1004,11 +1007,11 @@ angular.module('wst.inspector', [])
                         var theElement = $scope.selectedElement;
 
                         if (url) {
-                            theElement.css({'background-image': "url('" + url + "')"});
-                            theElement.css({'-webkit-background-size': 'cover'});
-                            theElement.css({'-moz-background-size': 'cover'});
-                            theElement.css({'-o-background-size': 'cover'});
-                            theElement.css({'background-size': 'cover'});
+                            theElement.css({ 'background-image': "url('" + url + "')" });
+                            theElement.css({ '-webkit-background-size': 'cover' });
+                            theElement.css({ '-moz-background-size': 'cover' });
+                            theElement.css({ '-o-background-size': 'cover' });
+                            theElement.css({ 'background-size': 'cover' });
                         } else {
                             theElement.css({ 'background-image': 'none' });
                         }
@@ -1106,7 +1109,7 @@ angular.module('wst.inspector', [])
 
                 $scope.applyBigInputBoxValue = function (name, value, append) {
                     var val = value.replace(/[A-Za-z]/g, '') + 'px';
-                    $scope.inspector.styles[name] = {top: val, left: val, right: val, bottom: val};
+                    $scope.inspector.styles[name] = { top: val, left: val, right: val, bottom: val };
                 };
 
                 $scope.selectPreset = function (e) {

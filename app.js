@@ -47,7 +47,7 @@ app.use(function (req, res, next) {
 });
 
 var bodyParser = require('body-parser');
-app.use(bodyParser.json({limit: '50mb'})); // get information from html forms
+app.use(bodyParser.json({ limit: '50mb' })); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
 var authentication = true;

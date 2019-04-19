@@ -72,7 +72,7 @@ module.directive('lvlDropTarget', ['$rootScope', 'uuid', function ($rootScope, u
                 var data = e.originalEvent.dataTransfer.getData('text');
                 // changed by mene because a problem with the dom
 
-                scope.onDrop({dragEl: data, dropEl: id});
+                scope.onDrop({ dragEl: data, dropEl: id });
             });
 
             $rootScope.$on('LVL-DRAG-START', function () {

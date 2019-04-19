@@ -95,7 +95,7 @@ angular.module('app').directive('wstWidgetProperties', function ($compile, c3Cha
                             }
                         }
 
-                        $rootScope.selectedElement.css({'background-color': $scope.backgroundColor});
+                        $rootScope.selectedElement.css({ 'background-color': $scope.backgroundColor });
                     } else if ($scope.dashboard) { $scope.dashboard.backgroundColor = $scope.backgroundColor; }
                     // saveProperties();
                 }
@@ -159,7 +159,7 @@ angular.module('app').directive('wstWidgetProperties', function ($compile, c3Cha
                     var r = hex.r;
                     var g = hex.g;
                     var b = hex.b;
-                    $scope.selectedElement.css({'background-color': 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')'});
+                    $scope.selectedElement.css({ 'background-color': 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')' });
                 } else {
                     if ($scope.imageFilters.opacity !== 0) {
                         var theElement = $scope.selectedElement;
@@ -230,7 +230,7 @@ angular.module('app').directive('wstWidgetProperties', function ($compile, c3Cha
             $scope.changeHeight = function (newHeight) {
                 if ($scope.selectedElementType === 'c3Chart') {
                     if ($scope.selectedChart) {
-                        $scope.selectedChart.chart.chartCanvas.resize({height: newHeight});
+                        $scope.selectedChart.chart.chartCanvas.resize({ height: newHeight });
                         $scope.selectedChart.chart.height = newHeight;
                     }
                 } else {

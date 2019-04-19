@@ -147,7 +147,7 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
 
         $scope.duplicate = function () {
             $scope.duplicateOptions.freeze = true;
-            return reportModel.duplicateReport({report: $scope.duplicateOptions.item, newName: $scope.duplicateOptions.newName}).then(function () {
+            return reportModel.duplicateReport({ report: $scope.duplicateOptions.item, newName: $scope.duplicateOptions.newName }).then(function () {
                 $scope.nav.refreshItems();
                 $scope.duplicateOptions.freeze = false;
                 $('#duplicateModal').modal('hide');
@@ -155,7 +155,7 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
         };
 
         $scope.delete = function () {
-            return connection.post('/api/reports/delete/' + $scope.deleteOptions.id, {id: $scope.deleteOptions.id}).then(function () {
+            return connection.post('/api/reports/delete/' + $scope.deleteOptions.id, { id: $scope.deleteOptions.id }).then(function () {
                 $scope.nav.refreshItems();
                 $('#deleteModal').modal('hide');
             });
@@ -347,7 +347,7 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
         };
 
         $scope.delete = function () {
-            return connection.post('/api/dashboardsv2/delete/' + $scope.deleteOptions.id, {id: $scope.deleteOptions.id}).then(function () {
+            return connection.post('/api/dashboardsv2/delete/' + $scope.deleteOptions.id, { id: $scope.deleteOptions.id }).then(function () {
                 $scope.nav.refreshItems();
                 $('#deleteModal').modal('hide');
             });
@@ -511,7 +511,7 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
         };
 
         $scope.delete = function () {
-            return connection.post('/api/layers/delete/' + $scope.deleteOptions.id, {id: $scope.deleteOptions.id}).then(function () {
+            return connection.post('/api/layers/delete/' + $scope.deleteOptions.id, { id: $scope.deleteOptions.id }).then(function () {
                 $scope.nav.refreshItems();
                 $('#deleteModal').modal('hide');
             });
@@ -535,7 +535,7 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
                 if (layer.status === 'active') { newStatus = 'Not active'; }
                 if (layer.status === 'Not active') { newStatus = 'active'; }
 
-                var data = {layerID: layer._id, status: newStatus};
+                var data = { layerID: layer._id, status: newStatus };
 
                 connection.post('/api/layers/change-layer-status', data).then(function (result) {
                     layer.status = newStatus;

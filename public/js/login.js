@@ -50,7 +50,7 @@ angular.module('urungi-login', [])
 
             if (options.showLoader) $('#loader-overlay').show();
 
-            $http({method: 'GET', url: url, params: params})
+            $http({ method: 'GET', url: url, params: params })
                 .success(angular.bind(this, function (data, status, headers, config) {
                     if (typeof data === 'string') window.location.href = '/';
 
@@ -59,15 +59,15 @@ angular.module('urungi-login', [])
                     if (options.showLoader) $('#loader-overlay').hide();
 
                     if (data.result === 1 && data.msg && options.showMsg) {
-                        noty({text: data.msg, timeout: 2000, type: 'success'});
+                        noty({ text: data.msg, timeout: 2000, type: 'success' });
                     } else if (data.result === 0 && data.msg && options.showMsg) {
-                        noty({text: data.msg, timeout: 2000, type: 'error'});
+                        noty({ text: data.msg, timeout: 2000, type: 'error' });
                     }
                 }))
                 .error(angular.bind(this, function (data, status, headers, config) {
                     if (options.showLoader) $('#loader-overlay').hide();
 
-                    noty({text: 'Error', timeout: 2000, type: 'error'});
+                    noty({ text: 'Error', timeout: 2000, type: 'error' });
                 }));
         };
 
@@ -90,15 +90,15 @@ angular.module('urungi-login', [])
                     if (options.showLoader) $('#loader-overlay').hide();
 
                     if (data.result === 1 && data.msg && options.showMsg) {
-                        noty({text: data.msg, timeout: 2000, type: 'success'});
+                        noty({ text: data.msg, timeout: 2000, type: 'success' });
                     } else if (data.result === 0 && data.msg && options.showMsg) {
-                        noty({text: data.msg, timeout: 2000, type: 'error'});
+                        noty({ text: data.msg, timeout: 2000, type: 'error' });
                     }
                 }))
                 .error(angular.bind(this, function (data, status, headers, config) {
                     if (options.showLoader) $('#loader-overlay').hide();
 
-                    noty({text: 'Error', timeout: 2000, type: 'error'});
+                    noty({ text: 'Error', timeout: 2000, type: 'error' });
                 }));
         };
 
@@ -109,10 +109,10 @@ angular.module('urungi-login', [])
         $scope.loginError = false;
         $scope.errorLoginMessage = '';
         $scope.login = function () {
-            var user = {'userName': $scope.userName, 'password': $scope.password, 'remember_me': $scope.rememberMe, 'companyID': $('#companyID').attr('value')};
+            var user = { 'userName': $scope.userName, 'password': $scope.password, 'remember_me': $scope.rememberMe, 'companyID': $('#companyID').attr('value') };
 
             if ($scope.userName !== undefined || $scope.password !== undefined) {
-                $http({method: 'POST', url: '/api/login', data: user, withCredentials: true})
+                $http({ method: 'POST', url: '/api/login', data: user, withCredentials: true })
                     .success(function (data, status, headers, config) {
                         $scope.loginError = false;
 

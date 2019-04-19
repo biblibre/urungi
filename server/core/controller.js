@@ -12,7 +12,7 @@ class Controller {
         var filters = (req.query.filters) ? JSON.parse(req.query.filters) : false;
         var fields = {};
         var fieldsToGet = (req.query.fields) ? req.query.fields : false;
-        if (req.query.page > 0) { var params = (req.query.page) ? {skip: (page - 1) * perPage, limit: perPage} : {}; }
+        if (req.query.page > 0) { var params = (req.query.page) ? { skip: (page - 1) * perPage, limit: perPage } : {}; }
 
         if (req.query.sort) {
             var sortField = {};
@@ -80,7 +80,7 @@ class Controller {
 
                 findFields.push(thisField);
             }
-            searchFind = (findFields.length > 0) ? {$or: findFields} : {};
+            searchFind = (findFields.length > 0) ? { $or: findFields } : {};
         }
 
         if (filters) {
@@ -93,14 +93,14 @@ class Controller {
 
         if (Object.keys(searchFind).length > 0) { mandatoryFilters.push(searchFind); }
 
-        if (mandatoryFilters.length > 0) { find = {$and: mandatoryFilters}; }
+        if (mandatoryFilters.length > 0) { find = { $and: mandatoryFilters }; }
 
         const p = Model.find(find, fields, params).exec().then(function (items) {
             return Model.count(find).exec().then(function (count) {
-                return {result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items};
+                return { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
             });
         }).catch(function (err) {
-            return {result: 0, msg: 'A database error has occured : ' + String(err), error: err};
+            return { result: 0, msg: 'A database error has occured : ' + String(err), error: err };
         });
 
         if (done) {
@@ -113,7 +113,7 @@ class Controller {
 
     findOne (req, done) {
         if (!req.query.id) {
-            const p = Promise.resolve({result: 0, msg: "'id' is required."});
+            const p = Promise.resolve({ result: 0, msg: "'id' is required." });
 
             if (done) {
                 console.warn('Using a callback with findOne is deprecated. Use the returned promise instead');
@@ -127,12 +127,12 @@ class Controller {
 
         const p = this.model.findOne(find, {}).exec().then(function (item) {
             if (!item) {
-                return {result: 0, msg: 'Item not found.'};
+                return { result: 0, msg: 'Item not found.' };
             }
 
-            return {result: 1, item: item.toObject()};
+            return { result: 1, item: item.toObject() };
         }).catch(function (err) {
-            return {result: 0, msg: 'A database error has occured : ' + String(err), error: err};
+            return { result: 0, msg: 'A database error has occured : ' + String(err), error: err };
         });
 
         if (done) {
@@ -162,7 +162,7 @@ class Controller {
         var user = (req.isAuthenticated()) ? req.user.username : 'unsigned user';
         if (!data.nd_history) data.nd_history = [];
 
-        data.nd_history.push({text: 'Created on ' + new Date() + ' by ' + user,
+        data.nd_history.push({ text: 'Created on ' + new Date() + ' by ' + user,
             user_id: (req.isAuthenticated()) ? req.user._id : null,
             user_name: (req.isAuthenticated()) ? req.user.username : null,
             user_companyID: (req.isAuthenticated()) ? req.user.companyID : null,
@@ -171,20 +171,20 @@ class Controller {
 
         const Model = this.model;
 
-        const p = Model.find({_id: data._id}).exec().then(function (item) {
+        const p = Model.find({ _id: data._id }).exec().then(function (item) {
             if (item.length > 0) {
                 if (!item[0].nd_trash_deleted) {
                     throw new Error('Item already exists');
                 } else {
-                    return Model.deleteOne({_id: data._id}).exec();
+                    return Model.deleteOne({ _id: data._id }).exec();
                 }
             }
         }).then(function () {
             return Model.create(data).then(function (item) {
-                return {result: 1, msg: 'Item created', item: item.toObject()};
+                return { result: 1, msg: 'Item created', item: item.toObject() };
             });
         }).catch(function (err) {
-            return {result: 0, msg: 'A database error has occured : ' + String(err), error: err};
+            return { result: 0, msg: 'A database error has occured : ' + String(err), error: err };
         });
 
         if (done) {
@@ -215,12 +215,12 @@ class Controller {
             var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
 
             if (numAffected > 0) {
-                return {result: 1, msg: numAffected + ' record updated.'};
+                return { result: 1, msg: numAffected + ' record updated.' };
             } else {
-                return {result: 0, msg: 'Error updating record, no record have been updated'};
+                return { result: 0, msg: 'Error updating record, no record have been updated' };
             }
         }).catch(function (err) {
-            return {result: 0, msg: 'A database error has occured : ' + String(err), error: err};
+            return { result: 0, msg: 'A database error has occured : ' + String(err), error: err };
         });
 
         if (done) {
@@ -233,7 +233,7 @@ class Controller {
 
     remove (req, done) {
         if (!req.params.id) {
-            const p = Promise.resolve({result: 0, msg: "'id' is required."});
+            const p = Promise.resolve({ result: 0, msg: "'id' is required." });
 
             if (done) {
                 console.warn('Using a callback with remove is deprecated. Use the returned promise instead');
@@ -249,12 +249,12 @@ class Controller {
             var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
 
             if (numAffected > 0) {
-                return {result: 1, msg: numAffected + ' items deleted.'};
+                return { result: 1, msg: numAffected + ' items deleted.' };
             } else {
-                return {result: 0, msg: 'Error deleting items, no item have been deleted'};
+                return { result: 0, msg: 'Error deleting items, no item have been deleted' };
             }
         }).catch(function (err) {
-            return {result: 0, msg: 'A database error has occured : ' + String(err), error: err};
+            return { result: 0, msg: 'A database error has occured : ' + String(err), error: err };
         });
 
         if (done) {
@@ -294,7 +294,7 @@ function generateFindFields (req, id) {
         mandatoryFilters.push(companyField);
     }
 
-    return {'$and': mandatoryFilters};
+    return { '$and': mandatoryFilters };
 }
 
 module.exports = Controller;
