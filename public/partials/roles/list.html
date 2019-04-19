@@ -18,26 +18,8 @@
                         <p class="list-group-item-text" ng-bind="role.description"></p>
                     </a>
                 </div>
-                <div class="container-fluid">
-                     <ul ng-if="pager.pages.length > 1" class="pagination">
-                        <li ng-class="{disabled:pager.currentPage === 1}">
-                            <a ng-click="getRoles(1,'',['name','description'])" translate>First</a>
-                        </li>
-                        <li ng-class="{disabled:pager.currentPage === 1}">
-                            <a ng-click="getRoles(pager.currentPage - 1,'',['name','description'])" translate>Previous</a>
-                        </li>
-                        <li ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
-                            <a ng-click="getRoles(page,'',['name','description'])">{{page}}</a>
-                        </li>
-                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                            <a ng-click="getRoles(pager.currentPage + 1,'',['name','description'])" translate>Next</a>
-                        </li>
-                        <li ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                            <a ng-click="getRoles(pager.totalPages,'',['name','description'])" translate>Last</a>
-                        </li>
-                    </ul>
 
-                </div>
+                <app-pager current-page="page" total-pages="pages" on-page-change="goToPage(page)"></app-pager>
             </div>
         </div>
     </div>

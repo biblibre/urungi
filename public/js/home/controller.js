@@ -240,7 +240,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$sessionS
                         gettextCatalog.getString('Next Step') +
                         '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
                         gettextCatalog.getString('Setup a data source') +
-                        '</span><br/><br/><br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/datasources/intro">' +
+                        '</span><br/><br/><br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/data-sources#intro">' +
                         gettextCatalog.getString('Go to data sources and continue tour') +
                         '</a></span></div>',
                         width: '500px',
@@ -466,12 +466,12 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$sessionS
         }
     }
 
-    connection.get('/api/get-user-other-data', {}, function (data) {
+    connection.get('/api/get-user-other-data', {}).then(function (data) {
         var user = data.items;
         $rootScope.user.contextHelp = user.contextHelp;
     });
 
-    connection.get('/api/get-user-last-executions', {}, function (data) {
+    connection.get('/api/get-user-last-executions', {}).then(function (data) {
         $scope.lastExecutions = [];
         $scope.mostExecutions = [];
 
@@ -493,7 +493,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$sessionS
     $scope.getReports = function (params) {
         params = params || {};
 
-        connection.get('/api/reports/find-all', params, function (data) {
+        connection.get('/api/reports/find-all', params).then(function (data) {
             $scope.reports = data;
         });
     };
@@ -501,13 +501,13 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$sessionS
     $scope.getDashboards = function (params) {
         params = params || {};
 
-        connection.get('/api/dashboards/find-all', params, function (data) {
+        connection.get('/api/dashboards/find-all', params).then(function (data) {
             $scope.dashboards = data;
         });
     };
 
     $scope.getCounts = function () {
-        /* connection.get('/api/get-counts', {}, function(data) {
+        /* connection.get('/api/get-counts', {}).then(function(data) {
             $rootScope.counts = data;
         }); */
     };
@@ -517,7 +517,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$sessionS
             $scope.userObjects = userObjects;
         });
 
-        connection.get('/api/get-counts', {}, function (data) {
+        connection.get('/api/get-counts', {}).then(function (data) {
             $rootScope.counts = data;
             getIntraOptions();
         });

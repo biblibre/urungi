@@ -6,7 +6,7 @@ angular.module('app', [
     'urungi.directives', 'ngSanitize', 'ui.select', 'angularUUID2', 'vs-repeat',
     'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'bsLoadingOverlay', 'xeditable',
     'intro.help', 'ngFileUpload', 'colorpicker.module',
-    'wst.inspector', 'gettext', 'ngFileSaver'
+    'wst.inspector', 'gettext', 'ngFileSaver', 'app.core', 'app.data-sources'
 ])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/home'});
@@ -76,38 +76,6 @@ angular.module('app', [
         $routeProvider.when('/reports/fullscreen/:reportID/', {
             templateUrl: 'partials/report/fullscreen.html',
             controller: 'reportCtrl'
-        });
-
-        // Data sources
-
-        $routeProvider.when('/data-sources', {
-            templateUrl: 'partials/data-source/list.html',
-            controller: 'dataSourceCtrl'
-        });
-
-        $routeProvider.when('/datasources/:extra', {
-            templateUrl: 'partials/data-source/list.html',
-            controller: 'dataSourceCtrl'
-        });
-
-        $routeProvider.when('/data-sources/:dataSourceID/', {
-            templateUrl: 'partials/data-source/edit.html',
-            controller: 'dataSourceCtrl'
-        });
-
-        $routeProvider.when('/data-sources/edit/:dataSourceID/', {
-            templateUrl: 'partials/data-source/edit.html',
-            controller: 'dataSourceCtrl'
-        });
-
-        $routeProvider.when('/data_sources/new/:newDataSource/', {
-            templateUrl: 'partials/data-source/edit.html',
-            controller: 'dataSourceCtrl'
-        });
-
-        $routeProvider.when('/datasources/new/:newDataSource/:extra', {
-            templateUrl: 'partials/data-source/edit.html',
-            controller: 'dataSourceCtrl'
         });
 
         // layers
@@ -331,14 +299,14 @@ angular.module('app').run(['$rootScope', '$sessionStorage', 'connection', functi
     $rootScope.setUserContextHelpViewed = function (contextHelpName) {
         var params = {};
         params.contextHelpName = contextHelpName;
-        connection.get('/api/set-viewed-context-help', params, function (data) {
+        connection.get('/api/set-viewed-context-help', params).then(function (data) {
             $rootScope.user.contextHelp = data.items;
         });
     };
 
     $rootScope.user = $sessionStorage.getObject('user');
     if (!$rootScope.user) {
-        connection.get('/api/get-user-data', {}, function (data) {
+        connection.get('/api/get-user-data', {}).then(function (data) {
             if (!data.items.user) {
                 window.location.href = '/login';
                 return;

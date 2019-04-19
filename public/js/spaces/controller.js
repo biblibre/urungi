@@ -139,7 +139,7 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
                     gettextCatalog.getString('Next Step') +
                     '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
                     gettextCatalog.getString('Creating a new data source') +
-                    '</span><br/><br/><br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/datasources/new/true/intro">' +
+                    '</span><br/><br/><br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/data-sources/new">' +
                     gettextCatalog.getString('Continue tour') +
                     '</a></span></div>',
                 width: '500px',
@@ -169,12 +169,11 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
     };
 
     $scope.save = function () {
-        connection.post('/api/company/save-public-space', $scope.data)
-            .then(data => {
-                if (data.result === 1) {
-                    $rootScope.userObjects = $scope.data;
-                }
-            });
+        connection.post('/api/company/save-public-space', $scope.data).then(data => {
+            if (data.result === 1) {
+                $rootScope.userObjects = $scope.data;
+            }
+        });
     };
 
     $scope.remove = function (scope) {

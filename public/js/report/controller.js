@@ -1,5 +1,5 @@
 angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportService, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, c3Charts,
-    reportModel, widgetsCommon, $location, PagerService, gettextCatalog, usersModel, $q) {
+    reportModel, widgetsCommon, $location, gettextCatalog, usersModel, $q) {
     usersModel.getUserObjects().then(userObjects => {
         $scope.userObjects = userObjects;
     });
@@ -20,21 +20,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.duplicateOptions = {};
     $scope.duplicateOptions.freeze = false;
     $scope.duplicateOptions.header = 'Duplicate report';
-
-    $scope.navigation = {};
-    $scope.navigation.page = 1;
-    $scope.navigation.pager = {};
-
-    $scope.navigation.search = '';
-    $scope.navigation.filters = {};
-    $scope.navigation.filters.reportName = '';
-    $scope.navigation.filters.author = '';
-
-    $scope.navigation.sort = 'reportName';
-    $scope.navigation.sortTypes = {};
-    $scope.navigation.sortTypes.reportName = 1;
-    $scope.navigation.sortTypes.author = 1;
-    $scope.navigation.sortTypes.createdOn = 1;
 
     $scope.gettingData = false;
     $scope.showSQL = false;
@@ -204,59 +189,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         if (!report.properties.order) { report.properties.order = []; }
     };
 
-    $scope.getReports = function (params) {
-        /*
-        * The possbile fields in params are
-        * fields
-        * page
-        * search
-        * sort (a column to sort by)
-        * sortType (1 or -1)
-        */
-
-        if (!params) {
-            params = {};
-        }
-
-        if (!params.fields) {
-            params.fields = ['reportName', 'reportType', 'isPublic', 'owner', 'reportDescription', 'author', 'createdOn'];
-        }
-
-        if (!params.page) {
-            params.page = $scope.navigation.page || 1;
-        }
-
-        if (!params.search) {
-            params.search = $scope.navigation.search || '';
-        }
-
-        if (!params.sort && $scope.navigation.sort) {
-            params.sort = $scope.navigation.sort;
-        }
-
-        if (params.sort && !params.sortType) {
-            params.sortType = $scope.navigation.sortTypes[params.sort] || '';
-        }
-
-        if (!params.filters) {
-            params.filters = $scope.navigation.filters || undefined;
-        }
-
-        for (const f of ['reportName', 'author']) {
-            if (!params.filters[f]) {
-                delete params.filters[f];
-            }
-        }
-
-        return connection.get('/api/reports/find-all', params).then(function (data) {
-            $scope.reports = data.items;
-            // $scope.items = data.items;
-            $scope.navigation.page = data.page;
-            $scope.navigation.pages = data.pages;
-            $scope.navigation.pager = PagerService.GetPager($scope.reports.length, data.page, 10, data.pages);
-        });
-    };
-
     $scope.initPrompts = function () {
         $scope.prompts = {};
 
@@ -378,7 +310,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.pushToDash = function () {
         var params = {};
 
-        return connection.get('/api/dashboardsv2/find-all', params, function (data) {
+        return connection.get('/api/dashboardsv2/find-all', params).then(function (data) {
             $scope.dashboards = data;
             $('#dashListModal').modal('show');
         });

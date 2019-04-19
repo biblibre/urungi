@@ -1,6 +1,7 @@
-angular.module('app').controller('listCtrl', function ($scope, $rootScope, connection, PagerService, $routeParams, $timeout) {
+angular.module('app').controller('listCtrl', function ($scope, $rootScope, connection, $routeParams, $timeout) {
     $scope.init = function () {
         $scope.nav.page = 1;
+        $scope.nav.currentPage = 1;
 
         console.log('initiating');
 
@@ -81,7 +82,8 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
 
             $scope.nav.items = result.items;
             $scope.nav.page = result.page;
-            $scope.nav.pager = PagerService.GetPager($scope.nav.items.length, result.page, $scope.nav.itemsPerPage, result.pages);
+            $scope.nav.currentPage = result.page;
+            $scope.nav.pages = result.pages;
         });
     };
 })
