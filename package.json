@@ -87,7 +87,7 @@
     "karma-jasmine": "^2.0.1",
     "karma-jsdom-launcher": "^7.1.0",
     "merge-stream": "^1.0.1",
-    "mocha": "^6.0.2",
+    "mocha": "^6.1.4",
     "npm-run-all": "^4.1.5",
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0"
