@@ -5,23 +5,46 @@ const gettext = require('gulp-angular-gettext');
 const merge = require('merge-stream');
 const del = require('del');
 
-gulp.task('clean:js', function () {
+const dist_js = gulp.series(dist_js_clean, dist_js_build);
+const dist_css = gulp.series(dist_css_clean, dist_css_build);
+const dist_fonts = gulp.series(dist_fonts_clean, dist_fonts_build);
+const dist_translations = gulp.series(dist_translations_clean, dist_translations_build);
+
+const dist = gulp.parallel(
+    dist_js,
+    dist_css,
+    dist_fonts,
+    dist_translations,
+);
+
+module.exports = exports = {
+    'default': dist,
+    'dist': dist,
+    'dist:js': dist_js,
+    'dist:css': dist_css,
+    'dist:fonts': dist_fonts,
+    'dist:translations': dist_translations,
+    'pot': pot,
+    'po:update': gulp.series(pot, po_update),
+};
+
+function dist_js_clean () {
     return del('dist/js/*');
-});
+}
 
-gulp.task('clean:css', function () {
+function dist_css_clean () {
     return del('dist/css/*');
-});
+}
 
-gulp.task('clean:fonts', function () {
+function dist_fonts_clean () {
     return del('dist/fonts/*');
-});
+}
 
-gulp.task('clean:translations', function () {
+function dist_translations_clean () {
     return del('dist/translations/*');
-});
+}
 
-gulp.task('dist:js', ['clean:js'], function () {
+function dist_js_build () {
     const paths = [
         'node_modules/jquery/dist/jquery.min.js',
         'node_modules/jquery-validation/dist/jquery.validate.min.js',
@@ -68,9 +91,9 @@ gulp.task('dist:js', ['clean:js'], function () {
         .pipe(gulp.dest('dist/js'));
 
     return merge(bundle, copy);
-});
+}
 
-gulp.task('dist:css', ['clean:css'], function () {
+function dist_css_build () {
     const paths = [
         'node_modules/bootstrap/dist/css/bootstrap.min.css',
         'node_modules/ui-select/dist/select.min.css',
@@ -87,39 +110,42 @@ gulp.task('dist:css', ['clean:css'], function () {
     return gulp.src(paths)
         .pipe(concat('bundle.min.css'))
         .pipe(gulp.dest('dist/css'));
-});
+}
 
-gulp.task('dist:fonts', ['clean:fonts'], function () {
+function dist_fonts_build () {
     const paths = [
         'node_modules/font-awesome/fonts/*',
     ];
 
     return gulp.src(paths)
         .pipe(gulp.dest('dist/fonts'));
-});
+}
 
-gulp.task('dist:translations', ['clean:translations'], function () {
+function dist_translations_build () {
     return gulp.src(['language/*.po'])
         .pipe(gettext.compile({ format: 'json' }))
         .pipe(gulp.dest('dist/translations'));
-});
+}
 
-gulp.task('dist', ['dist:js', 'dist:css', 'dist:fonts', 'dist:translations']);
-
-gulp.task('pot', function () {
+function pot () {
     return gulp.src(['public/js/**/*.js', 'public/partials/**/*.html'], { base: '.' })
         .pipe(gettext.extract('template.pot'))
         .pipe(gulp.dest('language'));
-});
+}
 
-gulp.task('po:update', ['pot'], function () {
-    const execSync = require('child_process').execSync;
+function po_update () {
     const fs = require('fs');
-    fs.readdirSync('language').forEach(path => {
-        if (path.endsWith('.po')) {
-            execSync('msgmerge --quiet -U language/' + path + ' language/template.pot');
-        }
-    });
-});
+    const util = require('util');
+    const child_process = require('child_process');
 
-gulp.task('default', ['dist']);
+    const exec = util.promisify(child_process.exec);
+    const readdir = util.promisify(fs.readdir);
+
+    return readdir('language').then(files => {
+        const promises = files
+            .filter(file => file.endsWith('.po'))
+            .map(file => exec('msgmerge --quiet --backup=none -U language/' + file + ' language/template.pot'));
+
+        return Promise.all(promises);
+    });
+}
