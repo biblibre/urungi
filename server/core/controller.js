@@ -15,7 +15,7 @@ class Controller {
         var params = component.params;
 
         const p = Model.find(find, fields, params).exec().then(function (items) {
-            return Model.count(find).exec().then(function (count) {
+            return Model.countDocuments(find).exec().then(function (count) {
                 return { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
             });
         }).catch(function (err) {
@@ -227,11 +227,9 @@ class Controller {
             data.companyID = (req.isAuthenticated()) ? req.user.companyID : null;
         }
 
-        const p = this.model.update(find, { $set: data }).exec().then(function (result) {
-            var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
-
-            if (numAffected > 0) {
-                return { result: 1, msg: numAffected + ' record updated.' };
+        const p = this.model.updateOne(find, { $set: data }).exec().then(function (result) {
+            if (result.n > 0) {
+                return { result: 1, msg: result.n + ' record updated.' };
             } else {
                 return { result: 0, msg: 'Error updating record, no record have been updated' };
             }
@@ -260,12 +258,9 @@ class Controller {
         }
 
         var find = generateFindFields(req, req.params.id);
-        const p = this.model.remove(find).exec().then(function (result) {
-            result = result.result;
-            var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
-
-            if (numAffected > 0) {
-                return { result: 1, msg: numAffected + ' items deleted.' };
+        const p = this.model.deleteOne(find).exec().then(function (result) {
+            if (result.n > 0) {
+                return { result: 1, msg: result.n + ' item deleted.' };
             } else {
                 return { result: 0, msg: 'Error deleting items, no item have been deleted' };
             }

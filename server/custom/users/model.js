@@ -123,7 +123,7 @@ usersSchema.statics.setViewedContextHelp = function (req, done) {
                 findUser.contextHelp.push(req.query.contextHelpName);
             }
 
-            Users.update({
+            Users.updateOne({
                 '_id': userID
             }, {
                 $set: {
@@ -153,7 +153,7 @@ usersSchema.statics.setStatus = function (req, done) {
             if (err) { console.error(err); }
 
             if (findUser) {
-                Users.update({
+                Users.updateOne({
                     '_id': userID
                 }, {
                     $set: {

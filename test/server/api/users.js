@@ -164,7 +164,7 @@ describe('Users API', function () {
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
-            expect(decrypted).to.have.property('msg', '1 items deleted.');
+            expect(decrypted).to.have.property('msg', '1 item deleted.');
         });
     });
 

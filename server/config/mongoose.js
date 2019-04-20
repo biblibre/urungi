@@ -12,7 +12,11 @@ module.exports = function (_, done) {
         const dbURI = config.get('db');
         debug('mongo DB connection');
         mongoose.Promise = global.Promise;
-        global.connection = mongoose.createConnection(dbURI, { server: { poolSize: 5 } });
+        global.connection = mongoose.createConnection(dbURI, {
+            poolSize: 5,
+            useNewUrlParser: true,
+            useFindAndModify: false,
+        });
 
         // CONNECTION EVENTS
         // When successfully connected
