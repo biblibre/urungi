@@ -1,4 +1,4 @@
-angular.module('app').service('ioModel', function (connection, $q) {
+angular.module('app').service('ioModel', function (connection, $q, gettextCatalog) {
     function exportDatasource (datasourceID) {
         return connection.get('/api/data-sources/find-one', { id: datasourceID })
             .then(response => response.item);
@@ -140,13 +140,23 @@ angular.module('app').service('ioModel', function (connection, $q) {
     this.importBundle = function (bundle, datasourceRef) {
         const additions = [];
         const messages = [];
+        const replace = [];
 
         const layerPromises = [];
         for (const layer of bundle.layers) {
             const p = getLayer(layer._id).then(l => {
                 if (l) {
-                    messages.push('Layer was not imported because it already exists in database: ' + l.name);
-                    return;
+                    if (layer.replace === true) {
+                        var msg = gettextCatalog.getString('This layer was replaced:') + ' ';
+                        messages.push(msg + l.name);
+                        return this.replaceLayer(layer).then(function () {
+                            replace.push(layer);
+                        });
+                    } else {
+                        msg = gettextCatalog.getString('Layer was not imported because it already exists in database:') + ' ';
+                        messages.push(msg + l.name);
+                        return;
+                    }
                 }
 
                 return importLayer(layer, datasourceRef).then(l => {
@@ -161,7 +171,15 @@ angular.module('app').service('ioModel', function (connection, $q) {
             for (const report of bundle.reports) {
                 const p = getReport(report._id).then(r => {
                     if (r) {
-                        messages.push('Report was not imported because it already exists in database: ' + r.reportName);
+                        if (report.replace === true) {
+                            var msg = gettextCatalog.getString('This report was replaced:') + ' ';
+                            messages.push(msg + r.reportName);
+                            return this.replaceReport(report).then(function () {
+                                replace.push(report);
+                            });
+                        }
+                        msg = gettextCatalog.getString('Report was not imported because it already exists in database:') + ' ';
+                        messages.push(msg + r.reportName);
                         return;
                     }
 
@@ -175,7 +193,15 @@ angular.module('app').service('ioModel', function (connection, $q) {
             for (const dashboard of bundle.dashboards) {
                 const p = getDashboard(dashboard._id).then(d => {
                     if (d) {
-                        messages.push('Dashboard was not imported because it already exists in database: ' + d.dashboardName);
+                        if (dashboard.replace === true) {
+                            var msg = gettextCatalog.getString('This dashboard was replaced:') + ' ';
+                            messages.push(msg + d.dashboardName);
+                            return this.replaceDashboard(dashboard).then(function () {
+                                replace.push(dashboard);
+                            });
+                        }
+                        msg = gettextCatalog.getString('Dashboard was not imported because it already exists in database:') + ' ';
+                        messages.push(msg + d.dashboardName);
                         return;
                     }
 
@@ -190,6 +216,7 @@ angular.module('app').service('ioModel', function (connection, $q) {
                 return {
                     additions: additions,
                     messages: messages,
+                    replace: replace,
                 };
             });
         });
@@ -237,5 +264,17 @@ angular.module('app').service('ioModel', function (connection, $q) {
         };
 
         return connection.get('/api/dashboardsv2/find-all', params).then(r => r.items);
+    };
+
+    this.replaceLayer = function (layer) {
+        return connection.post('/api/layers/update/' + layer._id, layer).then(l => l.item);
+    };
+
+    this.replaceReport = function (report) {
+        return connection.post('/api/reports/update/' + report._id, report).then(r => r.item);
+    };
+
+    this.replaceDashboard = function (dashboard) {
+        return connection.post('/api/dashboardsv2/update/' + dashboard._id, dashboard).then(d => d.item);
     };
 });
