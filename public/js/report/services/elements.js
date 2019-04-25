@@ -12,7 +12,7 @@ angular.module('app').service('dataElements', function () {
         var columnDefaultStyle = '';
 
         var theValue = '<div style="overflow:hidden;height:100%;">{{item.' + element.id + '}}</div>';
-        if (element.elementType === 'number') { theValue = '<div style="overflow:hidden;height:100%;">{{item.' + element.id + ' | number}}</div>'; }
+        if (element.elementType === 'number') { theValue = '<div style="overflow:hidden;height:100%;">{{item.' + element.id + '}}</div>'; }
 
         if (element.signals) {
             var theStyle = '<style>';
@@ -56,7 +56,7 @@ angular.module('app').service('dataElements', function () {
             }
             htmlCode += theStyle + '</style>';
 
-            if (element.elementType === 'number') { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + element.id + ' | number}}</div>'; } else { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + element.id + '}}</div>'; }
+            if (element.elementType === 'number') { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + element.id + '}}</div>'; } else { theValue = '<div ng-class="{' + theClass + '}" style="overflow:hidden;height:100%;" >{{item.' + element.id + '}}</div>'; }
         }
 
         if (element.link) {
