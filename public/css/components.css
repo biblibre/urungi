@@ -4145,9 +4145,6 @@ button.toast-close-button {
 .xe-widget.xe-counter-block .xe-upper .xe-label .num,
 .xe-widget.xe-progress-counter .xe-upper .xe-label .num {
     display: block;
-    font-size: 28px;
-    font-weight: normal;
-    color: #3e3f3f;
 }
 
 .xe-widget.xe-counter .xe-label span,
