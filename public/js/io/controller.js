@@ -71,7 +71,11 @@ angular.module('app').controller('ioCtrl', function ($scope, $rootScope, $q, con
         return ioModel.getDataSources().then(datasources => {
             $scope.localDataSources = datasources;
             for (const dts of $scope.importFile.datasources) {
-                $scope.datasourceMatch[dts._id] = autoDetect(dts);
+                if (datasources.length === 1) {
+                    $scope.datasourceMatch[dts._id] = $scope.localDataSources[0];
+                } else {
+                    $scope.datasourceMatch[dts._id] = autoDetect(dts);
+                }
             }
 
             $scope.state = 2;
