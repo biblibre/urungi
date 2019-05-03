@@ -34,7 +34,7 @@
     "cookie-parser": "~1.4.0",
     "cynteka-pivot-table-jquery": "github:biblibre/cynteka-pivot-table-jquery#semver:^0.11.1",
     "debug": "^3.1.0",
-    "ejs": "~2.3.4",
+    "ejs": "^2.6.1",
     "email-templates": "^5.0.4",
     "express": "^4.16.3",
     "express-ejs-layouts": "~1.1.0",
