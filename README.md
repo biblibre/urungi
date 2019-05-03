@@ -21,9 +21,6 @@ and others, see [Supported databases](#supported-databases)
 - [OpenJDK](http://openjdk.java.net/install/)
 - g++ and make (package build-essential on Debian-based distributions)
 
-MongoDB is used to store Urungi metadata, you have to install it even if you are
-not going to explore MondoDB data.
-
 
 ## Installation
 
