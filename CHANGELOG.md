@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2019-05-03
+
 These are the most notable changes made since the fork of
 [Widestage](https://github.com/widestage/widestage).
 
@@ -79,4 +81,5 @@ These are the most notable changes made since the fork of
 
 - A lot of minor issues
 
-[Unreleased]: https://github.com/biblibre/urungi/compare/widestage...HEAD
+[Unreleased]: https://github.com/biblibre/urungi/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/biblibre/urungi/compare/widestage...v1.0.0
