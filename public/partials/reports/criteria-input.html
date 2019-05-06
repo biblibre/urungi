@@ -29,12 +29,12 @@
 
             <!-- date input -->
             <div class="input-group" ng-if="(vm.filter.elementType == 'date' && (vm.filter.filterType == 'equal' || vm.filter.filterType == 'diferentThan' || vm.filter.filterType == 'biggerThan' || vm.filter.filterType == 'biggerOrEqualThan' || vm.filter.filterType == 'lessThan'  || vm.filter.filterType == 'lessOrEqualThan' || vm.filter.filterType == 'between'  || vm.filter.filterType == 'notBetween'))" style="width: 150px;">
-                <input type="text" class="form-control no-right-border form-focus-green" ng-value="vm.criterion.date1 | date:'yyyy-MM-dd'" readonly>
+                <input type="text" class="form-control no-right-border form-focus-green" ng-model="vm.criterion.date1">
                 <span class="input-group-btn" >
                     <span class="dropdown" >
-                        <a class="btn btn-primary popover-primary ng-scope"  id="dropdown1" role="button" data-toggle="dropdown" data-target="#" ><i class="fa fa-calendar"></i></a>
+                        <a class="btn btn-primary popover-primary ng-scope"  id="dropdown1" role="button" data-toggle="dropdown"><i class="fa fa-calendar"></i></a>
                         <ul class="dropdown-menu" role="menu">
-                            <datetimepicker ng-model="vm.criterion.date1" data-datetimepicker-config="{ dropdownSelector: '#dropdown1', startView:'day', minView:'day'  }"/>
+                            <datetimepicker ng-model="vm.criterion.date1" data-datetimepicker-config="{ startView:'day', minView:'day', modelType: 'YYYY-MM-DD' }"/>
                         </ul>
                     </span>
                 </span>
@@ -44,12 +44,12 @@
             <span class="filter-label-value" ng-if="(vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween') && vm.filter.elementType == 'date'" style="color: #00f;"> and </span>
 
             <div class="input-group" ng-if="(vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween') && vm.filter.elementType == 'date'" style="width: 150px;">
-                <input type="text" class="form-control no-right-border form-focus-green" ng-model="vm.criterion.date2 | date:'yyyy-MM-dd'" readonly>
+                <input type="text" class="form-control no-right-border form-focus-green" ng-model="vm.criterion.date2">
                 <span class="input-group-btn" >
                     <span class="dropdown" >
-                        <a class="btn btn-primary popover-primary ng-scope"  id="dropdown2" role="button" data-toggle="dropdown" data-target="#"><i class="fa fa-calendar"></i></a>
+                        <a class="btn btn-primary popover-primary ng-scope"  id="dropdown2" role="button" data-toggle="dropdown"><i class="fa fa-calendar"></i></a>
                         <ul class="dropdown-menu" role="menu">
-                            <datetimepicker ng-model="vm.criterion.date2" data-datetimepicker-config="{ dropdownSelector: '#dropdown2', startView:'day', minView:'day'  }"/>
+                            <datetimepicker ng-model="vm.criterion.date2" data-datetimepicker-config="{ startView: 'day', minView: 'day', modelType: 'YYYY-MM-DD' }"/>
                         </ul>
                     </span>
                 </span>

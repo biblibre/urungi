@@ -20,8 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move all "menu-list" code into several independent AngularJS components
 - Use $uibModal and its component option to make it easier to reuse modals
 - Cache all template files
+- Date input for filters can be changed manually (without datetimepicker)
 - Use uib-tabset everywhere we have tabs for consistency
 - Update angular-ui-bootstrap to 2.5.6
+- Update angularjs-bootstrap-datetimepicker to 1.1.4
 - Update angular, angular-route and angular-sanitize to 1.7.8
 - Browser's sessionStorage is not used anymore for user data
 
