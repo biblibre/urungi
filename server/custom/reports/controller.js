@@ -23,9 +23,12 @@ exports.ReportsFindAll = async function (req, res) {
 
 exports.GetReport = function (req, res) {
     req.query.trash = true;
-    req.query.companyid = true;
 
     controller.findOne(req).then(function (result) {
+        if (!result.item || (!result.item.isPublic && !req.isAuthenticated())) {
+            return res.status(403).send('Forbidden');
+        }
+
         res.status(200).json(result);
         if ((req.query.mode === 'execute' || req.query.mode === 'preview') && result.item) {
             // Note the execution in statistics
@@ -35,10 +38,12 @@ exports.GetReport = function (req, res) {
             stat.relationedID = result.item._id;
             stat.relationedName = result.item.reportName;
 
-            if (req.query.linked === true) { stat.action = 'execute link'; } else { stat.action = 'execute'; }
-            statistics.save(req, stat, function () {
-
-            });
+            if (req.query.linked === true) {
+                stat.action = 'execute link';
+            } else {
+                stat.action = 'execute';
+            }
+            statistics.save(req, stat);
         }
     });
 };
@@ -62,6 +67,7 @@ exports.ReportsCreate = function (req, res) {
 
         req.body.owner = req.user._id;
         req.body.isPublic = false;
+        req.body.isShared = false;
 
         req.body.author = req.user.userName;
 
@@ -98,7 +104,7 @@ exports.ReportsUpdate = function (req, res) {
 exports.PublishReport = async function (req, res) {
     const report = await getReportFromRequest(req);
     if (report) {
-        report.publish(req.body.parentFolder).then(() => {
+        report.publish().then(() => {
             res.status(200).json({ result: 1, msg: 'Report published' });
         }, err => {
             console.error(err);
@@ -117,6 +123,34 @@ exports.UnpublishReport = async function (req, res) {
         }, err => {
             console.error(err);
             res.status(500).json({ result: 0, msg: 'Error unpublishing report' });
+        });
+    } else {
+        res.status(404).json({ result: 0, msg: 'This report does not exist' });
+    }
+};
+
+exports.ShareReport = async function (req, res) {
+    const report = await getReportFromRequest(req);
+    if (report) {
+        report.share(req.body.parentFolder).then(() => {
+            res.status(200).json({ result: 1, msg: 'Report shared' });
+        }, err => {
+            console.error(err);
+            res.status(500).json({ result: 0, msg: 'Error sharing report' });
+        });
+    } else {
+        res.status(404).json({ result: 0, msg: 'This report does not exist' });
+    }
+};
+
+exports.UnshareReport = async function (req, res) {
+    const report = await getReportFromRequest(req);
+    if (report) {
+        report.unshare().then(() => {
+            res.status(200).json({ result: 1, msg: 'Report unshared' });
+        }, err => {
+            console.error(err);
+            res.status(500).json({ result: 0, msg: 'Error unsharing report' });
         });
     } else {
         res.status(404).json({ result: 0, msg: 'This report does not exist' });

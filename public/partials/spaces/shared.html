@@ -1,6 +1,6 @@
 
 <script type="text/ng-template" id="nodes_renderer.html">
-    <div id="publicSpaceItem" class="tree-node tree-node-content">
+    <div id="sharedSpaceItem" class="tree-node tree-node-content">
         <span ui-tree-handle><i class="fa fa-arrows"></i></span>
         <a class="btn btn-white btn-xs btn-round" ng-if="node.nodes && node.nodes.length > 0" data-nodrag ng-click="toggle(this)"><span
                 class="fa"
@@ -16,13 +16,13 @@
             </a>
         </span>
         <div class="pull-right" ng-if="!node.editing">
-            <a id="publicSpaceItemEdit" class=" btn btn-danger-white btn-xs btn-round" data-nodrag ng-click="node.editing = true; " uib-tooltip="{{'Click here to change the name of the folder' | translate}}" tooltip-placement="bottom">
+            <a id="sharedSpaceItemEdit" class=" btn btn-danger-white btn-xs btn-round" data-nodrag ng-click="node.editing = true; " uib-tooltip="{{'Click here to change the name of the folder' | translate}}" tooltip-placement="bottom">
                 <span class="fa fa-edit"></span>
             </a>
-            <a id="publicSpaceItemRemove" class=" btn btn-danger-white btn-xs btn-round" data-nodrag ng-click="remove(this)" uib-tooltip="{{'Click here to remove this folder (will remove all children folders)' | translate}}" tooltip-placement="bottom">
+            <a id="sharedSpaceItemRemove" class=" btn btn-danger-white btn-xs btn-round" data-nodrag ng-click="remove(this)" uib-tooltip="{{'Click here to remove this folder (will remove all children folders)' | translate}}" tooltip-placement="bottom">
                 <span class="fa fa-remove"></span>
             </a>
-            <a id="publicSpaceItemAdd" class=" btn btn-success-white btn-xs btn-round" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;" uib-tooltip="{{'Click here to add a new subfolder inside this' | translate}}" tooltip-placement="bottom">
+            <a id="sharedSpaceItemAdd" class=" btn btn-success-white btn-xs btn-round" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;" uib-tooltip="{{'Click here to add a new subfolder inside this' | translate}}" tooltip-placement="bottom">
                 <span class="fa fa-plus"></span>
             </a>
         </div>
@@ -33,18 +33,18 @@
     </ol>
 </script>
 <div class="container-fluid branded-border-panel" >
-    <h3 class="pull-left">Public space</h3>
+    <h3 class="pull-left">Shared space</h3>
 </div>
 
 <div class="row">
 
-    <a id="publicSpaceNewFolderBtn" class="btn btn-success" ng-click="newSubItem(this)" uib-tooltip="{{'Click here to add a new folder to the public space' | translate}}" tooltip-placement="bottom" translate>Add folder</a>
-    <a id="publicSpaceSaveBtn" class="btn btn-success pull-right"  ng-click="save()" uib-tooltip="{{'Click here to save changes to the public space' | translate}}" tooltip-placement="bottom" translate>Save</a>
-    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" uib-tooltip="{{'Click here to conduct the guided tour for the public space' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
+    <a id="sharedSpaceNewFolderBtn" class="btn btn-success" ng-click="newSubItem(this)" uib-tooltip="{{'Click here to add a new folder to the shared space' | translate}}" tooltip-placement="bottom" translate>Add folder</a>
+    <a id="sharedSpaceSaveBtn" class="btn btn-success pull-right"  ng-click="save()" uib-tooltip="{{'Click here to save changes to the shared space' | translate}}" tooltip-placement="bottom" translate>Save</a>
+    <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" uib-tooltip="{{'Click here to conduct the guided tour for the shared space' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
 
 </div>
 
-<div id="publicSpaceArea" ui-tree>
+<div id="sharedSpaceArea" ui-tree>
     <ol ui-tree-nodes ng-model="data">
         <li ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
     </ol>

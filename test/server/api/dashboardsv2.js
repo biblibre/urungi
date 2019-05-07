@@ -198,7 +198,7 @@ describe('Dashboards API', function () {
         });
     });
 
-    describe('POST /api/dashboardsv2/publish-page', function () {
+    describe('POST /api/dashboardsv2/share-page', function () {
         let dashboard;
 
         beforeEach(async function createDashboard () {
@@ -211,15 +211,15 @@ describe('Dashboards API', function () {
             return dashboard.remove();
         });
         it('should publish a dashboard', async function () {
-            const res = await agent.post('/api/dashboardsv2/publish-page')
+            const res = await agent.post('/api/dashboardsv2/share-page')
                 .send({ _id: dashboard.id, parentFolder: 'root' });
             expect(res).to.have.status(200);
             const result = JSON.parse(res.text);
             expect(result).to.have.property('result', 1);
-            expect(result).to.have.property('msg', 'Dashboard published');
+            expect(result).to.have.property('msg', 'Dashboard shared');
 
             const d = await Dashboardsv2.findById(dashboard.id);
-            expect(d).to.have.property('isPublic', true);
+            expect(d).to.have.property('isShared', true);
             expect(d).to.have.property('parentFolder', 'root');
         });
     });

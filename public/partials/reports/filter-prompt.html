@@ -1,0 +1,48 @@
+<div>
+    <span ng-if="!vm.isPrompt">
+        <span class="pull-right" style="padding: 7px 0;">
+            <i class="fa fa-times hand-cursor" ng-click="vm.removeFilter()"></i>
+        </span>
+
+        <div class="container-fluid form-inline">
+            <span class="col-md-1">
+                <button class="btn popover-primary ng-scope" ng-class="{'btn-black': vm.filter.filterPrompt == true, 'btn-white': vm.filter.filterPrompt == false}"
+                ng-click="vm.makePrompt()" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Runtime Filter" popover="{{vm.getButtonFilterPromptMessage(vm.filter)}}">
+                    <i class="fa fa-filter"></i><i class="fa fa-question"></i>
+                </button>
+            </span>
+
+            <span class="col-md-11">
+                <form role="form" class="form-inline" name="FORM_filter">
+                    <label class="control-label">{{vm.filter.promptInstructions}}</label>
+
+                    <!-- Column label -->
+
+                    <div class="input-group" uib-dropdown>
+                        <input type="text" class="form-control" ng-model="vm.filter.objectLabel" readonly>
+                    </div>
+
+                    <!-- equal, not equal, bigger than, etc...-->
+
+                    <span class="btn-group" uib-dropdown>
+                        <button type="button" class="btn" ng-bind="vm.filter.filterTypeLabel"></button>
+                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="option in vm.getElementFilterOptions()"><a ng-click="setFilterType(option)">{{option.label}}</a></li>
+                        </ul>
+                    </span>
+
+                    <!-- criterion -->
+
+                    <span ng-include="vm.criteriaInput"></span>
+                </form>
+            </span>
+        </div>
+    </span>
+
+    <div ng-if="vm.isPrompt">
+        <span ng-include="vm.criteriaInput"></span>
+    </div>
+</div>

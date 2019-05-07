@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var CompaniesSchema = new mongoose.Schema({
     companyID: { type: String, required: true },
-    publicSpace: [],
+    sharedSpace: [],
     defaultDocument: { type: String },
     defaultDocumentType: { type: String },
     customCSS: { type: String },

@@ -2,15 +2,15 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
     $scope.items = [];
     $scope.roleModal = 'partials/roles/roleModal.html';
 
-    $scope.publicSpace = $rootScope.user.companyData.publicSpace;
+    $scope.sharedSpace = $rootScope.user.companyData.sharedSpace;
 
     $scope.newRole = function () {
         $scope._Role = {};
         $scope._Role.permissions = [];
         $scope._Role.reportsCreate = false;
-        $scope._Role.reportsPublish = false;
+        $scope._Role.reportsShare = false;
         $scope._Role.dashboardsCreate = false;
-        $scope._Role.dashboardsPublish = false;
+        $scope._Role.dashboardsShare = false;
         $scope._Role.viewSQL = false;
         $scope._Role.grants = [];
         $scope.mode = 'add';
@@ -22,8 +22,8 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
             connection.get('/api/roles/find-one', { id: roleID }).then(function (data) {
                 $scope._Role = data.item;
                 $scope.mode = 'edit';
-                $scope.clearNodes($scope.publicSpace);
-                $scope.checkForNode($scope.publicSpace);
+                $scope.clearNodes($scope.sharedSpace);
+                $scope.checkForNode($scope.sharedSpace);
                 $('#roleModal').modal('show');
             });
         };
@@ -101,12 +101,12 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
         }
     };
 
-    $scope.clickedPublishReportsForTheNode = function (node) {
+    $scope.clickedShareReportsForTheNode = function (node) {
         setGrant(node);
         for (var i in node.nodes) {
-            node.nodes[i].publishReports = node.publishReports;
+            node.nodes[i].shareReports = node.shareReports;
             setGrant(node.nodes[i]);
-            if (node.nodes[i].nodes.length > 0) { $scope.clickedPublishReportsForTheNode(node.nodes[i]); }
+            if (node.nodes[i].nodes.length > 0) { $scope.clickedShareReportsForTheNode(node.nodes[i]); }
         }
     };
 
@@ -123,7 +123,7 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
                 grants[i].executePages = node.executePages;
                 grants[i].executeReports = node.executeReports;
                 grants[i].executeDashboards = node.executeDashboards;
-                grants[i].publishReports = node.publishReports;
+                grants[i].shareReports = node.shareReports;
             }
         }
 
@@ -133,7 +133,7 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
                 executePages: node.executePages,
                 executeReports: node.executeReports,
                 executeDashboards: node.executeDashboards,
-                publishReports: node.publishReports
+                shareReports: node.shareReports
             });
         }
     }
@@ -148,7 +148,7 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
             node.executePages = undefined;
             node.executeReports = undefined;
             node.executeDashboards = undefined;
-            node.publishReports = undefined;
+            node.shareReports = undefined;
         }
     };
 
@@ -166,7 +166,7 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
                     node.executePages = grants[i].executePages;
                     node.executeReports = grants[i].executeReports;
                     node.executeDashboards = grants[i].executeDashboards;
-                    node.publishReports = grants[i].publishReports;
+                    node.shareReports = grants[i].shareReports;
                 }
             }
         }

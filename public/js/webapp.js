@@ -6,7 +6,8 @@ angular.module('app', [
     'urungi.directives', 'ngSanitize', 'ui.select', 'angularUUID2', 'vs-repeat',
     'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'bsLoadingOverlay', 'xeditable',
     'intro.help', 'ngFileUpload', 'colorpicker.module',
-    'app.inspector', 'gettext', 'ngFileSaver', 'app.core', 'app.data-sources'
+    'app.inspector', 'gettext', 'ngFileSaver', 'ngclipboard',
+    'app.core', 'app.data-sources', 'app.reports', 'app.dashboards',
 ])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.otherwise({ redirectTo: '/home' });
@@ -24,11 +25,6 @@ angular.module('app', [
         $routeProvider.when('/dashboards/list/', {
             templateUrl: 'partials/menu-list/dashboardList.html',
             controller: 'dashboardListCtrl'
-        });
-
-        $routeProvider.when('/dashboards/view/:dashboardID', {
-            templateUrl: 'partials/dashboardv2/view.html',
-            controller: 'dashBoardv2Ctrl'
         });
 
         $routeProvider.when('/dashboards/new/:newDashboard/', {
@@ -50,20 +46,6 @@ angular.module('app', [
             templateUrl: 'partials/menu-list/reportList.html',
             controller: 'reportListCtrl'
         });
-        // $routeProvider.when('/report/:extra', {
-        //     templateUrl: 'partials/report/list.html',
-        //     controller: 'reportCtrl'
-        // });
-
-        $routeProvider.when('/reports/view/:reportID/', {
-            templateUrl: 'partials/report/view.html',
-            controller: 'reportCtrl'
-        });
-
-        // $routeProvider.when('/reports/:reportID/:elementID/:elementValue', {
-        //     templateUrl: 'partials/report/view.html',
-        //     controller: 'reportCtrl'
-        // });
 
         $routeProvider.when('/reports/new/', {
             templateUrl: 'partials/report/edit.html',
@@ -71,10 +53,6 @@ angular.module('app', [
         });
         $routeProvider.when('/reports/edit/:reportID/', {
             templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl'
-        });
-        $routeProvider.when('/reports/fullscreen/:reportID/', {
-            templateUrl: 'partials/report/fullscreen.html',
             controller: 'reportCtrl'
         });
 
@@ -131,11 +109,11 @@ angular.module('app', [
             controller: 'logOutCtrl'
         });
         // spaces
-        $routeProvider.when('/public-space', {
+        $routeProvider.when('/shared-space', {
             templateUrl: 'partials/spaces/index.html',
             controller: 'spacesCtrl'
         });
-        $routeProvider.when('/public-space/:extra', {
+        $routeProvider.when('/shared-space/:extra', {
             templateUrl: 'partials/spaces/index.html',
             controller: 'spacesCtrl'
         });
@@ -233,7 +211,19 @@ angular.module('app').service('reportService', function () {
     };
 });
 
-angular.module('app').run(['$rootScope', 'sessionStorage', 'connection', function ($rootScope, sessionStorage, connection) {
+angular.module('app').run(['$rootScope', '$location', 'sessionStorage', 'connection', function ($rootScope, $location, sessionStorage, connection) {
+    // Redirect to /login if next route is not public and user is not authenticated
+    $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
+        const user = sessionStorage.getObject('user');
+        if (next.$$route && !next.$$route.redirectTo && !next.$$route.isPublic && !user) {
+            window.location.href = '/login';
+        }
+    });
+
+    $rootScope.$on('$routeChangeError', function (angularEvent, current, previous) {
+        $location.url('/');
+    });
+
     $rootScope.removeFromArray = function (array, item) {
         var index = array.indexOf(item);
 
@@ -267,31 +257,27 @@ angular.module('app').run(['$rootScope', 'sessionStorage', 'connection', functio
     };
 
     $rootScope.user = sessionStorage.getObject('user');
-    if (!$rootScope.user) {
-        connection.get('/api/get-user-data', {}).then(function (data) {
-            if (!data.items.user) {
-                window.location.href = '/login';
-                return;
-            }
+    $rootScope.isWSTADMIN = isWSTADMIN($rootScope.user);
 
-            var theUser = data.items.user;
-            theUser.companyData = data.items.companyData;
-            theUser.rolesData = data.items.rolesData;
-            theUser.reportsCreate = data.items.reportsCreate;
-            theUser.dashboardsCreate = data.items.dashboardsCreate;
-            theUser.pagesCreate = data.items.pagesCreate;
-            theUser.exploreData = data.items.exploreData;
-            theUser.isWSTADMIN = data.items.isWSTADMIN;
-            theUser.contextHelp = data.items.contextHelp;
-            theUser.dialogs = data.items.dialogs;
-            theUser.viewSQL = data.items.viewSQL;
-            $rootScope.user = theUser;
-            sessionStorage.setObject('user', theUser);
-            $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
-        });
-    } else {
-        $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
-    }
+    // Refresh user session
+    connection.get('/api/get-user-data').then(function (data) {
+        const user = data.items.user;
+        user.companyData = data.items.companyData;
+        user.rolesData = data.items.rolesData;
+        user.reportsCreate = data.items.reportsCreate;
+        user.dashboardsCreate = data.items.dashboardsCreate;
+        user.pagesCreate = data.items.pagesCreate;
+        user.exploreData = data.items.exploreData;
+        user.isWSTADMIN = data.items.isWSTADMIN;
+        user.contextHelp = data.items.contextHelp;
+        user.dialogs = data.items.dialogs;
+        user.viewSQL = data.items.viewSQL;
+        sessionStorage.setObject('user', user);
+        $rootScope.user = user;
+        $rootScope.isWSTADMIN = isWSTADMIN($rootScope.user);
+    }, function () {
+        sessionStorage.removeObject('user');
+    });
 }]);
 
 angular.module('app').run(['bsLoadingOverlayService', function (bsLoadingOverlayService) {
@@ -311,11 +297,10 @@ angular.module('app').run(['language', function (language) {
     language.setLanguageFromLocalStorage();
 }]);
 
-function isWSTADMIN ($rootScope) {
-    var found = false;
-    for (var i in $rootScope.user.roles) {
-        if ($rootScope.user.roles[i] === 'WSTADMIN') { found = true; }
+function isWSTADMIN (user) {
+    if (user) {
+        return user.roles.some(role => role === 'WSTADMIN');
     }
 
-    return found;
+    return false;
 }

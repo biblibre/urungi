@@ -1,9 +1,7 @@
-angular.module('app').controller('listCtrl', function ($scope, $rootScope, connection, $routeParams, $timeout) {
+angular.module('app').controller('listCtrl', function ($scope, connection, $routeParams, $timeout, api) {
     $scope.init = function () {
         $scope.nav.page = 1;
         $scope.nav.currentPage = 1;
-
-        console.log('initiating');
 
         $scope.nav.sort = $scope.nav.infoFields[0].name;
         $scope.nav.sortTypes = {};
@@ -60,6 +58,16 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
         $scope.nav.refreshItems();
     };
 
+    $scope.onCopySuccess = function (e) {
+        $(e.trigger).tooltip({ title: 'Copied', trigger: 'manual' })
+            .on('shown.bs.tooltip', function () {
+                setTimeout(() => {
+                    $(this).tooltip('destroy');
+                }, 1000);
+            })
+            .tooltip('show');
+    };
+
     $scope.nav.refreshItems = function () {
         var params = {
             fields: $scope.nav.fetchFields,
@@ -87,7 +95,7 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
         });
     };
 })
-    .controller('reportListCtrl', function ($scope, $location, connection, reportModel, gettextCatalog) {
+    .controller('reportListCtrl', function ($scope, $location, connection, reportModel, gettextCatalog, api, usersModel) {
         $scope.listView = '/partials/menu-list/list.html';
 
         $scope.duplicateOptions = {};
@@ -102,7 +110,9 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
         $scope.nav.layerButtons = false;
         $scope.nav.itemsPerPage = 10;
 
-        $scope.nav.fetchFields = ['reportName', 'reportType', 'isPublic', 'owner', 'reportDescription', 'author', 'createdOn'];
+        $scope.shareButton = true;
+
+        $scope.nav.fetchFields = ['reportName', 'reportType', 'isPublic', 'isShared', 'parentFolder', 'owner', 'reportDescription', 'author', 'createdOn'];
         $scope.nav.nameField = 'reportName';
 
         $scope.nav.infoFields = [
@@ -128,7 +138,8 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
             itemClick: 'View this report',
             delete: 'Delete this report',
             duplicate: 'Duplicate this report',
-            edit: 'Edit this report'
+            edit: 'Edit this report',
+
         };
 
         $scope.nav.text = {
@@ -137,12 +148,77 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
             deleteBody: 'Are you sure you want to delete the report: '
         };
 
+        usersModel.getUserObjects().then(userObjects => {
+            $scope.userObjects = userObjects;
+        });
+
+        $scope.onPublish = function (report, e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const button = e.target;
+            button.setAttribute('disabled', '');
+
+            api.publishReport(report._id).then(() => {
+                report.isPublic = true;
+            }).finally(() => {
+                button.removeAttribute('disabled');
+            });
+        };
+
+        $scope.onUnpublish = function (report, e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const button = e.target;
+            button.setAttribute('disabled', '');
+
+            api.unpublishReport(report._id).then(() => {
+                report.isPublic = false;
+            }).finally(() => {
+                button.removeAttribute('disabled');
+            });
+        };
+
+        $scope.onShare = function (report, e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            $scope.objectToShare = report;
+            $('#publishModal').modal('show');
+        };
+
+        $scope.onUnshare = function (report, e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            api.unshareReport(report._id).then(() => {
+                report.parentFolder = undefined;
+                report.isShared = false;
+            });
+        };
+
+        $scope.selectThisFolder = function (folderID) {
+            const report = $scope.objectToShare;
+            api.shareReport(report._id, folderID).then(() => {
+                report.isShared = true;
+                report.parentFolder = folderID;
+                $('#publishModal').modal('hide');
+            });
+        };
+
         $scope.nav.clickItem = function (item) {
             $location.path('/reports/view/' + item._id);
         };
 
         $scope.getEditLink = function (item) {
             return '/#/reports/edit/' + item._id;
+        };
+
+        $scope.getCopyLink = function (item) {
+            const protocol = window.location.protocol;
+            const host = window.location.host;
+            return protocol + '//' + host + '/#/reports/view/' + item._id;
         };
 
         $scope.duplicate = function () {
@@ -287,7 +363,7 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
             ]
         };
     })
-    .controller('dashboardListCtrl', function ($scope, $location, connection, dashboardv2Model, gettextCatalog) {
+    .controller('dashboardListCtrl', function ($scope, $location, connection, dashboardv2Model, gettextCatalog, api, usersModel) {
         $scope.listView = '/partials/menu-list/list.html';
 
         $scope.duplicateOptions = {};
@@ -302,7 +378,9 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
         $scope.nav.layerButtons = false;
         $scope.nav.itemsPerPage = 10;
 
-        $scope.nav.fetchFields = ['dashboardName', 'isPublic', 'owner', 'dashboardDescription', 'author', 'createdOn'];
+        $scope.shareButton = true;
+
+        $scope.nav.fetchFields = ['dashboardName', 'isPublic', 'isShared', 'parentFolder', 'owner', 'dashboardDescription', 'author', 'createdOn'];
         $scope.nav.nameField = 'dashboardName';
 
         $scope.nav.infoFields = [
@@ -337,6 +415,10 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
             deleteBody: 'Are you sure you want to delete the dashboard: '
         };
 
+        usersModel.getUserObjects().then(userObjects => {
+            $scope.userObjects = userObjects;
+        });
+
         $scope.duplicate = function () {
             $scope.duplicateOptions.freeze = true;
             return dashboardv2Model.duplicateDashboard({ dashboard: $scope.duplicateOptions.item, newName: $scope.duplicateOptions.newName }).then(function () {
@@ -359,6 +441,67 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
 
         $scope.getEditLink = function (item) {
             return '/#/dashboards/edit/' + item._id;
+        };
+
+        $scope.getCopyLink = function (item) {
+            const protocol = window.location.protocol;
+            const host = window.location.host;
+            return protocol + '//' + host + '/#/dashboards/view/' + item._id;
+        };
+
+        $scope.onPublish = function (dashboard, e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const button = e.target;
+            button.setAttribute('disabled', '');
+
+            api.publishDashboard(dashboard._id).then(() => {
+                dashboard.isPublic = true;
+            }).finally(() => {
+                button.removeAttribute('disabled');
+            });
+        };
+
+        $scope.onUnpublish = function (dashboard, e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const button = e.target;
+            button.setAttribute('disabled', '');
+
+            api.unpublishDashboard(dashboard._id).then(() => {
+                dashboard.isPublic = false;
+            }).finally(() => {
+                button.removeAttribute('disabled');
+            });
+        };
+
+        $scope.onShare = function (dashboard, e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            $scope.objectToShare = dashboard;
+            $('#publishModal').modal('show');
+        };
+
+        $scope.onUnshare = function (dashboard, e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            api.unshareDashboard(dashboard._id).then(() => {
+                dashboard.parentFolder = undefined;
+                dashboard.isShared = false;
+            });
+        };
+
+        $scope.selectThisFolder = function (folderID) {
+            const dashboard = $scope.objectToShare;
+            api.shareDashboard(dashboard._id, folderID).then(() => {
+                dashboard.isShared = true;
+                dashboard.parentFolder = folderID;
+                $('#publishModal').modal('hide');
+            });
         };
 
         $scope.introOptions = {
@@ -475,6 +618,8 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
         $scope.nav.editButtons = false;
         $scope.layerButtons = true;
         $scope.nav.itemsPerPage = 10;
+
+        $scope.shareButton = false;
 
         $scope.nav.fetchFields = ['name', 'status', 'description', 'createdOn'];
 

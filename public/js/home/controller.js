@@ -25,11 +25,11 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', 'connectio
                         height: '180px'
                     },
                     {
-                        element: '#publicArea',
+                        element: '#sharedArea',
                         html: '<div><h3>' +
-                        gettextCatalog.getString('The public area') +
+                        gettextCatalog.getString('The shared area') +
                         '</h3><span style="font-weight:bold;">' +
-                        gettextCatalog.getString('Here all the public shared elements (reports, dashboards, pages) are displayed to be accessed by the users') +
+                        gettextCatalog.getString('Here all the shared elements (reports, dashboards, pages) are displayed to be accessed by the users') +
                         '</span><br/><span>' +
                         gettextCatalog.getString('Depending on their permissions the users can access different folders and/or elements') +
                         '</span></div>',
@@ -122,13 +122,13 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', 'connectio
                         areaLineColor: '#fff'
                     },
                     {
-                        element: '#publicSpaceMainMenu',
+                        element: '#sharedSpaceMainMenu',
                         html: '<div><h3>' +
-                        gettextCatalog.getString('Public space') +
+                        gettextCatalog.getString('Shared space') +
                         '</h3><span style="font-weight:bold;color:#8DC63F">' +
                         gettextCatalog.getString('This link is only available for urungi administrators.') +
                         '</span><br/><span style="font-weight:bold;">' +
-                        gettextCatalog.getString('Define here the folder structure for the public area') +
+                        gettextCatalog.getString('Define here the folder structure for the shared area') +
                         '</span><br/><span></span></div>',
                         width: '300px',
                         height: '180px',
@@ -266,11 +266,11 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', 'connectio
                         height: '180px'
                     },
                     {
-                        element: '#publicArea',
+                        element: '#sharedArea',
                         html: '<div><h3>' +
-                        gettextCatalog.getString('The public area') +
+                        gettextCatalog.getString('The shared area') +
                         '</h3><span style="font-weight:bold;">' +
-                        gettextCatalog.getString('Here all the public shared elements (reports, dashboards, pages) that you can execute') +
+                        gettextCatalog.getString('Here all the shared shared elements (reports, dashboards, pages) that you can execute') +
                         '</span><br/><span>' +
                         gettextCatalog.getString('Depending on your permissions you will be able to access different folders and/or elements') +
                         '</span></div>',

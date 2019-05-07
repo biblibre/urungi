@@ -10,4 +10,6 @@ module.exports = function (app) {
     app.get('/api/dashboards/get/:id', restrict, Dashboards.getDashboard);
     app.post('/api/dashboards/publish-dashboard', restrict, Dashboards.PublishDashboard);
     app.post('/api/dashboards/unpublish', restrict, Dashboards.UnpublishDashboard);
+    app.post('/api/dashboards/share-dashboard', restrict, Dashboards.ShareDashboard);
+    app.post('/api/dashboards/unshare', restrict, Dashboards.UnshareDashboard);
 };

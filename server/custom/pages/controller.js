@@ -19,7 +19,7 @@ exports.PagesFindAll = function (req, res) {
     var perPage = config.pagination.itemsPerPage;
     var page = (req.query.page) ? req.query.page : 1;
     var find = { '$and': [{ 'nd_trash_deleted': false }, { 'companyID': 'COMPID' }, { owner: req.user._id }] };
-    var fields = { pageName: 1, owner: 1, isPublic: 1 };
+    var fields = { pageName: 1, owner: 1, isShared: 1 };
     var params = {};
 
     var Pages = connection.model('Pages');
@@ -54,7 +54,7 @@ exports.PagesCreate = function (req, res) {
         req.query.userid = true;
 
         req.body.owner = req.user._id;
-        req.body.isPublic = false;
+        req.body.isShared = false;
         controller.create(req, function (result) {
             res.status(200).json(result);
         });
@@ -72,7 +72,7 @@ exports.PagesDuplicate = function (req, res) {
         delete (req.body._id);
         req.body.pageName = 'Copy of ' + req.body.pageName;
         req.body.owner = req.user._id;
-        req.body.isPublic = false;
+        req.body.isShared = false;
         controller.create(req, function (result) {
             res.status(200).json(result);
         });
@@ -206,7 +206,7 @@ exports.PublishPage = function (req, res) {
         if (err) throw err;
         if (Page) {
             Page.parentFolder = parentFolder;
-            Page.isPublic = true;
+            Page.isShared = true;
 
             Pages.update({ _id: data._id }, { $set: Page.toObject() }, function (err, numAffected) {
                 if (err) throw err;
@@ -235,7 +235,7 @@ exports.UnpublishPage = function (req, res) {
     Pages.findOne(find, {}, {}, function (err, Page) {
         if (err) throw err;
         if (Page) {
-            Page.isPublic = false;
+            Page.isShared = false;
             Pages.update({ _id: data._id }, { $set: Page.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 

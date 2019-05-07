@@ -8,7 +8,9 @@ module.exports = function (app) {
     app.post('/api/dashboardsv2/duplicate', restrict, Dashboardsv2.Dashboardsv2Duplicate);
     app.post('/api/dashboardsv2/update/:id', restrict, Dashboardsv2.Dashboardsv2Update);
     app.post('/api/dashboardsv2/delete/:id', restrict, Dashboardsv2.Dashboardsv2Delete);
-    app.get('/api/dashboardsv2/get/:id', restrict, Dashboardsv2.getDashboard);
+    app.get('/api/dashboardsv2/get/:id', Dashboardsv2.getDashboard);
     app.post('/api/dashboardsv2/publish-page', restrict, Dashboardsv2.PublishDashboard);
     app.post('/api/dashboardsv2/unpublish', restrict, Dashboardsv2.UnpublishDashboard);
+    app.post('/api/dashboardsv2/share-page', restrict, Dashboardsv2.ShareDashboard);
+    app.post('/api/dashboardsv2/unshare', restrict, Dashboardsv2.UnshareDashboard);
 };

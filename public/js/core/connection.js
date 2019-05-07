@@ -31,10 +31,6 @@
                     }
 
                     return data;
-                }, response => {
-                    noty({ text: 'Error', timeout: 5000, type: 'error' });
-
-                    throw new Error(response.statusText);
                 });
         }
 
@@ -54,10 +50,6 @@
                     }
 
                     return data;
-                }, response => {
-                    noty({ text: 'Error', timeout: 5000, type: 'error' });
-
-                    throw new Error(response.statusText);
                 });
         }
     }

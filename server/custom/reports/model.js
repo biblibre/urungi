@@ -15,21 +15,34 @@ var ReportsSchema = new mongoose.Schema({
     history: [],
     parentFolder: { type: String },
     isPublic: { type: Boolean },
+    isShared: { type: Boolean },
     nd_trash_deleted: { type: Boolean },
     nd_trash_deleted_date: { type: Date },
     selectedLayerID: { type: String }
 }, { collection: 'wst_Reports' });
 
-ReportsSchema.methods.publish = async function (folderId) {
-    this.parentFolder = folderId;
+ReportsSchema.methods.publish = async function () {
     this.isPublic = true;
 
     return this.save();
 };
 
 ReportsSchema.methods.unpublish = async function () {
-    this.parentFolder = undefined;
     this.isPublic = false;
+
+    return this.save();
+};
+
+ReportsSchema.methods.share = async function (folderId) {
+    this.parentFolder = folderId;
+    this.isShared = true;
+
+    return this.save();
+};
+
+ReportsSchema.methods.unshare = async function () {
+    this.parentFolder = undefined;
+    this.isShared = false;
 
     return this.save();
 };

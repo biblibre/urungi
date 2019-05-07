@@ -3,13 +3,8 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout,
     $rootScope, gettextCatalog, usersModel
 ) {
-    usersModel.getUserObjects().then(userObjects => {
-        $scope.userObjects = userObjects;
-    });
-
     $scope.reportModal = 'partials/report/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
-    $scope.publishModal = 'partials/report/modals/publishModal.html';
     $scope.settingsHtml = 'partials/pages/settings.html';
     $scope.queriesHtml = 'partials/pages/queries.html';
     $scope.settingsTemplate = 'partials/widgets/inspector.html';
@@ -219,38 +214,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         }
     };
 
-    $scope.loadHTML = function () {
-        $scope.mode = 'preview';
-
-        $scope.dashboardID = $routeParams.dashboardID;
-
-        connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, { id: $scope.dashboardID }).then(function (data) {
-            $scope.selectedDashboard = data.item;
-            if (!$scope.selectedDashboard.containers) { $scope.selectedDashboard.containers = []; }
-
-            // getAllPageColumns();
-
-            var theHTML = $scope.selectedDashboard.html;
-
-            // var theHTML = $scope.selectedDashboard.properties.designerHTML;
-
-            var $div = $(theHTML);
-            var el = angular.element(document.getElementById('pageViewer'));
-            el.append($div);
-            if ($scope.selectedDashboard.properties.rootStyle) {
-                el.attr('style', $scope.selectedDashboard.properties.rootStyle);
-            }
-
-            angular.element(document).injector().invoke(function ($compile) {
-                $compile($div)($scope);
-            });
-            $scope.initPrompts();
-
-            repaintReports();
-            // cleanAll('pageViewer');
-        });
-    };
-
     $scope.showOverlay = function (referenceId) {
         bsLoadingOverlayService.start({
             referenceId: referenceId
@@ -391,7 +354,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                     noty({ text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error' });
                     return;
                 }
-                return reportModel.getPromptHTML(data);
+                return getPromptHTML(data);
 
             case 'tabs':
                 var theid = 'TABS_' + uuid2.newguid();
@@ -721,8 +684,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
         theHTML = theHTML.replace('vs-repeat', ' ');
 
-        // getPromptsWidget();
-
         $scope.selectedDashboard.properties.designerHTML = theHTML;
         $scope.selectedDashboard.properties.rootStyle = container.attr('style');
 
@@ -759,58 +720,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         return $scope.selectedDashboard.reports.find(r => (r.id === reportID));
     };
 
-    // function getQueryData (index, done) {
-    //     if (!$scope.selectedDashboard.reports[index]) {
-    //         done();
-    //         return;
-    //     }
-
-    //     $scope.selectedDashboard.reports[index].loadingData = true;
-    //     $scope.showOverlay('OVERLAY_' + $scope.selectedDashboard.reports[index].id);
-
-    //     queryModel.getQueryData($scope.selectedDashboard.reports[index].query).then(data => {
-    //         $scope.selectedDashboard.reports[index].query.data = data.data;
-    //         $scope.selectedDashboard.reports[index].loadingData = false;
-    //         $scope.hideOverlay('OVERLAY_' + $scope.selectedDashboard.reports[index].id);
-    //         getQueryData(index + 1, done);
-    //     });
-    // }
-
-    // function rebuildCharts () {
-    //     if ($scope.selectedDashboard) {
-    //         for (var i in $scope.selectedDashboard.reports) {
-    //             if (typeof $scope.selectedDashboard.reports[i].properties !== 'undefined') {
-    //                 if (typeof $scope.selectedDashboard.reports[i].properties.chart !== 'undefined') {
-    //                     var theChart = $scope.selectedDashboard.reports[i].properties.chart;
-    //                     $scope.showOverlay('OVERLAY_' + theChart.chartID);
-    //                     c3Charts.rebuildChart($scope.selectedDashboard.reports[i]);
-    //                     $scope.hideOverlay('OVERLAY_' + theChart.chartID);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    // function rebuildIndicators () {
-    //     if ($scope.selectedDashboard) {
-    //         for (var i in $scope.selectedDashboard.reports) {
-    //             if ($scope.selectedDashboard.reports[i].reportType === 'indicator') {
-    //                 reportModel.generateIndicator($scope.selectedDashboard.reports[i]);
-    //             }
-    //         }
-    //     }
-    // }
-
-    // function rebuildGrids () {
-    //     if ($scope.selectedDashboard) {
-    //         for (var i in $scope.selectedDashboard.reports) {
-    //             if ($scope.selectedDashboard.reports[i].reportType === 'grid') {
-    //                 reportModel.repaintReport($scope.selectedDashboard.reports[i], $scope.mode);
-    //             }
-    //         }
-    //     }
-    // }
-
     function clone (obj) {
         if (obj == null || typeof obj !== 'object') return obj;
         var copy = obj.constructor();
@@ -819,26 +728,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         }
         return copy;
     }
-
-    $scope.publishDashboard = function () {
-        $scope.objectToPublish = $scope.selectedDashboard;
-        $('#publishModal').modal('show');
-    };
-
-    $scope.unPublish = function () {
-        connection.post('/api/dashboardsv2/unpublish', { _id: $scope.selectedDashboard._id }).then(function (data) {
-            $scope.selectedDashboard.isPublic = false;
-            $('#publishModal').modal('hide');
-        });
-    };
-
-    $scope.selectThisFolder = function (folderID) {
-        connection.post('/api/dashboardsv2/publish-page', { _id: $scope.selectedDashboard._id, parentFolder: folderID }).then(function (data) {
-            $scope.selectedDashboard.parentFolder = folderID;
-            $scope.selectedDashboard.isPublic = true;
-            $('#publishModal').modal('hide');
-        });
-    };
 
     $scope.delete = function (dashboardID, dashboardName) {
         $scope.modalOptions = {};
@@ -916,7 +805,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             var targetPrompt = document.getElementById('PROMPT_' + thePrompt.promptID);
 
             if (targetPrompt) {
-                var html = reportModel.getPromptHTML(thePrompt);
+                var html = getPromptHTML(thePrompt);
                 $(targetPrompt).replaceWith(html);
                 targetPrompt = document.getElementById('PROMPT_' + thePrompt.promptID);
                 if ($scope.mode === 'preview') {
@@ -953,4 +842,10 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     $scope.$on('element.reselected', function (e, node) {
         $scope.tabs.selected = 'settings';
     });
+
+    function getPromptHTML (prompt) {
+        var html = '<div id="PROMPT_' + prompt.promptID + '" page-block class="ndContainer" ndType="ndPrompt"><app-filter-prompt is-prompt="true" filter="prompts[\'' + prompt.promptID + '\']" on-change="promptChanged()" get-query="getQueryForFilter" ></app-filter-prompt></div>';
+
+        return html;
+    }
 });

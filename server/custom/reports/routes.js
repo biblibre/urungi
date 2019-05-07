@@ -7,8 +7,10 @@ module.exports = function (app) {
     app.post('/api/reports/create', restrict, Reports.ReportsCreate);
     app.post('/api/reports/update/:id', restrict, Reports.ReportsUpdate);
     app.post('/api/reports/delete/:id', restrict, Reports.ReportsDelete);
-    app.post('/api/reports/get-data', restrict, Reports.ReportsGetData);
-    app.get('/api/reports/get-report/:id', restrict, Reports.GetReport);
+    app.post('/api/reports/get-data', Reports.ReportsGetData);
+    app.get('/api/reports/get-report/:id', Reports.GetReport);
     app.post('/api/reports/publish-report', restrict, Reports.PublishReport);
     app.post('/api/reports/unpublish', restrict, Reports.UnpublishReport);
+    app.post('/api/reports/share-report', restrict, Reports.ShareReport);
+    app.post('/api/reports/unshare', restrict, Reports.UnshareReport);
 };

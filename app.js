@@ -36,7 +36,8 @@ app.use(session({
     },
     store: mongoStore,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    unset: 'destroy',
 }));
 
 app.use(function (req, res, next) {

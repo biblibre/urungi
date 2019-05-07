@@ -42,6 +42,7 @@ exports.Dashboardsv2Create = function (req, res) {
 
         req.body.owner = req.user._id;
         req.body.isPublic = false;
+        req.body.isShared = false;
 
         req.body.author = req.user.userName;
 
@@ -63,6 +64,7 @@ exports.Dashboardsv2Duplicate = function (req, res) {
         req.body.dashboardName = 'Copy of ' + req.body.dashboardName;
         req.body.owner = req.user._id;
         req.body.isPublic = false;
+        req.body.isShared = false;
         req.body.parentFolder = undefined;
         controller.create(req).then(function (result) {
             res.status(200).json(result);
@@ -121,6 +123,9 @@ exports.getDashboard = function (req, res) {
     // TODO: permissions to execute
 
     controller.findOne(req).then(function (result) {
+        if (!result.item || (!result.item.isPublic && !req.isAuthenticated())) {
+            return res.status(403).send('Forbidden');
+        }
         // identify reports of the Dashboard...
 
         if (result) {
@@ -174,7 +179,7 @@ exports.PublishDashboard = async function (req, res) {
     // TODO: Check if the connected user has the permission to publish
     const dashboard = await getDashboardFromRequest(req);
     if (dashboard) {
-        dashboard.publish(req.body.parentFolder).then(() => {
+        dashboard.publish().then(() => {
             res.status(200).json({ result: 1, msg: 'Dashboard published' });
         }, err => {
             console.error(err);
@@ -197,6 +202,42 @@ exports.UnpublishDashboard = async function (req, res) {
         }, err => {
             console.error(err);
             res.status(500).json({ result: 0, msg: 'Error unpublishing dashboard' });
+        });
+    } else {
+        res.status(404).json({
+            result: 0,
+            msg: 'This dashboard does not exist',
+        });
+    }
+};
+
+exports.ShareDashboard = async function (req, res) {
+    // TODO: Check if the connected user has the permission to share
+    const dashboard = await getDashboardFromRequest(req);
+    if (dashboard) {
+        dashboard.share(req.body.parentFolder).then(() => {
+            res.status(200).json({ result: 1, msg: 'Dashboard shared' });
+        }, err => {
+            console.error(err);
+            res.status(500).json({ result: 0, msg: 'Error sharing dashboard' });
+        });
+    } else {
+        res.status(404).json({
+            result: 0,
+            msg: 'This dashboard does not exist',
+        });
+    }
+};
+
+exports.UnshareDashboard = async function (req, res) {
+    // TODO: Check if logged in user has the permission to share
+    const dashboard = await getDashboardFromRequest(req);
+    if (dashboard) {
+        dashboard.unshare().then(() => {
+            res.status(200).json({ result: 1, msg: 'Dashboard unshared' });
+        }, err => {
+            console.error(err);
+            res.status(500).json({ result: 0, msg: 'Error unsharing dashboard' });
         });
     } else {
         res.status(404).json({

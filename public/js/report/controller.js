@@ -1,14 +1,9 @@
 angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportService, $routeParams, $timeout, $rootScope, bsLoadingOverlayService, c3Charts,
     reportModel, widgetsCommon, $location, gettextCatalog, usersModel, $q) {
-    usersModel.getUserObjects().then(userObjects => {
-        $scope.userObjects = userObjects;
-    });
-
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dateModal = 'partials/report/modals/dateModal.html';
     $scope.linkModal = 'partials/report/modals/linkModal.html';
     $scope.repeaterTemplate = 'partials/report/partials/repeater.html';
-    $scope.publishModal = 'partials/report/modals/publishModal.html';
     $scope.dropArea = 'partials/report/partials/drop-area.html';
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
     $scope.dashListModal = 'partials/report/modals/dashboardListModal.html';
@@ -50,18 +45,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
         return $scope.getReports().then(function () {
             $scope.mode = 'list';
-        });
-    };
-
-    $scope.initReportView = function () {
-        return reportModel.getReportDefinition($routeParams.reportID, false).then(function (report) {
-            $scope.selectedReport = report;
-            return $scope.initLayers().then(function () {
-                $scope.initForm();
-                $scope.initPrompts();
-                $scope.repaintWithPrompts();
-                $scope.mode = 'view';
-            });
         });
     };
 
@@ -189,21 +172,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         if (!report.properties.order) { report.properties.order = []; }
     };
 
-    $scope.initPrompts = function () {
-        $scope.prompts = {};
-
-        for (var filter of $scope.selectedReport.properties.filters) {
-            if (filter.filterPrompt) {
-                var prompt = {};
-                for (const i in filter) {
-                    prompt[i] = filter[i];
-                }
-                prompt.criterion = {};
-                $scope.prompts[prompt.id + prompt.filterType] = prompt;
-            }
-        }
-    };
-
     /*
     * Getters and setters
     */
@@ -322,32 +290,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $('#dashListModal').modal('hide');
         reportService.addReport($scope.selectedReport);
 
-        console.log('/dashboards/push/' + dashboardID);
-
         $location.path('/dashboards/push/' + dashboardID);
-    };
-
-    $scope.publishReport = function () {
-        $scope.objectToPublish = $scope.selectedReport;
-        $('#publishModal').modal('show');
-    };
-
-    $scope.unPublish = function () {
-        return connection.post('/api/reports/unpublish', { _id: $scope.selectedReport._id }).then(function () {
-            $scope.selectedReport.isPublic = false;
-            $('#publishModal').modal('hide');
-        });
-    };
-
-    $scope.selectThisFolder = function (folderID) {
-        const url = '/api/reports/publish-report';
-        const params = { _id: $scope.selectedReport._id, parentFolder: folderID };
-
-        return connection.post(url, params).then(function () {
-            $scope.selectedReport.parentFolder = folderID;
-            $scope.selectedReport.isPublic = true;
-            $('#publishModal').modal('hide');
-        });
     };
 
     $scope.showFilterModal = function (filter) {
@@ -505,8 +448,9 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $scope.selectedReport.properties.connectedComponent = newItem.component;
     };
 
-    $scope.onRemoveFilter = function (filterIndex) {
-        var filter = $scope.selectedReport.properties.filters.splice(filterIndex, 1)[0];
+    $scope.onRemoveFilter = function (filter) {
+        const filterIndex = $scope.selectedReport.properties.filters.indexOf(filter);
+        $scope.selectedReport.properties.filters.splice(filterIndex, 1);
         $scope.onRemoveField(filter, 'filter');
     };
 
@@ -691,10 +635,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         if (correction) height = height + correction;
 
         $('#' + element).css('height', height);
-    };
-
-    $scope.getButtonFilterPromptMessage = function (filter) {
-        if (filter.filterPrompt) { return 'Select to deactivate the runtime'; } else { return 'Make this filter appear in the report interface.'; }
     };
 
     $scope.changeReportType = function (newReportType) {

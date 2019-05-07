@@ -1,0 +1,11 @@
+<div class="container-fluid" style="padding-bottom: 5px; padding-top: 5px; height: 40px;">
+    <h3 class="pull-left" ng-bind="vm.dashboard.dashboardName"></h3>
+
+    <a ng-if="vm.dashboard && ((vm.dashboard.owner == user._id) || isWSTADMIN)" ng-href="/#/dashboards/edit/{{vm.dashboard._id}}" class="btn btn-success pull-right" style="margin-right: 5px;" translate>Edit Dashboard</a>
+
+    <a ng-click="goBack();" class="btn btn-default pull-right" uib-tooltip="{{ 'Click here to cancel and backtrack' | translate }}" tooltip-placement="bottom" translate>Cancel</a>
+</div>
+
+<div class="container-fluid branded-border-panel"></div>
+
+<div class="container-fluid" id="pageViewer" style="top: 42px; bottom: 0; position: absolute; overflow-y: auto; width: 100%; padding-top: 10px;"></div>

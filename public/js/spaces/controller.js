@@ -1,6 +1,6 @@
 angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, connection, uuid2, $routeParams, $timeout, gettextCatalog) {
     connection.get('/api/company/get-company-data').then(result => {
-        $scope.data = result.items.publicSpace;
+        $scope.data = result.items.sharedSpace;
     });
 
     if ($routeParams.extra === 'intro') {
@@ -13,13 +13,13 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
             {
                 element: '#parentIntro',
                 html: '<div><h3>' +
-                    gettextCatalog.getString('Public space') +
+                    gettextCatalog.getString('Shared space') +
                     '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                    gettextCatalog.getString('The public space is the place where you or your users will publish reports to be available for other users or the hole company.') +
+                    gettextCatalog.getString('The shared space is the place where you or your users will publish reports to be available for other users or the hole company.') +
                     '</span><br/><span>' +
-                    gettextCatalog.getString('Here you can define the structure in folders of the public space.') +
+                    gettextCatalog.getString('Here you can define the structure in folders of the shared space.') +
                     '</span><br/><span>' +
-                    gettextCatalog.getString('Later using roles you can grant or deny access to the different folders of the public space to users that have the appropriate role to execute or publish reports along the public space.') +
+                    gettextCatalog.getString('Later using roles you can grant or deny access to the different folders of the shared space to users that have the appropriate role to execute or share reports along the shared space.') +
                     '</span></div>',
                 width: '500px',
                 objectArea: false,
@@ -27,11 +27,11 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
                 height: '300px'
             },
             {
-                element: '#publicSpaceArea',
+                element: '#sharedSpaceArea',
                 html: '<div><h3>' +
-                    gettextCatalog.getString('Public space structure area') +
+                    gettextCatalog.getString('Shared space structure area') +
                     '</h3><span style="font-weight:bold;">' +
-                    gettextCatalog.getString('This is the area where you can define the structure for the public space.') +
+                    gettextCatalog.getString('This is the area where you can define the structure for the shared space.') +
                     '</span><br/><br/><span>' +
                     gettextCatalog.getString('Create folders and drag and drop them across to structure it.') +
                     '</span></div>',
@@ -41,13 +41,13 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
                 areaLineColor: '#fff'
             },
             {
-                element: '#publicSpaceNewFolderBtn',
+                element: '#sharedSpaceNewFolderBtn',
                 html: '<div><h3>' +
                     gettextCatalog.getString('New folder') +
                     '</h3><span style="font-weight:bold;">' +
-                    gettextCatalog.getString('Click here to create a new folder in the root of the public space.') +
+                    gettextCatalog.getString('Click here to create a new folder in the root of the shared space.') +
                     '</span><br/><span>' +
-                    gettextCatalog.getString('After creating the folder you can drag and drop it across the public space.') +
+                    gettextCatalog.getString('After creating the folder you can drag and drop it across the shared space.') +
                     '</span></div>',
                 width: '300px',
                 areaColor: 'transparent',
@@ -56,11 +56,11 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
 
             },
             {
-                element: '#publicSpaceItem',
+                element: '#sharedSpaceItem',
                 html: '<div><h3>' +
                     gettextCatalog.getString('Folder') +
                     '</h3><span style="font-weight:bold;">' +
-                    gettextCatalog.getString('This area represents a folder in the public space') +
+                    gettextCatalog.getString('This area represents a folder in the shared space') +
                     '</span><br/><br/><span>' +
                     gettextCatalog.getString('You can drag it down or up across the structure to move the folder at the same level.') +
                     '<br/>' +
@@ -73,7 +73,7 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
 
             },
             {
-                element: '#publicSpaceItemEdit',
+                element: '#sharedSpaceItemEdit',
                 html: '<div><h3>' +
                     gettextCatalog.getString('Edit folder') +
                     '</h3><span style="font-weight:bold;">' +
@@ -89,7 +89,7 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
 
             },
             {
-                element: '#publicSpaceItemRemove',
+                element: '#sharedSpaceItemRemove',
                 html: '<div><h3>' +
                     gettextCatalog.getString('Remove Folder') +
                     '</h3><span style="font-weight:bold;">' +
@@ -105,13 +105,13 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
 
             },
             {
-                element: '#publicSpaceItemAdd',
+                element: '#sharedSpaceItemAdd',
                 html: '<div><h3>' +
                     gettextCatalog.getString('Add subfolder') +
                     '</h3><span style="font-weight:bold;">' +
                     gettextCatalog.getString('Click here to create a new folder inside the actual folder.') +
                     '</span><br/><br/><span>' +
-                    gettextCatalog.getString('After creating the folder you can drag and drop it across the public space.') +
+                    gettextCatalog.getString('After creating the folder you can drag and drop it across the shared space.') +
                     '</span></div>',
                 width: '300px',
                 areaColor: 'transparent',
@@ -121,9 +121,9 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
 
             },
             {
-                element: '#publicSpaceSaveBtn',
+                element: '#sharedSpaceSaveBtn',
                 html: '<div><h3>' +
-                    gettextCatalog.getString('Save public space') +
+                    gettextCatalog.getString('Save shared space') +
                     '</h3><span style="font-weight:bold;">' +
                     gettextCatalog.getString('Once you get the structure you want save it to make it available for your users.') +
                     '</span><br/><span></span></div>',

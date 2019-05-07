@@ -186,7 +186,6 @@ exports.getDashboard = function (req, res) {
 
 exports.PublishDashboard = function (req, res) {
     var data = req.body;
-    var parentFolder = data.parentFolder;
 
     // tiene el usuario conectado permisos para publicar?
     var Dashboards = connection.model('Dashboards');
@@ -197,7 +196,6 @@ exports.PublishDashboard = function (req, res) {
     Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;
         if (Dashboard) {
-            Dashboard.parentFolder = parentFolder;
             Dashboard.isPublic = true;
 
             Dashboards.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
@@ -239,6 +237,65 @@ exports.UnpublishDashboard = function (req, res) {
             });
         } else {
             res.status(401).json({ result: 0, msg: 'You don´t have permissions to unpublish this dashboard, or this dashboard do not exists' });
+        }
+    });
+};
+
+exports.ShareDashboard = function (req, res) {
+    var data = req.body;
+    var parentFolder = data.parentFolder;
+
+    // tiene el usuario conectado permisos para publicar?
+    var Dashboards = connection.model('Dashboards');
+    var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
+
+    if (req.session.isWSTADMIN) { find = { _id: data._id, companyID: req.user.companyID }; }
+
+    Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
+        if (err) throw err;
+        if (Dashboard) {
+            Dashboard.parentFolder = parentFolder;
+            Dashboard.isShared = true;
+
+            Dashboards.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
+                if (err) throw err;
+
+                if (numAffected > 0) {
+                    res.status(200).json({ result: 1, msg: numAffected + ' dashboard shared.' });
+                } else {
+                    res.status(200).json({ result: 0, msg: 'Error sharing dashboard, no dashboard have been shared' });
+                }
+            });
+        } else {
+            res.status(401).json({ result: 0, msg: 'You don´t have permissions to shared this dashboard, or this dashboard do not exists' });
+        }
+    });
+};
+
+exports.UnshareDashboard = function (req, res) {
+    var data = req.body;
+
+    // TODO:tiene el usuario conectado permisos para publicar?
+    var Dashboards = connection.model('Dashboards');
+    var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
+
+    if (req.session.isWSTADMIN) { find = { _id: data._id, companyID: req.user.companyID }; }
+
+    Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
+        if (err) throw err;
+        if (Dashboard) {
+            Dashboard.isShared = false;
+            Dashboards.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
+                if (err) throw err;
+
+                if (numAffected > 0) {
+                    res.status(200).json({ result: 1, msg: numAffected + ' dashboard unshared.' });
+                } else {
+                    res.status(200).json({ result: 0, msg: 'Error unsharing dashboard, no dashboard have been unshared' });
+                }
+            });
+        } else {
+            res.status(401).json({ result: 0, msg: 'You don´t have permissions to unshared this dashboard, or this dashboard do not exists' });
         }
     });
 };
