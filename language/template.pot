@@ -163,7 +163,7 @@ msgid "Apply rupture"
 msgstr ""
 
 #: public/js/report/controller.js:1087
-msgid "As you define the query draging and droping in the areas above, the results of the query will appear here"
+msgid "As you define the query dragging and dropping in the areas above, the results of the query will appear here"
 msgstr ""
 
 #: public/partials/report/partials/repeater.html:13
@@ -958,7 +958,7 @@ msgid "Here all the layers are listed."
 msgstr ""
 
 #: public/js/home/controller.js:37
-msgid "Here all the public shared elements (reports, dashboards, pages) are displayed to be accesed by the users"
+msgid "Here all the public shared elements (reports, dashboards, pages) are displayed to be accessed by the users"
 msgstr ""
 
 #: public/js/home/controller.js:278
@@ -1075,7 +1075,7 @@ msgid "Last Name is required"
 msgstr ""
 
 #: public/js/spaces/controller.js:22
-msgid "Later using roles you can grant or deny access to the different folders of the public space to users that have the appropiate role to execute or publish reports along the public space."
+msgid "Later using roles you can grant or deny access to the different folders of the public space to users that have the appropriate role to execute or publish reports along the public space."
 msgstr ""
 
 #: public/js/home/controller.js:289
@@ -1118,7 +1118,7 @@ msgid "Layers"
 msgstr ""
 
 #: public/js/menu-list/controllers.js:540
-msgid "Layers allow your users to create reports dragging and droping familiar elements that points in the background to the fields contained in tables in your data sources."
+msgid "Layers allow your users to create reports dragging and dropping familiar elements that points in the background to the fields contained in tables in your data sources."
 msgstr ""
 
 #: public/js/menu-list/controllers.js:538
@@ -2033,7 +2033,7 @@ msgid "You can setup the name you want for data sources."
 msgstr ""
 
 #: public/js/home/controller.js:121
-msgid "You will define here the labels to use for every field, the joins between the different entities (tables), etc... All the necessary stuff to allow your users to create a report without any knowlegde of the structure of your data"
+msgid "You will define here the labels to use for every field, the joins between the different entities (tables), etc... All the necessary stuff to allow your users to create a report without any knowledge of the structure of your data"
 msgstr ""
 
 #: public/js/home/controller.js:104
