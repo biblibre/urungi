@@ -1,6 +1,10 @@
 module.exports = {
     up (db) {
         return db.collection('wst_Layers').find({}).forEach(function (layer) {
+            if (!layer.params || !layer.params.schema) {
+                return;
+            }
+
             const collections = new Map(layer.params.schema.map(c => [c.collectionID, c]));
 
             function visitComponent (collection, componentIdx) {
