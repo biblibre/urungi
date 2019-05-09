@@ -552,7 +552,7 @@ angular.module('app').controller('listCtrl', function ($scope, $rootScope, conne
                         '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
                         gettextCatalog.getString('Layers define the interface for your users to access the data.') +
                         '</span><br/><br/><span>' +
-                        gettextCatalog.getString('Layers allow your users to create reports dragging and droping familiar elements that points in the background to the fields contained in tables in your data sources.') +
+                        gettextCatalog.getString('Layers allow your users to create reports dragging and dropping familiar elements that points in the background to the fields contained in tables in your data sources.') +
                         '</span><br/><br/><span>' +
                         gettextCatalog.getString('Here you can create and manage the layers that later will be used by your users to create reports or explore data.') +
                         '</span><br/><br/><span>' +

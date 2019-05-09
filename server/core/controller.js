@@ -100,7 +100,7 @@ class Controller {
                 return { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
             });
         }).catch(function (err) {
-            return { result: 0, msg: 'A database error has occured : ' + String(err), error: err };
+            return { result: 0, msg: 'A database error has occurred : ' + String(err), error: err };
         });
 
         if (done) {
@@ -132,7 +132,7 @@ class Controller {
 
             return { result: 1, item: item.toObject() };
         }).catch(function (err) {
-            return { result: 0, msg: 'A database error has occured : ' + String(err), error: err };
+            return { result: 0, msg: 'A database error has occurred : ' + String(err), error: err };
         });
 
         if (done) {
@@ -184,7 +184,7 @@ class Controller {
                 return { result: 1, msg: 'Item created', item: item.toObject() };
             });
         }).catch(function (err) {
-            return { result: 0, msg: 'A database error has occured : ' + String(err), error: err };
+            return { result: 0, msg: 'A database error has occurred : ' + String(err), error: err };
         });
 
         if (done) {
@@ -220,7 +220,7 @@ class Controller {
                 return { result: 0, msg: 'Error updating record, no record have been updated' };
             }
         }).catch(function (err) {
-            return { result: 0, msg: 'A database error has occured : ' + String(err), error: err };
+            return { result: 0, msg: 'A database error has occurred : ' + String(err), error: err };
         });
 
         if (done) {
@@ -254,7 +254,7 @@ class Controller {
                 return { result: 0, msg: 'Error deleting items, no item have been deleted' };
             }
         }).catch(function (err) {
-            return { result: 0, msg: 'A database error has occured : ' + String(err), error: err };
+            return { result: 0, msg: 'A database error has occurred : ' + String(err), error: err };
         });
 
         if (done) {

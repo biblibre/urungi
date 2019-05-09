@@ -214,7 +214,7 @@ describe('Users API', function () {
             expect(decrypted).to.have.property('result', 1);
             expect(decrypted).to.have.property('msg', 'Password changed');
         });
-        it('should not update adminstrator password because passwords do not match ', async function () {
+        it('should not update administrator password because passwords do not match ', async function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);

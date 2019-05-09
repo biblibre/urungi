@@ -29,7 +29,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$sessionS
                         html: '<div><h3>' +
                         gettextCatalog.getString('The public area') +
                         '</h3><span style="font-weight:bold;">' +
-                        gettextCatalog.getString('Here all the public shared elements (reports, dashboards, pages) are displayed to be accesed by the users') +
+                        gettextCatalog.getString('Here all the public shared elements (reports, dashboards, pages) are displayed to be accessed by the users') +
                         '</span><br/><span>' +
                         gettextCatalog.getString('Depending on their permissions the users can access different folders and/or elements') +
                         '</span></div>',
@@ -113,7 +113,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$sessionS
                         '</span><br/><span style="font-weight:bold;">' +
                         gettextCatalog.getString('Here you can define the semantic layer used by your users to access the data in the different data sources.') +
                         '</span><br/><span>' +
-                        gettextCatalog.getString('You will define here the labels to use for every field, the joins between the different entities (tables), etc... All the necessary stuff to allow your users to create a report without any knowlegde of the structure of your data') +
+                        gettextCatalog.getString('You will define here the labels to use for every field, the joins between the different entities (tables), etc... All the necessary stuff to allow your users to create a report without any knowledge of the structure of your data') +
                         '</span></div>',
                         width: '300px',
                         height: '300px',

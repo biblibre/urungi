@@ -1041,7 +1041,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
                 html: '<div><h3>' +
                 gettextCatalog.getString('Results area') +
                 '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettextCatalog.getString('As you define the query draging and droping in the areas above, the results of the query will appear here') +
+                gettextCatalog.getString('As you define the query dragging and dropping in the areas above, the results of the query will appear here') +
                 '</span><br/><span></span></div>',
                 width: '300px',
                 height: '150px',

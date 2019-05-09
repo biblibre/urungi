@@ -19,7 +19,7 @@ angular.module('app').controller('spacesCtrl', function ($scope, $rootScope, con
                     '</span><br/><span>' +
                     gettextCatalog.getString('Here you can define the structure in folders of the public space.') +
                     '</span><br/><span>' +
-                    gettextCatalog.getString('Later using roles you can grant or deny access to the different folders of the public space to users that have the appropiate role to execute or publish reports along the public space.') +
+                    gettextCatalog.getString('Later using roles you can grant or deny access to the different folders of the public space to users that have the appropriate role to execute or publish reports along the public space.') +
                     '</span></div>',
                 width: '500px',
                 objectArea: false,
