@@ -12,6 +12,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
     $scope.selectedDashboard = { reports: [], containers: [], prompts: [] };
     $scope.lastElementID = 0;
+    $scope.selectedDashboardLimit = { value: 0 };
     $scope.dataPool = [];
 
     $scope.hiddenXS = false;
@@ -64,6 +65,10 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         $scope.reportInterface = true;
         $scope.editingReport = null;
         $scope.$broadcast('newReportForDash', {});
+    };
+
+    $scope.Redraw = function () {
+        repaintReports();
     };
 
     $scope.importReport = function () {
@@ -125,6 +130,8 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         };
 
         if ($scope.mode === 'edit') {
+            $scope.selectedDashboardLimit = { value: 500 };
+
             if (!$scope.dashboardID) {
                 noty({ text: 'Could not load dashboard : missing id', type: 'error', timeout: 4000 });
             }
@@ -380,7 +387,8 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
         $scope.$broadcast('repaint', {
             fetchData: true,
-            filterCriteria: filterCriteria
+            filterCriteria: filterCriteria,
+            selectedRecordLimit: $scope.selectedDashboardLimit.value
         });
     }
 

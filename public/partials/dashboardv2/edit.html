@@ -64,8 +64,19 @@
     <section  class="content">
 
         <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
+
             <section class="layer scrollPane">
                 <div class="layer-inner-reports">
+
+                    <div id="limit-panel">
+                        <span style="color:#fff;" translate>Quick display with</span>
+                        <input type="number" ng-model="selectedDashboardLimit.value" size="8">
+                        <span style="color:#fff;" translate>results.</span>
+                        <button style="padding: 3px 10px;" ng-click="Redraw();" class="btn btn-default">
+                          <i class="fa fa-refresh hand-cursor"></i>
+                          <span translate>Redraw</span>
+                        </button>
+                    </div>
 
                     <app-inspector element="selectedElement" properties="selectedReport.properties" dashboard="selectedDashboard" on-change="onChangeElementProperties"></app-inspector>
 
@@ -128,9 +139,9 @@
                 <section class="tab">
                     <section class="layer scrollPane">
                         <div class="layer-inner-reports">
-                            <div ng-repeat="prompt in getPrompts()" draggable="true" draggable-type="custom-object" 
-                            draggable-data="{objectType: 'queryFilter', promptID:'{{prompt.id + prompt.filterType}}'}" 
-                            style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; " 
+                            <div ng-repeat="prompt in getPrompts()" draggable="true" draggable-type="custom-object"
+                            draggable-data="{objectType: 'queryFilter', promptID:'{{prompt.id + prompt.filterType}}'}"
+                            style="margin-bottom: 5px; margin-top: 5px;        display: flex;align-items: center;border: 1px white solid;border-radius: 5px; "
                             id="{{item.id}}" class="dashboard-filter-prompt-item">
                               <span>
                                   <i class="fa fa-filter"></i>
