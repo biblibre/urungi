@@ -1803,6 +1803,10 @@ div.callout {
     -webkit-transform: translate3d(0, 0, 0);
 }
 
+#gauge-max {
+    margin-left: 20px;
+}
+
 #dropZone {
     position: absolute;
     left: 300px;

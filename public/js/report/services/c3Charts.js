@@ -8,7 +8,6 @@ angular.module('app').service('c3Charts', function () {
         var theNames = {};
         var theGroups = [];
         var theData = [];
-
         var query = report.query;
         var chart = report.properties.chart;
 
@@ -194,7 +193,10 @@ angular.module('app').service('c3Charts', function () {
                 columns: [
                     [theValues[0], query.data[0][theValues[0]]]
                 ],
-                type: chart.type
+                type: chart.type,
+            };
+            c3Config.gauge = {
+                max: report.properties.maxValue,
             };
             break;
 
