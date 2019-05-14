@@ -64,7 +64,7 @@
                             <!--<h5 class="pull-right">Properties</h5>-->
 
                         <layer-object-properties object-type="selectedItem" object="theSelectedElement" on-delete="deleteObject()" on-edit="editObject"
-                        element-types="elementTypes" string-default-aggregation="stringDefaultAggregation" number-default-aggregation="numberDefaultAggregation" 
+                        element-types="elementTypes" string-default-aggregation="stringDefaultAggregation" number-default-aggregation="numberDefaultAggregation"
                         layer="_Layer" on-delete-element="deleteSchemaElement" on-publish-element="elementAdd"></layer-object-properties>
 
                     </section>
@@ -72,11 +72,18 @@
                     <section id="elementsTab" class="results infinite layer-elements ng-hide " ng-show="tabs.selected == 'elements'">
 
                         <div class="container-fluid">
-                            <button type="button" class="btn btn-primary pull-right"  ng-click="addFolder()" translate>New Folder</button>
-                            <span class="pull-right"> &nbsp; </span>
-                            <button type="button" class="btn btn-primary pull-right"  ng-click="createComposedElement()" translate>New Element</button>
+                            <div id="layerButtonGroup" class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span translate>Create</span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu layerNewButtonDropdown">
+                                    <li><a href="" ng-click="addFolder()" translate>New Folder</a></li>
+                                    <li><a href="" ng-click="createComposedElement()" translate>New Element</a></li>
+                                </ul>
+                            </div>
                         </div>
-                       
+
 
                         <section class="layer scrollPane">
 
@@ -244,15 +251,15 @@
                                     <i ng-hide="collection.folded" class="jtk-field-selected fa fa-minus-square"></i>
                                     <i ng-show="collection.folded" class="jtk-field-selected fa fa-plus-square"></i>
                                 </span>
-                            
+
                                 <span>
-                                    <i ng-hide="allElementsAdded(collection)" class="jtk-field-icon fa fa-plus-square" ng-click="promptAddAll(collection)" 
+                                    <i ng-hide="allElementsAdded(collection)" class="jtk-field-icon fa fa-plus-square" ng-click="promptAddAll(collection)"
                                     uib-tooltip="Add all" ></i>
                                     <i ng-show="allElementsAdded(collection)" class="jtk-field-selected fa fa-check-square" ></i>
                                 </span>
                             </span>
                         </div>
-                        
+
                     </div>
 
 
