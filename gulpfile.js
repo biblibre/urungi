@@ -17,7 +17,7 @@ const dist = gulp.parallel(
     dist_translations,
 );
 
-module.exports = exports = {
+module.exports = {
     'default': dist,
     'dist': dist,
     'dist:js': dist_js,

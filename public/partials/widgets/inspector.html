@@ -23,16 +23,6 @@
         <div class="accordion-body">
             <div class="panel-box">
                 <div id="custom-attributes">
-                    <!--
-                    <div id="visibility">
-                        <ul class="list-unstyled list-inline" bl-element-visibility-controls>
-                            <li data-size="xs" data-toggle="tooltip" data-placement="top" title="visible on mobile"><i class="fa fa-mobile"></i></li>
-                            <li data-size="sm" data-toggle="tooltip" data-placement="top" title="visible on tablet"><i class="fa fa-tablet"></i></li>
-                            <li data-size="md" data-toggle="tooltip" data-placement="top" title="visible on laptop"><i class="fa fa-laptop"></i></li>
-                            <li data-size="lg" data-toggle="tooltip" data-placement="top" title="visible on desktop"><i class="fa fa-desktop"></i></li>
-                        </ul>
-                    </div>
-                    -->
                     <div class="form-group" ng-repeat="(name, config) in customAttributes">
                         <label for="el-{{ name }}">{{ name }}</label>
 
@@ -83,61 +73,10 @@
             <div class="panel-box">
                 <!--<div data-controls="properties.color" class="color-picker-trigger" id="fill-color"><div class="background-box"><i class="fa fa-color-adjust"></i></div><div class="background-name">{{ 'color' | translate }}</div></div>-->
                 <div colorpicker ng-model="properties.color"  class="color-picker-trigger" id="fill-color" style="width:100%;"><div class="background-box"><input type="text" class="form-control" ng-model="properties.color" style="background-color:transparent;"/></div></div>
-
-                <!--
-                <div bl-show-img-container id="image"><div class="background-box"><i class="fa fa-picture-outline"></i></div><div class="background-name">{{ 'image' | translate }}</div></div>
-                <div bl-show-img-container id="gradient"><div class="background-box"><i class="fa fa-pipette"></i></div><div class="background-name">{{ 'gradient' | translate }}</div></div>
-                -->
             </div>
 
         </div>
-    <!--
-        <div id="background-flyout-panel" class="hidden">
-            <div class="bl-panel-header clearfix"><div class="name">{{ 'background' | translate }}</div><div class="bl-panel-btns" ng-click="closePanel"><i class="fa fa-times"></i></div></div>
-            <div >
-                <button type="button" ng-file-select="onFileSelect($files, 'bg')" class="btn btn-primary btn-block">{{ 'uploadImage' | translate }}</button>
-            </div>
-            <div id="texturePresets">
-                <h5>{{ 'textures' | translate }}</h5>
-                <ul class="img-presets-list" bl-pretty-scrollbar>
-                    <li ng-repeat="texture in textures track by $index">
-                        <div ng-click="selectPreset($event)" class="preset" ng-style="{ 'background-image': 'url(images/textures/'+$index+'.png)' }"></div>
-                    </li>
-                </ul>
-                <div id="image-properties">
-                    <h5>{{ 'imageProperties' | translate }}</h5>
-                    <div id="img-positioning" class="clearfix">
-                        <div class="pull-left">
-                            <h6>{{ 'repeat' | translate }}</h6>
-                            <ul class="list-unstyled">
-                                <li><div class="radio"><label><input value="no-repeat" ng-checked="properties.repeat == 'no-repeat'" ng-model="properties.repeat" type="radio">{{ 'none' | translate }}</label></div></li>
-                                <li><div class="radio"><label><input value="repeat-x" ng-checked="properties.repeat == 'repeat-x'" ng-model="properties.repeat" type="radio">{{ 'horizontal' | translate }}</label></div></li>
-                                <li><div class="radio"><label><input value="repeat-y" ng-checked="properties.repeat == 'repeat-y'" ng-model="properties.repeat" type="radio">{{ 'vertical' | translate }}</label></div></li>
-                                <li><div class="radio"><label><input value="repeat" ng-checked="properties.repeat == 'repeat'" ng-model="properties.repeat" type="radio">{{ 'all' | translate }}</label></div></li>
-                            </ul>
-                        </div>
-                        <div class="pull-right">
-                            <h6>{{ 'alignment' | translate }}</h6>
-                            <div id="alignment" bl-img-alignment-grid></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="gradientPresets">
-                <h5>{{ 'gradients' | translate }}</h5>
-                <ul class="img-presets-list" bl-pretty-scrollbar>
-                    <li ng-repeat="gradient in gradients track by $index">
-                        <div class="preset" ng-click="selectPreset($event)" ng-style="{ 'background-image': gradient }"></div>
-                    </li>
-                </ul>
-            </div>
-
-        </div>
-    -->
     </section>
-
-    <!-- -->
-
 
     <!--background image-->
     <section id="background-image" class="inspector-panel accordion-item" ng-show="canEdit('background')">
@@ -201,9 +140,6 @@
                     <div class="col-md-4" style="padding: 0px; padding-left:5px;">
                     <div colorpicker ng-model="inspector.styles.text.color"  class="color-picker-trigger" id="fill-color" style="width:100%;height:35px;" ng-style="{background: inspector.styles.text.color}"><div class="background-box" style="padding: 0px;"><input type="text" class="form-control" ng-model="inspector.styles.text.color" style="background-color:transparent;"/></div><div class="background-name">{{ 'color' | translate }}</div></div>
                     </div>
-    <!--
-                    <div id="more-fonts" class="pull-right" data-toggle="modal" data-target="#fonts-modal"><i class="fa fa-google"></i></div>
-    -->
                 </div>
 
                 <div class="clearfix">
@@ -235,9 +171,6 @@
                 </div>
 
                 <div class="clearfix">
-                    <!--
-                    <div data-controls="inspector.styles.text.color" class="color-picker-trigger" style="background: {{ inspector.styles.text.color }}" bl-tooltip="textColor"></div>
-    -->
                 </div>
             </div>
         </div>
@@ -277,9 +210,7 @@
             <div class="accordion-body">
                 <div class="panel-box">
                     <div class="clearfix" style="margin-bottom:5px">
-    <!--
-                        <div id="border-color" data-controls="inspector.styles.border.color" class="color-picker-trigger" bl-border-color-preview bl-tooltip="borderColor"></div>
-    -->                                                <div colorpicker ng-model="inspector.styles.border.color"  class="color-picker-trigger" id="fill-color" style="width:58%;height:35px;border-width:5px;" ng-style="{borderColor: inspector.styles.border.color}"><div class="background-box" style="padding: 0px;"><input type="text" class="form-control" ng-model="inspector.styles.border.color" style="background-color:transparent;    height: 25px;"/></div><div class="background-name">{{ 'borderColor' | translate }}</div></div>
+                        <div colorpicker ng-model="inspector.styles.border.color"  class="color-picker-trigger" id="fill-color" style="width:58%;height:35px;border-width:5px;" ng-style="{borderColor: inspector.styles.border.color}"><div class="background-box" style="padding: 0px;"><input type="text" class="form-control" ng-model="inspector.styles.border.color" style="background-color:transparent;    height: 25px;"/></div><div class="background-name">{{ 'borderColor' | translate }}</div></div>
 
                         <select id="border-style" ng-model="inspector.styles.border.style">
                             <option value="none">{{ 'none' | translate }}</option>

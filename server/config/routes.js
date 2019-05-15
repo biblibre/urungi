@@ -2,7 +2,6 @@ const debug = require('debug')('urungi:server');
 
 module.exports = function (app, passport) {
     var hash = require('../util/hash');
-    var api = require('../api.js');
 
     app.get('/', restrict, function (req, res) {
         res.render('index');
@@ -11,10 +10,6 @@ module.exports = function (app, passport) {
     app.get('/login', function (req, res, next) {
         res.render('login');
     });
-
-    app.get('/partial/:name', api.partial);
-    app.get('/partial/:controller/:name', api.controllerPartial);
-    app.get('/partial/custom/:controller/:name', api.controllerCustomPartial);
 
     app.get('/auth/google', passport.authenticate('google'));
 

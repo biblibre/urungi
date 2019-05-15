@@ -21,7 +21,7 @@
                             <span translate ng-if="user.status == 'active'">active</span>
                             <span translate ng-if="user.status == 'Not active'">not active</span>
                         </a>
-                        <a href="/#/users/{{user._id}}">
+                        <a ng-href="/#/users/{{user._id}}">
                             <h4 class="list-group-item-heading" ng-bind="user.userName"></h4>
                             <span class="list-group-item-text" ng-bind="user.firstName"></span>  <span class="list-group-item-text" ng-bind="user.lastName"></span>
                         </a>
