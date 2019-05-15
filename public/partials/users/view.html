@@ -115,7 +115,7 @@
                                 <div class="list-group">
                                     <div class="list-group-item" ng-repeat="report in userReports">
                                         <span ng-if="report.isPublic" class="badge badge-success pull-right" translate>public</span>
-                                        <a href="/#/reports/{{report._id}}">
+                                        <a ng-href="/#/reports/{{report._id}}">
                                             <h4 class="list-group-item-heading" ng-bind="report.reportName"></h4>
                                             <p class="list-group-item-text" ng-bind="report.reportDescription"></p>
                                         </a>
@@ -136,7 +136,7 @@
                                 <div class="list-group">
                                     <div class="list-group-item" ng-repeat="dsh in userDashboards">
                                         <span ng-if="dsh.isPublic" class="badge badge-success pull-right" translate>public</span>
-                                        <a href="/#/dashboards/{{dsh._id}}">
+                                        <a ng-href="/#/dashboards/{{dsh._id}}">
                                         <h4 class="list-group-item-heading" ng-bind="dsh.dashboardName"></h4>
                                         <p class="list-group-item-text" ng-bind="dsh.dashboardDescription"></p>
                                         </a>

@@ -56,10 +56,10 @@
     <div class="repeater-data container-fluid" ng-repeat="item in theData[selectedReport.hashedID]" style="width:100%;padding:0px">
 
         <div  class="repeater-data-column popover-primary" ng-class="getColumnWidthClass(column)" ng-style="getColumnStyle(column)"  ng-repeat=" column in selectedReport.properties.columns" popover-trigger="mouseenter" popover-placement="top" popover-title="'{{column.objectLabel}}'" popover="{{item.elementName}}">
-            <a ng-if="column.link && column.link.type == 'report'" class="columnLink" href="/#/reports/{{column.link._id}}/{{column.link.promptElementID}}/{{item.elementName}}">
+            <a ng-if="column.link && column.link.type == 'report'" class="columnLink" ng-href="/#/reports/{{column.link._id}}/{{column.link.promptElementID}}/{{item.elementName}}">
                 {{item[column.collectionID+'_'+column.elementName+column.aggregation]}}
             </a>
-            <a ng-if="column.link && column.link.type == 'dashboard'" class="columnLink" href="/#/dashboards/{{column.link._id}}/{{column.link.promptElementID}}/{{item.elementName}}">
+            <a ng-if="column.link && column.link.type == 'dashboard'" class="columnLink" ng-href="/#/dashboards/{{column.link._id}}/{{column.link.promptElementID}}/{{item.elementName}}">
                 {{item[column.collectionID+'_'+column.elementName+column.aggregation]}}
             </a>
             <span ng-if="!column.link">{{item[column.collectionID+'_'+column.elementName+column.aggregation]}}</span>

@@ -27,7 +27,7 @@
                                 <li ng-repeat="option in displayOptions">
                                     <a ng-click="displayCallback(item, option.id)">
                                         <i ng-show="option.icon" class="{{option.icon}}" ></i>
-                                        <img ng-show="option.image"  src="{{option.image}}"/>
+                                        <img ng-show="option.image" ng-src="{{option.image}}"/>
                                         {{option.name | translate}}
                                     </a>
                                 </li>

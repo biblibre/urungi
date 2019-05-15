@@ -15,7 +15,7 @@
                 </div>
 
                 <div id="datasourceList" class="list-group" ng-init="vm.getDataSources(1,'',['name','type','connection.host','connection.port','connection.database'])">
-                    <a id="datasourceListItem" href="/#/data-sources/{{dts._id}}" class="list-group-item" ng-repeat="dts in vm.items">
+                    <a id="datasourceListItem" ng-href="/#/data-sources/{{dts._id}}" class="list-group-item" ng-repeat="dts in vm.items">
                         <span id="datasourceListItemType" class="pull-right branded-label" >{{dts.type}}</span>
                         <h4 id="datasourceListItemName" class="list-group-item-heading" uib-tooltip="{{ 'Click here to see or set data source details' | translate}}">{{dts.name}} </h4>
                         <p id="datasourceListItemDetails" class="list-group-item-text">
