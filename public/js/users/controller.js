@@ -19,38 +19,31 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
     };
 
     $scope.checkForNewUser = function () {
-        var isOk = true;
         $scope.alertMessage = '';
 
         if (!$scope._User.userName) {
             $scope.alertMessage = 'You have to introduce the user nick for the new user';
-            isOk = false;
             return;
         }
 
         if (!$scope._User.sendPassword) {
             if (!$scope._User.pwd1) {
                 $scope.alertMessage = 'You have to introduce a password';
-                isOk = false;
                 return;
             } else {
                 if ($scope._User.pwd1 !== $scope._User.pwd2) {
                     $scope.alertMessage = 'Passwords do not match';
-                    isOk = false;
                     return;
                 }
             }
         } else {
             if (!$scope._User.email) {
                 $scope.alertMessage = 'You have to introduce a valid email to send the generated password to the user';
-                isOk = false;
                 return;
             }
         }
 
-        if (isOk) {
-            $scope.save();
-        }
+        $scope.save();
     };
 
     $scope.checkForDuplicateUserNick = function () {

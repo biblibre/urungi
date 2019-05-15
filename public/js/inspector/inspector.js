@@ -558,7 +558,6 @@ angular.module('wst.inspector', [])
      * @return void
      */
         manager.reorderElement.prototype.insertAtIndex = function (type) {
-            var before = true;
             var parent = $(this.params.parent);
 
             // we'll need to use different index if we're undoing or redoing the insert
@@ -576,7 +575,7 @@ angular.module('wst.inspector', [])
 
                 // if node doesn't exist in the parent contents always insert
                 // it before the index otherwise do it depending on the index difference
-                before = currentIndex === -1 ? true : currentIndex > index;
+                var before = currentIndex === -1 ? true : currentIndex > index;
 
                 // loop trough the parent contents and when index matches
                 // prepend or append node to the node current at that index

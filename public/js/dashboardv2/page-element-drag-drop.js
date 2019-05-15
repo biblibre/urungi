@@ -235,7 +235,9 @@ module.directive('elementDropTarget', ['$rootScope', 'uuid', '$compile', functio
 
                 var dest = document.getElementById('ndDropped');
 
-                if (dest) { dest.remove(); } else { dest = document.getElementById(id); }
+                if (dest) {
+                    dest.remove();
+                }
 
                 var data = e.originalEvent.dataTransfer.getData('text');
                 dest = document.getElementById(id);
