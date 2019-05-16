@@ -73,10 +73,11 @@ exports.getEntities = async function (req, res) {
     const dts = result.item;
 
     var data;
+    var db;
 
     switch (dts.type) {
     case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL':
-        const db = new Db(dts);
+        db = new Db(dts);
 
         result = await db.getCollections();
 
@@ -85,6 +86,13 @@ exports.getEntities = async function (req, res) {
         res.status(200).json(result);
         break;
     case 'BIGQUERY': case 'JDBC-ORACLE':
+        if (dts.type === 'JDBC-ORACLE') {
+            db = require('./legacy/jdbc-oracle');
+        }
+        if (dts.type === 'BIGQUERY') {
+            db = require('./legacy/bigquery');
+        }
+
         data = {
             datasourceID: result.item._id,
             companyID: req.user.companyID,
