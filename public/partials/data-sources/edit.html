@@ -23,21 +23,21 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label" for="name" translate>Name</label>
-                <input class="form-control" name="name" id="name" ng-model="vm._dataSource.name" data-validate="required" placeholder="Insert here the name for this connection" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="name" id="name" ng-model="vm._dataSource.name" data-validate="required" placeholder="Insert here the name for this connection" novalidate="novalidate" required="true" aria-describedby="name-error" aria-invalid="false"><span id="name-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
         <div class="col-md-12" ng-if="vm._dataSource.type != 'BIGQUERY'">
             <div class="form-group">
                 <label class="control-label" for="host" translate>Host</label>
-                <input class="form-control" name="host" id="host" ng-model="vm._dataSource.connection.host" data-validate="required" placeholder="Insert here your Host address or IP" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="host" id="host" ng-model="vm._dataSource.connection.host" data-validate="required" placeholder="Insert here your Host address or IP" novalidate="novalidate" required="true" aria-describedby="host-error" aria-invalid="false"><span id="host-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
         <div class="col-md-12"  ng-if="vm._dataSource.type != 'BIGQUERY'">
             <div class="form-group">
                 <label class="control-label" for="port" translate>Port</label>
-                <input class="form-control" name="port" id="port" ng-model="vm._dataSource.connection.port" data-validate="required" placeholder="Insert here the port to access the SQL instance" novalidate="novalidate" required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="port" id="port" ng-model="vm._dataSource.connection.port" data-validate="required" placeholder="Insert here the port to access the SQL instance" novalidate="novalidate" required="true" aria-describedby="port-error" aria-invalid="false"><span id="port-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
@@ -45,7 +45,7 @@
             <div class="form-group">
                 <label class="control-label" for="database" ng-if="vm._dataSource.type != 'BIGQUERY'" translate>Database</label>
                 <label class="control-label" for="database" ng-if="vm._dataSource.type == 'BIGQUERY'" translate>Project ID</label>
-                <input class="form-control" name="database" id="database" ng-model="vm._dataSource.connection.database" data-validate="required" placeholder="Set here the name of the SQL Database to connect" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="database" id="database" ng-model="vm._dataSource.connection.database" data-validate="required" placeholder="Set here the name of the SQL Database to connect" novalidate="novalidate" aria-required="true" aria-describedby="database-error" aria-invalid="false"><span id="database-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
@@ -65,22 +65,22 @@
         <div class="col-md-12"  ng-if="vm._dataSource.type != 'BIGQUERY'">
             <div class="form-group">
                 <label class="control-label" for="userName" translate>User name</label>
-                <input class="form-control" name="userName" id="userName" ng-model="vm._dataSource.connection.userName" data-validate="required" placeholder="Set here the username to access the database" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" name="userName" id="userName" ng-model="vm._dataSource.connection.userName" data-validate="required" placeholder="Set here the username to access the database" novalidate="novalidate" aria-required="true" aria-describedby="username-error" aria-invalid="false"><span id="username-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
         <div class="col-md-12"  ng-if="vm._dataSource.type != 'BIGQUERY'">
             <div class="form-group">
                 <label class="control-label" for="password" translate>Password</label>
-                <input class="form-control" type="password" name="password" id="password" ng-model="vm._dataSource.connection.password" data-validate="required" placeholder="Set here the username password to access the database" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                <input class="form-control" type="password" name="password" id="password" ng-model="vm._dataSource.connection.password" data-validate="required" placeholder="Set here the username password to access the database" novalidate="novalidate" aria-required="true" aria-describedby="password-error" aria-invalid="false"><span id="password-error" class="validate-has-error" style="display: none;"></span>
             </div>
         </div>
 
         <div class="col-md-12" >
-            <div class="col-md-6" style="padding:0px">
+            <div class="col-md-6" style="padding: 0;">
                 <div class="form-group">
                     <label class="control-label" for="password" translate>Data Packet size</label>
-                    <input class="form-control" type="number" name="packetSize" id="packetSize" ng-model="vm._dataSource.packetSize" data-validate="required" placeholder="Set here the packet size for this datasource (-1 means get always all data)" novalidate="novalidate" aria-required="true" aria-describedby="full_name-error" aria-invalid="false"><span id="full_name-error" class="validate-has-error" style="display: none;"></span>
+                    <input class="form-control" type="number" name="packetSize" id="packetSize" ng-model="vm._dataSource.packetSize" data-validate="required" placeholder="Set here the packet size for this datasource (-1 means get always all data)" novalidate="novalidate" aria-required="true" aria-describedby="packetsize-error" aria-invalid="false"><span id="packetsize-error" class="validate-has-error" style="display: none;"></span>
                 </div>
             </div>
         </div>

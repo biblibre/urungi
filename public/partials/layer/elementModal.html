@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-                    <input id="field-3" class="form-control" ng-model="modalElement.viewExpression" required>
+                    <input class="form-control" ng-model="modalElement.viewExpression" required>
 
                     <!-- <div exp-editor
                         class="form-control"
@@ -96,8 +96,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="field-4b" class="control-label" translate>Default aggregation</label>
-                                <select id="field-4b" class="form-control" ng-model="modalElement.defaultAggregation" ng-options="obj.value as obj.name for obj in numberDefaultAggregation"></select>
+                                <label for="field-default-aggregation-number" class="control-label" translate>Default aggregation</label>
+                                <select id="field-default-aggregation-number" class="form-control" ng-model="modalElement.defaultAggregation" ng-options="obj.value as obj.name for obj in numberDefaultAggregation"></select>
                             </div>
 
                         </div>
@@ -110,8 +110,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="field-4b" class="control-label" translate>Default aggregation</label>
-                                <select id="field-4b" class="form-control" ng-model="modalElement.defaultAggregation" ng-options="obj.value as obj.name for obj in stringDefaultAggregation"></select>
+                                <label for="field-default-aggregation-string" class="control-label" translate>Default aggregation</label>
+                                <select id="field-default-aggregation-string" class="form-control" ng-model="modalElement.defaultAggregation" ng-options="obj.value as obj.name for obj in stringDefaultAggregation"></select>
                             </div>
 
                         </div>
@@ -179,7 +179,7 @@
                                 <h5 >Format examples</h5>
                                 <a class="btn btn-link pull-right" href="http://numeraljs.com/" target="_blank">more examples...</a>
 
-                                <table id="format-numbers" class="table-condensed striped bordered">
+                                <table class="table-condensed striped bordered">
                                     <thead>
                                     <tr>
                                         <th translate>Number</th>
@@ -207,7 +207,7 @@
                                 <h5 >Format examples</h5>
                                 <a class="btn btn-link pull-right" href="http://momentjs.com/docs/#/displaying/" target="_blank">more examples...</a>
 
-                                <table id="format-numbers" class="table-condensed striped bordered">
+                                <table class="table-condensed striped bordered">
                                     <thead>
                                     <tr>
 
