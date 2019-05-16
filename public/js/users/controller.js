@@ -243,32 +243,31 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
         ];
     }
 
-    function loadLanguages (callLater) {
+    function loadLanguages () {
         connection.get('/api/admin/languages/find-all', {}).then(function (data) {
             $scope.languages = [];
 
-            for (var i in data.items) { $scope.languages.push({ name: data.items[i].description, value: data.items[i].language }); }
-
-            if (typeof callLater !== 'undefined') { callLater(); }
+            for (var i in data.items) {
+                $scope.languages.push({
+                    name: data.items[i].description,
+                    value: data.items[i].language,
+                });
+            }
         });
     }
 
-    function loadRoles (callLater) {
+    function loadRoles () {
         connection.get('/api/roles/find-all', {}).then(function (data) {
             $scope.roles = data.items;
 
             var adminRole = { _id: 'WSTADMIN', name: 'Urungi Administrator' };
             $scope.roles.push(adminRole);
-
-            if (typeof callLater !== 'undefined') { callLater(); }
         });
     }
 
-    function loadFilters (callLater) {
+    function loadFilters () {
         connection.get('/api/admin/configurations/find-user-filters', {}).then(function (data) {
             $scope.filters = data.filters;
-
-            if (typeof callLater !== 'undefined') { callLater(); }
         });
     }
 
