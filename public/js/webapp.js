@@ -200,44 +200,6 @@ angular.module('app', [
             templateUrl: 'partials/io/export.html',
             controller: 'ioCtrl'
         });
-    }])
-    .factory('$sessionStorage', ['$window', function ($window) {
-        return {
-            set: function (key, value) {
-                $window.sessionStorage[key] = value;
-            },
-            get: function (key, defaultValue) {
-                return $window.sessionStorage[key] || defaultValue;
-            },
-            setObject: function (key, value) {
-                $window.sessionStorage[key] = JSON.stringify(value);
-            },
-            getObject: function (key) {
-                return ($window.sessionStorage[key]) ? JSON.parse($window.sessionStorage[key]) : false;
-            },
-            removeObject: function (key) {
-                delete ($window.sessionStorage[key]);
-            }
-        };
-    }])
-    .factory('$localStorage', ['$window', function ($window) {
-        return {
-            set: function (key, value) {
-                $window.localStorage[key] = value;
-            },
-            get: function (key, defaultValue) {
-                return $window.localStorage[key] || defaultValue;
-            },
-            setObject: function (key, value) {
-                $window.localStorage[key] = JSON.stringify(value);
-            },
-            getObject: function (key) {
-                return ($window.localStorage[key]) ? JSON.parse($window.localStorage[key]) : false;
-            },
-            removeObject: function (key) {
-                delete ($window.localStorage[key]);
-            }
-        };
     }]);
 
 angular.module('app').directive('ngEnter', function () {
@@ -271,7 +233,7 @@ angular.module('app').service('reportService', function () {
     };
 });
 
-angular.module('app').run(['$rootScope', '$sessionStorage', 'connection', function ($rootScope, $sessionStorage, connection) {
+angular.module('app').run(['$rootScope', 'sessionStorage', 'connection', function ($rootScope, sessionStorage, connection) {
     $rootScope.removeFromArray = function (array, item) {
         var index = array.indexOf(item);
 
@@ -304,7 +266,7 @@ angular.module('app').run(['$rootScope', '$sessionStorage', 'connection', functi
         });
     };
 
-    $rootScope.user = $sessionStorage.getObject('user');
+    $rootScope.user = sessionStorage.getObject('user');
     if (!$rootScope.user) {
         connection.get('/api/get-user-data', {}).then(function (data) {
             if (!data.items.user) {
@@ -324,7 +286,7 @@ angular.module('app').run(['$rootScope', '$sessionStorage', 'connection', functi
             theUser.dialogs = data.items.dialogs;
             theUser.viewSQL = data.items.viewSQL;
             $rootScope.user = theUser;
-            $sessionStorage.setObject('user', theUser);
+            sessionStorage.setObject('user', theUser);
             $rootScope.isWSTADMIN = isWSTADMIN($rootScope);
         });
     } else {

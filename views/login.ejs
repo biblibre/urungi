@@ -1,19 +1,5 @@
 <!DOCTYPE html>
-<html id="ng-app" ng-app="urungi-login">
-
-
-<script src="js/bundle.min.js"></script>
-<script>
-
-    function LoginController($scope) {
-        $scope.login = function()
-        {
-
-        }
-    }
-
-</script>
-
+<html id="ng-app" ng-app="app-login">
 
 <head>
     <meta charset="utf-8" />
@@ -21,15 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/bundle.min.css" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="/css/login.css">
-    <!-- font-awesome -->
-    <link rel="stylesheet" type="text/css" href="/css/font-awesome-4.4.0/css/font-awesome.min.css"/>
+    <title>Urungi</title>
+
+    <script src="js/bundle.min.js"></script>
+    <script src="/js/login.js"></script>
+    <script src="/js/core/core.module.js"></script>
+    <script src="/js/core/session-storage.js"></script>
+    <script src="/js/core/local-storage.js"></script>
+    <script src="/js/core/connection.js"></script>
 </head>
 
 
-<body class="page-body ng-scope login-page" style="background-color:white;">
- <!--
-<div ng-view></div> -->
-
+<body class="page-body ng-scope login-page" style="background-color: white;">
 
 <div class="page-container ng-scope" ng-controller="PublicCtrl">
     <div class="container">
@@ -40,34 +29,24 @@
     </div>
 
     <div class="login-container ng-scope">
-
-
-
         <div class="row">
-
             <div class="col-sm-6">
-
-
                 <div class="errors-container">
-
-
                 </div>
 
                 <form method="post" role="form" id="login" class="login-form fade-in-effect ng-pristine ng-valid in" novalidate="novalidate">
                     <div class="form-group">
-                        <!--<label class="control-label" for="username">Username</label>-->
                         <input type="text" class="form-control input-dark" name="username" placeholder="User name" id="username" ng-model="userName" autocomplete="off">
                     </div>
 
                     <div class="form-group">
-                        <!--<label class="control-label" for="passwd">Password</label>-->
                         <input type="password" class="form-control input-dark" name="passwd" id="passwd" placeholder="Password" ng-model="password" autocomplete="off">
                     </div>
 
                     <div class="form-group">
                         <label class="inline">
                             <input type="checkbox" name="remember_me" ng-model="rememberMe" />
-                            <span style="font-weight: normal;color:#ccc"> Remember Me</span>
+                            <span style="font-weight: normal; color: #ccc;"> Remember Me</span>
                         </label>
                     </div>
 
@@ -77,28 +56,13 @@
                             Log In
                         </button>
                     </div>
-                    <div class="form-group">
-                        <!--
-                                        <a class="button button-big button-full button-gapps" href="/auth/google">
-                                            Log In with Google
-                                        </a>
-                            -->
-                    </div>
+
                     <div class="alert alert-danger" ng-if="loginError == true">
-
                         {{errorLoginMessage}}
-
                     </div>
-
-
                 </form>
-
-
-
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -106,20 +70,13 @@
     <div class="loader-2"></div>
 </div>
 
-<script src="/js/login.js"></script>
 
 
 
 <div class="xenon-loading-bar progress-is-hidden">
-    <span data-pct="0" style="width: 0px;"></span>
+    <span data-pct="0" style="width: 0;"></span>
 </div>
-<textarea tabindex="-1" style="position: absolute; top: -999px; left: 0px; right: auto; bottom: auto; border: 0px; padding: 0px; box-sizing: content-box; word-wrap: break-word; overflow: hidden; transition: none; height: 0px !important; min-height: 0px !important; width: 604px;" class="autosizejs" id="autosizejs"></textarea>
-
-
-
-
+<textarea tabindex="-1" style="position: absolute; top: -999px; left: 0; right: auto; bottom: auto; border: 0; padding: 0; box-sizing: content-box; word-wrap: break-word; overflow: hidden; transition: none; height: 0 !important; min-height: 0 !important; width: 604px;" class="autosizejs" id="autosizejs"></textarea>
 
 </body>
-
-
 </html>

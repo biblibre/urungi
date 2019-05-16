@@ -1,110 +1,14 @@
-// Declare app level module which depends on filters, and services
-angular.module('urungi-login', [])
-    .service('Constants', function () {
-        var constants = {
-            DEBUGMODE: false,
-        };
+(function () {
+    'use strict';
 
-        return constants;
-    })
-    .factory('$sessionStorage', ['$window', function ($window) {
-        return {
-            set: function (key, value) {
-                $window.sessionStorage[key] = value;
-            },
-            get: function (key, defaultValue) {
-                return $window.sessionStorage[key] || defaultValue;
-            },
-            setObject: function (key, value) {
-                $window.sessionStorage[key] = JSON.stringify(value);
-            },
-            getObject: function (key) {
-                return ($window.sessionStorage[key]) ? JSON.parse($window.sessionStorage[key]) : false;
-            }
-        };
-    }])
-    .factory('$localStorage', ['$window', function ($window) {
-        return {
-            set: function (key, value) {
-                $window.localStorage[key] = value;
-            },
-            get: function (key, defaultValue) {
-                return $window.localStorage[key] || defaultValue;
-            },
-            setObject: function (key, value) {
-                $window.localStorage[key] = JSON.stringify(value);
-            },
-            getObject: function (key) {
-                return ($window.localStorage[key]) ? JSON.parse($window.localStorage[key]) : false;
-            },
-            removeObject: function (key) {
-                delete ($window.localStorage[key]);
-            }
-        };
-    }]).service('connection', function ($http, Constants) {
-        this.get = function (url, params, done, options) {
-            options = {
-                showLoader: (options && typeof options.showLoader !== 'undefined') ? options.showLoader : true,
-                showMsg: (options && typeof options.showMsg !== 'undefined') ? options.showMsg : true
-            };
+    angular.module('app-login', ['app.core']);
 
-            if (options.showLoader) $('#loader-overlay').show();
+    angular.module('app-login').controller('PublicCtrl', PublicCtrl);
 
-            $http({ method: 'GET', url: url, params: params })
-                .success(angular.bind(this, function (data, status, headers, config) {
-                    if (typeof data === 'string') window.location.href = '/';
+    PublicCtrl.$inject = ['$scope', '$http', 'sessionStorage', 'localStorage', 'connection'];
 
-                    if (typeof done !== 'undefined' && done) { done(data); }
-
-                    if (options.showLoader) $('#loader-overlay').hide();
-
-                    if (data.result === 1 && data.msg && options.showMsg) {
-                        noty({ text: data.msg, timeout: 2000, type: 'success' });
-                    } else if (data.result === 0 && data.msg && options.showMsg) {
-                        noty({ text: data.msg, timeout: 2000, type: 'error' });
-                    }
-                }))
-                .error(angular.bind(this, function (data, status, headers, config) {
-                    if (options.showLoader) $('#loader-overlay').hide();
-
-                    noty({ text: 'Error', timeout: 2000, type: 'error' });
-                }));
-        };
-
-        this.post = function (url, data, done, options) {
-            options = {
-                showLoader: (options && typeof options.showLoader !== 'undefined') ? options.showLoader : true,
-                showMsg: (options && typeof options.showMsg !== 'undefined') ? options.showMsg : true
-            };
-
-            if (options.showLoader) $('#loader-overlay').show();
-
-            if (typeof data._id !== 'undefined') data.id = data._id;
-
-            $http.post(url, data)
-                .success(angular.bind(this, function (data, status, headers, config) {
-                    if (typeof data === 'string') window.location.href = '/';
-
-                    if (typeof done !== 'undefined' && done) { done(data); }
-
-                    if (options.showLoader) $('#loader-overlay').hide();
-
-                    if (data.result === 1 && data.msg && options.showMsg) {
-                        noty({ text: data.msg, timeout: 2000, type: 'success' });
-                    } else if (data.result === 0 && data.msg && options.showMsg) {
-                        noty({ text: data.msg, timeout: 2000, type: 'error' });
-                    }
-                }))
-                .error(angular.bind(this, function (data, status, headers, config) {
-                    if (options.showLoader) $('#loader-overlay').hide();
-
-                    noty({ text: 'Error', timeout: 2000, type: 'error' });
-                }));
-        };
-
-        return this;
-    }).controller('PublicCtrl', function ($scope, $http, $rootScope, $sessionStorage, $localStorage, connection) {
-        var user = $localStorage.getObject('user');
+    function PublicCtrl ($scope, $http, sessionStorage, localStorage, connection) {
+        var user = localStorage.getObject('user');
 
         $scope.loginError = false;
         $scope.errorLoginMessage = '';
@@ -117,9 +21,9 @@ angular.module('urungi-login', [])
                         $scope.loginError = false;
 
                         var theUser = data.user;
-                        connection.get('/api/get-user-data', {}, function (data) {
+                        connection.get('/api/get-user-data').then(function (data) {
                             if ($scope.rememberMe) {
-                                $localStorage.setObject('user', user);
+                                localStorage.setObject('user', user);
                             }
                             theUser.companyData = data.items.companyData;
                             theUser.rolesData = data.items.rolesData;
@@ -131,9 +35,8 @@ angular.module('urungi-login', [])
                             theUser.contextHelp = data.items.contextHelp;
                             theUser.dialogs = data.items.dialogs;
                             theUser.viewSQL = data.items.viewSQL;
-                            $rootScope.user = theUser;
-                            $sessionStorage.setObject('user', theUser);
-                            $rootScope.loginRedirect();
+                            sessionStorage.setObject('user', theUser);
+                            window.location.href = '/#/home';
                         });
                     })
                     .error(function (data, status, headers, config) {
@@ -150,11 +53,5 @@ angular.module('urungi-login', [])
 
             $scope.login();
         }
-    });
-
-angular.module('urungi-login').run(['$http', '$rootScope', '$sce', '$sessionStorage', 'connection',
-    function ($http, $rootScope, $sce, $sessionStorage, connection) {
-        $rootScope.loginRedirect = function () {
-            window.location.href = '/#/home';
-        };
-    }]);
+    }
+})();

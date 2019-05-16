@@ -1,15 +1,15 @@
-angular.module('app').controller('logOutCtrl', function ($scope, $http, $sessionStorage, $localStorage) {
+angular.module('app').controller('logOutCtrl', function ($scope, $http, sessionStorage, localStorage) {
     $http({ method: 'POST', url: '/api/logout' })
         .success(function (data, status, headers, config) {
-            $sessionStorage.setObject('user', undefined);
-            $sessionStorage.removeObject('user');
-            $localStorage.setObject('user', undefined);
-            $localStorage.removeObject('user');
+            sessionStorage.setObject('user', undefined);
+            sessionStorage.removeObject('user');
+            localStorage.setObject('user', undefined);
+            localStorage.removeObject('user');
         })
         .error(function (data, status, headers, config) {
-            $sessionStorage.setObject('user', undefined);
-            $sessionStorage.removeObject('user');
-            $localStorage.setObject('user', undefined);
-            $localStorage.removeObject('user');
+            sessionStorage.setObject('user', undefined);
+            sessionStorage.removeObject('user');
+            localStorage.setObject('user', undefined);
+            localStorage.removeObject('user');
         });
 });
