@@ -9,6 +9,7 @@ var session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
 var cookieParser = require('cookie-parser');
+const csurf = require('csurf');
 
 var app = express();
 
@@ -46,6 +47,8 @@ app.use(function (req, res, next) {
     }
     next();
 });
+
+app.use(csurf());
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' })); // get information from html forms

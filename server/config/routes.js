@@ -4,10 +4,12 @@ module.exports = function (app, passport) {
     var hash = require('../util/hash');
 
     app.get('/', function (req, res) {
+        res.cookie('XSRF-TOKEN', req.csrfToken());
         res.render('index');
     });
 
     app.get('/login', function (req, res, next) {
+        res.cookie('XSRF-TOKEN', req.csrfToken());
         res.render('login');
     });
 
