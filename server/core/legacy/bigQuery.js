@@ -173,7 +173,7 @@ db.prototype.executeSQLQuery = function (connection, sql, done) {
         if (d.jobComplete) {
             var jsonObj = JSON.parse(JSON.stringify(d));
 
-            var results = [];
+            const results = [];
 
             for (const r in jsonObj.rows) {
                 var theRow = {};
@@ -184,7 +184,7 @@ db.prototype.executeSQLQuery = function (connection, sql, done) {
             }
             done(results);
         } else {
-            getQueryResults(connection, d.jobReference.jobId, function () {
+            getQueryResults(connection, d.jobReference.jobId, function (results) {
                 done(results);
             });
         }
