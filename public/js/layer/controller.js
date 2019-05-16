@@ -1235,13 +1235,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
         $scope.selectedCollection = undefined;
 
         // Clear selectedDts if collections === 0
-        var totalCollections = 0;
-
-        // FIXME: Replace by Object.keys(...).length ?
-        // eslint-disable-next-line no-unused-vars
-        for (const c in $scope._Layer.params.schema) {
-            totalCollections = totalCollections + 1;
-        }
+        var totalCollections = Object.keys($scope._Layer.params.schema).length;
 
         if (totalCollections === 0) { $scope.selectedDts = {}; }
     };
