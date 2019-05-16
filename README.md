@@ -44,6 +44,9 @@ and others, see [Supported databases](#supported-databases)
     npx migrate-mongo up
     ```
 
+5. (Optional but recommended) Create a local config file and change the
+   session's secret (see [Configuration](#configuration))
+
 ## Configuration
 
 Urungi uses [config](https://www.npmjs.com/package/config) to manage its

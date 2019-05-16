@@ -29,7 +29,7 @@ app.locals.mongooseConnection = mongooseConnection;
 app.use(cookieParser());
 
 app.use(session({
-    secret: 'ndurungiv0',
+    secret: config.get('session.secret'),
     cookie: {
         httpOnly: true,
         secure: false,

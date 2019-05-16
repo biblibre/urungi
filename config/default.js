@@ -8,7 +8,9 @@ module.exports = {
     // See https://docs.mongodb.com/manual/reference/connection-string/
     db: undefined,
 
-    sql_db: false,
+    session: {
+        secret: 'CHANGE ME',
+    },
 
     mailer: {
         service: 'SMTP', // SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
