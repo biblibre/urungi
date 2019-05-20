@@ -39,6 +39,20 @@
 
         </uib-tab>
 
+        <uib-tab heading="Icon set">
+
+            <ul id="file-list" class="ace-thumbnails files-modal-list">
+
+                <li ng-repeat="file in catalogIcons">
+                    <a class="hand-cursor file-selection" ng-click="onFileSelected(file)">
+                        <img class="dz-image" ng-src="{{file.url}}" />
+                    </a>
+                </li>
+
+            </ul>
+
+        </uib-tab>
+
         <uib-tab heading="Online Images">
 
             <input type="text" ng-model="onlineSearchTerm" ng-enter="searchOnline(onlineSearchTerm)"
