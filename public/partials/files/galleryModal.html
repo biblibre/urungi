@@ -27,9 +27,23 @@
         </uib-tab>
         <uib-tab heading="Public Images">
 
-            <ul id="file-list" class="ace-thumbnails files-modal-list">
+            <ul class="ace-thumbnails files-modal-list">
 
                 <li ng-repeat="file in catalogImages">
+                    <a class="hand-cursor file-selection" ng-click="onFileSelected(file)">
+                        <img class="dz-image" ng-src="{{file.url}}" />
+                    </a>
+                </li>
+
+            </ul>
+
+        </uib-tab>
+
+        <uib-tab heading="Icon set">
+
+            <ul class="ace-thumbnails files-modal-list">
+
+                <li ng-repeat="file in catalogIcons">
                     <a class="hand-cursor file-selection" ng-click="onFileSelected(file)">
                         <img class="dz-image" ng-src="{{file.url}}" />
                     </a>
@@ -44,7 +58,7 @@
             <input type="text" ng-model="onlineSearchTerm" ng-enter="searchOnline(onlineSearchTerm)"
                 style="width: 100%;height: 30px;font-size: 15px;" placeholder="Search...">
 
-            <ul id="file-list" class="ace-thumbnails files-modal-list">
+            <ul class="ace-thumbnails files-modal-list">
 
                 <li ng-repeat="file in onlineImages">
                     <a class="hand-cursor file-selection" ng-click="onFileSelected(file)">

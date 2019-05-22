@@ -6,6 +6,7 @@ angular.module('app').directive('fileModal', function ($http, fileService) {
         link: function ($scope) {
             $scope.init = function () {
                 $scope.catalogImages = [];
+                $scope.catalogIcons = [];
 
                 for (var i = 1; i < 100; ++i) {
                     var image = {};
@@ -17,6 +18,15 @@ angular.module('app').directive('fileModal', function ($http, fileService) {
                     image.source700 = '/resources/images/width700/JPEG/photo-' + imgnbr + '_1.jpg';
 
                     $scope.catalogImages.push(image);
+                }
+
+                for (i = 1; i < 55; ++i) {
+                    var icons = {};
+                    var iconsnbr = '';
+                    if (i < 10) { iconsnbr = '0' + i; } else { iconsnbr = i; }
+
+                    icons.url = '/resources/images/icons/icon-' + iconsnbr + '.png';
+                    $scope.catalogIcons.push(icons);
                 }
 
                 return fileService.getFiles().then(function (files) {
