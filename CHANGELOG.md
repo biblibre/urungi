@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Ability to make reports and dashboards public
+
+### Changed
+
+- Update angular-ui-bootstrap to 2.5.6
+
 ## [1.0.1] - 2019-05-03
 
 ### Security

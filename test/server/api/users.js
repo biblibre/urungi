@@ -232,7 +232,7 @@ describe('Users API', function () {
             datasource = await DataSources.create({ companyID: 'COMPID', name: 'DataSource', type: 'DataSource', status: 1, nd_trash_deleted: false });
             layer = await Layers.create({ companyID: 'COMPID', name: 'Layer', type: 'Layer', status: '1', nd_trash_deleted: false, createdBy: 'administrator' });
             var User = await Users.findOne({ userName: 'administrator' });
-            report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, selectedLayerID: layer.id, isPublic: true });
+            report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, selectedLayerID: layer.id, isShared: true });
             dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboard1', owner: User.id, nd_trash_deleted: false });
         });
 
@@ -268,14 +268,14 @@ describe('Users API', function () {
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var User = await Users.findOne({ userName: 'administrator' });
-            var report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isPublic: true });
-            var dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboardcount', owner: User.id, nd_trash_deleted: false, isPublic: true });
+            var report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isShared: true });
+            var dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboardcount', owner: User.id, nd_trash_deleted: false, isShared: true });
             var count = await agent.get('/api/get-user-counts/' + User.id)
                 .query({ userID: User.id });
             expect(count).to.have.status(200);
             var decrypted = JSON.parse(count.text);
-            expect(decrypted).to.have.property('publishedReports', 1);
-            expect(decrypted).to.have.property('publishedDashBoards', 1);
+            expect(decrypted).to.have.property('sharedReports', 1);
+            expect(decrypted).to.have.property('sharedDashBoards', 1);
             expect(decrypted).to.have.property('privateReports');
             expect(decrypted).to.have.property('privateDashBoards');
             res = await report.remove();
@@ -289,7 +289,7 @@ describe('Users API', function () {
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var User = await Users.findOne({ userName: 'administrator' });
-            var report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isPublic: true, parentFolder: 'parent', reportDescription: 'report Description', reportType: 'report' });
+            var report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isShared: true, parentFolder: 'parent', reportDescription: 'report Description', reportType: 'report' });
             res = await agent.get('/api/get-user-reports/' + User.id)
                 .query({ userID: User.id });
             expect(res).to.have.status(200);
@@ -300,7 +300,7 @@ describe('Users API', function () {
             expect(decrypted).to.have.property('items');
             expect(decrypted.items).to.be.a('array');
             expect(decrypted.items[0]).to.have.property('reportName', 'Report');
-            expect(decrypted.items[0]).to.have.property('isPublic', true);
+            expect(decrypted.items[0]).to.have.property('isShared', true);
             expect(decrypted.items[0]).to.have.property('parentFolder', 'parent');
             expect(decrypted.items[0]).to.have.property('reportDescription', 'report Description');
             expect(decrypted.items[0]).to.have.property('reportType', 'report');
@@ -314,7 +314,7 @@ describe('Users API', function () {
                 .send({ userName: 'administrator', password: 'urungi' });
             expect(res).to.have.status(200);
             var User = await Users.findOne({ userName: 'administrator' });
-            var dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboardget', owner: User.id, nd_trash_deleted: false, isPublic: true, dashboardDescription: 'dashboard Description', dashboardType: 'dashboard' });
+            var dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboardget', owner: User.id, nd_trash_deleted: false, isShared: true, dashboardDescription: 'dashboard Description', dashboardType: 'dashboard' });
             res = await agent.get('/api/get-user-dashboards/' + User.id)
                 .query({ userID: User.id });
             var decrypted = JSON.parse(res.text);
@@ -324,7 +324,7 @@ describe('Users API', function () {
             expect(decrypted).to.have.property('items');
             expect(decrypted.items).to.be.a('array');
             expect(decrypted.items[0]).to.have.property('dashboardName', 'Dashboardget');
-            expect(decrypted.items[0]).to.have.property('isPublic', true);
+            expect(decrypted.items[0]).to.have.property('isShared', true);
             expect(decrypted.items[0]).to.have.property('dashboardDescription', 'dashboard Description');
             expect(res).to.have.status(200);
             res = await dashboard.remove();
@@ -371,7 +371,7 @@ describe('Users API', function () {
             expect(decrypted.items.companyData).to.have.property('nd_trash_deleted', false);
             expect(decrypted.items.companyData).to.have.property('__v');
             expect(decrypted.items.companyData).to.have.property('history');
-            expect(decrypted.items.companyData).to.have.property('publicSpace');
+            expect(decrypted.items.companyData).to.have.property('sharedSpace');
             expect(decrypted.items).to.have.property('rolesData');
             expect(decrypted.items).to.have.property('reportsCreate');
             expect(decrypted.items).to.have.property('dashboardsCreate');
@@ -411,9 +411,9 @@ describe('Users API', function () {
             expect(decrypted.items.user).to.have.property('exploreData', true);
             expect(decrypted.items.user).to.have.property('viewSQL', true);
             expect(decrypted.items.user).to.have.property('isWSTADMIN', true);
-            expect(decrypted.items.user).to.have.property('canPublish', true);
-            expect(decrypted.items.user).to.have.property('publishReports', true);
-            expect(decrypted.items.user).to.have.property('publishDashboards', true);
+            expect(decrypted.items.user).to.have.property('canShare', true);
+            expect(decrypted.items.user).to.have.property('shareReports', true);
+            expect(decrypted.items.user).to.have.property('shareDashboards', true);
             expect(decrypted.items).to.have.property('companyData');
             expect(decrypted.items.companyData).to.have.property('_id');
             expect(decrypted.items.companyData).to.have.property('companyID', 'COMPID');
@@ -421,7 +421,7 @@ describe('Users API', function () {
             expect(decrypted.items.companyData).to.have.property('nd_trash_deleted', false);
             expect(decrypted.items.companyData).to.have.property('__v');
             expect(decrypted.items.companyData).to.have.property('history');
-            expect(decrypted.items.companyData).to.have.property('publicSpace');
+            expect(decrypted.items.companyData).to.have.property('sharedSpace');
             expect(decrypted.items).to.have.property('rolesData');
             expect(decrypted.items).to.have.property('reportsCreate', true);
             expect(decrypted.items).to.have.property('dashboardsCreate', true);
@@ -495,15 +495,15 @@ describe('Users API', function () {
             var res = await agent.post('/api/login')
                 .send({ userName: 'administrator', password: 'urungi' });
             var User = await Users.findOne({ userName: 'administrator' });
-            var report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isPublic: true, parentFolder: 'root' });
-            var dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboard', owner: User.id, nd_trash_deleted: false, isPublic: true, parentFolder: 'root' });
+            var report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, isShared: true, parentFolder: 'root' });
+            var dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboard', owner: User.id, nd_trash_deleted: false, isShared: true, parentFolder: 'root' });
             res = await agent.get('/api/get-user-objects');
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
             expect(decrypted).to.have.property('page');
             expect(decrypted).to.have.property('pages');
             expect(decrypted).to.have.property('items');
-            expect(decrypted).to.have.property('userCanPublish', true);
+            expect(decrypted).to.have.property('userCanShare', true);
             expect(decrypted.items[0]).to.have.property('id', report.id);
             expect(decrypted.items[0]).to.have.property('title', 'Report');
             expect(decrypted.items[0]).to.have.property('nodeType', 'report');

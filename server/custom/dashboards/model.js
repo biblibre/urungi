@@ -14,6 +14,7 @@ var DashboardsSchema = new mongoose.Schema({
     owner: { type: String },
     parentFolder: { type: String },
     isPublic: { type: Boolean },
+    isShared: { type: Boolean },
     createdBy: { type: String },
     author: { type: String },
     createdOn: { type: Date }

@@ -3,7 +3,7 @@ const debug = require('debug')('urungi:server');
 module.exports = function (app, passport) {
     var hash = require('../util/hash');
 
-    app.get('/', restrict, function (req, res) {
+    app.get('/', function (req, res) {
         res.render('index');
     });
 

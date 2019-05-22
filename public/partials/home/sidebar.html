@@ -1,7 +1,7 @@
-<div  class="list-group" ng-init="getCounts()"> 
+<div  class="list-group" ng-init="getCounts()">
     <div  class="list-group-item active">
         <a href="/#/users/{{user._id}}/" style="color: #FFFFFF">
-            <i class="fa fa-user" style="margin-right: 5px"></i>{{user.userName}}<span></span></a>  
+            <i class="fa fa-user" style="margin-right: 5px"></i>{{user.userName}}<span></span></a>
             <a href="/#/logout" class="badge">logout <i class="fa fa-sign-out" style="color:#FF0000"></i>
         </a>
     </div>
@@ -18,8 +18,8 @@
     <a id="exploreMainMenu" ng-if="user.exploreData" href="/#/explore" class="list-group-item">
         <i class="fa fa-sun-o"></i><span translate> &nbsp;Explore</span>
     </a>
-    <a id="publicSpaceMainMenu" ng-show="isWSTADMIN" href="/#/public-space" class="list-group-item">
-        <i class="fa fa-sitemap"></i><span translate>&nbsp; Public space</span>
+    <a id="sharedSpaceMainMenu" ng-show="isWSTADMIN" href="/#/shared-space" class="list-group-item">
+        <i class="fa fa-sitemap"></i><span translate>&nbsp; Shared space</span>
     </a>
     <a id="layersMainMenu" ng-show="isWSTADMIN" href="/#/layers" class="list-group-item">
         <i class="fa fa-map-o"></i><span translate>&nbsp; Layers </span> <span class="badge">{{counts.layers}}</span>

@@ -17,21 +17,34 @@ var Dashboardsv2Schema = new mongoose.Schema({
     owner: { type: String },
     parentFolder: { type: String },
     isPublic: { type: Boolean },
+    isShared: { type: Boolean },
     createdBy: { type: String },
     author: { type: String },
     createdOn: { type: Date }
 }, { collection: 'wst_Dashboardsv2' });
 
-Dashboardsv2Schema.methods.publish = async function (folderId) {
-    this.parentFolder = folderId;
+Dashboardsv2Schema.methods.publish = async function () {
     this.isPublic = true;
 
     return this.save();
 };
 
 Dashboardsv2Schema.methods.unpublish = async function () {
-    this.parentFolder = undefined;
     this.isPublic = false;
+
+    return this.save();
+};
+
+Dashboardsv2Schema.methods.share = async function (folderId) {
+    this.parentFolder = folderId;
+    this.isShared = true;
+
+    return this.save();
+};
+
+Dashboardsv2Schema.methods.unshare = async function () {
+    this.parentFolder = undefined;
+    this.isShared = false;
 
     return this.save();
 };

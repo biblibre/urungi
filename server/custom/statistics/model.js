@@ -14,7 +14,7 @@ var statisticsSchema = new mongoose.Schema({
 }, { collection: 'wst_Statistics' });
 
 statisticsSchema.statics.save = function (req, data, done) {
-    var companyID = req.user.companyID;
+    var companyID = req.isAuthenticated() ? req.user.companyID : null;
 
     var statistic = {
         type: data.type,

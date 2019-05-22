@@ -138,17 +138,17 @@ describe('Reports API', function () {
         });
     });
 
-    describe('POST /api/reports/publish-report', function () {
+    describe('POST /api/reports/share-report', function () {
         it('should publish a report', async function () {
-            const res = await agent.post('/api/reports/publish-report')
+            const res = await agent.post('/api/reports/share-report')
                 .send({ _id: report.id, parentFolder: 'root' });
             expect(res).to.have.status(200);
             const decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
-            expect(decrypted).to.have.property('msg', 'Report published');
+            expect(decrypted).to.have.property('msg', 'Report shared');
 
             const r = await Reports.findById(report.id);
-            expect(r).to.have.property('isPublic', true);
+            expect(r).to.have.property('isShared', true);
             expect(r).to.have.property('parentFolder', 'root');
         });
     });

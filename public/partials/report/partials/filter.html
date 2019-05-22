@@ -2,8 +2,7 @@
     drop="onDropOnFilter($data, $event, filter)" drop-effect="copy" drop-accept="['json/custom-object','json/column']" 
     ng-repeat="filter in selectedReport.properties.filters" >
     
-    <nd-prompt is-prompt="false" filter="filter" on-change="filterChanged" set-prompt="showFilterModal" 
-    get-query="getQueryForFilter"></nd-prompt>
+    <app-filter-prompt is-prompt="false" filter="filter" on-change="filterChanged()" set-prompt="showFilterModal(filter)" get-query="getQueryForFilter" on-remove="onRemoveFilter(filter)"></app-filter-prompt>
 </li>
 
 <li class="filter-box" ng-show="selectedReport.properties.recordLimit!=undefined">

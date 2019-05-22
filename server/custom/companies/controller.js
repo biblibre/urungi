@@ -8,10 +8,10 @@ exports.getCompanyData = function (req, res) {
     });
 };
 
-exports.savePublicSpace = function (req, res) {
+exports.saveSharedSpace = function (req, res) {
     var data = req.body;
 
-    Companies.update({ companyID: req.user.companyID }, { $set: { publicSpace: data } }, function (err, rawResponse) {
+    Companies.update({ companyID: req.user.companyID }, { $set: { sharedSpace: data } }, function (err, rawResponse) {
         if (err) throw err;
 
         let result;

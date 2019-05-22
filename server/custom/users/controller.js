@@ -228,24 +228,24 @@ exports.getCountsForUser = function (req, res) {
 
     // get all reports
     var Reports = connection.model('Reports');
-    Reports.count({ companyID: companyID, owner: userID, isPublic: true, nd_trash_deleted: false }, function (err, reportCount) {
+    Reports.count({ companyID: companyID, owner: userID, isShared: true, nd_trash_deleted: false }, function (err, reportCount) {
         if (err) { console.error(err); }
 
-        theCounts.publishedReports = reportCount;
+        theCounts.sharedReports = reportCount;
         // get all dashboards
         var Dashboards = connection.model('Dashboardsv2');
-        Dashboards.count({ companyID: companyID, owner: userID, isPublic: true, nd_trash_deleted: false }, function (err, dashCount) {
+        Dashboards.count({ companyID: companyID, owner: userID, isShared: true, nd_trash_deleted: false }, function (err, dashCount) {
             if (err) { console.error(err); }
 
-            theCounts.publishedDashBoards = dashCount;
+            theCounts.sharedDashBoards = dashCount;
 
-            Reports.count({ companyID: companyID, owner: userID, isPublic: false, nd_trash_deleted: false }, function (err, privateReportCount) {
+            Reports.count({ companyID: companyID, owner: userID, isShared: false, nd_trash_deleted: false }, function (err, privateReportCount) {
                 if (err) { console.error(err); }
 
                 theCounts.privateReports = privateReportCount;
 
                 var Dashboards = connection.model('Dashboardsv2');
-                Dashboards.count({ companyID: companyID, owner: userID, isPublic: false, nd_trash_deleted: false }, function (err, privateDashCount) {
+                Dashboards.count({ companyID: companyID, owner: userID, isShared: false, nd_trash_deleted: false }, function (err, privateDashCount) {
                     if (err) { console.error(err); }
 
                     theCounts.privateDashBoards = privateDashCount;
@@ -261,7 +261,7 @@ exports.getUserReports = function (req, res) {
     var userID = req.query.userID;
     var companyID = req.user.companyID;
     var Reports = connection.model('Reports');
-    Reports.find({ companyID: companyID, owner: userID, nd_trash_deleted: false }, { reportName: 1, parentFolder: 1, isPublic: 1, reportType: 1, reportDescription: 1, status: 1 }, function (err, reports) {
+    Reports.find({ companyID: companyID, owner: userID, nd_trash_deleted: false }, { reportName: 1, parentFolder: 1, isShared: 1, reportType: 1, reportDescription: 1, status: 1 }, function (err, reports) {
         if (err) { console.error(err); }
 
         res.status(200).json({ result: 1, page: page, pages: 1, items: reports });
@@ -273,7 +273,7 @@ exports.getUserDashboards = function (req, res) {
     var userID = req.query.userID;
     var companyID = req.user.companyID;
     var Dashboards = connection.model('Dashboardsv2');
-    Dashboards.find({ companyID: companyID, owner: userID, nd_trash_deleted: false }, { dashboardName: 1, parentFolder: 1, isPublic: 1, dashboardDescription: 1, status: 1 }, function (err, privateDashCount) {
+    Dashboards.find({ companyID: companyID, owner: userID, nd_trash_deleted: false }, { dashboardName: 1, parentFolder: 1, isShared: 1, dashboardDescription: 1, status: 1 }, function (err, privateDashCount) {
         if (err) { console.error(err); }
 
         res.status(200).json({ result: 1, page: page, pages: 1, items: privateDashCount });
@@ -285,7 +285,7 @@ exports.getUserPages = function (req, res) {
     var userID = req.query.userID;
     var companyID = req.user.companyID;
     var Pages = connection.model('Pages');
-    Pages.find({ companyID: companyID, owner: userID, nd_trash_deleted: false }, { pageName: 1, parentFolder: 1, isPublic: 1, dashboardDescription: 1, status: 1 }, function (err, pages) {
+    Pages.find({ companyID: companyID, owner: userID, nd_trash_deleted: false }, { pageName: 1, parentFolder: 1, isShared: 1, dashboardDescription: 1, status: 1 }, function (err, pages) {
         if (err) { console.error(err); }
 
         res.status(200).json({ result: 1, page: page, pages: 1, items: pages });
@@ -315,9 +315,9 @@ exports.getUserData = function (req, res) {
         var isWSTADMIN = false;
         var exploreData = false;
         var viewSQL = false;
-        var publishReports = false;
-        var publishDashboards = false;
-        var canPublish = false;
+        var shareReports = false;
+        var shareDashboards = false;
+        var canShare = false;
 
         if (req.isAuthenticated()) {
             for (var i in req.user.roles) {
@@ -328,27 +328,27 @@ exports.getUserData = function (req, res) {
                     createPages = true;
                     exploreData = true;
                     viewSQL = true;
-                    canPublish = true;
-                    publishReports = true;
-                    publishDashboards = true;
+                    canShare = true;
+                    shareReports = true;
+                    shareDashboards = true;
 
                     req.session.reportsCreate = createReports;
                     req.session.dashboardsCreate = createDashboards;
                     req.session.exploreData = exploreData;
                     req.session.viewSQL = viewSQL;
                     req.session.isWSTADMIN = isWSTADMIN;
-                    req.session.canPublish = canPublish;
-                    req.session.publishReports = publishReports;
-                    req.session.publishDashboards = publishDashboards;
+                    req.session.canShare = canShare;
+                    req.session.shareReports = shareReports;
+                    req.session.shareDashboards = shareDashboards;
 
                     theUserData.reportsCreate = createReports;
                     theUserData.dashboardsCreate = createDashboards;
                     theUserData.exploreData = exploreData;
                     theUserData.viewSQL = viewSQL;
                     theUserData.isWSTADMIN = isWSTADMIN;
-                    theUserData.canPublish = canPublish;
-                    theUserData.publishReports = publishReports;
-                    theUserData.publishDashboards = publishDashboards;
+                    theUserData.canShare = canShare;
+                    theUserData.shareReports = shareReports;
+                    theUserData.shareDashboards = shareDashboards;
                 }
             }
         }
@@ -366,8 +366,8 @@ exports.getUserData = function (req, res) {
                     if (roles[i].pagesCreate) { createPages = true; }
                     if (roles[i].exploreData) { exploreData = true; }
                     if (roles[i].viewSQL) { viewSQL = true; }
-                    if (roles[i].reportsPublish) { publishReports = true; }
-                    if (roles[i].dashboardsPublish) { publishDashboards = true; }
+                    if (roles[i].reportsShare) { shareReports = true; }
+                    if (roles[i].dashboardsShare) { shareDashboards = true; }
                 }
 
                 req.session.reportsCreate = createReports;
@@ -376,18 +376,18 @@ exports.getUserData = function (req, res) {
                 req.session.exploreData = exploreData;
                 req.session.viewSQL = viewSQL;
                 req.session.isWSTADMIN = isWSTADMIN;
-                req.session.canPublish = canPublish;
-                req.session.publishReports = publishReports;
-                req.session.publishDashboards = publishDashboards;
+                req.session.canShare = canShare;
+                req.session.shareReports = shareReports;
+                req.session.shareDashboards = shareDashboards;
 
                 theUserData.reportsCreate = createReports;
                 theUserData.dashboardsCreate = createDashboards;
                 theUserData.exploreData = exploreData;
                 theUserData.viewSQL = viewSQL;
                 theUserData.isWSTADMIN = isWSTADMIN;
-                theUserData.canPublish = canPublish;
-                theUserData.publishReports = publishReports;
-                theUserData.publishDashboards = publishDashboards;
+                theUserData.canShare = canShare;
+                theUserData.shareReports = shareReports;
+                theUserData.shareDashboards = shareDashboards;
 
                 res.status(200).json({ result: 1, page: 1, pages: 1, items: { user: theUserData, companyData: company, rolesData: roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL } });
             });
@@ -414,11 +414,11 @@ exports.getUserObjects = async function (req, res) {
     };
     const company = await Companies.findOne(query).exec();
 
-    const folders = company.publicSpace;
+    const folders = company.sharedSpace;
 
-    let canPublish = false;
+    let canShare = false;
     if (req.session.isWSTADMIN) {
-        canPublish = true;
+        canShare = true;
         await getFolderStructureForWSTADMIN(folders, 0);
     } else {
         if (req.user.roles.length > 0) {
@@ -429,7 +429,7 @@ exports.getUserObjects = async function (req, res) {
             };
             const roles = await Roles.find(query).lean().exec();
 
-            canPublish = await navigateRoles(folders, roles);
+            canShare = await navigateRoles(folders, roles);
         }
     }
 
@@ -447,13 +447,13 @@ exports.getUserObjects = async function (req, res) {
         page: 1,
         pages: 1,
         items: folders,
-        userCanPublish: canPublish
+        userCanShare: canShare
     };
     res.status(200).json(body);
 };
 
 async function navigateRoles (folders, rolesData) {
-    var canPublish = false;
+    var canShare = false;
 
     for (const r in rolesData) {
         if (!rolesData[r].grants || rolesData[r].grants.length === 0) {
@@ -465,26 +465,26 @@ async function navigateRoles (folders, rolesData) {
         for (const g in rolesData[r].grants) {
             var theGrant = rolesData[r].grants[g];
 
-            const publish = await setGrantsToFolder_v2(folders, theGrant);
-            if (publish) {
-                canPublish = true;
+            const share = await setGrantsToFolder_v2(folders, theGrant);
+            if (share) {
+                canShare = true;
             }
         }
     }
 
-    return canPublish;
+    return canShare;
 }
 
 async function setGrantsToFolder_v2 (folders, grant) {
-    var publish = false;
+    var share = false;
 
     for (var i in folders) {
         const folder = folders[i];
         if (folder.id === grant.folderID) {
             folder.grants = grant;
 
-            if (grant.publishReports === true) {
-                publish = true;
+            if (grant.shareReports === true) {
+                share = true;
             }
 
             const reports = await getReportsForFolder(grant.folderID, grant);
@@ -496,7 +496,7 @@ async function setGrantsToFolder_v2 (folders, grant) {
             const pages = await getPagesForFolder(grant.folderID, grant);
             pages.forEach(page => folder.nodes.push(page));
 
-            return publish;
+            return share;
         } else {
             if (folder.nodes && folder.nodes.length > 0) {
                 return setGrantsToFolder_v2(folder.nodes, grant);
@@ -520,7 +520,7 @@ async function getFolderStructureForWSTADMIN (folders, index) {
             executeDashboards: true,
             executeReports: true,
             executePages: true,
-            publishReports: true
+            shareReports: true
         };
 
         const reports = await getReportsForFolder(folder.id, folder.grants);
@@ -546,7 +546,7 @@ async function getReportsForFolder (idfolder, grant) {
             'nd_trash_deleted': false,
             'companyID': 'COMPID',
             'parentFolder': idfolder,
-            'isPublic': true
+            'isShared': true
         };
         const projection = { reportName: 1, reportType: 1, reportDescription: 1 };
 
@@ -574,7 +574,7 @@ async function getDashboardsForFolder (idfolder, grant) {
             'nd_trash_deleted': false,
             'companyID': 'COMPID',
             'parentFolder': idfolder,
-            'isPublic': true
+            'isShared': true
         };
         const projection = { dashboardName: 1, dashboardDescription: 1 };
 
@@ -601,7 +601,7 @@ async function getPagesForFolder (idfolder, grant) {
             'nd_trash_deleted': false,
             'companyID': 'COMPID',
             'parentFolder': idfolder,
-            'isPublic': true
+            'isShared': true
         };
         const projection = { pageName: 1, pageDescription: 1 };
 

@@ -13,7 +13,7 @@
             <input type="checkbox" ng-model="node.executePages" class="pull-right" style="width:60px" ng-click="clickedExecutePagesForTheNode(node)">
             <input type="checkbox" ng-model="node.executeReports" class="pull-right" style="width:60px" ng-click="clickedExecuteReportsForTheNode(node)">
             <input type="checkbox" ng-model="node.executeDashboards"  class="pull-right" style="width:60px" ng-click="clickedExecuteDashboardsForTheNode(node)">
-            <input type="checkbox" ng-model="node.publishReports"  class="pull-right" style="width:60px" ng-click="clickedPublishReportsForTheNode(node)">
+            <input type="checkbox" ng-model="node.shareReports"  class="pull-right" style="width:60px" ng-click="clickedShareReportsForTheNode(node)">
 
 
         </div>
@@ -43,7 +43,7 @@
                             <a  ng-click="tabbed_panel_active = 1" translate>General</a>
                         </li>
                         <li  ng-class="{'active': tabbed_panel_active == 2}" class="">
-                            <a  ng-click="tabbed_panel_active = 2" translate>Public space permissions</a>
+                            <a  ng-click="tabbed_panel_active = 2" translate>Shared space permissions</a>
                         </li>
 
                     </ul>
@@ -138,11 +138,11 @@
                             <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute pages</span>
                             <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute reports</span>
                             <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute dashboards</span>
-                            <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Publish</span>
+                            <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Share</span>
                         </div>
                         <div ui-tree id="tree-root">
-                            <ol ui-tree-nodes ng-model="publicSpace">
-                                <li ng-repeat="node in publicSpace" ui-tree-node ng-include="'role_grant_renderer.html'"></li>
+                            <ol ui-tree-nodes ng-model="sharedSpace">
+                                <li ng-repeat="node in sharedSpace" ui-tree-node ng-include="'role_grant_renderer.html'"></li>
                             </ol>
                         </div>
                     </div> <!--tab 2-->
@@ -156,7 +156,7 @@
     <div ng-if="roleEditingWarning && roleEditingWarning != ''" class="alert-block">{{roleEditingWarning}}</div>
 
     <div class="modal-footer ng-scope">
-        <button type="button" class="btn btn-info pull-right"  ng-click="save()" style="margin-right: 3px" translate>Save</button> 
+        <button type="button" class="btn btn-info pull-right"  ng-click="save()" style="margin-right: 3px" translate>Save</button>
         <button type="button" class="btn btn-white  pull-right" data-dismiss="modal" style="margin-right: 3px" translate>Cancel</button>
     </div>
 </nd-modal>

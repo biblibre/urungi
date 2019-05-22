@@ -13,7 +13,7 @@
                     </a>
                 </h4>
                 <br>
-                <input ng-if="!field.date" type="text" ng-model="nav.filters[field.name]" 
+                <input ng-if="!field.date" type="text" ng-model="nav.filters[field.name]"
                 ng-keydown="filterKeydown($event)" ng-blur="filterBlur($event)">
             </span>
 
@@ -22,34 +22,36 @@
 
     <div id="reportListItem" class="list-group-item row" ng-repeat="item in nav.items">
         <span class="col-md-10">
-        
-            <a  ng-click="nav.clickItem(item)" uib-tooltip="{{nav.tooltips.itemClick}}" tooltip-placement="bottom">
+
+            <a ng-click="nav.clickItem(item)" uib-tooltip="{{nav.tooltips.itemClick}}" tooltip-placement="bottom" style="cursor: pointer;">
 
                 <span ng-repeat="field in nav.infoFields" ng-class="field.widthClass">
                     <h5 ng-if="!field.date">{{item[field.name]}}</h5>
                     <h6 ng-if="field.date">{{item[field.name] | date}}</h6>
+                    <span ng-if="$first && item.isPublic" class="badge" translate>public</span>
+                    <span ng-if="$first && item.isShared" class="badge" translate>shared</span>
                 </span>
 
             </a>
             <span ng-if="layerButtons">
                 <a id="layerListItemStatus" class="badge pull-right"  ng-click="toggleActive(item)"
-                ng-class="{'badge-success': item.status == 'active', 'badge-danger': item.status == 'Not active'}" 
+                ng-class="{'badge-success': item.status == 'active', 'badge-danger': item.status == 'Not active'}"
                 uib-tooltip="Click here to change the status of the layer" tooltip-placement="left">{{item.status}}</a>
             </span>
         </span>
 
-        <span  class="col-md-2">
+        <span class="col-md-2">
             <span ng-if="nav.deleteButtons">
-                <a class="pull-right list-button btn-delete" ng-click="viewDeleteModal(item)" 
+                <a class="pull-right list-button btn-delete" ng-click="viewDeleteModal(item)"
                 uib-tooltip="{{nav.tooltips.delete}}" tooltip-placement="bottom">
                 <i class="fa fa-trash-o "  ></i>
                 </a>
             </span>
             <span ng-if="nav.editButtons">
 
-            
 
-                <a class="pull-right list-button btn-duplicate" ng-click="viewDuplicateModal(item)" 
+
+                <a class="pull-right list-button btn-duplicate" ng-click="viewDuplicateModal(item)"
                 uib-tooltip="{{nav.tooltips.duplicate}}" tooltip-placement="bottom">
                     <i class="fa fa-copy" ></i>
                 </a>
@@ -59,13 +61,53 @@
                 <i class="fa fa-pencil" ></i>
                 </a>
 
-                <span ng-if="item.isPublic" class="badge badge-success pull-right published-tag">published</span>    
+                <a ng-if="shareButton" class="list-button list-button-share pull-right"
+                    uib-tooltip="{{ 'Share' | translate }}"
+                    uib-popover-template="'share-popover.html'" popover-title="Share to..."
+                    popover-trigger="'outsideClick'" popover-placement="left"
+                >
+                    <i class="fa fa-share-alt"></i>
+                </a>
             </span>
         </span>
 
-        
+
 
     </div>
 
     <app-pager current-page="nav.currentPage" total-pages="nav.pages" on-page-change="goToPage(page)"></app-pager>
 </div>
+
+<div ng-include src="'partials/report/modals/publishModal.html'"></div>
+
+<script type="text/ng-template" id="share-popover.html">
+    <h4>Everyone</h4>
+    <p class="help-block">Anyone who has the link will be able to see it</p>
+    <button ng-if="!item.isPublic" ng-click="onPublish(item, $event)" type="button" class="btn btn-primary btn-sm" translate>Publish</button>
+    <button ng-if="item.isPublic" ng-click="onUnpublish(item, $event)" type="button" class="btn btn-danger btn-sm" translate>Unpublish</button>
+    <div class="form-group" ng-if="item.isPublic">
+      <label>Public URL</label>
+      <div class="input-group">
+        <input id="copy-link-{{ item._id }}" class="form-control" type="text" ng-value="getCopyLink(item)">
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ngclipboard ngclipboard-success="onCopySuccess(e)" data-clipboard-target="#copy-link-{{ item._id }}">
+                <i class="fa fa-clipboard"></i>
+            </button>
+        </span>
+      </div>
+    </div>
+
+    <h4>Authenticated users</h4>
+    <p class="help-block" translate>Authenticated users will be able to see it in the shared space</p>
+    <button ng-if="!item.isShared" ng-click="onShare(item, $event)" type="button" class="btn btn-primary btn-sm">Put in shared space</button>
+    <div class="btn-group" ng-if="item.isShared">
+        <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Remove from shared space
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#" ng-click="onUnshare(item, $event)">Remove from shared space</a></li>
+            <li><a href="#" ng-click="onShare(item, $event)">Move to another folder</a></li>
+        </ul>
+    </div>
+</script>

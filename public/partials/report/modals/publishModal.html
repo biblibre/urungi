@@ -3,21 +3,18 @@
 
 
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <button ng-if="objectToPublish.isPublic == true" class="btn btn-danger" ng-click="unPublish()" translate>Unpublish</button>
-        <h4 ng-if="objectToPublish.isPublic == false" translate>Publish</h4>
+        <h4 translate>Share</h4>
     </div>
     <div class="modal-body">
-        <p>{{modalOptions.bodyText}}</p>
-
         <div ng-if="isWSTADMIN" class="row">
             <span class="tree-node tree-node-content tree-node-folder" translate>root folder</span>
-            <button ng-if="objectToPublish.parentFolder != 'root' || objectToPublish.isPublic == false" class="btn btn-success btn-xs" ng-click="selectThisFolder('root')" translate>select</button>
-            <span class="badge badge-black" ng-if="objectToPublish.parentFolder == 'root' && objectToPublish.isPublic == true" translate>selected</span>
+            <button ng-if="objectToShare.parentFolder != 'root' || objectToShare.isShared == false" class="btn btn-success btn-xs" ng-click="selectThisFolder('root')" translate>select</button>
+            <span class="badge badge-black" ng-if="objectToShare.parentFolder == 'root' && objectToShare.isShared == true" translate>selected</span>
         </div>
 
         <div ui-tree data-nodrop-enabled id="tree-root" >
             <ol ui-tree-nodes data-nodrop-enabled ng-model="userObjects">
-                <li ng-if="((node.grants.executeReports == true || node.grants.executeDashboards == true) && node.nodeType != 'report' && node.nodeType != 'dashboard' && (node.grants.publishReports == true || isWSTADMIN))  " ng-repeat="node in userObjects" ui-tree-node ng-include="'publicFolders_renderer.html'"></li>
+                <li ng-if="((node.grants.executeReports == true || node.grants.executeDashboards == true) && node.nodeType != 'report' && node.nodeType != 'dashboard' && (node.grants.shareReports == true || isWSTADMIN))  " ng-repeat="node in userObjects" ui-tree-node ng-include="'publicFolders_renderer.html'"></li>
             </ol>
         </div>
     </div>
@@ -31,12 +28,12 @@
     <div  data-nodrag ui-tree-handle data-nodrop-enabled class="tree-node tree-node-content tree-node-folder" ng-if="((node.grants.executeReports == true || node.grants.executeDashboards == true) && node.nodeType != 'report' && node.nodeType != 'dashboard')  "> <!--&& node.nodes.length > 0 -->
         <span class="fa" ng-class="{'fa-folder': collapsed,'fa-folder-open-o': !collapsed}" ng-click="toggle(this)"></span>
         <span data-nodrag ng-click="toggle(this)" style="padding-left: 5px;margin-right: 5px;">{{node.title}}</span>
-        <button ng-if="objectToPublish.parentFolder != node.grants.folderID || objectToPublish.isPublic == false" class="btn btn-success btn-xs" ng-click="selectThisFolder(node.grants.folderID)" translate>select</button>
-        <span class="badge badge-black" ng-if="objectToPublish.parentFolder == node.grants.folderID && objectToPublish.isPublic == true" translate>selected</span>
+        <button ng-if="objectToShare.parentFolder != node.grants.folderID || objectToShare.isShared == false" class="btn btn-success btn-xs" ng-click="selectThisFolder(node.grants.folderID)" translate>select</button>
+        <span class="badge badge-black" ng-if="objectToShare.parentFolder == node.grants.folderID && objectToShare.isShared == true" translate>selected</span>
     </div>
 
     <ol ng-if="node.nodes" data-nodrag ui-tree-nodes data-nodrop-enabled ng-model="node.nodes" ng-class="{hidden: collapsed}">
-        <li ng-if="((node.grants.executeReports == true || node.grants.executeDashboards == true) && node.nodeType != 'report' && node.nodeType != 'dashboard' && (node.grants.publishReports == true || isWSTADMIN))"    data-nodrag ng-repeat="node in node.nodes" ui-tree-node ng-include="'publicFolders_renderer.html'">
+        <li ng-if="((node.grants.executeReports == true || node.grants.executeDashboards == true) && node.nodeType != 'report' && node.nodeType != 'dashboard' && (node.grants.shareReports == true || isWSTADMIN))"    data-nodrag ng-repeat="node in node.nodes" ui-tree-node ng-include="'publicFolders_renderer.html'">
         </li>
     </ol>
 </script>
