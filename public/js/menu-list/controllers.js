@@ -78,8 +78,9 @@ angular.module('app').controller('listCtrl', function ($scope, connection, $rout
         };
 
         for (const field of $scope.nav.infoFields) {
-            if (!params.filters[field.name]) {
-                delete params.filters[field.name];
+            var fieldFilter = field.filterField || field.name;
+            if (!params.filters[fieldFilter]) {
+                delete params.filters[fieldFilter];
             }
         }
 
@@ -103,7 +104,7 @@ angular.module('app').controller('listCtrl', function ($scope, connection, $rout
 
         $scope.nav = {};
 
-        $scope.nav.apiFetchUrl = '/api/reports/find-all';
+        $scope.nav.apiFetchUrl = '/api/reports/find-all?populate=layer';
         $scope.creationAuthorised = $scope.user.reportsCreate;
         $scope.nav.editButtons = true;
         $scope.nav.deleteButtons = true;
@@ -112,14 +113,20 @@ angular.module('app').controller('listCtrl', function ($scope, connection, $rout
 
         $scope.shareButton = true;
 
-        $scope.nav.fetchFields = ['reportName', 'reportType', 'isPublic', 'isShared', 'parentFolder', 'owner', 'reportDescription', 'author', 'createdOn'];
+        $scope.nav.fetchFields = ['reportName', 'reportType', 'isPublic', 'isShared', 'layerName', 'parentFolder', 'owner', 'reportDescription', 'author', 'createdOn'];
         $scope.nav.nameField = 'reportName';
 
         $scope.nav.infoFields = [
             {
                 name: 'reportName',
                 label: 'Name',
-                widthClass: 'col-md-6'
+                widthClass: 'col-md-3'
+            },
+            {
+                name: 'layerName',
+                filterField: 'layer.name',
+                label: 'Layer',
+                widthClass: 'col-md-3'
             },
             {
                 name: 'author',
@@ -128,7 +135,7 @@ angular.module('app').controller('listCtrl', function ($scope, connection, $rout
             },
             {
                 name: 'createdOn',
-                label: 'Date of creation',
+                label: 'Creation Date',
                 widthClass: 'col-md-3',
                 date: true
             }
@@ -396,7 +403,7 @@ angular.module('app').controller('listCtrl', function ($scope, connection, $rout
             },
             {
                 name: 'createdOn',
-                label: 'Date of creation',
+                label: 'Creation Date',
                 widthClass: 'col-md-3',
                 date: true
             }

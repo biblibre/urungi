@@ -5,11 +5,13 @@ const expect = chai.expect;
 
 describe('Reports API', function () {
     const Reports = connection.model('Reports');
+    const Layers = connection.model('Layers');
     const Users = connection.model('Users');
 
     let agent;
     let user;
     let report;
+    let layer;
 
     before(async function () {
         agent = chai.request.agent(app);
@@ -19,6 +21,11 @@ describe('Reports API', function () {
     });
 
     beforeEach(async function () {
+        layer = await Layers.create({
+            name: 'Layer',
+            status: 'active',
+        });
+
         report = await Reports.create({
             companyID: 'COMPID',
             reportName: 'Report',
@@ -27,11 +34,15 @@ describe('Reports API', function () {
             isPublic: false,
             createdBy: user.id,
             createdOn: new Date(),
+            selectedLayerID: layer._id,
+            author: user.id,
+            reportType: 'grid',
         });
     });
 
     afterEach(async function () {
         await report.remove();
+        await layer.remove();
     });
 
     after(() => {
@@ -47,6 +58,91 @@ describe('Reports API', function () {
             expect(decrypted).to.have.property('page');
             expect(decrypted).to.have.property('pages');
             expect(decrypted).to.have.property('items');
+        });
+    });
+
+    describe('GET /api/reports/find-all?populate=layer', function () {
+        it('should find all reports and their data', async function () {
+            const res = await agent.get('/api/reports/find-all?populate=layer');
+            expect(res).to.have.status(200);
+            var decrypted = JSON.parse(res.text);
+            expect(decrypted).to.have.property('result', 1);
+            expect(decrypted).to.have.property('page');
+            expect(decrypted).to.have.property('pages');
+            expect(decrypted).to.have.property('items');
+            expect(decrypted.items[0]).to.have.property('layerName', 'Layer');
+            expect(decrypted.items[0]).to.have.property('reportName', 'Report');
+            expect(decrypted.items[0]).to.have.property('nd_trash_deleted', false);
+            expect(decrypted.items[0]).to.have.property('owner', user.id);
+            expect(decrypted.items[0]).to.have.property('isPublic', false);
+            expect(decrypted.items[0]).to.have.property('createdBy');
+            expect(decrypted.items[0]).to.have.property('createdOn');
+            expect(decrypted.items[0]).to.have.property('author');
+            expect(decrypted.items[0]).to.have.property('owner');
+            expect(decrypted.items[0]).to.have.property('reportType');
+            expect(decrypted.items[0]).to.have.property('_id');
+        });
+    });
+
+    describe('GET /api/reports/find-all?populate=layer', function () {
+        var layer2;
+        var report2;
+
+        before(async function () {
+            layer2 = await Layers.create({
+                name: 'Layer2',
+                status: 'active',
+            });
+
+            report2 = await Reports.create({
+                companyID: 'COMPID',
+                reportName: 'Report2',
+                nd_trash_deleted: false,
+                owner: user.id,
+                isPublic: false,
+                createdBy: user.id,
+                createdOn: new Date(),
+                selectedLayerID: layer2._id,
+                author: user.id,
+                reportType: 'grid',
+            });
+        });
+
+        after(async function () {
+            await layer2.remove();
+            await report2.remove();
+        });
+
+        it('should find all reports and their data', async function () {
+            const res = await agent.get('/api/reports/find-all?populate=layer&sort=layerName&sortType=1');
+            expect(res).to.have.status(200);
+            var decrypted = JSON.parse(res.text);
+            expect(decrypted).to.have.property('result', 1);
+            expect(decrypted).to.have.property('page');
+            expect(decrypted).to.have.property('pages');
+            expect(decrypted).to.have.property('items');
+            expect(decrypted.items[0]).to.have.property('layerName', 'Layer');
+            expect(decrypted.items[0]).to.have.property('reportName', 'Report');
+            expect(decrypted.items[0]).to.have.property('nd_trash_deleted', false);
+            expect(decrypted.items[0]).to.have.property('owner', user.id);
+            expect(decrypted.items[0]).to.have.property('isPublic', false);
+            expect(decrypted.items[0]).to.have.property('createdBy');
+            expect(decrypted.items[0]).to.have.property('createdOn');
+            expect(decrypted.items[0]).to.have.property('author');
+            expect(decrypted.items[0]).to.have.property('owner');
+            expect(decrypted.items[0]).to.have.property('reportType');
+            expect(decrypted.items[0]).to.have.property('_id');
+            expect(decrypted.items[1]).to.have.property('reportName', 'Report2');
+            expect(decrypted.items[1]).to.have.property('nd_trash_deleted', false);
+            expect(decrypted.items[1]).to.have.property('owner', user.id);
+            expect(decrypted.items[1]).to.have.property('isPublic', false);
+            expect(decrypted.items[1]).to.have.property('createdBy');
+            expect(decrypted.items[1]).to.have.property('createdOn');
+            expect(decrypted.items[1]).to.have.property('author');
+            expect(decrypted.items[1]).to.have.property('owner');
+            expect(decrypted.items[1]).to.have.property('reportType');
+            expect(decrypted.items[1]).to.have.property('_id');
+            expect(decrypted.items[1]).to.have.property('layerName', 'Layer2');
         });
     });
 

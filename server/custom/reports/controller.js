@@ -17,8 +17,70 @@ exports.ReportsFindAll = async function (req, res) {
     req.query.companyid = true;
     req.user = {};
     req.user.companyID = 'COMPID';
-    const result = await controller.findAll(req);
-    res.status(200).json(result);
+    var perPage = config.get('pagination.itemsPerPage');
+    var page = (req.query.page) ? req.query.page : 1;
+    var result = controller.findAllParams(req);
+    let response;
+
+    if (req.query.populate === 'layer') {
+        const commonPipeline = [
+            {
+                $lookup: {
+                    from: 'wst_Layers',
+                    localField: 'selectedLayerID',
+                    foreignField: '_id',
+                    as: 'layer'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$layer',
+                }
+            },
+            {
+                $match: result.find,
+            },
+        ];
+
+        const pipeline = commonPipeline.slice();
+
+        if (result.fields && Object.keys(result.fields).length > 0) {
+            result.fields.layer = 1;
+            pipeline.push({ $project: result.fields });
+        }
+
+        pipeline.push({ $addFields: { layerName: '$layer.name' } });
+
+        if (result.params.sort && Object.keys(result.params.sort).length > 0) {
+            pipeline.push({ $sort: result.params.sort });
+        }
+
+        if (result.params.skip) {
+            pipeline.push({ $skip: result.params.skip });
+        }
+
+        if (result.params.limit) {
+            pipeline.push({ $limit: result.params.limit });
+        }
+
+        const countPipeline = commonPipeline.slice();
+        countPipeline.push({ $count: 'totalCount' });
+
+        const countDocs = await Reports.aggregate(countPipeline);
+        const count = countDocs.length ? countDocs[0].totalCount : 0;
+        const reports = await Reports.aggregate(pipeline);
+
+        response = {
+            result: 1,
+            page: page,
+            pages: req.query.page ? Math.ceil(count / perPage) : 1,
+            items: reports,
+        };
+    } else {
+        response = await controller.findAll(req);
+    }
+
+    res.status(200).json(response);
 };
 
 exports.GetReport = function (req, res) {

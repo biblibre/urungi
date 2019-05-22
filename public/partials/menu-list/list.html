@@ -13,7 +13,7 @@
                     </a>
                 </h4>
                 <br>
-                <input ng-if="!field.date" type="text" ng-model="nav.filters[field.name]"
+                <input ng-if="!field.date" type="text" ng-model="nav.filters[field.filterField || field.name]" 
                 ng-keydown="filterKeydown($event)" ng-blur="filterBlur($event)">
             </span>
 
