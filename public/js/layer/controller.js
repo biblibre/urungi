@@ -895,6 +895,13 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
         }
     };
 
+    $scope.getElementsUsedInCustomExpression = function () {
+        if (!$scope.modalElement) {
+            return [];
+        }
+        return layerUtils.getElementsUsedInCustomExpression($scope.modalElement.viewExpression, $scope._Layer);
+    };
+
     $scope.compileExpression = function () {
         const elements = layerUtils.getElementsUsedInCustomExpression($scope.modalElement.viewExpression, $scope._Layer);
 
