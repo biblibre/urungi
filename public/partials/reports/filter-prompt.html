@@ -30,7 +30,7 @@
                             <i class="fa fa-caret-down"></i>
                         </button>
                         <ul class="dropdown-menu">
-                            <li ng-repeat="option in vm.getElementFilterOptions()"><a ng-click="setFilterType(option)">{{option.label}}</a></li>
+                            <li ng-repeat="option in vm.getElementFilterOptions()"><a ng-click="vm.setFilterType(option)">{{option.label}}</a></li>
                         </ul>
                     </span>
 
