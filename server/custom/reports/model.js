@@ -19,7 +19,7 @@ var ReportsSchema = new mongoose.Schema({
     nd_trash_deleted: { type: Boolean },
     nd_trash_deleted_date: { type: Date },
     selectedLayerID: mongoose.Schema.Types.ObjectId
-}, { collection: 'wst_Reports' });
+}, { collection: 'wst_Reports', collation: { locale: 'en', strength: 2 } });
 
 ReportsSchema.methods.publish = async function () {
     this.isPublic = true;

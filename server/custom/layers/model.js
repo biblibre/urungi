@@ -11,7 +11,7 @@ var LayersSchema = new mongoose.Schema({
     nd_trash_deleted_date: { type: Date },
     createdBy: { type: String },
     createdOn: { type: Date }
-}, { collection: 'wst_Layers' });
+}, { collection: 'wst_Layers', collation: { locale: 'en', strength: 2 } });
 
 LayersSchema.statics.setStatus = function (req, done) {
     if (req.session.isWSTADMIN) {
