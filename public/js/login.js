@@ -5,9 +5,9 @@
 
     angular.module('app-login').controller('PublicCtrl', PublicCtrl);
 
-    PublicCtrl.$inject = ['$scope', '$http', 'sessionStorage', 'localStorage', 'connection'];
+    PublicCtrl.$inject = ['$scope', '$http', 'localStorage'];
 
-    function PublicCtrl ($scope, $http, sessionStorage, localStorage, connection) {
+    function PublicCtrl ($scope, $http, localStorage) {
         var user = localStorage.getObject('user');
 
         $scope.loginError = false;
@@ -20,24 +20,11 @@
                     .success(function (data, status, headers, config) {
                         $scope.loginError = false;
 
-                        var theUser = data.user;
-                        connection.get('/api/get-user-data').then(function (data) {
-                            if ($scope.rememberMe) {
-                                localStorage.setObject('user', user);
-                            }
-                            theUser.companyData = data.items.companyData;
-                            theUser.rolesData = data.items.rolesData;
-                            theUser.reportsCreate = data.items.reportsCreate;
-                            theUser.dashboardsCreate = data.items.dashboardsCreate;
-                            theUser.pagesCreate = data.items.pagesCreate;
-                            theUser.exploreData = data.items.exploreData;
-                            theUser.isWSTADMIN = data.items.isWSTADMIN;
-                            theUser.contextHelp = data.items.contextHelp;
-                            theUser.dialogs = data.items.dialogs;
-                            theUser.viewSQL = data.items.viewSQL;
-                            sessionStorage.setObject('user', theUser);
-                            window.location.href = '/#/home';
-                        });
+                        if ($scope.rememberMe) {
+                            // FIXME This stores the user password in local storage !
+                            localStorage.setObject('user', user);
+                        }
+                        window.location.href = '/#/home';
                     })
                     .error(function (data, status, headers, config) {
                         $scope.errorLoginMessage = data;

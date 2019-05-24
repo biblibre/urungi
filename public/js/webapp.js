@@ -211,12 +211,35 @@ angular.module('app').service('reportService', function () {
     };
 });
 
-angular.module('app').run(['$rootScope', '$location', 'sessionStorage', 'connection', function ($rootScope, $location, sessionStorage, connection) {
+angular.module('app').run(['$rootScope', '$location', 'connection', function ($rootScope, $location, connection) {
+    // Refresh user session
+    const getUserDataPromise = connection.get('/api/get-user-data');
+    getUserDataPromise.then(function (data) {
+        const user = data.items.user;
+        user.companyData = data.items.companyData;
+        user.rolesData = data.items.rolesData;
+        user.reportsCreate = data.items.reportsCreate;
+        user.dashboardsCreate = data.items.dashboardsCreate;
+        user.pagesCreate = data.items.pagesCreate;
+        user.exploreData = data.items.exploreData;
+        user.isWSTADMIN = data.items.isWSTADMIN;
+        user.contextHelp = data.items.contextHelp;
+        user.dialogs = data.items.dialogs;
+        user.viewSQL = data.items.viewSQL;
+        $rootScope.user = user;
+        $rootScope.isWSTADMIN = isWSTADMIN($rootScope.user);
+    });
+
     // Redirect to /login if next route is not public and user is not authenticated
     $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
-        const user = sessionStorage.getObject('user');
-        if (next.$$route && !next.$$route.redirectTo && !next.$$route.isPublic && !user) {
-            window.location.href = '/login';
+        if (next.$$route && !next.$$route.redirectTo && !next.$$route.isPublic) {
+            getUserDataPromise.then(data => {
+                if (!data.items.user) {
+                    window.location.href = '/login';
+                }
+            }, () => {
+                window.location.href = '/login';
+            });
         }
     });
 
@@ -255,29 +278,6 @@ angular.module('app').run(['$rootScope', '$location', 'sessionStorage', 'connect
             $rootScope.user.contextHelp = data.items;
         });
     };
-
-    $rootScope.user = sessionStorage.getObject('user');
-    $rootScope.isWSTADMIN = isWSTADMIN($rootScope.user);
-
-    // Refresh user session
-    connection.get('/api/get-user-data').then(function (data) {
-        const user = data.items.user;
-        user.companyData = data.items.companyData;
-        user.rolesData = data.items.rolesData;
-        user.reportsCreate = data.items.reportsCreate;
-        user.dashboardsCreate = data.items.dashboardsCreate;
-        user.pagesCreate = data.items.pagesCreate;
-        user.exploreData = data.items.exploreData;
-        user.isWSTADMIN = data.items.isWSTADMIN;
-        user.contextHelp = data.items.contextHelp;
-        user.dialogs = data.items.dialogs;
-        user.viewSQL = data.items.viewSQL;
-        sessionStorage.setObject('user', user);
-        $rootScope.user = user;
-        $rootScope.isWSTADMIN = isWSTADMIN($rootScope.user);
-    }, function () {
-        sessionStorage.removeObject('user');
-    });
 }]);
 
 angular.module('app').run(['bsLoadingOverlayService', function (bsLoadingOverlayService) {
