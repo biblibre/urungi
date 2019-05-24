@@ -8,6 +8,8 @@ angular.module('app', [
     'intro.help', 'ngFileUpload', 'colorpicker.module',
     'app.inspector', 'gettext', 'ngFileSaver', 'ngclipboard',
     'app.core', 'app.data-sources', 'app.reports', 'app.dashboards',
+    'app.layers',
+    'app.templates',
 ])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.otherwise({ redirectTo: '/home' });
@@ -20,11 +22,6 @@ angular.module('app', [
         $routeProvider.when('/about', {
             templateUrl: 'partials/home/about.html',
             controller: 'homeCtrl'
-        });
-
-        $routeProvider.when('/dashboards/list/', {
-            templateUrl: 'partials/menu-list/dashboardList.html',
-            controller: 'dashboardListCtrl'
         });
 
         $routeProvider.when('/dashboards/new/:newDashboard/', {
@@ -42,11 +39,6 @@ angular.module('app', [
             controller: 'dashBoardv2Ctrl'
         });
 
-        $routeProvider.when('/reports', {
-            templateUrl: 'partials/menu-list/reportList.html',
-            controller: 'reportListCtrl'
-        });
-
         $routeProvider.when('/reports/new/', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
@@ -54,18 +46,6 @@ angular.module('app', [
         $routeProvider.when('/reports/edit/:reportID/', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
-        });
-
-        // layers
-
-        $routeProvider.when('/layers', {
-            templateUrl: 'partials/menu-list/layerList.html',
-            controller: 'layerListCtrl'
-        });
-
-        $routeProvider.when('/layers/:layerID/', {
-            templateUrl: 'partials/layer/view.html',
-            controller: 'layerCtrl'
         });
 
         // users
@@ -80,15 +60,6 @@ angular.module('app', [
             controller: 'AdminUsersCtrl'
         });
 
-        $routeProvider.when('/users/new/:newUser/', {
-            templateUrl: 'partials/users/edit.html',
-            controller: 'AdminUsersCtrl'
-        });
-
-        $routeProvider.when('/users/edit/:userID/', {
-            templateUrl: 'partials/users/edit.html',
-            controller: 'AdminUsersCtrl'
-        });
         // roles
         $routeProvider.when('/roles', {
             templateUrl: 'partials/roles/list.html',
@@ -211,21 +182,8 @@ angular.module('app').service('reportService', function () {
     };
 });
 
-angular.module('app').run(['$rootScope', '$location', 'connection', function ($rootScope, $location, connection) {
-    // Refresh user session
-    const getUserDataPromise = connection.get('/api/get-user-data');
-    getUserDataPromise.then(function (data) {
-        const user = data.items.user;
-        user.companyData = data.items.companyData;
-        user.rolesData = data.items.rolesData;
-        user.reportsCreate = data.items.reportsCreate;
-        user.dashboardsCreate = data.items.dashboardsCreate;
-        user.pagesCreate = data.items.pagesCreate;
-        user.exploreData = data.items.exploreData;
-        user.isWSTADMIN = data.items.isWSTADMIN;
-        user.contextHelp = data.items.contextHelp;
-        user.dialogs = data.items.dialogs;
-        user.viewSQL = data.items.viewSQL;
+angular.module('app').run(['$rootScope', '$location', 'connection', 'userService', function ($rootScope, $location, connection, userService) {
+    userService.getCurrentUser().then(user => {
         $rootScope.user = user;
         $rootScope.isWSTADMIN = isWSTADMIN($rootScope.user);
     });
@@ -233,8 +191,8 @@ angular.module('app').run(['$rootScope', '$location', 'connection', function ($r
     // Redirect to /login if next route is not public and user is not authenticated
     $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
         if (next.$$route && !next.$$route.redirectTo && !next.$$route.isPublic) {
-            getUserDataPromise.then(data => {
-                if (!data.items.user) {
+            userService.getCurrentUser().then(user => {
+                if (!user) {
                     window.location.href = '/login';
                 }
             }, () => {
@@ -260,7 +218,7 @@ angular.module('app').run(['$rootScope', '$location', 'connection', function ($r
     $rootScope.getUserContextHelp = function (contextHelpName) {
         var found = false;
 
-        if ($rootScope.user.contextHelp) {
+        if ($rootScope.user && $rootScope.user.contextHelp) {
             for (var i in $rootScope.user.contextHelp) {
                 if ($rootScope.user.contextHelp[i] === contextHelpName) {
                     found = true;

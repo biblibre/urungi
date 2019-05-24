@@ -18,11 +18,13 @@
 </div>
 <div class="row">
     <div class="col-md-6">
-        <div id="sharedArea" class="panel panel-color panel-success">
+        <div id="sharedArea" class="panel panel-silver">
 
             <div class="panel-heading">
-                <a href="" ng-click="refreshHome()"><i class="fa fa-refresh pull-right"></i></a>
-                <span translate>Shared Area</span>
+                <div class="panel-title">
+                    <span translate>Shared Area</span>
+                    <a href="" class="pull-right" ng-click="refreshHome()"><i class="fa fa-refresh"></i></a>
+                </div>
             </div>
 
             <div class="panel-body">
@@ -39,9 +41,9 @@
 
     <div class="col-md-6">
         <div class="row">
-            <div id="latestExecutions" class="panel panel-color panel-secondary">
-                <div class="panel-heading" translate>
-                    Latest executions
+            <div id="latestExecutions" class="panel panel-silver">
+                <div class="panel-heading">
+                    <div class="panel-title" translate>Latest executions</div>
                 </div>
 
                 <div class="panel-body">
@@ -49,12 +51,9 @@
                         <ol>
                             <li ng-repeat="execution in lastExecutions">
                                 <div class="last-executed-item">
-
                                     <a ng-if="execution.type == 'report'" ng-href="/#/reports/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                     <a ng-if="execution.type == 'Dashboard'" ng-href="/#/dashboards/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-
                                     <span class="pull-right">{{execution.lastDate}}</span>
-
                                 </div>
                             </li>
                         </ol>
@@ -63,9 +62,9 @@
             </div>
         </div>
         <div class="row">
-            <div id="mostExecuted" class="panel panel-color panel-secondary">
-                <div class="panel-heading" translate>
-                    Most executed
+            <div id="mostExecuted" class="panel panel-silver">
+                <div class="panel-heading">
+                    <div class="panel-title" translate>Most executed</div>
                 </div>
 
                 <div class="panel-body">
@@ -73,11 +72,8 @@
                         <ol>
                             <li ng-repeat="execution in mostExecutions">
                                 <div class="most-executed-item">
-
                                     <a ng-if="execution.type == 'report'" ng-href="/#/reports/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                     <a ng-if="execution.type == 'Dashboard'" ng-href="/#/dashboards/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-
-
 
                                     <span class="badge pull-right">{{execution.count}}</span>
                                 </div>

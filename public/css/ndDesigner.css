@@ -659,54 +659,6 @@ section {
     margin-bottom: 20px;
 }
 
-/* JUSTIFIED TABS */
-
-.nav.nav-tabs {
-    border-bottom: 0;
-}
-
-.nav.nav-tabs.nav-tabs-justified,
-.nav-tabs-justified .nav.nav-tabs {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: separate;
-}
-
-.nav.nav-tabs > li {
-    display: inline-block;
-    float: none;
-    margin-bottom: 0;
-}
-
-.nav.nav-tabs.nav-tabs-justified > li,
-.nav-tabs-justified .nav.nav-tabs > li {
-    display: table-cell;
-    vertical-align: top;
-    width: 100%;
-    text-align: center;
-}
-
-.nav.nav-tabs > li > a {
-    border: none;
-    background-color: #f4f4f4;
-    margin-right: 5px;
-    padding-left: 20px;
-    padding-right: 20px;
-    cursor: pointer;
-}
-
-.nav.nav-tabs > li.active > a {
-    border: 0;
-    background-color: #fff;
-}
-
-.nav.nav-tabs + .tab-content {
-    background: #fff;
-    padding: 30px;
-    margin-bottom: 30px;
-}
-
 /******   */
 
 #photoGallery li {

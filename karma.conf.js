@@ -38,6 +38,7 @@ module.exports = function (config) {
             'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js',
             'node_modules/angular-gettext/dist/angular-gettext.min.js',
             'node_modules/cynteka-pivot-table-jquery/dist/jquery.cy-pivot.min.js',
+            'dist/templates/templates.js',
             'public/js/webapp.js',
             'public/js/*/*.module.js',
             'public/js/**/*.js',

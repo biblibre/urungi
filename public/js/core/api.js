@@ -11,16 +11,25 @@
             getEntitiesSchema: getEntitiesSchema,
             getSqlQuerySchema: getSqlQuerySchema,
 
+            reportsFindAll: reportsFindAll,
+            deleteReport: deleteReport,
             publishReport: publishReport,
             unpublishReport: unpublishReport,
             shareReport: shareReport,
             unshareReport: unshareReport,
 
+            dashboardsFindAll: dashboardsFindAll,
+            deleteDashboard: deleteDashboard,
             getDashboard: getDashboard,
             publishDashboard: publishDashboard,
             unpublishDashboard: unpublishDashboard,
             shareDashboard: shareDashboard,
             unshareDashboard: unshareDashboard,
+
+            layersFindAll: layersFindAll,
+            changeLayerStatus: changeLayerStatus,
+            createLayer: createLayer,
+            deleteLayer: deleteLayer,
         };
 
         return service;
@@ -45,6 +54,14 @@
             };
 
             return connection.get('/api/data-sources/getsqlQuerySchema', params);
+        }
+
+        function reportsFindAll (params) {
+            return connection.get('/api/reports/find-all', params);
+        }
+
+        function deleteReport (id) {
+            return connection.post('/api/reports/delete/' + id, { id: id });
         }
 
         function publishReport (id) {
@@ -78,6 +95,14 @@
             };
 
             return connection.post('/api/reports/unshare', data);
+        }
+
+        function dashboardsFindAll (params) {
+            return connection.get('/api/dashboardsv2/find-all', params);
+        }
+
+        function deleteDashboard (id) {
+            return connection.post('/api/dashboardsv2/delete/' + id, { id: id });
         }
 
         function getDashboard (id) {
@@ -119,6 +144,27 @@
             };
 
             return connection.post('/api/dashboardsv2/unshare', data);
+        }
+
+        function layersFindAll (params) {
+            return connection.get('/api/layers/find-all', params);
+        }
+
+        function changeLayerStatus (layerID, newStatus) {
+            var data = {
+                layerID: layerID,
+                status: newStatus,
+            };
+
+            return connection.post('/api/layers/change-layer-status', data);
+        }
+
+        function createLayer (layer) {
+            return connection.post('/api/layers/create', layer);
+        }
+
+        function deleteLayer (id) {
+            return connection.post('/api/layers/delete/' + id, { id: id });
         }
     }
 })();

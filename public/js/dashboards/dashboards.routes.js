@@ -17,5 +17,11 @@
             },
             isPublic: true,
         });
+
+        $routeProvider.when('/dashboards/list', {
+            templateUrl: 'partials/dashboards/list.html',
+            controller: 'DashboardsListController',
+            controllerAs: 'vm',
+        });
     }
 })();

@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="vm.dismiss()" aria-hidden="true">&times;</button>
+    <h4 translate>Share</h4>
+</div>
+
+<div class="modal-body">
+    <div ng-if="vm.isWSTADMIN" class="row">
+        <span class="tree-node tree-node-content tree-node-folder" translate>root folder</span>
+        <button ng-if="vm.item.parentFolder != 'root' || vm.item.isShared == false" class="btn btn-success btn-xs" ng-click="vm.selectThisFolder('root')" translate>select</button>
+        <span class="badge badge-black" ng-if="vm.item.parentFolder == 'root' && vm.item.isShared == true" translate>selected</span>
+    </div>
+
+    <div ui-tree data-nodrop-enabled id="tree-root" >
+        <ol ui-tree-nodes data-nodrop-enabled ng-model="vm.userObjects">
+            <li ng-if="((node.grants.executeReports == true || node.grants.executeDashboards == true) && node.nodeType != 'report' && node.nodeType != 'dashboard' && (node.grants.shareReports == true || vm.isWSTADMIN))  " ng-repeat="node in vm.userObjects" ui-tree-node ng-include="'publicFolders_renderer.html'"></li>
+        </ol>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn" ng-click="vm.dismiss()" translate>Cancel</button>
+</div>
+
+
+<script type="text/ng-template" id="publicFolders_renderer.html">
+    <div  data-nodrag ui-tree-handle data-nodrop-enabled class="tree-node tree-node-content tree-node-folder" ng-if="((node.grants.executeReports == true || node.grants.executeDashboards == true) && node.nodeType != 'report' && node.nodeType != 'dashboard')  "> <!--&& node.nodes.length > 0 -->
+        <span class="fa" ng-class="{'fa-folder': collapsed,'fa-folder-open-o': !collapsed}" ng-click="toggle(this)"></span>
+        <span data-nodrag ng-click="toggle(this)" style="padding-left: 5px;margin-right: 5px;">{{node.title}}</span>
+        <button ng-if="vm.item.parentFolder != node.grants.folderID || vm.item.isShared == false" class="btn btn-success btn-xs" ng-click="vm.selectThisFolder(node.grants.folderID)" translate>select</button>
+        <span class="badge badge-black" ng-if="vm.item.parentFolder == node.grants.folderID && vm.item.isShared == true" translate>selected</span>
+    </div>
+
+    <ol ng-if="node.nodes" data-nodrag ui-tree-nodes data-nodrop-enabled ng-model="node.nodes" ng-class="{hidden: collapsed}">
+        <li ng-if="((node.grants.executeReports == true || node.grants.executeDashboards == true) && node.nodeType != 'report' && node.nodeType != 'dashboard' && (node.grants.shareReports == true || vm.isWSTADMIN))"    data-nodrag ng-repeat="node in node.nodes" ui-tree-node ng-include="'publicFolders_renderer.html'">
+        </li>
+    </ol>
+</script>

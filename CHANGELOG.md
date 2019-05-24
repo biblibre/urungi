@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Move all "menu-list" code into several independent AngularJS components
+- Use $uibModal and its component option to make it easier to reuse modals
+- Cache all template files
+- Use uib-tabset everywhere we have tabs for consistency
 - Update angular-ui-bootstrap to 2.5.6
 
 ## [1.0.1] - 2019-05-03

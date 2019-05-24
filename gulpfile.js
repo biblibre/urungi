@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const concat = require('gulp-concat');
 const decomment = require('gulp-decomment');
 const gettext = require('gulp-angular-gettext');
+const templatecache = require('gulp-angular-templatecache');
 const merge = require('merge-stream');
 const del = require('del');
 
@@ -9,12 +10,14 @@ const dist_js = gulp.series(dist_js_clean, dist_js_build);
 const dist_css = gulp.series(dist_css_clean, dist_css_build);
 const dist_fonts = gulp.series(dist_fonts_clean, dist_fonts_build);
 const dist_translations = gulp.series(dist_translations_clean, dist_translations_build);
+const dist_templates = gulp.series(dist_templates_clean, dist_templates_build);
 
 const dist = gulp.parallel(
     dist_js,
     dist_css,
     dist_fonts,
     dist_translations,
+    dist_templates,
 );
 
 module.exports = {
@@ -24,8 +27,10 @@ module.exports = {
     'dist:css': dist_css,
     'dist:fonts': dist_fonts,
     'dist:translations': dist_translations,
+    'dist:templates': dist_templates,
     'pot': pot,
     'po:update': gulp.series(pot, po_update),
+    'watch:templates': watch_templates,
 };
 
 function dist_js_clean () {
@@ -42,6 +47,10 @@ function dist_fonts_clean () {
 
 function dist_translations_clean () {
     return del('dist/translations/*');
+}
+
+function dist_templates_clean () {
+    return del('dist/templates/*');
 }
 
 function dist_js_build () {
@@ -129,6 +138,17 @@ function dist_translations_build () {
         .pipe(gulp.dest('dist/translations'));
 }
 
+function dist_templates_build () {
+    return gulp.src(['public/partials/**/*.html'])
+        .pipe(templatecache({
+            root: 'partials',
+            module: 'app.templates',
+            standalone: true,
+            moduleSystem: 'IIFE',
+        }))
+        .pipe(gulp.dest('dist/templates'));
+}
+
 function pot () {
     return gulp.src(['public/js/**/*.js', 'public/partials/**/*.html'], { base: '.' })
         .pipe(gettext.extract('template.pot'))
@@ -150,4 +170,8 @@ function po_update () {
 
         return Promise.all(promises);
     });
+}
+
+function watch_templates () {
+    gulp.watch('public/partials/**/*.html', dist_templates);
 }

@@ -1,0 +1,36 @@
+<h4>Everyone</h4>
+<p class="help-block">Anyone who has the link will be able to see it</p>
+
+<button ng-if="!vm.item.isPublic" ng-click="vm.publish()" type="button" class="btn btn-primary btn-sm" translate>Publish</button>
+<button ng-if="vm.item.isPublic" ng-click="vm.unpublish()" type="button" class="btn btn-danger btn-sm" translate>Unpublish</button>
+
+<div class="form-group" ng-if="vm.item.isPublic">
+  <label>Public URL</label>
+
+  <div class="input-group">
+    <input id="copy-link-{{ vm.item._id }}" class="form-control" type="text" ng-value="vm.getCopyLink()">
+    <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ngclipboard ngclipboard-success="vm.onCopySuccess(e)" data-clipboard-target="#copy-link-{{ vm.item._id }}">
+            <i class="fa fa-clipboard"></i>
+        </button>
+    </span>
+  </div>
+</div>
+
+<h4>Authenticated users</h4>
+
+<p class="help-block" translate>Authenticated users will be able to see it in the shared space</p>
+
+<button ng-if="!vm.item.isShared" ng-click="vm.openShareModal()" type="button" class="btn btn-primary btn-sm">Put in shared space</button>
+
+<div class="btn-group" ng-if="vm.item.isShared">
+    <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Remove from shared space
+        <span class="caret"></span>
+    </button>
+
+    <ul class="dropdown-menu">
+        <li><a href="" ng-click="vm.unshare()">Remove from shared space</a></li>
+        <li><a href="" ng-click="vm.openShareModal()">Move to another folder</a></li>
+    </ul>
+</div>
