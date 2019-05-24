@@ -4,42 +4,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: \n"
 
-#: public/partials/home/sidebar.html:28
-msgid "&nbsp; Data sources"
-msgstr ""
-
-#: public/partials/home/sidebar.html:10
-msgid "&nbsp; Home"
-msgstr ""
-
-#: public/partials/home/sidebar.html:25
-msgid "&nbsp; Layers"
-msgstr ""
-
-#: public/partials/home/sidebar.html:31
-msgid "&nbsp; Roles"
-msgstr ""
-
-#: public/partials/home/sidebar.html:22
-msgid "&nbsp; Shared space"
-msgstr ""
-
-#: public/partials/home/sidebar.html:19
-msgid "&nbsp;Explore"
-msgstr ""
-
-#: public/partials/home/sidebar.html:13
-msgid "&nbsp;My Dashboards"
-msgstr ""
-
-#: public/partials/home/sidebar.html:16
-msgid "&nbsp;My Reports"
-msgstr ""
-
-#: public/partials/home/sidebar.html:34
-msgid "&nbsp;Users"
-msgstr ""
-
 #: public/partials/layer/datasetModal.html:13
 #: public/partials/layer/sqlModal.html:14
 msgid "1.- Choose a data source"
@@ -53,7 +17,7 @@ msgstr ""
 msgid "A query must hold at least one element here to be executed"
 msgstr ""
 
-#: public/partials/home/sidebar.html:40
+#: public/partials/home/sidebar.html:61
 msgid "About"
 msgstr ""
 
@@ -605,6 +569,7 @@ msgstr ""
 #: public/js/data-sources/data-sources-list.controller.js:32
 #: public/js/home/controller.js:93
 #: public/partials/data-sources/list.html:12
+#: public/partials/home/sidebar.html:42
 msgid "Data sources"
 msgstr ""
 
@@ -835,6 +800,7 @@ msgstr ""
 
 #: public/js/home/controller.js:157
 #: public/js/home/controller.js:317
+#: public/partials/home/sidebar.html:29
 msgid "Explore"
 msgstr ""
 
@@ -966,7 +932,7 @@ msgstr ""
 msgid "Google Cloud JSON authorization file"
 msgstr ""
 
-#: public/partials/home/sidebar.html:37
+#: public/partials/home/sidebar.html:57
 msgid "Guided tour"
 msgstr ""
 
@@ -1038,6 +1004,7 @@ msgstr ""
 #: public/js/home/controller.js:225
 #: public/js/home/controller.js:377
 #: public/partials/home/header.html:10
+#: public/partials/home/sidebar.html:15
 msgid "Home"
 msgstr ""
 
@@ -1136,6 +1103,7 @@ msgstr ""
 #: public/js/data-sources/data-sources-list.controller.js:122
 #: public/js/home/controller.js:110
 #: public/js/layers/layers-list.controller.js:74
+#: public/partials/home/sidebar.html:37
 #: public/partials/layers/list.html:9
 msgid "Layers"
 msgstr ""
@@ -1215,6 +1183,14 @@ msgstr ""
 
 #: public/partials/home/main.html:67
 msgid "Most executed"
+msgstr ""
+
+#: public/partials/home/sidebar.html:19
+msgid "My Dashboards"
+msgstr ""
+
+#: public/partials/home/sidebar.html:24
+msgid "My Reports"
 msgstr ""
 
 #: public/partials/home/header2.html:44
@@ -1529,6 +1505,7 @@ msgid "Role name"
 msgstr ""
 
 #: public/js/home/controller.js:78
+#: public/partials/home/sidebar.html:47
 #: public/partials/roles/list.html:11
 #: public/partials/users/add.html:135
 msgid "Roles"
@@ -1666,6 +1643,7 @@ msgstr ""
 
 #: public/js/home/controller.js:127
 #: public/js/spaces/controller.js:16
+#: public/partials/home/sidebar.html:33
 msgid "Shared space"
 msgstr ""
 
@@ -1966,6 +1944,7 @@ msgid "Username"
 msgstr ""
 
 #: public/js/home/controller.js:63
+#: public/partials/home/sidebar.html:52
 #: public/partials/users/list.html:13
 msgid "Users"
 msgstr ""
@@ -2174,6 +2153,7 @@ msgstr ""
 msgid "inset"
 msgstr ""
 
+#: public/partials/home/sidebar.html:8
 #: public/partials/users/view.html:8
 msgid "logout"
 msgstr ""

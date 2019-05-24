@@ -12,42 +12,6 @@ msgstr ""
 "X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: public/partials/home/sidebar.html:28
-msgid "&nbsp; Data sources"
-msgstr "&nbsp; Sources de données"
-
-#: public/partials/home/sidebar.html:10
-msgid "&nbsp; Home"
-msgstr "&nbsp; Accueil"
-
-#: public/partials/home/sidebar.html:25
-msgid "&nbsp; Layers"
-msgstr "&nbsp; Calques"
-
-#: public/partials/home/sidebar.html:31
-msgid "&nbsp; Roles"
-msgstr "&nbsp; Rôles"
-
-#: public/partials/home/sidebar.html:22
-msgid "&nbsp; Shared space"
-msgstr "&nbsp; Espace partagé"
-
-#: public/partials/home/sidebar.html:19
-msgid "&nbsp;Explore"
-msgstr "&nbsp;Explorer"
-
-#: public/partials/home/sidebar.html:13
-msgid "&nbsp;My Dashboards"
-msgstr "&nbsp;Mes tableaux de bord"
-
-#: public/partials/home/sidebar.html:16
-msgid "&nbsp;My Reports"
-msgstr "&nbsp;Mes rapports"
-
-#: public/partials/home/sidebar.html:34
-msgid "&nbsp;Users"
-msgstr "&nbsp;Utilisateurs"
-
 #: public/partials/layer/datasetModal.html:13
 #: public/partials/layer/sqlModal.html:14
 msgid "1.- Choose a data source"
@@ -61,7 +25,7 @@ msgstr "2.- Cliquez sur la source de données que vous voulez ajouter"
 msgid "A query must hold at least one element here to be executed"
 msgstr "Une requête doit contenir au moins un élément pour être exécutée"
 
-#: public/partials/home/sidebar.html:40
+#: public/partials/home/sidebar.html:61
 msgid "About"
 msgstr "À propos"
 
@@ -668,6 +632,7 @@ msgstr "Nom et type de la source de données"
 
 #: public/js/data-sources/data-sources-list.controller.js:32
 #: public/js/home/controller.js:93 public/partials/data-sources/list.html:12
+#: public/partials/home/sidebar.html:42
 msgid "Data sources"
 msgstr "Sources de données"
 
@@ -918,6 +883,7 @@ msgid "Execute reports"
 msgstr "Exécuter le rapport"
 
 #: public/js/home/controller.js:157 public/js/home/controller.js:317
+#: public/partials/home/sidebar.html:29
 msgid "Explore"
 msgstr "Explorer"
 
@@ -1055,7 +1021,7 @@ msgstr "Google Big Query"
 msgid "Google Cloud JSON authorization file"
 msgstr "Fichier JSON d’autorisation pour Google Cloud"
 
-#: public/partials/home/sidebar.html:37
+#: public/partials/home/sidebar.html:57
 msgid "Guided tour"
 msgstr "Visite guidée"
 
@@ -1150,9 +1116,9 @@ msgid "Hide components"
 msgstr "Masquer le composant"
 
 #: public/js/home/controller.js:225 public/js/home/controller.js:377
-#: public/partials/home/header.html:10
+#: public/partials/home/header.html:10 public/partials/home/sidebar.html:15
 msgid "Home"
-msgstr "Acceuil"
+msgstr "Accueil"
 
 #: public/partials/data-sources/edit.html:32
 msgid "Host"
@@ -1264,7 +1230,7 @@ msgstr "Éléments du<br>calque"
 #: public/js/data-sources/data-sources-list.controller.js:122
 #: public/js/home/controller.js:110
 #: public/js/layers/layers-list.controller.js:74
-#: public/partials/layers/list.html:9
+#: public/partials/home/sidebar.html:37 public/partials/layers/list.html:9
 msgid "Layers"
 msgstr "Calques"
 
@@ -1351,6 +1317,14 @@ msgstr "Plus exécutés"
 #: public/partials/home/main.html:67
 msgid "Most executed"
 msgstr "Plus exécutés"
+
+#: public/partials/home/sidebar.html:19
+msgid "My Dashboards"
+msgstr "Mes tableaux de bord"
+
+#: public/partials/home/sidebar.html:24
+msgid "My Reports"
+msgstr "Mes rapports"
 
 #: public/partials/home/header2.html:44
 msgid "My Tasks"
@@ -1690,8 +1664,8 @@ msgstr "Droite"
 msgid "Role name"
 msgstr "Nom du rôle"
 
-#: public/js/home/controller.js:78 public/partials/roles/list.html:11
-#: public/partials/users/add.html:135
+#: public/js/home/controller.js:78 public/partials/home/sidebar.html:47
+#: public/partials/roles/list.html:11 public/partials/users/add.html:135
 msgid "Roles"
 msgstr "Rôles"
 
@@ -1852,6 +1826,7 @@ msgid "Shared Area"
 msgstr "Espace partagé"
 
 #: public/js/home/controller.js:127 public/js/spaces/controller.js:16
+#: public/partials/home/sidebar.html:33
 msgid "Shared space"
 msgstr "Espace partagé"
 
@@ -2205,7 +2180,8 @@ msgstr "Profil et permissions de l'utilisateur"
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: public/js/home/controller.js:63 public/partials/users/list.html:13
+#: public/js/home/controller.js:63 public/partials/home/sidebar.html:52
+#: public/partials/users/list.html:13
 msgid "Users"
 msgstr "Utilisateur"
 
@@ -2476,7 +2452,7 @@ msgstr "imageProperties"
 msgid "inset"
 msgstr "encart"
 
-#: public/partials/users/view.html:8
+#: public/partials/home/sidebar.html:8 public/partials/users/view.html:8
 msgid "logout"
 msgstr "déconnexion"
 
