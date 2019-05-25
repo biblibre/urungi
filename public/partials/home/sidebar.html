@@ -52,7 +52,7 @@
         <span translate>Users</span>
         <span class="badge">{{counts.users}}</span>
     </a>
-    <a ng-if="!getUserContextHelp('homeIndex')" class="list-group-item admin-menu" ng-click="showIntro()">
+    <a ng-if="userContextHelp.includes('homeIndex')" class="list-group-item admin-menu" ng-click="showIntro()">
         <i class="fa fa-fw fa-map"></i>
         <span translate>Guided tour</span>
     </a>

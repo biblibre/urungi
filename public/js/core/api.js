@@ -7,6 +7,8 @@
 
     function api (connection) {
         const service = {
+            getCounts: getCounts,
+
             getDataSources: getDataSources,
             getEntitiesSchema: getEntitiesSchema,
             getSqlQuerySchema: getSqlQuerySchema,
@@ -33,6 +35,10 @@
         };
 
         return service;
+
+        function getCounts () {
+            return connection.get('/api/get-counts');
+        }
 
         function getDataSources (params) {
             return connection.get('/api/data-sources/find-all', params);

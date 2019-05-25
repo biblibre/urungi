@@ -3,9 +3,9 @@
 
     angular.module('app.dashboards').controller('DashboardsListController', DashboardsListController);
 
-    DashboardsListController.$inject = ['$rootScope', '$location', '$timeout', 'api', 'gettextCatalog', 'userService'];
+    DashboardsListController.$inject = ['$location', '$timeout', 'api', 'gettextCatalog', 'userService'];
 
-    function DashboardsListController ($rootScope, $location, $timeout, api, gettextCatalog, userService) {
+    function DashboardsListController ($location, $timeout, api, gettextCatalog, userService) {
         const vm = this;
 
         vm.dashboards = [];

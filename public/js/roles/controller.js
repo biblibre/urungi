@@ -1,8 +1,10 @@
-angular.module('app').controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, $rootScope) {
+angular.module('app').controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, userService) {
     $scope.items = [];
     $scope.roleModal = 'partials/roles/roleModal.html';
 
-    $scope.sharedSpace = $rootScope.user.companyData.sharedSpace;
+    userService.getCurrentUser().then(user => {
+        $scope.sharedSpace = user.companyData.sharedSpace;
+    });
 
     $scope.newRole = function () {
         $scope._Role = {};

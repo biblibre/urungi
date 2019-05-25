@@ -12,9 +12,9 @@
         },
     });
 
-    ReportsListItemController.$inject = ['$rootScope', '$uibModal', 'api', 'reportModel'];
+    ReportsListItemController.$inject = ['$uibModal', 'api', 'reportModel'];
 
-    function ReportsListItemController ($rootScope, $uibModal, api, reportModel) {
+    function ReportsListItemController ($uibModal, api, reportModel) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;

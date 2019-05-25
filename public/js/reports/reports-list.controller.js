@@ -3,9 +3,9 @@
 
     angular.module('app.reports').controller('ReportsListController', ReportsListController);
 
-    ReportsListController.$inject = ['$rootScope', '$location', '$timeout', 'api', 'gettextCatalog', 'userService'];
+    ReportsListController.$inject = ['$location', '$timeout', 'api', 'gettextCatalog', 'userService'];
 
-    function ReportsListController ($rootScope, $location, $timeout, api, gettextCatalog, userService) {
+    function ReportsListController ($location, $timeout, api, gettextCatalog, userService) {
         const vm = this;
 
         vm.reports = [];

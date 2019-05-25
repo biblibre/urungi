@@ -12,20 +12,23 @@
         },
     });
 
-    ShareModalController.$inject = ['$rootScope'];
+    ShareModalController.$inject = ['userService'];
 
-    function ShareModalController ($rootScope) {
+    function ShareModalController (userService) {
         const vm = this;
 
         vm.item = {};
         vm.userObjects = [];
-        vm.isWSTADMIN = $rootScope.isWSTADMIN;
+        vm.isWSTADMIN = false;
         vm.$onInit = $onInit;
         vm.selectThisFolder = selectThisFolder;
 
         function $onInit () {
             vm.item = vm.resolve.item;
             vm.userObjects = vm.resolve.userObjects;
+            userService.getCurrentUser().then(user => {
+                vm.isWSTADMIN = user.isWSTADMIN;
+            });
         }
 
         function selectThisFolder (folderID) {

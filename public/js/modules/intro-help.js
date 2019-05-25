@@ -1,6 +1,6 @@
 var module = angular.module('intro.help', []);
 
-module.directive('introHelp', ['$rootScope', '$compile', '$parse', '$window', function ($rootScope, $compile, $parse, $window) {
+module.directive('introHelp', ['$compile', '$parse', '$window', function ($compile, $parse, $window) {
     return {
         restrict: 'A',
         scope: {

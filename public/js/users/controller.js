@@ -1,4 +1,4 @@
-angular.module('app').controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window, $routeParams, $rootScope) {
+angular.module('app').controller('AdminUsersCtrl', function ($scope, connection, $q, $filter, $window, $routeParams, userService) {
     $scope.deleteModal = '/partial/private/deleteModal.html';
     $scope.changePasswordModal = '/partials/users/changePassword.html';
     $scope.page = null;
@@ -115,17 +115,19 @@ angular.module('app').controller('AdminUsersCtrl', function ($scope, connection,
     };
 
     $scope.changeUserStatus = function (user) {
-        if ($rootScope.isWSTADMIN) {
-            let newStatus;
-            if (user.status === 'active') { newStatus = 'Not active'; }
-            if (user.status === 'Not active') { newStatus = 'active'; }
+        userService.getCurrentUser().then(currentUser => {
+            if (currentUser.isWSTADMIN) {
+                let newStatus;
+                if (user.status === 'active') { newStatus = 'Not active'; }
+                if (user.status === 'Not active') { newStatus = 'active'; }
 
-            var data = { userID: user._id, status: newStatus };
+                var data = { userID: user._id, status: newStatus };
 
-            connection.post('/api/admin/users/change-user-status', data).then(function (result) {
-                user.status = newStatus;
-            });
-        }
+                connection.post('/api/admin/users/change-user-status', data).then(function (result) {
+                    user.status = newStatus;
+                });
+            }
+        });
     };
 
     $scope.getRoleName = function (roleID) {

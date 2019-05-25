@@ -24,8 +24,6 @@
                     user.pagesCreate = data.items.pagesCreate;
                     user.exploreData = data.items.exploreData;
                     user.isWSTADMIN = data.items.isWSTADMIN;
-                    user.contextHelp = data.items.contextHelp;
-                    user.dialogs = data.items.dialogs;
                     user.viewSQL = data.items.viewSQL;
 
                     return user;

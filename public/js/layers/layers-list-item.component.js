@@ -11,22 +11,24 @@
         },
     });
 
-    LayersListItemController.$inject = ['$rootScope', '$uibModal', 'api'];
+    LayersListItemController.$inject = ['$uibModal', 'api', 'userService'];
 
-    function LayersListItemController ($rootScope, $uibModal, api) {
+    function LayersListItemController ($uibModal, api, userService) {
         const vm = this;
 
         vm.toggleActive = toggleActive;
         vm.openDeleteModal = openDeleteModal;
 
         function toggleActive () {
-            if ($rootScope.isWSTADMIN) {
-                const newStatus = vm.layer.status === 'active' ? 'Not active' : 'active';
+            userService.getCurrentUser().then(user => {
+                if (user.isWSTADMIN) {
+                    const newStatus = vm.layer.status === 'active' ? 'Not active' : 'active';
 
-                api.changeLayerStatus(vm.layer._id, newStatus).then(() => {
-                    vm.layer.status = newStatus;
-                });
-            }
+                    api.changeLayerStatus(vm.layer._id, newStatus).then(() => {
+                        vm.layer.status = newStatus;
+                    });
+                }
+            });
         }
 
         function openDeleteModal () {

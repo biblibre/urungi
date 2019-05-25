@@ -1,5 +1,5 @@
-/* global jsPlumb: false, $modal: false, bsLoadingOverlayService: false */
-angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api, connection, $routeParams, uuid2, $timeout, $window, gettextCatalog) {
+/* global jsPlumb: false, bsLoadingOverlayService: false */
+angular.module('app').controller('layerCtrl', function ($scope, api, connection, $routeParams, uuid2, $timeout, $window, gettextCatalog) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
@@ -172,20 +172,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
             }
         });
     }
-
-    $scope.changeLayerStatus = function (layer) {
-        if ($rootScope.isWSTADMIN) {
-            let newStatus;
-            if (layer.status === 'active') { newStatus = 'Not active'; }
-            if (layer.status === 'Not active') { newStatus = 'active'; }
-
-            var data = { layerID: layer._id, status: newStatus };
-
-            connection.post('/api/layers/change-layer-status', data).then(function (result) {
-                layer.status = newStatus;
-            });
-        }
-    };
 
     $scope.view = function () {
         if ($routeParams.layerID) {
@@ -1293,10 +1279,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
         }
     };
 
-    $scope.openSetup = function () {
-        $rootScope.currentModal = $modal.open({ templateUrl: 'setupModal', scope: $scope });
-    };
-
     $scope.getDatasetsForThisDts = function (_id, theDataSource) {
         if (!theDataSource.loading) {
             theDataSource.loading = true;
@@ -1515,5 +1497,11 @@ angular.module('app').controller('layerCtrl', function ($scope, $rootScope, api,
         }
 
         return $scope._Layer.params.schema.concat($scope.customElements);
+    };
+
+    $scope.removeFromArray = function (array, item) {
+        var index = array.indexOf(item);
+
+        if (index > -1) array.splice(index, 1);
     };
 });

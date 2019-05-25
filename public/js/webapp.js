@@ -124,7 +124,7 @@ angular.module('app').service('reportService', function () {
 angular.module('app').run(['$rootScope', '$location', 'connection', 'userService', function ($rootScope, $location, connection, userService) {
     userService.getCurrentUser().then(user => {
         $rootScope.user = user;
-        $rootScope.isWSTADMIN = isWSTADMIN($rootScope.user);
+        $rootScope.isWSTADMIN = user.isWSTADMIN;
     });
 
     // Redirect to /login if next route is not public and user is not authenticated
@@ -144,37 +144,14 @@ angular.module('app').run(['$rootScope', '$location', 'connection', 'userService
         $location.url('/');
     });
 
-    $rootScope.removeFromArray = function (array, item) {
-        var index = array.indexOf(item);
-
-        if (index > -1) array.splice(index, 1);
-    };
-
     $rootScope.goBack = function () {
         window.history.back();
     };
 
-    $rootScope.getUserContextHelp = function (contextHelpName) {
-        var found = false;
-
-        if ($rootScope.user && $rootScope.user.contextHelp) {
-            for (var i in $rootScope.user.contextHelp) {
-                if ($rootScope.user.contextHelp[i] === contextHelpName) {
-                    found = true;
-                }
-            }
-        }
-
-        return !found;
-    };
-
-    $rootScope.setUserContextHelpViewed = function (contextHelpName) {
-        var params = {};
-        params.contextHelpName = contextHelpName;
-        connection.get('/api/set-viewed-context-help', params).then(function (data) {
-            $rootScope.user.contextHelp = data.items;
-        });
-    };
+    $rootScope.userContextHelp = [];
+    userService.getCurrentUser().then(user => {
+        $rootScope.userContextHelp = user.contextHelp;
+    });
 }]);
 
 angular.module('app').run(['bsLoadingOverlayService', function (bsLoadingOverlayService) {
@@ -193,11 +170,3 @@ angular.module('app').run(['editableOptions', function (editableOptions) {
 angular.module('app').run(['language', function (language) {
     language.setLanguageFromLocalStorage();
 }]);
-
-function isWSTADMIN (user) {
-    if (user) {
-        return user.roles.some(role => role === 'WSTADMIN');
-    }
-
-    return false;
-}

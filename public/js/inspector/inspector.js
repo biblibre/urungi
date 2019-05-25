@@ -44,9 +44,9 @@
 
     angular.module('app.inspector').directive('appInspector', appInspector);
 
-    appInspector.$inject = ['$compile', 'c3Charts', '$rootScope', 'textStyles', '$window'];
+    appInspector.$inject = ['$compile', 'c3Charts', 'textStyles', '$window'];
 
-    function appInspector ($compile, c3Charts, $rootScope, textStyles, $window) {
+    function appInspector ($compile, c3Charts, textStyles, $window) {
         return {
             transclude: true,
             scope: {
@@ -229,7 +229,6 @@
                         $scope.inspector.styles.border.radius = '';
                     }
 
-                    // $scope.elementType = $rootScope.elementType;
                     $scope.elementType = node.attr('ndType');
 
                     if ($scope.elementType === 'image' || $scope.elementType === 'video') {

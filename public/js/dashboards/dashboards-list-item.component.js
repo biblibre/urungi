@@ -12,9 +12,9 @@
         },
     });
 
-    DashboardsListItemController.$inject = ['$rootScope', '$uibModal', 'api', 'dashboardv2Model'];
+    DashboardsListItemController.$inject = ['$uibModal', 'api', 'dashboardv2Model'];
 
-    function DashboardsListItemController ($rootScope, $uibModal, api, dashboardv2Model) {
+    function DashboardsListItemController ($uibModal, api, dashboardv2Model) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;

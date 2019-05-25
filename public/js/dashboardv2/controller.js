@@ -1,7 +1,7 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportService, connection, $routeParams, reportModel, c3Charts, uuid2,
     colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout,
-    $rootScope, gettextCatalog, usersModel, $uibModal
+    gettextCatalog, usersModel, $uibModal, userService, api
 ) {
     $scope.reportModal = 'partials/report/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';
@@ -98,24 +98,26 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         ]
     };
 
-    if ($rootScope.user.reportsCreate || $rootScope.counts.reports > 0) {
-        $scope.IntroOptions.steps.push({
-            element: '#parentIntroReports',
-            html: '<div><h3>' +
-            gettextCatalog.getString('Next Step') +
-            '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-            gettextCatalog.getString('Reports') +
-            '</span><br/><br/>' +
-            gettextCatalog.getString('See how you can create reports that shows your data using charts and data grids') +
-            '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">' +
-            gettextCatalog.getString('Go to report designer and continue tour') +
-            '</a></span></div>',
-            width: '500px',
-            objectArea: false,
-            verticalAlign: 'top',
-            height: '250px'
-        });
-    }
+    $q.all({ user: userService.getCurrentUser(), counts: api.getCounts() }).then(result => {
+        if (result.user.reportsCreate || result.counts.reports > 0) {
+            $scope.IntroOptions.steps.push({
+                element: '#parentIntroReports',
+                html: '<div><h3>' +
+                gettextCatalog.getString('Next Step') +
+                '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
+                gettextCatalog.getString('Reports') +
+                '</span><br/><br/>' +
+                gettextCatalog.getString('See how you can create reports that shows your data using charts and data grids') +
+                '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">' +
+                gettextCatalog.getString('Go to report designer and continue tour') +
+                '</a></span></div>',
+                width: '500px',
+                objectArea: false,
+                verticalAlign: 'top',
+                height: '250px'
+            });
+        }
+    });
 
     $scope.initForm = function () {
         if (/new/.test($location.path())) {
