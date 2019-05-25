@@ -66,19 +66,11 @@ angular.module('app', [
             controller: 'rolesCtrl'
         });
 
-        $routeProvider.when('/roles/:roleID/', {
-            templateUrl: 'partials/roles/view.html',
-            controller: 'rolesCtrl'
-        });
-
-        $routeProvider.when('/roles/new/:newRole/', {
-            templateUrl: 'partials/roles/editNew.html',
-            controller: 'rolesCtrl'
-        });
         $routeProvider.when('/logout', {
             templateUrl: 'partials/logout/index.html',
             controller: 'logOutCtrl'
         });
+
         // spaces
         $routeProvider.when('/shared-space', {
             templateUrl: 'partials/spaces/index.html',
@@ -87,30 +79,6 @@ angular.module('app', [
         $routeProvider.when('/shared-space/:extra', {
             templateUrl: 'partials/spaces/index.html',
             controller: 'spacesCtrl'
-        });
-        // pages
-        $routeProvider.when('/pages', {
-            templateUrl: 'partials/pages/list.html',
-            controller: 'pagesCtrl'
-        });
-        $routeProvider.when('/page/:extra', {
-            templateUrl: 'partials/pages/list.html',
-            controller: 'pagesCtrl'
-        });
-
-        $routeProvider.when('/pages/:pageID', {
-            templateUrl: 'partials/pages/view.html',
-            controller: 'pagesCtrl'
-        });
-
-        $routeProvider.when('/pages/edit/:pageID/', {
-            templateUrl: 'partials/pages/edit.html',
-            controller: 'pagesCtrl'
-        });
-
-        $routeProvider.when('/pages/new/:newPage/', {
-            templateUrl: 'partials/pages/edit.html',
-            controller: 'pagesCtrl'
         });
 
         // explore
@@ -123,16 +91,6 @@ angular.module('app', [
             controller: 'reportCtrl'
         });
 
-        // catalog
-        $routeProvider.when('/catalog', {
-            templateUrl: 'partials/catalog/view.html',
-            controller: 'catalogCtrl'
-        });
-        $routeProvider.when('/catalog/:extra', {
-            templateUrl: 'partials/catalog/view.html',
-            controller: 'catalogCtrl'
-        });
-
         // imports and exports
 
         $routeProvider.when('/import', {
@@ -141,11 +99,6 @@ angular.module('app', [
         });
 
         $routeProvider.when('/export', {
-            templateUrl: 'partials/io/export.html',
-            controller: 'ioCtrl'
-        });
-
-        $routeProvider.when('/export/download', {
             templateUrl: 'partials/io/export.html',
             controller: 'ioCtrl'
         });
