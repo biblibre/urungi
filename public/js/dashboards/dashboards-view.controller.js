@@ -63,9 +63,9 @@
                 reportView.setAttribute('report', 'vm.' + reportAttr);
             });
 
-            $compile(pageViewer)($scope);
-
             initPrompts();
+
+            $compile(pageViewer)($scope);
 
             $timeout(function () {
                 repaintReports();
@@ -92,13 +92,10 @@
 
         function getPromptsWidget () {
             for (const promptID in vm.prompts) {
-                let targetPrompt = document.getElementById('PROMPT_' + promptID);
+                const targetPrompt = document.getElementById('PROMPT_' + promptID);
 
                 if (targetPrompt) {
                     targetPrompt.outerHTML = getPromptHTML(promptID);
-                    targetPrompt = document.getElementById('PROMPT_' + promptID);
-
-                    $compile(targetPrompt)($scope);
                 }
             }
         }
