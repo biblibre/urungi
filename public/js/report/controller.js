@@ -1,4 +1,4 @@
-angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportService, $routeParams, $timeout, c3Charts,
+angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportsService, $routeParams, $timeout, c3Charts,
     reportModel, widgetsCommon, $location, gettextCatalog, usersModel, $q) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dateModal = 'partials/report/modals/dateModal.html';
@@ -197,7 +197,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.saveReportStructure = function () {
-        reportService.addReport($scope.selectedReport);
+        reportsService.storeReport($scope.selectedReport);
     };
 
     $scope.stringVariables = [
@@ -271,7 +271,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $('modal-backdrop').visible = false;
         $('modal-backdrop').remove();
         $('#dashListModal').modal('hide');
-        reportService.addReport($scope.selectedReport);
+        reportsService.storeReport($scope.selectedReport);
 
         $location.path('/dashboards/push/' + dashboardID);
     };

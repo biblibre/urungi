@@ -1,6 +1,6 @@
 /* global uuid2: false */
 
-angular.module('app').service('dashboardv2Model', function ($http, $q, connection, reportService) {
+angular.module('app').service('dashboardv2Model', function ($http, $q, connection, reportsService) {
     this.getDashBoard = function (dashboardID, isLinked, done) {
         connection.get('/api/dashboardsv2/get/' + dashboardID, { id: dashboardID, linked: isLinked }).then(function (data) {
             done(data.item);
@@ -44,7 +44,7 @@ angular.module('app').service('dashboardv2Model', function ($http, $q, connectio
     this.pushReport2Dashboard = function (dashboardID) {
         connection.get('/api/dashboardsv2/get/' + dashboardID, { id: dashboardID, linked: false }).then(function (data) {
             var selectedDashboard = data.item;
-            var qstructure = reportService.getReport();
+            var qstructure = reportsService.getStoredReport();
             qstructure.reportName = 'report_' + (selectedDashboard.reports.length + 1);
             qstructure.id = uuid2.newguid();
             selectedDashboard.reports.push(qstructure);

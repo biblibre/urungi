@@ -1,5 +1,5 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
-    reportService, connection, $routeParams, reportModel, c3Charts, uuid2,
+    reportsService, connection, $routeParams, reportModel, c3Charts, uuid2,
     colors, htmlWidgets, dashboardv2Model, grid, $timeout,
     gettextCatalog, usersModel, $uibModal, userService, api
 ) {
@@ -150,7 +150,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             };
 
             if (/push/.test($location.path())) {
-                const pushedReport = reportService.getReport();
+                const pushedReport = reportsService.getStoredReport();
                 pushedReport.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
                 pushedReport.id = uuid2.newguid();
                 $scope.selectedDashboard.reports.push(pushedReport);
@@ -166,7 +166,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                 $scope.selectedDashboard = data.item;
 
                 if (/push/.test($location.path())) {
-                    const pushedReport = reportService.getReport();
+                    const pushedReport = reportsService.getStoredReport();
                     pushedReport.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
                     pushedReport.id = uuid2.newguid();
                     $scope.selectedDashboard.reports.push(pushedReport);
@@ -203,7 +203,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         var el = document.getElementById('reportLayout');
         angular.element(el).empty();
 
-        var qstructure = reportService.getReport();
+        var qstructure = reportsService.getStoredReport();
 
         if ($scope.editingReport == null) {
             qstructure.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);

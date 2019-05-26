@@ -6,9 +6,12 @@
     reportsService.$inject = [];
 
     function reportsService () {
+        let storedReport = {};
         const service = {
             generateQuery: generateQuery,
             getQueryForFilter: getQueryForFilter,
+            storeReport: storeReport,
+            getStoredReport: getStoredReport,
         };
 
         return service;
@@ -68,6 +71,14 @@
             query.columns.push(newColumn);
 
             return query;
+        }
+
+        function storeReport (report) {
+            storedReport = report;
+        }
+
+        function getStoredReport () {
+            return storedReport;
         }
 
         function getCountColumn (col) {

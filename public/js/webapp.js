@@ -96,23 +96,6 @@ angular.module('app', [
         });
     }]);
 
-angular.module('app').service('reportService', function () {
-    var theReport = {};
-
-    var addReport = function (newObj) {
-        theReport = newObj;
-    };
-
-    var getReport = function () {
-        return theReport;
-    };
-
-    return {
-        addReport: addReport,
-        getReport: getReport
-    };
-});
-
 angular.module('app').run(['$rootScope', '$location', 'connection', 'userService', function ($rootScope, $location, connection, userService) {
     userService.getCurrentUser().then(user => {
         $rootScope.user = user;
