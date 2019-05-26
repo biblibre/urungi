@@ -1,4 +1,4 @@
-angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportService, $routeParams, $timeout, bsLoadingOverlayService, c3Charts,
+angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportService, $routeParams, $timeout, c3Charts,
     reportModel, widgetsCommon, $location, gettextCatalog, usersModel, $q) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dateModal = 'partials/report/modals/dateModal.html';
@@ -54,8 +54,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             return;
         }
 
-        $scope.showOverlay('OVERLAY_reportLayout');
-
         return $scope.initLayers().then(function () {
             if (/reports\/new/.test($location.path())) {
                 $scope.mode = 'new';
@@ -68,12 +66,9 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
                     $scope.selectedReport = report;
                     $scope.initForm();
                     $scope.mode = 'edit';
-                    $scope.hideOverlay('OVERLAY_reportLayout');
                     return $scope.refresh();
                 });
             }
-
-            $scope.hideOverlay('OVERLAY_reportLayout');
 
             return $scope.refresh();
         });
@@ -199,18 +194,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.removeItem = function (item, collection) {
         var id = collection.indexOf(item);
         collection.splice(id, 1);
-    };
-
-    $scope.showOverlay = function (referenceId) {
-        bsLoadingOverlayService.start({
-            referenceId: referenceId
-        });
-    };
-
-    $scope.hideOverlay = function (referenceId) {
-        bsLoadingOverlayService.stop({
-            referenceId: referenceId
-        });
     };
 
     $scope.saveReportStructure = function () {

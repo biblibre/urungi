@@ -4,7 +4,7 @@
 angular.module('app', [
     'ngRoute', 'ui.sortable', 'draganddrop', 'ui.bootstrap',
     'urungi.directives', 'ngSanitize', 'ui.select', 'angularUUID2', 'vs-repeat',
-    'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'bsLoadingOverlay', 'xeditable',
+    'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'xeditable',
     'intro.help', 'ngFileUpload', 'colorpicker.module',
     'app.inspector', 'gettext', 'ngFileSaver', 'ngclipboard',
     'app.core', 'app.data-sources', 'app.reports', 'app.dashboards',
@@ -151,14 +151,6 @@ angular.module('app').run(['$rootScope', '$location', 'connection', 'userService
     $rootScope.userContextHelp = [];
     userService.getCurrentUser().then(user => {
         $rootScope.userContextHelp = user.contextHelp;
-    });
-}]);
-
-angular.module('app').run(['bsLoadingOverlayService', function (bsLoadingOverlayService) {
-    bsLoadingOverlayService.setGlobalConfig({
-        delay: 0, // Minimal delay to hide loading overlay in ms.
-        activeClass: undefined, // Class that is added to the element where bs-loading-overlay is applied when the overlay is active.
-        templateUrl: 'partials/loading-overlay-template.html' // Template url for overlay element. If not specified - no overlay element is created.
     });
 }]);
 

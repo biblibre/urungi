@@ -1,6 +1,6 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportService, connection, $routeParams, reportModel, c3Charts, uuid2,
-    colors, htmlWidgets, dashboardv2Model, grid, bsLoadingOverlayService, $timeout,
+    colors, htmlWidgets, dashboardv2Model, grid, $timeout,
     gettextCatalog, usersModel, $uibModal, userService, api
 ) {
     $scope.reportModal = 'partials/report/edit.html';
@@ -192,18 +192,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                 repaintReports();
             });
         }
-    };
-
-    $scope.showOverlay = function (referenceId) {
-        bsLoadingOverlayService.start({
-            referenceId: referenceId
-        });
-    };
-
-    $scope.hideOverlay = function (referenceId) {
-        bsLoadingOverlayService.stop({
-            referenceId: referenceId
-        });
     };
 
     $scope.cancelReport = function (report) {

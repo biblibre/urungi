@@ -1,4 +1,4 @@
-/* global jsPlumb: false, bsLoadingOverlayService: false */
+/* global jsPlumb: false */
 angular.module('app').controller('layerCtrl', function ($scope, api, connection, $routeParams, uuid2, $timeout, $window, gettextCatalog) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
@@ -1301,7 +1301,6 @@ angular.module('app').controller('layerCtrl', function ($scope, api, connection,
             if (result.result === 1) {
                 theEntity.fields = result.items[0].elements;
             }
-            bsLoadingOverlayService.stop({ referenceId: 'layerView' });
         });
     };
 

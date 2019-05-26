@@ -77,7 +77,6 @@ function dist_js_build () {
         'node_modules/ui-select/dist/select.min.js',
         'node_modules/d3/d3.min.js',
         'node_modules/c3/c3.min.js',
-        'node_modules/angular-loading-overlay/dist/angular-loading-overlay.js',
         'node_modules/angular-xeditable/dist/js/xeditable.min.js',
         'node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js',
         'node_modules/clipboard/dist/clipboard.min.js',
