@@ -399,7 +399,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'con
                         gettextCatalog.getString('Explore data') +
                         '</span><br/><br/>' +
                         gettextCatalog.getString('See how you can explore data creating queries easily without any technical knowledge') +
-                        '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/explore/intro">' +
+                        '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/explore#intro">' +
                         gettextCatalog.getString('Go to data explorer and continue tour') +
                         '</a></span></div>',
                         width: '500px',
@@ -417,7 +417,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'con
                             gettextCatalog.getString('Page reports') +
                             '</span><br/><br/>' +
                             gettextCatalog.getString('See how you can create customized web pages that shows your data using charts and data grids along with HTML components') +
-                            '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/page/intro">' +
+                            '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/page#intro">' +
                             gettextCatalog.getString('Go to pages designer and continue tour') +
                             '</a></span></div>',
                             width: '500px',
@@ -435,7 +435,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'con
                                 gettextCatalog.getString('Single query reports') +
                                 '</span><br/><br/>' +
                                 gettextCatalog.getString('See how you can create single query reports that shows your data using charts and data grids') +
-                                '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">' +
+                                '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report#intro">' +
                                 gettextCatalog.getString('Go to single query report designer and continue tour') +
                                 '</a></span></div>',
                                 width: '500px',
@@ -453,7 +453,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'con
                                     gettextCatalog.getString('Dashboards') +
                                     '</span><br/><br/>' +
                                     gettextCatalog.getString('See how to create dashboards composed with a set of single query reports') +
-                                    '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/dashboard/intro">' +
+                                    '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/dashboard#intro">' +
                                     gettextCatalog.getString('Go to dashboards and continue tour') +
                                     '</a></span></div>',
                                     width: '500px',

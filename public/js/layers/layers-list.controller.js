@@ -160,7 +160,7 @@
                             gettextCatalog.getString('Design your company public space') +
                             '</span><br/><br/>' +
                             gettextCatalog.getString('The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space') +
-                            '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/public-space/intro">' +
+                            '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/shared-space#intro">' +
                             gettextCatalog.getString('Go to the public space definition and continue tour') +
                             '</a></span></div>',
                         width: '500px',

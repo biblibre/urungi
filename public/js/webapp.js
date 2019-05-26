@@ -76,17 +76,9 @@ angular.module('app', [
             templateUrl: 'partials/spaces/index.html',
             controller: 'spacesCtrl'
         });
-        $routeProvider.when('/shared-space/:extra', {
-            templateUrl: 'partials/spaces/index.html',
-            controller: 'spacesCtrl'
-        });
 
         // explore
         $routeProvider.when('/explore', {
-            templateUrl: 'partials/report/edit.html',
-            controller: 'reportCtrl'
-        });
-        $routeProvider.when('/explore/:extra', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
         });

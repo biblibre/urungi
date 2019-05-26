@@ -1,5 +1,5 @@
 /* global jsPlumb: false */
-angular.module('app').controller('layerCtrl', function ($scope, api, connection, $routeParams, uuid2, $timeout, $window, gettextCatalog) {
+angular.module('app').controller('layerCtrl', function ($scope, $location, api, connection, $routeParams, uuid2, $timeout, $window, gettextCatalog) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
@@ -46,7 +46,7 @@ angular.module('app').controller('layerCtrl', function ($scope, api, connection,
 
     $scope.deletingJoin = false;
 
-    if ($routeParams.extra === 'intro') {
+    if ($location.hash() === 'intro') {
         $timeout(function () { $scope.showIntro(); }, 1000);
     }
 

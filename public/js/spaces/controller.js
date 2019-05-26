@@ -1,9 +1,9 @@
-angular.module('app').controller('spacesCtrl', function ($scope, connection, uuid2, $routeParams, $timeout, gettextCatalog) {
+angular.module('app').controller('spacesCtrl', function ($scope, $location, connection, uuid2, $timeout, gettextCatalog) {
     connection.get('/api/company/get-company-data').then(result => {
         $scope.data = result.items.sharedSpace;
     });
 
-    if ($routeParams.extra === 'intro') {
+    if ($location.hash() === 'intro') {
         $timeout(function () { $scope.showIntro(); }, 1000);
     }
 

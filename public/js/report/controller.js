@@ -205,7 +205,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         { value: 'toLower', label: 'To Lower' }
     ];
 
-    if ($routeParams.extra === 'intro') {
+    if ($location.hash() === 'intro') {
         $timeout(function () { $scope.showIntro(); }, 1000);
     }
 

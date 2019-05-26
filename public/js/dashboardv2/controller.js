@@ -88,7 +88,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         $scope.reportInterface = false;
     });
 
-    if ($routeParams.extra === 'intro') {
+    if ($location.hash() === 'intro') {
         $timeout(function () { $scope.showIntro(); }, 1000);
     }
 
@@ -108,7 +108,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                 gettextCatalog.getString('Reports') +
                 '</span><br/><br/>' +
                 gettextCatalog.getString('See how you can create reports that shows your data using charts and data grids') +
-                '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report/intro">' +
+                '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report#intro">' +
                 gettextCatalog.getString('Go to report designer and continue tour') +
                 '</a></span></div>',
                 width: '500px',
