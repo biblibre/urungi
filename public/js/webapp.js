@@ -1,17 +1,40 @@
+(function () {
+    'use strict';
 
-'use strict';
+    angular.module('app', [
+        'ngRoute',
+        'ngSanitize',
+        'ngFileUpload',
+        'ngFileSaver',
+        'ui.sortable',
+        'ui.bootstrap',
+        'ui.select',
+        'ui.bootstrap.datetimepicker',
+        'ui.tree',
+        'draganddrop',
+        'vs-repeat',
+        'xeditable',
+        'colorpicker.module',
+        'gettext',
+        'ngclipboard',
+        'urungi.directives',
+        'angularUUID2',
+        'intro.help',
+        'page.block',
+        'app.core',
+        'app.inspector',
+        'app.data-sources',
+        'app.reports',
+        'app.dashboards',
+        'app.layers',
+        'app.templates',
+    ]);
 
-angular.module('app', [
-    'ngRoute', 'ui.sortable', 'draganddrop', 'ui.bootstrap',
-    'urungi.directives', 'ngSanitize', 'ui.select', 'angularUUID2', 'vs-repeat',
-    'ui.bootstrap.datetimepicker', 'ui.tree', 'page.block', 'xeditable',
-    'intro.help', 'ngFileUpload', 'colorpicker.module',
-    'app.inspector', 'gettext', 'ngFileSaver', 'ngclipboard',
-    'app.core', 'app.data-sources', 'app.reports', 'app.dashboards',
-    'app.layers',
-    'app.templates',
-])
-    .config(['$routeProvider', function ($routeProvider) {
+    angular.module('app').config(configure);
+
+    configure.$inject = ['$routeProvider'];
+
+    function configure ($routeProvider) {
         $routeProvider.otherwise({ redirectTo: '/home' });
 
         $routeProvider.when('/home', {
@@ -94,46 +117,47 @@ angular.module('app', [
             templateUrl: 'partials/io/export.html',
             controller: 'ioCtrl'
         });
-    }]);
+    }
 
-angular.module('app').run(['$rootScope', '$location', 'connection', 'userService', function ($rootScope, $location, connection, userService) {
-    userService.getCurrentUser().then(user => {
-        $rootScope.user = user;
-        $rootScope.isWSTADMIN = user.isWSTADMIN;
-    });
+    angular.module('app').run(runBlock);
 
-    // Redirect to /login if next route is not public and user is not authenticated
-    $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
-        if (next.$$route && !next.$$route.redirectTo && !next.$$route.isPublic) {
-            userService.getCurrentUser().then(user => {
-                if (!user) {
+    runBlock.$inject = ['$rootScope', '$location', 'editableOptions', 'connection', 'userService', 'language'];
+
+    function runBlock ($rootScope, $location, editableOptions, connection, userService, language) {
+        userService.getCurrentUser().then(user => {
+            $rootScope.user = user;
+            $rootScope.isWSTADMIN = user.isWSTADMIN;
+        });
+
+        // Redirect to /login if next route is not public and user is not authenticated
+        $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
+            if (next.$$route && !next.$$route.redirectTo && !next.$$route.isPublic) {
+                userService.getCurrentUser().then(user => {
+                    if (!user) {
+                        window.location.href = '/login';
+                    }
+                }, () => {
                     window.location.href = '/login';
-                }
-            }, () => {
-                window.location.href = '/login';
-            });
-        }
-    });
+                });
+            }
+        });
 
-    $rootScope.$on('$routeChangeError', function (angularEvent, current, previous) {
-        $location.url('/');
-    });
+        $rootScope.$on('$routeChangeError', function (angularEvent, current, previous) {
+            $location.url('/');
+        });
 
-    $rootScope.goBack = function () {
-        window.history.back();
-    };
+        $rootScope.goBack = function () {
+            window.history.back();
+        };
 
-    $rootScope.userContextHelp = [];
-    userService.getCurrentUser().then(user => {
-        $rootScope.userContextHelp = user.contextHelp;
-    });
-}]);
+        $rootScope.userContextHelp = [];
+        userService.getCurrentUser().then(user => {
+            $rootScope.userContextHelp = user.contextHelp;
+        });
 
-// Set default options for xeditable
-angular.module('app').run(['editableOptions', function (editableOptions) {
-    editableOptions.buttons = 'no';
-}]);
+        // Set default options for xeditable
+        editableOptions.buttons = 'no';
 
-angular.module('app').run(['language', function (language) {
-    language.setLanguageFromLocalStorage();
-}]);
+        language.setLanguageFromLocalStorage();
+    }
+})();
