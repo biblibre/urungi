@@ -1,18 +1,17 @@
 <script src="js/xlsx.core.min.js"></script>
 
-<div class="container-fluid branded-border-panel" style="height: 40px;">
-    <h3 class="pull-left" ng-bind="vm.report.reportName"></h3>
-    <a ng-if="vm.report && ((vm.report.owner == user._id) || isWSTADMIN)" ng-href="/#/reports/edit/{{vm.report._id}}"  class="btn btn-success pull-right" style="margin-right: 5px;" translate>Edit Report</a>
-    <a ng-click="goBack()" class="btn btn-default pull-right" translate>Cancel</a>
+<div class="container-fluid">
+    <div class="page-header">
+        <span class="h3" ng-bind="vm.report.reportName"></span>
+        <a ng-if="vm.report && ((vm.report.owner == user._id) || isWSTADMIN)" ng-href="/#/reports/edit/{{vm.report._id}}"  class="btn btn-success pull-right" style="margin-right: 5px;" translate>Edit Report</a>
+        <a ng-click="goBack()" class="btn btn-default pull-right" translate>Cancel</a>
+        <a ng-show="vm.report.reportType === 'grid'" ng-click="vm.saveAsXLSX()" class="btn btn-default pull-right" translate>Export Data</a>
+    </div>
 </div>
 
-<div ng-show="vm.report.reportType === 'grid'" class="container-fluid">
-    <a ng-click="vm.saveAsXLSX()" class="btn btn-default pull-right" translate>Export Data</a>
-</div>
-
-<div class="container-fluid" style="position: absolute; left: 15px; right: 0; top: 100px; bottom: 0; padding: 0 18px 18px 0; box-sizing: border-box; overflow-y: auto; overflow-x: hidden;">
+<div style="position: absolute; left: 15px; right: 0; top: 100px; bottom: 0; padding: 0 18px 18px 0; box-sizing: border-box; overflow-y: auto; overflow-x: hidden;">
     <div id="promptsModal" ng-show="vm.getPrompts().length > 0" class="prompts-block" style="position: relative;">
-        <div class="container-fluid" ng-repeat="prompt in vm.getPrompts()" style="padding-bottom: 5px; max-width: 800px;">
+        <div class="center-block" ng-repeat="prompt in vm.getPrompts()" style="padding-bottom: 5px; max-width: 800px;">
             <app-filter-prompt is-prompt="true" filter="prompt" on-change="vm.repaintWithPrompts()" get-query="vm.getQueryForFilter"></app-filter-prompt>
         </div>
     </div>

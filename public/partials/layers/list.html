@@ -1,27 +1,22 @@
 <div id="parentIntro" intro-help ng-intro-method="vm.showIntro" ng-intro-options="vm.introOptions" class="container-fluid root-container">
-    <div class="main col-md-3" ng-include="'partials/home/sidebar.html'"></div>
+    <div class="row">
+        <div class="col-md-3">
+            <app-sidebar show-intro="vm.showIntro()"></app-sidebar>
+        </div>
 
-    <div class="main col-md-9">
-        <div class="container-fluid">
+        <div class="col-md-9">
+            <div class="page-header">
+                <span class="h3" translate>Layers</span>
 
-            <div class="row branded-border-panel">
-                <div class="col-md-12">
-                    <h3 class="pull-left" translate>Layers</h3>
-
-                    <a id="newLayerButton" ng-click="vm.showNewLayerModal()" class="btn btn-success pull-right" uib-tooltip="{{ 'Click here to create a new single query report' | translate }}" tooltip-placement="bottom" translate>New layer</a>
-                    <a class="btn btn-info pull-right" ng-click="vm.showIntro()" style="margin-right: 3px;" uib-tooltip="{{ 'Follow the guided tour for data sources' | translate }}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
-                </div>
+                <a id="newLayerButton" ng-click="vm.showNewLayerModal()" class="btn btn-success pull-right" uib-tooltip="{{ 'Click here to create a new single query report' | translate }}" tooltip-placement="bottom" translate>New layer</a>
+                <a class="btn btn-info pull-right" ng-click="vm.showIntro()" style="margin-right: 3px;" uib-tooltip="{{ 'Follow the guided tour for data sources' | translate }}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
             </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <app-list-panel columns="vm.columns" refresh="vm.refresh">
-                        <div class="list-group-item" ng-repeat="layer in vm.layers">
-                            <app-layers-list-item layer="layer" on-delete="vm.refresh()"></app-layers-list-item>
-                        </div>
-                    </app-list-panel>
+            <app-list-panel columns="vm.columns" refresh="vm.refresh">
+                <div class="list-group-item" ng-repeat="layer in vm.layers">
+                    <app-layers-list-item layer="layer" on-delete="vm.refresh()"></app-layers-list-item>
                 </div>
-            </div>
+            </app-list-panel>
         </div>
     </div>
 </div>

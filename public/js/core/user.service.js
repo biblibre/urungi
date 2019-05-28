@@ -3,19 +3,22 @@
 
     angular.module('app.core').factory('userService', userService);
 
-    userService.$inject = ['connection'];
+    userService.$inject = ['api'];
 
-    function userService (connection) {
+    function userService (api) {
         let getUserDataPromise;
+        let getCountsPromise;
+
         const service = {
             getCurrentUser: getCurrentUser,
+            getCounts: getCounts,
         };
 
         return service;
 
         function getCurrentUser () {
             if (!getUserDataPromise) {
-                getUserDataPromise = connection.get('/api/get-user-data').then(data => {
+                getUserDataPromise = api.getUserData().then(data => {
                     const user = data.items.user;
                     user.companyData = data.items.companyData;
                     user.rolesData = data.items.rolesData;
@@ -31,6 +34,14 @@
             }
 
             return getUserDataPromise;
+        }
+
+        function getCounts () {
+            if (!getCountsPromise) {
+                getCountsPromise = api.getCounts();
+            }
+
+            return getCountsPromise;
         }
     }
 })();

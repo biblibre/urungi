@@ -1655,12 +1655,10 @@ img.img-cirlce {
 }
 
 .last-executions-objects {
-    padding-left: 15px;
     height: 200px;
 }
 
 .most-executions-objects {
-    padding-left: 15px;
     height: 200px;
 }
 
@@ -2474,22 +2472,6 @@ label[for] {
 
 .input-group-addon .color-preview {
     width: 24px;
-}
-
-.branded-border-panel {
-    padding: 5px;
-    border-bottom: 2px solid #666;
-    margin-bottom: 10px;
-}
-
-.branded-parent-intro {
-    height: 100%;
-    border-bottom: 2px solid #666;
-}
-
-.branded-strong-label {
-    color: #666;
-    font-weight: bold;
 }
 
 .branded-label {
@@ -3472,32 +3454,8 @@ a.list-group-item:hover {
     display: block;
 }
 
-.about-page {
-    line-height: 2;
-}
-
-.about-page h2 {
-    color: #666;
-    line-height: 1.8;
-}
-
-.about-page ul {
-    text-indent: 20px;
-    list-style-position: inside;
-}
-
-.about-page ul ul {
-    text-indent: 30px;
-    list-style-type: circle;
-}
-
 .about-page a {
-    color: blue;
     text-decoration: underline;
-}
-
-.about-page a:visited {
-    color: purple;
 }
 
 .scroll-list {
@@ -3539,4 +3497,17 @@ a.list-group-item:hover {
     color: #666;
     background-color: silver;
     border-color: #666;
+}
+
+.page-header {
+    margin-top: 5px;
+    border-bottom-width: 2px;
+    border-bottom-color: #666;
+    overflow: hidden;
+}
+
+.explorer-header-title h3,
+.page-header h3,
+.page-header .h3 {
+    margin: 0;
 }

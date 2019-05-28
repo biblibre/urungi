@@ -519,10 +519,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'con
             $scope.userObjects = userObjects;
         });
 
-        connection.get('/api/get-counts', {}).then(function (data) {
-            $rootScope.counts = data;
-            getIntraOptions();
-        });
+        getIntraOptions();
     };
     $scope.refreshHome();
 }]);
