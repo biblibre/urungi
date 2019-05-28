@@ -48,7 +48,11 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(csurf());
+const csurfOptions = {};
+if (process.env.NODE_ENV === 'test') {
+    csurfOptions.ignoreMethods = ['GET', 'POST'];
+}
+app.use(csurf(csurfOptions));
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' })); // get information from html forms
