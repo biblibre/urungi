@@ -1,4 +1,4 @@
-const { app } = require('../../common');
+const { app, login } = require('../common');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -12,10 +12,11 @@ describe('Reports API', function () {
     let user;
     let report;
     let layer;
+    let xsrfToken;
 
     before(async function () {
         agent = chai.request.agent(app);
-        await agent.post('/api/login').send({ userName: 'administrator', password: 'urungi' });
+        xsrfToken = await login(agent);
         await agent.get('/api/get-user-data');
         user = await Users.findOne({ userName: 'administrator' });
     });
@@ -167,13 +168,15 @@ describe('Reports API', function () {
 
     describe('POST /api/reports/create', function () {
         it('should create a report', async function () {
-            const res = await agent.post('/api/reports/create').send({
-                companyID: 'COMPID',
-                reportName: 'Report 2',
-                nd_trash_deleted: false,
-                owner: user.id,
-                isPublic: false,
-            });
+            const res = await agent.post('/api/reports/create')
+                .set('X-XSRF-TOKEN', xsrfToken)
+                .send({
+                    companyID: 'COMPID',
+                    reportName: 'Report 2',
+                    nd_trash_deleted: false,
+                    owner: user.id,
+                    isPublic: false,
+                });
             expect(res).to.have.status(200);
             const decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
@@ -195,6 +198,7 @@ describe('Reports API', function () {
     describe('POST /api/reports/update/:id', function () {
         it('should update a report', async function () {
             const res = await agent.post('/api/reports/update/' + report.id)
+                .set('X-XSRF-TOKEN', xsrfToken)
                 .send({ _id: report.id });
             expect(res).to.have.status(200);
             const decrypted = JSON.parse(res.text);
@@ -205,6 +209,7 @@ describe('Reports API', function () {
     describe('POST /api/reports/delete/:id', function () {
         it('should delete a report', async function () {
             const res = await agent.post('/api/reports/delete/' + report.id)
+                .set('X-XSRF-TOKEN', xsrfToken)
                 .send({ _id: report.id });
             expect(res).to.have.status(200);
             const decrypted = JSON.parse(res.text);
@@ -237,6 +242,7 @@ describe('Reports API', function () {
     describe('POST /api/reports/share-report', function () {
         it('should publish a report', async function () {
             const res = await agent.post('/api/reports/share-report')
+                .set('X-XSRF-TOKEN', xsrfToken)
                 .send({ _id: report.id, parentFolder: 'root' });
             expect(res).to.have.status(200);
             const decrypted = JSON.parse(res.text);
@@ -254,6 +260,7 @@ describe('Reports API', function () {
             await report.publish('root');
 
             const res = await agent.post('/api/reports/unpublish')
+                .set('X-XSRF-TOKEN', xsrfToken)
                 .send({ _id: report.id });
             expect(res).to.have.status(200);
             const decrypted = JSON.parse(res.text);

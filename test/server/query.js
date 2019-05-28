@@ -1,6 +1,6 @@
 const Knex = require('knex');
 
-const { app } = require('../common');
+const { app, login } = require('./common');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -600,10 +600,11 @@ const generateTestSuite = (dbConfig) => function () {
         await knex.destroy();
     });
 
+    let xsrfToken;
+
     describe('Test datasource queries', function () {
-        before(function () {
-            return agent.post('/api/login')
-                .send({ userName: 'administrator', password: 'urungi' });
+        before(async function () {
+            xsrfToken = await login(agent);
         });
 
         it('Should test /api/data-sources/testConnection', async function () {
@@ -617,6 +618,7 @@ const generateTestSuite = (dbConfig) => function () {
             };
 
             const res = await agent.post('/api/data-sources/testConnection')
+                .set('X-XSRF-TOKEN', xsrfToken)
                 .send(params);
 
             expect(res).to.have.status(200);
@@ -739,7 +741,7 @@ const generateTestSuite = (dbConfig) => function () {
                 id: 'namefield',
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             const sourceData = testDataRef['gems'].tableData;
 
@@ -779,7 +781,7 @@ const generateTestSuite = (dbConfig) => function () {
                 }
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             const sourceData = testDataRef['gems'].tableData.filter((item) => !item.isFusion)
                 .sort(compareOn(a => a.name.toLowerCase()));
@@ -817,7 +819,7 @@ const generateTestSuite = (dbConfig) => function () {
                 sortType: 1
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             var sourceData = testDataRef['gems'].tableData.filter(() => true).sort(compareOn(a => a.colour)).reduce((acc, cur) => {
                 if (acc.length > 0 && cur.colour === acc[acc.length - 1].colour) {
@@ -873,7 +875,7 @@ const generateTestSuite = (dbConfig) => function () {
                 sortType: -1
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             var sourceData = [];
 
@@ -931,7 +933,9 @@ const generateTestSuite = (dbConfig) => function () {
                 const oldConsoleError = console.error;
                 console.error = function (err) { error = err; };
 
-                const res = await agent.post('/api/reports/get-data').send(params);
+                const res = await agent.post('/api/reports/get-data')
+                    .set('X-XSRF-TOKEN', xsrfToken)
+                    .send(params);
 
                 console.error = oldConsoleError;
 
@@ -974,7 +978,7 @@ const generateTestSuite = (dbConfig) => function () {
                 sortType: 1
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             var sourceData = [];
 
@@ -1033,7 +1037,7 @@ const generateTestSuite = (dbConfig) => function () {
                 }
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             const sourceData = testDataRef['episodes'].tableData
                 .filter((item) => (item.publishDate.getTime() !== (new Date('2014-03-24')).getTime()))
@@ -1081,7 +1085,7 @@ const generateTestSuite = (dbConfig) => function () {
                 sortType: 1
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             const sourceData = [];
 
@@ -1130,7 +1134,7 @@ const generateTestSuite = (dbConfig) => function () {
                 elementID: 'eecb'
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             expect(data).to.have.lengthOf(5);
         });
@@ -1153,7 +1157,7 @@ const generateTestSuite = (dbConfig) => function () {
                 elementID: 'eeab'
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             const sourceData = testDataRef['gems'].tableData.map((item) => ({ gemvalue: (item.id + 1), gemname: item.name }));
 
@@ -1209,7 +1213,7 @@ const generateTestSuite = (dbConfig) => function () {
                 }
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             expect(data).to.have.lengthOf(10);
 
@@ -1323,7 +1327,7 @@ const generateTestSuite = (dbConfig) => function () {
                 criterion: {}
             });
 
-            const data = await fetchData(agent, query);
+            const data = await fetchData(agent, xsrfToken, query);
 
             expect(data).to.have.lengthOf(5);
 
@@ -1387,10 +1391,12 @@ describe('Queries and data access', function () {
     // TODO Tests other databases
 });
 
-async function fetchData (agent, query) {
+async function fetchData (agent, xsrfToken, query) {
     const params = { query: query };
 
-    const res = await agent.post('/api/reports/get-data').send(params);
+    const res = await agent.post('/api/reports/get-data')
+        .set('X-XSRF-TOKEN', xsrfToken)
+        .send(params);
 
     expect(res).to.have.status(200);
 

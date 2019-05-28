@@ -1,4 +1,4 @@
-const { app } = require('../../common');
+const { app, login } = require('../common');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -57,22 +57,6 @@ function verifyItem (item) {
     expect(item).to.have.property('packetSize');
 };
 
-async function authentifyAgent (agent) {
-    const res = await agent.post('/api/login')
-        .send({ userName: 'administrator', password: 'urungi' });
-    expect(res).to.have.status(200);
-}
-
-async function getValidID (agent, index) {
-    if (!index) {
-        index = 0;
-    }
-
-    var res = await agent.get('/api/data-sources/find-all');
-    expect(res).to.have.status(200);
-    return JSON.parse(res.text).items[index]._id;
-};
-
 async function testUnidentifiedConnection (agent, url) {
     it('should return status 401', async function () {
         var res = await chai.request(app).get(url);
@@ -97,7 +81,7 @@ describe('Data sources API', function () {
         testUnidentifiedConnection(agent, '/api/data-sources/find-all');
 
         it('should return all data sources', async function () {
-            await authentifyAgent(agent);
+            await login(agent);
 
             var res = await agent.get('/api/data-sources/find-all');
             expect(res).to.have.status(200);
@@ -120,7 +104,7 @@ describe('Data sources API', function () {
         testUnidentifiedConnection(agent, '/api/data-sources/find-one');
 
         it('should find no valid item', async function () {
-            await authentifyAgent(agent);
+            await login(agent);
 
             var res = await agent.get('/api/data-sources/find-one');
             expect(res).to.have.status(200);
@@ -130,12 +114,12 @@ describe('Data sources API', function () {
         });
 
         it('should find a single valid item', async function () {
-            await authentifyAgent(agent);
+            await login(agent);
 
-            const entryID = await getValidID(agent, 0);
+            const ds = await DataSources.findOne();
 
             var res = await agent.get('/api/data-sources/find-one')
-                .query({ id: entryID });
+                .query({ id: ds.id });
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result');
@@ -148,13 +132,14 @@ describe('Data sources API', function () {
     });
 
     describe('POST /api/data-sources/create', function () {
-    // TODO : preliminary tests where the post is expected to fail
-    // TODO : creating a post as an unauthentified user ?
+        // TODO : preliminary tests where the post is expected to fail
+        // TODO : creating a post as an unauthentified user ?
 
         it('should create an entry made by an authenticated user', async function () {
-            await authentifyAgent(agent);
+            const xsrfToken = await login(agent);
 
             var res = await agent.post('/api/data-sources/create')
+                .set('X-XSRF-TOKEN', xsrfToken)
                 .send({
                     name: 'non existent db',
                     type: 'MySQL',
@@ -182,9 +167,10 @@ describe('Data sources API', function () {
 
     describe('POST /api/data-sources/upload-config-file', function () {
         it('Should return an error because the file is undefined', async function () {
-            await authentifyAgent(agent);
+            const xsrfToken = await login(agent);
 
-            var res = await agent.post('/api/data-sources/upload-config-file');
+            var res = await agent.post('/api/data-sources/upload-config-file')
+                .set('X-XSRF-TOKEN', xsrfToken);
             expect(res).to.have.status(500);
         });
 
@@ -195,12 +181,13 @@ describe('Data sources API', function () {
 
     describe('POST /api/data-sources/update', function () {
         it('should modify a database entry successfully', async function () {
-            await authentifyAgent(agent);
+            const xsrfToken = await login(agent);
 
             var res = await agent.get('/api/data-sources/find-all');
             const entryID = JSON.parse(res.text).items[0]._id;
 
             res = await agent.post('/api/data-sources/update/' + String(entryID))
+                .set('X-XSRF-TOKEN', xsrfToken)
                 .send({
                     _id: entryID,
                     name: 'renamed dummy db',
