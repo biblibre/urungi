@@ -53,7 +53,7 @@
                 },
                 {
                     name: 'layerName',
-                    label: 'Name',
+                    label: 'Layer',
                     width: 3,
                     filter: true,
                     filterField: 'layer.name',
