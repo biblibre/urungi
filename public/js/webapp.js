@@ -33,9 +33,12 @@
 
     angular.module('app').config(configure);
 
-    configure.$inject = ['$routeProvider'];
+    configure.$inject = ['$routeProvider', '$locationProvider'];
 
-    function configure ($routeProvider) {
+    function configure ($routeProvider, $locationProvider) {
+        // TODO Use the default prefix '!' or use HTML5 mode
+        $locationProvider.hashPrefix('');
+
         $routeProvider.otherwise({ redirectTo: '/home' });
 
         $routeProvider.when('/home', {

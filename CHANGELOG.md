@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cache all template files
 - Use uib-tabset everywhere we have tabs for consistency
 - Update angular-ui-bootstrap to 2.5.6
+- Update angular, angular-route and angular-sanitize to 1.7.8
 - Browser's sessionStorage is not used anymore for user data
 
 ### Fixed
