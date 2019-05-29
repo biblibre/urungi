@@ -97,7 +97,7 @@ function dist_js_build () {
 
     const copy = gulp.src([
         'node_modules/js-xlsx/dist/xlsx.core.min.js',
-        'node_modules/jsPlumb/dist/js/jquery.jsPlumb-1.7.6-min.js',
+        'node_modules/jsplumb/dist/js/jsplumb.min.js',
     ])
         .pipe(decomment())
         .pipe(gulp.dest('dist/js'));
@@ -118,6 +118,7 @@ function dist_css_build () {
         'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
         'node_modules/cynteka-pivot-table-jquery/dist/jquery.cy-pivot.min.css',
         'node_modules/font-awesome/css/font-awesome.min.css',
+        'node_modules/jsplumb/css/jsplumbtoolkit-defaults.css',
     ];
 
     return gulp.src(paths)

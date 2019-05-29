@@ -58,31 +58,31 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     var connectorPaintStyle = {
-        lineWidth: 4,
-        strokeStyle: '#61B7CF',
+        strokeWidth: 4,
+        stroke: '#61B7CF',
         joinstyle: 'round',
-        outlineColor: 'white',
+        outlineStroke: 'white',
         outlineWidth: 2
     };
     var connectorHoverStyle = {
-        lineWidth: 4,
-        strokeStyle: '#216477',
+        strokeWidth: 4,
+        stroke: '#216477',
         outlineWidth: 2,
-        outlineColor: 'white'
+        outlineStroke: 'white'
     };
     var endpointHoverStyle = {
-        fillStyle: '#000000',
-        strokeStyle: '#000000' // strokeStyle: "#216477"
+        fill: '#000000',
+        stroke: '#000000' // stroke: "#216477"
     };
 
     // the definition of source endpoints (the small blue ones)
     var sourceEndpoint = {
         endpoint: 'Dot',
         paintStyle: {
-            strokeStyle: '#7AB02C',
-            fillStyle: 'transparent',
+            stroke: '#7AB02C',
+            fill: 'transparent',
             radius: 6,
-            lineWidth: 3
+            strokeWidth: 3
         },
         isSource: true,
         connector: [ 'Flowchart', { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
@@ -103,7 +103,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     // the definition of target endpoints (will appear when the user drags a connection)
     var targetEndpoint = {
         endpoint: 'Dot',
-        paintStyle: { fillStyle: '#7AB02C', radius: 6 },
+        paintStyle: { fill: '#7AB02C', radius: 6 },
         hoverPaintStyle: endpointHoverStyle,
         maxConnections: -1,
         dropOptions: { hoverClass: 'hover', activeClass: 'active' },
@@ -514,7 +514,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                     if ((target === sourceID && source === targetID) ||
                             (target === targetID && source === sourceID)) {
                         $scope._Layer.params.joins[j].connection = undefined;
-                        $scope.instance.detach(connections[c]);
+                        $scope.instance.deleteConnection(connections[c]);
                     }
                 }
 
@@ -603,70 +603,43 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         // this timeout is here to give time to angular to create the element's divs'
             setTimeout(function () {
                 instance = jsPlumb.getInstance({
-                // default drag options
+                    Connector: [ 'Flowchart', { cornerRadius: 5 } ],
                     Endpoint: ['Dot', { radius: 2 }],
-
+                    PaintStyle: {
+                        strokeWidth: 4,
+                        stroke: '#61B7CF',
+                        outlineStroke: 'white',
+                        outlineWidth: 2,
+                    },
+                    HoverPaintStyle: {
+                        strokeWidth: 4,
+                        stroke: '#216477',
+                        outlineWidth: 2,
+                        outlineStroke: 'white',
+                    },
                     DragOptions: { cursor: 'pointer', zIndex: 2000 },
-                    // the overlays to decorate each connection with.  note that the label overlay uses a function to generate the label text; in this
-                    // case it returns the 'labelText' member that we set on each connection in the 'init' method below.
-                    ConnectionOverlays: [
-
-                    ],
-
                     Container: 'canvas'
                 });
 
                 var rightJoinType = {
-                    connector: 'StateMachine',
-                    paintStyle: { strokeStyle: '#61B7CF', lineWidth: 4 },
-                    hoverPaintStyle: { strokeStyle: 'blue' },
                     overlays: [
-                    // ["Diamond" , { location: 1 }]
                         ['Label', { location: 0.88, label: '[right]', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
                     ]
 
                 };
 
                 var leftJoinType = {
-                    connector: 'StateMachine',
-                    paintStyle: { strokeStyle: '#61B7CF', lineWidth: 4 },
-                    hoverPaintStyle: { strokeStyle: 'blue' },
-                    params: { margin: 40 },
                     overlays: [
-                    // ["Diamond" , { location: 0 }]
-                    // zero one many ["Label" , { location: 0.02,label:'>|*',labelStyle:{cssClass:'leftJoinType',color:'#61B7CF',font:'bold 42px ER',fill:' #fff no-repeat fixed center'} }]
                         ['Label', { location: 0.10, label: '[left]', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
                     ]
-
-                };
-
-                var selectedJoin = {
-                    paintStyle: { strokeStyle: '#999', lineWidth: 4 },
-                    hoverPaintStyle: { strokeStyle: '#999' }
                 };
 
                 instance.registerConnectionType('right', rightJoinType);
                 instance.registerConnectionType('left', leftJoinType);
-                instance.registerConnectionType('selected', selectedJoin);
 
-                var connectorPaintStyle = {
-                    lineWidth: 4,
-                    strokeStyle: '#61B7CF',
-                    joinstyle: 'round',
-                    outlineColor: 'white',
-                    outlineWidth: 2,
-                    params: { margin: 40 } // Distance from element to start and end connectors, in pixels.
-                };
-                // .. and this is the hover style.
-                var connectorHoverStyle = {
-                    lineWidth: 4,
-                    strokeStyle: '#216477',
-                    outlineWidth: 2,
-                    outlineColor: 'white'
-                };
                 var endpointHoverStyle = {
-                    fillStyle: '#000000',
-                    strokeStyle: '#000000' // strokeStyle: "#216477"
+                    fill: '#000000',
+                    stroke: '#000000' // stroke: "#216477"
                 };
 
                 var init = function (connection) {
@@ -680,20 +653,14 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                     instance.makeSource(jtkField, {
                         filter: 'a',
                         filterExclude: true,
-                        connector: [ 'Flowchart', { stub: [60, 60], gap: 0, cornerRadius: 5, alwaysRespectStubs: true } ],
-                        connectorStyle: connectorPaintStyle,
                         hoverPaintStyle: endpointHoverStyle,
-                        connectorHoverStyle: connectorHoverStyle,
                         maxConnections: -1,
-                        // endpoint:[ "Rectangle", { width: 10, cssClass:"small-blue" } ],
                         anchor: ['LeftMiddle', 'RightMiddle']
                     });
 
                     instance.makeTarget(jtkField, {
                         dropOptions: { hoverClass: 'hover' },
                         anchor: ['LeftMiddle', 'RightMiddle']
-                    // endpoint: "Dot"
-                    // endpoint:[ "Dot", { radius: 10, cssClass:"large-green" } ]
                     });
 
                     // listen for new connections; initialise them the same way we initialise the connections at startup.
@@ -701,26 +668,20 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                         init(connInfo.connection);
                     });
 
-                    // make all the window divs draggable
-                    /*
-                instance.draggable(jsPlumb.getSelector(".flowchart-demo .window"), { grid: [20, 20] });
-
-           */
                     instance.draggable(document.querySelectorAll('.window'), {
                         drag: function (e) {
-                        // Your code comes here
                             jsPlumb.repaint($(this));
                         },
-                        stop: function (event, ui) {
-                            if (typeof ui.position !== 'undefined') {
-                                var pos_x = ui.position.left;
-                                var pos_y = ui.position.top;
+                        stop: function (event) {
+                            if (typeof event.pos !== 'undefined') {
+                                var pos_x = event.pos[0];
+                                var pos_y = event.pos[1];
 
                                 if (pos_x < 0) { pos_x = 0; }
 
                                 if (pos_y < 0) { pos_y = 0; }
 
-                                var parentId = $(this).attr('id');
+                                var parentId = event.el.getAttribute('id');
 
                                 var id = parentId.replace('-parent', '');
 
@@ -734,15 +695,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                         }
                     });
 
-                    /*****************
-
-                for (var j in $scope._Layer.params.joins)
-                {
-                    instance.connect({uuids: [$scope._Layer.params.joins[j].sourceElementID+"RightMiddle", $scope._Layer.params.joins[j].targetElementID+"LeftMiddle"], editable: true,type: $scope._Layer.params.joins[j].joinType});
-                }
-****************/
-
-                    /*****************/
                     for (var j in $scope._Layer.params.joins) {
                         var c = instance.connect({ source: $scope._Layer.params.joins[j].targetElementID, target: $scope._Layer.params.joins[j].sourceElementID, id: $scope._Layer.params.joins[j].joinID });
 
@@ -764,7 +716,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                         }
 
                         originalEvent.stopPropagation();
-                        conn.setPaintStyle({ strokeStyle: '#000', lineWidth: 4 });
+                        conn.setPaintStyle({ stroke: '#000', strokeWidth: 4 });
                         conn.selected = true;
                     });
 
@@ -1319,7 +1271,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
 
         for (var c in connections) {
             // connections[c].setType("default"); esto cambia el tipo left right, es solo el color lo que queremos cambiar
-            connections[c].setPaintStyle({ strokeStyle: '#61B7CF', lineWidth: 4 });
+            connections[c].setPaintStyle({ stroke: '#61B7CF', strokeWidth: 4 });
             connections[c].selected = false;
         }
 

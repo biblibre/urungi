@@ -10,65 +10,24 @@
     overflow: scroll !important;
 }
 
-.jtk-surface-nopan {
-    overflow: scroll !important;
-    cursor: default;
-}
-
-.jtk-surface {
-    /* overflow: hidden !important; */
-    position: relative;
-    cursor: move;
-    cursor: -moz-grab;
-    cursor: -webkit-grab;
-    touch-action: none;
-}
-
 .window._jsPlumb_connected {
     border: 2px solid green;
 }
 
 .jtk-node {
-    /* background-color: #234b5e; */
-
-    /* border-radius: 14px;
-    border: 1px solid #CCC;
-    box-shadow: 0 0 5px #CCC; */
     cursor: pointer;
-    position: absolute;
     z-index: 11;
-
-    /* overflow: hidden; */
     height: 15px;
     width: auto;
 }
 
 .window {
-    /* border: 1px solid #346789;
-    box-shadow: 2px 2px 19px #aaa;
-    -o-box-shadow: 2px 2px 19px #aaa;
-    -webkit-box-shadow: 2px 2px 19px #aaa;
-    -moz-box-shadow: 2px 2px 19px #aaa;
-    -moz-border-radius: 0.5em;
-    border-radius: 0.5em;
-    opacity: 0.8;
-    filter: alpha(opacity=80);   */
     width: 200px;
-
-    /* min-height: 80px; */
-
-    /* line-height: 80px; */
     cursor: pointer;
-
-    /* text-align: center; */
     z-index: 20;
     position: absolute;
-
-    /* background-color: #eeeeef; */
     color: black;
     font-family: helvetica, serif;
-
-    /* padding: 0.5em; */
     font-size: 0.9em;
     -webkit-transition: -webkit-box-shadow 0.15s ease-in;
     -moz-transition: -moz-box-shadow 0.15s ease-in;

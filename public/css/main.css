@@ -1695,11 +1695,6 @@ div.callout {
     transition: all 0.3s ease-out;
 }
 
-.jtk-field {
-    /* width: 180px;
-    margin-left: 10px; */
-}
-
 .jtk-node {
     background-color: #d5d5d5;
 }

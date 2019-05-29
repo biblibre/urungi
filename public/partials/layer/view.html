@@ -1,4 +1,4 @@
-<script src="js/jquery.jsPlumb-1.7.6-min.js"></script>
+<script src="js/jsplumb.min.js"></script>
 
 
 <div class="explorer-main-container">
@@ -261,10 +261,7 @@
 
 
 
-                    <!--
-                    <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{'flowchart'+element.elementID}}" ng-repeat="element in collection.elements" popover-trigger="mouseenter" popover-placement="bottom" popover-title="{{element.elementName}}" popover="..." title="<h1><b>Another</b> <em>one</em> here too</h1>" data-html="true" rel="tooltip">{{element.elementName}}</div>
-                    -->
-                    <div class=" jtk-field _jsPlumb_endpoint_anchor _jsPlumb_connected" id="{{element.elementID}}" 
+                    <div class="jtk-field" id="{{element.elementID}}" 
                     ng-repeat="element in collection.elements"  title="{{element.elementName}}" data-html="true" rel="tooltip" 
                     ng-class="{'isPK': element.isPK}" ng-click="selectElement(element,$event)" ng-hide="collection.folded && !isInAJoin(element)">
 
@@ -281,26 +278,12 @@
 
 
                     </div>
-                    <!--//popover con html http://plnkr.co/edit/VhYAD04ETQsJ2dY3Uum3?p=preview -->
-
                 </div>
-
-
             </div>
         </div>
-
-    <!--</div>-->
-
-
-   <!-- <span ng-init="erDiagramInit()"></span> -->
-
-
-
         </div>
     </div>
 </div>
-<!--<div ng-include src="datasetModal"></div>-->
 <div ng-include src="elementModal"></div>
 <div ng-include src="sqlModal"></div>
 <div ng-include src="addAllModal"></div>
-<!--<div ng-include src="setupModal"></div>-->
