@@ -9,6 +9,7 @@
         const service = {
             getCounts: getCounts,
             getUserData: getUserData,
+            getUserObjects: getUserObjects,
 
             getDataSources: getDataSources,
             getEntitiesSchema: getEntitiesSchema,
@@ -43,6 +44,10 @@
 
         function getUserData () {
             return connection.get('/api/get-user-data');
+        }
+
+        function getUserObjects () {
+            return connection.get('/api/get-user-objects').then(res => res.items);
         }
 
         function getDataSources (params) {

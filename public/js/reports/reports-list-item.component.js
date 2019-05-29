@@ -12,9 +12,9 @@
         },
     });
 
-    ReportsListItemController.$inject = ['$uibModal', 'api', 'reportModel'];
+    ReportsListItemController.$inject = ['$uibModal', 'api', 'reportModel', 'gettextCatalog'];
 
-    function ReportsListItemController ($uibModal, api, reportModel) {
+    function ReportsListItemController ($uibModal, api, reportModel, gettextCatalog) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -29,7 +29,7 @@
             const modal = $uibModal.open({
                 component: 'appDeleteModal',
                 resolve: {
-                    name: () => vm.report.reportName,
+                    title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.report.reportName }),
                     delete: () => function () {
                         return api.deleteReport(vm.report._id);
                     },

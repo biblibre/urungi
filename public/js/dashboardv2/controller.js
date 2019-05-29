@@ -1,7 +1,7 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportsService, connection, $routeParams, reportModel, c3Charts, uuid2,
     colors, htmlWidgets, dashboardv2Model, grid, $timeout,
-    gettextCatalog, usersModel, $uibModal, userService, api
+    gettextCatalog, $uibModal, userService, api
 ) {
     $scope.reportModal = 'partials/report/edit.html';
     $scope.chartModal = 'partials/pages/chartModal.html';

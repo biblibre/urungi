@@ -15,13 +15,21 @@
     function DeleteModalController () {
         const vm = this;
 
+        vm.title = '';
         vm.deleteString = '';
+        vm.$onInit = $onInit;
         vm.onDelete = onDelete;
 
+        function $onInit () {
+            vm.title = vm.resolve.title;
+        }
+
         function onDelete () {
-            vm.resolve.delete().then(function () {
-                vm.close();
-            });
+            if (vm.deleteString === 'DELETE') {
+                vm.resolve.delete().then(function () {
+                    vm.close();
+                });
+            }
         }
     }
 })();

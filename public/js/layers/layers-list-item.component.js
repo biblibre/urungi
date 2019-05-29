@@ -11,9 +11,9 @@
         },
     });
 
-    LayersListItemController.$inject = ['$uibModal', 'api', 'userService'];
+    LayersListItemController.$inject = ['$uibModal', 'api', 'userService', 'gettextCatalog'];
 
-    function LayersListItemController ($uibModal, api, userService) {
+    function LayersListItemController ($uibModal, api, userService, gettextCatalog) {
         const vm = this;
 
         vm.toggleActive = toggleActive;
@@ -35,7 +35,7 @@
             const modal = $uibModal.open({
                 component: 'appDeleteModal',
                 resolve: {
-                    name: () => vm.layer.name,
+                    title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.layer.name }),
                     delete: () => function () {
                         return api.deleteLayer(vm.layer._id);
                     },

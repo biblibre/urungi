@@ -1,176 +1,120 @@
-<div class="main-content-view">
-
-    <!--<div class="page-title full-width" title="Profile" description="User profile and story timeline">   -->
-    <div class="well">
-
-        <div  class="pull-right" >
-            <button ng-click="goBack()" class="btn btn-default" translate>Cancel</button>
-            <a ng-if="_User._id == user._id" href="/#/logout" class="btn btn-danger" translate>logout</a>
-            <button ng-if="_User._id == user._id" class="btn btn-inverse" ng-click="changeMyPassword()" translate>Change my password</button>
-            <button ng-click="editUser()" ng-if="isWSTADMIN" class="btn btn-success" translate>Edit</button>
-
+<div class="container-fluid root-container">
+    <div class="row">
+        <div class="col-md-3">
+            <app-sidebar></app-sidebar>
         </div>
-            <h1 class="title" translate>User</h1>
-            <p class="description" translate>User profile and permissions</p>
 
+        <div class="col-md-9">
+            <div class="page-header">
+                <span class="h3" translate>User <small>User profile and permissions</small></span>
+                <div class="pull-right">
+                    <button ng-click="vm.editUser()" ng-if="vm.isWSTADMIN" class="btn btn-success" translate>Edit</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h4 class="text-center">
+                        {{ vm.user.userName }}
 
+                        <a class="badge" ng-class="{'badge-success': vm.user.status == 'active', 'badge-danger': vm.user.status == 'Not active'}" ng-click="vm.changeUserStatus(vm.user)">
+                            <span translate ng-if="vm.user.status == 'active'">active</span>
+                            <span translate ng-if="vm.user.status == 'Not active'">not active</span>
+                        </a>
+                    </h4>
 
-
-    </div>
-
-    <section class="profile-env" ng-init="view()">
-
-        <div class="container-fluid">
-
-            <div class="col-sm-3">
-
-                <div class="user-info-sidebar">
-
-                    <a href="" class="user-img">
-                       <!-- <img src="" alt="user-img" class="img-cirlce img-responsive img-thumbnail">-->
-                    </a>
-
-                    <a href="" class="user-name">
-                        {{_User.userName}}
-                        <span class="user-status" ng-class="{'is-active': _User.status == 'active', 'is-not-active': _User.status == 'Not active'}" ng-click="changeUserStatus(_User)"></span>
-                    </a>
-
-                            <div style="text-align: center">
-                            <a class="badge"  ng-class="{'badge-success': _User.status == 'active', 'badge-danger': _User.status == 'Not active'}" ng-click="changeUserStatus(_User)">
-                                <span translate ng-if="_User.status == 'active'">active</span>
-                                <span translate ng-if="_User.status == 'Not active'">not active</span>
-                            </a>
-                            </div>
-                            <span class="user-title">
-                                {{_User.title}}
-                            </span>
-                            <span class="user-title">
-                                {{_User.department}}
-                            </span>
-                            <span class="user-title">
-                                {{_User.businessUnit}}
-                            </span>
-                            <span class="user-title">
-                                {{_User.unit}}
-                            </span>
-                            <span class="user-title">
-                                {{_User.brand}}
-                            </span>
+                    <div class="text-center">
+                        {{ vm.user.title }}
+                    </div>
+                    <div class="text-center">
+                        {{ vm.user.department }}
+                    </div>
+                    <div class="text-center">
+                        {{ vm.user.businessUnit }}
+                    </div>
+                    <div class="text-center">
+                        {{ vm.user.unit }}
+                    </div>
+                    <div class="text-center">
+                        {{ vm.user.brand }}
+                    </div>
 
                     <hr>
 
                     <ul class="list-unstyled user-info-list">
-                        <li ng-repeat="role in _User.roles" style="color:#000">
-                         <i ng-if="isWSTADMIN" class="fa fa-trash-o" style="color: #FF0000" ng-click="deleteRole(role)"></i>   {{getRoleName(role)}}
-                        </li>
-                        <li ng-if="isWSTADMIN" style="margin-top:10px;">
-                            <span translate>Add role</span>
-                            <select ng-model="selectedRole" placeholder="Add a new role..." ng-class="selectedRole" id="roleSelect" class="form-control" ng-change="selectedRoleChanged = true" ng-options="role._id as role.name for role in getRolesNotInUser()" style="width: 80%;float: left;"></select>
-                            <div ng-show="selectedRoleChanged == true && selectedRole != ''" ng-click="_User.roles.push(selectedRole);save();selectedRole = '';selectedRoleChanged = false;" style="width: 20%;float: left;text-align:center;vertical-align: middle;" ><i class="fa fa-plus" style="color:#00A000;"></i>  </div>
-
+                        <li ng-repeat="role in vm.user.roles" style="color: #000;">
+                            <i ng-if="vm.isWSTADMIN" class="fa fa-trash-o" style="color: #f00;" ng-click="vm.deleteRole(role)"></i> {{ vm.getRoleName(role) }}
                         </li>
                     </ul>
-
-
+                    <form ng-if="vm.isWSTADMIN" class="form-inline">
+                        <div class="form-group">
+                            <label for="roleSelect" translate>Add role</label>
+                            <select ng-model="vm.selectedRole" placeholder="{{ 'Add a new role...' | translate }}" ng-class="vm.selectedRole" id="roleSelect" class="form-control" ng-change="vm.selectedRoleChanged = true" ng-options="role._id as role.name for role in vm.getRolesNotInUser()"></select>
+                        </div>
+                        <button type="button" class="btn btn-link" ng-show="vm.selectedRoleChanged == true && vm.selectedRole != ''" ng-click="vm.user.roles.push(vm.selectedRole); vm.save(); vm.selectedRole = ''; vm.selectedRoleChanged = false;">
+                            <i class="fa fa-plus" style="color: #00a000;"></i>
+                        </button>
+                    </form>
 
                     <hr>
 
-                    <ul class="list-unstyled user-friends-count">
-                        <li>
-                            <span>{{userCounts.publishedReports}}</span>
-                            <span translate>Published reports</span>
-                        </li>
-                        <li>
-                            <span>{{userCounts.publishedDashBoards}}</span>
-                            <span translate>Published Dashboards</span>
-                        </li>
-                    </ul>
-                    <ul class="list-unstyled user-friends-count">
-                        <li>
-                            <span>{{userCounts.privateReports}}</span>
-                            <span translate>Private reports</span>
-                        </li>
-                        <li>
-                            <span>{{userCounts.privateDashBoards}}</span>
-                            <span translate>Private Dashboards</span>
-                        </li>
-                    </ul>
-                    <!--
-                    <button type="button" class="btn btn-success btn-block text-left">
-                        Following
-                        <i class="fa-check pull-right"></i>
-                    </button>
-                    -->
+                    <div class="row" style="font-size: 14px;">
+                        <div class="col-sm-6">
+                            <span>{{ vm.userCounts.sharedReports }}</span>
+                            <span translate>shared reports</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{ vm.userCounts.sharedDashBoards }}</span>
+                            <span translate>shared dashboards</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{ vm.userCounts.privateReports }}</span>
+                            <span translate>private reports</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{ vm.userCounts.privateDashBoards }}</span>
+                            <span translate>private dashboards</span>
+                        </div>
+                    </div>
                 </div>
 
-            </div>
-
-            <div class="col-sm-9">
-                <div class="row">
-                    <div class="col-sm-6">
-
-                        <div class="panel ng-scope">
-                            <div class="panel-heading hidden-print">
-                                <div class="panel-title" translate>Reports</div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="list-group">
-                                    <div class="list-group-item" ng-repeat="report in userReports">
-                                        <span ng-if="report.isPublic" class="badge badge-success pull-right" translate>public</span>
-                                        <a ng-href="/#/reports/{{report._id}}">
-                                            <h4 class="list-group-item-heading" ng-bind="report.reportName"></h4>
-                                            <p class="list-group-item-text" ng-bind="report.reportDescription"></p>
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="panel ng-scope">
+                                <div class="panel-heading hidden-print">
+                                    <div class="panel-title" translate>Reports</div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="list-group">
+                                        <a ng-href="/#/reports/view/{{report._id}}" class="list-group-item" ng-repeat="report in vm.userReports">
+                                            {{ report.reportName }}
+                                            <span ng-if="report.isShared" class="badge badge-success pull-right" translate>shared</span>
                                         </a>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
 
-                    </div>
+                        <div class="col-sm-6">
+                            <div class="panel">
+                                <div class="panel-heading hidden-print">
+                                    <div class="panel-title" translate>Dashboards</div>
+                                </div>
 
-                    <div class="col-sm-6">
-
-                        <div class="panel">
-                            <div class="panel-heading hidden-print">
-                                <div class="panel-title" translate>Dashboards</div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="list-group">
-                                    <div class="list-group-item" ng-repeat="dsh in userDashboards">
-                                        <span ng-if="dsh.isPublic" class="badge badge-success pull-right" translate>public</span>
-                                        <a ng-href="/#/dashboards/{{dsh._id}}">
-                                        <h4 class="list-group-item-heading" ng-bind="dsh.dashboardName"></h4>
-                                        <p class="list-group-item-text" ng-bind="dsh.dashboardDescription"></p>
+                                <div class="panel-body">
+                                    <div class="list-group">
+                                        <a ng-href="/#/dashboards/view/{{ dsh._id }}" class="list-group-item" ng-repeat="dsh in vm.userDashboards">
+                                            {{ dsh.dashboardName }}
+                                            <span ng-if="dsh.isShared" class="badge badge-success pull-right" translate>shared</span>
                                         </a>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
-
                     </div>
+                </div>
             </div>
-
-
-
-
-
-            </div>
-
         </div>
-
-    </section>
-
+    </div>
 
 </div>
-<nd-modal id="editUserModal">
-<div ng-include src="editUserModal"></div>
-</nd-modal>
-
-
-<div ng-if="_User._id == user._id" ng-include src="changePasswordModal"></div>
-
-<div ng-include src="'partials/deleteModal.html'"></div>

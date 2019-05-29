@@ -12,9 +12,9 @@
         },
     });
 
-    DashboardsListItemController.$inject = ['$uibModal', 'api', 'dashboardv2Model'];
+    DashboardsListItemController.$inject = ['$uibModal', 'api', 'dashboardv2Model', 'gettextCatalog'];
 
-    function DashboardsListItemController ($uibModal, api, dashboardv2Model) {
+    function DashboardsListItemController ($uibModal, api, dashboardv2Model, gettextCatalog) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -29,7 +29,7 @@
             const modal = $uibModal.open({
                 component: 'appDeleteModal',
                 resolve: {
-                    name: () => vm.dashboard.dashboardName,
+                    title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.dashboard.dashboardName }),
                     delete: () => function () {
                         return api.deleteDashboard(vm.dashboard._id);
                     },

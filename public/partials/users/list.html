@@ -1,4 +1,4 @@
-<div class="container-fluid root-container" ng-init="getUsers(1,'',['userName','lastName','status'])">
+<div class="container-fluid root-container">
     <div class="row">
         <div class="col-md-3">
             <app-sidebar></app-sidebar>
@@ -7,13 +7,12 @@
         <div class="col-md-9">
             <div class="page-header">
                 <span class="h3" translate>Users</span>
-                <a ng-click="newUser()" class="btn btn-success pull-right" translate>New User</a>
+                <a ng-click="vm.newUser()" class="btn btn-success pull-right" translate>New User</a>
             </div>
 
             <div class="list-group">
-
-                <div  class="list-group-item" ng-repeat="user in users">
-                    <a class="badge pull-right" ng-class="{'badge-success': user.status == 'active', 'badge-danger': user.status == 'Not active'}" ng-click="changeUserStatus(user)">
+                <div class="list-group-item" ng-repeat="user in vm.users">
+                    <a class="badge pull-right" ng-class="{'badge-success': user.status == 'active', 'badge-danger': user.status == 'Not active'}" ng-click="vm.changeUserStatus(user)">
                         <span translate ng-if="user.status == 'active'">active</span>
                         <span translate ng-if="user.status == 'Not active'">not active</span>
                     </a>
@@ -24,12 +23,7 @@
                 </div>
             </div>
 
-            <app-pager current-page="page" total-pages="pages" on-page-change="goToPage(page)"></app-pager>
+            <app-pager current-page="vm.page" total-pages="vm.pages" on-page-change="vm.goToPage(page)"></app-pager>
         </div>
     </div>
-
 </div>
-
-<nd-modal id="editUserModal">
-    <div ng-include src="editUserModal"></div>
-</nd-modal>

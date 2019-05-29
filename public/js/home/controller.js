@@ -1,6 +1,6 @@
 /* global moment: false */
 
-angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'connection', 'gettextCatalog', 'usersModel', 'userService', 'api', function ($scope, $rootScope, $q, connection, gettextCatalog, usersModel, userService, api) {
+angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'connection', 'gettextCatalog', 'userService', 'api', function ($scope, $rootScope, $q, connection, gettextCatalog, userService, api) {
     $scope.dashboardsNbr = 3;
     $scope.reportsNbr = 10;
     $scope.notificationsNbr = 0;
@@ -515,7 +515,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'con
     };
 
     $scope.refreshHome = function () {
-        usersModel.getUserObjects().then(userObjects => {
+        api.getUserObjects().then(userObjects => {
             $scope.userObjects = userObjects;
         });
 
