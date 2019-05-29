@@ -3,6 +3,8 @@
 Lightweight Business Intelligence tool for reporting PostgreSQL, MySQL
 and others, see [Supported databases](#supported-databases)
 
+[![Travis (.org) branch](https://img.shields.io/travis/biblibre/urungi/master.svg)](https://travis-ci.org/biblibre/urungi)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/biblibre/urungi.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/biblibre/urungi/context:javascript)
 
 ## Supported databases
 
