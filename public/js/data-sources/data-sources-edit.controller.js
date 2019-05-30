@@ -103,7 +103,7 @@
                     transformRequest: angular.identity,
                     headers: { 'Content-Type': undefined }
                 })
-                    .success(angular.bind(this, function (data, status, headers, config) {
+                    .then(angular.bind(this, function (data, status, headers, config) {
                         if (data.result === 1) {
                             vm.fileUploadSuccess = true;
                             vm.fileUploadMessage = 'File uploaded successfully';
@@ -112,7 +112,7 @@
                             vm.fileUploadMessage = 'File upload failed [' + data.msg + ']';
                         }
                     }))
-                    .error(function (data, status) {
+                    .catch(function (data, status) {
                         vm.fileUploadSuccess = false;
                         vm.fileUploadMessage = 'File upload failed [' + data.msg + ']';
                     });

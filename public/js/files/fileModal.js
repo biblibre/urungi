@@ -92,7 +92,7 @@ angular.module('app').directive('fileModal', function ($http, fileService) {
                         client_id: '65d94c5d3440b6da10c6cd390059fd709a1f33ffc8f46f46ed44d6b6c6759559',
                         query: search
                     },
-                }).success(angular.bind(this, function (data, status, headers, config) {
+                }).then(angular.bind(this, function (data, status, headers, config) {
                     $scope.onlineImages = [];
 
                     for (var i in data.results) {
@@ -102,7 +102,7 @@ angular.module('app').directive('fileModal', function ($http, fileService) {
                         });
                     }
                 }))
-                    .error(angular.bind(this, function (data, status, headers, config) {
+                    .catch(angular.bind(this, function (data, status, headers, config) {
                         console.log(data);
                     }));
             };

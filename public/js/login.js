@@ -17,7 +17,7 @@
 
             if ($scope.userName !== undefined || $scope.password !== undefined) {
                 $http({ method: 'POST', url: '/api/login', data: user, withCredentials: true })
-                    .success(function (data, status, headers, config) {
+                    .then(function (data, status, headers, config) {
                         $scope.loginError = false;
 
                         if ($scope.rememberMe) {
@@ -26,7 +26,7 @@
                         }
                         window.location.href = '/#/home';
                     })
-                    .error(function (data, status, headers, config) {
+                    .catch(function (data, status, headers, config) {
                         $scope.errorLoginMessage = data;
                         $scope.loginError = true;
                     });
