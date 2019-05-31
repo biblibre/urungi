@@ -69,7 +69,8 @@ function dist_js_build () {
         'node_modules/angular-vs-repeat/src/angular-vs-repeat.min.js',
         'node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
         'node_modules/moment/min/moment.min.js',
-        'node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
+        'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js',
+        'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js',
         'node_modules/numeral/min/numeral.min.js',
         'node_modules/angular-ui-tree/dist/angular-ui-tree.min.js',
         'node_modules/angular-file-saver/dist/angular-file-saver.bundle.min.js',
@@ -108,7 +109,8 @@ function dist_css_build () {
     const paths = [
         'node_modules/bootstrap/dist/css/bootstrap.min.css',
         'node_modules/ui-select/dist/select.min.css',
-        'node_modules/angular-bootstrap-datetimepicker/src/css/datetimepicker.css',
+        'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css',
+        'node_modules/angularjs-bootstrap-datetimepicker/src/css/datetimepicker.css',
         'node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
         'node_modules/c3/c3.min.css',
         'node_modules/angular-xeditable/dist/css/xeditable.min.css',
@@ -126,6 +128,7 @@ function dist_css_build () {
 function dist_fonts_build () {
     const paths = [
         'node_modules/font-awesome/fonts/*',
+        'node_modules/bootstrap/fonts/*',
     ];
 
     return gulp.src(paths)
