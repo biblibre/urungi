@@ -1,6 +1,6 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportsService, connection, $routeParams, reportModel, c3Charts, uuid2,
-    colors, htmlWidgets, dashboardv2Model, grid, $timeout,
+    htmlWidgets, dashboardv2Model, grid, $timeout,
     gettextCatalog, $uibModal, userService, api
 ) {
     $scope.reportModal = 'partials/report/edit.html';
@@ -15,7 +15,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     $scope.lastElementID = 0;
     $scope.dataPool = [];
 
-    // $scope.colors = colors.colors;
     $scope.hiddenXS = false;
     $scope.hiddenSM = false;
     $scope.hiddenMD = false;
