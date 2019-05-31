@@ -40,7 +40,7 @@
                 </ul>
             </div>
         </span>
-    
+
         <button class="btn btn-success" ng-click="startImport()" ng-show="importFile">import</button>
         <br>
         <div class="btn btn-default" ng-app="fileUpload" ngf-select="upload($file)">Choose file to import</div>
@@ -49,10 +49,11 @@
     </span>
 
     <span ng-if="state === 2">
-        <h4>Please associate the imported data sources to the local ones</h4>
         <div class="row">
-            <div class="col-md-4">
-                <h5>Imported data sources</h5>
+            <div class="col-md-3">
+              <h4 translate>Please associate the imported data sources to the local ones:</h4>
+              <br>
+                <h5 translate>Imported data sources:</h5>
                 <ul>
                     <li ng-repeat="dts in importFile.datasources">
                         <div>
@@ -70,16 +71,36 @@
                 <button ng-click="cancelImport()">cancel</button>
 
             </div>
-            <div class="col-md-4">
-                <h5>Existing data sources</h5>
-                <ul>
-                    <li ng-repeat="dts in localDataSources">
-                        <div>
-                            {{dts.name}}
-                        </div>
-                    </li>
-                </ul>
+            <h4 translate>The following elements already exist. Please select the ones you want to overwrite. The others will not be imported:</h4>
+            <br>
+            <div class="col-md-3">
+                <h5 translate>Existing Layers:</h5>
 
+                <div class="checkbox" ng-repeat="item in importFile.layers">
+                    <label>
+                        <input type="checkbox" ng-model="item.replace">
+                        {{item.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h5 translate>Existing Reports:</h5>
+
+                <div class="checkbox" ng-repeat="item in importFile.reports">
+                    <label>
+                        <input type="checkbox" ng-model="item.replace">
+                        {{item.reportName}}
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h5 translate>Existing Dashboards:</h5>
+                <div class="checkbox" ng-repeat="item in importFile.dashboards">
+                    <label>
+                        <input type="checkbox" ng-model="item.replace">
+                        {{item.dashboardName}}
+                    </label>
+                </div>
             </div>
         </div>
     </span>
@@ -99,13 +120,28 @@
             No new item has been created.
         </div>
 
-        <div ng-if="messages.length">
-            <h5>Messages</h5>
+        <h5>Items updated</h5>
+        <div ng-if="replace.length">
             <ul>
-                <li ng-repeat="message in messages">
-                    {{ message }}
+                <li ng-repeat="item in replace">
+                    {{item.name || item.reportName || item.dashboardName}}
                 </li>
             </ul>
+        </div>
+        <div ng-if="!replace.length" translate>
+            No item has been updated.
+        </div>
+
+        <div ng-if="messages.length">
+            <details class="details">
+                <summary translate>Messages (Log)</summary>
+
+                <ul class="dropdownImport">
+                    <li ng-repeat="message in messages">
+                        {{ message }}
+                    </li>
+                </ul>
+            </details>
         </div>
 
         <button ng-click="initImport()">Import new file</button>
@@ -120,4 +156,3 @@
         <a class="button" href="/#/home">Back to main page</a>
     </span>
 </div>
-
