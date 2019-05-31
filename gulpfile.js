@@ -5,6 +5,7 @@ const gettext = require('gulp-angular-gettext');
 const templatecache = require('gulp-angular-templatecache');
 const merge = require('merge-stream');
 const del = require('del');
+const path = require('path');
 
 const dist_js = gulp.series(dist_js_clean, dist_js_build);
 const dist_css = gulp.series(dist_css_clean, dist_css_build);
@@ -138,7 +139,35 @@ function dist_translations_build () {
 }
 
 function dist_templates_build () {
-    return gulp.src(['public/partials/**/*.html'])
+    // Using a single glob `public/partials/**/*.html` breaks the file order
+    // and produce a different file even if no templates have changed.
+    // By listing explicitely all directories we ensure that it does not happen.
+    const globs = [
+        'public/partials/core/*.html',
+        'public/partials/dashboards/*.html',
+        'public/partials/dashboardv2/*.html',
+        'public/partials/data-sources/*.html',
+        'public/partials/directives/*.html',
+        'public/partials/files/*.html',
+        'public/partials/home/*.html',
+        'public/partials/io/*.html',
+        'public/partials/layer/*.html',
+        'public/partials/layers/*.html',
+        'public/partials/logout/*.html',
+        'public/partials/report/*.html',
+        'public/partials/report/directives/*.html',
+        'public/partials/report/modals/*.html',
+        'public/partials/report/partials/*.html',
+        'public/partials/reports/*.html',
+        'public/partials/roles/*.html',
+        'public/partials/sidebar/*.html',
+        'public/partials/spaces/*.html',
+        'public/partials/users/*.html',
+        'public/partials/widgets/*.html',
+    ];
+    const base = path.join(__dirname, 'public', 'partials');
+
+    return gulp.src(globs, { base: base })
         .pipe(templatecache({
             root: 'partials',
             module: 'app.templates',

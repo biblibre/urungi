@@ -28,6 +28,7 @@
         'app.reports',
         'app.dashboards',
         'app.layers',
+        'app.users',
         'app.templates',
     ]);
 
@@ -73,18 +74,6 @@
         $routeProvider.when('/reports/edit/:reportID/', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
-        });
-
-        // users
-
-        $routeProvider.when('/users', {
-            templateUrl: 'partials/users/list.html',
-            controller: 'AdminUsersCtrl'
-        });
-
-        $routeProvider.when('/users/:userID/', {
-            templateUrl: 'partials/users/view.html',
-            controller: 'AdminUsersCtrl'
         });
 
         // roles

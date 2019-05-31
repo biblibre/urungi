@@ -15,9 +15,9 @@
         },
     });
 
-    SharePopoverController.$inject = ['$uibModal', 'usersModel'];
+    SharePopoverController.$inject = ['$uibModal', 'api'];
 
-    function SharePopoverController ($uibModal, usersModel) {
+    function SharePopoverController ($uibModal, api) {
         const vm = this;
 
         vm.openShareModal = openShareModal;
@@ -28,7 +28,7 @@
                 component: 'appShareModal',
                 resolve: {
                     item: () => vm.item,
-                    userObjects: usersModel.getUserObjects,
+                    userObjects: api.getUserObjects,
                 },
             });
             modal.result.then(function (folderID) {
