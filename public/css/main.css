@@ -3229,7 +3229,7 @@ a.list-group-item:hover {
     margin-top: 5px;
     border-bottom-width: 2px;
     border-bottom-color: #666;
-    overflow: hidden;
+    padding-bottom: 15px;
 }
 
 .explorer-header-title h3,
