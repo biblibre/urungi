@@ -21,7 +21,7 @@ var Dashboardsv2Schema = new mongoose.Schema({
     createdBy: { type: String },
     author: { type: String },
     createdOn: { type: Date }
-}, { collection: 'wst_Dashboardsv2' });
+}, { collection: 'wst_Dashboardsv2', collation: { locale: 'en', strength: 2 } });
 
 Dashboardsv2Schema.methods.publish = async function () {
     this.isPublic = true;
