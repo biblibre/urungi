@@ -622,6 +622,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.changeReportType = function (newReportType) {
         const report = $scope.selectedReport;
+
         if (report.query) {
             report.query.countYKeys = false;
         }
