@@ -17,7 +17,6 @@
         'colorpicker.module',
         'gettext',
         'ngclipboard',
-        'urungi.directives',
         'angularUUID2',
         'intro.help',
         'page.block',

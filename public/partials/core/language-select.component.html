@@ -1,0 +1,8 @@
+<div ui-select ng-model="vm.currentLanguage" on-select="vm.languageChanged($item)" search-enabled="false">
+    <div ui-select-match>
+        <div ng-bind-html="$select.selected.label"></div>
+    </div>
+    <div ui-select-choices repeat="language in vm.availableLanguages" >
+        <div ng-bind-html="language.label"></div>
+    </div>
+</div>
