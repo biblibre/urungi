@@ -4,7 +4,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     gettextCatalog, $uibModal, userService, api
 ) {
     $scope.reportModal = 'partials/report/edit.html';
-    $scope.chartModal = 'partials/pages/chartModal.html';
     $scope.settingsHtml = 'partials/pages/settings.html';
     $scope.queriesHtml = 'partials/pages/queries.html';
     $scope.settingsTemplate = 'partials/widgets/inspector.html';
