@@ -13,7 +13,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
     $scope.selectedDashboard = { reports: [], containers: [], prompts: [] };
     $scope.lastElementID = 0;
-    $scope.selectedDashboardLimit = { value: 0 };
     $scope.dataPool = [];
 
     // $scope.colors = colors.colors;
