@@ -115,8 +115,6 @@ To upgrade Urungi to the latest version, follow these steps:
 
 ## Tests
 
-[![Build Status](https://travis-ci.org/biblibre/urungi.svg?branch=master)](https://travis-ci.org/biblibre/urungi)
-
 To run the tests:
 
     npm test
