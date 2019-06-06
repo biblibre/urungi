@@ -13,9 +13,13 @@ For more information, see https://angular-gettext.rocketeer.be/dev-guide/
 
 # 2 - Extract the strings to translate
 
-The command to do that is
+If gulp is not installed yet, install it with the following command:
 
-> gulp pot
+    npm install gulp-cli -g
+
+The command to extract all strings is
+
+    gulp pot
 
 This will generate the file language/template.pot
 
@@ -27,13 +31,13 @@ All translations must be stored as .po files in the language folder.
 
 To add new strings in po files, you can use this command:
 
-> gulp po:update
+    gulp po:update
 
 # 4 - compile the translation
 
 The command is
 
-> gulp dist:translations
+    gulp dist:translations
 
 This will update urungi with the new translations.
 
