@@ -1,4 +1,4 @@
-<div id="parentIntro" intro-help ng-intro-method="vm.showIntro" ng-intro-options="vm.introOptions" class="container-fluid root-container">
+<div id="parentIntro" ng-intro-method="vm.showIntro" ng-intro-options="vm.introOptions" class="container-fluid root-container">
     <div class="row">
         <div class="col-md-3">
             <app-sidebar show-intro="vm.showIntro()"></app-sidebar>
@@ -12,7 +12,7 @@
                 <a class="btn btn-info pull-right" ng-click="vm.showIntro()" style="margin-right: 3px;" uib-tooltip="{{ 'Follow the guided tour for data sources' | translate }}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
             </div>
 
-            <app-list-panel columns="vm.columns" refresh="vm.refresh">
+            <app-list-panel columns="vm.columns" refresh="vm.refresh" id="layerList">
                 <div class="list-group-item" ng-repeat="layer in vm.layers">
                     <app-layers-list-item layer="layer" on-delete="vm.refresh()"></app-layers-list-item>
                 </div>

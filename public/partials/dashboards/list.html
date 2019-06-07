@@ -1,4 +1,4 @@
-<div id="parentIntro" intro-help ng-intro-method="vm.showIntro" ng-intro-options="vm.introOptions" class="container-fluid root-container">
+<div id="parentIntro" ng-intro-method="vm.showIntro" ng-intro-options="vm.introOptions" class="container-fluid root-container">
     <div class="row">
         <div class="main col-md-3">
             <app-sidebar show-intro="vm.showIntro()"></app-sidebar>
@@ -14,7 +14,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <app-list-panel columns="vm.columns" refresh="vm.refresh">
+                    <app-list-panel columns="vm.columns" refresh="vm.refresh" id="dashboardList">
                         <div class="list-group-item" ng-repeat="dashboard in vm.dashboards">
                             <app-dashboards-list-item dashboard="dashboard" on-delete="vm.refresh()" on-duplicate="vm.refresh()"></app-dashboards-list-item>
                         </div>

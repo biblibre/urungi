@@ -920,110 +920,88 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.IntroOptions = {
-        // IF width > 300 then you will face problems with mobile devices in responsive mode
+        nextLabel: gettextCatalog.getString('Next'),
+        prevLabel: gettextCatalog.getString('Back'),
+        skipLabel: gettextCatalog.getString('Skip'),
+        doneLabel: gettextCatalog.getString('Done'),
+        tooltipPosition: 'auto',
+        showStepNumbers: false,
         steps: [
             {
-                element: '#dataObjectsIntroBlock',
-                html: '<div><h3>' +
-                gettextCatalog.getString('The layer catalog') +
-                '</h3><span style="font-weight:bold;">' +
-                gettextCatalog.getString('Access here the different data elements of every layer that you have access on') +
-                '</span><br/><span>' +
-                gettextCatalog.getString('Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)') +
-                '</span></div>',
-                width: '300px',
-                height: '250px'
+                element: '#elementsTab',
+                intro: '<h4>' +
+                    gettextCatalog.getString('The layer catalog') +
+                    '</h4><p><strong>' +
+                    gettextCatalog.getString('Access here the different data elements of every layer that you have access on') +
+                    '</strong></p><p>' +
+                    gettextCatalog.getString('Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)') +
+                    '</p>',
             },
             {
                 element: '#selectLayer',
-                html: '<div><h3>' +
-                gettextCatalog.getString('The layer selector') +
-                '</h3><span style="font-weight:bold;">' +
-                gettextCatalog.getString('Select here the layer where your query will be based on.') +
-                '</span><br/><span>' +
-                gettextCatalog.getString('One query can only be baes in just one layer, you can not mix elements from different layers in the same query') +
-                '</span></div>',
-                width: '300px',
-                height: '250px',
-                areaColor: 'transparent',
-                areaLineColor: '#8DC63F'
-
+                intro: '<h4>' +
+                    gettextCatalog.getString('The layer selector') +
+                    '</h4><p><strong>' +
+                    gettextCatalog.getString('Select here the layer where your query will be based on.') +
+                    '</strong></p><p>' +
+                    gettextCatalog.getString('One query can only be based on one layer, you can not mix elements from different layers in the same query') +
+                    '</p>',
             },
             {
                 element: '#reportType',
-                html: '<div><h3>' +
-                gettextCatalog.getString('Report Type selector') +
-                '</h3><span style="font-weight:bold;">' +
-                gettextCatalog.getString('Click over one of the different report types to change the visualization of the data you choose') +
-                '</span><br/><span></span></div>',
-                width: '300px',
-                areaColor: 'transparent',
-                height: '180px'
+                intro: '<h4>' +
+                    gettextCatalog.getString('Report Type selector') +
+                    '</h4><p>' +
+                    gettextCatalog.getString('Click over one of the different report types to change the visualization of the data you choose') +
+                    '</p>',
             },
             {
                 element: '#dropArea',
-                html: '<div><h3>' +
-                gettextCatalog.getString('Results area') +
-                '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettextCatalog.getString('As you define the query dragging and dropping in the areas above, the results of the query will appear here') +
-                '</span><br/><span></span></div>',
-                width: '300px',
-                height: '150px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff'
+                intro: '<h4>' +
+                    gettextCatalog.getString('Results area') +
+                    '</h4><p>' +
+                    gettextCatalog.getString('As you define the query dragging and dropping in the areas above, the results of the query will appear here') +
+                    '</p>',
             },
             {
                 element: '#queryRefresh',
-                html: '<div><h3>' +
-                gettextCatalog.getString('Query refresh') +
-                '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettextCatalog.getString('Use this button to refresh the results') +
-                '</span><br/><span>' +
-                gettextCatalog.getString('After building your query, refresh to view the report.') +
-                '</span></div>',
-                width: '300px',
-                height: '150px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff',
-                horizontalAlign: 'right'
+                intro: '<h4>' +
+                    gettextCatalog.getString('Query refresh') +
+                    '</h4><p><strong>' +
+                    gettextCatalog.getString('Use this button to refresh the results') +
+                    '</strong></p><p>' +
+                    gettextCatalog.getString('After building your query, refresh to view the report.') +
+                    '</p>',
             },
             {
                 element: '#columnsDropzone',
-                html: '<div><h3>' +
-                gettextCatalog.getString('Columns / results drop zone') +
-                '</h3><span style="font-weight:bold;">' +
-                gettextCatalog.getString('Drop here the elements you want to have in the results of the query') +
-                '</span><br/><span>' +
-                gettextCatalog.getString('A query must hold at least one element here to be executed') +
-                '</span></div>',
-                width: '300px',
-                height: '180px'
+                intro: '<h4>' +
+                    gettextCatalog.getString('Columns / results drop zone') +
+                    '</h4><p><strong>' +
+                    gettextCatalog.getString('Drop here the elements you want to have in the results of the query') +
+                    '</strong></p><p>' +
+                    gettextCatalog.getString('A query must hold at least one element here to be executed') +
+                    '</p>',
             },
             {
                 element: '#orderByDropzone',
-                html: '<div><h3>' +
-                gettextCatalog.getString('Order By drop zone') +
-                '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettextCatalog.getString('Drop here the elements that you want to use to order the results of the query') +
-                '</span><br/><span>' +
-                gettextCatalog.getString('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results') +
-                '</span></div>',
-                width: '300px',
-                height: '250px'
+                intro: '<h4>' +
+                    gettextCatalog.getString('Order By drop zone') +
+                    '</h4><p><strong>' +
+                    gettextCatalog.getString('Drop here the elements that you want to use to order the results of the query') +
+                    '</strong></p><p>' +
+                    gettextCatalog.getString('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results') +
+                    '</p>',
             },
             {
                 element: '#filtersDropzone',
-                html: '<div><h3>' +
-                gettextCatalog.getString('Filters drop zone') +
-                '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                'Drop here the elements that you want to use to filter the results of the query' +
-                '</span><br/><span>' +
-                'The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results' +
-                '</span></div>',
-                width: '300px',
-                height: '250px',
-                areaColor: 'transparent',
-                areaLineColor: '#fff'
+                intro: '<h4>' +
+                    gettextCatalog.getString('Filters drop zone') +
+                    '</h4><p><strong>' +
+                    gettextCatalog.getString('Drop here the elements that you want to use to filter the results of the query') +
+                    '</strong></p><p>' +
+                    gettextCatalog.getString('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results') +
+                    '</p>',
             }
 
         ]

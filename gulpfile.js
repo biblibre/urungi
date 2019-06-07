@@ -88,6 +88,8 @@ function dist_js_build () {
         'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js',
         'node_modules/angular-gettext/dist/angular-gettext.min.js',
         'node_modules/cynteka-pivot-table-jquery/dist/jquery.cy-pivot.min.js',
+        'node_modules/intro.js/minified/intro.min.js',
+        'node_modules/angular-intro.js/build/angular-intro.min.js',
     ];
 
     const bundle = gulp.src(paths)
@@ -119,6 +121,7 @@ function dist_css_build () {
         'node_modules/cynteka-pivot-table-jquery/dist/jquery.cy-pivot.min.css',
         'node_modules/font-awesome/css/font-awesome.min.css',
         'node_modules/jsplumb/css/jsplumbtoolkit-defaults.css',
+        'node_modules/intro.js/minified/introjs.min.css',
     ];
 
     return gulp.src(paths)

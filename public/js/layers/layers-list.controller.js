@@ -67,106 +67,78 @@
 
         function getIntroOptions () {
             const introOptions = {
+                nextLabel: gettextCatalog.getString('Next'),
+                prevLabel: gettextCatalog.getString('Back'),
+                skipLabel: gettextCatalog.getString('Skip'),
+                doneLabel: gettextCatalog.getString('Done'),
+                tooltipPosition: 'auto',
+                showStepNumbers: false,
                 steps: [
                     {
-                        element: '#parentIntro',
-                        html: '<div><h3>' +
+                        intro: '<h4>' +
                             gettextCatalog.getString('Layers') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
+                            '</h4><p>' +
                             gettextCatalog.getString('Layers define the interface for your users to access the data.') +
-                            '</span><br/><br/><span>' +
+                            '</p><p>' +
                             gettextCatalog.getString('Layers allow your users to create reports dragging and dropping familiar elements that points in the background to the fields contained in tables in your data sources.') +
-                            '</span><br/><br/><span>' +
+                            '</p><p>' +
                             gettextCatalog.getString('Here you can create and manage the layers that later will be used by your users to create reports or explore data.') +
-                            '</span><br/><br/><span>' +
+                            '</p><p>' +
                             gettextCatalog.getString('You can create several layers depending on your necessities, but you have to define one at least.') +
-                            '</span></div>',
-                        width: '500px',
-                        objectArea: false,
-                        verticalAlign: 'top',
-                        height: '300px'
+                            '</p>',
                     },
                     {
                         element: '#newLayerButton',
-                        html: '<div><h3>' +
+                        intro: '<h4>' +
                             gettextCatalog.getString('New Layer') +
-                            '</h3><span style="font-weight:bold;">' +
+                            '</h4><p>' +
                             gettextCatalog.getString('Click here to create a new layer.') +
-                            '</span><br/><span></span></div>',
-                        width: '300px',
-                        height: '150px',
-                        areaColor: 'transparent',
-                        horizontalAlign: 'right',
-                        areaLineColor: '#fff'
+                            '</p>',
                     },
                     {
                         element: '#layerList',
-                        html: '<div><h3>' +
+                        intro: '<h4>' +
                             gettextCatalog.getString('Layers list') +
-                            '</h3><span style="font-weight:bold;">' +
+                            '</h4><p>' +
                             gettextCatalog.getString('Here all the layers are listed.') +
-                            '</span><br/><span>' +
+                            '</p><p>' +
                             gettextCatalog.getString('You can edit the layer to configure the tables, elements and joins between tables.') +
-                            '<br/><br/>' +
+                            '</p><p>' +
                             gettextCatalog.getString('You can also activate or deactivate layers.') +
-                            '</span></div>',
-                        width: '300px',
-                        areaColor: 'transparent',
-                        areaLineColor: '#fff',
-                        verticalAlign: 'top',
-                        height: '180px'
-
+                            '</p>',
                     },
                     {
-                        element: '#layerListItemStatus',
-                        html: '<div><h3>' +
+                        element: '#layerList .badge',
+                        intro: '<h4>' +
                             gettextCatalog.getString('Layer status') +
-                            '</h3><span style="font-weight:bold;">' +
+                            '</h4><p>' +
                             gettextCatalog.getString('The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data.') +
-                            '</span><br/><br/><span>' +
+                            '</p><p>' +
                             gettextCatalog.getString('You can change the status of the layer simply clicking over this label') +
-                            '</span></div>',
-                        width: '300px',
-                        areaColor: 'transparent',
-                        areaLineColor: '#fff',
-                        horizontalAlign: 'right',
-                        height: '200px'
-
+                            '</p>',
                     },
-
                     {
                         element: '.btn-delete',
-                        html: '<div><h3>' +
+                        intro: '<h4>' +
                             gettextCatalog.getString('Layer delete') +
-                            '</h3><span style="font-weight:bold;">' +
+                            '</h4><p>' +
                             gettextCatalog.getString('Click here to delete the layer.') +
-                            '</span><br/><br/><span>' +
+                            '</p><p>' +
                             gettextCatalog.getString('Once deleted the layer will not be recoverable again.') +
-                            '</span><br/><br/><span>' +
+                            '</p><p>' +
                             gettextCatalog.getString('Requires 2 step confirmation.') +
-                            '</span></div>',
-                        width: '300px',
-                        areaColor: 'transparent',
-                        areaLineColor: '#fff',
-                        horizontalAlign: 'right',
-                        height: '200px'
-
+                            '</p>',
                     },
                     {
-                        element: '#parentIntro',
-                        html: '<div><h3>' +
+                        intro: '<h4>' +
                             gettextCatalog.getString('Next Step') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
+                            '</h4><p>' +
                             gettextCatalog.getString('Design your company public space') +
-                            '</span><br/><br/>' +
+                            '</p><p>' +
                             gettextCatalog.getString('The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space') +
-                            '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/shared-space#intro">' +
+                            '</p><a class="btn btn-info btn-xs" href="/#/shared-space#intro">' +
                             gettextCatalog.getString('Go to the public space definition and continue tour') +
-                            '</a></span></div>',
-                        width: '500px',
-                        objectArea: false,
-                        verticalAlign: 'top',
-                        height: '250px'
+                            '</a>',
                     }
                 ]
             };

@@ -10,460 +10,191 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'con
     function getIntraOptions () {
         $q.all({ user: userService.getCurrentUser(), counts: api.getCounts() }).then(result => {
             const { user, counts } = result;
-            if (user.isWSTADMIN) {
-                $scope.IntroOptions = {
-                // IF width > 300 then you will face problems with mobile devices in responsive mode
-                    steps: [
-                        {
-                            element: '#mainMenu',
-                            html: '<div><h3>' +
+            $scope.IntroOptions = {
+                nextLabel: gettextCatalog.getString('Next'),
+                prevLabel: gettextCatalog.getString('Back'),
+                skipLabel: gettextCatalog.getString('Skip'),
+                doneLabel: gettextCatalog.getString('Done'),
+                tooltipPosition: 'auto',
+                showStepNumbers: false,
+                steps: [
+                    {
+                        element: '#mainMenu',
+                        intro: '<h4>' +
                             gettextCatalog.getString('The main menu') +
-                            '</h3><span style="font-weight:bold;">' +
+                            '</h4><p>' +
                             gettextCatalog.getString('Here you can access the basic operations in urungi') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('The "white" part of the menu is common for all users, the "green" part is only for urungi administrators') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '180px'
-                        },
-                        {
-                            element: '#sharedArea',
-                            html: '<div><h3>' +
+                            '</p>',
+                    },
+                    {
+                        element: '#sharedArea',
+                        intro: '<h4>' +
                             gettextCatalog.getString('The shared area') +
-                            '</h3><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Here all the shared elements (reports, dashboards, pages) are displayed to be accessed by the users') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('Depending on their permissions the users can access different folders and/or elements') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '180px'
-
-                        },
-                        {
-                            element: '#latestExecutions',
-                            html: '<div><h3>' +
+                            '</h4><p>' +
+                            gettextCatalog.getString('Here all the shared shared elements (reports, dashboards, pages) that you can execute') +
+                            '</p><p>' +
+                            gettextCatalog.getString('Depending on your permissions you will be able to access different folders and/or elements') +
+                            '</p>',
+                    },
+                    {
+                        element: '#latestExecutions',
+                        intro: '<h4>' +
                             gettextCatalog.getString('Latest executions') +
-                            '</h3><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Here are displayed the 10 latest element executions by the connected user, along with the last execution time') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '180px'
-                        },
-                        {
-                            element: '#mostExecuted',
-                            html: '<div><h3>' +
+                            '</h4><p>' +
+                            gettextCatalog.getString('Here are displayed your 10 latest element executions, along with the last execution time') +
+                            '</p>',
+                    },
+                    {
+                        element: '#mostExecuted',
+                        intro: '<h4>' +
                             gettextCatalog.getString('Most Executed') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                            gettextCatalog.getString('This area display the 10 most executed elements for the hole company and the number of executions per element') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '180px'
-                        },
-                        {
-                            element: '#usersMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Users') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is only available for urungi administrators.') +
-                            '</span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Access users to create new urungi users and to manage them') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '180px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#fff'
-                        },
-                        {
-                            element: '#rolesMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Roles') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is only available for urungi administrators.') +
-                            '</span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Access roles to create, manage roles, and grant or revoque permissions') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '180px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#fff'
-                        },
-                        {
-                            element: '#datasourcesMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Data sources') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is only available for urungi administrators.') +
-                            '</span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Access here to define the connections to the different sources of your information') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('You will define here your database connections to get the data used in the reports that will be created by the users') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '250px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#fff'
-                        },
-                        {
-                            element: '#layersMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Layers') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is only available for urungi administrators.') +
-                            '</span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Here you can define the semantic layer used by your users to access the data in the different data sources.') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('You will define here the labels to use for every field, the joins between the different entities (tables), etc... All the necessary stuff to allow your users to create a report without any knowledge of the structure of your data') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '300px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#fff'
-                        },
-                        {
-                            element: '#sharedSpaceMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Shared space') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is only available for urungi administrators.') +
-                            '</span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Define here the folder structure for the shared area') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '180px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#fff'
-                        },
-                        {
-                            element: '#myProfileMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('My profile') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is available for all users.') +
-                            '</span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Access this to view info about your profile, change your password, etc...') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '180px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#exploreMainMenu',
-                            html: '<div><h3>' +
+                            '</h4><p>' +
+                            gettextCatalog.getString('This area display your 10 most executed elements and the number of executions per element') +
+                            '</p>',
+                    },
+                    {
+                        element: '#exploreMainMenu',
+                        intro: '<h4>' +
                             gettextCatalog.getString('Explore') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is available for all users that have the grant for explore data.') +
-                            '</span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Explore allow users to surf across the data without creating a report for that.') +
-                            '</span><br/><span>' +
+                            '</h4><p>' +
+                            gettextCatalog.getString('Explore allows you to surf across the data without creating a report for that.') +
+                            '</p><p>' +
                             gettextCatalog.getString('Use this if you want to query your data but is not necessary for you to save it for a later use') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '200px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#pagesMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Page reports') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is available for all users that have the grant to create pages.') +
-                            '</span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Pages allow users to create and manage report pages.') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('Report pages are webpages that can be compromised of data in the form of charts or data grids, along with other HTML elements that allows to customize the report at the highest level') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '250px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#reportsMainMenu',
-                            html: '<div><h3>' +
+                            '</p>',
+                    },
+                    {
+                        element: '#reportsMainMenu',
+                        intro: '<h4>' +
                             gettextCatalog.getString('Single query reports') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is available for all users that have the grant to create reports.') +
-                            '</span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Reports allow users to create and manage single query reports.') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('Single Reports allow the user to configure a query against the data and get the results using different charts or a data grid, single reports are the elements that you use to create a dashboard') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '250px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#dashboardsMainMenu',
-                            html: '<div><h3>' +
+                            '</h4><p>' +
+                            gettextCatalog.getString('Reports allows you to create (if granted) and manage your single query reports.') +
+                            '</p><p>' +
+                            gettextCatalog.getString('Using single query reports you can configure a query against the data and get the results using different charts or a simple data grid.') +
+                            '</p>',
+                    },
+                    {
+                        element: '#dashboardsMainMenu',
+                        intro: '<h4>' +
                             gettextCatalog.getString('Single query dashboards') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is available for all users that have the grant to create dashboards.') +
-                            '</span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Dashboards allow users to create dashboards using single query reports.') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('Dashboards allow the user to group several single query reports in just one interface, when creating dashboards you can define the area, size and position of every single query report into the dashboard') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '250px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#homeMainMenu',
-                            html: '<div><h3>' +
+                            '</h4><p>' +
+                            gettextCatalog.getString('Dashboards allows you to create (if granted) and manage dashboards using your previous defined single query reports.') +
+                            '</p><p>' +
+                            gettextCatalog.getString('Using single query dashboards you can group several single query reports in just one interface, you can define the area, size and position of every single query report into the dashboard') +
+                            '</p>',
+                    },
+                    {
+                        element: '#homeMainMenu',
+                        intro: '<h4>' +
                             gettextCatalog.getString('Home') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F">' +
-                            gettextCatalog.getString('This link is available for all users.') +
-                            '</span><br/><span style="font-weight:bold;">' +
+                            '</h4><p>' +
                             gettextCatalog.getString('Use this link to back to this page') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '150px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#parentIntro',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Next Step') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Setup a data source') +
-                            '</span><br/><br/><br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/data-sources#intro">' +
-                            gettextCatalog.getString('Go to data sources and continue tour') +
-                            '</a></span></div>',
-                            width: '500px',
-                            objectArea: false,
-                            verticalAlign: 'top',
-                            height: '250px'
-                        }
-                    ]
-                };
+                            '</p>',
+                    }
+                ]
+            };
+
+            if (user.isWSTADMIN) {
+                $scope.IntroOptions.steps.push({
+                    element: '#usersMainMenu',
+                    intro: '<h4>' +
+                        gettextCatalog.getString('Users') +
+                        '</h4><p style="font-weight:bold;color:#8DC63F">' +
+                        gettextCatalog.getString('This link is only available for urungi administrators.') +
+                        '</p><p>' +
+                        gettextCatalog.getString('Access users to create new urungi users and to manage them') +
+                        '</p>',
+                });
+                $scope.IntroOptions.steps.push({
+                    element: '#rolesMainMenu',
+                    intro: '<h4>' +
+                        gettextCatalog.getString('Roles') +
+                        '</h4><p style="font-weight:bold;color:#8DC63F">' +
+                        gettextCatalog.getString('This link is only available for urungi administrators.') +
+                        '</p><p>' +
+                        gettextCatalog.getString('Access roles to create, manage roles, and grant or revoque permissions') +
+                        '</p>',
+                });
+                $scope.IntroOptions.steps.push({
+                    element: '#datasourcesMainMenu',
+                    intro: '<h4>' +
+                        gettextCatalog.getString('Data sources') +
+                        '</h4><p style="font-weight:bold;color:#8DC63F">' +
+                        gettextCatalog.getString('This link is only available for urungi administrators.') +
+                        '</p><p>' +
+                        gettextCatalog.getString('Access here to define the connections to the different sources of your information') +
+                        '</p><p>' +
+                        gettextCatalog.getString('You will define here your database connections to get the data used in the reports that will be created by the users') +
+                        '</p>',
+                });
+                $scope.IntroOptions.steps.push({
+                    element: '#layersMainMenu',
+                    intro: '<h4>' +
+                        gettextCatalog.getString('Layers') +
+                        '</h4><p style="font-weight:bold;color:#8DC63F">' +
+                        gettextCatalog.getString('This link is only available for urungi administrators.') +
+                        '</p><p>' +
+                        gettextCatalog.getString('Here you can define the semantic layer used by your users to access the data in the different data sources.') +
+                        '</p><p>' +
+                        gettextCatalog.getString('You will define here the labels to use for every field, the joins between the different entities (tables), etc... All the necessary stuff to allow your users to create a report without any knowledge of the structure of your data') +
+                        '</p>',
+                });
+                $scope.IntroOptions.steps.push({
+                    element: '#sharedSpaceMainMenu',
+                    intro: '<h4>' +
+                        gettextCatalog.getString('Shared space') +
+                        '</h4><p style="font-weight:bold;color:#8DC63F">' +
+                        gettextCatalog.getString('This link is only available for urungi administrators.') +
+                        '</p><p>' +
+                        gettextCatalog.getString('Define here the folder structure for the shared area') +
+                        '</p>',
+                });
+                $scope.IntroOptions.steps.push({
+                    intro: '<h4>' +
+                        gettextCatalog.getString('Next Step') +
+                        '</h4><p>' +
+                        gettextCatalog.getString('Setup a data source') +
+                        '</p><a class="btn btn-info btn-xs" href="/#/data-sources#intro">' +
+                        gettextCatalog.getString('Go to data sources and continue tour') +
+                        '</a>',
+                });
             } else {
                 // the user is not WSTADMIN
-                $scope.IntroOptions = {
-                // IF width > 300 then you will face problems with mobile devices in responsive mode
-                    steps: [
-                        {
-                            element: '#mainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('The main menu') +
-                            '</h3><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Here you can access the basic operations in urungi') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '180px'
-                        },
-                        {
-                            element: '#sharedArea',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('The shared area') +
-                            '</h3><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Here all the shared shared elements (reports, dashboards, pages) that you can execute') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('Depending on your permissions you will be able to access different folders and/or elements') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '180px'
-
-                        },
-                        {
-                            element: '#latestExecutions',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Latest executions') +
-                            '</h3><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Here are displayed your 10 latest element executions, along with the last execution time') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '180px'
-                        },
-                        {
-                            element: '#mostExecuted',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Most Executed') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                            gettextCatalog.getString('This area display your 10 most executed elements and the number of executions per element') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '180px'
-                        },
-                        {
-                            element: '#myProfileMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('My profile') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Access this to view info about your profile, change your password, etc...') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '180px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#exploreMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Explore') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Explore allows you to surf across the data without creating a report for that.') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('Use this if you want to query your data but is not necessary for you to save it for a later use') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '200px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#pagesMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Page reports') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Pages allows you to create (if granted) and manage report pages.') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('Report pages are webpages that can be compromised of data in the form of charts or data grids, along with other HTML elements that allows you to customize the report at the highest level') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '250px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#reportsMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Single query reports') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Reports allows you to create (if granted) and manage your single query reports.') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('Using single query reports you can configure a query against the data and get the results using different charts or a simple data grid.') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '250px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#dashboardsMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Single query dashboards') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Dashboards allows you to create (if granted) and manage dashboards using your previous defined single query reports.') +
-                            '</span><br/><span>' +
-                            gettextCatalog.getString('Using single query dashboards you can group several single query reports in just one interface, you can define the area, size and position of every single query report into the dashboard') +
-                            '</span></div>',
-                            width: '300px',
-                            height: '250px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        },
-                        {
-                            element: '#homeMainMenu',
-                            html: '<div><h3>' +
-                            gettextCatalog.getString('Home') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span><br/><span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Use this link to back to this page') +
-                            '</span><br/><span></span></div>',
-                            width: '300px',
-                            height: '150px',
-                            position: 'right',
-                            areaColor: 'transparent',
-                            areaLineColor: '#8DC63F'
-                        }
-
-                    ]
-                };
-
                 if (user.exploreData) {
                     $scope.IntroOptions.steps.push({
-                        element: '#parentIntro',
-                        html: '<div><h3>' +
-                        gettextCatalog.getString('Next Step') +
-                        '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                        gettextCatalog.getString('Explore data') +
-                        '</span><br/><br/>' +
-                        gettextCatalog.getString('See how you can explore data creating queries easily without any technical knowledge') +
-                        '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/explore#intro">' +
-                        gettextCatalog.getString('Go to data explorer and continue tour') +
-                        '</a></span></div>',
-                        width: '500px',
-                        objectArea: false,
-                        verticalAlign: 'top',
-                        height: '250px'
-                    });
-                } else {
-                    if (user.pagesCreate || counts.pages > 0) {
-                        $scope.IntroOptions.steps.push({
-                            element: '#parentIntro',
-                            html: '<div><h3>' +
+                        intro: '<h4>' +
                             gettextCatalog.getString('Next Step') +
-                            '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                            gettextCatalog.getString('Page reports') +
-                            '</span><br/><br/>' +
-                            gettextCatalog.getString('See how you can create customized web pages that shows your data using charts and data grids along with HTML components') +
-                            '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/page#intro">' +
-                            gettextCatalog.getString('Go to pages designer and continue tour') +
-                            '</a></span></div>',
-                            width: '500px',
-                            objectArea: false,
-                            verticalAlign: 'top',
-                            height: '250px'
-                        });
-                    } else {
-                        if (user.reportsCreate || counts.reports > 0) {
-                            $scope.IntroOptions.steps.push({
-                                element: '#parentIntro',
-                                html: '<div><h3>' +
-                                gettextCatalog.getString('Next Step') +
-                                '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                                gettextCatalog.getString('Single query reports') +
-                                '</span><br/><br/>' +
-                                gettextCatalog.getString('See how you can create single query reports that shows your data using charts and data grids') +
-                                '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report#intro">' +
-                                gettextCatalog.getString('Go to single query report designer and continue tour') +
-                                '</a></span></div>',
-                                width: '500px',
-                                objectArea: false,
-                                verticalAlign: 'top',
-                                height: '250px'
-                            });
-                        } else {
-                            if (user.dashboardsCreate || counts.dashBoards > 0) {
-                                $scope.IntroOptions.steps.push({
-                                    element: '#parentIntro',
-                                    html: '<div><h3>' +
-                                    gettextCatalog.getString('Next Step') +
-                                    '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                                    gettextCatalog.getString('Dashboards') +
-                                    '</span><br/><br/>' +
-                                    gettextCatalog.getString('See how to create dashboards composed with a set of single query reports') +
-                                    '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/dashboard#intro">' +
-                                    gettextCatalog.getString('Go to dashboards and continue tour') +
-                                    '</a></span></div>',
-                                    width: '500px',
-                                    objectArea: false,
-                                    verticalAlign: 'top',
-                                    height: '250px'
-                                });
-                            }
-                        }
-                    }
+                            '</h4><p>' +
+                            gettextCatalog.getString('Explore data') +
+                            '</p><p>' +
+                            gettextCatalog.getString('See how you can explore data creating queries easily without any technical knowledge') +
+                            '</p><a class="btn btn-info btn-xs" href="/#/explore#intro">' +
+                            gettextCatalog.getString('Go to data explorer and continue tour') +
+                            '</a>',
+                    });
+                } else if (user.reportsCreate || counts.reports > 0) {
+                    $scope.IntroOptions.steps.push({
+                        intro: '<h4>' +
+                            gettextCatalog.getString('Next Step') +
+                            '</h4><p>' +
+                            gettextCatalog.getString('Single query reports') +
+                            '</p><p>' +
+                            gettextCatalog.getString('See how you can create single query reports that shows your data using charts and data grids') +
+                            '</p><a class="btn btn-info btn-xs" href="/#/report#intro">' +
+                            gettextCatalog.getString('Go to single query report designer and continue tour') +
+                            '</a>',
+                    });
+                } else if (user.dashboardsCreate || counts.dashBoards > 0) {
+                    $scope.IntroOptions.steps.push({
+                        intro: '<h4>' +
+                            gettextCatalog.getString('Next Step') +
+                            '</h4><p>' +
+                            gettextCatalog.getString('Dashboards') +
+                            '</p><p>' +
+                            gettextCatalog.getString('See how to create dashboards composed with a set of single query reports') +
+                            '</p><a class="btn btn-info btn-xs" href="/#/dashboard#intro">' +
+                            gettextCatalog.getString('Go to dashboards and continue tour') +
+                            '</a>',
+                    });
                 }
             }
         });
