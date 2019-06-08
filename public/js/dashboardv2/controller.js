@@ -86,37 +86,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         $scope.reportInterface = false;
     });
 
-    if ($location.hash() === 'intro') {
-        $timeout(function () { $scope.showIntro(); }, 1000);
-    }
-
-    $scope.IntroOptions = {
-        // IF width > 300 then you will face problems with mobile devices in responsive mode
-        steps: [
-        ]
-    };
-
-    $q.all({ user: userService.getCurrentUser(), counts: api.getCounts() }).then(result => {
-        if (result.user.reportsCreate || result.counts.reports > 0) {
-            $scope.IntroOptions.steps.push({
-                element: '#parentIntroReports',
-                html: '<div><h3>' +
-                gettextCatalog.getString('Next Step') +
-                '</h3><span style="font-weight:bold;color:#8DC63F"></span> <span style="font-weight:bold;">' +
-                gettextCatalog.getString('Reports') +
-                '</span><br/><br/>' +
-                gettextCatalog.getString('See how you can create reports that shows your data using charts and data grids') +
-                '<br/><br/><br/><span> <a class="btn btn-info pull-right" href="/#/report#intro">' +
-                gettextCatalog.getString('Go to report designer and continue tour') +
-                '</a></span></div>',
-                width: '500px',
-                objectArea: false,
-                verticalAlign: 'top',
-                height: '250px'
-            });
-        }
-    });
-
     $scope.initForm = function () {
         if (/new/.test($location.path())) {
             $scope.mode = 'add';
