@@ -148,6 +148,7 @@ function processQuery (query, queryLayer, warnings) {
         }
     }
 
+    const queryHasAggregation = query.columns.some(c => c.aggregation);
     for (const col of query.columns) {
         const element = findElement(queryLayer.objects, col.elementID);
         if (!element) {
@@ -159,8 +160,7 @@ function processQuery (query, queryLayer, warnings) {
 
         const validCol = validateColumn(col, element, warnings);
         processedQuery.columns.push(validCol);
-        if (!validCol.aggregation) {
-            // FIXME No need to GROUP BY if no aggregate functions is used at all
+        if (queryHasAggregation && !validCol.aggregation) {
             groupKeys.add(col);
         }
     }
