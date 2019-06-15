@@ -519,9 +519,6 @@ const generateTestSuite = (dbConfig) => function () {
         } catch (e) {
             await agent.close();
             await knex.destroy();
-            // This is needed to skip child suites
-            // https://github.com/mochajs/mocha/issues/2819
-            this.test.parent.pending = true;
             this.skip();
             return;
         }
@@ -749,6 +746,36 @@ const generateTestSuite = (dbConfig) => function () {
             expect(data[0]).to.have.property('namefield');
         });
 
+        it('should not use GROUP BY when there is no aggregation', async function () {
+            const query = {
+                layerID: simpleId,
+                columns: [
+                    {
+                        elementID: 'eeac',
+                        id: 'color',
+                    },
+                ],
+                order: [],
+                filters: [
+                    {
+                        elementID: 'eeac',
+                        filterType: 'equal',
+                        criterion: {
+                            text1: 'purple'
+                        }
+                    },
+                ],
+            };
+
+            const data = await fetchData(agent, xsrfToken, query);
+
+            expect(data).to.have.lengthOf(4);
+            expect(data[0].color).to.equal('purple');
+            expect(data[1].color).to.equal('purple');
+            expect(data[2].color).to.equal('purple');
+            expect(data[3].color).to.equal('purple');
+        });
+
         it('Should query with order and filter', async function () {
             const query = {
                 layerID: simpleId,
@@ -874,33 +901,36 @@ const generateTestSuite = (dbConfig) => function () {
                 id: 'countfield',
                 sortType: -1
             });
+            query.order.push({
+                elementID: 'eebb',
+                id: 'weaponname',
+                sortType: -1
+            });
 
             const data = await fetchData(agent, xsrfToken, query);
 
-            var sourceData = [];
+            expect(data).to.have.lengthOf(9);
+            expect(data[0].namefield).to.equal('Stevonie');
+            expect(data[0].colourfield).to.equal('pink');
+            expect(data[0].countfield).to.equal(103);
+            expect(data[0].weaponname).to.equal('Sword');
+            expect(data[1].namefield).to.equal('Stevonie');
+            expect(data[1].colourfield).to.equal('pink');
+            expect(data[1].countfield).to.equal(103);
+            expect(data[1].weaponname).to.equal('Shield');
+            expect(data[2].namefield).to.equal('Steven');
+            expect(data[2].colourfield).to.equal('pink');
+            expect(data[2].countfield).to.equal(101);
+            expect(data[2].weaponname).to.equal('Shield');
+            expect(data[3].namefield).to.equal('Ruby');
+            expect(data[3].colourfield).to.equal('red');
+            expect(data[3].countfield).to.equal(10);
+            expect(data[3].weaponname).to.equal('fist');
 
-            for (const litem of testDataRef['gems'].tableData) {
-                for (const ritem of testDataRef['weapons'].tableData) {
-                    if (litem.id === ritem.gemId) {
-                        sourceData.push({
-                            id: litem.id,
-                            namefield: litem.name,
-                            colourfield: litem.colour,
-                            weaponname: ritem.name
-                        });
-                    }
-                }
-            }
-
-            sourceData.sort(compareOn(a => a.id, true));
-
-            expect(data).to.have.lengthOf(sourceData.length);
-
-            for (const i in data) {
-                expect(data[i].namefield).to.equal(sourceData[i].namefield);
-                expect(data[i].colourfield).to.equal(sourceData[i].colourfield);
-                expect(data[i].weaponname).to.equal(sourceData[i].weaponname);
-            }
+            expect(data[8].namefield).to.equal('amethyst');
+            expect(data[8].colourfield).to.equal('purple');
+            expect(data[8].countfield).to.equal(0);
+            expect(data[8].weaponname).to.equal('whip');
         });
 
         it('Should handle all errors and return a result of 0', async function () {
@@ -977,31 +1007,33 @@ const generateTestSuite = (dbConfig) => function () {
                 id: 'countfield',
                 sortType: 1
             });
+            query.order.push({
+                elementID: 'eedb',
+                id: 'gemquote',
+                sortType: 1
+            });
 
             const data = await fetchData(agent, xsrfToken, query);
 
-            var sourceData = [];
-
-            for (const litem of testDataRef['gems'].tableData) {
-                for (const ritem of testDataRef['songs'].tableData) {
-                    if (litem.id === ritem.singerId) {
-                        sourceData.push({
-                            'gemId': litem.id,
-                            'gemname': litem.name,
-                            'gemquote': ritem.Title
-                        });
-                    }
-                }
-            }
-
-            sourceData.sort(compareOn(a => a.id));
-
-            expect(data).to.have.lengthOf(sourceData.length);
-
-            for (const i in data) {
-                expect(data[i].gemname).to.equal(sourceData[i].gemname);
-                expect(data[i].gemquote).to.equal(sourceData[i].gemquote);
-            }
+            expect(data).to.have.lengthOf(6);
+            expect(data[0].gemname).to.equal('pearl');
+            expect(data[0].gemquote).to.equal('You do it for him');
+            expect(data[0].countfield).to.equal(1);
+            expect(data[1].gemname).to.equal('garnet');
+            expect(data[1].gemquote).to.equal('Stronger than you');
+            expect(data[1].countfield).to.equal(2);
+            expect(data[2].gemname).to.equal('peridot');
+            expect(data[2].gemquote).to.equal('Peace and love');
+            expect(data[2].countfield).to.equal(3);
+            expect(data[3].gemname).to.equal('Ruby');
+            expect(data[3].gemquote).to.equal('Ruby rider');
+            expect(data[3].countfield).to.equal(10);
+            expect(data[4].gemname).to.equal('Steven');
+            expect(data[4].gemquote).to.equal('Full disclosure');
+            expect(data[4].countfield).to.equal(101);
+            expect(data[5].gemname).to.equal('Steven');
+            expect(data[5].gemquote).to.equal('Giant Woman');
+            expect(data[5].countfield).to.equal(101);
         });
 
         it('Should successfully fetch, order by and filter by date', async function () {
