@@ -1,50 +1,90 @@
-<h2>Export layers, reports and dashboards </h2>
+<div class="container-fluid root-container"  ng-init="initExport()">
+    <div class="row">
+        <div class="main col-md-3">
+            <app-sidebar></app-sidebar>
+        </div>
 
-<div class="container-fluid branded-border-panel"  ng-init="initExport()">
+        <div class="main col-md-9">
+            <div class="page-header">
+                <h3 translate>Export layers, reports and dashboards</h3>
+            </div>
 
-        <h5>Layers</h5>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <details class="details" open>
+                            <summary>Layers</summary>
 
-        <ul>
-            <li ng-repeat="layer in layers">
-                <div>
-                    <input type="checkbox" ng-model="layer.checked">
-                    <span> {{layer.name}}</span>
+                            <div class="dropdownExport">
+                                <div class="checkbox" ng-repeat="layer in layers">
+                                    <label>
+                                        <input type="checkbox" ng-model="layer.checked">
+                                        {{layer.name}}
+                                    </label>
+                                </div>
+                                <p class="help-block">
+                                    Required Layers for chosen reports and dashboards will be included automatically, there is no need to include them manually.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
                 </div>
-            </li>
-        </ul>
+            </div>
 
-        <i>Required Layers for chosen reports and dashboards will be included automatically, there is no need to include them manually.</i>
-        <br>
-        <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <details class="details" open>
+                            <summary>Reports</summary>
 
-        <h5>Reports</h5>
-
-        <ul>
-            <li ng-repeat="report in reports">
-                <div>
-                    <input type="checkbox" ng-model="report.checked">
-                    <span> {{report.reportName}}</span>
+                            <div class="dropdownExport">
+                                <div class="checkbox" ng-repeat="report in reports">
+                                    <label>
+                                        <input type="checkbox" ng-model="report.checked">
+                                        {{report.reportName}}
+                                    </label>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
                 </div>
-            </li>
-        </ul>
+            </div>
 
-        <h5>Dashboards</h5>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <details class="details" open>
+                            <summary>Dashboards</summary>
 
-        <ul>
-            <li ng-repeat="dashboard in dashboards">
-                <div>
-                    <input type="checkbox" ng-model="dashboard.checked">
-                    <span> {{dashboard.dashboardName}}</span>
+                            <div class="dropdownExport">
+                                <div class="checkbox" ng-repeat="dashboard in dashboards">
+                                    <label>
+                                        <input type="checkbox" ng-model="dashboard.checked">
+                                        {{dashboard.dashboardName}}
+                                    </label>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
                 </div>
-            </li>
-        </ul>
-    
-    <input type="text" ng-model="exportName">
-    .json
-    <br>
-    <button class="btn btn-success" ng-click="downloadExport()">export</button>
-    <br>
-    <a class="btn btn-default" href="/#/home">back</a>
-    
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="exportName">
+                            <span class="input-group-addon">.json</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-success" ng-click="downloadExport()" translate>Export</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
