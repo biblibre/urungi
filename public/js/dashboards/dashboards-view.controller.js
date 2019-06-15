@@ -68,7 +68,19 @@
             $compile(pageViewer)($scope);
 
             $timeout(function () {
-                repaintReports();
+                var mandatoryCount = 0;
+                for (var report of vm.dashboard.reports) {
+                    if (report.properties.filters.length !== 0) {
+                        for (var filter of report.properties.filters) {
+                            if (filter.promptMandatory === true) {
+                                ++mandatoryCount;
+                            }
+                        }
+                    }
+                }
+                if (mandatoryCount === 0) {
+                    repaintReports();
+                }
             }, 0);
         }
 
