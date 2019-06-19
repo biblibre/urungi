@@ -4,26 +4,33 @@
 </div>
 
 <div class="modal-body ng-scope">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="new-layer-name" class="control-label" translate>Layer name</label>
-                <input id="new-layer-name" type="text" class="form-control" ng-model="vm.newLayer.name" required>
-            </div>
-        </div>
-    </div>
+    <form id="new-layer-form" name="newLayerForm" ng-submit="vm.createLayer()" novalidate>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group" ng-class="{'has-error': newLayerForm.$submitted && newLayerForm.name.$invalid}">
+                    <label for="new-layer-name" class="control-label" translate>Layer name</label>
+                    <input id="new-layer-name" name="name" type="text" class="form-control" ng-model="vm.newLayer.name" required>
+                    <span class="help-block" ng-if="newLayerForm.$submitted && newLayerForm.name.$error.required">Name is required</span>
+                </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group no-margin">
-                <label class="control-label" for="new-layer-description" translate>Layer description</label>
-                <textarea id="new-layer-description" ng-model="vm.newLayer.description" class="form-control" rows="5" style="resize: vertical;"></textarea>
+                <div class="form-group no-margin">
+                    <label class="control-label" for="new-layer-description" translate>Layer description</label>
+                    <textarea id="new-layer-description" ng-model="vm.newLayer.description" class="form-control" rows="5" style="resize: vertical;"></textarea>
+                </div>
+
+                <div class="form-group" ng-class="{'has-error': newLayerForm.$submitted && newLayerForm.datasource.$invalid}">
+                    <label class="control-label" for="new-layer-datasource" translate>Data source</label>
+                    <select class="form-control" id="new-layer-datasource" name="datasource" ng-model="vm.datasource" ng-options="datasource as datasource.name for datasource in vm.datasources" required>
+                        <option value=""></option>
+                    </select>
+                    <span class="help-block" ng-if="newLayerForm.$submitted && newLayerForm.datasource.$error.required">Data source is required</span>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <div class="modal-footer ng-scope">
     <button type="button" class="btn btn-white" ng-click="vm.dismiss()" translate>Cancel</button>
-    <button type="button" class="btn btn-info"  ng-click="vm.createLayer()" translate>Save layer</button>
+    <button type="submit" form="new-layer-form" class="btn btn-info" translate>Save layer</button>
 </div>

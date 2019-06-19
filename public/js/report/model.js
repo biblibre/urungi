@@ -108,13 +108,11 @@ angular.module('app').service('reportModel', function ($q, connection, uuid2, Fi
     this.initChart = function (report) {
         var chart = {
             id: 'Chart' + uuid2.newguid(),
-            dataPoints: [],
             dataColumns: [],
             datax: {},
             height: report.properties.height,
             legendPosition: report.properties.legendPosition,
             query: report.query,
-            queryName: null
         };
 
         switch (report.reportType) {
@@ -139,7 +137,6 @@ angular.module('app').service('reportModel', function ($q, connection, uuid2, Fi
             const dataAxisInfo = report.properties.xkeys[0];
             chart.dataAxis = {
                 elementName: dataAxisInfo.elementName,
-                queryName: 'query1',
                 elementLabel: dataAxisInfo.objectLabel,
                 id: dataAxisInfo.id,
                 type: 'bar',
@@ -150,7 +147,6 @@ angular.module('app').service('reportModel', function ($q, connection, uuid2, Fi
                 const stackDimensionInfo = report.properties.xkeys[1];
                 chart.stackDimension = {
                     elementName: stackDimensionInfo.elementName,
-                    queryName: 'query1',
                     elementLabel: stackDimensionInfo.objectLabel,
                     id: stackDimensionInfo.id,
                     type: 'bar',

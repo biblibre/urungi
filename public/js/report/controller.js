@@ -354,7 +354,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             return {
                 aggregation: 'count',
                 collectionID: col.collectionID,
-                datasourceID: col.datasourceID,
                 elementID: col.elementID,
                 elementLabel: col.elementLabel,
                 elementName: col.elementName,
@@ -383,7 +382,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         var newColumn = {
             id: 'f',
             collectionID: filter.collectionID,
-            datasourceID: filter.datasourceID,
             elementID: filter.elementID,
             elementName: filter.elementName,
             elementType: filter.elementType,
@@ -480,7 +478,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         return {
             elementName: ngModelItem.elementName,
             objectLabel: ngModelItem.elementLabel + aggLabel,
-            datasourceID: ngModelItem.datasourceID,
             id: ngModelItem.id,
             elementLabel: ngModelItem.elementLabel,
             collectionID: ngModelItem.collectionID,

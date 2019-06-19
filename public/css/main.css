@@ -2281,10 +2281,6 @@ label[for] {
     color: #666;
 }
 
-.unselected-datasource {
-    color: #999;
-}
-
 .layer-tree-datasource-collection {
     font-weight: normal;
     cursor: pointer;

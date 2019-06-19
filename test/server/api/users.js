@@ -221,7 +221,7 @@ describe('Users API', function () {
         let datasource, layer, report, dashboard;
         beforeEach(async function () {
             datasource = await DataSources.create({ companyID: 'COMPID', name: 'DataSource', type: 'DataSource', status: 1, nd_trash_deleted: false });
-            layer = await Layers.create({ companyID: 'COMPID', name: 'Layer', type: 'Layer', status: '1', nd_trash_deleted: false, createdBy: 'administrator' });
+            layer = await Layers.create({ companyID: 'COMPID', name: 'Layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
             var User = await Users.findOne({ userName: 'administrator' });
             report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: User.id, selectedLayerID: layer.id, isShared: true });
             dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboard1', owner: User.id, nd_trash_deleted: false });

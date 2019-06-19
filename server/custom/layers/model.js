@@ -1,16 +1,84 @@
 var mongoose = require('mongoose');
 
+const LayerElementSchema = new mongoose.Schema({
+    collectionID: String,
+    collectionName: String,
+    component: Number,
+    data_type: String,
+    defaultAggregation: String,
+    description: String,
+    elementID: String,
+    elementLabel: String,
+    elementName: String,
+    elementRole: String,
+    elementType: String,
+    visible: Boolean,
+});
+
+const LayerAssociatedElementSchema = new mongoose.Schema({
+    element: LayerElementSchema,
+    visible: Boolean,
+});
+
+const LayerObjectSchema = LayerElementSchema.clone();
+LayerObjectSchema.add({
+    associatedElements: {
+        type: [ LayerAssociatedElementSchema ],
+        default: undefined,
+    },
+    expression: String,
+    isCustom: Boolean,
+    viewExpression: String,
+});
+LayerObjectSchema.add({
+    elements: {
+        type: [ LayerObjectSchema ],
+        default: undefined,
+    }
+});
+
+const LayerJoinSchema = new mongoose.Schema({
+    joinID: String,
+    joinType: String,
+    sourceCollectionID: String,
+    sourceCollectionName: String,
+    sourceElementID: String,
+    sourceElementName: String,
+    targetCollectionID: String,
+    targetCollectionName: String,
+    targetElementID: String,
+    targetElementName: String,
+});
+
+const LayerCollectionSchema = new mongoose.Schema({
+    collectionID: String,
+    collectionLabel: String,
+    collectionName: String,
+    component: Number,
+    elements: [ LayerElementSchema ],
+    folded: Boolean,
+    isSQL: Boolean,
+    left: Number,
+    sqlQuery: String,
+    top: Number,
+    visible: Boolean,
+});
+
 var LayersSchema = new mongoose.Schema({
     companyID: { type: String, required: false },
     name: { type: String, required: true },
     description: { type: String },
     status: { type: String, required: true },
-    params: { type: Object },
-    objects: [],
+    params: {
+        joins: [ LayerJoinSchema ],
+        schema: [ LayerCollectionSchema ],
+    },
+    objects: [ LayerObjectSchema ],
     nd_trash_deleted: { type: Boolean },
     nd_trash_deleted_date: { type: Date },
     createdBy: { type: String },
-    createdOn: { type: Date }
+    createdOn: { type: Date },
+    datasourceID: { type: mongoose.Schema.Types.ObjectId, required: true },
 }, { collection: 'wst_Layers', collation: { locale: 'en', strength: 2 } });
 
 LayersSchema.statics.setStatus = function (req, done) {

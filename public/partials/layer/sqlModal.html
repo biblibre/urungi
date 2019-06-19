@@ -7,31 +7,9 @@
 
     <span ng-if="!newSQLCollection">
 
-        <div class="modal-body ng-scope" ng-init="getDatasources()">
+        <div class="modal-body ng-scope">
 
             <div class="container-fluid">
-                <div class="form-group" ng-if="!ReadOnlyDataSourceSelector" ng-class="{ 'has-error': sqlLayerForm.datasource.$invalid }">
-                        <label for="field-3" class="control-label" translate>1.- Choose a data source</label>
-
-                        <select  class="form-control" name="datasource" ng-model="selectedDts.id" ng-required="true" required>
-
-                            <option value="{{dts._id}}" ng-repeat="dts in datasources">
-
-
-                                <h4 class="list-group-item-heading">{{dts.type}}</h4>
-                                <p class="list-group-item-text">
-
-                                    <label class="small" style="margin-right: 5px" translate>host: </label>{{dts.connection.host}}
-                                    <label class="small" style="margin-right: 5px" translate>port: </label>{{dts.connection.port}}
-                                    <label class="small" style="margin-right: 5px" translate>database: </label>{{dts.connection.database}}
-                                </p>
-                            </option>
-
-                        </select>
-                    <span ng-show="sqlLayerForm.datasource.$invalid" class="help-inline" ng-bind="getTranslation('You have to select a valid datasource for this dataset')"></span>
-
-
-                </div>
 
                 <div class="form-group" ng-class="{ 'has-error': sqlLayerForm.name.$invalid }">
                             <label class="control-label" for="field-name" translate>Type a name for this dataset</label>

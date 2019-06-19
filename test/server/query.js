@@ -446,7 +446,6 @@ for (const table of testData) {
         collectionID,
         collectionName,
         component: 0,
-        datasourceId: dtsId,
         elements: table.tableColumns.map(element => {
             return {
                 collectionID,
@@ -480,9 +479,6 @@ function findElement (elementID, list, f) {
         }
         if (el.elements) {
             findElement(elementID, el.elements, f);
-        }
-        if (el.arguments) {
-            findElement(elementID, el.arguments, f);
         }
     }
 }
@@ -568,9 +564,7 @@ const generateTestSuite = (dbConfig) => function () {
 
         entries.push(createdDts);
 
-        for (const collection of simpleLayer.params.schema) {
-            collection.datasourceID = dtsId;
-        }
+        simpleLayer.datasourceID = dtsId;
 
         const createdSL = await Layers.create(simpleLayer);
 
@@ -578,9 +572,7 @@ const generateTestSuite = (dbConfig) => function () {
         entries.push(createdSL);
 
         const complexLayer = buildComplexLayer(knex);
-        for (const collection of complexLayer.params.schema) {
-            collection.datasourceID = dtsId;
-        }
+        complexLayer.datasourceID = dtsId;
 
         const createdCL = await Layers.create(complexLayer);
 
@@ -1176,7 +1168,7 @@ const generateTestSuite = (dbConfig) => function () {
                 layerID: complexId,
                 columns: [],
                 order: [],
-                filters: []
+                filters: [],
             };
 
             query.columns.push({
@@ -1652,7 +1644,7 @@ function buildComplexLayer (knex) {
                 elements: [
                     {
                         elementID: 'eepa',
-                        isCustom: 'true',
+                        isCustom: true,
                         expression: 'eeaa + 1',
                         viewExpression: '#eeaa + 1',
                         arguments: [
@@ -1722,7 +1714,6 @@ function buildComplexLayer (knex) {
                 {
                     collectionID: 'Cuuaa',
                     component: 0,
-                    datasourceID: dtsId,
                     isSQL: true,
                     sqlQuery: customQuery1,
                     elements: [
@@ -1739,7 +1730,6 @@ function buildComplexLayer (knex) {
                 {
                     collectionID: 'Cuuab',
                     component: 3,
-                    datasourceID: dtsId,
                     isSQL: true,
                     sqlQuery: customQuery2,
                     elements: [

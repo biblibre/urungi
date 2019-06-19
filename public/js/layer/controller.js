@@ -1,7 +1,6 @@
 /* global jsPlumb: false */
 angular.module('app').controller('layerCtrl', function ($scope, $location, api, connection, $routeParams, uuid2, $timeout, $window, gettextCatalog) {
     $scope.layerModal = 'partials/layer/layerModal.html';
-    $scope.datasetModal = 'partials/layer/datasetModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';
     $scope.statusInfoModal = 'partials/common/statusInfo.html';
@@ -10,7 +9,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     $scope.ReadOnlyDataSourceSelector = false;
     $scope.items = [];
     $scope.datasources = [];
-    $scope.selectedDts = {};
     $scope.tab = { active: 1 };
 
     $scope.customElements = {
@@ -177,13 +175,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         if ($routeParams.layerID) {
             connection.get('/api/layers/find-one', { id: $routeParams.layerID }).then(function (data) {
                 $scope._Layer = data.item;
-                if ($scope._Layer.params) {
-                    if ($scope._Layer.params.schema) {
-                        if ($scope._Layer.params.schema.length > 0) {
-                            $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
-                        }
-                    }
-                }
                 $scope.mode = 'edit';
                 $scope.rootItem.elements = $scope._Layer.objects;
 
@@ -192,6 +183,8 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                         $scope.customElements.elements.push(element);
                     }
                 });
+
+                getDatasources();
 
                 if ($scope._Layer.params) {
                     $scope.erDiagramInit();
@@ -259,47 +252,15 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         }
     };
 
-    $scope.getDatasources = function () {
-        var params = {};
-
-        params.page = 0; // All data
-
-        params.fields = ['name', 'type', 'status', 'statusInfo', 'connection.host', 'connection.port', 'connection.database'];
-
-        api.getDataSources(params).then(function (data) {
-            $scope.datasources = data.items;
+    function getDatasources () {
+        api.getDatasource($scope._Layer.datasourceID).then(function (data) {
+            $scope.datasources = [ data.item ];
         });
     };
-    /*
-    $scope.addDataset = function ()
-    {
-        $scope.selectedDts = {};
-        $scope.selectedEntities = [];
-        $scope.datasetEntities = [];
-
-        if ($scope._Layer.params)
-            if ($scope._Layer.params.schema)
-                if ($scope._Layer.params.schema.length > 0)
-                    {
-                      $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
-                      $scope.ReadOnlyDataSourceSelector = true;
-                      $scope.getDatasetsForDts();
-                    }
-
-        $('#datasetModal').modal('show');
-    }
-
-*/
 
     $scope.addSQL = function () {
         $scope.temporarySQLCollection = {};
         $scope.temporarySQLCollection.mode = 'add';
-        $scope.selectedDts = {};
-        if ($scope._Layer.params && $scope._Layer.params.schema && $scope._Layer.params.schema.length > 0) {
-            $scope.selectedDts.id = $scope._Layer.params.schema[0].datasourceID;
-            $scope.ReadOnlyDataSourceSelector = true;
-            // $scope.getDatasetsForDts(); // ??? This function doesn't exist. Is it supposed to be the same as getDatasetsForThisDts() ?
-        }
         $('#sqlModal').modal('show');
     };
 
@@ -315,8 +276,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         $scope.temporarySQLCollection.sqlQuery = selectedCollection.sqlQuery;
         $scope.temporarySQLCollection.name = selectedCollection.collectionName;
 
-        $scope.selectedDts = {};
-        $scope.selectedDts.id = selectedCollection.datasourceID;
         $scope.ReadOnlyDataSourceSelector = true;
 
         $scope.newSQLCollection = undefined;
@@ -333,7 +292,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     $scope.addSqlToLayer = function () {
-        api.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection).then(function (result) {
+        api.getSqlQuerySchema($scope._Layer.datasourceID, $scope.temporarySQLCollection).then(function (result) {
             if (result.result !== 1) {
                 $scope.errorToken = result;
                 return;
@@ -347,11 +306,9 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             const collection = result.schema;
 
             collection.collectionID = 'C' + $scope.newID();
-            collection.datasourceID = $scope.selectedDts.id;
 
             for (const element of collection.elements) {
                 element.elementID = $scope.newID();
-                element.datasourceID = $scope.selectedDts.id;
                 element.collectionID = collection.collectionID;
                 element.collectionName = collection.collectionName;
             }
@@ -376,7 +333,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     $scope.saveSQLChanges = function () {
-        api.getSqlQuerySchema($scope.selectedDts.id, $scope.temporarySQLCollection).then(function (result) {
+        api.getSqlQuerySchema($scope._Layer.datasourceID, $scope.temporarySQLCollection).then(function (result) {
             if (result.result === 1 && result.items.length > 0) {
                 // The result is an array but I think it never holds more than one element.
 
@@ -384,7 +341,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                 var newCol = result.items[0];
 
                 for (const e in newCol.elements) {
-                    newCol.elements[e].datasourceID = currentCol.datasourceID;
                     newCol.elements[e].collectionID = currentCol.collectionID;
                     newCol.elements[e].collectionName = currentCol.collectionName;
                 }
@@ -804,7 +760,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
 
         element.viewExpression = '';
 
-        element.dataSourceID = '5b2a494717d5db0dc123c945';
         element.elementName = 'comp';
 
         $scope.selectedCollection = undefined;
@@ -1179,11 +1134,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         }
 
         $scope.selectedCollection = undefined;
-
-        // Clear selectedDts if collections === 0
-        var totalCollections = Object.keys($scope._Layer.params.schema).length;
-
-        if (totalCollections === 0) { $scope.selectedDts = {}; }
     };
 
     function deleteAllCollectionJoins (collectionID) {
@@ -1337,7 +1287,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     }
 
     $scope.addDatasetToLayer = function (datasourceID, entity) {
-        if (typeof $scope.selectedDts.id === 'undefined' || $scope.selectedDts.id === datasourceID) {
+        if ($scope._Layer.datasourceID === datasourceID) {
             api.getEntitiesSchema(datasourceID, entity).then(function (result) {
                 if (result.result !== 1) {
                     return;
@@ -1347,12 +1297,8 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
 
                 collection.collectionID = 'C' + $scope.newID();
 
-                collection.datasourceID = datasourceID;
-                $scope.selectedDts.id = datasourceID;
-
                 for (const element of collection.elements) {
                     element.elementID = $scope.newID();
-                    element.datasourceID = datasourceID;
                     element.collectionID = collection.collectionID;
                     element.collectionName = collection.collectionName;
                 }

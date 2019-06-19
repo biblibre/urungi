@@ -36,7 +36,6 @@
                     {
                         id: 'f',
                         collectionID: filter.collectionID,
-                        datasourceID: filter.datasourceID,
                         elementID: filter.elementID,
                         elementName: filter.elementName,
                         elementType: filter.elementType,
