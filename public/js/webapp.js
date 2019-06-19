@@ -27,6 +27,7 @@
         'app.dashboards',
         'app.layers',
         'app.users',
+        'app.io',
         'app.templates',
     ]);
 
@@ -95,18 +96,6 @@
         $routeProvider.when('/explore', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
-        });
-
-        // imports and exports
-
-        $routeProvider.when('/import', {
-            templateUrl: 'partials/io/import.html',
-            controller: 'ioCtrl'
-        });
-
-        $routeProvider.when('/export', {
-            templateUrl: 'partials/io/export.html',
-            controller: 'ioCtrl'
         });
 
         Noty.overrideDefaults({

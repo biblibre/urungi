@@ -41,7 +41,7 @@
 
             params.fields = ['name', 'status'];
 
-            return api.layersFindAll(params).then(result => {
+            return api.getLayers(params).then(result => {
                 vm.layers = result.items;
 
                 return { page: result.page, pages: result.pages };

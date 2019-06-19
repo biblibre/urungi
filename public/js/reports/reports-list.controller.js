@@ -36,7 +36,7 @@
             params.populate = 'layer';
             params.fields = ['reportName', 'isPublic', 'isShared', 'layerName', 'parentFolder', 'owner', 'author', 'createdOn'];
 
-            return api.reportsFindAll(params).then(result => {
+            return api.getReports(params).then(result => {
                 vm.reports = result.items;
 
                 return { page: result.page, pages: result.pages };
