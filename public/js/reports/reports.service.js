@@ -61,7 +61,6 @@
             var newColumn = {
                 id: 'f',
                 collectionID: filter.collectionID,
-                datasourceID: filter.datasourceID,
                 elementID: filter.elementID,
                 elementName: filter.elementName,
                 elementType: filter.elementType,
@@ -85,7 +84,6 @@
             return {
                 aggregation: 'count',
                 collectionID: col.collectionID,
-                datasourceID: col.datasourceID,
                 elementID: col.elementID,
                 elementLabel: col.elementLabel,
                 elementName: col.elementName,

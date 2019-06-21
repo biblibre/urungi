@@ -61,9 +61,7 @@ angular.module('app').service('ioModel', function (connection, $q, gettextCatalo
             .then(layers => {
                 bundle.layers = layers;
                 for (const layer of layers) {
-                    for (const schema of layer.params.schema) {
-                        requiredDatasources.add(schema.datasourceID);
-                    }
+                    requiredDatasources.add(layer.datasourceID);
                 }
             })
             .then(() => {
@@ -78,62 +76,32 @@ angular.module('app').service('ioModel', function (connection, $q, gettextCatalo
     };
 
     function importLayer (layer, datasourceRef) {
-        function exploreElements (elements) {
-            for (const el of elements) {
-                if (el.datasourceID) {
-                    el.datasourceID = datasourceRef[el.datasourceID];
-                }
-                if (el.elements) {
-                    exploreElements(el.elements);
-                }
-            }
+        let currentDatasourceID = layer.datasourceID;
+
+        // If not defined, search in layer.params.schema
+        // It might be an export from a previous version of Urungi
+        if (!currentDatasourceID && layer.params && layer.params.schema && layer.params.schema.length > 0) {
+            currentDatasourceID = layer.params.schema[0].datasourceID;
         }
 
-        exploreElements(layer.objects);
-
-        for (const col of layer.params.schema) {
-            col.datasourceID = datasourceRef[col.datasourceID];
+        if (!currentDatasourceID) {
+            return $q.reject(new Error('Cannot find datasourceID in layer ' + layer.name));
         }
+
+        if (!(currentDatasourceID in datasourceRef)) {
+            return $q.reject(new Error('Cannot find mapping for datasource ' + currentDatasourceID));
+        }
+
+        layer.datasourceID = datasourceRef[currentDatasourceID];
 
         return connection.post('/api/layers/create', layer);
     }
 
-    function importReport (report, datasourceRef) {
-        for (const object of
-            report.properties.columns.concat(
-                report.properties.xkeys,
-                report.properties.ykeys,
-                report.properties.pivotKeys.rows,
-                report.properties.pivotKeys.columns,
-                report.query.columns,
-                report.query.order,
-                report.query.groupFilters
-            )) {
-            if (object && object.datasourceID) {
-                object.datasourceID = datasourceRef[object.datasourceID];
-            }
-        }
-
+    function importReport (report) {
         return connection.post('/api/reports/create', report);
     }
 
     function importDashboard (dashboard, datasourceRef) {
-        for (const report of dashboard.reports) {
-            for (const object of report.properties.columns.concat(
-                report.properties.xkeys,
-                report.properties.ykeys,
-                report.properties.pivotKeys.rows,
-                report.properties.pivotKeys.columns,
-                report.query.columns,
-                report.query.order,
-                report.query.groupFilters
-            )) {
-                if (object && object.datasourceID) {
-                    object.datasourceID = datasourceRef[object.datasourceID];
-                }
-            }
-        }
-
         return connection.post('/api/dashboardsv2/create', dashboard);
     }
 
@@ -161,6 +129,9 @@ angular.module('app').service('ioModel', function (connection, $q, gettextCatalo
 
                 return importLayer(layer, datasourceRef).then(l => {
                     additions.push(l);
+                }).catch(err => {
+                    const msg = gettextCatalog.getString('Layer was not imported :');
+                    messages.push(msg + ' ' + err);
                 });
             });
             layerPromises.push(p);
@@ -183,7 +154,7 @@ angular.module('app').service('ioModel', function (connection, $q, gettextCatalo
                         return;
                     }
 
-                    return importReport(report, datasourceRef).then(r => {
+                    return importReport(report).then(r => {
                         additions.push(r);
                     });
                 });
@@ -231,7 +202,7 @@ angular.module('app').service('ioModel', function (connection, $q, gettextCatalo
     };
 
     function getLayer (id) {
-        return connection.get('/api/layers/find-one', { id: id }, undefined, { showMsg: false }).then(r => r.item);
+        return connection.get('/api/layers/find-one', { id: id }, { showMsg: false }).then(r => r.item);
     }
 
     this.getLayers = function () {
@@ -243,7 +214,7 @@ angular.module('app').service('ioModel', function (connection, $q, gettextCatalo
     };
 
     function getReport (id) {
-        return connection.get('/api/reports/find-one', { id: id }, undefined, { showMsg: false }).then(r => r.item);
+        return connection.get('/api/reports/find-one', { id: id }, { showMsg: false }).then(r => r.item);
     }
 
     this.getReports = function () {
@@ -255,7 +226,7 @@ angular.module('app').service('ioModel', function (connection, $q, gettextCatalo
     };
 
     function getDashboard (id) {
-        return connection.get('/api/dashboardsv2/find-one', { id: id }, undefined, { showMsg: false }).then(r => r.item);
+        return connection.get('/api/dashboardsv2/find-one', { id: id }, { showMsg: false }).then(r => r.item);
     }
 
     this.getDashboards = function () {

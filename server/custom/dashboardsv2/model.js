@@ -1,4 +1,22 @@
 var mongoose = require('mongoose');
+const Reports = require('../reports/model');
+
+const DashboardReportSchema = new mongoose.Schema({
+    author: { type: String },
+    companyID: { type: String },
+    createdBy: { type: String },
+    createdOn: { type: Date },
+    history: [],
+    id: String,
+    owner: { type: String },
+    properties: Reports.schema.path('properties'),
+    query: Reports.schema.path('query'),
+    reportDescription: { type: String },
+    reportName: { type: String, required: true },
+    reportSubType: { type: String },
+    reportType: { type: String },
+    selectedLayerID: mongoose.Schema.Types.ObjectId,
+});
 
 var Dashboardsv2Schema = new mongoose.Schema({
     companyID: { type: String, required: true },
@@ -6,7 +24,7 @@ var Dashboardsv2Schema = new mongoose.Schema({
     dashboardDescription: { type: String },
     dashboardType: { type: String },
     html: { type: String },
-    reports: [],
+    reports: [ DashboardReportSchema ],
     items: [],
     backgroundColor: { type: String },
     backgroundImage: { type: String },

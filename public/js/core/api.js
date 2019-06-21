@@ -11,6 +11,7 @@
             getUserData: getUserData,
             getUserObjects: getUserObjects,
 
+            getDatasource: getDatasource,
             getDataSources: getDataSources,
             getEntitiesSchema: getEntitiesSchema,
             getSqlQuerySchema: getSqlQuerySchema,
@@ -48,6 +49,14 @@
 
         function getUserObjects () {
             return connection.get('/api/get-user-objects').then(res => res.items);
+        }
+
+        function getDatasource (id) {
+            const params = {
+                id: id,
+            };
+
+            return connection.get('/api/data-sources/find-one', params);
         }
 
         function getDataSources (params) {

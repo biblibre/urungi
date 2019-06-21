@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update angularjs-bootstrap-datetimepicker to 1.1.4
 - Update angular, angular-route and angular-sanitize to 1.7.8
 - Browser's sessionStorage is not used anymore for user data
+- Relocate 'datasourceID' property in layers and define explicit schema for
+  layers, reports and dashboards
 
 ### Fixed
 

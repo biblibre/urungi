@@ -207,7 +207,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                 {
                     id: 'f',
                     collectionID: filter.collectionID,
-                    datasourceID: filter.datasourceID,
                     elementID: filter.elementID,
                     elementName: filter.elementName,
                     elementType: filter.elementType,

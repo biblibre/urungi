@@ -10,13 +10,22 @@ describe('Layers API', function () {
     const Reports = connection.model('Reports');
     const Dashboardsv2 = connection.model('Dashboardsv2');
     let agent;
+    let datasource;
 
-    before(function () {
+    before(async function () {
         agent = chai.request.agent(app);
+        datasource = await DataSources.create({
+            companyID: 'COMPID',
+            name: 'DataSource',
+            type: 'MySQL',
+            status: 1,
+            nd_trash_deleted: false,
+        });
     });
 
-    after(() => {
+    after(async function () {
         agent.close();
+        await datasource.remove();
     });
 
     describe('GET /api/layers/find-all', function () {
@@ -37,7 +46,7 @@ describe('Layers API', function () {
             const xsrfToken = await login(agent);
             let res = await agent.post('/api/layers/create')
                 .set('X-XSRF-TOKEN', xsrfToken)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false });
+                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
             var decrypted = JSON.parse(res.text);
             res = await agent.get('/api/layers/find-one').query({ id: decrypted.item._id });
             expect(res).to.have.status(200);
@@ -58,7 +67,7 @@ describe('Layers API', function () {
             const xsrfToken = await login(agent);
             const res = await agent.post('/api/layers/create')
                 .set('X-XSRF-TOKEN', xsrfToken)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false });
+                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
             expect(res).to.have.status(200);
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
@@ -77,20 +86,30 @@ describe('Layers API', function () {
     describe('POST /api/layers/update/:id', function () {
         it('should update one layer ', async function () {
             const xsrfToken = await login(agent);
-            var datasource = await DataSources.create({ companyID: 'COMPID', name: 'DataSource', type: 'DataSource', status: 1, nd_trash_deleted: false });
             let res = await agent.post('/api/layers/create')
                 .set('X-XSRF-TOKEN', xsrfToken)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false });
-            var decrypted = JSON.parse(res.text);
+                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
+            let decrypted = JSON.parse(res.text);
+
+            const ds = await DataSources.create({
+                companyID: 'COMPID',
+                name: 'DataSource',
+                type: 'DataSource',
+                status: 1,
+                nd_trash_deleted: false,
+            });
+
             res = await agent.post('/api/layers/update/' + decrypted.item._id)
                 .set('X-XSRF-TOKEN', xsrfToken)
-                .send({ _id: decrypted.item._id, params: { schema: [{ datasourceID: datasource.id }] } });
+                .send({ _id: decrypted.item._id, datasourceID: ds.id });
+
             expect(res).to.have.status(200);
             decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);
             expect(decrypted).to.have.property('msg', '1 record updated.');
-            res = await Layers.deleteOne({ name: 'layer' });
-            res = await DataSources.deleteOne({ name: 'DataSource' });
+
+            await Layers.deleteOne({ name: 'layer' });
+            await ds.remove();
         });
     });
     describe('POST /api/layers/delete:id', function () {
@@ -100,7 +119,7 @@ describe('Layers API', function () {
             await agent.get('/api/get-user-data');
             let res = await agent.post('/api/layers/create')
                 .set('X-XSRF-TOKEN', xsrfToken)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, owner: User.id, isPublic: false });
+                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, owner: User.id, isPublic: false, datasourceID: datasource._id });
             var layer = JSON.parse(res.text).item;
             res = await agent.post('/api/layers/delete/' + layer._id)
                 .set('X-XSRF-TOKEN', xsrfToken)
@@ -117,15 +136,14 @@ describe('Layers API', function () {
     describe('POST /api/layers/delete:id', function () {
         it('should not delete a layer with dashboard conflict', async function () {
             const xsrfToken = await login(agent);
-            var User = await Users.findOne({ userName: 'administrator' });
             await agent.get('/api/get-user-data');
             let res = await agent.post('/api/layers/create')
                 .set('X-XSRF-TOKEN', xsrfToken)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, owner: User.id, isPublic: false });
+                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
             var layer = JSON.parse(res.text).item;
             res = await agent.post('/api/dashboardsv2/create')
                 .set('X-XSRF-TOKEN', xsrfToken)
-                .send({ companyID: 'COMPID', dashboardName: 'Dashboard', nd_trash_deleted: false, reports: [{ selectedLayerID: layer._id }] });
+                .send({ companyID: 'COMPID', dashboardName: 'Dashboard', nd_trash_deleted: false, reports: [{ selectedLayerID: layer._id, reportName: 'foo' }] });
             var response = JSON.parse(res.text).item;
             res = await agent.post('/api/layers/delete/' + layer._id)
                 .set('X-XSRF-TOKEN', xsrfToken)
@@ -146,7 +164,7 @@ describe('Layers API', function () {
             await agent.get('/api/get-user-data');
             let res = await agent.post('/api/layers/create')
                 .set('X-XSRF-TOKEN', xsrfToken)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, owner: User.id, isPublic: false });
+                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
             var layer = JSON.parse(res.text).item;
             res = await agent.post('/api/reports/create')
                 .set('X-XSRF-TOKEN', xsrfToken)
@@ -171,7 +189,7 @@ describe('Layers API', function () {
             await agent.get('/api/get-user-data');
             let res = await agent.post('/api/layers/create')
                 .set('X-XSRF-TOKEN', xsrfToken)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false });
+                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
             var decrypted = JSON.parse(res.text);
 
             res = await agent.post('/api/layers/change-layer-status')
@@ -190,7 +208,7 @@ describe('Layers API', function () {
 
             let res = await agent.post('/api/layers/create')
                 .set('X-XSRF-TOKEN', xsrfToken)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false });
+                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
             res = await agent.get('/api/layers/get-layers');
             var decrypted = JSON.parse(res.text);
             expect(decrypted).to.have.property('result', 1);

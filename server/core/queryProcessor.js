@@ -10,7 +10,7 @@ exports.execute = async function (query) {
     }
     const queryLayer = lyrList[0];
 
-    const datasourceID = queryLayer.params.schema[0].datasourceID;
+    const datasourceID = queryLayer.datasourceID;
 
     const DataSource = connection.model('DataSources');
     const dtsList = await DataSource.find({ _id: datasourceID });
@@ -131,10 +131,7 @@ function processQuery (query, queryLayer, warnings) {
 
     processedQuery.joinTree = {};
 
-    // For now, a good portion of the code is written to enable the use of
-    // multiple datasources in a report
-    // This is why the layer does not have a single datasourceID field
-    processedQuery.datasourceID = queryLayer.params.schema[0].datasourceID;
+    processedQuery.datasourceID = queryLayer.datasourceID;
 
     function addElement (element, elementSet) {
         if (!element.isCustom) {
@@ -350,7 +347,6 @@ function validateColumn (column, element, warnings) {
     */
 
     const validColumn = {
-        datasourceID: element.datasourceID,
         collectionID: element.collectionID,
         elementID: element.elementID,
         elementName: element.elementName,

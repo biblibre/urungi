@@ -7,11 +7,13 @@ describe('Reports API', function () {
     const Reports = connection.model('Reports');
     const Layers = connection.model('Layers');
     const Users = connection.model('Users');
+    const Datasources = connection.model('DataSources');
 
     let agent;
     let user;
     let report;
     let layer;
+    let datasource;
     let xsrfToken;
 
     before(async function () {
@@ -22,9 +24,16 @@ describe('Reports API', function () {
     });
 
     beforeEach(async function () {
+        datasource = await Datasources.create({
+            name: 'MySQL Data Source',
+            type: 'MySQL',
+            status: 1,
+        });
+
         layer = await Layers.create({
             name: 'Layer',
             status: 'active',
+            datasourceID: datasource._id,
         });
 
         report = await Reports.create({
@@ -44,6 +53,7 @@ describe('Reports API', function () {
     afterEach(async function () {
         await report.remove();
         await layer.remove();
+        await datasource.remove();
     });
 
     after(() => {
@@ -93,6 +103,7 @@ describe('Reports API', function () {
             layer2 = await Layers.create({
                 name: 'Layer2',
                 status: 'active',
+                datasourceID: datasource._id,
             });
 
             report2 = await Reports.create({
