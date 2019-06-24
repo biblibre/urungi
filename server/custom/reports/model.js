@@ -29,7 +29,6 @@ ReportFilterSchema.add({
     criterion: {
         date1: String,
         date2: String,
-        dateList: [ String ], // FIXME This is never set
         datePattern: String,
         label: String, // Label of date pattern
         text1: String,
