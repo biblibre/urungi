@@ -48,31 +48,10 @@ const ReportQuerySchema = new mongoose.Schema({
     order: [ ReportColumnSchema ],
 });
 
-// FIXME Only id seems to be used
-const ReportAxisStackDimensionSchema = new mongoose.Schema({
-    elementName: String,
-    elementLabel: String,
-    id: String,
-    type: { type: String },
-    color: String,
-});
-
-const ReportChartSchema = new mongoose.Schema({
-    dataAxis: ReportAxisStackDimensionSchema,
-    dataColumns: [ ReportColumnSchema ],
-    height: Number,
-    id: String,
-    legendPosition: String,
-    query: ReportQuerySchema, // FIXME Query is stored twice in the report
-    stackDimension: ReportAxisStackDimensionSchema,
-    type: { type: String },
-});
-
 const ReportPropertiesSchema = new mongoose.Schema({
     angle: Number, // FIXME This is not used
     animationSpeed: Number, // FIXME This is not used
     backgroundColor: String,
-    chart: ReportChartSchema,
     colorStart: String, // FIXME This is not used
     colorStop: String, // FIXME This is not used
     columnLineWidht: Number, // FIXME spelling

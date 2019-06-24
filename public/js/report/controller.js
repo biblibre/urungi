@@ -247,10 +247,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.reportNameSave = function () {
         $scope.selectedReport.query = $scope.generateQuery();
 
-        if (['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0) {
-            reportModel.initChart($scope.selectedReport);
-        }
-
         return reportModel.saveAsReport($scope.selectedReport, $scope.mode).then(function () {
             $('#theReportNameModal').modal('hide');
             $('.modal-backdrop').hide();
@@ -292,10 +288,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.refresh = function () {
         $scope.selectedReport.query = $scope.generateQuery();
-
-        if (['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0) {
-            reportModel.initChart($scope.selectedReport);
-        }
 
         const params = {
             mode: $scope.mode,
