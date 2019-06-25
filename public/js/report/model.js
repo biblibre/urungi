@@ -134,23 +134,13 @@ angular.module('app').service('reportModel', function ($q, connection, uuid2, Fi
             report.properties.xkeys.length > 0 && report.properties.ykeys.length > 0) {
             chart.dataColumns = report.properties.ykeys;
 
-            const dataAxisInfo = report.properties.xkeys[0];
             chart.dataAxis = {
-                elementName: dataAxisInfo.elementName,
-                elementLabel: dataAxisInfo.objectLabel,
-                id: dataAxisInfo.id,
-                type: 'bar',
-                color: '#000000'
+                id: report.properties.xkeys[0].id,
             };
 
             if (report.properties.xkeys.length > 1) {
-                const stackDimensionInfo = report.properties.xkeys[1];
                 chart.stackDimension = {
-                    elementName: stackDimensionInfo.elementName,
-                    elementLabel: stackDimensionInfo.objectLabel,
-                    id: stackDimensionInfo.id,
-                    type: 'bar',
-                    color: '#000000'
+                    id: report.properties.xkeys[1].id,
                 };
             }
         }

@@ -757,27 +757,7 @@ function getDateFilterText (filterIdentifier, filter) {
 
         case 'notBetween':
             return filterIdentifier + " < '" + querySearchDate + "' OR " + filterIdentifier + " > '" + queryLastDate + "'";
-
-        case 'in':
-        case 'notIn':
-            var theFilter = filterIdentifier;
-            if (filter.filterType === 'in') { theFilter = theFilter + ' IN ('; }
-            if (filter.filterType === 'notIn') { theFilter = theFilter + ' NOT IN ('; }
-
-            var dates = filter.criterion.dateList;
-            for (var d in dates) {
-                var theDate = new Date(dates[d]);
-                var Inyear = theDate.getFullYear();
-                var Inmonth = pad(theDate.getMonth() + 1);
-                var Inday = pad(theDate.getDate());
-                var InquerySearchDate = Inyear + '/' + Inmonth + '/' + Inday;
-
-                theFilter = theFilter + "'" + InquerySearchDate + "'";
-                if (d < dates.length - 1) { theFilter = theFilter + ', '; }
-            }
         }
-
-        return theFilter + ')';
     }
 }
 

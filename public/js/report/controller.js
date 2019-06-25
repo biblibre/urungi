@@ -124,16 +124,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $scope.selectedReport.properties.filters = [];
         $scope.selectedReport.reportType = 'grid';
 
-        $scope.selectedReport.properties.backgroundColor = '#FFFFFF';
         $scope.selectedReport.properties.height = 300;
-        $scope.selectedReport.properties.headerHeight = 60;
-        $scope.selectedReport.properties.rowHeight = 35;
-        $scope.selectedReport.properties.headerBackgroundColor = '#FFFFFF';
-        $scope.selectedReport.properties.headerBottomLineWidth = 4;
-        $scope.selectedReport.properties.headerBottomLineColor = '#999999';
-        $scope.selectedReport.properties.rowBorderColor = '#CCCCCC';
-        $scope.selectedReport.properties.rowBottomLineWidth = 2;
-        $scope.selectedReport.properties.columnLineWidht = 0;
 
         $scope.selectedReport.properties.legendPosition = 'bottom';
 
@@ -247,10 +238,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.reportNameSave = function () {
         $scope.selectedReport.query = $scope.generateQuery();
 
-        if (['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0) {
-            reportModel.initChart($scope.selectedReport);
-        }
-
         return reportModel.saveAsReport($scope.selectedReport, $scope.mode).then(function () {
             $('#theReportNameModal').modal('hide');
             $('.modal-backdrop').hide();
@@ -292,10 +279,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.refresh = function () {
         $scope.selectedReport.query = $scope.generateQuery();
-
-        if (['chart-line', 'chart-donut', 'chart-pie', 'gauge'].indexOf($scope.selectedReport.reportType) >= 0) {
-            reportModel.initChart($scope.selectedReport);
-        }
 
         const params = {
             mode: $scope.mode,
@@ -692,10 +675,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             moveContent(report.properties.pivotKeys.columns, movedColumns);
             moveContent(report.properties.pivotKeys.rows, movedColumns);
             report.reportType = 'indicator';
-            if (!report.properties.style) { report.properties.style = 'style1'; }
-            if (!report.properties.backgroundColor) { report.properties.backgroundColor = 'transparent'; }
-            if (!report.properties.mainFontColor) { report.properties.mainFontColor = '#000000'; }
-            if (!report.properties.descFontColor) { report.properties.descFontColor = '#CCCCCC'; }
             break;
 
         case 'gauge':
@@ -705,20 +684,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             moveContent(report.properties.pivotKeys.rows, movedColumns);
             report.reportType = 'gauge';
 
-            if (!report.properties.lines) { report.properties.lines = 20; } // The number of lines to draw    12
-            if (!report.properties.angle) { report.properties.angle = 15; } // The length of each line
-            if (!report.properties.lineWidth) { report.properties.lineWidth = 44; } // The line thickness
-            if (!report.properties.pointerLength) { report.properties.pointerLength = 70; }
-            if (!report.properties.pointerStrokeWidth) { report.properties.pointerStrokeWidth = 35; }
-            if (!report.properties.pointerColor) { report.properties.pointerColor = '#000000'; }
-            if (!report.properties.limitMax) { report.properties.limitMax = 'false'; } // If true, the pointer will not go past the end of the gauge
-            if (!report.properties.colorStart) { report.properties.colorStart = '#6FADCF'; } // Colors
-            if (!report.properties.colorStop) { report.properties.colorStop = '#8FC0DA'; } // just experiment with them
-            if (!report.properties.strokeColor) { report.properties.strokeColor = '#E0E0E0'; } // to see which ones work best for you
-            if (!report.properties.generateGradient) { report.properties.generateGradient = true; }
-            if (!report.properties.minValue) { report.properties.minValue = 0; }
             if (!report.properties.maxValue) { report.properties.maxValue = 100; }
-            if (!report.properties.animationSpeed) { report.properties.animationSpeed = 32; }
             break;
 
         default:

@@ -17,19 +17,10 @@ angular.module('app').service('verticalGrid', function (dataElements) {
         var reportStyle = 'width:100%;padding-left:0px;padding-right:0px;';
         var rowStyle = 'width:100%;padding:0px';
 
-        if (!theProperties.backgroundColor) theProperties.backgroundColor = '#FFFFFF';
         if (!theProperties.height) theProperties.height = 400;
-        if (!theProperties.headerHeight) theProperties.headerHeight = 30;
-        if (!theProperties.rowHeight) theProperties.rowHeight = 20;
-        if (!theProperties.headerBackgroundColor) theProperties.headerBackgroundColor = '#FFFFFF';
-        if (!theProperties.headerBottomLineWidth) theProperties.headerBottomLineWidth = 4;
-        if (!theProperties.headerBottomLineColor) theProperties.headerBottomLineColor = '#999999';
-        if (!theProperties.rowBorderColor) theProperties.rowBorderColor = '#CCCCCC';
-        if (!theProperties.rowBottomLineWidth) theProperties.rowBottomLineWidth = 1;
-        if (!theProperties.columnLineWidht) theProperties.columnLineWidht = 0;
 
         if (theProperties) {
-            reportStyle += 'background-color:' + theProperties.backgroundColor + ';';
+            reportStyle += 'background-color: #fff;';
         }
 
         var htmlCode = '<div ' + pageBlock + ' id="REPORT_' + id + '" ndType="extendedGrid" class="container-fluid report-container" style="' + reportStyle + '">';

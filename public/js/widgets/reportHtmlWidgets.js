@@ -8,8 +8,6 @@ angular.module('app').service('reportHtmlWidgets', function () {
 
         var theData = report.query.data;
         if (theData) {
-            if (!report.properties.style) { report.properties.style = 'style1'; }
-
             var theYKey = report.properties.ykeys[0].id;
 
             theYKey = theYKey.replace(/[^a-zA-Z ]/g, '');
@@ -30,14 +28,12 @@ angular.module('app').service('reportHtmlWidgets', function () {
                 theValueText = report.properties.valueText;
             }
 
-            if (report.properties.style === 'style1') {
-                htmlCode += '<div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">';
-                htmlCode += '   <div class="xe-label">';
-                htmlCode += '       <div class="num">' + theValue + '</div>';
-                htmlCode += '       <span style="color:' + report.properties.descFontColor + '">' + theValueText + '</span>';
-                htmlCode += '   </div>';
-                htmlCode += '</div>';
-            }
+            htmlCode += '<div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">';
+            htmlCode += '   <div class="xe-label">';
+            htmlCode += '       <div class="num">' + theValue + '</div>';
+            htmlCode += '       <span style="color: #ccc;">' + theValueText + '</span>';
+            htmlCode += '   </div>';
+            htmlCode += '</div>';
 
             return htmlCode;
         }

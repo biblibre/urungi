@@ -631,30 +631,6 @@ class SqlQueryBuilder {
                     builder.where(this.getRef(filter), '<', querySearchDate);
                     builder.orWhere(this.getRef(filter), '>', queryLastDate);
                 });
-
-            case 'in':
-            case 'notIn':
-                var dateList = filter.criterion.dateList;
-                for (var date of filter.criterion.dateList) {
-                    var theDate = new Date(date);
-                    var Inyear = theDate.getFullYear();
-                    var Inmonth = pad(theDate.getMonth() + 1);
-                    var Inday = pad(theDate.getDate());
-                    var InquerySearchDate = Inyear + '/' + Inmonth + '/' + Inday;
-
-                    dateList.push(InquerySearchDate);
-                }
-
-                if (filter.filterType === 'in') {
-                    return applyWhereBuilder(builder => {
-                        builder.whereIn(this.getRef(filter), dateList);
-                    });
-                }
-                if (filter.filterType === 'notIn') {
-                    return applyWhereBuilder(builder => {
-                        builder.whereNotIn(this.getRef(filter), dateList);
-                    });
-                }
             }
         }
 

@@ -29,7 +29,6 @@ ReportFilterSchema.add({
     criterion: {
         date1: String,
         date2: String,
-        dateList: [ String ], // FIXME This is never set
         datePattern: String,
         label: String, // Label of date pattern
         text1: String,
@@ -49,64 +48,18 @@ const ReportQuerySchema = new mongoose.Schema({
     order: [ ReportColumnSchema ],
 });
 
-// FIXME Only id seems to be used
-const ReportAxisStackDimensionSchema = new mongoose.Schema({
-    elementName: String,
-    elementLabel: String,
-    id: String,
-    type: { type: String },
-    color: String,
-});
-
-const ReportChartSchema = new mongoose.Schema({
-    dataAxis: ReportAxisStackDimensionSchema,
-    dataColumns: [ ReportColumnSchema ],
-    height: Number,
-    id: String,
-    legendPosition: String,
-    query: ReportQuerySchema, // FIXME Query is stored twice in the report
-    stackDimension: ReportAxisStackDimensionSchema,
-    type: { type: String },
-});
-
 const ReportPropertiesSchema = new mongoose.Schema({
-    angle: Number, // FIXME This is not used
-    animationSpeed: Number, // FIXME This is not used
-    backgroundColor: String,
-    chart: ReportChartSchema,
-    colorStart: String, // FIXME This is not used
-    colorStop: String, // FIXME This is not used
-    columnLineWidht: Number, // FIXME spelling
     columns: [ ReportColumnSchema ],
     connectedComponent: Number, // FIXME This should not be stored
-    descFontColor: String, // FIXME This always has the same value
     filters: [ ReportFilterSchema ],
-    generateGradient: Boolean, // FIXME This is not used
-    headerBackgroundColor: String, // FIXME This always has the same value
-    headerBottomLineColor: String, // FIXME This always has the same value
-    headerBottomLineWidth: Number, // FIXME This always has the same value
-    headerHeight: Number, // FIXME This always has the same value
     height: Number,
     legendPosition: String,
-    limitMax: String, // FIXME This is not used
-    lines: Number, // FIXME This is not used
-    lineWidth: Number, // FIXME This is not used
-    mainFontColor: String, // FIXME This is not used
     maxValue: Number,
-    minValue: Number, // FIXME This is not used
     order: [ ReportColumnSchema ],
     pivotKeys: {
         columns: [ ReportColumnSchema ],
         rows: [ ReportColumnSchema ],
     },
-    pointerColor: String, // FIXME This is not used
-    pointerLength: Number, // FIXME This is not used
-    pointerStrokeWidth: Number, // FIXME This is not used
-    rowBorderColor: String, // FIXME This always has the same value
-    rowBottomLineWidth: Number, // FIXME This always has the same value
-    rowHeight: Number, // FIXME This always has the same value
-    strokeColor: String, // FIXME This is not used
-    style: String, // FIXME This is not used
     xkeys: [ ReportColumnSchema ],
     ykeys: [ ReportColumnSchema ],
 });
