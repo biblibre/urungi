@@ -59,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A lot of minor issues raised by LGTM
 - Wrong use of GROUP BY when the query does not use aggregation
 - Fixed links to report/dashboard on home page
+- Fixed date filters (between, not between, is null, is not null)
 
 ### Security
 
