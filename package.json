@@ -20,7 +20,7 @@
     "angular-ui-tree": "^2.22.6",
     "angular-uuid2": "github:biblibre/angular-uuid#semver:^0.1.0",
     "angular-vs-repeat": "^1.0.0-rc9",
-    "angular-xeditable": "^0.9.0",
+    "angular-xeditable": "^0.10.0",
     "angularjs-bootstrap-datetimepicker": "^1.1.4",
     "async": "~1.4.2",
     "bigquery": "0.0.6",
