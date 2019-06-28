@@ -63,7 +63,7 @@
     "passport-local": "~1.0.0",
     "passport-remember-me": "~0.0.1",
     "password-generator": "^2.2.0",
-    "pg": "^4.4.3",
+    "pg": "^7.11.0",
     "ui-select": "^0.19.8"
   },
   "devDependencies": {
