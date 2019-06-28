@@ -1,14 +1,24 @@
+dist: xenial
 language: node_js
 node_js:
-    - "8"
-    - "10"
+    - 8
+    - 10
+env:
+    matrix:
+        - MONGODB=3.4.21
+        - MONGODB=3.6.13
+        - MONGODB=4.0.10
 services:
-    - mongodb
     - mysql
     - postgresql
 addons:
-    mariadb: '10.1'
+    mariadb: '10.3'
 before_install:
+    - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${MONGODB}.tgz
+    - tar xzf mongodb-linux-x86_64-${MONGODB}.tgz
+    - ${PWD}/mongodb-linux-x86_64-${MONGODB}/bin/mongod --version
+    - mkdir ${PWD}/mongodb-linux-x86_64-${MONGODB}/data
+    - ${PWD}/mongodb-linux-x86_64-${MONGODB}/bin/mongod --dbpath ${PWD}/mongodb-linux-x86_64-${MONGODB}/data --logpath ${PWD}/mongodb-linux-x86_64-${MONGODB}/mongodb.log --fork
     - mysql -e 'CREATE DATABASE urungi_tests'
     - mysql -e 'GRANT ALL ON urungi_tests.* TO urungi@localhost IDENTIFIED BY "urungi"'
     - psql -c 'create database urungi_tests;' -U postgres
