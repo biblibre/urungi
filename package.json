@@ -24,7 +24,7 @@
     "bigquery": "0.0.6",
     "body-parser": "^1.19.0",
     "bootstrap": "^3.4.1",
-    "c3": "^0.4.23",
+    "c3": "^0.7.1",
     "clipboard": "^2.0.4",
     "components-jqueryui": "^1.12.1",
     "config": "^3.1.0",

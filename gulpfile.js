@@ -74,7 +74,7 @@ function dist_js_build () {
         'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
         'node_modules/angular-ui-sortable/dist/sortable.min.js',
         'node_modules/ui-select/dist/select.min.js',
-        'node_modules/d3/d3.min.js',
+        'node_modules/d3/dist/d3.min.js',
         'node_modules/c3/c3.min.js',
         'node_modules/angular-xeditable/dist/js/xeditable.min.js',
         'node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js',
