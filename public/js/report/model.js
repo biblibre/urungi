@@ -1,4 +1,4 @@
-angular.module('app').service('reportModel', function ($q, connection, uuid2, FileSaver, Noty) {
+angular.module('app').service('reportModel', function ($q, connection, uuid, FileSaver, Noty) {
     this.getReportDefinition = function (id, isLinked) {
         const url = '/api/reports/get-report/' + id;
         const params = { id: id, mode: 'preview', linked: isLinked };
@@ -107,7 +107,7 @@ angular.module('app').service('reportModel', function ($q, connection, uuid2, Fi
 
     this.initChart = function (report) {
         var chart = {
-            id: 'Chart' + uuid2.newguid(),
+            id: 'Chart' + uuid.v4(),
             dataColumns: [],
             datax: {},
             height: report.properties.height,

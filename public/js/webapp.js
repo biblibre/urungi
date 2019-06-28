@@ -18,7 +18,6 @@
         'gettext',
         'ngclipboard',
         'angular-intro',
-        'angularUUID2',
         'page.block',
         'app.core',
         'app.inspector',

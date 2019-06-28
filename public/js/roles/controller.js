@@ -1,4 +1,4 @@
-angular.module('app').controller('rolesCtrl', function ($scope, connection, $routeParams, uuid2, userService) {
+angular.module('app').controller('rolesCtrl', function ($scope, connection, $routeParams, userService) {
     $scope.items = [];
     $scope.roleModal = 'partials/roles/roleModal.html';
 

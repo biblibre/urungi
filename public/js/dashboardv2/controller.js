@@ -1,5 +1,5 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
-    reportsService, connection, $routeParams, reportModel, c3Charts, uuid2,
+    reportsService, connection, $routeParams, reportModel, c3Charts, uuid,
     htmlWidgets, dashboardv2Model, grid, $timeout,
     gettextCatalog, $uibModal, userService, api, Noty
 ) {
@@ -110,7 +110,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         }
 
         if ($scope.mode === 'add') {
-            $scope.dashboardID = uuid2.newguid();
+            $scope.dashboardID = uuid.v4();
             $scope.selectedDashboard = {
                 dashboardName: 'New Dashboard',
                 backgroundColor: '#999999',
@@ -123,7 +123,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             if (/push/.test($location.path())) {
                 const pushedReport = reportsService.getStoredReport();
                 pushedReport.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
-                pushedReport.id = uuid2.newguid();
+                pushedReport.id = uuid.v4();
                 $scope.selectedDashboard.reports.push(pushedReport);
             }
         };
@@ -141,7 +141,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                 if (/push/.test($location.path())) {
                     const pushedReport = reportsService.getStoredReport();
                     pushedReport.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
-                    pushedReport.id = uuid2.newguid();
+                    pushedReport.id = uuid.v4();
                     $scope.selectedDashboard.reports.push(pushedReport);
                 }
 
@@ -180,7 +180,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
         if ($scope.editingReport == null) {
             qstructure.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
-            qstructure.id = uuid2.newguid();
+            qstructure.id = uuid.v4();
             $scope.selectedDashboard.reports.push(qstructure);
         } else {
             var updatedReport = angular.copy(qstructure);
@@ -279,8 +279,8 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                 return getPromptHTML(data);
 
             case 'tabs':
-                var theid = 'TABS_' + uuid2.newguid();
-                var theTabs = [{ label: 'tab1', active: true, id: uuid2.newguid() }, { label: 'tab2', active: false, id: uuid2.newguid() }, { label: 'tab3', active: false, id: uuid2.newguid() }, { label: 'tab4', active: false, id: uuid2.newguid() }];
+                var theid = 'TABS_' + uuid.v4();
+                var theTabs = [{ label: 'tab1', active: true, id: uuid.v4() }, { label: 'tab2', active: false, id: uuid.v4() }, { label: 'tab3', active: false, id: uuid.v4() }, { label: 'tab4', active: false, id: uuid.v4() }];
                 var tabsElement = { id: theid, type: 'tabs', properties: { tabs: theTabs } };
                 if (!$scope.selectedDashboard.containers) { $scope.selectedDashboard.containers = []; }
                 $scope.selectedDashboard.containers.push(tabsElement);
@@ -425,80 +425,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             }
         }
     };
-    /* TABS Component
-    $scope.selectThisTab = function(tabsID,id)
-    {
-
-      for (var t in $scope.selectedDashboard.containers)
-      {
-        if ($scope.selectedDashboard.containers[t].id === tabsID)
-            {
-            var actualSelectedTab = $scope.selectedDashboard.containers[t].actualSelectedTab;
-            var actualHeaderID = '#'+actualSelectedTab+'_HEADER';
-            var actualBodyID = '#'+actualSelectedTab+'_BODY';
-            $(actualHeaderID).removeClass('active');
-            $(actualBodyID).removeClass('active');
-
-            $scope.selectedDashboard.containers[t].actualSelectedTab = id;
-
-            setTimeout(function () {
-                //jQuery(window).trigger('resize');
-                $(actualBodyID).trigger('resize');
-                }, 5);
-            }
-      }
-
-      var headerID = '#'+id+'_HEADER';
-      var bodyID = '#'+id+'_BODY';
-        $(headerID).removeClass('disabled');
-        $(headerID).addClass('active');
-
-        $(bodyID).addClass('active');
-
-    }
-
-    $scope.deleteTab = function(id)
-    {
-        var headerID = '#'+id+'_HEADER';
-        var bodyID = '#'+id+'_BODY';
-        $(headerID).remove();
-        $(bodyID).remove();
-    }
-
-    $scope.addNewTab = function()
-    {
-        var id = $scope.selectedTabContainer.id;
-        var tabID = uuid2.newguid();
-        $scope.selectedTabContainer.properties.tabs.push({label:'new tab',active:false,id:tabID})
-        var headerID = '#'+id+'_HEADER';
-        var bodyID = '#'+id+'_BODY';
-                    var theHeaderHTML = '<li id="'+tabID+'_HEADER" heading="Home" class="ng-isolate-scope" >'+
-                                        '<a id="'+tabID+'_LABEL" ng-click="selectThisTab(\''+id+'\',\''+tabID+'\')"  class="ng-binding">new tab</a>'+
-                                    '</li>';
-
-                    var theBodyHTML = '<div id="'+tabID+'_BODY" class="tab-pane Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" style="min-Height:150px;padding:5px;"></div>';
-
-                    var $div = $(theHeaderHTML);
-                    $(headerID).append($div);
-                    angular.element(document).injector().invoke(function($compile) {
-                        var scope = angular.element($div).scope();
-                        $compile($div)($scope);
-                    });
-
-                    var $div = $(theBodyHTML);
-                    $(bodyID).append($div);
-                    angular.element(document).injector().invoke(function($compile) {
-                        var scope = angular.element($div).scope();
-                        $compile($div)($scope);
-                    });
-
-    }
-
-    $scope.changeTabLabel = function(id,newLabel)
-    {
-        var labelID = '#'+id+'_LABEL';
-        $(labelID).text(newLabel);
-    } */
 
     $scope.getRuntimeReport = function (reportID) {
         if ($scope.mode !== 'preview') {

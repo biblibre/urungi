@@ -1,5 +1,5 @@
 /* global jsPlumb: false */
-angular.module('app').controller('layerCtrl', function ($scope, $location, api, connection, $routeParams, uuid2, $timeout, $window, gettextCatalog, Noty) {
+angular.module('app').controller('layerCtrl', function ($scope, $location, api, connection, $routeParams, $timeout, $window, gettextCatalog, Noty) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';

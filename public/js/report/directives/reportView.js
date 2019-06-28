@@ -1,4 +1,4 @@
-angular.module('app').directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, verticalGrid, pivot, uuid2) {
+angular.module('app').directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, verticalGrid, pivot, uuid) {
     return {
 
         scope: {
@@ -58,7 +58,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
                     case 'chart-donut':
                     case 'chart-pie':
                     case 'gauge':
-                        const id = 'CHART_' + $scope.report.id + '-' + uuid2.newuuid();
+                        const id = 'CHART_' + $scope.report._id + '-' + uuid.v4();
                         const html = c3Charts.getChartHTML($scope.report, $scope.mode, id);
                         $scope.changeContent(html);
 

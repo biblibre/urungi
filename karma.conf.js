@@ -19,7 +19,6 @@ module.exports = function (config) {
             'node_modules/angular-draganddrop/angular-draganddrop.min.js',
             'node_modules/angular-route/angular-route.min.js',
             'node_modules/noty/lib/noty.min.js',
-            'node_modules/angular-uuid2/dist/angular-uuid2.min.js',
             'node_modules/angular-vs-repeat/dist/angular-vs-repeat.min.js',
             'node_modules/moment/min/moment.min.js',
             'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js',

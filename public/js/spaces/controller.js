@@ -1,4 +1,4 @@
-angular.module('app').controller('spacesCtrl', function ($scope, $location, connection, uuid2, $timeout, gettextCatalog) {
+angular.module('app').controller('spacesCtrl', function ($scope, $location, connection, uuid, $timeout, gettextCatalog) {
     connection.get('/api/company/get-company-data').then(result => {
         $scope.data = result.items.sharedSpace;
     });
@@ -113,13 +113,13 @@ angular.module('app').controller('spacesCtrl', function ($scope, $location, conn
 
         if (typeof nodeData === 'undefined') {
             $scope.data.push({
-                id: uuid2.newguid(),
+                id: uuid.v4(),
                 title: 'my folder',
                 nodes: []
             });
         } else {
             nodeData.nodes.push({
-                id: uuid2.newguid(),
+                id: uuid.v4(),
                 title: nodeData.title + '.' + (nodeData.nodes.length + 1),
                 nodes: []
             });
