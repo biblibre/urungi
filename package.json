@@ -45,7 +45,7 @@
     "intro.js": "^2.9.3",
     "jdbc": "^0.6.3",
     "jquery": "^3.4.0",
-    "jquery-validation": "^1.19.0",
+    "jquery-validation": "^1.19.1",
     "js-xlsx": "^0.8.22",
     "jsplumb": "^2.9.3",
     "knex": "^0.16.5",
