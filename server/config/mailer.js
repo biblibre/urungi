@@ -1,30 +1,21 @@
 function sendEmail (emailSubject, emailMessage, emailTo) {
     var nodemailer = require('nodemailer');
-    var transportSMTP = nodemailer.createTransport('SMTP', {
-        host: config.get('mailer.host'), // hostname
-        secureConnection: config.get('mailer.secureConnection'), // use SSL
-        port: config.get('mailer.port'), // port for secure SMTP
-        auth: {
-            user: config.get('mailer.auth.user'),
-            pass: config.get('mailer.auth.pass')
-        }
-    });
+    var transport = nodemailer.createTransport(config.get('mailer.options'), config.get('mailer.defaults'));
 
     var mailOptions = {
-        from: config.get('mailer.from'), // sender address
         to: emailTo, // list of receivers
         subject: emailSubject, // Subject line
         html: emailMessage // html body
     };
 
-    transportSMTP.sendMail(mailOptions, function (error, response) {
+    transport.sendMail(mailOptions, function (error, response) {
         if (error) {
             console.log(error);
         } else {
 
         }
 
-        transportSMTP.close(); // shut down the connection pool, no more messages
+        transport.close(); // shut down the connection pool, no more messages
     });
 }
 global.sendEmail = sendEmail;
@@ -44,26 +35,7 @@ function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
             },
         },
     });
-    var transport;
-    if (config.get('mailer.service') !== 'SMTP') {
-        transport = nodemailer.createTransport({
-            service: config.get('mailer.service'),
-            auth: {
-                user: config.get('mailer.auth.user'),
-                pass: config.get('mailer.auth.pass')
-            }
-        });
-    } else {
-        transport = nodemailer.createTransport({
-            host: config.get('mailer.host'), // hostname
-            secureConnection: config.get('mailer.secureConnection'), // use SSL
-            port: config.get('mailer.port'), // port for secure SMTP
-            auth: {
-                user: config.get('mailer.auth.user'),
-                pass: config.get('mailer.auth.pass')
-            }
-        });
-    }
+    var transport = nodemailer.createTransport(config.get('mailer.options'), config.get('mailer.defaults'));
 
     // Send 10 mails at once
     async.mapLimit(recipients, 10, function (item, next) {
@@ -71,7 +43,6 @@ function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
         if (!item.lastName) { item.lastName = ' '; }
         template.renderAll(theEmailTemplate, item).then(function (results) {
             transport.sendMail({
-                from: config.get('mailer.from'),
                 to: item[emailField],
                 subject: subject,
                 html: results.html,

@@ -1,3 +1,5 @@
+const os = require('os');
+
 module.exports = {
     url: undefined,
     ip: undefined,
@@ -13,15 +15,14 @@ module.exports = {
     },
 
     mailer: {
-        service: 'SMTP', // SMTP, sendgrid, mandrill, etc... list of services nodemailer-wellknown
-        host: 'smtp.yourserver.com', // hostname
-        secureConnection: false, // use SSL
-        port: 25, // port for secure SMTP
-        auth: {
-            user: 'no_reply@yourserver.com',
-            pass: 'yourpassword',
+        // See https://nodemailer.com/transports/sendmail/
+        // or https://nodemailer.com/smtp/
+        options: {
+            sendmail: true,
         },
-        from: 'no_reply@yourserver.com',
+        defaults: {
+            from: 'root@' + os.hostname()
+        }
     },
     google: {
         clientID: 'your client id',
