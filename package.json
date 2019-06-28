@@ -43,7 +43,7 @@
     "express-session": "^1.15.6",
     "font-awesome": "^4.7.0",
     "intro.js": "^2.9.3",
-    "jdbc": "^0.6.3",
+    "jdbc": "^0.6.4",
     "jquery": "^3.4.1",
     "jquery-validation": "^1.19.1",
     "js-xlsx": "^0.8.22",
