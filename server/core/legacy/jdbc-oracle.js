@@ -63,7 +63,6 @@ db.prototype.query = function (theQuery, done) {
 
 function query (connection, query, done) {
     if (connection) {
-        var asyncjs = require('async');
         connection.reserve(function (err, connObj) {
             if (err) {
                 done(err);
@@ -71,50 +70,40 @@ function query (connection, query, done) {
                 var conn = connObj.conn;
 
                 // Query the database.
-                asyncjs.series([
-                    function (callback) {
-                        // Select statement example.
-                        conn.createStatement(function (err, statement) {
+                // Select statement example.
+                conn.createStatement(function (err, statement) {
+                    if (err) {
+                        done(err);
+                    } else {
+                        statement.setFetchSize(100, function (err) {
                             if (err) {
                                 done(err);
                             } else {
-                                statement.setFetchSize(100, function (err) {
-                                    if (err) {
-                                        done(err);
-                                    } else {
-                                        // Execute a query
-                                        statement.executeQuery(query,
-                                            function (err, resultset) {
+                                // Execute a query
+                                statement.executeQuery(query,
+                                    function (err, resultset) {
+                                        if (err) {
+                                            done(err);
+                                        } else {
+                                            resultset.toObjArray(function (err, results) {
                                                 if (err) {
                                                     done(err);
                                                 } else {
-                                                    resultset.toObjArray(function (err, results) {
+                                                    if (results.length > 0) {
+                                                        console.log('ID: ' + results[0].ID);
+                                                    }
+
+                                                    connection.release(connObj, function (err) {
                                                         if (err) {
                                                             done(err);
                                                         } else {
-                                                            if (results.length > 0) {
-                                                                console.log('ID: ' + results[0].ID);
-                                                            }
-
                                                             done(false, { rows: results });
                                                         }
                                                     });
                                                 }
                                             });
-                                    }
-                                });
-                            }
-                        });
-                    },
-                ], function (err, results) {
-                    if (err) {
-                        done(err);
-                    } else {
-                        // Results can also be processed here.
-                        // Release the connection back to the pool.
-                        connection.release(connObj, function (err) {
-                            if (err) {
-                                done(err);
+                                        }
+                                    });
                             }
                         });
                     }

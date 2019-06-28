@@ -22,7 +22,6 @@
     "angular-vs-repeat": "^1.0.0-rc9",
     "angular-xeditable": "^0.10.0",
     "angularjs-bootstrap-datetimepicker": "^1.1.4",
-    "async": "~1.4.2",
     "bigquery": "0.0.6",
     "body-parser": "^1.19.0",
     "bootstrap": "^3.4.1",
