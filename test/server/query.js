@@ -507,7 +507,11 @@ const generateTestSuite = (dbConfig) => function () {
 
     before(async function () {
         agent = chai.request.agent(app);
-        knex = Knex(dbConfig);
+        const config = {};
+        Object.assign(config, dbConfig);
+        config.connection = {};
+        Object.assign(config.connection, dbConfig.connection);
+        knex = Knex(config);
 
         // Test connection to database and skip the whole suite if needed
         try {
