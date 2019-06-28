@@ -67,7 +67,6 @@ function dist_js_build () {
         'node_modules/noty/js/noty/packaged/jquery.noty.packaged.min.js',
         'node_modules/angular-uuid2/dist/angular-uuid2.min.js',
         'node_modules/angular-vs-repeat/src/angular-vs-repeat.min.js',
-        'node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
         'node_modules/moment/min/moment.min.js',
         'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js',
         'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js',
@@ -111,7 +110,6 @@ function dist_css_build () {
     const paths = [
         'node_modules/bootstrap/dist/css/bootstrap.min.css',
         'node_modules/ui-select/dist/select.min.css',
-        'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css',
         'node_modules/angularjs-bootstrap-datetimepicker/src/css/datetimepicker.css',
         'node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
         'node_modules/c3/c3.min.css',
