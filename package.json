@@ -16,7 +16,7 @@
     "angular-route": "^1.7.8",
     "angular-sanitize": "^1.7.8",
     "angular-ui-bootstrap": "^2.5.6",
-    "angular-ui-sortable": "^0.14.4",
+    "angular-ui-sortable": "^0.19.0",
     "angular-ui-tree": "^2.22.6",
     "angular-uuid2": "github:biblibre/angular-uuid#semver:^0.1.0",
     "angular-vs-repeat": "^1.0.0-rc9",
