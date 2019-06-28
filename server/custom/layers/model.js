@@ -26,6 +26,7 @@ LayerObjectSchema.add({
         type: [ LayerAssociatedElementSchema ],
         default: undefined,
     },
+    format: String,
     expression: String,
     isCustom: Boolean,
     viewExpression: String,

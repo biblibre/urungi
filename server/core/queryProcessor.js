@@ -474,7 +474,7 @@ function processData (query, data) {
                 }
             }
             if (col.elementType === 'number' && col.format) {
-                if (row[col.id]) {
+                if (row[col.id] !== undefined) {
                     row[col.id + '_original'] = row[col.id];
                     var number = Number(row[col.id]);
                     row[col.id] = numeral(number).format(col.format);
