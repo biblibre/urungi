@@ -22,7 +22,7 @@ module.exports = function (config) {
             'node_modules/angular-uuid2/dist/angular-uuid2.min.js',
             'node_modules/angular-vs-repeat/dist/angular-vs-repeat.min.js',
             'node_modules/moment/min/moment.min.js',
-            'node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
+            'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js',
             'node_modules/numeral/min/numeral.min.js',
             'node_modules/angular-ui-tree/dist/angular-ui-tree.min.js',
             'node_modules/angular-file-saver/dist/angular-file-saver.bundle.min.js',
