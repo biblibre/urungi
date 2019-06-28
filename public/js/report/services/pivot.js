@@ -92,7 +92,8 @@ angular.module('app').service('pivot', function () {
             dataFieldInfo: dataFieldInfo,
             dataCellRenderer: dataCellRenderer,
             map: map,
-            reduce: reduce
+            reduce: reduce,
+            resizable: false,
         };
 
         return {

@@ -31,7 +31,7 @@
     "connect-mongo": "^3.0.0",
     "cookie-parser": "^1.4.4",
     "csurf": "^1.10.0",
-    "cynteka-pivot-table-jquery": "github:biblibre/cynteka-pivot-table-jquery#semver:^0.11.2",
+    "cynteka-pivot-table-jquery": "github:biblibre/cynteka-pivot-table-jquery#semver:^0.11.3",
     "debug": "^4.1.1",
     "ejs": "^2.6.2",
     "email-templates": "^6.0.0",
