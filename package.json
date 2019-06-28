@@ -49,7 +49,7 @@
     "jsplumb": "^2.10.1",
     "knex": "^0.18.0",
     "malihu-custom-scrollbar-plugin": "^3.1.5",
-    "migrate-mongo": "^5.0.1",
+    "migrate-mongo": "^6.0.0",
     "moment": "^2.24.0",
     "mongoose": "^4.13.18",
     "mssql": "^5.1.0",
