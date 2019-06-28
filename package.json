@@ -47,7 +47,7 @@
     "jquery": "^3.4.1",
     "jquery-validation": "^1.19.1",
     "js-xlsx": "^0.8.22",
-    "jsplumb": "^2.9.3",
+    "jsplumb": "^2.10.1",
     "knex": "^0.16.5",
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "migrate-mongo": "^5.0.1",
