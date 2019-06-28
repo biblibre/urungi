@@ -1,6 +1,6 @@
 /* global c3:false */
 
-angular.module('app').service('c3Charts', function () {
+angular.module('app').service('c3Charts', function (Noty) {
     this.rebuildChart = function (report, id) {
         var theValues = [];
         var theStackValues = {};
@@ -24,7 +24,7 @@ angular.module('app').service('c3Charts', function () {
         // This causes some of the charts to display weird or misleading results
 
         if (!query.data) {
-            noty({ text: 'no data to display', timeout: 2000, type: 'warning' });
+            new Noty({ text: 'no data to display', type: 'warning' }).show();
             return;
         }
 

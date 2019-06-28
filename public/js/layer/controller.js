@@ -1,5 +1,5 @@
 /* global jsPlumb: false */
-angular.module('app').controller('layerCtrl', function ($scope, $location, api, connection, $routeParams, uuid2, $timeout, $window, gettextCatalog) {
+angular.module('app').controller('layerCtrl', function ($scope, $location, api, connection, $routeParams, uuid2, $timeout, $window, gettextCatalog, Noty) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';
@@ -267,7 +267,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     $scope.editSQL = function () {
         var selectedCollection = $scope.theSelectedElement;
         if (!selectedCollection.isSQL) {
-            noty({ text: 'Cannot modify sql of an object which is not an sql request', timeout: 2000, type: 'error' });
+            new Noty({ text: 'Cannot modify sql of an object which is not an sql request', type: 'error' }).show();
             return;
         }
 
@@ -534,11 +534,8 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                         const comp = collection.component;
                         if (element.component !== undefined && element.component !== comp) {
                             element.component = -1;
-                            noty({
-                                text: gettextCatalog.getString('One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched'),
-                                type: 'warning',
-                                timeout: 8000
-                            });
+                            const msg = gettextCatalog.getString('One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched');
+                            new Noty({ text: msg, type: 'warning' }).show();
                             return;
                         }
                         element.component = comp;
@@ -546,7 +543,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                 } catch (error) {
                     const message = 'Failed to parse expression for element ' +
                         element.elementLabel + ' : ' + error.message;
-                    noty({ type: 'warning', text: message, timeout: 5000 });
+                    new Noty({ type: 'warning', text: message }).show();
                 }
             }
         });
@@ -1320,7 +1317,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                 $scope.erDiagramInit();
             });
         } else {
-            noty({ text: 'Datasource must be the same for all entities', timeout: 2000, type: 'error' });
+            new Noty({ text: 'Datasource must be the same for all entities', type: 'error' }).show();
         }
     };
 

@@ -1,5 +1,5 @@
 angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportsService, $routeParams, $timeout, c3Charts,
-    reportModel, widgetsCommon, $location, gettextCatalog, $q) {
+    reportModel, widgetsCommon, $location, gettextCatalog, $q, Noty) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dateModal = 'partials/report/modals/dateModal.html';
     $scope.linkModal = 'partials/report/modals/linkModal.html';
@@ -142,7 +142,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         const report = $scope.selectedReport;
 
         if (!report.properties) {
-            noty({ text: 'invalid report', timeout: 2000, type: 'error' });
+            new Noty({ text: 'invalid report', type: 'error' }).show();
             return;
         }
 
@@ -687,7 +687,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             break;
 
         default:
-            noty({ msg: 'report type does not exist', timeout: 2000, type: 'error' });
+            new Noty({ text: 'report type does not exist', type: 'error' }).show();
             break;
         }
 

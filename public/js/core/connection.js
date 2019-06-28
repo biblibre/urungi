@@ -3,9 +3,9 @@
 
     angular.module('app.core').factory('connection', connection);
 
-    connection.$inject = ['$http'];
+    connection.$inject = ['$http', 'Noty'];
 
-    function connection ($http) {
+    function connection ($http, Noty) {
         const service = {
             get: get,
             post: post,
@@ -25,9 +25,9 @@
                     if (typeof data === 'string') window.location.href = '/';
 
                     if (data.result === 1 && data.msg && options.showMsg) {
-                        noty({ text: data.msg, timeout: 5000, type: 'success' });
+                        new Noty({ text: data.msg, type: 'success' }).show();
                     } else if (data.result === 0 && data.msg && options.showMsg) {
-                        noty({ text: data.msg, timeout: 5000, type: 'error' });
+                        new Noty({ text: data.msg, type: 'error' }).show();
                     }
 
                     return data;
@@ -44,9 +44,9 @@
                     if (typeof data === 'string') window.location.href = '/';
 
                     if (data.result === 1 && data.msg) {
-                        noty({ text: data.msg, timeout: 5000, type: 'success' });
+                        new Noty({ text: data.msg, type: 'success' }).show();
                     } else if (data.result === 0 && data.msg) {
-                        noty({ text: data.msg, timeout: 5000, type: 'error' });
+                        new Noty({ text: data.msg, type: 'error' }).show();
                     }
 
                     return data;

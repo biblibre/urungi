@@ -3,9 +3,9 @@
 
     angular.module('app.users').controller('UsersViewController', UsersViewController);
 
-    UsersViewController.$inject = ['$routeParams', '$uibModal', 'connection', 'userService', 'gettextCatalog'];
+    UsersViewController.$inject = ['$routeParams', '$uibModal', 'Noty', 'connection', 'userService', 'gettextCatalog'];
 
-    function UsersViewController ($routeParams, $uibModal, connection, userService, gettextCatalog) {
+    function UsersViewController ($routeParams, $uibModal, Noty, connection, userService, gettextCatalog) {
         const vm = this;
 
         vm.selectedRole = '';
@@ -115,7 +115,7 @@
 
         function deleteRole (roleID) {
             if (vm.user.userName === 'administrator' && roleID === 'WSTADMIN') {
-                noty({ text: "The role 'Urungi Administrator' can't be removed from the user administrator", timeout: 6000, type: 'warning' });
+                new Noty({ text: "The role 'Urungi Administrator' can't be removed from the user administrator", type: 'warning' }).show();
             } else {
                 $uibModal.open({
                     component: 'appDeleteModal',

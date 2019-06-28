@@ -1,4 +1,4 @@
-angular.module('app').service('fileService', function (connection) {
+angular.module('app').service('fileService', function (connection, Noty) {
     this.getFiles = function () {
         const params = {};
 
@@ -21,7 +21,7 @@ angular.module('app').service('fileService', function (connection) {
                     const data = JSON.parse(XHR.responseText);
 
                     if (data.result !== 1 && data.msg) {
-                        noty({ text: data.msg, timeout: 2000, type: 'error' });
+                        new Noty({ text: data.msg, type: 'error' }).show();
                     }
 
                     if (data.result === 1) {
@@ -37,7 +37,7 @@ angular.module('app').service('fileService', function (connection) {
             });
 
             XHR.addEventListener('error', function (event) {
-                noty({ text: 'Unexpected server error', timeout: 2000, type: 'error' });
+                new Noty({ text: 'Unexpected server error', type: 'error' }).show();
                 console.log('Unexpected server error :');
                 console.log(event);
                 resolve();

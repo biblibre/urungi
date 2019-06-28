@@ -1,4 +1,4 @@
-angular.module('app').service('reportModel', function ($q, connection, uuid2, FileSaver) {
+angular.module('app').service('reportModel', function ($q, connection, uuid2, FileSaver, Noty) {
     this.getReportDefinition = function (id, isLinked) {
         const url = '/api/reports/get-report/' + id;
         const params = { id: id, mode: 'preview', linked: isLinked };
@@ -64,12 +64,12 @@ angular.module('app').service('reportModel', function ($q, connection, uuid2, Fi
         return connection.post('/api/reports/get-data', request).then(function (result) {
             if (result.warnings) {
                 for (const w of result.warnings) {
-                    noty({ text: w.msg, timeout: 3000, type: 'warning' });
+                    new Noty({ text: w.msg, type: 'warning' }).show();
                 }
             }
 
             if (result.result === 0) {
-                noty({ text: result.msg, timeout: 3000, type: 'error' });
+                new Noty({ text: result.msg, type: 'error' }).show();
                 return {
                     data: [],
                     sql: result.sql,

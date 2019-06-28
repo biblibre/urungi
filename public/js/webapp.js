@@ -33,9 +33,9 @@
 
     angular.module('app').config(configure);
 
-    configure.$inject = ['$routeProvider', '$locationProvider'];
+    configure.$inject = ['$routeProvider', '$locationProvider', 'Noty'];
 
-    function configure ($routeProvider, $locationProvider) {
+    function configure ($routeProvider, $locationProvider, Noty) {
         // TODO Use the default prefix '!' or use HTML5 mode
         $locationProvider.hashPrefix('');
 
@@ -108,6 +108,12 @@
         $routeProvider.when('/export', {
             templateUrl: 'partials/io/export.html',
             controller: 'ioCtrl'
+        });
+
+        Noty.overrideDefaults({
+            layout: 'topRight',
+            theme: 'bootstrap-v4',
+            timeout: 5000,
         });
     }
 

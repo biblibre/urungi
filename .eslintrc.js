@@ -22,7 +22,6 @@ module.exports = {
 
         // Browser
         angular: false,
-        noty: false,
         layerUtils: false,
 
         // Angular mocks

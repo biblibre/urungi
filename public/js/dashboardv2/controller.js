@@ -1,7 +1,7 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportsService, connection, $routeParams, reportModel, c3Charts, uuid2,
     htmlWidgets, dashboardv2Model, grid, $timeout,
-    gettextCatalog, $uibModal, userService, api
+    gettextCatalog, $uibModal, userService, api, Noty
 ) {
     $scope.reportModal = 'partials/report/edit.html';
     $scope.settingsHtml = 'partials/pages/settings.html';
@@ -80,7 +80,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                     report.id = report._id;
                     $scope.selectedDashboard.reports.push(report);
                 } else {
-                    noty({ text: 'Error : failed to import report', type: 'error', timeout: 3000 });
+                    new Noty({ text: 'Error : failed to import report', type: 'error' }).show();
                 }
             });
         });
@@ -132,7 +132,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             $scope.selectedDashboardLimit = { value: 500 };
 
             if (!$scope.dashboardID) {
-                noty({ text: 'Could not load dashboard : missing id', type: 'error', timeout: 4000 });
+                new Noty({ text: 'Could not load dashboard : missing id', type: 'error' }).show();
             }
 
             return connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, { id: $scope.dashboardID }).then(function (data) {
@@ -262,18 +262,18 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             case 'report':
                 const report = $scope.selectedDashboard.reports.find(r => r.id === data.reportID);
                 if (!report) {
-                    noty({ text: 'Could not find report', timeout: 6000, type: 'error' });
+                    new Noty({ text: 'Could not find report', type: 'error' }).show();
                     return;
                 }
                 if (angular.element('#REPORT_' + report.id).length) {
-                    noty({ text: 'Sorry, that report is already on the dash', timeout: 6000, type: 'error' });
+                    new Noty({ text: 'Sorry, that report is already on the dash', type: 'error' }).show();
                     return;
                 }
                 return reportModel.getReportContainerHTML(data.reportID);
 
             case 'queryFilter':
                 if (angular.element('#PROMPT_' + data.promptID).length) {
-                    noty({ text: 'Sorry, that filter is already on the dash', timeout: 6000, type: 'error' });
+                    new Noty({ text: 'Sorry, that filter is already on the dash', type: 'error' }).show();
                     return;
                 }
                 return getPromptHTML(data);
@@ -352,7 +352,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         const authorisedObjects = ['imageTextLarge', 'textImageLarge', 'report', 'queryFilter', 'image', 'video', 'paragraph', 'heading', 'pageHeader'];
 
         if (authorisedObjects.indexOf(customObjectData.objectType) === -1) {
-            noty({ text: 'You are not allowed to put this object inside a component', timeout: 6000, type: 'warning' });
+            new Noty({ text: 'You are not allowed to put this object inside a component', type: 'warning' }).show();
             return;
         }
 
