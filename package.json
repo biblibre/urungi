@@ -24,7 +24,7 @@
     "angularjs-bootstrap-datetimepicker": "^1.1.4",
     "async": "~1.4.2",
     "bigquery": "0.0.6",
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "bootstrap": "^3.4.1",
     "c3": "^0.4.23",
     "clipboard": "^2.0.4",
