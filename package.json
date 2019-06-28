@@ -86,7 +86,7 @@
     "gulp-decomment": "^0.2.0",
     "htmlhint": "^0.11.0",
     "jasmine-core": "^3.4.0",
-    "jsdom": "^14.1.0",
+    "jsdom": "^15.1.1",
     "karma": "^4.1.0",
     "karma-jasmine": "^2.0.1",
     "karma-jsdom-launcher": "^7.1.1",
