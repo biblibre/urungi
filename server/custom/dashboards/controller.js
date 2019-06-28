@@ -32,7 +32,7 @@ exports.DashboardsFindAll = function (req, res) {
     Dashboards.find(find, fields, params, function (err, items) {
         if (err) throw err;
 
-        Dashboards.count(find, function (err, count) {
+        Dashboards.countDocuments(find, function (err, count) {
             if (err) throw err;
 
             var result = { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
@@ -198,7 +198,7 @@ exports.PublishDashboard = function (req, res) {
         if (Dashboard) {
             Dashboard.isPublic = true;
 
-            Dashboards.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
+            Dashboards.updateOne({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
@@ -226,7 +226,7 @@ exports.UnpublishDashboard = function (req, res) {
         if (err) throw err;
         if (Dashboard) {
             Dashboard.isPublic = false;
-            Dashboards.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
+            Dashboards.updateOne({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {

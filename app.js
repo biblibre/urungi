@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'shared')));
 app.use(express.static(path.join(__dirname, 'dist')));
 
-const mongooseConnection = require('mongoose').createConnection(config.get('db'));
+const mongooseConnection = require('mongoose').createConnection(config.get('db'), { useNewUrlParser: true });
 const mongoStore = new MongoStore({
     mongooseConnection: mongooseConnection,
     collection: 'wst_Sessions',

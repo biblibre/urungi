@@ -25,7 +25,7 @@ exports.PagesFindAll = function (req, res) {
     var Pages = connection.model('Pages');
     Pages.find(find, fields, params, function (err, items) {
         if (err) throw err;
-        Pages.count(find, function (err, count) {
+        Pages.countDocuments(find, function (err, count) {
             if (err) { console.error(err); }
 
             var result = { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
@@ -208,7 +208,7 @@ exports.PublishPage = function (req, res) {
             Page.parentFolder = parentFolder;
             Page.isShared = true;
 
-            Pages.update({ _id: data._id }, { $set: Page.toObject() }, function (err, numAffected) {
+            Pages.updateOne({ _id: data._id }, { $set: Page.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
@@ -236,7 +236,7 @@ exports.UnpublishPage = function (req, res) {
         if (err) throw err;
         if (Page) {
             Page.isShared = false;
-            Pages.update({ _id: data._id }, { $set: Page.toObject() }, function (err, numAffected) {
+            Pages.updateOne({ _id: data._id }, { $set: Page.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {

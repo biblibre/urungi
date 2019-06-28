@@ -104,7 +104,7 @@ exports.changeMyPassword = function (req, res) {
             var hash = require('../../util/hash');
             hash(req.body.pwd1, function (err, salt, hash) {
                 if (err) throw err;
-                Users.update({ _id: req.user._id }, { salt: salt, hash: hash }, function (err) {
+                Users.updateOne({ _id: req.user._id }, { salt: salt, hash: hash }, function (err) {
                     if (err) { console.error(err); }
 
                     const result = { result: 1, msg: 'Password changed' };
@@ -147,43 +147,43 @@ exports.getCounts = function (req, res) {
 
     if (isWSTADMIN) {
         // get all reports
-        Reports.count({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, reportCount) {
+        Reports.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, reportCount) {
             if (err) { console.error(err); }
 
             theCounts.reports = reportCount;
             // get all dashboards
             var Dashboardsv2 = connection.model('Dashboardsv2');
-            Dashboardsv2.count({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, dashCount) {
+            Dashboardsv2.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, dashCount) {
                 if (err) { console.error(err); }
 
                 theCounts.dashBoards = dashCount;
                 // get all pages
                 var Pages = connection.model('Pages');
-                Pages.count({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, pageCount) {
+                Pages.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, pageCount) {
                     if (err) { console.error(err); }
 
                     theCounts.pages = pageCount;
                     // get all datasources
                     var DataSources = connection.model('DataSources');
-                    DataSources.count({ companyID: companyID, nd_trash_deleted: false }, function (err, dtsCount) {
+                    DataSources.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, dtsCount) {
                         if (err) { console.error(err); }
 
                         theCounts.dataSources = dtsCount;
                         // get all layers
                         var Layers = connection.model('Layers');
-                        Layers.count({ companyID: companyID, nd_trash_deleted: false }, function (err, layersCount) {
+                        Layers.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, layersCount) {
                             if (err) { console.error(err); }
 
                             theCounts.layers = layersCount;
                             // get all users
                             var Users = connection.model('Users');
-                            Users.count({ companyID: companyID, nd_trash_deleted: false }, function (err, usersCount) {
+                            Users.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, usersCount) {
                                 if (err) { console.error(err); }
 
                                 theCounts.users = usersCount;
                                 // get all roles
                                 var Roles = connection.model('Roles');
-                                Roles.count({ companyID: companyID, nd_trash_deleted: false }, function (err, rolesCount) {
+                                Roles.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, rolesCount) {
                                     if (err) { console.error(err); }
 
                                     theCounts.roles = rolesCount;
@@ -198,19 +198,19 @@ exports.getCounts = function (req, res) {
         });
     } else {
         // get all reports
-        Reports.count({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, reportCount) {
+        Reports.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, reportCount) {
             if (err) { console.error(err); }
 
             theCounts.reports = reportCount;
             // get all dashboards
             var Dashboards = connection.model('Dashboardsv2');
-            Dashboards.count({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, dashCount) {
+            Dashboards.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, dashCount) {
                 if (err) { console.error(err); }
 
                 theCounts.dashBoards = dashCount;
                 // get all pages
                 var Pages = connection.model('Pages');
-                Pages.count({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, pageCount) {
+                Pages.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, pageCount) {
                     if (err) { console.error(err); }
 
                     theCounts.pages = pageCount;
@@ -228,24 +228,24 @@ exports.getCountsForUser = function (req, res) {
 
     // get all reports
     var Reports = connection.model('Reports');
-    Reports.count({ companyID: companyID, owner: userID, isShared: true, nd_trash_deleted: false }, function (err, reportCount) {
+    Reports.countDocuments({ companyID: companyID, owner: userID, isShared: true, nd_trash_deleted: false }, function (err, reportCount) {
         if (err) { console.error(err); }
 
         theCounts.sharedReports = reportCount;
         // get all dashboards
         var Dashboards = connection.model('Dashboardsv2');
-        Dashboards.count({ companyID: companyID, owner: userID, isShared: true, nd_trash_deleted: false }, function (err, dashCount) {
+        Dashboards.countDocuments({ companyID: companyID, owner: userID, isShared: true, nd_trash_deleted: false }, function (err, dashCount) {
             if (err) { console.error(err); }
 
             theCounts.sharedDashBoards = dashCount;
 
-            Reports.count({ companyID: companyID, owner: userID, isShared: false, nd_trash_deleted: false }, function (err, privateReportCount) {
+            Reports.countDocuments({ companyID: companyID, owner: userID, isShared: false, nd_trash_deleted: false }, function (err, privateReportCount) {
                 if (err) { console.error(err); }
 
                 theCounts.privateReports = privateReportCount;
 
                 var Dashboards = connection.model('Dashboardsv2');
-                Dashboards.count({ companyID: companyID, owner: userID, isShared: false, nd_trash_deleted: false }, function (err, privateDashCount) {
+                Dashboards.countDocuments({ companyID: companyID, owner: userID, isShared: false, nd_trash_deleted: false }, function (err, privateDashCount) {
                     if (err) { console.error(err); }
 
                     theCounts.privateDashBoards = privateDashCount;

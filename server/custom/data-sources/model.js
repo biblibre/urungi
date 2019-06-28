@@ -17,7 +17,7 @@ var DataSourcesSchema = new mongoose.Schema({
 DataSourcesSchema.statics.changeStatus = function (req, datasourceID, status, done) {
 // -1 error, 0 not active, 1 active
 
-    DataSources.update({ _id: datasourceID }, { $set: { status: status } }, function (err, result) {
+    DataSources.updateOne({ _id: datasourceID }, { $set: { status: status } }, function (err, result) {
         if (err) throw err;
         var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
         if (numAffected > 0) {
@@ -31,7 +31,7 @@ DataSourcesSchema.statics.changeStatus = function (req, datasourceID, status, do
 DataSourcesSchema.statics.setStatusInfo = function (req, datasourceID, status, done) {
 // -1 error, 0 not active, 1 active
 
-    DataSources.update({ _id: datasourceID }, { $set: { status: status } }, function (err, result) {
+    DataSources.updateOne({ _id: datasourceID }, { $set: { status: status } }, function (err, result) {
         if (err) throw err;
         var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
         if (numAffected > 0) {
@@ -56,7 +56,7 @@ DataSourcesSchema.statics.invalidateDatasource = function (req, datasourceID, er
     var statusInfo = { type: 'ALERT', errorCode: errorcode, actionCode: actioncode, message: msg, lastDate: new Date() };
     // });
 
-    DataSources.update({ _id: datasourceID }, { $set: { status: -1, statusInfo: statusInfo } }, function (err, result) {
+    DataSources.updateOne({ _id: datasourceID }, { $set: { status: -1, statusInfo: statusInfo } }, function (err, result) {
         if (err) throw err;
         var numAffected = (typeof result.n === 'undefined') ? result.nModified : result.n; // MongoDB 2.X return n, 3.X return nModified?
         if (numAffected > 0) {

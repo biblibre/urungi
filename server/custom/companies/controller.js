@@ -11,7 +11,7 @@ exports.getCompanyData = function (req, res) {
 exports.saveSharedSpace = function (req, res) {
     var data = req.body;
 
-    Companies.update({ companyID: req.user.companyID }, { $set: { sharedSpace: data } }, function (err, rawResponse) {
+    Companies.updateOne({ companyID: req.user.companyID }, { $set: { sharedSpace: data } }, function (err, rawResponse) {
         if (err) throw err;
 
         let result;
@@ -28,7 +28,7 @@ exports.saveSharedSpace = function (req, res) {
 exports.saveCustomCSS = function (req, res) {
     var data = req.body.customCSS;
 
-    Companies.update({ companyID: req.user.companyID }, { $set: { customCSS: data } }, function (err, numAffected) {
+    Companies.updateOne({ companyID: req.user.companyID }, { $set: { customCSS: data } }, function (err, numAffected) {
         if (err) throw err;
 
         let result;
@@ -45,7 +45,7 @@ exports.saveCustomCSS = function (req, res) {
 exports.saveCustomLogo = function (req, res) {
     var data = req.body;
 
-    Companies.update({ companyID: req.user.companyID }, { $set: { customLogo: data } }, function (err, numAffected) {
+    Companies.updateOne({ companyID: req.user.companyID }, { $set: { customLogo: data } }, function (err, numAffected) {
         if (err) throw err;
 
         let result;

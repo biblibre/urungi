@@ -112,7 +112,7 @@ describe('Layers API', function () {
             await ds.remove();
         });
     });
-    describe('POST /api/layers/delete:id', function () {
+    describe('POST /api/layers/delete/:id', function () {
         it('should delete a layer', async function () {
             const xsrfToken = await login(agent);
             var User = await Users.findOne({ userName: 'administrator' });
@@ -127,7 +127,7 @@ describe('Layers API', function () {
             expect(res).to.have.status(200);
             var response = JSON.parse(res.text);
             expect(response).to.have.property('result', 1);
-            expect(response).to.have.property('msg', '1 items deleted.');
+            expect(response).to.have.property('msg', '1 item deleted.');
             var Layer = await Layers.findOne({ _id: layer._id });
             expect(Layer).to.be.a('null');
         });

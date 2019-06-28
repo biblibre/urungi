@@ -65,7 +65,7 @@ logsSchema.statics.adminFindAll = function (req, done) {
     this.find(find, {}, { skip: (page - 1) * perPage, limit: perPage, sort: { created: -1 } }, function (err, logs) {
         if (err) throw err;
 
-        Log.count(find, function (err, count) {
+        Log.countDocuments(find, function (err, count) {
             if (err) { console.error(err); }
 
             done({ result: 1, page: page, pages: Math.ceil(count / perPage), logs: logs });
