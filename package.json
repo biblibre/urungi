@@ -64,7 +64,7 @@
     "passport-google-oauth20": "^1.0.0",
     "passport-local": "~1.0.0",
     "passport-remember-me": "~0.0.1",
-    "password-generator": "~2.0.1",
+    "password-generator": "^2.2.0",
     "pg": "^4.4.3",
     "ui-select": "^0.19.8"
   },
