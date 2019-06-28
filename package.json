@@ -38,7 +38,7 @@
     "debug": "^3.1.0",
     "ejs": "^2.6.1",
     "email-templates": "^5.0.4",
-    "express": "^4.16.3",
+    "express": "^4.17.1",
     "express-ejs-layouts": "~1.1.0",
     "express-session": "^1.16.2",
     "font-awesome": "^4.7.0",
