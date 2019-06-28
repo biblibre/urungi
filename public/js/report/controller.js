@@ -3,7 +3,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dateModal = 'partials/report/modals/dateModal.html';
     $scope.linkModal = 'partials/report/modals/linkModal.html';
-    $scope.repeaterTemplate = 'partials/report/partials/repeater.html';
     $scope.dropArea = 'partials/report/partials/drop-area.html';
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
     $scope.dashListModal = 'partials/report/modals/dashboardListModal.html';

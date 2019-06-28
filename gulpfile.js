@@ -66,7 +66,7 @@ function dist_js_build () {
         'node_modules/angular-route/angular-route.min.js',
         'node_modules/noty/js/noty/packaged/jquery.noty.packaged.min.js',
         'node_modules/angular-uuid2/dist/angular-uuid2.min.js',
-        'node_modules/angular-vs-repeat/src/angular-vs-repeat.min.js',
+        'node_modules/angular-vs-repeat/dist/angular-vs-repeat.min.js',
         'node_modules/moment/min/moment.min.js',
         'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js',
         'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js',
