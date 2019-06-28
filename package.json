@@ -36,7 +36,7 @@
     "csurf": "^1.10.0",
     "cynteka-pivot-table-jquery": "github:biblibre/cynteka-pivot-table-jquery#semver:^0.11.2",
     "debug": "^3.1.0",
-    "ejs": "^2.6.1",
+    "ejs": "^2.6.2",
     "email-templates": "^6.0.0",
     "express": "^4.17.1",
     "express-ejs-layouts": "~1.1.0",
