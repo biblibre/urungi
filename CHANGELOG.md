@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Relocate 'datasourceID' property in layers and define explicit schema for
   layers, reports and dashboards
 - Configuration object for 'mailer' key has changed, check config/default.js
+- Replace mocha and karma by jest for running tests
 
 ### Fixed
 

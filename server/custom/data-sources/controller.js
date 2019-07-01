@@ -87,10 +87,10 @@ exports.getEntities = async function (req, res) {
         break;
     case 'BIGQUERY': case 'JDBC-ORACLE':
         if (dts.type === 'JDBC-ORACLE') {
-            db = require('./legacy/jdbc-oracle');
+            db = require('../../core/legacy/jdbc-oracle');
         }
         if (dts.type === 'BIGQUERY') {
-            db = require('./legacy/bigquery');
+            db = require('../../core/legacy/bigQuery');
         }
 
         data = {
@@ -193,7 +193,7 @@ exports.getEntitySchema = async function (req, res) {
         });
         break;
     case 'BIGQUERY':
-        var bquery = require('../../core/db/bigQuery.js');
+        var bquery = require('../../core/legacy/bigQuery.js');
         data = {
             companyID: req.user.companyID,
             type: result.item.type,

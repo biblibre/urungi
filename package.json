@@ -67,12 +67,12 @@
   },
   "devDependencies": {
     "angular-mocks": "^1.7.8",
-    "chai": "^4.2.0",
-    "chai-http": "^4.3.0",
+    "codecov": "^3.5.0",
     "del": "^4.1.1",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jest": "^22.7.1",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
@@ -82,27 +82,27 @@
     "gulp-concat": "^2.6.1",
     "gulp-decomment": "^0.2.0",
     "htmlhint": "^0.11.0",
-    "jasmine-core": "^3.4.0",
-    "jsdom": "^15.1.1",
-    "karma": "^4.1.0",
-    "karma-jasmine": "^2.0.1",
-    "karma-jsdom-launcher": "^7.1.1",
+    "jest": "^24.8.0",
     "merge-stream": "^2.0.0",
-    "mocha": "^6.1.4",
+    "mongodb-memory-server": "^5.1.5",
     "npm-run-all": "^4.1.5",
     "set-cookie-parser": "^2.3.5",
     "stylelint": "^10.1.0",
-    "stylelint-config-standard": "^18.3.0"
+    "stylelint-config-standard": "^18.3.0",
+    "supertest": "^4.0.2"
   },
   "scripts": {
     "start": "node server.js",
-    "test": "run-s -s -c test:*",
+    "test": "jest",
     "posttest": "run-s -s -c lint:*",
-    "test:server": "mocha",
-    "test:client": "karma start",
     "lint:js": "eslint .",
     "lint:css": "stylelint public/css",
-    "lint:html": "htmlhint"
+    "lint:html": "htmlhint public/partials"
+  },
+  "config": {
+      "mongodbMemoryServer": {
+          "disablePostinstall": "1"
+      }
   },
   "repository": {
     "type": "git",

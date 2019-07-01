@@ -59,7 +59,7 @@ exports.execute = async function (query) {
             Db = require('./legacy/jdbc-oracle').Db;
         }
         if (dts.type === 'BIGQUERY') {
-            Db = require('./legacy/bigquery').Db;
+            Db = require('./legacy/bigQuery').Db;
         }
 
         const legacySQLBuilder = require('./legacy/sql');

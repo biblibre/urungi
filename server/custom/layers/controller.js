@@ -90,7 +90,7 @@ exports.LayersDelete = function (req, res) {
                 if (dashboard.length === 0) {
                     if (!req.session.isWSTADMIN) {
                         var Layers = connection.model('Layers');
-                        Layers.FindOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
+                        Layers.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
                             if (err) throw err;
                             if (item) {
                                 controller.remove(req).then(function (result) {
