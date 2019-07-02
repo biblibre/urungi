@@ -43,7 +43,6 @@ module.exports = function (_, done) {
     process.on('SIGINT', function () {
         connection.close(function () {
             debug('Mongoose default connection disconnected through app termination');
-            process.exit(0);
         });
     });
 

@@ -1,4 +1,5 @@
 /* global define: false */
+/* eslint-env browser */
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         define([], factory);

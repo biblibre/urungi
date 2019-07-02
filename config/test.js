@@ -5,33 +5,38 @@ module.exports = {
     db: 'mongodb://localhost:27017/urungi_test',
     tests: {
         datasources: {
-            // See https://knexjs.org/#Installation-client for configuration
             mysql: {
-                client: 'mysql',
+                name: 'MySQL',
+                type: 'MySQL',
+                status: 1,
                 connection: {
                     host: 'localhost',
-                    user: 'urungi',
+                    userName: 'urungi',
                     password: 'urungi',
                     database: 'urungi_tests',
-                }
+                },
             },
             postgresql: {
-                client: 'pg',
+                name: 'PostgreSQL',
+                type: 'POSTGRE',
+                status: 1,
                 connection: {
                     host: 'localhost',
-                    user: 'postgres',
+                    userName: 'postgres',
                     database: 'urungi_tests',
-                }
+                },
             },
             mssql: {
-                client: 'mssql',
+                name: 'MS SQL Server',
+                type: 'MSSQL',
+                status: 0, // Disable test for MS SQL Server by default
                 connection: {
                     host: 'localhost',
-                    user: 'SA',
+                    userName: 'SA',
                     password: 'Micros0ft',
                     database: 'urungi_tests',
-                }
+                },
             },
-        }
-    }
+        },
+    },
 };

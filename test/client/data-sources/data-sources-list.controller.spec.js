@@ -1,5 +1,12 @@
+require('../../../public/js/core/core.module.js');
+require('../../../public/js/core/api.js');
+require('../../../public/js/core/constants.js');
+require('../../../public/js/core/connection.js');
+require('../../../public/js/data-sources/data-sources.module.js');
+require('../../../public/js/data-sources/data-sources-list.controller.js');
+
 describe('DataSourcesListController', function () {
-    beforeEach(module('app.data-sources'));
+    beforeEach(angular.mock.module('app.data-sources'));
 
     let $controller, $httpBackend;
     let vm;

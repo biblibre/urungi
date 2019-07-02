@@ -1,6 +1,9 @@
+require('../../../public/js/core/core.module.js');
+require('../../../public/js/core/pager.component.js');
+
 describe('appPager', function () {
-    beforeEach(module('app.core'));
-    beforeEach(module('app.templates'));
+    beforeEach(angular.mock.module('app.core'));
+    beforeEach(angular.mock.module('app.templates'));
 
     let $componentController, $compile, $rootScope;
 
@@ -15,7 +18,7 @@ describe('appPager', function () {
         let vm;
 
         beforeEach(function () {
-            onPageChangeSpy = jasmine.createSpy('onPageChange');
+            onPageChangeSpy = jest.fn();
             const bindings = {
                 currentPage: 10,
                 totalPages: 15,
