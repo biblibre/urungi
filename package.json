@@ -100,9 +100,9 @@
     "lint:html": "htmlhint public/partials"
   },
   "config": {
-      "mongodbMemoryServer": {
-          "disablePostinstall": "1"
-      }
+    "mongodbMemoryServer": {
+      "disablePostinstall": "1"
+    }
   },
   "repository": {
     "type": "git",
