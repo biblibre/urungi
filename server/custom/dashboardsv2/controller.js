@@ -136,9 +136,7 @@ exports.getDashboard = function (req, res) {
             stat.relationedID = result.item._id;
             stat.relationedName = result.item.dashboardName;
             stat.action = 'execute';
-            statistics.save(req, stat, function () {
-
-            });
+            statistics.saveStat(req, stat);
 
             for (var r in result.item.items) {
                 if (result.item.items[r].itemType === 'reportBlock') {

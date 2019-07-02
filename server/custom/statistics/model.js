@@ -13,7 +13,7 @@ var statisticsSchema = new mongoose.Schema({
     createdBy: { type: String }
 }, { collection: 'wst_Statistics' });
 
-statisticsSchema.statics.save = function (req, data, done) {
+statisticsSchema.statics.saveStat = function (req, data) {
     var companyID = req.isAuthenticated() ? req.user.companyID : null;
 
     var statistic = {
@@ -28,11 +28,7 @@ statisticsSchema.statics.save = function (req, data, done) {
         createdBy: (req.isAuthenticated()) ? req.user._id : null
     };
 
-    this.create(statistic, function (err, statistic) {
-        if (err) throw err;
-
-        if (typeof done !== 'undefined') done({ result: 1, msg: 'Statistic created', statistic: statistic.toObject() });
-    });
+    return this.create(statistic);
 };
 
 var statistics = connection.model('statistics', statisticsSchema);

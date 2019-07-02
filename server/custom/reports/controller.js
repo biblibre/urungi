@@ -105,7 +105,7 @@ exports.GetReport = function (req, res) {
             } else {
                 stat.action = 'execute';
             }
-            statistics.save(req, stat);
+            statistics.saveStat(req, stat);
         }
     });
 };
