@@ -62,27 +62,36 @@ Db.prototype.getCollections = async function () {
         query = (knex) =>
             knex.select('table_schema', knex.ref('table_name').as('name'))
                 .from('information_schema.tables').as('tables_info')
-                .where('table_schema', '=', this.connection.database);
+                .where('table_schema', '=', this.connection.database)
+                .orderBy('name');
         break;
     case 'POSTGRE':
         query = (knex) =>
             knex.select('table_catalog', knex.ref('table_name').as('name'))
                 .from('information_schema.tables').as('tables_info')
                 .where('table_catalog', '=', this.connection.database)
-                .andWhere('table_schema', '=', 'public');
+                .andWhere('table_schema', '=', 'public')
+                .orderBy('name');
         break;
     case 'ORACLE':
         query = (knex) =>
             knex.select({
                 'table_schema': knex.raw('user'),
                 'name': 'TABLE_NAME'
-            }).from('USER_TABLES');
+            }).from('USER_TABLES').unionAll(function () {
+                this.select({
+                    'table_schema': knex.raw('user'),
+                    'name': 'VIEW_NAME'
+                }).from('USER_VIEWS');
+            }).orderBy('name');
+
         break;
     case 'MSSQL':
         query = (knex) =>
             knex.select('table_schema', knex.ref('TABLE_NAME').as('name'))
                 .from('INFORMATION_SCHEMA.TABLES')
-                .where('TABLE_TYPE', '=', 'BASE TABLE');
+                .where('TABLE_TYPE', '=', 'BASE TABLE')
+                .orderBy('name');
         break;
     }
 
