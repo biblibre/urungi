@@ -1,3 +1,4 @@
+const debug = require('debug')('urungi:sql');
 var knex = require('knex');
 const SqlQueryBuilder = require('./sqlQueryBuilder');
 
@@ -145,7 +146,10 @@ Db.prototype.runQuery = async function (query) {
     try {
         const sqlQueryBuilder = new SqlQueryBuilder(this.knex);
         const q = sqlQueryBuilder.build(query);
-        result = await q.on('query', (data) => { runData = data; });
+        result = await q.on('query', (data) => {
+            debug('Running query: %o', { sql: data.sql, bindings: data.bindings });
+            runData = data;
+        });
     } catch (err) {
         return {
             result: 0,
