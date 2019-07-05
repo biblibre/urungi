@@ -76,15 +76,6 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
         $scope.getRoles(page, '', ['name', 'description']);
     };
 
-    $scope.clickedExecutePagesForTheNode = function (node) {
-        setGrant(node);
-        for (var i in node.nodes) {
-            node.nodes[i].executePages = node.executePages;
-            setGrant(node.nodes[i]);
-            if (node.nodes[i].nodes.length > 0) { $scope.clickedExecutePagesForTheNode(node.nodes[i]); }
-        }
-    };
-
     $scope.clickedExecuteReportsForTheNode = function (node) {
         setGrant(node);
         for (var i in node.nodes) {
@@ -122,7 +113,6 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
         for (var i in grants) {
             if (grants[i].folderID === node.id) {
                 found = true;
-                grants[i].executePages = node.executePages;
                 grants[i].executeReports = node.executeReports;
                 grants[i].executeDashboards = node.executeDashboards;
                 grants[i].shareReports = node.shareReports;
@@ -132,7 +122,6 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
         if (!found) {
             grants.push({
                 folderID: node.id,
-                executePages: node.executePages,
                 executeReports: node.executeReports,
                 executeDashboards: node.executeDashboards,
                 shareReports: node.shareReports
@@ -147,7 +136,6 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
                 if (node.nodes.length > 0) { $scope.clearNodes(node.nodes); }
             }
 
-            node.executePages = undefined;
             node.executeReports = undefined;
             node.executeDashboards = undefined;
             node.shareReports = undefined;
@@ -165,7 +153,6 @@ angular.module('app').controller('rolesCtrl', function ($scope, connection, $rou
 
             for (var i in grants) {
                 if (node.id === grants[i].folderID) {
-                    node.executePages = grants[i].executePages;
                     node.executeReports = grants[i].executeReports;
                     node.executeDashboards = grants[i].executeDashboards;
                     node.shareReports = grants[i].shareReports;

@@ -252,7 +252,6 @@ describe('Users API', function () {
 
             expect(res.body).toHaveProperty('reports', reportsCount);
             expect(res.body).toHaveProperty('dashBoards', dashboardsCount);
-            expect(res.body).toHaveProperty('pages');
             expect(res.body).toHaveProperty('dataSources', datasourcesCount);
             expect(res.body).toHaveProperty('layers', layersCount);
             expect(res.body).toHaveProperty('users', usersCount);
@@ -395,7 +394,6 @@ describe('Users API', function () {
             expect(res.body.items).toHaveProperty('rolesData');
             expect(res.body.items).toHaveProperty('reportsCreate');
             expect(res.body.items).toHaveProperty('dashboardsCreate');
-            expect(res.body.items).toHaveProperty('pagesCreate');
             expect(res.body.items).toHaveProperty('exploreData');
             expect(res.body.items).toHaveProperty('viewSQL');
             expect(res.body.items).toHaveProperty('isWSTADMIN', false);
@@ -442,7 +440,6 @@ describe('Users API', function () {
             expect(res.body.items).toHaveProperty('rolesData');
             expect(res.body.items).toHaveProperty('reportsCreate', true);
             expect(res.body.items).toHaveProperty('dashboardsCreate', true);
-            expect(res.body.items).toHaveProperty('pagesCreate', true);
             expect(res.body.items).toHaveProperty('exploreData', true);
             expect(res.body.items).toHaveProperty('viewSQL', true);
             expect(res.body.items).toHaveProperty('isWSTADMIN', true);

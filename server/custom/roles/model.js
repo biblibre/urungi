@@ -7,7 +7,6 @@ var RolesSchema = new mongoose.Schema({
     permissions: [],
     grants: [],
     reportsCreate: { type: Boolean },
-    pagesCreate: { type: Boolean },
     reportsShare: { type: Boolean },
     dashboardsCreate: { type: Boolean },
     exploreData: { type: Boolean },

@@ -157,39 +157,32 @@ exports.getCounts = function (req, res) {
                 if (err) { console.error(err); }
 
                 theCounts.dashBoards = dashCount;
-                // get all pages
-                var Pages = connection.model('Pages');
-                Pages.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, pageCount) {
+                // get all datasources
+                var DataSources = connection.model('DataSources');
+                DataSources.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, dtsCount) {
                     if (err) { console.error(err); }
 
-                    theCounts.pages = pageCount;
-                    // get all datasources
-                    var DataSources = connection.model('DataSources');
-                    DataSources.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, dtsCount) {
+                    theCounts.dataSources = dtsCount;
+                    // get all layers
+                    var Layers = connection.model('Layers');
+                    Layers.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, layersCount) {
                         if (err) { console.error(err); }
 
-                        theCounts.dataSources = dtsCount;
-                        // get all layers
-                        var Layers = connection.model('Layers');
-                        Layers.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, layersCount) {
+                        theCounts.layers = layersCount;
+                        // get all users
+                        var Users = connection.model('Users');
+                        Users.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, usersCount) {
                             if (err) { console.error(err); }
 
-                            theCounts.layers = layersCount;
-                            // get all users
-                            var Users = connection.model('Users');
-                            Users.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, usersCount) {
+                            theCounts.users = usersCount;
+                            // get all roles
+                            var Roles = connection.model('Roles');
+                            Roles.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, rolesCount) {
                                 if (err) { console.error(err); }
 
-                                theCounts.users = usersCount;
-                                // get all roles
-                                var Roles = connection.model('Roles');
-                                Roles.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, rolesCount) {
-                                    if (err) { console.error(err); }
-
-                                    theCounts.roles = rolesCount;
-                                    // send the response
-                                    res.status(200).json(theCounts);
-                                });
+                                theCounts.roles = rolesCount;
+                                // send the response
+                                res.status(200).json(theCounts);
                             });
                         });
                     });
@@ -208,14 +201,7 @@ exports.getCounts = function (req, res) {
                 if (err) { console.error(err); }
 
                 theCounts.dashBoards = dashCount;
-                // get all pages
-                var Pages = connection.model('Pages');
-                Pages.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, pageCount) {
-                    if (err) { console.error(err); }
-
-                    theCounts.pages = pageCount;
-                    res.status(200).json(theCounts);
-                });
+                res.status(200).json(theCounts);
             });
         });
     }
@@ -280,18 +266,6 @@ exports.getUserDashboards = function (req, res) {
     });
 };
 
-exports.getUserPages = function (req, res) {
-    var page = (req.query.page) ? req.query.page : 1;
-    var userID = req.query.userID;
-    var companyID = req.user.companyID;
-    var Pages = connection.model('Pages');
-    Pages.find({ companyID: companyID, owner: userID, nd_trash_deleted: false }, { pageName: 1, parentFolder: 1, isShared: 1, dashboardDescription: 1, status: 1 }, function (err, pages) {
-        if (err) { console.error(err); }
-
-        res.status(200).json({ result: 1, page: page, pages: 1, items: pages });
-    });
-};
-
 exports.getUserData = function (req, res) {
     var Companies = connection.model('Companies');
     Companies.findOne({ companyID: req.user.companyID, nd_trash_deleted: false }, {}, function (err, company) {
@@ -311,7 +285,6 @@ exports.getUserData = function (req, res) {
 
         var createReports = false;
         var createDashboards = false;
-        var createPages = false;
         var isWSTADMIN = false;
         var exploreData = false;
         var viewSQL = false;
@@ -325,7 +298,6 @@ exports.getUserData = function (req, res) {
                     isWSTADMIN = true;
                     createReports = true;
                     createDashboards = true;
-                    createPages = true;
                     exploreData = true;
                     viewSQL = true;
                     canShare = true;
@@ -363,7 +335,6 @@ exports.getUserData = function (req, res) {
                 for (var i in roles) {
                     if (roles[i].reportsCreate) { createReports = true; }
                     if (roles[i].dashboardsCreate) { createDashboards = true; }
-                    if (roles[i].pagesCreate) { createPages = true; }
                     if (roles[i].exploreData) { exploreData = true; }
                     if (roles[i].viewSQL) { viewSQL = true; }
                     if (roles[i].reportsShare) { shareReports = true; }
@@ -372,7 +343,6 @@ exports.getUserData = function (req, res) {
 
                 req.session.reportsCreate = createReports;
                 req.session.dashboardsCreate = createDashboards;
-                req.session.pagesCreate = createPages;
                 req.session.exploreData = exploreData;
                 req.session.viewSQL = viewSQL;
                 req.session.isWSTADMIN = isWSTADMIN;
@@ -389,11 +359,11 @@ exports.getUserData = function (req, res) {
                 theUserData.shareReports = shareReports;
                 theUserData.shareDashboards = shareDashboards;
 
-                res.status(200).json({ result: 1, page: 1, pages: 1, items: { user: theUserData, companyData: company, rolesData: roles, reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL } });
+                res.status(200).json({ result: 1, page: 1, pages: 1, items: { user: theUserData, companyData: company, rolesData: roles, reportsCreate: createReports, dashboardsCreate: createDashboards, exploreData: exploreData, viewSQL: viewSQL } });
             });
         } else {
             // var user = (req.user) ? req.user : false;
-            res.status(200).json({ result: 1, page: 1, pages: 1, items: { user: theUserData, companyData: company, rolesData: [], reportsCreate: createReports, dashboardsCreate: createDashboards, pagesCreate: createPages, exploreData: exploreData, viewSQL: viewSQL, isWSTADMIN: isWSTADMIN } });
+            res.status(200).json({ result: 1, page: 1, pages: 1, items: { user: theUserData, companyData: company, rolesData: [], reportsCreate: createReports, dashboardsCreate: createDashboards, exploreData: exploreData, viewSQL: viewSQL, isWSTADMIN: isWSTADMIN } });
         }
     });
 };
@@ -438,9 +408,6 @@ exports.getUserObjects = async function (req, res) {
 
     const dashboards = await getNoFolderDashboards();
     dashboards.forEach(dashboard => folders.push(dashboard));
-
-    const pages = await getNoFolderPages();
-    pages.forEach(page => folders.push(page));
 
     const body = {
         result: 1,
@@ -493,9 +460,6 @@ async function setGrantsToFolder_v2 (folders, grant) {
             const dashboards = await getDashboardsForFolder(grant.folderID, grant);
             dashboards.forEach(dashboard => folder.nodes.push(dashboard));
 
-            const pages = await getPagesForFolder(grant.folderID, grant);
-            pages.forEach(page => folder.nodes.push(page));
-
             return share;
         } else {
             if (folder.nodes && folder.nodes.length > 0) {
@@ -519,7 +483,6 @@ async function getFolderStructureForWSTADMIN (folders, index) {
             folderID: folder.id,
             executeDashboards: true,
             executeReports: true,
-            executePages: true,
             shareReports: true
         };
 
@@ -528,9 +491,6 @@ async function getFolderStructureForWSTADMIN (folders, index) {
 
         const dashboards = await getDashboardsForFolder(folder.id, folder.grants);
         dashboards.forEach(dashboard => folder.nodes.push(dashboard));
-
-        const pages = await getPagesForFolder(folder.id, folder.grants);
-        pages.forEach(page => folder.nodes.push(page));
 
         await getFolderStructureForWSTADMIN(folders, index + 1);
     }
@@ -591,43 +551,12 @@ async function getDashboardsForFolder (idfolder, grant) {
     return nodes;
 }
 
-async function getPagesForFolder (idfolder, grant) {
-    var nodes = [];
-
-    if (!grant || grant.executePages) {
-        const Pages = connection.model('Pages');
-
-        const query = {
-            'nd_trash_deleted': false,
-            'companyID': 'COMPID',
-            'parentFolder': idfolder,
-            'isShared': true
-        };
-        const projection = { pageName: 1, pageDescription: 1 };
-
-        const pages = await Pages.find(query).select(projection).exec();
-        nodes = pages.map(page => ({
-            id: page._id,
-            title: page.pageName,
-            nodeType: 'page',
-            description: page.pageDescription,
-            nodes: []
-        }));
-    }
-
-    return nodes;
-}
-
 async function getNoFolderReports () {
     return getReportsForFolder('root');
 }
 
 async function getNoFolderDashboards () {
     return getDashboardsForFolder('root');
-}
-
-async function getNoFolderPages () {
-    return getPagesForFolder('root');
 }
 
 exports.getUserLastExecutions = function (req, res) {

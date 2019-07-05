@@ -10,7 +10,6 @@
 
         <div class="pull-right" >
                                    <!--ng-checked="checkIfChecked(node,'reports')" -->
-            <input type="checkbox" ng-model="node.executePages" class="pull-right" style="width:60px" ng-click="clickedExecutePagesForTheNode(node)">
             <input type="checkbox" ng-model="node.executeReports" class="pull-right" style="width:60px" ng-click="clickedExecuteReportsForTheNode(node)">
             <input type="checkbox" ng-model="node.executeDashboards"  class="pull-right" style="width:60px" ng-click="clickedExecuteDashboardsForTheNode(node)">
             <input type="checkbox" ng-model="node.shareReports"  class="pull-right" style="width:60px" ng-click="clickedShareReportsForTheNode(node)">
@@ -76,10 +75,6 @@
                                             <td style="text-align: center"><input type="checkbox" ng-model="_Role.dashboardsCreate"></td>
                                         </tr>
                                         <tr>
-                                            <th translate>Create pages</th>
-                                            <td style="text-align: center"><input type="checkbox" ng-model="_Role.pagesCreate"></td>
-                                        </tr>
-                                        <tr>
                                             <th translate>Explore data</th>
                                             <td style="text-align: center"><input type="checkbox" ng-model="_Role.exploreData"></td>
                                         </tr>
@@ -96,7 +91,6 @@
             </uib-tab>
             <uib-tab classes="pull-right" heading="{{ 'Shared space permissions' | translate }}">
                 <div class="row tree-node-content">
-                    <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute pages</span>
                     <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute reports</span>
                     <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute dashboards</span>
                     <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Share</span>

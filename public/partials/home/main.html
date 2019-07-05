@@ -94,10 +94,6 @@
         <i class="fa fa-dashboard"></i><a data-nodrag  href="/#/dashboards/view/{{node.id}}">{{node.title}}</a>
     </div>
 
-    <div data-nodrag class="tree-node tree-node-item" ng-if="node.nodeType == 'page'">
-        <i class="fa fa-newspaper-o"></i><a data-nodrag  href="/#/pages/{{node.id}}">{{node.title}}</a>
-    </div>
-
     <ol ng-if="node.nodes" data-nodrag ui-tree-nodes="" data-nodrop-enabled ng-model="node.nodes" ng-class="{hidden: collapsed}">
         <li data-nodrag ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
         </li>

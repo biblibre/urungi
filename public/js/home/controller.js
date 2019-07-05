@@ -31,7 +31,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'con
                         intro: '<h4>' +
                             gettextCatalog.getString('The shared area') +
                             '</h4><p>' +
-                            gettextCatalog.getString('Here all the shared shared elements (reports, dashboards, pages) that you can execute') +
+                            gettextCatalog.getString('Here all the shared shared elements (reports, dashboards) that you can execute') +
                             '</p><p>' +
                             gettextCatalog.getString('Depending on your permissions you will be able to access different folders and/or elements') +
                             '</p>',

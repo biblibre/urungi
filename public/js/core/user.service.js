@@ -24,7 +24,6 @@
                     user.rolesData = data.items.rolesData;
                     user.reportsCreate = data.items.reportsCreate;
                     user.dashboardsCreate = data.items.dashboardsCreate;
-                    user.pagesCreate = data.items.pagesCreate;
                     user.exploreData = data.items.exploreData;
                     user.isWSTADMIN = data.items.isWSTADMIN;
                     user.viewSQL = data.items.viewSQL;

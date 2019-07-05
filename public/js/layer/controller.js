@@ -721,9 +721,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     }
 
     $scope.isInAJoin = function (element) {
-        // if(element.elementName === 'title' || element.elementName === 'pages'){
-        //     return true;
-        // }
         if (!$scope._Layer.params.joins) {
             return false;
         }
