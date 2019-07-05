@@ -7,29 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Important update information
+
+- CSRF protection
+
+  This version adds protection against
+  [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery).
+  It is strongly recommended to upgrade.
+
+- Session's secret is now configurable
+
+  Previously hardcoded, the secret used to sign the session ID cookie is now
+  configurable. Generate a random string and set it to key `session.secret` in
+  your local-{env}.js config file
+
+- Configuration object for `mailer` key has changed
+
+  Check config/default.js and update your local-{env}.js config file
+  accordingly
+
 ### Added
 
 - Ability to make reports and dashboards public
+- Added ability to change maximum value for gauge
 - New icon set to be used in dashboards
 - Legend in custom layer element modal to know which columns correspond to the
   cryptic IDs
+- Added docker and docker-compose files
+- SQL views can be added to layers (Oracle only)
 
 ### Changed
 
-- Session's secret is now configurable
 - Move all "menu-list" code into several independent AngularJS components
 - Use $uibModal and its component option to make it easier to reuse modals
 - Cache all template files
 - Date input for filters can be changed manually (without datetimepicker)
 - Use uib-tabset everywhere we have tabs for consistency
-- Update angular-ui-bootstrap to 2.5.6
-- Update angularjs-bootstrap-datetimepicker to 1.1.4
-- Update angular, angular-route and angular-sanitize to 1.7.8
 - Browser's sessionStorage is not used anymore for user data
 - Relocate 'datasourceID' property in layers and define explicit schema for
   layers, reports and dashboards
-- Configuration object for 'mailer' key has changed, check config/default.js
+- Configuration object for `mailer` key has changed, check config/default.js
 - Replace mocha and karma by jest for running tests
+- Tables are now ordered alphabetically in the layer modification page
 
 ### Fixed
 
@@ -38,6 +57,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove import error messages that were false positives
 - A lot of minor issues raised by LGTM
 - Wrong use of GROUP BY when the query does not use aggregation
+- Fixed links to report/dashboard on home page
+
+### Security
+
+- Session's secret is now configurable
+- Added CSRF protection
+
+### Dependencies
+
+- Added angular-intro.js
+- Added clipboard
+- Added codecov (dev)
+- Added csurf
+- Added eslint-plugin-jest (dev)
+- Added gulp-angular-templatecache (dev)
+- Added intro.js
+- Added jest (dev)
+- Added mongodb-memory-server (dev)
+- Added ngclipboard
+- Added oracledb
+- Added set-cookie-parser (dev)
+- Added supertest (dev)
+- Updated angular, angular-route and angular-sanitize to 1.7.8
+- Updated angular-mocks to 1.7.8 (dev)
+- Updated angular-ui-bootstrap to 2.5.6 (major update)
+- Updated angular-ui-sortable to 0.19.0
+- Updated angular-vs-repeat to 2.0.13
+- Updated angular-xeditable to 1.10.0
+- Updated angularjs-bootstrap-datetimepicker to 1.1.4 (major update)
+- Updated body-parser to 1.19.0
+- Updated bootstrap to 3.4.1
+- Updated c3 to 0.7.1
+- Updated config to 3.1.0 (major update)
+- Updated connect-mongo to 3.0.0 (major update)
+- Updated cookie-parser to 1.4.4
+- Updated debug to 4.1.1 (major update)
+- Updated del to 4.1.1 (dev, major update)
+- Updated ejs to 2.6.2
+- Updated email-templates to 6.0.0 (major update)
+- Updated eslint-plugin-import to 2.18.0 (dev)
+- Updated eslint-plugin-node to 9.1.0 (dev, major update)
+- Updated eslint-plugin-promise to 4.2.1 (dev)
+- Updated express to 4.17.1
+- Updated express-session to 1.16.2
+- Updated gulp to 4.0.2 (dev)
+- Updated jdbc to 0.6.4
+- Updated jquery to 3.4.1
+- Updated jquery-validation to 1.19.1
+- Updated jsplumb to 2.10.1 (major update)
+- Updated knex to 0.18.0
+- Updated merge-stream to 2.0.0 (dev, major update)
+- Updated migrate-mongo to 6.0.0 (major update)
+- Updated mongoose to 5.6.2 (major update)
+- Updated mssql to 5.1.0 (major update)
+- Updated multer to 1.4.1
+- Updated mysql to 2.17.1
+- Updated nodemailer to 6.2.1 (major update)
+- Updated noty to 3.2.0-beta (major update)
+- Updated numeral to 2.0.6 (major update)
+- Updated passport to 0.4.0
+- Updated passport-google-oauth20 to 2.0.0 (major update)
+- Updated password-generator to 2.2.0
+- Updated pg to 7.11.0 (major update)
+- Updated stylelint to 10.1.0 (dev)
+- Removed angular-loading-overlay
+- Removed angular-uuid2
+- Removed async
+- Removed bootstrap-datepicker
+- Removed chai (dev)
+- Removed chai-http (dev)
+- Removed express-ejs-layouts
+- Removed jasmine-core (dev)
+- Removed jsdom (dev)
+- Removed karma (dev)
+- Removed karma-jasmine (dev)
+- Removed karma-jsdom-launcher (dev)
+- Removed mocha (dev)
 
 ## [1.0.1] - 2019-05-03
 
