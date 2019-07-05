@@ -37,6 +37,17 @@ module.exports = {
                     database: 'urungi_tests',
                 },
             },
+            oracle: {
+                name: 'Oracle',
+                type: 'ORACLE',
+                status: 0, // Disable test for Oracle by default
+                connection: {
+                    host: 'localhost',
+                    userName: 'urungi',
+                    password: 'urungi',
+                    database: 'XEPDB1',
+                },
+            },
         },
     },
 };
