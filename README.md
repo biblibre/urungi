@@ -63,12 +63,12 @@ More info at https://github.com/lorenwest/node-config/wiki/Configuration-Files
 
 ## Oracle connections
 
-If you are going to use oracle connections, first you need to install in your
-server the Oracle instant client and then run:
+If you are going to use oracle connections, Oracle Client libraries must be
+installed. To get libraries, install an Instant Client Basic or Basic Light
+package from
+https://www.oracle.com/database/technologies/instant-client/downloads.html
 
-    npm install oracledb
-
-More info at https://github.com/oracle/node-oracledb
+Installation instructions: https://oracle.github.io/node-oracledb/INSTALL.html
 
 
 ## Starting up the Urungi server
