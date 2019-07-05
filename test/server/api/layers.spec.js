@@ -154,7 +154,7 @@ describe('Layers API', function () {
                 .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
 
             var layer = res.body.item;
-            res = await request(app).post('/api/dashboardsv2/create')
+            res = await request(app).post('/api/dashboards/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', dashboardName: 'Dashboard', nd_trash_deleted: false, reports: [{ selectedLayerID: layer._id, reportName: 'foo' }] });
 

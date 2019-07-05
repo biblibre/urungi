@@ -229,7 +229,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.pushToDash = function () {
         var params = {};
 
-        return connection.get('/api/dashboardsv2/find-all', params).then(function (data) {
+        return connection.get('/api/dashboards/find-all', params).then(function (data) {
             $scope.dashboards = data;
             $('#dashListModal').modal('show');
         });

@@ -224,14 +224,6 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'mom
         });
     };
 
-    $scope.getDashboards = function (params) {
-        params = params || {};
-
-        connection.get('/api/dashboards/find-all', params).then(function (data) {
-            $scope.dashboards = data;
-        });
-    };
-
     $scope.getCounts = function () {
     };
 

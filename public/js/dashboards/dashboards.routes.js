@@ -23,5 +23,20 @@
             controller: 'DashboardsListController',
             controllerAs: 'vm',
         });
+
+        $routeProvider.when('/dashboards/new/:newDashboard/', {
+            templateUrl: 'partials/dashboards/edit.html',
+            controller: 'DashboardEditController',
+        });
+
+        $routeProvider.when('/dashboards/edit/:dashboardID/', {
+            templateUrl: 'partials/dashboards/edit.html',
+            controller: 'DashboardEditController',
+        });
+
+        $routeProvider.when('/dashboards/push/:dashboardID/', {
+            templateUrl: 'partials/dashboards/edit.html',
+            controller: 'DashboardEditController',
+        });
     }
 })();

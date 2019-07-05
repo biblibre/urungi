@@ -336,8 +336,8 @@ describe('api', () => {
     });
 
     describe('api.getDashboards', () => {
-        it('should call /api/dashboardsv2/find-all', () => {
-            const url = '/api/dashboardsv2/find-all' +
+        it('should call /api/dashboards/find-all', () => {
+            const url = '/api/dashboards/find-all' +
                 '?fields=dashboardName&fields=owner' +
                 '&filters=' + encodeURI('{"owner":"foo"}') +
                 '&page=2&sort=owner&sortType=1';
@@ -363,7 +363,7 @@ describe('api', () => {
         });
 
         it('should throw if result is 0', () => {
-            const url = '/api/dashboardsv2/find-all';
+            const url = '/api/dashboards/find-all';
             const response = {
                 result: 0,
                 msg: 'Caught an error',
@@ -377,7 +377,7 @@ describe('api', () => {
         });
 
         it('should throw if request failed', () => {
-            const url = '/api/dashboardsv2/find-all';
+            const url = '/api/dashboards/find-all';
 
             $httpBackend.expect('GET', url).respond(403, 'Forbidden');
 
@@ -388,8 +388,8 @@ describe('api', () => {
     });
 
     describe('api.getDashboard', () => {
-        it('should call /api/dashboardsv2/find-one', () => {
-            const url = '/api/dashboardsv2/find-one?id=42';
+        it('should call /api/dashboards/find-one', () => {
+            const url = '/api/dashboards/find-one?id=42';
             const dashboard = {
                 dashboardName: 'foo',
             };
@@ -408,7 +408,7 @@ describe('api', () => {
         });
 
         it('should throw if result is 0', () => {
-            const url = '/api/dashboardsv2/find-one';
+            const url = '/api/dashboards/find-one';
             const response = {
                 result: 0,
                 msg: 'Caught an error',
@@ -422,7 +422,7 @@ describe('api', () => {
         });
 
         it('should throw if request failed', () => {
-            const url = '/api/dashboardsv2/find-one';
+            const url = '/api/dashboards/find-one';
 
             $httpBackend.expect('GET', url).respond(403, 'Forbidden');
 
@@ -433,8 +433,8 @@ describe('api', () => {
     });
 
     describe('api.createDashboard', () => {
-        it('should call /api/dashboardsv2/create', () => {
-            const url = '/api/dashboardsv2/create';
+        it('should call /api/dashboards/create', () => {
+            const url = '/api/dashboards/create';
             const dashboard = {
                 dashboardName: 'foo',
             };
@@ -453,7 +453,7 @@ describe('api', () => {
         });
 
         it('should throw if result is 0', () => {
-            const url = '/api/dashboardsv2/create';
+            const url = '/api/dashboards/create';
             const response = {
                 result: 0,
                 msg: 'Caught an error',
@@ -467,7 +467,7 @@ describe('api', () => {
         });
 
         it('should throw if request failed', () => {
-            const url = '/api/dashboardsv2/create';
+            const url = '/api/dashboards/create';
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
@@ -478,8 +478,8 @@ describe('api', () => {
     });
 
     describe('api.updateDashboard', () => {
-        it('should call /api/dashboardsv2/update/:id', () => {
-            const url = '/api/dashboardsv2/update/42';
+        it('should call /api/dashboards/update/:id', () => {
+            const url = '/api/dashboards/update/42';
             const dashboard = {
                 _id: 42,
                 dashboardName: 'foo',
@@ -499,7 +499,7 @@ describe('api', () => {
         });
 
         it('should throw if result is 0', () => {
-            const url = '/api/dashboardsv2/update/0';
+            const url = '/api/dashboards/update/0';
             const response = {
                 result: 0,
                 msg: 'Caught an error',
@@ -513,7 +513,7 @@ describe('api', () => {
         });
 
         it('should throw if request failed', () => {
-            const url = '/api/dashboardsv2/update/0';
+            const url = '/api/dashboards/update/0';
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
