@@ -27,7 +27,7 @@
                         window.location.href = '/#/home';
                     })
                     .catch(function (data, status, headers, config) {
-                        $scope.errorLoginMessage = data;
+                        $scope.errorLoginMessage = data.data;
                         $scope.loginError = true;
                     });
             }

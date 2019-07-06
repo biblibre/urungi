@@ -174,15 +174,14 @@ usersSchema.statics.setStatus = function (req, done) {
 usersSchema.statics.isValidUserPassword = function (username, password, done) {
     this.findOne({ $or: [ { 'userName': username }, { 'email': username } ], status: 'active' }, function (err, user) {
         if (err) return done(err);
-        if (!user) return done(null, false, { message: 'User' + ' ' + username + ' ' + 'does not exists or is inactive' });
-        if (user.status === 0) return done(null, false, { message: 'User not verified ' + username });
+        if (!user) return done(null, false, { message: 'Username or password incorrect' });
 
         hash(password, user.salt, function (err, hash) {
             if (err) return done(err);
             if (hash.toString() === user.hash || password === user.hash + user.salt) {
                 return done(null, user);
             } else {
-                done(null, false, { message: 'Password do not match' });
+                done(null, false, { message: 'Username or password incorrect' });
             }
         });
     });
