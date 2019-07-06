@@ -32,12 +32,3 @@ function restrictRole (roles) {
     };
 }
 global.restrictRole = restrictRole;
-
-function saveToLog (req, text, type, code, otherInfo, associatedID) {
-    var Logs = connection.model('Logs');
-
-    Logs.saveToLog(req, { text: text, type: type, code: code, associatedID: associatedID }, otherInfo, function () {
-
-    });
-};
-global.saveToLog = saveToLog;

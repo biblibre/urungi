@@ -76,15 +76,24 @@ require('./config/mailer');
 
 require('./config/routes')(app, passport);
 
-var fs = require('fs');
-
 app.use('/uploads', restrict, express.static(path.join(__dirname, 'uploads')));
 
 // Custom routes
-var routes_dir = path.join(__dirname, 'custom');
-fs.readdirSync(routes_dir).forEach(function (file) {
-    if (file[0] === '.') return;
-    require(routes_dir + '/' + file + '/routes.js')(app);
-});
+const routesModules = [
+    './custom/companies/routes',
+    './custom/dashboards/routes',
+    './custom/dashboardsv2/routes',
+    './custom/data-sources/routes',
+    './custom/files/routes',
+    './custom/layers/routes',
+    './custom/reports/routes',
+    './custom/roles/routes',
+    './custom/statistics/routes',
+    './custom/users/routes',
+];
+
+for (const routesModule of routesModules) {
+    require(routesModule)(app);
+}
 
 module.exports = app;

@@ -1,4 +1,5 @@
 const debug = require('debug')('urungi:server');
+const Logs = connection.model('Logs');
 
 module.exports = function (app, passport) {
     var hash = require('../util/hash');
@@ -70,7 +71,9 @@ function authenticate (passport, Users, req, res, next) {
         if (err) { return next(err); }
 
         if (!user) {
-            if (global.logFailLogin) { saveToLog(req, 'User fail login: ' + info.message, '', 102); }
+            if (global.logFailLogin) {
+                Logs.saveToLog(req, { text: 'User fail login: ' + info.message, code: 102 });
+            }
             res.status(401).send(info.message);
         } else {
             var loginData = {
@@ -91,7 +94,7 @@ function authenticate (passport, Users, req, res, next) {
                 if (err) throw err;
 
                 if (!company) {
-                    saveToLog(req, 'User fail login: ' + user.userName + ' (' + user.email + ') user company not found!', '', 102);
+                    Logs.saveToLog(req, { text: 'User fail login: ' + user.userName + ' (' + user.email + ') user company not found!', code: 102 });
                     res.status(401).send("User's company not found!");
                 } else {
                     user.companyData = company;
@@ -107,7 +110,7 @@ function authenticate (passport, Users, req, res, next) {
                             res.json({ user: user.toObject() });
 
                             if (global.logSuccessLogin) {
-                                saveToLog(req, 'User login: ' + user.userName + ' (' + user.email + ')', '', 102);
+                                Logs.saveToLog(req, { text: 'User login: ' + user.userName + ' (' + user.email + ')', code: 102 });
                             }
                         });
                     });

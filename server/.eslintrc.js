@@ -15,7 +15,6 @@ module.exports = {
         appRoot: false,
         restrict: false,
         restrictRole: false,
-        saveToLog: false,
         sendEmailTemplate: false,
     },
 };
