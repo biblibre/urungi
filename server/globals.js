@@ -1,6 +1,5 @@
 /* GLOBAL FUNCTIONS */
 const path = require('path');
-const debug = require('debug')('urungi:server');
 
 var appRoot = path.join(__dirname, '..');
 global.appRoot = appRoot;
@@ -14,21 +13,3 @@ function restrict (req, res, next) {
     }
 }
 global.restrict = restrict;
-
-function restrictRole (roles) {
-    return function (req, res, next) {
-        if (req.isAuthenticated()) {
-            for (var i in roles) {
-                if (req.user.roles.indexOf(roles[i]) > -1) {
-                    next();
-                    return;
-                }
-            }
-        }
-        req.session.error = 'Access denied!';
-        // TODO: Log annotation security issue
-        debug('Access denied!');
-        res.status(401).send({ result: 0, msg: 'You don´t have access to this function' });
-    };
-}
-global.restrictRole = restrictRole;

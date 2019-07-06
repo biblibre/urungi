@@ -21,7 +21,7 @@
 
         function toggleActive () {
             userService.getCurrentUser().then(user => {
-                if (user.isWSTADMIN) {
+                if (user.isAdmin()) {
                     const newStatus = vm.layer.status === 'active' ? 'Not active' : 'active';
 
                     api.changeLayerStatus(vm.layer._id, newStatus).then(() => {

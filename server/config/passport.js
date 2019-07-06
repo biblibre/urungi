@@ -7,22 +7,11 @@ var Users = connection.model('Users'); // require('../../models/users');
 
 module.exports = function (passport) {
     passport.serializeUser(function (user, done) {
-        if (user.companyID) {
-            var Companies = connection.model('Companies');
-
-            Companies.findOne({ companyCode: user.companyID }, function (err, company) {
-                if (company) {
-                    user['companyData'] = company;
-                }
-                done(err, user);
-            });
-        } else {
-            done(null, user);
-        }
+        done(null, user.id);
     });
 
-    passport.deserializeUser(function (user, done) {
-        done(false, user);
+    passport.deserializeUser(function (id, done) {
+        Users.findById(id, done);
     });
 
     passport.use(new LocalStrategy({

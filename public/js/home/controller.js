@@ -93,7 +93,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'con
                 ]
             };
 
-            if (user.isWSTADMIN) {
+            if (user.isAdmin()) {
                 $scope.IntroOptions.steps.push({
                     element: '#usersMainMenu',
                     intro: '<h4>' +
@@ -158,7 +158,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'con
                         '</a>',
                 });
             } else {
-                // the user is not WSTADMIN
+                // the user is not admin
                 if (user.exploreData) {
                     $scope.IntroOptions.steps.push({
                         intro: '<h4>' +

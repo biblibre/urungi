@@ -66,7 +66,7 @@ describe('Login API', function () {
 
                 expect(res.body).toHaveProperty('user');
                 expect(res.body.user).toHaveProperty('roles');
-                expect(res.body.user.roles).toContain('WSTADMIN');
+                expect(res.body.user.roles).toContain('ADMIN');
             });
         });
     });

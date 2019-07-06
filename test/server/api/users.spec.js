@@ -59,7 +59,7 @@ describe('Users API', function () {
             expect(res.body.items[0]).toHaveProperty('contextHelp');
             expect(res.body.items[0]).toHaveProperty('filters');
             expect(res.body.items[0]).toHaveProperty('roles');
-            expect(res.body.items[0].roles).toContain('WSTADMIN');
+            expect(res.body.items[0].roles).toContain('ADMIN');
         });
     });
     describe('GET /api/admin/users/find-one', function () {
@@ -95,7 +95,7 @@ describe('Users API', function () {
             expect(res.body.item).toHaveProperty('contextHelp');
             expect(res.body.item).toHaveProperty('filters');
             expect(res.body.item).toHaveProperty('roles');
-            expect(res.body.item.roles).toContain('WSTADMIN');
+            expect(res.body.item.roles).toContain('ADMIN');
         });
     });
     describe('POST /api/admin/users/create', function () {
@@ -185,7 +185,6 @@ describe('Users API', function () {
                 .send({ userName: 'new', pwd1: 'urungi' });
 
             var User = await Users.findOne({ userName: 'new' });
-            res = await request(app).get('/api/get-user-data').set(headers);
             res = await request(app).post('/api/admin/users/change-user-status')
                 .set(headers)
                 .send({ userID: User.id, status: 'Not active' })
@@ -396,7 +395,6 @@ describe('Users API', function () {
             expect(res.body.items).toHaveProperty('dashboardsCreate');
             expect(res.body.items).toHaveProperty('exploreData');
             expect(res.body.items).toHaveProperty('viewSQL');
-            expect(res.body.items).toHaveProperty('isWSTADMIN', false);
             await newUser.remove();
         });
     });
@@ -425,7 +423,6 @@ describe('Users API', function () {
             expect(res.body.items.user).toHaveProperty('dashboardsCreate', true);
             expect(res.body.items.user).toHaveProperty('exploreData', true);
             expect(res.body.items.user).toHaveProperty('viewSQL', true);
-            expect(res.body.items.user).toHaveProperty('isWSTADMIN', true);
             expect(res.body.items.user).toHaveProperty('canShare', true);
             expect(res.body.items.user).toHaveProperty('shareReports', true);
             expect(res.body.items.user).toHaveProperty('shareDashboards', true);
@@ -442,7 +439,6 @@ describe('Users API', function () {
             expect(res.body.items).toHaveProperty('dashboardsCreate', true);
             expect(res.body.items).toHaveProperty('exploreData', true);
             expect(res.body.items).toHaveProperty('viewSQL', true);
-            expect(res.body.items).toHaveProperty('isWSTADMIN', true);
         });
     });
     describe('GET /api/get-user-last-executions', function () {

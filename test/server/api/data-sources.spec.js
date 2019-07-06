@@ -91,9 +91,9 @@ describe('Data sources API', function () {
     });
 
     describe('GET /api/data-sources/find-all', function () {
-        it('should return status 401', async function () {
+        it('should return status 403', async function () {
             return request(app).get('/api/data-sources/find-all')
-                .expect(401);
+                .expect(403);
         });
 
         it('should return all data sources', async function () {
@@ -113,9 +113,9 @@ describe('Data sources API', function () {
     });
 
     describe('GET /api/data-sources/find-one', function () {
-        it('should return status 401', async function () {
+        it('should return status 403', async function () {
             return request(app).get('/api/data-sources/find-all')
-                .expect(401);
+                .expect(403);
         });
 
         it('should find no valid item', async function () {

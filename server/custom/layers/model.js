@@ -83,7 +83,7 @@ var LayersSchema = new mongoose.Schema({
 }, { collection: 'wst_Layers', collation: { locale: 'en', strength: 2 } });
 
 LayersSchema.statics.setStatus = function (req, done) {
-    if (req.session.isWSTADMIN) {
+    if (req.user.isAdmin()) {
         var layerID = req.body.layerID;
         var layerStatus = req.body.status;
 

@@ -8,7 +8,7 @@
             <div class="page-header">
                 <span class="h3" translate>User <small>User profile and permissions</small></span>
                 <div class="pull-right">
-                    <button ng-click="vm.editUser()" ng-if="vm.isWSTADMIN" class="btn btn-success" translate>Edit</button>
+                    <button ng-click="vm.editUser()" ng-if="vm.isAdmin" class="btn btn-success" translate>Edit</button>
                 </div>
             </div>
             <div class="row">
@@ -42,10 +42,10 @@
 
                     <ul class="list-unstyled user-info-list">
                         <li ng-repeat="role in vm.user.roles" style="color: #000;">
-                            <i ng-if="vm.isWSTADMIN" class="fa fa-trash-o" style="color: #f00;" ng-click="vm.deleteRole(role)"></i> {{ vm.getRoleName(role) }}
+                            <i ng-if="vm.isAdmin" class="fa fa-trash-o" style="color: #f00;" ng-click="vm.deleteRole(role)"></i> {{ vm.getRoleName(role) }}
                         </li>
                     </ul>
-                    <form ng-if="vm.isWSTADMIN" class="form-inline">
+                    <form ng-if="vm.isAdmin" class="form-inline">
                         <div class="form-group">
                             <label for="roleSelect" translate>Add role</label>
                             <select ng-model="vm.selectedRole" placeholder="{{ 'Add a new role...' | translate }}" ng-class="vm.selectedRole" id="roleSelect" class="form-control" ng-change="vm.selectedRoleChanged = true" ng-options="role._id as role.name for role in vm.getRolesNotInUser()"></select>

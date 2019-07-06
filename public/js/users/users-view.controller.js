@@ -12,7 +12,7 @@
         vm.selectedRoleChanged = false;
         vm.user = {};
         vm.currentUser = {};
-        vm.isWSTADMIN = false;
+        vm.isAdmin = false;
         vm.roles = [];
         vm.userCounts = {};
         vm.userReports = [];
@@ -29,7 +29,7 @@
         function activate () {
             userService.getCurrentUser().then(user => {
                 vm.currentUser = user;
-                vm.isWSTADMIN = user.isWSTADMIN;
+                vm.isAdmin = user.isAdmin();
             });
 
             loadRoles();
@@ -57,7 +57,7 @@
 
         function changeUserStatus (user) {
             userService.getCurrentUser().then(currentUser => {
-                if (currentUser.isWSTADMIN) {
+                if (currentUser.isAdmin()) {
                     let newStatus;
                     if (user.status === 'active') { newStatus = 'Not active'; }
                     if (user.status === 'Not active') { newStatus = 'active'; }
@@ -108,13 +108,13 @@
             connection.get('/api/roles/find-all', {}).then(function (data) {
                 vm.roles = data.items;
 
-                var adminRole = { _id: 'WSTADMIN', name: 'Urungi Administrator' };
+                var adminRole = { _id: 'ADMIN', name: 'Urungi Administrator' };
                 vm.roles.push(adminRole);
             });
         }
 
         function deleteRole (roleID) {
-            if (vm.user.userName === 'administrator' && roleID === 'WSTADMIN') {
+            if (vm.user.userName === 'administrator' && roleID === 'ADMIN') {
                 new Noty({ text: "The role 'Urungi Administrator' can't be removed from the user administrator", type: 'warning' }).show();
             } else {
                 $uibModal.open({

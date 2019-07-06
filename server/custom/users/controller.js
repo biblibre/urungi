@@ -1,5 +1,8 @@
-var Users = connection.model('Users');
+const Users = connection.model('Users');
 const Reports = connection.model('Reports');
+const Companies = connection.model('Companies');
+const Roles = connection.model('Roles');
+
 const Controller = require('../../core/controller.js');
 
 class UsersController extends Controller {
@@ -134,18 +137,7 @@ exports.getCounts = function (req, res) {
     var companyID = req.user.companyID;
     var theCounts = {};
 
-    // Only for WSTADMIN - these counts are only for the WSTADMIN role
-    var isWSTADMIN = false;
-
-    if (req.isAuthenticated()) {
-        for (var i in req.user.roles) {
-            if (req.user.roles[i] === 'WSTADMIN') {
-                isWSTADMIN = true;
-            }
-        }
-    }
-
-    if (isWSTADMIN) {
+    if (req.user.isAdmin()) {
         // get all reports
         Reports.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, reportCount) {
             if (err) { console.error(err); }
@@ -176,7 +168,6 @@ exports.getCounts = function (req, res) {
 
                             theCounts.users = usersCount;
                             // get all roles
-                            var Roles = connection.model('Roles');
                             Roles.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, rolesCount) {
                                 if (err) { console.error(err); }
 
@@ -266,106 +257,86 @@ exports.getUserDashboards = function (req, res) {
     });
 };
 
-exports.getUserData = function (req, res) {
-    var Companies = connection.model('Companies');
-    Companies.findOne({ companyID: req.user.companyID, nd_trash_deleted: false }, {}, function (err, company) {
-        if (err) { console.error(err); }
+exports.getUserData = async function (req, res) {
+    try {
+        const company = await Companies.findOne({ companyID: req.user.companyID, nd_trash_deleted: false });
+        const user = {
+            companyData: company,
+            companyID: req.user.companyID,
+            contextHelp: req.user.contextHelp,
+            dialogs: req.user.dialogs,
+            filters: req.user.filters,
+            privateSpace: req.user.privateSpace,
+            roles: req.user.roles,
+            status: req.user.status,
+            userName: req.user.userName,
+        };
 
-        var theUserData = {};
-        theUserData.companyData = req.user.companyData;
-        theUserData.companyID = req.user.companyID;
-        theUserData.contextHelp = req.user.contextHelp;
-        theUserData.dialogs = req.user.dialogs;
-        theUserData.filters = req.user.filters;
-        theUserData.privateSpace = req.user.privateSpace;
-        theUserData.roles = req.user.roles;
-        theUserData.rolesData = req.user.rolesData;
-        theUserData.status = req.user.status;
-        theUserData.userName = req.user.userName;
+        let createReports = false;
+        let createDashboards = false;
+        let exploreData = false;
+        let viewSQL = false;
+        let shareReports = false;
+        let shareDashboards = false;
+        let canShare = false;
 
-        var createReports = false;
-        var createDashboards = false;
-        var isWSTADMIN = false;
-        var exploreData = false;
-        var viewSQL = false;
-        var shareReports = false;
-        var shareDashboards = false;
-        var canShare = false;
+        if (req.user.isAdmin()) {
+            createReports = true;
+            createDashboards = true;
+            exploreData = true;
+            viewSQL = true;
+            canShare = true;
+            shareReports = true;
+            shareDashboards = true;
+        } else {
+            const roles = await Roles.find({ _id: { $in: req.user.roles } });
 
-        if (req.isAuthenticated()) {
-            for (var i in req.user.roles) {
-                if (req.user.roles[i] === 'WSTADMIN') {
-                    isWSTADMIN = true;
-                    createReports = true;
-                    createDashboards = true;
-                    exploreData = true;
-                    viewSQL = true;
-                    canShare = true;
-                    shareReports = true;
-                    shareDashboards = true;
-
-                    req.session.reportsCreate = createReports;
-                    req.session.dashboardsCreate = createDashboards;
-                    req.session.exploreData = exploreData;
-                    req.session.viewSQL = viewSQL;
-                    req.session.isWSTADMIN = isWSTADMIN;
-                    req.session.canShare = canShare;
-                    req.session.shareReports = shareReports;
-                    req.session.shareDashboards = shareDashboards;
-
-                    theUserData.reportsCreate = createReports;
-                    theUserData.dashboardsCreate = createDashboards;
-                    theUserData.exploreData = exploreData;
-                    theUserData.viewSQL = viewSQL;
-                    theUserData.isWSTADMIN = isWSTADMIN;
-                    theUserData.canShare = canShare;
-                    theUserData.shareReports = shareReports;
-                    theUserData.shareDashboards = shareDashboards;
-                }
+            for (const role of roles) {
+                if (role.reportsCreate) { createReports = true; }
+                if (role.dashboardsCreate) { createDashboards = true; }
+                if (role.exploreData) { exploreData = true; }
+                if (role.viewSQL) { viewSQL = true; }
+                if (role.reportsShare) { shareReports = true; }
+                if (role.dashboardsShare) { shareDashboards = true; }
             }
         }
 
-        if (req.user.roles.length > 0 && !isWSTADMIN) {
-            var Roles = connection.model('Roles');
-            Roles.find({ _id: { $in: req.user.roles } }, {}, function (err, roles) {
-                if (err) { console.error(err); }
+        req.session.reportsCreate = createReports;
+        req.session.dashboardsCreate = createDashboards;
+        req.session.exploreData = exploreData;
+        req.session.viewSQL = viewSQL;
+        req.session.canShare = canShare;
+        req.session.shareReports = shareReports;
+        req.session.shareDashboards = shareDashboards;
 
-                req.session.rolesData = roles;
+        user.reportsCreate = createReports;
+        user.dashboardsCreate = createDashboards;
+        user.exploreData = exploreData;
+        user.viewSQL = viewSQL;
+        user.canShare = canShare;
+        user.shareReports = shareReports;
+        user.shareDashboards = shareDashboards;
 
-                for (var i in roles) {
-                    if (roles[i].reportsCreate) { createReports = true; }
-                    if (roles[i].dashboardsCreate) { createDashboards = true; }
-                    if (roles[i].exploreData) { exploreData = true; }
-                    if (roles[i].viewSQL) { viewSQL = true; }
-                    if (roles[i].reportsShare) { shareReports = true; }
-                    if (roles[i].dashboardsShare) { shareDashboards = true; }
-                }
+        const response = {
+            result: 1,
+            page: 1,
+            pages: 1,
+            items: {
+                user: user,
+                companyData: company,
+                rolesData: req.user.roles,
+                reportsCreate: createReports,
+                dashboardsCreate: createDashboards,
+                exploreData: exploreData,
+                viewSQL: viewSQL,
+            },
+        };
 
-                req.session.reportsCreate = createReports;
-                req.session.dashboardsCreate = createDashboards;
-                req.session.exploreData = exploreData;
-                req.session.viewSQL = viewSQL;
-                req.session.isWSTADMIN = isWSTADMIN;
-                req.session.canShare = canShare;
-                req.session.shareReports = shareReports;
-                req.session.shareDashboards = shareDashboards;
-
-                theUserData.reportsCreate = createReports;
-                theUserData.dashboardsCreate = createDashboards;
-                theUserData.exploreData = exploreData;
-                theUserData.viewSQL = viewSQL;
-                theUserData.isWSTADMIN = isWSTADMIN;
-                theUserData.canShare = canShare;
-                theUserData.shareReports = shareReports;
-                theUserData.shareDashboards = shareDashboards;
-
-                res.status(200).json({ result: 1, page: 1, pages: 1, items: { user: theUserData, companyData: company, rolesData: roles, reportsCreate: createReports, dashboardsCreate: createDashboards, exploreData: exploreData, viewSQL: viewSQL } });
-            });
-        } else {
-            // var user = (req.user) ? req.user : false;
-            res.status(200).json({ result: 1, page: 1, pages: 1, items: { user: theUserData, companyData: company, rolesData: [], reportsCreate: createReports, dashboardsCreate: createDashboards, exploreData: exploreData, viewSQL: viewSQL, isWSTADMIN: isWSTADMIN } });
-        }
-    });
+        res.status(200).json(response);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json(err);
+    }
 };
 exports.getUserOtherData = function (req, res) {
     var Users = connection.model('Users');
@@ -377,7 +348,6 @@ exports.getUserOtherData = function (req, res) {
 };
 
 exports.getUserObjects = async function (req, res) {
-    const Companies = connection.model('Companies');
     const query = {
         'companyID': req.user.companyID,
         'nd_trash_deleted': false
@@ -387,9 +357,9 @@ exports.getUserObjects = async function (req, res) {
     const folders = company.sharedSpace;
 
     let canShare = false;
-    if (req.session.isWSTADMIN) {
+    if (req.user.isAdmin()) {
         canShare = true;
-        await getFolderStructureForWSTADMIN(folders, 0);
+        await getFolderStructureForAdmin(folders, 0);
     } else {
         if (req.user.roles.length > 0) {
             const Roles = connection.model('Roles');
@@ -469,7 +439,7 @@ async function setGrantsToFolder_v2 (folders, grant) {
     }
 }
 
-async function getFolderStructureForWSTADMIN (folders, index) {
+async function getFolderStructureForAdmin (folders, index) {
     const folder = folders[index];
 
     if (folder) {
@@ -477,7 +447,7 @@ async function getFolderStructureForWSTADMIN (folders, index) {
             folder.nodes = [];
         }
 
-        await getFolderStructureForWSTADMIN(folder.nodes, 0);
+        await getFolderStructureForAdmin(folder.nodes, 0);
 
         folder.grants = {
             folderID: folder.id,
@@ -492,7 +462,7 @@ async function getFolderStructureForWSTADMIN (folders, index) {
         const dashboards = await getDashboardsForFolder(folder.id, folder.grants);
         dashboards.forEach(dashboard => folder.nodes.push(dashboard));
 
-        await getFolderStructureForWSTADMIN(folders, index + 1);
+        await getFolderStructureForAdmin(folders, index + 1);
     }
 }
 
@@ -563,7 +533,7 @@ exports.getUserLastExecutions = function (req, res) {
     var statistics = connection.model('statistics');
 
     let find;
-    if (req.session.isWSTADMIN) {
+    if (req.user.isAdmin()) {
         find = { action: 'execute' };
     } else {
         find = { '$and': [{ userID: '' + req.user._id + '' }, { action: 'execute' }] };

@@ -52,7 +52,7 @@ if (process.argv.length !== 3) {
         salt: result.salt,
         hash: result.hash,
         companyID: company.companyID,
-        roles: ['WSTADMIN'],
+        roles: ['ADMIN'],
         status: 'active',
         nd_trash_deleted: false,
     };

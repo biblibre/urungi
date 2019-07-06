@@ -19,10 +19,6 @@ exports.DashboardsFindAll = function (req, res) {
 
     var perPage = config.get('pagination.itemsPerPage');
     var page = (req.query.page) ? req.query.page : 1;
-    /*
-     if (isWSTADMIN)
-     var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"}]}
-     else */
     var find = { '$and': [{ 'nd_trash_deleted': false }, { 'companyID': 'COMPID' }, { owner: req.user._id }] };
     // var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{"$or": [{owner: req.user._id},{owner: { $exists: false }}]}]}
     var fields = { dashboardName: 1, owner: 1, isPublic: 1 };
@@ -53,7 +49,7 @@ exports.DashboardsFindOne = function (req, res) {
 };
 
 exports.DashboardsCreate = function (req, res) {
-    if (!req.session.dashboardsCreate && !req.session.isWSTADMIN) {
+    if (!req.session.dashboardsCreate && !req.user.isAdmin()) {
         res.status(401).json({ result: 0, msg: 'You don´t have permissions to create dashboards' });
     } else {
         req.query.trash = true;
@@ -77,7 +73,7 @@ exports.DashboardsUpdate = function (req, res) {
 
     var data = req.body;
 
-    if (!req.session.isWSTADMIN) {
+    if (!req.user.isAdmin()) {
         var Dashboards = connection.model('Dashboards');
         Dashboards.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
@@ -108,7 +104,7 @@ exports.DashboardsDelete = function (req, res) {
 
     req.body = data;
 
-    if (!req.session.isWSTADMIN) {
+    if (!req.user.isAdmin()) {
         var Dashboards = connection.model('Dashboards');
         Dashboards.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
@@ -189,7 +185,7 @@ exports.PublishDashboard = function (req, res) {
     var Dashboards = connection.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
-    if (req.session.isWSTADMIN) { find = { _id: data._id, companyID: req.user.companyID }; }
+    if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
 
     Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;
@@ -218,7 +214,7 @@ exports.UnpublishDashboard = function (req, res) {
     var Dashboards = connection.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
-    if (req.session.isWSTADMIN) { find = { _id: data._id, companyID: req.user.companyID }; }
+    if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
 
     Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;
@@ -247,7 +243,7 @@ exports.ShareDashboard = function (req, res) {
     var Dashboards = connection.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
-    if (req.session.isWSTADMIN) { find = { _id: data._id, companyID: req.user.companyID }; }
+    if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
 
     Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;
@@ -277,7 +273,7 @@ exports.UnshareDashboard = function (req, res) {
     var Dashboards = connection.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
-    if (req.session.isWSTADMIN) { find = { _id: data._id, companyID: req.user.companyID }; }
+    if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
 
     Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;

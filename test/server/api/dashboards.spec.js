@@ -47,7 +47,6 @@ describe('Dashboards API', function () {
     describe('GET /api/dashboardsv2/find-one', function () {
         it('should find one dashboard and its data', async function () {
             var user = await Users.findOne({ userName: 'administrator' });
-            await request(app).get('/api/get-user-data').set(headers);
             let res = await request(app).post('/api/dashboardsv2/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', dashboardName: 'Dashboard' });
@@ -77,7 +76,6 @@ describe('Dashboards API', function () {
     describe('POST /api/dashboardsv2/create', function () {
         it('should create a dashboard', async function () {
             var user = await Users.findOne({ userName: 'administrator' });
-            await request(app).get('/api/get-user-data').set(headers);
             const res = await request(app).post('/api/dashboardsv2/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', dashboardName: 'Dashboard' })
@@ -105,7 +103,6 @@ describe('Dashboards API', function () {
     describe('POST /api/dashboardsv2/duplicate', function () {
         it('should duplicate a dashboard', async function () {
             var user = await Users.findOne({ userName: 'administrator' });
-            await request(app).get('/api/get-user-data').set(headers);
             let res = await request(app).post('/api/dashboardsv2/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', dashboardName: 'Dashboard' })
@@ -139,7 +136,6 @@ describe('Dashboards API', function () {
     describe('POST /api/dashboardsv2/update/:id', function () {
         it('should update a dashboard', async function () {
             await Users.findOne({ userName: 'administrator' });
-            await request(app).get('/api/get-user-data').set(headers);
             let res = await request(app).post('/api/dashboardsv2/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', dashboardName: 'Dashboard' });
@@ -178,7 +174,6 @@ describe('Dashboards API', function () {
     describe('GET /api/dashboardsv2/get/:id', function () {
         it('should get a dashboard and its data', async function () {
             var user = await Users.findOne({ userName: 'administrator' });
-            await request(app).get('/api/get-user-data').set(headers);
             let res = await request(app).post('/api/dashboardsv2/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', dashboardName: 'Dashboard' });

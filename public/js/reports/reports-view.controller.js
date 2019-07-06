@@ -3,9 +3,9 @@
 
     angular.module('app.reports').controller('ReportsViewController', ReportsViewController);
 
-    ReportsViewController.$inject = ['$scope', '$timeout', 'reportsService', 'xlsxService', 'report'];
+    ReportsViewController.$inject = ['$scope', '$timeout', 'reportsService', 'xlsxService', 'userService', 'report'];
 
-    function ReportsViewController ($scope, $timeout, reportsService, xlsxService, report) {
+    function ReportsViewController ($scope, $timeout, reportsService, xlsxService, userService, report) {
         const vm = this;
         vm.report = report;
         vm.prompts = {};
@@ -13,10 +13,15 @@
         vm.repaintWithPrompts = repaintWithPrompts;
         vm.getQueryForFilter = getQueryForFilter;
         vm.saveAsXLSX = saveAsXLSX;
+        vm.isAdmin = false;
 
         activate();
 
         function activate () {
+            userService.getCurrentUser().then(user => {
+                vm.isAdmin = user.isAdmin();
+            });
+
             vm.prompts = initPrompts();
 
             $timeout(function () {

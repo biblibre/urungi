@@ -3,7 +3,7 @@
 <div class="container-fluid">
     <div class="page-header">
         <span class="h3" ng-bind="vm.report.reportName"></span>
-        <a ng-if="vm.report && ((vm.report.owner == user._id) || isWSTADMIN)" ng-href="/#/reports/edit/{{vm.report._id}}"  class="btn btn-success pull-right" style="margin-right: 5px;" translate>Edit Report</a>
+        <a ng-if="vm.report && ((vm.report.owner == user._id) || vm.isAdmin)" ng-href="/#/reports/edit/{{vm.report._id}}"  class="btn btn-success pull-right" style="margin-right: 5px;" translate>Edit Report</a>
         <a ng-click="goBack()" class="btn btn-default pull-right" translate>Cancel</a>
         <a ng-show="vm.report.reportType === 'grid'" ng-click="vm.saveAsXLSX()" class="btn btn-default pull-right" translate>Export Data</a>
     </div>

@@ -24,7 +24,7 @@
 
         function changeUserStatus (user) {
             userService.getCurrentUser().then(currentUser => {
-                if (currentUser.isWSTADMIN) {
+                if (currentUser.isAdmin()) {
                     let newStatus;
                     if (user.status === 'active') { newStatus = 'Not active'; }
                     if (user.status === 'Not active') { newStatus = 'active'; }

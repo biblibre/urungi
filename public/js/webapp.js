@@ -123,7 +123,6 @@
     function runBlock ($rootScope, $location, editableOptions, connection, userService, language) {
         userService.getCurrentUser().then(user => {
             $rootScope.user = user;
-            $rootScope.isWSTADMIN = user.isWSTADMIN;
         });
 
         // Redirect to /login if next route is not public and user is not authenticated

@@ -133,7 +133,6 @@ describe('Layers API', function () {
     describe('POST /api/layers/delete/:id', function () {
         it('should delete a layer', async function () {
             var User = await Users.findOne({ userName: 'administrator' });
-            await request(app).get('/api/get-user-data').set(headers);
             let res = await request(app).post('/api/layers/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, owner: User.id, isPublic: false, datasourceID: datasource._id });
@@ -150,7 +149,6 @@ describe('Layers API', function () {
         });
 
         it('should not delete a layer with dashboard conflict', async function () {
-            await request(app).get('/api/get-user-data').set(headers);
             let res = await request(app).post('/api/layers/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
@@ -174,7 +172,6 @@ describe('Layers API', function () {
 
         it('should not delete a layer with reports', async function () {
             var User = await Users.findOne({ userName: 'administrator' });
-            await request(app).get('/api/get-user-data').set(headers);
             let res = await request(app).post('/api/layers/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id })
@@ -202,7 +199,6 @@ describe('Layers API', function () {
     describe('POST /api/layers/change-layer-status', function () {
         it('should change layer status', async function () {
             await Users.findOne({ userName: 'administrator' });
-            await request(app).get('/api/get-user-data').set(headers);
             let res = await request(app).post('/api/layers/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });

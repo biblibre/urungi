@@ -43,7 +43,7 @@ module.exports = function (app, passport) {
                 adminUser.userName = 'administrator';
                 adminUser.companyID = 'COMPID';
                 adminUser.roles = [];
-                adminUser.roles.push('WSTADMIN');
+                adminUser.roles.push('ADMIN');
                 adminUser.status = 'active';
                 adminUser.nd_trash_deleted = false;
 

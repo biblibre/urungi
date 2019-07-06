@@ -33,7 +33,6 @@ describe('Reports API', function () {
         Users = connection.model('Users');
         Datasources = connection.model('DataSources');
         headers = await helpers.login(app);
-        await request(app).get('/api/get-user-data').set(headers);
         user = await Users.findOne({ userName: 'administrator' });
     });
 

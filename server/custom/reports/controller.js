@@ -120,7 +120,7 @@ exports.ReportsFindOne = function (req, res) {
 };
 
 exports.ReportsCreate = function (req, res) {
-    if (!req.session.reportsCreate && !req.session.isWSTADMIN) {
+    if (!req.session.reportsCreate && !req.user.isAdmin()) {
         res.status(401).json({ result: 0, msg: 'You do not have permissions to create reports' });
     } else {
         req.query.trash = true;
@@ -144,7 +144,7 @@ exports.ReportsUpdate = function (req, res) {
     req.query.companyid = true;
     var data = req.body;
 
-    if (!req.session.isWSTADMIN) {
+    if (!req.user.isAdmin()) {
         var Reports = connection.model('Reports');
         Reports.findOne({ _id: data._id, owner: req.user._id, companyID: req.user.companyID }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
@@ -255,7 +255,7 @@ function getReportFromRequest (req) {
         companyID: req.user.companyID,
     };
 
-    if (!req.session.isWSTADMIN) {
+    if (!req.user.isAdmin()) {
         conditions.owner = req.user._id;
     }
 

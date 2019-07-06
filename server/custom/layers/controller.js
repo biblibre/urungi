@@ -88,7 +88,7 @@ exports.LayersDelete = function (req, res) {
         if (reports.length === 0) {
             Dashboardsv2.find({ 'reports.selectedLayerID': data._id, 'nd_trash_deleted': false }).then(function (dashboard) {
                 if (dashboard.length === 0) {
-                    if (!req.session.isWSTADMIN) {
+                    if (!req.user.isAdmin()) {
                         var Layers = connection.model('Layers');
                         Layers.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
                             if (err) throw err;

@@ -141,7 +141,7 @@ usersSchema.statics.setViewedContextHelp = function (req, done) {
 };
 
 usersSchema.statics.setStatus = function (req, done) {
-    if (req.session.isWSTADMIN) {
+    if (req.user.isAdmin()) {
         var userID = req.body.userID;
         var userStatus = req.body.status;
 
@@ -168,6 +168,8 @@ usersSchema.statics.setStatus = function (req, done) {
                 done({ result: 0, msg: 'No user found for this company, can´t update the user status' });
             }
         });
+    } else {
+        done({ result: 0, msg: 'Only admins can change users status' });
     }
 };
 
@@ -211,6 +213,10 @@ usersSchema.statics.findOrCreateGoogleUser = function (profile, done) {
             });
         }
     });
+};
+
+usersSchema.methods.isAdmin = function () {
+    return this.roles.includes('ADMIN');
 };
 
 var Users = connection.model('Users', usersSchema);

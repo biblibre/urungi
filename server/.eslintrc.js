@@ -14,7 +14,6 @@ module.exports = {
         // defined in server/globals.js
         appRoot: false,
         restrict: false,
-        restrictRole: false,
         sendEmailTemplate: false,
     },
 };

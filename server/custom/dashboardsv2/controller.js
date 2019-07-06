@@ -33,7 +33,7 @@ exports.Dashboardsv2FindOne = function (req, res) {
 };
 
 exports.Dashboardsv2Create = function (req, res) {
-    if (!req.session.Dashboardsv2Create && !req.session.isWSTADMIN) {
+    if (!req.session.Dashboardsv2Create && !req.user.isAdmin()) {
         res.status(401).json({ result: 0, msg: 'You don´t have permissions to create Dashboards' });
     } else {
         req.query.trash = true;
@@ -53,7 +53,7 @@ exports.Dashboardsv2Create = function (req, res) {
 };
 
 exports.Dashboardsv2Duplicate = function (req, res) {
-    if (!req.session.Dashboardsv2Create && !req.session.isWSTADMIN) {
+    if (!req.session.Dashboardsv2Create && !req.user.isAdmin()) {
         res.status(401).json({ result: 0, msg: 'You don´t have permissions to create Dashboardsv2' });
     } else {
         req.query.trash = true;
@@ -78,7 +78,7 @@ exports.Dashboardsv2Update = function (req, res) {
 
     var data = req.body;
 
-    if (!req.session.isWSTADMIN) {
+    if (!req.user.isAdmin()) {
         Dashboardsv2.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
@@ -251,7 +251,7 @@ function getDashboardFromRequest (req) {
         companyID: req.user.companyID,
     };
 
-    if (!req.session.isWSTADMIN) {
+    if (!req.user.isAdmin()) {
         conditions.owner = req.user._id;
     }
 

@@ -3,9 +3,9 @@
 
     angular.module('app.dashboards').controller('DashboardsViewController', DashboardsViewController);
 
-    DashboardsViewController.$inject = ['$scope', '$timeout', '$compile', 'dashboard'];
+    DashboardsViewController.$inject = ['$scope', '$timeout', '$compile', 'userService', 'dashboard'];
 
-    function DashboardsViewController ($scope, $timeout, $compile, dashboard) {
+    function DashboardsViewController ($scope, $timeout, $compile, userService, dashboard) {
         const vm = this;
 
         vm.mode = 'preview';
@@ -14,10 +14,14 @@
         vm.getReport = getReport;
         vm.promptChanged = promptChanged;
         vm.getQueryForFilter = getQueryForFilter;
+        vm.isAdmin = false;
 
         activate();
 
         function activate () {
+            userService.getCurrentUser().then(user => {
+                vm.isAdmin = user.isAdmin();
+            });
             loadHTML();
         }
 

@@ -25,8 +25,10 @@
                     user.reportsCreate = data.items.reportsCreate;
                     user.dashboardsCreate = data.items.dashboardsCreate;
                     user.exploreData = data.items.exploreData;
-                    user.isWSTADMIN = data.items.isWSTADMIN;
                     user.viewSQL = data.items.viewSQL;
+                    user.isAdmin = () => {
+                        return user.roles.includes('ADMIN');
+                    };
 
                     return user;
                 });

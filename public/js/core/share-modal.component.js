@@ -19,7 +19,7 @@
 
         vm.item = {};
         vm.userObjects = [];
-        vm.isWSTADMIN = false;
+        vm.isAdmin = false;
         vm.$onInit = $onInit;
         vm.selectThisFolder = selectThisFolder;
 
@@ -27,7 +27,7 @@
             vm.item = vm.resolve.item;
             vm.userObjects = vm.resolve.userObjects;
             userService.getCurrentUser().then(user => {
-                vm.isWSTADMIN = user.isWSTADMIN;
+                vm.isAdmin = user.isAdmin();
             });
         }
 
