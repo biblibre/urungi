@@ -31,7 +31,7 @@ exports.DataSourcesUploadConfigFile = function (req, res) {
     var fs = require('fs');
     var companyID = 'COMPID';
 
-    const dirPath = path.join(appRoot, 'server', 'keys', companyID);
+    const dirPath = path.join(__dirname, '..', '..', 'keys', companyID);
     if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath);
     }

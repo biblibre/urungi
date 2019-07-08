@@ -1,8 +1,4 @@
 /* GLOBAL FUNCTIONS */
-const path = require('path');
-
-var appRoot = path.join(__dirname, '..');
-global.appRoot = appRoot;
 
 function restrict (req, res, next) {
     if (req.isAuthenticated()) {

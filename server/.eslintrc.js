@@ -12,7 +12,6 @@ module.exports = {
         connection: false,
 
         // defined in server/globals.js
-        appRoot: false,
         restrict: false,
         sendEmailTemplate: false,
     },
