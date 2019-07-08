@@ -68,8 +68,6 @@ if (authentication) {
     app.use(passport.authenticate('remember-me'));
 }
 
-global.config = config;
-
 require('./config/mongoose')();
 require('./config/passport')(passport);
 

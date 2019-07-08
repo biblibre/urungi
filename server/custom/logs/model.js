@@ -1,3 +1,4 @@
+const config = require('config');
 var mongoose = require('mongoose');
 
 var logsSchema = new mongoose.Schema({
@@ -55,7 +56,7 @@ logsSchema.statics.saveToLog = function (req, data, otherInfo, done) {
 
 logsSchema.statics.adminFindAll = function (req, done) {
     var Log = this;
-    var perPage = config.pagination.itemsPerPage;
+    var perPage = config.get('pagination.itemsPerPage');
     var page = (req.query.page) ? req.query.page : 1;
     var find = {};
     var searchText = (req.query.search) ? req.query.search : false;

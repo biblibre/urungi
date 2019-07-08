@@ -1,3 +1,5 @@
+const config = require('config');
+
 var Dashboards = connection.model('Dashboards');
 
 const Controller = require('../../core/controller.js');

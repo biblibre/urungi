@@ -1,3 +1,4 @@
+const config = require('config');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const LocalStrategy = require('passport-local').Strategy;

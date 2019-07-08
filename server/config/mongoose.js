@@ -1,3 +1,5 @@
+const config = require('config');
+
 module.exports = function (_, done) {
     const path = require('path');
     const mongoose = require('mongoose');

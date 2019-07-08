@@ -1,3 +1,5 @@
+const config = require('config');
+
 class Controller {
     constructor (model) {
         this.model = model;
