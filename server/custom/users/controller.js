@@ -100,7 +100,7 @@ exports.logout = function (req, res) {
     res.clearCookie('remember_me');
     req.session.loggedIn = false;
     req.session = null;
-    res.end();
+    res.sendStatus(204);
 };
 
 exports.changeMyPassword = function (req, res) {

@@ -580,7 +580,7 @@ describe('Users API', function () {
         it('should return status 200', async function () {
             return request(app).post('/api/logout')
                 .set(headers)
-                .expect(200);
+                .expect(204);
         });
     });
 });
