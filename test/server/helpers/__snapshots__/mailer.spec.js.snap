@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mailer sendEmailTemplate should send newUserAndPassword mail 1`] = `
+"DEAR OBI-WAN
+
+These are your credentials to enter urungi
+ * user name: obiwan 
+ * password: JediMaster123 
+
+
+Best
+The urungi team"
+`;
+
+exports[`mailer sendEmailTemplate should send newUserAndPassword mail 2`] = `
+"<html>
+<body>
+<h2>Dear Obi-Wan</h2>
+        <br>
+
+These are your credentials to enter urungi
+<br>
+        <ul>
+            <li>
+                user name: <strong>obiwan</strong>
+            </li>
+            <li>
+                password: <strong>JediMaster123</strong>
+            </li>
+        </ul>
+<br>
+
+<div>
+    Best
+<br>
+    The urungi team
+</div>
+</body>
+</html>
+"
+`;

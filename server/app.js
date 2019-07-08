@@ -73,8 +73,6 @@ global.config = config;
 require('./config/mongoose')();
 require('./config/passport')(passport);
 
-require('./config/mailer');
-
 require('./config/routes')(app, passport);
 
 app.use('/uploads', restrict, express.static(path.join(__dirname, 'uploads')));

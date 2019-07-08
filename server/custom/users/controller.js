@@ -4,6 +4,7 @@ const Companies = connection.model('Companies');
 const Roles = connection.model('Roles');
 
 const Controller = require('../../core/controller.js');
+const { sendEmailTemplate } = require('../../helpers/mailer');
 
 class UsersController extends Controller {
     constructor () {

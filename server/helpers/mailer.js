@@ -1,24 +1,6 @@
-function sendEmail (emailSubject, emailMessage, emailTo) {
-    var nodemailer = require('nodemailer');
-    var transport = nodemailer.createTransport(config.get('mailer.options'), config.get('mailer.defaults'));
+const config = require('config');
 
-    var mailOptions = {
-        to: emailTo, // list of receivers
-        subject: emailSubject, // Subject line
-        html: emailMessage // html body
-    };
-
-    transport.sendMail(mailOptions, function (error, response) {
-        if (error) {
-            console.log(error);
-        } else {
-
-        }
-
-        transport.close(); // shut down the connection pool, no more messages
-    });
-}
-global.sendEmail = sendEmail;
+module.exports.sendEmailTemplate = sendEmailTemplate;
 
 function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
     var path = require('path');
@@ -36,11 +18,12 @@ function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
     });
     var transport = nodemailer.createTransport(config.get('mailer.options'), config.get('mailer.defaults'));
 
+    const promises = [];
     for (const item of recipients) {
         if (!item.firstName) { item.firstName = ' '; }
         if (!item.lastName) { item.lastName = ' '; }
-        template.renderAll(theEmailTemplate, item).then(function (results) {
-            transport.sendMail({
+        const p = template.renderAll(theEmailTemplate, item).then(function (results) {
+            return transport.sendMail({
                 to: item[emailField],
                 subject: subject,
                 html: results.html,
@@ -49,7 +32,9 @@ function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
         }).catch(function (err) {
             console.error(err);
         });
-    }
-}
 
-global.sendEmailTemplate = sendEmailTemplate;
+        promises.push(p);
+    }
+
+    return Promise.all(promises);
+}

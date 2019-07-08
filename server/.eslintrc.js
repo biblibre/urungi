@@ -10,8 +10,5 @@ module.exports = {
 
         // defined in server/config/mongoose.js
         connection: false,
-
-        // defined in server/config/mailer.js
-        sendEmailTemplate: false,
     },
 };
