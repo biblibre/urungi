@@ -11,7 +11,7 @@ var FilesSchema = new mongoose.Schema({
     nd_trash_deleted_date: { type: Date },
     upload_user_id: { type: String },
     createdOn: { type: Date }
-}, { collection: 'wst_Files' });
+});
 
-var Files = connection.model('Files', FilesSchema);
+var Files = mongoose.model('Files', FilesSchema, 'wst_Files');
 module.exports = Files;

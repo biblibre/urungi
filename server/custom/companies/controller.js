@@ -1,4 +1,5 @@
-const Companies = connection.model('Companies');
+const mongoose = require('mongoose');
+const Companies = mongoose.model('Companies');
 
 exports.getCompanyData = function (req, res) {
     Companies.findOne({ companyID: req.user.companyID, nd_trash_deleted: false }, {}, function (err, company) {

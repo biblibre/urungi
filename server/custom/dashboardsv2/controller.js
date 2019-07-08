@@ -1,4 +1,5 @@
-const Dashboardsv2 = connection.model('Dashboardsv2');
+const mongoose = require('mongoose');
+const Dashboardsv2 = mongoose.model('Dashboardsv2');
 
 const Controller = require('../../core/controller.js');
 
@@ -130,7 +131,7 @@ exports.getDashboard = function (req, res) {
 
         if (result) {
             // Annotate the execution in statistics
-            var statistics = connection.model('statistics');
+            var statistics = mongoose.model('statistics');
             var stat = {};
             stat.type = 'Dashboard';
             stat.relationedID = result.item._id;
@@ -148,7 +149,7 @@ exports.getDashboard = function (req, res) {
             }
 
             // Get all the reports...
-            var Reports = connection.model('Reports');
+            var Reports = mongoose.model('Reports');
 
             Reports.find({ _id: { $in: theReports } }, function (err, reports) {
                 if (err) { console.error(err); }

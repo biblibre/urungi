@@ -1,7 +1,8 @@
-const Users = connection.model('Users');
-const Reports = connection.model('Reports');
-const Companies = connection.model('Companies');
-const Roles = connection.model('Roles');
+const mongoose = require('mongoose');
+const Users = mongoose.model('Users');
+const Reports = mongoose.model('Reports');
+const Companies = mongoose.model('Companies');
+const Roles = mongoose.model('Roles');
 
 const Controller = require('../../core/controller.js');
 const { sendEmailTemplate } = require('../../helpers/mailer');
@@ -31,7 +32,7 @@ exports.UsersCreate = function (req, res) {
     req.body.status = 'active';
     req.body.nd_trash_deleted = false;
 
-    var Users = connection.model('Users');
+    var Users = mongoose.model('Users');
     Users.createTheUser(req, res, req.body, function (result) {
         if (req.body.sendPassword && typeof thePassword !== 'undefined') {
             var recipients = [];
@@ -145,25 +146,25 @@ exports.getCounts = function (req, res) {
 
             theCounts.reports = reportCount;
             // get all dashboards
-            var Dashboardsv2 = connection.model('Dashboardsv2');
+            var Dashboardsv2 = mongoose.model('Dashboardsv2');
             Dashboardsv2.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, dashCount) {
                 if (err) { console.error(err); }
 
                 theCounts.dashBoards = dashCount;
                 // get all datasources
-                var DataSources = connection.model('DataSources');
+                var DataSources = mongoose.model('DataSources');
                 DataSources.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, dtsCount) {
                     if (err) { console.error(err); }
 
                     theCounts.dataSources = dtsCount;
                     // get all layers
-                    var Layers = connection.model('Layers');
+                    var Layers = mongoose.model('Layers');
                     Layers.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, layersCount) {
                         if (err) { console.error(err); }
 
                         theCounts.layers = layersCount;
                         // get all users
-                        var Users = connection.model('Users');
+                        var Users = mongoose.model('Users');
                         Users.countDocuments({ companyID: companyID, nd_trash_deleted: false }, function (err, usersCount) {
                             if (err) { console.error(err); }
 
@@ -188,7 +189,7 @@ exports.getCounts = function (req, res) {
 
             theCounts.reports = reportCount;
             // get all dashboards
-            var Dashboards = connection.model('Dashboardsv2');
+            var Dashboards = mongoose.model('Dashboardsv2');
             Dashboards.countDocuments({ companyID: companyID, owner: req.user._id, nd_trash_deleted: false }, function (err, dashCount) {
                 if (err) { console.error(err); }
 
@@ -205,13 +206,13 @@ exports.getCountsForUser = function (req, res) {
     var theCounts = {};
 
     // get all reports
-    var Reports = connection.model('Reports');
+    var Reports = mongoose.model('Reports');
     Reports.countDocuments({ companyID: companyID, owner: userID, isShared: true, nd_trash_deleted: false }, function (err, reportCount) {
         if (err) { console.error(err); }
 
         theCounts.sharedReports = reportCount;
         // get all dashboards
-        var Dashboards = connection.model('Dashboardsv2');
+        var Dashboards = mongoose.model('Dashboardsv2');
         Dashboards.countDocuments({ companyID: companyID, owner: userID, isShared: true, nd_trash_deleted: false }, function (err, dashCount) {
             if (err) { console.error(err); }
 
@@ -222,7 +223,7 @@ exports.getCountsForUser = function (req, res) {
 
                 theCounts.privateReports = privateReportCount;
 
-                var Dashboards = connection.model('Dashboardsv2');
+                var Dashboards = mongoose.model('Dashboardsv2');
                 Dashboards.countDocuments({ companyID: companyID, owner: userID, isShared: false, nd_trash_deleted: false }, function (err, privateDashCount) {
                     if (err) { console.error(err); }
 
@@ -238,7 +239,7 @@ exports.getUserReports = function (req, res) {
     var page = (req.query.page) ? req.query.page : 1;
     var userID = req.query.userID;
     var companyID = req.user.companyID;
-    var Reports = connection.model('Reports');
+    var Reports = mongoose.model('Reports');
     Reports.find({ companyID: companyID, owner: userID, nd_trash_deleted: false }, { reportName: 1, parentFolder: 1, isShared: 1, reportType: 1, reportDescription: 1, status: 1 }, function (err, reports) {
         if (err) { console.error(err); }
 
@@ -250,7 +251,7 @@ exports.getUserDashboards = function (req, res) {
     var page = (req.query.page) ? req.query.page : 1;
     var userID = req.query.userID;
     var companyID = req.user.companyID;
-    var Dashboards = connection.model('Dashboardsv2');
+    var Dashboards = mongoose.model('Dashboardsv2');
     Dashboards.find({ companyID: companyID, owner: userID, nd_trash_deleted: false }, { dashboardName: 1, parentFolder: 1, isShared: 1, dashboardDescription: 1, status: 1 }, function (err, privateDashCount) {
         if (err) { console.error(err); }
 
@@ -340,7 +341,7 @@ exports.getUserData = async function (req, res) {
     }
 };
 exports.getUserOtherData = function (req, res) {
-    var Users = connection.model('Users');
+    var Users = mongoose.model('Users');
     Users.findOne({ _id: req.user._id }, {}, function (err, user) {
         if (err) { console.error(err); }
 
@@ -363,7 +364,7 @@ exports.getUserObjects = async function (req, res) {
         await getFolderStructureForAdmin(folders, 0);
     } else {
         if (req.user.roles.length > 0) {
-            const Roles = connection.model('Roles');
+            const Roles = mongoose.model('Roles');
             const query = {
                 '_id': { '$in': req.user.roles },
                 'companyID': req.user.companyID
@@ -471,7 +472,7 @@ async function getReportsForFolder (idfolder, grant) {
     var nodes = [];
 
     if (!grant || grant.executeReports) {
-        const Reports = connection.model('Reports');
+        const Reports = mongoose.model('Reports');
 
         const query = {
             'nd_trash_deleted': false,
@@ -499,7 +500,7 @@ async function getDashboardsForFolder (idfolder, grant) {
     var nodes = [];
 
     if (!grant || grant.executeDashboards) {
-        const Dashboards = connection.model('Dashboardsv2');
+        const Dashboards = mongoose.model('Dashboardsv2');
 
         const query = {
             'nd_trash_deleted': false,
@@ -531,7 +532,7 @@ async function getNoFolderDashboards () {
 }
 
 exports.getUserLastExecutions = function (req, res) {
-    var statistics = connection.model('statistics');
+    var statistics = mongoose.model('statistics');
 
     let find;
     if (req.user.isAdmin()) {

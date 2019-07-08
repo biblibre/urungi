@@ -1,4 +1,5 @@
-var Files = connection.model('Files');
+const mongoose = require('mongoose');
+var Files = mongoose.model('Files');
 
 exports.getFiles = function (req, res) {
     var find = { 'type': new RegExp('image', 'i'), 'upload_user_id': req.user._id };

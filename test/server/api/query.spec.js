@@ -3,6 +3,7 @@ const helpers = require('../helpers');
 const request = require('supertest');
 const config = require('config');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+let mongoose = require('mongoose');
 
 let app;
 let mongod;
@@ -10,11 +11,11 @@ beforeAll(async () => {
     mongod = new MongoMemoryServer();
     process.env.MONGODB_URI = await mongod.getConnectionString();
     jest.resetModules(); // Needed for config to take MONGODB_URI into account
+    mongoose = require('mongoose');
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { connection.close(resolve); });
-    await new Promise(resolve => { app.locals.mongooseConnection.close(resolve); });
+    await new Promise(resolve => { mongoose.connection.close(resolve); });
     await mongod.stop();
 });
 
@@ -515,8 +516,8 @@ describe('Queries and data access', function () {
                 let headers;
 
                 beforeAll(async () => {
-                    DataSources = connection.model('DataSources');
-                    Layers = connection.model('Layers');
+                    DataSources = mongoose.model('DataSources');
+                    Layers = mongoose.model('Layers');
                     headers = await helpers.login(app);
                 });
 

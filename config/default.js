@@ -4,7 +4,6 @@ module.exports = {
     url: undefined,
     ip: undefined,
     port: undefined,
-    db_type: 'mongoDB', // tingoDB or mongoDB
 
     // MongoDB connection string
     // See https://docs.mongodb.com/manual/reference/connection-string/

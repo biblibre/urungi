@@ -1,4 +1,5 @@
-var DataSources = connection.model('DataSources');
+const mongoose = require('mongoose');
+var DataSources = mongoose.model('DataSources');
 const path = require('path');
 const Controller = require('../../core/controller.js');
 const Db = require('../../core/connection').Db;

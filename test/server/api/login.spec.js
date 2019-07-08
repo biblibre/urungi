@@ -1,6 +1,7 @@
 const request = require('supertest');
 const setCookieParser = require('set-cookie-parser');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const mongoose = require('mongoose');
 
 let app;
 let mongod;
@@ -10,8 +11,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { connection.close(resolve); });
-    await new Promise(resolve => { app.locals.mongooseConnection.close(resolve); });
+    await new Promise(resolve => { mongoose.connection.close(resolve); });
     await mongod.stop();
 });
 

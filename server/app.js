@@ -22,13 +22,13 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.static(path.join(__dirname, '..', 'shared')));
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 
-const mongooseConnection = require('mongoose').createConnection(config.get('db'), { useNewUrlParser: true });
+const connection = require('./config/mongoose')();
+
 const mongoStore = new MongoStore({
-    mongooseConnection: mongooseConnection,
+    mongooseConnection: connection,
     collection: 'wst_Sessions',
     ttl: 60 * 60 * 24, // 24 hours
 });
-app.locals.mongooseConnection = mongooseConnection;
 app.use(cookieParser());
 
 app.use(session({
@@ -68,7 +68,6 @@ if (authentication) {
     app.use(passport.authenticate('remember-me'));
 }
 
-require('./config/mongoose')();
 require('./config/passport')(passport);
 
 require('./config/routes')(app, passport);

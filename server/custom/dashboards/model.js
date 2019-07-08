@@ -18,7 +18,7 @@ var DashboardsSchema = new mongoose.Schema({
     createdBy: { type: String },
     author: { type: String },
     createdOn: { type: Date }
-}, { collection: 'wst_Dashboards' });
+});
 
-var Dashboards = connection.model('Dashboards', DashboardsSchema);
+var Dashboards = mongoose.model('Dashboards', DashboardsSchema, 'wst_Dashboards');
 module.exports = Dashboards;

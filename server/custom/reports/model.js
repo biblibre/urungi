@@ -83,7 +83,7 @@ var ReportsSchema = new mongoose.Schema({
     reportSubType: { type: String }, // FIXME This is not used
     reportType: { type: String },
     selectedLayerID: mongoose.Schema.Types.ObjectId,
-}, { collection: 'wst_Reports', collation: { locale: 'en', strength: 2 } });
+}, { collation: { locale: 'en', strength: 2 } });
 
 ReportsSchema.methods.publish = async function () {
     this.isPublic = true;
@@ -111,5 +111,5 @@ ReportsSchema.methods.unshare = async function () {
     return this.save();
 };
 
-var Reports = connection.model('Reports', ReportsSchema);
+var Reports = mongoose.model('Reports', ReportsSchema, 'wst_Reports');
 module.exports = Reports;

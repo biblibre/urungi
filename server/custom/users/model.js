@@ -62,7 +62,7 @@ var usersSchema = new mongoose.Schema({
     createdBy: { type: String },
     createdOn: { type: Date },
     companyData: {}
-}, { collection: 'wst_Users' });
+});
 
 if (!usersSchema.options.toObject) usersSchema.options.toObject = {};
 usersSchema.options.toObject.transform = function (doc, user, options) {
@@ -219,5 +219,5 @@ usersSchema.methods.isAdmin = function () {
     return this.roles.includes('ADMIN');
 };
 
-var Users = connection.model('Users', usersSchema);
+var Users = mongoose.model('Users', usersSchema, 'wst_Users');
 module.exports = Users;

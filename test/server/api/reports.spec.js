@@ -1,6 +1,7 @@
 const helpers = require('../helpers');
 const request = require('supertest');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const mongoose = require('mongoose');
 
 let app;
 let mongod;
@@ -10,8 +11,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { connection.close(resolve); });
-    await new Promise(resolve => { app.locals.mongooseConnection.close(resolve); });
+    await new Promise(resolve => { mongoose.connection.close(resolve); });
     await mongod.stop();
 });
 
@@ -28,10 +28,10 @@ describe('Reports API', function () {
     let headers;
 
     beforeAll(async function () {
-        Reports = connection.model('Reports');
-        Layers = connection.model('Layers');
-        Users = connection.model('Users');
-        Datasources = connection.model('DataSources');
+        Reports = mongoose.model('Reports');
+        Layers = mongoose.model('Layers');
+        Users = mongoose.model('Users');
+        Datasources = mongoose.model('DataSources');
         headers = await helpers.login(app);
         user = await Users.findOne({ userName: 'administrator' });
     });

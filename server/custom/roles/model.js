@@ -16,7 +16,7 @@ var RolesSchema = new mongoose.Schema({
     nd_trash_deleted_date: { type: Date },
     createdBy: { type: String },
     createdOn: { type: Date }
-}, { collection: 'wst_Roles' });
+});
 
-var Roles = connection.model('Roles', RolesSchema);
+var Roles = mongoose.model('Roles', RolesSchema, 'wst_Roles');
 module.exports = Roles;

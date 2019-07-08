@@ -1,4 +1,5 @@
-var Layers = connection.model('Layers');
+const mongoose = require('mongoose');
+var Layers = mongoose.model('Layers');
 const Controller = require('../../core/controller.js');
 class LayersController extends Controller {
     constructor () {
@@ -81,15 +82,15 @@ exports.LayersDelete = function (req, res) {
 
     req.body = data;
 
-    var Reports = connection.model('Reports');
-    var Dashboardsv2 = connection.model('Dashboardsv2');
+    var Reports = mongoose.model('Reports');
+    var Dashboardsv2 = mongoose.model('Dashboardsv2');
 
     Reports.find({ selectedLayerID: data._id }).then(function (reports) {
         if (reports.length === 0) {
             Dashboardsv2.find({ 'reports.selectedLayerID': data._id, 'nd_trash_deleted': false }).then(function (dashboard) {
                 if (dashboard.length === 0) {
                     if (!req.user.isAdmin()) {
-                        var Layers = connection.model('Layers');
+                        var Layers = mongoose.model('Layers');
                         Layers.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
                             if (err) throw err;
                             if (item) {

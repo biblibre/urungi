@@ -1,5 +1,6 @@
 const debug = require('debug')('urungi:server');
-const Logs = connection.model('Logs');
+const mongoose = require('mongoose');
+const Logs = mongoose.model('Logs');
 
 module.exports = function (app, passport) {
     var hash = require('../util/hash');
@@ -24,8 +25,8 @@ module.exports = function (app, passport) {
     );
 
     app.post('/api/login', function (req, res, next) {
-        var Users = connection.model('Users');
-        var Companies = connection.model('Companies');
+        var Users = mongoose.model('Users');
+        var Companies = mongoose.model('Companies');
 
         Users.countDocuments({}, function (err, c) {
             if (err) throw err;
@@ -52,7 +53,7 @@ module.exports = function (app, passport) {
 
                     adminUser.salt = salt;
                     adminUser.hash = hash;
-                    var User = connection.model('Users');
+                    var User = mongoose.model('Users');
 
                     User.create(adminUser, function (err, user) {
                         if (err) throw err;
@@ -88,7 +89,7 @@ function authenticate (passport, Users, req, res, next) {
             }
 
             // insert the company's Data into the user to avoid a 2nd server query'
-            var Companies = connection.model('Companies');
+            var Companies = mongoose.model('Companies');
 
             Companies.findOne({ companyID: user.companyID }, {}, function (err, company) {
                 if (err) throw err;

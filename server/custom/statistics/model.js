@@ -11,7 +11,7 @@ var statisticsSchema = new mongoose.Schema({
     action: { type: String }, // 'create', 'update', 'delete'
     createdOn: { type: Date, default: Date.now },
     createdBy: { type: String }
-}, { collection: 'wst_Statistics' });
+});
 
 statisticsSchema.statics.saveStat = function (req, data) {
     var companyID = req.isAuthenticated() ? req.user.companyID : null;
@@ -31,5 +31,5 @@ statisticsSchema.statics.saveStat = function (req, data) {
     return this.create(statistic);
 };
 
-var statistics = connection.model('statistics', statisticsSchema);
+var statistics = mongoose.model('statistics', statisticsSchema, 'wst_Statistics');
 module.exports = statistics;

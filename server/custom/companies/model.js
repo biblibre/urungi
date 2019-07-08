@@ -12,7 +12,7 @@ var CompaniesSchema = new mongoose.Schema({
     nd_trash_deleted_date: { type: Date },
     createdBy: { type: String },
     createdOn: { type: Date }
-}, { collection: 'wst_Companies' });
+});
 
-var Companies = connection.model('Companies', CompaniesSchema);
+var Companies = mongoose.model('Companies', CompaniesSchema, 'wst_Companies');
 module.exports = Companies;

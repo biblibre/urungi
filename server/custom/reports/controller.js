@@ -1,6 +1,7 @@
 const config = require('config');
+const mongoose = require('mongoose');
 
-var Reports = connection.model('Reports');
+var Reports = mongoose.model('Reports');
 
 const Controller = require('../../core/controller.js');
 const QueryProcessor = require('../../core/queryProcessor');
@@ -96,7 +97,7 @@ exports.GetReport = function (req, res) {
         res.status(200).json(result);
         if ((req.query.mode === 'execute' || req.query.mode === 'preview') && result.item) {
             // Note the execution in statistics
-            var statistics = connection.model('statistics');
+            var statistics = mongoose.model('statistics');
             var stat = {};
             stat.type = 'report';
             stat.relationedID = result.item._id;
@@ -147,7 +148,7 @@ exports.ReportsUpdate = function (req, res) {
     var data = req.body;
 
     if (!req.user.isAdmin()) {
-        var Reports = connection.model('Reports');
+        var Reports = mongoose.model('Reports');
         Reports.findOne({ _id: data._id, owner: req.user._id, companyID: req.user.companyID }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {

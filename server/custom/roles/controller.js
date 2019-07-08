@@ -1,4 +1,5 @@
-var Roles = connection.model('Roles');
+const mongoose = require('mongoose');
+var Roles = mongoose.model('Roles');
 const Controller = require('../../core/controller.js');
 
 class RolesController extends Controller {

@@ -15,7 +15,7 @@ var logsSchema = new mongoose.Schema({
     associatedID: String,
     createdOn: { type: Date, default: Date.now },
     createdBy: { type: String }
-}, { collection: 'wst_Logs' });
+});
 
 // Log Types
 // 100 info
@@ -74,6 +74,5 @@ logsSchema.statics.adminFindAll = function (req, done) {
     });
 };
 
-// var Log = mongoose.model("Log", logsSchema);
-var Logs = connection.model('Logs', logsSchema);
+var Logs = mongoose.model('Logs', logsSchema, 'wst_Logs');
 module.exports = Logs;

@@ -1,45 +1,32 @@
 const config = require('config');
 
-module.exports = function (_, done) {
-    const path = require('path');
+module.exports = function () {
     const mongoose = require('mongoose');
     const debug = require('debug')('urungi:server');
 
-    if (config.get('db_type') === 'tingoDB') {
-        // global.connection = mongoose.connect('tingodb:'+global.tingo_db_path);
-        debug('tingo DB connection');
-        global.TUNGUS_DB_OPTIONS = { nativeObjectID: true, searchInArray: true };
-        global.connection = mongoose.connect('mongodb://data');
-    } else {
-        const dbURI = config.get('db');
-        debug('mongo DB connection');
-        mongoose.Promise = global.Promise;
-        global.connection = mongoose.createConnection(dbURI, {
-            poolSize: 5,
-            useNewUrlParser: true,
-            useFindAndModify: false,
-        });
+    const db = config.get('db');
+    mongoose.connect(db, {
+        useNewUrlParser: true,
+        useFindAndModify: false,
+    });
 
-        // CONNECTION EVENTS
-        // When successfully connected
-        connection.on('connected', function () {
-            if (typeof done !== 'undefined') {
-                done();
-            } else {
-                debug('Mongoose connection open to ' + dbURI);
-            }
-        });
+    const connection = mongoose.connection;
 
-        // If the connection throws an error
-        connection.on('error', function (err) {
-            console.error('Mongoose default connection error: ' + err);
-        });
+    // CONNECTION EVENTS
+    // When successfully connected
+    connection.on('connected', function () {
+        debug('Mongoose connection open to ' + db);
+    });
 
-        // When the connection is disconnected
-        connection.on('disconnected', function () {
-            debug('Mongoose default connection disconnected');
-        });
-    }
+    // If the connection throws an error
+    connection.on('error', function (err) {
+        console.error('Mongoose default connection error: ' + err);
+    });
+
+    // When the connection is disconnected
+    connection.on('disconnected', function () {
+        debug('Mongoose default connection disconnected');
+    });
 
     // If the Node process ends, close the Mongoose connection
     process.on('SIGINT', function () {
@@ -48,12 +35,17 @@ module.exports = function (_, done) {
         });
     });
 
-    var fs = require('fs');
+    require('../custom/companies/model');
+    require('../custom/dashboards/model');
+    require('../custom/dashboardsv2/model');
+    require('../custom/data-sources/model');
+    require('../custom/files/model');
+    require('../custom/layers/model');
+    require('../custom/logs/model');
+    require('../custom/reports/model');
+    require('../custom/roles/model');
+    require('../custom/statistics/model');
+    require('../custom/users/model');
 
-    // Custom models
-    var models_dir = path.join(__dirname, '..', 'custom');
-    fs.readdirSync(models_dir).forEach(function (file) {
-        if (file[0] === '.') return;
-        require(models_dir + '/' + file + '/model.js');
-    });
+    return connection;
 };

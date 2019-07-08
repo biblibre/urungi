@@ -12,7 +12,7 @@ var DataSourcesSchema = new mongoose.Schema({
     createdBy: { type: String },
     createdOn: { type: Date },
     statusInfo: { type: Object }
-}, { collection: 'wst_DataSources' });
+});
 
 DataSourcesSchema.statics.changeStatus = function (req, datasourceID, status, done) {
 // -1 error, 0 not active, 1 active
@@ -67,5 +67,5 @@ DataSourcesSchema.statics.invalidateDatasource = function (req, datasourceID, er
     });
 };
 
-var DataSources = connection.model('DataSources', DataSourcesSchema);
+var DataSources = mongoose.model('DataSources', DataSourcesSchema, 'wst_DataSources');
 module.exports = DataSources;

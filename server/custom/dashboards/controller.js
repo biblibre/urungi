@@ -1,6 +1,7 @@
 const config = require('config');
+const mongoose = require('mongoose');
 
-var Dashboards = connection.model('Dashboards');
+var Dashboards = mongoose.model('Dashboards');
 
 const Controller = require('../../core/controller.js');
 
@@ -26,7 +27,7 @@ exports.DashboardsFindAll = function (req, res) {
     var fields = { dashboardName: 1, owner: 1, isPublic: 1 };
     var params = {};
 
-    var Dashboards = connection.model('Dashboards');
+    var Dashboards = mongoose.model('Dashboards');
     Dashboards.find(find, fields, params, function (err, items) {
         if (err) throw err;
 
@@ -76,7 +77,7 @@ exports.DashboardsUpdate = function (req, res) {
     var data = req.body;
 
     if (!req.user.isAdmin()) {
-        var Dashboards = connection.model('Dashboards');
+        var Dashboards = mongoose.model('Dashboards');
         Dashboards.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
@@ -107,7 +108,7 @@ exports.DashboardsDelete = function (req, res) {
     req.body = data;
 
     if (!req.user.isAdmin()) {
-        var Dashboards = connection.model('Dashboards');
+        var Dashboards = mongoose.model('Dashboards');
         Dashboards.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
@@ -137,7 +138,7 @@ exports.getDashboard = function (req, res) {
         if (result) {
             // Annotate the execution in statistics
 
-            var statistics = connection.model('statistics');
+            var statistics = mongoose.model('statistics');
             var stat = {};
             stat.type = 'dashboard';
             stat.relationedID = result.item._id;
@@ -155,7 +156,7 @@ exports.getDashboard = function (req, res) {
             }
 
             // Get all the reports...
-            var Reports = connection.model('Reports');
+            var Reports = mongoose.model('Reports');
 
             Reports.find({ _id: { $in: theReports } }, function (err, reports) {
                 if (err) { console.error(err); }
@@ -184,7 +185,7 @@ exports.PublishDashboard = function (req, res) {
     var data = req.body;
 
     // tiene el usuario conectado permisos para publicar?
-    var Dashboards = connection.model('Dashboards');
+    var Dashboards = mongoose.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
     if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
@@ -213,7 +214,7 @@ exports.UnpublishDashboard = function (req, res) {
     var data = req.body;
 
     // TODO:tiene el usuario conectado permisos para publicar?
-    var Dashboards = connection.model('Dashboards');
+    var Dashboards = mongoose.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
     if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
@@ -242,7 +243,7 @@ exports.ShareDashboard = function (req, res) {
     var parentFolder = data.parentFolder;
 
     // tiene el usuario conectado permisos para publicar?
-    var Dashboards = connection.model('Dashboards');
+    var Dashboards = mongoose.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
     if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
@@ -272,7 +273,7 @@ exports.UnshareDashboard = function (req, res) {
     var data = req.body;
 
     // TODO:tiene el usuario conectado permisos para publicar?
-    var Dashboards = connection.model('Dashboards');
+    var Dashboards = mongoose.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
     if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }

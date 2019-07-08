@@ -1,5 +1,6 @@
-var DataSources = connection.model('DataSources');
-const Logs = connection.model('Logs');
+const mongoose = require('mongoose');
+var DataSources = mongoose.model('DataSources');
+const Logs = mongoose.model('Logs');
 
 var db = function () {
     /* this.host = data.host;

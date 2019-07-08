@@ -39,7 +39,7 @@ var Dashboardsv2Schema = new mongoose.Schema({
     createdBy: { type: String },
     author: { type: String },
     createdOn: { type: Date }
-}, { collection: 'wst_Dashboardsv2', collation: { locale: 'en', strength: 2 } });
+}, { collation: { locale: 'en', strength: 2 } });
 
 Dashboardsv2Schema.methods.publish = async function () {
     this.isPublic = true;
@@ -67,5 +67,5 @@ Dashboardsv2Schema.methods.unshare = async function () {
     return this.save();
 };
 
-var Dashboardsv2 = connection.model('Dashboardsv2', Dashboardsv2Schema);
+var Dashboardsv2 = mongoose.model('Dashboardsv2', Dashboardsv2Schema, 'wst_Dashboardsv2');
 module.exports = Dashboardsv2;

@@ -80,7 +80,7 @@ var LayersSchema = new mongoose.Schema({
     createdBy: { type: String },
     createdOn: { type: Date },
     datasourceID: { type: mongoose.Schema.Types.ObjectId, required: true },
-}, { collection: 'wst_Layers', collation: { locale: 'en', strength: 2 } });
+}, { collation: { locale: 'en', strength: 2 } });
 
 LayersSchema.statics.setStatus = function (req, done) {
     if (req.user.isAdmin()) {
@@ -113,5 +113,5 @@ LayersSchema.statics.setStatus = function (req, done) {
     }
 };
 
-var Layers = connection.model('Layers', LayersSchema);
+var Layers = mongoose.model('Layers', LayersSchema, 'wst_Layers');
 module.exports = Layers;

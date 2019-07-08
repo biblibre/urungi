@@ -4,7 +4,8 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const RememberMeStrategy = require('passport-remember-me').Strategy;
 
-var Users = connection.model('Users'); // require('../../models/users');
+const mongoose = require('mongoose');
+var Users = mongoose.model('Users');
 
 module.exports = function (passport) {
     passport.serializeUser(function (user, done) {
