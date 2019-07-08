@@ -1,3 +1,5 @@
+const restrict = require('../../middlewares/restrict');
+
 module.exports = function (app) {
     var Dashboardsv2 = require('./controller.js');
 

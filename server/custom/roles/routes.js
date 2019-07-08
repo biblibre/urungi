@@ -1,3 +1,4 @@
+const restrict = require('../../middlewares/restrict');
 const restrictAdmin = require('../../middlewares/restrict-admin');
 
 module.exports = function (app) {

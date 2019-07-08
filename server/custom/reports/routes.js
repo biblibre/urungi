@@ -1,3 +1,5 @@
+const restrict = require('../../middlewares/restrict');
+
 module.exports = function (app) {
     var Reports = require('./controller.js');
 

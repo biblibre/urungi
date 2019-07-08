@@ -11,6 +11,8 @@ const MongoStore = require('connect-mongo')(session);
 var cookieParser = require('cookie-parser');
 const csurf = require('csurf');
 
+const restrict = require('./middlewares/restrict.js');
+
 var app = express();
 
 // set the view engine to ejs
@@ -71,7 +73,6 @@ global.config = config;
 require('./config/mongoose')();
 require('./config/passport')(passport);
 
-require('./globals');
 require('./config/mailer');
 
 require('./config/routes')(app, passport);
