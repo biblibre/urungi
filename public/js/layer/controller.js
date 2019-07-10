@@ -253,8 +253,8 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     function getDatasources () {
-        api.getDatasource($scope._Layer.datasourceID).then(function (data) {
-            $scope.datasources = [ data.item ];
+        api.getDatasource($scope._Layer.datasourceID).then(function (datasource) {
+            $scope.datasources = [ datasource ];
         });
     };
 

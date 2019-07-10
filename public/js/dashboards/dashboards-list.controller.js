@@ -35,7 +35,7 @@
 
             params.fields = ['dashboardName', 'isPublic', 'isShared', 'parentFolder', 'owner', 'author', 'createdOn'];
 
-            return api.dashboardsFindAll(params).then(result => {
+            return api.getDashboards(params).then(result => {
                 vm.dashboards = result.items;
 
                 return { page: result.page, pages: result.pages };

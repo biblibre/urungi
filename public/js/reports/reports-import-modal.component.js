@@ -33,7 +33,7 @@
 
             params.fields = ['reportName', 'isPublic'];
 
-            return api.reportsFindAll(params).then(result => {
+            return api.getReports(params).then(result => {
                 vm.reports = result.items;
 
                 return { page: result.page, pages: result.pages };

@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configuration object for `mailer` key has changed, check config/default.js
 - Replace mocha and karma by jest for running tests
 - Tables are now ordered alphabetically in the layer modification page
+- Make import tool more picky and informative
 
 ### Fixed
 

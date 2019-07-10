@@ -1,4 +1,4 @@
-<div class="container-fluid root-container"  ng-init="initExport()">
+<div class="container-fluid root-container">
     <div class="row">
         <div class="main col-md-3">
             <app-sidebar></app-sidebar>
@@ -13,17 +13,17 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <details class="details" open>
-                            <summary>Layers</summary>
+                            <summary translate>Layers</summary>
 
                             <div class="dropdownExport">
-                                <div class="checkbox" ng-repeat="layer in layers">
+                                <div class="checkbox" ng-repeat="layer in vm.layers">
                                     <label>
                                         <input type="checkbox" ng-model="layer.checked">
                                         {{layer.name}}
                                     </label>
                                 </div>
-                                <p class="help-block">
-                                    Required Layers for chosen reports and dashboards will be included automatically, there is no need to include them manually.
+                                <p class="help-block" translate>
+                                    Required layers for chosen reports and dashboards will be included automatically, there is no need to include them manually.
                                 </p>
                             </div>
                         </details>
@@ -35,10 +35,10 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <details class="details" open>
-                            <summary>Reports</summary>
+                            <summary translate>Reports</summary>
 
                             <div class="dropdownExport">
-                                <div class="checkbox" ng-repeat="report in reports">
+                                <div class="checkbox" ng-repeat="report in vm.reports">
                                     <label>
                                         <input type="checkbox" ng-model="report.checked">
                                         {{report.reportName}}
@@ -54,10 +54,10 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <details class="details" open>
-                            <summary>Dashboards</summary>
+                            <summary translate>Dashboards</summary>
 
                             <div class="dropdownExport">
-                                <div class="checkbox" ng-repeat="dashboard in dashboards">
+                                <div class="checkbox" ng-repeat="dashboard in vm.dashboards">
                                     <label>
                                         <input type="checkbox" ng-model="dashboard.checked">
                                         {{dashboard.dashboardName}}
@@ -73,7 +73,7 @@
                 <div class="col-sm-2">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" class="form-control" ng-model="exportName">
+                            <input type="text" class="form-control" ng-model="vm.exportName">
                             <span class="input-group-addon">.json</span>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-success" ng-click="downloadExport()" translate>Export</button>
+                    <button class="btn btn-success" ng-click="vm.downloadExport()" translate>Export</button>
                 </div>
             </div>
         </div>

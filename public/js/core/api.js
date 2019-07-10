@@ -3,9 +3,9 @@
 
     angular.module('app.core').factory('api', api);
 
-    api.$inject = ['connection'];
+    api.$inject = ['$http', 'connection'];
 
-    function api (connection) {
+    function api ($http, connection) {
         const service = {
             getCounts: getCounts,
             getUserData: getUserData,
@@ -16,25 +16,32 @@
             getEntitiesSchema: getEntitiesSchema,
             getSqlQuerySchema: getSqlQuerySchema,
 
-            reportsFindAll: reportsFindAll,
+            getReports: getReports,
             deleteReport: deleteReport,
             publishReport: publishReport,
             unpublishReport: unpublishReport,
             shareReport: shareReport,
             unshareReport: unshareReport,
+            getReport: getReport,
+            createReport: createReport,
+            updateReport: updateReport,
 
-            dashboardsFindAll: dashboardsFindAll,
+            getDashboards: getDashboards,
             deleteDashboard: deleteDashboard,
             getDashboard: getDashboard,
             publishDashboard: publishDashboard,
             unpublishDashboard: unpublishDashboard,
             shareDashboard: shareDashboard,
             unshareDashboard: unshareDashboard,
+            createDashboard: createDashboard,
+            updateDashboard: updateDashboard,
 
-            layersFindAll: layersFindAll,
+            getLayers: getLayers,
             changeLayerStatus: changeLayerStatus,
             createLayer: createLayer,
             deleteLayer: deleteLayer,
+            getLayer: getLayer,
+            updateLayer: updateLayer,
         };
 
         return service;
@@ -52,11 +59,7 @@
         }
 
         function getDatasource (id) {
-            const params = {
-                id: id,
-            };
-
-            return connection.get('/api/data-sources/find-one', params);
+            return get('/api/data-sources/find-one', { id: id }).then(data => data.item);
         }
 
         function getDataSources (params) {
@@ -81,8 +84,19 @@
             return connection.get('/api/data-sources/getsqlQuerySchema', params);
         }
 
-        function reportsFindAll (params) {
-            return connection.get('/api/reports/find-all', params);
+        /**
+         * Fetch multiple reports
+         *
+         * @param {object} params - Query parameters
+         * @param {Array<string>} params.fields - List of fields to retrive
+         * @param {Object<string, string>} params.filters - Filters to apply
+         * @param {string} params.sort - Field to sort on
+         * @param {number} params.sortType - Sort direction (1: asc, -1: desc)
+         * @param {number} params.page - Page to fetch
+         * @returns {Promise<object, Error>} Promise that resolves to an object
+         */
+        function getReports (params) {
+            return get('/api/reports/find-all', params);
         }
 
         function deleteReport (id) {
@@ -122,20 +136,64 @@
             return connection.post('/api/reports/unshare', data);
         }
 
-        function dashboardsFindAll (params) {
-            return connection.get('/api/dashboardsv2/find-all', params);
+        /**
+         * Fetch an existing report
+         *
+         * @param {string} id - ID of report to fetch
+         * @returns {Promise<object, Error>} Promise that resolves to the report object
+         */
+        function getReport (id) {
+            return get('/api/reports/find-one', { id: id }).then(data => data.item);
+        }
+
+        /**
+         * Create a new report
+         *
+         * @param {object} report - Report to create
+         * @returns {Promise<object, Error>} Promise that resolves to the created report
+         */
+        function createReport (report) {
+            return post('/api/reports/create', report).then(data => data.item);
+        }
+
+        /**
+         * Update an existing report
+         *
+         * @param {object} report - Report to update
+         * @param {string} report._id - ID of report to update
+         * @returns {Promise<object, Error>} Promise that resolves to the updated report
+         */
+        function updateReport (report) {
+            return post('/api/reports/update/' + report._id, report).then(data => data.item);
+        }
+
+        /**
+         * Fetch multiple dashboards
+         *
+         * @param {object} params - Query parameters
+         * @param {Array<string>} params.fields - List of fields to retrive
+         * @param {Object<string, string>} params.filters - Filters to apply
+         * @param {string} params.sort - Field to sort on
+         * @param {number} params.sortType - Sort direction (1: asc, -1: desc)
+         * @param {number} params.page - Page to fetch
+         * @returns {Promise<object, Error>} Promise that resolves to an object
+         */
+        function getDashboards (params) {
+            return get('/api/dashboardsv2/find-all', params);
         }
 
         function deleteDashboard (id) {
             return connection.post('/api/dashboardsv2/delete/' + id, { id: id });
         }
 
+        /**
+         * Fetch an existing dashboard
+         *
+         * @param {string} id - ID of dashboard to fetch
+         * @returns {Promise<object, Error>} Promise that resolves to the dashboard object
+         */
         function getDashboard (id) {
-            const data = {
-                id: id,
-            };
-
-            return connection.get('/api/dashboardsv2/get/' + id, data).then(res => res.item);
+            return get('/api/dashboardsv2/find-one', { id: id }).then(data => data.item);
         }
 
         function publishDashboard (id) {
@@ -171,8 +229,40 @@
             return connection.post('/api/dashboardsv2/unshare', data);
         }
 
-        function layersFindAll (params) {
-            return connection.get('/api/layers/find-all', params);
+        /**
+         * Create a new dashboard
+         *
+         * @param {object} dashboard - Dashboard to create
+         * @returns {Promise<object, Error>} Promise that resolves to the created dashboard
+         */
+        function createDashboard (dashboard) {
+            return post('/api/dashboardsv2/create', dashboard).then(data => data.item);
+        }
+
+        /**
+         * Update an existing dashboard
+         *
+         * @param {object} dashboard - Dashboard to update
+         * @param {string} dashboard._id - ID of dashboard to update
+         * @returns {Promise<object, Error>} Promise that resolves to the updated dashboard
+         */
+        function updateDashboard (dashboard) {
+            return post('/api/dashboardsv2/update/' + dashboard._id, dashboard).then(data => data.item);
+        }
+
+        /**
+         * Fetch multiple layers
+         *
+         * @param {object} params - Query parameters
+         * @param {Array<string>} params.fields - List of fields to retrive
+         * @param {Object<string, string>} params.filters - Filters to apply
+         * @param {string} params.sort - Field to sort on
+         * @param {number} params.sortType - Sort direction (1: asc, -1: desc)
+         * @param {number} params.page - Page to fetch
+         * @returns {Promise<object, Error>} Promise that resolves to an object
+         */
+        function getLayers (params) {
+            return get('/api/layers/find-all', params);
         }
 
         function changeLayerStatus (layerID, newStatus) {
@@ -184,12 +274,77 @@
             return connection.post('/api/layers/change-layer-status', data);
         }
 
+        /**
+         * Create a new layer
+         *
+         * @param {object} layer - Layer to create
+         * @returns {Promise<object, Error>} Promise that resolves to the created layer
+         */
         function createLayer (layer) {
-            return connection.post('/api/layers/create', layer);
+            return post('/api/layers/create', layer);
         }
 
         function deleteLayer (id) {
             return connection.post('/api/layers/delete/' + id, { id: id });
+        }
+
+        /**
+         * Fetch an existing layer
+         *
+         * @param {string} id - ID of layer to fetch
+         * @returns {Promise<object, Error>} Promise that resolves to the layer object
+         */
+        function getLayer (id) {
+            return get('/api/layers/find-one', { id: id }).then(data => data.item);
+        }
+
+        /**
+         * Update an existing layer
+         *
+         * @param {object} layer - Layer object
+         * @param {string} layer._id - ID of layer to be updated
+         * @returns {Promise<object, Error>}
+         */
+        function updateLayer (layer) {
+            return post('/api/layers/update/' + layer._id, layer).then(data => data.item);
+        }
+
+        /**
+         * Perform a GET request
+         *
+         * @param {string} url - URL of the request
+         * @param {object} params - Query parameters
+         * @returns {Promise<object, Error>} Promise that resolves to an object (can be undefined if not found)
+         */
+        function get (url, params) {
+            return $http.get(url, { params: params }).then(res => {
+                if (res.data.result === 0) {
+                    throw new Error(res.data.msg);
+                }
+
+                return res.data;
+            }, res => {
+                throw new Error(res.data);
+            });
+        }
+
+        /**
+         * Perform a POST request
+         *
+         * @param {string} url - URL of the request
+         * @param {object} data - Data to send as request body
+         * @returns {Promise<object, Error>}
+         */
+        function post (url, data) {
+            return $http.post(url, data).then(res => {
+                if (res.data.result === 0) {
+                    throw new Error(res.data.msg);
+                }
+
+                return res.data;
+            }, res => {
+                throw new Error(res.data);
+            });
         }
     }
 })();
