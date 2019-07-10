@@ -7,6 +7,8 @@
 
     function api ($http, connection) {
         const service = {
+            getVersion: getVersion,
+
             getCounts: getCounts,
             getUserData: getUserData,
             getUserObjects: getUserObjects,
@@ -45,6 +47,10 @@
         };
 
         return service;
+
+        function getVersion () {
+            return $http.get('/api/version').then(res => res.data);
+        }
 
         function getCounts () {
             return connection.get('/api/get-counts');
