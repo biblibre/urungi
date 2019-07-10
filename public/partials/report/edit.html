@@ -11,11 +11,11 @@
         </div>
 
     <div class="explorer-header-buttons">
-                <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-if="mode == 'edit' && !isForDash" style="margin-left: 5px" uib-tooltip="{{'Click here to save the report changes' | translate}}" tooltip-placement="bottom" translate>Save</a>
+                <a id="saveReportBtn" data-ng-click="reportName()" class="btn btn-success pull-right"  ng-if="mode == 'edit' && !isForDash" style="margin-left: 5px;" uib-tooltip="{{'Click here to save the report changes' | translate}}" tooltip-placement="bottom" translate>Save</a>
 
                 <a ng-if="isForDash != true" ng-click="goBack();" class="btn btn-default pull-right" uib-tooltip="{{'Click here to cancel and backtrack' | translate}}" tooltip-placement="bottom" translate>Cancel</a>
                 <a ng-if="isForDash == true" ng-click="cancelReport(selectedReport);" class="btn btn-default pull-right" uib-tooltip="{{'Click here to cancel and back to the dashboard' | translate}}" tooltip-placement="bottom" translate>Cancel</a>
-                <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right:3px;" uib-tooltip="{{'Click here to conduct the guided tour for data explorer' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
+                <a class="btn btn-info pull-right" ng-click="showIntro()" style="margin-right: 3px;" uib-tooltip="{{'Click here to conduct the guided tour for data explorer' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
     </div>
 
 </div>
@@ -29,10 +29,6 @@
                             <i class="fa fa-gear" ></i>
                         </div>
                         <div class="object-panel-header-inner">
-                                <!--<i class="toggle-button fa-minus-circle"  ng-click="toggle();$event.stopPropagation()" role="button" tabindex="0" style="right: 5px;
-                position: absolute;
-                font-size: 20px;"></i>-->
-
                         </div>
 
                 </div>

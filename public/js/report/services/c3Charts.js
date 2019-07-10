@@ -1,6 +1,6 @@
 /* global c3:false */
 
-angular.module('app').service('c3Charts', function (Noty) {
+angular.module('app').service('c3Charts', function (Noty, gettextCatalog) {
     this.rebuildChart = function (report, id) {
         var theValues = [];
         var theStackValues = {};
@@ -24,7 +24,7 @@ angular.module('app').service('c3Charts', function (Noty) {
         // This causes some of the charts to display weird or misleading results
 
         if (!query.data) {
-            new Noty({ text: 'no data to display', type: 'warning' }).show();
+            new Noty({ text: gettextCatalog.getString('no data to display'), type: 'warning' }).show();
             return;
         }
 
@@ -295,32 +295,32 @@ angular.module('app').service('c3Charts', function (Noty) {
     this.chartColumnTypeOptions = [
         {
             id: 'spline',
-            name: 'Spline',
+            name: gettextCatalog.getString('Spline'),
             image: 'images/spline.png'
         },
         {
             id: 'bar',
-            name: 'Bar',
+            name: gettextCatalog.getString('Bar'),
             icon: 'fa fa-bar-chart'
         },
         {
             id: 'area',
-            name: 'Area',
+            name: gettextCatalog.getString('Area'),
             icon: 'fa fa-area-chart'
         },
         {
             id: 'line',
-            name: 'Line',
+            name: gettextCatalog.getString('Line'),
             icon: 'fa fa-line-chart'
         },
         {
             id: 'area-spline',
-            name: 'Area spline',
+            name: gettextCatalog.getString('Area spline'),
             image: 'images/area-spline.png'
         },
         {
             id: 'scatter',
-            name: 'Scatter',
+            name: gettextCatalog.getString('Scatter'),
             image: 'images/scatter.png'
         }
     ];
@@ -328,12 +328,12 @@ angular.module('app').service('c3Charts', function (Noty) {
     this.chartSectorTypeOptions = [
         {
             id: 'pie',
-            name: 'Pie',
+            name: gettextCatalog.getString('Pie'),
             image: 'images/pie.png'
         },
         {
             id: 'donut',
-            name: 'Donut',
+            name: gettextCatalog.getString('Donut'),
             image: 'images/donut.png'
         }
     ];

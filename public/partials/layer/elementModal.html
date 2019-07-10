@@ -87,7 +87,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="field-5" class="control-label">Description</label>
+                                <label for="field-5" class="control-label" translate>Description</label>
                                 <textarea ng-model="modalElement.description" class="form-control autogrow" id="field-5"  style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 50px;"></textarea>
                             </div>
 
@@ -98,16 +98,16 @@
                         <div class="col-md-12">
                             <div class="form-group" ng-if="modalElement.elementType == 'array'">
 
-                                <label class="control-label">Array values</label>
+                                <label class="control-label" translate>Array values</label>
                                 <div ng-repeat="value in modalElement.values">
-                                    <span class="form-control" style="width: 47%;float: left;font-weight: bold;">{{value.value}} </span>
-                                    <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
+                                    <span class="form-control" style="width: 47%; float: left; font-weight: bold;">{{value.value}} </span>
+                                    <input class="form-control" ng-model="value.label" placeholder="{{ 'label' | translate }}" style="width: 47%; float: left;">
                                     <i class="fa fa-times hand-cursor" ng-click="removeFromArray(modalElement.values, value)" style="padding: 9px;"></i>
                                 </div>
 
                                 <div>
-                                    <input class="form-control" ng-model="valueValue" placeholder="enter new value" style="width: 47%;float: left;">
-                                    <input class="form-control" ng-model="valueLabel" placeholder="enter new label" style="width: 47%;float: left;">
+                                    <input class="form-control" ng-model="valueValue" placeholder="{{ 'enter new value' | translate }}" style="width: 47%; float: left;">
+                                    <input class="form-control" ng-model="valueLabel" placeholder="{{ 'enter new label' | translate }}" style="width: 47%; float: left;">
                                     <i class="fa fa-arrow-right hand-cursor" style="padding: 9px;"
                                         ng-click="addValueToElement(modalElement, valueValue, valueLabel);valueValue='';valueLabel='';"></i>
                                 </div>
@@ -116,18 +116,18 @@
 
                             <div class="form-group" ng-if="modalElement.elementType == 'lookup'">
 
-                                <label class="control-label">Lookup setup</label>
+                                <label class="control-label" translate>Lookup setup</label>
                                 <div>
-                                    <span class="form-control" style="width: 47%;float: left;font-weight: bold;">Join Dataset </span>
-                                    <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
+                                    <span class="form-control" style="width: 47%; float: left; font-weight: bold;" translate>Join Dataset </span>
+                                    <input class="form-control" ng-model="value.label" placeholder="{{ 'label' | translate }}" style="width: 47%; float: left;">
                                 </div>
                                 <div>
-                                    <span class="form-control" style="width: 47%;float: left;font-weight: bold;">Join Field </span>
-                                    <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
+                                    <span class="form-control" style="width: 47%; float: left; font-weight: bold;" translate>Join Field </span>
+                                    <input class="form-control" ng-model="value.label" placeholder="{{ 'label' | translate }}" style="width: 47%; float: left;">
                                 </div>
                                 <div>
-                                    <span class="form-control" style="width: 47%;float: left;font-weight: bold;">Shown Field </span>
-                                    <input class="form-control" ng-model="value.label" placeholder="label" style="width: 47%;float: left;">
+                                    <span class="form-control" style="width: 47%; float: left; font-weight: bold;" translate>Shown Field</span>
+                                    <input class="form-control" ng-model="value.label" placeholder="{{ 'label' | translate }}" style="width: 47%; float: left;">
                                 </div>
                             </div>
                         </div>
@@ -136,12 +136,12 @@
             <uib-tab index="2" heading="{{ 'Format' | translate }}">
                        <div ng-if="modalElement.elementType == 'number' || modalElement.elementType == 'date'" >
                             <div class="form-group">
-                                <label for="field-format" class="control-label">Format</label>
-                                <input id="field-format" class="form-control" ng-model="modalElement.format" placeholder="format..." style="width: 100%;">
+                                <label for="field-format" class="control-label" translate>Format</label>
+                                <input id="field-format" class="form-control" ng-model="modalElement.format" placeholder="{{ 'format...' | translate }}" style="width: 100%;">
                             </div>
                             <div ng-if="modalElement.elementType == 'number'">
-                                <h5 >Format examples</h5>
-                                <a class="btn btn-link pull-right" href="http://numeraljs.com/" target="_blank">more examples...</a>
+                                <h5 translate>Format examples</h5>
+                                <a class="btn btn-link pull-right" href="http://numeraljs.com/" target="_blank" translate>more examples...</a>
 
                                 <table class="table-condensed striped bordered">
                                     <thead>
@@ -168,8 +168,8 @@
                             </div>
 
                             <div ng-if="modalElement.elementType == 'date'">
-                                <h5 >Format examples</h5>
-                                <a class="btn btn-link pull-right" href="http://momentjs.com/docs/#/displaying/" target="_blank">more examples...</a>
+                                <h5 translate>Format examples</h5>
+                                <a class="btn btn-link pull-right" href="http://momentjs.com/docs/#/displaying/" target="_blank" translate>more examples...</a>
 
                                 <table class="table-condensed striped bordered">
                                     <thead>
@@ -211,17 +211,17 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td><label>Year</label></td>
+                                    <td><label translate>Year</label></td>
                                     <td><input id="yearfrom" type="text" class="form-control" ng-model="modalElement.yearPositionFrom"></td>
                                     <td><input id="yearto" type="text" class="form-control" ng-model="modalElement.yearPositionTo" ></td>
                                 </tr>
                                 <tr>
-                                    <td><label>Month</label></td>
+                                    <td><label translate>Month</label></td>
                                     <td><input id="monthfrom" type="text" class="form-control" ng-model="modalElement.monthPositionFrom" ></td>
                                     <td><input id="monthto" type="text" class="form-control" ng-model="modalElement.monthPositionTo" ></td>
                                 </tr>
                                 <tr>
-                                    <td><label>Day</label></td>
+                                    <td><label translate>Day</label></td>
                                     <td><input id="dayfrom" type="text" class="form-control" ng-model="modalElement.dayPositionFrom" ></td>
                                     <td><input id="dayto" type="text" class="form-control" ng-model="modalElement.dayPositionTo" ></td>
                                 </tr>
@@ -244,24 +244,24 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="element in modalElement.associatedElements">
-                                        <td style="width: 80%;font-weight: bold;">{{element.element.elementLabel}}  </td>
-                                        <td style="width: 10%;text-align: center">
+                                        <td style="width: 80%; font-weight: bold;">{{element.element.elementLabel}}  </td>
+                                        <td style="width: 10%; text-align: center;">
                                             <input type="checkbox"  ng-model="element.visible" >
 
                                         </td>
-                                        <td style="width: 10%;text-align: right">
+                                        <td style="width: 10%; text-align: right;">
                                         <i class="fa fa-times hand-cursor" ng-click="removeFromArray(modalElement.associatedElements, element)" style="padding: 9px;"></i>
                                         </td>
                                     </tr>
-                                    <tr style="background-color: #ccc;margin-top: 3px;">
-                                        <td style="width: 80%;padding: 2px;">
+                                    <tr style="background-color: #ccc; margin-top: 3px;">
+                                        <td style="width: 80%; padding: 2px;">
                                             <select class="form-control" ng-model="elementElement" ng-options="obj as obj.elementName for obj in getCollectionElements(modalElement.collectionID)" ></select>
                                         </td>
-                                        <td style="width: 10%;text-align: center">
+                                        <td style="width: 10%; text-align: center;">
                                             <input type="checkbox"  ng-model="elementVisible" >
 
                                         </td>
-                                        <td style="width: 10%;text-align: right">
+                                        <td style="width: 10%; text-align: right;">
                                             <i class="fa fa-arrow-right hand-cursor" style="padding: 9px;"
                                                ng-click="addAssociatedElementToElement(modalElement, elementElement, elementVisible);elementElement=undefined;elementVisible=false;"></i>
                                         </td>

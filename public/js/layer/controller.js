@@ -267,7 +267,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     $scope.editSQL = function () {
         var selectedCollection = $scope.theSelectedElement;
         if (!selectedCollection.isSQL) {
-            new Noty({ text: 'Cannot modify sql of an object which is not an sql request', type: 'error' }).show();
+            new Noty({ text: gettextCatalog.getString('Cannot modify sql of an object which is not an sql request'), type: 'error' }).show();
             return;
         }
 
@@ -541,7 +541,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                         element.component = comp;
                     }
                 } catch (error) {
-                    const message = 'Failed to parse expression for element ' +
+                    const message = gettextCatalog.getString('Failed to parse expression for element') + ' ' +
                         element.elementLabel + ' : ' + error.message;
                     new Noty({ type: 'warning', text: message }).show();
                 }
@@ -576,14 +576,14 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
 
                 var rightJoinType = {
                     overlays: [
-                        ['Label', { location: 0.88, label: '[right]', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
+                        ['Label', { location: 0.88, label: '[' + gettextCatalog.getString('right') + ']', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
                     ]
 
                 };
 
                 var leftJoinType = {
                     overlays: [
-                        ['Label', { location: 0.10, label: '[left]', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
+                        ['Label', { location: 0.10, label: '[' + gettextCatalog.getString('left') + ']', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
                     ]
                 };
 
@@ -920,37 +920,37 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             if (element.extractFromString) {
                 if (!element.yearPositionFrom) {
                     isOk = false;
-                    message = 'You have to setup a valid "FROM" position number to extract the year from the string';
+                    message = gettextCatalog.getString('You have to setup a valid "FROM" position number to extract the year from the string');
                 }
 
                 if (angular.isNumber(element.yearPositionFrom)) {
                     isOk = false;
-                    message = 'You have to setup a valid "FROM" position number to extract the year from the string';
+                    message = gettextCatalog.getString('You have to setup a valid "FROM" position number to extract the year from the string');
                 }
 
                 if (!element.yearPositionTo || angular.isNumber(element.yearPositionTo)) {
                     isOk = false;
-                    message = 'You have to setup a valid "TO" position number to extract the year from the string';
+                    message = gettextCatalog.getString('You have to setup a valid "TO" position number to extract the year from the string');
                 }
 
                 if (!element.monthPositionFrom || angular.isNumber(element.monthPositionFrom)) {
                     isOk = false;
-                    message = 'You have to setup a valid "FROM" position number to extract the month from the string';
+                    message = gettextCatalog.getString('You have to setup a valid "FROM" position number to extract the month from the string');
                 }
 
                 if (!element.monthPositionTo || angular.isNumber(element.monthPositionTo)) {
                     isOk = false;
-                    message = 'You have to setup a valid "TO" position number to extract the month from the string';
+                    message = gettextCatalog.getString('You have to setup a valid "TO" position number to extract the month from the string');
                 }
 
                 if (!element.dayPositionFrom || angular.isNumber(element.dayPositionFrom)) {
                     isOk = false;
-                    message = 'You have to setup a valid "FROM" position number to extract the day from the string';
+                    message = gettextCatalog.getString('You have to setup a valid "FROM" position number to extract the day from the string');
                 }
 
                 if (!element.dayPositionTo || angular.isNumber(element.dayPositionTo)) {
                     isOk = false;
-                    message = 'You have to setup a valid "TO" position number to extract the day from the string';
+                    message = gettextCatalog.getString('You have to setup a valid "TO" position number to extract the day from the string');
                 }
             }
         }
@@ -1025,7 +1025,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         var elementID = 'F' + $scope.newID();
 
         var element = {};
-        element.elementLabel = 'my folder';
+        element.elementLabel = gettextCatalog.getString('my folder');
         element.elementRole = 'folder';
         element.elementID = elementID;
         element.editing = true;
@@ -1314,7 +1314,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                 $scope.erDiagramInit();
             });
         } else {
-            new Noty({ text: 'Datasource must be the same for all entities', type: 'error' }).show();
+            new Noty({ text: gettextCatalog.getString('Datasource must be the same for all entities'), type: 'error' }).show();
         }
     };
 

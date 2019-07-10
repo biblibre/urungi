@@ -5,14 +5,14 @@
     <button ng-if="elementType != 'page' && wstMode != 'report-designer' && selectedElement" class="btn btn-danger pull-right" ng-click="deleteSelected()"><i class="fa fa-trash"></i></button>
   </div>
 
-  <div class="container-fluid" style="background-color:transparent;margin-top: 10px;margin-bottom: 10px;" ng-if="elementType != 'page'">
-     <table style="width:100%;">
-         <tr >
-             <td style="width:50%; padding-right:5px;">
-               <button class="btn btn-info btn-small"  ng-click="moveElementUp()" style="width:100%;"><i class="fa fa-arrow-up"></i> <span translate>Up</span></button>
+  <div class="container-fluid" style="background-color: transparent; margin-top: 10px; margin-bottom: 10px;" ng-if="elementType != 'page'">
+     <table style="width: 100%;">
+         <tr>
+             <td style="width: 50%; padding-right: 5px;">
+               <button class="btn btn-info btn-small" ng-click="moveElementUp()" style="width: 100%;"><i class="fa fa-arrow-up"></i> <span translate>Up</span></button>
              </td>
-             <td  style="width:50%;">
-               <button class="btn btn-info btn-small" ng-click="moveElementDown()" style="width:100%;"><i class="fa fa-arrow-down"></i> <span translate>Down</span></button>
+             <td style="width: 50%;">
+               <button class="btn btn-info btn-small" ng-click="moveElementDown()" style="width: 100%;"><i class="fa fa-arrow-down"></i> <span translate>Down</span></button>
              </td>
          </tr>
      </table>
@@ -71,8 +71,7 @@
 
         <div class="accordion-body">
             <div class="panel-box">
-                <!--<div data-controls="properties.color" class="color-picker-trigger" id="fill-color"><div class="background-box"><i class="fa fa-color-adjust"></i></div><div class="background-name">{{ 'color' | translate }}</div></div>-->
-                <div colorpicker ng-model="properties.color"  class="color-picker-trigger" id="fill-color" style="width:100%;"><div class="background-box"><input type="text" class="form-control" ng-model="properties.color" style="background-color:transparent;"/></div></div>
+                <div colorpicker ng-model="properties.color"  class="color-picker-trigger" id="fill-color" style="width: 100%;"><div class="background-box"><input type="text" class="form-control" ng-model="properties.color" style="background-color: transparent;"/></div></div>
             </div>
 
         </div>
@@ -131,36 +130,36 @@
         <div class="accordion-body">
             <div id="text-box" class="clearfix panel-box">
                 <div class="clearfix">
-                    <div class="col-md-8" style=" padding: 0px;">
-                        <select id="el-font-family" class="pretty-select" ng-model="inspector.styles.text.fontFamily" data-width="170" style="width:100%">
-                        <option value="">Font</option>
-                        <option ng-repeat="font in textStyles.baseFonts" data-font-family="{{ font.css }}" value="{{ font.css }}">{{ font.name }}</option>
+                    <div class="col-md-8" style=" padding: 0;">
+                        <select id="el-font-family" class="pretty-select" ng-model="inspector.styles.text.fontFamily" data-width="170" style="width: 100%;">
+                            <option value="" translate>Font</option>
+                            <option ng-repeat="font in textStyles.baseFonts" data-font-family="{{ font.css }}" value="{{ font.css }}">{{ font.name }}</option>
                         </select>
                     </div>
-                    <div class="col-md-4" style="padding: 0px; padding-left:5px;">
-                    <div colorpicker ng-model="inspector.styles.text.color"  class="color-picker-trigger" id="fill-color" style="width:100%;height:35px;" ng-style="{background: inspector.styles.text.color}"><div class="background-box" style="padding: 0px;"><input type="text" class="form-control" ng-model="inspector.styles.text.color" style="background-color:transparent;"/></div><div class="background-name">{{ 'color' | translate }}</div></div>
+                    <div class="col-md-4" style="padding: 0; padding-left: 5px;">
+                    <div colorpicker ng-model="inspector.styles.text.color"  class="color-picker-trigger" id="fill-color" style="width: 100%; height: 35px;" ng-style="{background: inspector.styles.text.color}"><div class="background-box" style="padding: 0;"><input type="text" class="form-control" ng-model="inspector.styles.text.color" style="background-color: transparent;"/></div><div class="background-name">{{ 'color' | translate }}</div></div>
                     </div>
                 </div>
 
                 <div class="clearfix">
-                        <div class="col-md-8" style=" padding: 0px;">
+                        <div class="col-md-8" style=" padding: 0;">
                             <div class="icon-box italic" bl-toggle-text-style="fontStyle|italic">I</div>
                             <div class="icon-box underline" bl-toggle-text-decoration="underline" ng-class="inspector.styles.text.textDecoration.indexOf('underline') > -1 ? 'active' : ''">U</div>
                             <div class="icon-box strike" bl-toggle-text-decoration="line-through" ng-class="inspector.styles.text.textDecoration.indexOf('line-through') > -1 ? 'active' : ''">S</div>
                             <div class="icon-box overline" bl-toggle-text-decoration="overline" ng-class="inspector.styles.text.textDecoration.indexOf('overline') > -1 ? 'active' : ''">O</div>
                         </div>
-                        <div class="col-md-4" style=" padding: 0px;">
-                            <select id="el-font-weight" class="form-control pretty-select" ng-model="inspector.styles.text.fontWeight" data-width="66" style="width:100%">
+                        <div class="col-md-4" style=" padding: 0;">
+                            <select id="el-font-weight" class="form-control pretty-select" ng-model="inspector.styles.text.fontWeight" data-width="66" style="width: 100%;">
                                 <option ng-repeat="weight in textStyles.fontWeights" data-font-weight="{{ weight }}" value="{{ weight }}">{{ weight }}</option>
                             </select>
                         </div>
                 </div>
                 <div class="clearfix">
-                        <div id="el-font-style-box" class="col-md-6" style=" padding: 0px;">
+                        <div id="el-font-style-box" class="col-md-6" style=" padding: 0;">
 
-                                <input type="text" id="el-font-size" ng-model="inspector.styles.text.fontSize" ng-model-options="{ debounce: 300 }" class="form-control " style="width:100%">
+                                <input type="text" id="el-font-size" ng-model="inspector.styles.text.fontSize" ng-model-options="{ debounce: 300 }" class="form-control " style="width: 100%;">
                         </div>
-                        <div class="col-md-6" style=" padding: 0px;">
+                        <div class="col-md-6" style=" padding: 0;">
                                 <div class="pull-right">
                                     <div class="icon-box" bl-toggle-text-style="textAlign|left"><i class="fa fa-align-left"></i> </div>
                                     <div class="icon-box" bl-toggle-text-style="textAlign|center"><i class="fa fa-align-center"></i> </div>
@@ -209,8 +208,8 @@
             <h4 class="accordion-heading">{{ 'border' | translate }} <i class="fa fa-angle-down pull-right"></i></h4>
             <div class="accordion-body">
                 <div class="panel-box">
-                    <div class="clearfix" style="margin-bottom:5px">
-                        <div colorpicker ng-model="inspector.styles.border.color"  class="color-picker-trigger" id="fill-color" style="width:58%;height:35px;border-width:5px;" ng-style="{borderColor: inspector.styles.border.color}"><div class="background-box" style="padding: 0px;"><input type="text" class="form-control" ng-model="inspector.styles.border.color" style="background-color:transparent;    height: 25px;"/></div><div class="background-name">{{ 'borderColor' | translate }}</div></div>
+                    <div class="clearfix" style="margin-bottom: 5px;">
+                        <div colorpicker ng-model="inspector.styles.border.color"  class="color-picker-trigger" id="fill-color" style="width: 58%; height: 35px; border-width: 5px;" ng-style="{borderColor: inspector.styles.border.color}"><div class="background-box" style="padding: 0;"><input type="text" class="form-control" ng-model="inspector.styles.border.color" style="background-color: transparent; height: 25px;"/></div><div class="background-name">{{ 'borderColor' | translate }}</div></div>
 
                         <select id="border-style" ng-model="inspector.styles.border.style">
                             <option value="none">{{ 'none' | translate }}</option>

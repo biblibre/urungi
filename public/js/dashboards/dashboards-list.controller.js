@@ -46,19 +46,19 @@
             return [
                 {
                     name: 'dashboardName',
-                    label: 'Name',
+                    label: gettextCatalog.getString('Name'),
                     width: 4,
                     filter: true,
                 },
                 {
                     name: 'author',
-                    label: 'Author',
+                    label: gettextCatalog.getString('Author'),
                     width: 3,
                     filter: true,
                 },
                 {
                     name: 'createdOn',
-                    label: 'Date of creation',
+                    label: gettextCatalog.getString('Date of creation'),
                     width: 3,
                 },
             ];

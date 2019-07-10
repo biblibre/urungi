@@ -108,14 +108,14 @@
             connection.get('/api/roles/find-all', {}).then(function (data) {
                 vm.roles = data.items;
 
-                var adminRole = { _id: 'ADMIN', name: 'Urungi Administrator' };
+                var adminRole = { _id: 'ADMIN', name: gettextCatalog.getString('Urungi Administrator') };
                 vm.roles.push(adminRole);
             });
         }
 
         function deleteRole (roleID) {
             if (vm.user.userName === 'administrator' && roleID === 'ADMIN') {
-                new Noty({ text: "The role 'Urungi Administrator' can't be removed from the user administrator", type: 'warning' }).show();
+                new Noty({ text: gettextCatalog.getString("The role 'Urungi Administrator' can't be removed from the user administrator"), type: 'warning' }).show();
             } else {
                 $uibModal.open({
                     component: 'appDeleteModal',

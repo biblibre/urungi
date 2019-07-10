@@ -13,18 +13,18 @@
 
                 <div class="form-group" ng-class="{ 'has-error': sqlLayerForm.name.$invalid }">
                             <label class="control-label" for="field-name" translate>Type a name for this dataset</label>
-                            <input type="text" class="form-control" id="field-name" name="name" ng-model="temporarySQLCollection.name" placeholder="type a name for the dataset" ng-required="true" required>
-                            <span ng-show="sqlLayerForm.name.$invalid" class="help-inline" ng-bind="getTranslation('The name is required')"></span>
+                            <input type="text" class="form-control" id="field-name" name="name" ng-model="temporarySQLCollection.name" placeholder="{{ 'type a name for the dataset' | translate }}" ng-required="true" required>
+                            <span ng-show="sqlLayerForm.name.$invalid" class="help-inline" translate>The name is required</span>
                 </div>
                 <div class="form-group" ng-class="{ 'has-error': sqlLayerForm.sql.$invalid }">
                     <label class="control-label" for="field-sql" translate>SQL query</label>
                     <textarea class="form-control autogrow" cols="20" id="field-sql" name="sql" ng-model="temporarySQLCollection.sqlQuery" ng-required="true" required></textarea>
-                    <span ng-show="sqlLayerForm.sql.$invalid" class="help-inline" ng-bind="getTranslation('You have to enter an SQL query')"></span>
+                    <span ng-show="sqlLayerForm.sql.$invalid" class="help-inline" translate>You have to enter an SQL query</span>
                 </div>
 
             </div>
 
-            <div class="container-fluid" ng-show="temporarySQLCollection.invalidSql">
+            <div class="container-fluid" ng-show="temporarySQLCollection.invalidSql" translate>
                 There is an error in your sql syntax.
             </div>
 
@@ -81,13 +81,12 @@
             </div>
 
         </div>
-        
+
         <div class="modal-footer ng-scope">
                 <button type="button" class="btn btn-white" data-dismiss="modal" translate>Cancel</button>
                 <button type="button" class="btn btn-info" ng-click="confirmSQLChanges()" translate>Confirm</button>
         </div>
 
     </span>
-    
 
 </nd-modal>

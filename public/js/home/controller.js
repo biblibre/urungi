@@ -1,6 +1,4 @@
-/* global moment: false */
-
-angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'connection', 'gettextCatalog', 'userService', 'api', function ($scope, $rootScope, $q, connection, gettextCatalog, userService, api) {
+angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'moment', 'connection', 'gettextCatalog', 'userService', 'api', function ($scope, $rootScope, $q, moment, connection, gettextCatalog, userService, api) {
     $scope.dashboardsNbr = 3;
     $scope.reportsNbr = 10;
     $scope.notificationsNbr = 0;

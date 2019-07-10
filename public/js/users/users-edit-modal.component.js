@@ -12,9 +12,9 @@
         },
     });
 
-    UsersEditModalController.$inject = ['connection'];
+    UsersEditModalController.$inject = ['gettextCatalog', 'connection'];
 
-    function UsersEditModalController (connection) {
+    function UsersEditModalController (gettextCatalog, connection) {
         const vm = this;
 
         vm.mode = 'new';
@@ -33,23 +33,23 @@
             vm.alertMessage = '';
 
             if (!vm.user.userName) {
-                vm.alertMessage = 'You have to introduce the user nick for the new user';
+                vm.alertMessage = gettextCatalog.getString('You have to introduce the user nick for the new user');
                 return;
             }
 
             if (!vm.user.sendPassword) {
                 if (!vm.user.pwd1) {
-                    vm.alertMessage = 'You have to introduce a password';
+                    vm.alertMessage = gettextCatalog.getString('You have to introduce a password');
                     return;
                 } else {
                     if (vm.user.pwd1 !== vm.user.pwd2) {
-                        vm.alertMessage = 'Passwords do not match';
+                        vm.alertMessage = gettextCatalog.getString('Passwords do not match');
                         return;
                     }
                 }
             } else {
                 if (!vm.user.email) {
-                    vm.alertMessage = 'You have to introduce a valid email to send the generated password to the user';
+                    vm.alertMessage = gettextCatalog.getString('You have to introduce a valid email to send the generated password to the user');
                     return;
                 }
             }

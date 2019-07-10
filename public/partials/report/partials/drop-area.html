@@ -1,59 +1,34 @@
     <!-- Metrics for charts and pivot tables -->
 
-    <div ng-if="selectedReport.reportType == 'pivot'"
-    wst-dropzone="true" list-model="selectedReport.properties.ykeys"
-    aggregation-mandatory="true"
-    role="'column'" zone-info="'Drop here your metrics'"></div>
+    <div ng-if="selectedReport.reportType == 'pivot'" wst-dropzone="true" list-model="selectedReport.properties.ykeys" aggregation-mandatory="true" role="'column'" zone-info="'Drop here your metrics' | translate"></div>
 
-    <div ng-if="selectedReport.reportType == 'chart-bar' || selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'indicator' || selectedReport.reportType == 'gauge'"
-    wst-dropzone="true" list-model="selectedReport.properties.ykeys"
-    role="'column'" zone-info="'Drop here your metrics'"></div>
+    <div ng-if="selectedReport.reportType == 'chart-bar' || selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'indicator' || selectedReport.reportType == 'gauge'" wst-dropzone="true" list-model="selectedReport.properties.ykeys" role="'column'" zone-info="'Drop here your metrics' | translate"></div>
 
-    <div ng-if="selectedReport.reportType == 'chart-line'"
-    wst-dropzone="true" list-model="selectedReport.properties.ykeys"
-    display-options="chartColumnTypeOptions"
-    display-callback="changeChartColumnType"
-    stack-bars="(selectedReport.properties.xkeys.length > 1) && stackBars"
-    role="'column'" zone-info="'Drop here your metrics'"></div>
+    <div ng-if="selectedReport.reportType == 'chart-line'" wst-dropzone="true" list-model="selectedReport.properties.ykeys" display-options="chartColumnTypeOptions" display-callback="changeChartColumnType" stack-bars="(selectedReport.properties.xkeys.length > 1) && stackBars" role="'column'" zone-info="'Drop here your metrics' | translate"></div>
 
-    <div ng-if="selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'chart-pie'"
-    wst-dropzone="true" list-model="selectedReport.properties.ykeys"
-    display-options="chartSectorTypeOptions"
-    display-callback = "changeChartSectorType"
-    role="'column'" zone-info="'Drop here your metrics'"></div>
+    <div ng-if="selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'chart-pie'" wst-dropzone="true" list-model="selectedReport.properties.ykeys" display-options="chartSectorTypeOptions" display-callback = "changeChartSectorType" role="'column'" zone-info="'Drop here your metrics' | translate"></div>
 
     <!-- Column entries -->
 
-    <div id="columnsDropzone" ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid'"
-    wst-dropzone="true" list-model="selectedReport.properties.columns" hide-column="hideColumn"
-    role="'column'" zone-info="'Drop here your columns' | translate"></div>
+    <div id="columnsDropzone" ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid'" wst-dropzone="true" list-model="selectedReport.properties.columns" hide-column="hideColumn" role="'column'" zone-info="'Drop here your columns' | translate"></div>
 
     <!--dimensions for pivot tables -->
 
-    <div ng-if="selectedReport.reportType == 'pivot'" wst-dropzone="true" list-model="selectedReport.properties.pivotKeys.columns"
-    forbid-aggregation="true"
-    role="'column'" zone-info="'Drop here the table columns' | translate"></div>
+    <div ng-if="selectedReport.reportType == 'pivot'" wst-dropzone="true" list-model="selectedReport.properties.pivotKeys.columns" forbid-aggregation="true" role="'column'" zone-info="'Drop here the table columns' | translate"></div>
 
-    <div ng-if="selectedReport.reportType == 'pivot'" wst-dropzone="true" list-model="selectedReport.properties.pivotKeys.rows"
-    forbid-aggregation="true"
-    role="'column'" zone-info="'Drop here the table rows' | translate"></div>
+    <div ng-if="selectedReport.reportType == 'pivot'" wst-dropzone="true" list-model="selectedReport.properties.pivotKeys.rows" forbid-aggregation="true" role="'column'" zone-info="'Drop here the table rows' | translate"></div>
 
     <!--dimensions for charts -->
 
-    <div ng-if="selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'chart-line' || selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'chart-pie'"
-    wst-dropzone="true" list-model="selectedReport.properties.xkeys"
-    role="'column'" zone-info="'Drop here the dimension field' | translate"></div>
+    <div ng-if="selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'chart-line' || selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'chart-pie'" wst-dropzone="true" list-model="selectedReport.properties.xkeys" role="'column'" zone-info="'Drop here the dimension field' | translate"></div>
 
     <!-- Filters -->
 
-    <div id="filtersDropzone"  class="container-fluid column-zone no-padding" drop="onDropOnFilter($data, $event, 'filter')" 
-    drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
-        <div class="filter-zone-label pull-right" ng-hide="selectedReport.properties.filters.length > 0 || selectedReport.properties.recordLimit != undefined">Drop here your filters</div>
+    <div id="filtersDropzone"  class="container-fluid column-zone no-padding" drop="onDropOnFilter($data, $event, 'filter')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+        <div class="filter-zone-label pull-right" ng-hide="selectedReport.properties.filters.length > 0 || selectedReport.properties.recordLimit != undefined" translate>Drop here your filters</div>
         <ul class="ul-drop no-padding" ng-model="selectedReport.properties.filters" ui-sortable="filterSortableOptions" ng-include="'partials/report/partials/filter.html'"></ul>
     </div>
 
     <!-- Order keys -->
 
-    <div id="orderByDropzone" ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'"
-    wst-dropzone="true" list-model="selectedReport.properties.order" set-sort-type="setSortType"
-    role="'order'" zone-info="'Drop here your order keys'"></div>
+    <div id="orderByDropzone" ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" wst-dropzone="true" list-model="selectedReport.properties.order" set-sort-type="setSortType" role="'order'" zone-info="'Drop here your order keys' | translate"></div>

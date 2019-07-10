@@ -47,26 +47,26 @@
             return [
                 {
                     name: 'reportName',
-                    label: 'Name',
+                    label: gettextCatalog.getString('Name'),
                     width: 3,
                     filter: true,
                 },
                 {
                     name: 'layerName',
-                    label: 'Layer',
+                    label: gettextCatalog.getString('Layer'),
                     width: 3,
                     filter: true,
                     filterField: 'layer.name',
                 },
                 {
                     name: 'author',
-                    label: 'Author',
+                    label: gettextCatalog.getString('Author'),
                     width: 2,
                     filter: true,
                 },
                 {
                     name: 'createdOn',
-                    label: 'Date of creation',
+                    label: gettextCatalog.getString('Date of creation'),
                     width: 2,
                 },
             ];

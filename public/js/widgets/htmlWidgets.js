@@ -1,32 +1,31 @@
-angular.module('app').service('htmlWidgets', function () {
+angular.module('app').service('htmlWidgets', function (gettextCatalog) {
     this.getJumbotronHTML = function () {
         return '<div page-block class="jumbotron" ndType="jumbotron">' +
-                        '<h1 page-block  class="editable" ndType="header" contenteditable="false">  Hello, world! </h1>' +
-                        '<p page-block  class="editable" contenteditable="false" ndType="paragraph">This is a simple text paragraph select to edit content.</p>' +
-                        /* '<a page-block  class="editable btn btn-default" ndType="button"  role="button">My button</a>'+ */
+                        '<h1 page-block  class="editable" ndType="header" contenteditable="false">' + gettextCatalog.getString('Hello, world!') + '</h1>' +
+                        '<p page-block  class="editable" contenteditable="false" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
                         '</div>';
     };
 
     this.get4colsctaHTML = function () {
         return '<div page-block class="container-fluid ndContainer" ndType="container">' +
                     '<div  page-block class="col-md-3 ndContainer" ndtype="column" >' +
-                        '<h3  page-block class="editable" ndType="header" >  A header text H3 </h3>' +
-                        '<p page-block class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>' +
+                        '<h3  page-block class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
+                        '<p page-block class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
                         '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
                     '</div>' +
                     '<div class="col-md-3 ndContainer" ndtype="column">' +
-                        '<h3 page-block  class="editable"  ndType="header" >  A header text H3 </h3>' +
-                        '<p page-block  class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>' +
+                        '<h3 page-block  class="editable"  ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
+                        '<p page-block  class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
                         '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
                     '</div>' +
                     '<div class="col-md-3 ndContainer" ndtype="column" >' +
-                        '<h3  page-block  class="editable" ndType="header" >  A header text H3 </h3>' +
-                        '<p page-block  class="editable"  ndType="paragraph">This is a simple text paragraph select to edit content.</p>' +
+                        '<h3  page-block  class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
+                        '<p page-block  class="editable"  ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
                         '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
                     '</div>' +
                     '<div class="col-md-3 ndContainer" ndtype="column">' +
-                        '<h3  page-block  class="editable" ndType="header" >  A header text H3 </h3>' +
-                        '<p page-block  class="editable"  ndType="paragraph">This is a simple text paragraph select to edit content.</p>' +
+                        '<h3  page-block  class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
+                        '<p page-block  class="editable"  ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
                         '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
                     '</div>' +
                 '</div>';
@@ -35,18 +34,18 @@ angular.module('app').service('htmlWidgets', function () {
     this.get3colsctaHTML = function () {
         return '<div page-block class="container-fluid ndContainer" ndType="container">' +
                     '<div  page-block class="col-md-4 ndContainer" ndtype="column" >' +
-                        '<h3  page-block class="editable" ndType="header" >  A header text H3 </h3>' +
-                        '<p page-block class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>' +
+                        '<h3  page-block class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
+                        '<p page-block class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
                         '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
                     '</div>' +
                     '<div class="col-md-4 ndContainer" ndtype="column">' +
-                        '<h3 page-block  class="editable"  ndType="header" >  A header text H3 </h3>' +
-                        '<p page-block  class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>' +
+                        '<h3 page-block  class="editable"  ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
+                        '<p page-block  class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
                         '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
                     '</div>' +
                     '<div class="col-md-4 ndContainer" ndtype="column">' +
-                        '<h3  page-block  class="editable" ndType="header" >  A header text H3 </h3>' +
-                        '<p page-block  class="editable"  ndType="paragraph">This is a simple text paragraph select to edit content.</p>' +
+                        '<h3  page-block  class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
+                        '<p page-block  class="editable"  ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
                         '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
                     '</div>' +
                 '</div>';
@@ -55,13 +54,13 @@ angular.module('app').service('htmlWidgets', function () {
     this.get2colsctaHTML = function () {
         return '<div page-block class="container-fluid ndContainer" ndType="container">' +
                     '<div  page-block class="col-md-6 ndContainer" ndtype="column" >' +
-                        '<h3  page-block class="editable" ndType="header" >  A header text H3 </h3>' +
-                        '<p page-block class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>' +
+                        '<h3  page-block class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
+                        '<p page-block class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
                         '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
                     '</div>' +
                     '<div class="col-md-6 ndContainer" ndtype="column">' +
-                        '<h3 page-block  class="editable"  ndType="header" >  A header text H3 </h3>' +
-                        '<p page-block  class="editable" ndType="paragraph">This is a simple text paragraph select to edit content.</p>' +
+                        '<h3 page-block  class="editable"  ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
+                        '<p page-block  class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
                         '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
                     '</div>' +
                 '</div>';
@@ -70,7 +69,7 @@ angular.module('app').service('htmlWidgets', function () {
     this.getImageTextLargeHTML = function () {
         return '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >' +
                     '<div page-block class="col-md-7 col-md-push-5 ndContainer" ndtype="column"  ndType="col" >' +
-                        '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">Oh yeah, it is that good. <span class="text-muted">See for yourself.</span></h2>' +
+                        '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">' + gettextCatalog.getString('Oh yeah, it is that good.') + ' <span class="text-muted">See for yourself.</span></h2>' +
                         '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>' +
                     '</div>' +
                     '<div page-block class="col-md-5 col-md-pull-7 ndContainer" ndtype="column">' +
@@ -82,7 +81,7 @@ angular.module('app').service('htmlWidgets', function () {
     this.getTextImageLargeHTML = function () {
         return '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >' +
                     '<div page-block class="col-md-7 ndContainer" ndtype="column"  ndType="col" >' +
-                        '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">Oh yeah, it is that good. <span class="text-muted">See for yourself.</span></h2>' +
+                        '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">' + gettextCatalog.getString('Oh yeah, it is that good.') + ' <span class="text-muted">See for yourself.</span></h2>' +
                         '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>' +
                     '</div>' +
                     '<div page-block class="col-md-5 ndContainer" ndtype="column">' +
@@ -93,7 +92,7 @@ angular.module('app').service('htmlWidgets', function () {
 
     this.getTextLargeHTML = function () {
         return '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >' +
-                    '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">Oh yeah, it is that good. <span class="text-muted">See for yourself.</span></h2>' +
+                    '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">' + gettextCatalog.getString('Oh yeah, it is that good.') + ' <span class="text-muted">See for yourself.</span></h2>' +
                     '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>' +
                     '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
                     '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>' +

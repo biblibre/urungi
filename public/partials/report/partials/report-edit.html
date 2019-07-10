@@ -2,7 +2,7 @@
 <div ng-include src="filterPromptModal"></div>
 
 <!--choose a widget to see your data-->
-<div id="reportType" class="container-fluid" ng-hide="queryID" style="width:100%">
+<div id="reportType" class="container-fluid" ng-hide="queryID" style="width: 100%;">
     <!-- TYPE OF REPORT SELECTION -->
     <a id="reportTypeGrid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'grid', 'report-unselected-btn': selectedReport.reportType != 'grid'}" ng-click="changeReportType('grid')"><img src="/images/grid.png"></a>
     <a id="reportTypeVerticalGrid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'vertical-grid', 'report-unselected-btn': selectedReport.reportType != 'vertical-grid'}" ng-click="changeReportType('vertical-grid')"><img src="/images/vertical_grid.png"></a>
@@ -13,15 +13,15 @@
     <a id="reportTypeGauge" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'gauge', 'report-unselected-btn': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="/images/gauge.png"></a>
 </div>
 
-<div id="dropArea" class="container-fluid" style="width:100%" ng-include src="dropArea"></div>
+<div id="dropArea" class="container-fluid" style="width: 100%;" ng-include src="dropArea"></div>
 
-<div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width:100%">
+<div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width: 100%;">
     <div>
         <span ng-show="selectedReport.properties.recordLimit == undefined">
             <span translate>Quick display with</span>
             <input type="number" ng-model="selectedRecordLimit.value" size="8">
             <span translate>results.</span>
-            <button id="setLimit" class="btn btn-default" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" uib-tooltip="Move the limit to the filter area, will be used during runtime, not only during report building">Filter</button>
+            <button id="setLimit" class="btn btn-default" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" uib-tooltip="{{ 'Move the limit to the filter area, will be used during runtime, not only during report building' | translate }}" translate>Filter</button>
         </span>
         <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
         <span id="gauge-max" ng-if="selectedReport.reportType === 'gauge'" translate>Enter a max value for gauge</span><input ng-if="selectedReport.reportType === 'gauge'" ng-model="selectedReport.properties.maxValue" type="number" name="maxGauge">
@@ -35,17 +35,17 @@
     </div>
 </div>
 
-<div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width:100%">
+<div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width: 100%;">
 
-    <button class="btn btn-success pull-right" ng-if="user.reportsCreate" ng-click="reportName()" style="margin-left:5px;" translate>Save as a report</button>
-    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left:5px;" translate>Push it to a Dashboard</button>
+    <button class="btn btn-success pull-right" ng-if="user.reportsCreate" ng-click="reportName()" style="margin-left: 5px;" translate>Save as a report</button>
+    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left: 5px;" translate>Push it to a Dashboard</button>
 </div>
-<div class="container-fluid" ng-show="sql && isForDash" style="width:100%">
-    <button class="btn btn-success pull-right"  style="margin-left:5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();" translate>Save</button>
+<div class="container-fluid" ng-show="sql && isForDash" style="width: 100%;">
+    <button class="btn btn-success pull-right"  style="margin-left: 5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();" translate>Save</button>
 </div>
 
 
-<div ng-show="showSQL" class="panel" style="z-index:100">
+<div ng-show="showSQL" class="panel" style="z-index: 100;">
     <div class="panel-heading">
         <div class="panel-title">
             <span translate>SQL query</span>
@@ -65,7 +65,7 @@
                 To fix this, make sure to choose an aggregation for your metrics, and do not use more than 1 or 2 dimensions.
             </div>
             <div class="col-md-2">
-                <button ng-click="hideErrorMessage()">Hide</button>
+                <button ng-click="hideErrorMessage()" translate>Hide</button>
             </div>
         </div>
 
@@ -77,7 +77,7 @@
 
 </div>
 
-<div report-view report="selectedReport" style="height:100%;position:relative" mode="mode" ></div>
+<div report-view report="selectedReport" style="height: 100%; position: relative;" mode="mode" ></div>
 
 
 <div ng-include src="dateModal"></div>
