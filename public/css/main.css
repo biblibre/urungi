@@ -54,6 +54,20 @@ a:focus {
     font-weight: bold;
 }
 
+.layerNewButtonDropdown {
+    background-color: #666;
+}
+
+#layerButtonGroup > .dropdown-menu > li > a {
+    background-color: #666;
+    color: #fff;
+}
+
+#layerButtonGroup > .dropdown-menu > li > a:hover {
+    background-color: #204d74;
+    color: #fff;
+}
+
 .logo {
     width: 500px;
 }
