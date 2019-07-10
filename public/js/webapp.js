@@ -20,6 +20,7 @@
         'angular-intro',
         'page.block',
         'app.core',
+        'app.about',
         'app.inspector',
         'app.sidebar',
         'app.data-sources',
@@ -43,11 +44,6 @@
 
         $routeProvider.when('/home', {
             templateUrl: 'partials/home/index.html',
-            controller: 'homeCtrl'
-        });
-
-        $routeProvider.when('/about', {
-            templateUrl: 'partials/home/about.html',
             controller: 'homeCtrl'
         });
 

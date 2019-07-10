@@ -86,6 +86,7 @@ const routesModules = [
     './custom/roles/routes',
     './custom/statistics/routes',
     './custom/users/routes',
+    './custom/version/routes',
 ];
 
 for (const routesModule of routesModules) {

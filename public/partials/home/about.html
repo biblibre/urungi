@@ -9,6 +9,11 @@
                 <h3 translate>About</h3>
             </div>
 
+            <p ng-if="vm.version">
+                <span translate>Urungi version: {{ vm.version }}</span>
+                <span ng-if="vm.gitVersion">(git: {{ vm.gitVersion }})</span>
+            </p>
+
             <h4 translate>What is Urungi</h4>
             <p translate>
                 Urungi is a self-service dashboard and reporting tool.
