@@ -105,8 +105,51 @@ function dist_js_build () {
 }
 
 function dist_css_build () {
-    const paths = [
-        'node_modules/bootstrap/dist/css/bootstrap.min.css',
+    var less = require('gulp-less');
+
+    const bootstrap = gulp.src([
+        'node_modules/bootstrap/less/alerts.less',
+        'node_modules/bootstrap/less/badges.less',
+        'node_modules/bootstrap/less/breadcrumbs.less',
+        'node_modules/bootstrap/less/button-groups.less',
+        'node_modules/bootstrap/less/buttons.less',
+        'node_modules/bootstrap/less/carousel.less',
+        'node_modules/bootstrap/less/close.less',
+        'node_modules/bootstrap/less/code.less',
+        'node_modules/bootstrap/less/component-animations.less',
+        'node_modules/bootstrap/less/dropdowns.less',
+        'node_modules/bootstrap/less/forms.less',
+        'node_modules/bootstrap/less/glyphicons.less',
+        'node_modules/bootstrap/less/grid.less',
+        'node_modules/bootstrap/less/input-groups.less',
+        'node_modules/bootstrap/less/jumbotron.less',
+        'node_modules/bootstrap/less/labels.less',
+        'node_modules/bootstrap/less/list-group.less',
+        'node_modules/bootstrap/less/mixins.less',
+        'node_modules/bootstrap/less/modals.less',
+        'node_modules/bootstrap/less/navbar.less',
+        'node_modules/bootstrap/less/navs.less',
+        'node_modules/bootstrap/less/normalize.less',
+        'node_modules/bootstrap/less/pager.less',
+        'node_modules/bootstrap/less/pagination.less',
+        'node_modules/bootstrap/less/panels.less',
+        'node_modules/bootstrap/less/popovers.less',
+        'node_modules/bootstrap/less/progress-bars.less',
+        'node_modules/bootstrap/less/responsive-embed.less',
+        'node_modules/bootstrap/less/responsive-utilities.less',
+        'node_modules/bootstrap/less/scaffolding.less',
+        'node_modules/bootstrap/less/tables.less',
+        'node_modules/bootstrap/less/thumbnails.less',
+        'node_modules/bootstrap/less/tooltip.less',
+        'node_modules/bootstrap/less/type.less',
+        'node_modules/bootstrap/less/utilities.less',
+        'node_modules/bootstrap/less/variables.less',
+        'node_modules/bootstrap/less/wells.less',
+    ])
+        .pipe(concat('bootstrap.less'))
+        .pipe(less());
+
+    const modulesCss = gulp.src([
         'node_modules/ui-select/dist/select.min.css',
         'node_modules/angularjs-bootstrap-datetimepicker/src/css/datetimepicker.css',
         'node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
@@ -120,9 +163,9 @@ function dist_css_build () {
         'node_modules/intro.js/minified/introjs.min.css',
         'node_modules/noty/lib/noty.css',
         'node_modules/noty/lib/themes/bootstrap-v4.css',
-    ];
+    ]);
 
-    return gulp.src(paths)
+    return merge(bootstrap, modulesCss)
         .pipe(concat('bundle.min.css'))
         .pipe(gulp.dest('dist/css'));
 }
