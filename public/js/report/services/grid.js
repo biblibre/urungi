@@ -1,4 +1,4 @@
-angular.module('app').service('grid', function () {
+angular.module('app').service('grid', function (gettextCatalog) {
     var colClass = '';
     var colWidth = '';
     var columns = [];
@@ -71,7 +71,7 @@ angular.module('app').service('grid', function () {
 
         htmlCode += '</div>';
 
-        htmlCode += '<div ng-if="report.query.data.length == 0" >No data found</div>';
+        htmlCode += '<div ng-if="report.query.data.length == 0" >' + gettextCatalog.getString('No data found') + '</div>';
 
         htmlCode += '</div>';
 

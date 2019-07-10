@@ -12,7 +12,9 @@
         },
     });
 
-    function DuplicateModalController () {
+    DuplicateModalController.$inject = ['gettextCatalog'];
+
+    function DuplicateModalController (gettextCatalog) {
         const vm = this;
 
         vm.newName = '';
@@ -20,7 +22,7 @@
         vm.onDuplicate = onDuplicate;
 
         function $onInit () {
-            vm.newName = 'Copy of ' + vm.resolve.name;
+            vm.newName = gettextCatalog.getString('Copy of {{name}}', { name: vm.resolve.name });
         }
 
         function onDuplicate () {

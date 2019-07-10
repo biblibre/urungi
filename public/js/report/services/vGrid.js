@@ -1,4 +1,4 @@
-angular.module('app').service('verticalGrid', function (dataElements) {
+angular.module('app').service('verticalGrid', function (dataElements, gettextCatalog) {
     this.getVerticalGrid = function (report, mode) {
         let id;
         if (typeof report.id === 'undefined') {
@@ -35,7 +35,7 @@ angular.module('app').service('verticalGrid', function (dataElements) {
 
         htmlCode += '</div>';
 
-        htmlCode += '<div ng-if="report.query.data.length == 0" >No data found</div>';
+        htmlCode += '<div ng-if="report.query.data.length == 0" >' + gettextCatalog.getString('No data found') + '</div>';
 
         htmlCode += '</div>';
 

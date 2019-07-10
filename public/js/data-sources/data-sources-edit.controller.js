@@ -3,9 +3,9 @@
 
     angular.module('app.data-sources').controller('DataSourcesEditController', DataSourcesEditController);
 
-    DataSourcesEditController.$inject = ['connection', '$routeParams', '$http'];
+    DataSourcesEditController.$inject = ['connection', '$routeParams', '$http', 'gettextCatalog'];
 
-    function DataSourcesEditController (connection, $routeParams, $http) {
+    function DataSourcesEditController (connection, $routeParams, $http, gettextCatalog) {
         const vm = this;
 
         vm._dataSource = null;
@@ -66,10 +66,10 @@
             connection.post('/api/data-sources/testConnection', data).then(function (result) {
                 console.log(result);
                 if (result.result === 1) {
-                    vm.testConnection = { result: 1, message: 'Successful database connection.' };
+                    vm.testConnection = { result: 1, message: gettextCatalog.getString('Successful database connection.') };
                     vm.testingConnection = false;
                 } else {
-                    vm.testConnection = { result: 0, message: 'Database connection failed.', errorMessage: result.msg };
+                    vm.testConnection = { result: 0, message: gettextCatalog.getString('Database connection failed.'), errorMessage: result.msg };
                     vm.testingConnection = false;
                 }
             });
@@ -106,15 +106,15 @@
                     .then(angular.bind(this, function (data, status, headers, config) {
                         if (data.result === 1) {
                             vm.fileUploadSuccess = true;
-                            vm.fileUploadMessage = 'File uploaded successfully';
+                            vm.fileUploadMessage = gettextCatalog.getString('File uploaded successfully');
                         } else {
                             vm.fileUploadSuccess = false;
-                            vm.fileUploadMessage = 'File upload failed [' + data.msg + ']';
+                            vm.fileUploadMessage = gettextCatalog.getString('File upload failed') + ' [' + data.msg + ']';
                         }
                     }))
                     .catch(function (data, status) {
                         vm.fileUploadSuccess = false;
-                        vm.fileUploadMessage = 'File upload failed [' + data.msg + ']';
+                        vm.fileUploadMessage = gettextCatalog.getString('File upload failed') + ' [' + data.msg + ']';
                     });
             }
         };

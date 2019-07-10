@@ -1,7 +1,22 @@
-angular.module('app')
-    .factory('language', ['gettextCatalog', function (gettextCatalog) {
+(function () {
+    'use strict';
+
+    angular.module('app.core').factory('language', language);
+
+    language.$inject = ['gettextCatalog', 'moment'];
+
+    function language (gettextCatalog, moment) {
         const defaultLanguage = 'en';
         const availableLanguages = ['en', 'fr'];
+
+        const service = {
+            getAvailableLanguages: getAvailableLanguages,
+            setCurrentLanguage: setCurrentLanguage,
+            getCurrentLanguage: getCurrentLanguage,
+            setLanguageFromLocalStorage: setLanguageFromLocalStorage,
+        };
+
+        return service;
 
         function getAvailableLanguages () {
             return availableLanguages;
@@ -18,6 +33,8 @@ angular.module('app')
             }
 
             localStorage.setItem('currentLanguage', code);
+
+            moment.locale(code);
         }
 
         function getCurrentLanguage () {
@@ -28,11 +45,5 @@ angular.module('app')
             const currentLanguage = localStorage.getItem('currentLanguage');
             setCurrentLanguage(currentLanguage);
         }
-
-        return {
-            getAvailableLanguages: getAvailableLanguages,
-            setCurrentLanguage: setCurrentLanguage,
-            getCurrentLanguage: getCurrentLanguage,
-            setLanguageFromLocalStorage: setLanguageFromLocalStorage,
-        };
-    }]);
+    }
+})();

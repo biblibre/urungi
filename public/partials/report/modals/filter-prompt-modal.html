@@ -17,7 +17,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="field-3" class="control-label"></label>
-                    <div class="checkbox popover-primary ng-scope" popover-trigger="mouseenter" popover-placement="top" popover-title="Answer required" popover="Select if you want the user to enter an answer before executing the report.">
+                    <div class="checkbox popover-primary ng-scope" popover-trigger="mouseenter" popover-placement="top" popover-title="{{ 'Answer required' | translate }}" popover="{{ 'Select if you want the user to enter an answer before executing the report.' | translate }}">
                         <label>
                             <input type="checkbox" ng-model="selectedFilter.promptMandatory">
                             <span translate>Answer required (mandatory filter)</span>
@@ -44,7 +44,7 @@
     </div>
 
     <div class="modal-footer ng-scope">
-        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-white" data-dismiss="modal" translate>Close</button>
         <button ng-show="selectedFilter.filterPrompt" type="button" class="btn btn-danger"  ng-click="confirmFilterModal()" translate>Deactivate Filter</button>
         <button ng-show="!selectedFilter.filterPrompt" type="button" class="btn btn-info"  ng-click="confirmFilterModal()" translate>Activate Filter</button>
     </div>

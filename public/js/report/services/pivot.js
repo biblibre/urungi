@@ -1,4 +1,4 @@
-angular.module('app').service('pivot', function () {
+angular.module('app').service('pivot', function (gettextCatalog) {
     this.getPivotTableSetup = function (report) {
         const pivotKeys = report.properties.pivotKeys;
         const data = report.query.data;
@@ -97,7 +97,7 @@ angular.module('app').service('pivot', function () {
         };
 
         return {
-            html: '<div id="' + pivotID + '" > ERROR - could not display pivot table </div>',
+            html: '<div id="' + pivotID + '" >' + gettextCatalog.getString('ERROR - could not display pivot table') + '</div>',
             params: params,
             jquerySelector: '#' + pivotID
         };

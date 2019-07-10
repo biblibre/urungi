@@ -21,7 +21,7 @@
 
             <p ng-if="vm.checkError" class="text-danger">
                 <span translate>Error:</span>
-                <span>{{ vm.checkError.message | translate }}</span>
+                <span>{{ vm.checkError.message }}</span>
             </p>
 
             <div ng-if="vm.step >= 2">
@@ -32,11 +32,11 @@
                         <summary translate>Data sources</summary>
 
                         <div class="form-group" ng-repeat="ds in vm.importBundle.datasources" ng-class="{ 'has-error': vm.form['datasource-' + ds.doc._id].$invalid }">
-                            <label class="control-label">Datasource matching {{ds.doc.name}}</label>
+                            <label class="control-label" translate>Datasource matching {{ds.doc.name}}</label>
                             <select class="form-control" name="datasource-{{ ds.doc._id }}" ng-model="vm.datasourceMatch[ds.doc._id]" ng-options="ds as ds.name for ds in vm.localDatasources track by ds._id" required>
                                 <option value=""></option>
                             </select>
-                            <span class="help-block" ng-if="vm.form['datasource-' + ds.doc._id].$error.required">This field is required</span>
+                            <span class="help-block" ng-if="vm.form['datasource-' + ds.doc._id].$error.required" translate>This field is required</span>
                         </div>
                     </details>
 
@@ -47,8 +47,8 @@
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Status</th>
+                                        <th translate>Name</th>
+                                        <th translate>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -56,7 +56,7 @@
                                         <td>{{ layer.doc.name }}</td>
                                         <td>
                                             <div ng-if="!layer.valid">
-                                                <div class="text-warning" ng-repeat="error in layer.errors">{{ error | translate }}</div>
+                                                <div class="text-warning" ng-repeat="error in layer.errors">{{ error }}</div>
                                             </div>
                                             <div ng-if="layer.valid">
                                                 <div ng-if="layer.exists">
@@ -64,7 +64,7 @@
                                                     <input type="checkbox" ng-model="layer.overwrite">
                                                 </div>
                                                 <div ng-if="!layer.exists">
-                                                    <span class="text-success">OK</span>
+                                                    <span class="text-success" translate>OK</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -81,8 +81,8 @@
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Status</th>
+                                        <th translate>Name</th>
+                                        <th translate>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -90,15 +90,15 @@
                                         <td>{{ report.doc.reportName }}</td>
                                         <td>
                                             <div ng-if="!report.valid">
-                                                <div class="text-warning" ng-repeat="error in errors">{{ error | translate }}</div>
+                                                <div class="text-warning" ng-repeat="error in errors">{{ error }}</div>
                                             </div>
                                             <div ng-if="report.valid">
                                                 <div ng-if="report.exists">
-                                                    <span class="text-info">Already exists. Overwrite ?</span>
+                                                    <span class="text-info" translate>Already exists. Overwrite ?</span>
                                                     <input type="checkbox" ng-model="report.overwrite">
                                                 </div>
                                                 <div ng-if="!report.exists">
-                                                    <span class="text-success">OK</span>
+                                                    <span class="text-success" translate>OK</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -115,8 +115,8 @@
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Status</th>
+                                        <th translate>Name</th>
+                                        <th translate>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -124,15 +124,15 @@
                                         <td>{{ dashboard.doc.dashboardName }}</td>
                                         <td>
                                             <div ng-if="!dashboard.valid">
-                                                <div class="text-warning" ng-repeat="error in dashboard.errors">{{ error | translate }}</div>
+                                                <div class="text-warning" ng-repeat="error in dashboard.errors">{{ error }}</div>
                                             </div>
                                             <div ng-if="dashboard.valid">
                                                 <div ng-if="dashboard.exists">
-                                                    <span class="text-info">Already exists. Overwrite ?</span>
+                                                    <span class="text-info" translate>Already exists. Overwrite ?</span>
                                                     <input type="checkbox" ng-model="dashboard.overwrite">
                                                 </div>
                                                 <div ng-if="!dashboard.exists">
-                                                    <span class="text-success">OK</span>
+                                                    <span class="text-success" translate>OK</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -154,7 +154,7 @@
                 <uib-progressbar value="vm.importProgressValue" max="vm.importProgressMax"></uib-progressbar>
 
                 <div class="well" style="height: 300px; overflow-y: auto;">
-                    <div ng-class="'text-' + message.type" ng-repeat="message in vm.messages track by $index">{{ message.text | translate }}</div>
+                    <div ng-class="'text-' + message.type" ng-repeat="message in vm.messages track by $index">{{ message.text }}</div>
                 </div>
             </div>
         </div>

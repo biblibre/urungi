@@ -1,4 +1,4 @@
-angular.module('app').directive('fileModal', function ($http, fileService, Noty) {
+angular.module('app').directive('fileModal', function ($http, fileService, Noty, gettextCatalog) {
     return {
 
         templateUrl: '/partials/files/galleryModal.html',
@@ -66,7 +66,7 @@ angular.module('app').directive('fileModal', function ($http, fileService, Noty)
 
                 const type = file.type.split('/')[0];
                 if (type !== 'image') {
-                    new Noty({ text: 'You may only upload images', type: 'error' }).show();
+                    new Noty({ text: gettextCatalog.getString('You may only upload images'), type: 'error' }).show();
                     return;
                 }
 

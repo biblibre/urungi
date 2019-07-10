@@ -1,4 +1,3 @@
-
 <div class="container-fluid column-zone no-padding" 
     drop="onDrop($data, $event)" drop-effect="copy" drop-accept="['json/custom-object','json/column']" 
     drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
@@ -31,7 +30,7 @@
                                         {{option.name | translate}}
                                     </a>
                                 </li>
-                            
+
                                 <li class="divider" ng-show="hideColumn"></li>
 
                                 <li ng-show="hideColumn">
@@ -45,14 +44,13 @@
                                     <a ng-show="item.doNotStack" ng-click="stackBars(item,true);" translate>Stack column</a>
                                     <a ng-hide="item.doNotStack" ng-click="stackBars(item,false);" translate>unstack Column</a>
                                 </li>
-
                            </ul>
                 </div>
 
                 <span ng-if="setSortType">
                         <i ng-show="item.sortType == -1" class="fa fa-chevron-down hand-cursor order-box-close-btn" 
                         ng-click="setSortType(item, 1)" uib-tooltip="{{'Click here to order descendent using this field' | translate}}" tooltip-placement="bottom"></i>
-    
+
                         <i ng-show="item.sortType == 1" class="fa fa-chevron-up hand-cursor order-box-close-btn" 
                         ng-click="setSortType(item, -1)" uib-tooltip="{{'Click here to order ascendent using this field' | translate}}" tooltip-placement="bottom"></i>
                 </span>
@@ -64,4 +62,4 @@
         </li>
     </ul>
 
-</div>  
+</div>

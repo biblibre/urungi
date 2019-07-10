@@ -78,7 +78,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                     report.id = report._id;
                     $scope.selectedDashboard.reports.push(report);
                 } else {
-                    new Noty({ text: 'Error : failed to import report', type: 'error' }).show();
+                    new Noty({ text: gettextCatalog.getString('Error : failed to import report'), type: 'error' }).show();
                 }
             });
         });
@@ -110,7 +110,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         if ($scope.mode === 'add') {
             $scope.dashboardID = uuid.v4();
             $scope.selectedDashboard = {
-                dashboardName: 'New Dashboard',
+                dashboardName: gettextCatalog.getString('New Dashboard'),
                 backgroundColor: '#999999',
                 reports: [],
                 items: [],
@@ -130,7 +130,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             $scope.selectedDashboardLimit = { value: 500 };
 
             if (!$scope.dashboardID) {
-                new Noty({ text: 'Could not load dashboard : missing id', type: 'error' }).show();
+                new Noty({ text: gettextCatalog.getString('Could not load dashboard : missing id'), type: 'error' }).show();
             }
 
             return connection.get('/api/dashboardsv2/get/' + $scope.dashboardID, { id: $scope.dashboardID }).then(function (data) {
@@ -260,18 +260,18 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             case 'report':
                 const report = $scope.selectedDashboard.reports.find(r => r.id === data.reportID);
                 if (!report) {
-                    new Noty({ text: 'Could not find report', type: 'error' }).show();
+                    new Noty({ text: gettextCatalog.getString('Could not find report'), type: 'error' }).show();
                     return;
                 }
                 if (angular.element('#REPORT_' + report.id).length) {
-                    new Noty({ text: 'Sorry, that report is already on the dash', type: 'error' }).show();
+                    new Noty({ text: gettextCatalog.getString('Sorry, that report is already on the dash'), type: 'error' }).show();
                     return;
                 }
                 return reportModel.getReportContainerHTML(data.reportID);
 
             case 'queryFilter':
                 if (angular.element('#PROMPT_' + data.promptID).length) {
-                    new Noty({ text: 'Sorry, that filter is already on the dash', type: 'error' }).show();
+                    new Noty({ text: gettextCatalog.getString('Sorry, that filter is already on the dash'), type: 'error' }).show();
                     return;
                 }
                 return getPromptHTML(data);
@@ -350,7 +350,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         const authorisedObjects = ['imageTextLarge', 'textImageLarge', 'report', 'queryFilter', 'image', 'video', 'paragraph', 'heading', 'pageHeader'];
 
         if (authorisedObjects.indexOf(customObjectData.objectType) === -1) {
-            new Noty({ text: 'You are not allowed to put this object inside a component', type: 'warning' }).show();
+            new Noty({ text: gettextCatalog.getString('You are not allowed to put this object inside a component'), type: 'warning' }).show();
             return;
         }
 

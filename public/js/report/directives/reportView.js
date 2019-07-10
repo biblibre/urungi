@@ -1,4 +1,4 @@
-angular.module('app').directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, verticalGrid, pivot, uuid) {
+angular.module('app').directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, verticalGrid, pivot, uuid, gettextCatalog) {
     return {
 
         scope: {
@@ -31,7 +31,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
                 let promise = $q.resolve(0);
 
                 if (args.fetchData && $scope.report.query) {
-                    $scope.loadingMessage = 'Fetching data ...';
+                    $scope.loadingMessage = gettextCatalog.getString('Fetching data ...');
                     promise = reportModel.fetchData($scope.report.query, args).then(function (result) {
                         if (result.errorToken) {
                             $scope.errorToken = result.errorToken;
@@ -40,7 +40,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
                 }
 
                 return promise.then(function () {
-                    $scope.loadingMessage = 'Repainting report ...';
+                    $scope.loadingMessage = gettextCatalog.getString('Repainting report ...');
 
                     switch ($scope.report.reportType) {
                     case 'grid':
@@ -75,7 +75,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
                         break;
 
                     default:
-                        $scope.changeContent('<div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">No data for this report</span></div>');
+                        $scope.changeContent('<div style="width: 100%;height: 100%;display: flex;align-items: center;"><span style="color: darkgray; font-size: initial; width:100%;text-align: center";><img src="/images/empty.png">' + gettextCatalog.getString('No data for this report') + '</span></div>');
                     }
 
                     $scope.loading = false;

@@ -9,7 +9,10 @@
             ng-click="vm.toggleActive()"
             ng-class="{'badge-success': vm.layer.status == 'active', 'badge-danger': vm.layer.status == 'Not active'}"
             uib-tooltip="{{ 'Click here to change the status of the layer' | translate }}"
-        >{{ vm.layer.status }}</a>
+        >
+            <span ng-if="vm.layer.status === 'active'" translate>active</span>
+            <span ng-if="vm.layer.status === 'Not active'" translate>not active</span>
+        </a>
     </div>
 
     <div class="col-md-2">

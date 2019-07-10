@@ -3,9 +3,9 @@
 
     angular.module('app.io').controller('ImportController', ImportController);
 
-    ImportController.$inject = ['$scope', '$q', 'gettext', 'api'];
+    ImportController.$inject = ['$scope', '$q', 'gettextCatalog', 'api'];
 
-    function ImportController ($scope, $q, gettext, api) {
+    function ImportController ($scope, $q, gettextCatalog, api) {
         const vm = this;
 
         vm.checkError = undefined;
@@ -47,7 +47,7 @@
                 const importFile = JSON.parse(result);
                 if (!(importFile.layers && importFile.reports &&
                     importFile.datasources && importFile.dashboards)) {
-                    throw new Error(gettext('File must contain the following properties: datasources, layers, reports and dashboards'));
+                    throw new Error(gettextCatalog.getString('File must contain the following properties: datasources, layers, reports and dashboards'));
                 }
 
                 return checkImportFile(importFile).then(importBundle => {
@@ -143,13 +143,13 @@
 
                 if (!datasourceID) {
                     bundleLayer.valid = false;
-                    bundleLayer.errors.push(gettext('No datasourceID'));
+                    bundleLayer.errors.push(gettextCatalog.getString('No datasourceID'));
                     continue;
                 }
 
                 if (!(datasourceID in datasourcesById)) {
                     bundleLayer.valid = false;
-                    bundleLayer.errors.push(gettext('Related datasource is not in import file'));
+                    bundleLayer.errors.push(gettextCatalog.getString('Related datasource is not in import file'));
                 }
 
                 promises.push(api.getLayer(layer._id).then(l => {
@@ -178,19 +178,19 @@
                 const layerID = report.selectedLayerID;
                 if (!layerID) {
                     bundleReport.valid = false;
-                    bundleReport.errors.push(gettext('No selectedLayerID'));
+                    bundleReport.errors.push(gettextCatalog.getString('No selectedLayerID'));
                     continue;
                 }
 
                 if (!(layerID in layersById)) {
                     bundleReport.valid = false;
-                    bundleReport.errors.push(gettext('Related layer is not in import file'));
+                    bundleReport.errors.push(gettextCatalog.getString('Related layer is not in import file'));
                     continue;
                 }
 
                 if (!layersById[layerID].valid) {
                     bundleReport.valid = false;
-                    bundleReport.errors.push(gettext('Related layer is not valid'));
+                    bundleReport.errors.push(gettextCatalog.getString('Related layer is not valid'));
                     continue;
                 }
 
@@ -221,19 +221,19 @@
                     const layerID = report.selectedLayerID;
                     if (!layerID) {
                         bundleDashboard.valid = false;
-                        bundleDashboard.errors.push(gettext('At least one report has no selectedLayerID'));
+                        bundleDashboard.errors.push(gettextCatalog.getString('At least one report has no selectedLayerID'));
                         continue;
                     }
 
                     if (!(layerID in layersById)) {
                         bundleDashboard.valid = false;
-                        bundleDashboard.errors.push(gettext('At least one report is related to a layer that is not in import file'));
+                        bundleDashboard.errors.push(gettextCatalog.getString('At least one report is related to a layer that is not in import file'));
                         continue;
                     }
 
                     if (!layersById[layerID].valid) {
                         bundleDashboard.valid = false;
-                        bundleDashboard.errors.push(gettext('At least one report is related to a layer that is not valid'));
+                        bundleDashboard.errors.push(gettextCatalog.getString('At least one report is related to a layer that is not valid'));
                         continue;
                     }
                 }
@@ -286,7 +286,7 @@
                     return $q.all(reportAndDashboardPromises);
                 }).then(() => {
                     vm.messages.push({
-                        text: gettext('Import completed'),
+                        text: gettextCatalog.getString('Import completed'),
                         type: 'info',
                     });
                 });
@@ -309,12 +309,12 @@
                     p = api.updateLayer(bundleLayer.doc).then(() => {
                         bundleLayer.imported = true;
                         vm.messages.push({
-                            text: gettext('Layer updated successfully:') + ' ' + layer.name,
+                            text: gettextCatalog.getString('Layer updated successfully:') + ' ' + layer.name,
                             type: 'success',
                         });
                     }, (err) => {
                         vm.messages.push({
-                            text: gettext('Failed to update layer') + ' ' + layer.name + ': ' + err,
+                            text: gettextCatalog.getString('Failed to update layer') + ' ' + layer.name + ': ' + err,
                             type: 'error',
                         });
                     });
@@ -322,12 +322,12 @@
                     p = api.createLayer(bundleLayer.doc).then(() => {
                         bundleLayer.imported = true;
                         vm.messages.push({
-                            text: gettext('Layer created successfully:') + ' ' + layer.name,
+                            text: gettextCatalog.getString('Layer created successfully:') + ' ' + layer.name,
                             type: 'success',
                         });
                     }, (err) => {
                         vm.messages.push({
-                            text: gettext('Failed to create layer') + ' ' + layer.name + ': ' + err,
+                            text: gettextCatalog.getString('Failed to create layer') + ' ' + layer.name + ': ' + err,
                             type: 'error',
                         });
                     });
@@ -357,24 +357,24 @@
                 if (bundleReport.exists && bundleReport.overwrite) {
                     p = api.updateReport(report).then(() => {
                         vm.messages.push({
-                            text: gettext('Report updated successfully:') + ' ' + report.reportName,
+                            text: gettextCatalog.getString('Report updated successfully:') + ' ' + report.reportName,
                             type: 'success',
                         });
                     }, (err) => {
                         vm.messages.push({
-                            text: gettext('Failed to update report') + ' ' + report.reportName + ': ' + err,
+                            text: gettextCatalog.getString('Failed to update report') + ' ' + report.reportName + ': ' + err,
                             type: 'error',
                         });
                     });
                 } else if (!bundleReport.exists) {
                     p = api.createReport(report).then(() => {
                         vm.messages.push({
-                            text: gettext('Report created successfully:') + ' ' + report.reportName,
+                            text: gettextCatalog.getString('Report created successfully:') + ' ' + report.reportName,
                             type: 'success',
                         });
                     }, (err) => {
                         vm.messages.push({
-                            text: gettext('Failed to create report') + ' ' + report.reportName + ': ' + err,
+                            text: gettextCatalog.getString('Failed to create report') + ' ' + report.reportName + ': ' + err,
                             type: 'error',
                         });
                     });
@@ -419,24 +419,24 @@
                     if (bundleDashboard.exists && bundleDashboard.overwrite) {
                         p = api.updateDashboard(dashboard).then(() => {
                             vm.messages.push({
-                                text: gettext('Dashboard updated successfully:') + ' ' + dashboard.dashboardName,
+                                text: gettextCatalog.getString('Dashboard updated successfully:') + ' ' + dashboard.dashboardName,
                                 type: 'success',
                             });
                         }, (err) => {
                             vm.messages.push({
-                                text: gettext('Failed to update dashboard') + ' ' + dashboard.dashboardName + ': ' + err,
+                                text: gettextCatalog.getString('Failed to update dashboard') + ' ' + dashboard.dashboardName + ': ' + err,
                                 type: 'error',
                             });
                         });
                     } else if (!bundleDashboard.exists) {
                         p = api.createDashboard(dashboard).then(() => {
                             vm.messages.push({
-                                text: gettext('Dashboard created successfully') + ' ' + dashboard.dashboardName,
+                                text: gettextCatalog.getString('Dashboard created successfully') + ' ' + dashboard.dashboardName,
                                 type: 'success',
                             });
                         }, (err) => {
                             vm.messages.push({
-                                text: gettext('Failed to create dashboard') + ' ' + dashboard.dashboardName + ': ' + err,
+                                text: gettextCatalog.getString('Failed to create dashboard') + ' ' + dashboard.dashboardName + ': ' + err,
                                 type: 'error',
                             });
                         });

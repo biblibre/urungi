@@ -27,7 +27,7 @@
 <nd-modal id="roleModal">
     <div class="modal-header ng-scope">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-close"></i></button>
-        <h4 class="modal-title">Role</h4>
+        <h4 class="modal-title" translate>Role</h4>
     </div>
 
     <div class="modal-body">
@@ -68,19 +68,19 @@
                                     <tbody>
                                         <tr>
                                             <th translate>Create reports</th>
-                                            <td style="text-align: center"><input type="checkbox" ng-model="_Role.reportsCreate"></td>
+                                            <td style="text-align: center;"><input type="checkbox" ng-model="_Role.reportsCreate"></td>
                                         </tr>
                                         <tr>
                                             <th translate>Create dashboards</th>
-                                            <td style="text-align: center"><input type="checkbox" ng-model="_Role.dashboardsCreate"></td>
+                                            <td style="text-align: center;"><input type="checkbox" ng-model="_Role.dashboardsCreate"></td>
                                         </tr>
                                         <tr>
                                             <th translate>Explore data</th>
-                                            <td style="text-align: center"><input type="checkbox" ng-model="_Role.exploreData"></td>
+                                            <td style="text-align: center;"><input type="checkbox" ng-model="_Role.exploreData"></td>
                                         </tr>
                                         <tr>
                                             <th translate>See SQL</th>
-                                            <td style="text-align: center"><input type="checkbox" ng-model="_Role.viewSQL"></td>
+                                            <td style="text-align: center;"><input type="checkbox" ng-model="_Role.viewSQL"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -91,9 +91,9 @@
             </uib-tab>
             <uib-tab classes="pull-right" heading="{{ 'Shared space permissions' | translate }}">
                 <div class="row tree-node-content">
-                    <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute reports</span>
-                    <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Execute dashboards</span>
-                    <span  class="pull-right" style="width:60px;font-size: 10px;overflow: hidden" translate>Share</span>
+                    <span  class="pull-right" style="width: 60px; font-size: 10px; overflow: hidden;" translate>Execute reports</span>
+                    <span  class="pull-right" style="width: 60px; font-size: 10px; overflow: hidden;" translate>Execute dashboards</span>
+                    <span  class="pull-right" style="width: 60px; font-size: 10px; overflow: hidden;" translate>Share</span>
                 </div>
                 <div ui-tree id="tree-root">
                     <ol ui-tree-nodes ng-model="sharedSpace">
@@ -107,7 +107,7 @@
     <div ng-if="roleEditingWarning && roleEditingWarning != ''" class="alert-block">{{roleEditingWarning}}</div>
 
     <div class="modal-footer ng-scope">
-        <button type="button" class="btn btn-info pull-right"  ng-click="save()" style="margin-right: 3px" translate>Save</button>
-        <button type="button" class="btn btn-white  pull-right" data-dismiss="modal" style="margin-right: 3px" translate>Cancel</button>
+        <button type="button" class="btn btn-info pull-right"  ng-click="save()" style="margin-right: 3px;" translate>Save</button>
+        <button type="button" class="btn btn-white  pull-right" data-dismiss="modal" style="margin-right: 3px;" translate>Cancel</button>
     </div>
 </nd-modal>

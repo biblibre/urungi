@@ -1,4 +1,4 @@
-angular.module('app').service('fileService', function (connection, Noty) {
+angular.module('app').service('fileService', function (connection, Noty, gettextCatalog) {
     this.getFiles = function () {
         const params = {};
 
@@ -37,7 +37,7 @@ angular.module('app').service('fileService', function (connection, Noty) {
             });
 
             XHR.addEventListener('error', function (event) {
-                new Noty({ text: 'Unexpected server error', type: 'error' }).show();
+                new Noty({ text: gettextCatalog.getString('Unexpected server error'), type: 'error' }).show();
                 console.log('Unexpected server error :');
                 console.log(event);
                 resolve();

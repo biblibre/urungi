@@ -2,9 +2,7 @@
     <button id="close-gallery-btn" type="button" class="close" ng-click="modalOptions.close()">X</button>
 
     <uib-tabset class="nav-tabs-justified">
-        <uib-tab heading="My Images">
-
-            <!-- <form class="dropzone" id="dropzone" style="min-height: 0px;padding: 80px;" ng-init="setDropzone()"></form> -->
+        <uib-tab heading="{{ 'My Images' | translate }}">
 
             <p id="extensionMSG" style="color: red;"></p>
 
@@ -12,7 +10,6 @@
 
                 <li ng-repeat="file in files">
                     <a class="hand-cursor file-selection" ng-hide="file.loading" ng-click="onFileSelected(file)">
-                        <!-- <span class="label label-success dz-label" translate>success</span> -->
                         <img class="dz-image" alt="{{file.description}}" uib-tooltip="{{file.name}}" ng-src="{{file.url}}" />
                     </a>
                     <a class="hand-cursor file-selection" ng-show="file.loading">
@@ -22,10 +19,10 @@
 
             </ul>
 
-            <div class="btn btn-default" ng-app="fileUpload" ngf-select="upload($file)">Choose image to upload</div>
+            <div class="btn btn-default" ng-app="fileUpload" ngf-select="upload($file)" translate>Choose image to upload</div>
 
         </uib-tab>
-        <uib-tab heading="Public Images">
+        <uib-tab heading="{{ 'Public Images' | translate }}">
 
             <ul class="ace-thumbnails files-modal-list">
 
@@ -39,7 +36,7 @@
 
         </uib-tab>
 
-        <uib-tab heading="Icon set">
+        <uib-tab heading="{{ 'Icon set' | translate }}">
 
             <ul class="ace-thumbnails files-modal-list">
 
@@ -56,8 +53,7 @@
         <uib-tab heading="Online Images">
 
             <form ng-submit="searchOnline(onlineSearchTerm)">
-                <input type="text" ng-model="onlineSearchTerm"
-                    style="width: 100%; height: 30px; font-size: 15px;" placeholder="Search...">
+                <input type="text" ng-model="onlineSearchTerm" style="width: 100%; height: 30px; font-size: 15px;" placeholder="{{ 'Search...' | translate }}">
             </form>
 
             <ul class="ace-thumbnails files-modal-list">
@@ -76,10 +72,8 @@
     <div id="dropzone-item" class="hidden">
         <li class="dz-item">
             <a class="hand-cursor file-selection">
-                <!--<img src="/images/loader.gif" class="dz-loading" />-->
-
-                <span class="label label-danger dz-label" style="display: none;">error</span>
-                <span class="label label-success dz-label" style="display: none;">success</span>
+                <span class="label label-danger dz-label" style="display: none;" translate>error</span>
+                <span class="label label-success dz-label" style="display: none;" translate>success</span>
 
                 <img class="dz-image" data-dz-thumbnail />
             </a>

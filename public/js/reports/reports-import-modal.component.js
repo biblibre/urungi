@@ -12,9 +12,9 @@
         },
     });
 
-    ReportsImportModalController.$inject = ['api'];
+    ReportsImportModalController.$inject = ['gettextCatalog', 'api'];
 
-    function ReportsImportModalController (api) {
+    function ReportsImportModalController (gettextCatalog, api) {
         const vm = this;
 
         vm.reports = [];
@@ -44,7 +44,7 @@
             return [
                 {
                     name: 'reportName',
-                    label: 'Name',
+                    label: gettextCatalog.getString('Name'),
                     width: 12,
                 },
             ];

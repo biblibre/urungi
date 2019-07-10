@@ -3,6 +3,14 @@
 
     angular.module('app-login', ['app.core']);
 
+    angular.module('app-login').run(runBlock);
+
+    runBlock.$inject = ['language'];
+
+    function runBlock (language) {
+        language.setLanguageFromLocalStorage();
+    }
+
     angular.module('app-login').controller('PublicCtrl', PublicCtrl);
 
     PublicCtrl.$inject = ['$scope', '$http', 'localStorage'];

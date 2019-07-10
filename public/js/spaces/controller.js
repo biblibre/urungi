@@ -114,7 +114,7 @@ angular.module('app').controller('spacesCtrl', function ($scope, $location, conn
         if (typeof nodeData === 'undefined') {
             $scope.data.push({
                 id: uuid.v4(),
-                title: 'my folder',
+                title: gettextCatalog.getString('my folder'),
                 nodes: []
             });
         } else {

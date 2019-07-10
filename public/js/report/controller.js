@@ -13,7 +13,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.duplicateOptions = {};
     $scope.duplicateOptions.freeze = false;
-    $scope.duplicateOptions.header = 'Duplicate report';
+    $scope.duplicateOptions.header = gettextCatalog.getString('Duplicate report');
 
     $scope.gettingData = false;
     $scope.showSQL = false;
@@ -142,7 +142,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         const report = $scope.selectedReport;
 
         if (!report.properties) {
-            new Noty({ text: 'invalid report', type: 'error' }).show();
+            new Noty({ text: gettextCatalog.getString('invalid report'), type: 'error' }).show();
             return;
         }
 
@@ -191,8 +191,8 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.stringVariables = [
-        { value: 'toUpper', label: 'To Upper' },
-        { value: 'toLower', label: 'To Lower' }
+        { value: 'toUpper', label: gettextCatalog.getString('To Upper') },
+        { value: 'toLower', label: gettextCatalog.getString('To Lower') }
     ];
 
     if ($location.hash() === 'intro') {
@@ -285,7 +285,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         };
 
         $scope.$broadcast('updateFilters');
-        $scope.$broadcast('showLoadingMessage', 'Fetching data ...');
+        $scope.$broadcast('showLoadingMessage', gettextCatalog.getString('Fetching data ...'));
 
         return reportModel.fetchData($scope.selectedReport.query, params).then(function (result) {
             if (result.errorToken) {
@@ -687,7 +687,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             break;
 
         default:
-            new Noty({ text: 'report type does not exist', type: 'error' }).show();
+            new Noty({ text: gettextCatalog.getString('report type does not exist'), type: 'error' }).show();
             break;
         }
 

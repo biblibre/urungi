@@ -6,8 +6,8 @@
                     <span ng-if="objectType == 'element'" translate>Element</span>
                     <button ng-if="objectType != 'element'" type="button" class="btn btn-danger pull-right"  ng-click="delete()" translate>Delete</button>
                     <button ng-if="objectType == 'collection' && object.isSQL" type="button" class="btn pull-right query-edit-btn"  ng-click="onEdit()" translate>Edit</button>
-                    <button ng-if="!object.elementRole && objectType == 'element'" type="button" class="btn btn-success pull-right" ng-click="publishElement()" data-toggle="tooltip" data-placement="bottom" title="Add to layer's elements">+</button>
-                    <button ng-if="object.elementRole && objectType == 'element'" type="button" class="btn btn-warning pull-right" ng-click="removeElement()" data-toggle="tooltip" data-placement="bottom" title="Remove from layer's elements">-</button>
+                    <button ng-if="!object.elementRole && objectType == 'element'" type="button" class="btn btn-success pull-right" ng-click="publishElement()" data-toggle="tooltip" data-placement="bottom" title="{{ 'Add to layer elements' | translate }}">+</button>
+                    <button ng-if="object.elementRole && objectType == 'element'" type="button" class="btn btn-warning pull-right" ng-click="removeElement()" data-toggle="tooltip" data-placement="bottom" title="{{ 'Remove from layer elements' | translate }}">-</button>
 
             </div>
         </div>
@@ -19,7 +19,7 @@
    <div class="container-fluid" ng-if="objectType == '' || objectType == undefined">
             <br/>
             <br/>
-            No Selection
+            <span translate>No Selection</span>
         </div>
 
 <div ng-if="objectType == 'collection'">
@@ -52,7 +52,7 @@
         <div class="row" ng-if="object.sqlQuery">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="field-5" class="control-label" translate>SQL</label>
+                    <label for="field-5" class="control-label">SQL</label>
                     <textarea ng-model="object.sqlQuery" class="form-control autogrow" id="field-5"></textarea>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label  class="control-label properties" translate>Format</label>
-                            <input type="text" class="form-control" ng-model="object.format" placeholder="format...">
+                            <input type="text" class="form-control" ng-model="object.format" placeholder="{{ 'format...' | translate }}">
                             <p class="help-block"><a class="pull-right" href="http://numeraljs.com/" target="_blank" translate>More Info</a></p>
                         </div>
                     </div>
@@ -127,23 +127,23 @@
 
 <div ng-if="objectType == 'join'">
     <div class="container-fluid main-properties-container">
-                <div class="row" style="margin-top:20px;">
+                <div class="row" style="margin-top: 20px;">
                     <div class="col-md-12">
                             <label  class="control-label properties" translate>Source</label>
                         <input type="text" class="form-control" placeholder="{{object.sourceCollectionName+'.'+object.sourceElementName}}" disabled="">
                     </div>
                 </div>
-                <div class="row" style="margin-top:20px;">
+                <div class="row" style="margin-top: 20px;">
                     <div class="col-md-12">
                             <label  class="control-label properties" translate>Target</label>
                             <input type="text" class="form-control" placeholder="{{object.targetCollectionName+'.'+object.targetElementName}}" disabled="">
 
                     </div>
                 </div>
-                 <div class="row" style="margin-top:20px;">
+                 <div class="row" style="margin-top: 20px;">
                     <div class="col-md-12">
                             <label  class="control-label properties" translate>Join type</label>
-                                <div class="btn-group btn-group-justified" style="width:100%">
+                                <div class="btn-group btn-group-justified" style="width: 100%;">
                                     <a type="button" class="btn btn-sm" ng-class="{'btn-info': object.joinType == 'left','btn-white': object.joinType != 'left'}"   ng-click="changeJoinType('left')" translate>Left</a>
 
                                     <a type="button" class="btn btn-sm" ng-class="{'btn-info': object.joinType == 'default','btn-white': object.joinType != 'default'}"  ng-click="changeJoinType('default')" translate>Inner</a>

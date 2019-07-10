@@ -29,10 +29,6 @@
                             <i class="fa fa-gear" ></i>
                         </div>
                         <div class="object-panel-header-inner">
-                                <!--<i class="toggle-button fa-minus-circle"  ng-click="toggle();$event.stopPropagation()" role="button" tabindex="0" style="right: 5px;
-                position: absolute;
-                font-size: 20px;"></i>-->
-
                         </div>
 
                 </div>
@@ -117,10 +113,10 @@
 
                                             <div ng-if="!rootItem.editing == true" class="schema-element-btn">
                                                 <div class="btn btn-danger btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(rootItem)" translate>Delete</div>
-                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="rootItem.editing = true; elementEditing = true;">Edit</div>
+                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="rootItem.editing = true; elementEditing = true;" translate>Edit</div>
                                             </div>
 
-                                            <div ng-if="rootItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="rootItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o save-folder-element-btn-icon" uib-tooltip="{{'Save folder label' | translate}}"></i></div>
+                                            <div ng-if="rootItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="rootItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o save-folder-element-btn-icon" uib-tooltip="{{'Save folder label' | translate}}"></i></div>
                                         </div>
                                         <ul ng-if="rootItem.elementRole == 'folder' || rootItem.elementRole == 'root'" class="schema-container list-group" ui-sortable="sortableOptions" ng-model="rootItem.elements"
                                             ng-class="{'schema-element-container-placeholder': onDrag, 'schema-element-container-default': !onDrag}">
@@ -253,8 +249,7 @@
                                 </span>
 
                                 <span>
-                                    <i ng-hide="allElementsAdded(collection)" class="jtk-field-icon fa fa-plus-square" ng-click="promptAddAll(collection)"
-                                    uib-tooltip="Add all" ></i>
+                                    <i ng-hide="allElementsAdded(collection)" class="jtk-field-icon fa fa-plus-square" ng-click="promptAddAll(collection)" uib-tooltip="{{ 'Add all' | translate }}" ></i>
                                     <i ng-show="allElementsAdded(collection)" class="jtk-field-selected fa fa-check-square" ></i>
                                 </span>
                             </span>

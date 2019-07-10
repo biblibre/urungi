@@ -6,8 +6,7 @@
 
         <div class="container-fluid form-inline">
             <span class="col-md-1">
-                <button class="btn popover-primary ng-scope" ng-class="{'btn-black': vm.filter.filterPrompt == true, 'btn-white': vm.filter.filterPrompt == false}"
-                ng-click="vm.makePrompt()" popover-trigger="mouseenter" popover-placement="bottom" popover-title="Runtime Filter" popover="{{vm.getButtonFilterPromptMessage(vm.filter)}}">
+                <button class="btn popover-primary ng-scope" ng-class="{'btn-black': vm.filter.filterPrompt == true, 'btn-white': vm.filter.filterPrompt == false}" ng-click="vm.makePrompt()" popover-trigger="mouseenter" popover-placement="bottom" popover-title="{{ 'Runtime Filter' | translate }}" popover="{{vm.getButtonFilterPromptMessage(vm.filter)}}">
                     <i class="fa fa-filter"></i><i class="fa fa-question"></i>
                 </button>
             </span>

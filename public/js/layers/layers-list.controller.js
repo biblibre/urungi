@@ -52,13 +52,13 @@
             return [
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: gettextCatalog.getString('Name'),
                     width: 6,
                     filter: true,
                 },
                 {
                     name: 'status',
-                    label: 'Status',
+                    label: gettextCatalog.getString('Status'),
                     width: 4,
                     filter: true,
                 },

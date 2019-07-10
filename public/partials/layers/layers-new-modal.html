@@ -10,7 +10,7 @@
                 <div class="form-group" ng-class="{'has-error': newLayerForm.$submitted && newLayerForm.name.$invalid}">
                     <label for="new-layer-name" class="control-label" translate>Layer name</label>
                     <input id="new-layer-name" name="name" type="text" class="form-control" ng-model="vm.newLayer.name" required>
-                    <span class="help-block" ng-if="newLayerForm.$submitted && newLayerForm.name.$error.required">Name is required</span>
+                    <span class="help-block" ng-if="newLayerForm.$submitted && newLayerForm.name.$error.required" translate>Name is required</span>
                 </div>
 
                 <div class="form-group no-margin">
@@ -23,7 +23,7 @@
                     <select class="form-control" id="new-layer-datasource" name="datasource" ng-model="vm.datasource" ng-options="datasource as datasource.name for datasource in vm.datasources" required>
                         <option value=""></option>
                     </select>
-                    <span class="help-block" ng-if="newLayerForm.$submitted && newLayerForm.datasource.$error.required">Data source is required</span>
+                    <span class="help-block" ng-if="newLayerForm.$submitted && newLayerForm.datasource.$error.required" translate>Data source is required</span>
                 </div>
             </div>
         </div>

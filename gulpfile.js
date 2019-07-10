@@ -66,7 +66,7 @@ function dist_js_build () {
         'node_modules/angular-route/angular-route.min.js',
         'node_modules/noty/lib/noty.min.js',
         'node_modules/angular-vs-repeat/dist/angular-vs-repeat.min.js',
-        'node_modules/moment/min/moment.min.js',
+        'node_modules/moment/min/moment-with-locales.min.js',
         'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js',
         'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js',
         'node_modules/angular-ui-tree/dist/angular-ui-tree.min.js',
@@ -226,7 +226,7 @@ function dist_templates_build () {
 }
 
 function pot () {
-    return gulp.src(['public/js/**/*.js', 'public/partials/**/*.html'], { base: '.' })
+    return gulp.src(['public/js/**/*.js', 'public/partials/**/*.html', 'views/login.ejs'], { base: '.' })
         .pipe(gettext.extract('template.pot'))
         .pipe(gulp.dest('language'));
 }
