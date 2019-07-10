@@ -557,79 +557,66 @@ class SqlQueryBuilder {
                 });
             }
         } else {
-            const searchDate = new Date(filter.criterion.date1);
-            const theNextDay = new Date(searchDate);
+            const date1 = filter.criterion.date1;
+            const date2 = filter.criterion.date2;
 
-            theNextDay.setDate(searchDate.getDate() + 1);
-            const qyear = searchDate.getFullYear();
-            const qmonth = pad(searchDate.getMonth() + 1);
-            const qday = pad(searchDate.getDate());
-
-            const qyear2 = theNextDay.getFullYear();
-            const qmonth2 = pad(theNextDay.getMonth() + 1);
-            const qday2 = pad(theNextDay.getDate());
-
-            let queryLastDate;
-            if (filter.criterion.date2) {
-                lastDate = new Date(filter.criterion.filterText2);
-                const qlyear = lastDate.getFullYear();
-                const qlmonth = pad(lastDate.getMonth() + 1);
-                const qlday = pad(lastDate.getDate());
-                queryLastDate = qlyear + '/' + qlmonth + '/' + qlday;
-            }
-
-            const querySearchDate = qyear + '/' + qmonth + '/' + qday;
-
-            const querySearchDate2 = qyear2 + '/' + qmonth2 + '/' + qday2;
+            const d1 = new Date(date1);
+            d1.setDate(d1.getDate() + 1);
+            const nextDay = d1.getFullYear() + '-' +
+                pad(d1.getMonth() + 1) + '-' +
+                pad(d1.getDate());
 
             switch (filter.filterType) {
             case 'equal':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '>=', querySearchDate);
-                    builder.where(this.getRef(filter), '<', querySearchDate2);
+                    builder.where(this.getRef(filter), '>=', date1);
+                    builder.where(this.getRef(filter), '<', nextDay);
                 });
 
             case 'diferentThan':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '<', querySearchDate);
-                    builder.orWhere(this.getRef(filter), '>=', querySearchDate2);
+                    builder.where(this.getRef(filter), '<', date1);
+                    builder.orWhere(this.getRef(filter), '>=', nextDay);
                 });
 
             case 'biggerThan':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '>', querySearchDate);
-                });
-
-            case 'notGreaterThan':
-                return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '<=', querySearchDate);
+                    builder.where(this.getRef(filter), '>', date1);
                 });
 
             case 'biggerOrEqualThan':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '>=', querySearchDate);
+                    builder.where(this.getRef(filter), '>=', date1);
                 });
 
             case 'lessThan':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '<', querySearchDate);
+                    builder.where(this.getRef(filter), '<', date1);
                 });
 
             case 'lessOrEqualThan':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '<=', querySearchDate);
+                    builder.where(this.getRef(filter), '<=', date1);
                 });
 
             case 'between':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '>', querySearchDate);
-                    builder.where(this.getRef(filter), '<=', queryLastDate);
+                    builder.whereBetween(this.getRef(filter), [date1, date2]);
                 });
 
             case 'notBetween':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '<', querySearchDate);
-                    builder.orWhere(this.getRef(filter), '>', queryLastDate);
+                    builder.whereNotBetween(this.getRef(filter), [date1, date2]);
+                });
+
+            case 'null':
+                return applyWhereBuilder(builder => {
+                    builder.whereNull(this.getRef(filter));
+                });
+
+            case 'notNull':
+                return applyWhereBuilder(builder => {
+                    builder.whereNotNull(this.getRef(filter));
                 });
             }
         }
