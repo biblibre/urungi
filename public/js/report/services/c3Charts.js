@@ -176,7 +176,7 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog) {
             var theColumns = [];
             if (axisField && theValues) {
                 for (const i in query.data) {
-                    const groupField = query.data[i][axisField];
+                    const groupField = query.data[i][axisField] !== null ? query.data[i][axisField] : 'NULL';
                     const valueField = query.data[i][theValues[0]];
                     theColumns.push([groupField, valueField]);
                 }
