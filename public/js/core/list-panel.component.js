@@ -24,7 +24,6 @@
         vm.filters = {};
         vm.$onInit = $onInit;
         vm.onFilterKeydown = onFilterKeydown;
-        vm.onFilterBlur = onFilterBlur;
         vm.onSortClick = onSortClick;
         vm.goToPage = goToPage;
 
@@ -40,12 +39,6 @@
                 vm.page = 1;
                 triggerRefresh();
             }, 250);
-        };
-
-        function onFilterBlur () {
-            $timeout.cancel(filterKeydownTimeoutPromise);
-            vm.page = 1;
-            triggerRefresh();
         };
 
         function onSortClick (column) {
