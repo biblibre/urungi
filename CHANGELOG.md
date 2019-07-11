@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 
 - Updated c3 to 0.7.2
+- Updated jsplumb to 2.10.2
 
 ## [1.1.0] - 2019-07-11
 
