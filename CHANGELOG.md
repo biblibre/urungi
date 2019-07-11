@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   cryptic IDs
 - Added docker and docker-compose files
 - SQL views can be added to layers (Oracle only)
+- Added favicon
 
 ### Changed
 
