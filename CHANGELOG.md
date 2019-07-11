@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated c3 to 0.7.2
 - Updated jsplumb to 2.10.2
 - Updated knex to 0.19.0
+- Updated mongoose to 5.6.4
 
 ## [1.1.0] - 2019-07-11
 
