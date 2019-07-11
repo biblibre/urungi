@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated jsplumb to 2.10.2
 - Updated knex to 0.19.0
 - Updated mongoose to 5.6.4
+- Updated del to 5.0.0 (dev)
 
 ## [1.1.0] - 2019-07-11
 
