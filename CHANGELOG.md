@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed an infinite $digest look when editing a report
 - Fixed a weird bug where sometimes a click in layers/reports/dashboards list
   would do nothing
+- Fixed runtime filters (#99)
 
 ## [1.1.0] - 2019-07-11
 
