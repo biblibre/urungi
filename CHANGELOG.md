@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed runtime filters (#99)
 - Fixed a bug preventing c3 to draw a pie/donut when there is a NULL value
 
+### Dependencies
+
+- Updated c3 to 0.7.2
+
 ## [1.1.0] - 2019-07-11
 
 ### Important update information
