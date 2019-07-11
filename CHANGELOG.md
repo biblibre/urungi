@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed a weird bug where sometimes a click in layers/reports/dashboards list
   would do nothing
 - Fixed runtime filters (#99)
+- Fixed a bug preventing c3 to draw a pie/donut when there is a NULL value
 
 ## [1.1.0] - 2019-07-11
 
