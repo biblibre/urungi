@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated knex to 0.19.0
 - Updated mongoose to 5.6.4
 - Updated del to 5.0.0 (dev)
+- Updated eslint-plugin-jest to 22.7.2 (dev)
 
 ## [1.1.0] - 2019-07-11
 
