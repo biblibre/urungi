@@ -14,8 +14,6 @@
         vm.mode = 'edit';
         vm.save = save;
         vm.testConnection = {};
-        vm.testingConnection = false;
-        vm.upload = upload;
 
         activate();
 
@@ -53,7 +51,6 @@
         function doTestConnection () {
             vm.testConnection = {};
             var data = {};
-            vm.testingConnection = true;
             data.type = vm._dataSource.type;
             data.host = vm._dataSource.connection.host;
             data.port = vm._dataSource.connection.port;
@@ -64,13 +61,10 @@
             if (vm._dataSource.connection.file) data.file = vm._dataSource.connection.file;
 
             connection.post('/api/data-sources/testConnection', data).then(function (result) {
-                console.log(result);
                 if (result.result === 1) {
                     vm.testConnection = { result: 1, message: gettextCatalog.getString('Successful database connection.') };
-                    vm.testingConnection = false;
                 } else {
                     vm.testConnection = { result: 0, message: gettextCatalog.getString('Database connection failed.'), errorMessage: result.msg };
-                    vm.testingConnection = false;
                 }
             });
         };
@@ -80,43 +74,11 @@
                 return false;
             }
 
-            if (vm._dataSource.type !== 'BIGQUERY' && vm._dataSource.connection.host && vm._dataSource.connection.database) {
-                return true;
-            }
-
-            if (vm._dataSource.type === 'BIGQUERY' && vm._dataSource.connection.database && vm._dataSource.connection.file && vm.fileUploadSuccess) {
+            if (vm._dataSource.connection.host && vm._dataSource.connection.database) {
                 return true;
             }
 
             return false;
-        };
-
-        function upload (file) {
-            if (file) {
-                vm._dataSource.connection.file = file.name;
-
-                var fd = new FormData();
-
-                fd.append('file', file);
-
-                $http.post('/api/data-sources/upload-config-file', fd, {
-                    transformRequest: angular.identity,
-                    headers: { 'Content-Type': undefined }
-                })
-                    .then(angular.bind(this, function (data, status, headers, config) {
-                        if (data.result === 1) {
-                            vm.fileUploadSuccess = true;
-                            vm.fileUploadMessage = gettextCatalog.getString('File uploaded successfully');
-                        } else {
-                            vm.fileUploadSuccess = false;
-                            vm.fileUploadMessage = gettextCatalog.getString('File upload failed') + ' [' + data.msg + ']';
-                        }
-                    }))
-                    .catch(function (data, status) {
-                        vm.fileUploadSuccess = false;
-                        vm.fileUploadMessage = gettextCatalog.getString('File upload failed') + ' [' + data.msg + ']';
-                    });
-            }
         };
     }
 })();
