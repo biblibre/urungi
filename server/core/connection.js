@@ -31,8 +31,6 @@ var Db = function (datasource, warnings) {
     case 'MSSQL':
         client = 'mssql';
         break;
-    case 'BIGQUERY': case 'JDBC-ORACLE':
-        throw new Error('The standard connection procedure does not Support BigQuery and jdbc-Oracle. These should be accessed with legacy code');
     default:
         throw new Error('Invalid Database type : ' + String(this.type));
     }

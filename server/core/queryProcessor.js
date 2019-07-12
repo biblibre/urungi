@@ -45,56 +45,6 @@ exports.execute = async function (query) {
         result.warnings = warnings;
         return result;
 
-    case 'JDBC-ORACLE': case 'BIGQUERY':
-        /*
-        * Neither JDBC nor bigquery are supported by knex.js
-        * This is an attempt to keep the support of these libraries with pre-existing code
-        *
-        * These libraries have not been tested as the changes to query resolution were made,
-        * and there is no guarantee of how well they work
-        *
-        * It is also unclear what the purpose of jdbc-oracle is when oracle is supported
-        */
-
-        if (dts.type === 'JDBC-ORACLE') {
-            Db = require('./legacy/jdbc-oracle').Db;
-        }
-        if (dts.type === 'BIGQUERY') {
-            Db = require('./legacy/bigQuery').Db;
-        }
-
-        const legacySQLBuilder = require('./legacy/sql');
-
-        const sqlText = legacySQLBuilder.generateQueryText(processedQuery);
-
-        db = new Db(dts.connection);
-
-        return new Promise((resolve, reject) => {
-            db.connect(dts.connection, function (err, connection) {
-                if (err) {
-                    resolve({ result: 0, msg: String(err) });
-                    return;
-                }
-
-                const start = Date.now();
-
-                db.query(sqlText, function (err, result) {
-                    if (err) {
-                        resolve({ result: 0, msg: String(err) });
-                        return;
-                    }
-
-                    const time = Date.now() - start;
-
-                    const data = result.rows;
-
-                    processData(processedQuery, data);
-
-                    resolve({ result: 1, data: data, sql: sqlText, time: time });
-                });
-            });
-        });
-
     default:
         throw new Error('Invalid datasource type : ' + dts.type);
     }

@@ -7,7 +7,6 @@ module.exports = function (app) {
     app.get('/api/data-sources/find-all', restrictAdmin, DataSources.DataSourcesFindAll);
     app.get('/api/data-sources/find-one', restrictAdmin, DataSources.DataSourcesFindOne);
     app.post('/api/data-sources/create', restrictAdmin, DataSources.DataSourcesCreate);
-    app.post('/api/data-sources/upload-config-file', restrictAdmin, DataSources.DataSourcesUploadConfigFile);
     app.post('/api/data-sources/update/:id', restrictAdmin, DataSources.DataSourcesUpdate);
     app.post('/api/data-sources/testConnection', restrictAdmin, DataSources.testConnection);
     app.get('/api/data-sources/getEntities', restrictAdmin, DataSources.getEntities);

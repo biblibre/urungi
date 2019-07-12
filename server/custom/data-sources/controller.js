@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 var DataSources = mongoose.model('DataSources');
-const path = require('path');
 const Controller = require('../../core/controller.js');
 const Db = require('../../core/connection').Db;
 
@@ -23,37 +22,6 @@ exports.DataSourcesCreate = function (req, res) {
     });
 };
 
-exports.DataSourcesUploadConfigFile = function (req, res) {
-    var file = req.files[0];
-
-    if (!file) {
-        return res.status(200).json({ result: 0, msg: 'file is undefined' });
-    }
-    var fs = require('fs');
-    var companyID = 'COMPID';
-
-    const dirPath = path.join(__dirname, '..', '..', 'keys', companyID);
-    if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath);
-    }
-
-    var filePath = path.join(dirPath, file.originalname);
-
-    fs.readFile(file.path, function (err, data) {
-        if (err) {
-            return res.status(200).json({ result: 0, msg: err.message });
-        }
-
-        fs.writeFile(filePath, data, function (err) {
-            if (err) {
-                return res.status(200).json({ result: 0, msg: err.message });
-            }
-
-            res.status(200).json({ result: 1, msg: 'File uploaded successfully' });
-        });
-    });
-};
-
 exports.DataSourcesUpdate = function (req, res) {
     controller.update(req).then(function (result) {
         res.status(200).json(result);
@@ -73,50 +41,20 @@ exports.getEntities = async function (req, res) {
 
     const dts = result.item;
 
-    var data;
-    var db;
+    const db = new Db(dts);
 
-    switch (dts.type) {
-    case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL':
-        db = new Db(dts);
+    result = await db.getCollections();
 
-        result = await db.getCollections();
+    db.close();
 
-        db.close();
-
-        res.status(200).json(result);
-        break;
-    case 'BIGQUERY': case 'JDBC-ORACLE':
-        if (dts.type === 'JDBC-ORACLE') {
-            db = require('../../core/legacy/jdbc-oracle');
-        }
-        if (dts.type === 'BIGQUERY') {
-            db = require('../../core/legacy/bigQuery');
-        }
-
-        data = {
-            datasourceID: result.item._id,
-            companyID: req.user.companyID,
-            host: result.item.connection.host,
-            port: result.item.connection.port,
-            userName: result.item.connection.userName,
-            password: result.item.connection.password,
-            database: result.item.connection.database
-        };
-
-        if (result.item.connection.file) data.file = result.item.connection.file;
-
-        db.testConnection(req, data, function (result) {
-            res.status(200).json(result);
-        });
-    }
+    res.status(200).json(result);
 };
 
 exports.testConnection = async function (req, res) {
     req.body.companyID = req.user.companyID;
 
     switch (req.body.type) {
-    case 'MySQL' : case 'POSTGRE': case 'ORACLE': case 'MSSQL': case 'BIGQUERY': case 'JDBC-ORACLE':
+    case 'MySQL' : case 'POSTGRE': case 'ORACLE': case 'MSSQL':
 
         const connectionParams = req.body;
 
@@ -152,7 +90,6 @@ exports.getEntitySchema = async function (req, res) {
 
     const dts = result.item;
 
-    var data;
     var collectionSchema;
 
     switch (dts.type) {
@@ -175,42 +112,7 @@ exports.getEntitySchema = async function (req, res) {
         res.status(200).json({ result: 1, schema: collectionSchema });
 
         break;
-    case 'JDBC-ORACLE':
 
-        const sql = require('../../core/legacy/sql');
-
-        data = {
-            type: result.item.type,
-            host: result.item.connection.host,
-            port: result.item.connection.port,
-            userName: result.item.connection.userName,
-            password: result.item.connection.password,
-            database: result.item.connection.database,
-            entities: [theEntity]
-        };
-
-        sql.getSchemas(data, function (result) {
-            res.status(200).json(result);
-        });
-        break;
-    case 'BIGQUERY':
-        var bquery = require('../../core/legacy/bigQuery.js');
-        data = {
-            companyID: req.user.companyID,
-            type: result.item.type,
-            host: result.item.connection.host,
-            port: result.item.connection.port,
-            userName: result.item.connection.userName,
-            password: result.item.connection.password,
-            database: result.item.connection.database,
-            file: result.item.connection.file,
-            entities: [theEntity]
-        };
-
-        bquery.getSchemas(data, function (result) {
-            res.status(200).json(result);
-        });
-        break;
     default:
         res.status(200).json({ result: 0, msg: 'Invalid database type' });
     }
@@ -236,78 +138,34 @@ exports.getsqlQuerySchema = async function (req, res) {
 
     try {
         const connection = result.item.connection;
-        let data;
-        switch (result.item.type) {
-        case 'POSTGRE': case 'MySQL': case 'ORACLE': case 'MSSQL':
 
-            data = {
-                type: result.item.type,
-                connection: {
-                    host: connection.host,
-                    port: connection.port,
-                    userName: connection.userName,
-                    password: connection.password,
-                    database: connection.database
-                }
-            };
-
-            const db = new Db(data);
-            const queryResult = await db.executeRawQuery(collectionRef.sqlQuery);
-
-            db.close();
-
-            if (!queryResult) {
-                result = { result: 1, isValid: false };
-                res.status(200).json(result);
-                return;
+        const data = {
+            type: result.item.type,
+            connection: {
+                host: connection.host,
+                port: connection.port,
+                userName: connection.userName,
+                password: connection.password,
+                database: connection.database
             }
+        };
 
-            const collection = processSqlQuerySchema(collectionRef, queryResult);
+        const db = new Db(data);
+        const queryResult = await db.executeRawQuery(collectionRef.sqlQuery);
 
-            result = { result: 1, isValid: true, schema: collection };
+        db.close();
 
+        if (!queryResult) {
+            result = { result: 1, isValid: false };
             res.status(200).json(result);
-
-            break;
-        case 'JDBC-ORACLE':
-            var sql = require('../../core/legacy/sql');
-            data = {
-                type: result.item.type,
-                host: result.item.connection.host,
-                port: result.item.connection.port,
-                userName: result.item.connection.userName,
-                password: result.item.connection.password,
-                database: result.item.connection.database,
-                sqlQuery: collectionRef.sqlQuery
-            };
-
-            sql.getSqlQuerySchema(data, function (result) {
-                if (result.result === 1) {
-                    result.isValid = true;
-                }
-                res.status(200).json(result);
-            });
-
-            break;
-        case 'BIGQUERY':
-            var bquery = require('../../core/legacy/bigQuery.js');
-            data = {
-                type: result.item.type,
-                host: result.item.connection.host,
-                port: result.item.connection.port,
-                userName: result.item.connection.userName,
-                password: result.item.connection.password,
-                database: result.item.connection.database,
-                sqlquery: collectionRef.sqlQuery
-            };
-
-            bquery.getSqlQuerySchema(data, function (result) {
-                if (result.result === 1) {
-                    result.isValid = true;
-                }
-                res.status(200).json(result);
-            });
+            return;
         }
+
+        const collection = processSqlQuerySchema(collectionRef, queryResult);
+
+        result = { result: 1, isValid: true, schema: collection };
+
+        res.status(200).json(result);
     } catch (err) {
         console.error(err);
         res.status(200).json({ result: 0, msg: String(err) });

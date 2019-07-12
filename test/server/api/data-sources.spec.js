@@ -169,14 +169,6 @@ describe('Data sources API', function () {
         });
     });
 
-    describe('POST /api/data-sources/upload-config-file', function () {
-        it('Should return an error because the file is undefined', async function () {
-            return request(app).post('/api/data-sources/upload-config-file')
-                .set(headers)
-                .expect(500);
-        });
-    });
-
     describe('POST /api/data-sources/update', function () {
         it('should modify a database entry successfully', async function () {
             var res = await request(app).get('/api/data-sources/find-all')
