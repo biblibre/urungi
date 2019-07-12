@@ -6,7 +6,6 @@ var DataSourcesSchema = new mongoose.Schema({
     type: { type: String, required: true },
     status: { type: Number, required: true }, // -1 error, 0 not active, 1 active
     connection: { type: Object },
-    packetSize: { type: Number },
     nd_trash_deleted: { type: Boolean },
     nd_trash_deleted_date: { type: Date },
     createdBy: { type: String },

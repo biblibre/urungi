@@ -25,7 +25,6 @@ async function seed () {
                 name: 'dummy db',
                 type: 'MySQL',
                 status: 1,
-                packetSize: 500,
                 connection: {
                     database: 'non_existent_db',
                     host: 'localhost'
@@ -39,7 +38,6 @@ async function seed () {
                 name: 'sql db',
                 type: 'MySQL',
                 status: 1,
-                packetSize: 500,
                 connection: {
                     database: 'will_need_to_be_created',
                     host: 'localhost'
@@ -64,7 +62,6 @@ function verifyItem (item) {
     expect(item).toHaveProperty('nd_trash_deleted');
     expect(item).toHaveProperty('__v');
     expect(item).toHaveProperty('connection');
-    expect(item).toHaveProperty('packetSize');
 };
 
 describe('Data sources API', function () {
@@ -150,7 +147,6 @@ describe('Data sources API', function () {
                     name: 'non existent db',
                     type: 'MySQL',
                     status: 1,
-                    packetSize: 500,
                     connection: {
                         database: 'database_name',
                         host: 'localhost'

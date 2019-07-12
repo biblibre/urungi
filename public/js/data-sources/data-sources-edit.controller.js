@@ -21,7 +21,6 @@
             if ($routeParams.dataSourceID === 'new') {
                 vm._dataSource = {};
                 vm._dataSource.connection = {};
-                vm._dataSource.packetSize = 500;
                 vm._dataSource.status = 1;
                 vm._dataSource.type = 'MySQL';
 

@@ -60,15 +60,6 @@
             </div>
         </div>
 
-        <div class="col-md-12" >
-            <div class="col-md-6" style="padding: 0;">
-                <div class="form-group">
-                    <label class="control-label" for="password" translate>Data Packet size</label>
-                    <input class="form-control" type="number" name="packetSize" id="packetSize" ng-model="vm._dataSource.packetSize" data-validate="required" placeholder="{{ 'Set here the packet size for this datasource (-1 means get always all data)' | translate }}" novalidate="novalidate" aria-required="true" aria-describedby="packetsize-error" aria-invalid="false"><span id="packetsize-error" class="validate-has-error" style="display: none;"></span>
-                </div>
-            </div>
-        </div>
-
         <div class="col-md-12" style="padding: 5px;">
             <a ng-click="vm.doTestConnection()" ng-disabled="!vm.enableTestConnection()" class="btn btn-default pull-right" style="margin-left: 5px; margin-right: 5px;" translate>Test Connection</a>
 

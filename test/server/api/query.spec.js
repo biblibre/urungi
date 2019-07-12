@@ -562,7 +562,6 @@ describe('Queries and data access', function () {
                         name: 'query tests',
                         createdBy: userInfo.id,
                         companyID: userInfo.compID,
-                        packetSize: 500,
                         status: 1,
                         type: datasource.type,
                         connection: datasource.connection,
