@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- JDBC connector for Oracle have been deprecated and will be removed in the
+  next version
+
+  It is not tested, requires several build dependencies (openjdk, g++, make)
+  and there is already an Oracle connector that works and is supported by knex.
+
+- Connector for Google BigQuery have been deprecated and will be removed in the
+  next version
+
+  It is not tested, depends on an old non-maintained package, which itself
+  depends on packages that have security issues.
+  It might be reintroduced in the future though, if someone is willing to
+  implement it using packages that do not have these problems
+
 ### Fixed
 
 - Fixed an infinite $digest look when editing a report

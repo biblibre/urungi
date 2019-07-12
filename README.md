@@ -12,7 +12,7 @@ and others, see [Supported databases](#supported-databases)
 - MySQL
 - MS SQL Server
 - Oracle
-- Google Big Query
+- Google Big Query (DEPRECATED)
 
 
 ## Requirements
