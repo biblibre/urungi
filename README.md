@@ -34,13 +34,21 @@ and others, see [Supported databases](#supported-databases)
 3. Download and install dependencies
 
     ```
+    # In development environment
     npm ci
+    
+    # In production environment
+    npm ci --only=production
     ```
 
 4. Run MongoDB migrations
 
     ```
+    # In development environment
     npx migrate-mongo up
+    
+    # In production environment
+    NODE_ENV=production npx migrate-mongo up
     ```
 
 5. (Optional but recommended) Create a local config file and change the
@@ -98,13 +106,21 @@ To upgrade Urungi to the latest version, follow these steps:
 2. Update dependencies
 
     ```
+    # In development environment
     npm ci
+    
+    # In production environment
+    npm ci --only=production
     ```
 
 3. Update database
 
     ```
+    # In development environment
     npx migrate-mongo up
+    
+    # In production environment
+    NODE_ENV=production npx migrate-mongo up
     ```
 
 4. Restart the server
