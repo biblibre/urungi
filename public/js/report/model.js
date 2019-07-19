@@ -49,6 +49,8 @@ angular.module('app').service('reportModel', function ($q, connection, uuid, Fil
 
         request.query = clone(query);
 
+        delete request.query.data;
+
         if (!query.recordLimit && params.selectedRecordLimit) {
             request.query.quickResultLimit = params.selectedRecordLimit;
         }
