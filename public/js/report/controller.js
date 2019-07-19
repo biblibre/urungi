@@ -385,7 +385,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         };
         if ($scope.selectedReport.properties.filters.length > 0) {
             item.conditionType = 'and';
-            item.conditionLabel = 'AND';
         }
         $scope.selectedReport.properties.filters.push(item);
         $scope.onDropField(item, 'filter');

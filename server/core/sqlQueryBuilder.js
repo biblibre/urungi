@@ -18,14 +18,14 @@ class SqlQueryBuilder {
             }, {});
             qb.select(columns);
 
-            for (const i in query.filters) {
-                const filter = query.filters[i];
+            query.filters.forEach((filter, i) => {
+                const isFirst = (i === 0);
                 if (filter.elementType === 'date') {
-                    sqb.applyDateFilter(qb, filter, i === '0');
+                    sqb.applyDateFilter(qb, filter, isFirst);
                 } else {
-                    sqb.applyFilter(qb, filter, i === '0');
+                    sqb.applyFilter(qb, filter, isFirst);
                 }
-            }
+            });
 
             if (query.quickResultLimit) {
                 qb.limit(query.quickResultLimit);
@@ -163,7 +163,7 @@ class SqlQueryBuilder {
                     return qb.where(field, condition, value);
                 }
             } else {
-                var ct = filter.conditionType;
+                let ct = filter.conditionType || 'and';
                 if (negate) {
                     ct = (ct === 'and' || ct === 'andNot') ? ((ct === 'and') ? 'andNot' : 'and') : ((ct === 'or') ? 'orNot' : 'or');
                 }

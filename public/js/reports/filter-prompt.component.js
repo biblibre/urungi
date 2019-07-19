@@ -128,7 +128,6 @@
 
         function updateCondition (filter, condition) {
             filter.conditionType = condition.conditionType;
-            filter.conditionLabel = condition.conditionLabel;
         }
 
         function getElementFilterOptions () {

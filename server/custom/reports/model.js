@@ -25,6 +25,7 @@ const ReportColumnSchema = new mongoose.Schema({
 
 const ReportFilterSchema = ReportColumnSchema.clone();
 ReportFilterSchema.add({
+    conditionType: String,
     criterion: {
         date1: String,
         date2: String,

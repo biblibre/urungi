@@ -802,10 +802,17 @@ describe('Queries and data access', function () {
                         });
 
                         query.filters.push({
-                            elementID: 'eead',
+                            elementID: 'eeac',
                             filterType: 'equal',
                             criterion: {
-                                text1: 'false'
+                                text1: 'purple'
+                            }
+                        });
+                        query.filters.push({
+                            elementID: 'eeab',
+                            filterType: 'startWith',
+                            criterion: {
+                                text1: 'S'
                             }
                         });
 
@@ -815,15 +822,11 @@ describe('Queries and data access', function () {
                             .expect(200);
                         const data = res.body.data;
 
-                        const sourceData = testDataRef['gems'].tableData.filter((item) => !item.isFusion)
-                            .sort(compareOn(a => a.name.toLowerCase()));
-
-                        expect(data).toHaveLength(sourceData.length);
-
-                        for (const i in data) {
-                            expect(data[i]['namefield']).toBe(sourceData[i].name);
-                            expect(data[i]['colourfield']).toBe(sourceData[i].colour);
-                        }
+                        expect(data).toHaveLength(2);
+                        expect(data[0]).toHaveProperty('namefield', 'Sardonyx');
+                        expect(data[0]).toHaveProperty('colourfield', 'purple');
+                        expect(data[1]).toHaveProperty('namefield', 'Sugalite');
+                        expect(data[1]).toHaveProperty('colourfield', 'purple');
                     });
 
                     it('Should query with aggregation', async function () {
