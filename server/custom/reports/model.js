@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 const ReportColumnSchema = new mongoose.Schema({
     aggregation: String,
     collectionID: String,
-    component: Number,
     data_type: String,
     doNotStack: Boolean,
     elementID: String,
@@ -51,7 +50,6 @@ const ReportQuerySchema = new mongoose.Schema({
 
 const ReportPropertiesSchema = new mongoose.Schema({
     columns: [ ReportColumnSchema ],
-    connectedComponent: Number, // FIXME This should not be stored
     filters: [ ReportFilterSchema ],
     height: Number,
     legendPosition: String,

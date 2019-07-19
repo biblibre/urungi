@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed queries with multiple filters
+- Fixed a bug that prevented to add new columns to existing reports
 
 ### Removed
 

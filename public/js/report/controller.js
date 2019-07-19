@@ -406,8 +406,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             newItem.elementLabel = newItem.originalLabel;
             newItem.objectLabel = newItem.originalLabel;
         }
-
-        $scope.selectedReport.properties.connectedComponent = newItem.component;
     };
 
     $scope.onRemoveFilter = function (filter) {
@@ -418,28 +416,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.onRemoveField = function (item, role) {
         $scope.sql = undefined;
-
-        var empty = true;
-
-        for (const columnList of [
-            $scope.selectedReport.properties.columns,
-            $scope.selectedReport.properties.xkeys,
-            $scope.selectedReport.properties.ykeys,
-            $scope.selectedReport.properties.pivotKeys.columns,
-            $scope.selectedReport.properties.pivotKeys.rows,
-            $scope.selectedReport.properties.order,
-            $scope.selectedReport.properties.filters
-        ]) {
-            if (columnList.length > 0) {
-                empty = false;
-                break;
-            }
-        }
-        $scope.selectedReport.empty = empty;
-
-        if ($scope.selectedReport.empty) {
-            $scope.selectedReport.properties.connectedComponent = undefined;
-        }
     };
 
     $scope.toReportItem = function (ngModelItem) {
@@ -473,7 +449,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             isCustom: ngModelItem.isCustom,
             expression: ngModelItem.expression,
             viewExpression: ngModelItem.viewExpression,
-            component: ngModelItem.component,
             aggregation: agg
         };
     };
@@ -704,12 +679,38 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.isUsable = function (item) {
-        return $scope.selectedReport.properties &&
-            item.component !== -1 &&
-            ($scope.selectedReport.properties.connectedComponent === undefined || // connectedComponent can be 0, which is why we can't just test it's truthyness
-            item.component === undefined ||
-            item.component === $scope.selectedReport.properties.connectedComponent);
+        const properties = $scope.selectedReport.properties;
+        if (properties) {
+            const elementsInUse = properties.columns.concat(
+                properties.pivotKeys ? properties.pivotKeys.columns : [],
+                properties.pivotKeys ? properties.pivotKeys.rows : [],
+                properties.xkeys,
+                properties.ykeys,
+                properties.filters,
+                properties.order,
+            );
+
+            if (elementsInUse.length > 0) {
+                const firstElement = elementsInUse[0];
+
+                const layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
+                const elements = flattenLayerObjects(layer.objects);
+                const firstObject = elements.find(e => e.elementID === firstElement.elementID);
+                const itemObject = elements.find(e => e.elementID === item.elementID);
+                if (itemObject.component !== firstObject.component) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     };
+
+    function flattenLayerObjects (objects) {
+        return objects.reduce((acc, val) => {
+            return Array.isArray(val.elements) ? acc.concat(flattenLayerObjects(val.elements)) : acc.concat(val);
+        }, []);
+    }
 
     $scope.chartColumnTypeOptions = c3Charts.chartColumnTypeOptions;
 
