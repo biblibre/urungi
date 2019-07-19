@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- In Oracle layers, columns are now sorted by name
+
 ### Removed
 
 - Removed deprecated JDBC connector for Oracle
 - Removed deprecated connector for Google BigQuery
+- Removed the datasource parameter 'packetsize', which was not used
 
 ## [1.1.1] - 2019-07-12
 
