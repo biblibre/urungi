@@ -38,15 +38,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     /*
     *   Initialisation
     */
-
-    $scope.initReportList = function () {
-        $scope.navigation.page = 1;
-
-        return $scope.getReports().then(function () {
-            $scope.mode = 'list';
-        });
-    };
-
     $scope.initReportEdit = function () {
         // FIXME There should be another way...
         if (/dashboards/.test($location.path())) {
@@ -822,11 +813,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         }
 
         return available;
-    };
-
-    $scope.gridGetMoreData = function (reportID) {
-        $scope.navigation.page += 1;
-        reportModel.getReportDataNextPage($scope.selectedReport, $scope.navigation.page);
     };
 
     $scope.setSortType = function (field, type) {
