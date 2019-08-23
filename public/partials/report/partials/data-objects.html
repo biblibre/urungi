@@ -34,11 +34,12 @@
                         values:rootItem.values,
                         component:rootItem.component}">
                             <i class="fa fa-cube wst-main-color" 
-                            ng-show="rootItem.elementType != 'number' && rootItem.elementType != 'count' && (!rootItem.defaultAggregation)" 
+                            ng-show="rootItem.elementType != 'date' && rootItem.elementType != 'number' && rootItem.elementType != 'count' && (!rootItem.defaultAggregation)"
                             data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Dimmension)"></i>
                             <i class="fa fa-reorder wst-main-color" 
                             ng-show="rootItem.elementType == 'number' || rootItem.elementType == 'count' || (rootItem.elementType == 'string' && rootItem.defaultAggregation)" 
                             data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Metric)"></i>
+                            <i class="fa fa-calendar-o wst-main-color" ng-show="rootItem.elementType == 'date'" data-toggle="tooltip" data-placement="top"></i>
 
 
                             <span ng-hide="rootItem.defaultAggregation" ng-bind="rootItem.elementLabel"></span>
@@ -48,11 +49,12 @@
 
                 <a ng-if="!isUsable(rootItem)" class="element-disabled">
                     <i class="fa fa-cube" 
-                    ng-show="rootItem.elementType != 'number' && rootItem.elementType != 'count' && (!rootItem.defaultAggregation)" 
+                    ng-show="rootItem.elementType != 'date' && rootItem.elementType != 'number' && rootItem.elementType != 'count' && (!rootItem.defaultAggregation)"
                     data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Dimmension)"></i>
                     <i class="fa fa-reorder" 
                     ng-show="rootItem.elementType == 'number' || rootItem.elementType == 'count' || (rootItem.elementType == 'string' && rootItem.defaultAggregation)" 
                     data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Metric)"></i>
+                    <i class="fa fa-calendar-o" ng-show="rootItem.elementType == 'date'" data-toggle="tooltip" data-placement="top"></i>
 
 
                     <span ng-hide="rootItem.defaultAggregation" ng-bind="rootItem.elementLabel"></span>
