@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed a bug that prevented the column's type (spline, bar, area, ...) to be
   saved
 - Columns and rows of pivot table are now sorted
+- Fixed a bug in SQL query builder when using date filters
 
 ## [1.2.0] - 2019-08-26
 
