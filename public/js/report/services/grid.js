@@ -16,11 +16,6 @@ angular.module('app').service('grid', function (gettextCatalog) {
         }
 
         var theProperties = report.properties;
-        var pageBlock = 'page-block';
-
-        if (mode === 'preview') {
-            pageBlock = '';
-        }
 
         var reportStyle = 'width:100%;padding-left:0px;padding-right:0px;';
         var headerStyle = 'width:100%;padding-left:0px;background-color:#ccc;';
@@ -34,7 +29,7 @@ angular.module('app').service('grid', function (gettextCatalog) {
 
         if (theProperties) {
             reportStyle += 'background-color: #fff;';
-            // reportStyle += 'height:'+theProperties.height+'px;';
+            reportStyle += 'min-height: 200px;';
 
             const rowHeight = 35;
             columnDefaultStyle += 'height: ' + rowHeight + 'px;';
@@ -48,7 +43,7 @@ angular.module('app').service('grid', function (gettextCatalog) {
             columnDefaultStyle += 'border-bottom: 2px solid #ccc;';
         }
 
-        var htmlCode = '<div ' + pageBlock + ' id="REPORT_' + id + '" ndType="extendedGrid" class="container-fluid report-container" style="' + reportStyle + '">';
+        var htmlCode = '<div id="REPORT_' + id + '" class="container-fluid report-container" style="' + reportStyle + '">';
 
         columns = report.properties.columns;
 
@@ -61,7 +56,7 @@ angular.module('app').service('grid', function (gettextCatalog) {
         }
         htmlCode += '</div>';
 
-        htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: 60px;" scrolly="gridGetMoreData(\'' + id + '\')">';
+        htmlCode += '<div vs-repeat style="width:100%;overflow-y: scroll;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: 60px;">';
 
         htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in report.query.data | filter:theFilter | orderBy:report.predicate:report.reverse  " style="' + rowStyle + '"  >';
 
@@ -162,18 +157,4 @@ angular.module('app').service('grid', function (gettextCatalog) {
 
         return htmlCode;
     }
-});
-
-angular.module('app').directive('scrolly', function () {
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
-            var raw = element[0];
-            element.bind('scroll', function () {
-                if (raw.scrollTop + raw.offsetHeight > raw.scrollHeight) {
-                    scope.$apply(attrs.scrolly);
-                }
-            });
-        }
-    };
 });

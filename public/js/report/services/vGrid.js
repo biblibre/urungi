@@ -8,13 +8,9 @@ angular.module('app').service('verticalGrid', function (dataElements, gettextCat
         }
 
         var theProperties = report.properties;
-        var pageBlock = 'page-block';
-
-        if (mode === 'preview') {
-            pageBlock = '';
-        }
 
         var reportStyle = 'width:100%;padding-left:0px;padding-right:0px;';
+        reportStyle += 'min-height: 200px;';
         var rowStyle = 'width:100%;padding:0px';
 
         if (!theProperties.height) theProperties.height = 400;
@@ -23,11 +19,11 @@ angular.module('app').service('verticalGrid', function (dataElements, gettextCat
             reportStyle += 'background-color: #fff;';
         }
 
-        var htmlCode = '<div ' + pageBlock + ' id="REPORT_' + id + '" ndType="extendedGrid" class="container-fluid report-container" style="' + reportStyle + '">';
+        var htmlCode = '<div id="REPORT_' + id + '" class="container-fluid report-container" style="' + reportStyle + '">';
 
         const columns = report.properties.columns;
 
-        htmlCode += '<div vs-repeat style="width:100%;overflow-y: auto;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: 0px;" scrolly="gridGetMoreData(\'' + id + '\')">';
+        htmlCode += '<div vs-repeat style="width:100%;overflow-y: auto;border: 1px solid #ccc;align-items: stretch;position: absolute;bottom: 0px;top: 0px;">';
 
         htmlCode += '<div ndType="repeaterGridItems" class="repeater-data container-fluid" ng-repeat="item in report.query.data | filter:theFilter | orderBy:report.predicate:report.reverse  " style="' + rowStyle + '"  >';
 

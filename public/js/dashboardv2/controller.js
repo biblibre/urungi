@@ -653,16 +653,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         }
     };
 
-    $scope.gridGetMoreData = function (reportID) {
-        for (var i in $scope.selectedDashboard.reports) {
-            if ($scope.selectedDashboard.reports[i].id === reportID) {
-                if (!$scope.selectedDashboard.reports[i].lastLoadedPage) { $scope.selectedDashboard.reports[i].lastLoadedPage = 2; } else { $scope.selectedDashboard.reports[i].lastLoadedPage += 1; }
-
-                reportModel.getReportDataNextPage($scope.selectedDashboard.reports[i], $scope.selectedDashboard.reports[i].lastLoadedPage);
-            }
-        }
-    };
-
     $scope.$on('element.reselected', function (e, node) {
         $scope.tabs.selected = 'settings';
     });
