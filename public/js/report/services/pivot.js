@@ -34,15 +34,9 @@ angular.module('app').service('pivot', function (gettextCatalog) {
         }
 
         for (const dim in dimensionList) {
-            var valueList = [];
-
-            for (const v of dimensionList[dim].set.values()) {
-                const value = {
-                    id: v,
-                    label: v
-                };
-                valueList.push(value);
-            }
+            const values = Array.from(dimensionList[dim].set);
+            values.sort((a, b) => String(a).localeCompare(b, 'en', { numeric: true }));
+            const valueList = values.map(v => ({ id: v, label: v }));
 
             dimensions[dim] = new DimensionDescription(dimensionList[dim].info.objectLabel, valueList);
         }
