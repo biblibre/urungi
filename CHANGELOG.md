@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed queries with multiple filters
 - Fixed a bug that prevented to add new columns to existing reports
+- Fixed a bug that prevented editing reports after a modification of the layer
+- Fixed the icon for date fields in report editor
+- Fixed some graphical issues with grid and vGrid in dashboards
 
 ### Removed
 
