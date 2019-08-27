@@ -47,6 +47,22 @@
             <section id="settingsTab" class="results infinite ng-hide editor-panel" ng-show="tabs.selected == 'settings'">
                     <section class="content-section">
                         <h4 translate>Display settings</h4>
+                        <div ng-if="['chart-pie', 'chart-donut'].includes(selectedReport.reportType)">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" ng-model="selectedReport.reportType" name="report-type" value="chart-donut">
+                                    <img src="images/donut.png">
+                                    <span translate>Donut</span>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" ng-model="selectedReport.reportType" name="report-type" value="chart-pie">
+                                    <img src="images/pie.png">
+                                    <span translate>Pie</span>
+                                </label>
+                            </div>
+                        </div>
                         <br>
                         <div ng-show="['chart-line', 'chart-pie', 'chart-donut'].indexOf(selectedReport.reportType) >= 0">
                             <span translate>Legend position :</span>

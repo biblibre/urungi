@@ -37,7 +37,6 @@
         vm.getElementFilterOptions = getElementFilterOptions;
         vm.getDatePatternFilters = getDatePatternFilters;
         vm.setFilterType = setFilterType;
-        vm.aggregationChoosed = aggregationChoosed;
         vm.makePrompt = makePrompt;
         vm.getButtonFilterPromptMessage = getButtonFilterPromptMessage;
 
@@ -151,26 +150,6 @@
             vm.filter.filterTypeLabel = filterOption.label;
 
             vm.onChange();
-        }
-
-        function aggregationChoosed (column, variable) {
-            if (variable.value === 'original') {
-                delete (column.aggregation);
-            } else {
-                column.aggregation = variable.value;
-            }
-
-            if (typeof column.originalLabel === 'undefined') {
-                column.originalLabel = column.elementLabel;
-            }
-
-            if (variable.value === 'original') {
-                column.elementLabel = column.originalLabel;
-                column.objectLabel = column.originalLabel;
-            } else {
-                column.elementLabel = column.originalLabel + ' (' + variable.name + ')';
-                column.objectLabel = column.originalLabel + ' (' + variable.name + ')';
-            }
         }
 
         function makePrompt () {

@@ -375,35 +375,27 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         if ($scope.selectedReport.properties.filters.length > 0) {
             item.conditionType = 'and';
         }
-        $scope.selectedReport.properties.filters.push(item);
-        $scope.onDropField(item, 'filter');
+        $scope.onDropField($scope.selectedReport.properties.filters, item, 'filter');
     };
 
-    $scope.onDropField = function (newItem, role, forbidAggregation) {
+    $scope.onDropField = function (elements, newItem, role) {
+        elements.push(newItem);
+
         $scope.sql = undefined;
 
         if (role === 'order') {
             newItem.sortType = 1;
         }
-
-        if (newItem.aggregation && forbidAggregation) {
-            if (typeof newItem.originalLabel === 'undefined') {
-                newItem.originalLabel = newItem.elementLabel;
-            }
-            delete (newItem.aggregation);
-            newItem.id = reportModel.changeColumnId(newItem.id, 'raw');
-            newItem.elementLabel = newItem.originalLabel;
-            newItem.objectLabel = newItem.originalLabel;
-        }
     };
 
     $scope.onRemoveFilter = function (filter) {
-        const filterIndex = $scope.selectedReport.properties.filters.indexOf(filter);
-        $scope.selectedReport.properties.filters.splice(filterIndex, 1);
-        $scope.onRemoveField(filter, 'filter');
+        $scope.onRemoveField($scope.selectedReport.properties.filters, filter, 'filter');
     };
 
-    $scope.onRemoveField = function (item, role) {
+    $scope.onRemoveField = function (elements, item, role) {
+        const index = elements.indexOf(item);
+        elements.splice(index, 1);
+
         $scope.sql = undefined;
     };
 
@@ -481,9 +473,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             }
             break;
 
-        case 'chart-bar':
         case 'chart-line':
-        case 'chart-area':
         case 'chart-pie':
         case 'chart-donut':
             if ($scope.selectedReport.properties.xkeys.length === 0) {
@@ -541,10 +531,8 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             if (item.elementID === newItem.elementID) { found = true; }
         }
         if (!found) {
-            choice.propertyBind.push(newItem);
+            $scope.onDropField(choice.propertyBind, newItem, choice.role);
         }
-
-        $scope.onDropField(newItem, choice.role, choice.forbidAggregation);
     };
 
     $scope.onDragOver = function (event) {
@@ -603,25 +591,11 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             report.reportType = 'pivot';
             break;
 
-        case 'chart-bar':
-            moveContent(report.properties.columns, movedColumns);
-            moveContent(report.properties.pivotKeys.columns, movedColumns);
-            moveContent(report.properties.pivotKeys.rows, movedColumns);
-            report.reportType = 'chart-bar';
-            break;
-
         case 'chart-line':
             moveContent(report.properties.columns, movedColumns);
             moveContent(report.properties.pivotKeys.columns, movedColumns);
             moveContent(report.properties.pivotKeys.rows, movedColumns);
             report.reportType = 'chart-line';
-            break;
-
-        case 'chart-area':
-            moveContent(report.properties.columns, movedColumns);
-            moveContent(report.properties.pivotKeys.columns, movedColumns);
-            moveContent(report.properties.pivotKeys.rows, movedColumns);
-            report.reportType = 'chart-area';
             break;
 
         case 'chart-donut':
@@ -662,7 +636,8 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             // queryModel.updateColumnField(col, 'zone', choice.zone);
             choice.propertyBind.push(col);
             if (choice.forbidAggregation) {
-                $scope.aggregationChoosed(col, { name: 'Raw', value: 'raw' });
+                delete col.aggregation;
+                col.id = reportsService.getColumnId(col);
             }
         }
     };
@@ -730,33 +705,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.orderColumn = function (columnIndex, desc, hashedID) {
         reportModel.orderColumn($scope.selectedReport, columnIndex, desc, hashedID);
-    };
-
-    $scope.aggregationChoosed = function (column, option) {
-        if (typeof column.originalLabel === 'undefined') {
-            column.originalLabel = column.elementLabel;
-        }
-
-        if (option.value === 'raw') {
-            delete (column.aggregation);
-            column.elementLabel = column.originalLabel;
-            column.objectLabel = column.originalLabel;
-            column.id = reportModel.changeColumnId(column.id, 'raw');
-        } else {
-            column.aggregation = option.value;
-            column.elementLabel = column.originalLabel + ' (' + option.name + ')';
-            column.objectLabel = column.originalLabel + ' (' + option.name + ')';
-            column.id = reportModel.changeColumnId(column.id, option.value);
-        }
-    };
-
-    $scope.hideColumn = function (column, hidden) {
-        column['hidden'] = hidden;
-    };
-
-    $scope.stackBars = function (column, stacked) {
-        column.doNotStack = !stacked;
-        c3Charts.changeStack($scope.selectedReport.properties.chart);
     };
 
     $scope.saveToExcel = function (reportHash) {
@@ -830,39 +778,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.hideErrorMessage = function () {
         $scope.selectedReport.hideErrorMessage = true;
-    };
-
-    /*
-    *   Other
-    */
-
-    $scope.fieldsAggregations = {
-        'number': [
-            { name: gettextCatalog.getString('Sum'), value: 'sum' },
-            { name: gettextCatalog.getString('Avg'), value: 'avg' },
-            { name: gettextCatalog.getString('Min'), value: 'min' },
-            { name: gettextCatalog.getString('Max'), value: 'max' },
-            { name: gettextCatalog.getString('Count'), value: 'count' },
-            { name: gettextCatalog.getString('Count distinct'), value: 'countDistinct' },
-            { name: gettextCatalog.getString('Raw'), value: 'raw' }
-        ],
-        'date': [
-            { name: gettextCatalog.getString('Year'), value: 'year' },
-            { name: gettextCatalog.getString('Month'), value: 'month' },
-            { name: gettextCatalog.getString('Day'), value: 'day' },
-            { name: gettextCatalog.getString('Count'), value: 'count' },
-            { name: gettextCatalog.getString('Count distinct'), value: 'countDistinct' },
-            { name: gettextCatalog.getString('Raw'), value: 'raw' }
-            /* {name: 'Semester', value: 'semester'},
-            {name: 'Quarter', value: 'quarter'},
-            {name: 'Trimester', value: 'trimester'} */
-        ],
-        'string': [
-            { name: gettextCatalog.getString('Count'), value: 'count' },
-            { name: gettextCatalog.getString('Count distinct'), value: 'countDistinct' },
-            { name: gettextCatalog.getString('Raw'), value: 'raw' }
-
-        ]
     };
 
     $scope.IntroOptions = {
