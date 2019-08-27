@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed a bug preventing to change the sort direction in report editor
+
 ## [1.2.0] - 2019-08-26
 
 ### Changed

@@ -51,7 +51,7 @@
                         <i ng-show="item.sortType == -1" class="fa fa-chevron-down hand-cursor order-box-close-btn" 
                         ng-click="setSortType(item, 1)" uib-tooltip="{{'Click here to order descendent using this field' | translate}}" tooltip-placement="bottom"></i>
 
-                        <i ng-show="item.sortType == 1" class="fa fa-chevron-up hand-cursor order-box-close-btn" 
+                        <i ng-show="item.sortType != -1" class="fa fa-chevron-up hand-cursor order-box-close-btn"
                         ng-click="setSortType(item, -1)" uib-tooltip="{{'Click here to order ascendent using this field' | translate}}" tooltip-placement="bottom"></i>
                 </span>
 

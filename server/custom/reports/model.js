@@ -18,6 +18,7 @@ const ReportColumnSchema = new mongoose.Schema({
     layerID: mongoose.Schema.Types.ObjectId,
     objectLabel: String,
     originalLabel: String,
+    sortType: Number,
     visible: Boolean,
     zone: String,
 });
