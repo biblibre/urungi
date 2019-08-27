@@ -19,6 +19,7 @@ const ReportColumnSchema = new mongoose.Schema({
     objectLabel: String,
     originalLabel: String,
     sortType: Number,
+    type: { type: String },
     visible: Boolean,
     zone: String,
 });
