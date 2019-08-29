@@ -23,8 +23,8 @@
 
         vm.onDropItem = onDropItem;
         vm.onRemoveItem = onRemoveItem;
-        vm.getColumnDescription = getColumnDescription;
         vm.openColumnSettingsModal = openColumnSettingsModal;
+        vm.getColumnDescription = reportsService.getColumnDescription;
 
         function onDropItem (data, event) {
             event.stopPropagation();
@@ -40,16 +40,6 @@
 
         function onRemoveItem (item) {
             vm.onRemove({ elements: vm.elements, item: item });
-        };
-
-        function getColumnDescription (column) {
-            let columnDescription = column.originalLabel || column.objectLabel;
-            if (column.aggregation) {
-                const aggregationDescription = reportsService.getAggregationDescription(column.aggregation);
-                columnDescription += ' (' + aggregationDescription + ')';
-            }
-
-            return columnDescription;
         };
 
         function openColumnSettingsModal (column) {

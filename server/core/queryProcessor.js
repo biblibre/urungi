@@ -100,7 +100,7 @@ function processQuery (query, queryLayer, warnings) {
     for (const col of query.columns) {
         const element = findElement(queryLayer.objects, col.elementID);
         if (!element) {
-            warnings.push({ msg: 'element ' + col.objectLabel + ' could not be found. Are you sure it has not been deleted ?' });
+            warnings.push({ msg: 'element ' + col.elementLabel + ' could not be found. Are you sure it has not been deleted ?' });
             continue;
         }
 
@@ -116,7 +116,7 @@ function processQuery (query, queryLayer, warnings) {
     for (const col of query.order) {
         const element = findElement(queryLayer.objects, col.elementID);
         if (!element) {
-            warnings.push({ msg: 'element ' + col.objectLabel + ' could not be found. Are you sure it has not been deleted ?' });
+            warnings.push({ msg: 'element ' + col.elementLabel + ' could not be found. Are you sure it has not been deleted ?' });
             continue;
         }
 
@@ -127,7 +127,7 @@ function processQuery (query, queryLayer, warnings) {
     for (const col of query.filters) {
         const element = findElement(queryLayer.objects, col.elementID);
         if (!element) {
-            warnings.push({ msg: 'element ' + col.objectLabel + ' could not be found. Are you sure it has not been deleted ?' });
+            warnings.push({ msg: 'element ' + col.elementLabel + ' could not be found. Are you sure it has not been deleted ?' });
             continue;
         }
 

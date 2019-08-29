@@ -1,4 +1,4 @@
-angular.module('app').service('grid', function (gettextCatalog) {
+angular.module('app').service('grid', function (gettextCatalog, reportsService) {
     var colClass = '';
     var colWidth = '';
     var columns = [];
@@ -77,7 +77,7 @@ angular.module('app').service('grid', function (gettextCatalog) {
 
     function getHeaderColumn (column) {
         var htmlCode = '';
-        htmlCode += '<div class="' + colClass + ' report-repeater-column-header" style="' + colWidth + '"><table style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space: nowrap;width:95%;">' + column.objectLabel + '</td></tr></table> </div>';
+        htmlCode += '<div class="' + colClass + ' report-repeater-column-header" style="' + colWidth + '"><table style="table-layout:fixed;width:100%"><tr><td style="overflow:hidden;white-space: nowrap;width:95%;">' + reportsService.getColumnDescription(column) + '</td></tr></table> </div>';
 
         return htmlCode;
     }

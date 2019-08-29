@@ -23,6 +23,7 @@
             storeReport: storeReport,
             getStoredReport: getStoredReport,
             getColumnId: getColumnId,
+            getColumnDescription: getColumnDescription,
         };
 
         return service;
@@ -124,6 +125,16 @@
             return columnId;
         }
 
+        function getColumnDescription (column) {
+            let columnDescription = column.elementLabel;
+            if (column.aggregation) {
+                const aggregationDescription = getAggregationDescription(column.aggregation);
+                columnDescription += ' (' + aggregationDescription + ')';
+            }
+
+            return columnDescription;
+        };
+
         function getCountColumn (col) {
             return {
                 aggregation: 'count',
@@ -135,7 +146,6 @@
                 filterPrompt: false,
                 id: col.id + 'ptc',
                 layerID: col.layerID,
-                objectLabel: col.objectLabel + ' count'
             };
         }
     }

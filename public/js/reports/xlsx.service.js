@@ -5,9 +5,9 @@
 
     angular.module('app.reports').factory('xlsxService', xlsxService);
 
-    xlsxService.$inject = ['FileSaver'];
+    xlsxService.$inject = ['FileSaver', 'reportsService'];
 
-    function xlsxService (FileSaver) {
+    function xlsxService (FileSaver, reportsService) {
         const service = {
             saveReportAsXLSX: saveReportAsXLSX,
         };
@@ -54,7 +54,7 @@
                 if (range.e.r < 0) range.e.r = 0;
                 if (range.e.c < i) range.e.c = i;
 
-                var cell = { v: report.properties.columns[i].objectLabel };
+                var cell = { v: reportsService.getColumnDescription(report.properties.columns[i]) };
                 var cell_ref = XLSX.utils.encode_cell({ c: i, r: 0 });
                 if (typeof cell.v === 'number') cell.t = 'n';
                 else if (typeof cell.v === 'boolean') cell.t = 'b';

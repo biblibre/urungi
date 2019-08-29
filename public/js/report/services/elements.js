@@ -1,12 +1,4 @@
 angular.module('app').service('dataElements', function () {
-    this.getElementLabel = function (element) {
-        var htmlCode = '';
-
-        htmlCode = '<span class="report-element-label">' + element.objectLabel + '</span>';
-
-        return htmlCode;
-    };
-
     this.getElementValue = function (element, dataColumnClass) {
         var htmlCode = '';
         var columnDefaultStyle = '';

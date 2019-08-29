@@ -332,7 +332,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
                 filterPrompt: false,
                 id: col.id + 'ptc',
                 layerID: col.layerID,
-                objectLabel: col.objectLabel + ' count'
             };
         }
 
@@ -401,21 +400,17 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.toReportItem = function (ngModelItem) {
         var agg;
-        var aggLabel = '';
 
         if (ngModelItem.aggregation) {
             agg = ngModelItem.aggregation;
-            aggLabel = ' (' + ngModelItem.aggregation + ')';
         }
 
         if (ngModelItem.defaultAggregation) {
             agg = ngModelItem.defaultAggregation;
-            aggLabel = ' (' + ngModelItem.defaultAggregation + ')';
         }
 
         return {
             elementName: ngModelItem.elementName,
-            objectLabel: ngModelItem.elementLabel + aggLabel,
             id: ngModelItem.id,
             elementLabel: ngModelItem.elementLabel,
             collectionID: ngModelItem.collectionID,
@@ -516,15 +511,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         const newItem = $scope.toReportItem(ngModelItem);
         var choice = $scope.autoChooseArea(newItem);
         newItem.zone = choice.zone;
-
-        if (newItem.aggregation && (newItem.zone === 'pcol' || newItem.zone === 'prow')) {
-            if (typeof newItem.originalLabel === 'undefined') {
-                newItem.originalLabel = newItem.elementLabel;
-            }
-            delete (newItem.aggregation);
-            newItem.elementLabel = newItem.originalLabel;
-            newItem.objectLabel = newItem.originalLabel;
-        }
 
         var found = false;
         for (const item of choice.propertyBind) {

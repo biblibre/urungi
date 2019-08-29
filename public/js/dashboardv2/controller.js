@@ -662,4 +662,9 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
         return html;
     }
+
+    $scope.getColumnDescription = getColumnDescription;
+    function getColumnDescription (column) {
+        reportsService.getColumnDescription(column);
+    }
 });

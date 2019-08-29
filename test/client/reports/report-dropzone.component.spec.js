@@ -56,17 +56,5 @@ describe('appReportDropzone', function () {
                 expect(onRemoveSpy).toHaveBeenCalledWith({ elements: [], item: element });
             });
         });
-
-        describe('getColumnDescription', function () {
-            it('should return a column description', function () {
-                const column = {
-                    originalLabel: 'original',
-                    objectLabel: 'original (count)',
-                    aggregation: 'sum',
-                };
-                const description = vm.getColumnDescription(column);
-                expect(description).toBe('original (Sum)');
-            });
-        });
     });
 });
