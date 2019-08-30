@@ -188,7 +188,7 @@ class SqlQueryBuilder {
                     return qb.whereBetween(field, [filter.criterion.text1, filter.criterion.text2]);
                 }
             } else {
-                var ct = filter.conditionType;
+                var ct = filter.conditionType || 'and';
                 if (negate) {
                     ct = (ct === 'and' || ct === 'andNot') ? ((ct === 'and') ? 'andNot' : 'and') : ((ct === 'or') ? 'orNot' : 'or');
                 }
@@ -213,7 +213,7 @@ class SqlQueryBuilder {
                     return qb.whereIn(field, filter.criterion.textList);
                 }
             } else {
-                var ct = filter.conditionType;
+                var ct = filter.conditionType || 'and';
                 if (negate) {
                     ct = (ct === 'and' || ct === 'andNot') ? ((ct === 'and') ? 'andNot' : 'and') : ((ct === 'or') ? 'orNot' : 'or');
                 }
@@ -238,7 +238,7 @@ class SqlQueryBuilder {
                     return qb.whereNull(field);
                 }
             } else {
-                var ct = filter.conditionType;
+                var ct = filter.conditionType || 'and';
                 if (negate) {
                     ct = (ct === 'and' || ct === 'andNot') ? ((ct === 'and') ? 'andNot' : 'and') : ((ct === 'or') ? 'orNot' : 'or');
                 }
@@ -332,7 +332,8 @@ class SqlQueryBuilder {
             if (first) {
                 return qb.where(builderFunction);
             } else {
-                switch (filter.conditionType) {
+                const conditionType = filter.conditionType || 'and';
+                switch (conditionType) {
                 case 'and':
                     return qb.where(builderFunction);
                 case 'or':
