@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2018-08-30
+
 ### Fixed
 
 - Fixed a bug preventing to change the sort direction in report editor
@@ -283,7 +285,8 @@ These are the most notable changes made since the fork of
 
 - A lot of minor issues
 
-[Unreleased]: https://github.com/biblibre/urungi/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/biblibre/urungi/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/biblibre/urungi/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/biblibre/urungi/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/biblibre/urungi/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/biblibre/urungi/compare/v1.0.1...v1.1.0
