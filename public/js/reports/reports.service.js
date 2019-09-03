@@ -126,10 +126,13 @@
         }
 
         function getColumnDescription (column) {
-            let columnDescription = column.elementLabel;
-            if (column.aggregation) {
-                const aggregationDescription = getAggregationDescription(column.aggregation);
-                columnDescription += ' (' + aggregationDescription + ')';
+            let columnDescription = column.label;
+            if (!columnDescription) {
+                columnDescription = column.elementLabel;
+                if (column.aggregation) {
+                    const aggregationDescription = getAggregationDescription(column.aggregation);
+                    columnDescription += ' (' + aggregationDescription + ')';
+                }
             }
 
             return columnDescription;
