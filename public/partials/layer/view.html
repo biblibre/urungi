@@ -22,35 +22,29 @@
 
 
 
-            <section id="objectPanel" data-num-cols="4" ng-init="tabs.selected = 'elements'" class="catalogSidebar">
-
-                <div class="object-panel-header">
-                        <div class="object-panel-header-icon" ng-click="tabs.selected = 'properties'" ng-class="{'active': tabs.selected == 'properties'}">
-                            <i class="fa fa-gear" ></i>
-                        </div>
-                        <div class="object-panel-header-inner">
-                        </div>
-
-                </div>
-
+            <section id="objectPanel" ng-init="tabs.selected = 'elements'" class="catalogSidebar">
                 <menu>
+                    <li class="search hand-cursor" ng-class="{'on': tabs.selected === 'properties'}">
+                        <a ng-click="tabs.selected = 'properties'">
+                            <i class="fa fa-gear"></i>
+                        </a>
+                    </li>
                     <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'elements'}">
                         <a  ng-click="tabs.selected = 'elements'">
+                            <span class="objectPanel-menu-label" translate>Layer elements</span>
                             <i class="fa fa-newspaper-o fa-2" aria-hidden="true"></i><!--<br/>Layer<br/>Elements-->
-                            <div class="objectPanel-menu-label" translate>Layer<br/>Elements</div>
-
                         </a>
                     </li>
                     <li id="sourcesTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'sources'}">
                         <a  ng-click="tabs.selected = 'sources'">
-                            <i class="fa fa-plug fa-2" aria-hidden="true"></i> <!--<br/><br/> Sources-->
-                            <div class="objectPanel-menu-label" translate>Sources</div>
+                            <span class="objectPanel-menu-label" translate>Sources</span>
+                            <i class="fa fa-plug fa-2" aria-hidden="true"></i>
                         </a>
                     </li>
                     <li id="queriesTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'queries'}">
                         <a  ng-click="tabs.selected = 'queries'">
+                            <span class="objectPanel-menu-label" translate>Queries</span>
                             <i class="fa fa-map fa-2" aria-hidden="true"></i> <!--<br/>SQL<br/> Queries-->
-                            <div class="objectPanel-menu-label" translate>Queries</div>
                         </a>
                     </li>
                 </menu>

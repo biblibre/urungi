@@ -1,4 +1,4 @@
-angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportsService, $routeParams, $timeout, c3Charts,
+angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportsService, $routeParams, $timeout, c3Charts, $uibModal,
     reportModel, widgetsCommon, $location, gettextCatalog, $q, Noty) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dropArea = 'partials/report/partials/drop-area.html';
@@ -852,5 +852,22 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             }
 
         ]
+    };
+
+    $scope.openReportSettingsModal = openReportSettingsModal;
+
+    function openReportSettingsModal () {
+        const modal = $uibModal.open({
+            component: 'appReportSettingsModal',
+            resolve: {
+                report: () => $scope.selectedReport,
+            },
+        });
+
+        modal.result.then(settings => {
+            $scope.selectedReport.reportType = settings.reportType;
+            $scope.selectedReport.properties.legendPosition = settings.legendPosition;
+            $scope.selectedReport.properties.height = settings.height;
+        }, () => {});
     };
 });
