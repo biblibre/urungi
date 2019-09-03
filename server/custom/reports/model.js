@@ -13,6 +13,7 @@ const ReportColumnSchema = new mongoose.Schema({
     expression: String,
     filterTypeLabel: String,
     filterType: String,
+    format: String,
     id: String,
     isCustom: Boolean,
     label: String,

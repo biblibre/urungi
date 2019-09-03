@@ -34,6 +34,7 @@
             vm.settings.doNotStack = column.doNotStack || false;
             vm.settings.label = column.label || '';
             vm.settings.type = column.type || 'bar';
+            vm.settings.format = column.format || '';
 
             const aggregations = [];
 
