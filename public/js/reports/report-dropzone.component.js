@@ -61,6 +61,7 @@
                 column.doNotStack = settings.doNotStack;
                 column.label = settings.label;
                 column.type = settings.type;
+                column.format = settings.format;
             }, () => {});
 
             return modal;
