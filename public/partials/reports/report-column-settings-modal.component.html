@@ -6,6 +6,12 @@
 <div class="modal-body">
     <form class="form-horizontal">
         <div class="form-group">
+            <label class="col-sm-3 control-label" for="report-column-settings-modal-label" translate>Label</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="report-column-settings-modal-label" name="report-column-settings-modal-label" ng-model="vm.settings.label">
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label" for="report-column-settings-modal-aggregation">Aggregation</label>
             <div class="col-sm-9">
                 <select id="report-column-settings-modal-aggregation" class="form-control" ng-model="vm.settings.aggregation" ng-options="item.value as item.name for item in vm.aggregationsOptions">

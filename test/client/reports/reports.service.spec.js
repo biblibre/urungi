@@ -152,5 +152,16 @@ describe('reportsService', function () {
 
             expect(description).toBe('Quux (Count distinct)');
         });
+
+        it('should return correct description for columns with custom label', function () {
+            const column = {
+                elementLabel: 'Quux',
+                aggregation: 'max',
+                label: 'Maximum Quux',
+            };
+            const description = reportsService.getColumnDescription(column);
+
+            expect(description).toBe('Maximum Quux');
+        });
     });
 });

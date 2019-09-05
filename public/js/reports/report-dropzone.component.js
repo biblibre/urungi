@@ -59,6 +59,7 @@
                 column.id = reportsService.getColumnId(column);
 
                 column.doNotStack = settings.doNotStack;
+                column.label = settings.label;
                 column.type = settings.type;
             }, () => {});
 

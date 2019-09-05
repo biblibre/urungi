@@ -15,6 +15,7 @@ const ReportColumnSchema = new mongoose.Schema({
     filterType: String,
     id: String,
     isCustom: Boolean,
+    label: String,
     layerID: mongoose.Schema.Types.ObjectId,
     sortType: Number,
     type: { type: String },

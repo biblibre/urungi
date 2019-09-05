@@ -193,6 +193,7 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
                 columns: [
                     [theValues[0], query.data[0][theValues[0]]]
                 ],
+                names: theNames,
                 type: chart.type,
             };
             c3Config.gauge = {
