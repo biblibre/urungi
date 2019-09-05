@@ -504,14 +504,6 @@ ul {
     display: inline-block;
 }
 
-input[type=checkbox],
-input[type=radio] {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 4px 0 0;
-    line-height: normal;
-}
-
 .pretty-checkbox > input[type=checkbox] {
     display: none;
 }

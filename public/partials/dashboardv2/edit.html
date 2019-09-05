@@ -28,36 +28,28 @@
     </section>
 
     <section id="objectPanel" class="dashboard-edit-object-panel" data-num-cols="4" ng-init="tabs.selected = 'reports'">
-
-
-        <div class="object-panel-header">
-                        <div class="object-panel-header-icon" ng-click="tabs.selected = 'settings'" ng-class="{'active': tabs.selected == 'settings'}">
-                            <i class="fa fa-gear" ></i>
-                        </div>
-                        <div class="object-panel-header-inner">
-
-
-                        </div>
-
-        </div>
-
         <menu>
+            <li ng-class="{'on': tabs.selected == 'settings'}">
+                <a ng-click="tabs.selected = 'settings'">
+                    <i class="fa fa-gear"></i>
+                </a>
+            </li>
             <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'reports'}">
                 <a ng-click="tabs.selected = 'reports'">
+                    <span class="objectPanel-menu-label" translate>Reports</span>
                     <i class="fa fa-bar-chart fa-2" aria-hidden="true" style="margin-left: 0; margin-right: 5px;"> </i>
-                    <div class="objectPanel-menu-label" translate>Reports</div>
                 </a>
             </li>
             <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'prompts'}" >
                 <a ng-click="tabs.selected = 'prompts'">
+                    <span class="objectPanel-menu-label" translate>Run time filters</span>
                     <i class="fa fa-filter fa-2" aria-hidden="true"></i>
-                    <div class="objectPanel-menu-label" translate>Run time<br/>Filters</div>
                 </a>
             </li>
             <li id="layoutTabButton" class="layout hand-cursor" ng-class="{'on': tabs.selected == 'layouts'}" >
                 <a ng-click="tabs.selected = 'layouts'">
+                    <span class="objectPanel-menu-label" translate>Layouts</span>
                     <i class="fa fa-file-image-o fa-2" aria-hidden="true"></i>
-                    <div class="objectPanel-menu-label" translate>Layouts</div>
                 </a>
             </li>
         </menu>
@@ -103,7 +95,6 @@
                             <img ng-if="item.reportType == 'grid'" src="images/grid.png" data-pin-nopin="true">
                             <img ng-if="item.reportType == 'chart-line'" src="images/chart_line.png" data-pin-nopin="true">
                             <img ng-if="item.reportType == 'chart-donut' || item.reportType == 'chart-pie'" src="images/chart_donut.png" data-pin-nopin="true">
-                            <img ng-if="item.reportType == 'chart-bar'" src="images/chart_bar.png" data-pin-nopin="true">
                             <img ng-if="item.reportType == 'indicator'" src="images/indicator.png" data-pin-nopin="true">
                             <img ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
                         </span>
@@ -141,7 +132,7 @@
                                   <i class="fa fa-filter"></i>
                                     <i class="fa fa-question"></i>
                               </span>
-                                {{prompt.objectLabel}}
+                                {{ getColumnDescription(prompt) }}
                             </div>
                         </div>
 

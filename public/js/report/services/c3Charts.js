@@ -1,6 +1,6 @@
 /* global c3:false */
 
-angular.module('app').service('c3Charts', function (Noty, gettextCatalog) {
+angular.module('app').service('c3Charts', function (Noty, gettextCatalog, reportsService) {
     this.rebuildChart = function (report, id) {
         var theValues = [];
         var theStackValues = {};
@@ -31,7 +31,7 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog) {
         for (const dtc of chart.dataColumns) {
             theValues.push(dtc.id);
             theTypes[dtc.id] = dtc.type || 'bar';
-            theNames[dtc.id] = dtc.elementLabel;
+            theNames[dtc.id] = reportsService.getColumnDescription(dtc);
         }
 
         if (stackField && chart.type === 'line') {

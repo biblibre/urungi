@@ -1,4 +1,4 @@
-angular.module('app').service('verticalGrid', function (dataElements, gettextCatalog) {
+angular.module('app').service('verticalGrid', function (dataElements, gettextCatalog, reportsService) {
     this.getVerticalGrid = function (report, mode) {
         let id;
         if (typeof report.id === 'undefined') {
@@ -48,7 +48,7 @@ angular.module('app').service('verticalGrid', function (dataElements, gettextCat
             htmlCode += '<div class="col-md-12 vertical-grid-column-container" >';
 
             htmlCode += '<div class="col-md-3 vertical-grid-label-column" >';
-            htmlCode += dataElements.getElementLabel(columns[i]);
+            htmlCode += '<span class="report-element-label">' + reportsService.getColumnDescription(columns[i]) + '</span>';
             htmlCode += '</div>';
 
             htmlCode += '<div class="col-md-9 vertical-grid-column-value" >';

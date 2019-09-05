@@ -1,0 +1,87 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="vm.dismiss()" aria-hidden="true"><i class="fa fa-close"></i></button>
+    <h4 translate>Settings for '{{ vm.column.elementLabel }}'</h4>
+</div>
+
+<div class="modal-body">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="report-column-settings-modal-aggregation">Aggregation</label>
+            <div class="col-sm-9">
+                <select id="report-column-settings-modal-aggregation" class="form-control" ng-model="vm.settings.aggregation" ng-options="item.value as item.name for item in vm.aggregationsOptions">
+                    <option value="">No aggregation</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" ng-if="vm.report.reportType === 'chart-line'">
+            <label class="col-sm-3 control-label">Type</label>
+            <div class="col-sm-9">
+                <div class="radio">
+                    <label>
+                        <input type="radio" ng-model="vm.settings.type" value="spline">
+                        <img src="images/spline.png">
+                        <span translate>Spline</span>
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" ng-model="vm.settings.type" value="bar">
+                        <i class="fa fa-bar-chart"></i>
+                        <span translate>Bar</span>
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" ng-model="vm.settings.type" value="area">
+                        <i class="fa fa-area-chart"></i>
+                        <span translate>Area</span>
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" ng-model="vm.settings.type" value="line">
+                        <i class="fa fa-line-chart"></i>
+                        <span translate>Line</span>
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" ng-model="vm.settings.type" value="area-spline">
+                        <img src="images/area-spline.png">
+                        <span translate>Area spline</span>
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" ng-model="vm.settings.type" value="scatter">
+                        <img src="images/scatter.png">
+                        <span translate>Scatter</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" ng-if="vm.report.properties.xkeys.length > 1 && vm.settings.type === 'bar'">
+            <label class="col-sm-3 control-label">Stack columns</label>
+            <div class="col-sm-9">
+                <div class="radio">
+                    <label>
+                        <input type="radio" ng-model="vm.settings.doNotStack" ng-value="false">
+                        <span translate>Yes</span>
+                    </label>
+                </div>
+
+                <div class="radio">
+                    <label>
+                        <input type="radio" ng-model="vm.settings.doNotStack" ng-value="true">
+                        <span translate>No</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="vm.dismiss()" translate>Cancel</button>
+    <button ng-click="vm.close({ $value: vm.settings });" class="btn btn-primary" translate>Save settings</button>
+</div>

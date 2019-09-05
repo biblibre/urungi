@@ -1,26 +1,20 @@
     <!-- Metrics for charts and pivot tables -->
 
-    <div ng-if="selectedReport.reportType == 'pivot'" wst-dropzone="true" list-model="selectedReport.properties.ykeys" aggregation-mandatory="true" role="'column'" zone-info="'Drop here your metrics' | translate"></div>
-
-    <div ng-if="selectedReport.reportType == 'chart-bar' || selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'indicator' || selectedReport.reportType == 'gauge'" wst-dropzone="true" list-model="selectedReport.properties.ykeys" role="'column'" zone-info="'Drop here your metrics' | translate"></div>
-
-    <div ng-if="selectedReport.reportType == 'chart-line'" wst-dropzone="true" list-model="selectedReport.properties.ykeys" display-options="chartColumnTypeOptions" display-callback="changeChartColumnType" stack-bars="(selectedReport.properties.xkeys.length > 1) && stackBars" role="'column'" zone-info="'Drop here your metrics' | translate"></div>
-
-    <div ng-if="selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'chart-pie'" wst-dropzone="true" list-model="selectedReport.properties.ykeys" display-options="chartSectorTypeOptions" display-callback = "changeChartSectorType" role="'column'" zone-info="'Drop here your metrics' | translate"></div>
+    <app-report-dropzone ng-if="['pivot', 'chart-line', 'chart-donut', 'chart-pie', 'indicator', 'gauge'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.ykeys" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your metrics' | translate"></app-report-dropzone>
 
     <!-- Column entries -->
 
-    <div id="columnsDropzone" ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid'" wst-dropzone="true" list-model="selectedReport.properties.columns" hide-column="hideColumn" role="'column'" zone-info="'Drop here your columns' | translate"></div>
+    <app-report-dropzone id="columnsDropzone" ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid'" report="selectedReport" elements="selectedReport.properties.columns" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your columns' | translate"></app-report-dropzone>
 
     <!--dimensions for pivot tables -->
 
-    <div ng-if="selectedReport.reportType == 'pivot'" wst-dropzone="true" list-model="selectedReport.properties.pivotKeys.columns" forbid-aggregation="true" role="'column'" zone-info="'Drop here the table columns' | translate"></div>
+    <app-report-dropzone ng-if="selectedReport.reportType == 'pivot'" report="selectedReport" elements="selectedReport.properties.pivotKeys.columns" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the table columns' | translate"></app-report-dropzone>
 
-    <div ng-if="selectedReport.reportType == 'pivot'" wst-dropzone="true" list-model="selectedReport.properties.pivotKeys.rows" forbid-aggregation="true" role="'column'" zone-info="'Drop here the table rows' | translate"></div>
+    <app-report-dropzone ng-if="selectedReport.reportType == 'pivot'" report="selectedReport" elements="selectedReport.properties.pivotKeys.rows" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the table rows' | translate"></app-report-dropzone>
 
     <!--dimensions for charts -->
 
-    <div ng-if="selectedReport.reportType == 'chart-area' || selectedReport.reportType == 'chart-line' || selectedReport.reportType == 'chart-donut' || selectedReport.reportType == 'chart-pie'" wst-dropzone="true" list-model="selectedReport.properties.xkeys" role="'column'" zone-info="'Drop here the dimension field' | translate"></div>
+    <app-report-dropzone ng-if="['chart-line', 'chart-donut', 'chart-pie'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.xkeys" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the dimension field' | translate"></app-report-dropzone>
 
     <!-- Filters -->
 
@@ -31,4 +25,4 @@
 
     <!-- Order keys -->
 
-    <div id="orderByDropzone" ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" wst-dropzone="true" list-model="selectedReport.properties.order" set-sort-type="setSortType" role="'order'" zone-info="'Drop here your order keys' | translate"></div>
+    <app-report-dropzone id="orderByDropzone" ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" report="selectedReport" elements="selectedReport.properties.order" set-sort-type="setSortType(item, direction)" on-drop="onDropField(elements, item, 'order')" on-remove="onRemoveField(elements, item, 'order')" zone-info="'Drop here your order keys' | translate"></app-report-dropzone>

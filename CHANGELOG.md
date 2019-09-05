@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Move report columns settings into a modal
+- Move report settings into a modal
+
 ## [1.2.2] - 2019-08-30
 
 ### Fixed

@@ -1,4 +1,4 @@
-angular.module('app').service('reportModel', function ($q, connection, uuid, FileSaver, Noty) {
+angular.module('app').service('reportModel', function ($q, connection, uuid, FileSaver, Noty, reportsService) {
     this.getReportDefinition = function (id, isLinked) {
         const url = '/api/reports/get-report/' + id;
         const params = { id: id, mode: 'preview', linked: isLinked };
@@ -154,37 +154,14 @@ angular.module('app').service('reportModel', function ($q, connection, uuid, Fil
         report.properties.chart = chart;
     };
 
-    this.getColumnId = function (element) {
-        return getColumnId(element);
-    };
-
     this.changeColumnId = function (oldId, newAggregation) {
         return oldId.substring(0, oldId.length - 3) + newAggregation.substring(0, 3);
     };
 
-    function getColumnId (element) {
-        /*
-        * The id of a column (column.id) differs from the id of the element which that column uses (column.elementID)
-        * this allows for multiple columns which use the same element, for example to use different aggregations
-        */
-
-        var columnId;
-
-        var aggregation = element.aggregation || element.defaultAggregation;
-
-        if (!aggregation) {
-            columnId = 'e' + element.elementID.toLowerCase() + 'raw';
-        } else {
-            columnId = 'e' + element.elementID.toLowerCase() + aggregation.substring(0, 3);
-        }
-
-        return columnId;
-    }
-
     function calculateIdForAllElements (elements) {
         for (var element of elements) {
             if (element.elementRole === 'dimension') {
-                element.id = getColumnId(element);
+                element.id = reportsService.getColumnId(element);
             }
 
             if (element.elements) { calculateIdForAllElements(element.elements); }

@@ -1,4 +1,4 @@
-angular.module('app').service('pivot', function (gettextCatalog) {
+angular.module('app').service('pivot', function (gettextCatalog, reportsService) {
     this.getPivotTableSetup = function (report) {
         const pivotKeys = report.properties.pivotKeys;
         const data = report.query.data;
@@ -38,7 +38,9 @@ angular.module('app').service('pivot', function (gettextCatalog) {
             values.sort((a, b) => String(a).localeCompare(b, 'en', { numeric: true }));
             const valueList = values.map(v => ({ id: v, label: v }));
 
-            dimensions[dim] = new DimensionDescription(dimensionList[dim].info.objectLabel, valueList);
+            const column = dimensionList[dim].info;
+            const columnDescription = reportsService.getColumnDescription(column);
+            dimensions[dim] = new DimensionDescription(columnDescription, valueList);
         }
 
         const horizontalDimensions = [];

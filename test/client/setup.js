@@ -14,5 +14,6 @@ Object.defineProperty(window, 'angular', { value: angular });
 require('angular-route');
 require('angular-gettext');
 require('angular-mocks');
+require('angular-ui-bootstrap');
 
 require('../../dist/templates/templates.js');
