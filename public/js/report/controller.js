@@ -1,5 +1,5 @@
 angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportsService, $routeParams, $timeout, c3Charts, $uibModal,
-    reportModel, widgetsCommon, $location, gettextCatalog, $q, Noty) {
+    reportModel, widgetsCommon, $location, gettextCatalog, $q, Noty, layerService, api) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dropArea = 'partials/report/partials/drop-area.html';
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
@@ -7,17 +7,15 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.filterPromptModal = 'partials/report/modals/filter-prompt-modal.html';
     $scope.tabs = { selected: 'elements' };
 
-    $scope.selectedReport = {};
+    $scope.selectedReport = null;
 
     $scope.duplicateOptions = {};
     $scope.duplicateOptions.freeze = false;
     $scope.duplicateOptions.header = gettextCatalog.getString('Duplicate report');
 
-    $scope.gettingData = false;
     $scope.showSQL = false;
 
     $scope.rows = [];
-    $scope.selectedReport.selectedLayerID = undefined;
     $scope.layers = [];
     $scope.mode = 'preview';
     $scope.isForDash = false;
@@ -57,16 +55,17 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
                     return $scope.refresh();
                 });
             }
-
-            return $scope.refresh();
         });
     };
 
     $scope.$on('newReportForDash', function (event, args) {
         $scope.mode = 'add';
         $scope.isForDash = true;
+        $scope.$broadcast('clearReport');
 
-        $scope.initLayers().then($scope.newForm);
+        $scope.initLayers().then(function () {
+            $scope.newForm();
+        });
     });
 
     $scope.$on('loadReportStrucutureForDash', function (event, args) {
@@ -78,6 +77,9 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
         return $scope.initLayers().then(function () {
             $scope.initForm();
+            $scope.$broadcast('repaint', {
+                fetchData: true,
+            });
         });
     });
 
@@ -158,7 +160,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
         $scope.$broadcast('repaint', {
             fetchData: true,
-            filterCriteria: filterCriteria
+            filters: filterCriteria
         });
     };
 
@@ -192,15 +194,8 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.changeLayer = function (selectedLayerID) {
         $scope.selectedReport.selectedLayerID = selectedLayerID;
-        if ($scope.selectedReport.query) {
-            $scope.selectedReport.query.selectedLayerID = selectedLayerID;
-        }
         var layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
         $scope.rootItem = layer.rootItem;
-    };
-
-    $scope.getQuery = function () {
-        return $scope.selectedReport.query;
     };
 
     $scope.getReport = function (hashedID) {
@@ -224,8 +219,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.reportNameSave = function () {
-        $scope.selectedReport.query = $scope.generateQuery();
-
         return reportModel.saveAsReport($scope.selectedReport, $scope.mode).then(function () {
             $('#theReportNameModal').modal('hide');
             $('.modal-backdrop').hide();
@@ -266,17 +259,14 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     */
 
     $scope.refresh = function () {
-        $scope.selectedReport.query = $scope.generateQuery();
-
         const params = {
-            mode: $scope.mode,
-            selectedRecordLimit: $scope.selectedRecordLimit.value
+            limit: $scope.selectedRecordLimit.value
         };
 
         $scope.$broadcast('updateFilters');
         $scope.$broadcast('showLoadingMessage', gettextCatalog.getString('Fetching data ...'));
 
-        return reportModel.fetchData($scope.selectedReport.query, params).then(function (result) {
+        return api.getReportData($scope.selectedReport, params).then(function (result) {
             if (result.errorToken) {
                 $scope.errorToken = result.errorToken;
             }
@@ -284,83 +274,8 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             $scope.sql = result.sql;
             $scope.time = result.time;
 
-            $scope.$broadcast('repaint', { fetchData: false });
+            $scope.$broadcast('repaint', { fetchData: false, data: result.data });
         });
-    };
-
-    $scope.generateQuery = function () {
-        var query = {};
-
-        query.columns = [];
-        const prop = $scope.selectedReport.properties;
-        for (const columnList of [
-            prop.columns,
-            prop.xkeys,
-            prop.ykeys,
-            prop.pivotKeys.columns,
-            prop.pivotKeys.rows
-        ]) {
-            for (const c of columnList) {
-                query.columns.push(c);
-            }
-        }
-
-        query.order = [];
-        for (const o of prop.order) {
-            query.order.push(o);
-        }
-
-        query.filters = [];
-        for (const f of prop.filters) {
-            query.filters.push(f);
-        }
-
-        if ($scope.selectedReport.reportType === 'pivot') {
-            for (const c of prop.ykeys) {
-                query.columns.push(countColumn(c));
-            }
-        }
-
-        function countColumn (col) {
-            return {
-                aggregation: 'count',
-                collectionID: col.collectionID,
-                elementID: col.elementID,
-                elementLabel: col.elementLabel,
-                elementName: col.elementName,
-                elementType: col.elementType,
-                filterPrompt: false,
-                id: col.id + 'ptc',
-                layerID: col.layerID,
-            };
-        }
-
-        if (prop.recordLimit) {
-            query.recordLimit = prop.recordLimit;
-        }
-
-        query.layerID = $scope.selectedReport.selectedLayerID;
-
-        return query;
-    };
-
-    $scope.getQueryForFilter = function (filter) {
-        const query = $scope.generateQuery();
-
-        query.filters = query.filters.filter(f => f !== filter);
-
-        var newColumn = {
-            id: 'f',
-            collectionID: filter.collectionID,
-            elementID: filter.elementID,
-            elementName: filter.elementName,
-            elementType: filter.elementType,
-            layerID: filter.layerID
-        };
-
-        query.columns.push(newColumn);
-
-        return query;
     };
 
     $scope.onDropOnFilter = function (data, event, type, group) {
@@ -539,10 +454,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.changeReportType = function (newReportType) {
         const report = $scope.selectedReport;
 
-        if (report.query) {
-            report.query.countYKeys = false;
-        }
-
         $scope.$broadcast('clearReport');
 
         var movedColumns = [];
@@ -571,9 +482,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         case 'pivot':
             moveContent(report.properties.xkeys, movedColumns);
             moveContent(report.properties.columns, movedColumns);
-            if (report.query) {
-                report.query.countYKeys = true;
-            }
             report.reportType = 'pivot';
             break;
 
@@ -629,7 +537,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.isUsable = function (item) {
-        const properties = $scope.selectedReport.properties;
+        const properties = $scope.selectedReport ? $scope.selectedReport.properties : null;
         if (properties) {
             const elementsInUse = properties.columns.concat(
                 properties.pivotKeys ? properties.pivotKeys.columns : [],
@@ -644,11 +552,13 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
                 const firstElement = elementsInUse[0];
 
                 const layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
-                const elements = flattenLayerObjects(layer.objects);
-                const firstObject = elements.find(e => e.elementID === firstElement.elementID);
-                const itemObject = elements.find(e => e.elementID === item.elementID);
-                if (itemObject.component !== firstObject.component) {
-                    return false;
+                if (layer) {
+                    const elements = layerService.flattenObjects(layer.objects);
+                    const firstObject = elements.find(e => e.elementID === firstElement.elementID);
+                    const itemObject = elements.find(e => e.elementID === item.elementID);
+                    if (itemObject && firstObject && itemObject.component !== firstObject.component) {
+                        return false;
+                    }
                 }
             }
         }
@@ -656,20 +566,9 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         return true;
     };
 
-    function flattenLayerObjects (objects) {
-        return objects.reduce((acc, val) => {
-            return Array.isArray(val.elements) ? acc.concat(flattenLayerObjects(val.elements)) : acc.concat(val);
-        }, []);
-    }
-
     $scope.chartColumnTypeOptions = c3Charts.chartColumnTypeOptions;
 
     $scope.chartSectorTypeOptions = c3Charts.chartSectorTypeOptions;
-
-    $scope.changeChartColumnType = function (column, type) {
-        column.type = type;
-        c3Charts.changeChartColumnType($scope.selectedReport.properties.chart, column);
-    };
 
     $scope.changeChartSectorType = function (column, type) {
         if (type === 'pie') { $scope.selectedReport.reportType = 'chart-pie'; }
@@ -687,10 +586,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.setColumnFormat = function () {
         $scope.$broadcast('repaint');
-    };
-
-    $scope.orderColumn = function (columnIndex, desc, hashedID) {
-        reportModel.orderColumn($scope.selectedReport, columnIndex, desc, hashedID);
     };
 
     $scope.saveToExcel = function (reportHash) {

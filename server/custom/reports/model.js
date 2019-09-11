@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 
 const ReportColumnSchema = new mongoose.Schema({
     aggregation: String,
+    calculateTotal: Boolean,
     collectionID: String,
     data_type: String,
     doNotStack: Boolean,
@@ -43,13 +44,6 @@ ReportFilterSchema.add({
     promptTitle: String,
 });
 
-const ReportQuerySchema = new mongoose.Schema({
-    columns: [ ReportColumnSchema ],
-    filters: [ ReportFilterSchema ],
-    layerID: mongoose.Schema.Types.ObjectId,
-    order: [ ReportColumnSchema ],
-});
-
 const ReportPropertiesSchema = new mongoose.Schema({
     columns: [ ReportColumnSchema ],
     filters: [ ReportFilterSchema ],
@@ -61,6 +55,7 @@ const ReportPropertiesSchema = new mongoose.Schema({
         columns: [ ReportColumnSchema ],
         rows: [ ReportColumnSchema ],
     },
+    recordLimit: Number,
     xkeys: [ ReportColumnSchema ],
     ykeys: [ ReportColumnSchema ],
 });
@@ -78,7 +73,6 @@ var ReportsSchema = new mongoose.Schema({
     owner: { type: String }, // Same as createdBy
     parentFolder: { type: String },
     properties: ReportPropertiesSchema,
-    query: ReportQuerySchema,
     reportDescription: { type: String }, // FIXME This is not used
     reportName: { type: String, required: true },
     reportSubType: { type: String }, // FIXME This is not used

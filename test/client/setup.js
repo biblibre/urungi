@@ -8,6 +8,9 @@ Object.defineProperty(window, 'Noty', { value: Noty });
 const moment = require('moment');
 Object.defineProperty(window, 'moment', { value: moment });
 
+const numeral = require('numeral');
+Object.defineProperty(window, 'numeral', { value: numeral });
+
 const angular = require('angular');
 Object.defineProperty(window, 'angular', { value: angular });
 

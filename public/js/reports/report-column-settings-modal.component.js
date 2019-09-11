@@ -17,11 +17,13 @@
     function ReportColumnSettingsModalController (reportsService) {
         const vm = this;
 
+        vm.$onInit = $onInit;
         vm.aggregationsOptions = [];
+        vm.canCalculateTotal = canCalculateTotal;
         vm.column = {};
+        vm.isAggregatable = isAggregatable;
         vm.report = {};
         vm.settings = {};
-        vm.$onInit = $onInit;
 
         function $onInit () {
             const column = vm.resolve.column;
@@ -35,6 +37,7 @@
             vm.settings.label = column.label || '';
             vm.settings.type = column.type || 'bar';
             vm.settings.format = column.format || '';
+            vm.settings.calculateTotal = column.calculateTotal || false;
 
             const aggregations = [];
 
@@ -48,6 +51,23 @@
                 name: reportsService.getAggregationDescription(agg),
                 value: agg,
             }));
+        }
+
+        function canCalculateTotal () {
+            if (['grid', 'vertical-grid'].includes(vm.report.reportType)) {
+                if (vm.column.elementType === 'number' || ['count', 'countDistinct'].includes(vm.settings.aggregation)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isAggregatable () {
+            const properties = vm.report.properties;
+            const aggregatableCols = properties.columns.concat(properties.ykeys);
+
+            return aggregatableCols.includes(vm.column);
         }
     }
 })();

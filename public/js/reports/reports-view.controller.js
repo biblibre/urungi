@@ -3,15 +3,14 @@
 
     angular.module('app.reports').controller('ReportsViewController', ReportsViewController);
 
-    ReportsViewController.$inject = ['$scope', '$timeout', 'reportsService', 'xlsxService', 'userService', 'report'];
+    ReportsViewController.$inject = ['$scope', '$timeout', 'api', 'xlsxService', 'userService', 'report'];
 
-    function ReportsViewController ($scope, $timeout, reportsService, xlsxService, userService, report) {
+    function ReportsViewController ($scope, $timeout, api, xlsxService, userService, report) {
         const vm = this;
         vm.report = report;
         vm.prompts = {};
         vm.getPrompts = getPrompts;
         vm.repaintWithPrompts = repaintWithPrompts;
-        vm.getQueryForFilter = getQueryForFilter;
         vm.saveAsXLSX = saveAsXLSX;
         vm.isAdmin = false;
 
@@ -57,16 +56,14 @@
 
             $scope.$broadcast('repaint', {
                 fetchData: true,
-                filterCriteria: filterCriteria
+                filters: filterCriteria
             });
         }
 
-        function getQueryForFilter (filter) {
-            return reportsService.getQueryForFilter(vm.report, filter);
-        }
-
         function saveAsXLSX () {
-            xlsxService.saveReportAsXLSX(vm.report);
+            api.getReportData(vm.report).then(function (res) {
+                xlsxService.saveReportAsXLSX(vm.report, res.data);
+            });
         }
     }
 })();

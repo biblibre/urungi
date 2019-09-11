@@ -65,7 +65,6 @@ function dist_js_build () {
         'node_modules/angular-draganddrop/angular-draganddrop.min.js',
         'node_modules/angular-route/angular-route.min.js',
         'node_modules/noty/lib/noty.min.js',
-        'node_modules/angular-vs-repeat/dist/angular-vs-repeat.min.js',
         'node_modules/moment/min/moment-with-locales.min.js',
         'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js',
         'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js',
@@ -84,9 +83,11 @@ function dist_js_build () {
         'node_modules/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js',
         'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js',
         'node_modules/angular-gettext/dist/angular-gettext.min.js',
-        'node_modules/cynteka-pivot-table-jquery/dist/jquery.cy-pivot.min.js',
         'node_modules/intro.js/minified/intro.min.js',
         'node_modules/angular-intro.js/build/angular-intro.min.js',
+        'node_modules/numeral/min/numeral.min.js',
+        'node_modules/pivottable/dist/pivot.min.js',
+        'node_modules/subtotal/dist/subtotal.min.js',
     ];
 
     const bundle = gulp.src(paths)
@@ -157,12 +158,13 @@ function dist_css_build () {
         'node_modules/angular-xeditable/dist/css/xeditable.min.css',
         'node_modules/angular-bootstrap-colorpicker/css/colorpicker.min.css',
         'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
-        'node_modules/cynteka-pivot-table-jquery/dist/jquery.cy-pivot.min.css',
         'node_modules/font-awesome/css/font-awesome.min.css',
         'node_modules/jsplumb/css/jsplumbtoolkit-defaults.css',
         'node_modules/intro.js/minified/introjs.min.css',
         'node_modules/noty/lib/noty.css',
         'node_modules/noty/lib/themes/bootstrap-v4.css',
+        'node_modules/pivottable/dist/pivot.min.css',
+        'node_modules/subtotal/dist/subtotal.min.css',
     ]);
 
     return merge(bootstrap, modulesCss)

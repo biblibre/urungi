@@ -15,9 +15,9 @@
         },
     });
 
-    FilterPromptController.$inject = ['$scope', 'gettextCatalog', 'reportModel'];
+    FilterPromptController.$inject = ['$scope', 'gettextCatalog', 'api'];
 
-    function FilterPromptController ($scope, gettextCatalog, reportModel) {
+    function FilterPromptController ($scope, gettextCatalog, api) {
         const vm = this;
 
         vm.criteriaInput = 'partials/reports/criteria-input.html';
@@ -28,7 +28,6 @@
         vm.promptChanged = promptChanged;
         vm.onDateListChange = onDateListChange;
         vm.update = update;
-        vm.loadFilterValues = loadFilterValues;
         vm.selectFirstValue = selectFirstValue;
         vm.selectSecondValue = selectSecondValue;
         vm.selectListValue = selectListValue;
@@ -85,19 +84,14 @@
         }
 
         function update () {
-            vm.loadFilterValues();
+            loadFilterValues();
         }
 
         function loadFilterValues () {
-            const fQuery = vm.getQuery(vm.filter);
-
-            return reportModel.fetchData(fQuery).then(function (result) {
-                var possibleValues = new Set();
-                for (const item of result.data) {
-                    possibleValues.add(item.f);
-                }
-
-                vm.values = Array.from(possibleValues.values());
+            return api.getReportFilterValues(vm.filter).then(function (result) {
+                let values = result.data.map(row => row.f);
+                values = values.filter(f => f !== null && f !== undefined && f !== '');
+                vm.values = values;
             });
         }
 

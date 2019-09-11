@@ -8,9 +8,9 @@
 
     <!--dimensions for pivot tables -->
 
-    <app-report-dropzone ng-if="selectedReport.reportType == 'pivot'" report="selectedReport" elements="selectedReport.properties.pivotKeys.columns" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the table columns' | translate"></app-report-dropzone>
+    <app-report-dropzone ng-if="selectedReport.reportType == 'pivot'" report="selectedReport" elements="selectedReport.properties.pivotKeys.columns" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the table columns' | translate"></app-report-dropzone>
 
-    <app-report-dropzone ng-if="selectedReport.reportType == 'pivot'" report="selectedReport" elements="selectedReport.properties.pivotKeys.rows" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the table rows' | translate"></app-report-dropzone>
+    <app-report-dropzone ng-if="selectedReport.reportType == 'pivot'" report="selectedReport" elements="selectedReport.properties.pivotKeys.rows" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the table rows' | translate"></app-report-dropzone>
 
     <!--dimensions for charts -->
 

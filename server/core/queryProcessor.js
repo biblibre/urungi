@@ -34,9 +34,7 @@ exports.execute = async function (query) {
         db = new Db(dts, warnings);
         const result = await db.runQuery(processedQuery);
 
-        if (result.result === 1) {
-            processData(processedQuery, result.data);
-        } else {
+        if (result.result !== 1) {
             console.log(result.msg);
         }
 
@@ -410,27 +408,3 @@ function validatePage (page) {
         return 1;
     }
 }
-
-function processData (query, data) {
-    var moment = require('moment');
-    var numeral = require('numeral');
-
-    for (var row of data) {
-        for (var col of query.columns) {
-            if (col.elementType === 'date' && col.format) {
-                if (row[col.id]) {
-                    row[col.id + '_original'] = row[col.id];
-                    var date = new Date(row[col.id]);
-                    row[col.id] = moment(date).format(col.format);
-                }
-            }
-            if (col.elementType === 'number' && col.format) {
-                if (row[col.id] !== undefined) {
-                    row[col.id + '_original'] = row[col.id];
-                    var number = Number(row[col.id]);
-                    row[col.id] = numeral(number).format(col.format);
-                }
-            }
-        }
-    }
-};

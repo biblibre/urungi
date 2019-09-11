@@ -1,15 +1,13 @@
 /* global c3:false */
 
 angular.module('app').service('c3Charts', function (Noty, gettextCatalog, reportsService) {
-    this.rebuildChart = function (report, id) {
+    this.rebuildChart = function (report, id, data, chart) {
         var theValues = [];
         var theStackValues = {};
         var theTypes = {};
         var theNames = {};
         var theGroups = [];
         var theData = [];
-        var query = report.query;
-        var chart = report.properties.chart;
 
         var axisField = '';
         if (chart.dataAxis) { axisField = chart.dataAxis.id; }
@@ -19,11 +17,7 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
         if (chart.stackDimension) { stackField = chart.stackDimension.id; }
         // var stackIsInQuery = false;
 
-        chart.noUnicityWarning = false;
-        // Indicates that for a single (axisField * stackField) value there are multiple entries
-        // This causes some of the charts to display weird or misleading results
-
-        if (!query.data) {
+        if (!data) {
             new Noty({ text: gettextCatalog.getString('no data to display'), type: 'warning' }).show();
             return;
         }
@@ -52,7 +46,7 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
 
             var newData = [];
 
-            query.data.map(function (item) {
+            data.map(function (item) {
                 if (!item[axisField]) {
                     return;
                 }
@@ -93,7 +87,6 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
                             newData.push(currentItem);
                             var newItem = {};
                             newItem[axisField] = currentItem[axisField];
-                            chart.noUnicityWarning = true;
                             currentItem = newItem;
                         }
 
@@ -124,7 +117,7 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
 
             chart.stackKeys = theStackValues;
         } else {
-            theData = query.data;
+            theData = data;
             theGroups = undefined;
             chart.stacked = false;
         }
@@ -145,7 +138,7 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
             }
         };
 
-        if (report.properties.chart.legendPosition === 'top') {
+        if (chart.legendPosition === 'top') {
             c3Config.padding = {
                 top: 50,
             };
@@ -158,13 +151,13 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
                     step: undefined
                 }
             };
-        } else if (report.properties.chart.legendPosition === 'right') {
+        } else if (chart.legendPosition === 'right') {
             c3Config.legend = {
                 position: 'right',
             };
         }
 
-        if (report.properties.chart.legendPosition === 'none') {
+        if (chart.legendPosition === 'none') {
             c3Config.legend = {
                 hide: true,
             };
@@ -175,9 +168,9 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
         case 'donut':
             var theColumns = [];
             if (axisField && theValues) {
-                for (const i in query.data) {
-                    const groupField = query.data[i][axisField] !== null ? query.data[i][axisField] : 'NULL';
-                    const valueField = query.data[i][theValues[0]];
+                for (const i in data) {
+                    const groupField = data[i][axisField] !== null ? data[i][axisField] : 'NULL';
+                    const valueField = data[i][theValues[0]];
                     theColumns.push([groupField, valueField]);
                 }
             }
@@ -191,7 +184,7 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
         case 'gauge':
             c3Config.data = {
                 columns: [
-                    [theValues[0], query.data[0][theValues[0]]]
+                    [theValues[0], data[0][theValues[0]]]
                 ],
                 names: theNames,
                 type: chart.type,
@@ -258,16 +251,6 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
         $(theChartCode).parent().on('overflow', function () {
             chart.chartCanvas.flush();
         });
-    };
-
-    this.changeChartColumnType = function (chart, column) {
-        if (chart.stacked) {
-            for (const key of chart.stackKeys[column.id]) {
-                chart.chartCanvas.transform(column.type, key);
-            }
-        } else {
-            chart.chartCanvas.transform(column.type, column.id);
-        }
     };
 
     this.changeStack = function (chart) {

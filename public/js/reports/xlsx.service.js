@@ -14,12 +14,12 @@
 
         return service;
 
-        function saveReportAsXLSX (report) {
+        function saveReportAsXLSX (report, data) {
             var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
             var ws_name = report.reportName;
 
             var wb = new Workbook();
-            var ws = sheet_from_array_of_arrays(report);
+            var ws = sheet_from_array_of_arrays(report, data);
 
             wb.SheetNames.push(ws_name);
             wb.Sheets[ws_name] = ws;
@@ -44,8 +44,7 @@
             this.Sheets = {};
         }
 
-        function sheet_from_array_of_arrays (report) {
-            var data = report.query.data;
+        function sheet_from_array_of_arrays (report, data) {
             var ws = {};
             var range = { s: { c: 10000000, r: 10000000 }, e: { c: 0, r: 0 } };
             for (var i = 0; i < report.properties.columns.length; i++) {

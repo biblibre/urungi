@@ -719,21 +719,21 @@ describe('Queries and data access', function () {
 
                 describe('Test report queries with a simple layer', function () {
                     it('Should query a single field', async function () {
-                        const query = {
-                            layerID: simpleId,
-                            columns: [],
-                            order: [],
-                            filters: []
+                        const report = {
+                            properties: {
+                                columns: [
+                                    {
+                                        elementID: 'eeab',
+                                        id: 'namefield',
+                                    },
+                                ],
+                            },
+                            selectedLayerID: simpleId,
                         };
 
-                        query.columns.push({
-                            elementID: 'eeab',
-                            id: 'namefield',
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -744,29 +744,30 @@ describe('Queries and data access', function () {
                     });
 
                     it('should not use GROUP BY when there is no aggregation', async function () {
-                        const query = {
-                            layerID: simpleId,
-                            columns: [
-                                {
-                                    elementID: 'eeac',
-                                    id: 'color',
-                                },
-                            ],
-                            order: [],
-                            filters: [
-                                {
-                                    elementID: 'eeac',
-                                    filterType: 'equal',
-                                    criterion: {
-                                        text1: 'purple'
-                                    }
-                                },
-                            ],
+                        const report = {
+                            selectedLayerID: simpleId,
+                            properties: {
+                                columns: [
+                                    {
+                                        elementID: 'eeac',
+                                        id: 'color',
+                                    },
+                                ],
+                                filters: [
+                                    {
+                                        elementID: 'eeac',
+                                        filterType: 'equal',
+                                        criterion: {
+                                            text1: 'purple'
+                                        }
+                                    },
+                                ],
+                            }
                         };
 
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -778,47 +779,48 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should query with order and filter', async function () {
-                        const query = {
-                            layerID: simpleId,
-                            columns: [],
-                            order: [],
-                            filters: []
+                        const report = {
+                            selectedLayerID: simpleId,
+                            properties: {
+                                columns: [
+                                    {
+                                        elementID: 'eeab',
+                                        id: 'namefield',
+                                    },
+                                    {
+                                        elementID: 'eeac',
+                                        id: 'colourfield',
+                                    },
+                                ],
+                                order: [
+                                    {
+                                        elementID: 'eeab',
+                                        id: 'namefield',
+                                        sortType: 1,
+                                    },
+                                ],
+                                filters: [
+                                    {
+                                        elementID: 'eeac',
+                                        filterType: 'equal',
+                                        criterion: {
+                                            text1: 'purple',
+                                        },
+                                    },
+                                    {
+                                        elementID: 'eeab',
+                                        filterType: 'startWith',
+                                        criterion: {
+                                            text1: 'S',
+                                        },
+                                    },
+                                ],
+                            },
                         };
 
-                        query.columns.push({
-                            elementID: 'eeab',
-                            id: 'namefield',
-                        });
-
-                        query.columns.push({
-                            elementID: 'eeac',
-                            id: 'colourfield',
-                        });
-
-                        query.order.push({
-                            elementID: 'eeab',
-                            id: 'namefield',
-                            sortType: 1
-                        });
-
-                        query.filters.push({
-                            elementID: 'eeac',
-                            filterType: 'equal',
-                            criterion: {
-                                text1: 'purple'
-                            }
-                        });
-                        query.filters.push({
-                            elementID: 'eeab',
-                            filterType: 'startWith',
-                            criterion: {
-                                text1: 'S'
-                            }
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -830,33 +832,33 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should query with aggregation', async function () {
-                        const query = {
-                            layerID: simpleId,
-                            columns: [],
-                            order: [],
-                            filters: []
+                        const report = {
+                            selectedLayerID: simpleId,
+                            properties: {
+                                columns: [
+                                    {
+                                        elementID: 'eeaa',
+                                        id: 'countfield',
+                                        aggregation: 'count'
+                                    },
+                                    {
+                                        elementID: 'eeac',
+                                        id: 'colourfield',
+                                    },
+                                ],
+                                order: [
+                                    {
+                                        elementID: 'eeac',
+                                        id: 'colourfield',
+                                        sortType: 1,
+                                    },
+                                ],
+                            },
                         };
 
-                        query.columns.push({
-                            elementID: 'eeaa',
-                            id: 'countfield',
-                            aggregation: 'count'
-                        });
-
-                        query.columns.push({
-                            elementID: 'eeac',
-                            id: 'colourfield',
-                        });
-
-                        query.order.push({
-                            elementID: 'eeac',
-                            id: 'colourfield',
-                            sortType: 1
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -881,47 +883,45 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should query with a join', async function () {
-                        const query = {
-                            layerID: simpleId,
-                            columns: [],
-                            order: [],
-                            filters: []
+                        const report = {
+                            selectedLayerID: simpleId,
+                            properties: {
+                                columns: [
+                                    {
+                                        elementID: 'eeab',
+                                        id: 'namefield',
+                                    },
+                                    {
+                                        elementID: 'eeac',
+                                        id: 'colourfield',
+                                    },
+                                    {
+                                        elementID: 'eeaa',
+                                        id: 'countfield',
+                                    },
+                                    {
+                                        elementID: 'eebb',
+                                        id: 'weaponname',
+                                    },
+                                ],
+                                order: [
+                                    {
+                                        elementID: 'eeaa',
+                                        id: 'countfield',
+                                        sortType: -1
+                                    },
+                                    {
+                                        elementID: 'eebb',
+                                        id: 'weaponname',
+                                        sortType: -1
+                                    },
+                                ],
+                            }
                         };
 
-                        query.columns.push({
-                            elementID: 'eeab',
-                            id: 'namefield',
-                        });
-
-                        query.columns.push({
-                            elementID: 'eeac',
-                            id: 'colourfield',
-                        });
-
-                        query.columns.push({
-                            elementID: 'eeaa',
-                            id: 'countfield',
-                        });
-
-                        query.columns.push({
-                            elementID: 'eebb',
-                            id: 'weaponname',
-                        });
-
-                        query.order.push({
-                            elementID: 'eeaa',
-                            id: 'countfield',
-                            sortType: -1
-                        });
-                        query.order.push({
-                            elementID: 'eebb',
-                            id: 'weaponname',
-                            sortType: -1
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -950,38 +950,39 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should handle all errors and return a result of 0', async function () {
-                        const invalidQueries = [
+                        const invalidReports = [
                             {},
                             {
-                                layerID: simpleId
+                                selectedLayerID: simpleId
                             },
                             {
-                                layerID: simpleId,
-                                columns: [],
-                                order: [],
-                                filters: []
+                                selectedLayerID: simpleId,
+                                properties: {
+                                    columns: [],
+                                    order: [],
+                                    filters: []
+                                },
                             },
                             {
-                                layerID: simpleId,
-                                columns: [{
-                                    elementID: 'zzzz'
-                                }],
-                                order: [],
-                                filters: []
+                                selectedLayerID: simpleId,
+                                properties: {
+                                    columns: [{
+                                        elementID: 'zzzz'
+                                    }],
+                                    order: [],
+                                    filters: []
+                                },
                             }
                         ];
 
-                        for (const i in invalidQueries) {
-                            const query = invalidQueries[i];
-                            const params = { query: query };
-
+                        for (const report of invalidReports) {
                             let error;
                             const oldConsoleError = console.error;
                             console.error = function (err) { error = err; };
 
-                            const res = await request(app).post('/api/reports/get-data')
+                            const res = await request(app).post('/api/reports/data-query')
                                 .set(headers)
-                                .send(params)
+                                .send({ report: report })
                                 .expect(200);
 
                             console.error = oldConsoleError;
@@ -996,42 +997,43 @@ describe('Queries and data access', function () {
 
                 describe('Test report queries with a complex layer', function () {
                     it('should run a simple query', async function () {
-                        const query = {
-                            layerID: complexId,
-                            columns: [],
-                            order: [],
-                            filters: []
+                        const report = {
+                            selectedLayerID: complexId,
+                            properties: {
+                                columns: [
+                                    {
+                                        id: 'gemname',
+                                        elementID: 'eeab',
+                                    },
+
+                                    {
+                                        id: 'countfield',
+                                        elementID: 'eeaa',
+                                    },
+
+                                    {
+                                        id: 'gemquote',
+                                        elementID: 'eedb',
+                                    },
+                                ],
+                                order: [
+                                    {
+                                        elementID: 'eeaa',
+                                        id: 'countfield',
+                                        sortType: 1,
+                                    },
+                                    {
+                                        elementID: 'eedb',
+                                        id: 'gemquote',
+                                        sortType: 1,
+                                    },
+                                ],
+                            }
                         };
 
-                        query.columns.push({
-                            id: 'gemname',
-                            elementID: 'eeab'
-                        });
-
-                        query.columns.push({
-                            id: 'countfield',
-                            elementID: 'eeaa'
-                        });
-
-                        query.columns.push({
-                            id: 'gemquote',
-                            elementID: 'eedb'
-                        });
-
-                        query.order.push({
-                            elementID: 'eeaa',
-                            id: 'countfield',
-                            sortType: 1
-                        });
-                        query.order.push({
-                            elementID: 'eedb',
-                            id: 'gemquote',
-                            sortType: 1
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -1057,41 +1059,42 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should successfully fetch, order by and filter by date', async function () {
-                        const query = {
-                            layerID: simpleId,
-                            columns: [],
-                            order: [],
-                            filters: []
+                        const report = {
+                            selectedLayerID: simpleId,
+                            properties: {
+                                columns: [
+                                    {
+                                        elementID: 'eecb',
+                                        id: 'titlefield',
+                                    },
+                                    {
+                                        elementID: 'eecc',
+                                        id: 'datefield',
+                                    },
+                                ],
+                                order: [
+                                    {
+                                        elementID: 'eecc',
+                                        id: 'datefield',
+                                        sortType: 1,
+                                    },
+                                ],
+                                filters: [
+                                    {
+                                        elementID: 'eecc',
+                                        id: 'datefield',
+                                        filterType: 'diferentThan',
+                                        criterion: {
+                                            date1: new Date('2014-03-24'),
+                                        },
+                                    },
+                                ],
+                            },
                         };
 
-                        query.columns.push({
-                            elementID: 'eecb',
-                            id: 'titlefield'
-                        });
-
-                        query.columns.push({
-                            elementID: 'eecc',
-                            id: 'datefield',
-                        });
-
-                        query.order.push({
-                            elementID: 'eecc',
-                            id: 'datefield',
-                            sortType: 1
-                        });
-
-                        query.filters.push({
-                            elementID: 'eecc',
-                            id: 'datefield',
-                            filterType: 'diferentThan',
-                            criterion: {
-                                date1: new Date('2014-03-24')
-                            }
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -1107,43 +1110,43 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should successfully chain joins', async function () {
-                        const query = {
-                            layerID: complexId,
-                            columns: [],
-                            order: [],
-                            filters: []
+                        const report = {
+                            selectedLayerID: complexId,
+                            properties: {
+                                columns: [
+                                    {
+                                        id: 'gemweapon',
+                                        elementID: 'eebb',
+                                    },
+
+                                    {
+                                        id: 'episodetitle',
+                                        elementID: 'eecb',
+                                    },
+
+                                    {
+                                        id: 'wid',
+                                        elementID: 'eeba',
+                                    },
+                                ],
+                                order: [
+                                    {
+                                        elementID: 'eeba',
+                                        id: 'wid',
+                                        sortType: 1,
+                                    },
+                                    {
+                                        elementID: 'eecb',
+                                        id: 'episodetitle',
+                                        sortType: 1,
+                                    },
+                                ],
+                            },
                         };
 
-                        query.columns.push({
-                            id: 'gemweapon',
-                            elementID: 'eebb'
-                        });
-
-                        query.columns.push({
-                            id: 'episodetitle',
-                            elementID: 'eecb'
-                        });
-
-                        query.columns.push({
-                            id: 'wid',
-                            elementID: 'eeba'
-                        });
-
-                        query.order.push({
-                            elementID: 'eeba',
-                            id: 'wid',
-                            sortType: 1
-                        });
-
-                        query.order.push({
-                            elementID: 'eecb',
-                            id: 'episodetitle',
-                            sortType: 1
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -1181,22 +1184,22 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should fetch only 5 elements', async function () {
-                        const query = {
-                            layerID: complexId,
-                            columns: [],
-                            order: [],
-                            filters: [],
-                            recordLimit: 5
+                        const report = {
+                            selectedLayerID: complexId,
+                            properties: {
+                                columns: [
+                                    {
+                                        id: 'episodetitle',
+                                        elementID: 'eecb',
+                                    },
+                                ],
+                                recordLimit: 5,
+                            },
                         };
 
-                        query.columns.push({
-                            id: 'episodetitle',
-                            elementID: 'eecb'
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -1204,26 +1207,26 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should run a query with a simple custom element', async function () {
-                        const query = {
-                            layerID: complexId,
-                            columns: [],
-                            order: [],
-                            filters: [],
+                        const report = {
+                            selectedLayerID: complexId,
+                            properties: {
+                                columns: [
+                                    {
+                                        id: 'gemvalue',
+                                        elementID: 'eepa',
+                                    },
+
+                                    {
+                                        id: 'gemname',
+                                        elementID: 'eeab',
+                                    },
+                                ],
+                            },
                         };
 
-                        query.columns.push({
-                            id: 'gemvalue',
-                            elementID: 'eepa'
-                        });
-
-                        query.columns.push({
-                            id: 'gemname',
-                            elementID: 'eeab'
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -1241,49 +1244,46 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should run a query with a simple custom SQL collection', async function () {
-                        const query = {
-                            layerID: complexId,
-                            columns: [],
-                            order: [],
-                            filters: []
+                        const report = {
+                            selectedLayerID: complexId,
+                            properties: {
+                                columns: [
+                                    {
+                                        elementID: 'eeua',
+                                        id: 'gemname',
+                                    },
+                                    {
+                                        elementID: 'eeub',
+                                        id: 'gemid',
+                                    },
+                                    {
+                                        elementID: 'eeuc',
+                                        id: 'gemcolour',
+                                    },
+                                ],
+                                order: [
+                                    {
+                                        elementID: 'eeub',
+                                        id: 'gemid',
+                                        sortType: 1,
+                                    },
+                                ],
+                                filters: [
+                                    {
+                                        elementID: 'eeuc',
+                                        id: 'gemcolour',
+                                        filterType: 'diferentThan',
+                                        criterion: {
+                                            text1: 'purple',
+                                        },
+                                    },
+                                ],
+                            },
                         };
 
-                        query.columns.push({
-                            elementID: 'eeua',
-                            id: 'gemname'
-                        });
-
-                        query.columns.push({
-                            elementID: 'eeub',
-                            id: 'gemid'
-                        });
-
-                        query.columns.push({
-                            elementID: 'eeuc',
-                            id: 'gemcolour'
-                        });
-
-                        query.order.push({
-                            elementID: 'eeub',
-                            id: 'gemid',
-                            sortType: 1
-                        });
-                        // In an ideal world, the order of the custom SQL query would be preserved by the main query
-                        // However, the GROUP BY clause seems to be messing with that.
-                        // The lazy 'just GROUP BY everything' strategy used by Urungi has it's downsides
-
-                        query.filters.push({
-                            elementID: 'eeuc',
-                            id: 'gemcolour',
-                            filterType: 'diferentThan',
-                            criterion: {
-                                text1: 'purple'
-                            }
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
                         const data = res.body.data;
 
@@ -1344,64 +1344,61 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should run a query is a more ambitious custom sql collection', async function () {
-                        const query = {
-                            layerID: complexId,
-                            columns: [],
-                            order: [],
-                            filters: []
+                        const report = {
+                            selectedLayerID: complexId,
+                            properties: {
+                                columns: [
+                                    {
+                                        elementID: 'eecb',
+                                        id: 'episodetitle',
+                                    },
+                                    {
+                                        id: 'charname',
+                                        elementID: 'eeva',
+                                    },
+                                    {
+                                        id: 'fusion',
+                                        elementID: 'eevc',
+                                    },
+                                    {
+                                        id: 'weapon',
+                                        elementID: 'eevd',
+                                    },
+                                    {
+                                        id: 'song',
+                                        elementID: 'eeve',
+                                    },
+                                    {
+                                        id: 'id',
+                                        elementID: 'eevb',
+                                    },
+                                ],
+                                order: [
+                                    {
+                                        elementID: 'eevb',
+                                        id: 'id',
+                                        sortType: 1,
+                                    },
+                                    {
+                                        elementID: 'eeve',
+                                        id: 'song',
+                                        sortType: 1,
+                                    },
+                                ],
+                                filters: [
+                                    {
+                                        elementID: 'eevd',
+                                        id: 'weapon',
+                                        filterType: 'notNull',
+                                        criterion: {},
+                                    },
+                                ],
+                            },
                         };
 
-                        query.columns.push({
-                            elementID: 'eecb',
-                            id: 'episodetitle'
-                        });
-
-                        query.columns.push({
-                            id: 'charname',
-                            elementID: 'eeva'
-                        });
-
-                        query.columns.push({
-                            id: 'fusion',
-                            elementID: 'eevc'
-                        });
-
-                        query.columns.push({
-                            id: 'weapon',
-                            elementID: 'eevd'
-                        });
-
-                        query.columns.push({
-                            id: 'song',
-                            elementID: 'eeve'
-                        });
-
-                        query.columns.push({
-                            id: 'id',
-                            elementID: 'eevb'
-                        });
-
-                        query.order.push({
-                            elementID: 'eevb',
-                            id: 'id',
-                            sortType: 1
-                        });
-                        query.order.push({
-                            elementID: 'eeve',
-                            id: 'song',
-                            sortType: 1
-                        });
-
-                        query.filters.push({
-                            elementID: 'eevd',
-                            id: 'weapon',
-                            filterType: 'notNull',
-                            criterion: {}
-                        });
-
-                        const res = await request(app).post('/api/reports/get-data')
+                        const res = await request(app).post('/api/reports/data-query')
                             .set(headers)
-                            .send({ query: query })
+                            .send({ report: report })
                             .expect(200);
 
                         expect(res.body.result).toBe(1);
@@ -1459,6 +1456,35 @@ describe('Queries and data access', function () {
                                 'weapon': 'Shield',
                             }
                         ]);
+                    });
+                });
+
+                describe('POST /api/reports/filter-values-query', function () {
+                    it('should return the list of distinct values for a column', async function () {
+                        const filter = {
+                            collectionID: 'Caaaa',
+                            elementID: 'eeac',
+                            elementName: 'colour',
+                            elementType: 'string',
+                            layerID: simpleId,
+                        };
+
+                        const res = await request(app).post('/api/reports/filter-values-query')
+                            .set(headers)
+                            .send({ filter: filter })
+                            .expect(200);
+
+                        expect(res.body.result).toBe(1);
+
+                        const data = res.body.data;
+                        expect(data).toHaveLength(7);
+                        expect(data[0].f).toBe('blue');
+                        expect(data[1].f).toBe('green');
+                        expect(data[2].f).toBe('pink');
+                        expect(data[3].f).toBe('purple');
+                        expect(data[4].f).toBe('red');
+                        expect(data[5].f).toBe('white');
+                        expect(data[6].f).toBe('yellow');
                     });
                 });
             });
