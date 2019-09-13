@@ -5,7 +5,6 @@ const migrate = require('migrate-mongo');
 if (cluster.isMaster) {
     migrate.database.connect().then(db => {
         return migrate.status(db).then(statuses => {
-            db.close();
             if (statuses.some(s => s.appliedAt === 'PENDING')) {
                 throw new Error('Some migrations are pending. Run `npx migrate-mongo up` before starting the server');
             }

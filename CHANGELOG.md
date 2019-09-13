@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move report columns settings into a modal
 - Move report settings into a modal
 
+### Dependencies
+
+- Updated migrate-mongo to 6.0.2
+- Updated mongoose to 5.7.0
+
 ## [1.2.2] - 2019-08-30
 
 ### Fixed
