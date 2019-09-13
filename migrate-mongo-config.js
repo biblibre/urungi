@@ -9,7 +9,8 @@ const migrateMongoConfig = {
         url: db,
         databaseName: databaseName,
         options: {
-            useNewUrlParser: true
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         }
     },
     migrationsDir: 'migrations',
