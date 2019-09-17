@@ -1,6 +1,7 @@
 <div ng-show="!reportInterface" id="parentIntro" class="explorer-main-container" >
 
 <div class="explorer-container">
+    <app-theme-link theme="selectedDashboard.theme"></app-theme-link>
 
     <div class="explorer-header" ng-init="initForm()">
 
@@ -23,7 +24,7 @@
 
         </div>
 
-    <section page-block ndType="page" ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered ng-scope" style="padding: 10px;">
+    <section page-block ndType="page" ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered dashboard-container" style="padding: 10px;">
 
     </section>
 
@@ -60,17 +61,23 @@
             <section class="layer scrollPane">
                 <div class="layer-inner-reports">
 
-                    <div id="limit-panel">
-                        <span style="color: #fff;" translate>Quick display with</span>
-                        <input type="number" ng-model="selectedDashboardLimit.value" size="8">
-                        <span style="color: #fff;" translate>results.</span>
-                        <button style="padding: 3px 10px;" ng-click="Redraw();" class="btn btn-default">
-                          <i class="fa fa-refresh hand-cursor"></i>
+                    <form>
+                        <div class="form-group">
+                            <label translate>Theme</label>
+                            <app-theme-select theme="selectedDashboard.theme" on-change="selectedDashboard.theme = theme"></app-theme-select>
+                        </div>
+                        <div class="form-group">
+                            <label translate>Preview size</label>
+                            <input type="number" ng-model="selectedDashboardLimit.value" class="form-control">
+                            <div class="help-block" translate>This limits the number of rows fetched in order to get a preview quickly. Set to 0 to disable.</div>
+                        </div>
+                        <button ng-click="Redraw()" class="btn btn-sm btn-default">
+                          <i class="fa fa-refresh"></i>
                           <span translate>Redraw</span>
                         </button>
-                    </div>
+                    </form>
 
-                    <app-inspector element="selectedElement" properties="selectedReport.properties" dashboard="selectedDashboard" on-change="onChangeElementProperties"></app-inspector>
+                    <app-inspector element="selectedElement" dashboard="selectedDashboard" on-change="onChangeElementProperties"></app-inspector>
 
                 </div>
             </section>

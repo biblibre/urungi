@@ -18,26 +18,27 @@ const dashboardReportSchema = new mongoose.Schema({
 });
 
 const dashboardSchema = new mongoose.Schema({
-    companyID: { type: String, required: true },
-    dashboardName: { type: String, required: true },
-    dashboardDescription: { type: String },
-    dashboardType: { type: String },
-    html: { type: String },
-    reports: [dashboardReportSchema],
-    items: [],
+    author: { type: String },
     backgroundColor: { type: String },
     backgroundImage: { type: String },
-    properties: { type: Object },
+    companyID: { type: String, required: true },
+    createdBy: { type: String },
+    createdOn: { type: Date },
+    dashboardDescription: { type: String },
+    dashboardName: { type: String, required: true },
+    dashboardType: { type: String },
     history: [],
+    html: { type: String },
+    isPublic: { type: Boolean },
+    isShared: { type: Boolean },
+    items: [],
     nd_trash_deleted: { type: Boolean },
     nd_trash_deleted_date: { type: Date },
     owner: { type: String },
     parentFolder: { type: String },
-    isPublic: { type: Boolean },
-    isShared: { type: Boolean },
-    createdBy: { type: String },
-    author: { type: String },
-    createdOn: { type: Date }
+    properties: { type: Object },
+    reports: [dashboardReportSchema],
+    theme: String,
 }, { collation: { locale: 'en', strength: 2 } });
 
 dashboardSchema.methods.publish = async function () {

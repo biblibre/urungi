@@ -2,7 +2,7 @@
 
   <div class="container-fluid">
     <span> {{elementType}}</span>
-    <button ng-if="elementType != 'page' && wstMode != 'report-designer' && selectedElement" class="btn btn-danger pull-right" ng-click="deleteSelected()"><i class="fa fa-trash"></i></button>
+    <button ng-if="elementType != 'page' && selectedElement" class="btn btn-danger pull-right" ng-click="deleteSelected()"><i class="fa fa-trash"></i></button>
   </div>
 
   <div class="container-fluid" style="background-color: transparent; margin-top: 10px; margin-bottom: 10px;" ng-if="elementType != 'page'">
@@ -17,6 +17,18 @@
          </tr>
      </table>
    </div>
+
+    <div class="form-group">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span translate>Clear direct formatting</span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="" ng-click="clearElementInlineStyle()" translate>This block only</a></li>
+                <li><a href="" ng-click="clearTreeInlineStyle()" translate>This block and its sub-blocks</a></li>
+            </ul>
+        </div>
+    </div>
 
     <div ng-show="canEdit('attributes')" class="inspector-panel accordion-item open" id="attributes-panel">
         <h4 class="accordion-heading">{{ 'attributes' | translate }} <i class="fa fa-angle-down pull-right"></i></h4>

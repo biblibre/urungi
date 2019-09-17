@@ -5,6 +5,13 @@
 
 <div class="modal-body">
     <form class="form-horizontal">
+        <div class="form-group" ng-if="!vm.isForDash">
+            <label class="col-sm-3 control-label" translate>Theme</label>
+            <div class="col-sm-9">
+                <app-theme-select theme="vm.settings.theme" on-change="vm.settings.theme = theme"></app-theme-select>
+            </div>
+        </div>
+
         <div class="form-group" ng-if="['chart-pie', 'chart-donut'].includes(vm.report.reportType)">
             <label class="col-sm-3 control-label" translate>Report type</label>
             <div class="col-sm-9">

@@ -248,15 +248,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                 }
                 return getPromptHTML(data);
 
-            case 'tabs':
-                var theid = 'TABS_' + uuid.v4();
-                var theTabs = [{ label: 'tab1', active: true, id: uuid.v4() }, { label: 'tab2', active: false, id: uuid.v4() }, { label: 'tab3', active: false, id: uuid.v4() }, { label: 'tab4', active: false, id: uuid.v4() }];
-                var tabsElement = { id: theid, type: 'tabs', properties: { tabs: theTabs } };
-                if (!$scope.selectedDashboard.containers) { $scope.selectedDashboard.containers = []; }
-                $scope.selectedDashboard.containers.push(tabsElement);
-
-                return htmlWidgets.getTabsHTML(theid, theTabs);
-
             case 'image': {
                 const deferred = $q.defer();
                 $scope.$broadcast('showFileModal', {
@@ -287,9 +278,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
             case 'pageHeader':
                 return htmlWidgets.getPageHeader();
-
-            case 'definitionList':
-                return htmlWidgets.getDefinitionList();
             }
         });
     }
@@ -361,36 +349,12 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         });
     }
 
-    $scope.getElementProperties = function (element, elementID) {
-        if (elementID) {
-            if (elementID.substr(0, 7) === 'REPORT_') {
-                var reportID = elementID.substr(7, elementID.length);
-                for (var i in $scope.selectedDashboard.reports) {
-                    if ($scope.selectedDashboard.reports[i].id === reportID) {
-                        $scope.selectedReport = $scope.selectedDashboard.reports[i];
-                    }
-                }
-            }
-        }
-
-        $scope.selectedElement = element;
-        $scope.tabs.selected = 'settings';
-    };
-
     $scope.onChangeElementProperties = function () {
 
     };
 
     $scope.overChartDragging = function () {
 
-    };
-
-    $scope.getTabs = function (id) {
-        for (var c in $scope.selectedDashboard.containers) {
-            if ($scope.selectedDashboard.containers[c].id === id) {
-                return $scope.selectedDashboard.containers[c].properties.tabs;
-            }
-        }
     };
 
     $scope.getRuntimeReport = function (reportID) {
@@ -441,14 +405,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             $(theElement.childNodes[i]).removeAttr('drop-accept');
             $(theElement.childNodes[i]).removeClass('editable');
             $(theElement.childNodes[i]).removeClass('selected');
-            $(theElement.childNodes[i]).removeClass('Block500');
-            $(theElement.childNodes[i]).removeAttr('vs-repeat');
-
-            // var elementType = $(theElement.childNodes[i]).attr('ndType');
-
-            // if (elementType === 'ndPrompt') {
-            //     $(theElement.childNodes[i]).children().remove();
-            // }
 
             if (theElement.childNodes[i].hasChildNodes()) { cleanElement(theElement.childNodes[i]); }
         }

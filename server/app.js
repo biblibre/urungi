@@ -85,6 +85,7 @@ const routesModules = [
     './custom/reports/routes',
     './custom/roles/routes',
     './custom/statistics/routes',
+    './custom/themes/routes',
     './custom/users/routes',
     './custom/version/routes',
 ];

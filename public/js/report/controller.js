@@ -597,11 +597,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         filter.filterLabel1 = option.label;
     };
 
-    $scope.getElementProperties = function (element, elementID) {
-        $scope.selectedElement = element;
-        $scope.tabs.selected = 'settings';
-    };
-
     $scope.onChangeElementProperties = function () {
 
     };
@@ -755,6 +750,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             component: 'appReportSettingsModal',
             resolve: {
                 report: () => $scope.selectedReport,
+                isForDash: () => $scope.isForDash,
             },
         });
 
@@ -762,6 +758,23 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             $scope.selectedReport.reportType = settings.reportType;
             $scope.selectedReport.properties.legendPosition = settings.legendPosition;
             $scope.selectedReport.properties.height = settings.height;
+            $scope.selectedReport.theme = settings.theme;
         }, () => {});
     };
+
+    $scope.isReportSettingsModalAvailable = isReportSettingsModalAvailable;
+
+    function isReportSettingsModalAvailable () {
+        // If not for a dashboard, there is at least the theme setting
+        if (!$scope.isForDash) {
+            return true;
+        }
+
+        const report = $scope.selectedReport;
+        if (['chart-line', 'chart-pie', 'chart-donut'].includes(report.reportType)) {
+            return true;
+        }
+
+        return false;
+    }
 });
