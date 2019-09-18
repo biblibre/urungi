@@ -223,6 +223,10 @@ a:focus {
     text-align: center;
 }
 
+.ndContainer {
+    overflow: hidden;
+}
+
 .ndContainer > h3 {
     background-color: #ccc;
     color: #444;

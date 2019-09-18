@@ -1,6 +1,6 @@
 @media print {
     /** Setting margins */
-    @page { margin: 2mm; }
+    @page { margin: 10mm 5mm; }
 
     *::before,
     *::after,
@@ -21,6 +21,11 @@
     }
 
     hr {
-        page-break-after: always;
+        break-after: always;
+    }
+
+    [ndtype="jumbotron"],
+    [ndtype="column"] {
+        break-inside: avoid;
     }
 }
