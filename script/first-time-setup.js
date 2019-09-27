@@ -3,7 +3,7 @@ global.config = config;
 
 const hash = require('../server/util/hash');
 
-require('../server/config/mongoose')();
+const connection = require('../server/config/mongoose')();
 const Users = connection.model('Users');
 const Companies = connection.model('Companies');
 

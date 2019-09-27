@@ -3,7 +3,7 @@ global.config = config;
 
 const hash = require('../server/util/hash');
 
-require('../server/config/mongoose')();
+const connection = require('../server/config/mongoose')();
 const Users = connection.model('Users');
 
 if (process.argv.length !== 4) {
@@ -34,7 +34,10 @@ if (process.argv.length !== 4) {
     const password = process.argv[3];
     const result = await hashPassword(password);
 
-    await user.update({ $set: { salt: result.salt, hash: result.hash } });
+    user.salt = result.salt;
+    user.hash = result.hash;
+
+    await user.save();
 
     connection.close();
 })();
