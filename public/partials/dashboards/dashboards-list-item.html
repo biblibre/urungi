@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-4">
-        <a ng-href="/#/dashboards/view/{{ vm.dashboard._id }}">{{ vm.dashboard.dashboardName }}</a>
+        <a ng-href="dashboards/view/{{ vm.dashboard._id }}">{{ vm.dashboard.dashboardName }}</a>
         <div class="badge-list">
             <span ng-if="vm.dashboard.isPublic" class="badge" translate>public</span>
             <span ng-if="vm.dashboard.isShared" class="badge" translate>shared</span>
@@ -22,7 +22,7 @@
         <a class="pull-right list-button btn-duplicate" ng-click="vm.openDuplicateModal()" uib-tooltip="{{ 'Duplicate this dashboard' | translate}}" tooltip-placement="bottom">
             <i class="fa fa-copy"></i>
         </a>
-        <a class="pull-right list-button btn-edit" ng-href="/#/dashboards/edit/{{ vm.dashboard._id }}" uib-tooltip="{{ 'Edit this dashboard' | translate }}" tooltip-placement="bottom">
+        <a class="pull-right list-button btn-edit" ng-href="dashboards/edit/{{ vm.dashboard._id }}" uib-tooltip="{{ 'Edit this dashboard' | translate }}" tooltip-placement="bottom">
             <i class="fa fa-pencil"></i>
         </a>
         <a class="list-button list-button-share pull-right"

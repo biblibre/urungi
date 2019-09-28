@@ -98,7 +98,7 @@
                             gettextCatalog.getString('Layers') +
                             ' (<a href="https://en.wikipedia.org/wiki/Semantic_layer" target="_blank">semantic layers</a>) ' +
                             gettextCatalog.getString('allow your users to access and understand your data without any knowledge of SQL or how the database is structured in tables and fields...') +
-                            '</p><a class="btn btn-info btn-xs" href="/#/layers#intro">' +
+                            '</p><a class="btn btn-info btn-xs" href="layers#intro">' +
                             gettextCatalog.getString('Go to layers and continue tour') +
                             '</a>',
                     }

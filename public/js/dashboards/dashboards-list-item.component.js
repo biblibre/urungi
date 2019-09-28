@@ -12,9 +12,9 @@
         },
     });
 
-    DashboardsListItemController.$inject = ['$uibModal', 'api', 'dashboardv2Model', 'gettextCatalog'];
+    DashboardsListItemController.$inject = ['$uibModal', 'api', 'base', 'dashboardv2Model', 'gettextCatalog'];
 
-    function DashboardsListItemController ($uibModal, api, dashboardv2Model, gettextCatalog) {
+    function DashboardsListItemController ($uibModal, api, base, dashboardv2Model, gettextCatalog) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -89,7 +89,7 @@
         function getCopyLink () {
             const protocol = window.location.protocol;
             const host = window.location.host;
-            return protocol + '//' + host + '/#/dashboards/view/' + vm.dashboard._id;
+            return protocol + '//' + host + base + '/dashboards/view/' + vm.dashboard._id;
         }
     }
 })();

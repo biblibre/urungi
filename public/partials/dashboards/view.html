@@ -7,12 +7,12 @@
                 <span translate>Export</span> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="/api/dashboards/{{ vm.dashboard._id }}.png">As PNG</a></li>
-                <li><a href="/api/dashboards/{{ vm.dashboard._id }}.pdf">As PDF</a></li>
+                <li><a href="" ng-click="vm.downloadAsPNG()">As PNG</a></li>
+                <li><a href="" ng-click="vm.downloadAsPDF()">As PDF</a></li>
             </ul>
         </div>
         <a ng-click="goBack();" class="btn btn-default" uib-tooltip="{{ 'Click here to cancel and backtrack' | translate }}" tooltip-placement="bottom" translate>Cancel</a>
-        <a ng-if="vm.dashboard && ((vm.dashboard.owner == user._id) || vm.isAdmin)" ng-href="/#/dashboards/edit/{{vm.dashboard._id}}" class="btn btn-success" style="margin-right: 5px;" translate>Edit Dashboard</a>
+        <a ng-if="vm.dashboard && ((vm.dashboard.owner == user._id) || vm.isAdmin)" ng-href="dashboards/edit/{{vm.dashboard._id}}" class="btn btn-success" style="margin-right: 5px;" translate>Edit Dashboard</a>
     </div>
 </div>
 

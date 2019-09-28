@@ -93,4 +93,10 @@ for (const routesModule of routesModules) {
     require(routesModule)(app);
 }
 
+// Catch-all route, it should always be defined last
+app.get('*', function (req, res) {
+    res.cookie('XSRF-TOKEN', req.csrfToken());
+    res.render('index', { base: config.get('base') });
+});
+
 module.exports = app;

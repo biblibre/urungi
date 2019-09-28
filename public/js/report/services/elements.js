@@ -53,10 +53,10 @@ angular.module('app').service('dataElements', function () {
 
         if (element.link) {
             if (element.link.type === 'report') {
-                if (element.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/reports/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + '}}</a>'; }
+                if (element.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="reports/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="reports/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + '}}</a>'; }
             }
             if (element.link.type === 'dashboard') {
-                if (element.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="/#/dashboards/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + '}}</a>'; }
+                if (element.elementType === 'number') { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="dashboards/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + ' | number}}</a>'; } else { theValue = '<a class="columnLink" style="overflow:hidden;height:100%;" href="dashboards/' + element.link._id + '/' + element.link.promptElementID + '/{{item.' + element.id + '}}">{{item.' + element.id + '}}</a>'; }
             }
         }
 

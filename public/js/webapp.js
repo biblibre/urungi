@@ -33,11 +33,12 @@
 
     angular.module('app').config(configure);
 
-    configure.$inject = ['$routeProvider', '$locationProvider', 'Noty'];
+    configure.$inject = ['$routeProvider', '$locationProvider', '$httpProvider', 'Noty', 'base'];
 
-    function configure ($routeProvider, $locationProvider, Noty) {
-        // TODO Use the default prefix '!' or use HTML5 mode
-        $locationProvider.hashPrefix('');
+    function configure ($routeProvider, $locationProvider, $httpProvider, Noty, base) {
+        $locationProvider.html5Mode(true);
+
+        $httpProvider.interceptors.push('httpInterceptor');
 
         $routeProvider.otherwise({ redirectTo: '/home' });
 
@@ -102,9 +103,9 @@
 
     angular.module('app').run(runBlock);
 
-    runBlock.$inject = ['$rootScope', '$location', 'editableOptions', 'connection', 'userService', 'language'];
+    runBlock.$inject = ['$rootScope', '$location', 'editableOptions', 'base', 'connection', 'userService', 'language'];
 
-    function runBlock ($rootScope, $location, editableOptions, connection, userService, language) {
+    function runBlock ($rootScope, $location, editableOptions, base, connection, userService, language) {
         userService.getCurrentUser().then(user => {
             $rootScope.user = user;
         });
@@ -114,10 +115,10 @@
             if (next.$$route && !next.$$route.redirectTo && !next.$$route.isPublic) {
                 userService.getCurrentUser().then(user => {
                     if (!user) {
-                        window.location.href = '/login';
+                        window.location.href = base + '/login';
                     }
                 }, () => {
-                    window.location.href = '/login';
+                    window.location.href = base + '/login';
                 });
             }
         });

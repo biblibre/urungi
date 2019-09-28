@@ -301,6 +301,40 @@ describe('api', () => {
         });
     });
 
+    describe('api.getReportAsPDF', function () {
+        it('should call /api/reports/:id.pdf', function () {
+            const url = '/api/reports/foo.pdf';
+            const response = {
+                data: 'foodata',
+            };
+
+            $httpBackend.expect('GET', url).respond(response);
+
+            const p = api.getReportAsPDF('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(response);
+        });
+    });
+
+    describe('api.getReportAsPNG', function () {
+        it('should call /api/reports/:id.png', function () {
+            const url = '/api/reports/foo.png';
+            const response = {
+                data: 'foodata',
+            };
+
+            $httpBackend.expect('GET', url).respond(response);
+
+            const p = api.getReportAsPNG('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(response);
+        });
+    });
+
     describe('api.getDashboards', () => {
         it('should call /api/dashboardsv2/find-all', () => {
             const url = '/api/dashboardsv2/find-all' +
@@ -486,6 +520,40 @@ describe('api', () => {
             setTimeout($httpBackend.flush);
 
             return expect(api.updateDashboard({ _id: 0 })).rejects.toThrow('Forbidden');
+        });
+    });
+
+    describe('api.getDashboardAsPDF', function () {
+        it('should call /api/dashboards/:id.pdf', function () {
+            const url = '/api/dashboards/foo.pdf';
+            const response = {
+                data: 'foodata',
+            };
+
+            $httpBackend.expect('GET', url).respond(response);
+
+            const p = api.getDashboardAsPDF('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(response);
+        });
+    });
+
+    describe('api.getDashboardAsPNG', function () {
+        it('should call /api/dashboards/:id.png', function () {
+            const url = '/api/dashboards/foo.png';
+            const response = {
+                data: 'foodata',
+            };
+
+            $httpBackend.expect('GET', url).respond(response);
+
+            const p = api.getDashboardAsPNG('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(response);
         });
     });
 

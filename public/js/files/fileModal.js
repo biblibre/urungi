@@ -1,7 +1,7 @@
 angular.module('app').directive('fileModal', function ($http, fileService, Noty, gettextCatalog) {
     return {
 
-        templateUrl: '/partials/files/galleryModal.html',
+        templateUrl: 'partials/files/galleryModal.html',
 
         link: function ($scope) {
             $scope.init = function () {
@@ -13,9 +13,9 @@ angular.module('app').directive('fileModal', function ($http, fileService, Noty,
                     var imgnbr = '';
                     if (i < 10) { imgnbr = '0' + i; } else { imgnbr = i; }
 
-                    image.url = '/resources/images/tumbnails100/JPEG/photo-' + imgnbr + '_1.jpg';
-                    image.source1400 = '/resources/images/width1400/JPEG/photo-' + imgnbr + '_1.jpg';
-                    image.source700 = '/resources/images/width700/JPEG/photo-' + imgnbr + '_1.jpg';
+                    image.url = 'resources/images/tumbnails100/JPEG/photo-' + imgnbr + '_1.jpg';
+                    image.source1400 = 'resources/images/width1400/JPEG/photo-' + imgnbr + '_1.jpg';
+                    image.source700 = 'resources/images/width700/JPEG/photo-' + imgnbr + '_1.jpg';
 
                     $scope.catalogImages.push(image);
                 }
@@ -25,7 +25,7 @@ angular.module('app').directive('fileModal', function ($http, fileService, Noty,
                     var iconsnbr = '';
                     if (i < 10) { iconsnbr = '0' + i; } else { iconsnbr = i; }
 
-                    icons.url = '/resources/images/icons/icon-' + iconsnbr + '.png';
+                    icons.url = 'resources/images/icons/icon-' + iconsnbr + '.png';
                     $scope.catalogIcons.push(icons);
                 }
 

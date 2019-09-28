@@ -13,6 +13,10 @@ module.exports = {
         secret: 'CHANGE ME',
     },
 
+    // URI path under which Urungi is served
+    // eg. if Urungi is accessible on https://example.com/urungi/ base is '/urungi'
+    base: '',
+
     mailer: {
         // See https://nodemailer.com/transports/sendmail/
         // or https://nodemailer.com/smtp/
