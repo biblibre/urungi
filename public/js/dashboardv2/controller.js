@@ -607,6 +607,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
     $scope.getColumnDescription = getColumnDescription;
     function getColumnDescription (column) {
-        reportsService.getColumnDescription(column);
+        return reportsService.getColumnDescription(column);
     }
 });
