@@ -7,10 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Important update information
+
+- The new ability to export reports and dashboards as PDF/PNG requires a new
+  dependency: [Pikitia](https://github.com/biblibre/pikitia)
+
+  You need to install it and configure it by setting options `pikitia.url`,
+  `pikitia.client_id`, `pikitia.client_secret` and `url` (see [Configuration
+  section in README.md](README.md#configuration))
+
 ### Added
 
 - Added ability to change a column's label in report
 - Added ability to change column's format in report (for date and number)
+- Added ability to export dashboards and reports as PNG or PDF
 
 ### Changed
 
@@ -19,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Dependencies
 
+- Added request 2.88.0
 - Updated migrate-mongo to 6.0.2
 - Updated mongoose to 5.7.0
 

@@ -62,6 +62,8 @@
     "passport-remember-me": "~0.0.1",
     "password-generator": "^2.2.0",
     "pg": "^7.11.0",
+    "puppeteer-core": "^1.20.0",
+    "request": "^2.88.0",
     "ui-select": "^0.19.8"
   },
   "devDependencies": {

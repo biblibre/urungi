@@ -34,4 +34,9 @@ module.exports = {
     query: {
         defaultRecordsPerPage: 500,
     },
+    pikitia: {
+        url: undefined,
+        client_id: undefined,
+        client_secret: undefined,
+    }
 };
