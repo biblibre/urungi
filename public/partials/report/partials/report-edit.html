@@ -66,26 +66,7 @@
     </div>
 </div>
 
-<div class="panel panel-danger" ng-if="selectedReport.reportType === 'chart-line' && selectedReport.properties.chart.noUnicityWarning && !selectedReport.hideErrorMessage">
-        <div class="container-fluid form-inline">
-            <div class="col-md-10" translate>
-                Warning. The data you've requested contains multiple values for some of the data points. This may result in the chart being strange or misleading.
-                To fix this, make sure to choose an aggregation for your metrics, and do not use more than 1 or 2 dimensions.
-            </div>
-            <div class="col-md-2">
-                <button ng-click="hideErrorMessage()" translate>Hide</button>
-            </div>
-        </div>
-
-</div>
-
-<div class="container-fluid" ng-if="gettingData == true">
-
-    <img src="/images/loader.gif" width="32px" height="32px"/><h3 translate>getting data ...</h3>
-
-</div>
-
-<div report-view report="selectedReport" style="height: 100%; position: relative;" mode="mode" ></div>
+<div report-view report="selectedReport" style="position: relative; overflow: auto;" mode="mode"></div>
 
 
 <div ng-include src="reportNameModal"></div>

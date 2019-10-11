@@ -62,6 +62,7 @@
                 column.label = settings.label;
                 column.type = settings.type;
                 column.format = settings.format;
+                column.calculateTotal = settings.calculateTotal;
             }, () => {});
 
             return modal;

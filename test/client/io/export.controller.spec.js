@@ -105,9 +105,7 @@ describe('ExportController', function () {
             return {
                 _id: 'fakereportid',
                 reportName: 'FakeReport',
-                query: {
-                    layerID: 'fakelayerid',
-                },
+                selectedLayerID: 'fakelayerid',
             };
         }
 

@@ -10,7 +10,6 @@ const DashboardReportSchema = new mongoose.Schema({
     id: String,
     owner: { type: String },
     properties: Reports.schema.path('properties'),
-    query: Reports.schema.path('query'),
     reportDescription: { type: String },
     reportName: { type: String, required: true },
     reportSubType: { type: String },

@@ -21,17 +21,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added ability to change a column's label in report
 - Added ability to change column's format in report (for date and number)
 - Added ability to export dashboards and reports as PNG or PDF
+- Added ability to calculate totals in grid and vgrid
 
 ### Changed
 
 - Move report columns settings into a modal
 - Move report settings into a modal
+- Use HTML table for building grid and vgrid
+- Use PivotTable.js instead of cynteka for building pivot table
 
 ### Dependencies
 
 - Added request 2.88.0
+- Added pivottable 2.23.0
+- Added subtotal 1.11.0-alpha.0
 - Updated migrate-mongo to 6.0.2
 - Updated mongoose to 5.7.0
+- Removed cynteka-pivot-table-jquery
+- Removed angular-vs-repeat
 
 ## [1.2.2] - 2019-08-30
 

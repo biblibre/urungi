@@ -199,6 +199,78 @@ describe('api', () => {
         });
     });
 
+    describe('api.getReportData', () => {
+        it('should call POST /api/reports/data-query', () => {
+            const url = '/api/reports/data-query';
+            const report = {
+                _id: 42,
+                reportName: 'foo',
+                properties: {},
+            };
+            const data = {
+                report: report,
+                limit: 500,
+                filters: {
+                    name: 'value',
+                },
+            };
+            const response = {
+                result: 1,
+                data: ['foodata'],
+            };
+
+            $httpBackend.expect('POST', url, data).respond(response);
+
+            const p = api.getReportData(report, { limit: 500, filters: { name: 'value' } });
+
+            $httpBackend.flush();
+
+            expect(p).resolves.toEqual(response);
+        });
+
+        it('should throw if request failed', () => {
+            const url = '/api/reports/data-query';
+
+            $httpBackend.expect('POST', url).respond(403, 'Forbidden');
+
+            expect(api.getReportData({ properties: {} })).rejects.toThrow('Forbidden');
+            $httpBackend.flush();
+        });
+    });
+
+    describe('api.getReportFilterValues', () => {
+        it('should call POST /api/reports/filter-values-query', () => {
+            const url = '/api/reports/filter-values-query';
+            const filter = {
+                id: 'foo',
+            };
+            const data = {
+                filter: filter,
+            };
+            const response = {
+                result: 1,
+                data: ['foodata'],
+            };
+
+            $httpBackend.expect('POST', url, data).respond(response);
+
+            const p = api.getReportFilterValues(filter);
+
+            $httpBackend.flush();
+
+            expect(p).resolves.toEqual(response);
+        });
+
+        it('should throw if request failed', () => {
+            const url = '/api/reports/filter-values-query';
+
+            $httpBackend.expect('POST', url).respond(403, 'Forbidden');
+
+            expect(api.getReportFilterValues({})).rejects.toThrow('Forbidden');
+            $httpBackend.flush();
+        });
+    });
+
     describe('api.getDashboards', () => {
         it('should call /api/dashboardsv2/find-all', () => {
             const url = '/api/dashboardsv2/find-all' +

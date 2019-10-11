@@ -3164,10 +3164,6 @@ a.list-group-item:hover {
     background-color: #ccc;
 }
 
-.cypivot .div22 {
-    overflow: initial;
-}
-
 .report-view {
     overflow: auto;
 }
@@ -3198,4 +3194,46 @@ a.list-group-item:hover {
 .page-header h3,
 .page-header .h3 {
     margin: 0;
+}
+
+.report-grid {
+    background-color: #fff;
+    height: 100%;
+    overflow: auto;
+}
+
+.report-grid > table {
+    margin-bottom: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+.report-grid > table > thead {
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+}
+
+.report-grid > table > tbody {
+    border-bottom: 2px solid lightgrey;
+}
+
+.report-grid > table > thead > tr > th,
+.report-grid > table > tbody > tr > th,
+.report-grid > table > tfoot > tr > th,
+.report-grid > table > thead > tr > td,
+.report-grid > table > tbody > tr > td,
+.report-grid > table > tfoot > tr > td {
+    padding: 8px;
+    border-bottom: 1px solid lightgrey;
+}
+
+.report-grid > table > thead > tr > th,
+.report-grid > table > tbody > tr > th,
+.report-grid > table > tfoot > tr > th {
+    background-color: #eee;
+}
+
+.report-grid > table > tbody > tr.divider > td {
+    padding: 0;
 }

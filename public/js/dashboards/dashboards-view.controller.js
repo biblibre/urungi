@@ -13,7 +13,6 @@
         vm.dashboard = dashboard;
         vm.getReport = getReport;
         vm.promptChanged = promptChanged;
-        vm.getQueryForFilter = getQueryForFilter;
         vm.isAdmin = false;
 
         activate();
@@ -31,26 +30,6 @@
 
         function promptChanged () {
             repaintReports();
-        }
-
-        function getQueryForFilter (filter) {
-            const query = {
-                layerID: filter.layerID,
-                columns: [
-                    {
-                        id: 'f',
-                        collectionID: filter.collectionID,
-                        elementID: filter.elementID,
-                        elementName: filter.elementName,
-                        elementType: filter.elementType,
-                        layerID: filter.layerID,
-                    }
-                ],
-                order: [],
-                filters: [],
-            };
-
-            return query;
         }
 
         function loadHTML () {
@@ -123,13 +102,13 @@
 
             $scope.$broadcast('repaint', {
                 fetchData: true,
-                filterCriteria: filterCriteria
+                filters: filterCriteria
             });
         }
 
         function getPromptHTML (promptID) {
             const html = '<div id="PROMPT_' + promptID + '" class="ndContainer" ndType="ndPrompt">' +
-                '<app-filter-prompt is-prompt="true" filter="vm.prompts[\'' + promptID + '\']" on-change="vm.promptChanged()" get-query="vm.getQueryForFilter"></app-filter-prompt>' +
+                '<app-filter-prompt is-prompt="true" filter="vm.prompts[\'' + promptID + '\']" on-change="vm.promptChanged()"></app-filter-prompt>' +
                 '</div>';
 
             return html;

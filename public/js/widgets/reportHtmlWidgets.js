@@ -1,12 +1,10 @@
 angular.module('app').service('reportHtmlWidgets', function () {
-    this.generateIndicator = function (report) {
-        return generateIndicator(report);
-    };
+    this.generateIndicator = generateIndicator;
 
-    function generateIndicator (report) {
+    function generateIndicator (report, data) {
         var htmlCode = '';
 
-        var theData = report.query.data;
+        var theData = data;
         if (theData) {
             var theYKey = report.properties.ykeys[0].id;
 

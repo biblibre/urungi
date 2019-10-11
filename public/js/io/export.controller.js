@@ -51,7 +51,7 @@
                 .then(reports => {
                     bundle.reports = reports;
                     for (const report of reports) {
-                        requiredLayers.add(report.query.layerID);
+                        requiredLayers.add(report.selectedLayerID);
                     }
                 });
 
@@ -60,7 +60,7 @@
                     bundle.dashboards = dashboards;
                     for (const dashboard of dashboards) {
                         for (const report of dashboard.reports) {
-                            requiredLayers.add(report.query.layerID);
+                            requiredLayers.add(report.selectedLayerID);
                         }
                     }
                 });

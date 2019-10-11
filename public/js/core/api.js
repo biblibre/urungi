@@ -27,6 +27,8 @@
             getReport: getReport,
             createReport: createReport,
             updateReport: updateReport,
+            getReportData: getReportData,
+            getReportFilterValues: getReportFilterValues,
 
             getDashboards: getDashboards,
             deleteDashboard: deleteDashboard,
@@ -171,6 +173,34 @@
          */
         function updateReport (report) {
             return post('/api/reports/update/' + report._id, report).then(data => data.item);
+        }
+
+        /**
+         * Fetch report data
+         *
+         * @param {object} report - Report definition
+         * @param {object} options - Options
+         * @param {number} options.limit - Limit the maximum number of rows used
+         * @param {object} options.filters - Filters values
+         */
+        function getReportData (report, options = {}) {
+            const params = {
+                report: report,
+            };
+
+            if (options.limit && !report.properties.recordLimit) {
+                params.limit = options.limit;
+            }
+
+            if (options.filters) {
+                params.filters = options.filters;
+            }
+
+            return post('/api/reports/data-query', params);
+        }
+
+        function getReportFilterValues (filter) {
+            return post('/api/reports/filter-values-query', { filter: filter });
         }
 
         /**

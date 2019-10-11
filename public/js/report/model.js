@@ -29,84 +29,6 @@ angular.module('app').service('reportModel', function ($q, connection, uuid, Fil
         });
     };
 
-    /*
-    * Fetches all of the data associated to the report's query, and stores it in report.query.data
-    */
-    this.fetchData = function (query, params) {
-        if (query.columns.length === 0) {
-            return $q.resolve({});
-        }
-
-        var request = {};
-
-        if (!params) {
-            params = {};
-        }
-
-        if (params.page !== undefined) {
-            request.page = params.page;
-        }
-
-        request.query = clone(query);
-
-        delete request.query.data;
-
-        if (!query.recordLimit && params.selectedRecordLimit) {
-            request.query.quickResultLimit = params.selectedRecordLimit;
-        }
-
-        if (params.filterCriteria) {
-            for (const filter of request.query.filters) {
-                if (params.filterCriteria[filter.id + filter.filterType]) {
-                    filter.criterion = params.filterCriteria[filter.id + filter.filterType];
-                }
-            }
-        }
-
-        return connection.post('/api/reports/get-data', request).then(function (result) {
-            if (result.warnings) {
-                for (const w of result.warnings) {
-                    new Noty({ text: w.msg, type: 'warning' }).show();
-                }
-            }
-
-            if (result.result === 0) {
-                new Noty({ text: result.msg, type: 'error' }).show();
-                return {
-                    data: [],
-                    sql: result.sql,
-                    errorToken: result
-                };
-            }
-
-            var data = result.data;
-
-            processDates(data);
-
-            query.data = result.data;
-
-            return {
-                data: data,
-                sql: result.sql,
-                time: result.time,
-                warnings: result.warnings
-            };
-        });
-    };
-
-    function processDates (data) {
-        for (const item of data) {
-            for (const key in item) {
-                if (typeof item[key] === 'string') {
-                    var a = /\/Date\((\d*)\)\//.exec(item[key]);
-                    if (a) {
-                        item[key] = new Date(+a[1]);
-                    }
-                }
-            }
-        }
-    }
-
     this.initChart = function (report) {
         var chart = {
             id: 'Chart' + uuid.v4(),
@@ -114,7 +36,6 @@ angular.module('app').service('reportModel', function ($q, connection, uuid, Fil
             datax: {},
             height: report.properties.height,
             legendPosition: report.properties.legendPosition,
-            query: report.query,
         };
 
         switch (report.reportType) {
@@ -151,7 +72,7 @@ angular.module('app').service('reportModel', function ($q, connection, uuid, Fil
             chart.dataColumns = report.properties.ykeys;
         }
 
-        report.properties.chart = chart;
+        return chart;
     };
 
     this.changeColumnId = function (oldId, newAggregation) {
@@ -186,42 +107,7 @@ angular.module('app').service('reportModel', function ($q, connection, uuid, Fil
         return selectedColumnIndex;
     };
 
-    this.orderColumn = function (report, columnIndex, desc) {
-        var theColumn = report.query.columns[columnIndex];
-        if (desc) {
-            theColumn.sortType = 1;
-        } else {
-            theColumn.sortType = -1;
-        }
-        report.query.order = [];
-        report.query.order.push(theColumn);
-    };
-
-    function clone (obj) {
-        if (!obj) { return obj; }
-        if (Object.getPrototypeOf(obj) === Date.prototype) { return new Date(obj); }
-        if (typeof obj !== 'object') { return obj; }
-        var copy = obj.constructor();
-        for (var attr in obj) {
-            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
-        }
-        return copy;
-    }
-
     this.saveAsReport = function (report, mode) {
-        // Cleaning up the report object
-
-        // var clonedReport = clone(report);
-        // Is this necessary ? It causes c3 to crash, so I will remove it until I find a reason for it
-        var clonedReport = report;
-        if (clonedReport.properties.chart) {
-            clonedReport.properties.chart.chartCanvas = undefined;
-            clonedReport.properties.chart.data = undefined;
-            // clonedReport.properties.chart.query = undefined;
-        }
-        if (clonedReport.query.data) { clonedReport.query.data = undefined; }
-        clonedReport.parentDiv = undefined;
-
         let url;
         if (mode === 'add') {
             url = '/api/reports/create';
@@ -229,7 +115,7 @@ angular.module('app').service('reportModel', function ($q, connection, uuid, Fil
             url = '/api/reports/update/' + report._id;
         }
 
-        return connection.post(url, clonedReport);
+        return connection.post(url, report);
     };
 
     this.duplicateReport = function (duplicateOptions) {

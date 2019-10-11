@@ -1,6 +1,6 @@
 angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location, $q,
     reportsService, connection, $routeParams, reportModel, c3Charts, uuid,
-    htmlWidgets, dashboardv2Model, grid, $timeout,
+    htmlWidgets, dashboardv2Model, $timeout,
     gettextCatalog, $uibModal, userService, api, Noty
 ) {
     $scope.reportModal = 'partials/report/edit.html';
@@ -190,39 +190,10 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
         $scope.initPrompts();
     };
 
-    $scope.getQuery = function (queryID) {
-        for (var r in $scope.selectedDashboard.reports) {
-            if ($scope.selectedDashboard.reports[r].query.id === queryID) {
-                return $scope.selectedDashboard.reports[r].query;
-            }
-        }
-    };
-
-    $scope.getQueryForFilter = function (filter) {
-        const query = {
-            layerID: filter.layerID,
-            columns: [
-                {
-                    id: 'f',
-                    collectionID: filter.collectionID,
-                    elementID: filter.elementID,
-                    elementName: filter.elementName,
-                    elementType: filter.elementType,
-                    layerID: filter.layerID,
-                }
-            ],
-            order: [],
-            filters: [],
-        };
-
-        return query;
-    };
-
     var reportBackup;
     $scope.loadReport = function (report) {
         $scope.reportInterface = true;
         $scope.editingReport = report.id;
-        // reportBackup = clone(report);
         reportBackup = angular.copy(report);
         for (var i in $scope.selectedDashboard.reports) {
             if ($scope.selectedDashboard.reports[i].id === report.id) {
@@ -383,8 +354,8 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
         $scope.$broadcast('repaint', {
             fetchData: true,
-            filterCriteria: filterCriteria,
-            selectedRecordLimit: $scope.selectedDashboardLimit.value
+            filters: filterCriteria,
+            limit: $scope.selectedDashboardLimit.value
         });
     }
 
@@ -406,10 +377,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
     $scope.onChangeElementProperties = function () {
 
-    };
-
-    $scope.changeChartColumnType = function (chart, column) {
-        c3Charts.changeChartColumnType(chart, column);
     };
 
     $scope.overChartDragging = function () {
@@ -507,22 +474,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
         var dashboard = $scope.selectedDashboard;
 
-        for (var i in $scope.selectedDashboard.reports) {
-            if (typeof $scope.selectedDashboard.reports[i].properties !== 'undefined') {
-                if (typeof $scope.selectedDashboard.reports[i].properties.chart !== 'undefined') {
-                    var theChart = clone($scope.selectedDashboard.reports[i].properties.chart);
-                    theChart.chartCanvas = undefined;
-                    theChart.data = undefined;
-                    theChart.query = undefined;
-
-                    // var targetChart = document.getElementById(theChart.chartID);
-
-                    // if (targetChart != undefined)
-                    $scope.selectedDashboard.reports[i].properties.chart = theChart;
-                }
-            }
-        }
-
         var container = $('#designArea');
 
         clearPrompts();
@@ -566,15 +517,6 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     $scope.getReport = function (reportID) {
         return $scope.selectedDashboard.reports.find(r => (r.id === reportID));
     };
-
-    function clone (obj) {
-        if (obj == null || typeof obj !== 'object') return obj;
-        var copy = obj.constructor();
-        for (var attr in obj) {
-            if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
-        }
-        return copy;
-    }
 
     $scope.deleteReport = function (reportID, reportName) {
         for (var i in $scope.selectedDashboard.reports) {
@@ -658,7 +600,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
     });
 
     function getPromptHTML (prompt) {
-        var html = '<div id="PROMPT_' + prompt.promptID + '" page-block class="ndContainer" ndType="ndPrompt"><app-filter-prompt is-prompt="true" filter="prompts[\'' + prompt.promptID + '\']" on-change="promptChanged()" get-query="getQueryForFilter" ></app-filter-prompt></div>';
+        var html = '<div id="PROMPT_' + prompt.promptID + '" page-block class="ndContainer" ndType="ndPrompt"><app-filter-prompt is-prompt="true" filter="prompts[\'' + prompt.promptID + '\']" on-change="promptChanged()"></app-filter-prompt></div>';
 
         return html;
     }

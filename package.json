@@ -18,7 +18,6 @@
     "angular-ui-bootstrap": "^2.5.6",
     "angular-ui-sortable": "^0.19.0",
     "angular-ui-tree": "^2.22.6",
-    "angular-vs-repeat": "^2.0.13",
     "angular-xeditable": "^0.10.0",
     "angularjs-bootstrap-datetimepicker": "^1.1.4",
     "body-parser": "^1.19.0",
@@ -30,7 +29,6 @@
     "connect-mongo": "^3.0.0",
     "cookie-parser": "^1.4.4",
     "csurf": "^1.10.0",
-    "cynteka-pivot-table-jquery": "github:biblibre/cynteka-pivot-table-jquery#semver:^0.11.3",
     "debug": "^4.1.1",
     "ejs": "^2.6.2",
     "email-templates": "^6.0.0",
@@ -63,6 +61,8 @@
     "password-generator": "^2.2.0",
     "pg": "^7.11.0",
     "request": "^2.88.0",
+    "pivottable": "^2.23.0",
+    "subtotal": "^1.11.0-alpha.0",
     "ui-select": "^0.19.8"
   },
   "devDependencies": {
