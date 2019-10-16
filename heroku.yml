@@ -1,0 +1,13 @@
+setup:
+    addons:
+        - plan: mongolab
+          as: MONGODB
+        - plan: heroku-postgresql
+          as: DATABASE
+build:
+    docker:
+        web: Dockerfile
+release:
+    command:
+        - .heroku/release.sh
+    image: web

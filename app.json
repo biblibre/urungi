@@ -1,0 +1,19 @@
+{
+  "addons": [
+    {
+      "plan": "mongolab",
+      "as": "MONGODB"
+    },
+    {
+      "plan": "heroku-postgresql",
+      "as": "DATABASE"
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "urungi",
+  "stack": "container"
+}

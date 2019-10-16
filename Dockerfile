@@ -1,9 +1,6 @@
 FROM node:8
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    default-jdk-headless \
-    git
+RUN apt-get update && apt-get install -y git
 
 WORKDIR /usr/src/app
 
