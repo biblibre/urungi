@@ -1,5 +1,5 @@
 <span class="form-inline">
-    <div class="form-group">
+    <div class="form-group" uib-tooltip="{{ vm.filter.promptInstructions }}" tooltip-enable="vm.isPrompt">
         <label ng-if="vm.isPrompt" class="control-label">{{vm.filter.promptTitle}} {{vm.filter.filterTypeLabel}}</label>
 
         <!-- Date -->
