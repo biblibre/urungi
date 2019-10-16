@@ -1,0 +1,89 @@
+version: 2.1
+executors:
+  node:
+    parameters:
+      node:
+        type: string
+        default: '8'
+      mongodb:
+        type: string
+        default: '3.4.22'
+    docker:
+      - image: circleci/node:<< parameters.node >>
+      - image: circleci/mariadb:10.3
+        environment:
+          MYSQL_DATABASE: urungi_tests
+          MYSQL_USER: urungi
+          MYSQL_PASSWORD: urungi
+      - image: circleci/postgres:9.6
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: urungi_tests
+    working_directory: ~/urungi
+    environment:
+      MONGOMS_VERSION: << parameters.mongodb >>
+
+jobs:
+  test:
+    parameters:
+      e:
+        type: executor
+    executor: << parameters.e >>
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm test -- --coverage
+      - run: bash <(curl -s https://codecov.io/bash)
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test:
+          name: node:8 mongodb:3.4
+          e:
+            name: node
+            node: '8-jessie'
+            mongodb: '3.4.22'
+      - test:
+          name: node:8 mongodb:3.6
+          e:
+            name: node
+            node: '8'
+            mongodb: '3.6.14'
+      - test:
+          name: node:8 mongodb:4.0
+          e:
+            name: node
+            node: '8'
+            mongodb: '4.0.12'
+      - test:
+          name: node:8 mongodb:4.2
+          e:
+            name: node
+            node: '8'
+            mongodb: '4.2.0'
+      - test:
+          name: node:10 mongodb:3.4
+          e:
+            name: node
+            node: '10-jessie'
+            mongodb: '3.4.22'
+      - test:
+          name: node:10 mongodb:3.6
+          e:
+            name: node
+            node: '10'
+            mongodb: '3.6.14'
+      - test:
+          name: node:10 mongodb:4.0
+          e:
+            name: node
+            node: '10'
+            mongodb: '4.0.12'
+      - test:
+          name: node:10 mongodb:4.2
+          e:
+            name: node
+            node: '10'
+            mongodb: '4.2.0'
