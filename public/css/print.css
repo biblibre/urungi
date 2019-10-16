@@ -28,4 +28,8 @@
     [ndtype="column"] {
         break-inside: avoid;
     }
+
+    .ndContainer {
+        overflow: hidden;
+    }
 }
