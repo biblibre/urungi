@@ -12,7 +12,6 @@ const ReportColumnSchema = new mongoose.Schema({
     elementType: String,
     elementRole: String,
     expression: String,
-    filterTypeLabel: String,
     filterType: String,
     format: String,
     id: String,

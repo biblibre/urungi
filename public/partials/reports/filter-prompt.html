@@ -22,12 +22,12 @@
                     <!-- equal, not equal, bigger than, etc...-->
 
                     <span class="btn-group" uib-dropdown>
-                        <button type="button" class="btn" ng-bind="vm.filter.filterTypeLabel"></button>
+                        <button type="button" class="btn" ng-bind="vm.getFilterTypeLabel(vm.filter.filterType)"></button>
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-caret-down"></i>
                         </button>
                         <ul class="dropdown-menu">
-                            <li ng-repeat="option in vm.getElementFilterOptions()"><a ng-click="vm.setFilterType(option)">{{option.label}}</a></li>
+                            <li ng-repeat="option in vm.getElementFilterOptions()"><a ng-click="vm.setFilterType(option)">{{ vm.getFilterTypeLabel(option) }}</a></li>
                         </ul>
                     </span>
 

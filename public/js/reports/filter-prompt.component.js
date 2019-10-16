@@ -20,24 +20,25 @@
     function FilterPromptController ($scope, gettextCatalog, api) {
         const vm = this;
 
-        vm.criteriaInput = 'partials/reports/criteria-input.html';
         vm.$onInit = $onInit;
-        vm.removeFilter = removeFilter;
-        vm.setDatePatternFilterType = setDatePatternFilterType;
         vm.clearFilter = clearFilter;
-        vm.promptChanged = promptChanged;
-        vm.onDateListChange = onDateListChange;
-        vm.update = update;
-        vm.selectFirstValue = selectFirstValue;
-        vm.selectSecondValue = selectSecondValue;
-        vm.selectListValue = selectListValue;
-        vm.inputChanged = inputChanged;
-        vm.updateCondition = updateCondition;
-        vm.getElementFilterOptions = getElementFilterOptions;
-        vm.getDatePatternFilters = getDatePatternFilters;
-        vm.setFilterType = setFilterType;
-        vm.makePrompt = makePrompt;
+        vm.criteriaInput = 'partials/reports/criteria-input.html';
+        vm.getFilterTypeLabel = getFilterTypeLabel;
         vm.getButtonFilterPromptMessage = getButtonFilterPromptMessage;
+        vm.getDatePatternFilters = getDatePatternFilters;
+        vm.getElementFilterOptions = getElementFilterOptions;
+        vm.inputChanged = inputChanged;
+        vm.makePrompt = makePrompt;
+        vm.onDateListChange = onDateListChange;
+        vm.promptChanged = promptChanged;
+        vm.removeFilter = removeFilter;
+        vm.selectFirstValue = selectFirstValue;
+        vm.selectListValue = selectListValue;
+        vm.selectSecondValue = selectSecondValue;
+        vm.setDatePatternFilterType = setDatePatternFilterType;
+        vm.setFilterType = setFilterType;
+        vm.update = update;
+        vm.updateCondition = updateCondition;
 
         function $onInit () {
             vm.criterion = vm.filter.criterion;
@@ -134,14 +135,11 @@
         }
 
         function getDatePatternFilters () {
-            const filterOptions = getFilterOptions();
-
-            return filterOptions.datePattern;
+            return datePatternOptions;
         }
 
-        function setFilterType (filterOption) {
-            vm.filter.filterType = filterOption.value;
-            vm.filter.filterTypeLabel = filterOption.label;
+        function setFilterType (filterType) {
+            vm.filter.filterType = filterType;
 
             vm.onChange();
         }
@@ -165,90 +163,126 @@
             }
         }
 
+        function getFilterTypeLabel (filterType) {
+            const labels = {
+                'equal': gettextCatalog.getString('is equal to'),
+                'equal-pattern': gettextCatalog.getString('is equal to (pattern)'),
+                'diferentThan': gettextCatalog.getString('is different than'),
+                'diferentThan-pattern': gettextCatalog.getString('is different than (pattern)'),
+                'in': gettextCatalog.getString('is in'),
+                'notIn': gettextCatalog.getString('is not in'),
+                'biggerThan': gettextCatalog.getString('is bigger than'),
+                'biggerThan-pattern': gettextCatalog.getString('is bigger than (pattern)'),
+                'biggerOrEqualThan': gettextCatalog.getString('is bigger or equal than'),
+                'biggerOrEqualThan-pattern': gettextCatalog.getString('is bigger or equal than (pattern)'),
+                'lessThan': gettextCatalog.getString('is less than'),
+                'lessThan-pattern': gettextCatalog.getString('is less than (pattern)'),
+                'lessOrEqualThan': gettextCatalog.getString('is less or equal than'),
+                'lessOrEqualThan-pattern': gettextCatalog.getString('is less or equal than (pattern)'),
+                'between': gettextCatalog.getString('is between'),
+                'notBetween': gettextCatalog.getString('is not between'),
+                'contains': gettextCatalog.getString('contains'),
+                'notContains': gettextCatalog.getString('does not contain'),
+                'startWith': gettextCatalog.getString('starts with'),
+                'notStartWith': gettextCatalog.getString('does not start with'),
+                'endsWith': gettextCatalog.getString('ends with'),
+                'notEndsWith': gettextCatalog.getString('does not end with'),
+                'like': gettextCatalog.getString('is like'),
+                'notLike': gettextCatalog.getString('is not like'),
+                'null': gettextCatalog.getString('is null'),
+                'notNull': gettextCatalog.getString('is not null'),
+            };
+
+            if (filterType in labels) {
+                return labels[filterType];
+            }
+        }
+
+        const datePatternOptions = [
+            { value: '#WST-TODAY#', label: gettextCatalog.getString('Today') },
+            { value: '#WST-THISWEEK#', label: gettextCatalog.getString('This week') },
+            { value: '#WST-THISMONTH#', label: gettextCatalog.getString('This month') },
+            { value: '#WST-THISYEAR#', label: gettextCatalog.getString('This year') },
+            { value: '#WST-FIRSTQUARTER#', label: gettextCatalog.getString('First quarter') },
+            { value: '#WST-SECONDQUARTER#', label: gettextCatalog.getString('Second quarter') },
+            { value: '#WST-THIRDQUARTER#', label: gettextCatalog.getString('Third quarter') },
+            { value: '#WST-FOURTHQUARTER#', label: gettextCatalog.getString('Fourth quarter') },
+            { value: '#WST-FIRSTSEMESTER#', label: gettextCatalog.getString('First semester') },
+            { value: '#WST-SECONDSEMESTER#', label: gettextCatalog.getString('Second semester') },
+            { value: '#WST-YESTERDAY#', label: gettextCatalog.getString('Yesterday') },
+            { value: '#WST-LASTWEEK#', label: gettextCatalog.getString('Last week') },
+            { value: '#WST-LASTMONTH#', label: gettextCatalog.getString('Last month') },
+            { value: '#WST-LASTYEAR#', label: gettextCatalog.getString('Last year') },
+            { value: '#WST-LYFIRSTQUARTER#', label: gettextCatalog.getString('Last year first quarter') },
+            { value: '#WST-LYSECONDQUARTER#', label: gettextCatalog.getString('Last year second quarter') },
+            { value: '#WST-LYTHIRDQUARTER#', label: gettextCatalog.getString('Last year third quarter') },
+            { value: '#WST-LYFOURTHQUARTER#', label: gettextCatalog.getString('Last year fourth quarter') },
+            { value: '#WST-LYFIRSTSEMESTER#', label: gettextCatalog.getString('Last year first semester') },
+            { value: '#WST-LYSECONDSEMESTER#', label: gettextCatalog.getString('Last year second semester') }
+        ];
+
         const filterOptions = {
             string: [
-                { value: 'equal', label: gettextCatalog.getString('equal') },
-                { value: 'in', label: gettextCatalog.getString('in') },
-                { value: 'diferentThan', label: gettextCatalog.getString('different than') },
-                { value: 'notIn', label: gettextCatalog.getString('not in') },
-                { value: 'biggerThan', label: gettextCatalog.getString('bigger than') },
-                { value: 'biggerOrEqualThan', label: gettextCatalog.getString('bigger or equal than') },
-                { value: 'lessThan', label: gettextCatalog.getString('less than') },
-                { value: 'lessOrEqualThan', label: gettextCatalog.getString('less or equal than') },
-                { value: 'between', label: gettextCatalog.getString('between') },
-                { value: 'notBetween', label: gettextCatalog.getString('not between') },
-                { value: 'contains', label: gettextCatalog.getString('contains') },
-                { value: 'notContains', label: gettextCatalog.getString('not contains') },
-                { value: 'startWith', label: gettextCatalog.getString('start with') },
-                { value: 'notStartWith', label: gettextCatalog.getString('not start with') },
-                { value: 'endsWith', label: gettextCatalog.getString('ends with') },
-                { value: 'notEndsWith', label: gettextCatalog.getString('not ends with') },
-                { value: 'like', label: gettextCatalog.getString('like') },
-                { value: 'notLike', label: gettextCatalog.getString('not like') },
-                { value: 'null', label: gettextCatalog.getString('is null') },
-                { value: 'notNull', label: gettextCatalog.getString('is not null') },
+                'equal',
+                'diferentThan',
+                'in',
+                'notIn',
+                'biggerThan',
+                'biggerOrEqualThan',
+                'lessThan',
+                'lessOrEqualThan',
+                'between',
+                'notBetween',
+                'contains',
+                'notContains',
+                'startWith',
+                'notStartWith',
+                'endsWith',
+                'notEndsWith',
+                'like',
+                'notLike',
+                'null',
+                'notNull',
             ],
             array: [
-                { value: 'equal', label: gettextCatalog.getString('equal') },
-                { value: 'diferentThan', label: gettextCatalog.getString('different than') },
-                { value: 'null', label: gettextCatalog.getString('is null') },
-                { value: 'notNull', label: gettextCatalog.getString('is not null') },
-                { value: 'in', label: gettextCatalog.getString('in') },
-                { value: 'notIn', label: gettextCatalog.getString('not in') },
+                'equal',
+                'diferentThan',
+                'null',
+                'notNull',
+                'in',
+                'notIn',
             ],
             number: [
-                { value: 'equal', label: gettextCatalog.getString('equal') },
-                { value: 'in', label: gettextCatalog.getString('in') },
-                { value: 'diferentThan', label: gettextCatalog.getString('different than') },
-                { value: 'notIn', label: gettextCatalog.getString('not in') },
-                { value: 'biggerThan', label: gettextCatalog.getString('bigger than') },
-                { value: 'biggerOrEqualThan', label: gettextCatalog.getString('bigger or equal than') },
-                { value: 'lessThan', label: gettextCatalog.getString('less than') },
-                { value: 'lessOrEqualThan', label: gettextCatalog.getString('less or equal than') },
-                { value: 'between', label: gettextCatalog.getString('between') },
-                { value: 'notBetween', label: gettextCatalog.getString('not between') },
-                { value: 'null', label: gettextCatalog.getString('is null') },
-                { value: 'notNull', label: gettextCatalog.getString('is not null') },
-            ],
-            datePattern: [
-                { value: '#WST-TODAY#', label: gettextCatalog.getString('Today') },
-                { value: '#WST-THISWEEK#', label: gettextCatalog.getString('This week') },
-                { value: '#WST-THISMONTH#', label: gettextCatalog.getString('This month') },
-                { value: '#WST-THISYEAR#', label: gettextCatalog.getString('This year') },
-                { value: '#WST-FIRSTQUARTER#', label: gettextCatalog.getString('First quarter') },
-                { value: '#WST-SECONDQUARTER#', label: gettextCatalog.getString('Second quarter') },
-                { value: '#WST-THIRDQUARTER#', label: gettextCatalog.getString('Third quarter') },
-                { value: '#WST-FOURTHQUARTER#', label: gettextCatalog.getString('Fourth quarter') },
-                { value: '#WST-FIRSTSEMESTER#', label: gettextCatalog.getString('First semester') },
-                { value: '#WST-SECONDSEMESTER#', label: gettextCatalog.getString('Second semester') },
-                { value: '#WST-YESTERDAY#', label: gettextCatalog.getString('Yesterday') },
-                { value: '#WST-LASTWEEK#', label: gettextCatalog.getString('Last week') },
-                { value: '#WST-LASTMONTH#', label: gettextCatalog.getString('Last month') },
-                { value: '#WST-LASTYEAR#', label: gettextCatalog.getString('Last year') },
-                { value: '#WST-LYFIRSTQUARTER#', label: gettextCatalog.getString('Last year first quarter') },
-                { value: '#WST-LYSECONDQUARTER#', label: gettextCatalog.getString('Last year second quarter') },
-                { value: '#WST-LYTHIRDQUARTER#', label: gettextCatalog.getString('Last year third quarter') },
-                { value: '#WST-LYFOURTHQUARTER#', label: gettextCatalog.getString('Last year fourth quarter') },
-                { value: '#WST-LYFIRSTSEMESTER#', label: gettextCatalog.getString('Last year first semester') },
-                { value: '#WST-LYSECONDSEMESTER#', label: gettextCatalog.getString('Last year second semester') }
+                'equal',
+                'diferentThan',
+                'in',
+                'notIn',
+                'biggerThan',
+                'biggerOrEqualThan',
+                'lessThan',
+                'lessOrEqualThan',
+                'between',
+                'notBetween',
+                'null',
+                'notNull',
             ],
             date: [
-                { value: 'equal', label: gettextCatalog.getString('equal') },
-                { value: 'equal-pattern', label: gettextCatalog.getString('equal (pattern)') },
-                { value: 'diferentThan', label: gettextCatalog.getString('different than') },
-                { value: 'diferentThan-pattern', label: gettextCatalog.getString('different than (pattern)') },
-                { value: 'biggerThan', label: gettextCatalog.getString('bigger than') },
-                { value: 'biggerThan-pattern', label: gettextCatalog.getString('bigger than (pattern)') },
-                { value: 'biggerOrEqualThan', label: gettextCatalog.getString('bigger or equal than') },
-                { value: 'biggerOrEqualThan-pattern', label: gettextCatalog.getString('bigger or equal than (pattern)') },
-                { value: 'lessThan', label: gettextCatalog.getString('less than') },
-                { value: 'lessThan-pattern', label: gettextCatalog.getString('less than (pattern)') },
-                { value: 'lessOrEqualThan', label: gettextCatalog.getString('less or equal than') },
-                { value: 'lessOrEqualThan-pattern', label: gettextCatalog.getString('less or equal than (pattern)') },
-                { value: 'between', label: gettextCatalog.getString('between') },
-                { value: 'notBetween', label: gettextCatalog.getString('not between') },
-                { value: 'null', label: gettextCatalog.getString('is null') },
-                { value: 'notNull', label: gettextCatalog.getString('is not null') }
+                'equal',
+                'equal-pattern',
+                'diferentThan',
+                'diferentThan-pattern',
+                'biggerThan',
+                'biggerThan-pattern',
+                'biggerOrEqualThan',
+                'biggerOrEqualThan-pattern',
+                'lessThan',
+                'lessThan-pattern',
+                'lessOrEqualThan',
+                'lessOrEqualThan-pattern',
+                'between',
+                'notBetween',
+                'null',
+                'notNull',
             ],
         };
 
