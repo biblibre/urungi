@@ -32,7 +32,7 @@ jobs:
     steps:
       - checkout
       - run: npm ci
-      - run: npm test -- --coverage
+      - run: npm test -- --maxWorkers 1 --coverage
       - run: bash <(curl -s https://codecov.io/bash)
 
 workflows:
