@@ -217,12 +217,21 @@
             return post('/api/reports/filter-values-query', { filter: filter });
         }
 
-        function getReportAsPDF (id) {
-            return get(`/api/reports/${id}.pdf`);
+        /**
+         * Export a report as PDF
+         *
+         * @param {string} id - Report ID
+         * @param {object} params - Parameters
+         * @param {boolean} params.displayHeaderFooter - Display header and footer
+         * @param {string} params.headerTemplate - Header template
+         * @param {string} params.footerTemplate - Footer template
+         */
+        function getReportAsPDF (id, params) {
+            return post(`/api/reports/${id}/pdf`, params);
         }
 
         function getReportAsPNG (id) {
-            return get(`/api/reports/${id}.png`);
+            return post(`/api/reports/${id}/png`);
         }
 
         /**
@@ -308,12 +317,21 @@
             return post('/api/dashboardsv2/update/' + dashboard._id, dashboard).then(data => data.item);
         }
 
-        function getDashboardAsPDF (id) {
-            return get(`/api/dashboards/${id}.pdf`);
+        /**
+         * Export a dashboard as PDF
+         *
+         * @param {string} id - Dashboard ID
+         * @param {object} params - Parameters
+         * @param {boolean} params.displayHeaderFooter - Display header and footer
+         * @param {string} params.headerTemplate - Header template
+         * @param {string} params.footerTemplate - Footer template
+         */
+        function getDashboardAsPDF (id, params) {
+            return post(`/api/dashboards/${id}/pdf`, params);
         }
 
         function getDashboardAsPNG (id) {
-            return get(`/api/dashboards/${id}.png`);
+            return post(`/api/dashboards/${id}/png`);
         }
 
         /**

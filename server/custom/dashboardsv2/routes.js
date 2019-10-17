@@ -18,7 +18,7 @@ module.exports = function (app) {
     app.post('/api/dashboardsv2/share-page', restrict, Dashboardsv2.ShareDashboard);
     app.post('/api/dashboardsv2/unshare', restrict, Dashboardsv2.UnshareDashboard);
 
-    app.get('/api/dashboards/:id.png', async function (req, res, next) {
+    app.post('/api/dashboards/:id/png', async function (req, res, next) {
         const mongoose = require('mongoose');
         const Dashboard = mongoose.model('Dashboard');
 
@@ -47,7 +47,7 @@ module.exports = function (app) {
         }
     });
 
-    app.get('/api/dashboards/:id.pdf', async function (req, res, next) {
+    app.post('/api/dashboards/:id/pdf', async function (req, res, next) {
         const mongoose = require('mongoose');
         const Dashboard = mongoose.model('Dashboard');
 
@@ -58,7 +58,14 @@ module.exports = function (app) {
             }
 
             const url = config.get('url') + config.get('base') + `/dashboards/view/${dashboard.id}`;
-            const buffer = await pikitia.toPDF(url, { cookies: req.cookies });
+            const options = {
+                cookies: req.cookies,
+                displayHeaderFooter: req.body.displayHeaderFooter || false,
+                headerTemplate: req.body.headerTemplate || '',
+                footerTemplate: req.body.footerTemplate || '',
+            };
+
+            const buffer = await pikitia.toPDF(url, options);
 
             const response = {
                 data: buffer.toString('base64'),

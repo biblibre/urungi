@@ -3,9 +3,9 @@
 
     angular.module('app.dashboards').controller('DashboardsViewController', DashboardsViewController);
 
-    DashboardsViewController.$inject = ['$scope', '$timeout', '$compile', 'Noty', 'gettextCatalog', 'api', 'userService', 'dashboard'];
+    DashboardsViewController.$inject = ['$scope', '$timeout', '$compile', '$uibModal', 'Noty', 'gettextCatalog', 'api', 'userService', 'dashboard'];
 
-    function DashboardsViewController ($scope, $timeout, $compile, Noty, gettextCatalog, api, userService, dashboard) {
+    function DashboardsViewController ($scope, $timeout, $compile, $uibModal, Noty, gettextCatalog, api, userService, dashboard) {
         const vm = this;
 
         vm.downloadAsPDF = downloadAsPDF;
@@ -117,11 +117,17 @@
         }
 
         function downloadAsPDF () {
-            api.getDashboardAsPDF(vm.dashboard._id).then(res => {
-                download(res.data, 'application/pdf', vm.dashboard.dashboardName + '.pdf');
-            }, () => {
-                new Noty({ text: gettextCatalog.getString('The export failed. Please contact the system administrator.'), type: 'error' }).show();
+            const modal = $uibModal.open({
+                component: 'appPdfExportSettingsModal',
             });
+
+            return modal.result.then(function (settings) {
+                return api.getDashboardAsPDF(vm.dashboard._id, settings).then(res => {
+                    download(res.data, 'application/pdf', vm.dashboard.dashboardName + '.pdf');
+                }, () => {
+                    new Noty({ text: gettextCatalog.getString('The export failed. Please contact the system administrator.'), type: 'error' }).show();
+                });
+            }, () => {});
         }
 
         function downloadAsPNG () {
