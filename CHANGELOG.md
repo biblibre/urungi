@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated pg to 7.12.1
 - Updated nodemailer to 6.3.1
 - Updated multer to 1.4.2
+- Updated c3 to 0.7.11
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 
