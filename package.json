@@ -59,9 +59,9 @@
     "passport-local": "~1.0.0",
     "passport-remember-me": "~0.0.1",
     "password-generator": "^2.2.0",
-    "pg": "^7.11.0",
-    "request": "^2.88.0",
+    "pg": "^7.12.1",
     "pivottable": "^2.23.0",
+    "request": "^2.88.0",
     "subtotal": "^1.11.0-alpha.0",
     "ui-select": "^0.19.8"
   },
