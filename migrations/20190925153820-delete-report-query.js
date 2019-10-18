@@ -1,6 +1,6 @@
 module.exports = {
     async up (db) {
-        await db.collection('wst_Reports').updateMany({}, { '$unset': { 'query': '' } });
+        await db.collection('wst_Reports').updateMany({}, { $unset: { query: '' } });
 
         const dashboardsCollection = db.collection('wst_Dashboardsv2');
         const dashboards = await dashboardsCollection.find().toArray();

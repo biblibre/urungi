@@ -23,7 +23,7 @@ const LayerAssociatedElementSchema = new mongoose.Schema({
 const LayerObjectSchema = LayerElementSchema.clone();
 LayerObjectSchema.add({
     associatedElements: {
-        type: [ LayerAssociatedElementSchema ],
+        type: [LayerAssociatedElementSchema],
         default: undefined,
     },
     format: String,
@@ -33,7 +33,7 @@ LayerObjectSchema.add({
 });
 LayerObjectSchema.add({
     elements: {
-        type: [ LayerObjectSchema ],
+        type: [LayerObjectSchema],
         default: undefined,
     }
 });
@@ -56,7 +56,7 @@ const LayerCollectionSchema = new mongoose.Schema({
     collectionLabel: String,
     collectionName: String,
     component: Number,
-    elements: [ LayerElementSchema ],
+    elements: [LayerElementSchema],
     folded: Boolean,
     isSQL: Boolean,
     left: Number,
@@ -71,10 +71,10 @@ var LayersSchema = new mongoose.Schema({
     description: { type: String },
     status: { type: String, required: true },
     params: {
-        joins: [ LayerJoinSchema ],
-        schema: [ LayerCollectionSchema ],
+        joins: [LayerJoinSchema],
+        schema: [LayerCollectionSchema],
     },
-    objects: [ LayerObjectSchema ],
+    objects: [LayerObjectSchema],
     nd_trash_deleted: { type: Boolean },
     nd_trash_deleted_date: { type: Date },
     createdBy: { type: String },
@@ -91,15 +91,15 @@ LayersSchema.statics.setStatus = function (req, done) {
             done({ result: 0, msg: "'id' and 'status' are required." });
             return;
         }
-        this.findOne({ '_id': layerID, 'companyID': req.user.companyID }, function (err, findLayer) {
+        this.findOne({ _id: layerID, companyID: req.user.companyID }, function (err, findLayer) {
             if (err) { console.error(err); }
 
             if (findLayer) {
                 Layers.updateOne({
-                    '_id': layerID
+                    _id: layerID
                 }, {
                     $set: {
-                        'status': layerStatus
+                        status: layerStatus
                     }
                 }, function (err, numAffected) {
                     if (err) throw err;

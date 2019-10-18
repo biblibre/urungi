@@ -65,7 +65,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
                         case 'chart-line':
                         case 'chart-donut':
                         case 'chart-pie':
-                        case 'gauge':
+                        case 'gauge': {
                             const id = 'CHART_' + $scope.report._id + '-' + uuid.v4();
                             const html = c3Charts.getChartHTML($scope.report, $scope.mode, id);
                             $scope.changeContent(html);
@@ -78,6 +78,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
                                 c3Charts.rebuildChart($scope.report, id, $scope.data, chart);
                                 $scope.loading = false;
                             });
+                        }
 
                         case 'indicator':
                             $scope.changeContent(reportHtmlWidgets.generateIndicator($scope.report, $scope.data));

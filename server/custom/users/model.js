@@ -79,7 +79,7 @@ usersSchema.statics.createTheUser = function (req, res, userData, done) {
         return;
     }
 
-    User.findOne({ 'userName': userData.userName, companyID: req.user.companyID }, {}, function (err, user) {
+    User.findOne({ userName: userData.userName, companyID: req.user.companyID }, {}, function (err, user) {
         if (err) throw err;
         if (user) {
             done({ result: 0, msg: 'userName already in use.' });
@@ -107,7 +107,7 @@ usersSchema.statics.createTheUser = function (req, res, userData, done) {
 usersSchema.statics.setViewedContextHelp = function (req, done) {
     var userID = req.user._id;
 
-    this.findOne({ '_id': userID }, function (err, findUser) {
+    this.findOne({ _id: userID }, function (err, findUser) {
         if (err) { console.error(err); }
 
         if (findUser) {
@@ -124,10 +124,10 @@ usersSchema.statics.setViewedContextHelp = function (req, done) {
             }
 
             Users.updateOne({
-                '_id': userID
+                _id: userID
             }, {
                 $set: {
-                    'contextHelp': findUser.contextHelp
+                    contextHelp: findUser.contextHelp
                 }
             }, function (err, numAffected) {
                 if (err) throw err;
@@ -149,15 +149,15 @@ usersSchema.statics.setStatus = function (req, done) {
             done({ result: 0, msg: "'id' and 'status' are required." });
             return;
         }
-        this.findOne({ '_id': userID, 'companyID': req.user.companyID }, function (err, findUser) {
+        this.findOne({ _id: userID, companyID: req.user.companyID }, function (err, findUser) {
             if (err) { console.error(err); }
 
             if (findUser) {
                 Users.updateOne({
-                    '_id': userID
+                    _id: userID
                 }, {
                     $set: {
-                        'status': userStatus
+                        status: userStatus
                     }
                 }, function (err, numAffected) {
                     if (err) throw err;
@@ -174,7 +174,7 @@ usersSchema.statics.setStatus = function (req, done) {
 };
 
 usersSchema.statics.isValidUserPassword = function (username, password, done) {
-    this.findOne({ $or: [ { 'userName': username }, { 'email': username } ], status: 'active' }, function (err, user) {
+    this.findOne({ $or: [{ userName: username }, { email: username }], status: 'active' }, function (err, user) {
         if (err) return done(err);
         if (!user) return done(null, false, { message: 'Username or password incorrect' });
 

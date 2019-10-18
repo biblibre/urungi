@@ -83,18 +83,18 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             strokeWidth: 3
         },
         isSource: true,
-        connector: [ 'Flowchart', { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
+        connector: ['Flowchart', { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true }],
         connectorStyle: connectorPaintStyle,
         hoverPaintStyle: endpointHoverStyle,
         connectorHoverStyle: connectorHoverStyle,
         maxConnections: -1,
         dragOptions: {},
         overlays: [
-            [ 'Label', {
+            ['Label', {
                 location: [0.5, 1.5],
                 label: '',
                 cssClass: 'endpointSourceLabel'
-            } ]
+            }]
         ]
     };
 
@@ -107,7 +107,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         dropOptions: { hoverClass: 'hover', activeClass: 'active' },
         isTarget: true,
         overlays: [
-            [ 'Label', { location: [0.5, -0.5], label: '', cssClass: 'endpointTargetLabel' } ]
+            ['Label', { location: [0.5, -0.5], label: '', cssClass: 'endpointTargetLabel' }]
         ]
     };
 
@@ -205,11 +205,11 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                         onZoom = true;
 
                         if (e.originalEvent.wheelDelta / 120 > 0) {
-                            $('#canvas').animate({ 'zoom': currentZoom += 0.1 }, 250, function () {
+                            $('#canvas').animate({ zoom: currentZoom += 0.1 }, 250, function () {
                                 onZoom = false;
                             });
                         } else {
-                            $('#canvas').animate({ 'zoom': currentZoom -= 0.1 }, 250, function () {
+                            $('#canvas').animate({ zoom: currentZoom -= 0.1 }, 250, function () {
                                 onZoom = false;
                             });
                         }
@@ -254,7 +254,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
 
     function getDatasources () {
         api.getDatasource($scope._Layer.datasourceID).then(function (datasource) {
-            $scope.datasources = [ datasource ];
+            $scope.datasources = [datasource];
         });
     };
 
@@ -556,7 +556,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         // this timeout is here to give time to angular to create the element's divs'
             setTimeout(function () {
                 instance = jsPlumb.getInstance({
-                    Connector: [ 'Flowchart', { cornerRadius: 5 } ],
+                    Connector: ['Flowchart', { cornerRadius: 5 }],
                     Endpoint: ['Dot', { radius: 2 }],
                     PaintStyle: {
                         strokeWidth: 4,
@@ -1039,7 +1039,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         for (var s in $scope._Layer.params.schema) {
             for (var e in $scope._Layer.params.schema[s].elements) {
                 if ($scope._Layer.params.schema[s].elements[e].elementID === elementID) {
-                    delete $scope._Layer.params.schema[s].elements[e]['elementRole'];
+                    delete $scope._Layer.params.schema[s].elements[e].elementRole;
                 }
             }
         }
@@ -1075,7 +1075,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         for (var s in $scope._Layer.params.schema) {
             for (var e in $scope._Layer.params.schema[s].elements) {
                 if ($scope._Layer.params.schema[s].elements[e].elementID === elementID) {
-                    delete $scope._Layer.params.schema[s].elements[e]['elementRole'];
+                    delete $scope._Layer.params.schema[s].elements[e].elementRole;
                 }
             }
         }

@@ -34,7 +34,7 @@ ReportFilterSchema.add({
         label: String, // Label of date pattern
         text1: String,
         text2: String,
-        textList: [ String ],
+        textList: [String],
     },
     filterPrompt: Boolean,
     promptAllowMultipleSelection: Boolean,
@@ -44,19 +44,19 @@ ReportFilterSchema.add({
 });
 
 const ReportPropertiesSchema = new mongoose.Schema({
-    columns: [ ReportColumnSchema ],
-    filters: [ ReportFilterSchema ],
+    columns: [ReportColumnSchema],
+    filters: [ReportFilterSchema],
     height: Number,
     legendPosition: String,
     maxValue: Number,
-    order: [ ReportColumnSchema ],
+    order: [ReportColumnSchema],
     pivotKeys: {
-        columns: [ ReportColumnSchema ],
-        rows: [ ReportColumnSchema ],
+        columns: [ReportColumnSchema],
+        rows: [ReportColumnSchema],
     },
     recordLimit: Number,
-    xkeys: [ ReportColumnSchema ],
-    ykeys: [ ReportColumnSchema ],
+    xkeys: [ReportColumnSchema],
+    ykeys: [ReportColumnSchema],
 });
 
 var ReportsSchema = new mongoose.Schema({

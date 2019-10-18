@@ -373,7 +373,7 @@ class SqlQueryBuilder {
             let lwday;
 
             switch (filter.criterion.datePattern) {
-            case '#WST-TODAY#':
+            case '#WST-TODAY#': {
                 firstDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
                 const tomorrow = new Date(today);
                 tomorrow.setDate(today.getDate() + 1);
@@ -383,8 +383,9 @@ class SqlQueryBuilder {
 
                 lastDate = new Date(year1 + '-' + month1 + '-' + day1 + 'T00:00:00.000Z');
                 break;
+            }
 
-            case '#WST-YESTERDAY#':
+            case '#WST-YESTERDAY#': {
                 lastDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
                 const yesterday = new Date(today);
                 yesterday.setDate(today.getDate() - 1);
@@ -394,6 +395,7 @@ class SqlQueryBuilder {
 
                 firstDate = new Date(year1 + '-' + month1 + '-' + day1 + 'T00:00:00.000Z');
                 break;
+            }
 
             case '#WST-THISWEEK#': // TODO: first day monday instead sunday
                 curr = new Date(); // get current date

@@ -50,13 +50,13 @@ describe('pivot', function () {
                 selectedLayerID: 'foo',
                 properties: {
                     pivotKeys: {
-                        columns: [ column ],
-                        rows: [ row ],
+                        columns: [column],
+                        rows: [row],
                     },
-                    ykeys: [ ykey ],
+                    ykeys: [ykey],
                 },
                 query: {
-                    columns: [ column, row, ykey ],
+                    columns: [column, row, ykey],
                 },
             };
             const rows = [

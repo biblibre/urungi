@@ -60,10 +60,10 @@ describe('ImportController', function () {
             expect(vm.step).toBe(1);
 
             const fileContent = JSON.stringify({
-                reports: [ getReport() ],
-                dashboards: [ getDashboard() ],
-                layers: [ getLayer() ],
-                datasources: [ getDatasource() ],
+                reports: [getReport()],
+                dashboards: [getDashboard()],
+                layers: [getLayer()],
+                datasources: [getDatasource()],
             });
             const file = new File([fileContent], 'export.json');
 
@@ -86,10 +86,10 @@ describe('ImportController', function () {
                 fakedatasourceid: getDatasource(),
             });
             expect(vm.importBundle).toEqual({
-                layers: [ { valid: true, errors: [], exists: true, doc: getLayer() } ],
-                reports: [ { valid: true, errors: [], exists: true, doc: getReport() } ],
-                dashboards: [ { valid: true, errors: [], exists: true, doc: getDashboard() } ],
-                datasources: [ { doc: getDatasource() } ],
+                layers: [{ valid: true, errors: [], exists: true, doc: getLayer() }],
+                reports: [{ valid: true, errors: [], exists: true, doc: getReport() }],
+                dashboards: [{ valid: true, errors: [], exists: true, doc: getDashboard() }],
+                datasources: [{ doc: getDatasource() }],
             });
             expect(vm.importProgressValue).toBe(0);
             expect(vm.importProgressMax).toBe(100);
@@ -199,7 +199,7 @@ describe('ImportController', function () {
                 result: 1,
                 page: 1,
                 pages: 1,
-                items: [ getDatasource() ],
+                items: [getDatasource()],
             };
         }
     });

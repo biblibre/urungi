@@ -12,7 +12,7 @@ async function login (app, username = 'administrator', password = 'urungi') {
     const xsrfToken = cookies['XSRF-TOKEN'].value;
     const headers = {
         'X-XSRF-TOKEN': xsrfToken,
-        'Cookie': cookie,
+        Cookie: cookie,
     };
 
     await request(app).post('/api/login')

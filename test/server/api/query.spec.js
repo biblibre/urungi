@@ -58,88 +58,88 @@ const testData = [
         ],
         tableData: [
             {
-                'id': 0,
-                'name': 'amethyst',
-                'colour': 'purple',
-                'isFusion': false
+                id: 0,
+                name: 'amethyst',
+                colour: 'purple',
+                isFusion: false
             },
             {
-                'id': 1,
-                'name': 'pearl',
-                'colour': 'white',
-                'isFusion': false
+                id: 1,
+                name: 'pearl',
+                colour: 'white',
+                isFusion: false
             },
             {
-                'id': 2,
-                'name': 'garnet',
-                'colour': 'purple',
-                'isFusion': true
+                id: 2,
+                name: 'garnet',
+                colour: 'purple',
+                isFusion: true
             },
             {
-                'id': 3,
-                'name': 'peridot',
-                'colour': 'green',
-                'isFusion': false
+                id: 3,
+                name: 'peridot',
+                colour: 'green',
+                isFusion: false
             },
             {
-                'id': 4,
-                'name': 'Lapis-Lazuli',
-                'colour': 'blue',
-                'isFusion': false
+                id: 4,
+                name: 'Lapis-Lazuli',
+                colour: 'blue',
+                isFusion: false
             },
             {
-                'id': 5,
-                'name': 'Sugalite',
-                'colour': 'purple',
-                'isFusion': true
+                id: 5,
+                name: 'Sugalite',
+                colour: 'purple',
+                isFusion: true
             },
             {
-                'id': 6,
-                'name': 'Sardonyx',
-                'colour': 'purple',
-                'isFusion': true
+                id: 6,
+                name: 'Sardonyx',
+                colour: 'purple',
+                isFusion: true
             },
             {
-                'id': 7,
-                'name': 'Opal',
-                'colour': 'blue',
-                'isFusion': true
+                id: 7,
+                name: 'Opal',
+                colour: 'blue',
+                isFusion: true
             },
             {
-                'id': 8,
-                'name': 'Jasper',
-                'colour': 'yellow',
-                'isFusion': false
+                id: 8,
+                name: 'Jasper',
+                colour: 'yellow',
+                isFusion: false
             },
             {
-                'id': 9,
-                'name': 'Malachite',
-                'colour': 'green',
-                'isFusion': true
+                id: 9,
+                name: 'Malachite',
+                colour: 'green',
+                isFusion: true
             },
             {
-                'id': 10,
-                'name': 'Ruby',
-                'colour': 'red',
-                'isFusion': false
+                id: 10,
+                name: 'Ruby',
+                colour: 'red',
+                isFusion: false
             },
             {
-                'id': 11,
-                'name': 'Saphire',
-                'colour': 'blue',
-                'isFusion': false
+                id: 11,
+                name: 'Saphire',
+                colour: 'blue',
+                isFusion: false
             },
             {
-                'id': 101,
-                'name': 'Steven',
-                'colour': 'pink',
-                'isFusion': false
+                id: 101,
+                name: 'Steven',
+                colour: 'pink',
+                isFusion: false
             },
             {
-                'id': 103,
-                'name': 'Stevonie',
-                'colour': 'pink',
-                'isFusion': true
+                id: 103,
+                name: 'Stevonie',
+                colour: 'pink',
+                isFusion: true
             },
 
         ]
@@ -174,27 +174,27 @@ const testData = [
         ],
         tableData: [
             {
-                'id': 101,
-                'name': 'Steven',
-                'age': 14,
-                'isFusion': false
+                id: 101,
+                name: 'Steven',
+                age: 14,
+                isFusion: false
             },
             {
-                'id': 102,
-                'name': 'Connie',
-                'age': 12,
-                'isFusion': false
+                id: 102,
+                name: 'Connie',
+                age: 12,
+                isFusion: false
             },
             {
-                'id': 103,
-                'name': 'Stevonie',
-                'isFusion': true
+                id: 103,
+                name: 'Stevonie',
+                isFusion: true
             },
             {
-                'id': 104,
-                'name': 'Greg',
-                'age': 40,
-                'isFusion': false
+                id: 104,
+                name: 'Greg',
+                age: 40,
+                isFusion: false
             },
 
         ]
@@ -224,54 +224,54 @@ const testData = [
         ],
         tableData: [
             {
-                'id': 7,
-                'name': 'whip',
-                'gemId': 0
+                id: 7,
+                name: 'whip',
+                gemId: 0
             },
             {
-                'id': 15,
-                'name': 'fists',
-                'gemId': 2
+                id: 15,
+                name: 'fists',
+                gemId: 2
             },
             {
-                'id': 16,
-                'name': 'fist',
-                'gemId': 10
+                id: 16,
+                name: 'fist',
+                gemId: 10
             },
             {
-                'id': 834,
-                'name': 'spear',
-                'gemId': 1
+                id: 834,
+                name: 'spear',
+                gemId: 1
             },
             {
-                'id': 12,
-                'name': 'helmet',
-                'gemId': 8
+                id: 12,
+                name: 'helmet',
+                gemId: 8
             },
             {
-                'id': 4,
-                'name': 'Telkinesis; Depression',
-                'gemId': 4
+                id: 4,
+                name: 'Telkinesis; Depression',
+                gemId: 4
             },
             {
-                'id': 206,
-                'name': 'Shield',
-                'gemId': 101
+                id: 206,
+                name: 'Shield',
+                gemId: 101
             },
             {
-                'id': 206,
-                'name': 'Sword',
-                'gemId': 102
+                id: 206,
+                name: 'Sword',
+                gemId: 102
             },
             {
-                'id': 206,
-                'name': 'Shield',
-                'gemId': 103
+                id: 206,
+                name: 'Shield',
+                gemId: 103
             },
             {
-                'id': 206,
-                'name': 'Sword',
-                'gemId': 103
+                id: 206,
+                name: 'Sword',
+                gemId: 103
             }
         ]
     },
@@ -300,44 +300,44 @@ const testData = [
         ],
         tableData: [
             {
-                'id': 'ijosd3-qs2dqo98k-qs',
-                'title': 'Laser Light Canon',
-                'publishDate': new Date('2013-12-04')
+                id: 'ijosd3-qs2dqo98k-qs',
+                title: 'Laser Light Canon',
+                publishDate: new Date('2013-12-04')
             },
             {
-                'id': 'oudh7khs-54fdt12-s',
-                'title': 'Steven\'s Lion',
-                'publishDate': new Date('2014-02-27')
+                id: 'oudh7khs-54fdt12-s',
+                title: 'Steven\'s Lion',
+                publishDate: new Date('2014-02-27')
             },
             {
-                'id': 'oijs7g2-dgc09-qjds',
-                'title': 'Giant Woman',
-                'publishDate': new Date('2014-03-24')
+                id: 'oijs7g2-dgc09-qjds',
+                title: 'Giant Woman',
+                publishDate: new Date('2014-03-24')
             },
             {
-                'id': 'ipjqd56-ftfls2-4',
-                'title': 'Jail Break',
-                'publishDate': new Date('2015-05-12')
+                id: 'ipjqd56-ftfls2-4',
+                title: 'Jail Break',
+                publishDate: new Date('2015-05-12')
             },
             {
-                'id': 'ujsd-2-sijd67jisql',
-                'title': 'Full Disclosure',
-                'publishDate': new Date('2015-05-13')
+                id: 'ujsd-2-sijd67jisql',
+                title: 'Full Disclosure',
+                publishDate: new Date('2015-05-13')
             },
             {
-                'id': 'okpsd123-hidsi77-d',
-                'title': 'Sworn to the sword',
-                'publishDate': new Date('2015-07-15')
+                id: 'okpsd123-hidsi77-d',
+                title: 'Sworn to the sword',
+                publishDate: new Date('2015-07-15')
             },
             {
-                'id': 'nfsujis7_dyiq-2',
-                'title': 'It could\'ve been great',
-                'publishDate': new Date('2016-02-06')
+                id: 'nfsujis7_dyiq-2',
+                title: 'It could\'ve been great',
+                publishDate: new Date('2016-02-06')
             },
             {
-                'id': 'ojoqjdo0099098',
-                'title': 'The question',
-                'publishDate': new Date('2018-07-04')
+                id: 'ojoqjdo0099098',
+                title: 'The question',
+                publishDate: new Date('2018-07-04')
             }
         ]
     },
@@ -372,40 +372,40 @@ const testData = [
         ],
         tableData: [
             {
-                'id': 0,
-                'Title': 'You do it for him',
-                'episodeId': 'okpsd123-hidsi77-d',
-                'singerId': 1
+                id: 0,
+                Title: 'You do it for him',
+                episodeId: 'okpsd123-hidsi77-d',
+                singerId: 1
             },
             {
-                'id': 1,
-                'Title': 'Stronger than you',
-                'episodeId': 'ipjqd56-ftfls2-4',
-                'singerId': 2
+                id: 1,
+                Title: 'Stronger than you',
+                episodeId: 'ipjqd56-ftfls2-4',
+                singerId: 2
             },
             {
-                'id': 2,
-                'Title': 'Full disclosure',
-                'episodeId': 'ujsd-2-sijd67jisql',
-                'singerId': 101
+                id: 2,
+                Title: 'Full disclosure',
+                episodeId: 'ujsd-2-sijd67jisql',
+                singerId: 101
             },
             {
-                'id': 3,
-                'Title': 'Peace and love',
-                'episodeId': 'nfsujis7_dyiq-2',
-                'singerId': 3
+                id: 3,
+                Title: 'Peace and love',
+                episodeId: 'nfsujis7_dyiq-2',
+                singerId: 3
             },
             {
-                'id': 4,
-                'Title': 'Ruby rider',
-                'episodeId': 'ojoqjdo0099098',
-                'singerId': 10
+                id: 4,
+                Title: 'Ruby rider',
+                episodeId: 'ojoqjdo0099098',
+                singerId: 10
             },
             {
-                'id': 5,
-                'Title': 'Giant Woman',
-                'episodeId': 'oijs7g2-dgc09-qjds',
-                'singerId': 101
+                id: 5,
+                Title: 'Giant Woman',
+                episodeId: 'oijs7g2-dgc09-qjds',
+                singerId: 101
             },
         ]
     }
@@ -501,10 +501,10 @@ describe('Queries and data access', function () {
             // eslint-disable-next-line jest/valid-describe
             describe(datasource.name, function () {
                 const knexClientsByDatasourceType = {
-                    'MySQL': 'mysql',
-                    'POSTGRE': 'pg',
-                    'ORACLE': 'oracledb',
-                    'MSSQL': 'mssql',
+                    MySQL: 'mysql',
+                    POSTGRE: 'pg',
+                    ORACLE: 'oracledb',
+                    MSSQL: 'mssql',
                 };
 
                 const entries = [];
@@ -700,7 +700,7 @@ describe('Queries and data access', function () {
 
                         schema.elements.sort(compareOn(a => a.elementName));
 
-                        const sourceData = testDataRef['gems'].tableColumns.map((item) => ({
+                        const sourceData = testDataRef.gems.tableColumns.map((item) => ({
                             elementName: item.columnName,
                             elementType: item.elementType,
                             type: item.type,
@@ -737,7 +737,7 @@ describe('Queries and data access', function () {
                             .expect(200);
                         const data = res.body.data;
 
-                        const sourceData = testDataRef['gems'].tableData;
+                        const sourceData = testDataRef.gems.tableData;
 
                         expect(data).toHaveLength(sourceData.length);
                         expect(data[0]).toHaveProperty('namefield');
@@ -862,7 +862,7 @@ describe('Queries and data access', function () {
                             .expect(200);
                         const data = res.body.data;
 
-                        var sourceData = testDataRef['gems'].tableData.filter(() => true).sort(compareOn(a => a.colour)).reduce((acc, cur) => {
+                        var sourceData = testDataRef.gems.tableData.filter(() => true).sort(compareOn(a => a.colour)).reduce((acc, cur) => {
                             if (acc.length > 0 && cur.colour === acc[acc.length - 1].colour) {
                                 acc[acc.length - 1].count += 1;
                             } else {
@@ -1098,7 +1098,7 @@ describe('Queries and data access', function () {
                             .expect(200);
                         const data = res.body.data;
 
-                        const sourceData = testDataRef['episodes'].tableData
+                        const sourceData = testDataRef.episodes.tableData
                             .filter((item) => (item.publishDate.getTime() !== (new Date('2014-03-24')).getTime()))
                             .sort(compareOn(a => a.publishDate));
 
@@ -1152,17 +1152,17 @@ describe('Queries and data access', function () {
 
                         const sourceData = [];
 
-                        for (const i1 of testDataRef['weapons'].tableData) {
-                            for (const i2 of testDataRef['gems'].tableData) {
+                        for (const i1 of testDataRef.weapons.tableData) {
+                            for (const i2 of testDataRef.gems.tableData) {
                                 if (i1.gemId === i2.id) {
-                                    for (const i3 of testDataRef['songs'].tableData) {
+                                    for (const i3 of testDataRef.songs.tableData) {
                                         if (i3.singerId === i2.id) {
-                                            for (const i4 of testDataRef['episodes'].tableData) {
+                                            for (const i4 of testDataRef.episodes.tableData) {
                                                 if (i3.episodeId === i4.id) {
                                                     sourceData.push({
-                                                        'gemweapon': i1.name,
-                                                        'episodetitle': i4.title,
-                                                        'wid': i1.id
+                                                        gemweapon: i1.name,
+                                                        episodetitle: i4.title,
+                                                        wid: i1.id
                                                     });
                                                 }
                                             }
@@ -1230,7 +1230,7 @@ describe('Queries and data access', function () {
                             .expect(200);
                         const data = res.body.data;
 
-                        const sourceData = testDataRef['gems'].tableData.map((item) => ({ gemvalue: (item.id + 1), gemname: item.name }));
+                        const sourceData = testDataRef.gems.tableData.map((item) => ({ gemvalue: (item.id + 1), gemname: item.name }));
 
                         data.sort(compareOn(a => a.gemvalue));
                         sourceData.sort(compareOn(a => a.gemvalue));
@@ -1416,44 +1416,44 @@ describe('Queries and data access', function () {
 
                         expect(data).toEqual([
                             {
-                                'charname': 'pearl',
-                                'episodetitle': 'Sworn to the sword',
-                                'fusion': _false,
-                                'id': 1,
-                                'song': 'You do it for him',
-                                'weapon': 'spear',
+                                charname: 'pearl',
+                                episodetitle: 'Sworn to the sword',
+                                fusion: _false,
+                                id: 1,
+                                song: 'You do it for him',
+                                weapon: 'spear',
                             },
                             {
-                                'charname': 'garnet',
-                                'episodetitle': 'Jail Break',
-                                'fusion': _true,
-                                'id': 2,
-                                'song': 'Stronger than you',
-                                'weapon': 'fists',
+                                charname: 'garnet',
+                                episodetitle: 'Jail Break',
+                                fusion: _true,
+                                id: 2,
+                                song: 'Stronger than you',
+                                weapon: 'fists',
                             },
                             {
-                                'charname': 'Ruby',
-                                'episodetitle': 'The question',
-                                'fusion': _false,
-                                'id': 10,
-                                'song': 'Ruby rider',
-                                'weapon': 'fist',
+                                charname: 'Ruby',
+                                episodetitle: 'The question',
+                                fusion: _false,
+                                id: 10,
+                                song: 'Ruby rider',
+                                weapon: 'fist',
                             },
                             {
-                                'charname': 'Steven',
-                                'episodetitle': 'Full Disclosure',
-                                'fusion': _false,
-                                'id': 101,
-                                'song': 'Full disclosure',
-                                'weapon': 'Shield',
+                                charname: 'Steven',
+                                episodetitle: 'Full Disclosure',
+                                fusion: _false,
+                                id: 101,
+                                song: 'Full disclosure',
+                                weapon: 'Shield',
                             },
                             {
-                                'charname': 'Steven',
-                                'episodetitle': 'Giant Woman',
-                                'fusion': _false,
-                                'id': 101,
-                                'song': 'Giant Woman',
-                                'weapon': 'Shield',
+                                charname: 'Steven',
+                                episodetitle: 'Giant Woman',
+                                fusion: _false,
+                                id: 101,
+                                song: 'Giant Woman',
+                                weapon: 'Shield',
                             }
                         ]);
                     });
@@ -1508,22 +1508,22 @@ function compareOn (f, inverse) {
 function jsTypeFromDbType (client, dbType) {
     const jsTypes = {
         MySQL: {
-            'boolean': 'number',
-            'integer': 'number',
-            'string': 'string',
-            'date': 'date',
+            boolean: 'number',
+            integer: 'number',
+            string: 'string',
+            date: 'date',
         },
         POSTGRE: {
-            'boolean': 'boolean',
-            'integer': 'number',
-            'string': 'string',
-            'date': 'date',
+            boolean: 'boolean',
+            integer: 'number',
+            string: 'string',
+            date: 'date',
         },
         MSSQL: {
-            'boolean': 'boolean',
-            'integer': 'number',
-            'string': 'string',
-            'date': 'date',
+            boolean: 'boolean',
+            integer: 'number',
+            string: 'string',
+            date: 'date',
         },
     };
 

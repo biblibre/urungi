@@ -351,8 +351,8 @@ exports.getUserOtherData = function (req, res) {
 
 exports.getUserObjects = async function (req, res) {
     const query = {
-        'companyID': req.user.companyID,
-        'nd_trash_deleted': false
+        companyID: req.user.companyID,
+        nd_trash_deleted: false
     };
     const company = await Companies.findOne(query).exec();
 
@@ -366,8 +366,8 @@ exports.getUserObjects = async function (req, res) {
         if (req.user.roles.length > 0) {
             const Roles = mongoose.model('Roles');
             const query = {
-                '_id': { '$in': req.user.roles },
-                'companyID': req.user.companyID
+                _id: { $in: req.user.roles },
+                companyID: req.user.companyID
             };
             const roles = await Roles.find(query).lean().exec();
 
@@ -475,10 +475,10 @@ async function getReportsForFolder (idfolder, grant) {
         const Reports = mongoose.model('Reports');
 
         const query = {
-            'nd_trash_deleted': false,
-            'companyID': 'COMPID',
-            'parentFolder': idfolder,
-            'isShared': true
+            nd_trash_deleted: false,
+            companyID: 'COMPID',
+            parentFolder: idfolder,
+            isShared: true
         };
         const projection = { reportName: 1, reportType: 1, reportDescription: 1 };
 
@@ -503,10 +503,10 @@ async function getDashboardsForFolder (idfolder, grant) {
         const Dashboards = mongoose.model('Dashboardsv2');
 
         const query = {
-            'nd_trash_deleted': false,
-            'companyID': 'COMPID',
-            'parentFolder': idfolder,
-            'isShared': true
+            nd_trash_deleted: false,
+            companyID: 'COMPID',
+            parentFolder: idfolder,
+            isShared: true
         };
         const projection = { dashboardName: 1, dashboardDescription: 1 };
 
@@ -538,20 +538,24 @@ exports.getUserLastExecutions = function (req, res) {
     if (req.user.isAdmin()) {
         find = { action: 'execute' };
     } else {
-        find = { '$and': [{ userID: '' + req.user._id + '' }, { action: 'execute' }] };
+        find = { $and: [{ userID: '' + req.user._id + '' }, { action: 'execute' }] };
     }
 
     // Last executions
 
     statistics.aggregate([
         { $match: find },
-        { $group: {
-            _id: { relationedID: '$relationedID',
-                type: '$type',
-                relationedName: '$relationedName',
-                action: '$action' },
-            lastDate: { $max: '$createdOn' }
-        } },
+        {
+            $group: {
+                _id: {
+                    relationedID: '$relationedID',
+                    type: '$type',
+                    relationedName: '$relationedName',
+                    action: '$action'
+                },
+                lastDate: { $max: '$createdOn' }
+            }
+        },
         { $sort: { lastDate: -1 } }
     ], function (err, lastExecutions) {
         if (err) {
@@ -561,13 +565,17 @@ exports.getUserLastExecutions = function (req, res) {
 
         statistics.aggregate([
             { $match: find },
-            { $group: {
-                _id: { relationedID: '$relationedID',
-                    type: '$type',
-                    relationedName: '$relationedName',
-                    action: '$action' },
-                count: { $sum: 1 }
-            } },
+            {
+                $group: {
+                    _id: {
+                        relationedID: '$relationedID',
+                        type: '$type',
+                        relationedName: '$relationedName',
+                        action: '$action'
+                    },
+                    count: { $sum: 1 }
+                }
+            },
             { $sort: { count: -1 } }
         ], function (err, mostExecuted) {
             if (err) {
