@@ -1,18 +1,18 @@
 # Urungi
 
-Lightweight Business Intelligence tool for reporting PostgreSQL, MySQL
-and others, see [Supported databases](#supported-databases)
+Lightweight open source software that allows you to create statistics and dashboards freely regardless of your data source. http://urungi.org
 
 [![Travis (.org) branch](https://img.shields.io/travis/biblibre/urungi/master.svg)](https://travis-ci.org/biblibre/urungi)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/biblibre/urungi.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/biblibre/urungi/context:javascript)
 
-## Supported databases
+## Introduction
 
-- PostgreSQL
-- MySQL
-- MS SQL Server
-- Oracle
+* Centralize:  Connect Urungi with any SQL data source. All your stats will end up in one place.
+* Analyze: Explore and define your views and reports on your data according to your needs and the expectations of your users.
+* Share: Create dashboards to visualize and display your data.
+* Supported databases - PostgreSQL, MySQL, MS SQL Server, Oracle
 
+![Urungi 2019](doc/images/urungi-2019.gif)
 
 ## Requirements
 
