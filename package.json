@@ -33,7 +33,7 @@
     "ejs": "^2.7.1",
     "email-templates": "^6.0.3",
     "express": "^4.17.1",
-    "express-session": "^1.16.2",
+    "express-session": "^1.17.0",
     "font-awesome": "^4.7.0",
     "intro.js": "^2.9.3",
     "jquery": "^3.4.1",
