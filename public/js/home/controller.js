@@ -204,13 +204,13 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'mom
 
         for (var l in data.items.theLastExecutions) {
             if (l < 10) {
-                data.items.theLastExecutions[l]._id['lastDate'] = moment(data.items.theLastExecutions[l].lastDate).fromNow();
+                data.items.theLastExecutions[l]._id.lastDate = moment(data.items.theLastExecutions[l].lastDate).fromNow();
                 $scope.lastExecutions.push(data.items.theLastExecutions[l]._id);
             }
         }
         for (var m in data.items.theMostExecuted) {
             if (m < 10) {
-                data.items.theMostExecuted[m]._id['count'] = data.items.theMostExecuted[m].count;
+                data.items.theMostExecuted[m]._id.count = data.items.theMostExecuted[m].count;
                 $scope.mostExecutions.push(data.items.theMostExecuted[m]._id);
             }
         }

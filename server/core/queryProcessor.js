@@ -26,26 +26,24 @@ exports.execute = async function (query) {
     var Db;
     var db;
 
-    switch (dts.type) {
-    case 'MySQL': case 'POSTGRE': case 'ORACLE': case 'MSSQL':
-
-        Db = require('./connection').Db;
-
-        db = new Db(dts, warnings);
-        const result = await db.runQuery(processedQuery);
-
-        if (result.result !== 1) {
-            console.log(result.msg);
-        }
-
-        db.close();
-
-        result.warnings = warnings;
-        return result;
-
-    default:
+    const validTypes = ['MySQL', 'POSTGRE', 'ORACLE', 'MSSQL'];
+    if (!validTypes.includes(dts.type)) {
         throw new Error('Invalid datasource type : ' + dts.type);
     }
+
+    Db = require('./connection').Db;
+
+    db = new Db(dts, warnings);
+    const result = await db.runQuery(processedQuery);
+
+    if (result.result !== 1) {
+        console.log(result.msg);
+    }
+
+    db.close();
+
+    result.warnings = warnings;
+    return result;
 };
 
 function processQuery (query, queryLayer, warnings) {

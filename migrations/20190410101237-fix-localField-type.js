@@ -7,10 +7,10 @@ module.exports = {
         reports.forEach(report => {
             var layerID = report.selectedLayerID;
             operations.push({
-                'updateOne': {
-                    'filter': { '_id': report._id },
-                    'update': {
-                        '$set': { 'selectedLayerID': ObjectID(layerID) }
+                updateOne: {
+                    filter: { _id: report._id },
+                    update: {
+                        $set: { selectedLayerID: ObjectID(layerID) }
                     }
                 }
             });
@@ -28,10 +28,10 @@ module.exports = {
         reports.forEach(report => {
             var layerID = report.selectedLayerID;
             operations.push({
-                'updateOne': {
-                    'filter': { '_id': report._id },
-                    'update': {
-                        '$set': { 'selectedLayerID': String(layerID) }
+                updateOne: {
+                    filter: { _id: report._id },
+                    update: {
+                        $set: { selectedLayerID: String(layerID) }
                     }
                 }
             });

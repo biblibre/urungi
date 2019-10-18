@@ -50,7 +50,7 @@ class Controller {
 
             sortField[req.query.sort] = Number(sortField[req.query.sort]);
 
-            params['sort'] = sortField;
+            params.sort = sortField;
         }
 
         if (fieldsToGet) {
@@ -67,21 +67,21 @@ class Controller {
 
         if (req.query.trash) {
             var trashField = {};
-            trashField['nd_trash_deleted'] = false;
+            trashField.nd_trash_deleted = false;
 
             mandatoryFilters.push(trashField);
         }
 
         if (req.query.userid) {
             var userField = {};
-            userField['user_id'] = req.user._id;
+            userField.user_id = req.user._id;
 
             mandatoryFilters.push(userField);
         }
 
         if (req.query.companyid) {
             var companyField = {};
-            companyField['companyID'] = req.user.companyID;
+            companyField.companyID = req.user.companyID;
 
             mandatoryFilters.push(companyField);
         }
@@ -180,7 +180,8 @@ class Controller {
         var user = (req.isAuthenticated()) ? req.user.username : 'unsigned user';
         if (!data.nd_history) data.nd_history = [];
 
-        data.nd_history.push({ text: 'Created on ' + new Date() + ' by ' + user,
+        data.nd_history.push({
+            text: 'Created on ' + new Date() + ' by ' + user,
             user_id: (req.isAuthenticated()) ? req.user._id : null,
             user_name: (req.isAuthenticated()) ? req.user.username : null,
             user_companyID: (req.isAuthenticated()) ? req.user.companyID : null,
@@ -282,32 +283,32 @@ class Controller {
 function generateFindFields (req, id) {
     var mandatoryFilters = [];
     var idField = {};
-    idField['_id'] = id;
+    idField._id = id;
 
     mandatoryFilters.push(idField);
 
     if (req.query.trash) {
         var trashField = {};
-        trashField['nd_trash_deleted'] = false;
+        trashField.nd_trash_deleted = false;
 
         mandatoryFilters.push(trashField);
     }
 
     if (req.query.userid) {
         var userField = {};
-        userField['user_id'] = req.user._id;
+        userField.user_id = req.user._id;
 
         mandatoryFilters.push(userField);
     }
 
     if (req.query.companyid) {
         var companyField = {};
-        companyField['companyID'] = req.user.companyID;
+        companyField.companyID = req.user.companyID;
 
         mandatoryFilters.push(companyField);
     }
 
-    return { '$and': mandatoryFilters };
+    return { $and: mandatoryFilters };
 }
 
 module.exports = Controller;

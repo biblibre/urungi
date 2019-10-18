@@ -78,13 +78,13 @@ function authenticate (passport, Users, req, res, next) {
             res.status(401).send(info.message);
         } else {
             var loginData = {
-                'last_login_date': new Date(),
-                'last_login_ip': req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress
+                last_login_date: new Date(),
+                last_login_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress
             };
 
             if (req.body.remember_me) {
                 var token = ((Math.random() * Math.pow(36, 10) << 0).toString(36)).substr(-8);
-                loginData['accessToken'] = token;
+                loginData.accessToken = token;
                 res.cookie('remember_me', token, { path: '/', httpOnly: true, maxAge: 604800000 }); // 7 days
             }
 
@@ -101,7 +101,7 @@ function authenticate (passport, Users, req, res, next) {
                     user.companyData = company;
 
                     Users.updateOne({
-                        '_id': user._id
+                        _id: user._id
                     }, {
                         $set: loginData
                     }, function (err) {

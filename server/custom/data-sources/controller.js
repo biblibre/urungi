@@ -53,22 +53,16 @@ exports.getEntities = async function (req, res) {
 exports.testConnection = async function (req, res) {
     req.body.companyID = req.user.companyID;
 
-    switch (req.body.type) {
-    case 'MySQL' : case 'POSTGRE': case 'ORACLE': case 'MSSQL':
+    const validTypes = ['MySQL', 'POSTGRE', 'ORACLE', 'MSSQL'];
+    if (!validTypes.includes(req.body.type)) {
+        return res.status(200).json({ result: 0, msg: 'Invalid database type' });
+    }
 
-        const connectionParams = req.body;
+    const connectionParams = req.body;
+    const con = require('../../core/connection');
+    const result = await con.testConnection(connectionParams);
 
-        const con = require('../../core/connection');
-
-        const result = await con.testConnection(connectionParams);
-
-        res.status(200).json(result);
-        break;
-
-    default:
-        res.status(200).json({ result: 0, msg: 'Invalid database type' });
-        break;
-    };
+    res.status(200).json(result);
 };
 
 exports.getEntitySchema = async function (req, res) {
@@ -92,30 +86,26 @@ exports.getEntitySchema = async function (req, res) {
 
     var collectionSchema;
 
-    switch (dts.type) {
-    case 'POSTGRE': case 'MySQL': case 'ORACLE': case 'MSSQL':
-
-        const db = new Db(dts);
-
-        const rawSchema = await db.getSchema(theEntity);
-
-        if (rawSchema.result !== 1) {
-            res.status(200).json(rawSchema);
-            db.close();
-            return;
-        }
-
-        collectionSchema = processCollectionSchema(theEntity, rawSchema.items);
-
-        db.close();
-
-        res.status(200).json({ result: 1, schema: collectionSchema });
-
-        break;
-
-    default:
-        res.status(200).json({ result: 0, msg: 'Invalid database type' });
+    const validTypes = ['MySQL', 'POSTGRE', 'ORACLE', 'MSSQL'];
+    if (!validTypes.includes(dts.type)) {
+        return res.status(200).json({ result: 0, msg: 'Invalid database type' });
     }
+
+    const db = new Db(dts);
+
+    const rawSchema = await db.getSchema(theEntity);
+
+    if (rawSchema.result !== 1) {
+        res.status(200).json(rawSchema);
+        db.close();
+        return;
+    }
+
+    collectionSchema = processCollectionSchema(theEntity, rawSchema.items);
+
+    db.close();
+
+    res.status(200).json({ result: 1, schema: collectionSchema });
 };
 
 exports.getsqlQuerySchema = async function (req, res) {

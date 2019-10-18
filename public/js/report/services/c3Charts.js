@@ -229,12 +229,7 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
                 }
             };
 
-            const hasNegativeValues = theData.some(row => {
-                return theValues.some(key => {
-                    return row[key] < 0;
-                });
-            });
-            if (hasNegativeValues) {
+            if (hasNegativeValues(theData, theValues)) {
                 c3Config.grid = {
                     y: {
                         lines: [
@@ -252,6 +247,14 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
             chart.chartCanvas.flush();
         });
     };
+
+    function hasNegativeValues (data, values) {
+        return data.some(row => {
+            return values.some(key => {
+                return row[key] < 0;
+            });
+        });
+    }
 
     this.changeStack = function (chart) {
         var theGroups = [];

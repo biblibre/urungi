@@ -61,7 +61,7 @@ logsSchema.statics.adminFindAll = function (req, done) {
     var find = {};
     var searchText = (req.query.search) ? req.query.search : false;
 
-    if (searchText) { find = { $or: [ { text: { $regex: searchText } }, { user_id: { $regex: searchText } } ] }; }
+    if (searchText) { find = { $or: [{ text: { $regex: searchText } }, { user_id: { $regex: searchText } }] }; }
 
     this.find(find, {}, { skip: (page - 1) * perPage, limit: perPage, sort: { created: -1 } }, function (err, logs) {
         if (err) throw err;

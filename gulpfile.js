@@ -22,14 +22,14 @@ const dist = gulp.parallel(
 );
 
 module.exports = {
-    'default': dist,
-    'dist': dist,
+    default: dist,
+    dist: dist,
     'dist:js': dist_js,
     'dist:css': dist_css,
     'dist:fonts': dist_fonts,
     'dist:translations': dist_translations,
     'dist:templates': dist_templates,
-    'pot': pot,
+    pot: pot,
     'po:update': gulp.series(pot, po_update),
     'watch:templates': watch_templates,
 };

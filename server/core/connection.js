@@ -74,12 +74,12 @@ Db.prototype.getCollections = async function () {
     case 'ORACLE':
         query = (knex) =>
             knex.select({
-                'table_schema': knex.raw('user'),
-                'name': 'TABLE_NAME'
+                table_schema: knex.raw('user'),
+                name: 'TABLE_NAME'
             }).from('USER_TABLES').unionAll(function () {
                 this.select({
-                    'table_schema': knex.raw('user'),
-                    'name': 'VIEW_NAME'
+                    table_schema: knex.raw('user'),
+                    name: 'VIEW_NAME'
                 }).from('USER_VIEWS');
             }).orderBy('name');
 

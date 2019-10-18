@@ -87,7 +87,7 @@ exports.LayersDelete = function (req, res) {
 
     Reports.find({ selectedLayerID: data._id }).then(function (reports) {
         if (reports.length === 0) {
-            Dashboardsv2.find({ 'reports.selectedLayerID': data._id, 'nd_trash_deleted': false }).then(function (dashboard) {
+            Dashboardsv2.find({ 'reports.selectedLayerID': data._id, nd_trash_deleted: false }).then(function (dashboard) {
                 if (dashboard.length === 0) {
                     if (!req.user.isAdmin()) {
                         var Layers = mongoose.model('Layers');

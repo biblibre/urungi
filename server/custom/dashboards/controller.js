@@ -22,7 +22,7 @@ exports.DashboardsFindAll = function (req, res) {
 
     var perPage = config.get('pagination.itemsPerPage');
     var page = (req.query.page) ? req.query.page : 1;
-    var find = { '$and': [{ 'nd_trash_deleted': false }, { 'companyID': 'COMPID' }, { owner: req.user._id }] };
+    var find = { $and: [{ nd_trash_deleted: false }, { companyID: 'COMPID' }, { owner: req.user._id }] };
     // var find = {"$and":[{"nd_trash_deleted":false},{"companyID":"COMPID"},{"$or": [{owner: req.user._id},{owner: { $exists: false }}]}]}
     var fields = { dashboardName: 1, owner: 1, isPublic: 1 };
     var params = {};

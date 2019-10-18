@@ -21,7 +21,7 @@
         $scope.loginError = false;
         $scope.errorLoginMessage = '';
         $scope.login = function () {
-            var user = { 'userName': $scope.userName, 'password': $scope.password, 'remember_me': $scope.rememberMe, 'companyID': $('#companyID').attr('value') };
+            var user = { userName: $scope.userName, password: $scope.password, remember_me: $scope.rememberMe, companyID: $('#companyID').attr('value') };
 
             if ($scope.userName !== undefined || $scope.password !== undefined) {
                 $http({ method: 'POST', url: '/api/login', data: user, withCredentials: true })

@@ -35,10 +35,10 @@ module.exports = function (passport) {
         function (user, done) {
             var token = ((Math.random() * Math.pow(36, 10) << 0).toString(36)).substr(-8);
             Users.updateOne({
-                '_id': user.id
+                _id: user.id
             }, {
                 $set: {
-                    'accessToken': token
+                    accessToken: token
                 }
             }, function (err) {
                 if (err) { return done(err); }

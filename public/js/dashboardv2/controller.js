@@ -228,7 +228,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
             case 'textImageLarge':
                 return htmlWidgets.getTextImageLargeHTML();
 
-            case 'report':
+            case 'report': {
                 const report = $scope.selectedDashboard.reports.find(r => r.id === data.reportID);
                 if (!report) {
                     new Noty({ text: gettextCatalog.getString('Could not find report'), type: 'error' }).show();
@@ -239,6 +239,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                     return;
                 }
                 return reportModel.getReportContainerHTML(data.reportID);
+            }
 
             case 'queryFilter':
                 if (angular.element('#PROMPT_' + data.promptID).length) {
@@ -256,7 +257,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
 
                 return htmlWidgets.getTabsHTML(theid, theTabs);
 
-            case 'image':
+            case 'image': {
                 const deferred = $q.defer();
                 $scope.$broadcast('showFileModal', {
                     addFile: function (file) {
@@ -273,6 +274,7 @@ angular.module('app').controller('dashBoardv2Ctrl', function ($scope, $location,
                     }
                 });
                 return deferred.promise;
+            }
 
             case 'video':
                 return htmlWidgets.getVideo();

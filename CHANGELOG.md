@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated ejs to 2.7.1
 - Updated email-templates to 6.0.3
 - Updated eslint to 6.5.1
+- Updated eslint-config-standard to 14.1.0
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 - Removed codecov

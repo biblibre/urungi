@@ -68,10 +68,10 @@ describe('ExportController', function () {
                 const result = JSON.parse(lastBlob.array[0]);
                 return result;
             })).resolves.toEqual({
-                reports: [ getReport() ],
-                dashboards: [ getDashboard() ],
-                layers: [ getLayer() ],
-                datasources: [ getDatasource() ],
+                reports: [getReport()],
+                dashboards: [getDashboard()],
+                layers: [getLayer()],
+                datasources: [getDatasource()],
             });
             $httpBackend.flush();
         });
@@ -90,7 +90,7 @@ describe('ExportController', function () {
                 result: 1,
                 page: 1,
                 pages: 1,
-                items: [ getLayer() ],
+                items: [getLayer()],
             };
         }
 
@@ -114,7 +114,7 @@ describe('ExportController', function () {
                 result: 1,
                 page: 1,
                 pages: 1,
-                items: [ getReport() ],
+                items: [getReport()],
             };
         }
 
@@ -138,7 +138,7 @@ describe('ExportController', function () {
                 result: 1,
                 page: 1,
                 pages: 1,
-                items: [ getDashboard() ],
+                items: [getDashboard()],
             };
         }
 

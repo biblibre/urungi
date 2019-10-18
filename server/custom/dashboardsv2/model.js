@@ -23,7 +23,7 @@ var Dashboardsv2Schema = new mongoose.Schema({
     dashboardDescription: { type: String },
     dashboardType: { type: String },
     html: { type: String },
-    reports: [ DashboardReportSchema ],
+    reports: [DashboardReportSchema],
     items: [],
     backgroundColor: { type: String },
     backgroundImage: { type: String },
