@@ -334,7 +334,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             layerID: $scope.selectedReport.selectedLayerID,
             filterType: 'equal',
             filterPrompt: false,
-            filterTypeLabel: 'equal',
             format: ngModelItem.format,
             values: ngModelItem.values,
             isCustom: ngModelItem.isCustom,
