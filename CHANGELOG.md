@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added subtotal 1.11.0-alpha.0
 - Updated migrate-mongo to 6.0.2
 - Updated mongoose to 5.7.0
+- Updated gulp-angular-gettext to 2.3.0
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 
