@@ -1,4 +1,4 @@
-/* global XLSX: false, Blob: false, datenum: false */
+/* global XLSX: false, datenum: false */
 
 (function () {
     'use strict';
