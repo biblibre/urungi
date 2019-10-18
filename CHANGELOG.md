@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated stylelint-config-standard to 19.0.0
 - Updated set-cookie-parser to 2.4.0
 - Updated pg to 7.12.1
+- Updated nodemailer to 6.3.1
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 
