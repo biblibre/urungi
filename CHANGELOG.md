@@ -38,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated migrate-mongo to 6.0.2
 - Updated mongoose to 5.7.0
 - Updated gulp-angular-gettext to 2.3.0
+- Updated stylelint to 11.1.1
+- Updated stylelint-config-standard to 19.0.0
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 
