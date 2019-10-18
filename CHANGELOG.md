@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated c3 to 0.7.11
 - Updated config to 3.2.3
 - Updated del to 5.1.0
+- Updated ejs to 2.7.1
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 - Removed codecov
