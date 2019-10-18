@@ -57,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated express-session to 1.17.0
 - Updated jsplumb to 2.12.0
 - Updated knex to 0.19.5
+- Updated mongodb-memory-server to 5.2.8
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 - Removed codecov
