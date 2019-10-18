@@ -55,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated eslint-plugin-node to 10.0.0
 - Updated eslint-plugin-standard to 4.0.1
 - Updated express-session to 1.17.0
+- Updated jsplumb to 2.12.0
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 - Removed codecov
