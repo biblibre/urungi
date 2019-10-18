@@ -16,7 +16,7 @@ msgstr ""
 msgid "A header text H3"
 msgstr ""
 
-#: public/js/report/controller.js:929
+#: public/js/report/controller.js:724
 msgid "A query must hold at least one element here to be executed"
 msgstr ""
 
@@ -29,7 +29,7 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: public/js/report/controller.js:881
+#: public/js/report/controller.js:676
 msgid "Access here the different data elements of every layer that you have access on"
 msgstr ""
 
@@ -49,11 +49,11 @@ msgstr ""
 msgid "Activate Filter"
 msgstr ""
 
-#: public/partials/layer/view.html:182
+#: public/partials/layer/view.html:176
 msgid "Add"
 msgstr ""
 
-#: public/partials/layer/view.html:221
+#: public/partials/layer/view.html:215
 msgid "Add SQL"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Add a new role..."
 msgstr ""
 
-#: public/partials/layer/view.html:252
+#: public/partials/layer/view.html:246
 msgid "Add all"
 msgstr ""
 
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: public/js/report/controller.js:919
+#: public/js/report/controller.js:714
 msgid "After building your query, refresh to view the report."
 msgstr ""
 
@@ -141,11 +141,13 @@ msgstr ""
 msgid "Anyone who has the link will be able to see it"
 msgstr ""
 
-#: public/js/report/services/c3Charts.js:308
+#: public/js/report/services/c3Charts.js:292
+#: public/partials/reports/report-column-settings-modal.component.html:43
 msgid "Area"
 msgstr ""
 
-#: public/js/report/services/c3Charts.js:318
+#: public/js/report/services/c3Charts.js:302
+#: public/partials/reports/report-column-settings-modal.component.html:57
 msgid "Area spline"
 msgstr ""
 
@@ -153,7 +155,11 @@ msgstr ""
 msgid "Array values"
 msgstr ""
 
-#: public/js/report/controller.js:909
+#: public/partials/reports/view.html:15
+msgid "As XLSX"
+msgstr ""
+
+#: public/js/report/controller.js:704
 msgid "As you define the query dragging and dropping in the areas above, the results of the query will appear here"
 msgstr ""
 
@@ -194,7 +200,7 @@ msgstr ""
 msgid "Authors"
 msgstr ""
 
-#: public/js/report/controller.js:842
+#: public/js/reports/reports.service.js:12
 msgid "Avg"
 msgstr ""
 
@@ -202,7 +208,7 @@ msgstr ""
 #: public/js/data-sources/data-sources-list.controller.js:29
 #: public/js/home/controller.js:13
 #: public/js/layers/layers-list.controller.js:71
-#: public/js/report/controller.js:870
+#: public/js/report/controller.js:665
 #: public/js/reports/reports-list.controller.js:78
 #: public/js/spaces/controller.js:12
 msgid "Back"
@@ -212,7 +218,8 @@ msgstr ""
 msgid "Back to login"
 msgstr ""
 
-#: public/js/report/services/c3Charts.js:303
+#: public/js/report/services/c3Charts.js:287
+#: public/partials/reports/report-column-settings-modal.component.html:36
 msgid "Bar"
 msgstr ""
 
@@ -224,12 +231,16 @@ msgstr ""
 msgid "Business unit"
 msgstr ""
 
+#: public/partials/reports/report-column-settings-modal.component.html:107
+msgid "Calculate total"
+msgstr ""
+
 #: public/partials/core/delete-modal.html:15
 #: public/partials/core/duplicate-modal.html:12
 #: public/partials/core/share-modal.html:20
-#: public/partials/dashboards/view.html:6
+#: public/partials/dashboards/view.html:14
 #: public/partials/dashboardv2/edit.html:14
-#: public/partials/dashboardv2/edit.html:266
+#: public/partials/dashboardv2/edit.html:257
 #: public/partials/data-sources/edit.html:3
 #: public/partials/layer/addAllModal.html:8
 #: public/partials/layer/elementModal.html:293
@@ -241,8 +252,10 @@ msgstr ""
 #: public/partials/report/edit.html:16
 #: public/partials/report/edit.html:17
 #: public/partials/report/modals/reportNameModal.html:15
+#: public/partials/reports/report-column-settings-modal.component.html:128
+#: public/partials/reports/report-settings-modal.component.html:50
 #: public/partials/reports/reports-import-modal.html:15
-#: public/partials/reports/view.html:7
+#: public/partials/reports/view.html:19
 #: public/partials/roles/roleModal.html:111
 msgid "Cancel"
 msgstr ""
@@ -291,7 +304,7 @@ msgstr ""
 msgid "Click here to cancel and back to the dashboard"
 msgstr ""
 
-#: public/partials/dashboards/view.html:6
+#: public/partials/dashboards/view.html:14
 #: public/partials/dashboardv2/edit.html:14
 #: public/partials/report/edit.html:16
 msgid "Click here to cancel and backtrack"
@@ -379,7 +392,7 @@ msgstr ""
 msgid "Click here to delete the report."
 msgstr ""
 
-#: public/partials/dashboardv2/edit.html:113
+#: public/partials/dashboardv2/edit.html:104
 msgid "Click here to delete this report"
 msgstr ""
 
@@ -387,7 +400,7 @@ msgstr ""
 msgid "Click here to duplicate the report."
 msgstr ""
 
-#: public/partials/dashboardv2/edit.html:116
+#: public/partials/dashboardv2/edit.html:107
 msgid "Click here to edit this report"
 msgstr ""
 
@@ -403,11 +416,11 @@ msgstr ""
 msgid "Click here to modify this dashboard"
 msgstr ""
 
-#: public/partials/report/directives/wstDropzone.html:55
+#: public/partials/reports/report-dropzone.component.html:17
 msgid "Click here to order ascendent using this field"
 msgstr ""
 
-#: public/partials/report/directives/wstDropzone.html:52
+#: public/partials/reports/report-dropzone.component.html:15
 msgid "Click here to order descendent using this field"
 msgstr ""
 
@@ -456,7 +469,7 @@ msgstr ""
 msgid "Click over a report's name to execute it."
 msgstr ""
 
-#: public/js/report/controller.js:901
+#: public/js/report/controller.js:696
 msgid "Click over one of the different report types to change the visualization of the data you choose"
 msgstr ""
 
@@ -465,7 +478,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: public/js/report/controller.js:925
+#: public/js/report/controller.js:720
 msgid "Columns / results drop zone"
 msgstr ""
 
@@ -490,7 +503,7 @@ msgstr ""
 msgid "Copy of {{name}}"
 msgstr ""
 
-#: public/js/dashboardv2/controller.js:263
+#: public/js/dashboardv2/controller.js:234
 msgid "Could not find report"
 msgstr ""
 
@@ -498,19 +511,15 @@ msgstr ""
 msgid "Could not load dashboard : missing id"
 msgstr ""
 
-#: public/js/report/controller.js:845
-#: public/js/report/controller.js:853
-#: public/js/report/controller.js:861
+#: public/js/reports/reports.service.js:15
 msgid "Count"
 msgstr ""
 
-#: public/js/report/controller.js:846
-#: public/js/report/controller.js:854
-#: public/js/report/controller.js:862
+#: public/js/reports/reports.service.js:16
 msgid "Count distinct"
 msgstr ""
 
-#: public/partials/layer/view.html:73
+#: public/partials/layer/view.html:67
 msgid "Create"
 msgstr ""
 
@@ -546,7 +555,7 @@ msgstr ""
 msgid "Cyclic definition :"
 msgstr ""
 
-#: public/partials/dashboardv2/edit.html:258
+#: public/partials/dashboardv2/edit.html:249
 msgid "Dashboard Name"
 msgstr ""
 
@@ -641,7 +650,6 @@ msgstr ""
 msgid "Date of creation"
 msgstr ""
 
-#: public/js/report/controller.js:852
 #: public/partials/layer/elementModal.html:224
 msgid "Day"
 msgstr ""
@@ -670,7 +678,7 @@ msgstr ""
 
 #: public/partials/core/delete-modal.html:16
 #: public/partials/layer/objectProperties.html:7
-#: public/partials/layer/view.html:115
+#: public/partials/layer/view.html:109
 msgid "Delete"
 msgstr ""
 
@@ -719,10 +727,6 @@ msgstr ""
 msgid "Design your company public space"
 msgstr ""
 
-#: public/partials/report/edit.html:49
-msgid "Display settings"
-msgstr ""
-
 #: public/partials/home/main.html:12
 msgid "Do not show this block again"
 msgstr ""
@@ -731,13 +735,14 @@ msgstr ""
 #: public/js/data-sources/data-sources-list.controller.js:31
 #: public/js/home/controller.js:15
 #: public/js/layers/layers-list.controller.js:73
-#: public/js/report/controller.js:872
+#: public/js/report/controller.js:667
 #: public/js/reports/reports-list.controller.js:80
 #: public/js/spaces/controller.js:14
 msgid "Done"
 msgstr ""
 
-#: public/js/report/services/c3Charts.js:336
+#: public/js/report/services/c3Charts.js:320
+#: public/partials/reports/report-settings-modal.component.html:15
 msgid "Donut"
 msgstr ""
 
@@ -749,46 +754,43 @@ msgstr ""
 msgid "Drag if from left to right to move it inside another existing folder."
 msgstr ""
 
-#: public/partials/report/partials/drop-area.html:23
+#: public/partials/report/partials/drop-area.html:17
 msgid "Drop here the dimension field"
 msgstr ""
 
-#: public/js/report/controller.js:947
+#: public/js/report/controller.js:742
 msgid "Drop here the elements that you want to use to filter the results of the query"
 msgstr ""
 
-#: public/js/report/controller.js:937
+#: public/js/report/controller.js:732
 msgid "Drop here the elements that you want to use to order the results of the query"
 msgstr ""
 
-#: public/js/report/controller.js:927
+#: public/js/report/controller.js:722
 msgid "Drop here the elements you want to have in the results of the query"
 msgstr ""
 
-#: public/partials/report/partials/drop-area.html:17
+#: public/partials/report/partials/drop-area.html:11
 msgid "Drop here the table columns"
 msgstr ""
 
-#: public/partials/report/partials/drop-area.html:19
+#: public/partials/report/partials/drop-area.html:13
 msgid "Drop here the table rows"
 msgstr ""
 
-#: public/partials/report/partials/drop-area.html:13
+#: public/partials/report/partials/drop-area.html:7
 msgid "Drop here your columns"
 msgstr ""
 
-#: public/partials/report/partials/drop-area.html:28
+#: public/partials/report/partials/drop-area.html:22
 msgid "Drop here your filters"
 msgstr ""
 
 #: public/partials/report/partials/drop-area.html:3
-#: public/partials/report/partials/drop-area.html:5
-#: public/partials/report/partials/drop-area.html:7
-#: public/partials/report/partials/drop-area.html:9
 msgid "Drop here your metrics"
 msgstr ""
 
-#: public/partials/report/partials/drop-area.html:34
+#: public/partials/report/partials/drop-area.html:28
 msgid "Drop here your order keys"
 msgstr ""
 
@@ -813,22 +815,18 @@ msgstr ""
 msgid "Duplicate this report"
 msgstr ""
 
-#: public/js/report/services/pivot.js:94
-msgid "ERROR - could not display pivot table"
-msgstr ""
-
 #: public/partials/layer/objectProperties.html:8
-#: public/partials/layer/view.html:103
-#: public/partials/layer/view.html:116
+#: public/partials/layer/view.html:110
+#: public/partials/layer/view.html:97
 #: public/partials/users/view.html:11
 msgid "Edit"
 msgstr ""
 
-#: public/partials/dashboards/view.html:4
+#: public/partials/dashboards/view.html:15
 msgid "Edit Dashboard"
 msgstr ""
 
-#: public/partials/reports/view.html:6
+#: public/partials/reports/view.html:20
 msgid "Edit Report"
 msgstr ""
 
@@ -860,11 +858,11 @@ msgstr ""
 msgid "Element"
 msgstr ""
 
-#: public/partials/report/edit.html:41
+#: public/partials/report/edit.html:29
 msgid "Elements"
 msgstr ""
 
-#: public/partials/report/partials/report-edit.html:27
+#: public/partials/report/partials/report-edit.html:35
 msgid "Enter a max value for gauge"
 msgstr ""
 
@@ -906,13 +904,11 @@ msgstr ""
 msgid "Explorer"
 msgstr ""
 
+#: public/partials/dashboards/view.html:7
 #: public/partials/io/export.html:85
+#: public/partials/reports/view.html:10
 #: public/partials/sidebar/sidebar.html:61
 msgid "Export"
-msgstr ""
-
-#: public/partials/reports/view.html:8
-msgid "Export Data"
 msgstr ""
 
 #: public/partials/io/export.html:9
@@ -955,8 +951,8 @@ msgstr ""
 msgid "Failed to update report"
 msgstr ""
 
-#: public/js/report/controller.js:277
-#: public/js/report/directives/reportView.js:34
+#: public/js/report/controller.js:267
+#: public/js/report/directives/reportView.js:40
 msgid "Fetching data ..."
 msgstr ""
 
@@ -964,7 +960,7 @@ msgstr ""
 msgid "File must contain the following properties: datasources, layers, reports and dashboards"
 msgstr ""
 
-#: public/partials/report/partials/report-edit.html:24
+#: public/partials/report/partials/report-edit.html:32
 msgid "Filter"
 msgstr ""
 
@@ -972,7 +968,7 @@ msgstr ""
 msgid "Filter Instructions"
 msgstr ""
 
-#: public/js/report/controller.js:945
+#: public/js/report/controller.js:740
 msgid "Filters drop zone"
 msgstr ""
 
@@ -988,11 +984,11 @@ msgstr ""
 msgid "First Name is required"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:245
+#: public/js/reports/filter-prompt.component.js:206
 msgid "First quarter"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:249
+#: public/js/reports/filter-prompt.component.js:210
 msgid "First semester"
 msgstr ""
 
@@ -1021,6 +1017,8 @@ msgstr ""
 #: public/partials/layer/elementModal.html:150
 #: public/partials/layer/elementModal.html:178
 #: public/partials/layer/objectProperties.html:112
+#: public/partials/reports/report-column-settings-modal.component.html:88
+#: public/partials/reports/report-column-settings-modal.component.html:97
 msgid "Format"
 msgstr ""
 
@@ -1029,7 +1027,7 @@ msgstr ""
 msgid "Format examples"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:248
+#: public/js/reports/filter-prompt.component.js:209
 msgid "Fourth quarter"
 msgstr ""
 
@@ -1071,8 +1069,8 @@ msgstr ""
 msgid "Guided tour"
 msgstr ""
 
-#: public/partials/report/edit.html:62
-msgid "Height :"
+#: public/partials/reports/report-settings-modal.component.html:41
+msgid "Height"
 msgstr ""
 
 #: public/js/widgets/htmlWidgets.js:4
@@ -1123,14 +1121,6 @@ msgstr ""
 msgid "Here you can define the structure in folders of the shared space."
 msgstr ""
 
-#: public/partials/report/partials/report-edit.html:68
-msgid "Hide"
-msgstr ""
-
-#: public/partials/report/directives/wstDropzone.html:37
-msgid "Hide Column"
-msgstr ""
-
 #: public/js/home/controller.js:86
 #: public/partials/home/main.html:2
 #: public/partials/sidebar/sidebar.html:15
@@ -1157,7 +1147,7 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: public/partials/dashboardv2/edit.html:98
+#: public/partials/dashboardv2/edit.html:90
 msgid "Import Report"
 msgstr ""
 
@@ -1212,6 +1202,7 @@ msgstr ""
 #: public/partials/layer/elementModal.html:44
 #: public/partials/layer/objectProperties.html:37
 #: public/partials/layer/objectProperties.html:80
+#: public/partials/reports/report-column-settings-modal.component.html:9
 msgid "Label"
 msgstr ""
 
@@ -1227,39 +1218,39 @@ msgstr ""
 msgid "Last Name is required"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:253
+#: public/js/reports/filter-prompt.component.js:214
 msgid "Last month"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:252
+#: public/js/reports/filter-prompt.component.js:213
 msgid "Last week"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:254
+#: public/js/reports/filter-prompt.component.js:215
 msgid "Last year"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:255
+#: public/js/reports/filter-prompt.component.js:216
 msgid "Last year first quarter"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:259
+#: public/js/reports/filter-prompt.component.js:220
 msgid "Last year first semester"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:258
+#: public/js/reports/filter-prompt.component.js:219
 msgid "Last year fourth quarter"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:256
+#: public/js/reports/filter-prompt.component.js:217
 msgid "Last year second quarter"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:260
+#: public/js/reports/filter-prompt.component.js:221
 msgid "Last year second semester"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:257
+#: public/js/reports/filter-prompt.component.js:218
 msgid "Last year third quarter"
 msgstr ""
 
@@ -1299,6 +1290,10 @@ msgstr ""
 msgid "Layer description"
 msgstr ""
 
+#: public/partials/layer/view.html:34
+msgid "Layer elements"
+msgstr ""
+
 #: public/partials/layers/layers-new-modal.html:11
 msgid "Layer name"
 msgstr ""
@@ -1309,10 +1304,6 @@ msgstr ""
 
 #: public/js/io/import.controller.js:312
 msgid "Layer updated successfully:"
-msgstr ""
-
-#: public/partials/layer/view.html:40
-msgid "Layer<br>Elements"
 msgstr ""
 
 #: public/js/data-sources/data-sources-list.controller.js:96
@@ -1338,7 +1329,7 @@ msgstr ""
 msgid "Layers list"
 msgstr ""
 
-#: public/partials/dashboardv2/edit.html:60
+#: public/partials/dashboardv2/edit.html:51
 msgid "Layouts"
 msgstr ""
 
@@ -1346,15 +1337,16 @@ msgstr ""
 msgid "Left"
 msgstr ""
 
-#: public/partials/report/edit.html:52
-msgid "Legend position :"
+#: public/partials/reports/report-settings-modal.component.html:29
+msgid "Legend position"
 msgstr ""
 
 #: public/partials/home/about.html:35
 msgid "License"
 msgstr ""
 
-#: public/js/report/services/c3Charts.js:313
+#: public/js/report/services/c3Charts.js:297
+#: public/partials/reports/report-column-settings-modal.component.html:50
 msgid "Line"
 msgstr ""
 
@@ -1370,19 +1362,18 @@ msgstr ""
 msgid "Lookup setup"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:191
+#: public/js/reports/filter-prompt.component.js:162
 msgid "Make this filter appear in the report interface."
 msgstr ""
 
-#: public/js/report/controller.js:844
+#: public/js/reports/reports.service.js:14
 msgid "Max"
 msgstr ""
 
-#: public/js/report/controller.js:843
+#: public/js/reports/reports.service.js:13
 msgid "Min"
 msgstr ""
 
-#: public/js/report/controller.js:851
 #: public/partials/layer/elementModal.html:219
 msgid "Month"
 msgstr ""
@@ -1399,7 +1390,7 @@ msgstr ""
 msgid "Most executed"
 msgstr ""
 
-#: public/partials/report/partials/report-edit.html:24
+#: public/partials/report/partials/report-edit.html:32
 msgid "Move the limit to the filter area, will be used during runtime, not only during report building"
 msgstr ""
 
@@ -1446,11 +1437,11 @@ msgstr ""
 msgid "New Data Source"
 msgstr ""
 
-#: public/partials/layer/view.html:78
+#: public/partials/layer/view.html:72
 msgid "New Element"
 msgstr ""
 
-#: public/partials/layer/view.html:77
+#: public/partials/layer/view.html:71
 msgid "New Folder"
 msgstr ""
 
@@ -1459,7 +1450,7 @@ msgid "New Layer"
 msgstr ""
 
 #: public/js/reports/reports-list.controller.js:103
-#: public/partials/dashboardv2/edit.html:97
+#: public/partials/dashboardv2/edit.html:89
 msgid "New Report"
 msgstr ""
 
@@ -1488,7 +1479,7 @@ msgstr ""
 #: public/js/data-sources/data-sources-list.controller.js:28
 #: public/js/home/controller.js:12
 #: public/js/layers/layers-list.controller.js:70
-#: public/js/report/controller.js:869
+#: public/js/report/controller.js:664
 #: public/js/reports/reports-list.controller.js:77
 #: public/js/spaces/controller.js:11
 #: public/partials/core/pager.html:13
@@ -1506,17 +1497,17 @@ msgstr ""
 msgid "Next Step"
 msgstr ""
 
+#: public/partials/reports/report-column-settings-modal.component.html:112
+#: public/partials/reports/report-column-settings-modal.component.html:82
+msgid "No"
+msgstr ""
+
 #: public/partials/layer/objectProperties.html:22
 msgid "No Selection"
 msgstr ""
 
-#: public/js/report/directives/reportView.js:78
+#: public/js/report/directives/reportView.js:87
 msgid "No data for this report"
-msgstr ""
-
-#: public/js/report/services/grid.js:69
-#: public/js/report/services/vGrid.js:34
-msgid "No data found"
 msgstr ""
 
 #: public/js/io/import.controller.js:146
@@ -1563,7 +1554,7 @@ msgstr ""
 msgid "One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched"
 msgstr ""
 
-#: public/js/report/controller.js:893
+#: public/js/report/controller.js:688
 msgid "One query can only be based on one layer, you can not mix elements from different layers in the same query"
 msgstr ""
 
@@ -1574,7 +1565,7 @@ msgid ""
 "            elements"
 msgstr ""
 
-#: public/js/report/controller.js:935
+#: public/js/report/controller.js:730
 msgid "Order By drop zone"
 msgstr ""
 
@@ -1592,7 +1583,8 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
-#: public/js/report/services/c3Charts.js:331
+#: public/js/report/services/c3Charts.js:315
+#: public/partials/reports/report-settings-modal.component.html:22
 msgid "Pie"
 msgstr ""
 
@@ -1624,7 +1616,7 @@ msgstr ""
 msgid "Publish"
 msgstr ""
 
-#: public/partials/report/partials/report-edit.html:41
+#: public/partials/report/partials/report-edit.html:49
 msgid "Push it to a Dashboard"
 msgstr ""
 
@@ -1632,27 +1624,21 @@ msgstr ""
 msgid "Put in shared space"
 msgstr ""
 
-#: public/partials/layer/view.html:53
+#: public/partials/layer/view.html:46
 msgid "Queries"
 msgstr ""
 
-#: public/js/report/controller.js:915
+#: public/js/report/controller.js:710
 msgid "Query refresh"
 msgstr ""
 
-#: public/partials/dashboardv2/edit.html:72
-#: public/partials/report/partials/report-edit.html:21
+#: public/partials/dashboardv2/edit.html:64
+#: public/partials/report/partials/report-edit.html:29
 msgid "Quick display with"
 msgstr ""
 
-#: public/js/report/controller.js:847
-#: public/js/report/controller.js:855
-#: public/js/report/controller.js:863
-msgid "Raw"
-msgstr ""
-
-#: public/partials/dashboardv2/edit.html:77
-#: public/partials/report/partials/report-edit.html:31
+#: public/partials/dashboardv2/edit.html:69
+#: public/partials/report/partials/report-edit.html:39
 msgid "Redraw"
 msgstr ""
 
@@ -1672,7 +1658,7 @@ msgstr ""
 msgid "Remember Me"
 msgstr ""
 
-#: public/partials/layer/view.html:102
+#: public/partials/layer/view.html:96
 msgid "Remove"
 msgstr ""
 
@@ -1693,7 +1679,11 @@ msgstr ""
 msgid "Remove role {{name}} ?"
 msgstr ""
 
-#: public/js/report/directives/reportView.js:43
+#: public/partials/reports/report-dropzone.component.html:20
+msgid "Remove this item from this dimension"
+msgstr ""
+
+#: public/js/report/directives/reportView.js:49
 msgid "Repainting report ..."
 msgstr ""
 
@@ -1705,7 +1695,7 @@ msgstr ""
 msgid "Report Name"
 msgstr ""
 
-#: public/js/report/controller.js:899
+#: public/js/report/controller.js:694
 msgid "Report Type selector"
 msgstr ""
 
@@ -1717,13 +1707,22 @@ msgstr ""
 msgid "Report published"
 msgstr ""
 
+#: public/partials/report/partials/report-edit.html:17
+#: public/partials/reports/report-settings-modal.component.html:3
+msgid "Report settings"
+msgstr ""
+
+#: public/partials/reports/report-settings-modal.component.html:9
+msgid "Report type"
+msgstr ""
+
 #: public/js/io/import.controller.js:360
 msgid "Report updated successfully:"
 msgstr ""
 
 #: public/js/reports/reports-list.controller.js:86
 #: public/js/reports/reports-list.controller.js:93
-#: public/partials/dashboardv2/edit.html:48
+#: public/partials/dashboardv2/edit.html:39
 #: public/partials/io/export.html:38
 #: public/partials/io/import.html:78
 #: public/partials/reports/list.html:9
@@ -1757,7 +1756,7 @@ msgstr ""
 msgid "Result"
 msgstr ""
 
-#: public/js/report/controller.js:907
+#: public/js/report/controller.js:702
 msgid "Results area"
 msgstr ""
 
@@ -1783,8 +1782,8 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
-#: public/partials/dashboardv2/edit.html:54
-msgid "Run time<br>Filters"
+#: public/partials/dashboardv2/edit.html:45
+msgid "Run time filters"
 msgstr ""
 
 #: public/partials/reports/filter-prompt.html:9
@@ -1800,16 +1799,16 @@ msgid "Runtime Filter properties"
 msgstr ""
 
 #: public/partials/layer/sqlModal.html:20
-#: public/partials/report/partials/report-edit.html:51
+#: public/partials/report/partials/report-edit.html:59
 msgid "SQL query"
 msgstr ""
 
 #: public/partials/dashboardv2/edit.html:12
-#: public/partials/dashboardv2/edit.html:265
+#: public/partials/dashboardv2/edit.html:256
 #: public/partials/layer/elementModal.html:295
 #: public/partials/report/edit.html:14
 #: public/partials/report/modals/reportNameModal.html:14
-#: public/partials/report/partials/report-edit.html:44
+#: public/partials/report/partials/report-edit.html:52
 #: public/partials/roles/roleModal.html:110
 #: public/partials/spaces/shared.html:42
 #: public/partials/users/users-edit-modal.html:91
@@ -1820,7 +1819,7 @@ msgstr ""
 msgid "Save Datasource"
 msgstr ""
 
-#: public/partials/report/partials/report-edit.html:40
+#: public/partials/report/partials/report-edit.html:48
 msgid "Save as a report"
 msgstr ""
 
@@ -1828,7 +1827,7 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: public/partials/layer/view.html:119
+#: public/partials/layer/view.html:113
 msgid "Save folder label"
 msgstr ""
 
@@ -1838,11 +1837,17 @@ msgstr ""
 msgid "Save layer"
 msgstr ""
 
+#: public/partials/reports/report-column-settings-modal.component.html:129
+#: public/partials/reports/report-settings-modal.component.html:51
+msgid "Save settings"
+msgstr ""
+
 #: public/js/spaces/controller.js:94
 msgid "Save shared space"
 msgstr ""
 
-#: public/js/report/services/c3Charts.js:323
+#: public/js/report/services/c3Charts.js:307
+#: public/partials/reports/report-column-settings-modal.component.html:64
 msgid "Scatter"
 msgstr ""
 
@@ -1850,12 +1855,17 @@ msgstr ""
 msgid "Search..."
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:246
+#: public/js/reports/filter-prompt.component.js:207
 msgid "Second quarter"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:250
+#: public/js/reports/filter-prompt.component.js:211
 msgid "Second semester"
+msgstr ""
+
+#: public/partials/reports/report-column-settings-modal.component.html:100
+#: public/partials/reports/report-column-settings-modal.component.html:91
+msgid "See <a ng-href=\"{{ url }}\" target=\"_blank\" rel=\"noreferrer\">documentation</a> for examples"
 msgstr ""
 
 #: public/partials/roles/roleModal.html:82
@@ -1878,7 +1888,7 @@ msgstr ""
 msgid "Select a datasource type..."
 msgstr ""
 
-#: public/js/report/controller.js:883
+#: public/js/report/controller.js:678
 msgid "Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)"
 msgstr ""
 
@@ -1886,7 +1896,7 @@ msgstr ""
 msgid "Select file..."
 msgstr ""
 
-#: public/js/report/controller.js:891
+#: public/js/report/controller.js:686
 msgid "Select here the layer where your query will be based on."
 msgstr ""
 
@@ -1898,7 +1908,7 @@ msgstr ""
 msgid "Select the dashboard to push this report to"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:189
+#: public/js/reports/filter-prompt.component.js:160
 msgid "Select to deactivate the runtime"
 msgstr ""
 
@@ -1916,6 +1926,10 @@ msgstr ""
 
 #: public/partials/data-sources/edit.html:52
 msgid "Set here the username to access the database"
+msgstr ""
+
+#: public/partials/reports/report-column-settings-modal.component.html:3
+msgid "Settings for '{{ vm.column.elementLabel }}'"
 msgstr ""
 
 #: public/js/home/controller.js:153
@@ -1953,10 +1967,6 @@ msgstr ""
 msgid "Shared space structure area"
 msgstr ""
 
-#: public/partials/report/directives/wstDropzone.html:38
-msgid "Show Column"
-msgstr ""
-
 #: public/partials/layer/elementModal.html:129
 msgid "Shown Field"
 msgstr ""
@@ -1974,17 +1984,17 @@ msgstr ""
 #: public/js/data-sources/data-sources-list.controller.js:30
 #: public/js/home/controller.js:14
 #: public/js/layers/layers-list.controller.js:72
-#: public/js/report/controller.js:871
+#: public/js/report/controller.js:666
 #: public/js/reports/reports-list.controller.js:79
 #: public/js/spaces/controller.js:13
 msgid "Skip"
 msgstr ""
 
-#: public/js/dashboardv2/controller.js:274
+#: public/js/dashboardv2/controller.js:245
 msgid "Sorry, that filter is already on the dash"
 msgstr ""
 
-#: public/js/dashboardv2/controller.js:267
+#: public/js/dashboardv2/controller.js:238
 msgid "Sorry, that report is already on the dash"
 msgstr ""
 
@@ -1992,16 +2002,13 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-#: public/partials/layer/view.html:47
+#: public/partials/layer/view.html:40
 msgid "Sources"
 msgstr ""
 
-#: public/js/report/services/c3Charts.js:298
+#: public/js/report/services/c3Charts.js:282
+#: public/partials/reports/report-column-settings-modal.component.html:29
 msgid "Spline"
-msgstr ""
-
-#: public/partials/report/directives/wstDropzone.html:44
-msgid "Stack column"
 msgstr ""
 
 #: public/partials/logout/index.html:10
@@ -2043,7 +2050,7 @@ msgstr ""
 msgid "Successful database connection."
 msgstr ""
 
-#: public/js/report/controller.js:841
+#: public/js/reports/reports.service.js:11
 msgid "Sum"
 msgstr ""
 
@@ -2063,15 +2070,15 @@ msgstr ""
 msgid "Thanks for using Urungi"
 msgstr ""
 
-#: public/partials/dashboardv2/edit.html:260
+#: public/partials/dashboardv2/edit.html:251
 msgid "The dashboard name is required"
 msgstr ""
 
-#: public/js/report/controller.js:949
+#: public/js/report/controller.js:744
 msgid "The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results"
 msgstr ""
 
-#: public/js/report/controller.js:939
+#: public/js/report/controller.js:734
 msgid "The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results"
 msgstr ""
 
@@ -2087,11 +2094,11 @@ msgstr ""
 msgid "The following columns will be removed :"
 msgstr ""
 
-#: public/js/report/controller.js:879
+#: public/js/report/controller.js:674
 msgid "The layer catalog"
 msgstr ""
 
-#: public/js/report/controller.js:889
+#: public/js/report/controller.js:684
 msgid "The layer selector"
 msgstr ""
 
@@ -2139,7 +2146,7 @@ msgstr ""
 msgid "There is an error in your sql syntax."
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:247
+#: public/js/reports/filter-prompt.component.js:208
 msgid "Third quarter"
 msgstr ""
 
@@ -2151,7 +2158,7 @@ msgstr ""
 msgid "This area represents a folder in the shared space"
 msgstr ""
 
-#: public/partials/dashboardv2/edit.html:218
+#: public/partials/dashboardv2/edit.html:209
 msgid "This divider defines a page-break for printing"
 msgstr ""
 
@@ -2197,11 +2204,11 @@ msgstr ""
 msgid "This link is only available for urungi administrators."
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:243
+#: public/js/reports/filter-prompt.component.js:204
 msgid "This month"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:242
+#: public/js/reports/filter-prompt.component.js:203
 msgid "This week"
 msgstr ""
 
@@ -2209,7 +2216,7 @@ msgstr ""
 msgid "This will remove all child nodes as well."
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:244
+#: public/js/reports/filter-prompt.component.js:205
 msgid "This year"
 msgstr ""
 
@@ -2217,16 +2224,20 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: public/js/report/controller.js:184
+#: public/js/report/controller.js:186
 msgid "To Lower"
 msgstr ""
 
-#: public/js/report/controller.js:183
+#: public/js/report/controller.js:185
 msgid "To Upper"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:241
+#: public/js/reports/filter-prompt.component.js:202
 msgid "Today"
+msgstr ""
+
+#: public/js/reports/pivot.service.js:99
+msgid "Totals"
 msgstr ""
 
 #: public/partials/layer/elementModal.html:50
@@ -2292,7 +2303,7 @@ msgstr ""
 msgid "Urungi version: {{ vm.version }}"
 msgstr ""
 
-#: public/js/report/controller.js:917
+#: public/js/report/controller.js:712
 msgid "Use this button to refresh the results"
 msgstr ""
 
@@ -2339,18 +2350,12 @@ msgstr ""
 msgid "Using single query reports you can configure a query against the data and get the results using different charts or a simple data grid."
 msgstr ""
 
-#: public/partials/report/partials/report-edit.html:26
+#: public/partials/report/partials/report-edit.html:34
 msgid "View SQL"
 msgstr ""
 
 #: public/partials/layer/elementModal.html:242
 msgid "Visible"
-msgstr ""
-
-#: public/partials/report/partials/report-edit.html:63
-msgid ""
-"Warning. The data you've requested contains multiple values for some of the data points. This may result in the chart being strange or misleading.\n"
-"                To fix this, make sure to choose an aggregation for your metrics, and do not use more than 1 or 2 dimensions."
 msgstr ""
 
 #: public/partials/home/about.html:30
@@ -2361,16 +2366,20 @@ msgstr ""
 msgid "What is Urungi"
 msgstr ""
 
-#: public/js/report/controller.js:850
 #: public/partials/layer/elementModal.html:214
 msgid "Year"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:251
+#: public/partials/reports/report-column-settings-modal.component.html:119
+#: public/partials/reports/report-column-settings-modal.component.html:75
+msgid "Yes"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:212
 msgid "Yesterday"
 msgstr ""
 
-#: public/js/dashboardv2/controller.js:353
+#: public/js/dashboardv2/controller.js:324
 msgid "You are not allowed to put this object inside a component"
 msgstr ""
 
@@ -2501,32 +2510,6 @@ msgstr ""
 msgid "backgroundImage"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:205
-#: public/js/reports/filter-prompt.component.js:235
-#: public/js/reports/filter-prompt.component.js:275
-msgid "between"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:202
-#: public/js/reports/filter-prompt.component.js:232
-#: public/js/reports/filter-prompt.component.js:269
-msgid "bigger or equal than"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:270
-msgid "bigger or equal than (pattern)"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:201
-#: public/js/reports/filter-prompt.component.js:231
-#: public/js/reports/filter-prompt.component.js:267
-msgid "bigger than"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:268
-msgid "bigger than (pattern)"
-msgstr ""
-
 #: public/partials/widgets/inspector.html:208
 msgid "border"
 msgstr ""
@@ -2539,7 +2522,7 @@ msgstr ""
 msgid "borderRoundness"
 msgstr ""
 
-#: public/partials/report/edit.html:56
+#: public/partials/reports/report-settings-modal.component.html:34
 msgid "bottom"
 msgstr ""
 
@@ -2547,7 +2530,7 @@ msgstr ""
 msgid "color"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:207
+#: public/js/reports/filter-prompt.component.js:184
 msgid "contains"
 msgstr ""
 
@@ -2559,15 +2542,16 @@ msgstr ""
 msgid "database:"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:199
-#: public/js/reports/filter-prompt.component.js:220
-#: public/js/reports/filter-prompt.component.js:229
-#: public/js/reports/filter-prompt.component.js:265
-msgid "different than"
+#: public/js/reports/filter-prompt.component.js:185
+msgid "does not contain"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:266
-msgid "different than (pattern)"
+#: public/js/reports/filter-prompt.component.js:189
+msgid "does not end with"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:187
+msgid "does not start with"
 msgstr ""
 
 #: public/partials/widgets/inspector.html:218
@@ -2594,7 +2578,7 @@ msgstr ""
 msgid "email is required"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:211
+#: public/js/reports/filter-prompt.component.js:188
 msgid "ends with"
 msgstr ""
 
@@ -2604,17 +2588,6 @@ msgstr ""
 
 #: public/partials/layer/elementModal.html:109
 msgid "enter new value"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:197
-#: public/js/reports/filter-prompt.component.js:219
-#: public/js/reports/filter-prompt.component.js:227
-#: public/js/reports/filter-prompt.component.js:263
-msgid "equal"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:264
-msgid "equal (pattern)"
 msgstr ""
 
 #: public/partials/files/gallery.html:17
@@ -2629,10 +2602,6 @@ msgstr ""
 #: public/partials/layer/elementModal.html:140
 #: public/partials/layer/objectProperties.html:113
 msgid "format..."
-msgstr ""
-
-#: public/partials/report/partials/report-edit.html:76
-msgid "getting data ..."
 msgstr ""
 
 #: public/partials/widgets/inspector.html:116
@@ -2663,12 +2632,6 @@ msgstr ""
 msgid "imageProperties"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:198
-#: public/js/reports/filter-prompt.component.js:223
-#: public/js/reports/filter-prompt.component.js:228
-msgid "in"
-msgstr ""
-
 #: public/partials/widgets/inspector.html:222
 msgid "inset"
 msgstr ""
@@ -2678,21 +2641,87 @@ msgstr ""
 msgid "internship in summer 2018"
 msgstr ""
 
-#: public/js/report/controller.js:134
+#: public/js/report/controller.js:136
 msgid "invalid report"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:216
-#: public/js/reports/filter-prompt.component.js:222
-#: public/js/reports/filter-prompt.component.js:238
-#: public/js/reports/filter-prompt.component.js:278
+#: public/js/reports/filter-prompt.component.js:182
+msgid "is between"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:176
+msgid "is bigger or equal than"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:177
+msgid "is bigger or equal than (pattern)"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:174
+msgid "is bigger than"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:175
+msgid "is bigger than (pattern)"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:170
+msgid "is different than"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:171
+msgid "is different than (pattern)"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:168
+msgid "is equal to"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:169
+msgid "is equal to (pattern)"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:172
+msgid "is in"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:180
+msgid "is less or equal than"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:181
+msgid "is less or equal than (pattern)"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:178
+msgid "is less than"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:179
+msgid "is less than (pattern)"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:190
+msgid "is like"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:183
+msgid "is not between"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:173
+msgid "is not in"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:191
+msgid "is not like"
+msgstr ""
+
+#: public/js/reports/filter-prompt.component.js:193
 msgid "is not null"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:215
-#: public/js/reports/filter-prompt.component.js:221
-#: public/js/reports/filter-prompt.component.js:237
-#: public/js/reports/filter-prompt.component.js:277
+#: public/js/reports/filter-prompt.component.js:192
 msgid "is null"
 msgstr ""
 
@@ -2705,30 +2734,6 @@ msgstr ""
 
 #: public/js/layer/controller.js:586
 msgid "left"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:204
-#: public/js/reports/filter-prompt.component.js:234
-#: public/js/reports/filter-prompt.component.js:273
-msgid "less or equal than"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:274
-msgid "less or equal than (pattern)"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:203
-#: public/js/reports/filter-prompt.component.js:233
-#: public/js/reports/filter-prompt.component.js:271
-msgid "less than"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:272
-msgid "less than (pattern)"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:213
-msgid "like"
 msgstr ""
 
 #: public/partials/sidebar/sidebar.html:8
@@ -2749,11 +2754,11 @@ msgstr ""
 msgid "my folder"
 msgstr ""
 
-#: public/js/report/services/c3Charts.js:27
+#: public/js/report/services/c3Charts.js:21
 msgid "no data to display"
 msgstr ""
 
-#: public/partials/report/edit.html:57
+#: public/partials/reports/report-settings-modal.component.html:35
 #: public/partials/widgets/inspector.html:102
 #: public/partials/widgets/inspector.html:215
 msgid "none"
@@ -2763,34 +2768,6 @@ msgstr ""
 #: public/partials/users/list.html:17
 #: public/partials/users/view.html:21
 msgid "not active"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:206
-#: public/js/reports/filter-prompt.component.js:236
-#: public/js/reports/filter-prompt.component.js:276
-msgid "not between"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:208
-msgid "not contains"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:212
-msgid "not ends with"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:200
-#: public/js/reports/filter-prompt.component.js:224
-#: public/js/reports/filter-prompt.component.js:230
-msgid "not in"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:214
-msgid "not like"
-msgstr ""
-
-#: public/js/reports/filter-prompt.component.js:210
-msgid "not start with"
 msgstr ""
 
 #: public/partials/widgets/inspector.html:223
@@ -2838,12 +2815,12 @@ msgstr ""
 msgid "repeat"
 msgstr ""
 
-#: public/js/report/controller.js:653
+#: public/js/report/controller.js:520
 msgid "report type does not exist"
 msgstr ""
 
-#: public/partials/dashboardv2/edit.html:74
-#: public/partials/report/partials/report-edit.html:23
+#: public/partials/dashboardv2/edit.html:66
+#: public/partials/report/partials/report-edit.html:31
 msgid "results."
 msgstr ""
 
@@ -2852,7 +2829,7 @@ msgid "ridge"
 msgstr ""
 
 #: public/js/layer/controller.js:579
-#: public/partials/report/edit.html:55
+#: public/partials/reports/report-settings-modal.component.html:33
 msgid "right"
 msgstr ""
 
@@ -2893,8 +2870,8 @@ msgstr ""
 msgid "source"
 msgstr ""
 
-#: public/js/reports/filter-prompt.component.js:209
-msgid "start with"
+#: public/js/reports/filter-prompt.component.js:186
+msgid "starts with"
 msgstr ""
 
 #: public/partials/files/gallery.html:18
@@ -2910,16 +2887,12 @@ msgstr ""
 msgid "textures"
 msgstr ""
 
-#: public/partials/report/edit.html:54
+#: public/partials/reports/report-settings-modal.component.html:32
 msgid "top"
 msgstr ""
 
 #: public/partials/layer/sqlModal.html:16
 msgid "type a name for the dataset"
-msgstr ""
-
-#: public/partials/report/directives/wstDropzone.html:45
-msgid "unstack Column"
 msgstr ""
 
 #: public/partials/widgets/inspector.html:59
