@@ -23,7 +23,7 @@ executors:
         environment:
           ACCEPT_EULA: 'Y'
           SA_PASSWORD: 'Micros0ft'
-        command: "/bin/sh -c '(sleep 10; /opt/mssql-tools/bin/sqlcmd -U SA -P Micros0ft -Q \"CREATE DATABASE urungi_tests\") & /opt/mssql/bin/sqlservr"
+        command: "/bin/sh -c '(sleep 10; /opt/mssql-tools/bin/sqlcmd -U SA -P Micros0ft -Q \"CREATE DATABASE urungi_tests\") & /opt/mssql/bin/sqlservr'"
     working_directory: ~/urungi
     environment:
       MONGOMS_VERSION: << parameters.mongodb >>
