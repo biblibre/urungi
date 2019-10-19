@@ -22,16 +22,12 @@ describe('userService', function () {
     });
 
     describe('getCurrentUser', function () {
-        it('should return a valid user', function () {
+        it('should return a valid user', async function () {
             $httpBackend.expect('GET', '/api/get-user-data')
                 .respond(apiGetUserDataResponse());
 
-            let user;
-            expect(userService.getCurrentUser().then(currentUser => {
-                user = currentUser;
-            })).resolves.toBeUndefined();
-
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+            const user = await userService.getCurrentUser();
 
             expect(user.userName).toBe('foo');
             expect(user.status).toBe('active');

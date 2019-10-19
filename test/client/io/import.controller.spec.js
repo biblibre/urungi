@@ -37,7 +37,7 @@ describe('ImportController', function () {
     });
 
     describe('upload', function () {
-        it('should check import file and import all objects', () => {
+        it('should check import file and import all objects', async function () {
             $httpBackend.expect('GET', '/api/data-sources/find-all')
                 .respond(apiDatasourcesFindAllResponse());
 
@@ -74,9 +74,8 @@ describe('ImportController', function () {
             $httpBackend.expect('GET', '/api/dashboardsv2/find-one?id=fakedashboardid')
                 .respond(apiDashboardsFindOneResponse());
 
-            expect(vm.upload(file)).resolves.toBeUndefined();
-
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+            await expect(vm.upload(file)).resolves.toBeUndefined();
 
             expect(vm.checkError).toBeUndefined();
             expect(vm.checkingFile).toBe(false);
@@ -110,9 +109,10 @@ describe('ImportController', function () {
                 .respond({ result: 1 });
 
             vm.form = { $valid: true };
-            expect(vm.doImport()).resolves.toBeUndefined();
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            await expect(vm.doImport()).resolves.toBeUndefined();
 
             expect(vm.checkError).toBeUndefined();
             expect(vm.checkingFile).toBe(false);

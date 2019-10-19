@@ -64,16 +64,19 @@ describe('ExportController', function () {
             $httpBackend.expect('GET', '/api/data-sources/find-one?id=fakedatasourceid')
                 .respond(apiDatasourcesFindOneResponse());
 
-            expect(vm.downloadExport().then(() => {
+            const p = vm.downloadExport().then(() => {
                 const result = JSON.parse(lastBlob.array[0]);
                 return result;
-            })).resolves.toEqual({
+            });
+
+            setTimeout($httpBackend.flush, 0);
+
+            return expect(p).resolves.toEqual({
                 reports: [getReport()],
                 dashboards: [getDashboard()],
                 layers: [getLayer()],
                 datasources: [getDatasource()],
             });
-            $httpBackend.flush();
         });
 
         function getLayer () {
