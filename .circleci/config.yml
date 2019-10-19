@@ -19,6 +19,10 @@ executors:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: urungi_tests
+      - image: mcr.microsoft.com/mssql/server
+        environment:
+          ACCEPT_EULA: 'Y'
+          SA_PASSWORD: 'Micros0ft'
     working_directory: ~/urungi
     environment:
       MONGOMS_VERSION: << parameters.mongodb >>

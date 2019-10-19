@@ -35,7 +35,7 @@ module.exports = {
             mssql: {
                 name: 'MS SQL Server',
                 type: 'MSSQL',
-                status: 0, // Disable test for MS SQL Server by default
+                status: 1,
                 connection: {
                     host: 'localhost',
                     userName: 'SA',
