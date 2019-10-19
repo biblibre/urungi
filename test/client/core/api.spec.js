@@ -41,9 +41,9 @@ describe('api', () => {
             };
             const p = api.getReports(params);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(response);
+            return expect(p).resolves.toEqual(response);
         });
 
         it('should throw if result is 0', () => {
@@ -55,8 +55,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(response);
 
-            expect(api.getReports()).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getReports()).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -64,8 +65,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(403, 'Forbidden');
 
-            expect(api.getReports()).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getReports()).rejects.toThrow('Forbidden');
         });
     });
 
@@ -84,9 +86,9 @@ describe('api', () => {
 
             const p = api.getReport(42);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(report);
+            return expect(p).resolves.toEqual(report);
         });
 
         it('should throw if result is 0', () => {
@@ -98,8 +100,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(response);
 
-            expect(api.getReport()).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getReport()).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -107,8 +110,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(403, 'Forbidden');
 
-            expect(api.getReport()).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getReport()).rejects.toThrow('Forbidden');
         });
     });
 
@@ -127,9 +131,9 @@ describe('api', () => {
 
             const p = api.createReport(report);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(report);
+            return expect(p).resolves.toEqual(report);
         });
 
         it('should throw if result is 0', () => {
@@ -141,8 +145,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(response);
 
-            expect(api.createReport()).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.createReport()).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -150,8 +155,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
-            expect(api.createReport()).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.createReport()).rejects.toThrow('Forbidden');
         });
     });
 
@@ -171,9 +177,9 @@ describe('api', () => {
 
             const p = api.updateReport(report);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(report);
+            return expect(p).resolves.toEqual(report);
         });
 
         it('should throw if result is 0', () => {
@@ -185,8 +191,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(response);
 
-            expect(api.updateReport({ _id: 0 })).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.updateReport({ _id: 0 })).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -194,8 +201,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
-            expect(api.updateReport({ _id: 0 })).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.updateReport({ _id: 0 })).rejects.toThrow('Forbidden');
         });
     });
 
@@ -223,9 +231,9 @@ describe('api', () => {
 
             const p = api.getReportData(report, { limit: 500, filters: { name: 'value' } });
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(response);
+            return expect(p).resolves.toEqual(response);
         });
 
         it('should throw if request failed', () => {
@@ -233,8 +241,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
-            expect(api.getReportData({ properties: {} })).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getReportData({ properties: {} })).rejects.toThrow('Forbidden');
         });
     });
 
@@ -256,9 +265,9 @@ describe('api', () => {
 
             const p = api.getReportFilterValues(filter);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(response);
+            return expect(p).resolves.toEqual(response);
         });
 
         it('should throw if request failed', () => {
@@ -266,8 +275,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
-            expect(api.getReportFilterValues({})).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getReportFilterValues({})).rejects.toThrow('Forbidden');
         });
     });
 
@@ -293,9 +303,9 @@ describe('api', () => {
             };
             const p = api.getDashboards(params);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(response);
+            return expect(p).resolves.toEqual(response);
         });
 
         it('should throw if result is 0', () => {
@@ -307,8 +317,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(response);
 
-            expect(api.getDashboards()).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getDashboards()).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -316,8 +327,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(403, 'Forbidden');
 
-            expect(api.getDashboards()).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getDashboards()).rejects.toThrow('Forbidden');
         });
     });
 
@@ -336,9 +348,9 @@ describe('api', () => {
 
             const p = api.getDashboard(42);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(dashboard);
+            return expect(p).resolves.toEqual(dashboard);
         });
 
         it('should throw if result is 0', () => {
@@ -350,8 +362,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(response);
 
-            expect(api.getDashboard()).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getDashboard()).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -359,8 +372,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(403, 'Forbidden');
 
-            expect(api.getDashboard()).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getDashboard()).rejects.toThrow('Forbidden');
         });
     });
 
@@ -379,9 +393,9 @@ describe('api', () => {
 
             const p = api.createDashboard(dashboard);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(dashboard);
+            return expect(p).resolves.toEqual(dashboard);
         });
 
         it('should throw if result is 0', () => {
@@ -393,8 +407,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(response);
 
-            expect(api.createDashboard()).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.createDashboard()).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -402,8 +417,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
-            expect(api.createDashboard()).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.createDashboard()).rejects.toThrow('Forbidden');
         });
     });
 
@@ -423,9 +439,9 @@ describe('api', () => {
 
             const p = api.updateDashboard(dashboard);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(dashboard);
+            return expect(p).resolves.toEqual(dashboard);
         });
 
         it('should throw if result is 0', () => {
@@ -437,8 +453,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(response);
 
-            expect(api.updateDashboard({ _id: 0 })).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.updateDashboard({ _id: 0 })).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -446,8 +463,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
-            expect(api.updateDashboard({ _id: 0 })).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.updateDashboard({ _id: 0 })).rejects.toThrow('Forbidden');
         });
     });
 
@@ -473,9 +491,9 @@ describe('api', () => {
             };
             const p = api.getLayers(params);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(response);
+            return expect(p).resolves.toEqual(response);
         });
 
         it('should throw if result is 0', () => {
@@ -487,8 +505,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(response);
 
-            expect(api.getLayers()).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getLayers()).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -496,8 +515,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(403, 'Forbidden');
 
-            expect(api.getLayers()).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getLayers()).rejects.toThrow('Forbidden');
         });
     });
 
@@ -516,9 +536,9 @@ describe('api', () => {
 
             const p = api.getLayer(42);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(layer);
+            return expect(p).resolves.toEqual(layer);
         });
 
         it('should throw if result is 0', () => {
@@ -530,8 +550,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(response);
 
-            expect(api.getLayer()).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getLayer()).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -539,8 +560,9 @@ describe('api', () => {
 
             $httpBackend.expect('GET', url).respond(403, 'Forbidden');
 
-            expect(api.getLayer()).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getLayer()).rejects.toThrow('Forbidden');
         });
     });
 
@@ -559,9 +581,9 @@ describe('api', () => {
 
             const p = api.createLayer(layer);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(response);
+            return expect(p).resolves.toEqual(response);
         });
 
         it('should throw if result is 0', () => {
@@ -573,8 +595,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(response);
 
-            expect(api.createLayer()).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.createLayer()).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -582,8 +605,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
-            expect(api.createLayer()).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.createLayer()).rejects.toThrow('Forbidden');
         });
     });
 
@@ -603,9 +627,9 @@ describe('api', () => {
 
             const p = api.updateLayer(layer);
 
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
 
-            expect(p).resolves.toEqual(layer);
+            return expect(p).resolves.toEqual(layer);
         });
 
         it('should throw if result is 0', () => {
@@ -617,8 +641,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(response);
 
-            expect(api.updateLayer({ _id: 0 })).rejects.toThrow('Caught an error');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.updateLayer({ _id: 0 })).rejects.toThrow('Caught an error');
         });
 
         it('should throw if request failed', () => {
@@ -626,8 +651,9 @@ describe('api', () => {
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
-            expect(api.updateLayer({ _id: 0 })).rejects.toThrow('Forbidden');
-            $httpBackend.flush();
+            setTimeout($httpBackend.flush);
+
+            return expect(api.updateLayer({ _id: 0 })).rejects.toThrow('Forbidden');
         });
     });
 });

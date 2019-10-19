@@ -59,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated knex to 0.19.5
 - Updated mongodb-memory-server to 5.2.8
 - Updated mongoose to 5.7.5
+- Updated eslint-plugin-jest to 22.19.0
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 - Removed codecov
