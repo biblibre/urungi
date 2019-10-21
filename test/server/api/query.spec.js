@@ -3,6 +3,7 @@ const helpers = require('../helpers');
 const request = require('supertest');
 const config = require('config');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const moment = require('moment');
 let mongoose = require('mongoose');
 
 let app;
@@ -554,7 +555,22 @@ describe('Queries and data access', function () {
                             }
                         });
 
-                        await knex(table.tableName).insert(table.tableData);
+                        const rows = table.tableData.map(row => Object.assign({}, row));
+
+                        // oracledb doesn't handle correctly Date objects under
+                        // Jest environment
+                        // See https://github.com/oracle/node-oracledb/issues/1152
+                        if (datasource.type === 'ORACLE') {
+                            for (const row of rows) {
+                                for (const col of Object.keys(row)) {
+                                    if (row[col] instanceof Date) {
+                                        row[col] = moment(row[col]).format('DD-MMM-YYYY');
+                                    }
+                                }
+                            }
+                        }
+
+                        await knex(table.tableName).insert(rows);
                     }
 
                     const dts = new DataSources({
@@ -675,10 +691,11 @@ describe('Queries and data access', function () {
                     });
 
                     it('Should test /api/data-sources/getsqlQuerySchema', async function () {
+                        const sqlQuery = knex.select().from('gems').toSQL().toNative().sql;
                         const params = {
                             datasourceID: dtsId,
                             collection: JSON.stringify({
-                                sqlQuery: 'select * from gems',
+                                sqlQuery: sqlQuery,
                                 name: 'simple query'
                             })
                         };
@@ -696,7 +713,7 @@ describe('Queries and data access', function () {
 
                         expect(schema.collectionName).toBe('simple query');
                         expect(schema.isSQL).toBe(true);
-                        expect(schema.sqlQuery).toBe('select * from gems');
+                        expect(schema.sqlQuery).toBe(sqlQuery);
 
                         schema.elements.sort(compareOn(a => a.elementName));
 
@@ -1409,7 +1426,7 @@ describe('Queries and data access', function () {
 
                         let _false = false;
                         let _true = true;
-                        if (datasource.type === 'MySQL') {
+                        if (datasource.type === 'MySQL' || datasource.type === 'ORACLE') {
                             _false = 0;
                             _true = 1;
                         }
@@ -1521,6 +1538,12 @@ function jsTypeFromDbType (client, dbType) {
         },
         MSSQL: {
             boolean: 'boolean',
+            integer: 'number',
+            string: 'string',
+            date: 'date',
+        },
+        ORACLE: {
+            boolean: 'number',
             integer: 'number',
             string: 'string',
             date: 'date',
