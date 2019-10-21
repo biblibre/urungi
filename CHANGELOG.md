@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated mongoose to 5.7.5
 - Updated eslint-plugin-jest to 22.19.0
 - Updated jest to 24.9.0 and forced graceful-fs to 4.2.2
+- Updated oracledb to 4.0.1
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 - Removed codecov
