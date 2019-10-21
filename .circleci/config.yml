@@ -87,3 +87,21 @@ workflows:
             name: node
             node: '10'
             mongodb: '4.2.0'
+      - test:
+          name: node:12 mongodb:3.6
+          e:
+            name: node
+            node: '12'
+            mongodb: '3.6.14'
+      - test:
+          name: node:12 mongodb:4.0
+          e:
+            name: node
+            node: '12'
+            mongodb: '4.0.12'
+      - test:
+          name: node:12 mongodb:4.2
+          e:
+            name: node
+            node: '12'
+            mongodb: '4.2.0'
