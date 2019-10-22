@@ -16,10 +16,10 @@ afterAll(async () => {
 });
 
 describe('Reports API', function () {
-    let Reports;
-    let Layers;
-    let Users;
-    let Datasources;
+    let Report;
+    let Layer;
+    let User;
+    let Datasource;
 
     let user;
     let report;
@@ -28,28 +28,28 @@ describe('Reports API', function () {
     let headers;
 
     beforeAll(async function () {
-        Reports = mongoose.model('Reports');
-        Layers = mongoose.model('Layers');
-        Users = mongoose.model('Users');
-        Datasources = mongoose.model('DataSources');
+        Report = mongoose.model('Report');
+        Layer = mongoose.model('Layer');
+        User = mongoose.model('User');
+        Datasource = mongoose.model('Datasource');
         headers = await helpers.login(app);
-        user = await Users.findOne({ userName: 'administrator' });
+        user = await User.findOne({ userName: 'administrator' });
     });
 
     beforeEach(async function () {
-        datasource = await Datasources.create({
+        datasource = await Datasource.create({
             name: 'MySQL Data Source',
             type: 'MySQL',
             status: 1,
         });
 
-        layer = await Layers.create({
+        layer = await Layer.create({
             name: 'Layer',
             status: 'active',
             datasourceID: datasource._id,
         });
 
-        report = await Reports.create({
+        report = await Report.create({
             companyID: 'COMPID',
             reportName: 'Report',
             nd_trash_deleted: false,
@@ -98,13 +98,13 @@ describe('Reports API', function () {
         var report2;
 
         beforeAll(async function () {
-            layer2 = await Layers.create({
+            layer2 = await Layer.create({
                 name: 'Layer2',
                 status: 'active',
                 datasourceID: datasource._id,
             });
 
-            report2 = await Reports.create({
+            report2 = await Report.create({
                 companyID: 'COMPID',
                 reportName: 'Report2',
                 nd_trash_deleted: false,
@@ -204,7 +204,7 @@ describe('Reports API', function () {
             expect(res.body.item).toHaveProperty('_id');
             expect(res.body.item).toHaveProperty('history');
 
-            await Reports.findByIdAndRemove(res.body.item._id);
+            await Report.findByIdAndRemove(res.body.item._id);
         });
     });
 
@@ -264,7 +264,7 @@ describe('Reports API', function () {
             expect(res.body).toHaveProperty('result', 1);
             expect(res.body).toHaveProperty('msg', 'Report shared');
 
-            const r = await Reports.findById(report.id);
+            const r = await Report.findById(report.id);
             expect(r).toHaveProperty('isShared', true);
             expect(r).toHaveProperty('parentFolder', 'root');
         });
@@ -282,7 +282,7 @@ describe('Reports API', function () {
             expect(res.body).toHaveProperty('result', 1);
             expect(res.body).toHaveProperty('msg', 'Report unpublished');
 
-            const r = await Reports.findById(report.id);
+            const r = await Report.findById(report.id);
             expect(r).toHaveProperty('isPublic', false);
             expect(r).toHaveProperty('parentFolder', undefined);
         });

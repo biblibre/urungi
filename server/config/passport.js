@@ -5,7 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const RememberMeStrategy = require('passport-remember-me').Strategy;
 
 const mongoose = require('mongoose');
-var Users = mongoose.model('Users');
+const User = mongoose.model('User');
 
 module.exports = function (passport) {
     passport.serializeUser(function (user, done) {
@@ -13,7 +13,7 @@ module.exports = function (passport) {
     });
 
     passport.deserializeUser(function (id, done) {
-        Users.findById(id, done);
+        User.findById(id, done);
     });
 
     passport.use(new LocalStrategy({
@@ -21,12 +21,12 @@ module.exports = function (passport) {
         passwordField: 'password'
     },
     function (username, password, done) {
-        Users.isValidUserPassword(username, password, done);
+        User.isValidUserPassword(username, password, done);
     }));
 
     passport.use(new RememberMeStrategy(
         function (token, done) {
-            Users.findOne({ accessToken: token }, {}, function (err, user) {
+            User.findOne({ accessToken: token }, {}, function (err, user) {
                 if (err) { return done(err); }
                 if (!user) { return done(null, false); }
                 return done(null, user);
@@ -34,7 +34,7 @@ module.exports = function (passport) {
         },
         function (user, done) {
             var token = ((Math.random() * Math.pow(36, 10) << 0).toString(36)).substr(-8);
-            Users.updateOne({
+            User.updateOne({
                 _id: user.id
             }, {
                 $set: {
@@ -55,7 +55,7 @@ module.exports = function (passport) {
             callbackURL: config.get('google.callbackURL')
         },
         function (req, accessToken, refreshToken, profile, done) {
-            Users.findOrCreateGoogleUser(profile, done);
+            User.findOrCreateGoogleUser(profile, done);
         }
         ));
     }

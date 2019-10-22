@@ -1,14 +1,14 @@
 const config = require('config');
 const mongoose = require('mongoose');
 
-var Reports = mongoose.model('Reports');
+const Report = mongoose.model('Report');
 
 const Controller = require('../../core/controller.js');
 const QueryProcessor = require('../../core/queryProcessor');
 
 class ReportsController extends Controller {
     constructor () {
-        super(Reports);
+        super(Report);
         this.searchFields = ['reportName'];
     }
 }
@@ -29,7 +29,7 @@ exports.ReportsFindAll = async function (req, res) {
         const commonPipeline = [
             {
                 $lookup: {
-                    from: 'wst_Layers',
+                    from: 'layers',
                     localField: 'selectedLayerID',
                     foreignField: '_id',
                     as: 'layer'
@@ -69,9 +69,9 @@ exports.ReportsFindAll = async function (req, res) {
         const countPipeline = commonPipeline.slice();
         countPipeline.push({ $count: 'totalCount' });
 
-        const countDocs = await Reports.aggregate(countPipeline);
+        const countDocs = await Report.aggregate(countPipeline);
         const count = countDocs.length ? countDocs[0].totalCount : 0;
-        const reports = await Reports.aggregate(pipeline);
+        const reports = await Report.aggregate(pipeline);
 
         response = {
             result: 1,
@@ -97,7 +97,7 @@ exports.GetReport = function (req, res) {
         res.status(200).json(result);
         if ((req.query.mode === 'execute' || req.query.mode === 'preview') && result.item) {
             // Note the execution in statistics
-            var statistics = mongoose.model('statistics');
+            var Statistic = mongoose.model('Statistic');
             var stat = {};
             stat.type = 'report';
             stat.relationedID = result.item._id;
@@ -108,7 +108,7 @@ exports.GetReport = function (req, res) {
             } else {
                 stat.action = 'execute';
             }
-            statistics.saveStat(req, stat);
+            Statistic.saveStat(req, stat);
         }
     });
 };
@@ -148,8 +148,7 @@ exports.ReportsUpdate = function (req, res) {
     var data = req.body;
 
     if (!req.user.isAdmin()) {
-        var Reports = mongoose.model('Reports');
-        Reports.findOne({ _id: data._id, owner: req.user._id, companyID: req.user.companyID }, { _id: 1 }, {}, function (err, item) {
+        Report.findOne({ _id: data._id, owner: req.user._id, companyID: req.user.companyID }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
                 controller.update(req).then(function (result) {
@@ -360,5 +359,5 @@ function getReportFromRequest (req) {
         conditions.owner = req.user._id;
     }
 
-    return Reports.findOne(conditions);
+    return Report.findOne(conditions);
 }

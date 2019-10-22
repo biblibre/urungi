@@ -16,10 +16,10 @@ afterAll(async () => {
 });
 
 async function seed () {
-    var DataSources = mongoose.model('DataSources');
+    var Datasource = mongoose.model('Datasource');
 
     const entries = [
-        new DataSources(
+        new Datasource(
             {
                 companyID: 'COMPID',
                 name: 'dummy db',
@@ -32,7 +32,7 @@ async function seed () {
                 nd_trash_deleted: false
             }
         ),
-        new DataSources(
+        new Datasource(
             {
                 companyID: 'COMPID',
                 name: 'sql db',
@@ -65,13 +65,13 @@ function verifyItem (item) {
 };
 
 describe('Data sources API', function () {
-    var DataSources;
+    var Datasource;
 
     let headers;
     let entries;
 
     beforeAll(async () => {
-        DataSources = mongoose.model('DataSources');
+        Datasource = mongoose.model('Datasource');
         headers = await helpers.login(app);
         entries = await seed();
     });
@@ -120,7 +120,7 @@ describe('Data sources API', function () {
         });
 
         it('should find a single valid item', async function () {
-            const ds = await DataSources.findOne();
+            const ds = await Datasource.findOne();
 
             var res = await request(app).get('/api/data-sources/find-one')
                 .query({ id: ds.id })
@@ -161,7 +161,7 @@ describe('Data sources API', function () {
             expect(res.body.item.connection.database)
                 .toBe('database_name');
 
-            await DataSources.deleteOne({ _id: res.body.item._id });
+            await Datasource.deleteOne({ _id: res.body.item._id });
         });
     });
 

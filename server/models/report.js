@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-const ReportColumnSchema = new mongoose.Schema({
+const reportColumnSchema = new mongoose.Schema({
     aggregation: String,
     calculateTotal: Boolean,
     collectionID: String,
@@ -24,8 +24,8 @@ const ReportColumnSchema = new mongoose.Schema({
     zone: String,
 });
 
-const ReportFilterSchema = ReportColumnSchema.clone();
-ReportFilterSchema.add({
+const reportFilterSchema = reportColumnSchema.clone();
+reportFilterSchema.add({
     conditionType: String,
     criterion: {
         date1: String,
@@ -44,22 +44,22 @@ ReportFilterSchema.add({
 });
 
 const ReportPropertiesSchema = new mongoose.Schema({
-    columns: [ReportColumnSchema],
-    filters: [ReportFilterSchema],
+    columns: [reportColumnSchema],
+    filters: [reportFilterSchema],
     height: Number,
     legendPosition: String,
     maxValue: Number,
-    order: [ReportColumnSchema],
+    order: [reportColumnSchema],
     pivotKeys: {
-        columns: [ReportColumnSchema],
-        rows: [ReportColumnSchema],
+        columns: [reportColumnSchema],
+        rows: [reportColumnSchema],
     },
     recordLimit: Number,
-    xkeys: [ReportColumnSchema],
-    ykeys: [ReportColumnSchema],
+    xkeys: [reportColumnSchema],
+    ykeys: [reportColumnSchema],
 });
 
-var ReportsSchema = new mongoose.Schema({
+var reportSchema = new mongoose.Schema({
     author: { type: String }, // Creator's user name
     companyID: { type: String },
     createdBy: { type: String }, // Creator's id
@@ -79,31 +79,30 @@ var ReportsSchema = new mongoose.Schema({
     selectedLayerID: mongoose.Schema.Types.ObjectId,
 }, { collation: { locale: 'en', strength: 2 } });
 
-ReportsSchema.methods.publish = async function () {
+reportSchema.methods.publish = async function () {
     this.isPublic = true;
 
     return this.save();
 };
 
-ReportsSchema.methods.unpublish = async function () {
+reportSchema.methods.unpublish = async function () {
     this.isPublic = false;
 
     return this.save();
 };
 
-ReportsSchema.methods.share = async function (folderId) {
+reportSchema.methods.share = async function (folderId) {
     this.parentFolder = folderId;
     this.isShared = true;
 
     return this.save();
 };
 
-ReportsSchema.methods.unshare = async function () {
+reportSchema.methods.unshare = async function () {
     this.parentFolder = undefined;
     this.isShared = false;
 
     return this.save();
 };
 
-var Reports = mongoose.model('Reports', ReportsSchema, 'wst_Reports');
-module.exports = Reports;
+module.exports = mongoose.model('Report', reportSchema);

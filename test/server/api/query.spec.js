@@ -511,14 +511,14 @@ describe('Queries and data access', function () {
                 const entries = [];
 
                 var knex;
-                var DataSources;
-                var Layers;
+                var Datasource;
+                var Layer;
 
                 let headers;
 
                 beforeAll(async () => {
-                    DataSources = mongoose.model('DataSources');
-                    Layers = mongoose.model('Layers');
+                    Datasource = mongoose.model('Datasource');
+                    Layer = mongoose.model('Layer');
                     headers = await helpers.login(app);
                 });
 
@@ -573,7 +573,7 @@ describe('Queries and data access', function () {
                         await knex(table.tableName).insert(rows);
                     }
 
-                    const dts = new DataSources({
+                    const dts = new Datasource({
                         createdOn: new Date(),
                         name: 'query tests',
                         createdBy: userInfo.id,
@@ -591,7 +591,7 @@ describe('Queries and data access', function () {
 
                     simpleLayer.datasourceID = dtsId;
 
-                    const createdSL = await Layers.create(simpleLayer);
+                    const createdSL = await Layer.create(simpleLayer);
 
                     simpleId = createdSL._id;
                     entries.push(createdSL);
@@ -599,7 +599,7 @@ describe('Queries and data access', function () {
                     const complexLayer = buildComplexLayer(knex);
                     complexLayer.datasourceID = dtsId;
 
-                    const createdCL = await Layers.create(complexLayer);
+                    const createdCL = await Layer.create(complexLayer);
 
                     expect(createdCL).toHaveProperty('_id');
                     complexId = createdCL._id;

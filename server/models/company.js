@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var CompaniesSchema = new mongoose.Schema({
+const companySchema = new mongoose.Schema({
     companyID: { type: String, required: true },
     sharedSpace: [],
     defaultDocument: { type: String },
@@ -14,5 +14,4 @@ var CompaniesSchema = new mongoose.Schema({
     createdOn: { type: Date }
 });
 
-var Companies = mongoose.model('Companies', CompaniesSchema, 'wst_Companies');
-module.exports = Companies;
+module.exports = mongoose.model('Company', companySchema);

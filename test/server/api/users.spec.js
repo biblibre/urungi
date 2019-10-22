@@ -16,22 +16,22 @@ afterAll(async () => {
 });
 
 describe('Users API', function () {
-    let DataSources;
-    let Layers;
-    let Reports;
-    let Dashboards;
-    let Users;
-    let statistics;
+    let Datasource;
+    let Layer;
+    let Report;
+    let Dashboard;
+    let User;
+    let Statistic;
 
     let headers;
 
     beforeAll(async () => {
-        DataSources = mongoose.model('DataSources');
-        Layers = mongoose.model('Layers');
-        Reports = mongoose.model('Reports');
-        Dashboards = mongoose.model('Dashboardsv2');
-        Users = mongoose.model('Users');
-        statistics = mongoose.model('statistics');
+        Datasource = mongoose.model('Datasource');
+        Layer = mongoose.model('Layer');
+        Report = mongoose.model('Report');
+        Dashboard = mongoose.model('Dashboard');
+        User = mongoose.model('User');
+        Statistic = mongoose.model('Statistic');
         headers = await helpers.login(app);
     });
 
@@ -73,9 +73,9 @@ describe('Users API', function () {
         });
 
         it('should find the user and their data', async function () {
-            var User = await Users.findOne({ userName: 'administrator' });
+            var user = await User.findOne({ userName: 'administrator' });
             const res = await request(app).get('/api/admin/users/find-one')
-                .query({ id: User.id })
+                .query({ id: user.id })
                 .set(headers)
                 .expect(200);
 
@@ -121,22 +121,22 @@ describe('Users API', function () {
             expect(res.body.user).toHaveProperty('contextHelp');
             expect(res.body.user).toHaveProperty('filters');
             expect(res.body.user).toHaveProperty('roles');
-            await Users.deleteOne({ userName: 'test' });
+            await User.deleteOne({ userName: 'test' });
         });
     });
 
     describe('POST /api/admin/users/update/:id', function () {
         it('should update administrator data', async function () {
-            var User = await Users.findOne({ userName: 'administrator' });
-            const res = await request(app).post('/api/admin/users/update/' + User.id)
+            var user = await User.findOne({ userName: 'administrator' });
+            const res = await request(app).post('/api/admin/users/update/' + user.id)
                 .set(headers)
-                .send({ email: 'admin@example.com', _id: User.id, firstName: 'update' });
+                .send({ email: 'admin@example.com', _id: user.id, firstName: 'update' });
 
             expect(res.body).toHaveProperty('result', 1);
             expect(res.body).toHaveProperty('msg', '1 record updated.');
-            User = await Users.findOne({ userName: 'administrator' });
-            expect(User.firstName).toBe('update');
-            expect(User.email).toBe('admin@example.com');
+            user = await User.findOne({ userName: 'administrator' });
+            expect(user.firstName).toBe('update');
+            expect(user.email).toBe('admin@example.com');
         });
     });
 
@@ -145,18 +145,18 @@ describe('Users API', function () {
             let res = await request(app).post('/api/admin/users/create')
                 .set(headers)
                 .send({ userName: 'new', pwd1: 'urungi' });
-            var User = await Users.findOne({ userName: 'new' });
-            res = await request(app).post('/api/admin/users/update/' + User.id)
+            var user = await User.findOne({ userName: 'new' });
+            res = await request(app).post('/api/admin/users/update/' + user.id)
                 .set(headers)
-                .send({ email: 'new@example.com', _id: User.id, firstName: 'update' })
+                .send({ email: 'new@example.com', _id: user.id, firstName: 'update' })
                 .expect(200);
 
             expect(res.body).toHaveProperty('result', 1);
             expect(res.body).toHaveProperty('msg', '1 record updated.');
-            User = await Users.findOne({ userName: 'new' });
-            expect(User.firstName).toBe('update');
-            expect(User.email).toBe('new@example.com');
-            res = await Users.deleteOne({ userName: 'new' });
+            user = await User.findOne({ userName: 'new' });
+            expect(user.firstName).toBe('update');
+            expect(user.email).toBe('new@example.com');
+            res = await User.deleteOne({ userName: 'new' });
         });
     });
 
@@ -167,10 +167,10 @@ describe('Users API', function () {
                 .send({ userName: 'new', pwd1: 'urungi' })
                 .expect(200);
 
-            var User = await Users.findOne({ userName: 'new' });
-            res = await request(app).post('/api/admin/users/delete/' + User.id)
+            var user = await User.findOne({ userName: 'new' });
+            res = await request(app).post('/api/admin/users/delete/' + user.id)
                 .set(headers)
-                .send({ _id: User.id })
+                .send({ _id: user.id })
                 .expect(200);
 
             expect(res.body).toHaveProperty('result', 1);
@@ -179,20 +179,29 @@ describe('Users API', function () {
     });
 
     describe('POST /api/admin/users/change-user-status', function () {
-        it('should return status 200 ', async function () {
-            let res = await request(app).post('/api/admin/users/create')
+        it('should return status 204 ', async function () {
+            await request(app).post('/api/admin/users/create')
                 .set(headers)
                 .send({ userName: 'new', pwd1: 'urungi' });
 
-            var User = await Users.findOne({ userName: 'new' });
-            res = await request(app).post('/api/admin/users/change-user-status')
+            var user = await User.findOne({ userName: 'new' });
+            await request(app).post('/api/admin/users/change-user-status')
                 .set(headers)
-                .send({ userID: User.id, status: 'Not active' })
-                .expect(200);
+                .send({ userID: user.id, status: 'Not active' })
+                .expect(204);
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('msg', 'Status updated.');
-            res = await Users.deleteOne({ userName: 'new' });
+            await User.deleteOne({ userName: 'new' });
+        });
+
+        it('should return status 500 if status is invalid', async function () {
+            const user = await User.create({ userName: 'new', pwd1: 'password' });
+
+            await request(app).post('/api/admin/users/change-user-status')
+                .set(headers)
+                .send({ userID: user.id, status: {} })
+                .expect(500);
+
+            await user.remove();
         });
     });
 
@@ -222,11 +231,11 @@ describe('Users API', function () {
         let datasource, layer, report, dashboard;
         let user;
         beforeEach(async function () {
-            datasource = await DataSources.create({ companyID: 'COMPID', name: 'DataSource', type: 'DataSource', status: 1, nd_trash_deleted: false });
-            layer = await Layers.create({ companyID: 'COMPID', name: 'Layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
-            user = await Users.findOne({ userName: 'administrator' });
-            report = await Reports.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: user.id, selectedLayerID: layer.id, isShared: true });
-            dashboard = await Dashboards.create({ companyID: 'COMPID', dashboardName: 'Dashboard1', owner: user.id, nd_trash_deleted: false });
+            datasource = await Datasource.create({ companyID: 'COMPID', name: 'DataSource', type: 'DataSource', status: 1, nd_trash_deleted: false });
+            layer = await Layer.create({ companyID: 'COMPID', name: 'Layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
+            user = await User.findOne({ userName: 'administrator' });
+            report = await Report.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: user.id, selectedLayerID: layer.id, isShared: true });
+            dashboard = await Dashboard.create({ companyID: 'COMPID', dashboardName: 'Dashboard1', owner: user.id, nd_trash_deleted: false });
         });
 
         afterEach(async function () {
@@ -243,11 +252,11 @@ describe('Users API', function () {
                 .set(headers)
                 .expect(200);
 
-            const reportsCount = await Reports.countDocuments({ owner: user._id });
-            const dashboardsCount = await Dashboards.countDocuments({ owner: user._id });
-            const datasourcesCount = await DataSources.countDocuments({});
-            const layersCount = await Layers.countDocuments({});
-            const usersCount = await Users.countDocuments({});
+            const reportsCount = await Report.countDocuments({ owner: user._id });
+            const dashboardsCount = await Dashboard.countDocuments({ owner: user._id });
+            const datasourcesCount = await Datasource.countDocuments({});
+            const layersCount = await Layer.countDocuments({});
+            const usersCount = await User.countDocuments({});
 
             expect(res.body).toHaveProperty('reports', reportsCount);
             expect(res.body).toHaveProperty('dashBoards', dashboardsCount);
@@ -260,26 +269,26 @@ describe('Users API', function () {
 
     describe('GET /api/get-user-counts/:id', function () {
         it('should count public and private reports and dashboard created by administrator ', async function () {
-            var User = await Users.findOne({ userName: 'administrator' });
-            var report = await Reports.create({
+            var user = await User.findOne({ userName: 'administrator' });
+            var report = await Report.create({
                 companyID: 'COMPID',
                 reportName: 'Report',
                 nd_trash_deleted: false,
                 createdBy: 'administrator',
-                owner: User.id,
+                owner: user.id,
                 isShared: true,
             });
 
-            var dashboard = await Dashboards.create({
+            var dashboard = await Dashboard.create({
                 companyID: 'COMPID',
                 dashboardName: 'Dashboardcount',
-                owner: User.id,
+                owner: user.id,
                 nd_trash_deleted: false,
                 isShared: true,
             });
 
-            const res = await request(app).get('/api/get-user-counts/' + User.id)
-                .query({ userID: User.id })
+            const res = await request(app).get('/api/get-user-counts/' + user.id)
+                .query({ userID: user.id })
                 .set(headers)
                 .expect(200);
 
@@ -294,25 +303,25 @@ describe('Users API', function () {
 
     describe('GET /api/get-user-reports/:id', function () {
         it('should get a report with its data which was created by administrator ', async function () {
-            var User = await Users.findOne({ userName: 'administrator' });
-            var report = await Reports.create({
+            var user = await User.findOne({ userName: 'administrator' });
+            var report = await Report.create({
                 companyID: 'COMPID',
                 reportName: 'Report',
                 nd_trash_deleted: false,
                 createdBy: 'administrator',
-                owner: User.id,
+                owner: user.id,
                 isShared: true,
                 parentFolder: 'parent',
                 reportDescription: 'report Description',
                 reportType: 'report',
             });
 
-            const res = await request(app).get('/api/get-user-reports/' + User.id)
-                .query({ userID: User.id })
+            const res = await request(app).get('/api/get-user-reports/' + user.id)
+                .query({ userID: user.id })
                 .set(headers)
                 .expect(200);
 
-            const reportsCount = await Reports.countDocuments({ owner: User.id });
+            const reportsCount = await Report.countDocuments({ owner: user.id });
 
             expect(res.body).toHaveProperty('result', 1);
             expect(res.body).toHaveProperty('page');
@@ -326,18 +335,18 @@ describe('Users API', function () {
 
     describe('GET /api/get-user-dashboards/:id', function () {
         it('should get a dashboard with its data which was created by administrator ', async function () {
-            var User = await Users.findOne({ userName: 'administrator' });
-            var dashboard = await Dashboards.create({
+            var user = await User.findOne({ userName: 'administrator' });
+            var dashboard = await Dashboard.create({
                 companyID: 'COMPID',
                 dashboardName: 'Dashboardget',
-                owner: User.id,
+                owner: user.id,
                 nd_trash_deleted: false,
                 isShared: true,
                 dashboardDescription: 'dashboard Description',
                 dashboardType: 'dashboard',
             });
-            const res = await request(app).get('/api/get-user-dashboards/' + User.id)
-                .query({ userID: User.id })
+            const res = await request(app).get('/api/get-user-dashboards/' + user.id)
+                .query({ userID: user.id })
                 .set(headers)
                 .expect(200);
 
@@ -355,15 +364,15 @@ describe('Users API', function () {
 
     describe('GET /api/get-user-data with new user', function () {
         it('should return status 200 ', async function () {
-            await Users.findOne({ userName: 'administrator' });
+            await User.findOne({ userName: 'administrator' });
             let res = await request(app).post('/api/admin/users/create')
                 .set(headers)
                 .send({ userName: 'new', pwd1: 'urungi' })
                 .expect(200);
 
-            var newUser = await Users.findOne({ userName: 'new' });
+            var newUser = await User.findOne({ userName: 'new' });
             const newHeaders = await helpers.login(app, 'new', 'urungi');
-            newUser = await Users.findOne({ userName: 'new' });
+            newUser = await User.findOne({ userName: 'new' });
             res = await request(app).get('/api/get-user-data')
                 .set(newHeaders)
                 .expect(200);
@@ -400,7 +409,7 @@ describe('Users API', function () {
     });
     describe('GET /api/get-user-data with administrator', function () {
         it('should get administrator data ', async function () {
-            await Users.findOne({ userName: 'administrator' });
+            await User.findOne({ userName: 'administrator' });
             const res = await request(app).get('/api/get-user-data')
                 .set(headers)
                 .expect(200);
@@ -445,10 +454,10 @@ describe('Users API', function () {
         let statistics1, statistics2, statistics3;
 
         beforeEach(async function () {
-            var User = await Users.findOne({ userName: 'administrator' });
-            statistics1 = await statistics.create({ type: 'report', relationedName: 'report1', action: 'execute', companyID: 'COMPID', userID: User.id, userName: 'administrator', createdBy: User.id });
-            statistics2 = await statistics.create({ type: 'report', relationedName: 'report1', action: 'execute', companyID: 'COMPID', userID: User.id, userName: 'administrator', createdBy: User.id });
-            statistics3 = await statistics.create({ type: 'report', relationedName: 'report2', action: 'execute', companyID: 'COMPID', userID: User.id, userName: 'administrator', createdBy: User.id });
+            var user = await User.findOne({ userName: 'administrator' });
+            statistics1 = await Statistic.create({ type: 'report', relationedName: 'report1', action: 'execute', companyID: 'COMPID', userID: user.id, userName: 'administrator', createdBy: user.id });
+            statistics2 = await Statistic.create({ type: 'report', relationedName: 'report1', action: 'execute', companyID: 'COMPID', userID: user.id, userName: 'administrator', createdBy: user.id });
+            statistics3 = await Statistic.create({ type: 'report', relationedName: 'report2', action: 'execute', companyID: 'COMPID', userID: user.id, userName: 'administrator', createdBy: user.id });
         });
         afterEach(async function () {
             await Promise.all([
@@ -493,35 +502,39 @@ describe('Users API', function () {
 
     describe('GET /api/set-viewed-context-help', function () {
         it('should return status 200', async function () {
-            var User = await Users.findOne({ userName: 'administrator' });
-            expect(User).toHaveProperty('contextHelp');
-            expect(User.contextHelp).toHaveLength(0);
-            await request(app).get('/api/set-viewed-context-help')
+            var user = await User.findOne({ userName: 'administrator' });
+            expect(user).toHaveProperty('contextHelp');
+            expect(user.contextHelp).toHaveLength(0);
+            const res = await request(app).get('/api/set-viewed-context-help')
                 .query({ contextHelpName: 'homeIndex' })
                 .set(headers)
                 .expect(200);
 
-            User = await Users.findOne({ userName: 'administrator' });
-            expect(User.contextHelp).toContain('homeIndex');
+            expect(res.body).toHaveProperty('data');
+            expect(res.body.data).toHaveLength(1);
+            expect(res.body.data[0]).toBe('homeIndex');
+
+            user = await User.findOne({ userName: 'administrator' });
+            expect(user.contextHelp).toContain('homeIndex');
         });
     });
 
     describe('GET /api/get-user-objects', function () {
         it('should get report and dashboard id and title which was created by administrator', async function () {
-            var User = await Users.findOne({ userName: 'administrator' });
-            var report = await Reports.create({
+            var user = await User.findOne({ userName: 'administrator' });
+            var report = await Report.create({
                 companyID: 'COMPID',
                 reportName: 'Report',
                 createdBy: 'administrator',
-                owner: User.id,
+                owner: user.id,
                 isShared: true,
                 parentFolder: 'root',
                 nd_trash_deleted: false,
             });
-            var dashboard = await Dashboards.create({
+            var dashboard = await Dashboard.create({
                 companyID: 'COMPID',
                 dashboardName: 'Dashboard',
-                owner: User.id,
+                owner: user.id,
                 isShared: true,
                 parentFolder: 'root',
                 nd_trash_deleted: false,

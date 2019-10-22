@@ -19,6 +19,26 @@ describe('api', () => {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
+    describe('api.changeUserStatus', function () {
+        it('should call /api/admin/users/change-user-status', function () {
+            const url = '/api/admin/users/change-user-status';
+            const userID = 'foo';
+            const newStatus = 'active';
+            const data = {
+                userID: userID,
+                status: newStatus,
+            };
+
+            $httpBackend.expect('POST', url, data).respond(204, '');
+
+            const p = api.changeUserStatus(userID, newStatus);
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toBe('');
+        });
+    });
+
     describe('api.getReports', () => {
         it('should call /api/reports/find-all', () => {
             const url = '/api/reports/find-all' +
@@ -518,6 +538,26 @@ describe('api', () => {
             setTimeout($httpBackend.flush);
 
             return expect(api.getLayers()).rejects.toThrow('Forbidden');
+        });
+    });
+
+    describe('api.changeLayerStatus', function () {
+        it('should call /api/layers/change-layer-status', function () {
+            const url = '/api/layers/change-layer-status';
+            const layerID = 'foo';
+            const newStatus = 'active';
+            const data = {
+                layerID: layerID,
+                status: newStatus,
+            };
+
+            $httpBackend.expect('POST', url, data).respond(204, '');
+
+            const p = api.changeLayerStatus(layerID, newStatus);
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toBe('');
         });
     });
 

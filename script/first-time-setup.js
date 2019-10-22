@@ -4,8 +4,8 @@ global.config = config;
 const hash = require('../server/util/hash');
 
 const connection = require('../server/config/mongoose')();
-const Users = connection.model('Users');
-const Companies = connection.model('Companies');
+const User = connection.model('User');
+const Company = connection.model('Company');
 
 if (process.argv.length !== 3) {
     console.error('Usage: node first-time-setup.js PASSWORD');
@@ -13,13 +13,13 @@ if (process.argv.length !== 3) {
 }
 
 (async function () {
-    let company = await Companies.findOne({ companyID: 'COMPID' });
+    let company = await Company.findOne({ companyID: 'COMPID' });
     if (company) {
         console.error('Company COMPID already exists. 1st time setup has already been done');
         process.exit(1);
     }
 
-    const user = await Users.findOne({ userName: 'administrator' });
+    const user = await User.findOne({ userName: 'administrator' });
     if (user) {
         console.error('User administrator already exists. 1st time setup has already been done');
         process.exit(1);
@@ -30,7 +30,7 @@ if (process.argv.length !== 3) {
         createdBy: 'urungi setup',
         nd_trash_deleted: false,
     };
-    company = await Companies.create(theCompany);
+    company = await Company.create(theCompany);
 
     function hashPassword (password) {
         return new Promise(function (resolve, reject) {
@@ -57,7 +57,7 @@ if (process.argv.length !== 3) {
         nd_trash_deleted: false,
     };
 
-    await Users.create(adminUser);
+    await User.create(adminUser);
 
     connection.close();
 })();

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var FilesSchema = new mongoose.Schema({
+var fileSchema = new mongoose.Schema({
     companyID: { type: String, required: false },
     filename: { type: String, required: true }, // The name under which the file is stored in the system
     name: { type: String, required: false }, // The name seen by the user
@@ -13,5 +13,4 @@ var FilesSchema = new mongoose.Schema({
     createdOn: { type: Date }
 });
 
-var Files = mongoose.model('Files', FilesSchema, 'wst_Files');
-module.exports = Files;
+module.exports = mongoose.model('File', fileSchema);

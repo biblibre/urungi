@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
         useFindAndModify: false,
         useUnifiedTopology: true,
     });
-    const Datasource = require('../server/custom/data-sources/model');
+    const Datasource = require('../server/models/datasource');
     let datasource = await Datasource.findOne({ name: 'Heroku PostgreSQL' });
     if (!datasource) {
         const re = new RegExp('^postgres://(.*):(.*)@(.*):(.*)/(.*)$');
@@ -32,7 +32,7 @@ const mongoose = require('mongoose');
         datasource = await datasource.save();
     }
 
-    const Layer = require('../server/custom/layers/model');
+    const Layer = require('../server/models/layer');
     let layer = await Layer.findOne({ name: 'Movies' });
     if (!layer) {
         layer = new Layer({

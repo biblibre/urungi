@@ -20,7 +20,7 @@ module.exports = function (app) {
 
     app.get('/api/dashboards/:id.png', async function (req, res, next) {
         const mongoose = require('mongoose');
-        const Dashboard = mongoose.model('Dashboardsv2');
+        const Dashboard = mongoose.model('Dashboard');
 
         try {
             const dashboard = await Dashboard.findById(req.params.id);
@@ -49,7 +49,7 @@ module.exports = function (app) {
 
     app.get('/api/dashboards/:id.pdf', async function (req, res, next) {
         const mongoose = require('mongoose');
-        const Dashboard = mongoose.model('Dashboardsv2');
+        const Dashboard = mongoose.model('Dashboard');
 
         try {
             const dashboard = await Dashboard.findById(req.params.id);

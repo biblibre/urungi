@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var RolesSchema = new mongoose.Schema({
+const roleSchema = new mongoose.Schema({
     companyID: { type: String, required: false },
     name: { type: String, required: true },
     description: { type: String },
@@ -18,5 +18,4 @@ var RolesSchema = new mongoose.Schema({
     createdOn: { type: Date }
 });
 
-var Roles = mongoose.model('Roles', RolesSchema, 'wst_Roles');
-module.exports = Roles;
+module.exports = mongoose.model('Role', roleSchema);
