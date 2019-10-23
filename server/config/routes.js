@@ -1,3 +1,4 @@
+const config = require('config');
 const debug = require('debug')('urungi:server');
 const mongoose = require('mongoose');
 const Log = mongoose.model('Log');
@@ -6,14 +7,9 @@ const Company = mongoose.model('Company');
 module.exports = function (app, passport) {
     var hash = require('../util/hash');
 
-    app.get('/', function (req, res) {
-        res.cookie('XSRF-TOKEN', req.csrfToken());
-        res.render('index');
-    });
-
     app.get('/login', function (req, res, next) {
         res.cookie('XSRF-TOKEN', req.csrfToken());
-        res.render('login');
+        res.render('login', { base: config.get('base') });
     });
 
     app.get('/auth/google', passport.authenticate('google'));

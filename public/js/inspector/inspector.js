@@ -258,7 +258,7 @@
 
                 $scope.selectPreset = function (e) {
                     if (e) {
-                        $scope.properties.image = $(e.target).css('background-image');
+                        $scope.properties.image = e.target.style.getPropertyValue('background-image');
                     }
                 };
 

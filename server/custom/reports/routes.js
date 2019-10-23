@@ -29,7 +29,7 @@ module.exports = function (app) {
                 return res.sendStatus(404);
             }
 
-            const url = config.get('url') + `/#/reports/view/${report.id}`;
+            const url = config.get('url') + config.get('base') + `/reports/view/${report.id}`;
             const buffer = await pikitia.toPNG(url, {
                 cookies: req.cookies,
                 viewport: {
@@ -38,10 +38,11 @@ module.exports = function (app) {
                 },
             });
 
-            const filename = report.reportName.replace(/"/g, '_') + '.png';
-            res.set('Content-Disposition', 'attachment; filename="' + filename + '"');
-            res.set('Content-Type', 'image/png');
-            res.status(200).send(buffer);
+            const response = {
+                data: buffer.toString('base64'),
+            };
+
+            res.status(200).json(response);
         } catch (e) {
             return next(e);
         }
@@ -54,13 +55,14 @@ module.exports = function (app) {
                 return res.sendStatus(404);
             }
 
-            const url = config.get('url') + `/#/reports/view/${report.id}`;
+            const url = config.get('url') + config.get('base') + `/reports/view/${report.id}`;
             const buffer = await pikitia.toPDF(url, { cookies: req.cookies });
 
-            const filename = report.reportName.replace(/"/g, '_') + '.pdf';
-            res.set('Content-Disposition', 'attachment; filename="' + filename + '"');
-            res.set('Content-Type', 'application/pdf');
-            res.status(200).send(buffer);
+            const response = {
+                data: buffer.toString('base64'),
+            };
+
+            res.status(200).json(response);
         } catch (e) {
             return next(e);
         }

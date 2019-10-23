@@ -12,9 +12,9 @@
         },
     });
 
-    ReportsListItemController.$inject = ['$uibModal', 'api', 'reportModel', 'gettextCatalog'];
+    ReportsListItemController.$inject = ['$uibModal', 'api', 'base', 'reportModel', 'gettextCatalog'];
 
-    function ReportsListItemController ($uibModal, api, reportModel, gettextCatalog) {
+    function ReportsListItemController ($uibModal, api, base, reportModel, gettextCatalog) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -89,7 +89,7 @@
         function getCopyLink () {
             const protocol = window.location.protocol;
             const host = window.location.host;
-            return protocol + '//' + host + '/#/reports/view/' + vm.report._id;
+            return protocol + '//' + host + base + '/reports/view/' + vm.report._id;
         }
     }
 })();

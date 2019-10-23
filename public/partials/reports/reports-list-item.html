@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-3">
-        <a ng-href="/#/reports/view/{{ vm.report._id }}">{{ vm.report.reportName }}</a>
+        <a ng-href="reports/view/{{ vm.report._id }}">{{ vm.report.reportName }}</a>
         <div class="badge-list">
             <span ng-if="vm.report.isPublic" class="badge" translate>public</span>
             <span ng-if="vm.report.isShared" class="badge" translate>shared</span>
@@ -25,7 +25,7 @@
         <a class="pull-right list-button btn-duplicate" ng-click="vm.openDuplicateModal()" uib-tooltip="{{ 'Duplicate this report' | translate}}" tooltip-placement="bottom">
             <i class="fa fa-copy"></i>
         </a>
-        <a class="pull-right list-button btn-edit" ng-href="/#/reports/edit/{{ vm.report._id }}" uib-tooltip="{{ 'Edit this report' | translate }}" tooltip-placement="bottom">
+        <a class="pull-right list-button btn-edit" ng-href="reports/edit/{{ vm.report._id }}" uib-tooltip="{{ 'Edit this report' | translate }}" tooltip-placement="bottom">
             <i class="fa fa-pencil"></i>
         </a>
         <a class="list-button list-button-share pull-right"

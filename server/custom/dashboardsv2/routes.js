@@ -28,7 +28,7 @@ module.exports = function (app) {
                 return res.sendStatus(404);
             }
 
-            const url = config.get('url') + `/#/dashboards/view/${dashboard.id}`;
+            const url = config.get('url') + config.get('base') + `/dashboards/view/${dashboard.id}`;
             const buffer = await pikitia.toPNG(url, {
                 cookies: req.cookies,
                 viewport: {
@@ -37,11 +37,11 @@ module.exports = function (app) {
                 },
             });
 
-            const filename = dashboard.dashboardName.replace(/"/g, '_') + '.png';
+            const response = {
+                data: buffer.toString('base64'),
+            };
 
-            res.set('Content-Disposition', 'attachment; filename="' + filename + '"');
-            res.set('Content-Type', 'image/png');
-            res.status(200).send(buffer);
+            res.status(200).json(response);
         } catch (e) {
             return next(e);
         }
@@ -57,13 +57,14 @@ module.exports = function (app) {
                 return res.sendStatus(404);
             }
 
-            const url = config.get('url') + `/#/dashboards/view/${dashboard.id}`;
+            const url = config.get('url') + config.get('base') + `/dashboards/view/${dashboard.id}`;
             const buffer = await pikitia.toPDF(url, { cookies: req.cookies });
 
-            const filename = dashboard.dashboardName.replace(/"/g, '_') + '.pdf';
-            res.set('Content-Disposition', 'attachment; filename="' + filename + '"');
-            res.set('Content-Type', 'application/pdf');
-            res.status(200).send(buffer);
+            const response = {
+                data: buffer.toString('base64'),
+            };
+
+            res.status(200).json(response);
         } catch (e) {
             return next(e);
         }

@@ -3,10 +3,13 @@
 
     angular.module('app.reports').controller('ReportsViewController', ReportsViewController);
 
-    ReportsViewController.$inject = ['$scope', '$timeout', 'api', 'xlsxService', 'userService', 'report'];
+    ReportsViewController.$inject = ['$scope', '$timeout', 'Noty', 'gettextCatalog', 'api', 'xlsxService', 'userService', 'report'];
 
-    function ReportsViewController ($scope, $timeout, api, xlsxService, userService, report) {
+    function ReportsViewController ($scope, $timeout, Noty, gettextCatalog, api, xlsxService, userService, report) {
         const vm = this;
+
+        vm.downloadAsPDF = downloadAsPDF;
+        vm.downloadAsPNG = downloadAsPNG;
         vm.report = report;
         vm.prompts = {};
         vm.getPrompts = getPrompts;
@@ -64,6 +67,29 @@
             api.getReportData(vm.report).then(function (res) {
                 xlsxService.saveReportAsXLSX(vm.report, res.data);
             });
+        }
+
+        function downloadAsPDF () {
+            api.getReportAsPDF(vm.report._id).then(res => {
+                download(res.data, 'application/pdf', vm.report.reportName + '.pdf');
+            }, () => {
+                new Noty({ text: gettextCatalog.getString('The export failed. Please contact the system administrator.'), type: 'error' }).show();
+            });
+        }
+
+        function downloadAsPNG () {
+            api.getReportAsPNG(vm.report._id).then(res => {
+                download(res.data, 'image/png', vm.report.reportName + '.png');
+            }, () => {
+                new Noty({ text: gettextCatalog.getString('The export failed. Please contact the system administrator.'), type: 'error' }).show();
+            });
+        }
+
+        function download (data, type, filename) {
+            const a = document.createElement('a');
+            a.download = filename;
+            a.href = 'data:' + type + ';base64,' + data;
+            a.dispatchEvent(new MouseEvent('click'));
         }
     }
 })();

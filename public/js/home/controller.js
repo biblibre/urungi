@@ -151,7 +151,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'mom
                         gettextCatalog.getString('Next Step') +
                         '</h4><p>' +
                         gettextCatalog.getString('Setup a data source') +
-                        '</p><a class="btn btn-info btn-xs" href="/#/data-sources#intro">' +
+                        '</p><a class="btn btn-info btn-xs" href="data-sources#intro">' +
                         gettextCatalog.getString('Go to data sources and continue tour') +
                         '</a>',
                 });
@@ -165,7 +165,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'mom
                             gettextCatalog.getString('Explore data') +
                             '</p><p>' +
                             gettextCatalog.getString('See how you can explore data creating queries easily without any technical knowledge') +
-                            '</p><a class="btn btn-info btn-xs" href="/#/explore#intro">' +
+                            '</p><a class="btn btn-info btn-xs" href="explore#intro">' +
                             gettextCatalog.getString('Go to data explorer and continue tour') +
                             '</a>',
                     });
@@ -177,7 +177,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'mom
                             gettextCatalog.getString('Single query reports') +
                             '</p><p>' +
                             gettextCatalog.getString('See how you can create single query reports that shows your data using charts and data grids') +
-                            '</p><a class="btn btn-info btn-xs" href="/#/report#intro">' +
+                            '</p><a class="btn btn-info btn-xs" href="report#intro">' +
                             gettextCatalog.getString('Go to single query report designer and continue tour') +
                             '</a>',
                     });
@@ -189,7 +189,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'mom
                             gettextCatalog.getString('Dashboards') +
                             '</p><p>' +
                             gettextCatalog.getString('See how to create dashboards composed with a set of single query reports') +
-                            '</p><a class="btn btn-info btn-xs" href="/#/dashboard#intro">' +
+                            '</p><a class="btn btn-info btn-xs" href="dashboard#intro">' +
                             gettextCatalog.getString('Go to dashboards and continue tour') +
                             '</a>',
                     });

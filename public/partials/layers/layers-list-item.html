@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-6">
-        <a ng-href="/#/layers/{{ vm.layer._id }}">{{ vm.layer.name }}</a>
+        <a ng-href="layers/{{ vm.layer._id }}">{{ vm.layer.name }}</a>
     </div>
 
     <div class="col-md-4">
@@ -19,7 +19,7 @@
         <a class="pull-right list-button btn-delete" ng-click="vm.openDeleteModal()" uib-tooltip="{{ 'Delete this layer' | translate}}" tooltip-placement="bottom">
             <i class="fa fa-trash-o"></i>
         </a>
-        <a class="pull-right list-button btn-edit" ng-href="/#/layers/{{ vm.layer._id }}" uib-tooltip="{{ 'Edit this layer' | translate }}" tooltip-placement="bottom">
+        <a class="pull-right list-button btn-edit" ng-href="layers/{{ vm.layer._id }}" uib-tooltip="{{ 'Edit this layer' | translate }}" tooltip-placement="bottom">
             <i class="fa fa-pencil"></i>
         </a>
     </div>

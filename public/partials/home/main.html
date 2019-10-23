@@ -47,8 +47,8 @@
                     <ol>
                         <li ng-repeat="execution in lastExecutions">
                             <div class="last-executed-item">
-                                <a ng-if="execution.type == 'report'" ng-href="/#/reports/view/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                <a ng-if="execution.type == 'Dashboard'" ng-href="/#/dashboards/view/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                <a ng-if="execution.type == 'report'" ng-href="reports/view/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                <a ng-if="execution.type == 'Dashboard'" ng-href="dashboards/view/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                 <span class="pull-right">{{execution.lastDate}}</span>
                             </div>
                         </li>
@@ -67,8 +67,8 @@
                     <ol>
                         <li ng-repeat="execution in mostExecutions">
                             <div class="most-executed-item">
-                                <a ng-if="execution.type == 'report'" ng-href="/#/reports/view/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                <a ng-if="execution.type == 'Dashboard'" ng-href="/#/dashboards/view/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                <a ng-if="execution.type == 'report'" ng-href="reports/view/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                <a ng-if="execution.type == 'Dashboard'" ng-href="dashboards/view/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
 
                                 <span class="badge pull-right">{{execution.count}}</span>
                             </div>
@@ -87,11 +87,11 @@
     </div>
 
     <div data-nodrag class="tree-node tree-node-item" ng-if="node.nodeType == 'report'">
-        <i class="fa fa-bar-chart"></i><a data-nodrag  href="/#/reports/view/{{node.id}}">{{node.title}}</a>
+        <i class="fa fa-bar-chart"></i><a data-nodrag  href="reports/view/{{node.id}}">{{node.title}}</a>
     </div>
 
     <div data-nodrag class="tree-node tree-node-item" ng-if="node.nodeType == 'dashboard'">
-        <i class="fa fa-dashboard"></i><a data-nodrag  href="/#/dashboards/view/{{node.id}}">{{node.title}}</a>
+        <i class="fa fa-dashboard"></i><a data-nodrag  href="dashboards/view/{{node.id}}">{{node.title}}</a>
     </div>
 
     <ol ng-if="node.nodes" data-nodrag ui-tree-nodes="" data-nodrop-enabled ng-model="node.nodes" ng-class="{hidden: collapsed}">

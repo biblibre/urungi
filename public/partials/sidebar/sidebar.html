@@ -1,62 +1,62 @@
 <div class="list-group">
     <div class="list-group-item active">
-        <a href="/#/users/{{vm.user._id}}/" style="color: #fff;">
+        <a href="users/{{vm.user._id}}/" style="color: #fff;">
             <i class="fa fa-fw fa-user"></i>
             {{vm.user.userName}}
         </a>
-        <a href="/#/logout" class="badge">
+        <a href="logout" class="badge">
             <span translate>logout</span>
             <i class="fa fa-sign-out" style="color: #f00;"></i>
         </a>
     </div>
 
-    <a id="homeMainMenu" href="/#/home" class="list-group-item ">
+    <a id="homeMainMenu" href="home" class="list-group-item ">
         <i class="fa fa-fw fa-home"></i>
         <span translate>Home</span>
     </a>
-    <a id="dashboardsMainMenu" ng-if="vm.user.dashboardsCreate || vm.counts.dashBoards > 0" href="/#/dashboards/list" class="list-group-item ">
+    <a id="dashboardsMainMenu" ng-if="vm.user.dashboardsCreate || vm.counts.dashBoards > 0" href="dashboards/list" class="list-group-item ">
        <i class="fa fa-fw fa-dashboard"></i>
        <span translate>My Dashboards</span>
        <span class="badge">{{vm.counts.dashBoards}}</span>
     </a>
-    <a id="reportsMainMenu" ng-if="vm.user.reportsCreate || vm.counts.reports > 0" href="/#/reports" class="list-group-item">
+    <a id="reportsMainMenu" ng-if="vm.user.reportsCreate || vm.counts.reports > 0" href="reports" class="list-group-item">
        <i class="fa fa-fw fa-bar-chart"></i>
        <span translate>My Reports</span>
        <span class="badge">{{vm.counts.reports}}</span>
     </a>
-    <a id="exploreMainMenu" ng-if="vm.user.exploreData" href="/#/explore" class="list-group-item">
+    <a id="exploreMainMenu" ng-if="vm.user.exploreData" href="explore" class="list-group-item">
         <i class="fa fa-fw fa-sun-o"></i>
         <span translate>Explore</span>
     </a>
-    <a id="sharedSpaceMainMenu" ng-show="vm.user.isAdmin()" href="/#/shared-space" class="list-group-item">
+    <a id="sharedSpaceMainMenu" ng-show="vm.user.isAdmin()" href="shared-space" class="list-group-item">
         <i class="fa fa-fw fa-sitemap"></i>
         <span translate>Shared space</span>
     </a>
-    <a id="layersMainMenu" ng-show="vm.user.isAdmin()" href="/#/layers" class="list-group-item">
+    <a id="layersMainMenu" ng-show="vm.user.isAdmin()" href="layers" class="list-group-item">
         <i class="fa fa-fw fa-map-o"></i>
         <span translate>Layers</span>
         <span class="badge">{{vm.counts.layers}}</span>
     </a>
-    <a id="datasourcesMainMenu" ng-show="vm.user.isAdmin()" href="/#/data-sources" class="list-group-item">
+    <a id="datasourcesMainMenu" ng-show="vm.user.isAdmin()" href="data-sources" class="list-group-item">
         <i class="fa fa-fw fa-database"></i>
         <span translate>Data sources</span>
         <span class="badge">{{vm.counts.dataSources}}</span>
     </a>
-    <a id="rolesMainMenu" ng-show="vm.user.isAdmin()" href="/#/roles" class="list-group-item">
+    <a id="rolesMainMenu" ng-show="vm.user.isAdmin()" href="roles" class="list-group-item">
         <i class="fa fa-fw fa-users"></i>
         <span translate>Roles</span>
         <span class="badge">{{vm.counts.roles}}</span>
     </a>
-    <a id="usersMainMenu" ng-show="vm.user.isAdmin()" href="/#/users" class="list-group-item">
+    <a id="usersMainMenu" ng-show="vm.user.isAdmin()" href="users" class="list-group-item">
         <i class="fa fa-fw fa-user"></i>
         <span translate>Users</span>
         <span class="badge">{{vm.counts.users}}</span>
     </a>
-    <a id="usersImport" ng-show="vm.user.isAdmin()" href="/#/import" class="list-group-item">
+    <a id="usersImport" ng-show="vm.user.isAdmin()" href="import" class="list-group-item">
         <i class="fa fa-fw fa-upload"></i>
         <span translate>Import</span>
     </a>
-    <a id="usersExport" ng-show="vm.user.isAdmin()" href="/#/export" class="list-group-item">
+    <a id="usersExport" ng-show="vm.user.isAdmin()" href="export" class="list-group-item">
         <i class="fa fa-fw fa-download"></i>
         <span translate>Export</span>
     </a>
@@ -64,7 +64,7 @@
         <i class="fa fa-fw fa-map"></i>
         <span translate>Guided tour</span>
     </a>
-    <a id="aboutMenu" href="/#/about" class="list-group-item">
+    <a id="aboutMenu" href="about" class="list-group-item">
         <i class="fa fa-fw fa-question-circle"></i>
         <span translate>About</span>
     </a>

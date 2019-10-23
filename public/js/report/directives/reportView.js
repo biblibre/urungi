@@ -15,7 +15,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
                 var html = '<div class="report-view" ng-hide="loading" style="height:100%">';
                 html += newHtml;
                 html += '</div><div ng-show="loading" class="container-fluid" >';
-                html += '<h3><img src="/images/loader.gif" width="32px" height="32px"/>{{loadingMessage}}</h3>';
+                html += '<h3><img src="images/loader.gif" width="32px" height="32px"/>{{loadingMessage}}</h3>';
                 html += '</div>';
 
                 element.html(html);
@@ -85,7 +85,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
                             break;
                         }
                     } else {
-                        $scope.changeContent('<div style="width: 100%; height: 100%; display: flex; align-items: center;"><span style="color: darkgray; font-size: initial; width:100%; text-align: center;"><img src="/images/empty.png">' + gettextCatalog.getString('No data for this report') + '</span></div>');
+                        $scope.changeContent('<div style="width: 100%; height: 100%; display: flex; align-items: center;"><span style="color: darkgray; font-size: initial; width:100%; text-align: center;"><img src="images/empty.png">' + gettextCatalog.getString('No data for this report') + '</span></div>');
                     }
                 }).then(function () {
                     $scope.loading = false;
@@ -93,7 +93,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
             });
 
             $scope.$on('clearReport', function () {
-                $scope.changeContent('<div class="container-fluid"  ng-show="loading" ><h3><img src="/images/loader.gif" width="32px" height="32px"/>{{loadingMessage}}</h3></div>');
+                $scope.changeContent('<div class="container-fluid"  ng-show="loading" ><h3><img src="images/loader.gif" width="32px" height="32px"/>{{loadingMessage}}</h3></div>');
                 $scope.loading = false;
             });
 
@@ -103,7 +103,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
             });
         },
 
-        template: '<div class="container-fluid"  ng-show="loading" ><h3><img src="/images/loader.gif" width="32px" height="32px"/>{{loadingMessage}}</h3></div>'
+        template: '<div class="container-fluid"  ng-show="loading" ><h3><img src="images/loader.gif" width="32px" height="32px"/>{{loadingMessage}}</h3></div>'
 
     };
 });

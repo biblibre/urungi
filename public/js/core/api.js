@@ -30,6 +30,8 @@
             updateReport: updateReport,
             getReportData: getReportData,
             getReportFilterValues: getReportFilterValues,
+            getReportAsPDF: getReportAsPDF,
+            getReportAsPNG: getReportAsPNG,
 
             getDashboards: getDashboards,
             deleteDashboard: deleteDashboard,
@@ -40,6 +42,8 @@
             unshareDashboard: unshareDashboard,
             createDashboard: createDashboard,
             updateDashboard: updateDashboard,
+            getDashboardAsPDF: getDashboardAsPDF,
+            getDashboardAsPNG: getDashboardAsPNG,
 
             getLayers: getLayers,
             changeLayerStatus: changeLayerStatus,
@@ -213,6 +217,14 @@
             return post('/api/reports/filter-values-query', { filter: filter });
         }
 
+        function getReportAsPDF (id) {
+            return get(`/api/reports/${id}.pdf`);
+        }
+
+        function getReportAsPNG (id) {
+            return get(`/api/reports/${id}.png`);
+        }
+
         /**
          * Fetch multiple dashboards
          *
@@ -294,6 +306,14 @@
          */
         function updateDashboard (dashboard) {
             return post('/api/dashboardsv2/update/' + dashboard._id, dashboard).then(data => data.item);
+        }
+
+        function getDashboardAsPDF (id) {
+            return get(`/api/dashboards/${id}.pdf`);
+        }
+
+        function getDashboardAsPNG (id) {
+            return get(`/api/dashboards/${id}.png`);
         }
 
         /**

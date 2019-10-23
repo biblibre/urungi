@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="list-group">
-                                        <a ng-href="/#/reports/view/{{report._id}}" class="list-group-item" ng-repeat="report in vm.userReports">
+                                        <a ng-href="reports/view/{{report._id}}" class="list-group-item" ng-repeat="report in vm.userReports">
                                             {{ report.reportName }}
                                             <span ng-if="report.isShared" class="badge badge-success pull-right" translate>shared</span>
                                         </a>
@@ -103,7 +103,7 @@
 
                                 <div class="panel-body">
                                     <div class="list-group">
-                                        <a ng-href="/#/dashboards/view/{{ dsh._id }}" class="list-group-item" ng-repeat="dsh in vm.userDashboards">
+                                        <a ng-href="dashboards/view/{{ dsh._id }}" class="list-group-item" ng-repeat="dsh in vm.userDashboards">
                                             {{ dsh.dashboardName }}
                                             <span ng-if="dsh.isShared" class="badge badge-success pull-right" translate>shared</span>
                                         </a>

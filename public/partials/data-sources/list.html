@@ -8,12 +8,12 @@
             <div class="page-header">
                 <span class="h3" translate>Data sources</span>
 
-                <a id="newDataSourceBtn" href="/#/data-sources/new" class="btn btn-success pull-right" uib-tooltip="{{'Click here to create a new data source' | translate}}" tooltip-placement="bottom" translate>New Data Source</a>
+                <a id="newDataSourceBtn" href="data-sources/new" class="btn btn-success pull-right" uib-tooltip="{{'Click here to create a new data source' | translate}}" tooltip-placement="bottom" translate>New Data Source</a>
                 <a class="btn btn-info pull-right" ng-click="vm.showIntro()" style="margin-right: 3px;" uib-tooltip="{{ 'Click here to conduct the guided tour for data sources' | translate}}" tooltip-placement="bottom"><i class="fa fa-map"></i></a>
             </div>
 
             <div id="datasourceList" class="list-group" ng-init="vm.getDataSources(1,'',['name','type','connection.host','connection.port','connection.database'])">
-                <a id="datasourceListItem" ng-href="/#/data-sources/{{dts._id}}" class="list-group-item" ng-repeat="dts in vm.items">
+                <a id="datasourceListItem" ng-href="data-sources/{{dts._id}}" class="list-group-item" ng-repeat="dts in vm.items">
                     <span id="datasourceListItemType" class="pull-right branded-label" >{{dts.type}}</span>
                     <h4 id="datasourceListItemName" class="list-group-item-heading" uib-tooltip="{{ 'Click here to see or set data source details' | translate}}">{{dts.name}} </h4>
                     <p id="datasourceListItemDetails" class="list-group-item-text">
