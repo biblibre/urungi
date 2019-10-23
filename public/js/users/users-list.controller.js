@@ -3,9 +3,9 @@
 
     angular.module('app.users').controller('UsersListController', UsersListController);
 
-    UsersListController.$inject = ['$uibModal', 'connection', 'userService'];
+    UsersListController.$inject = ['$uibModal', 'Noty', 'gettextCatalog', 'api', 'connection', 'userService'];
 
-    function UsersListController ($uibModal, connection, userService) {
+    function UsersListController ($uibModal, Noty, gettextCatalog, api, connection, userService) {
         const vm = this;
 
         vm.page = 1;
@@ -29,10 +29,9 @@
                     if (user.status === 'active') { newStatus = 'Not active'; }
                     if (user.status === 'Not active') { newStatus = 'active'; }
 
-                    var data = { userID: user._id, status: newStatus };
-
-                    connection.post('/api/admin/users/change-user-status', data).then(function (result) {
+                    api.changeUserStatus(user._id, newStatus).then(function (result) {
                         user.status = newStatus;
+                        new Noty({ text: gettextCatalog.getString('Status updated'), type: 'success' }).show();
                     });
                 }
             });

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
-const Reports = require('../reports/model');
+const Report = require('./report');
 
-const DashboardReportSchema = new mongoose.Schema({
+const dashboardReportSchema = new mongoose.Schema({
     author: { type: String },
     companyID: { type: String },
     createdBy: { type: String },
@@ -9,7 +9,7 @@ const DashboardReportSchema = new mongoose.Schema({
     history: [],
     id: String,
     owner: { type: String },
-    properties: Reports.schema.path('properties'),
+    properties: Report.schema.path('properties'),
     reportDescription: { type: String },
     reportName: { type: String, required: true },
     reportSubType: { type: String },
@@ -17,13 +17,13 @@ const DashboardReportSchema = new mongoose.Schema({
     selectedLayerID: mongoose.Schema.Types.ObjectId,
 });
 
-var Dashboardsv2Schema = new mongoose.Schema({
+const dashboardSchema = new mongoose.Schema({
     companyID: { type: String, required: true },
     dashboardName: { type: String, required: true },
     dashboardDescription: { type: String },
     dashboardType: { type: String },
     html: { type: String },
-    reports: [DashboardReportSchema],
+    reports: [dashboardReportSchema],
     items: [],
     backgroundColor: { type: String },
     backgroundImage: { type: String },
@@ -40,31 +40,30 @@ var Dashboardsv2Schema = new mongoose.Schema({
     createdOn: { type: Date }
 }, { collation: { locale: 'en', strength: 2 } });
 
-Dashboardsv2Schema.methods.publish = async function () {
+dashboardSchema.methods.publish = async function () {
     this.isPublic = true;
 
     return this.save();
 };
 
-Dashboardsv2Schema.methods.unpublish = async function () {
+dashboardSchema.methods.unpublish = async function () {
     this.isPublic = false;
 
     return this.save();
 };
 
-Dashboardsv2Schema.methods.share = async function (folderId) {
+dashboardSchema.methods.share = async function (folderId) {
     this.parentFolder = folderId;
     this.isShared = true;
 
     return this.save();
 };
 
-Dashboardsv2Schema.methods.unshare = async function () {
+dashboardSchema.methods.unshare = async function () {
     this.parentFolder = undefined;
     this.isShared = false;
 
     return this.save();
 };
 
-var Dashboardsv2 = mongoose.model('Dashboardsv2', Dashboardsv2Schema, 'wst_Dashboardsv2');
-module.exports = Dashboardsv2;
+module.exports = mongoose.model('Dashboard', dashboardSchema);

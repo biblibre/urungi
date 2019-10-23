@@ -36,17 +36,16 @@ module.exports = function () {
         });
     });
 
-    require('../custom/companies/model');
-    require('../custom/dashboards/model');
-    require('../custom/dashboardsv2/model');
-    require('../custom/data-sources/model');
-    require('../custom/files/model');
-    require('../custom/layers/model');
-    require('../custom/logs/model');
-    require('../custom/reports/model');
-    require('../custom/roles/model');
-    require('../custom/statistics/model');
-    require('../custom/users/model');
+    require('../models/company');
+    require('../models/dashboard');
+    require('../models/datasource');
+    require('../models/file');
+    require('../models/layer');
+    require('../models/log');
+    require('../models/report');
+    require('../models/statistic');
+    require('../models/user');
+    require('../models/role');
 
     return connection;
 };

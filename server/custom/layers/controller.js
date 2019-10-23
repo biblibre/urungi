@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-var Layers = mongoose.model('Layers');
+const Layer = mongoose.model('Layer');
 const Controller = require('../../core/controller.js');
 class LayersController extends Controller {
     constructor () {
-        super(Layers);
+        super(Layer);
         this.searchFields = ['actionCategory'];
     }
 }
@@ -65,8 +65,11 @@ exports.LayersFindOne = function (req, res) {
 };
 
 exports.changeLayerStatus = function (req, res) {
-    Layers.setStatus(req, function (result) {
-        res.status(200).json(result);
+    const update = { $set: { status: req.body.status } };
+    Layer.findByIdAndUpdate(req.body.layerID, update).then(() => {
+        res.sendStatus(204);
+    }, err => {
+        res.status(500).json({ error: err });
     });
 };
 
@@ -82,16 +85,16 @@ exports.LayersDelete = function (req, res) {
 
     req.body = data;
 
-    var Reports = mongoose.model('Reports');
-    var Dashboardsv2 = mongoose.model('Dashboardsv2');
+    var Report = mongoose.model('Report');
+    var Dashboard = mongoose.model('Dashboard');
 
-    Reports.find({ selectedLayerID: data._id }).then(function (reports) {
+    Report.find({ selectedLayerID: data._id }).then(function (reports) {
         if (reports.length === 0) {
-            Dashboardsv2.find({ 'reports.selectedLayerID': data._id, nd_trash_deleted: false }).then(function (dashboard) {
+            Dashboard.find({ 'reports.selectedLayerID': data._id, nd_trash_deleted: false }).then(function (dashboard) {
                 if (dashboard.length === 0) {
                     if (!req.user.isAdmin()) {
-                        var Layers = mongoose.model('Layers');
-                        Layers.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
+                        var Layer = mongoose.model('Layer');
+                        Layer.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
                             if (err) throw err;
                             if (item) {
                                 controller.remove(req).then(function (result) {

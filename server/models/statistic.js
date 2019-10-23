@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var statisticsSchema = new mongoose.Schema({
+var statisticSchema = new mongoose.Schema({
     type: String,
     userID: String,
     userName: String,
@@ -13,7 +13,7 @@ var statisticsSchema = new mongoose.Schema({
     createdBy: { type: String }
 });
 
-statisticsSchema.statics.saveStat = function (req, data) {
+statisticSchema.statics.saveStat = function (req, data) {
     var companyID = req.isAuthenticated() ? req.user.companyID : null;
 
     var statistic = {
@@ -31,5 +31,4 @@ statisticsSchema.statics.saveStat = function (req, data) {
     return this.create(statistic);
 };
 
-var statistics = mongoose.model('statistics', statisticsSchema, 'wst_Statistics');
-module.exports = statistics;
+module.exports = mongoose.model('Statistic', statisticSchema);

@@ -26,7 +26,7 @@ const connection = require('./config/mongoose')();
 
 const mongoStore = new MongoStore({
     mongooseConnection: connection,
-    collection: 'wst_Sessions',
+    collection: 'sessions',
     ttl: 60 * 60 * 24, // 24 hours
 });
 app.use(cookieParser());

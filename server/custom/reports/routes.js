@@ -1,7 +1,7 @@
 const config = require('config');
 const restrict = require('../../middlewares/restrict');
 const mongoose = require('mongoose');
-const Report = mongoose.model('Reports');
+const Report = mongoose.model('Report');
 const pikitia = require('../../helpers/pikitia');
 
 module.exports = function (app) {

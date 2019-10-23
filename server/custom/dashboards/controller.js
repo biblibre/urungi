@@ -1,13 +1,13 @@
 const config = require('config');
 const mongoose = require('mongoose');
 
-var Dashboards = mongoose.model('Dashboards');
+var Dashboard = mongoose.model('Dashboard');
 
 const Controller = require('../../core/controller.js');
 
 class DashboardsController extends Controller {
     constructor () {
-        super(Dashboards);
+        super(Dashboard);
         this.searchFields = [];
     }
 }
@@ -27,11 +27,10 @@ exports.DashboardsFindAll = function (req, res) {
     var fields = { dashboardName: 1, owner: 1, isPublic: 1 };
     var params = {};
 
-    var Dashboards = mongoose.model('Dashboards');
-    Dashboards.find(find, fields, params, function (err, items) {
+    Dashboard.find(find, fields, params, function (err, items) {
         if (err) throw err;
 
-        Dashboards.countDocuments(find, function (err, count) {
+        Dashboard.countDocuments(find, function (err, count) {
             if (err) throw err;
 
             var result = { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
@@ -77,8 +76,7 @@ exports.DashboardsUpdate = function (req, res) {
     var data = req.body;
 
     if (!req.user.isAdmin()) {
-        var Dashboards = mongoose.model('Dashboards');
-        Dashboards.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
+        Dashboard.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
                 controller.update(req, function (result) {
@@ -108,8 +106,7 @@ exports.DashboardsDelete = function (req, res) {
     req.body = data;
 
     if (!req.user.isAdmin()) {
-        var Dashboards = mongoose.model('Dashboards');
-        Dashboards.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
+        Dashboard.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
                 controller.update(req, function (result) {
@@ -138,13 +135,13 @@ exports.getDashboard = function (req, res) {
         if (result) {
             // Annotate the execution in statistics
 
-            var statistics = mongoose.model('statistics');
+            var Statistic = mongoose.model('Statistic');
             var stat = {};
             stat.type = 'dashboard';
             stat.relationedID = result.item._id;
             stat.relationedName = result.item.dashboardName;
             if (req.query.linked) { stat.action = 'execute link'; } else { stat.action = 'execute'; }
-            statistics.saveStat(req, stat);
+            Statistic.saveStat(req, stat);
 
             for (var r in result.item.items) {
                 if (result.item.items[r].itemType === 'reportBlock') {
@@ -156,9 +153,9 @@ exports.getDashboard = function (req, res) {
             }
 
             // Get all the reports...
-            var Reports = mongoose.model('Reports');
+            var Report = mongoose.model('Report');
 
-            Reports.find({ _id: { $in: theReports } }, function (err, reports) {
+            Report.find({ _id: { $in: theReports } }, function (err, reports) {
                 if (err) { console.error(err); }
 
                 if (reports) {
@@ -185,17 +182,16 @@ exports.PublishDashboard = function (req, res) {
     var data = req.body;
 
     // tiene el usuario conectado permisos para publicar?
-    var Dashboards = mongoose.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
     if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
 
-    Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
+    Dashboard.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;
         if (Dashboard) {
             Dashboard.isPublic = true;
 
-            Dashboards.updateOne({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
+            Dashboard.updateOne({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
@@ -214,16 +210,15 @@ exports.UnpublishDashboard = function (req, res) {
     var data = req.body;
 
     // TODO:tiene el usuario conectado permisos para publicar?
-    var Dashboards = mongoose.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
     if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
 
-    Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
+    Dashboard.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;
         if (Dashboard) {
             Dashboard.isPublic = false;
-            Dashboards.updateOne({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
+            Dashboard.updateOne({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
@@ -243,18 +238,17 @@ exports.ShareDashboard = function (req, res) {
     var parentFolder = data.parentFolder;
 
     // tiene el usuario conectado permisos para publicar?
-    var Dashboards = mongoose.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
     if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
 
-    Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
+    Dashboard.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;
         if (Dashboard) {
             Dashboard.parentFolder = parentFolder;
             Dashboard.isShared = true;
 
-            Dashboards.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
+            Dashboard.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {
@@ -273,16 +267,15 @@ exports.UnshareDashboard = function (req, res) {
     var data = req.body;
 
     // TODO:tiene el usuario conectado permisos para publicar?
-    var Dashboards = mongoose.model('Dashboards');
     var find = { _id: data._id, owner: req.user._id, companyID: req.user.companyID };
 
     if (req.user.isAdmin()) { find = { _id: data._id, companyID: req.user.companyID }; }
 
-    Dashboards.findOne(find, {}, {}, function (err, Dashboard) {
+    Dashboard.findOne(find, {}, {}, function (err, Dashboard) {
         if (err) throw err;
         if (Dashboard) {
             Dashboard.isShared = false;
-            Dashboards.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
+            Dashboard.update({ _id: data._id }, { $set: Dashboard.toObject() }, function (err, numAffected) {
                 if (err) throw err;
 
                 if (numAffected > 0) {

@@ -11,9 +11,9 @@
         },
     });
 
-    LayersListItemController.$inject = ['$uibModal', 'api', 'userService', 'gettextCatalog'];
+    LayersListItemController.$inject = ['$uibModal', 'Noty', 'api', 'userService', 'gettextCatalog'];
 
-    function LayersListItemController ($uibModal, api, userService, gettextCatalog) {
+    function LayersListItemController ($uibModal, Noty, api, userService, gettextCatalog) {
         const vm = this;
 
         vm.toggleActive = toggleActive;
@@ -26,6 +26,7 @@
 
                     api.changeLayerStatus(vm.layer._id, newStatus).then(() => {
                         vm.layer.status = newStatus;
+                        new Noty({ text: gettextCatalog.getString('Status updated'), type: 'success' }).show();
                     });
                 }
             });

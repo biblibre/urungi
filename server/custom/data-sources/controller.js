@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-var DataSources = mongoose.model('DataSources');
+const Datasource = mongoose.model('Datasource');
 const Controller = require('../../core/controller.js');
 const Db = require('../../core/connection').Db;
 
 class DataSourcesController extends Controller {
     constructor () {
-        super(DataSources);
+        super(Datasource);
         this.searchFields = ['actionCategory'];
     }
 }

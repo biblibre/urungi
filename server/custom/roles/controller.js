@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-var Roles = mongoose.model('Roles');
+var Role = mongoose.model('Role');
 const Controller = require('../../core/controller.js');
 
 class RolesController extends Controller {
     constructor () {
-        super(Roles);
+        super(Role);
         this.searchFields = ['actionCategory'];
     }
 }

@@ -1,6 +1,7 @@
 const debug = require('debug')('urungi:server');
 const mongoose = require('mongoose');
-const Logs = mongoose.model('Logs');
+const Log = mongoose.model('Log');
+const Company = mongoose.model('Company');
 
 module.exports = function (app, passport) {
     var hash = require('../util/hash');
@@ -25,10 +26,9 @@ module.exports = function (app, passport) {
     );
 
     app.post('/api/login', function (req, res, next) {
-        var Users = mongoose.model('Users');
-        var Companies = mongoose.model('Companies');
+        var User = mongoose.model('User');
 
-        Users.countDocuments({}, function (err, c) {
+        User.countDocuments({}, function (err, c) {
             if (err) throw err;
 
             if (c === 0) {
@@ -37,7 +37,7 @@ module.exports = function (app, passport) {
                 theCompany.companyID = 'COMPID';
                 theCompany.createdBy = 'urungi setup';
                 theCompany.nd_trash_deleted = false;
-                Companies.create(theCompany, function (result) {
+                Company.create(theCompany, function (result) {
                 });
 
                 var adminUser = {};
@@ -53,27 +53,27 @@ module.exports = function (app, passport) {
 
                     adminUser.salt = salt;
                     adminUser.hash = hash;
-                    var User = mongoose.model('Users');
+                    var User = mongoose.model('User');
 
                     User.create(adminUser, function (err, user) {
                         if (err) throw err;
-                        authenticate(passport, Users, req, res, next);
+                        authenticate(passport, User, req, res, next);
                     });
                 });
             } else {
-                authenticate(passport, Users, req, res, next);
+                authenticate(passport, User, req, res, next);
             }
         });
     });
 };
 
-function authenticate (passport, Users, req, res, next) {
+function authenticate (passport, User, req, res, next) {
     passport.authenticate('local', function (err, user, info) {
         if (err) { return next(err); }
 
         if (!user) {
             if (global.logFailLogin) {
-                Logs.saveToLog(req, { text: 'User fail login: ' + info.message, code: 102 });
+                Log.saveToLog(req, { text: 'User fail login: ' + info.message, code: 102 });
             }
             res.status(401).send(info.message);
         } else {
@@ -89,18 +89,17 @@ function authenticate (passport, Users, req, res, next) {
             }
 
             // insert the company's Data into the user to avoid a 2nd server query'
-            var Companies = mongoose.model('Companies');
 
-            Companies.findOne({ companyID: user.companyID }, {}, function (err, company) {
+            Company.findOne({ companyID: user.companyID }, {}, function (err, company) {
                 if (err) throw err;
 
                 if (!company) {
-                    Logs.saveToLog(req, { text: 'User fail login: ' + user.userName + ' (' + user.email + ') user company not found!', code: 102 });
+                    Log.saveToLog(req, { text: 'User fail login: ' + user.userName + ' (' + user.email + ') user company not found!', code: 102 });
                     res.status(401).send("User's company not found!");
                 } else {
                     user.companyData = company;
 
-                    Users.updateOne({
+                    User.updateOne({
                         _id: user._id
                     }, {
                         $set: loginData
@@ -111,7 +110,7 @@ function authenticate (passport, Users, req, res, next) {
                             res.json({ user: user.toObject() });
 
                             if (global.logSuccessLogin) {
-                                Logs.saveToLog(req, { text: 'User login: ' + user.userName + ' (' + user.email + ')', code: 102 });
+                                Log.saveToLog(req, { text: 'User login: ' + user.userName + ' (' + user.email + ')', code: 102 });
                             }
                         });
                     });

@@ -12,6 +12,7 @@
             getCounts: getCounts,
             getUserData: getUserData,
             getUserObjects: getUserObjects,
+            changeUserStatus: changeUserStatus,
 
             getDatasource: getDatasource,
             getDataSources: getDataSources,
@@ -64,6 +65,15 @@
 
         function getUserObjects () {
             return connection.get('/api/get-user-objects').then(res => res.items);
+        }
+
+        function changeUserStatus (userID, newStatus) {
+            const data = {
+                userID: userID,
+                status: newStatus,
+            };
+
+            return post('/api/admin/users/change-user-status', data);
         }
 
         function getDatasource (id) {
@@ -307,7 +317,7 @@
                 status: newStatus,
             };
 
-            return connection.post('/api/layers/change-layer-status', data);
+            return post('/api/layers/change-layer-status', data);
         }
 
         /**

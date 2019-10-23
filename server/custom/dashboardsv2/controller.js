@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-const Dashboardsv2 = mongoose.model('Dashboardsv2');
+const Dashboard = mongoose.model('Dashboard');
 
 const Controller = require('../../core/controller.js');
 
 class Dashboardsv2Controller extends Controller {
     constructor () {
-        super(Dashboardsv2);
+        super(Dashboard);
         this.searchFields = [];
     }
 }
@@ -80,7 +80,7 @@ exports.Dashboardsv2Update = function (req, res) {
     var data = req.body;
 
     if (!req.user.isAdmin()) {
-        Dashboardsv2.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
+        Dashboard.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
             if (err) throw err;
             if (item) {
                 controller.update(req).then(function (result) {
@@ -131,13 +131,13 @@ exports.getDashboard = function (req, res) {
 
         if (result) {
             // Annotate the execution in statistics
-            var statistics = mongoose.model('statistics');
+            const Statistic = mongoose.model('Statistic');
             var stat = {};
             stat.type = 'Dashboard';
             stat.relationedID = result.item._id;
             stat.relationedName = result.item.dashboardName;
             stat.action = 'execute';
-            statistics.saveStat(req, stat);
+            Statistic.saveStat(req, stat);
 
             for (var r in result.item.items) {
                 if (result.item.items[r].itemType === 'reportBlock') {
@@ -149,9 +149,9 @@ exports.getDashboard = function (req, res) {
             }
 
             // Get all the reports...
-            var Reports = mongoose.model('Reports');
+            var Report = mongoose.model('Report');
 
-            Reports.find({ _id: { $in: theReports } }, function (err, reports) {
+            Report.find({ _id: { $in: theReports } }, function (err, reports) {
                 if (err) { console.error(err); }
 
                 if (reports) {
@@ -256,5 +256,5 @@ function getDashboardFromRequest (req) {
         conditions.owner = req.user._id;
     }
 
-    return Dashboardsv2.findOne(conditions).exec();
+    return Dashboard.findOne(conditions).exec();
 }

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const Companies = mongoose.model('Companies');
+const Company = mongoose.model('Company');
 
 exports.getCompanyData = function (req, res) {
-    Companies.findOne({ companyID: req.user.companyID, nd_trash_deleted: false }, {}, function (err, company) {
+    Company.findOne({ companyID: req.user.companyID, nd_trash_deleted: false }, {}, function (err, company) {
         if (err) throw err;
 
         res.status(200).json({ result: 1, page: 1, pages: 1, items: company });
@@ -12,7 +12,7 @@ exports.getCompanyData = function (req, res) {
 exports.saveSharedSpace = function (req, res) {
     var data = req.body;
 
-    Companies.updateOne({ companyID: req.user.companyID }, { $set: { sharedSpace: data } }, function (err, rawResponse) {
+    Company.updateOne({ companyID: req.user.companyID }, { $set: { sharedSpace: data } }, function (err, rawResponse) {
         if (err) throw err;
 
         let result;
@@ -29,7 +29,7 @@ exports.saveSharedSpace = function (req, res) {
 exports.saveCustomCSS = function (req, res) {
     var data = req.body.customCSS;
 
-    Companies.updateOne({ companyID: req.user.companyID }, { $set: { customCSS: data } }, function (err, numAffected) {
+    Company.updateOne({ companyID: req.user.companyID }, { $set: { customCSS: data } }, function (err, numAffected) {
         if (err) throw err;
 
         let result;
@@ -46,7 +46,7 @@ exports.saveCustomCSS = function (req, res) {
 exports.saveCustomLogo = function (req, res) {
     var data = req.body;
 
-    Companies.updateOne({ companyID: req.user.companyID }, { $set: { customLogo: data } }, function (err, numAffected) {
+    Company.updateOne({ companyID: req.user.companyID }, { $set: { customLogo: data } }, function (err, numAffected) {
         if (err) throw err;
 
         let result;

@@ -4,7 +4,7 @@ const layerUtils = require('../../shared/layerUtils.js');
 exports.execute = async function (query) {
     const warnings = [];
 
-    const Layer = mongoose.model('Layers');
+    const Layer = mongoose.model('Layer');
     const lyrList = await Layer.find({ _id: query.layerID });
     if (lyrList.length === 0) {
         throw new Error('Layer not found');
@@ -13,8 +13,8 @@ exports.execute = async function (query) {
 
     const datasourceID = queryLayer.datasourceID;
 
-    const DataSource = mongoose.model('DataSources');
-    const dtsList = await DataSource.find({ _id: datasourceID });
+    const Datasource = mongoose.model('Datasource');
+    const dtsList = await Datasource.find({ _id: datasourceID });
     if (dtsList.length === 0) {
         throw new Error('Data source not found');
     }

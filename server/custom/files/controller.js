@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var Files = mongoose.model('Files');
+const File = mongoose.model('File');
 
 exports.getFiles = function (req, res) {
     var find = { type: new RegExp('image', 'i'), upload_user_id: req.user._id };
@@ -8,7 +8,7 @@ exports.getFiles = function (req, res) {
         find.extension = req.query.format;
     }
 
-    Files.find(find, {}, { sort: { created: -1 } }, function (err, files) {
+    File.find(find, {}, { sort: { created: -1 } }, function (err, files) {
         if (err) throw err;
 
         res.status(200).json({ result: 1, files: files });
@@ -37,7 +37,7 @@ exports.registerUpload = async function (req, res) {
     };
 
     try {
-        const createdFile = await Files.create(fileInfo);
+        const createdFile = await File.create(fileInfo);
         res.status(200).json({ result: 1, item: createdFile });
     } catch (err) {
         console.error(err);
