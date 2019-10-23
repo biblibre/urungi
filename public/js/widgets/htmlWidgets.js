@@ -90,39 +90,6 @@ angular.module('app').service('htmlWidgets', function (gettextCatalog) {
                 '</div>';
     };
 
-    this.getTextLargeHTML = function () {
-        return '<div page-block class="container-fluid featurette ndContainer"  ndType="container" >' +
-                    '<h2 page-block class="editable featurette-heading"  ndType="header" contenteditable="false">' + gettextCatalog.getString('Oh yeah, it is that good.') + ' <span class="text-muted">See for yourself.</span></h2>' +
-                    '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>' +
-                    '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
-                    '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>' +
-                '</div>';
-    };
-
-    this.getTabsHTML = function (id, tabs) {
-        var theHTML = '<div page-block id="' + id + '" class="container-fluid ndContainer"  ndType="tabsContainer" >' +
-                            '<div class="nav-tabs-justified ng-isolate-scope">' +
-                                '<ul id="' + id + '_HEADER" class="nav nav-tabs" ng-class="{\'nav-stacked\': vertical, \'nav-justified\': justified}">';
-        for (const t in tabs) {
-            theHTML += '<li id="' + tabs[t].id + '_HEADER" heading="Home" class="ng-isolate-scope" >' +
-                                        '<a id="' + tabs[t].id + '_LABEL" ng-click="selectThisTab(\'' + id + '\',\'' + tabs[t].id + '\')"  class="ng-binding">' + tabs[t].label + '</a>' +
-                                    '</li>';
-        }
-
-        theHTML += '</ul>' +
-                              '<div id="' + id + '_BODY" class="tab-content">';
-
-        for (const t in tabs) {
-            theHTML += '<div id="' + tabs[t].id + '_BODY" class="tab-pane Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" style="min-Height:150px;padding:5px;"></div>';
-        }
-
-        theHTML += '</div>' +
-                                '</div>' +
-                        '</div>';
-
-        return theHTML;
-    };
-
     this.getDivider = function () {
         return '<hr page-block class="featurette-divider" ndType="featureteDivider">';
     };
@@ -145,18 +112,6 @@ angular.module('app').service('htmlWidgets', function (gettextCatalog) {
 
     this.getPageHeader = function () {
         return '<div page-block ndtype="page-header" class="page-header"><h1 page-block ndtype="heading" class="editable">Lorem Ipsum</h1><p page-block ndtype="paragraph" class="editable">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p></div>';
-    };
-
-    this.getDefinitionList = function () {
-        return '<dl page-block style="padding:5px;" ndType="dl"><dt page-block class="editable" ndType="dt">Lorem ipsum</dt><dd page-block ndType="dd" class="editable">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor... </dd><dt page-block ndType="dt" class="editable">Lorem ipsum</dt><dd page-block class="editable" ndType="dd">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...</dd></dl>';
-    };
-
-    this.getBlockQuote = function () {
-
-    };
-
-    this.getUnOrderedList = function () {
-
     };
 
     this.getHeading = function () {

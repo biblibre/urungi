@@ -77,6 +77,7 @@ var reportSchema = new mongoose.Schema({
     reportSubType: { type: String }, // FIXME This is not used
     reportType: { type: String },
     selectedLayerID: mongoose.Schema.Types.ObjectId,
+    theme: String,
 }, { collation: { locale: 'en', strength: 2 } });
 
 reportSchema.methods.publish = async function () {

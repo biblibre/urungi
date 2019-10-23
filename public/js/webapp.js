@@ -28,6 +28,7 @@
         'app.layers',
         'app.users',
         'app.io',
+        'app.themes',
         'app.templates',
     ]);
 

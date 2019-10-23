@@ -51,6 +51,8 @@
             deleteLayer: deleteLayer,
             getLayer: getLayer,
             updateLayer: updateLayer,
+
+            getThemes: getThemes,
         };
 
         return service;
@@ -391,6 +393,15 @@
          */
         function updateLayer (layer) {
             return post('/api/layers/update/' + layer._id, layer).then(data => data.item);
+        }
+
+        /**
+         * Fetch the list of available themes
+         */
+        function getThemes () {
+            return $http.get('/api/themes').then(res => {
+                return res.data;
+            });
         }
 
         /**

@@ -14,7 +14,7 @@
             <a id="reportTypeIndicator" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'indicator', 'report-unselected-btn': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="images/indicator.png"></a>
             <a id="reportTypeGauge" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'gauge', 'report-unselected-btn': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="images/gauge.png"></a>
 
-            <button ng-show="['chart-line', 'chart-pie', 'chart-donut'].includes(selectedReport.reportType)" type="button" class="btn btn-default btn-sm pull-right" title="{{ 'Report settings' | translate }}" ng-click="openReportSettingsModal()">
+            <button ng-show="isReportSettingsModalAvailable()" type="button" class="btn btn-default btn-sm pull-right" title="{{ 'Report settings' | translate }}" ng-click="openReportSettingsModal()">
                 <i class="fa fa-gear"></i>
             </button>
         </div>

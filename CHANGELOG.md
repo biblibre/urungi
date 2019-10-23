@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added ability to change column's format in report (for date and number)
 - Added ability to export dashboards and reports as PNG or PDF
 - Added ability to calculate totals in grid and vgrid
+- Added ability to select a theme for reports and dashboards
 
 ### Changed
 

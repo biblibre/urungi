@@ -96,7 +96,7 @@
     "test": "jest",
     "posttest": "run-s -s -c lint:*",
     "lint:js": "eslint .",
-    "lint:css": "stylelint public/css",
+    "lint:css": "stylelint public/css public/themes",
     "lint:html": "htmlhint public/partials"
   },
   "config": {

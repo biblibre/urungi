@@ -44,18 +44,15 @@
 
     angular.module('app.inspector').directive('appInspector', appInspector);
 
-    appInspector.$inject = ['$compile', 'c3Charts', 'textStyles', '$window'];
+    appInspector.$inject = ['$compile', '$timeout', 'c3Charts', 'textStyles', '$window'];
 
-    function appInspector ($compile, c3Charts, textStyles, $window) {
+    function appInspector ($compile, $timeout, c3Charts, textStyles, $window) {
         return {
             transclude: true,
             scope: {
                 onChange: '=',
-                description: '@',
                 element: '=',
-                properties: '=',
                 dashboard: '=',
-                wstMode: '@'
             },
 
             templateUrl: 'partials/widgets/inspector.html',
@@ -504,6 +501,53 @@
                         $('#select-box').css('height', elementHeight);
                     }
                 }
+
+                function clearInlineStyle (element) {
+                    const cssProperties = [
+                        'background',
+                        'background-image',
+                        'background-repeat',
+                        'border',
+                        'border-radius',
+                        'color',
+                        'font-family',
+                        'font-size',
+                        'font-style',
+                        'font-weight',
+                        'height',
+                        'margin',
+                        'padding',
+                        'text-align',
+                        'text-decoration',
+                    ];
+
+                    for (const cssProperty of cssProperties) {
+                        element.css(cssProperty, '');
+                    }
+                }
+
+                $scope.clearElementInlineStyle = function () {
+                    const element = $scope.selectedElement;
+
+                    clearInlineStyle(element);
+
+                    $timeout(function () {
+                        $scope.$broadcast('element.reselected', element);
+                    }, 0);
+                };
+
+                $scope.clearTreeInlineStyle = function () {
+                    const element = $scope.selectedElement;
+
+                    clearInlineStyle(element);
+                    element.find('[page-block]').each(function () {
+                        clearInlineStyle($(this));
+                    });
+
+                    $timeout(function () {
+                        $scope.$broadcast('element.reselected', element);
+                    }, 0);
+                };
             }
 
         };
