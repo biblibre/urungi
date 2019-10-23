@@ -22,7 +22,7 @@ module.exports = function (app) {
     app.post('/api/reports/data-query', Reports.dataQuery);
     app.post('/api/reports/filter-values-query', Reports.filterValuesQuery);
 
-    app.get('/api/reports/:id.png', async function (req, res, next) {
+    app.post('/api/reports/:id/png', async function (req, res, next) {
         try {
             const report = await Report.findById(req.params.id);
             if (!(report && (req.isAuthenticated() || report.isPublic))) {
@@ -48,7 +48,7 @@ module.exports = function (app) {
         }
     });
 
-    app.get('/api/reports/:id.pdf', async function (req, res, next) {
+    app.post('/api/reports/:id/pdf', async function (req, res, next) {
         try {
             const report = await Report.findById(req.params.id);
             if (!(report && (req.isAuthenticated() || report.isPublic))) {
@@ -56,7 +56,14 @@ module.exports = function (app) {
             }
 
             const url = config.get('url') + config.get('base') + `/reports/view/${report.id}`;
-            const buffer = await pikitia.toPDF(url, { cookies: req.cookies });
+            const options = {
+                cookies: req.cookies,
+                displayHeaderFooter: req.body.displayHeaderFooter || false,
+                headerTemplate: req.body.headerTemplate || '',
+                footerTemplate: req.body.footerTemplate || '',
+            };
+
+            const buffer = await pikitia.toPDF(url, options);
 
             const response = {
                 data: buffer.toString('base64'),

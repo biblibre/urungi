@@ -302,13 +302,13 @@ describe('api', () => {
     });
 
     describe('api.getReportAsPDF', function () {
-        it('should call /api/reports/:id.pdf', function () {
-            const url = '/api/reports/foo.pdf';
+        it('should call /api/reports/:id/pdf', function () {
+            const url = '/api/reports/foo/pdf';
             const response = {
                 data: 'foodata',
             };
 
-            $httpBackend.expect('GET', url).respond(response);
+            $httpBackend.expect('POST', url).respond(response);
 
             const p = api.getReportAsPDF('foo');
 
@@ -319,13 +319,13 @@ describe('api', () => {
     });
 
     describe('api.getReportAsPNG', function () {
-        it('should call /api/reports/:id.png', function () {
-            const url = '/api/reports/foo.png';
+        it('should call /api/reports/:id/png', function () {
+            const url = '/api/reports/foo/png';
             const response = {
                 data: 'foodata',
             };
 
-            $httpBackend.expect('GET', url).respond(response);
+            $httpBackend.expect('POST', url).respond(response);
 
             const p = api.getReportAsPNG('foo');
 
@@ -524,13 +524,13 @@ describe('api', () => {
     });
 
     describe('api.getDashboardAsPDF', function () {
-        it('should call /api/dashboards/:id.pdf', function () {
-            const url = '/api/dashboards/foo.pdf';
+        it('should call /api/dashboards/:id/pdf', function () {
+            const url = '/api/dashboards/foo/pdf';
             const response = {
                 data: 'foodata',
             };
 
-            $httpBackend.expect('GET', url).respond(response);
+            $httpBackend.expect('POST', url).respond(response);
 
             const p = api.getDashboardAsPDF('foo');
 
@@ -541,13 +541,13 @@ describe('api', () => {
     });
 
     describe('api.getDashboardAsPNG', function () {
-        it('should call /api/dashboards/:id.png', function () {
-            const url = '/api/dashboards/foo.png';
+        it('should call /api/dashboards/:id/png', function () {
+            const url = '/api/dashboards/foo/png';
             const response = {
                 data: 'foodata',
             };
 
-            $httpBackend.expect('GET', url).respond(response);
+            $httpBackend.expect('POST', url).respond(response);
 
             const p = api.getDashboardAsPNG('foo');
 

@@ -3,9 +3,9 @@
 
     angular.module('app.reports').controller('ReportsViewController', ReportsViewController);
 
-    ReportsViewController.$inject = ['$scope', '$timeout', 'Noty', 'gettextCatalog', 'api', 'xlsxService', 'userService', 'report'];
+    ReportsViewController.$inject = ['$scope', '$timeout', '$uibModal', 'Noty', 'gettextCatalog', 'api', 'xlsxService', 'userService', 'report'];
 
-    function ReportsViewController ($scope, $timeout, Noty, gettextCatalog, api, xlsxService, userService, report) {
+    function ReportsViewController ($scope, $timeout, $uibModal, Noty, gettextCatalog, api, xlsxService, userService, report) {
         const vm = this;
 
         vm.downloadAsPDF = downloadAsPDF;
@@ -70,11 +70,17 @@
         }
 
         function downloadAsPDF () {
-            api.getReportAsPDF(vm.report._id).then(res => {
-                download(res.data, 'application/pdf', vm.report.reportName + '.pdf');
-            }, () => {
-                new Noty({ text: gettextCatalog.getString('The export failed. Please contact the system administrator.'), type: 'error' }).show();
+            const modal = $uibModal.open({
+                component: 'appPdfExportSettingsModal',
             });
+
+            return modal.result.then(function (settings) {
+                return api.getReportAsPDF(vm.report._id, settings).then(res => {
+                    download(res.data, 'application/pdf', vm.report.reportName + '.pdf');
+                }, () => {
+                    new Noty({ text: gettextCatalog.getString('The export failed. Please contact the system administrator.'), type: 'error' }).show();
+                });
+            }, () => {});
         }
 
         function downloadAsPNG () {

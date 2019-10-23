@@ -48,8 +48,15 @@ async function render (url, endpoint, options) {
         },
     };
 
-    const body = await requestPromise(tokenRequestOptions);
-    const token = JSON.parse(body);
+    const tokenBody = await requestPromise(tokenRequestOptions);
+    const token = JSON.parse(tokenBody);
+
+    const requestBody = {
+        url: url,
+    };
+    for (const key of Object.keys(options)) {
+        requestBody[key] = options[key];
+    }
 
     const requestOptions = {
         baseUrl: pikitiaUrl,
@@ -58,11 +65,7 @@ async function render (url, endpoint, options) {
         auth: {
             bearer: token.access_token,
         },
-        body: {
-            url: url,
-            cookies: options.cookies,
-            viewport: options.viewport,
-        },
+        body: requestBody,
         json: true,
         encoding: null,
     };
