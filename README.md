@@ -2,8 +2,9 @@
 
 Lightweight open source software that allows you to create statistics and dashboards freely regardless of your data source. http://urungi.org
 
-[![Travis (.org) branch](https://img.shields.io/travis/biblibre/urungi/master.svg)](https://travis-ci.org/biblibre/urungi)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/biblibre/urungi.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/biblibre/urungi/context:javascript)
+[![CircleCI](https://img.shields.io/circleci/build/github/biblibre/urungi?logo=circleci)](https://circleci.com/gh/biblibre/urungi)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/biblibre/urungi?logo=lgtm)](https://lgtm.com/projects/g/biblibre/urungi/context:javascript)
+[![Codecov](https://img.shields.io/codecov/c/github/biblibre/urungi?logo=codecov)](https://codecov.io/gh/biblibre/urungi)
 
 ## Introduction
 
