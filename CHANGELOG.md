@@ -31,6 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use HTML table for building grid and vgrid
 - Use PivotTable.js instead of cynteka for building pivot table
 
+### Fixed
+
+- Fix date filters for Oracle
+
 ### Dependencies
 
 - Added request 2.88.0
