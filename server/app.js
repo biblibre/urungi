@@ -78,7 +78,6 @@ app.use('/uploads', restrict, express.static(path.join(__dirname, 'uploads')));
 const routesModules = [
     './custom/companies/routes',
     './custom/dashboards/routes',
-    './custom/dashboardsv2/routes',
     './custom/data-sources/routes',
     './custom/files/routes',
     './custom/layers/routes',

@@ -71,7 +71,7 @@ describe('ImportController', function () {
                 .respond(apiLayersFindOneResponse());
             $httpBackend.expect('GET', '/api/reports/find-one?id=fakereportid')
                 .respond(apiReportsFindOneResponse());
-            $httpBackend.expect('GET', '/api/dashboardsv2/find-one?id=fakedashboardid')
+            $httpBackend.expect('GET', '/api/dashboards/find-one?id=fakedashboardid')
                 .respond(apiDashboardsFindOneResponse());
 
             setTimeout($httpBackend.flush);
@@ -105,7 +105,7 @@ describe('ImportController', function () {
                 .respond({ result: 1 });
             $httpBackend.expect('POST', '/api/reports/update/fakereportid')
                 .respond({ result: 1 });
-            $httpBackend.expect('POST', '/api/dashboardsv2/update/fakedashboardid')
+            $httpBackend.expect('POST', '/api/dashboards/update/fakedashboardid')
                 .respond({ result: 1 });
 
             vm.form = { $valid: true };

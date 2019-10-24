@@ -195,7 +195,6 @@ function dist_templates_build () {
     const globs = [
         'public/partials/core/*.html',
         'public/partials/dashboards/*.html',
-        'public/partials/dashboardv2/*.html',
         'public/partials/data-sources/*.html',
         'public/partials/directives/*.html',
         'public/partials/files/*.html',

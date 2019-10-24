@@ -48,21 +48,6 @@
             controller: 'homeCtrl'
         });
 
-        $routeProvider.when('/dashboards/new/:newDashboard/', {
-            templateUrl: 'partials/dashboardv2/edit.html',
-            controller: 'dashBoardv2Ctrl'
-        });
-
-        $routeProvider.when('/dashboards/edit/:dashboardID/', {
-            templateUrl: 'partials/dashboardv2/edit.html',
-            controller: 'dashBoardv2Ctrl'
-        });
-
-        $routeProvider.when('/dashboards/push/:dashboardID/', {
-            templateUrl: 'partials/dashboardv2/edit.html',
-            controller: 'dashBoardv2Ctrl'
-        });
-
         $routeProvider.when('/reports/new/', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'

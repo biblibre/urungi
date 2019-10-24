@@ -12,9 +12,9 @@
         },
     });
 
-    DashboardsListItemController.$inject = ['$uibModal', 'api', 'base', 'dashboardv2Model', 'gettextCatalog'];
+    DashboardsListItemController.$inject = ['$uibModal', 'api', 'base', 'gettextCatalog'];
 
-    function DashboardsListItemController ($uibModal, api, base, dashboardv2Model, gettextCatalog) {
+    function DashboardsListItemController ($uibModal, api, base, gettextCatalog) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -51,13 +51,15 @@
                             newName: newName,
                         };
 
-                        return dashboardv2Model.duplicateDashboard(params);
+                        return duplicateDashboard(params);
                     },
                 },
             });
             modal.result.then(function () {
                 vm.onDuplicate();
             });
+
+            return modal;
         }
 
         function publish () {
@@ -90,6 +92,16 @@
             const protocol = window.location.protocol;
             const host = window.location.host;
             return protocol + '//' + host + base + '/dashboards/view/' + vm.dashboard._id;
+        }
+
+        function duplicateDashboard (duplicateOptions) {
+            return api.getDashboard(duplicateOptions.dashboard._id).then(function (dashboard) {
+                delete dashboard._id;
+                delete dashboard.createdOn;
+                dashboard.dashboardName = duplicateOptions.newName;
+
+                return api.createDashboard(dashboard);
+            });
         }
     }
 })();

@@ -248,11 +248,11 @@
          * @returns {Promise<object, Error>} Promise that resolves to an object
          */
         function getDashboards (params) {
-            return get('/api/dashboardsv2/find-all', params);
+            return get('/api/dashboards/find-all', params);
         }
 
         function deleteDashboard (id) {
-            return connection.post('/api/dashboardsv2/delete/' + id, { id: id });
+            return connection.post('/api/dashboards/delete/' + id, { id: id });
         }
 
         /**
@@ -262,7 +262,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the dashboard object
          */
         function getDashboard (id) {
-            return get('/api/dashboardsv2/find-one', { id: id }).then(data => data.item);
+            return get('/api/dashboards/find-one', { id: id }).then(data => data.item);
         }
 
         function publishDashboard (id) {
@@ -270,7 +270,7 @@
                 id: id,
             };
 
-            return connection.post('/api/dashboardsv2/publish-page', data);
+            return connection.post('/api/dashboards/publish-page', data);
         }
 
         function unpublishDashboard (id) {
@@ -278,7 +278,7 @@
                 id: id,
             };
 
-            return connection.post('/api/dashboardsv2/unpublish', data);
+            return connection.post('/api/dashboards/unpublish', data);
         }
 
         function shareDashboard (id, folderID) {
@@ -287,7 +287,7 @@
                 parentFolder: folderID,
             };
 
-            return connection.post('/api/dashboardsv2/share-page', data);
+            return connection.post('/api/dashboards/share-page', data);
         }
 
         function unshareDashboard (id) {
@@ -295,7 +295,7 @@
                 id: id,
             };
 
-            return connection.post('/api/dashboardsv2/unshare', data);
+            return connection.post('/api/dashboards/unshare', data);
         }
 
         /**
@@ -305,7 +305,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the created dashboard
          */
         function createDashboard (dashboard) {
-            return post('/api/dashboardsv2/create', dashboard).then(data => data.item);
+            return post('/api/dashboards/create', dashboard).then(data => data.item);
         }
 
         /**
@@ -316,7 +316,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the updated dashboard
          */
         function updateDashboard (dashboard) {
-            return post('/api/dashboardsv2/update/' + dashboard._id, dashboard).then(data => data.item);
+            return post('/api/dashboards/update/' + dashboard._id, dashboard).then(data => data.item);
         }
 
         /**

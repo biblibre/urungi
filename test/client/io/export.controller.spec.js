@@ -46,7 +46,7 @@ describe('ExportController', function () {
                 .respond(apiLayersFindAllResponse());
             $httpBackend.expect('GET', '/api/reports/find-all')
                 .respond(apiReportsFindAllResponse());
-            $httpBackend.expect('GET', '/api/dashboardsv2/find-all')
+            $httpBackend.expect('GET', '/api/dashboards/find-all')
                 .respond(apiDashboardsFindAllResponse());
 
             $httpBackend.flush();
@@ -57,7 +57,7 @@ describe('ExportController', function () {
 
             $httpBackend.expect('GET', '/api/reports/find-one?id=fakereportid')
                 .respond(apiReportsFindOneResponse());
-            $httpBackend.expect('GET', '/api/dashboardsv2/find-one?id=fakedashboardid')
+            $httpBackend.expect('GET', '/api/dashboards/find-one?id=fakedashboardid')
                 .respond(apiDashboardsFindOneResponse());
             $httpBackend.expect('GET', '/api/layers/find-one?id=fakelayerid')
                 .respond(apiLayersFindOneResponse());
