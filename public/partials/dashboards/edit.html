@@ -24,7 +24,7 @@
 
         </div>
 
-    <section page-block ndType="page" ng-show="!queryInterface" id="designArea" drop="onDrop($data, $event, 'order')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" class="scrollPane multiPage rendered dashboard-container" style="padding: 10px;">
+    <section page-block ndType="page" ng-show="!queryInterface" id="designArea" class="scrollPane multiPage rendered dashboard-container" style="padding: 10px;" app-drop-target=".Block500, #designArea" drop-accept="text/html" on-drop="vm.onDrop($event, dropTarget)">
 
     </section>
 
@@ -96,14 +96,14 @@
                         <button class="btn btn-info pull-right" ng-click="newReport()" translate>New Report</button>
                         <button class="btn btn-info pull-right" ng-click="importReport()" translate>Import Report</button>
                     </div>
-                    <div ng-repeat="item in selectedDashboard.reports" draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'report',reportID:'{{item.id}}'}" style="margin-bottom: 5px; margin-top: 5px; display: flex; align-items: center; border: 1px white solid; border-radius: 5px;" id="{{item.id}}" class="">
+                    <div ng-repeat="item in selectedDashboard.reports" draggable="true" app-dragstart="vm.onReportDragStart($event, item)" style="margin-bottom: 5px; margin-top: 5px; display: flex; align-items: center; border: 1px white solid; border-radius: 5px;" id="{{item.id}}" class="">
 
                         <span style="padding: 2px; border-right: 2px white solid; margin-right: 5px; background-color: white;">
-                            <img ng-if="item.reportType == 'grid'" src="images/grid.png" data-pin-nopin="true">
-                            <img ng-if="item.reportType == 'chart-line'" src="images/chart_line.png" data-pin-nopin="true">
-                            <img ng-if="item.reportType == 'chart-donut' || item.reportType == 'chart-pie'" src="images/chart_donut.png" data-pin-nopin="true">
-                            <img ng-if="item.reportType == 'indicator'" src="images/indicator.png" data-pin-nopin="true">
-                            <img ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
+                            <img draggable="false" ng-if="item.reportType == 'grid'" src="images/grid.png" data-pin-nopin="true">
+                            <img draggable="false" ng-if="item.reportType == 'chart-line'" src="images/chart_line.png" data-pin-nopin="true">
+                            <img draggable="false" ng-if="item.reportType == 'chart-donut' || item.reportType == 'chart-pie'" src="images/chart_donut.png" data-pin-nopin="true">
+                            <img draggable="false" ng-if="item.reportType == 'indicator'" src="images/indicator.png" data-pin-nopin="true">
+                            <img draggable="false" ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
                         </span>
                         <div style="width: 100%;">
                         <span style="color: white; font-size: 10px; width: 100%; text-align: left;" editable-text="item.reportName">{{ item.reportName }}</span>
@@ -131,8 +131,7 @@
                 <section class="tab">
                     <section class="layer scrollPane">
                         <div class="layer-inner-reports">
-                            <div ng-repeat="prompt in getPrompts()" draggable="true" draggable-type="custom-object"
-                            draggable-data="{objectType: 'queryFilter', promptID:'{{prompt.id + prompt.filterType}}'}"
+                            <div ng-repeat="prompt in getPrompts()" draggable="true" app-dragstart="vm.onFilterPromptDragStart($event, prompt)"
                             style="margin-bottom: 5px; margin-top: 5px; display: flex; align-items: center; border: 1px white solid; border-radius: 5px;"
                             id="{{item.id}}" class="dashboard-filter-prompt-item">
                               <span>
@@ -159,17 +158,17 @@
                 <section class="layer scrollPane">
                     <div class="layer-inner">
                         <div class="searchLoaderHolder"></div>
-                        <div class="searchGroup hasContent" style="height: 2872px;">
+                        <div class="searchGroup hasContent">
                             <div class="row gallery infoPanelGallery templateGallery laidOut" style="padding-left: 25px;">
 
                                 <div  style="width: 200px;">
                                     <div class="col-md-6" style="padding: 0; padding-right: 1px;">
-                                        <div id="element-btn" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'paragraph'}"  >
+                                        <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'paragraph')">
                                             <i class="fa fa-paragraph"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-6" style="padding: 0; padding-left: 1px;">
-                                        <div id="element-btn" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'heading'}"  >
+                                        <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'heading')">
                                             <i class="fa fa-header"></i>
                                         </div>
                                     </div>
@@ -177,62 +176,54 @@
 
                                 <div  style="width: 200px;">
                                     <div class="col-md-6" style="padding: 0; padding-right: 1px;">
-                                        <div id="element-btn" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'image'}"  >
+                                        <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'image')">
                                             <i class="fa fa-picture-o"></i>
 
                                         </div>
                                     </div>
                                     <div class="col-md-6" style="padding: 0; padding-left: 1px;">
-                                        <div id="element-btn" draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'video'}"  >
+                                        <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'video')">
                                             <i class="fa fa-play"></i>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div data-color="jumbotron" effect-allowed="copy"  style="margin-bottom: 5px;" draggable="true" draggable-type="custom-object" id="5c025c3c-2dcb-a4b4-488a-01dbf3e54fbc" draggable-data="{ objectType: 'jumbotron' }">
-                                    <img src="images/layout_jumbotron.png" width="200" height="50" style="height: 50px; width: 200px;">
-                                </div>
-                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: '4colscta'}" style="margin-bottom: 5px;" id="b79177e2-9eae-d919-f544-5ee126dff4c0" class="">
-
-                                    <img src="images/layout_4cols_cta.png" width="200" style="height: 50px; width: 200px;">
+                                <div data-color="jumbotron" effect-allowed="copy"  style="margin-bottom: 5px;" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'jumbotron')">
+                                    <img draggable="false" src="images/layout_jumbotron.png" width="200" height="50" style="height: 50px; width: 200px;">
                                 </div>
 
-                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: '3colscta'}" style="margin-bottom: 5px;" id="b79177e2-9eae-d919-f544-5ee126dff4c0" class="">
-
-                                    <img src="images/layout_3cols_cta.png" width="200" style="height: 50px; width: 200px;">
-                                </div>
-                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: '2colscta'}" style="margin-bottom: 5px;" id="b79177e2-9eae-d919-f544-5ee126dff4dd" class="">
-
-                                    <img src="images/layout_2cols_cta.png" width="200" style="height: 50px; width: 200px;">
-                                </div>
-                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'imageTextLarge'}"  style="margin-bottom: 5px;"  id="953bd17f-45d8-9daf-3bde-92f4809bdf07" class="">
-
-                                    <img src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px; width: 200px;">
-                                </div>
-                                <div draggable="true" draggable-type="custom-object" draggable-data="{objectType: 'textImageLarge'}" style="margin-bottom: 5px;" id="b512bcc4-dd1d-2a33-2246-69671ae9430d">
-
-                                    <img src="images/layout_block_text_image_large.png" width="200" height="50" style="height: 50px; width: 200px;">
-                                </div>
-                                <div draggable="true" draggable-type="custom-object" uib-tooltip="{{'This divider defines a page-break for printing'| translate}}" draggable-data="{objectType: 'divider'}" style="margin-bottom: 5px;"  id="4f8c0bca-7d8f-9bad-2354-309b48a37764">
-
-                                    <img src="images/layout_featurete_divider.png" width="200" height="15" style="height: 15px; width: 200px;">
-                                </div>
-                                <div draggable="true" draggable-type="custom-object"  draggable-data="{objectType: 'pageHeader'}"  style="margin-bottom: 5px;"  id="953bd17f-d45d8-9daf-3bde-92f4809bdf07" class="">
-                                    <img src="images/layout-page-header.png" width="200" height="50" style="height: 50px; width: 200px;">
+                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, '4colscta')" style="margin-bottom: 5px;">
+                                    <img draggable="false" src="images/layout_4cols_cta.png" width="200" style="height: 50px; width: 200px;">
                                 </div>
 
+                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, '3colscta')" style="margin-bottom: 5px;">
+                                    <img draggable="false" src="images/layout_3cols_cta.png" width="200" style="height: 50px; width: 200px;">
+                                </div>
 
+                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, '2colscta')" style="margin-bottom: 5px;">
+                                    <img draggable="false" src="images/layout_2cols_cta.png" width="200" style="height: 50px; width: 200px;">
+                                </div>
 
+                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'imageTextLarge')" style="margin-bottom: 5px;">
+
+                                    <img draggable="false" src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px; width: 200px;">
+                                </div>
+
+                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'textImageLarge')" style="margin-bottom: 5px;">
+                                    <img draggable="false" src="images/layout_block_text_image_large.png" width="200" height="50" style="height: 50px; width: 200px;">
+                                </div>
+
+                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'divider')" uib-tooltip="{{'This divider defines a page-break for printing'| translate}}" style="margin-bottom: 5px;">
+                                    <img draggable="false" src="images/layout_featurete_divider.png" width="200" height="15" style="height: 15px; width: 200px;">
+                                </div>
+
+                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'pageHeader')" style="margin-bottom: 5px;">
+                                    <img draggable="false" src="images/layout-page-header.png" width="200" height="50" style="height: 50px; width: 200px;">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
-                <div class="scrollTrack vScrollTrack">
-                    <div class="scrollThumb" style="height: 15px; transform: translateY(0);"></div>
-                </div>
-                <div class="scrollTrack hScrollTrack">
-                    <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0);"></div>
-                </div>
             </section>
         </section>
     </section>
@@ -264,7 +255,5 @@
         <button type="button" class="btn pull-right" data-dismiss="modal" translate>Cancel</button>
     </div>
 </nd-modal>
-
-<file-modal></file-modal>
 
 <div id="previewContainer" ng-show="false"></div>

@@ -52,6 +52,9 @@
             getLayer: getLayer,
             updateLayer: updateLayer,
 
+            getFiles: getFiles,
+            uploadFile: uploadFile,
+
             getThemes: getThemes,
         };
 
@@ -393,6 +396,24 @@
          */
         function updateLayer (layer) {
             return post('/api/layers/update/' + layer._id, layer).then(data => data.item);
+        }
+
+        function getFiles () {
+            return get('/api/files/get-files').then(function (res) {
+                return res.files;
+            });
+        }
+
+        function uploadFile (file) {
+            const config = {
+                headers: {
+                    'Content-Type': undefined,
+                },
+            };
+            const data = new FormData();
+            data.set('content', file);
+
+            return $http.post('/api/files/upload', data, config).then(res => res.data.item);
         }
 
         /**

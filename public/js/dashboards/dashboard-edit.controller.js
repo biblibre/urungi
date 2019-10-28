@@ -3,9 +3,16 @@
 
     angular.module('app.dashboards').controller('DashboardEditController', DashboardEditController);
 
-    DashboardEditController.$inject = ['$scope', '$location', '$q', 'reportsService', 'connection', '$routeParams', 'reportModel', 'uuid', 'htmlWidgets', 'gettextCatalog', '$uibModal', 'Noty'];
+    DashboardEditController.$inject = ['$scope', '$location', '$q', '$compile', 'reportsService', 'connection', '$routeParams', 'reportModel', 'uuid', 'htmlWidgets', 'gettextCatalog', '$uibModal', 'Noty'];
 
-    function DashboardEditController ($scope, $location, $q, reportsService, connection, $routeParams, reportModel, uuid, htmlWidgets, gettextCatalog, $uibModal, Noty) {
+    function DashboardEditController ($scope, $location, $q, $compile, reportsService, connection, $routeParams, reportModel, uuid, htmlWidgets, gettextCatalog, $uibModal, Noty) {
+        const vm = this;
+
+        vm.onDrop = onDrop;
+        vm.onFilterPromptDragStart = onFilterPromptDragStart;
+        vm.onLayoutDragStart = onLayoutDragStart;
+        vm.onReportDragStart = onReportDragStart;
+
         $scope.reportModal = 'partials/report/edit.html';
         $scope.settingsTemplate = 'partials/widgets/inspector.html';
         $scope.filterWidget = 'partials/report/filterWidget.html';
@@ -149,15 +156,14 @@
                     // getAllPageColumns();
 
                     var $div = $($scope.selectedDashboard.properties.designerHTML);
-                    var el = angular.element(document.getElementById('designArea'));
+                    const designArea = document.getElementById('designArea');
+                    var el = angular.element(designArea);
                     el.append($div);
                     if ($scope.selectedDashboard.properties.rootStyle) {
                         el.attr('style', $scope.selectedDashboard.properties.rootStyle);
                     }
 
-                    angular.element(document).injector().invoke(function ($compile) {
-                        $compile($div)($scope);
-                    });
+                    $compile($div)($scope);
 
                     cleanAllSelected();
 
@@ -207,132 +213,66 @@
             $scope.$broadcast('loadReportStrucutureForDash', { report: reportBackup });
         };
 
-        function getDroppableObjectHtml (data, context) {
-            return $q.resolve(0).then(function () {
-                switch (data.objectType) {
-                case 'jumbotron':
-                    return htmlWidgets.getJumbotronHTML();
+        function getLayoutHtml (type) {
+            switch (type) {
+            case 'jumbotron':
+                return htmlWidgets.getJumbotronHTML();
 
-                case '4colscta':
-                    return htmlWidgets.get4colsctaHTML();
+            case '4colscta':
+                return htmlWidgets.get4colsctaHTML();
 
-                case '3colscta':
-                    return htmlWidgets.get3colsctaHTML();
+            case '3colscta':
+                return htmlWidgets.get3colsctaHTML();
 
-                case '2colscta':
-                    return htmlWidgets.get2colsctaHTML();
+            case '2colscta':
+                return htmlWidgets.get2colsctaHTML();
 
-                case 'divider':
-                    return htmlWidgets.getDivider();
+            case 'divider':
+                return htmlWidgets.getDivider();
 
-                case 'imageTextLarge':
-                    return htmlWidgets.getImageTextLargeHTML();
+            case 'imageTextLarge':
+                return htmlWidgets.getImageTextLargeHTML();
 
-                case 'textImageLarge':
-                    return htmlWidgets.getTextImageLargeHTML();
+            case 'textImageLarge':
+                return htmlWidgets.getTextImageLargeHTML();
 
-                case 'report': {
-                    const report = $scope.selectedDashboard.reports.find(r => r.id === data.reportID);
-                    if (!report) {
-                        new Noty({ text: gettextCatalog.getString('Could not find report'), type: 'error' }).show();
-                        return;
-                    }
-                    if (angular.element('#REPORT_' + report.id).length) {
-                        new Noty({ text: gettextCatalog.getString('Sorry, that report is already on the dash'), type: 'error' }).show();
-                        return;
-                    }
-                    return reportModel.getReportContainerHTML(data.reportID);
-                }
+            case 'image':
+                return '<app-dashboard-image size="700" page-block ndtype="image"></app-dashboard-image>';
 
-                case 'queryFilter':
-                    if (angular.element('#PROMPT_' + data.promptID).length) {
-                        new Noty({ text: gettextCatalog.getString('Sorry, that filter is already on the dash'), type: 'error' }).show();
-                        return;
-                    }
-                    return getPromptHTML(data);
+            case 'video':
+                return htmlWidgets.getVideo();
 
-                case 'image': {
-                    const deferred = $q.defer();
-                    $scope.$broadcast('showFileModal', {
-                        addFile: function (file) {
-                            var url = file.url;
-                            if (context) {
-                                if (context.preferedSize === '700' && file.source700) {
-                                    url = file.source700;
-                                }
-                                if (context.preferedSize === '1400' && file.source1400) {
-                                    url = file.source1400;
-                                }
-                            }
-                            deferred.resolve(htmlWidgets.getImage(url));
-                        }
-                    });
-                    return deferred.promise;
-                }
+            case 'paragraph':
+                return htmlWidgets.getParagraph();
 
-                case 'video':
-                    return htmlWidgets.getVideo();
+            case 'heading':
+                return htmlWidgets.getHeading();
 
-                case 'paragraph':
-                    return htmlWidgets.getParagraph();
-
-                case 'heading':
-                    return htmlWidgets.getHeading();
-
-                case 'pageHeader':
-                    return htmlWidgets.getPageHeader();
-                }
-            });
+            case 'pageHeader':
+                return htmlWidgets.getPageHeader();
+            }
         }
 
-        $scope.onDrop = function (data, event, type, group) {
-            // DROP OVER THE DASHBOARD PARENT DIV
+        function onReportDragStart (ev, report) {
+            const html = reportModel.getReportContainerHTML(report.id);
+            const json = angular.toJson(report);
 
-            event.stopPropagation();
-            var customObjectData = data['json/custom-object'];
-
-            return getDroppableObjectHtml(customObjectData, { preferedSize: '1400' }).then(function (html) {
-                var $div = $(html);
-                $('#designArea').append($div);
-                angular.element(document).injector().invoke(function ($compile) {
-                    var scope = angular.element($div).scope();
-                    $compile($div)(scope);
-                });
-
-                if (customObjectData.objectType === 'report') {
-                    repaintReports();
-                }
-            });
+            ev.dataTransfer.setData('text/html', html);
+            ev.dataTransfer.setData('application/vnd.urungi.report+json', json);
         };
 
-        $scope.onDropObject = function (data, event, type, group) {
-            // DROP OVER AN HTML CONTAINER
+        function onFilterPromptDragStart (ev, filterPrompt) {
+            const html = getPromptHTML(filterPrompt);
+            const json = angular.toJson(filterPrompt);
 
-            event.stopPropagation();
-            var customObjectData = data['json/custom-object'];
+            ev.dataTransfer.setData('text/html', html);
+            ev.dataTransfer.setData('application/vnd.urungi.filter-prompt+json', json);
+        };
 
-            const authorisedObjects = ['imageTextLarge', 'textImageLarge', 'report', 'queryFilter', 'image', 'video', 'paragraph', 'heading', 'pageHeader'];
+        function onLayoutDragStart (ev, type) {
+            const html = getLayoutHtml(type);
 
-            if (authorisedObjects.indexOf(customObjectData.objectType) === -1) {
-                new Noty({ text: gettextCatalog.getString('You are not allowed to put this object inside a component'), type: 'warning' }).show();
-                return;
-            }
-
-            return getDroppableObjectHtml(customObjectData, { preferedSize: '700' }).then(function (html) {
-                if (html) {
-                    var $div = $(html);
-                    var el = angular.element(event.target);
-                    el.append($div);
-                    angular.element(document).injector().invoke(function ($compile) {
-                        var scope = angular.element($div).scope();
-                        $compile($div)(scope);
-
-                        if (customObjectData.objectType === 'report') {
-                            repaintReports();
-                        }
-                    });
-                }
-            });
+            ev.dataTransfer.setData('text/html', html);
         };
 
         $scope.promptChanged = function (elementID, values) {
@@ -452,9 +392,7 @@
 
             var $div = $(theHTML);
             previewContainer.append($div);
-            angular.element(document).injector().invoke(function ($compile) {
-                $compile($div)($scope);
-            });
+            $compile($div)($scope);
 
             cleanAll('previewContainer');
 
@@ -539,11 +477,8 @@
                         targetPrompt.removeAttribute('page-block');
                     }
 
-                    angular.element(document).injector().invoke(function ($compile) {
-                        const el = angular.element(targetPrompt);
-                        const scope = el.scope();
-                        $compile(el)(scope);
-                    });
+                    const el = angular.element(targetPrompt);
+                    $compile(el)($scope);
                 }
             }
         }
@@ -569,6 +504,20 @@
         $scope.getColumnDescription = getColumnDescription;
         function getColumnDescription (column) {
             return reportsService.getColumnDescription(column);
+        }
+
+        function onDrop (ev, dropTarget) {
+            const html = ev.dataTransfer.getData('text/html');
+            const element = $compile(html)($scope);
+            dropTarget.appendChild(element[0]);
+
+            // FIXME Repaint only the added report, either by creating a child
+            // scope and broadcasting the 'repaint' event on it, or by
+            // rewriting the reportView directive so that it can paint itself
+            // immediately after insertion
+            if (ev.dataTransfer.types.includes('application/vnd.urungi.report+json')) {
+                repaintReports();
+            }
         }
     }
 })();

@@ -278,18 +278,24 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         });
     };
 
-    $scope.onDropOnFilter = function (data, event, type, group) {
-        var item = data['json/custom-object'];
-        event.stopPropagation();
-        item.criterion = {
+    $scope.onDropOnFilter = function (ev) {
+        const type = 'application/vnd.urungi.layer-element+json';
+        const filter = JSON.parse(ev.dataTransfer.getData(type));
+        filter.criterion = {
             text1: '',
             text2: '',
             textList: []
         };
+
+        filter.filterType = 'equal';
+        filter.filterPrompt = false;
+        filter.layerID = $scope.selectedReport.selectedLayerID;
+
         if ($scope.selectedReport.properties.filters.length > 0) {
-            item.conditionType = 'and';
+            filter.conditionType = 'and';
         }
-        $scope.onDropField($scope.selectedReport.properties.filters, item, 'filter');
+
+        $scope.onDropField($scope.selectedReport.properties.filters, filter, 'filter');
     };
 
     $scope.onDropField = function (elements, newItem, role) {
@@ -776,5 +782,13 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         }
 
         return false;
+    }
+
+    $scope.onElementDragStart = onElementDragStart;
+    function onElementDragStart (ev, element) {
+        const json = angular.toJson(element);
+
+        ev.dataTransfer.effectAllowed = 'copy';
+        ev.dataTransfer.setData('application/vnd.urungi.layer-element+json', json);
     }
 });

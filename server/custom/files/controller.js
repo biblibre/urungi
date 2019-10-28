@@ -30,7 +30,7 @@ exports.registerUpload = async function (req, res) {
         filename: file.filename,
         name: file.originalName,
         type: file.mimetype,
-        url: '/uploads/' + file.filename,
+        url: 'uploads/' + file.filename,
         size: file.size,
         nd_trash_deleted: false,
         createdOn: new Date()

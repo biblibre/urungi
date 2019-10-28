@@ -11,7 +11,6 @@
         'ui.select',
         'ui.bootstrap.datetimepicker',
         'ui.tree',
-        'draganddrop',
         'xeditable',
         'colorpicker.module',
         'gettext',

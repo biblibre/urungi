@@ -44,9 +44,9 @@
 
     angular.module('app.inspector').directive('appInspector', appInspector);
 
-    appInspector.$inject = ['$compile', '$timeout', 'c3Charts', 'textStyles', '$window'];
+    appInspector.$inject = ['$compile', '$timeout', '$uibModal', 'c3Charts', 'textStyles', '$window'];
 
-    function appInspector ($compile, $timeout, c3Charts, textStyles, $window) {
+    function appInspector ($compile, $timeout, $uibModal, c3Charts, textStyles, $window) {
         return {
             transclude: true,
             scope: {
@@ -131,17 +131,18 @@
                 };
 
                 $scope.openImageGallery = function (target) {
-                    $scope.$parent.$broadcast('showFileModal', {
-                        addFile: function (file) {
-                            var url = file.url;
-                            if (file.source1400) {
-                                url = file.source1400;
-                            } else if (file.source700) {
-                                url = file.source700;
-                            }
-                            $scope.setBackgroundImage(url);
-                        }
+                    const modal = $uibModal.open({
+                        component: 'appDashboardImageModal',
                     });
+                    modal.result.then(function (file) {
+                        var url = file.url;
+                        if (file.source1400) {
+                            url = file.source1400;
+                        } else if (file.source700) {
+                            url = file.source700;
+                        }
+                        $scope.setBackgroundImage(url);
+                    }, function () {});
                 };
 
                 $scope.setBackgroundImage = function (url) {
