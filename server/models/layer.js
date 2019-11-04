@@ -15,17 +15,8 @@ const layerElementSchema = new mongoose.Schema({
     visible: Boolean,
 });
 
-const layerAssociatedElementSchema = new mongoose.Schema({
-    element: layerElementSchema,
-    visible: Boolean,
-});
-
 const layerObjectSchema = layerElementSchema.clone();
 layerObjectSchema.add({
-    associatedElements: {
-        type: [layerAssociatedElementSchema],
-        default: undefined,
-    },
     format: String,
     expression: String,
     isCustom: Boolean,
