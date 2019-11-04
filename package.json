@@ -31,7 +31,6 @@
     "csurf": "^1.10.0",
     "debug": "^4.1.1",
     "ejs": "^2.7.1",
-    "email-templates": "^6.0.3",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "font-awesome": "^4.7.0",
@@ -68,7 +67,7 @@
   "devDependencies": {
     "angular-mocks": "^1.7.8",
     "del": "^5.1.0",
-    "eslint": "^6.5.1",
+    "eslint": "^6.6.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jest": "^22.19.0",
