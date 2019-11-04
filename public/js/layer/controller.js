@@ -1015,12 +1015,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         element.values.push({ value: value, label: label });
     };
 
-    $scope.addAssociatedElementToElement = function (element, associatedElement, isVisible) {
-        if (!element.associatedElements) element.associatedElements = [];
-
-        element.associatedElements.push({ element: associatedElement, visible: isVisible });
-    };
-
     $scope.addFolder = function () {
         var elementID = 'F' + $scope.newID();
 
@@ -1160,20 +1154,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             }
         }
     }
-
-    $scope.getCollectionElements = function (collectionID) {
-        if ($scope._Layer) {
-            if ($scope._Layer.params) {
-                if ($scope._Layer.params.schema) {
-                    if ($scope._Layer.params.schema.length > 0) {
-                        for (var e in $scope._Layer.params.schema) {
-                            if ($scope._Layer.params.schema[e].collectionID === collectionID) { return $scope._Layer.params.schema[e].elements; }
-                        }
-                    }
-                }
-            }
-        }
-    };
 
     $scope.getDatasetsForThisDts = function (_id, theDataSource) {
         if (!theDataSource.loading) {
