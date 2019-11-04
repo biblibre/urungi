@@ -1,33 +1,29 @@
 const config = require('config');
+const util = require('util');
+const ejs = require('ejs');
+const path = require('path');
+const nodemailer = require('nodemailer');
 
 module.exports.sendEmailTemplate = sendEmailTemplate;
 
 function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
-    var path = require('path');
-    const Email = require('email-templates');
-    var nodemailer = require('nodemailer');
-
-    var templatesDir = path.resolve(__dirname, '../../', 'email_templates');
-    var template = new Email({
-        views: {
-            root: templatesDir,
-            options: {
-                extension: 'ejs',
-            },
-        },
-    });
+    var templatesDir = path.resolve(__dirname, '../', 'email_templates');
     var transport = nodemailer.createTransport(config.get('mailer.options'), config.get('mailer.defaults'));
 
     const promises = [];
     for (const item of recipients) {
         if (!item.firstName) { item.firstName = ' '; }
         if (!item.lastName) { item.lastName = ' '; }
-        const p = template.renderAll(theEmailTemplate, item).then(function (results) {
+        const renderFile = util.promisify(ejs.renderFile);
+        const p = Promise.all([
+            renderFile(path.join(templatesDir, theEmailTemplate, 'html.ejs'), item),
+            renderFile(path.join(templatesDir, theEmailTemplate, 'text.ejs'), item),
+        ]).then(function ([html, text]) {
             return transport.sendMail({
                 to: item[emailField],
                 subject: subject,
-                html: results.html,
-                text: results.text
+                html: html,
+                text: text,
             });
         }).catch(function (err) {
             console.error(err);

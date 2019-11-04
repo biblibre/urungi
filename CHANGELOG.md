@@ -54,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated del to 5.1.0
 - Updated ejs to 2.7.1
 - Updated email-templates to 6.0.3
-- Updated eslint to 6.5.1
+- Updated eslint to 6.6.0
 - Updated eslint-config-standard to 14.1.0
 - Updated eslint-plugin-import to 2.18.2
 - Updated eslint-plugin-node to 10.0.0
@@ -70,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
 - Removed codecov
+- Removed email-templates
 
 ## [1.2.2] - 2019-08-30
 

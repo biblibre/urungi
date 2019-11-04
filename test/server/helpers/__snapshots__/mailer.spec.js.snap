@@ -4,12 +4,13 @@ exports[`mailer sendEmailTemplate should send newUserAndPassword mail 1`] = `
 "DEAR OBI-WAN
 
 These are your credentials to enter urungi
- * user name: obiwan 
- * password: JediMaster123 
+ * user name: obiwan
+ * password: JediMaster123
 
 
 Best
-The urungi team"
+The urungi team
+"
 `;
 
 exports[`mailer sendEmailTemplate should send newUserAndPassword mail 2`] = `
