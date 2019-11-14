@@ -3160,10 +3160,6 @@ a.list-group-item:hover {
     background-color: #ccc;
 }
 
-.report-view {
-    overflow: auto;
-}
-
 .app-list-panel a:hover,
 .app-list-panel a:focus {
     text-decoration: none;
@@ -3194,8 +3190,6 @@ a.list-group-item:hover {
 
 .report-grid {
     background-color: #fff;
-    height: 100%;
-    overflow: auto;
 }
 
 .report-grid > table {
