@@ -75,6 +75,9 @@
             uploadPromise.then(file => {
                 $.extend(newFile, file);
                 newFile.loading = false;
+            }, err => {
+                new Noty({ text: gettextCatalog.getString('Image upload failed') + ' : ' + err.message, type: 'error' }).show();
+                vm.files.pop();
             });
         }
     }

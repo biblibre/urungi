@@ -413,7 +413,9 @@
             const data = new FormData();
             data.set('content', file);
 
-            return $http.post('/api/files/upload', data, config).then(res => res.data.item);
+            return $http.post('/api/files/upload', data, config).then(res => res.data.item, res => {
+                throw new Error(res.statusText);
+            });
         }
 
         /**
