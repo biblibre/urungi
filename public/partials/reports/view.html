@@ -23,12 +23,20 @@
     </div>
 </div>
 
-<div style="position: absolute; left: 15px; right: 0; top: 100px; bottom: 0; padding: 0 18px 18px 0; box-sizing: border-box; overflow-y: auto; overflow-x: hidden;">
-    <div id="promptsModal" ng-show="vm.getPrompts().length > 0" class="prompts-block" style="position: relative;">
-        <div class="center-block" ng-repeat="prompt in vm.getPrompts()" style="padding-bottom: 5px; max-width: 800px;">
-            <app-filter-prompt is-prompt="true" filter="prompt" on-change="vm.repaintWithPrompts()"></app-filter-prompt>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="promptsModal" ng-show="vm.getPrompts().length > 0" class="prompts-block" style="position: relative;">
+                <div class="center-block" ng-repeat="prompt in vm.getPrompts()" style="padding-bottom: 5px; max-width: 800px;">
+                    <app-filter-prompt is-prompt="true" filter="prompt" on-change="vm.repaintWithPrompts()"></app-filter-prompt>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div report-view report="vm.report" mode="'preview'" style="height: 100%;"></div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div report-view report="vm.report" mode="'preview'"></div>
+        </div>
+    </div>
 </div>

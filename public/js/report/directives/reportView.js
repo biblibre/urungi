@@ -12,7 +12,7 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
 
             var childScope;
             $scope.changeContent = function (newHtml) {
-                var html = '<div class="report-view" ng-hide="loading" style="height:100%">';
+                var html = '<div class="report-view" ng-hide="loading">';
                 html += newHtml;
                 html += '</div><div ng-show="loading" class="container-fluid" >';
                 html += '<h3><img src="images/loader.gif" width="32px" height="32px"/>{{loadingMessage}}</h3>';
