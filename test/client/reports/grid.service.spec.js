@@ -14,17 +14,10 @@ describe('grid', function () {
     beforeEach(angular.mock.module('app.layers'));
 
     let grid;
-    let $httpBackend;
 
-    beforeEach(inject(function (_grid_, _$httpBackend_) {
+    beforeEach(inject(function (_grid_) {
         grid = _grid_;
-        $httpBackend = _$httpBackend_;
     }));
-
-    afterEach(function () {
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
-    });
 
     describe('createGrid', function () {
         it('should create a table', function () {
@@ -40,6 +33,10 @@ describe('grid', function () {
                             elementType: 'number',
                             id: 'equuxraw',
                             calculateTotal: true,
+                            layerObject: {
+                                elementType: 'number',
+                                format: '0.00',
+                            },
                         },
                     ],
                 }
@@ -53,23 +50,7 @@ describe('grid', function () {
                 },
             ];
 
-            $httpBackend.expect('GET', '/api/layers/find-one?id=foo')
-                .respond({
-                    result: 1,
-                    item: {
-                        objects: [
-                            {
-                                elementID: 'quux',
-                                elementType: 'number',
-                                format: '0.00',
-                            },
-                        ],
-                    },
-                });
-
             grid.createGrid(element, report, rows);
-
-            $httpBackend.flush();
 
             const reportGrid = element.find('.report-grid');
             expect(reportGrid).toHaveLength(1);
@@ -96,6 +77,10 @@ describe('grid', function () {
                             elementType: 'number',
                             id: 'equuxraw',
                             calculateTotal: true,
+                            layerObject: {
+                                elementType: 'number',
+                                format: '0.00',
+                            },
                         },
                     ],
                 }
@@ -109,23 +94,7 @@ describe('grid', function () {
                 },
             ];
 
-            $httpBackend.expect('GET', '/api/layers/find-one?id=foo')
-                .respond({
-                    result: 1,
-                    item: {
-                        objects: [
-                            {
-                                elementID: 'quux',
-                                elementType: 'number',
-                                format: '0.00',
-                            },
-                        ],
-                    },
-                });
-
             grid.createGrid(element, report, rows, { vertical: true });
-
-            $httpBackend.flush();
 
             const reportGrid = element.find('.report-grid');
             expect(reportGrid).toHaveLength(1);

@@ -87,21 +87,22 @@ exports.ReportsFindAll = async function (req, res) {
 };
 
 exports.GetReport = function (req, res) {
-    req.query.trash = true;
-
-    controller.findOne(req).then(function (result) {
-        if (!result.item || (!result.item.isPublic && !req.isAuthenticated())) {
+    Report.findById(req.params.id).populate('selectedLayerID').then(function (report) {
+        if (!report || (!report.isPublic && !req.isAuthenticated())) {
             return res.status(403).send('Forbidden');
         }
 
-        res.status(200).json(result);
-        if ((req.query.mode === 'execute' || req.query.mode === 'preview') && result.item) {
+        const reportObject = report.toObject({ getters: true, depopulate: true });
+
+        res.status(200).json({ result: 1, item: reportObject });
+
+        if ((req.query.mode === 'execute' || req.query.mode === 'preview')) {
             // Note the execution in statistics
             var Statistic = mongoose.model('Statistic');
             var stat = {};
             stat.type = 'report';
-            stat.relationedID = result.item._id;
-            stat.relationedName = result.item.reportName;
+            stat.relationedID = report._id;
+            stat.relationedName = report.reportName;
 
             if (req.query.linked === true) {
                 stat.action = 'execute link';
@@ -110,6 +111,8 @@ exports.GetReport = function (req, res) {
             }
             Statistic.saveStat(req, stat);
         }
+    }, err => {
+        res.status(200).json({ result: 0, msg: 'A database error has occured : ' + String(err), error: err });
     });
 };
 

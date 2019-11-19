@@ -3,9 +3,9 @@
 
     angular.module('app.reports').factory('pivot', pivot);
 
-    pivot.$inject = ['numeral', 'moment', 'gettextCatalog', 'api', 'layerService'];
+    pivot.$inject = ['numeral', 'moment', 'gettextCatalog'];
 
-    function pivot (numeral, moment, gettextCatalog, api, layerService) {
+    function pivot (numeral, moment, gettextCatalog) {
         const service = {
             createPivotTable: createPivotTable,
         };
@@ -13,29 +13,24 @@
         return service;
 
         function createPivotTable (element, report, rows) {
-            return api.getLayer(report.selectedLayerID).then(layer => {
-                const layerObjects = layerService.flattenObjects(layer.objects);
-                const layerObjectsMap = new Map(layerObjects.map(object => [object.elementID, object]));
-                const input = function (callback) {
-                    const columns = report.properties.ykeys.concat(report.properties.pivotKeys.columns, report.properties.pivotKeys.rows);
-                    for (const row of rows) {
-                        const newRow = {};
-                        for (const column of columns) {
-                            const layerObject = layerObjectsMap.get(column.elementID);
-                            const label = column.label || layerObject.elementLabel;
-                            newRow[label] = row[column.id];
-                        }
-                        callback(newRow);
+            const input = function (callback) {
+                const columns = report.properties.ykeys.concat(report.properties.pivotKeys.columns, report.properties.pivotKeys.rows);
+                for (const row of rows) {
+                    const newRow = {};
+                    for (const column of columns) {
+                        const label = column.label || column.layerObject.elementLabel;
+                        newRow[label] = row[column.id];
                     }
-                };
-                const options = getPivotTableOptions(report, layerObjectsMap);
-                element.pivot(input, options);
-            });
+                    callback(newRow);
+                }
+            };
+            const options = getPivotTableOptions(report);
+            element.pivot(input, options);
         }
 
-        function getPivotTableOptions (report, layerObjectsMap) {
+        function getPivotTableOptions (report) {
             const ykey = report.properties.ykeys[0];
-            const layerObject = layerObjectsMap.get(ykey.elementID);
+            const layerObject = ykey.layerObject;
 
             let formatFn = x => x;
             const format = ykey.format || layerObject.format;
@@ -74,10 +69,10 @@
 
             const pivotKeys = report.properties.pivotKeys;
             const cols = pivotKeys.columns.map(e => {
-                return e.label || layerObjectsMap.get(e.elementID).elementLabel;
+                return e.label || e.layerObject.elementLabel;
             });
             const rows = pivotKeys.rows.map(e => {
-                return e.label || layerObjectsMap.get(e.elementID).elementLabel;
+                return e.label || e.layerObject.elementLabel;
             });
 
             const options = {

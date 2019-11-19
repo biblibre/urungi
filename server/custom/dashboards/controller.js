@@ -98,59 +98,23 @@ exports.DashboardsDelete = async function (req, res) {
 };
 
 exports.getDashboard = function (req, res) {
-    req.query.trash = true;
-    var theReports = [];
-
-    // TODO: permissions to execute
-
-    controller.findOne(req).then(function (result) {
-        if (!result.item || (!result.item.isPublic && !req.isAuthenticated())) {
+    Dashboard.findById(req.params.id).populate('reports.selectedLayerID').then(dashboard => {
+        if (!dashboard || (!dashboard.isPublic && !req.isAuthenticated())) {
             return res.status(403).send('Forbidden');
         }
-        // identify reports of the dashboard...
 
-        if (result) {
-            // Annotate the execution in statistics
-            const Statistic = mongoose.model('Statistic');
-            var stat = {};
-            stat.type = 'dashboard';
-            stat.relationedID = result.item._id;
-            stat.relationedName = result.item.dashboardName;
-            stat.action = 'execute';
-            Statistic.saveStat(req, stat);
+        // Annotate the execution in statistics
+        const Statistic = mongoose.model('Statistic');
+        var stat = {};
+        stat.type = 'dashboard';
+        stat.relationedID = dashboard._id;
+        stat.relationedName = dashboard.dashboardName;
+        stat.action = 'execute';
+        Statistic.saveStat(req, stat);
 
-            for (var r in result.item.items) {
-                if (result.item.items[r].itemType === 'reportBlock') {
-                    theReports.push(result.item.items[r].reportID);
-                }
-                if (result.item.items[r].itemType === 'tabBlock') {
-                    // $scope.getTabBlock(result.item.items[r]);
-                }
-            }
-
-            // Get all the reports...
-            var Report = mongoose.model('Report');
-
-            Report.find({ _id: { $in: theReports } }, function (err, reports) {
-                if (err) { console.error(err); }
-
-                if (reports) {
-                    for (var r in reports) {
-                        for (var i in result.item.items) {
-                            if (reports[r]._id === result.item.items[i].reportID) {
-                                result.item.items[i].reportDefinition = reports[r];
-                            }
-                        }
-                    }
-
-                    res.status(200).json(result);
-                } else {
-                // TODO: NO REPORTS FOUND
-                }
-            });
-        } else {
-            // TODO: NO DASHBOARD FOUND
-        }
+        res.status(200).json({ result: 1, item: dashboard.toObject({ getters: true, depopulate: true }) });
+    }, err => {
+        res.status(200).json({ result: 0, msg: 'Database error : ' + err.message });
     });
 };
 

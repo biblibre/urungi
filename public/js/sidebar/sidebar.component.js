@@ -26,7 +26,7 @@
             });
             userService.getCurrentUser().then(user => {
                 vm.user = user;
-            });
+            }, () => {});
         }
     }
 })();
