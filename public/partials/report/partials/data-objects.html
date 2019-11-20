@@ -15,22 +15,7 @@
 
                 <a id="ELEMENT_{{rootItem.elementID}}" class="list-group-item data-source-element schema-item-report" 
                 ng-if="isUsable(rootItem)"
-                ng-click="autoFill(rootItem)" draggable="true" effect-allowed="copy" draggable-type="custom-object"
-                draggable-data="{
-                        elementName: rootItem.elementName,
-                        id:rootItem.id,
-                        elementLabel:rootItem.elementLabel,
-                        collectionID:rootItem.collectionID,
-                        elementID: rootItem.elementID,
-                        elementType: rootItem.elementType,
-                        layerID: selectedReport.selectedLayerID,
-                        filterType: 'equal',
-                        filterPrompt: false,
-                        format:rootItem.format,
-                        isCustom:rootItem.isCustom,
-                        expression:rootItem.expression,
-                        values:rootItem.values,
-                        component:rootItem.component}">
+                ng-click="autoFill(rootItem)" draggable="true" app-dragstart="onElementDragStart($event, rootItem)">
                             <i class="fa fa-cube wst-main-color" 
                             ng-show="rootItem.elementType != 'date' && rootItem.elementType != 'number' && rootItem.elementType != 'count' && (!rootItem.defaultAggregation)"
                             data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Dimmension)"></i>

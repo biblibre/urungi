@@ -9,7 +9,6 @@
   "dependencies": {
     "angular": "^1.7.8",
     "angular-bootstrap-colorpicker": "^3.0.32",
-    "angular-draganddrop": "github:biblibre/angular-draganddrop#semver:^0.2.3",
     "angular-file-saver": "^1.1.3",
     "angular-gettext": "^2.4.1",
     "angular-intro.js": "^3.4.0",

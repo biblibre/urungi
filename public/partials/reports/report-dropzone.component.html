@@ -1,5 +1,4 @@
-<div class="container-fluid column-zone no-padding"
-    drop="vm.onDropItem($data, $event)" drop-effect="copy" drop-accept="['json/custom-object','json/column']">
+<div class="container-fluid column-zone no-padding" app-drop-target drop-accept="application/vnd.urungi.layer-element+json" on-drop="vm.onDropItem($event)">
 
     <div class="filter-zone-label pull-right" ng-hide="vm.elements.length > 0">{{ vm.zoneInfo | translate }}</div>
     <ul class="ul-drop no-padding" ng-model="vm.elements" ui-sortable>

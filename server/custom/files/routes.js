@@ -16,9 +16,18 @@ module.exports = function (app) {
         cb(null, (type === 'image'));
     }
 
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, path.join(__dirname, '..', '..', '..', 'uploads'));
+        },
+        filename: function (req, file, cb) {
+            cb(null, Date.now() + '-' + file.originalname);
+        }
+    });
+
     const upload = multer({
-        dest: path.join(__dirname, '..', '..', '..', 'uploads'),
-        fileFilter: fileFilter
+        fileFilter: fileFilter,
+        storage: storage,
     });
 
     app.post('/api/files/upload', restrict, upload.single('content'), Files.registerUpload);

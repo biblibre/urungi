@@ -18,7 +18,7 @@
 
     <!-- Filters -->
 
-    <div id="filtersDropzone"  class="container-fluid column-zone no-padding" drop="onDropOnFilter($data, $event, 'filter')" drop-effect="copy" drop-accept="['json/custom-object','json/column']" drag-over="onDragOver($event)" drag-over-class="drag-over-accept">
+    <div id="filtersDropzone"  class="container-fluid column-zone no-padding" app-drop-target on-drop="onDropOnFilter($event)" drop-accept="application/vnd.urungi.layer-element+json">
         <div class="filter-zone-label pull-right" ng-hide="selectedReport.properties.filters.length > 0 || selectedReport.properties.recordLimit != undefined" translate>Drop here your filters</div>
         <ul class="ul-drop no-padding" ng-model="selectedReport.properties.filters" ui-sortable="filterSortableOptions" ng-include="'partials/report/partials/filter.html'"></ul>
     </div>

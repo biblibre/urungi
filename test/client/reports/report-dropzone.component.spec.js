@@ -38,11 +38,25 @@ describe('appReportDropzone', function () {
                 const element = {
                     elementID: 'abcd',
                 };
-                const data = {
-                    'json/custom-object': element,
-                };
-                const dropEvent = new Event('drop');
-                vm.onDropItem(data, dropEvent);
+
+                function DataTransfer () {
+                    const _data = {};
+                    this.setData = function (type, data) {
+                        _data[type] = data;
+                    };
+                    this.getData = function (type) {
+                        return _data[type];
+                    };
+                }
+
+                function DragEvent (type, dragEventInit) {
+                    Object.assign(this, dragEventInit);
+                }
+
+                const dataTransfer = new DataTransfer();
+                dataTransfer.setData('application/vnd.urungi.layer-element+json', JSON.stringify(element));
+                const dropEvent = new DragEvent('drop', { dataTransfer: dataTransfer });
+                vm.onDropItem(dropEvent);
                 expect(onDropSpy).toHaveBeenCalledWith({ elements: [], item: element });
             });
         });

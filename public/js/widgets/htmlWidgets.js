@@ -11,22 +11,22 @@ angular.module('app').service('htmlWidgets', function (gettextCatalog) {
                     '<div  page-block class="col-md-3 ndContainer" ndtype="column" >' +
                         '<h3  page-block class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
                         '<p page-block class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
-                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndtype="column"></div>' +
                     '</div>' +
                     '<div class="col-md-3 ndContainer" ndtype="column">' +
                         '<h3 page-block  class="editable"  ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
                         '<p page-block  class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
-                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndtype="column"></div>' +
                     '</div>' +
                     '<div class="col-md-3 ndContainer" ndtype="column" >' +
                         '<h3  page-block  class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
                         '<p page-block  class="editable"  ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
-                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndtype="column"></div>' +
                     '</div>' +
                     '<div class="col-md-3 ndContainer" ndtype="column">' +
                         '<h3  page-block  class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
                         '<p page-block  class="editable"  ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
-                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndtype="column"></div>' +
                     '</div>' +
                 '</div>';
     };
@@ -36,17 +36,17 @@ angular.module('app').service('htmlWidgets', function (gettextCatalog) {
                     '<div  page-block class="col-md-4 ndContainer" ndtype="column" >' +
                         '<h3  page-block class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
                         '<p page-block class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
-                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndtype="column"></div>' +
                     '</div>' +
                     '<div class="col-md-4 ndContainer" ndtype="column">' +
                         '<h3 page-block  class="editable"  ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
                         '<p page-block  class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
-                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndtype="column"></div>' +
                     '</div>' +
                     '<div class="col-md-4 ndContainer" ndtype="column">' +
                         '<h3  page-block  class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
                         '<p page-block  class="editable"  ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
-                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndtype="column"></div>' +
                     '</div>' +
                 '</div>';
     };
@@ -56,12 +56,12 @@ angular.module('app').service('htmlWidgets', function (gettextCatalog) {
                     '<div  page-block class="col-md-6 ndContainer" ndtype="column" >' +
                         '<h3  page-block class="editable" ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
                         '<p page-block class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
-                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndtype="column"></div>' +
                     '</div>' +
                     '<div class="col-md-6 ndContainer" ndtype="column">' +
                         '<h3 page-block  class="editable"  ndType="header" >  ' + gettextCatalog.getString('A header text H3') + ' </h3>' +
                         '<p page-block  class="editable" ndType="paragraph">' + gettextCatalog.getString('This is a simple text paragraph select to edit content.') + '</p>' +
-                        '<div page-block class="Block500" ndtype="column" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndtype="column"></div>' +
                     '</div>' +
                 '</div>';
     };
@@ -73,7 +73,7 @@ angular.module('app').service('htmlWidgets', function (gettextCatalog) {
                         '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>' +
                     '</div>' +
                     '<div page-block class="col-md-5 col-md-pull-7 ndContainer" ndtype="column">' +
-                        '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndType="Block500"></div>' +
                     '</div>' +
                 '</div>';
     };
@@ -85,7 +85,7 @@ angular.module('app').service('htmlWidgets', function (gettextCatalog) {
                         '<p page-block class="editable lead" contenteditable="false" ndType="paragraph">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>' +
                     '</div>' +
                     '<div page-block class="col-md-5 ndContainer" ndtype="column">' +
-                        '<div page-block class="Block500" ndType="Block500" drop="onDropObject($data, $event, \'order\')" drop-effect="copy" drop-accept="[\'json/custom-object\',\'json/column\']" ></div>' +
+                        '<div page-block class="Block500" ndType="Block500"></div>' +
                     '</div>' +
                 '</div>';
     };

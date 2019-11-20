@@ -26,17 +26,16 @@
         vm.openColumnSettingsModal = openColumnSettingsModal;
         vm.getColumnDescription = reportsService.getColumnDescription;
 
-        function onDropItem (data, event) {
-            event.stopPropagation();
+        function onDropItem (ev) {
+            const type = 'application/vnd.urungi.layer-element+json';
+            const data = ev.dataTransfer.getData(type);
+            const layerElement = JSON.parse(data);
 
-            var newItem = data['json/custom-object'];
-
-            const found = vm.elements.find(e => e.elementID === newItem.elementID);
-
+            const found = vm.elements.find(e => e.elementID === layerElement.elementID);
             if (!found) {
-                vm.onDrop({ elements: vm.elements, item: newItem });
+                vm.onDrop({ elements: vm.elements, item: layerElement });
             }
-        };
+        }
 
         function onRemoveItem (item) {
             vm.onRemove({ elements: vm.elements, item: item });

@@ -72,7 +72,7 @@ require('./config/passport')(passport);
 
 require('./config/routes')(app, passport);
 
-app.use('/uploads', restrict, express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', restrict, express.static(path.join(__dirname, '..', 'uploads')));
 
 // Custom routes
 const routesModules = [

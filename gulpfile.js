@@ -62,7 +62,6 @@ function dist_js_build () {
         'node_modules/bootstrap/dist/js/bootstrap.min.js',
         'node_modules/angular/angular.min.js',
         'node_modules/angular-sanitize/angular-sanitize.min.js',
-        'node_modules/angular-draganddrop/angular-draganddrop.min.js',
         'node_modules/angular-route/angular-route.min.js',
         'node_modules/noty/lib/noty.min.js',
         'node_modules/moment/min/moment-with-locales.min.js',
