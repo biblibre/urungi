@@ -9,8 +9,12 @@
                 <span translate>Export</span> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="" ng-click="vm.downloadAsPNG()">As PNG</a></li>
-                <li><a href="" ng-click="vm.downloadAsPDF()">As PDF</a></li>
+                <li ng-class="{ disabled: !vm.exportAsPNGAvailable }">
+                    <a href="" ng-click="vm.exportAsPNGAvailable && vm.downloadAsPNG()">As PNG</a>
+                </li>
+                <li ng-class="{ disabled: !vm.exportAsPDFAvailable }">
+                    <a href="" ng-click="vm.exportAsPDFAvailable && vm.downloadAsPDF()">As PDF</a>
+                </li>
             </ul>
         </div>
         <a ng-click="goBack();" class="btn btn-default" uib-tooltip="{{ 'Click here to cancel and backtrack' | translate }}" tooltip-placement="bottom" translate>Cancel</a>

@@ -11,8 +11,12 @@
                     <span translate>Export</span> <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="" ng-click="vm.downloadAsPNG()">As PNG</a></li>
-                    <li><a href="" ng-click="vm.downloadAsPDF()">As PDF</a></li>
+                    <li ng-class="{ disabled: !vm.exportAsPNGAvailable }">
+                        <a href="" ng-click="vm.exportAsPNGAvailable && vm.downloadAsPNG()">As PNG</a>
+                    </li>
+                    <li ng-class="{ disabled: !vm.exportAsPDFAvailable }">
+                        <a href="" ng-click="vm.exportAsPDFAvailable && vm.downloadAsPDF()">As PDF</a>
+                    </li>
                     <li ng-if="vm.report.reportType === 'grid'"><a href="" ng-click="vm.saveAsXLSX()" translate>As XLSX</a></li>
                 </ul>
             </div>

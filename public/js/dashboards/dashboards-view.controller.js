@@ -10,6 +10,8 @@
 
         vm.downloadAsPDF = downloadAsPDF;
         vm.downloadAsPNG = downloadAsPNG;
+        vm.exportAsPDFAvailable = false;
+        vm.exportAsPNGAvailable = false;
         vm.mode = 'preview';
         vm.prompts = {};
         vm.dashboard = dashboard;
@@ -23,6 +25,12 @@
             userService.getCurrentUser().then(user => {
                 vm.isAdmin = user.isAdmin();
             }, () => {});
+            api.isDashboardAsPDFAvailable(dashboard._id).then(available => {
+                vm.exportAsPDFAvailable = available;
+            });
+            api.isDashboardAsPNGAvailable(dashboard._id).then(available => {
+                vm.exportAsPNGAvailable = available;
+            });
             loadHTML();
         }
 

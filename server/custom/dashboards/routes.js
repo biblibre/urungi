@@ -1,6 +1,10 @@
 const config = require('config');
+const express = require('express');
 const restrict = require('../../middlewares/restrict');
+const assertPikitiaIsConfigured = require('../../middlewares/assert-pikitia-is-configured');
 const pikitia = require('../../helpers/pikitia');
+const mongoose = require('mongoose');
+const Dashboard = mongoose.model('Dashboard');
 
 module.exports = function (app) {
     var Dashboards = require('./controller.js');
@@ -16,16 +20,18 @@ module.exports = function (app) {
     app.post('/api/dashboards/share-page', restrict, Dashboards.ShareDashboard);
     app.post('/api/dashboards/unshare', restrict, Dashboards.UnshareDashboard);
 
-    app.post('/api/dashboards/:id/png', async function (req, res, next) {
-        const mongoose = require('mongoose');
-        const Dashboard = mongoose.model('Dashboard');
+    const dashboardRouter = express.Router();
 
+    dashboardRouter.use(['/png', '/pdf'], assertPikitiaIsConfigured);
+
+    dashboardRouter.options(['/png', '/pdf'], function (req, res) {
+        res.set('Allow', 'POST');
+        res.sendStatus(200);
+    });
+
+    dashboardRouter.post('/png', async function (req, res, next) {
         try {
-            const dashboard = await Dashboard.findById(req.params.id);
-            if (!(dashboard && (req.isAuthenticated() || dashboard.isPublic))) {
-                return res.sendStatus(404);
-            }
-
+            const dashboard = res.locals.dashboard;
             const url = config.get('url') + config.get('base') + `/dashboards/view/${dashboard.id}`;
             const buffer = await pikitia.toPNG(url, {
                 cookies: req.cookies,
@@ -45,16 +51,9 @@ module.exports = function (app) {
         }
     });
 
-    app.post('/api/dashboards/:id/pdf', async function (req, res, next) {
-        const mongoose = require('mongoose');
-        const Dashboard = mongoose.model('Dashboard');
-
+    dashboardRouter.post('/pdf', async function (req, res, next) {
         try {
-            const dashboard = await Dashboard.findById(req.params.id);
-            if (!(dashboard && (req.isAuthenticated() || dashboard.isPublic))) {
-                return res.sendStatus(404);
-            }
-
+            const dashboard = res.locals.dashboard;
             const url = config.get('url') + config.get('base') + `/dashboards/view/${dashboard.id}`;
             const options = {
                 cookies: req.cookies,
@@ -74,4 +73,19 @@ module.exports = function (app) {
             return next(e);
         }
     });
+
+    function findDashboard (req, res, next) {
+        Dashboard.findById(req.params.id).then(dashboard => {
+            if (!(dashboard && (req.isAuthenticated() || dashboard.isPublic))) {
+                return res.sendStatus(404);
+            }
+
+            res.locals.dashboard = dashboard;
+            next();
+        }, () => {
+            return res.sendStatus(404);
+        });
+    }
+
+    app.use('/api/dashboards/:id', findDashboard, dashboardRouter);
 };

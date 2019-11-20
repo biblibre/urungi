@@ -2,9 +2,14 @@ const config = require('config');
 const request = require('request');
 
 module.exports = {
+    isConfigured,
     toPDF,
     toPNG,
 };
+
+function isConfigured () {
+    return config.has('pikitia.url') && config.has('pikitia.client_id') && config.has('pikitia.client_secret');
+}
 
 /**
  * Ask Pikitia to generate a PNG of given URL
