@@ -12,7 +12,7 @@
             controllerAs: 'vm',
             resolve: {
                 dashboard: function ($route, api) {
-                    return api.getDashboard($route.current.params.dashboardID);
+                    return api.getDashboardForView($route.current.params.dashboardID);
                 },
             },
             isPublic: true,

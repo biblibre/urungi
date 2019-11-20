@@ -24,6 +24,13 @@ const reportColumnSchema = new mongoose.Schema({
     zone: String,
 });
 
+reportColumnSchema.virtual('layerObject').get(function () {
+    const report = this.parent().parent();
+    if (report.selectedLayerID.findObject) {
+        return report.selectedLayerID.findObject(this.elementID);
+    }
+});
+
 const reportFilterSchema = reportColumnSchema.clone();
 reportFilterSchema.add({
     conditionType: String,
@@ -76,7 +83,7 @@ var reportSchema = new mongoose.Schema({
     reportName: { type: String, required: true },
     reportSubType: { type: String }, // FIXME This is not used
     reportType: { type: String },
-    selectedLayerID: mongoose.Schema.Types.ObjectId,
+    selectedLayerID: { type: mongoose.Schema.Types.ObjectId, ref: 'Layer' },
     theme: String,
 }, { collation: { locale: 'en', strength: 2 } });
 

@@ -73,4 +73,22 @@ const layerSchema = new mongoose.Schema({
     datasourceID: { type: mongoose.Schema.Types.ObjectId, required: true },
 }, { collation: { locale: 'en', strength: 2 } });
 
+layerSchema.methods.findObject = function (id) {
+    function search (objs, id) {
+        for (const obj of objs) {
+            if (obj.elementID === id) {
+                return obj;
+            }
+            if (obj.elements) {
+                const found = search(obj.elements, id);
+                if (found) {
+                    return found;
+                }
+            }
+        }
+    }
+
+    return search(this.objects, id);
+};
+
 module.exports = mongoose.model('Layer', layerSchema);

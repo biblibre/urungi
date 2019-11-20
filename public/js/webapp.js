@@ -93,7 +93,7 @@
     function runBlock ($rootScope, $location, editableOptions, base, connection, userService, language) {
         userService.getCurrentUser().then(user => {
             $rootScope.user = user;
-        });
+        }, () => {});
 
         // Redirect to /login if next route is not public and user is not authenticated
         $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
@@ -119,7 +119,7 @@
         $rootScope.userContextHelp = [];
         userService.getCurrentUser().then(user => {
             $rootScope.userContextHelp = user.contextHelp;
-        });
+        }, () => {});
 
         // Set default options for xeditable
         editableOptions.buttons = 'no';

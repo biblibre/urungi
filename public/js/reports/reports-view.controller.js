@@ -22,7 +22,7 @@
         function activate () {
             userService.getCurrentUser().then(user => {
                 vm.isAdmin = user.isAdmin();
-            });
+            }, () => {});
 
             vm.prompts = initPrompts();
 

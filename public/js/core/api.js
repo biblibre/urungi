@@ -36,6 +36,7 @@
             getDashboards: getDashboards,
             deleteDashboard: deleteDashboard,
             getDashboard: getDashboard,
+            getDashboardForView: getDashboardForView,
             publishDashboard: publishDashboard,
             unpublishDashboard: unpublishDashboard,
             shareDashboard: shareDashboard,
@@ -69,7 +70,7 @@
         }
 
         function getUserData () {
-            return connection.get('/api/get-user-data');
+            return get('/api/get-user-data');
         }
 
         function getUserObjects () {
@@ -266,6 +267,10 @@
          */
         function getDashboard (id) {
             return get('/api/dashboards/find-one', { id: id }).then(data => data.item);
+        }
+
+        function getDashboardForView (id) {
+            return get('/api/dashboards/get/' + id).then(data => data.item);
         }
 
         function publishDashboard (id) {

@@ -47,6 +47,12 @@ describe('Reports API', function () {
             name: 'Layer',
             status: 'active',
             datasourceID: datasource._id,
+            objects: [
+                {
+                    elementID: 'abcd',
+                    elementLabel: 'Foo',
+                },
+            ],
         });
 
         report = await Report.create({
@@ -60,6 +66,13 @@ describe('Reports API', function () {
             selectedLayerID: layer._id,
             author: user.id,
             reportType: 'grid',
+            properties: {
+                columns: [
+                    {
+                        elementID: 'abcd',
+                    },
+                ],
+            },
         });
     });
 
@@ -241,16 +254,24 @@ describe('Reports API', function () {
 
             expect(res.body).toHaveProperty('result', 1);
             expect(res.body).toHaveProperty('item');
-            expect(res.body.item).toHaveProperty('_id');
-            expect(res.body.item).toHaveProperty('companyID', 'COMPID');
-            expect(res.body.item).toHaveProperty('reportName', 'Report');
-            expect(res.body.item).toHaveProperty('nd_trash_deleted', false);
-            expect(res.body.item).toHaveProperty('owner', user.id);
-            expect(res.body.item).toHaveProperty('isPublic', false);
-            expect(res.body.item).toHaveProperty('createdBy', user.id);
-            expect(res.body.item).toHaveProperty('createdOn');
-            expect(res.body.item).toHaveProperty('__v');
-            expect(res.body.item).toHaveProperty('history');
+
+            const r = res.body.item;
+            expect(r).toHaveProperty('_id');
+            expect(r).toHaveProperty('companyID', 'COMPID');
+            expect(r).toHaveProperty('reportName', 'Report');
+            expect(r).toHaveProperty('nd_trash_deleted', false);
+            expect(r).toHaveProperty('owner', user.id);
+            expect(r).toHaveProperty('isPublic', false);
+            expect(r).toHaveProperty('createdBy', user.id);
+            expect(r).toHaveProperty('createdOn');
+            expect(r).toHaveProperty('__v');
+            expect(r).toHaveProperty('history');
+            expect(r).toHaveProperty('properties');
+
+            expect(r.properties).toHaveProperty('columns');
+            expect(r.properties.columns).toHaveLength(1);
+            expect(r.properties.columns[0]).toHaveProperty('layerObject');
+            expect(r.properties.columns[0].layerObject).toHaveProperty('elementLabel', 'Foo');
         });
     });
 
