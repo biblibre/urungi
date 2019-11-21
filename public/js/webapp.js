@@ -26,6 +26,7 @@
         'app.dashboards',
         'app.layers',
         'app.users',
+        'app.roles',
         'app.io',
         'app.themes',
         'app.templates',
@@ -54,12 +55,6 @@
         $routeProvider.when('/reports/edit/:reportID/', {
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
-        });
-
-        // roles
-        $routeProvider.when('/roles', {
-            templateUrl: 'partials/roles/list.html',
-            controller: 'rolesCtrl'
         });
 
         $routeProvider.when('/logout', {
