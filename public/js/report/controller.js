@@ -298,13 +298,15 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $scope.onDropField($scope.selectedReport.properties.filters, filter, 'filter');
     };
 
-    $scope.onDropField = function (elements, newItem, role) {
-        elements.push(newItem);
+    $scope.onDropField = function (elements, layerObject, role) {
+        const element = Object.assign({}, layerObject);
+        element.layerObject = layerObject;
+        elements.push(element);
 
         $scope.sql = undefined;
 
         if (role === 'order') {
-            newItem.sortType = 1;
+            element.sortType = 1;
         }
     };
 
