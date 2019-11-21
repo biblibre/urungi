@@ -14,6 +14,11 @@
             getUserObjects: getUserObjects,
             changeUserStatus: changeUserStatus,
 
+            getRole: getRole,
+            getRoles: getRoles,
+            createRole: createRole,
+            updateRole: updateRole,
+
             getDatasource: getDatasource,
             getDataSources: getDataSources,
             getEntitiesSchema: getEntitiesSchema,
@@ -88,6 +93,22 @@
             };
 
             return post('/api/admin/users/change-user-status', data);
+        }
+
+        function getRole (id) {
+            return get('/api/roles/find-one', { id: id }).then(data => data.item);
+        }
+
+        function getRoles (params) {
+            return get('/api/roles/find-all', params);
+        }
+
+        function createRole (role) {
+            return post('/api/roles/create', role).then(data => data.item);
+        }
+
+        function updateRole (role) {
+            return post('/api/roles/update/' + role._id, role).then(data => data.item);
         }
 
         function getDatasource (id) {
