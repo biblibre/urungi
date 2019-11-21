@@ -10,6 +10,8 @@
 
         vm.downloadAsPDF = downloadAsPDF;
         vm.downloadAsPNG = downloadAsPNG;
+        vm.exportAsPNGAvailable = false;
+        vm.exportAsPDFAvailable = false;
         vm.report = report;
         vm.prompts = {};
         vm.getPrompts = getPrompts;
@@ -23,6 +25,12 @@
             userService.getCurrentUser().then(user => {
                 vm.isAdmin = user.isAdmin();
             }, () => {});
+            api.isReportAsPNGAvailable(report._id).then(available => {
+                vm.exportAsPNGAvailable = available;
+            });
+            api.isReportAsPDFAvailable(report._id).then(available => {
+                vm.exportAsPDFAvailable = available;
+            });
 
             vm.prompts = initPrompts();
 

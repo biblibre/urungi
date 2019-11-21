@@ -335,6 +335,58 @@ describe('api', () => {
         });
     });
 
+    describe('api.isReportAsPDFAvailable', function () {
+        it('should call OPTIONS /api/reports/:id/pdf and return false', function () {
+            const url = '/api/reports/foo/pdf';
+
+            $httpBackend.expect('OPTIONS', url).respond(501, '');
+
+            const p = api.isReportAsPDFAvailable('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(false);
+        });
+
+        it('should call OPTIONS /api/reports/:id/pdf and return true', function () {
+            const url = '/api/reports/foo/pdf';
+
+            $httpBackend.expect('OPTIONS', url).respond(200, '');
+
+            const p = api.isReportAsPDFAvailable('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(true);
+        });
+    });
+
+    describe('api.isReportAsPNGAvailable', function () {
+        it('should call OPTIONS /api/reports/:id/png and return false', function () {
+            const url = '/api/reports/foo/png';
+
+            $httpBackend.expect('OPTIONS', url).respond(501, '');
+
+            const p = api.isReportAsPNGAvailable('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(false);
+        });
+
+        it('should call OPTIONS /api/reports/:id/png and return true', function () {
+            const url = '/api/reports/foo/png';
+
+            $httpBackend.expect('OPTIONS', url).respond(200, '');
+
+            const p = api.isReportAsPNGAvailable('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(true);
+        });
+    });
+
     describe('api.getDashboards', () => {
         it('should call /api/dashboards/find-all', () => {
             const url = '/api/dashboards/find-all' +
@@ -554,6 +606,58 @@ describe('api', () => {
             setTimeout($httpBackend.flush);
 
             return expect(p).resolves.toEqual(response);
+        });
+    });
+
+    describe('api.isDashboardAsPDFAvailable', function () {
+        it('should call OPTIONS /api/dashboards/:id/pdf and return false', function () {
+            const url = '/api/dashboards/foo/pdf';
+
+            $httpBackend.expect('OPTIONS', url).respond(501, '');
+
+            const p = api.isDashboardAsPDFAvailable('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(false);
+        });
+
+        it('should call OPTIONS /api/dashboards/:id/pdf and return true', function () {
+            const url = '/api/dashboards/foo/pdf';
+
+            $httpBackend.expect('OPTIONS', url).respond(200, '');
+
+            const p = api.isDashboardAsPDFAvailable('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(true);
+        });
+    });
+
+    describe('api.isDashboardAsPNGAvailable', function () {
+        it('should call OPTIONS /api/dashboards/:id/png and return false', function () {
+            const url = '/api/dashboards/foo/png';
+
+            $httpBackend.expect('OPTIONS', url).respond(501, '');
+
+            const p = api.isDashboardAsPNGAvailable('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(false);
+        });
+
+        it('should call OPTIONS /api/dashboards/:id/png and return true', function () {
+            const url = '/api/dashboards/foo/png';
+
+            $httpBackend.expect('OPTIONS', url).respond(200, '');
+
+            const p = api.isDashboardAsPNGAvailable('foo');
+
+            setTimeout($httpBackend.flush);
+
+            return expect(p).resolves.toEqual(true);
         });
     });
 

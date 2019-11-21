@@ -308,4 +308,68 @@ describe('Reports API', function () {
             expect(r).toHaveProperty('parentFolder', undefined);
         });
     });
+
+    describe('OPTIONS /api/reports/:id/png', function () {
+        it('should return 404 if report does not exist', async function () {
+            const res = await request(app).options('/api/reports/foo/png')
+                .set(headers);
+
+            expect(res.status).toBe(404);
+        });
+
+        it('should return 501 if pikitia is not configured', async function () {
+            const res = await request(app).options('/api/reports/' + report.id + '/png')
+                .set(headers);
+
+            expect(res.status).toBe(501);
+        });
+    });
+
+    describe('POST /api/reports/:id/png', function () {
+        it('should return 404 if report does not exist', async function () {
+            const res = await request(app).post('/api/reports/foo/png')
+                .set(headers);
+
+            expect(res.status).toBe(404);
+        });
+
+        it('should return 501 if pikitia is not configured', async function () {
+            const res = await request(app).post('/api/reports/' + report.id + '/png')
+                .set(headers);
+
+            expect(res.status).toBe(501);
+        });
+    });
+
+    describe('OPTIONS /api/reports/:id/pdf', function () {
+        it('should return 404 if report does not exist', async function () {
+            const res = await request(app).options('/api/reports/foo/pdf')
+                .set(headers);
+
+            expect(res.status).toBe(404);
+        });
+
+        it('should return 501 if pikitia is not configured', async function () {
+            const res = await request(app).options('/api/reports/' + report.id + '/pdf')
+                .set(headers);
+
+            expect(res.status).toBe(501);
+        });
+    });
+
+    describe('POST /api/reports/:id/pdf', function () {
+        it('should return 404 if report does not exist', async function () {
+            const res = await request(app).post('/api/reports/foo/pdf')
+                .set(headers);
+
+            expect(res.status).toBe(404);
+        });
+
+        it('should return 501 if pikitia is not configured', async function () {
+            const res = await request(app).post('/api/reports/' + report.id + '/pdf')
+                .set(headers);
+
+            expect(res.status).toBe(501);
+        });
+    });
 });

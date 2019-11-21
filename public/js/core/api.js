@@ -32,6 +32,8 @@
             getReportFilterValues: getReportFilterValues,
             getReportAsPDF: getReportAsPDF,
             getReportAsPNG: getReportAsPNG,
+            isReportAsPDFAvailable: isReportAsPDFAvailable,
+            isReportAsPNGAvailable: isReportAsPNGAvailable,
 
             getDashboards: getDashboards,
             deleteDashboard: deleteDashboard,
@@ -45,6 +47,8 @@
             updateDashboard: updateDashboard,
             getDashboardAsPDF: getDashboardAsPDF,
             getDashboardAsPNG: getDashboardAsPNG,
+            isDashboardAsPDFAvailable: isDashboardAsPDFAvailable,
+            isDashboardAsPNGAvailable: isDashboardAsPNGAvailable,
 
             getLayers: getLayers,
             changeLayerStatus: changeLayerStatus,
@@ -240,6 +244,22 @@
             return post(`/api/reports/${id}/png`);
         }
 
+        function isReportAsPDFAvailable (id) {
+            return $http({ method: 'OPTIONS', url: `/api/reports/${id}/pdf` }).then(res => {
+                return true;
+            }, res => {
+                return false;
+            });
+        }
+
+        function isReportAsPNGAvailable (id) {
+            return $http({ method: 'OPTIONS', url: `/api/reports/${id}/png` }).then(res => {
+                return true;
+            }, res => {
+                return false;
+            });
+        }
+
         /**
          * Fetch multiple dashboards
          *
@@ -342,6 +362,22 @@
 
         function getDashboardAsPNG (id) {
             return post(`/api/dashboards/${id}/png`);
+        }
+
+        function isDashboardAsPDFAvailable (id) {
+            return $http({ method: 'OPTIONS', url: `/api/dashboards/${id}/pdf` }).then(res => {
+                return true;
+            }, res => {
+                return false;
+            });
+        }
+
+        function isDashboardAsPNGAvailable (id) {
+            return $http({ method: 'OPTIONS', url: `/api/dashboards/${id}/png` }).then(res => {
+                return true;
+            }, res => {
+                return false;
+            });
         }
 
         /**
