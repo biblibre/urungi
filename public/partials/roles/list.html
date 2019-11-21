@@ -1,4 +1,4 @@
-<div class="container-fluid root-container" ng-init="getRoles(1,'',['name','description'])">
+<div class="container-fluid root-container">
     <div class="row">
         <div class="col-md-3">
             <app-sidebar></app-sidebar>
@@ -7,18 +7,17 @@
         <div class="col-md-9">
             <div class="page-header">
                 <span class="h3" translate>Roles</span>
-                <a ng-click="newRole()" class="btn btn-success pull-right" translate>New Role</a>
+                <a ng-click="vm.newRole()" class="btn btn-success pull-right" translate>New Role</a>
             </div>
 
             <div class="list-group">
-                <a ng-click="view(role._id)" class="list-group-item" ng-repeat="role in items">
+                <a ng-click="vm.view(role._id)" class="list-group-item" ng-repeat="role in vm.items">
                     <h4 class="list-group-item-heading" ng-bind="role.name"></h4>
                     <p class="list-group-item-text" ng-bind="role.description"></p>
                 </a>
             </div>
 
-            <app-pager current-page="page" total-pages="pages" on-page-change="goToPage(page)"></app-pager>
+            <app-pager current-page="vm.page" total-pages="vm.pages" on-page-change="vm.goToPage(page)"></app-pager>
         </div>
     </div>
 </div>
-<div ng-include src="roleModal"></div>
