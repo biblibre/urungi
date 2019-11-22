@@ -3235,3 +3235,9 @@ a.list-group-item:hover {
 .dragover {
     box-shadow: inset 0 0 5px 0 rgba(150, 150, 255, 0.7);
 }
+
+.editable-text {
+    cursor: pointer;
+    color: #428bca;
+    border-bottom: 1px dashed #428bca;
+}

@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix date filters for Oracle
+- Fix a bug where report/dashboard/layer name modification was not always saved (#141)
 
 ### Dependencies
 
@@ -73,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated oracledb to 4.0.1
 - Removed cynteka-pivot-table-jquery
 - Removed angular-vs-repeat
+- Removed angular-xeditable
 - Removed codecov
 - Removed email-templates
 

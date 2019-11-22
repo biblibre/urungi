@@ -7,7 +7,7 @@
 
         <div class="explorer-header-title">
                 <h3  ng-if="mode == 'preview' && !selectedReport.reportName" translate>Explorer</h3>
-                <h3   editable-text="selectedReport.reportName" blur="submit">{{ selectedReport.reportName }}</h3>
+                <h3 app-editable-text="selectedReport.reportName">{{ selectedReport.reportName }}</h3>
 
         </div>
 

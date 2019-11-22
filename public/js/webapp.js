@@ -11,7 +11,6 @@
         'ui.select',
         'ui.bootstrap.datetimepicker',
         'ui.tree',
-        'xeditable',
         'colorpicker.module',
         'gettext',
         'ngclipboard',
@@ -83,9 +82,9 @@
 
     angular.module('app').run(runBlock);
 
-    runBlock.$inject = ['$rootScope', '$location', 'editableOptions', 'base', 'connection', 'userService', 'language'];
+    runBlock.$inject = ['$rootScope', '$location', 'base', 'connection', 'userService', 'language'];
 
-    function runBlock ($rootScope, $location, editableOptions, base, connection, userService, language) {
+    function runBlock ($rootScope, $location, base, connection, userService, language) {
         userService.getCurrentUser().then(user => {
             $rootScope.user = user;
         }, () => {});
@@ -115,9 +114,6 @@
         userService.getCurrentUser().then(user => {
             $rootScope.userContextHelp = user.contextHelp;
         }, () => {});
-
-        // Set default options for xeditable
-        editableOptions.buttons = 'no';
 
         language.setLanguageFromLocalStorage();
     }
