@@ -6,7 +6,7 @@
     <div class="explorer-header" ng-init="initForm()">
 
         <div class="explorer-header-title">
-            <h3 class="pull-left" editable-text="selectedDashboard.dashboardName">{{ selectedDashboard.dashboardName }}</h3>
+            <h3 app-editable-text="selectedDashboard.dashboardName">{{ selectedDashboard.dashboardName }}</h3>
         </div>
 
         <div class="explorer-header-buttons">
@@ -106,7 +106,7 @@
                             <img draggable="false" ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
                         </span>
                         <div style="width: 100%;">
-                        <span style="color: white; font-size: 10px; width: 100%; text-align: left;" editable-text="item.reportName">{{ item.reportName }}</span>
+                            <span app-editable-text="item.reportName" style="color: white;">{{ item.reportName }}</span>
                             <br/>
                             <a id="reportListItemDeleteBtn" href="" class="pull-right  list-button btn-delete" ng-click="deleteReport(item.id,item.reportName)"  uib-tooltip="{{ 'Click here to delete this report' | translate }}" tooltip-placement="bottom">
                                 <i class="fa fa-trash-o "  ></i>
