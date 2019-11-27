@@ -4,11 +4,7 @@
 </div>
 
 <div class="modal-body">
-    <app-list-panel columns="vm.columns" refresh="vm.refresh">
-        <button type="button" ng-click="vm.close({ $value: report._id })" class="list-group-item" ng-repeat="report in vm.reports">
-            {{ report.reportName }}
-        </button>
-    </app-list-panel>
+    <app-reports-table on-select="vm.close({ $value: $report._id })" hide-buttons="true"></app-reports-table>
 </div>
 
 <div class="modal-footer">

@@ -33,12 +33,16 @@
 
     angular.module('app').config(configure);
 
-    configure.$inject = ['$routeProvider', '$locationProvider', '$httpProvider', 'Noty', 'base'];
+    configure.$inject = ['$routeProvider', '$locationProvider', '$httpProvider', '$uibTooltipProvider', 'Noty', 'base'];
 
-    function configure ($routeProvider, $locationProvider, $httpProvider, Noty, base) {
+    function configure ($routeProvider, $locationProvider, $httpProvider, $uibTooltipProvider, Noty, base) {
         $locationProvider.html5Mode(true);
 
         $httpProvider.interceptors.push('httpInterceptor');
+
+        $uibTooltipProvider.options({
+            appendToBody: true,
+        });
 
         $routeProvider.otherwise({ redirectTo: '/home' });
 

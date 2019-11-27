@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    angular.module('app.dashboards').component('appDashboardsListItem', {
-        templateUrl: 'partials/dashboards/dashboards-list-item.html',
-        controller: DashboardsListItemController,
+    angular.module('app.dashboards').component('appDashboardsListButtons', {
+        templateUrl: 'partials/dashboards/dashboards-list-buttons.html',
+        controller: DashboardsListButtonsController,
         controllerAs: 'vm',
         bindings: {
             dashboard: '<',
@@ -12,9 +12,9 @@
         },
     });
 
-    DashboardsListItemController.$inject = ['$uibModal', 'api', 'base', 'gettextCatalog'];
+    DashboardsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'gettextCatalog'];
 
-    function DashboardsListItemController ($uibModal, api, base, gettextCatalog) {
+    function DashboardsListButtonsController ($uibModal, api, base, gettextCatalog) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;

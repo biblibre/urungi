@@ -3,27 +3,56 @@
 
     angular.module('app.layers').controller('LayersListController', LayersListController);
 
-    LayersListController.$inject = ['$scope', '$location', '$timeout', '$uibModal', 'connection', 'api', 'gettext', 'gettextCatalog'];
+    LayersListController.$inject = ['$scope', '$location', '$timeout', '$uibModal', 'Noty', 'connection', 'api', 'gettext', 'gettextCatalog', 'userService'];
 
-    function LayersListController ($scope, $location, $timeout, $uibModal, connection, api, gettext, gettextCatalog) {
+    function LayersListController ($scope, $location, $timeout, $uibModal, Noty, connection, api, gettext, gettextCatalog, userService) {
         const vm = this;
 
-        vm.layers = [];
-        vm.columns = [];
-        vm.lastRefreshParams = {};
+        vm.currentPage = 1;
+        vm.filters = {};
+        vm.goToPage = goToPage;
         vm.introOptions = {};
-        vm.showNewLayerModal = showNewLayerModal;
+        vm.layers = [];
+        vm.lastRefreshParams = {};
+        vm.onFilter = onFilter;
+        vm.onSort = onSort;
+        vm.page = 1;
+        vm.pages = 1;
         vm.refresh = refresh;
+        vm.showNewLayerModal = showNewLayerModal;
+        vm.sortDir = {};
+        vm.toggleActive = toggleActive;
 
         activate();
 
         function activate () {
-            vm.columns = getColumns();
             vm.introOptions = getIntroOptions();
+            vm.sortDir.name = 1;
 
             if ($location.hash() === 'intro') {
                 $timeout(function () { vm.showIntro(); }, 1000);
             }
+
+            refresh();
+        }
+
+        function goToPage (page) {
+            vm.page = page;
+            refresh();
+        }
+
+        function onFilter (name, value) {
+            vm.filters[name] = value;
+            vm.page = 1;
+            refresh();
+        }
+
+        function onSort (name, dir) {
+            for (const key in vm.sortDir) {
+                vm.sortDir[key] = 0;
+            }
+            vm.sortDir[name] = dir;
+            refresh();
         }
 
         function showNewLayerModal () {
@@ -35,34 +64,33 @@
             });
         }
 
-        function refresh (params) {
-            params = params || vm.lastRefreshParams;
-            vm.lastRefreshParams = params;
+        function refresh () {
+            const params = {};
 
             params.fields = ['name', 'status'];
+            params.filters = vm.filters;
+            params.sort = Object.keys(vm.sortDir).find(k => vm.sortDir[k]);
+            params.sortType = vm.sortDir[params.sort];
+            params.page = vm.page;
 
             return api.getLayers(params).then(result => {
                 vm.layers = result.items;
-
-                return { page: result.page, pages: result.pages };
+                vm.currentPage = result.page;
+                vm.pages = result.pages;
             });
         }
 
-        function getColumns () {
-            return [
-                {
-                    name: 'name',
-                    label: gettextCatalog.getString('Name'),
-                    width: 6,
-                    filter: true,
-                },
-                {
-                    name: 'status',
-                    label: gettextCatalog.getString('Status'),
-                    width: 4,
-                    filter: true,
-                },
-            ];
+        function toggleActive (layer) {
+            userService.getCurrentUser().then(user => {
+                if (user.isAdmin()) {
+                    const newStatus = layer.status === 'active' ? 'Not active' : 'active';
+
+                    api.changeLayerStatus(layer._id, newStatus).then(() => {
+                        layer.status = newStatus;
+                        new Noty({ text: gettextCatalog.getString('Status updated'), type: 'success' }).show();
+                    });
+                }
+            });
         }
 
         function getIntroOptions () {

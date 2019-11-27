@@ -12,11 +12,7 @@
                 <a class="btn btn-info pull-right" ng-click="vm.showIntro()" style="margin-right: 3px;" uib-tooltip="{{ 'Follow the guided tour for reports' | translate }}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
             </div>
 
-            <app-list-panel columns="vm.columns" refresh="vm.refresh">
-                <div class="list-group-item" ng-repeat="report in vm.reports">
-                    <app-reports-list-item report="report" on-delete="vm.refresh()" on-duplicate="vm.refresh()"></app-reports-list-item>
-                </div>
-            </app-list-panel>
+            <app-reports-table></app-reports-table>
         </div>
     </div>
 </div>
