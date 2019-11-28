@@ -21,7 +21,6 @@ const reportColumnSchema = new mongoose.Schema({
     sortType: Number,
     type: { type: String },
     visible: Boolean,
-    zone: String,
 });
 
 reportColumnSchema.virtual('layerObject').get(function () {
