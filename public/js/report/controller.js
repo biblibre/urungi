@@ -263,7 +263,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             limit: $scope.selectedRecordLimit.value
         };
 
-        $scope.$broadcast('updateFilters');
         $scope.$broadcast('showLoadingMessage', gettextCatalog.getString('Fetching data ...'));
 
         return api.getReportData($scope.selectedReport, params).then(function (result) {

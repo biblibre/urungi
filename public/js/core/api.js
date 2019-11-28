@@ -244,8 +244,8 @@
             return post('/api/reports/data-query', params);
         }
 
-        function getReportFilterValues (filter) {
-            return post('/api/reports/filter-values-query', { filter: filter });
+        function getReportFilterValues (filter, options) {
+            return post('/api/reports/filter-values-query', { filter: filter, options: options });
         }
 
         /**
