@@ -8,60 +8,68 @@
     function DashboardsListController ($location, $timeout, api, gettextCatalog, userService) {
         const vm = this;
 
-        vm.dashboards = [];
-        vm.introOptions = {};
-        vm.columns = [];
         vm.creationAuthorised = false;
+        vm.currentPage = 1;
+        vm.dashboards = [];
+        vm.filters = {};
+        vm.goToPage = goToPage;
+        vm.introOptions = {};
+        vm.onFilter = onFilter;
+        vm.onSort = onSort;
+        vm.page = 1;
+        vm.pages = 1;
         vm.refresh = refresh;
+        vm.sortDir = {};
 
         activate();
 
         function activate () {
-            vm.columns = getColumns();
             vm.introOptions = getIntroOptions();
+            vm.sortDir.dashboardName = 1;
 
             userService.getCurrentUser().then(user => {
                 vm.creationAuthorised = user.dashboardsCreate;
             });
+
+            refresh();
 
             if ($location.hash() === 'intro') {
                 $timeout(function () { vm.showIntro(); }, 1000);
             }
         }
 
-        function refresh (params) {
-            params = params || vm.lastRefreshParams;
-            vm.lastRefreshParams = params;
+        function goToPage (page) {
+            vm.page = page;
+            refresh();
+        }
 
+        function onFilter (name, value) {
+            vm.filters[name] = value;
+            vm.page = 1;
+            refresh();
+        }
+
+        function onSort (name, dir) {
+            for (const key in vm.sortDir) {
+                vm.sortDir[key] = 0;
+            }
+            vm.sortDir[name] = dir;
+            refresh();
+        }
+
+        function refresh () {
+            const params = {};
             params.fields = ['dashboardName', 'isPublic', 'isShared', 'parentFolder', 'owner', 'author', 'createdOn'];
+            params.filters = vm.filters;
+            params.sort = Object.keys(vm.sortDir).find(k => vm.sortDir[k]);
+            params.sortType = vm.sortDir[params.sort];
+            params.page = vm.page;
 
             return api.getDashboards(params).then(result => {
                 vm.dashboards = result.items;
-
-                return { page: result.page, pages: result.pages };
+                vm.currentPage = result.page;
+                vm.pages = result.pages;
             });
-        }
-
-        function getColumns () {
-            return [
-                {
-                    name: 'dashboardName',
-                    label: gettextCatalog.getString('Name'),
-                    width: 4,
-                    filter: true,
-                },
-                {
-                    name: 'author',
-                    label: gettextCatalog.getString('Author'),
-                    width: 3,
-                    filter: true,
-                },
-                {
-                    name: 'createdOn',
-                    label: gettextCatalog.getString('Date of creation'),
-                    width: 3,
-                },
-            ];
         }
 
         function getIntroOptions () {

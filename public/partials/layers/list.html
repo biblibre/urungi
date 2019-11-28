@@ -12,11 +12,56 @@
                 <a class="btn btn-info pull-right" ng-click="vm.showIntro()" style="margin-right: 3px;" uib-tooltip="{{ 'Follow the guided tour for data sources' | translate }}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
             </div>
 
-            <app-list-panel columns="vm.columns" refresh="vm.refresh" id="layerList">
-                <div class="list-group-item" ng-repeat="layer in vm.layers">
-                    <app-layers-list-item layer="layer" on-delete="vm.refresh()"></app-layers-list-item>
-                </div>
-            </app-list-panel>
+            <table class="table table-striped">
+                <colgroup>
+                    <col style="width: 40%;">
+                    <col style="width: 30%;">
+                    <col style="width: 30%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>
+                            <span translate>Name</span>
+                            <app-table-column-sort on-sort="vm.onSort('name', $dir)" sort-dir="vm.sortDir['name']"></app-table-column-sort>
+                        </th>
+                        <th>
+                            <span translate>Status</span>
+                            <app-table-column-sort on-sort="vm.onSort('status', $dir)" sort-dir="vm.sortDir['status']"></app-table-column-sort>
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <app-table-column-filter on-filter="vm.onFilter('name', $value)"></app-table-column-filter>
+                        </td>
+                        <td>
+                            <app-table-column-filter on-filter="vm.onFilter('status', $value)"></app-table-column-filter>
+                        </td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="layer in vm.layers">
+                        <td>
+                            <a ng-href="layers/{{ layer._id }}">{{ layer.name }}</a>
+                        </td>
+                        <td>
+                            <a
+                                class="badge"
+                                ng-click="vm.toggleActive(layer)"
+                                ng-class="{'badge-success': layer.status == 'active', 'badge-danger': layer.status == 'Not active'}"
+                                uib-tooltip="{{ 'Click here to change the status of the layer' | translate }}"
+                            >
+                                <span ng-if="layer.status === 'active'" translate>active</span>
+                                <span ng-if="layer.status === 'Not active'" translate>not active</span>
+                            </a>
+                        </td>
+                        <td><app-layers-list-buttons layer="layer" on-delete="vm.refresh()" on-duplicate="vm.refresh()"></app-layers-list-buttons></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <app-pager current-page="vm.currentPage" total-pages="vm.pages" on-page-change="vm.goToPage(page)"></app-pager>
         </div>
     </div>
 </div>

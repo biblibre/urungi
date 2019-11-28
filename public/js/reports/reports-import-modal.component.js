@@ -12,42 +12,6 @@
         },
     });
 
-    ReportsImportModalController.$inject = ['gettextCatalog', 'api'];
-
-    function ReportsImportModalController (gettextCatalog, api) {
-        const vm = this;
-
-        vm.reports = [];
-        vm.columns = [];
-        vm.lastRefreshParams = {};
-        vm.$onInit = $onInit;
-        vm.refresh = refresh;
-
-        function $onInit () {
-            vm.columns = getColumns();
-        }
-
-        function refresh (params) {
-            params = params || vm.lastRefreshParams;
-            vm.lastRefreshParams = params;
-
-            params.fields = ['reportName', 'isPublic'];
-
-            return api.getReports(params).then(result => {
-                vm.reports = result.items;
-
-                return { page: result.page, pages: result.pages };
-            });
-        }
-
-        function getColumns () {
-            return [
-                {
-                    name: 'reportName',
-                    label: gettextCatalog.getString('Name'),
-                    width: 12,
-                },
-            ];
-        }
+    function ReportsImportModalController () {
     }
 })();

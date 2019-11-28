@@ -8,16 +8,12 @@
     function ReportsListController ($location, $timeout, api, gettextCatalog, userService) {
         const vm = this;
 
-        vm.reports = [];
         vm.introOptions = {};
-        vm.columns = [];
         vm.creationAuthorised = false;
-        vm.refresh = refresh;
 
         activate();
 
         function activate () {
-            vm.columns = getColumns();
             vm.introOptions = getIntroOptions();
 
             userService.getCurrentUser().then(user => {
@@ -27,49 +23,6 @@
             if ($location.hash() === 'intro') {
                 $timeout(function () { vm.showIntro(); }, 1000);
             }
-        }
-
-        function refresh (params) {
-            params = params || vm.lastRefreshParams;
-            vm.lastRefreshParams = params;
-
-            params.populate = 'layer';
-            params.fields = ['reportName', 'isPublic', 'isShared', 'layerName', 'parentFolder', 'owner', 'author', 'createdOn'];
-
-            return api.getReports(params).then(result => {
-                vm.reports = result.items;
-
-                return { page: result.page, pages: result.pages };
-            });
-        }
-
-        function getColumns () {
-            return [
-                {
-                    name: 'reportName',
-                    label: gettextCatalog.getString('Name'),
-                    width: 3,
-                    filter: true,
-                },
-                {
-                    name: 'layerName',
-                    label: gettextCatalog.getString('Layer'),
-                    width: 3,
-                    filter: true,
-                    filterField: 'layer.name',
-                },
-                {
-                    name: 'author',
-                    label: gettextCatalog.getString('Author'),
-                    width: 2,
-                    filter: true,
-                },
-                {
-                    name: 'createdOn',
-                    label: gettextCatalog.getString('Date of creation'),
-                    width: 2,
-                },
-            ];
         }
 
         function getIntroOptions () {

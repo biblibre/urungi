@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix date filters for Oracle
 - Fix a bug where report/dashboard/layer name modification was not always saved (#141)
+- Fixed display issues for layers/reports/dashboards tables on small screens (#65)
 
 ### Dependencies
 

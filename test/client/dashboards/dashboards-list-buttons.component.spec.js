@@ -3,9 +3,9 @@ require('../../../public/js/core/constants.js');
 require('../../../public/js/core/connection.js');
 require('../../../public/js/core/api.js');
 require('../../../public/js/dashboards/dashboards.module.js');
-require('../../../public/js/dashboards/dashboards-list-item.component.js');
+require('../../../public/js/dashboards/dashboards-list-buttons.component.js');
 
-describe('appDashboardsListItem', function () {
+describe('appDashboardsListButtons', function () {
     beforeEach(angular.mock.module('app.core'));
     beforeEach(angular.mock.module('app.dashboards'));
     beforeEach(angular.mock.module('app.templates'));
@@ -24,7 +24,7 @@ describe('appDashboardsListItem', function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('DashboardsListItemController', function () {
+    describe('DashboardsListButtonsController', function () {
         let onDeleteSpy;
         let onDuplicateSpy;
         let vm;
@@ -43,7 +43,7 @@ describe('appDashboardsListItem', function () {
                 onDelete: onDeleteSpy,
                 onDuplicate: onDuplicateSpy,
             };
-            vm = $componentController('appDashboardsListItem', null, bindings);
+            vm = $componentController('appDashboardsListButtons', null, bindings);
         });
 
         describe('getCopyLink', function () {

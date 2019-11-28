@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    angular.module('app.reports').component('appReportsListItem', {
-        templateUrl: 'partials/reports/reports-list-item.html',
-        controller: ReportsListItemController,
+    angular.module('app.reports').component('appReportsListButtons', {
+        templateUrl: 'partials/reports/reports-list-buttons.html',
+        controller: ReportsListButtonsController,
         controllerAs: 'vm',
         bindings: {
             report: '<',
@@ -12,9 +12,9 @@
         },
     });
 
-    ReportsListItemController.$inject = ['$uibModal', 'api', 'base', 'reportModel', 'gettextCatalog'];
+    ReportsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'reportModel', 'gettextCatalog'];
 
-    function ReportsListItemController ($uibModal, api, base, reportModel, gettextCatalog) {
+    function ReportsListButtonsController ($uibModal, api, base, reportModel, gettextCatalog) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;

@@ -394,15 +394,6 @@ img.img-cirlce {
     color: #fff;
 }
 
-.btn-xs,
-.btn-group-xs > .btn {
-    padding: 1px 5px;
-    font-size: 12px;
-    line-height: 1.5;
-    border-radius: 0;
-    background-color: #afe9dd;
-}
-
 .btn-round {
     border-radius: 15px;
 }
@@ -3160,11 +3151,6 @@ a.list-group-item:hover {
     background-color: #ccc;
 }
 
-.app-list-panel a:hover,
-.app-list-panel a:focus {
-    text-decoration: none;
-}
-
 .panel-silver {
     border-color: #666;
 }
@@ -3240,4 +3226,20 @@ a.list-group-item:hover {
     cursor: pointer;
     color: #428bca;
     border-bottom: 1px dashed #428bca;
+}
+
+.btn-group {
+    display: inline-flex;
+}
+
+.btn-silver {
+    background-color: #c0c0c0;
+    border-color: #a6a6a6;
+    color: white;
+}
+
+.btn-silver:hover {
+    background-color: #b3b3b3;
+    border-color: #999;
+    color: white;
 }
