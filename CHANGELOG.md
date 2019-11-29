@@ -17,51 +17,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   section in README.md](README.md#configuration))
 
 - **BREAKING** Node.js 8 and MongoDB 3.4 are no longer supported. Upgrade to
-  Node.js 10 and MongoDB 3.6
+  Node.js 10 and MongoDB 3.6 (#208)
 
 ### Added
 
-- Added ability to change a column's label in report
-- Added ability to change column's format in report (for date and number)
-- Added ability to export dashboards and reports as PNG or PDF
-- Added ability to calculate totals in grid and vgrid
-- Added ability to select a theme for reports and dashboards
+- Added ability to change a column's label in report (#39)
+- Added ability to change column's format in report (for date and number) (#75)
+- Added ability to export dashboards and reports as PNG or PDF (#41, #110)
+- Added ability to calculate totals in grid and vgrid (#74)
+- Added ability to select a theme for reports and dashboards (#109)
+- Added ability to serve Urungi under a subdirectory (#139)
 
 ### Changed
 
 - Move report columns settings into a modal
 - Move report settings into a modal
 - Use HTML table for building grid and vgrid
-- Use PivotTable.js instead of cynteka for building pivot table
-- Hide dashboard title on print
+- Use PivotTable.js instead of cynteka for building pivot table (#71)
+- Hide dashboard title on print (#165)
 - Use asynchronous autocompletion for filters to avoid loading thousands of
-  values
+  values (#132)
 
 ### Removed
 
-- Removed the Advanced tab in layer element modification (modal and sidebar)
+- Removed the Advanced tab in layer element modification (modal and sidebar) (#150)
 
 ### Fixed
 
-- Fix date filters for Oracle
+- Fix scripts first-time-setup and set-password
+- Fix date filters for Oracle (#16)
 - Fix a bug where report/dashboard/layer name modification was not always saved (#141)
 - Fixed display issues for layers/reports/dashboards tables on small screens (#65)
 - Use default aggregation set in layer when adding columns to a report
+- Fixed drag and drop in dashboard (#37, #126, #146)
+- Fixed role permissions modification (#197)
 
 ### Dependencies
 
-- Added request 2.88.0
 - Added pivottable 2.23.0
+- Added request 2.88.0
 - Added subtotal 1.11.0-alpha.0
-- Updated migrate-mongo to 6.0.2
-- Updated mongoose to 5.7.0
-- Updated gulp-angular-gettext to 2.3.0
-- Updated stylelint to 11.1.1
-- Updated stylelint-config-standard to 19.0.0
-- Updated set-cookie-parser to 2.4.0
-- Updated pg to 7.12.1
-- Updated nodemailer to 6.3.1
-- Updated multer to 1.4.2
 - Updated c3 to 0.7.11
 - Updated config to 3.2.3
 - Updated del to 5.1.0
@@ -70,20 +65,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated eslint to 6.6.0
 - Updated eslint-config-standard to 14.1.0
 - Updated eslint-plugin-import to 2.18.2
+- Updated eslint-plugin-jest to 22.19.0
 - Updated eslint-plugin-node to 10.0.0
 - Updated eslint-plugin-standard to 4.0.1
 - Updated express-session to 1.17.0
+- Updated gulp-angular-gettext to 2.3.0
+- Updated jest to 24.9.0 and forced graceful-fs to 4.2.2
 - Updated jsplumb to 2.12.0
 - Updated knex to 0.19.5
+- Updated migrate-mongo to 6.0.2
 - Updated mongodb-memory-server to 5.2.8
 - Updated mongoose to 5.7.5
-- Updated eslint-plugin-jest to 22.19.0
-- Updated jest to 24.9.0 and forced graceful-fs to 4.2.2
+- Updated multer to 1.4.2
+- Updated nodemailer to 6.3.1
 - Updated oracledb to 4.0.1
-- Removed cynteka-pivot-table-jquery
+- Updated pg to 7.12.1
+- Updated set-cookie-parser to 2.4.0
+- Updated stylelint to 11.1.1
+- Updated stylelint-config-standard to 19.0.0
+- Removed angular-draganddrop
 - Removed angular-vs-repeat
 - Removed angular-xeditable
 - Removed codecov
+- Removed cynteka-pivot-table-jquery
 - Removed email-templates
 
 ## [1.2.2] - 2019-08-30
