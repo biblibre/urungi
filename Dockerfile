@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:10
 
 RUN apt-get update && apt-get install -y git
 

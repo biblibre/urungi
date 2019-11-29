@@ -24,13 +24,13 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Server (please complete the following information):**
- - OS: [e.g. Debian 9]
- - NodeJS: [e.g. 8.15.1]
- - MongoDB: [e.g. 3.4.20]
+ - OS: [e.g. Debian 10]
+ - NodeJS: [e.g. 10.17.0]
+ - MongoDB: [e.g. 3.6.15]
  - Datasource(s): [e.g. MariaDB 10.1]
 
 **Client (please complete the following information):**
- - OS: [e.g. Debian 9]
+ - OS: [e.g. Debian 10]
  - Browser [e.g. Firefox 60 ESR]
 
 **Additional context**
