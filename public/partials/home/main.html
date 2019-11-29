@@ -48,7 +48,7 @@
                         <li ng-repeat="execution in lastExecutions">
                             <div class="last-executed-item">
                                 <a ng-if="execution.type == 'report'" ng-href="reports/view/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                <a ng-if="execution.type == 'Dashboard'" ng-href="dashboards/view/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                <a ng-if="execution.type == 'dashboard'" ng-href="dashboards/view/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
                                 <span class="pull-right">{{execution.lastDate}}</span>
                             </div>
                         </li>
@@ -68,7 +68,7 @@
                         <li ng-repeat="execution in mostExecutions">
                             <div class="most-executed-item">
                                 <a ng-if="execution.type == 'report'" ng-href="reports/view/{{execution.relationedID}}"><i class="fa fa-bar-chart" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
-                                <a ng-if="execution.type == 'Dashboard'" ng-href="dashboards/view/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
+                                <a ng-if="execution.type == 'dashboard'" ng-href="dashboards/view/{{execution.relationedID}}"><i class="fa fa-dashboard" style="margin-right: 2px;"></i>{{execution.relationedName}}</a>
 
                                 <span class="badge pull-right">{{execution.count}}</span>
                             </div>
