@@ -301,6 +301,9 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.onDropField = function (elements, layerObject, role) {
         const element = Object.assign({}, layerObject);
         element.layerObject = layerObject;
+        if (layerObject.defaultAggregation) {
+            element.aggregation = layerObject.defaultAggregation;
+        }
         elements.push(element);
 
         $scope.sql = undefined;
@@ -359,7 +362,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         case 'vertical-grid':
             choice = {
                 propertyBind: $scope.selectedReport.properties.columns,
-                zone: 'columns',
                 role: 'column'
             };
             break;
@@ -368,7 +370,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             if ($scope.selectedReport.properties.pivotKeys.rows.length === 0) {
                 choice = {
                     propertyBind: $scope.selectedReport.properties.pivotKeys.rows,
-                    zone: 'prow',
                     role: 'column',
                     forbidAggregation: true
                 };
@@ -376,14 +377,12 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
                 if ($scope.selectedReport.properties.pivotKeys.columns.length === 0) {
                     choice = {
                         propertyBind: $scope.selectedReport.properties.pivotKeys.columns,
-                        zone: 'pcol',
                         role: 'column',
                         forbidAggregation: true
                     };
                 } else {
                     choice = {
                         propertyBind: $scope.selectedReport.properties.ykeys,
-                        zone: 'ykeys',
                         role: 'column'
                     };
                 }
@@ -396,20 +395,17 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             if ($scope.selectedReport.properties.xkeys.length === 0) {
                 choice = {
                     propertyBind: $scope.selectedReport.properties.xkeys,
-                    zone: 'xkeys',
                     role: 'column'
                 };
             } else {
                 if ($scope.selectedReport.properties.ykeys.length === 0 || $scope.selectedReport.properties.order.length > 0 || chooseColumn) {
                     choice = {
                         propertyBind: $scope.selectedReport.properties.ykeys,
-                        zone: 'ykeys',
                         role: 'column'
                     };
                 } else {
                     choice = {
                         propertyBind: $scope.selectedReport.properties.order,
-                        zone: 'order',
                         role: 'order'
                     };
                 }
@@ -420,7 +416,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         case 'gauge':
             choice = {
                 propertyBind: $scope.selectedReport.properties.ykeys,
-                zone: 'ykeys',
                 role: 'column'
             };
             break;
@@ -429,17 +424,12 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         return choice;
     };
 
-    $scope.autoFill = function (ngModelItem) {
-        const newItem = $scope.toReportItem(ngModelItem);
-        var choice = $scope.autoChooseArea(newItem);
-        newItem.zone = choice.zone;
+    $scope.autoFill = function (layerObject) {
+        var choice = $scope.autoChooseArea(layerObject);
 
-        var found = false;
-        for (const item of choice.propertyBind) {
-            if (item.elementID === newItem.elementID) { found = true; }
-        }
+        const found = choice.propertyBind.find(item => item.elementID === layerObject.elementID);
         if (!found) {
-            $scope.onDropField(choice.propertyBind, newItem, choice.role);
+            $scope.onDropField(choice.propertyBind, layerObject, choice.role);
         }
     };
 
@@ -533,8 +523,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         // This ensures that there are no hidden columns in the query, which results in strange behaviour
         for (const col of movedColumns) {
             const choice = $scope.autoChooseArea(col, true);
-            col.zone = choice.zone;
-            // queryModel.updateColumnField(col, 'zone', choice.zone);
             choice.propertyBind.push(col);
             if (choice.forbidAggregation) {
                 delete col.aggregation;
