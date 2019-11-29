@@ -34,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use HTML table for building grid and vgrid
 - Use PivotTable.js instead of cynteka for building pivot table
 - Hide dashboard title on print
+- Use asynchronous autocompletion for filters to avoid loading thousands of
+  values
 
 ### Removed
 

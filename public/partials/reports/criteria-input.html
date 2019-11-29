@@ -7,7 +7,7 @@
 
             <!--preformated date selector -->
             <div class="input-group" uib-dropdown ng-if="vm.filter.filterType == 'equal-pattern' || vm.filter.filterType == 'diferentThan-pattern' || vm.filter.filterType == 'biggerThan-pattern' || vm.filter.filterType == 'biggerOrEqualThan-pattern' || vm.filter.filterType == 'lessThan-pattern' || vm.filter.filterType == 'lessOrEqualThan-pattern'">
-                <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-value="vm.criterion.label" readonly>
+                <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control" ng-value="vm.criterion.label" readonly>
                 <span class="input-group-btn" >
                     <span class="dropdown" >
                         <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -29,7 +29,7 @@
 
             <!-- date input -->
             <div class="input-group" ng-if="(vm.filter.elementType == 'date' && (vm.filter.filterType == 'equal' || vm.filter.filterType == 'diferentThan' || vm.filter.filterType == 'biggerThan' || vm.filter.filterType == 'biggerOrEqualThan' || vm.filter.filterType == 'lessThan'  || vm.filter.filterType == 'lessOrEqualThan' || vm.filter.filterType == 'between'  || vm.filter.filterType == 'notBetween'))" style="width: 150px;">
-                <input type="text" class="form-control no-right-border form-focus-green" ng-model="vm.criterion.date1">
+                <input type="text" class="form-control" ng-model="vm.criterion.date1">
                 <span class="input-group-btn" >
                     <span class="dropdown" >
                         <a class="btn btn-primary popover-primary ng-scope"  id="dropdown1" role="button" data-toggle="dropdown"><i class="fa fa-calendar"></i></a>
@@ -44,7 +44,7 @@
             <span class="filter-label-value" ng-if="(vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween') && vm.filter.elementType == 'date'" style="color: #00f;" translate> and </span>
 
             <div class="input-group" ng-if="(vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween') && vm.filter.elementType == 'date'" style="width: 150px;">
-                <input type="text" class="form-control no-right-border form-focus-green" ng-model="vm.criterion.date2">
+                <input type="text" class="form-control" ng-model="vm.criterion.date2">
                 <span class="input-group-btn" >
                     <span class="dropdown" >
                         <a class="btn btn-primary popover-primary ng-scope"  id="dropdown2" role="button" data-toggle="dropdown"><i class="fa fa-calendar"></i></a>
@@ -58,22 +58,12 @@
         <!-- END Date -->
 
         <!--equal, in, etc ...-->
-        <span ng-if="vm.filter.elementType !== 'date'" ng-init="vm.update()">
+        <span ng-if="vm.filter.elementType !== 'date'">
             <span ng-if="!(vm.filter.filterType == 'null' || vm.filter.filterType == 'notNull') && ( vm.filter.elementType != 'array') && ( vm.filter.elementType != 'date') && (vm.filter.filterType != 'notIn') && (vm.filter.filterType != 'in')">
-                <div class="input-group">
-                    <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="vm.criterion.text1" ng-required="vm.filter.promptMandatory == true" style="height: 30px; border-right: 0;">
+                <div class="input-group input-group-sm">
+                    <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control" ng-model="vm.criterion.text1" ng-required="vm.filter.promptMandatory == true" uib-typeahead="value for value in vm.getFilterValues($viewValue)" typeahead-focus-first="false" typeahead-min-length="0">
                     <span class="input-group-btn" >
-                        <span class="dropdown" >
-                            <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 5px; width: 21px; background-color: #ddd; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; border-right: 1px solid #ccc;" uib-tooltip="{{ 'Click here to select a value' | translate }}" tooltip-placement="bottom">
-                                <i class="fa fa-caret-down"></i>
-                            </button>
-
-                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu5b" >
-                                <li ng-repeat="value in vm.values"><a ng-click="vm.selectFirstValue(value)">{{value}}</a></li>
-                            </ul>
-                        </span>
-
-                        <button type="button" ng-if="!( vm.isPrompt && vm.filter.promptMandatory )" class="btn btn-sm btn-white" ng-click="vm.clearFilter(vm.filter)" style="padding: 5px; width: 21px; background-color: #ccc;" uib-tooltip="{{ 'Click here to clear the selected value' | translate }}" tooltip-placement="bottom">
+                        <button type="button" ng-if="!( vm.isPrompt && vm.filter.promptMandatory )" class="btn btn-default" ng-click="vm.clearFilter(vm.filter)" uib-tooltip="{{ 'Click here to clear the selected value' | translate }}" tooltip-placement="bottom">
                             <i class="fa fa-times"></i>
                         </button>
                     </span>
@@ -84,8 +74,8 @@
                 <div class="input-group">
                     <ui-select multiple ng-model="vm.criterion.textList" theme="bootstrap" ng-disabled="disabled" class="input-in">
                         <ui-select-match placeholder="{{vm.filter.promptTitle}}">{{$item}}</ui-select-match>
-                        <ui-select-choices repeat="value in vm.values | filter:$select.search">
-                            {{value}}
+                        <ui-select-choices repeat="value in vm.values track by $index" refresh="vm.getFilterValues($select.search)" refresh-delay="0">
+                            <div ng-bind-html="value | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -94,29 +84,13 @@
             <!--between-->
             <span ng-show="vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween'" translate>AND</span>
 
-            <span class="input-group" uib-dropdown ng-show="vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween'">
+            <span class="input-group input-group-sm" ng-show="vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween'">
+                <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control" ng-model="vm.criterion.text2" ng-required="vm.filter.promptMandatory == true" uib-typeahead="value for value in vm.getFilterValues($viewValue)" typeahead-focus-first="false" typeahead-min-length="0">
 
-                <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control no-right-border form-focus-green" ng-model="vm.criterion.text2" ng-required="vm.filter.promptMandatory == true" style="height: 30px; border-right: 0;">
-
-                <span class="input-group-btn" >
-                    <span class="dropdown" >
-                        <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 5px; width: 21px; background-color: #ddd; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; border-right: 1px solid #ccc;" uib-tooltip="{{ 'Click here to select a value' | translate }}" tooltip-placement="bottom">
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu5b" >
-                            <li ng-repeat="value in vm.values"><a ng-click="vm.selectSecondValue(value)">{{value}}</a></li>
-                            <li ng-if="vm.filter.promptMandatory != true">
-                            <a ng-click="vm.ClearFilter(vm.filter)" translate>Clear filter</a>
-                            </li>
-                        </ul>
-
-                    </span>
-
-                    <button type="button" class="btn btn-white" ng-if="!( vm.isPrompt && vm.filter.promptMandatory )" ng-click="vm.clearFilter(vm.filter)" style="padding: 5px; width: 21px; background-color: #ccc;" uib-tooltip="{{ 'Click here to clear the selected value' | translate }}" tooltip-placement="bottom">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-if="!( vm.isPrompt && vm.filter.promptMandatory )" ng-click="vm.clearFilter(vm.filter)" uib-tooltip="{{ 'Click here to clear the selected value' | translate }}" tooltip-placement="bottom">
                         <i class="fa fa-times"></i>
                     </button>
-
                 </span>
             </span>
         </span>

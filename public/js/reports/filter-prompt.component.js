@@ -27,6 +27,7 @@
         vm.getButtonFilterPromptMessage = getButtonFilterPromptMessage;
         vm.getDatePatternFilters = getDatePatternFilters;
         vm.getElementFilterOptions = getElementFilterOptions;
+        vm.getFilterValues = getFilterValues;
         vm.inputChanged = inputChanged;
         vm.makePrompt = makePrompt;
         vm.onDateListChange = onDateListChange;
@@ -37,12 +38,11 @@
         vm.selectSecondValue = selectSecondValue;
         vm.setDatePatternFilterType = setDatePatternFilterType;
         vm.setFilterType = setFilterType;
-        vm.update = update;
         vm.updateCondition = updateCondition;
+        vm.values = [];
 
         function $onInit () {
             vm.criterion = vm.filter.criterion;
-            $scope.$on('updateFilters', onUpdateFilters);
         }
 
         function removeFilter () {
@@ -80,19 +80,17 @@
             vm.onChange();
         }
 
-        function onUpdateFilters () {
-            vm.update();
-        }
+        function getFilterValues (term) {
+            const options = {
+                contains: term,
+                limit: 15,
+            };
 
-        function update () {
-            loadFilterValues();
-        }
-
-        function loadFilterValues () {
-            return api.getReportFilterValues(vm.filter).then(function (result) {
-                let values = result.data.map(row => row.f);
-                values = values.filter(f => f !== null && f !== undefined && f !== '');
+            return api.getReportFilterValues(vm.filter, options).then(function (result) {
+                const values = result.data.map(row => row.f).filter(f => f !== null && f !== undefined && f.trim() !== '');
                 vm.values = values;
+
+                return values;
             });
         }
 

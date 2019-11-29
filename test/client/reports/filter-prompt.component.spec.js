@@ -5,7 +5,7 @@ require('../../../public/js/core/api.js');
 require('../../../public/js/reports/reports.module.js');
 require('../../../public/js/reports/filter-prompt.component.js');
 
-describe('appReportDropzone', function () {
+describe('appFilterPrompt', function () {
     beforeEach(angular.mock.module('app.core'));
     beforeEach(angular.mock.module('app.reports'));
     beforeEach(angular.mock.module('app.templates'));
@@ -16,7 +16,7 @@ describe('appReportDropzone', function () {
         $componentController = _$componentController_;
     }));
 
-    describe('ReportDropzoneController', function () {
+    describe('FilterPromptController', function () {
         let onChangeSpy;
         let onRemoveSpy;
         let setPromptSpy;

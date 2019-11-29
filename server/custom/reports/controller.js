@@ -269,6 +269,7 @@ exports.dataQuery = async function (req, res) {
 
 exports.filterValuesQuery = async function (req, res) {
     const filter = req.body.filter;
+    const options = req.body.options || {};
 
     var result;
     try {
@@ -302,6 +303,20 @@ exports.filterValuesQuery = async function (req, res) {
             ],
             filters: [],
         };
+
+        if (options.contains) {
+            query.filters.push({
+                elementID: filter.elementID,
+                filterType: 'contains',
+                criterion: {
+                    text1: options.contains,
+                },
+            });
+        }
+
+        if (options.limit) {
+            query.recordLimit = options.limit;
+        }
 
         result = await QueryProcessor.execute(query);
     } catch (err) {
