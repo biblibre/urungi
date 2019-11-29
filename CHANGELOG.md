@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2019-11-29
+
 ### Important update information
 
 - The new ability to export reports and dashboards as PDF/PNG requires a new
@@ -374,7 +376,8 @@ These are the most notable changes made since the fork of
 
 - A lot of minor issues
 
-[Unreleased]: https://github.com/biblibre/urungi/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/biblibre/urungi/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/biblibre/urungi/compare/v1.2.2...v2.0.0
 [1.2.2]: https://github.com/biblibre/urungi/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/biblibre/urungi/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/biblibre/urungi/compare/v1.1.1...v1.2.0
