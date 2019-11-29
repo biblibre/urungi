@@ -30,7 +30,7 @@
         function view (roleID) {
             return api.getRole(roleID).then(function (role) {
                 return openRoleModal(role).then(function () {
-                    new Noty({ text: 'Role updated successfully', type: 'success' }).show();
+                    new Noty({ text: gettextCatalog.getString('Role updated successfully'), type: 'success' }).show();
                 }, () => {});
             });
         };

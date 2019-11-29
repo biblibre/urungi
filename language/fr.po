@@ -20,11 +20,11 @@ msgstr ""
 msgid "A header text H3"
 msgstr "Un en-tête H3"
 
-#: public/js/report/controller.js:724
+#: public/js/report/controller.js:714
 msgid "A query must hold at least one element here to be executed"
 msgstr "Une requête doit contenir au moins un élément pour être exécutée"
 
-#: public/partials/reports/criteria-input.html:95
+#: public/partials/reports/criteria-input.html:85
 msgid "AND"
 msgstr "ET"
 
@@ -32,7 +32,7 @@ msgstr "ET"
 msgid "About"
 msgstr "À propos"
 
-#: public/js/report/controller.js:676
+#: public/js/report/controller.js:666
 msgid ""
 "Access here the different data elements of every layer that you have access "
 "on"
@@ -92,6 +92,10 @@ msgstr "Ajouter un élément au schéma"
 msgid "Add folder"
 msgstr "Ajouter un dossier"
 
+#: public/partials/core/pdf-export-settings-modal.component.html:12
+msgid "Add header and footer"
+msgstr "Ajouter un en-tête et un pied de page"
+
 #: public/partials/layer/sqlModal.html:5
 msgid "Add new SQL"
 msgstr "Ajouter SQL"
@@ -112,12 +116,7 @@ msgstr "Ajouter au calque"
 msgid "Add to layer elements"
 msgstr "Ajouter aux éléments du calque"
 
-#: public/partials/layer/elementModal.html:193
-#: public/partials/layer/objectProperties.html:121
-msgid "Advanced"
-msgstr "Avancé"
-
-#: public/js/report/controller.js:714
+#: public/js/report/controller.js:704
 msgid "After building your query, refresh to view the report."
 msgstr ""
 "Après avoir construit votre requête, actualisez pour voir votre rapport."
@@ -139,7 +138,7 @@ msgstr ""
 "Après avoir créé le dossier vous pouvez le déplacer à travers l'espace "
 "partagé."
 
-#: public/js/dashboards/dashboards-list.controller.js:84
+#: public/js/dashboards/dashboards-list.controller.js:92
 msgid ""
 "After you define the reports to get and visualize your data, you can drag "
 "and drop different html layout elements, and put your report in, using "
@@ -170,12 +169,12 @@ msgstr "Réponse nécessaire (filtre obligatoire)"
 msgid "Anyone who has the link will be able to see it"
 msgstr "N'importe qui ayant le lien sera capable de le voir"
 
-#: public/js/report/services/c3Charts.js:292
+#: public/js/report/services/c3Charts.js:295
 #: public/partials/reports/report-column-settings-modal.component.html:43
 msgid "Area"
 msgstr "Zone"
 
-#: public/js/report/services/c3Charts.js:302
+#: public/js/report/services/c3Charts.js:305
 #: public/partials/reports/report-column-settings-modal.component.html:57
 msgid "Area spline"
 msgstr "Courbe de surface"
@@ -184,21 +183,17 @@ msgstr "Courbe de surface"
 msgid "Array values"
 msgstr "Valeurs du tableau"
 
-#: public/partials/reports/view.html:15
+#: public/partials/reports/view.html:20
 msgid "As XLSX"
 msgstr "En XLSX"
 
-#: public/js/report/controller.js:704
+#: public/js/report/controller.js:694
 msgid ""
 "As you define the query dragging and dropping in the areas above, the "
 "results of the query will appear here"
 msgstr ""
 "Pendant que vous définissez la requête en déposant des éléments dans les "
 "zones ci-dessus, les résultats de la requête apparaîtront ici"
-
-#: public/partials/layer/elementModal.html:238
-msgid "Associated elements"
-msgstr "Éléments associés"
 
 #: public/js/data-sources/data-sources-list.controller.js:43
 msgid ""
@@ -230,8 +225,8 @@ msgstr "Utilisateurs authentifiés"
 msgid "Authenticated users will be able to see it in the shared space"
 msgstr "Les utilisateurs authentifiés pourront le voir dans l'espace partagé"
 
-#: public/js/dashboards/dashboards-list.controller.js:55
-#: public/js/reports/reports-list.controller.js:63
+#: public/partials/dashboards/list.html:31
+#: public/partials/reports/reports-table.component.html:20
 msgid "Author"
 msgstr "Auteur"
 
@@ -243,12 +238,12 @@ msgstr "Auteurs"
 msgid "Avg"
 msgstr "Moyenne"
 
-#: public/js/dashboards/dashboards-list.controller.js:70
+#: public/js/dashboards/dashboards-list.controller.js:78
 #: public/js/data-sources/data-sources-list.controller.js:29
 #: public/js/home/controller.js:13
-#: public/js/layers/layers-list.controller.js:71
-#: public/js/report/controller.js:665
-#: public/js/reports/reports-list.controller.js:78
+#: public/js/layers/layers-list.controller.js:99
+#: public/js/report/controller.js:655
+#: public/js/reports/reports-list.controller.js:31
 #: public/js/spaces/controller.js:12
 msgid "Back"
 msgstr "Retour"
@@ -257,7 +252,7 @@ msgstr "Retour"
 msgid "Back to login"
 msgstr "Retour à l'écran de connexion"
 
-#: public/js/report/services/c3Charts.js:287
+#: public/js/report/services/c3Charts.js:290
 #: public/partials/reports/report-column-settings-modal.component.html:36
 msgid "Bar"
 msgstr "Barre"
@@ -276,24 +271,25 @@ msgstr "Calculer le total"
 
 #: public/partials/core/delete-modal.html:15
 #: public/partials/core/duplicate-modal.html:12
+#: public/partials/core/pdf-export-settings-modal.component.html:51
 #: public/partials/core/share-modal.html:20
-#: public/partials/dashboards/view.html:14
-#: public/partials/dashboardv2/edit.html:14
-#: public/partials/dashboardv2/edit.html:257
+#: public/partials/dashboards/edit.html:15
+#: public/partials/dashboards/edit.html:255
+#: public/partials/dashboards/view.html:20
 #: public/partials/data-sources/edit.html:3
 #: public/partials/layer/addAllModal.html:8
-#: public/partials/layer/elementModal.html:293
+#: public/partials/layer/elementModal.html:207
 #: public/partials/layer/folderModal.html:43
 #: public/partials/layer/sqlModal.html:34
 #: public/partials/layer/sqlModal.html:86 public/partials/layer/view.html:14
 #: public/partials/layers/layers-new-modal.html:34
-#: public/partials/report/edit.html:16 public/partials/report/edit.html:17
+#: public/partials/report/edit.html:17 public/partials/report/edit.html:18
 #: public/partials/report/modals/reportNameModal.html:15
 #: public/partials/reports/report-column-settings-modal.component.html:128
-#: public/partials/reports/report-settings-modal.component.html:50
-#: public/partials/reports/reports-import-modal.html:15
-#: public/partials/reports/view.html:19
-#: public/partials/roles/roleModal.html:111
+#: public/partials/reports/report-settings-modal.component.html:57
+#: public/partials/reports/reports-import-modal.html:11
+#: public/partials/reports/view.html:24
+#: public/partials/roles/role-edit-modal.component.html:92
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -317,7 +313,7 @@ msgstr "Choisissez un nouveau nom pour la copie :"
 msgid "Choose a report to add to the dashboard"
 msgstr "Choisissez un rapport à ajouter au tableau de bord"
 
-#: public/js/reports/reports-list.controller.js:95
+#: public/js/reports/reports-list.controller.js:48
 msgid ""
 "Choose a report type and drag and drop elements from the selected layer to "
 "compose your report."
@@ -325,13 +321,13 @@ msgstr ""
 "Choisissez un type de rapport et déposez des éléments depuis le calque "
 "sélectionné pour constituer votre rapport."
 
-#: public/partials/files/galleryModal.html:22
+#: public/partials/dashboards/dashboard-image-modal.component.html:20
 msgid "Choose image to upload"
 msgstr "Choisissez une image à téléverser"
 
-#: public/partials/reports/criteria-input.html:110
-msgid "Clear filter"
-msgstr "Effacer le filtre"
+#: public/partials/widgets/inspector.html:24
+msgid "Clear direct formatting"
+msgstr "Supprimer le formatage direct"
 
 #: public/partials/spaces/shared.html:41
 msgid "Click here to add a new folder to the shared space"
@@ -341,12 +337,12 @@ msgstr "Ajouter un dossier dans l'espace partagé"
 msgid "Click here to add a new subfolder inside this"
 msgstr "Ajouter un nouveau sous-fichier dans celui-ci"
 
-#: public/partials/report/edit.html:17
+#: public/partials/report/edit.html:18
 msgid "Click here to cancel and back to the dashboard"
 msgstr "Annuler et retourner au tableau de bord"
 
-#: public/partials/dashboards/view.html:14
-#: public/partials/dashboardv2/edit.html:14 public/partials/report/edit.html:16
+#: public/partials/dashboards/edit.html:15
+#: public/partials/dashboards/view.html:20 public/partials/report/edit.html:17
 msgid "Click here to cancel and backtrack"
 msgstr "Revenir en arrière"
 
@@ -358,16 +354,16 @@ msgstr "Cliquez ici pour modifier le nom du dossier."
 msgid "Click here to change the name of the folder"
 msgstr "Changer le nom du fichier"
 
-#: public/partials/layers/layers-list-item.html:11
+#: public/partials/layers/list.html:53
 msgid "Click here to change the status of the layer"
 msgstr "Cliquer ici pour modifier le statut du calque"
 
-#: public/partials/reports/criteria-input.html:116
-#: public/partials/reports/criteria-input.html:76
+#: public/partials/reports/criteria-input.html:66
+#: public/partials/reports/criteria-input.html:91
 msgid "Click here to clear the selected value"
 msgstr "Cliquez ici pour effacer la valeur sélectionnée"
 
-#: public/partials/report/edit.html:18
+#: public/partials/report/edit.html:19
 msgid "Click here to conduct the guided tour for data explorer"
 msgstr "Suivre une visite guidée de l'explorateur de données"
 
@@ -387,7 +383,7 @@ msgstr "Cliquer ici pour créer un nouveau tableau de bord"
 msgid "Click here to create a new dashboard and push this report in"
 msgstr "Créer un nouveau tableau de bord et y ajouter ce rapport"
 
-#: public/js/dashboards/dashboards-list.controller.js:92
+#: public/js/dashboards/dashboards-list.controller.js:100
 msgid "Click here to create a new dashboard."
 msgstr "Créer une nouvelle source de données."
 
@@ -409,11 +405,11 @@ msgid "Click here to create a new folder inside the actual folder."
 msgstr ""
 "Cliquez ici pour créer un nouveau dossier à l'intérieur du dossier actuel."
 
-#: public/js/layers/layers-list.controller.js:95
+#: public/js/layers/layers-list.controller.js:123
 msgid "Click here to create a new layer."
 msgstr "Cliquez ici pour créer un nouveau calque."
 
-#: public/js/reports/reports-list.controller.js:105
+#: public/js/reports/reports-list.controller.js:58
 msgid "Click here to create a new report."
 msgstr "Cliquez ici pour créer un nouveau rapport."
 
@@ -421,35 +417,35 @@ msgstr "Cliquez ici pour créer un nouveau rapport."
 msgid "Click here to create a new single query report"
 msgstr "Cliquez ici pour créer un nouveau rapport"
 
-#: public/js/dashboards/dashboards-list.controller.js:120
+#: public/js/dashboards/dashboards-list.controller.js:128
 msgid "Click here to delete the dashboard."
 msgstr "Cliquez ici pour supprimer ce tableau de bord."
 
-#: public/js/layers/layers-list.controller.js:125
+#: public/js/layers/layers-list.controller.js:153
 msgid "Click here to delete the layer."
 msgstr "Cliquez ici pour supprimer ce calque."
 
-#: public/js/reports/reports-list.controller.js:133
+#: public/js/reports/reports-list.controller.js:86
 msgid "Click here to delete the report."
 msgstr "Cliquez ici pour supprimer ce rapport."
 
-#: public/partials/dashboardv2/edit.html:104
+#: public/partials/dashboards/edit.html:111
 msgid "Click here to delete this report"
 msgstr "Supprimer ce rapport"
 
-#: public/js/reports/reports-list.controller.js:145
+#: public/js/reports/reports-list.controller.js:98
 msgid "Click here to duplicate the report."
 msgstr "Cliquez ici pour dupliquer le rapport."
 
-#: public/partials/dashboardv2/edit.html:107
+#: public/partials/dashboards/edit.html:114
 msgid "Click here to edit this report"
 msgstr "Modifier le rapport"
 
-#: public/js/dashboards/dashboards-list.controller.js:112
+#: public/js/dashboards/dashboards-list.controller.js:120
 msgid "Click here to modify the dashboard."
 msgstr "Modifier le tableau de bord."
 
-#: public/js/reports/reports-list.controller.js:125
+#: public/js/reports/reports-list.controller.js:78
 msgid "Click here to modify the report."
 msgstr "Cliquez ici pour modifier le rapport."
 
@@ -457,11 +453,11 @@ msgstr "Cliquez ici pour modifier le rapport."
 msgid "Click here to modify this dashboard"
 msgstr "Modifier le tableau de bord"
 
-#: public/partials/reports/report-dropzone.component.html:17
+#: public/partials/reports/report-dropzone.component.html:16
 msgid "Click here to order ascendent using this field"
 msgstr "Trier selon ce champ par ordre croissant"
 
-#: public/partials/reports/report-dropzone.component.html:15
+#: public/partials/reports/report-dropzone.component.html:14
 msgid "Click here to order descendent using this field"
 msgstr "Trier selon ce champ par ordre décroissant"
 
@@ -477,7 +473,7 @@ msgstr "Supprimer ce fichier (ceci supprimera les sous-fichiers)"
 msgid "Click here to save changes to the shared space"
 msgstr "Cliquer ici pour enregistrer les changements de l'espace partagé"
 
-#: public/partials/dashboardv2/edit.html:12
+#: public/partials/dashboards/edit.html:13
 msgid "Click here to save the dashboard changes"
 msgstr "Sauvegarder les changements au tableau de bord"
 
@@ -487,7 +483,7 @@ msgid ""
 msgstr ""
 "Cliquez ici pour enregistrer le nom du dossier et sortir du mode édition"
 
-#: public/partials/report/edit.html:14
+#: public/partials/report/edit.html:15
 msgid "Click here to save the report changes"
 msgstr "Cliquez ici pour enregistrer les changements du rapport"
 
@@ -495,24 +491,19 @@ msgstr "Cliquez ici pour enregistrer les changements du rapport"
 msgid "Click here to see or set data source details"
 msgstr "Consulter et modifier les détails des sources de données"
 
-#: public/partials/reports/criteria-input.html:103
-#: public/partials/reports/criteria-input.html:67
-msgid "Click here to select a value"
-msgstr "Cliquez ici pour sélectionner une valeur"
-
 #: public/partials/report/modals/dashboardListModal.html:19
 msgid "Click here to select this dashboard"
 msgstr "Sélectionner ce tableau de bord"
 
-#: public/js/dashboards/dashboards-list.controller.js:102
+#: public/js/dashboards/dashboards-list.controller.js:110
 msgid "Click over a dashboard's name to execute it."
 msgstr "Cliquez sur le nom du tableau de bord pour le lancer."
 
-#: public/js/reports/reports-list.controller.js:115
+#: public/js/reports/reports-list.controller.js:68
 msgid "Click over a report's name to execute it."
 msgstr "Cliquez sur le nom du rapport pour l'exécuter."
 
-#: public/js/report/controller.js:696
+#: public/js/report/controller.js:686
 msgid ""
 "Click over one of the different report types to change the visualization of "
 "the data you choose"
@@ -525,10 +516,11 @@ msgstr ""
 msgid "Close"
 msgstr "Fermer"
 
-#: public/js/report/controller.js:720
+#: public/js/report/controller.js:710
 msgid "Columns / results drop zone"
 msgstr "Colonnes / zone de dépôt des résultats"
 
+#: public/partials/core/pdf-export-settings-modal.component.html:52
 #: public/partials/layer/addAllModal.html:7
 #: public/partials/layer/sqlModal.html:87
 msgid "Confirm"
@@ -550,11 +542,7 @@ msgstr "Copié"
 msgid "Copy of {{name}}"
 msgstr "Copie de {{name}}"
 
-#: public/js/dashboardv2/controller.js:234
-msgid "Could not find report"
-msgstr "Impossible de trouver le rapport"
-
-#: public/js/dashboardv2/controller.js:133
+#: public/js/dashboards/dashboard-edit.controller.js:143
 msgid "Could not load dashboard : missing id"
 msgstr "Impossible de charger le tableau de bord : identifiant manquant"
 
@@ -578,7 +566,7 @@ msgstr ""
 "Créez et gérez ici les connections aux bases de données qui contiennent les "
 "données que vous voulez pour pouvoir créer des rapports avec Urungi."
 
-#: public/partials/roles/roleModal.html:74
+#: public/partials/roles/role-edit-modal.component.html:58
 msgid "Create dashboards"
 msgstr "Exécuter les tableaux de bords"
 
@@ -594,19 +582,24 @@ msgstr "Créer un nouveau tableau de bord"
 msgid "Create new report"
 msgstr "Créer un nouveau rapport"
 
-#: public/partials/roles/roleModal.html:70
+#: public/partials/roles/role-edit-modal.component.html:54
 msgid "Create reports"
 msgstr "Créer les rapports"
+
+#: public/partials/dashboards/list.html:35
+#: public/partials/reports/reports-table.component.html:24
+msgid "Created on"
+msgstr "Créé le"
 
 #: public/js/spaces/controller.js:103
 msgid "Creating a new data source"
 msgstr "Création d'une nouvelle source de données"
 
-#: public/partials/layer/elementModal.html:283
+#: public/partials/layer/elementModal.html:197
 msgid "Cyclic definition :"
 msgstr "Définition cyclique :"
 
-#: public/partials/dashboardv2/edit.html:249
+#: public/partials/dashboards/edit.html:247
 msgid "Dashboard Name"
 msgstr "Nom du tableau de bord"
 
@@ -614,15 +607,15 @@ msgstr "Nom du tableau de bord"
 msgid "Dashboard created successfully"
 msgstr "Tableau de bord créé avec succès"
 
-#: public/js/dashboards/dashboards-list.controller.js:118
+#: public/js/dashboards/dashboards-list.controller.js:126
 msgid "Dashboard delete"
 msgstr "Supprimer le tableau de bord"
 
-#: public/js/dashboards/dashboards-list.controller.js:110
+#: public/js/dashboards/dashboards-list.controller.js:118
 msgid "Dashboard edit"
 msgstr "Modifier le tableau de bord"
 
-#: public/js/dashboards/dashboards-list.controller.js:130
+#: public/js/dashboards/dashboards-list.controller.js:138
 msgid "Dashboard published"
 msgstr "Tableaux de bord publié"
 
@@ -630,7 +623,7 @@ msgstr "Tableaux de bord publié"
 msgid "Dashboard updated successfully:"
 msgstr "Tableau de bord mis à jour avec succès:"
 
-#: public/js/dashboards/dashboards-list.controller.js:78
+#: public/js/dashboards/dashboards-list.controller.js:86
 #: public/js/home/controller.js:189 public/partials/dashboards/list.html:9
 #: public/partials/io/export.html:57 public/partials/io/import.html:112
 #: public/partials/users/view.html:101
@@ -645,7 +638,7 @@ msgstr ""
 "Les tableaux de bord vous permettent si vous y êtes autorisés de créer et "
 "modifier des tableaux de bord en utilisant des rapports créés précédemment."
 
-#: public/js/dashboards/dashboards-list.controller.js:98
+#: public/js/dashboards/dashboards-list.controller.js:106
 msgid "Dashboards list"
 msgstr "Tableaux de bord"
 
@@ -696,25 +689,16 @@ msgstr "Jeu de données"
 msgid "Datasource matching {{ds.doc.name}}"
 msgstr "Source de données correspondant à {{ds.doc.name}}"
 
-#: public/js/layer/controller.js:1317
+#: public/js/layer/controller.js:1297
 msgid "Datasource must be the same for all entities"
 msgstr "La source de données doit être la même pour toutes les entités"
-
-#: public/js/dashboards/dashboards-list.controller.js:61
-#: public/js/reports/reports-list.controller.js:69
-msgid "Date of creation"
-msgstr "Date de création"
-
-#: public/partials/layer/elementModal.html:224
-msgid "Day"
-msgstr "Jour"
 
 #: public/partials/report/modals/filter-prompt-modal.html:48
 msgid "Deactivate Filter"
 msgstr "Désactiver le filtre"
 
-#: public/partials/layer/objectProperties.html:103
-#: public/partials/layer/objectProperties.html:96
+#: public/partials/layer/objectProperties.html:101
+#: public/partials/layer/objectProperties.html:94
 msgid "Default Aggregation"
 msgstr "Agrégation par défaut"
 
@@ -727,7 +711,7 @@ msgstr "Agrégation par défaut"
 msgid "Define here the folder structure for the shared area"
 msgstr "Définissez ici la structure de dossiers pour l'espace partagé"
 
-#: public/js/dashboards/dashboards-list.controller.js:82
+#: public/js/dashboards/dashboards-list.controller.js:90
 msgid ""
 "Define several reports using filters and dragging and dropping from "
 "different layers."
@@ -741,29 +725,29 @@ msgstr ""
 msgid "Delete"
 msgstr "Supprimer"
 
-#: public/partials/widgets/inspector.html:87
+#: public/partials/widgets/inspector.html:99
 msgid "Delete background"
 msgstr "Supprimer l'arrière-plan"
 
-#: public/js/reports/reports-list.controller.js:131
+#: public/js/reports/reports-list.controller.js:84
 msgid "Delete report"
 msgstr "Supprimer le rapport"
 
-#: public/partials/dashboards/dashboards-list-item.html:19
+#: public/partials/dashboards/dashboards-list-buttons.html:21
 msgid "Delete this dashboard"
 msgstr "Supprimer ce tableau de bord"
 
-#: public/partials/layers/layers-list-item.html:19
+#: public/partials/layers/layers-list-buttons.html:6
 msgid "Delete this layer"
 msgstr "Supprimer ce calque"
 
-#: public/partials/reports/reports-list-item.html:22
+#: public/partials/reports/reports-list-buttons.html:21
 msgid "Delete this report"
 msgstr "Supprimer ce rapport"
 
-#: public/js/dashboards/dashboards-list-item.component.js:32
-#: public/js/layers/layers-list-item.component.js:38
-#: public/js/reports/reports-list-item.component.js:32
+#: public/js/dashboards/dashboards-list-buttons.component.js:32
+#: public/js/layers/layers-list-buttons.component.js:25
+#: public/js/reports/reports-list-buttons.component.js:32
 msgid "Delete {{name}} ?"
 msgstr "Supprimer {{name}} ?"
 
@@ -779,13 +763,13 @@ msgstr ""
 "Suivant vos droits vous pourrez accéder aux différents dossiers ou éléments"
 
 #: public/partials/layer/elementModal.html:90
-#: public/partials/layer/objectProperties.html:177
+#: public/partials/layer/objectProperties.html:168
 #: public/partials/layer/objectProperties.html:46
-#: public/partials/roles/roleModal.html:51
+#: public/partials/roles/role-edit-modal.component.html:41
 msgid "Description"
 msgstr "Description"
 
-#: public/js/layers/layers-list.controller.js:136
+#: public/js/layers/layers-list.controller.js:164
 msgid "Design your company public space"
 msgstr "Concevez l'espace public de votre société"
 
@@ -793,18 +777,18 @@ msgstr "Concevez l'espace public de votre société"
 msgid "Do not show this block again"
 msgstr "Ne pas montrer ce bloc à nouveau"
 
-#: public/js/dashboards/dashboards-list.controller.js:72
+#: public/js/dashboards/dashboards-list.controller.js:80
 #: public/js/data-sources/data-sources-list.controller.js:31
 #: public/js/home/controller.js:15
-#: public/js/layers/layers-list.controller.js:73
-#: public/js/report/controller.js:667
-#: public/js/reports/reports-list.controller.js:80
+#: public/js/layers/layers-list.controller.js:101
+#: public/js/report/controller.js:657
+#: public/js/reports/reports-list.controller.js:33
 #: public/js/spaces/controller.js:14
 msgid "Done"
 msgstr "Terminé"
 
-#: public/js/report/services/c3Charts.js:320
-#: public/partials/reports/report-settings-modal.component.html:15
+#: public/js/report/services/c3Charts.js:323
+#: public/partials/reports/report-settings-modal.component.html:22
 msgid "Donut"
 msgstr "Donut"
 
@@ -822,7 +806,7 @@ msgstr ""
 msgid "Drop here the dimension field"
 msgstr "Glissez ici la dimension"
 
-#: public/js/report/controller.js:742
+#: public/js/report/controller.js:732
 msgid ""
 "Drop here the elements that you want to use to filter the results of the "
 "query"
@@ -830,14 +814,14 @@ msgstr ""
 "Déposez ici les éléments que vous voulez utiliser pour filtrer les résultats "
 "de la requête"
 
-#: public/js/report/controller.js:732
+#: public/js/report/controller.js:722
 msgid ""
 "Drop here the elements that you want to use to order the results of the query"
 msgstr ""
 "Déposez ici les éléments que vous voulez utiliser pour ordonner les "
 "résultats de la requête"
 
-#: public/js/report/controller.js:722
+#: public/js/report/controller.js:712
 msgid "Drop here the elements you want to have in the results of the query"
 msgstr ""
 "Déposez ici les éléments que vous voulez avoir dans les résultats de la "
@@ -876,15 +860,15 @@ msgid "Duplicate '{{vm.resolve.name}}' ?"
 msgstr "Dupliquer '{{vm.resolve.name}}' ?"
 
 #: public/js/report/controller.js:14
-#: public/js/reports/reports-list.controller.js:143
+#: public/js/reports/reports-list.controller.js:96
 msgid "Duplicate report"
 msgstr "Dupliquer le rapport"
 
-#: public/partials/dashboards/dashboards-list-item.html:22
+#: public/partials/dashboards/dashboards-list-buttons.html:17
 msgid "Duplicate this dashboard"
 msgstr "Dupliquer ce tableau de bord"
 
-#: public/partials/reports/reports-list-item.html:25
+#: public/partials/reports/reports-list-buttons.html:17
 msgid "Duplicate this report"
 msgstr "Dupliquer ce rapport"
 
@@ -894,11 +878,11 @@ msgstr "Dupliquer ce rapport"
 msgid "Edit"
 msgstr "Éditer"
 
-#: public/partials/dashboards/view.html:15
+#: public/partials/dashboards/view.html:21
 msgid "Edit Dashboard"
 msgstr "Modifier le Tableau de Bord"
 
-#: public/partials/reports/view.html:20
+#: public/partials/reports/view.html:25
 msgid "Edit Report"
 msgstr "Modifier le rapport"
 
@@ -910,19 +894,19 @@ msgstr "Modifier l'utilisateur"
 msgid "Edit folder"
 msgstr "Modifier le dossier"
 
-#: public/js/reports/reports-list.controller.js:123
+#: public/js/reports/reports-list.controller.js:76
 msgid "Edit report"
 msgstr "Modifier le rapport"
 
-#: public/partials/dashboards/dashboards-list-item.html:25
+#: public/partials/dashboards/dashboards-list-buttons.html:13
 msgid "Edit this dashboard"
 msgstr "Modifier ce tableau de bord"
 
-#: public/partials/layers/layers-list-item.html:22
+#: public/partials/layers/layers-list-buttons.html:2
 msgid "Edit this layer"
 msgstr "Modifier ce calque"
 
-#: public/partials/reports/reports-list-item.html:28
+#: public/partials/reports/reports-list-buttons.html:13
 msgid "Edit this report"
 msgstr "Modifier ce rapport"
 
@@ -930,7 +914,7 @@ msgstr "Modifier ce rapport"
 msgid "Element"
 msgstr "Élément"
 
-#: public/partials/report/edit.html:29
+#: public/partials/report/edit.html:30
 msgid "Elements"
 msgstr "Éléments"
 
@@ -938,7 +922,7 @@ msgstr "Éléments"
 msgid "Enter a max value for gauge"
 msgstr "Saisissez une valeur max pour la jauge"
 
-#: public/js/dashboardv2/controller.js:81
+#: public/js/dashboards/dashboard-edit.controller.js:91
 msgid "Error : failed to import report"
 msgstr "Erreur : l'import du rapport a échoué"
 
@@ -950,11 +934,11 @@ msgstr "Erreur:"
 msgid "Everyone"
 msgstr "Tout le monde"
 
-#: public/partials/roles/roleModal.html:95
+#: public/partials/roles/role-edit-modal.component.html:79
 msgid "Execute dashboards"
 msgstr "Exécuter les tableaux de bords"
 
-#: public/partials/roles/roleModal.html:94
+#: public/partials/roles/role-edit-modal.component.html:78
 msgid "Execute reports"
 msgstr "Exécuter le rapport"
 
@@ -969,16 +953,17 @@ msgid ""
 msgstr ""
 "L'explorateur vous permet de parcourir les données sans créer de rapport."
 
-#: public/js/home/controller.js:165 public/partials/roles/roleModal.html:78
+#: public/js/home/controller.js:165
+#: public/partials/roles/role-edit-modal.component.html:62
 msgid "Explore data"
 msgstr "Explorer les données"
 
-#: public/partials/report/edit.html:8
+#: public/partials/report/edit.html:9
 msgid "Explorer"
 msgstr "Explorateur"
 
-#: public/partials/dashboards/view.html:7 public/partials/io/export.html:85
-#: public/partials/reports/view.html:10 public/partials/sidebar/sidebar.html:61
+#: public/partials/dashboards/view.html:9 public/partials/io/export.html:85
+#: public/partials/reports/view.html:11 public/partials/sidebar/sidebar.html:61
 msgid "Export"
 msgstr "Export"
 
@@ -989,10 +974,6 @@ msgstr "Exportez les calques, rapports et tableaux de bord"
 #: public/partials/layer/elementModal.html:10
 msgid "Expression"
 msgstr "Expression"
-
-#: public/partials/layer/elementModal.html:199
-msgid "Extract from String"
-msgstr "Extraire d'une chaîne de caractère"
 
 #: public/js/io/import.controller.js:439
 msgid "Failed to create dashboard"
@@ -1010,6 +991,10 @@ msgstr "La création du rapport a échoué"
 msgid "Failed to parse expression for element"
 msgstr "L'analyse de l'expression a échoué pour l'élément"
 
+#: public/js/roles/role-edit-modal.component.js:63
+msgid "Failed to save role"
+msgstr "L'enregistrement du rôle a échoué"
+
 #: public/js/io/import.controller.js:427
 msgid "Failed to update dashboard"
 msgstr "La mise à jour du tableau de bord a échoué"
@@ -1022,7 +1007,7 @@ msgstr "La mise à jour du calque a échoué"
 msgid "Failed to update report"
 msgstr "La mise à jour du rapport a échoué"
 
-#: public/js/report/controller.js:267
+#: public/js/report/controller.js:266
 #: public/js/report/directives/reportView.js:40
 msgid "Fetching data ..."
 msgstr "Récupération des données ..."
@@ -1043,7 +1028,7 @@ msgstr "Filtrer"
 msgid "Filter Instructions"
 msgstr "Instructions du filtre"
 
-#: public/js/report/controller.js:740
+#: public/js/report/controller.js:730
 msgid "Filters drop zone"
 msgstr "Zone de dépôt des filtres"
 
@@ -1059,11 +1044,11 @@ msgstr "Prénom"
 msgid "First Name is required"
 msgstr "Le prénom est nécéssaire"
 
-#: public/js/reports/filter-prompt.component.js:206
+#: public/js/reports/filter-prompt.component.js:204
 msgid "First quarter"
 msgstr "Premier trimestre"
 
-#: public/js/reports/filter-prompt.component.js:210
+#: public/js/reports/filter-prompt.component.js:208
 msgid "First semester"
 msgstr "Premier semestre"
 
@@ -1083,15 +1068,19 @@ msgstr "Suivre une visite guidée pour les sources de données"
 msgid "Follow the guided tour for reports"
 msgstr "Suivre la visite guidée pour les rapports"
 
-#: public/partials/widgets/inspector.html:135
+#: public/partials/widgets/inspector.html:147
 msgid "Font"
 msgstr "Police de caractères"
+
+#: public/partials/core/pdf-export-settings-modal.component.html:25
+msgid "Footer template"
+msgstr "Modèle du pied de page"
 
 #: public/partials/layer/elementModal.html:136
 #: public/partials/layer/elementModal.html:139
 #: public/partials/layer/elementModal.html:150
 #: public/partials/layer/elementModal.html:178
-#: public/partials/layer/objectProperties.html:112
+#: public/partials/layer/objectProperties.html:110
 #: public/partials/reports/report-column-settings-modal.component.html:88
 #: public/partials/reports/report-column-settings-modal.component.html:97
 msgid "Format"
@@ -1102,13 +1091,12 @@ msgstr "Format"
 msgid "Format examples"
 msgstr "Exemples de format"
 
-#: public/js/reports/filter-prompt.component.js:209
+#: public/js/reports/filter-prompt.component.js:207
 msgid "Fourth quarter"
 msgstr "Quatrième trimestre"
 
 #: public/partials/layer/elementModal.html:39
-#: public/partials/layer/objectProperties.html:66
-#: public/partials/roles/roleModal.html:35
+#: public/partials/roles/role-edit-modal.component.html:27
 msgid "General"
 msgstr "Général"
 
@@ -1136,7 +1124,7 @@ msgstr "Aller voir les calques et continuer la visite"
 msgid "Go to single query report designer and continue tour"
 msgstr "Passez aux créateur de calques et continuez la visite"
 
-#: public/js/layers/layers-list.controller.js:140
+#: public/js/layers/layers-list.controller.js:168
 msgid "Go to the public space definition and continue tour"
 msgstr "Passez à la définition de l'espace public et continuez la visite"
 
@@ -1144,7 +1132,37 @@ msgstr "Passez à la définition de l'espace public et continuez la visite"
 msgid "Guided tour"
 msgstr "Visite guidée"
 
-#: public/partials/reports/report-settings-modal.component.html:41
+#: public/partials/core/pdf-export-settings-modal.component.html:27
+msgid ""
+"HTML template for the print footer. The default is to show the\n"
+"                page number and the total number of pages on the right."
+msgstr ""
+"Modèle HTML pour le pied de page. La valeur par défaut affiche le numéro de "
+"page et le nombre total de pages sur la droite."
+
+#: public/partials/core/pdf-export-settings-modal.component.html:20
+msgid ""
+"HTML template for the print header. The default is to show the\n"
+"                date on the right."
+msgstr ""
+"Modèle HTML pour l'en-tête. La valeur par défaut affiche la date sur la "
+"droite."
+
+#: public/partials/core/pdf-export-settings-modal.component.html:33
+msgid ""
+"Header and footer templates should be valid HTML markup\n"
+"                    with following classes used to inject printing values "
+"into\n"
+"                    them:"
+msgstr ""
+"Les modèles d'en-tête et de pied de page doivent être du HTML valide avec "
+"les classes suivantes utilisées pour y injecter des valeurs:"
+
+#: public/partials/core/pdf-export-settings-modal.component.html:18
+msgid "Header template"
+msgstr "Modèle de l'en-tête"
+
+#: public/partials/reports/report-settings-modal.component.html:48
 msgid "Height"
 msgstr "Hauteur"
 
@@ -1158,7 +1176,7 @@ msgstr ""
 "Ici toutes les sources de données (connections aux bases de données) sont "
 "listées."
 
-#: public/js/layers/layers-list.controller.js:103
+#: public/js/layers/layers-list.controller.js:131
 msgid "Here all the layers are listed."
 msgstr "Tous vos calques sont listés ici."
 
@@ -1170,11 +1188,11 @@ msgstr ""
 "Tous les éléments partagés (rapports, tableaux de bords) que vous pouvez "
 "lancer"
 
-#: public/js/dashboards/dashboards-list.controller.js:100
+#: public/js/dashboards/dashboards-list.controller.js:108
 msgid "Here all your dashboards are listed."
 msgstr "Tous les tableaux de bord sont listés ici."
 
-#: public/js/reports/reports-list.controller.js:113
+#: public/js/reports/reports-list.controller.js:66
 msgid "Here all your reports are listed."
 msgstr "Tous vos rapports sont listés ici."
 
@@ -1190,11 +1208,11 @@ msgstr ""
 msgid "Here you can access the basic operations in urungi"
 msgstr "Vous pouvez accéder ici aux opérations de base d'Urungi"
 
-#: public/js/reports/reports-list.controller.js:88
+#: public/js/reports/reports-list.controller.js:41
 msgid "Here you can create and execute reports."
 msgstr "Ici vous pouvez créer et exécuter des rapports."
 
-#: public/js/layers/layers-list.controller.js:85
+#: public/js/layers/layers-list.controller.js:113
 msgid ""
 "Here you can create and manage the layers that later will be used by your "
 "users to create reports or explore data."
@@ -1223,11 +1241,11 @@ msgstr "Accueil"
 msgid "Host"
 msgstr "Hôte"
 
-#: public/partials/files/galleryModal.html:39
+#: public/partials/dashboards/dashboard-image-modal.component.html:33
 msgid "Icon set"
 msgstr "Jeu d'icônes"
 
-#: public/js/dashboards/dashboards-list.controller.js:134
+#: public/js/dashboards/dashboards-list.controller.js:142
 msgid ""
 "If you drop or modify a published dashboard, it will have and impact on "
 "other users, think about it before making any updates on the dashboard."
@@ -1236,7 +1254,7 @@ msgstr ""
 "pour les autres utilisateurs, pensez ici avant de mettre à jour ces tableaux "
 "de bord."
 
-#: public/js/reports/reports-list.controller.js:155
+#: public/js/reports/reports-list.controller.js:108
 msgid ""
 "If you drop or modify a published report, it will have and impact on other "
 "users, think about it before making any updates on the report."
@@ -1244,11 +1262,15 @@ msgstr ""
 "Si vous supprimez ou modifiez un rapport publié, cela aura un impact sur les "
 "autres utilisateurs, pensez-y avant de mettre à jour un rapport."
 
+#: public/js/dashboards/dashboard-image-modal.component.js:79
+msgid "Image upload failed"
+msgstr "Le téléversement de l'image a échoué"
+
 #: public/partials/sidebar/sidebar.html:57
 msgid "Import"
 msgstr "Import"
 
-#: public/partials/dashboardv2/edit.html:90
+#: public/partials/dashboards/edit.html:97
 msgid "Import Report"
 msgstr "Importer un rapport"
 
@@ -1260,12 +1282,12 @@ msgstr "Import terminé"
 msgid "Import layers, reports and dashboards"
 msgstr "Importez des calques, rapports et tableaux de bord"
 
-#: public/js/dashboards/dashboards-list.controller.js:80
+#: public/js/dashboards/dashboards-list.controller.js:88
 msgid "In here you can create and execute dashboards like web pages."
 msgstr ""
 "Ici vous pouvez créer ou lancer des tableaux de bord comme des pages web."
 
-#: public/partials/layer/objectProperties.html:149
+#: public/partials/layer/objectProperties.html:140
 msgid "Inner"
 msgstr "Inner"
 
@@ -1297,13 +1319,13 @@ msgstr "Jeu de données de la jointure"
 msgid "Join Field"
 msgstr "Champ de la jointure"
 
-#: public/partials/layer/objectProperties.html:145
+#: public/partials/layer/objectProperties.html:136
 msgid "Join type"
 msgstr "Type de jointure"
 
 #: public/partials/layer/elementModal.html:44
 #: public/partials/layer/objectProperties.html:37
-#: public/partials/layer/objectProperties.html:80
+#: public/partials/layer/objectProperties.html:78
 #: public/partials/reports/report-column-settings-modal.component.html:9
 msgid "Label"
 msgstr "Étiquette"
@@ -1320,39 +1342,39 @@ msgstr "Nom de famille"
 msgid "Last Name is required"
 msgstr "Le nom de famille est nécéssaire"
 
-#: public/js/reports/filter-prompt.component.js:214
+#: public/js/reports/filter-prompt.component.js:212
 msgid "Last month"
 msgstr "Mois dernier"
 
-#: public/js/reports/filter-prompt.component.js:213
+#: public/js/reports/filter-prompt.component.js:211
 msgid "Last week"
 msgstr "Semaine dernière"
 
-#: public/js/reports/filter-prompt.component.js:215
+#: public/js/reports/filter-prompt.component.js:213
 msgid "Last year"
 msgstr "Année dernière"
 
-#: public/js/reports/filter-prompt.component.js:216
+#: public/js/reports/filter-prompt.component.js:214
 msgid "Last year first quarter"
 msgstr "Premier trimestre de l'année dernière"
 
-#: public/js/reports/filter-prompt.component.js:220
+#: public/js/reports/filter-prompt.component.js:218
 msgid "Last year first semester"
 msgstr "Premier semestre de l'année dernière"
 
-#: public/js/reports/filter-prompt.component.js:219
+#: public/js/reports/filter-prompt.component.js:217
 msgid "Last year fourth quarter"
 msgstr "Quatrième trimestre de l'année dernière"
 
-#: public/js/reports/filter-prompt.component.js:217
+#: public/js/reports/filter-prompt.component.js:215
 msgid "Last year second quarter"
 msgstr "Deuxième trimestre de l'année dernière"
 
-#: public/js/reports/filter-prompt.component.js:221
+#: public/js/reports/filter-prompt.component.js:219
 msgid "Last year second semester"
 msgstr "Deuxième semestre de l'année dernière"
 
-#: public/js/reports/filter-prompt.component.js:218
+#: public/js/reports/filter-prompt.component.js:216
 msgid "Last year third quarter"
 msgstr "Troisième trimestre de l'année dernière"
 
@@ -1370,12 +1392,12 @@ msgstr ""
 msgid "Latest executions"
 msgstr "Dernières exécutions"
 
-#: public/js/reports/reports-list.controller.js:56
+#: public/partials/reports/reports-table.component.html:16
 msgid "Layer"
 msgstr "Calque"
 
 #: public/partials/layer/folderModal.html:13
-#: public/partials/layer/objectProperties.html:167
+#: public/partials/layer/objectProperties.html:158
 msgid "Layer Name"
 msgstr "Nom du calque"
 
@@ -1388,7 +1410,7 @@ msgstr "Propriétés du calque"
 msgid "Layer created successfully:"
 msgstr "Calque créé avec succès:"
 
-#: public/js/layers/layers-list.controller.js:123
+#: public/js/layers/layers-list.controller.js:151
 msgid "Layer delete"
 msgstr "Suppression du calque"
 
@@ -1405,7 +1427,7 @@ msgstr "Éléments du calque"
 msgid "Layer name"
 msgstr "Nom du calque"
 
-#: public/js/layers/layers-list.controller.js:113
+#: public/js/layers/layers-list.controller.js:141
 msgid "Layer status"
 msgstr "Statut du calque"
 
@@ -1416,13 +1438,13 @@ msgstr "Calque mis à jour avec succès:"
 #: public/js/data-sources/data-sources-list.controller.js:96
 #: public/js/data-sources/data-sources-list.controller.js:98
 #: public/js/home/controller.js:130
-#: public/js/layers/layers-list.controller.js:79
+#: public/js/layers/layers-list.controller.js:107
 #: public/partials/io/export.html:16 public/partials/io/import.html:44
 #: public/partials/layers/list.html:9 public/partials/sidebar/sidebar.html:37
 msgid "Layers"
 msgstr "Calques"
 
-#: public/js/layers/layers-list.controller.js:83
+#: public/js/layers/layers-list.controller.js:111
 msgid ""
 "Layers allow your users to create reports dragging and dropping familiar "
 "elements that points in the background to the fields contained in tables in "
@@ -1432,25 +1454,25 @@ msgstr ""
 "et déposant des éléments familiers qui pointent en arrière plan sur les "
 "champs contenus dans les tables de vos sources de données."
 
-#: public/js/layers/layers-list.controller.js:81
+#: public/js/layers/layers-list.controller.js:109
 msgid "Layers define the interface for your users to access the data."
 msgstr ""
 "Les calques définissent l'interface pour que vos utilisateurs puissent "
 "accéder aux données."
 
-#: public/js/layers/layers-list.controller.js:101
+#: public/js/layers/layers-list.controller.js:129
 msgid "Layers list"
 msgstr "Liste des calques"
 
-#: public/partials/dashboardv2/edit.html:51
+#: public/partials/dashboards/edit.html:52
 msgid "Layouts"
 msgstr "Calques"
 
-#: public/partials/layer/objectProperties.html:147
+#: public/partials/layer/objectProperties.html:138
 msgid "Left"
 msgstr "Gauche"
 
-#: public/partials/reports/report-settings-modal.component.html:29
+#: public/partials/reports/report-settings-modal.component.html:36
 msgid "Legend position"
 msgstr "Position de la légende"
 
@@ -1458,7 +1480,7 @@ msgstr "Position de la légende"
 msgid "License"
 msgstr "Licence"
 
-#: public/js/report/services/c3Charts.js:297
+#: public/js/report/services/c3Charts.js:300
 #: public/partials/reports/report-column-settings-modal.component.html:50
 msgid "Line"
 msgstr "Ligne"
@@ -1467,7 +1489,7 @@ msgstr "Ligne"
 msgid "List of data sources"
 msgstr "Liste des sources de données"
 
-#: views/login.ejs:59
+#: views/login.ejs:61
 msgid "Log In"
 msgstr "Se connecter"
 
@@ -1475,7 +1497,7 @@ msgstr "Se connecter"
 msgid "Lookup setup"
 msgstr "Configuration de la recherche"
 
-#: public/js/reports/filter-prompt.component.js:162
+#: public/js/reports/filter-prompt.component.js:160
 msgid "Make this filter appear in the report interface."
 msgstr "Faire apparaître ce filtre dans l'interface du rapport."
 
@@ -1487,11 +1509,7 @@ msgstr "Max"
 msgid "Min"
 msgstr "Min"
 
-#: public/partials/layer/elementModal.html:219
-msgid "Month"
-msgstr "Mois"
-
-#: public/partials/layer/objectProperties.html:114
+#: public/partials/layer/objectProperties.html:112
 msgid "More Info"
 msgstr "Plus d'information"
 
@@ -1519,7 +1537,7 @@ msgstr "Déplacer dans un autre dossier"
 msgid "My Dashboards"
 msgstr "Mes tableaux de bord"
 
-#: public/partials/files/galleryModal.html:5
+#: public/partials/dashboards/dashboard-image-modal.component.html:8
 msgid "My Images"
 msgstr "Mes images"
 
@@ -1527,14 +1545,13 @@ msgstr "Mes images"
 msgid "My Reports"
 msgstr "Mes rapports"
 
-#: public/js/dashboards/dashboards-list.controller.js:49
-#: public/js/layers/layers-list.controller.js:55
-#: public/js/reports/reports-import-modal.component.js:47
-#: public/js/reports/reports-list.controller.js:50
+#: public/partials/dashboards/list.html:27
 #: public/partials/data-sources/edit.html:23 public/partials/io/import.html:118
 #: public/partials/io/import.html:50 public/partials/io/import.html:84
 #: public/partials/layer/objectProperties.html:30
-#: public/partials/layer/objectProperties.html:71
+#: public/partials/layer/objectProperties.html:69
+#: public/partials/layers/list.html:24
+#: public/partials/reports/reports-table.component.html:12
 msgid "Name"
 msgstr "Nom"
 
@@ -1542,8 +1559,8 @@ msgstr "Nom"
 msgid "Name is required"
 msgstr "Le nom est requis"
 
-#: public/js/dashboards/dashboards-list.controller.js:90
-#: public/js/dashboardv2/controller.js:113
+#: public/js/dashboards/dashboard-edit.controller.js:123
+#: public/js/dashboards/dashboards-list.controller.js:98
 #: public/partials/report/modals/dashboardListModal.html:10
 msgid "New Dashboard"
 msgstr "Nouveau Tableau de Bord"
@@ -1560,12 +1577,12 @@ msgstr "Nouvel élément"
 msgid "New Folder"
 msgstr "Nouveau dossier"
 
-#: public/js/layers/layers-list.controller.js:93
+#: public/js/layers/layers-list.controller.js:121
 msgid "New Layer"
 msgstr "Nouveau calque"
 
-#: public/js/reports/reports-list.controller.js:103
-#: public/partials/dashboardv2/edit.html:89
+#: public/js/reports/reports-list.controller.js:56
+#: public/partials/dashboards/edit.html:96
 msgid "New Report"
 msgstr "Nouveau rapport"
 
@@ -1590,21 +1607,21 @@ msgstr "Nouveau dossier"
 msgid "New layer"
 msgstr "Nouveau calque"
 
-#: public/js/dashboards/dashboards-list.controller.js:69
+#: public/js/dashboards/dashboards-list.controller.js:77
 #: public/js/data-sources/data-sources-list.controller.js:28
 #: public/js/home/controller.js:12
-#: public/js/layers/layers-list.controller.js:70
-#: public/js/report/controller.js:664
-#: public/js/reports/reports-list.controller.js:77
+#: public/js/layers/layers-list.controller.js:98
+#: public/js/report/controller.js:654
+#: public/js/reports/reports-list.controller.js:30
 #: public/js/spaces/controller.js:11 public/partials/core/pager.html:13
-#: public/partials/layer/elementModal.html:294
+#: public/partials/layer/elementModal.html:208
 msgid "Next"
 msgstr "Suivant"
 
 #: public/js/data-sources/data-sources-list.controller.js:94
 #: public/js/home/controller.js:151 public/js/home/controller.js:163
 #: public/js/home/controller.js:175 public/js/home/controller.js:187
-#: public/js/layers/layers-list.controller.js:134
+#: public/js/layers/layers-list.controller.js:162
 #: public/js/spaces/controller.js:101
 msgid "Next Step"
 msgstr "Étape suivante"
@@ -1618,7 +1635,7 @@ msgstr "Non"
 msgid "No Selection"
 msgstr "Aucune sélection"
 
-#: public/js/report/directives/reportView.js:87
+#: public/js/report/directives/reportView.js:88
 msgid "No data for this report"
 msgstr "Aucune donnée pour ce rapport"
 
@@ -1640,19 +1657,18 @@ msgid "OK"
 msgstr "OK"
 
 #: public/js/widgets/htmlWidgets.js:72 public/js/widgets/htmlWidgets.js:84
-#: public/js/widgets/htmlWidgets.js:95
 msgid "Oh yeah, it is that good."
 msgstr "Oh oui, c'est si bon."
 
-#: public/js/dashboards/dashboards-list.controller.js:122
+#: public/js/dashboards/dashboards-list.controller.js:130
 msgid "Once deleted the dashboard will not be recoverable again."
 msgstr "Un tableau de bord supprimé ne sera plus récupérable ensuite."
 
-#: public/js/layers/layers-list.controller.js:127
+#: public/js/layers/layers-list.controller.js:155
 msgid "Once deleted the layer will not be recoverable again."
 msgstr "Une fois supprimé, un calque n'est plus récupérable."
 
-#: public/js/reports/reports-list.controller.js:135
+#: public/js/reports/reports-list.controller.js:88
 msgid "Once deleted the report will not be recoverable again."
 msgstr "Une fois supprimé, un rapport n'est plus récupérable."
 
@@ -1672,7 +1688,7 @@ msgstr ""
 "L'un des éléments personnalisé utilise des éléments provenant de tables qui "
 "ne sont pas jointes. Cet élément personnalisé ne peut pas être récupéré"
 
-#: public/js/report/controller.js:688
+#: public/js/report/controller.js:678
 msgid ""
 "One query can only be based on one layer, you can not mix elements from "
 "different layers in the same query"
@@ -1690,12 +1706,12 @@ msgstr ""
 "Afficher seulement les <input type=\"number\" ng-model=\"selectedReport."
 "properties.recordLimit\" size=\"8\"> premiers éléments"
 
-#: public/js/report/controller.js:730
+#: public/js/report/controller.js:720
 msgid "Order By drop zone"
 msgstr "Zone de dépôt des tris"
 
 #: public/partials/data-sources/edit.html:58
-#: public/partials/users/users-edit-modal.html:42 views/login.ejs:46
+#: public/partials/users/users-edit-modal.html:42 views/login.ejs:48
 msgid "Password"
 msgstr "Mot de Passe"
 
@@ -1703,12 +1719,12 @@ msgstr "Mot de Passe"
 msgid "Passwords do not match"
 msgstr "Les mots de passe ne correspondent pas"
 
-#: public/partials/roles/roleModal.html:60
+#: public/partials/roles/role-edit-modal.component.html:50
 msgid "Permissions"
 msgstr "Permissions"
 
-#: public/js/report/services/c3Charts.js:315
-#: public/partials/reports/report-settings-modal.component.html:22
+#: public/js/report/services/c3Charts.js:318
+#: public/partials/reports/report-settings-modal.component.html:29
 msgid "Pie"
 msgstr "Camembert"
 
@@ -1724,11 +1740,15 @@ msgstr "Veuillez écrire DELETE pour confirmer"
 msgid "Port"
 msgstr "Port"
 
+#: public/partials/dashboards/edit.html:70
+msgid "Preview size"
+msgstr "Taille de la prévisualisation"
+
 #: public/partials/core/pager.html:7
 msgid "Previous"
 msgstr "Précédent"
 
-#: public/partials/files/galleryModal.html:25
+#: public/partials/dashboards/dashboard-image-modal.component.html:23
 msgid "Public Images"
 msgstr "Images publiques"
 
@@ -1752,16 +1772,15 @@ msgstr "Mettre dans l'espace partagé"
 msgid "Queries"
 msgstr "Requêtes"
 
-#: public/js/report/controller.js:710
+#: public/js/report/controller.js:700
 msgid "Query refresh"
 msgstr "Actualisation de la requête"
 
-#: public/partials/dashboardv2/edit.html:64
 #: public/partials/report/partials/report-edit.html:29
 msgid "Quick display with"
 msgstr "Aperçu rapide avec"
 
-#: public/partials/dashboardv2/edit.html:69
+#: public/partials/dashboards/edit.html:76
 #: public/partials/report/partials/report-edit.html:39
 msgid "Redraw"
 msgstr "Redessiner"
@@ -1778,7 +1797,7 @@ msgstr "Le calque lié n'est pas dans le fichier d'import"
 msgid "Related layer is not valid"
 msgstr "Le calque lié n'est pas valide"
 
-#: views/login.ejs:52
+#: views/login.ejs:54
 msgid "Remember Me"
 msgstr "Mémorise moi"
 
@@ -1799,11 +1818,11 @@ msgstr "Supprimer des éléments du calque"
 msgid "Remove from shared space"
 msgstr "Retirer de l'espace partagé"
 
-#: public/js/users/users-view.controller.js:123
+#: public/js/users/users-view.controller.js:122
 msgid "Remove role {{name}} ?"
 msgstr "Supprimer le role {{name}} ?"
 
-#: public/partials/reports/report-dropzone.component.html:20
+#: public/partials/reports/report-dropzone.component.html:19
 msgid "Remove this item from this dimension"
 msgstr "Retirer cet élément de cette dimension"
 
@@ -1819,7 +1838,7 @@ msgstr "Répéter le mot de passe"
 msgid "Report Name"
 msgstr "Nom du rapport"
 
-#: public/js/report/controller.js:694
+#: public/js/report/controller.js:684
 msgid "Report Type selector"
 msgstr "Sélecteur de type de rapport"
 
@@ -1827,7 +1846,7 @@ msgstr "Sélecteur de type de rapport"
 msgid "Report created successfully:"
 msgstr "Rapport créé avec succès:"
 
-#: public/js/reports/reports-list.controller.js:151
+#: public/js/reports/reports-list.controller.js:104
 msgid "Report published"
 msgstr "Rapport publié"
 
@@ -1836,7 +1855,7 @@ msgstr "Rapport publié"
 msgid "Report settings"
 msgstr "Paramètres du rapport"
 
-#: public/partials/reports/report-settings-modal.component.html:9
+#: public/partials/reports/report-settings-modal.component.html:16
 msgid "Report type"
 msgstr "Type de rapport"
 
@@ -1844,9 +1863,9 @@ msgstr "Type de rapport"
 msgid "Report updated successfully:"
 msgstr "Rapport mis à jour avec succès:"
 
-#: public/js/reports/reports-list.controller.js:86
-#: public/js/reports/reports-list.controller.js:93
-#: public/partials/dashboardv2/edit.html:39 public/partials/io/export.html:38
+#: public/js/reports/reports-list.controller.js:39
+#: public/js/reports/reports-list.controller.js:46
+#: public/partials/dashboards/edit.html:40 public/partials/io/export.html:38
 #: public/partials/io/import.html:78 public/partials/reports/list.html:9
 #: public/partials/users/view.html:85
 msgid "Reports"
@@ -1860,7 +1879,7 @@ msgstr ""
 "Les rapports vous permettent de créer et de gérer des rapports avec une "
 "seule requête."
 
-#: public/js/reports/reports-list.controller.js:111
+#: public/js/reports/reports-list.controller.js:64
 msgid "Reports list"
 msgstr "Liste des rapports"
 
@@ -1872,9 +1891,9 @@ msgstr ""
 "Les calques requis pour les rapports et les tableaux de bord choisis seront "
 "inclus automatiquement, il n'y a pas besoin de les inclure manuellement."
 
-#: public/js/dashboards/dashboards-list.controller.js:124
-#: public/js/layers/layers-list.controller.js:129
-#: public/js/reports/reports-list.controller.js:137
+#: public/js/dashboards/dashboards-list.controller.js:132
+#: public/js/layers/layers-list.controller.js:157
+#: public/js/reports/reports-list.controller.js:90
 msgid "Requires 2 step confirmation."
 msgstr "Nécessite 2 étapes de confirmations."
 
@@ -1886,32 +1905,40 @@ msgstr "Réinitialiser le mot de passe"
 msgid "Result"
 msgstr "Résultats"
 
-#: public/js/report/controller.js:702
+#: public/js/report/controller.js:692
 msgid "Results area"
 msgstr "Zone de résultats"
 
-#: public/partials/layer/objectProperties.html:151
+#: public/partials/layer/objectProperties.html:142
 msgid "Right"
 msgstr "Droite"
 
-#: public/partials/roles/roleModal.html:30
+#: public/partials/roles/role-edit-modal.component.html:22
 msgid "Role"
 msgstr "Rôle"
 
-#: public/partials/roles/roleModal.html:40
+#: public/js/roles/roles-list.controller.js:26
+msgid "Role created successfully"
+msgstr "Rôle créé avec succès"
+
+#: public/partials/roles/role-edit-modal.component.html:32
 msgid "Role name"
 msgstr "Nom du rôle"
+
+#: public/js/roles/roles-list.controller.js:33
+msgid "Role updated successfully"
+msgstr "Rôle mis à jour avec succès"
 
 #: public/js/home/controller.js:108 public/partials/roles/list.html:9
 #: public/partials/sidebar/sidebar.html:47
 msgid "Roles"
 msgstr "Rôles"
 
-#: public/partials/reports/criteria-input.html:124
+#: public/partials/reports/criteria-input.html:98
 msgid "Run"
 msgstr "Exécuter"
 
-#: public/partials/dashboardv2/edit.html:45
+#: public/partials/dashboards/edit.html:46
 msgid "Run time filters"
 msgstr "Filtres dynamiques"
 
@@ -1932,13 +1959,13 @@ msgstr "Propriétés du filtre"
 msgid "SQL query"
 msgstr "Requête SQL"
 
-#: public/partials/dashboardv2/edit.html:12
-#: public/partials/dashboardv2/edit.html:256
-#: public/partials/layer/elementModal.html:295
-#: public/partials/report/edit.html:14
+#: public/partials/dashboards/edit.html:13
+#: public/partials/dashboards/edit.html:254
+#: public/partials/layer/elementModal.html:209
+#: public/partials/report/edit.html:15
 #: public/partials/report/modals/reportNameModal.html:14
 #: public/partials/report/partials/report-edit.html:52
-#: public/partials/roles/roleModal.html:110
+#: public/partials/roles/role-edit-modal.component.html:93
 #: public/partials/spaces/shared.html:42
 #: public/partials/users/users-edit-modal.html:91
 msgid "Save"
@@ -1966,7 +1993,7 @@ msgid "Save layer"
 msgstr "Sauvegarder le calque"
 
 #: public/partials/reports/report-column-settings-modal.component.html:129
-#: public/partials/reports/report-settings-modal.component.html:51
+#: public/partials/reports/report-settings-modal.component.html:58
 msgid "Save settings"
 msgstr "Enregistrer les paramètres"
 
@@ -1974,20 +2001,16 @@ msgstr "Enregistrer les paramètres"
 msgid "Save shared space"
 msgstr "Enregistrer l'espace partagé"
 
-#: public/js/report/services/c3Charts.js:307
+#: public/js/report/services/c3Charts.js:310
 #: public/partials/reports/report-column-settings-modal.component.html:64
 msgid "Scatter"
 msgstr "Nuage de points"
 
-#: public/partials/files/galleryModal.html:56
-msgid "Search..."
-msgstr "Rechercher..."
-
-#: public/js/reports/filter-prompt.component.js:207
+#: public/js/reports/filter-prompt.component.js:205
 msgid "Second quarter"
 msgstr "Deuxième trimestre"
 
-#: public/js/reports/filter-prompt.component.js:211
+#: public/js/reports/filter-prompt.component.js:209
 msgid "Second semester"
 msgstr "Deuxième semestre"
 
@@ -2000,7 +2023,7 @@ msgstr ""
 "Voir <a ng-href=\"{{ url }}\" target=\"_blank\" rel=\"noreferrer\">la "
 "documentation</a> pour des examples"
 
-#: public/partials/roles/roleModal.html:82
+#: public/partials/roles/role-edit-modal.component.html:66
 msgid "See SQL"
 msgstr "Voir le SQL"
 
@@ -2031,7 +2054,11 @@ msgstr ""
 msgid "Select a datasource type..."
 msgstr "Sélectionnez un type de source de données..."
 
-#: public/js/report/controller.js:678
+#: public/partials/dashboards/dashboard-image-modal.component.html:3
+msgid "Select an image"
+msgstr "Sélectionnez une image"
+
+#: public/js/report/controller.js:668
 msgid ""
 "Select elements and drag and drop them over the query design zone, depending "
 "if the element is going to be used as a column result (columns area), as a "
@@ -2047,7 +2074,7 @@ msgstr ""
 msgid "Select file..."
 msgstr "Sélectionnez un fichier..."
 
-#: public/js/report/controller.js:686
+#: public/js/report/controller.js:676
 msgid "Select here the layer where your query will be based on."
 msgstr "Sélectionnez ici le calque sur lequel votre requête va s'appuyer."
 
@@ -2062,7 +2089,7 @@ msgstr ""
 msgid "Select the dashboard to push this report to"
 msgstr "Choisir un tableau de bord auquel ajouter ce rapport"
 
-#: public/js/reports/filter-prompt.component.js:160
+#: public/js/reports/filter-prompt.component.js:158
 msgid "Select to deactivate the runtime"
 msgstr "Sélectionnez pour désactiver le filtre à l'exécution"
 
@@ -2088,19 +2115,26 @@ msgstr "Saisissez ici le nom d'utilisateur pour accéder à la base de données"
 msgid "Settings for '{{ vm.column.elementLabel }}'"
 msgstr "Paramètres pour '{{ vm.column.elementLabel }}'"
 
+#: public/partials/core/pdf-export-settings-modal.component.html:3
+msgid "Settings for PDF export"
+msgstr "Paramètres de l'export PDF"
+
 #: public/js/home/controller.js:153
 msgid "Setup a data source"
 msgstr "Configurer une source de données"
 
 #: public/partials/core/share-modal.html:3
-#: public/partials/dashboards/dashboards-list-item.html:29
-#: public/partials/reports/reports-list-item.html:32
-#: public/partials/roles/roleModal.html:96
+#: public/partials/dashboards/dashboards-list-buttons.html:3
+#: public/partials/reports/reports-list-buttons.html:3
 msgid "Share"
 msgstr "Partager"
 
-#: public/partials/dashboards/dashboards-list-item.html:31
-#: public/partials/reports/reports-list-item.html:34
+#: public/partials/roles/role-edit-modal.component.html:80
+msgid "Share reports"
+msgstr "Partager les rapports"
+
+#: public/partials/dashboards/dashboards-list-buttons.html:5
+#: public/partials/reports/reports-list-buttons.html:5
 msgid "Share to..."
 msgstr "Partager à..."
 
@@ -2114,7 +2148,7 @@ msgstr "Espace partagé"
 msgid "Shared space"
 msgstr "Espace partagé"
 
-#: public/partials/roles/roleModal.html:92
+#: public/partials/roles/role-edit-modal.component.html:76
 msgid "Shared space permissions"
 msgstr "Permissions de l'espace partagé"
 
@@ -2134,25 +2168,17 @@ msgstr "Tableaux de bords à une seule requête"
 msgid "Single query reports"
 msgstr "Rapports avec une seule requête"
 
-#: public/js/dashboards/dashboards-list.controller.js:71
+#: public/js/dashboards/dashboards-list.controller.js:79
 #: public/js/data-sources/data-sources-list.controller.js:30
 #: public/js/home/controller.js:14
-#: public/js/layers/layers-list.controller.js:72
-#: public/js/report/controller.js:666
-#: public/js/reports/reports-list.controller.js:79
+#: public/js/layers/layers-list.controller.js:100
+#: public/js/report/controller.js:656
+#: public/js/reports/reports-list.controller.js:32
 #: public/js/spaces/controller.js:13
 msgid "Skip"
 msgstr "Passer"
 
-#: public/js/dashboardv2/controller.js:245
-msgid "Sorry, that filter is already on the dash"
-msgstr "Désolé, ce filtre est déjà sur le tableau de bord"
-
-#: public/js/dashboardv2/controller.js:238
-msgid "Sorry, that report is already on the dash"
-msgstr "Désolé, ce rapport est déjà sur le tableau de bord"
-
-#: public/partials/layer/objectProperties.html:132
+#: public/partials/layer/objectProperties.html:123
 msgid "Source"
 msgstr "Source"
 
@@ -2160,7 +2186,7 @@ msgstr "Source"
 msgid "Sources"
 msgstr "Sources"
 
-#: public/js/report/services/c3Charts.js:282
+#: public/js/report/services/c3Charts.js:285
 #: public/partials/reports/report-column-settings-modal.component.html:29
 msgid "Spline"
 msgstr "Courbe"
@@ -2177,11 +2203,16 @@ msgstr "Visite guidée"
 msgid "Start import"
 msgstr "Démarrer l'import"
 
-#: public/js/layers/layers-list.controller.js:61
 #: public/partials/io/import.html:119 public/partials/io/import.html:51
-#: public/partials/io/import.html:85
+#: public/partials/io/import.html:85 public/partials/layers/list.html:28
 msgid "Status"
 msgstr "Statut"
+
+#: public/js/layers/layers-list.controller.js:90
+#: public/js/users/users-list.controller.js:34
+#: public/js/users/users-view.controller.js:67
+msgid "Status updated"
+msgstr "Statut mis à jour"
 
 #: public/partials/io/import.html:12
 msgid "Step 1 - Choose file to import"
@@ -2211,7 +2242,7 @@ msgstr "Somme"
 msgid "Take our guided tour to familiarize yourself..."
 msgstr "Suivez notre visite guidée pour vous familiariser..."
 
-#: public/partials/layer/objectProperties.html:138
+#: public/partials/layer/objectProperties.html:129
 msgid "Target"
 msgstr "Cible"
 
@@ -2223,11 +2254,11 @@ msgstr "Tester la connection"
 msgid "Thanks for using Urungi"
 msgstr "Merci d'utiliser Urungi"
 
-#: public/partials/dashboardv2/edit.html:251
+#: public/partials/dashboards/edit.html:249
 msgid "The dashboard name is required"
 msgstr "Le nom de tableau de bord est nécéssaire"
 
-#: public/js/report/controller.js:744
+#: public/js/report/controller.js:734
 msgid ""
 "The elements you drop in here do not necessarily have to be in the columns/"
 "results area, a query can be filtered by elements that do not appear in the "
@@ -2237,7 +2268,7 @@ msgstr ""
 "zone des colonnes, une requête peut être filtrée par des éléments qui "
 "n'apparaissent pas dans les résultats"
 
-#: public/js/report/controller.js:734
+#: public/js/report/controller.js:724
 msgid ""
 "The elements you drop in here do not necessarily have to be in the columns/"
 "results area, a query can be ordered by elements that do not appear in the "
@@ -2246,6 +2277,13 @@ msgstr ""
 "Les éléments que vous déposez ici n'ont pas nécessairement à être dans la "
 "zone des colonnes, une requête peut être triée par des éléments qui "
 "n'apparaissent pas dans les résultats"
+
+#: public/js/dashboards/dashboards-view.controller.js:136
+#: public/js/dashboards/dashboards-view.controller.js:145
+#: public/js/reports/reports-view.controller.js:89
+#: public/js/reports/reports-view.controller.js:98
+msgid "The export failed. Please contact the system administrator."
+msgstr "L'export a échoué. Veuillez contacter l'administrateur système."
 
 #: public/partials/layer/sqlModal.html:62
 msgid "The following columns will be added :"
@@ -2259,11 +2297,11 @@ msgstr "Les colonnes suivantes seront conservées :"
 msgid "The following columns will be removed :"
 msgstr "Les colonnes suivantes seront supprimées :"
 
-#: public/js/report/controller.js:674
+#: public/js/report/controller.js:664
 msgid "The layer catalog"
 msgstr "Le catalogue de calques"
 
-#: public/js/report/controller.js:684
+#: public/js/report/controller.js:674
 msgid "The layer selector"
 msgstr "Le sélecteur de calques"
 
@@ -2284,7 +2322,7 @@ msgstr "Le nom de la source de donnée et le type de connexion."
 msgid "The name is required"
 msgstr "Le nom est requis"
 
-#: public/js/layers/layers-list.controller.js:138
+#: public/js/layers/layers-list.controller.js:166
 msgid ""
 "The public space is the place where your users can publish reports to be "
 "shared across the company, in this place you will define the folder "
@@ -2298,7 +2336,7 @@ msgstr ""
 msgid "The report name is required"
 msgstr "Le nom de rapport est nécéssaire"
 
-#: public/js/users/users-view.controller.js:118
+#: public/js/users/users-view.controller.js:117
 msgid ""
 "The role 'Urungi Administrator' can't be removed from the user administrator"
 msgstr ""
@@ -2318,7 +2356,7 @@ msgstr ""
 "rapports afin qu'ils soient accessibles à d'autres utilisateurs ou à toute "
 "la société."
 
-#: public/js/layers/layers-list.controller.js:115
+#: public/js/layers/layers-list.controller.js:143
 msgid ""
 "The status of the layer defines if the layer is visible or not for your "
 "users when creating or editing a report or exploring data."
@@ -2326,11 +2364,16 @@ msgstr ""
 "Le statut du calque définit si le calque est visible ou non pour vos "
 "utilisateurs quand ils créent ou éditent un rapport ou explorent des données."
 
+#: public/partials/dashboards/edit.html:66
+#: public/partials/reports/report-settings-modal.component.html:9
+msgid "Theme"
+msgstr "Thème"
+
 #: public/partials/layer/sqlModal.html:27
 msgid "There is an error in your sql syntax."
 msgstr "Il y a une erreur dans la syntaxe SQL."
 
-#: public/js/reports/filter-prompt.component.js:208
+#: public/js/reports/filter-prompt.component.js:206
 msgid "Third quarter"
 msgstr "Troisième trimestre"
 
@@ -2346,7 +2389,15 @@ msgstr ""
 msgid "This area represents a folder in the shared space"
 msgstr "Cette zone représente un dossier dans l'espace partagé"
 
-#: public/partials/dashboardv2/edit.html:209
+#: public/partials/widgets/inspector.html:28
+msgid "This block and its sub-blocks"
+msgstr "Ce bloc et ses sous-blocs"
+
+#: public/partials/widgets/inspector.html:27
+msgid "This block only"
+msgstr "Ce bloc seulement"
+
+#: public/partials/dashboards/edit.html:216
 msgid "This divider defines a page-break for printing"
 msgstr "Ce séparateur définit un saut de page pour l'impression"
 
@@ -2372,13 +2423,21 @@ msgid ""
 msgstr ""
 "C'est la zone où vous pouvez définir la structure pour l'espace partagé."
 
-#: public/js/dashboards/dashboards-list.controller.js:132
+#: public/js/dashboards/dashboards-list.controller.js:140
 msgid "This label indicates that this dashboard is public."
 msgstr "Cette étiquette indique que le tableau de bord est publique."
 
-#: public/js/reports/reports-list.controller.js:153
+#: public/js/reports/reports-list.controller.js:106
 msgid "This label indicates that this report is public."
 msgstr "Cette étiquette indique que le rapport est publique."
+
+#: public/partials/dashboards/edit.html:72
+msgid ""
+"This limits the number of rows fetched in order to get a preview quickly. "
+"Set to 0 to disable."
+msgstr ""
+"Ceci limite le nombre de lignes récupérées dans le but d'obtenir une "
+"prévisualisation rapidement. Mettre à 0 pour désactiver."
 
 #: public/js/home/controller.js:100 public/js/home/controller.js:110
 #: public/js/home/controller.js:120 public/js/home/controller.js:132
@@ -2386,11 +2445,11 @@ msgstr "Cette étiquette indique que le rapport est publique."
 msgid "This link is only available for urungi administrators."
 msgstr "Ce lien est disponible uniquement pour les administrateurs d'Urungi."
 
-#: public/js/reports/filter-prompt.component.js:204
+#: public/js/reports/filter-prompt.component.js:202
 msgid "This month"
 msgstr "Ce mois"
 
-#: public/js/reports/filter-prompt.component.js:203
+#: public/js/reports/filter-prompt.component.js:201
 msgid "This week"
 msgstr "Cette semaine"
 
@@ -2398,7 +2457,7 @@ msgstr "Cette semaine"
 msgid "This will remove all child nodes as well."
 msgstr "Cela va également supprimer tous les nœuds enfants."
 
-#: public/js/reports/filter-prompt.component.js:205
+#: public/js/reports/filter-prompt.component.js:203
 msgid "This year"
 msgstr "Cette année"
 
@@ -2414,16 +2473,16 @@ msgstr "En minuscules"
 msgid "To Upper"
 msgstr "En majuscules"
 
-#: public/js/reports/filter-prompt.component.js:202
+#: public/js/reports/filter-prompt.component.js:200
 msgid "Today"
 msgstr "Aujourd'hui"
 
-#: public/js/reports/pivot.service.js:99
+#: public/js/reports/pivot.service.js:94
 msgid "Totals"
 msgstr "Totaux"
 
 #: public/partials/layer/elementModal.html:50
-#: public/partials/layer/objectProperties.html:89
+#: public/partials/layer/objectProperties.html:87
 msgid "Type"
 msgstr "Type"
 
@@ -2434,10 +2493,6 @@ msgstr "Entrez un nom pour ce jeu de données"
 #: public/partials/spaces/shared.html:13
 msgid "Type here the new name of the folder"
 msgstr "Entrez le nouveau nom du dossier"
-
-#: public/js/files/service.js:40
-msgid "Unexpected server error"
-msgstr "Erreur serveur inattendue"
 
 #: public/partials/users/users-edit-modal.html:77
 msgid "Unit"
@@ -2451,11 +2506,11 @@ msgstr "Dé-publier"
 msgid "Up"
 msgstr "Haut"
 
-#: public/partials/widgets/inspector.html:86
+#: public/partials/widgets/inspector.html:98
 msgid "Upload image"
 msgstr "Téléverser une image"
 
-#: public/js/users/users-view.controller.js:111
+#: public/js/users/users-view.controller.js:110
 msgid "Urungi Administrator"
 msgstr "Administrateur Urungi"
 
@@ -2500,7 +2555,7 @@ msgstr ""
 msgid "Urungi version: {{ vm.version }}"
 msgstr "Version d'Urungi: {{ vm.version }}"
 
-#: public/js/report/controller.js:712
+#: public/js/report/controller.js:702
 msgid "Use this button to refresh the results"
 msgstr "Utilisez ce bouton pour actualiser les résultats"
 
@@ -2528,7 +2583,7 @@ msgstr "Surnom de l'utilisateur"
 msgid "User Nick is required"
 msgstr "Le surnom est nécéssaire"
 
-#: public/partials/data-sources/edit.html:51 views/login.ejs:42
+#: public/partials/data-sources/edit.html:51 views/login.ejs:44
 msgid "User name"
 msgstr "Nom d'utilisateur"
 
@@ -2564,10 +2619,6 @@ msgstr ""
 msgid "View SQL"
 msgstr "Voir le SQL"
 
-#: public/partials/layer/elementModal.html:242
-msgid "Visible"
-msgstr "Visible"
-
 #: public/partials/home/about.html:30
 msgid "What does Urungi mean ?"
 msgstr "Que signifie Urungi ?"
@@ -2576,42 +2627,33 @@ msgstr "Que signifie Urungi ?"
 msgid "What is Urungi"
 msgstr "Qu'est ce qu'Urungi"
 
-#: public/partials/layer/elementModal.html:214
-msgid "Year"
-msgstr "Année"
-
 #: public/partials/reports/report-column-settings-modal.component.html:119
 #: public/partials/reports/report-column-settings-modal.component.html:75
 msgid "Yes"
 msgstr "Oui"
 
-#: public/js/reports/filter-prompt.component.js:212
+#: public/js/reports/filter-prompt.component.js:210
 msgid "Yesterday"
 msgstr "Hier"
 
-#: public/js/dashboardv2/controller.js:324
-msgid "You are not allowed to put this object inside a component"
-msgstr ""
-"Vous n'êtes pas autorisé à déposer cet objet à l'intérieur de composant"
-
-#: public/js/layers/layers-list.controller.js:107
+#: public/js/layers/layers-list.controller.js:135
 msgid "You can also activate or deactivate layers."
 msgstr "Vous pouvez aussi activer ou désactiver des calques."
 
-#: public/js/reports/reports-list.controller.js:97
+#: public/js/reports/reports-list.controller.js:50
 msgid "You can also add runtime filters to split your data in real time."
 msgstr ""
 "Vous pouvez aussi ajouter des filtres dynamiques pour filtrer vos données en "
 "temps réel."
 
-#: public/js/dashboards/dashboards-list.controller.js:104
+#: public/js/dashboards/dashboards-list.controller.js:112
 msgid ""
 "You can also modify or drop the dashboard, clicking into the modify or "
 "delete buttons."
 msgstr ""
 "Vous pouvez aussi modifier le tableau de bord en cliquant sur ces boutons."
 
-#: public/js/reports/reports-list.controller.js:117
+#: public/js/reports/reports-list.controller.js:70
 msgid ""
 "You can also modify or drop the report, clicking into the modify or delete "
 "buttons."
@@ -2619,13 +2661,13 @@ msgstr ""
 "Vous pouvez aussi modifier ou supprimer le rapport en cliquant sur les "
 "boutons modifier ou supprimer."
 
-#: public/js/layers/layers-list.controller.js:117
+#: public/js/layers/layers-list.controller.js:145
 msgid "You can change the status of the layer simply clicking over this label"
 msgstr ""
 "Vous pouvez changer le statut du calque simplement en cliquant sur cette "
 "étiquette"
 
-#: public/js/layers/layers-list.controller.js:87
+#: public/js/layers/layers-list.controller.js:115
 msgid ""
 "You can create several layers depending on your necessities, but you have to "
 "define one at least."
@@ -2649,7 +2691,7 @@ msgstr ""
 "Vous pouvez éditer les détails de la connexion pour chaque source de "
 "données, supprimer une source de données ou en activer/désactiver une."
 
-#: public/js/layers/layers-list.controller.js:105
+#: public/js/layers/layers-list.controller.js:133
 msgid ""
 "You can edit the layer to configure the tables, elements and joins between "
 "tables."
@@ -2730,7 +2772,7 @@ msgstr ""
 "Vous devez configurer une position valide \"TO\" pour extraire l'année de la "
 "chaîne"
 
-#: public/js/files/fileModal.js:69
+#: public/js/dashboards/dashboard-image-modal.component.js:64
 msgid "You may only upload images"
 msgstr "Vous pouvez téléverser uniquement des images"
 
@@ -2755,16 +2797,16 @@ msgstr ""
 "données qui seront utilisées dans les rapports qui seront créés par les "
 "utilisateurs"
 
-#: public/partials/layers/layers-list-item.html:13
-#: public/partials/users/list.html:16 public/partials/users/view.html:20
+#: public/partials/layers/list.html:55 public/partials/users/list.html:16
+#: public/partials/users/view.html:20
 msgid "active"
 msgstr "actif"
 
-#: public/partials/widgets/inspector.html:109
+#: public/partials/widgets/inspector.html:121
 msgid "alignment"
 msgstr "alignement"
 
-#: public/partials/widgets/inspector.html:105
+#: public/partials/widgets/inspector.html:117
 msgid "all"
 msgstr "tout"
 
@@ -2780,43 +2822,47 @@ msgstr ""
 msgid "and"
 msgstr "et"
 
-#: public/partials/widgets/inspector.html:22
+#: public/partials/widgets/inspector.html:34
 msgid "attributes"
 msgstr "attributs"
 
-#: public/partials/widgets/inspector.html:70
+#: public/partials/widgets/inspector.html:82
 msgid "backgroundColor"
 msgstr "couleur d'arrière-plan"
 
-#: public/partials/widgets/inspector.html:82
+#: public/partials/widgets/inspector.html:94
 msgid "backgroundImage"
 msgstr "image d'arrière-plan"
 
-#: public/partials/widgets/inspector.html:208
+#: public/partials/widgets/inspector.html:220
 msgid "border"
 msgstr "bordure"
 
-#: public/partials/widgets/inspector.html:212
+#: public/partials/widgets/inspector.html:224
 msgid "borderColor"
 msgstr "couleur de la bordure"
 
-#: public/partials/widgets/inspector.html:232
+#: public/partials/widgets/inspector.html:244
 msgid "borderRoundness"
 msgstr "rondeur de la bordure"
 
-#: public/partials/reports/report-settings-modal.component.html:34
+#: public/partials/reports/report-settings-modal.component.html:41
 msgid "bottom"
 msgstr "bas"
 
-#: public/partials/widgets/inspector.html:140
+#: public/partials/widgets/inspector.html:152
 msgid "color"
 msgstr "couleur"
 
-#: public/js/reports/filter-prompt.component.js:184
+#: public/js/reports/filter-prompt.component.js:182
 msgid "contains"
 msgstr "contient"
 
-#: public/partials/widgets/inspector.html:217
+#: public/partials/core/pdf-export-settings-modal.component.html:42
+msgid "current page number"
+msgstr "numéro de la page courante"
+
+#: public/partials/widgets/inspector.html:229
 msgid "dashed"
 msgstr "en tiret"
 
@@ -2824,23 +2870,31 @@ msgstr "en tiret"
 msgid "database:"
 msgstr "base de données:"
 
-#: public/js/reports/filter-prompt.component.js:185
+#: public/partials/core/pdf-export-settings-modal.component.html:41
+msgid "document location"
+msgstr "emplacement du document"
+
+#: public/partials/core/pdf-export-settings-modal.component.html:40
+msgid "document title"
+msgstr "titre du document"
+
+#: public/js/reports/filter-prompt.component.js:183
 msgid "does not contain"
 msgstr "ne contient pas"
 
-#: public/js/reports/filter-prompt.component.js:189
+#: public/js/reports/filter-prompt.component.js:187
 msgid "does not end with"
 msgstr "ne termine pas par"
 
-#: public/js/reports/filter-prompt.component.js:187
+#: public/js/reports/filter-prompt.component.js:185
 msgid "does not start with"
 msgstr "ne commence pas par"
 
-#: public/partials/widgets/inspector.html:218
+#: public/partials/widgets/inspector.html:230
 msgid "dotted"
 msgstr "pointillé"
 
-#: public/partials/widgets/inspector.html:219
+#: public/partials/widgets/inspector.html:231
 msgid "double"
 msgstr "double"
 
@@ -2860,7 +2914,7 @@ msgstr "email"
 msgid "email is required"
 msgstr "l'email est obligatoire"
 
-#: public/js/reports/filter-prompt.component.js:188
+#: public/js/reports/filter-prompt.component.js:186
 msgid "ends with"
 msgstr "termine par"
 
@@ -2873,7 +2927,6 @@ msgid "enter new value"
 msgstr "saisissez une nouvelle valeur"
 
 #: public/partials/files/gallery.html:17
-#: public/partials/files/galleryModal.html:75
 msgid "error"
 msgstr "erreur"
 
@@ -2882,27 +2935,31 @@ msgid "first version of widestage"
 msgstr "première version de widestage"
 
 #: public/partials/layer/elementModal.html:140
-#: public/partials/layer/objectProperties.html:113
+#: public/partials/layer/objectProperties.html:111
 msgid "format..."
 msgstr "format..."
 
-#: public/partials/widgets/inspector.html:116
+#: public/partials/core/pdf-export-settings-modal.component.html:39
+msgid "formatted print date"
+msgstr "date d'impression formatée"
+
+#: public/partials/widgets/inspector.html:128
 msgid "gradients"
 msgstr "gradients"
 
-#: public/partials/widgets/inspector.html:220
+#: public/partials/widgets/inspector.html:232
 msgid "groove"
 msgstr "rainure"
 
-#: public/partials/widgets/inspector.html:47
+#: public/partials/widgets/inspector.html:59
 msgid "heading"
 msgstr "en-tête"
 
-#: public/partials/widgets/inspector.html:37
+#: public/partials/widgets/inspector.html:49
 msgid "height"
 msgstr "hauteur"
 
-#: public/partials/widgets/inspector.html:103
+#: public/partials/widgets/inspector.html:115
 msgid "horizontal"
 msgstr "horizontal"
 
@@ -2910,11 +2967,11 @@ msgstr "horizontal"
 msgid "host:"
 msgstr "hôte:"
 
-#: public/partials/widgets/inspector.html:97
+#: public/partials/widgets/inspector.html:109
 msgid "imageProperties"
 msgstr "imageProperties"
 
-#: public/partials/widgets/inspector.html:222
+#: public/partials/widgets/inspector.html:234
 msgid "inset"
 msgstr "encart"
 
@@ -2926,83 +2983,83 @@ msgstr "stage pendant l'été 2018"
 msgid "invalid report"
 msgstr "rapport invalide"
 
-#: public/js/reports/filter-prompt.component.js:182
+#: public/js/reports/filter-prompt.component.js:180
 msgid "is between"
 msgstr "est entre"
 
-#: public/js/reports/filter-prompt.component.js:176
+#: public/js/reports/filter-prompt.component.js:174
 msgid "is bigger or equal than"
 msgstr "est supérieur ou égal à"
 
-#: public/js/reports/filter-prompt.component.js:177
+#: public/js/reports/filter-prompt.component.js:175
 msgid "is bigger or equal than (pattern)"
 msgstr "est supérieur ou égal à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:174
+#: public/js/reports/filter-prompt.component.js:172
 msgid "is bigger than"
 msgstr "est supérieur à"
 
-#: public/js/reports/filter-prompt.component.js:175
+#: public/js/reports/filter-prompt.component.js:173
 msgid "is bigger than (pattern)"
 msgstr "est supérieur à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:170
+#: public/js/reports/filter-prompt.component.js:168
 msgid "is different than"
 msgstr "est différent de"
 
-#: public/js/reports/filter-prompt.component.js:171
+#: public/js/reports/filter-prompt.component.js:169
 msgid "is different than (pattern)"
 msgstr "est différent de (motif)"
 
-#: public/js/reports/filter-prompt.component.js:168
+#: public/js/reports/filter-prompt.component.js:166
 msgid "is equal to"
 msgstr "est égal à"
 
-#: public/js/reports/filter-prompt.component.js:169
+#: public/js/reports/filter-prompt.component.js:167
 msgid "is equal to (pattern)"
 msgstr "est égal à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:172
+#: public/js/reports/filter-prompt.component.js:170
 msgid "is in"
 msgstr "est dans"
 
-#: public/js/reports/filter-prompt.component.js:180
+#: public/js/reports/filter-prompt.component.js:178
 msgid "is less or equal than"
 msgstr "est inférieur ou égal à"
 
-#: public/js/reports/filter-prompt.component.js:181
+#: public/js/reports/filter-prompt.component.js:179
 msgid "is less or equal than (pattern)"
 msgstr "est inférieur ou égal à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:178
+#: public/js/reports/filter-prompt.component.js:176
 msgid "is less than"
 msgstr "est inférieur à"
 
-#: public/js/reports/filter-prompt.component.js:179
+#: public/js/reports/filter-prompt.component.js:177
 msgid "is less than (pattern)"
 msgstr "est inférieur à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:190
+#: public/js/reports/filter-prompt.component.js:188
 msgid "is like"
 msgstr "est semblable à"
 
-#: public/js/reports/filter-prompt.component.js:183
+#: public/js/reports/filter-prompt.component.js:181
 msgid "is not between"
 msgstr "n'est pas entre"
 
-#: public/js/reports/filter-prompt.component.js:173
+#: public/js/reports/filter-prompt.component.js:171
 msgid "is not in"
 msgstr "n'est pas dans"
 
-#: public/js/reports/filter-prompt.component.js:191
+#: public/js/reports/filter-prompt.component.js:189
 msgid "is not like"
 msgstr "n'est pas semblable à"
 
-#: public/js/reports/filter-prompt.component.js:193
+#: public/js/reports/filter-prompt.component.js:191
 msgid "is not null"
 msgstr "n'est pas NULL"
 
-#: public/js/reports/filter-prompt.component.js:192
+#: public/js/reports/filter-prompt.component.js:190
 msgid "is null"
 msgstr "est NULL"
 
@@ -3021,7 +3078,7 @@ msgstr "gauche"
 msgid "logout"
 msgstr "déconnexion"
 
-#: public/partials/widgets/inspector.html:192
+#: public/partials/widgets/inspector.html:204
 msgid "margin"
 msgstr "marge"
 
@@ -3030,7 +3087,7 @@ msgstr "marge"
 msgid "more examples..."
 msgstr "plus d'exemples..."
 
-#: public/js/layer/controller.js:1028 public/js/spaces/controller.js:117
+#: public/js/layer/controller.js:1022 public/js/spaces/controller.js:117
 msgid "my folder"
 msgstr "mon dossier"
 
@@ -3038,36 +3095,28 @@ msgstr "mon dossier"
 msgid "no data to display"
 msgstr "aucune donnée à afficher"
 
-#: public/partials/reports/report-settings-modal.component.html:35
-#: public/partials/widgets/inspector.html:102
-#: public/partials/widgets/inspector.html:215
+#: public/partials/reports/report-settings-modal.component.html:42
+#: public/partials/widgets/inspector.html:114
+#: public/partials/widgets/inspector.html:227
 msgid "none"
 msgstr "aucun"
 
-#: public/partials/layers/layers-list-item.html:14
-#: public/partials/users/list.html:17 public/partials/users/view.html:21
+#: public/partials/layers/list.html:56 public/partials/users/list.html:17
+#: public/partials/users/view.html:21
 msgid "not active"
 msgstr "non actif"
 
-#: public/partials/widgets/inspector.html:223
+#: public/partials/widgets/inspector.html:235
 msgid "outset"
 msgstr "outset"
 
-#: public/partials/widgets/inspector.html:183
+#: public/partials/widgets/inspector.html:195
 msgid "padding"
 msgstr "marge interne"
 
 #: public/partials/data-sources/list.html:22
 msgid "port:"
 msgstr "port:"
-
-#: public/partials/layer/elementModal.html:208
-msgid "position from"
-msgstr "position à partir de"
-
-#: public/partials/layer/elementModal.html:209
-msgid "position to"
-msgstr "position vers"
 
 #: public/partials/home/about.html:25
 msgid "powerful for power-users"
@@ -3081,8 +3130,8 @@ msgstr "tableaux de bord privés"
 msgid "private reports"
 msgstr "rapports privés"
 
-#: public/partials/dashboards/dashboards-list-item.html:5
-#: public/partials/reports/reports-list-item.html:5
+#: public/partials/dashboards/list.html:55
+#: public/partials/reports/reports-table.component.html:48
 msgid "public"
 msgstr "public"
 
@@ -3090,25 +3139,24 @@ msgstr "public"
 msgid "push"
 msgstr "envoyer"
 
-#: public/partials/widgets/inspector.html:100
+#: public/partials/widgets/inspector.html:112
 msgid "repeat"
 msgstr "répéter"
 
-#: public/js/report/controller.js:520
+#: public/js/report/controller.js:517
 msgid "report type does not exist"
 msgstr "le type du rapport n'existe pas"
 
-#: public/partials/dashboardv2/edit.html:66
 #: public/partials/report/partials/report-edit.html:31
 msgid "results."
 msgstr "résultats."
 
-#: public/partials/widgets/inspector.html:221
+#: public/partials/widgets/inspector.html:233
 msgid "ridge"
 msgstr "arête"
 
 #: public/js/layer/controller.js:579
-#: public/partials/reports/report-settings-modal.component.html:33
+#: public/partials/reports/report-settings-modal.component.html:40
 msgid "right"
 msgstr "droite"
 
@@ -3126,8 +3174,8 @@ msgstr "sélectionner"
 msgid "selected"
 msgstr "sélectionné"
 
-#: public/partials/dashboards/dashboards-list-item.html:6
-#: public/partials/reports/reports-list-item.html:6
+#: public/partials/dashboards/list.html:56
+#: public/partials/reports/reports-table.component.html:49
 #: public/partials/users/view.html:108 public/partials/users/view.html:91
 msgid "shared"
 msgstr "partagé"
@@ -3140,44 +3188,47 @@ msgstr "tableaux de bord partagés"
 msgid "shared reports"
 msgstr "rapports partagés"
 
-#: public/partials/widgets/inspector.html:216
+#: public/partials/widgets/inspector.html:228
 msgid "solid"
 msgstr "solide"
 
-#: public/partials/widgets/inspector.html:42
+#: public/partials/widgets/inspector.html:54
 msgid "source"
 msgstr "source"
 
-#: public/js/reports/filter-prompt.component.js:186
+#: public/js/reports/filter-prompt.component.js:184
 msgid "starts with"
 msgstr "commence par"
 
 #: public/partials/files/gallery.html:18
-#: public/partials/files/galleryModal.html:76
 msgid "success"
 msgstr "succès"
 
-#: public/partials/widgets/inspector.html:129
+#: public/partials/widgets/inspector.html:141
 msgid "textStyle"
 msgstr "style du texte"
 
-#: public/partials/widgets/inspector.html:90
+#: public/partials/widgets/inspector.html:102
 msgid "textures"
 msgstr "textures"
 
-#: public/partials/reports/report-settings-modal.component.html:32
+#: public/partials/reports/report-settings-modal.component.html:39
 msgid "top"
 msgstr "haut"
+
+#: public/partials/core/pdf-export-settings-modal.component.html:43
+msgid "total pages in the document"
+msgstr "nombre total de pages dans le document"
 
 #: public/partials/layer/sqlModal.html:16
 msgid "type a name for the dataset"
 msgstr "entrez un nom pour ce jeu de données"
 
-#: public/partials/widgets/inspector.html:59
+#: public/partials/widgets/inspector.html:71
 msgid "uploadImage"
 msgstr "image uploadée"
 
-#: public/partials/widgets/inspector.html:104
+#: public/partials/widgets/inspector.html:116
 msgid "vertical"
 msgstr "vertical"
 
