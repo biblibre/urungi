@@ -9,6 +9,6 @@ services:
         environment:
             - MONGODB_URI=mongodb://mongo:27017/urungi_development
     mongo:
-        image: mongo:3.4-xenial
+        image: mongo:3.6-xenial
         ports:
             - 27017:27017

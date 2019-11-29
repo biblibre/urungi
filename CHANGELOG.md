@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `pikitia.client_id`, `pikitia.client_secret` and `url` (see [Configuration
   section in README.md](README.md#configuration))
 
+- **BREAKING** Node.js 8 and MongoDB 3.4 are no longer supported. Upgrade to
+  Node.js 10 and MongoDB 3.6
+
 ### Added
 
 - Added ability to change a column's label in report
