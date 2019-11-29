@@ -4,7 +4,7 @@ global.config = config;
 const hash = require('../server/util/hash');
 
 const connection = require('../server/config/mongoose')();
-const Users = connection.model('Users');
+const User = connection.model('User');
 
 if (process.argv.length !== 4) {
     console.error('Usage: node set-password.js USERNAME PASSWORD');
@@ -13,7 +13,7 @@ if (process.argv.length !== 4) {
 
 (async function () {
     const username = process.argv[2];
-    const user = await Users.findOne({ userName: username });
+    const user = await User.findOne({ userName: username });
     if (!user) {
         console.error('User ' + username + ' does not exist');
         process.exit(1);
