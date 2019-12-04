@@ -75,7 +75,6 @@ app.use('/api', api);
 const routesModules = [
     './custom/dashboards/routes',
     './custom/data-sources/routes',
-    './custom/files/routes',
     './custom/layers/routes',
     './custom/reports/routes',
 ];

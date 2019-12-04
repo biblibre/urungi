@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
+router.use('/files', require('./api/files'));
 router.use('/roles', require('./api/roles'));
 router.use('/shared-space', require('./api/shared-space'));
 router.use('/statistics', require('./api/statistics'));

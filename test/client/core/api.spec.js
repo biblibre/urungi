@@ -892,6 +892,30 @@ describe('api', () => {
         });
     });
 
+    describe('api.getFiles', function () {
+        it('should call GET /api/files', function () {
+            $httpBackend.expect('GET', '/api/files').respond({ files: [] });
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getFiles()).resolves.toEqual([]);
+        });
+    });
+
+    describe('api.uploadFile', function () {
+        it('should call POST /api/files', function () {
+            const file = new File(['foo'], 'foo.png', { type: 'image/png' });
+            const formData = new FormData();
+            formData.set('content', file);
+
+            $httpBackend.expect('POST', '/api/files').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.uploadFile(file)).resolves.toEqual({});
+        });
+    });
+
     describe('api.getThemes', function () {
         it('should call GET /api/themes', function () {
             $httpBackend.expect('GET', '/api/themes').respond({});
