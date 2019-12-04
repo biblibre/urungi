@@ -8,6 +8,7 @@
     function UsersViewController ($routeParams, $uibModal, Noty, api, connection, userService, gettextCatalog) {
         const vm = this;
 
+        vm.addRole = addRole;
         vm.selectedRole = '';
         vm.selectedRoleChanged = false;
         vm.user = {};
@@ -22,7 +23,6 @@
         vm.deleteRole = deleteRole;
         vm.getRoleName = getRoleName;
         vm.getRolesNotInUser = getRolesNotInUser;
-        vm.save = save;
 
         activate();
 
@@ -34,25 +34,30 @@
 
             loadRoles();
 
-            connection.get('/api/admin/users/find-one', { id: $routeParams.userID }).then(function (data) {
-                vm.user = data.item;
+            api.getUser($routeParams.userID).then(function (user) {
+                vm.user = user;
             });
 
-            connection.get('/api/get-user-counts/' + $routeParams.userID, { userID: $routeParams.userID }).then(function (data) {
+            api.getUserCounts($routeParams.userID).then(function (data) {
                 vm.userCounts = data;
             });
 
-            connection.get('/api/get-user-reports/' + $routeParams.userID, { userID: $routeParams.userID }).then(function (data) {
+            api.getUserReports($routeParams.userID).then(data => {
                 vm.userReports = data.items;
             });
 
-            connection.get('/api/get-user-dashboards/' + $routeParams.userID, { userID: $routeParams.userID }).then(function (data) {
+            api.getUserDashboards($routeParams.userID).then(data => {
                 vm.userDashboards = data.items;
             });
         };
 
-        function save () {
-            return connection.post('/api/admin/users/update/' + vm.user._id, vm.user);
+        function addRole (roleId) {
+            vm.selectedRole = '';
+            vm.selectedRoleChanged = false;
+
+            return api.addUserRole(vm.user._id, roleId).then(() => {
+                vm.user.roles.push(roleId);
+            });
         }
 
         function changeUserStatus (user) {
@@ -62,7 +67,7 @@
                     if (user.status === 'active') { newStatus = 'Not active'; }
                     if (user.status === 'Not active') { newStatus = 'active'; }
 
-                    api.changeUserStatus(user._id, newStatus).then(function (result) {
+                    api.updateUser(user._id, { status: newStatus }).then(function (result) {
                         user.status = newStatus;
                         new Noty({ text: gettextCatalog.getString('Status updated'), type: 'success' }).show();
                     });
@@ -104,7 +109,7 @@
         };
 
         function loadRoles () {
-            connection.get('/api/roles/find-all', {}).then(function (data) {
+            api.getRoles({ fields: 'name' }).then(function (data) {
                 vm.roles = data.items;
 
                 var adminRole = { _id: 'ADMIN', name: gettextCatalog.getString('Urungi Administrator') };
@@ -121,8 +126,9 @@
                     resolve: {
                         title: () => gettextCatalog.getString('Remove role {{name}} ?', { name: vm.getRoleName(roleID) }),
                         delete: () => function () {
-                            vm.user.roles.splice(vm.user.roles.indexOf(roleID), 1);
-                            return vm.save();
+                            return api.deleteUserRole(vm.user._id, roleID).then(() => {
+                                vm.user.roles = vm.user.roles.filter(r => r !== roleID);
+                            });
                         },
                     },
                 });

@@ -18,4 +18,31 @@ const roleSchema = new mongoose.Schema({
     createdOn: { type: Date }
 });
 
+roleSchema.methods.canShareReportsInFolder = function (folderId) {
+    const grant = this.grants.find(grant => grant.folderID === folderId);
+    if (grant) {
+        return grant.shareReports;
+    }
+
+    return false;
+};
+
+roleSchema.methods.canExecuteReportsInFolder = function (folderId) {
+    const grant = this.grants.find(grant => grant.folderID === folderId);
+    if (grant) {
+        return grant.executeReports;
+    }
+
+    return false;
+};
+
+roleSchema.methods.canExecuteDashboardsInFolder = function (folderId) {
+    const grant = this.grants.find(grant => grant.folderID === folderId);
+    if (grant) {
+        return grant.executeDashboards;
+    }
+
+    return false;
+};
+
 module.exports = mongoose.model('Role', roleSchema);

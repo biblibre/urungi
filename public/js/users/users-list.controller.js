@@ -3,9 +3,9 @@
 
     angular.module('app.users').controller('UsersListController', UsersListController);
 
-    UsersListController.$inject = ['$uibModal', 'Noty', 'gettextCatalog', 'api', 'connection', 'userService'];
+    UsersListController.$inject = ['$uibModal', 'Noty', 'gettextCatalog', 'api', 'userService'];
 
-    function UsersListController ($uibModal, Noty, gettextCatalog, api, connection, userService) {
+    function UsersListController ($uibModal, Noty, gettextCatalog, api, userService) {
         const vm = this;
 
         vm.page = 1;
@@ -29,7 +29,7 @@
                     if (user.status === 'active') { newStatus = 'Not active'; }
                     if (user.status === 'Not active') { newStatus = 'active'; }
 
-                    api.changeUserStatus(user._id, newStatus).then(function (result) {
+                    api.updateUser(user._id, { status: newStatus }).then(function (result) {
                         user.status = newStatus;
                         new Noty({ text: gettextCatalog.getString('Status updated'), type: 'success' }).show();
                     });
@@ -40,10 +40,10 @@
         function getUsers (page) {
             var params = {
                 page: page || 1,
-                fields: ['userName', 'lastName', 'status']
+                fields: 'userName,lastName,status',
             };
 
-            connection.get('/api/admin/users/find-all', params).then(function (data) {
+            api.getUsers(params).then(function (data) {
                 vm.users = data.items;
                 vm.page = data.page;
                 vm.pages = data.pages;

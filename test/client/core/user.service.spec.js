@@ -23,7 +23,7 @@ describe('userService', function () {
 
     describe('getCurrentUser', function () {
         it('should return a valid user', async function () {
-            $httpBackend.expect('GET', '/api/get-user-data')
+            $httpBackend.expect('GET', '/api/user')
                 .respond(apiGetUserDataResponse());
 
             setTimeout($httpBackend.flush);
@@ -36,16 +36,9 @@ describe('userService', function () {
 
         function apiGetUserDataResponse () {
             return {
-                result: 1,
-                page: 1,
-                pages: 1,
-                items: {
-                    user: {
-                        userName: 'foo',
-                        status: 'active',
-                        roles: ['ADMIN'],
-                    },
-                },
+                userName: 'foo',
+                status: 'active',
+                roles: ['ADMIN'],
             };
         }
     });

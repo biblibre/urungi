@@ -34,8 +34,8 @@
                 vm.grantsMap[grant.folderID] = grant;
             }
 
-            userService.getCurrentUser().then(user => {
-                const sharedSpace = user.companyData.sharedSpace;
+            api.getSharedSpace().then(data => {
+                const sharedSpace = data.items;
                 addMissingGrants(sharedSpace);
                 vm.sharedSpace = sharedSpace;
             });

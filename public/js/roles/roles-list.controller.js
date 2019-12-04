@@ -37,7 +37,7 @@
 
         function getRoles (page) {
             const params = {
-                fields: ['name', 'description'],
+                fields: 'name,description',
                 page: page || 1,
             };
 

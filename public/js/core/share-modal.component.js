@@ -25,7 +25,7 @@
 
         function $onInit () {
             vm.item = vm.resolve.item;
-            vm.userObjects = vm.resolve.userObjects;
+            vm.userObjects = vm.resolve.userObjects.items;
             userService.getCurrentUser().then(user => {
                 vm.isAdmin = user.isAdmin();
             });

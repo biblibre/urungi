@@ -23,7 +23,7 @@ describe('RolesListController', function () {
 
     describe('activate', function () {
         it('should call /api/roles/find-all', function () {
-            $httpBackend.expect('GET', '/api/roles/find-all?fields=name&fields=description&page=1')
+            $httpBackend.expect('GET', '/api/roles?fields=name,description&page=1')
                 .respond(getRolesFindAllResponse());
 
             vm = $controller('RolesListController');
@@ -35,13 +35,13 @@ describe('RolesListController', function () {
 
     describe('goToPage', function () {
         it('should call /api/roles/find-all', function () {
-            $httpBackend.expect('GET', '/api/roles/find-all?fields=name&fields=description&page=1')
+            $httpBackend.expect('GET', '/api/roles?fields=name,description&page=1')
                 .respond(getRolesFindAllResponse());
 
             vm = $controller('RolesListController');
             $httpBackend.flush();
 
-            $httpBackend.expect('GET', '/api/roles/find-all?fields=name&fields=description&page=2')
+            $httpBackend.expect('GET', '/api/roles?fields=name,description&page=2')
                 .respond(getRolesFindAllResponse());
 
             vm.goToPage(2);
@@ -51,7 +51,6 @@ describe('RolesListController', function () {
 
     function getRolesFindAllResponse () {
         return {
-            result: 1,
             page: 1,
             pages: 1,
             items: [

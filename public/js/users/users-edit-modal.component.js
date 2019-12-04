@@ -12,9 +12,9 @@
         },
     });
 
-    UsersEditModalController.$inject = ['gettextCatalog', 'connection'];
+    UsersEditModalController.$inject = ['gettextCatalog', 'api'];
 
-    function UsersEditModalController (gettextCatalog, connection) {
+    function UsersEditModalController (gettextCatalog, api) {
         const vm = this;
 
         vm.mode = 'new';
@@ -54,11 +54,13 @@
                 }
             }
 
+            vm.user.password = vm.user.pwd1;
+
             let p;
             if (vm.mode === 'new') {
-                p = connection.post('/api/admin/users/create', vm.user);
+                p = api.createUser(vm.user);
             } else {
-                p = connection.post('/api/admin/users/update/' + vm.user._id, vm.user);
+                p = api.updateUser(vm.user._id, vm.user);
             }
 
             p.then(function () {

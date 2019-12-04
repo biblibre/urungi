@@ -16,32 +16,41 @@ afterAll(async () => {
 });
 
 describe('Users API', function () {
-    let Datasource;
-    let Layer;
-    let Report;
-    let Dashboard;
-    let User;
-    let Statistic;
+    let Report, Dashboard, User, Role;
 
-    let headers;
+    let adminHeaders, userHeaders;
 
     beforeAll(async () => {
-        Datasource = mongoose.model('Datasource');
-        Layer = mongoose.model('Layer');
         Report = mongoose.model('Report');
         Dashboard = mongoose.model('Dashboard');
         User = mongoose.model('User');
-        Statistic = mongoose.model('Statistic');
-        headers = await helpers.login(app);
+        Role = mongoose.model('Role');
+
+        adminHeaders = await helpers.login(app);
+
+        await User.create({ userName: 'user', password: 'password', companyID: 'COMPID' });
+        userHeaders = await helpers.login(app, 'user', 'password');
     });
 
-    describe('GET /api/admin/users/find-all', function () {
-        it('should find all users and their data', async function () {
-            const res = await request(app).get('/api/admin/users/find-all')
-                .set(headers)
-                .expect(200);
+    describe('GET /api/users', function () {
+        it('should return status 403 if not authenticated', async function () {
+            const res = await request(app).get('/api/users');
 
-            expect(res.body).toHaveProperty('result');
+            expect(res.status).toBe(403);
+        });
+
+        it('should return status 403 if not admin', async function () {
+            const res = await request(app).get('/api/users').set(userHeaders);
+
+            expect(res.status).toBe(403);
+        });
+
+        it('should find all users and their data', async function () {
+            const res = await request(app).get('/api/users')
+                .set(adminHeaders);
+
+            expect(res.status).toBe(200);
+
             expect(res.body).toHaveProperty('page');
             expect(res.body).toHaveProperty('pages');
             expect(res.body.items[0]).toHaveProperty('_id');
@@ -62,538 +71,427 @@ describe('Users API', function () {
             expect(res.body.items[0].roles).toContain('ADMIN');
         });
     });
-    describe('GET /api/admin/users/find-one', function () {
-        it('should not find the user because there is a missing parameter', async function () {
-            const res = await request(app).get('/api/admin/users/find-one')
-                .set(headers)
-                .expect(200);
 
-            expect(res.body).toHaveProperty('result', 0);
-            expect(res.body).toHaveProperty('msg');
+    describe('POST /api/users', function () {
+        it('should return status 403 if not authenticated', async function () {
+            const res = await request(app).post('/api/users');
+
+            expect(res.status).toBe(403);
         });
 
-        it('should find the user and their data', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
-            const res = await request(app).get('/api/admin/users/find-one')
-                .query({ id: user.id })
-                .set(headers)
-                .expect(200);
+        it('should return status 403 if not admin', async function () {
+            const res = await request(app).post('/api/users').set(userHeaders);
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('item');
-            expect(res.body.item).toHaveProperty('_id');
-            expect(res.body.item).toHaveProperty('userName');
-            expect(res.body.item).toHaveProperty('companyID');
-            expect(res.body.item).toHaveProperty('status');
-            expect(res.body.item).toHaveProperty('nd_trash_deleted');
-            expect(res.body.item).toHaveProperty('__v');
-            expect(res.body.item).toHaveProperty('last_login_date');
-            expect(res.body.item).toHaveProperty('last_login_ip');
-            expect(res.body.item).toHaveProperty('privateSpace');
-            expect(res.body.item).toHaveProperty('startDate');
-            expect(res.body.item).toHaveProperty('dialogs');
-            expect(res.body.item).toHaveProperty('contextHelp');
-            expect(res.body.item).toHaveProperty('filters');
-            expect(res.body.item).toHaveProperty('roles');
-            expect(res.body.item.roles).toContain('ADMIN');
+            expect(res.status).toBe(403);
         });
-    });
-    describe('POST /api/admin/users/create', function () {
-        it('should create an user and delete him', async function () {
-            const res = await request(app).post('/api/admin/users/create')
-                .set(headers)
+
+        it('should create a user', async function () {
+            const res = await request(app).post('/api/users')
+                .set(adminHeaders)
                 .send({ userName: 'test', pwd1: 'urungi' });
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('msg', 'User created.');
-            expect(res.body).toHaveProperty('user');
-            expect(res.body.user).toHaveProperty('__v');
-            expect(res.body.user).toHaveProperty('userName');
-            expect(res.body.user).toHaveProperty('companyID');
-            expect(res.body.user).toHaveProperty('status');
-            expect(res.body.user).toHaveProperty('nd_trash_deleted');
-            expect(res.body.user).toHaveProperty('salt');
-            expect(res.body.user).toHaveProperty('hash');
-            expect(res.body.user).toHaveProperty('_id');
-            expect(res.body.user).toHaveProperty('privateSpace');
-            expect(res.body.user).toHaveProperty('startDate');
-            expect(res.body.user).toHaveProperty('dialogs');
-            expect(res.body.user).toHaveProperty('contextHelp');
-            expect(res.body.user).toHaveProperty('filters');
-            expect(res.body.user).toHaveProperty('roles');
+            expect(res.body).toHaveProperty('__v');
+            expect(res.body).toHaveProperty('userName');
+            expect(res.body).toHaveProperty('companyID');
+            expect(res.body).toHaveProperty('status');
+            expect(res.body).not.toHaveProperty('salt');
+            expect(res.body).not.toHaveProperty('hash');
+            expect(res.body).toHaveProperty('_id');
+            expect(res.body).toHaveProperty('privateSpace');
+            expect(res.body).toHaveProperty('startDate');
+            expect(res.body).toHaveProperty('dialogs');
+            expect(res.body).toHaveProperty('contextHelp');
+            expect(res.body).toHaveProperty('filters');
+            expect(res.body).toHaveProperty('roles');
+
             await User.deleteOne({ userName: 'test' });
         });
     });
 
-    describe('POST /api/admin/users/update/:id', function () {
-        it('should update administrator data', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
-            const res = await request(app).post('/api/admin/users/update/' + user.id)
-                .set(headers)
-                .send({ email: 'admin@example.com', _id: user.id, firstName: 'update' });
+    describe('GET /api/users/:userId', function () {
+        describe('when not authenticated', function () {
+            it('should return status 403', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).get('/api/users/' + admin.id);
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('msg', '1 record updated.');
-            user = await User.findOne({ userName: 'administrator' });
-            expect(user.firstName).toBe('update');
-            expect(user.email).toBe('admin@example.com');
-        });
-    });
-
-    describe('POST /api/admin/users/update/:id with new user', function () {
-        it('should create a user and update his data ', async function () {
-            let res = await request(app).post('/api/admin/users/create')
-                .set(headers)
-                .send({ userName: 'new', pwd1: 'urungi' });
-            var user = await User.findOne({ userName: 'new' });
-            res = await request(app).post('/api/admin/users/update/' + user.id)
-                .set(headers)
-                .send({ email: 'new@example.com', _id: user.id, firstName: 'update' })
-                .expect(200);
-
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('msg', '1 record updated.');
-            user = await User.findOne({ userName: 'new' });
-            expect(user.firstName).toBe('update');
-            expect(user.email).toBe('new@example.com');
-            res = await User.deleteOne({ userName: 'new' });
-        });
-    });
-
-    describe('POST /api/admin/users/delete/:id', function () {
-        it('should create an user and delete him ', async function () {
-            let res = await request(app).post('/api/admin/users/create')
-                .set(headers)
-                .send({ userName: 'new', pwd1: 'urungi' })
-                .expect(200);
-
-            var user = await User.findOne({ userName: 'new' });
-            res = await request(app).post('/api/admin/users/delete/' + user.id)
-                .set(headers)
-                .send({ _id: user.id })
-                .expect(200);
-
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('msg', '1 item deleted.');
-        });
-    });
-
-    describe('POST /api/admin/users/change-user-status', function () {
-        it('should return status 204 ', async function () {
-            await request(app).post('/api/admin/users/create')
-                .set(headers)
-                .send({ userName: 'new', pwd1: 'urungi' });
-
-            var user = await User.findOne({ userName: 'new' });
-            await request(app).post('/api/admin/users/change-user-status')
-                .set(headers)
-                .send({ userID: user.id, status: 'Not active' })
-                .expect(204);
-
-            await User.deleteOne({ userName: 'new' });
+                expect(res.status).toBe(403);
+            });
         });
 
-        it('should return status 500 if status is invalid', async function () {
-            const user = await User.create({ userName: 'new', pwd1: 'password' });
+        describe('when authenticated as a normal user', function () {
+            it('should return status 403 if asking for another user', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).get('/api/users/' + admin.id)
+                    .set(userHeaders);
 
-            await request(app).post('/api/admin/users/change-user-status')
-                .set(headers)
-                .send({ userID: user.id, status: {} })
-                .expect(500);
-
-            await user.remove();
-        });
-    });
-
-    describe('POST /api/change-my-password', function () {
-        it('should update administrator password ', async function () {
-            const res = await request(app).post('/api/change-my-password')
-                .set(headers)
-                .send({ pwd1: 'urungi', pwd2: 'urungi' })
-                .expect(200);
-
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('msg', 'Password changed');
-        });
-
-        it('should not update administrator password because passwords do not match ', async function () {
-            const res = await request(app).post('/api/change-my-password')
-                .set(headers)
-                .send({ pwd1: 'urungi1', pwd2: 'urungi' })
-                .expect(200);
-
-            expect(res.body).toHaveProperty('result', 0);
-            expect(res.body).toHaveProperty('msg', 'Passwords do not match');
-        });
-    });
-
-    describe('GET /api/get-counts', function () {
-        let datasource, layer, report, dashboard;
-        let user;
-        beforeEach(async function () {
-            datasource = await Datasource.create({ companyID: 'COMPID', name: 'DataSource', type: 'DataSource', status: 1, nd_trash_deleted: false });
-            layer = await Layer.create({ companyID: 'COMPID', name: 'Layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
-            user = await User.findOne({ userName: 'administrator' });
-            report = await Report.create({ companyID: 'COMPID', reportName: 'Report', nd_trash_deleted: false, createdBy: 'administrator', owner: user.id, selectedLayerID: layer.id, isShared: true });
-            dashboard = await Dashboard.create({ companyID: 'COMPID', dashboardName: 'Dashboard1', owner: user.id, nd_trash_deleted: false });
-        });
-
-        afterEach(async function () {
-            await Promise.all([
-                dashboard.remove(),
-                report.remove(),
-                layer.remove(),
-                datasource.remove(),
-            ]);
-        });
-
-        it('should count report, dashboards, layers and users ', async function () {
-            var res = await request(app).get('/api/get-counts')
-                .set(headers)
-                .expect(200);
-
-            const reportsCount = await Report.countDocuments({ owner: user._id });
-            const dashboardsCount = await Dashboard.countDocuments({ owner: user._id });
-            const datasourcesCount = await Datasource.countDocuments({});
-            const layersCount = await Layer.countDocuments({});
-            const usersCount = await User.countDocuments({});
-
-            expect(res.body).toHaveProperty('reports', reportsCount);
-            expect(res.body).toHaveProperty('dashBoards', dashboardsCount);
-            expect(res.body).toHaveProperty('dataSources', datasourcesCount);
-            expect(res.body).toHaveProperty('layers', layersCount);
-            expect(res.body).toHaveProperty('users', usersCount);
-            expect(res.body).toHaveProperty('roles');
-        });
-    });
-
-    describe('GET /api/get-user-counts/:id', function () {
-        it('should count public and private reports and dashboard created by administrator ', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
-            var report = await Report.create({
-                companyID: 'COMPID',
-                reportName: 'Report',
-                nd_trash_deleted: false,
-                createdBy: 'administrator',
-                owner: user.id,
-                isShared: true,
+                expect(res.status).toBe(403);
             });
 
-            var dashboard = await Dashboard.create({
-                companyID: 'COMPID',
-                dashboardName: 'Dashboardcount',
-                owner: user.id,
-                nd_trash_deleted: false,
-                isShared: true,
+            it('should return user data if asking for its own account data', async function () {
+                const user = await User.findOne({ userName: 'user' });
+                const res = await request(app).get('/api/users/' + user.id)
+                    .set(userHeaders);
+
+                expect(res.status).toBe(200);
+                expect(res.body).toHaveProperty('userName', 'user');
+            });
+        });
+
+        describe('when authenticated as admin', function () {
+            it('should return user data', async function () {
+                const user = await User.findOne({ userName: 'user' });
+                const res = await request(app).get('/api/users/' + user.id)
+                    .set(adminHeaders);
+
+                expect(res.status).toBe(200);
+
+                expect(res.body).toHaveProperty('_id');
+                expect(res.body).toHaveProperty('userName', 'user');
+                expect(res.body).toHaveProperty('companyID');
+                expect(res.body).toHaveProperty('status');
+                expect(res.body).toHaveProperty('last_login_date');
+                expect(res.body).toHaveProperty('last_login_ip');
+                expect(res.body).toHaveProperty('privateSpace');
+                expect(res.body).toHaveProperty('startDate');
+                expect(res.body).toHaveProperty('dialogs');
+                expect(res.body).toHaveProperty('contextHelp');
+                expect(res.body).toHaveProperty('filters');
+                expect(res.body).toHaveProperty('roles');
+            });
+        });
+    });
+
+    describe('PATCH /api/users/:userId', function () {
+        describe('when not authenticated', function () {
+            it('should return status 403', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).patch('/api/users/' + admin.id);
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as a normal user', function () {
+            it('should return status 403', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).patch('/api/users/' + admin.id)
+                    .set(userHeaders);
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as admin', function () {
+            it('should update user data', async function () {
+                let user = await User.findOne({ userName: 'user' });
+                const res = await request(app).patch('/api/users/' + user.id)
+                    .set(adminHeaders)
+                    .send({ email: 'user@example.com', firstName: 'update' });
+
+                expect(res.status).toBe(200);
+
+                expect(res.body).toHaveProperty('email', 'user@example.com');
+                expect(res.body).toHaveProperty('firstName', 'update');
+
+                user = await User.findOne({ userName: 'user' });
+                expect(user.firstName).toBe('update');
+                expect(user.email).toBe('user@example.com');
+            });
+        });
+    });
+
+    describe('GET /api/users/:userId/counts', function () {
+        describe('when not authenticated', function () {
+            it('should return status 403', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).patch('/api/users/' + admin.id + '/counts');
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as a normal user', function () {
+            it('should return status 403 if asking for another user', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).get('/api/users/' + admin.id + '/counts')
+                    .set(userHeaders);
+
+                expect(res.status).toBe(403);
             });
 
-            const res = await request(app).get('/api/get-user-counts/' + user.id)
-                .query({ userID: user.id })
-                .set(headers)
-                .expect(200);
+            it('should return user data if asking for its own account data', async function () {
+                const user = await User.findOne({ userName: 'user' });
+                const report = await Report.create({
+                    companyID: 'COMPID',
+                    reportName: 'Report',
+                    owner: user.id,
+                    isShared: true,
+                });
+                const dashboard = await Dashboard.create({
+                    companyID: 'COMPID',
+                    dashboardName: 'Dashboard',
+                    owner: user.id,
+                    isShared: true,
+                });
 
-            expect(res.body).toHaveProperty('sharedReports', 1);
-            expect(res.body).toHaveProperty('sharedDashBoards', 1);
-            expect(res.body).toHaveProperty('privateReports');
-            expect(res.body).toHaveProperty('privateDashBoards');
-            await report.remove();
-            await dashboard.remove();
+                const res = await request(app).get('/api/users/' + user.id + '/counts')
+                    .set(userHeaders);
+
+                expect(res.status).toBe(200);
+                expect(res.body).toEqual({
+                    sharedReports: 1,
+                    sharedDashboards: 1,
+                    privateReports: 0,
+                    privateDashboards: 0,
+                });
+
+                await report.remove();
+                await dashboard.remove();
+            });
+        });
+
+        describe('when authenticated as admin', function () {
+            it('should return user data', async function () {
+                const user = await User.findOne({ userName: 'user' });
+                const report = await Report.create({
+                    companyID: 'COMPID',
+                    reportName: 'Report',
+                    owner: user.id,
+                    isShared: true,
+                });
+                const dashboard = await Dashboard.create({
+                    companyID: 'COMPID',
+                    dashboardName: 'Dashboard',
+                    owner: user.id,
+                    isShared: true,
+                });
+
+                const res = await request(app).get('/api/users/' + user.id + '/counts')
+                    .set(adminHeaders)
+                    .expect(200);
+
+                expect(res.body).toEqual({
+                    sharedReports: 1,
+                    sharedDashboards: 1,
+                    privateReports: 0,
+                    privateDashboards: 0,
+                });
+
+                await report.remove();
+                await dashboard.remove();
+            });
         });
     });
 
-    describe('GET /api/get-user-reports/:id', function () {
-        it('should get a report with its data which was created by administrator ', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
-            var report = await Report.create({
-                companyID: 'COMPID',
-                reportName: 'Report',
-                nd_trash_deleted: false,
-                createdBy: 'administrator',
-                owner: user.id,
-                isShared: true,
-                parentFolder: 'parent',
-                reportDescription: 'report Description',
-                reportType: 'report',
+    describe('GET /api/users/:userId/reports', function () {
+        describe('when not authenticated', function () {
+            it('should return status 403', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).patch('/api/users/' + admin.id + '/reports');
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as a normal user', function () {
+            it('should return status 403 if asking for another user', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).get('/api/users/' + admin.id + '/reports')
+                    .set(userHeaders);
+
+                expect(res.status).toBe(403);
             });
 
-            const res = await request(app).get('/api/get-user-reports/' + user.id)
-                .query({ userID: user.id })
-                .set(headers)
-                .expect(200);
+            it('should return user data if asking for its own account data', async function () {
+                var user = await User.findOne({ userName: 'user' });
+                var report = await Report.create({
+                    companyID: 'COMPID',
+                    reportName: 'Report',
+                    owner: user.id,
+                });
 
-            const reportsCount = await Report.countDocuments({ owner: user.id });
+                const res = await request(app).get('/api/users/' + user.id + '/reports')
+                    .set(userHeaders);
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('page');
-            expect(res.body).toHaveProperty('pages');
-            expect(res.body).toHaveProperty('items');
-            expect(res.body.items).toHaveLength(reportsCount);
-            expect(res.body.items.some(r => r._id === report.id)).toBeTruthy();
-            await report.remove();
-        });
-    });
+                expect(res.status).toBe(200);
 
-    describe('GET /api/get-user-dashboards/:id', function () {
-        it('should get a dashboard with its data which was created by administrator ', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
-            var dashboard = await Dashboard.create({
-                companyID: 'COMPID',
-                dashboardName: 'Dashboardget',
-                owner: user.id,
-                nd_trash_deleted: false,
-                isShared: true,
-                dashboardDescription: 'dashboard Description',
-                dashboardType: 'dashboard',
+                expect(res.body).toHaveProperty('items');
+                expect(res.body.items).toHaveLength(1);
+                expect(res.body.items[0]).toHaveProperty('reportName', 'Report');
+
+                await report.remove();
             });
-            const res = await request(app).get('/api/get-user-dashboards/' + user.id)
-                .query({ userID: user.id })
-                .set(headers)
-                .expect(200);
-
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('page');
-            expect(res.body).toHaveProperty('pages');
-            expect(res.body).toHaveProperty('items');
-            expect(res.body.items).toHaveLength(1);
-            expect(res.body.items[0]).toHaveProperty('dashboardName', 'Dashboardget');
-            expect(res.body.items[0]).toHaveProperty('isShared', true);
-            expect(res.body.items[0]).toHaveProperty('dashboardDescription', 'dashboard Description');
-            await dashboard.remove();
-        });
-    });
-
-    describe('GET /api/get-user-data with new user', function () {
-        it('should return status 200 ', async function () {
-            await User.findOne({ userName: 'administrator' });
-            let res = await request(app).post('/api/admin/users/create')
-                .set(headers)
-                .send({ userName: 'new', pwd1: 'urungi' })
-                .expect(200);
-
-            var newUser = await User.findOne({ userName: 'new' });
-            const newHeaders = await helpers.login(app, 'new', 'urungi');
-            newUser = await User.findOne({ userName: 'new' });
-            res = await request(app).get('/api/get-user-data')
-                .set(newHeaders)
-                .expect(200);
-
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('page');
-            expect(res.body).toHaveProperty('pages');
-            expect(res.body).toHaveProperty('items');
-            expect(res.body.items).toHaveProperty('user');
-            expect(res.body.items.user).toHaveProperty('companyData');
-            expect(res.body.items.user).toHaveProperty('companyID', 'COMPID');
-            expect(res.body.items.user).toHaveProperty('contextHelp');
-            expect(res.body.items.user).toHaveProperty('dialogs');
-            expect(res.body.items.user).toHaveProperty('filters');
-            expect(res.body.items.user).toHaveProperty('privateSpace');
-            expect(res.body.items.user).toHaveProperty('roles');
-            expect(res.body.items.user).toHaveProperty('status', 'active');
-            expect(res.body.items.user).toHaveProperty('userName', 'new');
-            expect(res.body.items).toHaveProperty('companyData');
-            expect(res.body.items.companyData).toHaveProperty('_id');
-            expect(res.body.items.companyData).toHaveProperty('companyID', 'COMPID');
-            expect(res.body.items.companyData).toHaveProperty('createdBy');
-            expect(res.body.items.companyData).toHaveProperty('nd_trash_deleted', false);
-            expect(res.body.items.companyData).toHaveProperty('__v');
-            expect(res.body.items.companyData).toHaveProperty('history');
-            expect(res.body.items.companyData).toHaveProperty('sharedSpace');
-            expect(res.body.items).toHaveProperty('rolesData');
-            expect(res.body.items).toHaveProperty('reportsCreate');
-            expect(res.body.items).toHaveProperty('dashboardsCreate');
-            expect(res.body.items).toHaveProperty('exploreData');
-            expect(res.body.items).toHaveProperty('viewSQL');
-            await newUser.remove();
-        });
-    });
-    describe('GET /api/get-user-data with administrator', function () {
-        it('should get administrator data ', async function () {
-            await User.findOne({ userName: 'administrator' });
-            const res = await request(app).get('/api/get-user-data')
-                .set(headers)
-                .expect(200);
-
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('page');
-            expect(res.body).toHaveProperty('pages');
-            expect(res.body).toHaveProperty('items');
-            expect(res.body.items).toHaveProperty('user');
-            expect(res.body.items.user).toHaveProperty('companyData');
-            expect(res.body.items.user).toHaveProperty('companyID', 'COMPID');
-            expect(res.body.items.user).toHaveProperty('contextHelp');
-            expect(res.body.items.user).toHaveProperty('dialogs');
-            expect(res.body.items.user).toHaveProperty('filters');
-            expect(res.body.items.user).toHaveProperty('privateSpace');
-            expect(res.body.items.user).toHaveProperty('roles');
-            expect(res.body.items.user).toHaveProperty('status', 'active');
-            expect(res.body.items.user).toHaveProperty('userName', 'administrator');
-            expect(res.body.items.user).toHaveProperty('reportsCreate', true);
-            expect(res.body.items.user).toHaveProperty('dashboardsCreate', true);
-            expect(res.body.items.user).toHaveProperty('exploreData', true);
-            expect(res.body.items.user).toHaveProperty('viewSQL', true);
-            expect(res.body.items.user).toHaveProperty('canShare', true);
-            expect(res.body.items.user).toHaveProperty('shareReports', true);
-            expect(res.body.items.user).toHaveProperty('shareDashboards', true);
-            expect(res.body.items).toHaveProperty('companyData');
-            expect(res.body.items.companyData).toHaveProperty('_id');
-            expect(res.body.items.companyData).toHaveProperty('companyID', 'COMPID');
-            expect(res.body.items.companyData).toHaveProperty('createdBy');
-            expect(res.body.items.companyData).toHaveProperty('nd_trash_deleted', false);
-            expect(res.body.items.companyData).toHaveProperty('__v');
-            expect(res.body.items.companyData).toHaveProperty('history');
-            expect(res.body.items.companyData).toHaveProperty('sharedSpace');
-            expect(res.body.items).toHaveProperty('rolesData');
-            expect(res.body.items).toHaveProperty('reportsCreate', true);
-            expect(res.body.items).toHaveProperty('dashboardsCreate', true);
-            expect(res.body.items).toHaveProperty('exploreData', true);
-            expect(res.body.items).toHaveProperty('viewSQL', true);
-        });
-    });
-    describe('GET /api/get-user-last-executions', function () {
-        let statistics1, statistics2, statistics3;
-
-        beforeEach(async function () {
-            var user = await User.findOne({ userName: 'administrator' });
-            statistics1 = await Statistic.create({ type: 'report', relationedName: 'report1', action: 'execute', companyID: 'COMPID', userID: user.id, userName: 'administrator', createdBy: user.id });
-            statistics2 = await Statistic.create({ type: 'report', relationedName: 'report1', action: 'execute', companyID: 'COMPID', userID: user.id, userName: 'administrator', createdBy: user.id });
-            statistics3 = await Statistic.create({ type: 'report', relationedName: 'report2', action: 'execute', companyID: 'COMPID', userID: user.id, userName: 'administrator', createdBy: user.id });
-        });
-        afterEach(async function () {
-            await Promise.all([
-                statistics1.remove(),
-                statistics2.remove(),
-                statistics3.remove(),
-            ]);
         });
 
-        it('should return the last executions and the most executed reports ', async function () {
-            const res = await request(app).get('/api/get-user-last-executions')
-                .set(headers)
-                .expect(200);
+        describe('when authenticated as admin', function () {
+            it('should return user data', async function () {
+                var user = await User.findOne({ userName: 'user' });
+                var report = await Report.create({
+                    companyID: 'COMPID',
+                    reportName: 'Report',
+                    owner: user.id,
+                });
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('page');
-            expect(res.body).toHaveProperty('pages');
-            expect(res.body).toHaveProperty('items');
-            expect(res.body.items).toHaveProperty('theLastExecutions');
-            expect(res.body.items).toHaveProperty('theMostExecuted');
-            expect(res.body.items.theLastExecutions[0]).toHaveProperty('_id');
-            expect(res.body.items.theLastExecutions[0]).toHaveProperty('lastDate');
-            expect(res.body.items.theLastExecutions[0]._id).toHaveProperty('type');
-            expect(res.body.items.theLastExecutions[0]._id).toHaveProperty('relationedName', 'report2');
-            expect(res.body.items.theLastExecutions[0]._id).toHaveProperty('action');
-            expect(res.body.items.theLastExecutions[1]).toHaveProperty('_id');
-            expect(res.body.items.theLastExecutions[1]._id).toHaveProperty('type');
-            expect(res.body.items.theLastExecutions[1]._id).toHaveProperty('relationedName', 'report1');
-            expect(res.body.items.theLastExecutions[1]._id).toHaveProperty('action');
-            expect(res.body.items.theMostExecuted[0]).toHaveProperty('_id');
-            expect(res.body.items.theMostExecuted[0]).toHaveProperty('count', 2);
-            expect(res.body.items.theMostExecuted[0]._id).toHaveProperty('type');
-            expect(res.body.items.theMostExecuted[0]._id).toHaveProperty('relationedName', 'report1');
-            expect(res.body.items.theMostExecuted[0]._id).toHaveProperty('action');
-            expect(res.body.items.theMostExecuted[1]).toHaveProperty('_id');
-            expect(res.body.items.theMostExecuted[1]).toHaveProperty('count', 1);
-            expect(res.body.items.theMostExecuted[1]._id).toHaveProperty('type');
-            expect(res.body.items.theMostExecuted[1]._id).toHaveProperty('relationedName', 'report2');
-            expect(res.body.items.theMostExecuted[1]._id).toHaveProperty('action');
-        });
-    });
+                const res = await request(app).get('/api/users/' + user.id + '/reports')
+                    .set(adminHeaders);
 
-    describe('GET /api/set-viewed-context-help', function () {
-        it('should return status 200', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
-            expect(user).toHaveProperty('contextHelp');
-            expect(user.contextHelp).toHaveLength(0);
-            const res = await request(app).get('/api/set-viewed-context-help')
-                .query({ contextHelpName: 'homeIndex' })
-                .set(headers)
-                .expect(200);
+                expect(res.status).toBe(200);
 
-            expect(res.body).toHaveProperty('data');
-            expect(res.body.data).toHaveLength(1);
-            expect(res.body.data[0]).toBe('homeIndex');
+                expect(res.body).toHaveProperty('items');
+                expect(res.body.items).toHaveLength(1);
+                expect(res.body.items[0]).toHaveProperty('reportName', 'Report');
 
-            user = await User.findOne({ userName: 'administrator' });
-            expect(user.contextHelp).toContain('homeIndex');
-        });
-    });
-
-    describe('GET /api/get-user-objects', function () {
-        it('should get report and dashboard id and title which was created by administrator', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
-            var report = await Report.create({
-                companyID: 'COMPID',
-                reportName: 'Report',
-                createdBy: 'administrator',
-                owner: user.id,
-                isShared: true,
-                parentFolder: 'root',
-                nd_trash_deleted: false,
+                await report.remove();
             });
-            var dashboard = await Dashboard.create({
-                companyID: 'COMPID',
-                dashboardName: 'Dashboard',
-                owner: user.id,
-                isShared: true,
-                parentFolder: 'root',
-                nd_trash_deleted: false,
+        });
+    });
+
+    describe('GET /api/users/:userId/dashboards', function () {
+        describe('when not authenticated', function () {
+            it('should return status 403', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).patch('/api/users/' + admin.id + '/dashboards');
+
+                expect(res.status).toBe(403);
             });
-            const res = await request(app).get('/api/get-user-objects')
-                .set(headers)
-                .expect(200);
+        });
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('page');
-            expect(res.body).toHaveProperty('pages');
-            expect(res.body).toHaveProperty('items');
-            expect(res.body).toHaveProperty('userCanShare', true);
-            expect(res.body.items[0]).toHaveProperty('id', report.id);
-            expect(res.body.items[0]).toHaveProperty('title', 'Report');
-            expect(res.body.items[0]).toHaveProperty('nodeType', 'report');
-            expect(res.body.items[1]).toHaveProperty('id', dashboard.id);
-            expect(res.body.items[1]).toHaveProperty('title', 'Dashboard');
-            expect(res.body.items[1]).toHaveProperty('nodeType', 'dashboard');
-            await report.remove();
-            await dashboard.remove();
+        describe('when authenticated as a normal user', function () {
+            it('should return status 403 if asking for another user', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).get('/api/users/' + admin.id + '/dashboards')
+                    .set(userHeaders);
+
+                expect(res.status).toBe(403);
+            });
+
+            it('should return user data if asking for its own account data', async function () {
+                var user = await User.findOne({ userName: 'user' });
+                var dashboard = await Dashboard.create({
+                    companyID: 'COMPID',
+                    dashboardName: 'Dashboard',
+                    owner: user.id,
+                });
+
+                const res = await request(app).get('/api/users/' + user.id + '/dashboards')
+                    .set(userHeaders);
+
+                expect(res.status).toBe(200);
+
+                expect(res.body).toHaveProperty('items');
+                expect(res.body.items).toHaveLength(1);
+                expect(res.body.items[0]).toHaveProperty('dashboardName', 'Dashboard');
+
+                await dashboard.remove();
+            });
+        });
+
+        describe('when authenticated as admin', function () {
+            it('should return user data', async function () {
+                var user = await User.findOne({ userName: 'user' });
+                var dashboard = await Dashboard.create({
+                    companyID: 'COMPID',
+                    dashboardName: 'Dashboard',
+                    owner: user.id,
+                });
+
+                const res = await request(app).get('/api/users/' + user.id + '/dashboards')
+                    .set(adminHeaders);
+
+                expect(res.status).toBe(200);
+
+                expect(res.body).toHaveProperty('items');
+                expect(res.body.items).toHaveLength(1);
+                expect(res.body.items[0]).toHaveProperty('dashboardName', 'Dashboard');
+
+                await dashboard.remove();
+            });
         });
     });
-    describe('GET /api/get-user-other-data', function () {
-        it('should get administrator other data which is not get by get user data function', async function () {
-            const res = await request(app).get('/api/get-user-other-data')
-                .set(headers)
-                .expect(200);
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('page');
-            expect(res.body).toHaveProperty('pages');
-            expect(res.body).toHaveProperty('items');
-            expect(res.body.items).toHaveProperty('_id');
-            expect(res.body.items).toHaveProperty('userName', 'administrator');
-            expect(res.body.items).toHaveProperty('companyID', 'COMPID');
-            expect(res.body.items).toHaveProperty('status', 'active');
-            expect(res.body.items).toHaveProperty('nd_trash_deleted');
-            expect(res.body.items).toHaveProperty('salt');
-            expect(res.body.items).toHaveProperty('hash');
-            expect(res.body.items).toHaveProperty('__v');
-            expect(res.body.items).toHaveProperty('last_login_date');
-            expect(res.body.items).toHaveProperty('last_login_ip');
-            expect(res.body.items).toHaveProperty('email');
-            expect(res.body.items).toHaveProperty('firstName');
-            expect(res.body.items).toHaveProperty('privateSpace');
-            expect(res.body.items).toHaveProperty('startDate');
-            expect(res.body.items).toHaveProperty('dialogs');
-            expect(res.body.items).toHaveProperty('contextHelp');
-            expect(res.body.items).toHaveProperty('filters');
-            expect(res.body.items).toHaveProperty('roles');
+    describe('PUT /api/users/:userId/roles/:roleId', function () {
+        let role, user1;
+
+        beforeAll(async function () {
+            role = await Role.create({ name: 'Normal user' });
+            user1 = await User.create({ userName: 'user1' });
+        });
+
+        afterAll(async function () {
+            await role.remove();
+            await user1.remove();
+        });
+
+        describe('when not authenticated', function () {
+            it('should return status 403', async function () {
+                const res = await request(app).put('/api/users/' + user1.id + '/roles/' + role.id);
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as a normal user', function () {
+            it('should return status 403', async function () {
+                const res = await request(app).put('/api/users/' + user1.id + '/roles/' + role.id)
+                    .set(userHeaders);
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as admin', function () {
+            it('should return status 204', async function () {
+                const res = await request(app).put('/api/users/' + user1.id + '/roles/' + role.id)
+                    .set(adminHeaders);
+
+                expect(res.status).toBe(204);
+
+                user1 = await User.findById(user1.id);
+                expect(user1.roles).toContain(role.id);
+            });
         });
     });
 
-    describe('POST /api/logout', function () {
-        it('should return status 200', async function () {
-            return request(app).post('/api/logout')
-                .set(headers)
-                .expect(204);
+    describe('DELETE /api/users/:userId/roles/:roleId', function () {
+        let role, user1;
+
+        beforeAll(async function () {
+            role = await Role.create({ name: 'Normal user' });
+            user1 = await User.create({ userName: 'user1', roles: [role.id] });
+        });
+
+        afterAll(async function () {
+            await role.remove();
+            await user1.remove();
+        });
+
+        describe('when not authenticated', function () {
+            it('should return status 403', async function () {
+                const res = await request(app).delete('/api/users/' + user1.id + '/roles/' + role.id);
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as a normal user', function () {
+            it('should return status 403', async function () {
+                const res = await request(app).delete('/api/users/' + user1.id + '/roles/' + role.id)
+                    .set(userHeaders);
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as admin', function () {
+            it('should return status 204', async function () {
+                const res = await request(app).delete('/api/users/' + user1.id + '/roles/' + role.id)
+                    .set(adminHeaders);
+
+                expect(res.status).toBe(204);
+
+                user1 = await User.findById(user1.id);
+                expect(user1.roles).not.toContain(role.id);
+            });
         });
     });
 });

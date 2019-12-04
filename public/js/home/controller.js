@@ -181,7 +181,7 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'mom
                             gettextCatalog.getString('Go to single query report designer and continue tour') +
                             '</a>',
                     });
-                } else if (user.dashboardsCreate || counts.dashBoards > 0) {
+                } else if (user.dashboardsCreate || counts.dashboards > 0) {
                     $scope.IntroOptions.steps.push({
                         intro: '<h4>' +
                             gettextCatalog.getString('Next Step') +
@@ -198,46 +198,23 @@ angular.module('app').controller('homeCtrl', ['$scope', '$rootScope', '$q', 'mom
         });
     }
 
-    connection.get('/api/get-user-last-executions', {}).then(function (data) {
-        $scope.lastExecutions = [];
-        $scope.mostExecutions = [];
-
-        for (var l in data.items.theLastExecutions) {
-            if (l < 10) {
-                data.items.theLastExecutions[l]._id.lastDate = moment(data.items.theLastExecutions[l].lastDate).fromNow();
-                $scope.lastExecutions.push(data.items.theLastExecutions[l]._id);
-            }
-        }
-        for (var m in data.items.theMostExecuted) {
-            if (m < 10) {
-                data.items.theMostExecuted[m]._id.count = data.items.theMostExecuted[m].count;
-                $scope.mostExecutions.push(data.items.theMostExecuted[m]._id);
-            }
-        }
+    connection.get('/api/statistics/most-executed').then(data => {
+        $scope.mostExecutions = data.items;
     });
 
-    $scope.getReports = function (params) {
-        params = params || {};
-
-        connection.get('/api/reports/find-all', params).then(function (data) {
-            $scope.reports = data;
-        });
-    };
-
-    $scope.getCounts = function () {
-    };
+    connection.get('/api/statistics/last-executions', {}).then(function (data) {
+        $scope.lastExecutions = data.items;
+    });
 
     $scope.setUserContextHelpViewed = function (contextHelpName) {
-        var params = {};
-        params.contextHelpName = contextHelpName;
-        connection.get('/api/set-viewed-context-help', params).then(function (data) {
+        api.setViewedContextHelp(contextHelpName).then(data => {
             $rootScope.userContextHelp = data.items;
         });
     };
 
     $scope.refreshHome = function () {
-        api.getUserObjects().then(userObjects => {
-            $scope.userObjects = userObjects;
+        api.getUserObjects().then(data => {
+            $scope.userObjects = data.items;
         });
 
         getIntraOptions();

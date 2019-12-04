@@ -74,18 +74,17 @@ require('./config/routes')(app, passport);
 
 app.use('/uploads', restrict, express.static(path.join(__dirname, '..', 'uploads')));
 
+const api = require('./routes/api.js');
+app.use('/api', api);
+
 // Custom routes
 const routesModules = [
-    './custom/companies/routes',
     './custom/dashboards/routes',
     './custom/data-sources/routes',
     './custom/files/routes',
     './custom/layers/routes',
     './custom/reports/routes',
-    './custom/roles/routes',
-    './custom/statistics/routes',
     './custom/themes/routes',
-    './custom/users/routes',
     './custom/version/routes',
 ];
 

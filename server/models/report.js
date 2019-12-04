@@ -112,4 +112,8 @@ reportSchema.methods.unshare = async function () {
     return this.save();
 };
 
+reportSchema.query.byFolder = function (folderId) {
+    return this.where({ parentFolder: folderId, isShared: true });
+};
+
 module.exports = mongoose.model('Report', reportSchema);

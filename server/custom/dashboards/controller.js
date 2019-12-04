@@ -34,23 +34,25 @@ exports.DashboardsFindOne = function (req, res) {
 };
 
 exports.DashboardsCreate = function (req, res) {
-    if (!req.session.dashboardsCreate && !req.user.isAdmin()) {
-        res.status(401).json({ result: 0, msg: 'You do not have permissions to create dashboards' });
-    } else {
-        req.query.trash = true;
-        req.query.companyid = true;
-        req.query.userid = true;
+    req.user.getPermissions().then(permissions => {
+        if (!permissions.dashboardsCreate && !req.user.isAdmin()) {
+            res.status(401).json({ result: 0, msg: 'You do not have permissions to create dashboards' });
+        } else {
+            req.query.trash = true;
+            req.query.companyid = true;
+            req.query.userid = true;
 
-        req.body.owner = req.user._id;
-        req.body.isPublic = false;
-        req.body.isShared = false;
+            req.body.owner = req.user._id;
+            req.body.isPublic = false;
+            req.body.isShared = false;
 
-        req.body.author = req.user.userName;
+            req.body.author = req.user.userName;
 
-        controller.create(req).then(function (result) {
-            res.status(200).json(result);
-        });
-    }
+            controller.create(req).then(function (result) {
+                res.status(200).json(result);
+            });
+        }
+    });
 };
 
 exports.DashboardsUpdate = function (req, res) {

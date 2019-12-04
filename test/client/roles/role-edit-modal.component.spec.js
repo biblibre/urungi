@@ -42,8 +42,8 @@ describe('appRoleEditModal', function () {
 
         describe('$onInit', function () {
             it('should set sane defaults', function () {
-                $httpBackend.expect('GET', '/api/get-user-data')
-                    .respond(getUserDataResponse());
+                $httpBackend.expect('GET', '/api/shared-space')
+                    .respond(getSharedSpaceResponse());
 
                 vm.$onInit();
                 $httpBackend.flush();
@@ -76,8 +76,8 @@ describe('appRoleEditModal', function () {
 
         describe('onNodeChange', function () {
             it('should change grants of sub-folders', function () {
-                $httpBackend.expect('GET', '/api/get-user-data')
-                    .respond(getUserDataResponse());
+                $httpBackend.expect('GET', '/api/shared-space')
+                    .respond(getSharedSpaceResponse());
 
                 vm.$onInit();
                 $httpBackend.flush();
@@ -89,29 +89,21 @@ describe('appRoleEditModal', function () {
             });
         });
 
-        function getUserDataResponse () {
+        function getSharedSpaceResponse () {
             return {
-                result: 1,
-                page: 1,
-                pages: 1,
-                items: {
-                    user: {},
-                    companyData: {
-                        sharedSpace: [
+                items: [
+                    {
+                        id: 'foo',
+                        title: 'Foo',
+                        nodes: [
                             {
-                                id: 'foo',
-                                title: 'Foo',
-                                nodes: [
-                                    {
-                                        id: 'bar',
-                                        title: 'Bar',
-                                        nodes: [],
-                                    },
-                                ],
+                                id: 'bar',
+                                title: 'Bar',
+                                nodes: [],
                             },
                         ],
                     },
-                },
+                ],
             };
         }
     });

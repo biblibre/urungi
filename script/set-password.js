@@ -1,8 +1,6 @@
 const config = require('config');
 global.config = config;
 
-const hash = require('../server/util/hash');
-
 const connection = require('../server/config/mongoose')();
 const User = connection.model('User');
 
@@ -19,23 +17,8 @@ if (process.argv.length !== 4) {
         process.exit(1);
     }
 
-    function hashPassword (password) {
-        return new Promise(function (resolve, reject) {
-            hash(password, function (err, salt, hash) {
-                if (err) {
-                    return reject(err);
-                }
-
-                resolve({ salt: salt, hash: hash });
-            });
-        });
-    }
-
     const password = process.argv[3];
-    const result = await hashPassword(password);
-
-    user.salt = result.salt;
-    user.hash = result.hash;
+    user.password = password;
 
     await user.save();
 
