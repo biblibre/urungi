@@ -1,8 +1,6 @@
 const config = require('config');
 global.config = config;
 
-const hash = require('../server/util/hash');
-
 const connection = require('../server/config/mongoose')();
 const User = connection.model('User');
 const Company = connection.model('Company');
@@ -32,32 +30,18 @@ if (process.argv.length !== 3) {
     };
     company = await Company.create(theCompany);
 
-    function hashPassword (password) {
-        return new Promise(function (resolve, reject) {
-            hash(password, function (err, salt, hash) {
-                if (err) {
-                    return reject(err);
-                }
-
-                resolve({ salt: salt, hash: hash });
-            });
-        });
-    }
-
     const password = process.argv[2];
-    const result = await hashPassword(password);
 
-    const adminUser = {
+    const adminUser = new User({
         userName: 'administrator',
-        salt: result.salt,
-        hash: result.hash,
         companyID: company.companyID,
         roles: ['ADMIN'],
         status: 'active',
         nd_trash_deleted: false,
-    };
+    });
+    adminUser.password = password;
 
-    await User.create(adminUser);
+    await adminUser.save();
 
     connection.close();
 })();

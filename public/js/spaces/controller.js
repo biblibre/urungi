@@ -1,6 +1,6 @@
-angular.module('app').controller('spacesCtrl', function ($scope, $location, connection, uuid, $timeout, gettextCatalog) {
-    connection.get('/api/company/get-company-data').then(result => {
-        $scope.data = result.items.sharedSpace;
+angular.module('app').controller('spacesCtrl', function ($scope, $location, api, uuid, $timeout, gettextCatalog) {
+    api.getSharedSpace().then(data => {
+        $scope.data = data.items;
     });
 
     if ($location.hash() === 'intro') {
@@ -127,7 +127,9 @@ angular.module('app').controller('spacesCtrl', function ($scope, $location, conn
     };
 
     $scope.save = function () {
-        connection.post('/api/company/save-public-space', $scope.data);
+        api.setSharedSpace($scope.data).then(data => {
+            $scope.data = data.items;
+        });
     };
 
     $scope.remove = function (scope) {

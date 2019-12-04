@@ -67,4 +67,8 @@ dashboardSchema.methods.unshare = async function () {
     return this.save();
 };
 
+dashboardSchema.query.byFolder = function (folderId) {
+    return this.where({ parentFolder: folderId, isShared: true });
+};
+
 module.exports = mongoose.model('Dashboard', dashboardSchema);

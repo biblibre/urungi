@@ -1,13 +1,12 @@
 const mongoose = require('mongoose');
-const hash = require('../util/hash');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     userName: String,
-    password: String,
     companyID: String,
-    status: String,
+    status: { type: String, default: 'active' },
     email: String,
     language: String,
     salt: String,
@@ -59,8 +58,8 @@ const userSchema = new mongoose.Schema({
     defaultDocumentType: { type: String },
     nd_trash_deleted: { type: Boolean },
     nd_trash_deleted_date: { type: Date },
-    createdBy: { type: String },
-    createdOn: { type: Date },
+    createdBy: { type: mongoose.Schema.Types.ObjectId },
+    createdOn: { type: Date, default: Date.now },
     companyData: {}
 });
 
@@ -71,6 +70,21 @@ userSchema.options.toObject.transform = function (doc, user, options) {
     delete user.hash_verify_account;
     delete user.hash_change_password;
 };
+
+function generateSalt () {
+    return crypto.randomBytes(128).toString('base64');
+}
+
+function hashPassword (password, salt) {
+    return crypto.pbkdf2Sync(password, salt, 12000, 128, 'sha1');
+}
+
+userSchema.virtual('password').set(function (password) {
+    const salt = generateSalt();
+    const hash = hashPassword(password, salt);
+    this.salt = salt;
+    this.hash = hash;
+});
 
 userSchema.statics.createTheUser = function (req, res, userData, done) {
     var User = this;
@@ -85,17 +99,12 @@ userSchema.statics.createTheUser = function (req, res, userData, done) {
             done({ result: 0, msg: 'userName already in use.' });
         } else {
             if (userData.pwd1) {
-                hash(userData.pwd1, function (err, salt, hash) {
-                    if (err) throw err;
-                    userData.password = undefined;
-                    userData.salt = salt;
-                    userData.hash = hash;
-                    userData.companyID = req.user.companyID;
+                const user = new User(userData);
+                user.password = userData.pwd1;
+                userData.companyID = req.user.companyID;
 
-                    User.create(userData, function (err, user) {
-                        if (err) throw err;
-                        done({ result: 1, msg: 'User created.', user: user });
-                    });
+                user.save().then(user => {
+                    done({ result: 1, msg: 'User created.', user: user });
                 });
             } else {
                 done({ result: 0, msg: "'No Password set for the new user." });
@@ -109,14 +118,12 @@ userSchema.statics.isValidUserPassword = function (username, password, done) {
         if (err) return done(err);
         if (!user) return done(null, false, { message: 'Username or password incorrect' });
 
-        hash(password, user.salt, function (err, hash) {
-            if (err) return done(err);
-            if (hash.toString() === user.hash || password === user.hash + user.salt) {
-                return done(null, user);
-            } else {
-                done(null, false, { message: 'Username or password incorrect' });
-            }
-        });
+        const hash = hashPassword(password, user.salt);
+        if (hash.toString() === user.hash) {
+            return done(null, user);
+        } else {
+            done(null, false, { message: 'Username or password incorrect' });
+        }
     });
 };
 
@@ -148,6 +155,45 @@ userSchema.statics.findOrCreateGoogleUser = function (profile, done) {
 
 userSchema.methods.isAdmin = function () {
     return this.roles.includes('ADMIN');
+};
+
+userSchema.methods.getReports = function () {
+    return this.model('Report').find({ owner: this._id });
+};
+
+userSchema.methods.getDashboards = function () {
+    return this.model('Dashboard').find({ owner: this._id });
+};
+
+userSchema.methods.getRoles = function () {
+    const roles = this.roles.filter(role => role !== 'ADMIN');
+
+    return this.model('Role').find({ _id: { $in: roles } });
+};
+
+userSchema.methods.getPermissions = function () {
+    const keys = ['reportsCreate', 'dashboardsCreate', 'exploreData', 'viewSQL'];
+    if (this.isAdmin()) {
+        const permissions = {};
+        for (const key of keys) {
+            permissions[key] = true;
+        }
+
+        return Promise.resolve(permissions);
+    }
+
+    return this.getRoles().then(roles => {
+        const permissions = {};
+        for (const role of roles) {
+            for (const key of keys) {
+                if (role[key]) {
+                    permissions[key] = true;
+                }
+            }
+        }
+
+        return permissions;
+    });
 };
 
 module.exports = mongoose.model('User', userSchema);

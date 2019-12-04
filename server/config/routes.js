@@ -3,10 +3,9 @@ const debug = require('debug')('urungi:server');
 const mongoose = require('mongoose');
 const Log = mongoose.model('Log');
 const Company = mongoose.model('Company');
+const User = mongoose.model('User');
 
 module.exports = function (app, passport) {
-    var hash = require('../util/hash');
-
     app.get('/login', function (req, res, next) {
         res.cookie('XSRF-TOKEN', req.csrfToken());
         res.render('login', { base: config.get('base') });
@@ -22,8 +21,6 @@ module.exports = function (app, passport) {
     );
 
     app.post('/api/login', function (req, res, next) {
-        var User = mongoose.model('User');
-
         User.countDocuments({}, function (err, c) {
             if (err) throw err;
 
@@ -36,25 +33,17 @@ module.exports = function (app, passport) {
                 Company.create(theCompany, function (result) {
                 });
 
-                var adminUser = {};
+                var adminUser = new User();
                 adminUser.userName = 'administrator';
+                adminUser.password = 'urungi';
                 adminUser.companyID = 'COMPID';
                 adminUser.roles = [];
                 adminUser.roles.push('ADMIN');
                 adminUser.status = 'active';
                 adminUser.nd_trash_deleted = false;
 
-                hash('urungi', function (err, salt, hash) {
-                    if (err) throw err;
-
-                    adminUser.salt = salt;
-                    adminUser.hash = hash;
-                    var User = mongoose.model('User');
-
-                    User.create(adminUser, function (err, user) {
-                        if (err) throw err;
-                        authenticate(passport, User, req, res, next);
-                    });
+                adminUser.save().then(() => {
+                    authenticate(passport, User, req, res, next);
                 });
             } else {
                 authenticate(passport, User, req, res, next);

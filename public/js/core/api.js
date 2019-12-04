@@ -9,10 +9,13 @@
         const service = {
             getVersion: getVersion,
 
+            getSharedSpace: getSharedSpace,
+            setSharedSpace: setSharedSpace,
+
             getCounts: getCounts,
             getUserData: getUserData,
             getUserObjects: getUserObjects,
-            changeUserStatus: changeUserStatus,
+            setViewedContextHelp: setViewedContextHelp,
 
             getRole: getRole,
             getRoles: getRoles,
@@ -66,53 +69,66 @@
             uploadFile: uploadFile,
 
             getThemes: getThemes,
+
+            getUsers: getUsers,
+            getUser: getUser,
+            createUser: createUser,
+            updateUser: updateUser,
+            deleteUserRole: deleteUserRole,
+            addUserRole: addUserRole,
+            getUserReports: getUserReports,
+            getUserDashboards: getUserDashboards,
+            getUserCounts: getUserCounts,
         };
 
         return service;
 
         function getVersion () {
-            return $http.get('/api/version').then(res => res.data);
+            return httpGet('/api/version');
+        }
+
+        function getSharedSpace () {
+            return httpGet('/api/shared-space');
+        }
+
+        function setSharedSpace (sharedSpace) {
+            return httpPut('/api/shared-space', sharedSpace);
         }
 
         function getCounts () {
-            return connection.get('/api/get-counts');
+            return httpGet('/api/user/counts');
         }
 
         function getUserData () {
-            return get('/api/get-user-data');
+            return httpGet('/api/user');
         }
 
         function getUserObjects () {
-            return connection.get('/api/get-user-objects').then(res => res.items);
+            return httpGet('/api/user/objects');
         }
 
-        function changeUserStatus (userID, newStatus) {
-            const data = {
-                userID: userID,
-                status: newStatus,
-            };
-
-            return post('/api/admin/users/change-user-status', data);
+        function setViewedContextHelp (name) {
+            return httpPut('/api/user/context-help/' + name);
         }
 
         function getRole (id) {
-            return get('/api/roles/find-one', { id: id }).then(data => data.item);
+            return httpGet('/api/roles/' + id);
         }
 
         function getRoles (params) {
-            return get('/api/roles/find-all', params);
+            return httpGet('/api/roles', params);
         }
 
         function createRole (role) {
-            return post('/api/roles/create', role).then(data => data.item);
+            return httpPost('/api/roles', role);
         }
 
         function updateRole (role) {
-            return post('/api/roles/update/' + role._id, role).then(data => data.item);
+            return httpPatch('/api/roles/' + role._id, role);
         }
 
         function getDatasource (id) {
-            return get('/api/data-sources/find-one', { id: id }).then(data => data.item);
+            return httpGet('/api/data-sources/find-one', { id: id }).then(data => data.item);
         }
 
         function getDataSources (params) {
@@ -149,7 +165,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to an object
          */
         function getReports (params) {
-            return get('/api/reports/find-all', params);
+            return httpGet('/api/reports/find-all', params);
         }
 
         function deleteReport (id) {
@@ -196,7 +212,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the report object
          */
         function getReport (id) {
-            return get('/api/reports/find-one', { id: id }).then(data => data.item);
+            return httpGet('/api/reports/find-one', { id: id }).then(data => data.item);
         }
 
         /**
@@ -206,7 +222,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the created report
          */
         function createReport (report) {
-            return post('/api/reports/create', report).then(data => data.item);
+            return httpPost('/api/reports/create', report).then(data => data.item);
         }
 
         /**
@@ -217,7 +233,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the updated report
          */
         function updateReport (report) {
-            return post('/api/reports/update/' + report._id, report).then(data => data.item);
+            return httpPost('/api/reports/update/' + report._id, report).then(data => data.item);
         }
 
         /**
@@ -241,11 +257,11 @@
                 params.filters = options.filters;
             }
 
-            return post('/api/reports/data-query', params);
+            return httpPost('/api/reports/data-query', params);
         }
 
         function getReportFilterValues (filter, options) {
-            return post('/api/reports/filter-values-query', { filter: filter, options: options });
+            return httpPost('/api/reports/filter-values-query', { filter: filter, options: options });
         }
 
         /**
@@ -258,11 +274,11 @@
          * @param {string} params.footerTemplate - Footer template
          */
         function getReportAsPDF (id, params) {
-            return post(`/api/reports/${id}/pdf`, params);
+            return httpPost(`/api/reports/${id}/pdf`, params);
         }
 
         function getReportAsPNG (id) {
-            return post(`/api/reports/${id}/png`);
+            return httpPost(`/api/reports/${id}/png`);
         }
 
         function isReportAsPDFAvailable (id) {
@@ -293,7 +309,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to an object
          */
         function getDashboards (params) {
-            return get('/api/dashboards/find-all', params);
+            return httpGet('/api/dashboards/find-all', params);
         }
 
         function deleteDashboard (id) {
@@ -307,11 +323,11 @@
          * @returns {Promise<object, Error>} Promise that resolves to the dashboard object
          */
         function getDashboard (id) {
-            return get('/api/dashboards/find-one', { id: id }).then(data => data.item);
+            return httpGet('/api/dashboards/find-one', { id: id }).then(data => data.item);
         }
 
         function getDashboardForView (id) {
-            return get('/api/dashboards/get/' + id).then(data => data.item);
+            return httpGet('/api/dashboards/get/' + id).then(data => data.item);
         }
 
         function publishDashboard (id) {
@@ -354,7 +370,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the created dashboard
          */
         function createDashboard (dashboard) {
-            return post('/api/dashboards/create', dashboard).then(data => data.item);
+            return httpPost('/api/dashboards/create', dashboard).then(data => data.item);
         }
 
         /**
@@ -365,7 +381,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the updated dashboard
          */
         function updateDashboard (dashboard) {
-            return post('/api/dashboards/update/' + dashboard._id, dashboard).then(data => data.item);
+            return httpPost('/api/dashboards/update/' + dashboard._id, dashboard).then(data => data.item);
         }
 
         /**
@@ -378,11 +394,11 @@
          * @param {string} params.footerTemplate - Footer template
          */
         function getDashboardAsPDF (id, params) {
-            return post(`/api/dashboards/${id}/pdf`, params);
+            return httpPost(`/api/dashboards/${id}/pdf`, params);
         }
 
         function getDashboardAsPNG (id) {
-            return post(`/api/dashboards/${id}/png`);
+            return httpPost(`/api/dashboards/${id}/png`);
         }
 
         function isDashboardAsPDFAvailable (id) {
@@ -413,7 +429,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to an object
          */
         function getLayers (params) {
-            return get('/api/layers/find-all', params);
+            return httpGet('/api/layers/find-all', params);
         }
 
         function changeLayerStatus (layerID, newStatus) {
@@ -422,7 +438,7 @@
                 status: newStatus,
             };
 
-            return post('/api/layers/change-layer-status', data);
+            return httpPost('/api/layers/change-layer-status', data);
         }
 
         /**
@@ -432,7 +448,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the created layer
          */
         function createLayer (layer) {
-            return post('/api/layers/create', layer);
+            return httpPost('/api/layers/create', layer);
         }
 
         function deleteLayer (id) {
@@ -446,7 +462,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the layer object
          */
         function getLayer (id) {
-            return get('/api/layers/find-one', { id: id }).then(data => data.item);
+            return httpGet('/api/layers/find-one', { id: id }).then(data => data.item);
         }
 
         /**
@@ -457,11 +473,11 @@
          * @returns {Promise<object, Error>}
          */
         function updateLayer (layer) {
-            return post('/api/layers/update/' + layer._id, layer).then(data => data.item);
+            return httpPost('/api/layers/update/' + layer._id, layer).then(data => data.item);
         }
 
         function getFiles () {
-            return get('/api/files/get-files').then(function (res) {
+            return httpGet('/api/files/get-files').then(function (res) {
                 return res.files;
             });
         }
@@ -484,9 +500,43 @@
          * Fetch the list of available themes
          */
         function getThemes () {
-            return $http.get('/api/themes').then(res => {
-                return res.data;
-            });
+            return httpGet('/api/themes');
+        }
+
+        function getUsers (params) {
+            return httpGet('/api/users', params);
+        }
+
+        function getUser (userId) {
+            return httpGet('/api/users/' + userId);
+        }
+
+        function createUser (user) {
+            return httpPost('/api/users', user);
+        }
+
+        function updateUser (id, changes) {
+            return httpPatch('/api/users/' + id, changes);
+        }
+
+        function deleteUserRole (userId, roleId) {
+            return httpDelete('/api/users/' + userId + '/roles/' + roleId);
+        }
+
+        function addUserRole (userId, roleId) {
+            return httpPut('/api/users/' + userId + '/roles/' + roleId);
+        }
+
+        function getUserReports (userId) {
+            return httpGet('/api/users/' + userId + '/reports');
+        }
+
+        function getUserDashboards (userId) {
+            return httpGet('/api/users/' + userId + '/dashboards');
+        }
+
+        function getUserCounts (userId) {
+            return httpGet('/api/users/' + userId + '/counts');
         }
 
         /**
@@ -496,16 +546,8 @@
          * @param {object} params - Query parameters
          * @returns {Promise<object, Error>} Promise that resolves to an object (can be undefined if not found)
          */
-        function get (url, params) {
-            return $http.get(url, { params: params }).then(res => {
-                if (res.data.result === 0) {
-                    throw new Error(res.data.msg);
-                }
-
-                return res.data;
-            }, res => {
-                throw new Error(res.data);
-            });
+        function httpGet (url, params) {
+            return httpRequest({ method: 'GET', url: url, params: params });
         }
 
         /**
@@ -515,9 +557,32 @@
          * @param {object} data - Data to send as request body
          * @returns {Promise<object, Error>}
          */
-        function post (url, data) {
-            return $http.post(url, data).then(res => {
-                if (res.data.result === 0) {
+        function httpPost (url, data) {
+            return httpRequest({ method: 'POST', url: url, data: data });
+        }
+
+        /**
+         * Perform a PATCH request
+         *
+         * @param {string} url - URL of the request
+         * @param {object} data - Data to send as request body
+         * @returns {Promise<object>}
+         */
+        function httpPatch (url, data) {
+            return httpRequest({ method: 'PATCH', url: url, data: data });
+        }
+
+        function httpPut (url, data) {
+            return httpRequest({ method: 'PUT', url: url, data: data });
+        }
+
+        function httpDelete (url) {
+            return httpRequest({ method: 'DELETE', url: url });
+        }
+
+        function httpRequest (config) {
+            return $http(config).then(res => {
+                if (res.data && res.data.result === 0) {
                     throw new Error(res.data.msg);
                 }
 

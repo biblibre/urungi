@@ -14,10 +14,10 @@
         <i class="fa fa-fw fa-home"></i>
         <span translate>Home</span>
     </a>
-    <a id="dashboardsMainMenu" ng-if="vm.user.dashboardsCreate || vm.counts.dashBoards > 0" href="dashboards/list" class="list-group-item ">
+    <a id="dashboardsMainMenu" ng-if="vm.user.dashboardsCreate || vm.counts.dashboards > 0" href="dashboards/list" class="list-group-item ">
        <i class="fa fa-fw fa-dashboard"></i>
        <span translate>My Dashboards</span>
-       <span class="badge">{{vm.counts.dashBoards}}</span>
+       <span class="badge">{{vm.counts.dashboards}}</span>
     </a>
     <a id="reportsMainMenu" ng-if="vm.user.reportsCreate || vm.counts.reports > 0" href="reports" class="list-group-item">
        <i class="fa fa-fw fa-bar-chart"></i>
@@ -40,7 +40,7 @@
     <a id="datasourcesMainMenu" ng-show="vm.user.isAdmin()" href="data-sources" class="list-group-item">
         <i class="fa fa-fw fa-database"></i>
         <span translate>Data sources</span>
-        <span class="badge">{{vm.counts.dataSources}}</span>
+        <span class="badge">{{vm.counts.datasources}}</span>
     </a>
     <a id="rolesMainMenu" ng-show="vm.user.isAdmin()" href="roles" class="list-group-item">
         <i class="fa fa-fw fa-users"></i>

@@ -19,23 +19,46 @@ describe('api', () => {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('api.changeUserStatus', function () {
-        it('should call /api/admin/users/change-user-status', function () {
-            const url = '/api/admin/users/change-user-status';
-            const userID = 'foo';
-            const newStatus = 'active';
-            const data = {
-                userID: userID,
-                status: newStatus,
+    describe('api.getVersion', function () {
+        it('should call GET /api/version', function () {
+            const url = '/api/version';
+            const response = {
+                data: {
+                    version: '2.0.0',
+                    gitVersion: '2.0.0-1-g0de3ed85-dirty',
+                },
             };
 
-            $httpBackend.expect('POST', url, data).respond(204, '');
+            $httpBackend.expect('GET', url).respond(response);
 
-            const p = api.changeUserStatus(userID, newStatus);
+            const p = api.getVersion();
 
             setTimeout($httpBackend.flush);
 
-            return expect(p).resolves.toBe('');
+            return expect(p).resolves.toEqual(response);
+        });
+    });
+
+    describe('api.getSharedSpace', function () {
+        it('should call GET /api/shared-space', function () {
+            const response = { items: [] };
+            $httpBackend.expect('GET', '/api/shared-space').respond(response);
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getSharedSpace()).resolves.toEqual(response);
+        });
+    });
+
+    describe('api.setSharedSpace', function () {
+        it('should call PUT /api/shared-space', function () {
+            const sharedSpace = [];
+            const response = { items: sharedSpace };
+            $httpBackend.expect('PUT', '/api/shared-space', sharedSpace).respond(response);
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.setSharedSpace(sharedSpace)).resolves.toEqual(response);
         });
     });
 
@@ -866,6 +889,96 @@ describe('api', () => {
             setTimeout($httpBackend.flush);
 
             return expect(api.updateLayer({ _id: 0 })).rejects.toThrow('Forbidden');
+        });
+    });
+
+    describe('api.getUsers', function () {
+        it('should call GET /api/users', function () {
+            $httpBackend.expect('GET', '/api/users').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getUsers()).resolves.toEqual({});
+        });
+    });
+
+    describe('api.getUser', function () {
+        it('should call GET /api/users/:userId', function () {
+            $httpBackend.expect('GET', '/api/users/foo').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getUser('foo')).resolves.toEqual({});
+        });
+    });
+
+    describe('api.createUser', function () {
+        it('should call POST /api/users', function () {
+            $httpBackend.expect('POST', '/api/users').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.createUser({})).resolves.toEqual({});
+        });
+    });
+
+    describe('api.updateUser', function () {
+        it('should call PATCH /api/users/:userId', function () {
+            $httpBackend.expect('PATCH', '/api/users/foo').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.updateUser('foo')).resolves.toEqual({});
+        });
+    });
+
+    describe('api.deleteUserRole', function () {
+        it('should call DELETE /api/users/:userId/roles/:roleId', function () {
+            $httpBackend.expect('DELETE', '/api/users/foo/roles/bar').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.deleteUserRole('foo', 'bar')).resolves.toEqual({});
+        });
+    });
+
+    describe('api.addUserRole', function () {
+        it('should call PUT /api/users/:userId/roles/:roleId', function () {
+            $httpBackend.expect('PUT', '/api/users/foo/roles/bar').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.addUserRole('foo', 'bar')).resolves.toEqual({});
+        });
+    });
+
+    describe('api.getUserReports', function () {
+        it('should call GET /api/users/:userId/reports', function () {
+            $httpBackend.expect('GET', '/api/users/foo/reports').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getUserReports('foo')).resolves.toEqual({});
+        });
+    });
+
+    describe('api.getUserDashboards', function () {
+        it('should call GET /api/users/:userId/dashboards', function () {
+            $httpBackend.expect('GET', '/api/users/foo/dashboards').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getUserDashboards('foo')).resolves.toEqual({});
+        });
+    });
+
+    describe('api.getUserCounts', function () {
+        it('should call GET /api/users/:userId/counts', function () {
+            $httpBackend.expect('GET', '/api/users/foo/counts').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getUserCounts('foo')).resolves.toEqual({});
         });
     });
 });

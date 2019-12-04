@@ -18,14 +18,7 @@
 
         function getCurrentUser () {
             if (!getUserDataPromise) {
-                getUserDataPromise = api.getUserData().then(data => {
-                    const user = data.items.user;
-                    user.companyData = data.items.companyData;
-                    user.rolesData = data.items.rolesData;
-                    user.reportsCreate = data.items.reportsCreate;
-                    user.dashboardsCreate = data.items.dashboardsCreate;
-                    user.exploreData = data.items.exploreData;
-                    user.viewSQL = data.items.viewSQL;
+                getUserDataPromise = api.getUserData().then(user => {
                     user.isAdmin = () => {
                         return user.roles.includes('ADMIN');
                     };

@@ -50,7 +50,7 @@
                             <label for="roleSelect" translate>Add role</label>
                             <select ng-model="vm.selectedRole" placeholder="{{ 'Add a new role...' | translate }}" ng-class="vm.selectedRole" id="roleSelect" class="form-control" ng-change="vm.selectedRoleChanged = true" ng-options="role._id as role.name for role in vm.getRolesNotInUser()"></select>
                         </div>
-                        <button type="button" class="btn btn-link" ng-show="vm.selectedRoleChanged == true && vm.selectedRole != ''" ng-click="vm.user.roles.push(vm.selectedRole); vm.save(); vm.selectedRole = ''; vm.selectedRoleChanged = false;">
+                        <button type="button" class="btn btn-link" ng-show="vm.selectedRoleChanged == true && vm.selectedRole != ''" ng-click="vm.addRole(vm.selectedRole)">
                             <i class="fa fa-plus" style="color: #00a000;"></i>
                         </button>
                     </form>
@@ -63,7 +63,7 @@
                             <span translate>shared reports</span>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{ vm.userCounts.sharedDashBoards }}</span>
+                            <span>{{ vm.userCounts.sharedDashboards }}</span>
                             <span translate>shared dashboards</span>
                         </div>
                         <div class="col-sm-6">
@@ -71,7 +71,7 @@
                             <span translate>private reports</span>
                         </div>
                         <div class="col-sm-6">
-                            <span>{{ vm.userCounts.privateDashBoards }}</span>
+                            <span>{{ vm.userCounts.privateDashboards }}</span>
                             <span translate>private dashboards</span>
                         </div>
                     </div>
