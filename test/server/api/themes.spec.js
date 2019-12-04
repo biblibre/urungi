@@ -1,6 +1,7 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const helpers = require('../helpers.js');
 
 let app;
 let mongod;
@@ -15,13 +16,28 @@ afterAll(async () => {
 });
 
 describe('Themes API', function () {
-    describe('GET /api/themes', function () {
-        it('should return the list of themes', async function () {
-            const res = await request(app).get('/api/themes')
-                .expect(200);
+    let adminHeaders;
 
-            expect(res.body).toHaveProperty('data');
-            expect(res.body.data).toEqual(['blue', 'grey']);
+    beforeAll(async function () {
+        adminHeaders = await helpers.login(app);
+    });
+
+    describe('GET /api/themes', function () {
+        describe('when not authenticated', function () {
+            it('should return status 403', async function () {
+                const res = await request(app).get('/api/themes');
+
+                expect(res.status).toBe(403);
+            });
+        });
+        describe('when authenticated', function () {
+            it('should return the list of themes', async function () {
+                const res = await request(app).get('/api/themes').set(adminHeaders);
+
+                expect(res.status).toBe(200);
+                expect(res.body).toHaveProperty('data');
+                expect(res.body.data).toEqual(['blue', 'grey']);
+            });
         });
     });
 });
