@@ -31,6 +31,7 @@ if (cluster.isMaster) {
     var ipaddr = process.env.IP || config.get('ip');
     var port = process.env.PORT || config.get('port');
 
-    app.listen(port, ipaddr);
+    const server = app.listen(port, ipaddr);
+    server.setTimeout(0);
     debug('Server running at http://' + ipaddr + ':' + port + '/');
 }
