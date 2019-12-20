@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed sharing a dashboard or a report inside a shared space folder
+- Fixed shared space for non-admin users
+
 ### Changed
 
 - Make users API routes more REST-like
+- Disabled the default http.Server timeout of 120s
 
 ## [2.0.0] - 2019-11-29
 
