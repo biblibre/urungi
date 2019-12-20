@@ -1686,7 +1686,7 @@ msgstr ""
 msgid "Remove from shared space"
 msgstr ""
 
-#: public/js/users/users-view.controller.js:122
+#: public/js/users/users-view.controller.js:127
 msgid "Remove role {{name}} ?"
 msgstr ""
 
@@ -2050,7 +2050,7 @@ msgstr ""
 
 #: public/js/layers/layers-list.controller.js:90
 #: public/js/users/users-list.controller.js:34
-#: public/js/users/users-view.controller.js:67
+#: public/js/users/users-view.controller.js:72
 msgid "Status updated"
 msgstr ""
 
@@ -2157,7 +2157,7 @@ msgstr ""
 msgid "The report name is required"
 msgstr ""
 
-#: public/js/users/users-view.controller.js:117
+#: public/js/users/users-view.controller.js:122
 msgid "The role 'Urungi Administrator' can't be removed from the user administrator"
 msgstr ""
 
@@ -2317,7 +2317,7 @@ msgstr ""
 msgid "Upload image"
 msgstr ""
 
-#: public/js/users/users-view.controller.js:110
+#: public/js/users/users-view.controller.js:115
 msgid "Urungi Administrator"
 msgstr ""
 
