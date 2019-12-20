@@ -25,8 +25,8 @@
     <div  data-nodrag ui-tree-handle data-nodrop-enabled class="tree-node tree-node-content tree-node-folder" ng-if="((node.grants.executeReports == true || node.grants.executeDashboards == true) && node.nodeType != 'report' && node.nodeType != 'dashboard')  "> <!--&& node.nodes.length > 0 -->
         <span class="fa" ng-class="{'fa-folder': collapsed,'fa-folder-open-o': !collapsed}" ng-click="toggle(this)"></span>
         <span data-nodrag ng-click="toggle(this)" style="padding-left: 5px;margin-right: 5px;">{{node.title}}</span>
-        <button ng-if="vm.item.parentFolder != node.grants.folderID || vm.item.isShared == false" class="btn btn-success btn-xs" ng-click="vm.selectThisFolder(node.grants.folderID)" translate>select</button>
-        <span class="badge badge-black" ng-if="vm.item.parentFolder == node.grants.folderID && vm.item.isShared == true" translate>selected</span>
+        <button ng-if="vm.item.parentFolder != node.id || vm.item.isShared == false" class="btn btn-success btn-xs" ng-click="vm.selectThisFolder(node.id)" translate>select</button>
+        <span class="badge badge-black" ng-if="vm.item.parentFolder == node.id && vm.item.isShared == true" translate>selected</span>
     </div>
 
     <ol ng-if="node.nodes" data-nodrag ui-tree-nodes data-nodrop-enabled ng-model="node.nodes" ng-class="{hidden: collapsed}">
