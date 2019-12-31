@@ -1,0 +1,45 @@
+#!/usr/bin/env node
+
+const migrate = require('migrate-mongo');
+const debug = require('debug')('urungi:server');
+
+(async function () {
+    try {
+        const { db, client } = await migrate.database.connect();
+        const statuses = await migrate.status(db);
+        await client.close();
+        if (statuses.some(s => s.appliedAt === 'PENDING')) {
+            throw new Error('Some migrations are pending. Run `npx migrate-mongo up` before starting the server');
+        }
+    } catch (err) {
+        console.error(`Error: ${err.message}`);
+        process.exit(1);
+    }
+
+    const config = require('config');
+    const app = require('../server/app');
+
+    const ip = process.env.IP || config.get('ip');
+    const port = process.env.PORT || config.get('port');
+
+    const server = app.listen(port, ip);
+    server.setTimeout(0);
+
+    server.on('close', async function () {
+        debug('Server closed');
+
+        const mongoose = require('mongoose');
+        await mongoose.connection.close();
+
+        process.exit(0);
+    });
+
+    function close () {
+        server.close();
+    }
+
+    process.on('SIGINT', close);
+    process.on('SIGTERM', close);
+
+    debug(`Server running at http://${ip}:${port}/`);
+})();

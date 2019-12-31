@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added ability to configure the number of workers
+
+### Dependencies
+
+- Updated migrate-mongo to 7.0.1
+
 ## [2.0.1] - 2019-12-20
 
 ### Fixed
