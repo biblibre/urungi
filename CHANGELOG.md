@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2020-01-02
+
 ### Added
 
 - Added ability to configure the number of workers
@@ -396,7 +398,8 @@ These are the most notable changes made since the fork of
 
 - A lot of minor issues
 
-[Unreleased]: https://github.com/biblibre/urungi/compare/v2.0.1...HEAD
+[Unreleased]: https://github.com/biblibre/urungi/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/biblibre/urungi/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/biblibre/urungi/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/biblibre/urungi/compare/v1.2.2...v2.0.0
 [1.2.2]: https://github.com/biblibre/urungi/compare/v1.2.1...v1.2.2
