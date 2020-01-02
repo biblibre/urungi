@@ -5,6 +5,10 @@ module.exports = {
     ip: undefined,
     port: undefined,
 
+    // Number of processes to spawn
+    // Defaults to the number of logical CPU cores
+    workers: os.cpus().length,
+
     // MongoDB connection string
     // See https://docs.mongodb.com/manual/reference/connection-string/
     db: undefined,

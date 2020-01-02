@@ -29,13 +29,6 @@ module.exports = function () {
         debug('Mongoose default connection disconnected');
     });
 
-    // If the Node process ends, close the Mongoose connection
-    process.on('SIGINT', function () {
-        connection.close(function () {
-            debug('Mongoose default connection disconnected through app termination');
-        });
-    });
-
     require('../models/company');
     require('../models/dashboard');
     require('../models/datasource');
