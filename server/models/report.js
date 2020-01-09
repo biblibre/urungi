@@ -82,7 +82,7 @@ var reportSchema = new mongoose.Schema({
     reportName: { type: String, required: true },
     reportSubType: { type: String }, // FIXME This is not used
     reportType: { type: String },
-    selectedLayerID: { type: mongoose.Schema.Types.ObjectId, ref: 'Layer' },
+    selectedLayerID: { type: mongoose.Schema.Types.ObjectId, ref: 'Layer', required: true },
     theme: String,
 }, { collation: { locale: 'en', strength: 2 } });
 

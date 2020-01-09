@@ -18,6 +18,7 @@
     "angular-ui-sortable": "^0.19.0",
     "angular-ui-tree": "^2.22.6",
     "angularjs-bootstrap-datetimepicker": "^1.1.4",
+    "arg": "^4.1.2",
     "body-parser": "^1.19.0",
     "bootstrap": "^3.4.1",
     "c3": "^0.7.11",
@@ -41,7 +42,7 @@
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "migrate-mongo": "^7.0.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.5",
+    "mongoose": "^5.8.6",
     "mssql": "^5.1.0",
     "multer": "^1.4.2",
     "mysql": "^2.17.1",
@@ -99,6 +100,9 @@
     "mongodbMemoryServer": {
       "disablePostinstall": "1"
     }
+  },
+  "engines": {
+    "node": ">=10.0.0"
   },
   "repository": {
     "type": "git",

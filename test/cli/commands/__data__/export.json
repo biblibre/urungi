@@ -1,0 +1,75 @@
+{
+    "reports": [
+        {
+            "_id": "000000000000000000000000"
+        },
+        {
+            "_id": "000000000000000000000001",
+            "reportName": "Report 1",
+            "selectedLayerID": "a00000000000000000000000"
+        },
+        {
+            "_id": "000000000000000000000002",
+            "reportName": "Report 2",
+            "selectedLayerID": "a00000000000000000000001"
+        },
+        {
+            "_id": "000000000000000000000003",
+            "reportName": "Report 3",
+            "selectedLayerID": "a00000000000000000000002"
+        }
+    ],
+    "dashboards": [
+        {
+            "_id": "b00000000000000000000000"
+        },
+        {
+            "_id": "b00000000000000000000001",
+            "dashboardName": "Dashboard 1",
+            "companyID": "COMPID",
+            "reports": [
+                {
+                    "reportName": "Dashboard 1 Report 1",
+                    "selectedLayerID": "a00000000000000000000000"
+                }
+            ]
+        },
+        {
+            "_id": "b00000000000000000000002",
+            "dashboardName": "Dashboard 2",
+            "companyID": "COMPID",
+            "reports": [
+                {
+                    "reportName": "Dashboard 2 Report 1",
+                    "selectedLayerID": "a00000000000000000000001"
+                }
+            ]
+        },
+        {
+            "_id": "b00000000000000000000003",
+            "dashboardName": "Dashboard 3",
+            "companyID": "COMPID",
+            "reports": [
+                {
+                    "reportName": "Dashboard 3 Report 1",
+                    "selectedLayerID": "a00000000000000000000002"
+                }
+            ]
+        }
+    ],
+    "layers": [
+        {
+            "_id": "a00000000000000000000001",
+            "name": "Layer 1",
+            "status": "active",
+            "datasourceID": "d00000000000000000000001"
+        },
+        {
+            "_id": "a00000000000000000000002",
+            "name": "Layer 2",
+            "status": "active",
+            "datasourceID": "d00000000000000000000002"
+        }
+    ],
+    "datasources": []
+}

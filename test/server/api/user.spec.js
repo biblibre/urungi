@@ -185,6 +185,7 @@ describe('User API', function () {
                 owner: user.id,
                 isShared: true,
                 parentFolder: 'foo',
+                selectedLayerID: 'abcdef123456789012345678',
             });
             dashboard = await Dashboard.create({
                 companyID: 'COMPID',

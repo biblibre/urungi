@@ -2,6 +2,7 @@ module.exports = {
     collectCoverageFrom: [
         'public/**/*.js',
         'server/**/*.js',
+        'src/**/*.js',
     ],
     coverageReporters: [
         'lcovonly',
@@ -26,6 +27,14 @@ module.exports = {
                 '<rootDir>/test/server/**/*.spec.js',
             ],
             globalSetup: '<rootDir>/test/server/setup.js',
+        },
+        {
+            displayName: 'cli',
+            testEnvironment: 'node',
+            testMatch: [
+                '<rootDir>/test/cli/**/*.spec.js',
+            ],
+            globalSetup: '<rootDir>/test/cli/setup.js',
         },
     ],
 };
