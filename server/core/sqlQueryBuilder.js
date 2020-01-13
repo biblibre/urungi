@@ -423,25 +423,15 @@ class SqlQueryBuilder {
                 break;
 
             case '#WST-THISMONTH#':
-                firstDate = new Date(year + '-' + month + '-01T00:00:00.000Z');
-
-                if (month === 12) {
-                    lastDate = new Date((year + 1) + '-01-01T00:00:00.000Z');
-                } else {
-                    month1 = pad(today.getMonth() + 2);
-                    lastDate = new Date(year + '-' + month1 + '-01T00:00:00.000Z');
-                }
+                firstDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                lastDate = new Date(firstDate.getTime());
+                lastDate.setMonth(firstDate.getMonth() + 1);
                 break;
 
             case '#WST-LASTMONTH#':
-                if (month === 1) {
-                    firstDate = new Date((year - 1) + '-12-01T00:00:00.000Z');
-                } else {
-                    month1 = pad(today.getMonth());
-                    firstDate = new Date(year + '-' + month1 + '-01T00:00:00.000Z');
-                }
-
-                lastDate = new Date(year + '-' + month + '-01T00:00:00.000Z');
+                firstDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                firstDate.setMonth(-1);
+                lastDate = new Date(today.getFullYear(), today.getMonth(), 1);
                 break;
 
             case '#WST-THISYEAR#':
