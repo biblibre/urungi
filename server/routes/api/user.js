@@ -128,7 +128,6 @@ function setContextHelp (req, res) {
 
 function logout (req, res) {
     req.logOut();
-    res.clearCookie('remember_me');
     res.sendStatus(204);
 }
 

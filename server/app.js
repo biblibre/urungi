@@ -56,17 +56,11 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' })); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var authentication = true;
-
-global.authentication = authentication;
 global.logFailLogin = true;
 global.logSuccessLogin = true;
 
-if (authentication) {
-    app.use(passport.initialize());
-    app.use(passport.session());
-    app.use(passport.authenticate('remember-me'));
-}
+app.use(passport.initialize());
+app.use(passport.session());
 
 require('./config/passport')(passport);
 
