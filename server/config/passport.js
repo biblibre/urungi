@@ -2,7 +2,6 @@ const config = require('config');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const LocalStrategy = require('passport-local').Strategy;
-const RememberMeStrategy = require('passport-remember-me').Strategy;
 
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
@@ -23,29 +22,6 @@ module.exports = function (passport) {
     function (username, password, done) {
         User.isValidUserPassword(username, password, done);
     }));
-
-    passport.use(new RememberMeStrategy(
-        function (token, done) {
-            User.findOne({ accessToken: token }, {}, function (err, user) {
-                if (err) { return done(err); }
-                if (!user) { return done(null, false); }
-                return done(null, user);
-            });
-        },
-        function (user, done) {
-            var token = ((Math.random() * Math.pow(36, 10) << 0).toString(36)).substr(-8);
-            User.updateOne({
-                _id: user.id
-            }, {
-                $set: {
-                    accessToken: token
-                }
-            }, function (err) {
-                if (err) { return done(err); }
-                return done(null, token);
-            });
-        }
-    ));
 
     if (config.has('google')) {
         passport.use(new GoogleStrategy({

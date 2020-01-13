@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema({
     filters: [],
     contextHelp: [],
     dialogs: [],
-    accessToken: String,
     startDate: { type: Date, default: Date.now },
     endDate: { type: Date },
     history: String,

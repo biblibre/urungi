@@ -67,12 +67,6 @@ function authenticate (passport, User, req, res, next) {
                 last_login_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress
             };
 
-            if (req.body.remember_me) {
-                var token = ((Math.random() * Math.pow(36, 10) << 0).toString(36)).substr(-8);
-                loginData.accessToken = token;
-                res.cookie('remember_me', token, { path: '/', httpOnly: true, maxAge: 604800000 }); // 7 days
-            }
-
             // insert the company's Data into the user to avoid a 2nd server query'
 
             Company.findOne({ companyID: user.companyID }, {}, function (err, company) {
