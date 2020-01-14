@@ -1,4 +1,5 @@
 const config = require('config');
+const escapeRegExp = require('./escape-regexp.js');
 
 module.exports = {
     find,
@@ -12,7 +13,7 @@ async function find (model, req) {
     if (req.query.filters) {
         const filters = JSON.parse(req.query.filters);
         for (const key in filters) {
-            filter[key] = new RegExp(filters[key], 'i');
+            filter[key] = new RegExp(escapeRegExp(filters[key]), 'i');
         }
     }
 
