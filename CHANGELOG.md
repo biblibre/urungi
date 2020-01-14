@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed date filter when using patterns 'This month' and 'Last month'
+
 ### Removed
 
 - Removed "Remember me" feature at login because it was not secure
