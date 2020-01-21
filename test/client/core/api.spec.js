@@ -892,6 +892,16 @@ describe('api', () => {
         });
     });
 
+    describe('api.getThemes', function () {
+        it('should call GET /api/themes', function () {
+            $httpBackend.expect('GET', '/api/themes').respond({});
+
+            setTimeout($httpBackend.flush);
+
+            return expect(api.getThemes()).resolves.toEqual({});
+        });
+    });
+
     describe('api.getUsers', function () {
         it('should call GET /api/users', function () {
             $httpBackend.expect('GET', '/api/users').respond({});
