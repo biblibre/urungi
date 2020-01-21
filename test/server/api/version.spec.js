@@ -16,9 +16,9 @@ afterAll(async () => {
 
 describe('Version API', function () {
     it('should return the version', async function () {
-        const res = await request(app).get('/api/version')
-            .expect(200);
+        const res = await request(app).get('/api/version');
 
+        expect(res.status).toBe(200);
         expect(res.body).toHaveProperty('data');
         expect(res.body.data).toHaveProperty('version');
         expect(res.body.data.version).toMatch(/^\d+\.\d+\.\d+$/);

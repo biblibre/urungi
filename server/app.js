@@ -78,7 +78,6 @@ const routesModules = [
     './custom/files/routes',
     './custom/layers/routes',
     './custom/reports/routes',
-    './custom/version/routes',
 ];
 
 for (const routesModule of routesModules) {
