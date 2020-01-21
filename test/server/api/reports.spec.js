@@ -201,6 +201,7 @@ describe('Reports API', function () {
                     nd_trash_deleted: false,
                     owner: user.id,
                     isPublic: false,
+                    selectedLayerID: 'abcdef123456789012345678',
                 })
                 .expect(200);
 

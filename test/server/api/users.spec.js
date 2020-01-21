@@ -226,6 +226,7 @@ describe('Users API', function () {
                     reportName: 'Report',
                     owner: user.id,
                     isShared: true,
+                    selectedLayerID: 'abcdef123456789012345678',
                 });
                 const dashboard = await Dashboard.create({
                     companyID: 'COMPID',
@@ -258,6 +259,7 @@ describe('Users API', function () {
                     reportName: 'Report',
                     owner: user.id,
                     isShared: true,
+                    selectedLayerID: 'abcdef123456789012345678',
                 });
                 const dashboard = await Dashboard.create({
                     companyID: 'COMPID',
@@ -308,6 +310,7 @@ describe('Users API', function () {
                     companyID: 'COMPID',
                     reportName: 'Report',
                     owner: user.id,
+                    selectedLayerID: 'abcdef123456789012345678',
                 });
 
                 const res = await request(app).get('/api/users/' + user.id + '/reports')
@@ -330,6 +333,7 @@ describe('Users API', function () {
                     companyID: 'COMPID',
                     reportName: 'Report',
                     owner: user.id,
+                    selectedLayerID: 'abcdef123456789012345678',
                 });
 
                 const res = await request(app).get('/api/users/' + user.id + '/reports')
