@@ -1,4 +1,5 @@
 const os = require('os');
+const path = require('path');
 
 module.exports = {
     url: undefined,
@@ -31,6 +32,12 @@ module.exports = {
             from: 'root@' + os.hostname()
         }
     },
+
+    uploads: {
+        // Absolute path where uploaded files will be stored
+        path: path.join(__dirname, '..', 'uploads'),
+    },
+
     google: {
         clientID: 'your client id',
         clientSecret: 'your client secret',

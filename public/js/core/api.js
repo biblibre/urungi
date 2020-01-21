@@ -477,7 +477,7 @@
         }
 
         function getFiles () {
-            return httpGet('/api/files/get-files').then(function (res) {
+            return httpGet('/api/files').then(function (res) {
                 return res.files;
             });
         }
@@ -491,7 +491,7 @@
             const data = new FormData();
             data.set('content', file);
 
-            return $http.post('/api/files/upload', data, config).then(res => res.data.item, res => {
+            return $http.post('/api/files', data, config).then(res => res.data, res => {
                 throw new Error(res.statusText);
             });
         }

@@ -10,7 +10,7 @@ var fileSchema = new mongoose.Schema({
     nd_trash_deleted: { type: Boolean },
     nd_trash_deleted_date: { type: Date },
     upload_user_id: { type: String },
-    createdOn: { type: Date }
+    createdOn: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('File', fileSchema);

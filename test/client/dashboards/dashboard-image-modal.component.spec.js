@@ -57,7 +57,7 @@ describe('appDashboardImageModal', function () {
                         },
                     ],
                 };
-                $httpBackend.expect('GET', '/api/files/get-files').respond(response);
+                $httpBackend.expect('GET', '/api/files').respond(response);
                 vm.$onInit();
                 $httpBackend.flush();
 
@@ -97,28 +97,25 @@ describe('appDashboardImageModal', function () {
                 expect(notyShowSpy).toHaveBeenCalledWith();
             });
 
-            it('should call /api/files/upload', function () {
+            it('should call POST /api/files', function () {
                 const response = {
-                    result: 1,
-                    item: {
-                        upload_user_id: 1,
-                        companyID: 'COMPID',
-                        filename: 'foo',
-                        name: 'foo',
-                        type: 'image/png',
-                        url: 'uploads/foo',
-                        size: 1,
-                        nd_trash_deleted: false,
-                        createdOn: new Date()
-                    },
+                    upload_user_id: 1,
+                    companyID: 'COMPID',
+                    filename: 'foo',
+                    name: 'foo',
+                    type: 'image/png',
+                    url: 'uploads/foo',
+                    size: 1,
+                    nd_trash_deleted: false,
+                    createdOn: new Date()
                 };
-                $httpBackend.expect('POST', '/api/files/upload').respond(response);
+                $httpBackend.expect('POST', '/api/files').respond(response);
                 const file = new File([], 'foo', { type: 'image/png' });
                 vm.upload(file);
 
                 expect(vm.files[0]).toEqual({ loading: true });
                 $httpBackend.flush();
-                expect(vm.files[0]).toEqual(Object.assign({ loading: false }, response.item));
+                expect(vm.files[0]).toEqual(Object.assign({ loading: false }, response));
             });
         });
     });
