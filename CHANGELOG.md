@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - scripts in script/ have been replaced by a command in the new CLI
+- Dockerfile now takes a build arg `NODE_TAG`
+- docker-compose.yml reads environment variables `NODE_TAG` and `MONGO_TAG`
 
 ### Fixed
 
