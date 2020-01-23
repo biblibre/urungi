@@ -1,7 +1,10 @@
 version: '3'
 services:
     web:
-        build: .
+        build:
+            context: .
+            args:
+                NODE_TAG: ${NODE_TAG:-lts}
         ports:
             - 8080:8080
         depends_on:
@@ -9,6 +12,6 @@ services:
         environment:
             - MONGODB_URI=mongodb://mongo:27017/urungi_development
     mongo:
-        image: mongo:3.6-xenial
+        image: mongo:${MONGO_TAG:-latest}
         ports:
             - 27017:27017

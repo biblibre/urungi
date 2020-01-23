@@ -1,13 +1,15 @@
-FROM node:10
+ARG NODE_TAG=lts
 
-RUN apt-get update && apt-get install -y git
+FROM node:$NODE_TAG
 
-WORKDIR /usr/src/app
+USER node
 
-COPY package*.json ./
+COPY --chown=node package.json package-lock.json /home/node/app/
+WORKDIR /home/node/app
 RUN npm ci --only=production
 
-COPY . .
+COPY --chown=node . .
 
 EXPOSE 8080
-CMD npx migrate-mongo up && npm start
+ENTRYPOINT ["./docker-entrypoint.sh"]
+CMD ["node", "server.js"]
