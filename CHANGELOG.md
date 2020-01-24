@@ -30,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 
 - Added arg 4.1.2
+- Updated angular to 1.7.9
+- Updated angular-mocks to 1.7.9
+- Updated angular-route to 1.7.9
+- Updated angular-sanitize to 1.7.9
 - Updated eslint to 6.8.0
 - Updated eslint-plugin-import to 2.20.0
 - Updated eslint-plugin-jest to 23.6.0
