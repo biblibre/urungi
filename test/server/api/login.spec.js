@@ -33,7 +33,7 @@ describe('Login API', function () {
         });
         describe('with invalid credentials', () => {
             it('should return status 401', async function () {
-                const res = await agent.get('/login');
+                let res = await agent.get('/login');
                 let setCookieHeader = res.headers['set-cookie'];
                 if (setCookieHeader.length === 1) {
                     setCookieHeader = setCookieParser.splitCookiesString(setCookieHeader[0]);
@@ -41,11 +41,12 @@ describe('Login API', function () {
                 const cookies = setCookieParser.parse(setCookieHeader, { map: true });
                 const cookie = Object.values(cookies).map(c => c.name + '=' + c.value).join('; ');
                 const xsrfToken = cookies['XSRF-TOKEN'].value;
-                return request(app).post('/api/login')
+                res = await request(app).post('/api/login')
                     .set('X-XSRF-TOKEN', xsrfToken)
                     .set('Cookie', cookie)
-                    .send({ userName: 'administrator', password: 'invalidpassword' })
-                    .expect(401);
+                    .send({ userName: 'administrator', password: 'invalidpassword' });
+
+                expect(res.status).toBe(401);
             });
         });
         describe('with valid credentials', () => {

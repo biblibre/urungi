@@ -199,25 +199,25 @@ describe('Layers API', function () {
     describe('POST /api/layers/change-layer-status', function () {
         it('should change layer status', async function () {
             await User.findOne({ userName: 'administrator' });
-            const res = await request(app).post('/api/layers/create')
-                .set(headers)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
+            const layer = await Layer.create({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
 
-            await request(app).post('/api/layers/change-layer-status')
+            const res = await request(app).post('/api/layers/change-layer-status')
                 .set(headers)
-                .send({ layerID: res.body.item._id, status: 'active' })
-                .expect(204);
+                .send({ layerID: layer._id, status: 'active' });
 
-            await Layer.deleteOne({ name: 'layer' });
+            expect(res.status).toBe(204);
+
+            await layer.remove();
         });
 
         it('should return 500 if status is invalid', async function () {
             const layer = await Layer.create({ name: 'layer', status: 'active', datasourceID: datasource._id });
 
-            await request(app).post('/api/layers/change-layer-status')
+            const res = await request(app).post('/api/layers/change-layer-status')
                 .set(headers)
-                .send({ layerID: layer.id, status: {} })
-                .expect(500);
+                .send({ layerID: layer.id, status: {} });
+
+            expect(res.status).toBe(500);
 
             await layer.remove();
         });
