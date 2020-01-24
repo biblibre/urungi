@@ -30,8 +30,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 
 - Added arg 4.1.2
+- Updated eslint to 6.8.0
+- Updated eslint-plugin-import to 2.20.0
+- Updated eslint-plugin-jest to 23.6.0
+- Updated eslint-plugin-node to 11.0.0
+- Updated jest to 25.1.0
+- Updated mongodb-memory-server to 6.2.3
 - Updated mongoose to 5.8.6
 - Updated oracledb to 4.1.0
+- Updated set-cookie-parser to 2.4.1
+- Updated stylelint to 13.0.0
 
 ## [2.1.0] - 2020-01-02
 

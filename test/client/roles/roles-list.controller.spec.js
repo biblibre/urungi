@@ -42,17 +42,20 @@ describe('RolesListController', function () {
             $httpBackend.flush();
 
             $httpBackend.expect('GET', '/api/roles?fields=name,description&page=2')
-                .respond(getRolesFindAllResponse());
+                .respond(getRolesFindAllResponse(2));
 
             vm.goToPage(2);
             $httpBackend.flush();
+
+            expect(vm.page).toBe(2);
+            expect(vm.pages).toBe(2);
         });
     });
 
-    function getRolesFindAllResponse () {
+    function getRolesFindAllResponse (page = 1) {
         return {
-            page: 1,
-            pages: 1,
+            page: page,
+            pages: page,
             items: [
                 {
                     _id: 'one',
