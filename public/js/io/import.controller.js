@@ -26,7 +26,7 @@
         activate();
 
         function activate () {
-            api.getDataSources().then(data => {
+            api.getDatasources().then(data => {
                 vm.localDatasources = data.items;
             });
         }

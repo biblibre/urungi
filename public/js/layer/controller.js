@@ -3,7 +3,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';
-    $scope.statusInfoModal = 'partials/common/statusInfo.html';
     $scope.setupModal = 'partials/layer/setupModal.html';
     $scope.addAllModal = 'partials/layer/addAllModal.html';
     $scope.ReadOnlyDataSourceSelector = false;
@@ -292,19 +291,9 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     $scope.addSqlToLayer = function () {
-        api.getSqlQuerySchema($scope._Layer.datasourceID, $scope.temporarySQLCollection).then(function (result) {
-            if (result.result !== 1) {
-                $scope.errorToken = result;
-                return;
-            }
+        delete $scope.temporarySQLCollection.error;
 
-            if (!result.isValid) {
-                $scope.temporarySQLCollection.invalidSql = true;
-                return;
-            }
-
-            const collection = result.schema;
-
+        api.getSqlQueryCollection($scope._Layer.datasourceID, $scope.temporarySQLCollection).then(function (collection) {
             collection.collectionID = 'C' + $scope.newID();
 
             for (const element of collection.elements) {
@@ -329,51 +318,52 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
 
             $('#sqlModal').modal('hide');
             $scope.erDiagramInit();
+        }, function (err) {
+            $scope.temporarySQLCollection.error = err.message;
         });
     };
 
     $scope.saveSQLChanges = function () {
-        api.getSqlQuerySchema($scope._Layer.datasourceID, $scope.temporarySQLCollection).then(function (result) {
-            if (result.result === 1 && result.items.length > 0) {
-                // The result is an array but I think it never holds more than one element.
+        delete $scope.temporarySQLCollection.error;
 
-                var currentCol = $scope.theSelectedElement;
-                var newCol = result.items[0];
+        api.getSqlQueryCollection($scope._Layer.datasourceID, $scope.temporarySQLCollection).then(function (newCol) {
+            var currentCol = $scope.theSelectedElement;
 
-                for (const e in newCol.elements) {
-                    newCol.elements[e].collectionID = currentCol.collectionID;
-                    newCol.elements[e].collectionName = currentCol.collectionName;
-                }
-
-                $scope.elementMatch = {};
-                $scope.lostElements = [];
-                $scope.newElements = [];
-                $scope.matchedElements = [];
-
-                for (const e1 of newCol.elements) {
-                    $scope.elementMatch[e1.elementID] = null;
-                    for (const e2 of currentCol.elements) {
-                        if (e1.elementName === e2.elementName) {
-                            $scope.elementMatch[e1.elementID] = e2;
-                            $scope.matchedElements.push(e2);
-                        }
-                    }
-                }
-
-                for (const el of currentCol.elements) {
-                    if ($scope.matchedElements.indexOf(el) < 0) {
-                        $scope.lostElements.push(el);
-                    }
-                }
-
-                for (const el of newCol.elements) {
-                    if (!$scope.elementMatch[el.elementID]) {
-                        $scope.newElements.push(el);
-                    }
-                }
-
-                $scope.newSQLCollection = newCol;
+            for (const e in newCol.elements) {
+                newCol.elements[e].collectionID = currentCol.collectionID;
+                newCol.elements[e].collectionName = currentCol.collectionName;
             }
+
+            $scope.elementMatch = {};
+            $scope.lostElements = [];
+            $scope.newElements = [];
+            $scope.matchedElements = [];
+
+            for (const e1 of newCol.elements) {
+                $scope.elementMatch[e1.elementID] = null;
+                for (const e2 of currentCol.elements) {
+                    if (e1.elementName === e2.elementName) {
+                        $scope.elementMatch[e1.elementID] = e2;
+                        $scope.matchedElements.push(e2);
+                    }
+                }
+            }
+
+            for (const el of currentCol.elements) {
+                if ($scope.matchedElements.indexOf(el) < 0) {
+                    $scope.lostElements.push(el);
+                }
+            }
+
+            for (const el of newCol.elements) {
+                if (!$scope.elementMatch[el.elementID]) {
+                    $scope.newElements.push(el);
+                }
+            }
+
+            $scope.newSQLCollection = newCol;
+        }, function (err) {
+            $scope.temporarySQLCollection.error = err.message;
         });
     };
 
@@ -1158,26 +1148,11 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     $scope.getDatasetsForThisDts = function (_id, theDataSource) {
         if (!theDataSource.loading) {
             theDataSource.loading = true;
-            connection.get('/api/data-sources/getEntities', { id: _id }).then(function (data) {
+            api.getDatasourceCollections(_id).then(function (data) {
                 theDataSource.loading = false;
-                if (data.result === 1) {
-                    theDataSource.entities = data.items;
-                } else {
-                    if (data.actionCode === 'INVALIDATEDTS') {
-                        theDataSource.status = -1;
-                        theDataSource.statusInfo = { errorCode: data.code, actionCode: data.actionCode, message: data.msg, lastDate: new Date() };
-                    }
-                }
+                theDataSource.entities = data.data;
             });
         }
-    };
-
-    $scope.getFieldsForThisEntity = function (dataSourceID, entity, theEntity) {
-        api.getEntitiesSchema(dataSourceID, entity).then(function (result) {
-            if (result.result === 1) {
-                theEntity.fields = result.items[0].elements;
-            }
-        });
     };
 
     $scope.selectedCanvas = function (event) {
@@ -1216,9 +1191,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
 
         $scope.selectedItem = 'collection';
         $scope.theSelectedElement = theCollection;
-        $scope.selected_name = theCollection.table_name;
-        $scope.selected_schema_name = theCollection.schema_name;
-        $scope.selected_decription = theCollection.description;
         // if ($scope.joinMode)
         //  collectionHighliter(theCollection.collectionID);
 
@@ -1234,11 +1206,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         unSelect();
         $scope.selectedItem = 'element';
         $scope.theSelectedElement = theElement;
-        $scope.selected_name = theElement.column_name;
-        $scope.selected_schema_name = theElement.table_schema;
-        $scope.selected_table_name = theElement.table_name;
-        $scope.selected_decription = theElement.description;
-        $scope.selected_data_type = theElement.data_type;
         if (theElement.isPK) { $scope.selected_primary_key = true; } else { $scope.selected_primary_key = false; }
 
         if ($scope.selectedElements) {
@@ -1248,11 +1215,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         setSelectedElements();
     };
 
-    $scope.showStatusInfo = function (statusInfo) {
-        $scope.statusInfo = statusInfo;
-        $('#statusInfo').modal('show');
-    };
-
     function setSelectedElements () {
         for (var s in $scope.selectedElements) {
             $('#' + $scope.selectedElements[s]).addClass('selectedElement');
@@ -1260,15 +1222,9 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         $scope.tabs.selected = 'properties';
     }
 
-    $scope.addDatasetToLayer = function (datasourceID, entity) {
+    $scope.addDatasetToLayer = function (datasourceID, collectionName) {
         if ($scope._Layer.datasourceID === datasourceID) {
-            api.getEntitiesSchema(datasourceID, entity).then(function (result) {
-                if (result.result !== 1) {
-                    return;
-                }
-
-                const collection = result.schema;
-
+            api.getDatasourceCollection(datasourceID, collectionName).then(function (collection) {
                 collection.collectionID = 'C' + $scope.newID();
 
                 for (const element of collection.elements) {

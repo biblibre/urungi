@@ -23,9 +23,14 @@
             updateRole: updateRole,
 
             getDatasource: getDatasource,
-            getDataSources: getDataSources,
-            getEntitiesSchema: getEntitiesSchema,
-            getSqlQuerySchema: getSqlQuerySchema,
+            getDatasources: getDatasources,
+            createDatasource: createDatasource,
+            updateDatasource: updateDatasource,
+            getDatasourceCollections: getDatasourceCollections,
+            getDatasourceCollection: getDatasourceCollection,
+            getSqlQueryCollection: getSqlQueryCollection,
+
+            testConnection: testConnection,
 
             getReports: getReports,
             deleteReport: deleteReport,
@@ -128,29 +133,35 @@
         }
 
         function getDatasource (id) {
-            return httpGet('/api/data-sources/find-one', { id: id }).then(data => data.item);
+            return httpGet('/api/datasources/' + id);
         }
 
-        function getDataSources (params) {
-            return connection.get('/api/data-sources/find-all', params);
+        function getDatasources (params) {
+            return httpGet('/api/datasources', params);
         }
 
-        function getEntitiesSchema (dataSourceID, entity) {
-            var params = {
-                datasourceID: dataSourceID,
-                entity: entity,
-            };
-
-            return connection.get('/api/data-sources/getEntitySchema', params);
+        function createDatasource (datasource) {
+            return httpPost('/api/datasources', datasource);
         }
 
-        function getSqlQuerySchema (dataSourceID, collection) {
-            var params = {
-                datasourceID: dataSourceID,
-                collection: collection,
-            };
+        function updateDatasource (datasourceId, changes) {
+            return httpPatch('/api/datasources/' + datasourceId, changes);
+        }
 
-            return connection.get('/api/data-sources/getsqlQuerySchema', params);
+        function getDatasourceCollections (datasourceId) {
+            return httpGet('/api/datasources/' + datasourceId + '/collections');
+        }
+
+        function getDatasourceCollection (datasourceId, collectionName) {
+            return connection.get('/api/datasources/' + datasourceId + '/collections/' + collectionName);
+        }
+
+        function getSqlQueryCollection (datasourceId, collection) {
+            return httpGet('/api/datasources/' + datasourceId + '/sql-query-collection', { sqlQuery: collection.sqlQuery, collectionName: collection.name });
+        }
+
+        function testConnection (datasource) {
+            return httpPost('/api/connection-test', datasource);
         }
 
         /**
@@ -588,6 +599,10 @@
 
                 return res.data;
             }, res => {
+                if (typeof res.data === 'object' && res.data.error) {
+                    throw new Error(res.data.error);
+                }
+
                 throw new Error(res.data);
             });
         }

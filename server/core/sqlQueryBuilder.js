@@ -76,7 +76,7 @@ class SqlQueryBuilder {
 
         if (column.isCustom) {
             const args = [];
-            const expr = column.viewExpression.replace(/#([a-z0-9]+)/g, (match, elementID) => {
+            const expr = column.viewExpression.replace(/#([a-z0-9_]+)/g, (match, elementID) => {
                 let element;
                 for (const collection of this.query.layer.params.schema) {
                     const el = collection.elements.find(e => e.elementID === elementID);

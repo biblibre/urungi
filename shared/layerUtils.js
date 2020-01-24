@@ -11,7 +11,7 @@
 }(typeof self !== 'undefined' ? self : this, function () {
     const getElementsUsedInCustomExpression = function (expression, layer) {
         const elements = [];
-        const re = /#([a-z0-9]+)/g;
+        const re = /#([a-z0-9_]+)/g;
         let found;
 
         while ((found = re.exec(expression)) !== null) {

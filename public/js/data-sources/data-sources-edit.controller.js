@@ -3,9 +3,9 @@
 
     angular.module('app.data-sources').controller('DataSourcesEditController', DataSourcesEditController);
 
-    DataSourcesEditController.$inject = ['connection', '$routeParams', '$http', 'gettextCatalog'];
+    DataSourcesEditController.$inject = ['$routeParams', '$location', 'gettextCatalog', 'Noty', 'api'];
 
-    function DataSourcesEditController (connection, $routeParams, $http, gettextCatalog) {
+    function DataSourcesEditController ($routeParams, $location, gettextCatalog, Noty, api) {
         const vm = this;
 
         vm._dataSource = null;
@@ -26,44 +26,32 @@
 
                 vm.mode = 'add';
             } else {
-                connection.get('/api/data-sources/find-one', { id: $routeParams.dataSourceID }).then(function (data) {
-                    vm._dataSource = data.item;
+                api.getDatasource($routeParams.dataSourceID).then(function (data) {
+                    vm._dataSource = data;
                 });
             }
         }
 
         function save () {
             if (vm.mode === 'add') {
-                var data = vm._dataSource;
-                connection.post('/api/data-sources/create', data).then(function (data) {
-                    window.history.back();
+                api.createDatasource(vm._dataSource).then(data => {
+                    new Noty({ text: gettextCatalog.getString('Datasource created successfully'), type: 'success' }).show();
+                    $location.url('/data-sources');
                 });
             } else {
-                connection.post('/api/data-sources/update/' + vm._dataSource._id, vm._dataSource).then(function (result) {
-                    if (result.result === 1) {
-                        window.history.back();
-                    }
+                api.updateDatasource(vm._dataSource._id, vm._dataSource).then(result => {
+                    new Noty({ text: gettextCatalog.getString('Datasource updated successfully'), type: 'success' }).show();
+                    $location.url('/data-sources');
                 });
             }
         };
 
         function doTestConnection () {
-            vm.testConnection = {};
-            var data = {};
-            data.type = vm._dataSource.type;
-            data.host = vm._dataSource.connection.host;
-            data.port = vm._dataSource.connection.port;
-            data.database = vm._dataSource.connection.database;
-            data.userName = vm._dataSource.connection.userName;
-            data.password = vm._dataSource.connection.password;
-
-            if (vm._dataSource.connection.file) data.file = vm._dataSource.connection.file;
-
-            connection.post('/api/data-sources/testConnection', data).then(function (result) {
-                if (result.result === 1) {
+            return api.testConnection(vm._dataSource).then(result => {
+                if (result.ok) {
                     vm.testConnection = { result: 1, message: gettextCatalog.getString('Successful database connection.') };
                 } else {
-                    vm.testConnection = { result: 0, message: gettextCatalog.getString('Database connection failed.'), errorMessage: result.msg };
+                    vm.testConnection = { result: 0, message: gettextCatalog.getString('Database connection failed.') + ' ' + result.error };
                 }
             });
         };

@@ -117,9 +117,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'movie_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'movie_id',
-                                data_type: 'integer',
                                 elementID: 'acwk',
                                 collectionID: 'Cabta',
                                 collectionName: 'movie'
@@ -127,9 +125,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'company_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'company_id',
-                                data_type: 'integer',
                                 elementID: 'adqt',
                                 collectionID: 'Cabta',
                                 collectionName: 'movie'
@@ -137,9 +133,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'country_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'country_id',
-                                data_type: 'integer',
                                 elementID: 'aekf',
                                 collectionID: 'Cabta',
                                 collectionName: 'movie'
@@ -147,9 +141,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'release_date',
                                 elementType: 'date',
-                                visible: true,
                                 elementLabel: 'Release Date',
-                                data_type: 'date',
                                 elementID: 'afwi',
                                 collectionID: 'Cabta',
                                 collectionName: 'movie',
@@ -159,9 +151,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'title',
                                 elementType: 'string',
-                                visible: true,
                                 elementLabel: 'Movie title',
-                                data_type: 'character varying',
                                 elementID: 'agxk',
                                 collectionID: 'Cabta',
                                 collectionName: 'movie',
@@ -170,7 +160,6 @@ const mongoose = require('mongoose');
                             }
                         ],
                         collectionName: 'movie',
-                        visible: true,
                         collectionLabel: 'movie',
                         collectionID: 'Cabta',
                         component: 1,
@@ -182,9 +171,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'company_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'company_id',
-                                data_type: 'integer',
                                 elementID: 'aiuu',
                                 collectionID: 'Cahqb',
                                 collectionName: 'company'
@@ -192,9 +179,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'name',
                                 elementType: 'string',
-                                visible: true,
                                 elementLabel: 'Company',
-                                data_type: 'character varying',
                                 elementID: 'ajkq',
                                 collectionID: 'Cahqb',
                                 collectionName: 'company',
@@ -203,7 +188,6 @@ const mongoose = require('mongoose');
                             }
                         ],
                         collectionName: 'company',
-                        visible: true,
                         collectionLabel: 'company',
                         collectionID: 'Cahqb',
                         component: 1,
@@ -215,9 +199,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'country_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'country_id',
-                                data_type: 'integer',
                                 elementID: 'almp',
                                 collectionID: 'Caktl',
                                 collectionName: 'country'
@@ -225,9 +207,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'name',
                                 elementType: 'string',
-                                visible: true,
                                 elementLabel: 'Movie country',
-                                data_type: 'character varying',
                                 elementID: 'amxh',
                                 collectionID: 'Caktl',
                                 collectionName: 'country',
@@ -236,7 +216,6 @@ const mongoose = require('mongoose');
                             }
                         ],
                         collectionName: 'country',
-                        visible: true,
                         collectionLabel: 'country',
                         collectionID: 'Caktl',
                         component: 1,
@@ -248,9 +227,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'genre_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'genre_id',
-                                data_type: 'integer',
                                 elementID: 'aocs',
                                 collectionID: 'Canob',
                                 collectionName: 'genre'
@@ -258,9 +235,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'name',
                                 elementType: 'string',
-                                visible: true,
                                 elementLabel: 'Genre',
-                                data_type: 'character varying',
                                 elementID: 'apho',
                                 collectionID: 'Canob',
                                 collectionName: 'genre',
@@ -269,7 +244,6 @@ const mongoose = require('mongoose');
                             }
                         ],
                         collectionName: 'genre',
-                        visible: true,
                         collectionLabel: 'genre',
                         collectionID: 'Canob',
                         component: 1,
@@ -281,9 +255,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'movie_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'movie_id',
-                                data_type: 'integer',
                                 elementID: 'arqp',
                                 collectionID: 'Caqdo',
                                 collectionName: 'movie_actor'
@@ -291,16 +263,13 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'person_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'person_id',
-                                data_type: 'integer',
                                 elementID: 'aspa',
                                 collectionID: 'Caqdo',
                                 collectionName: 'movie_actor'
                             }
                         ],
                         collectionName: 'movie_actor',
-                        visible: true,
                         collectionLabel: 'movie_actor',
                         collectionID: 'Caqdo',
                         component: 1,
@@ -312,9 +281,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'movie_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'movie_id',
-                                data_type: 'integer',
                                 elementID: 'aupm',
                                 collectionID: 'Catwk',
                                 collectionName: 'movie_genre'
@@ -322,16 +289,13 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'genre_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'genre_id',
-                                data_type: 'integer',
                                 elementID: 'avri',
                                 collectionID: 'Catwk',
                                 collectionName: 'movie_genre'
                             }
                         ],
                         collectionName: 'movie_genre',
-                        visible: true,
                         collectionLabel: 'movie_genre',
                         collectionID: 'Catwk',
                         component: 1,
@@ -343,9 +307,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'person_id',
                                 elementType: 'number',
-                                visible: true,
                                 elementLabel: 'person_id',
-                                data_type: 'integer',
                                 elementID: 'axsg',
                                 collectionID: 'Cawrc',
                                 collectionName: 'person'
@@ -353,9 +315,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'firstname',
                                 elementType: 'string',
-                                visible: true,
                                 elementLabel: 'Actor first name',
-                                data_type: 'character varying',
                                 elementID: 'aybn',
                                 collectionID: 'Cawrc',
                                 collectionName: 'person',
@@ -365,9 +325,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'lastname',
                                 elementType: 'string',
-                                visible: true,
                                 elementLabel: 'Actor last name',
-                                data_type: 'character varying',
                                 elementID: 'azxd',
                                 collectionID: 'Cawrc',
                                 collectionName: 'person',
@@ -377,9 +335,7 @@ const mongoose = require('mongoose');
                             {
                                 elementName: 'date_of_birth',
                                 elementType: 'date',
-                                visible: true,
                                 elementLabel: 'Actor date of birth',
-                                data_type: 'date',
                                 elementID: 'bacz',
                                 collectionID: 'Cawrc',
                                 collectionName: 'person',
@@ -388,7 +344,6 @@ const mongoose = require('mongoose');
                             }
                         ],
                         collectionName: 'person',
-                        visible: true,
                         collectionLabel: 'person',
                         collectionID: 'Cawrc',
                         component: 1,
@@ -406,9 +361,7 @@ const mongoose = require('mongoose');
                 {
                     elementName: 'title',
                     elementType: 'string',
-                    visible: true,
                     elementLabel: 'Movie title',
-                    data_type: 'character varying',
                     elementID: 'agxk',
                     collectionID: 'Cabta',
                     collectionName: 'movie',
@@ -418,9 +371,7 @@ const mongoose = require('mongoose');
                 {
                     elementName: 'release_date',
                     elementType: 'date',
-                    visible: true,
                     elementLabel: 'Release Date',
-                    data_type: 'date',
                     elementID: 'afwi',
                     collectionID: 'Cabta',
                     collectionName: 'movie',
@@ -430,9 +381,7 @@ const mongoose = require('mongoose');
                 {
                     elementName: 'name',
                     elementType: 'string',
-                    visible: true,
                     elementLabel: 'Movie country',
-                    data_type: 'character varying',
                     elementID: 'amxh',
                     collectionID: 'Caktl',
                     collectionName: 'country',
@@ -442,9 +391,7 @@ const mongoose = require('mongoose');
                 {
                     elementName: 'firstname',
                     elementType: 'string',
-                    visible: true,
                     elementLabel: 'Actor first name',
-                    data_type: 'character varying',
                     elementID: 'aybn',
                     collectionID: 'Cawrc',
                     collectionName: 'person',
@@ -454,9 +401,7 @@ const mongoose = require('mongoose');
                 {
                     elementName: 'lastname',
                     elementType: 'string',
-                    visible: true,
                     elementLabel: 'Actor last name',
-                    data_type: 'character varying',
                     elementID: 'azxd',
                     collectionID: 'Cawrc',
                     collectionName: 'person',
@@ -466,9 +411,7 @@ const mongoose = require('mongoose');
                 {
                     elementName: 'date_of_birth',
                     elementType: 'date',
-                    visible: true,
                     elementLabel: 'Actor date of birth',
-                    data_type: 'date',
                     elementID: 'bacz',
                     collectionID: 'Cawrc',
                     collectionName: 'person',
@@ -478,9 +421,7 @@ const mongoose = require('mongoose');
                 {
                     elementName: 'name',
                     elementType: 'string',
-                    visible: true,
                     elementLabel: 'Genre',
-                    data_type: 'character varying',
                     elementID: 'apho',
                     collectionID: 'Canob',
                     collectionName: 'genre',
@@ -490,9 +431,7 @@ const mongoose = require('mongoose');
                 {
                     elementName: 'name',
                     elementType: 'string',
-                    visible: true,
                     elementLabel: 'Company',
-                    data_type: 'character varying',
                     elementID: 'ajkq',
                     collectionID: 'Cahqb',
                     collectionName: 'company',

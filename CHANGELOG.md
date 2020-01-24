@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added arg 4.1.2
 - Updated mongoose to 5.8.6
+- Updated oracledb to 4.1.0
 
 ## [2.1.0] - 2020-01-02
 
