@@ -4,7 +4,6 @@ const layerElementSchema = new mongoose.Schema({
     collectionID: String,
     collectionName: String,
     component: Number,
-    data_type: String,
     defaultAggregation: String,
     description: String,
     elementID: String,
@@ -12,7 +11,6 @@ const layerElementSchema = new mongoose.Schema({
     elementName: String,
     elementRole: String,
     elementType: String,
-    visible: Boolean,
 });
 
 const layerObjectSchema = layerElementSchema.clone();
@@ -53,7 +51,6 @@ const layerCollectionSchema = new mongoose.Schema({
     left: Number,
     sqlQuery: String,
     top: Number,
-    visible: Boolean,
 });
 
 const layerSchema = new mongoose.Schema({

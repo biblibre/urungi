@@ -61,7 +61,7 @@ describe('ExportController', function () {
                 .respond(apiDashboardsFindOneResponse());
             $httpBackend.expect('GET', '/api/layers/find-one?id=fakelayerid')
                 .respond(apiLayersFindOneResponse());
-            $httpBackend.expect('GET', '/api/data-sources/find-one?id=fakedatasourceid')
+            $httpBackend.expect('GET', '/api/datasources/fakedatasourceid')
                 .respond(apiDatasourcesFindOneResponse());
 
             const p = vm.downloadExport().then(() => {
@@ -164,10 +164,7 @@ describe('ExportController', function () {
         }
 
         function apiDatasourcesFindOneResponse () {
-            return {
-                result: 1,
-                item: getDatasource(),
-            };
+            return getDatasource();
         }
     });
 });

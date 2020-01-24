@@ -1,48 +1,37 @@
 const mongoose = require('mongoose');
 const layerUtils = require('../../shared/layerUtils.js');
+const DatabaseClient = require('../core/database-client.js');
 
 exports.execute = async function (query) {
     const warnings = [];
 
     const Layer = mongoose.model('Layer');
-    const lyrList = await Layer.find({ _id: query.layerID });
-    if (lyrList.length === 0) {
+    const queryLayer = await Layer.findById(query.layerID);
+    if (!queryLayer) {
         throw new Error('Layer not found');
     }
-    const queryLayer = lyrList[0];
 
     const datasourceID = queryLayer.datasourceID;
 
     const Datasource = mongoose.model('Datasource');
-    const dtsList = await Datasource.find({ _id: datasourceID });
-    if (dtsList.length === 0) {
+    const dts = await Datasource.findById(datasourceID);
+    if (!dts) {
         throw new Error('Data source not found');
     }
-    const dts = dtsList[0];
 
-    const processedQuery = await processQuery(query, queryLayer, warnings);
+    const processedQuery = processQuery(query, queryLayer, warnings);
     buildJoinTree(processedQuery, queryLayer, warnings);
-
-    var Db;
-    var db;
 
     const validTypes = ['MySQL', 'POSTGRE', 'ORACLE', 'MSSQL'];
     if (!validTypes.includes(dts.type)) {
         throw new Error('Invalid datasource type : ' + dts.type);
     }
 
-    Db = require('./connection').Db;
-
-    db = new Db(dts, warnings);
-    const result = await db.runQuery(processedQuery);
-
-    if (result.result !== 1) {
-        console.log(result.msg);
-    }
-
-    db.close();
+    const dbClient = DatabaseClient.fromDatasource(dts);
+    const result = await dbClient.getQueryResults(processedQuery);
 
     result.warnings = warnings;
+
     return result;
 };
 
@@ -66,31 +55,11 @@ function processQuery (query, queryLayer, warnings) {
     processedQuery.order = [];
     processedQuery.filters = [];
 
-    var elementSet = {
-        content: [],
-        add: function (element) {
-            if (!this.content.find(el => el.elementID === element.elementID)) {
-                this.content.push(element);
-            }
-        }
-    };
     var groupKeys = new Set();
 
     processedQuery.joinTree = {};
 
     processedQuery.datasourceID = queryLayer.datasourceID;
-
-    function addElement (element, elementSet) {
-        if (!element.isCustom) {
-            elementSet.add(element);
-        } else {
-            for (const argElement of layerUtils.getElementsUsedInCustomExpression(element.viewExpression, queryLayer)) {
-                if (!argElement.isCustom) {
-                    elementSet.add(argElement);
-                }
-            }
-        }
-    }
 
     const queryHasAggregation = query.columns.some(c => c.aggregation);
     for (const col of query.columns) {
@@ -99,8 +68,6 @@ function processQuery (query, queryLayer, warnings) {
             warnings.push({ msg: 'element ' + col.elementLabel + ' could not be found. Are you sure it has not been deleted ?' });
             continue;
         }
-
-        addElement(element, elementSet);
 
         const validCol = validateColumn(col, element, warnings);
         processedQuery.columns.push(validCol);
@@ -116,7 +83,6 @@ function processQuery (query, queryLayer, warnings) {
             continue;
         }
 
-        addElement(element, elementSet);
         processedQuery.order.push(validateOrder(col, element, warnings));
     }
 
@@ -127,7 +93,6 @@ function processQuery (query, queryLayer, warnings) {
             continue;
         }
 
-        addElement(element, elementSet);
         const vf = validateFilter(col, element, escape, warnings);
         if (vf) {
             processedQuery.filters.push(vf);
@@ -142,8 +107,6 @@ function processQuery (query, queryLayer, warnings) {
     }
 
     processedQuery.page = validatePage(query.page);
-
-    processedQuery.elements = elementSet.content;
 
     processedQuery.groupKeys = Array.from(groupKeys.values());
 
@@ -203,10 +166,6 @@ function buildJoinTree (query, queryLayer, warnings) {
     }
 
     query.joinTree = result.node;
-
-    for (const element of query.elements) {
-        addElement(query.joinTree, element);
-    }
 }
 
 function joinCollections (collectionRef, layer, currentID, previousID, safetyCount, warnings) {
@@ -228,8 +187,6 @@ function joinCollections (collectionRef, layer, currentID, previousID, safetyCou
     }
 
     node.joins = [];
-    node.fetchFields = [];
-    node.carryFields = [];
 
     for (const join of layer.params.joins) {
         var joinedID = null;
@@ -256,7 +213,6 @@ function joinCollections (collectionRef, layer, currentID, previousID, safetyCou
                     warnings.push({ msg: 'Unable to join a table due to missing join field' });
                     continue;
                 }
-                result.node.fetchFields.push(joinElement);
                 node.joins.push(result.node);
             }
         }
@@ -266,24 +222,6 @@ function joinCollections (collectionRef, layer, currentID, previousID, safetyCou
         shouldJoin: shouldJoin,
         node: node
     };
-}
-
-function addElement (node, element) {
-    for (const childNode of node.joins) {
-        if (addElement(childNode, element)) {
-            node.carryFields.push(element);
-            return true;
-        }
-    }
-
-    if (element.collectionID === node.collection.collectionID) {
-        if (!node.fetchFields.find(el => el.elementID === element.elementID)) {
-            node.fetchFields.push(element);
-        }
-        return true;
-    } else {
-        return false;
-    }
 }
 
 function validateColumn (column, element, warnings) {
@@ -378,7 +316,7 @@ function validateFilter (filter, element, escape, warnings) {
 function plainText (text, warnings) {
     var secureText;
     try {
-        secureText = String(text).replace(/[^a-zA-Z0-9]/g, '');
+        secureText = String(text).replace(/[^a-zA-Z0-9_]/g, '');
     } catch (err) {
         secureText = '';
     }

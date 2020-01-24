@@ -4,7 +4,6 @@ const reportColumnSchema = new mongoose.Schema({
     aggregation: String,
     calculateTotal: Boolean,
     collectionID: String,
-    data_type: String,
     doNotStack: Boolean,
     elementID: String,
     elementLabel: String,
@@ -20,7 +19,6 @@ const reportColumnSchema = new mongoose.Schema({
     layerID: mongoose.Schema.Types.ObjectId,
     sortType: Number,
     type: { type: String },
-    visible: Boolean,
 });
 
 reportColumnSchema.virtual('layerObject').get(function () {

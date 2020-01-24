@@ -38,7 +38,7 @@ describe('ImportController', function () {
 
     describe('upload', function () {
         it('should check import file and import all objects', async function () {
-            $httpBackend.expect('GET', '/api/data-sources/find-all')
+            $httpBackend.expect('GET', '/api/datasources')
                 .respond(apiDatasourcesFindAllResponse());
 
             const $scope = {};
@@ -196,7 +196,6 @@ describe('ImportController', function () {
 
         function apiDatasourcesFindAllResponse () {
             return {
-                result: 1,
                 page: 1,
                 pages: 1,
                 items: [getDatasource()],

@@ -16,18 +16,17 @@
                             <input type="text" class="form-control" id="field-name" name="name" ng-model="temporarySQLCollection.name" placeholder="{{ 'type a name for the dataset' | translate }}" ng-required="true" required>
                             <span ng-show="sqlLayerForm.name.$invalid" class="help-inline" translate>The name is required</span>
                 </div>
-                <div class="form-group" ng-class="{ 'has-error': sqlLayerForm.sql.$invalid }">
+                <div class="form-group" ng-class="{ 'has-error': sqlLayerForm.sql.$invalid || temporarySQLCollection.error }">
                     <label class="control-label" for="field-sql" translate>SQL query</label>
                     <textarea class="form-control autogrow" cols="20" id="field-sql" name="sql" ng-model="temporarySQLCollection.sqlQuery" ng-required="true" required></textarea>
-                    <span ng-show="sqlLayerForm.sql.$invalid" class="help-inline" translate>You have to enter an SQL query</span>
+
+                    <div ng-show="sqlLayerForm.sql.$invalid" class="help-block" translate>You have to enter an SQL query</div>
+
+                    <div class="help-block" ng-show="temporarySQLCollection.error">
+                        {{ temporarySQLCollection.error }}
+                    </div>
                 </div>
-
             </div>
-
-            <div class="container-fluid" ng-show="temporarySQLCollection.invalidSql" translate>
-                There is an error in your sql syntax.
-            </div>
-
         </div>
 
         <div class="modal-footer ng-scope">

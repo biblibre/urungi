@@ -145,7 +145,6 @@
 
                                   <span ng-disabled="item.loading || item.status == -1" ng-click="getDatasetsForThisDts(item._id,item)">{{item.name}}</span>
 
-                                    <i ng-if="item.status == -1 && !item.loading" class="fa fa-exclamation-triangle" style="color: #cc3f44; font-size: 16px;" ng-click="showStatusInfo(item.statusInfo)"></i>
                                     <i ng-if="(item.status == -1 || item.entities ) && !item.loading" class="fa fa-refresh" ng-click="getDatasetsForThisDts(item._id,item)" style="color: #eee; font-size: 16px;"></i>
 
                                         <div id="fountainG" ng-if="item.loading">
@@ -162,39 +161,22 @@
 
                               </div>
                                       <ol  ui-tree-nodes="" ng-model="item.entities">
-                                        <li ng-repeat="subItem in item.entities" ui-tree-node>
+                                        <li ng-repeat="collectionName in item.entities" ui-tree-node>
                                           <div ui-tree-handle class="layer-tree-datasource-collection" style="font-weight: 100;">
                                             <table style="width: 100%; cursor: default;">
                                                 <tr style="width: 100%;">
-                                                    <td ng-click="getFieldsForThisEntity(item._id,subItem,subItem)">
+                                                    <td>
                                                         <i class="fa fa-table" aria-hidden="true"></i>
                                                     </td>
-                                                    <td ng-click="getFieldsForThisEntity(item._id,subItem,subItem)" class="layer-tree-td-name">
-                                                        {{subItem.name}}
+                                                    <td class="layer-tree-td-name">
+                                                        {{ collectionName }}
                                                     </td>
                                                     <td>
-                                                        <button type="button" ng-click="addDatasetToLayer(item._id,subItem)" class="btn btn-info btn-xs add-to-layer-btn" translate>Add</button>
+                                                        <button type="button" ng-click="addDatasetToLayer(item._id, collectionName)" class="btn btn-info btn-xs add-to-layer-btn" translate>Add</button>
                                                     </td>
                                                 </tr>
                                               </table>
                                           </div>
-                                            <ol ui-tree-nodes="" ng-model="subItem.fields">
-                                                <li ng-repeat="field in subItem.fields" ui-tree-node>
-                                                  <div ui-tree-handle class="layer-tree-datasource-collection layer-tree-datasource-field" style="font-weight: 100;">
-                                                    <table style="width: 100%; cursor: default;">
-                                                        <tr style="width: 100%;">
-                                                            <td>
-                                                                <i class="fa fa-reorder wst-main-color ng-hide" ng-show="field.elementType == 'number'" data-toggle="tooltip" data-placement="top"></i>
-                                                                <i class="fa fa-cube wst-main-color" ng-show="field.elementType == 'string'" data-toggle="tooltip" data-placement="top"></i>
-                                                                <i class="fa fa-calendar-o wst-main-color" ng-show="field.elementType == 'date'" data-toggle="tooltip" data-placement="top"></i>
-                                                            </td>
-                                                            <td class="layer-tree-td-name" uib-tooltip="{{field.elementName}}"> {{field.elementName}}</td>
-
-                                                        </tr>
-                                                      </table>
-                                                  </div>
-                                                </li>
-                                              </ol>
                                         </li>
                                       </ol>
                             </li>

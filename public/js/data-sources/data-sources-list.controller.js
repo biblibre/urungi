@@ -8,7 +8,7 @@
     function DataSourcesListController ($location, $timeout, connection, api, gettextCatalog) {
         const vm = this;
         vm.IntroOptions = {};
-        vm.getDataSources = getDataSources;
+        vm.getDatasources = getDatasources;
         vm.goToPage = goToPage;
         vm.page = 1;
         vm.pages = 1;
@@ -21,6 +21,8 @@
             if ($location.hash() === 'intro') {
                 $timeout(function () { vm.showIntro(); }, 1000);
             }
+
+            getDatasources();
         }
 
         function getIntroOptions () {
@@ -106,23 +108,13 @@
             };
         }
 
-        function getDataSources (page, search, fields) {
-            var params = {};
+        function getDatasources (page) {
+            var params = {
+                page: page || 1,
+                fields: 'name,type,connection.host,connection.port,connection.database',
+            };
 
-            params.page = (page) || 1;
-
-            if (search) {
-                vm.search = search;
-            } else if (page === 1) {
-                vm.search = '';
-            }
-            if (vm.search) {
-                params.search = vm.search;
-            }
-
-            if (fields) params.fields = fields;
-
-            return api.getDataSources(params).then(function (data) {
+            return api.getDatasources(params).then(function (data) {
                 vm.items = data.items;
                 vm.page = data.page;
                 vm.pages = data.pages;
@@ -130,7 +122,7 @@
         }
 
         function goToPage (page) {
-            vm.getDataSources(page, '', ['name', 'type', 'connection.host', 'connection.port', 'connection.database']);
+            getDatasources(page);
         }
     }
 })();

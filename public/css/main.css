@@ -2989,11 +2989,6 @@ a.list-group-item:hover {
     font-size: 10px;
 }
 
-#layerObjectProperties select {
-    height: 20px;
-    font-size: 10px;
-}
-
 #layerObjectProperties .nav.nav-tabs + .tab-content {
     background: transparent;
     padding: 0;

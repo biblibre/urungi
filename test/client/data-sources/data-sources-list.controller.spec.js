@@ -15,8 +15,12 @@ describe('DataSourcesListController', function () {
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
 
+        $httpBackend.expect('GET', '/api/datasources?fields=name,type,connection.host,connection.port,connection.database&page=1')
+            .respond(getDataSourcesFindAllResponse());
+
         const $scope = {};
         vm = $controller('DataSourcesListController', { $scope: $scope });
+        $httpBackend.flush();
     }));
 
     afterEach(function () {
@@ -32,36 +36,36 @@ describe('DataSourcesListController', function () {
         });
     });
 
-    describe('getDataSources', function () {
+    describe('getDatasources', function () {
         it('should populate items', function () {
-            $httpBackend.expect('GET', '/api/data-sources/find-all?page=1')
+            $httpBackend.expect('GET', '/api/datasources?fields=name,type,connection.host,connection.port,connection.database&page=1')
                 .respond(getDataSourcesFindAllResponse());
-            vm.getDataSources();
+            vm.getDatasources();
             $httpBackend.flush();
 
             expect(vm.items).toBeDefined();
             expect(vm.items.length).toBe(1);
             expect(vm.items[0]._id).toBe('fakeid');
         });
-
-        function getDataSourcesFindAllResponse () {
-            return {
-                result: 1,
-                page: 1,
-                pages: 1,
-                items: [
-                    {
-                        _id: 'fakeid',
-                        connection: {
-                            host: 'localhost',
-                            port: 3306,
-                            database: 'database',
-                        },
-                        type: 'MySQL',
-                        name: 'Database',
-                    }
-                ],
-            };
-        }
     });
+
+    function getDataSourcesFindAllResponse () {
+        return {
+            result: 1,
+            page: 1,
+            pages: 1,
+            items: [
+                {
+                    _id: 'fakeid',
+                    connection: {
+                        host: 'localhost',
+                        port: 3306,
+                        database: 'database',
+                    },
+                    type: 'MySQL',
+                    name: 'Database',
+                }
+            ],
+        };
+    }
 });

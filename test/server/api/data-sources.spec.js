@@ -1,13 +1,24 @@
 const helpers = require('../helpers');
 const request = require('supertest');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const mongoose = require('mongoose');
+let mongoose = require('mongoose');
+
+const mysql = require('../../../server/database-adapters/mysql.js');
+const pg = require('../../../server/database-adapters/pg.js');
+const mssql = require('../../../server/database-adapters/mssql.js');
+const oracle = require('../../../server/database-adapters/oracle.js');
+
+jest.mock('../../../server/database-adapters/mysql.js');
+jest.mock('../../../server/database-adapters/pg.js');
+jest.mock('../../../server/database-adapters/mssql.js');
+jest.mock('../../../server/database-adapters/oracle.js');
 
 let app;
 let mongod;
 beforeAll(async () => {
     mongod = new MongoMemoryServer();
     process.env.MONGODB_URI = await mongod.getConnectionString();
+    mongoose = require('mongoose');
     app = require('../../../server/app');
 });
 afterAll(async () => {
@@ -59,12 +70,33 @@ function verifyItem (item) {
     expect(item).toHaveProperty('name');
     expect(item).toHaveProperty('type');
     expect(item).toHaveProperty('status');
-    expect(item).toHaveProperty('nd_trash_deleted');
-    expect(item).toHaveProperty('__v');
     expect(item).toHaveProperty('connection');
 };
 
-describe('Data sources API', function () {
+describe('Datasources API', function () {
+    const datasources = [
+        ['mysql', mysql.MysqlAdapter, {
+            name: 'MySQL datasource',
+            type: 'MySQL',
+            connection: { host: 'localhost', port: '3306', database: 'DB', userName: 'root', password: 'secret' },
+        }],
+        ['pg', pg.PgAdapter, {
+            name: 'PostgreSQL datasource',
+            type: 'POSTGRE',
+            connection: { host: 'localhost', port: '5432', database: 'DB', userName: 'root', password: 'secret' },
+        }],
+        ['mssql', mssql.MssqlAdapter, {
+            name: 'MS SQL datasource',
+            type: 'MSSQL',
+            connection: { host: 'localhost', port: '1433', database: 'DB', userName: 'root', password: 'secret' },
+        }],
+        ['oracle', oracle.OracleAdapter, {
+            name: 'Oracle datasource',
+            type: 'ORACLE',
+            connection: { host: 'localhost', port: '1521', database: 'DB', userName: 'root', password: 'secret' },
+        }],
+    ];
+
     var Datasource;
 
     let headers;
@@ -82,66 +114,59 @@ describe('Data sources API', function () {
         }
     });
 
-    describe('GET /api/data-sources/find-all', function () {
+    describe('GET /api/datasources', function () {
         it('should return status 403', async function () {
-            return request(app).get('/api/data-sources/find-all')
-                .expect(403);
+            const res = await request(app).get('/api/datasources');
+
+            expect(res.status).toBe(403);
         });
 
         it('should return all data sources', async function () {
-            var res = await request(app).get('/api/data-sources/find-all')
-                .set(headers)
-                .expect(200);
+            var res = await request(app).get('/api/datasources')
+                .set(headers);
 
-            expect(res.body).toHaveProperty('result');
+            expect(res.status).toBe(200);
+
             expect(res.body).toHaveProperty('page');
             expect(res.body).toHaveProperty('pages');
 
-            expect(res.body.items).toHaveLength(1);
-            // We cannot expect the length to be equal to 2,
-            // because other simultaneous tests may add entries to the database
+            expect(res.body.items).toHaveLength(2);
             verifyItem(res.body.items[0]);
+            verifyItem(res.body.items[1]);
         });
     });
 
-    describe('GET /api/data-sources/find-one', function () {
+    describe('GET /api/datasources/:datasourceId', function () {
         it('should return status 403', async function () {
-            return request(app).get('/api/data-sources/find-all')
-                .expect(403);
+            const datasource = await Datasource.findOne();
+
+            const res = await request(app).get('/api/datasources/' + datasource.id);
+
+            expect(res.status).toBe(403);
         });
 
         it('should find no valid item', async function () {
-            var res = await request(app).get('/api/data-sources/find-one')
-                .set(headers)
-                .expect(200);
+            const res = await request(app).get('/api/datasources/foo')
+                .set(headers);
 
-            expect(res.body).toHaveProperty('result');
-            expect(res.body.result).toBe(0);
+            expect(res.status).toBe(404);
         });
 
         it('should find a single valid item', async function () {
-            const ds = await Datasource.findOne();
+            const datasource = await Datasource.findOne();
 
-            var res = await request(app).get('/api/data-sources/find-one')
-                .query({ id: ds.id })
-                .set(headers)
-                .expect(200);
+            var res = await request(app).get('/api/datasources/' + datasource.id)
+                .set(headers);
 
-            expect(res.body).toHaveProperty('result');
-            expect(res.body.result).toBe(1);
+            expect(res.status).toBe(200);
 
-            verifyItem(res.body.item);
-            // Is this test necessary ?
-            // It makes the whole test sequence longer, and doesn't really change much
+            verifyItem(res.body);
         });
     });
 
-    describe('POST /api/data-sources/create', function () {
-        // TODO : preliminary tests where the post is expected to fail
-        // TODO : creating a post as an unauthentified user ?
-
-        it('should create an entry made by an authenticated user', async function () {
-            var res = await request(app).post('/api/data-sources/create')
+    describe('POST /api/datasources', function () {
+        it('should create a datasource', async function () {
+            var res = await request(app).post('/api/datasources')
                 .set(headers)
                 .send({
                     name: 'non existent db',
@@ -149,54 +174,196 @@ describe('Data sources API', function () {
                     status: 1,
                     connection: {
                         database: 'database_name',
-                        host: 'localhost'
-                    }
+                        host: 'localhost',
+                    },
                 });
 
-            expect(res.body).toHaveProperty('result');
-            expect(res.body.result).toBe(1);
-            expect(res.body).toHaveProperty('item');
-            verifyItem(res.body.item);
+            expect(res.status).toBe(201);
 
-            expect(res.body.item.connection.database)
-                .toBe('database_name');
+            verifyItem(res.body);
 
-            await Datasource.deleteOne({ _id: res.body.item._id });
+            expect(res.body.connection.database).toBe('database_name');
+
+            await Datasource.deleteOne({ _id: res.body._id });
         });
     });
 
-    describe('POST /api/data-sources/update', function () {
+    describe('PATCH /api/datasources/:datasourceId', function () {
         it('should modify a database entry successfully', async function () {
-            var res = await request(app).get('/api/data-sources/find-all')
-                .set(headers)
-                .expect(200);
+            const datasource = await Datasource.findOne();
 
-            const entryID = res.body.items[0]._id;
-
-            res = await request(app).post('/api/data-sources/update/' + String(entryID))
+            const res = await request(app).patch('/api/datasources/' + datasource.id)
                 .set(headers)
                 .send({
-                    _id: entryID,
                     name: 'renamed dummy db',
                     type: 'MySQL',
                     connection: {
                         database: 'modified_name'
                     }
-                })
-                .expect(200);
+                });
 
-            expect(res.body).toHaveProperty('result');
-            expect(res.body.result).toBe(1);
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveProperty('connection.database', 'modified_name');
 
-            res = await request(app).get('/api/data-sources/find-one')
-                .query({ id: entryID })
-                .set(headers)
-                .expect(200);
+            const updatedDatasource = await Datasource.findById(datasource.id);
+            expect(updatedDatasource).toHaveProperty('connection.database', 'modified_name');
+        });
+    });
 
-            expect(res.body.item.name).toBe('renamed dummy db');
-            expect(res.body.item.type).toBe('MySQL');
-            expect(res.body.item.connection.database)
-                .toBe('modified_name');
+    describe('GET /api/datasources/:datasourceId/collections', function () {
+        describe.each(datasources)('%s', function (type, adapter, datasource) {
+            let d;
+            beforeAll(async function () {
+                d = await Datasource.create(datasource);
+            });
+            afterAll(async function () {
+                await d.remove();
+            });
+
+            describe('when connection is ok', function () {
+                beforeAll(async function () {
+                    adapter.prototype.getCollectionNames.mockImplementation(function () {
+                        return Promise.resolve(['foo', 'bar', 'baz']);
+                    });
+                });
+
+                it('should return a list of table names', async function () {
+                    const res = await request(app).get('/api/datasources/' + d.id + '/collections')
+                        .set(headers);
+
+                    expect(res.status).toBe(200);
+                    expect(res.body).toHaveProperty('data');
+                    expect(res.body.data).toEqual(['foo', 'bar', 'baz']);
+                });
+            });
+
+            describe('when connection is not ok', function () {
+                beforeAll(async function () {
+                    adapter.prototype.getCollectionNames.mockImplementation(function () {
+                        return Promise.reject(new Error('Connection error'));
+                    });
+                });
+
+                it('should return status 500 with an error message', async function () {
+                    const res = await request(app).get('/api/datasources/' + d.id + '/collections')
+                        .set(headers);
+
+                    expect(res.status).toBe(500);
+                    expect(res.body).toHaveProperty('error', 'Connection error');
+                });
+            });
+        });
+    });
+
+    describe('GET /api/datasources/:datasourceId/collections/:collectionName', function () {
+        describe.each(datasources)('%s', function (type, adapter, datasource) {
+            let d;
+            beforeAll(async function () {
+                d = await Datasource.create(datasource);
+            });
+            afterAll(async function () {
+                await d.remove();
+            });
+
+            describe('when connection is ok', function () {
+                beforeAll(async function () {
+                    adapter.prototype.getCollectionSchema.mockImplementation(function () {
+                        return Promise.resolve({ columns: [{ name: 'bar', type: 'string' }] });
+                    });
+                });
+
+                it('should return a collection', async function () {
+                    const res = await request(app).get('/api/datasources/' + d.id + '/collections/foo')
+                        .set(headers);
+
+                    expect(res.status).toBe(200);
+                    expect(res.body).toEqual({
+                        collectionName: 'foo',
+                        collectionLabel: 'foo',
+                        elements: [
+                            {
+                                elementName: 'bar',
+                                elementLabel: 'bar',
+                                elementType: 'string',
+                            },
+                        ],
+                    });
+                });
+            });
+
+            describe('when connection is not ok', function () {
+                beforeAll(async function () {
+                    adapter.prototype.getCollectionSchema.mockImplementation(function () {
+                        return Promise.reject(new Error('Connection error'));
+                    });
+                });
+
+                it('should return status 500 with an error message', async function () {
+                    const res = await request(app).get('/api/datasources/' + d.id + '/collections/foo')
+                        .set(headers);
+
+                    expect(res.status).toBe(500);
+                    expect(res.body).toHaveProperty('error', 'Connection error');
+                });
+            });
+        });
+    });
+
+    describe('GET /api/datasources/:datasourceId/sql-query-collection', function () {
+        describe.each(datasources)('%s', function (type, adapter, datasource) {
+            let d;
+            beforeAll(async function () {
+                d = await Datasource.create(datasource);
+            });
+            afterAll(async function () {
+                await d.remove();
+            });
+
+            describe('when connection is ok', function () {
+                beforeAll(async function () {
+                    adapter.prototype.getSqlQuerySchema.mockImplementation(function () {
+                        return Promise.resolve({ columns: [{ name: 'bar', type: 'string' }] });
+                    });
+                });
+
+                it('should return a collection', async function () {
+                    const res = await request(app).get('/api/datasources/' + d.id + '/sql-query-collection')
+                        .query({ sqlQuery: 'SELECT * FROM foo', collectionName: 'foo' })
+                        .set(headers);
+
+                    expect(res.status).toBe(200);
+                    expect(res.body).toEqual({
+                        collectionName: 'foo',
+                        collectionLabel: 'foo',
+                        isSQL: true,
+                        sqlQuery: 'SELECT * FROM foo',
+                        elements: [
+                            {
+                                elementName: 'bar',
+                                elementLabel: 'bar',
+                                elementType: 'string',
+                            },
+                        ],
+                    });
+                });
+            });
+
+            describe('when connection is not ok', function () {
+                beforeAll(async function () {
+                    adapter.prototype.getSqlQuerySchema.mockImplementation(function () {
+                        return Promise.reject(new Error('Connection error'));
+                    });
+                });
+
+                it('should return status 500 with an error message', async function () {
+                    const res = await request(app).get('/api/datasources/' + d.id + '/collections/sql-query-collection')
+                        .query({ sqlQuery: 'SELECT * FROM foo', collectionName: 'foo' })
+                        .set(headers);
+
+                    expect(res.status).toBe(500);
+                    expect(res.body).toHaveProperty('error', 'Connection error');
+                });
+            });
         });
     });
 });
