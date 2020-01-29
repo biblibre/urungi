@@ -74,7 +74,6 @@ app.use('/api', api);
 // Custom routes
 const routesModules = [
     './custom/dashboards/routes',
-    './custom/layers/routes',
     './custom/reports/routes',
 ];
 

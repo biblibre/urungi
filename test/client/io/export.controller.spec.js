@@ -42,7 +42,7 @@ describe('ExportController', function () {
             const $scope = {};
             vm = $controller('ExportController', { $scope: $scope });
 
-            $httpBackend.expect('GET', '/api/layers/find-all')
+            $httpBackend.expect('GET', '/api/layers')
                 .respond(apiLayersFindAllResponse());
             $httpBackend.expect('GET', '/api/reports/find-all')
                 .respond(apiReportsFindAllResponse());
@@ -59,7 +59,7 @@ describe('ExportController', function () {
                 .respond(apiReportsFindOneResponse());
             $httpBackend.expect('GET', '/api/dashboards/find-one?id=fakedashboardid')
                 .respond(apiDashboardsFindOneResponse());
-            $httpBackend.expect('GET', '/api/layers/find-one?id=fakelayerid')
+            $httpBackend.expect('GET', '/api/layers/fakelayerid')
                 .respond(apiLayersFindOneResponse());
             $httpBackend.expect('GET', '/api/datasources/fakedatasourceid')
                 .respond(apiDatasourcesFindOneResponse());
@@ -90,18 +90,14 @@ describe('ExportController', function () {
 
         function apiLayersFindAllResponse () {
             return {
-                result: 1,
                 page: 1,
                 pages: 1,
-                items: [getLayer()],
+                data: [getLayer()],
             };
         }
 
         function apiLayersFindOneResponse () {
-            return {
-                result: 1,
-                item: getLayer(),
-            };
+            return getLayer();
         }
 
         function getReport () {

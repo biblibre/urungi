@@ -39,10 +39,11 @@ function canViewUser (req, res, next) {
     }
 }
 
-function listUsers (req, res) {
-    mongooseHelper.find(User, req).then(response => {
-        res.json(response);
-    });
+function listUsers (req, res, next) {
+    const pipeline = mongooseHelper.getAggregationPipelineFromQuery(req.query);
+    User.aggregate(pipeline).then(([result]) => {
+        res.json(result);
+    }).catch(next);
 }
 
 async function createUser (req, res) {

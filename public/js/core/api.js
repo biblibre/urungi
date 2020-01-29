@@ -68,7 +68,7 @@
             createLayer: createLayer,
             deleteLayer: deleteLayer,
             getLayer: getLayer,
-            updateLayer: updateLayer,
+            replaceLayer: replaceLayer,
 
             getFiles: getFiles,
             uploadFile: uploadFile,
@@ -440,16 +440,15 @@
          * @returns {Promise<object, Error>} Promise that resolves to an object
          */
         function getLayers (params) {
-            return httpGet('/api/layers/find-all', params);
+            return httpGet('/api/layers', params);
         }
 
         function changeLayerStatus (layerID, newStatus) {
             var data = {
-                layerID: layerID,
                 status: newStatus,
             };
 
-            return httpPost('/api/layers/change-layer-status', data);
+            return httpPatch('/api/layers/' + layerID, data);
         }
 
         /**
@@ -459,11 +458,11 @@
          * @returns {Promise<object, Error>} Promise that resolves to the created layer
          */
         function createLayer (layer) {
-            return httpPost('/api/layers/create', layer);
+            return httpPost('/api/layers', layer);
         }
 
         function deleteLayer (id) {
-            return connection.post('/api/layers/delete/' + id, { id: id });
+            return httpDelete('/api/layers/' + id);
         }
 
         /**
@@ -473,18 +472,18 @@
          * @returns {Promise<object, Error>} Promise that resolves to the layer object
          */
         function getLayer (id) {
-            return httpGet('/api/layers/find-one', { id: id }).then(data => data.item);
+            return httpGet('/api/layers/' + id);
         }
 
         /**
-         * Update an existing layer
+         * Replace an existing layer
          *
          * @param {object} layer - Layer object
          * @param {string} layer._id - ID of layer to be updated
-         * @returns {Promise<object, Error>}
+         * @returns {Promise<object>}
          */
-        function updateLayer (layer) {
-            return httpPost('/api/layers/update/' + layer._id, layer).then(data => data.item);
+        function replaceLayer (layer) {
+            return httpPut('/api/layers/' + layer._id, layer);
         }
 
         function getFiles () {

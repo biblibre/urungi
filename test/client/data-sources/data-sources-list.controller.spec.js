@@ -51,10 +51,9 @@ describe('DataSourcesListController', function () {
 
     function getDataSourcesFindAllResponse () {
         return {
-            result: 1,
             page: 1,
             pages: 1,
-            items: [
+            data: [
                 {
                     _id: 'fakeid',
                     connection: {

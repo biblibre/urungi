@@ -16,7 +16,6 @@ afterAll(async () => {
 });
 
 describe('Layers API', function () {
-    let User;
     let Layer;
     let Datasource;
     let Report;
@@ -26,7 +25,6 @@ describe('Layers API', function () {
     let headers;
 
     beforeAll(async () => {
-        User = mongoose.model('User');
         Layer = mongoose.model('Layer');
         Datasource = mongoose.model('Datasource');
         Report = mongoose.model('Report');
@@ -38,7 +36,6 @@ describe('Layers API', function () {
             name: 'DataSource',
             type: 'MySQL',
             status: 1,
-            nd_trash_deleted: false,
         });
     });
 
@@ -46,199 +43,148 @@ describe('Layers API', function () {
         await datasource.remove();
     });
 
-    describe('GET /api/layers/find-all', function () {
+    describe('GET /api/layers', function () {
         it('should find all layers and their data', async function () {
-            const res = await request(app).get('/api/layers/find-all')
-                .set(headers)
-                .expect(200);
+            const res = await request(app).get('/api/layers')
+                .set(headers);
 
-            expect(res.body).toHaveProperty('result', 1);
+            expect(res.status).toBe(200);
+
             expect(res.body).toHaveProperty('page');
             expect(res.body).toHaveProperty('pages');
-            expect(res.body).toHaveProperty('items');
+            expect(res.body).toHaveProperty('data');
         });
     });
 
-    describe('GET /api/layers/find-one', function () {
+    describe('GET /api/layers/:layerId', function () {
         it('should find one layer and its data', async function () {
-            let res = await request(app).post('/api/layers/create')
-                .set(headers)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
+            const layer = await Layer.create({ name: 'layer', status: 'active', datasourceID: datasource._id });
 
-            res = await request(app).get('/api/layers/find-one')
-                .query({ id: res.body.item._id })
-                .set(headers)
-                .expect(200);
+            const res = await request(app).get('/api/layers/' + layer.id)
+                .set(headers);
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('item');
-            expect(res.body.item).toHaveProperty('__v');
-            expect(res.body.item).toHaveProperty('companyID', 'COMPID');
-            expect(res.body.item).toHaveProperty('name', 'layer');
-            expect(res.body.item).toHaveProperty('status', 'active');
-            expect(res.body.item).toHaveProperty('nd_trash_deleted', false); ;
-            expect(res.body.item).toHaveProperty('_id');
-            expect(res.body.item).toHaveProperty('objects');
+            expect(res.status).toBe(200);
 
-            await Layer.deleteOne({ name: 'layer' });
+            expect(res.body).toHaveProperty('name', 'layer');
+            expect(res.body).toHaveProperty('status', 'active');
+            expect(res.body).toHaveProperty('_id');
+            expect(res.body).toHaveProperty('objects');
+
+            await layer.remove();
         });
     });
-    describe('POST /api/layers/create', function () {
+
+    describe('POST /api/layers', function () {
         it('should create a layer', async function () {
-            const res = await request(app).post('/api/layers/create')
+            const res = await request(app).post('/api/layers')
                 .set(headers)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id })
-                .expect(200);
+                .send({ name: 'layer', status: 'active', datasourceID: datasource._id });
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('msg', 'Item created');
-            expect(res.body).toHaveProperty('item');
-            expect(res.body.item).toHaveProperty('__v');
-            expect(res.body.item).toHaveProperty('companyID', 'COMPID');
-            expect(res.body.item).toHaveProperty('name', 'layer');
-            expect(res.body.item).toHaveProperty('status', 'active');
-            expect(res.body.item).toHaveProperty('nd_trash_deleted', false); ;
-            expect(res.body.item).toHaveProperty('_id');
-            expect(res.body.item).toHaveProperty('objects');
+            expect(res.status).toBe(201);
 
-            await Layer.deleteOne({ name: 'layer' });
+            expect(res.body).toHaveProperty('name', 'layer');
+            expect(res.body).toHaveProperty('status', 'active');
+            expect(res.body).toHaveProperty('_id');
+            expect(res.body).toHaveProperty('objects');
+
+            await Layer.deleteOne({ _id: res.body._id });
         });
     });
-    describe('POST /api/layers/update/:id', function () {
-        it('should update one layer ', async function () {
-            let res = await request(app).post('/api/layers/create')
-                .set(headers)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
 
-            const ds = await Datasource.create({
-                companyID: 'COMPID',
-                name: 'DataSource',
-                type: 'DataSource',
-                status: 1,
-                nd_trash_deleted: false,
+    describe('PUT /api/layers/:layerId', function () {
+        it('should update one layer ', async function () {
+            const layer = await Layer.create({
+                name: 'layer',
+                status: 'active',
+                datasourceID: datasource._id,
+                createdBy: 'tests',
+                objects: [
+                    {
+                        component: 1,
+                    },
+                ],
             });
 
-            res = await request(app).post('/api/layers/update/' + res.body.item._id)
+            const res = await request(app).put('/api/layers/' + layer.id)
                 .set(headers)
-                .send({ _id: res.body.item._id, datasourceID: ds.id })
-                .expect(200);
+                .send({
+                    name: 'renamed layer',
+                    status: 'active',
+                    datasourceID: datasource._id,
+                    objects: [
+                        {
+                            component: 2,
+                        },
+                    ],
+                });
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('msg', '1 record updated.');
+            expect(res.status).toBe(200);
 
-            await Layer.deleteOne({ name: 'layer' });
-            await ds.remove();
+            expect(res.body).toHaveProperty('name', 'renamed layer');
+            expect(res.body).not.toHaveProperty('createdBy');
+            expect(res.body.objects).toHaveLength(1);
+            expect(res.body.objects[0]).toHaveProperty('component', 2);
+
+            await layer.remove();
         });
     });
-    describe('POST /api/layers/delete/:id', function () {
-        it('should delete a layer', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
-            let res = await request(app).post('/api/layers/create')
-                .set(headers)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, owner: user.id, isPublic: false, datasourceID: datasource._id });
-            var layer = res.body.item;
-            res = await request(app).post('/api/layers/delete/' + layer._id)
-                .set(headers)
-                .send({ _id: layer._id })
-                .expect(200);
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('msg', '1 item deleted.');
+    describe('DELETE /api/layers/:layerId', function () {
+        it('should delete a layer', async function () {
+            let layer = await Layer.create({ name: 'layer', status: 'active', datasourceID: datasource._id });
+
+            const res = await request(app).delete('/api/layers/' + layer.id)
+                .set(headers);
+
+            expect(res.status).toBe(204);
+
             layer = await Layer.findOne({ _id: layer._id });
             expect(layer).toBeNull();
         });
 
         it('should not delete a layer with dashboard conflict', async function () {
-            let res = await request(app).post('/api/layers/create')
-                .set(headers)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
+            const layer = await Layer.create({ name: 'layer', status: 'active', datasourceID: datasource._id });
+            const dashboard = await Dashboard.create({ companyID: 'COMPID', dashboardName: 'Dashboard', nd_trash_deleted: false, reports: [{ selectedLayerID: layer._id, reportName: 'foo' }] });
 
-            var layer = res.body.item;
-            res = await request(app).post('/api/dashboards/create')
-                .set(headers)
-                .send({ companyID: 'COMPID', dashboardName: 'Dashboard', nd_trash_deleted: false, reports: [{ selectedLayerID: layer._id, reportName: 'foo' }] });
+            const res = await request(app).delete('/api/layers/' + layer.id)
+                .set(headers);
 
-            res = await request(app).post('/api/layers/delete/' + layer._id)
-                .set(headers)
-                .send({ id: layer._id })
-                .expect(200);
+            expect(res.status).toBe(403);
+            expect(res.body).toHaveProperty('error', 'This layer cannot be deleted because at least one dashboard is using it (Dashboard)');
 
-            expect(res.body).toHaveProperty('result', 0);
-            expect(res.body).toHaveProperty('msg', 'This layer cannot be deleted because at least one dashboard is using it (Dashboard)');
-
-            res = await Dashboard.deleteOne({ dashboardName: 'Dashboard' });
-            res = await Layer.deleteOne({ name: 'layer' });
+            await dashboard.remove();
+            await layer.remove();
         });
 
         it('should not delete a layer with reports', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
-            let res = await request(app).post('/api/layers/create')
-                .set(headers)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id })
-                .expect(200);
-
-            var layer = res.body.item;
-            res = await request(app).post('/api/reports/create')
-                .set(headers)
-                .send({ companyID: 'COMPID', reportName: 'Report', selectedLayerID: layer._id, nd_trash_deleted: false, owner: user.id, isPublic: true })
-                .expect(200);
-
-            res = await request(app).post('/api/layers/delete/' + layer._id)
-                .set(headers)
-                .send({ id: layer._id })
-                .expect(200);
-
-            expect(res.body).toHaveProperty('result', 0);
-            expect(res.body).toHaveProperty('msg', 'This layer cannot be deleted because at least one report is using it (Report)');
-
-            await Report.deleteOne({ reportName: 'Report' });
-            await Layer.deleteOne({ name: 'layer' });
-        });
-    });
-
-    describe('POST /api/layers/change-layer-status', function () {
-        it('should change layer status', async function () {
-            await User.findOne({ userName: 'administrator' });
-            const layer = await Layer.create({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
-
-            const res = await request(app).post('/api/layers/change-layer-status')
-                .set(headers)
-                .send({ layerID: layer._id, status: 'active' });
-
-            expect(res.status).toBe(204);
-
-            await layer.remove();
-        });
-
-        it('should return 500 if status is invalid', async function () {
             const layer = await Layer.create({ name: 'layer', status: 'active', datasourceID: datasource._id });
+            const report = await Report.create({ companyID: 'COMPID', reportName: 'Report', selectedLayerID: layer._id, nd_trash_deleted: false });
 
-            const res = await request(app).post('/api/layers/change-layer-status')
-                .set(headers)
-                .send({ layerID: layer.id, status: {} });
+            const res = await request(app).delete('/api/layers/' + layer.id)
+                .set(headers);
 
-            expect(res.status).toBe(500);
+            expect(res.status).toBe(403);
 
+            expect(res.body).toHaveProperty('error', 'This layer cannot be deleted because at least one report is using it (Report)');
+
+            await report.remove();
             await layer.remove();
         });
     });
-    describe('GET /api/layers/get-layers', function () {
-        it('should get layers', async function () {
-            let res = await request(app).post('/api/layers/create')
-                .set(headers)
-                .send({ companyID: 'COMPID', name: 'layer', status: 'active', nd_trash_deleted: false, datasourceID: datasource._id });
-            res = await request(app).get('/api/layers/get-layers')
-                .set(headers)
-                .expect(200);
 
-            expect(res.body).toHaveProperty('result', 1);
-            expect(res.body).toHaveProperty('page');
-            expect(res.body).toHaveProperty('pages');
-            expect(res.body).toHaveProperty('items');
-            expect(res.body.items[0]).toHaveProperty('_id');
-            expect(res.body.items[0]).toHaveProperty('name', 'layer');
-            expect(res.body.items[0]).toHaveProperty('objects');
-            res = await Layer.deleteOne({ name: 'layer' });
+    describe('PATCH /api/layers/:layerId', function () {
+        it('should partially update a layer', async function () {
+            const layer = await Layer.create({ name: 'layer', status: 'Not active', datasourceID: datasource._id });
+
+            const res = await request(app).patch('/api/layers/' + layer.id)
+                .set(headers)
+                .send({ status: 'active' });
+
+            expect(res.status).toBe(200);
+
+            expect(res.body).toHaveProperty('status', 'active');
+
+            await layer.remove();
         });
     });
 });

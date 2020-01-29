@@ -114,10 +114,10 @@
                 fields: 'name,type,connection.host,connection.port,connection.database',
             };
 
-            return api.getDatasources(params).then(function (data) {
-                vm.items = data.items;
-                vm.page = data.page;
-                vm.pages = data.pages;
+            return api.getDatasources(params).then(function (res) {
+                vm.items = res.data;
+                vm.page = res.page;
+                vm.pages = res.pages;
             });
         }
 

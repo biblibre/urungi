@@ -26,8 +26,8 @@
         activate();
 
         function activate () {
-            api.getDatasources().then(data => {
-                vm.localDatasources = data.items;
+            api.getDatasources().then(res => {
+                vm.localDatasources = res.data;
             });
         }
 
@@ -306,7 +306,7 @@
                 delete layer.createdOn;
 
                 if (bundleLayer.exists && bundleLayer.overwrite) {
-                    p = api.updateLayer(bundleLayer.doc).then(() => {
+                    p = api.replaceLayer(bundleLayer.doc).then(() => {
                         bundleLayer.imported = true;
                         vm.messages.push({
                             text: gettextCatalog.getString('Layer updated successfully:') + ' ' + layer.name,

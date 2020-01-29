@@ -130,9 +130,9 @@ describe('Datasources API', function () {
             expect(res.body).toHaveProperty('page');
             expect(res.body).toHaveProperty('pages');
 
-            expect(res.body.items).toHaveLength(2);
-            verifyItem(res.body.items[0]);
-            verifyItem(res.body.items[1]);
+            expect(res.body.data).toHaveLength(2);
+            verifyItem(res.body.data[0]);
+            verifyItem(res.body.data[1]);
         });
     });
 

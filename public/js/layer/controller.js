@@ -1,5 +1,5 @@
 /* global jsPlumb: false */
-angular.module('app').controller('layerCtrl', function ($scope, $location, api, connection, $routeParams, $timeout, $window, gettextCatalog, Noty) {
+angular.module('app').controller('layerCtrl', function ($scope, $location, api, $routeParams, $timeout, $window, gettextCatalog, Noty) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';
@@ -131,14 +131,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         return newEndpoints;
     };
 
-    $scope.newLayer = function () {
-        $scope._Layer = {};
-        $scope._Layer.params = {};
-        $scope._Layer.status = 'Not active';
-        $scope.mode = 'add';
-        $('#layerModal').modal('show');
-    };
-
     function setDraggable (targetID) {
         instance.draggable(document.querySelectorAll(targetID), {
 
@@ -172,9 +164,8 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
 
     $scope.view = function () {
         if ($routeParams.layerID) {
-            connection.get('/api/layers/find-one', { id: $routeParams.layerID }).then(function (data) {
-                $scope._Layer = data.item;
-                $scope.mode = 'edit';
+            api.getLayer($routeParams.layerID).then(function (layer) {
+                $scope._Layer = layer;
                 $scope.rootItem.elements = $scope._Layer.objects;
 
                 $scope.forAllElements((element) => {
@@ -235,20 +226,9 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             theLayer.params.joins[join].connection = undefined;
         }
 
-        if ($scope.mode === 'add') {
-            theLayer.objects = $scope.rootItem.elements;
-            var data = theLayer;
-            connection.post('/api/layers/create', data).then(function (data) {
-                $scope.items.push(data.item);
-                $('#layerModal').modal('hide');
-            });
-        } else {
-            connection.post('/api/layers/update/' + theLayer._id, theLayer).then(function (result) {
-                if (result.result === 1) {
-                    window.history.back();
-                }
-            });
-        }
+        api.replaceLayer(theLayer).then(function () {
+            $location.url('/layers');
+        });
     };
 
     function getDatasources () {

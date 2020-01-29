@@ -42,7 +42,7 @@
         }
 
         function onFilter (name, value) {
-            vm.filters[name] = value;
+            vm.filters[name] = { contains: value };
             vm.page = 1;
             refresh();
         }
@@ -67,14 +67,16 @@
         function refresh () {
             const params = {};
 
-            params.fields = ['name', 'status'];
+            params.fields = 'name,status';
             params.filters = vm.filters;
             params.sort = Object.keys(vm.sortDir).find(k => vm.sortDir[k]);
-            params.sortType = vm.sortDir[params.sort];
+            if (vm.sortDir[params.sort] === -1) {
+                params.sort = '-' + params.sort;
+            }
             params.page = vm.page;
 
             return api.getLayers(params).then(result => {
-                vm.layers = result.items;
+                vm.layers = result.data;
                 vm.currentPage = result.page;
                 vm.pages = result.pages;
             });

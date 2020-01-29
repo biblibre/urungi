@@ -41,10 +41,10 @@
                 page: page || 1,
             };
 
-            api.getRoles(params).then(function (data) {
-                vm.items = data.items;
-                vm.page = data.page;
-                vm.pages = data.pages;
+            api.getRoles(params).then(function (res) {
+                vm.items = res.data;
+                vm.page = res.page;
+                vm.pages = res.pages;
             });
         };
 

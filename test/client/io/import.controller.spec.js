@@ -67,7 +67,7 @@ describe('ImportController', function () {
             });
             const file = new File([fileContent], 'export.json');
 
-            $httpBackend.expect('GET', '/api/layers/find-one?id=fakelayerid')
+            $httpBackend.expect('GET', '/api/layers/fakelayerid')
                 .respond(apiLayersFindOneResponse());
             $httpBackend.expect('GET', '/api/reports/find-one?id=fakereportid')
                 .respond(apiReportsFindOneResponse());
@@ -101,7 +101,7 @@ describe('ImportController', function () {
             vm.importBundle.reports[0].overwrite = true;
             vm.importBundle.dashboards[0].overwrite = true;
 
-            $httpBackend.expect('POST', '/api/layers/update/fakelayerid')
+            $httpBackend.expect('PUT', '/api/layers/fakelayerid')
                 .respond({ result: 1 });
             $httpBackend.expect('POST', '/api/reports/update/fakereportid')
                 .respond({ result: 1 });
@@ -144,10 +144,7 @@ describe('ImportController', function () {
         }
 
         function apiLayersFindOneResponse () {
-            return {
-                result: 1,
-                item: getLayer(),
-            };
+            return getLayer();
         }
 
         function getReport () {
@@ -198,7 +195,7 @@ describe('ImportController', function () {
             return {
                 page: 1,
                 pages: 1,
-                items: [getDatasource()],
+                data: [getDatasource()],
             };
         }
     });

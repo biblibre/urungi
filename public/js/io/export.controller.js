@@ -17,7 +17,7 @@
         activate();
 
         function activate () {
-            api.getLayers().then(data => { vm.layers = data.items; });
+            api.getLayers().then(res => { vm.layers = res.data; });
             api.getReports().then(data => { vm.reports = data.items; });
             api.getDashboards().then(data => { vm.dashboards = data.items; });
         }

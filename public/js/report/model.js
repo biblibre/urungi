@@ -1,4 +1,4 @@
-angular.module('app').service('reportModel', function ($q, connection, uuid, FileSaver, Noty, reportsService) {
+angular.module('app').service('reportModel', function ($q, api, connection, uuid, FileSaver, Noty, reportsService) {
     this.getReportDefinition = function (id, isLinked) {
         const url = '/api/reports/get-report/' + id;
         const params = { id: id, mode: 'preview', linked: isLinked };
@@ -9,12 +9,16 @@ angular.module('app').service('reportModel', function ($q, connection, uuid, Fil
     };
 
     this.getLayers = function () {
-        return connection.get('/api/layers/get-layers', {}).then(function (data) {
-            if (data.result !== 1) {
-                throw new Error(data.msg);
-            }
+        const params = {
+            fields: 'name,description,objects,params.joins',
+            sort: 'name',
+            filters: {
+                status: 'active',
+            },
+        };
 
-            var layers = data.items;
+        return api.getLayers(params).then(function (res) {
+            var layers = res.data;
 
             for (var layer of layers) {
                 layer.rootItem = {

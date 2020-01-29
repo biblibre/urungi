@@ -45,9 +45,9 @@ describe('Roles API', function () {
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('page', 1);
             expect(res.body).toHaveProperty('pages', 1);
-            expect(res.body).toHaveProperty('items');
-            expect(res.body.items).toHaveLength(1);
-            expect(res.body.items[0]).toHaveProperty('name', 'Role 1');
+            expect(res.body).toHaveProperty('data');
+            expect(res.body.data).toHaveLength(1);
+            expect(res.body.data[0]).toHaveProperty('name', 'Role 1');
         });
 
         it('should return roles if admin', async function () {
@@ -57,9 +57,9 @@ describe('Roles API', function () {
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('page', 1);
             expect(res.body).toHaveProperty('pages', 1);
-            expect(res.body).toHaveProperty('items');
-            expect(res.body.items).toHaveLength(1);
-            expect(res.body.items[0]).toHaveProperty('name', 'Role 1');
+            expect(res.body).toHaveProperty('data');
+            expect(res.body.data).toHaveLength(1);
+            expect(res.body.data[0]).toHaveProperty('name', 'Role 1');
         });
     });
 

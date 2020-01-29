@@ -109,8 +109,8 @@
         };
 
         function loadRoles () {
-            api.getRoles({ fields: 'name' }).then(function (data) {
-                vm.roles = data.items;
+            api.getRoles({ fields: 'name' }).then(function (res) {
+                vm.roles = res.data;
 
                 var adminRole = { _id: 'ADMIN', name: gettextCatalog.getString('Urungi Administrator') };
                 vm.roles.push(adminRole);
