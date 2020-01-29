@@ -26,10 +26,11 @@ router.post('/', restrictAdmin, createRole);
 router.get('/:roleId', restrict, getRole);
 router.patch('/:roleId', restrictAdmin, updateRole);
 
-function listRoles (req, res) {
-    mongooseHelper.find(Role, req).then(response => {
-        res.json(response);
-    });
+function listRoles (req, res, next) {
+    const pipeline = mongooseHelper.getAggregationPipelineFromQuery(req.query);
+    Role.aggregate(pipeline).then(([result]) => {
+        res.json(result);
+    }).catch(next);
 }
 
 function createRole (req, res) {

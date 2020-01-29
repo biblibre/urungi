@@ -31,8 +31,9 @@ router.get('/:datasourceId/collections/:collectionName', getDatasourceCollection
 router.get('/:datasourceId/sql-query-collection', getSqlQueryCollection);
 
 function getDatasources (req, res, next) {
-    mongooseHelper.find(Datasource, req).then(response => {
-        res.json(response);
+    const pipeline = mongooseHelper.getAggregationPipelineFromQuery(req.query);
+    Datasource.aggregate(pipeline).then(([result]) => {
+        res.json(result);
     }).catch(next);
 }
 

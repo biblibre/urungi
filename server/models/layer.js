@@ -54,20 +54,19 @@ const layerCollectionSchema = new mongoose.Schema({
 });
 
 const layerSchema = new mongoose.Schema({
-    companyID: { type: String, required: false },
-    name: { type: String, required: true },
+    datasourceID: { type: mongoose.Schema.Types.ObjectId, required: true },
     description: { type: String },
-    status: { type: String, required: true },
+    name: { type: String, required: true },
+    objects: [layerObjectSchema],
     params: {
         joins: [layerJoinSchema],
         schema: [layerCollectionSchema],
     },
-    objects: [layerObjectSchema],
-    nd_trash_deleted: { type: Boolean },
-    nd_trash_deleted_date: { type: Date },
-    createdBy: { type: String },
-    createdOn: { type: Date },
-    datasourceID: { type: mongoose.Schema.Types.ObjectId, required: true },
+    status: {
+        type: String,
+        required: true,
+        enum: ['active', 'Not active'],
+    },
 }, { collation: { locale: 'en', strength: 2 } });
 
 layerSchema.methods.findObject = function (id) {

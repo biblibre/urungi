@@ -685,8 +685,8 @@ describe('api', () => {
     });
 
     describe('api.getLayers', () => {
-        it('should call /api/layers/find-all', () => {
-            const url = '/api/layers/find-all' +
+        it('should call GET /api/layers', () => {
+            const url = '/api/layers' +
                 '?fields=layerName&fields=owner' +
                 '&filters=' + encodeURI('{"owner":"foo"}') +
                 '&page=2&sort=owner&sortType=1';
@@ -712,7 +712,7 @@ describe('api', () => {
         });
 
         it('should throw if result is 0', () => {
-            const url = '/api/layers/find-all';
+            const url = '/api/layers';
             const response = {
                 result: 0,
                 msg: 'Caught an error',
@@ -726,7 +726,7 @@ describe('api', () => {
         });
 
         it('should throw if request failed', () => {
-            const url = '/api/layers/find-all';
+            const url = '/api/layers';
 
             $httpBackend.expect('GET', url).respond(403, 'Forbidden');
 
@@ -737,35 +737,31 @@ describe('api', () => {
     });
 
     describe('api.changeLayerStatus', function () {
-        it('should call /api/layers/change-layer-status', function () {
-            const url = '/api/layers/change-layer-status';
+        it('should call PATCH /api/layers/:layerID', function () {
             const layerID = 'foo';
+            const url = '/api/layers/' + layerID;
             const newStatus = 'active';
             const data = {
-                layerID: layerID,
                 status: newStatus,
             };
 
-            $httpBackend.expect('POST', url, data).respond(204, '');
+            $httpBackend.expect('PATCH', url, data).respond(200, { status: 'active' });
 
             const p = api.changeLayerStatus(layerID, newStatus);
 
             setTimeout($httpBackend.flush);
 
-            return expect(p).resolves.toBe('');
+            return expect(p).resolves.toEqual({ status: 'active' });
         });
     });
 
     describe('api.getLayer', () => {
-        it('should call /api/layers/find-one', () => {
-            const url = '/api/layers/find-one?id=42';
+        it('should call GET /api/layers/:layerId', () => {
+            const url = '/api/layers/42';
             const layer = {
                 layerName: 'foo',
             };
-            const response = {
-                result: 1,
-                item: layer,
-            };
+            const response = layer;
 
             $httpBackend.expect('GET', url).respond(response);
 
@@ -776,39 +772,24 @@ describe('api', () => {
             return expect(p).resolves.toEqual(layer);
         });
 
-        it('should throw if result is 0', () => {
-            const url = '/api/layers/find-one';
-            const response = {
-                result: 0,
-                msg: 'Caught an error',
-            };
-
-            $httpBackend.expect('GET', url).respond(response);
-
-            setTimeout($httpBackend.flush);
-
-            return expect(api.getLayer()).rejects.toThrow('Caught an error');
-        });
-
         it('should throw if request failed', () => {
-            const url = '/api/layers/find-one';
+            const url = '/api/layers/foo';
 
             $httpBackend.expect('GET', url).respond(403, 'Forbidden');
 
             setTimeout($httpBackend.flush);
 
-            return expect(api.getLayer()).rejects.toThrow('Forbidden');
+            return expect(api.getLayer('foo')).rejects.toThrow('Forbidden');
         });
     });
 
     describe('api.createLayer', () => {
-        it('should call /api/layers/create', () => {
-            const url = '/api/layers/create';
+        it('should call POST /api/layers', () => {
+            const url = '/api/layers';
             const layer = {
                 layerName: 'foo',
             };
             const response = {
-                result: 1,
                 item: layer,
             };
 
@@ -821,22 +802,8 @@ describe('api', () => {
             return expect(p).resolves.toEqual(response);
         });
 
-        it('should throw if result is 0', () => {
-            const url = '/api/layers/create';
-            const response = {
-                result: 0,
-                msg: 'Caught an error',
-            };
-
-            $httpBackend.expect('POST', url).respond(response);
-
-            setTimeout($httpBackend.flush);
-
-            return expect(api.createLayer()).rejects.toThrow('Caught an error');
-        });
-
         it('should throw if request failed', () => {
-            const url = '/api/layers/create';
+            const url = '/api/layers';
 
             $httpBackend.expect('POST', url).respond(403, 'Forbidden');
 
@@ -846,49 +813,32 @@ describe('api', () => {
         });
     });
 
-    describe('api.updateLayer', () => {
-        it('should call /api/layers/update/:id', () => {
-            const url = '/api/layers/update/42';
+    describe('api.replaceLayer', () => {
+        it('should call PUT /api/layers/:layerId', () => {
+            const url = '/api/layers/42';
             const layer = {
                 _id: 42,
                 layerName: 'foo',
             };
-            const response = {
-                result: 1,
-                item: layer,
-            };
+            const response = layer;
 
-            $httpBackend.expect('POST', url, layer).respond(response);
+            $httpBackend.expect('PUT', url, layer).respond(response);
 
-            const p = api.updateLayer(layer);
+            const p = api.replaceLayer(layer);
 
             setTimeout($httpBackend.flush);
 
             return expect(p).resolves.toEqual(layer);
         });
 
-        it('should throw if result is 0', () => {
-            const url = '/api/layers/update/0';
-            const response = {
-                result: 0,
-                msg: 'Caught an error',
-            };
-
-            $httpBackend.expect('POST', url).respond(response);
-
-            setTimeout($httpBackend.flush);
-
-            return expect(api.updateLayer({ _id: 0 })).rejects.toThrow('Caught an error');
-        });
-
         it('should throw if request failed', () => {
-            const url = '/api/layers/update/0';
+            const url = '/api/layers/0';
 
-            $httpBackend.expect('POST', url).respond(403, 'Forbidden');
+            $httpBackend.expect('PUT', url).respond(403, 'Forbidden');
 
             setTimeout($httpBackend.flush);
 
-            return expect(api.updateLayer({ _id: 0 })).rejects.toThrow('Forbidden');
+            return expect(api.replaceLayer({ _id: 0 })).rejects.toThrow('Forbidden');
         });
     });
 

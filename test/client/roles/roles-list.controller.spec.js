@@ -56,7 +56,7 @@ describe('RolesListController', function () {
         return {
             page: page,
             pages: page,
-            items: [
+            data: [
                 {
                     _id: 'one',
                     name: 'One',

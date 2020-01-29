@@ -43,10 +43,10 @@
                 fields: 'userName,lastName,status',
             };
 
-            api.getUsers(params).then(function (data) {
-                vm.users = data.items;
-                vm.page = data.page;
-                vm.pages = data.pages;
+            api.getUsers(params).then(function (res) {
+                vm.users = res.data;
+                vm.page = res.page;
+                vm.pages = res.pages;
             });
         };
 

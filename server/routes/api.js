@@ -5,6 +5,7 @@ const router = express.Router();
 router.use('/connection-test', require('./api/connection-test'));
 router.use('/datasources', require('./api/datasources'));
 router.use('/files', require('./api/files'));
+router.use('/layers', require('./api/layers'));
 router.use('/roles', require('./api/roles'));
 router.use('/shared-space', require('./api/shared-space'));
 router.use('/statistics', require('./api/statistics'));
