@@ -430,7 +430,7 @@ class SqlQueryBuilder {
 
             case '#WST-LASTMONTH#':
                 firstDate = new Date(today.getFullYear(), today.getMonth(), 1);
-                firstDate.setMonth(-1);
+                firstDate.setMonth(firstDate.getMonth() - 1);
                 lastDate = new Date(today.getFullYear(), today.getMonth(), 1);
                 break;
 
