@@ -1,6 +1,6 @@
 {
   "name": "urungi",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Open source reporting tool for SQL databases",
   "main": "server.js",
   "directories": {
