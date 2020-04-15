@@ -21,15 +21,14 @@
         vm.catalogIcons = [];
         vm.catalogImages = [];
         vm.files = [];
-	vm.url = [];
-	vm.submit = submit;
+        vm.url = [];
+        vm.submit = submit;
         vm.onFileSelected = onFileSelected;
         vm.upload = upload;
 
         function $onInit () {
             api.getFiles().then(function (files) {
                 vm.files = files;
-
             });
 
             for (let i = 1; i < 100; ++i) {
@@ -49,7 +48,6 @@
                     url: 'resources/images/icons/icon-' + idx + '.png',
                 };
 
-
                 vm.catalogIcons.push(icon);
             }
         }
@@ -58,15 +56,13 @@
             vm.close({ $value: file });
         }
 
-	function submit() {
-	  console.log(vm.url);  
-	  var file = {
-	url : vm.url,	
-	};
- 	
-	  vm.close({ $value: file })
-        }
+        function submit () {
+            var file = {
+                url: vm.url,
+            };
 
+            vm.close({ $value: file });
+        }
 
         function upload (file) {
             if (!file) {
