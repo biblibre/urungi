@@ -42,14 +42,10 @@
 	
 	<uib-tab heading="{{ 'Image url' | translate }}">
            <ul class="files-modal-list">
-	      <br>
                <label> URL </label>
 		<input type="text" ng-model="vm.url" name="url" placeholder="Image Url" size="40">
-		<input type="submit" name="submit" value="submit" ng-click="vm.submit()">
-                     
-                       <img ng-src="{{ vm.url }}" />
-                     
-               </li>
+		<input type="submit" name="submit" value="submit" ng-click="vm.submit()">     
+                 <img ng-src="{{ vm.url }}" />
             </ul>
         </uib-tab>
     </uib-tabset>
