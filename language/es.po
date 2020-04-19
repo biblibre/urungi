@@ -1,203 +1,238 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Claudio M. Fuhr <claudiofuhr@gmail.com>\n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Project-Id-Version: \n"
+"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: public/js/widgets/htmlWidgets.js:12
-#: public/js/widgets/htmlWidgets.js:17
-#: public/js/widgets/htmlWidgets.js:22
-#: public/js/widgets/htmlWidgets.js:27
-#: public/js/widgets/htmlWidgets.js:37
-#: public/js/widgets/htmlWidgets.js:42
-#: public/js/widgets/htmlWidgets.js:47
-#: public/js/widgets/htmlWidgets.js:57
+#: public/js/widgets/htmlWidgets.js:12 public/js/widgets/htmlWidgets.js:17
+#: public/js/widgets/htmlWidgets.js:22 public/js/widgets/htmlWidgets.js:27
+#: public/js/widgets/htmlWidgets.js:37 public/js/widgets/htmlWidgets.js:42
+#: public/js/widgets/htmlWidgets.js:47 public/js/widgets/htmlWidgets.js:57
 #: public/js/widgets/htmlWidgets.js:62
 msgid "A header text H3"
-msgstr ""
+msgstr "Un texto de encabezado H3"
 
 #: public/js/report/controller.js:714
 msgid "A query must hold at least one element here to be executed"
-msgstr ""
+msgstr "Una consulta debe contener al menos un elemento aquí para ejecutarse"
 
 #: public/partials/reports/criteria-input.html:85
 msgid "AND"
-msgstr ""
+msgstr "Y"
 
-#: public/partials/home/about.html:9
-#: public/partials/sidebar/sidebar.html:69
+#: public/partials/home/about.html:9 public/partials/sidebar/sidebar.html:69
 msgid "About"
-msgstr ""
+msgstr "Acerca de"
 
 #: public/js/report/controller.js:666
-msgid "Access here the different data elements of every layer that you have access on"
+msgid ""
+"Access here the different data elements of every layer that you have access "
+"on"
 msgstr ""
+"Accede aquí a los diferentes elementos de datos de cada capa en la que "
+"tienes acceso"
 
 #: public/js/home/controller.js:122
-msgid "Access here to define the connections to the different sources of your information"
+msgid ""
+"Access here to define the connections to the different sources of your "
+"information"
 msgstr ""
+"Acceda aquí para definir las conexiones a las diferentes fuentes de su "
+"información"
 
 #: public/js/home/controller.js:112
 msgid "Access roles to create, manage roles, and grant or revoque permissions"
 msgstr ""
+"Acceda a roles para crear, administrar roles y conceder o revoque permisos"
 
 #: public/js/home/controller.js:102
 msgid "Access users to create new urungi users and to manage them"
-msgstr ""
+msgstr "Accede a los usuarios para crear nuevos usuarios urungi y gestionarlos"
 
 #: public/partials/report/modals/filter-prompt-modal.html:49
 msgid "Activate Filter"
-msgstr ""
+msgstr "Activar filtro"
 
 #: public/partials/layer/view.html:175
 msgid "Add"
-msgstr ""
+msgstr "Agregar"
 
 #: public/partials/layer/view.html:197
 msgid "Add SQL"
-msgstr ""
+msgstr "Agregar SQL"
 
 #: public/partials/users/view.html:51
 msgid "Add a new role..."
-msgstr ""
+msgstr "Agregar un nuevo rol..."
 
 #: public/partials/layer/view.html:228
 msgid "Add all"
-msgstr ""
+msgstr "Agregar todo"
 
 #: public/partials/layer/addAllModal.html:5
 msgid "Add all elements from this collection to the layer ?"
-msgstr ""
+msgstr "¿Agregar todos los elementos de esta colección a la capa?"
 
 #: public/partials/layer/elementModal.html:4
 msgid "Add element to schema"
-msgstr ""
+msgstr "Agregar elemento al esquema"
 
 #: public/partials/spaces/shared.html:41
 msgid "Add folder"
-msgstr ""
+msgstr "Agregar carpeta"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:12
 msgid "Add header and footer"
-msgstr ""
+msgstr "Agregar encabezado y pie de página"
 
 #: public/partials/layer/sqlModal.html:5
 msgid "Add new SQL"
-msgstr ""
+msgstr "Agregar nuevo SQL"
 
 #: public/partials/users/view.html:50
 msgid "Add role"
-msgstr ""
+msgstr "Agregar rol"
 
 #: public/js/spaces/controller.js:84
 msgid "Add subfolder"
-msgstr ""
+msgstr "Agregar subcarpeta"
 
 #: public/partials/layer/sqlModal.html:34
 msgid "Add to layer"
-msgstr ""
+msgstr "Agregar a capa"
 
 #: public/partials/layer/objectProperties.html:9
 msgid "Add to layer elements"
-msgstr ""
+msgstr "Agregar a elementos de capa"
 
 #: public/js/report/controller.js:704
 msgid "After building your query, refresh to view the report."
-msgstr ""
+msgstr "Después de crear su consulta, actualice para ver el informe."
 
 #: public/js/spaces/controller.js:68
-msgid "After clicking here a text box with the name of the folder will appear, change then the name there and click on the small save button that will appear beside the edit box."
+msgid ""
+"After clicking here a text box with the name of the folder will appear, "
+"change then the name there and click on the small save button that will "
+"appear beside the edit box."
 msgstr ""
+"Después de hacer clic aquí, aparecerá un cuadro de texto con el nombre de la "
+"carpeta, cambie el nombre allí y haga clic en el pequeño botón Guardar que "
+"aparecerá junto al cuadro de edición."
 
-#: public/js/spaces/controller.js:46
-#: public/js/spaces/controller.js:88
-msgid "After creating the folder you can drag and drop it across the shared space."
+#: public/js/spaces/controller.js:46 public/js/spaces/controller.js:88
+msgid ""
+"After creating the folder you can drag and drop it across the shared space."
 msgstr ""
+"Después de crear la carpeta, puede arrastrarla y soltarla en el espacio "
+"compartido."
 
 #: public/js/dashboards/dashboards-list.controller.js:92
-msgid "After you define the reports to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it."
+msgid ""
+"After you define the reports to get and visualize your data, you can drag "
+"and drop different html layout elements, and put your report in, using "
+"different formats to show it."
 msgstr ""
+"Después de definir los informes para obtener y visualizar sus datos, puede "
+"arrastrar y soltar diferentes elementos de diseño html y colocar su informe "
+"en diferentes formatos para mostrarlo."
 
 #: public/partials/report/modals/filter-prompt-modal.html:29
 msgid "Allow Multiple selection"
-msgstr ""
+msgstr "Permitir selección múltiple"
 
-#: public/partials/io/import.html:131
-#: public/partials/io/import.html:63
+#: public/partials/io/import.html:131 public/partials/io/import.html:63
 #: public/partials/io/import.html:97
 msgid "Already exists. Overwrite ?"
-msgstr ""
+msgstr "Ya existe. Sobrescribir ?"
 
 #: public/partials/report/modals/filter-prompt-modal.html:20
 msgid "Answer required"
-msgstr ""
+msgstr "Respuesta requerida"
 
 #: public/partials/report/modals/filter-prompt-modal.html:23
 msgid "Answer required (mandatory filter)"
-msgstr ""
+msgstr "Respuesta requerida (filtro obligatorio)"
 
 #: public/partials/core/share-popover.html:2
 msgid "Anyone who has the link will be able to see it"
-msgstr ""
+msgstr "Cualquiera que tenga el enlace podrá verlo"
 
 #: public/js/report/services/c3Charts.js:295
 #: public/partials/reports/report-column-settings-modal.component.html:43
 msgid "Area"
-msgstr ""
+msgstr "Area"
 
 #: public/js/report/services/c3Charts.js:305
 #: public/partials/reports/report-column-settings-modal.component.html:57
 msgid "Area spline"
-msgstr ""
+msgstr "Spline de área"
 
 #: public/partials/layer/elementModal.html:101
 msgid "Array values"
-msgstr ""
+msgstr "Valores de matriz"
 
 #: public/partials/reports/view.html:20
 msgid "As XLSX"
-msgstr ""
+msgstr "Como XLSX"
 
 #: public/js/report/controller.js:694
-msgid "As you define the query dragging and dropping in the areas above, the results of the query will appear here"
+msgid ""
+"As you define the query dragging and dropping in the areas above, the "
+"results of the query will appear here"
 msgstr ""
+"A medida que defina la consulta arrastrando y soltando en las áreas "
+"anteriores, los resultados de la consulta aparecerán aquí"
 
 #: public/js/data-sources/data-sources-list.controller.js:45
-msgid "At least one data source must be defined, unless you do not define some data source you and your users will not be able to create reports."
+msgid ""
+"At least one data source must be defined, unless you do not define some data "
+"source you and your users will not be able to create reports."
 msgstr ""
+"Se debe definir al menos una fuente de datos, a menos que no defina alguna "
+"fuente de datos que usted y sus usuarios no podrán crear informes."
 
 #: public/js/io/import.controller.js:224
 msgid "At least one report has no selectedLayerID"
-msgstr ""
+msgstr "Al menos un informe no ha seleccionado LayerID"
 
 #: public/js/io/import.controller.js:230
 msgid "At least one report is related to a layer that is not in import file"
 msgstr ""
+"Al menos un informe está relacionado con una capa que no está en el archivo "
+"de importación"
 
 #: public/js/io/import.controller.js:236
 msgid "At least one report is related to a layer that is not valid"
-msgstr ""
+msgstr "Al menos un informe está relacionado con una capa que no es válida"
 
 #: public/partials/core/share-popover.html:20
 msgid "Authenticated users"
-msgstr ""
+msgstr "Usuarios autenticados"
 
 #: public/partials/core/share-popover.html:22
 msgid "Authenticated users will be able to see it in the shared space"
-msgstr ""
+msgstr "Los usuarios autenticados podrán verlo en el espacio compartido"
 
 #: public/partials/dashboards/list.html:31
 #: public/partials/reports/reports-table.component.html:20
 msgid "Author"
-msgstr ""
+msgstr "Autor"
 
 #: public/partials/home/about.html:40
 msgid "Authors"
-msgstr ""
+msgstr "Autores"
 
 #: public/js/reports/reports.service.js:12
 msgid "Avg"
-msgstr ""
+msgstr "Promedio"
 
 #: public/js/dashboards/dashboards-list.controller.js:78
 #: public/js/data-sources/data-sources-list.controller.js:31
@@ -207,28 +242,28 @@ msgstr ""
 #: public/js/reports/reports-list.controller.js:31
 #: public/js/spaces/controller.js:12
 msgid "Back"
-msgstr ""
+msgstr "Atrás"
 
 #: public/partials/logout/index.html:14
 msgid "Back to login"
-msgstr ""
+msgstr "Atrás para iniciar sesión"
 
 #: public/js/report/services/c3Charts.js:290
 #: public/partials/reports/report-column-settings-modal.component.html:36
 msgid "Bar"
-msgstr ""
+msgstr "Barra"
 
 #: public/partials/users/users-edit-modal.html:82
 msgid "Brand"
-msgstr ""
+msgstr "Marca"
 
 #: public/partials/users/users-edit-modal.html:72
 msgid "Business unit"
-msgstr ""
+msgstr "Unidad de negocio"
 
 #: public/partials/reports/report-column-settings-modal.component.html:107
 msgid "Calculate total"
-msgstr ""
+msgstr "Calcular total"
 
 #: public/partials/core/delete-modal.html:15
 #: public/partials/core/duplicate-modal.html:12
@@ -242,11 +277,9 @@ msgstr ""
 #: public/partials/layer/elementModal.html:207
 #: public/partials/layer/folderModal.html:43
 #: public/partials/layer/sqlModal.html:33
-#: public/partials/layer/sqlModal.html:85
-#: public/partials/layer/view.html:14
+#: public/partials/layer/sqlModal.html:85 public/partials/layer/view.html:14
 #: public/partials/layers/layers-new-modal.html:34
-#: public/partials/report/edit.html:17
-#: public/partials/report/edit.html:18
+#: public/partials/report/edit.html:17 public/partials/report/edit.html:18
 #: public/partials/report/modals/reportNameModal.html:15
 #: public/partials/reports/report-column-settings-modal.component.html:128
 #: public/partials/reports/report-settings-modal.component.html:57
@@ -254,35 +287,39 @@ msgstr ""
 #: public/partials/reports/view.html:24
 #: public/partials/roles/role-edit-modal.component.html:92
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: public/js/layer/controller.js:249
 msgid "Cannot modify sql of an object which is not an sql request"
-msgstr ""
+msgstr "No se puede modificar sql de un objeto que no es una solicitud sql"
 
 #: public/partials/io/import.html:17
 msgid "Checking file"
-msgstr ""
+msgstr "Comprobando archivo"
 
 #: public/partials/report/partials/data-objects.html:4
 msgid "Choose a layer:"
-msgstr ""
+msgstr "Elija una capa:"
 
 #: public/partials/core/duplicate-modal.html:7
 msgid "Choose a new name for the copy :"
-msgstr ""
+msgstr "Elija un nuevo nombre para la copia:"
 
 #: public/partials/reports/reports-import-modal.html:3
 msgid "Choose a report to add to the dashboard"
-msgstr ""
+msgstr "Elija un informe para agregar al tablero"
 
 #: public/js/reports/reports-list.controller.js:48
-msgid "Choose a report type and drag and drop elements from the selected layer to compose your report."
+msgid ""
+"Choose a report type and drag and drop elements from the selected layer to "
+"compose your report."
 msgstr ""
+"Elija un tipo de informe y arrastre y suelte elementos de la capa "
+"seleccionada para componer su informe."
 
 #: public/partials/dashboards/dashboard-image-modal.component.html:20
 msgid "Choose image to upload"
-msgstr ""
+msgstr "Elige imagen para subir"
 
 #: public/partials/widgets/inspector.html:24
 msgid "Clear direct formatting"
@@ -290,438 +327,466 @@ msgstr ""
 
 #: public/partials/spaces/shared.html:41
 msgid "Click here to add a new folder to the shared space"
-msgstr ""
+msgstr "Haga clic aquí para agregar una nueva carpeta al espacio compartido"
 
 #: public/partials/spaces/shared.html:25
 msgid "Click here to add a new subfolder inside this"
-msgstr ""
+msgstr "Haga clic aquí para agregar una nueva subcarpeta dentro de este"
 
 #: public/partials/report/edit.html:18
 msgid "Click here to cancel and back to the dashboard"
-msgstr ""
+msgstr "Haga clic aquí para cancelar y volver al tablero"
 
 #: public/partials/dashboards/edit.html:15
-#: public/partials/dashboards/view.html:20
-#: public/partials/report/edit.html:17
+#: public/partials/dashboards/view.html:20 public/partials/report/edit.html:17
 msgid "Click here to cancel and backtrack"
-msgstr ""
+msgstr "Haga clic aquí para cancelar y retroceder"
 
 #: public/js/spaces/controller.js:66
 msgid "Click here to change the folder&quot;s name."
-msgstr ""
+msgstr "Haga clic aquí para cambiar el nombre de la carpeta."
 
 #: public/partials/spaces/shared.html:19
 msgid "Click here to change the name of the folder"
-msgstr ""
+msgstr "Haga clic aquí para cambiar el nombre de la carpeta"
 
 #: public/partials/layers/list.html:53
 msgid "Click here to change the status of the layer"
-msgstr ""
+msgstr "Haga clic aquí para cambiar el estado de la capa"
 
 #: public/partials/reports/criteria-input.html:66
 #: public/partials/reports/criteria-input.html:91
 msgid "Click here to clear the selected value"
-msgstr ""
+msgstr "Haga clic aquí para borrar el valor seleccionado"
 
 #: public/partials/report/edit.html:19
 msgid "Click here to conduct the guided tour for data explorer"
 msgstr ""
+"Haga clic aquí para realizar la visita guiada para el explorador de datos"
 
 #: public/partials/data-sources/list.html:12
 msgid "Click here to conduct the guided tour for data sources"
-msgstr ""
+msgstr "Haga clic aquí para realizar la visita guiada de fuentes de datos"
 
 #: public/partials/spaces/shared.html:43
 msgid "Click here to conduct the guided tour for the shared space"
 msgstr ""
+"Haga clic aquí para realizar la visita guiada por el espacio compartido"
 
 #: public/partials/dashboards/list.html:11
 msgid "Click here to create a new dashboard"
-msgstr ""
+msgstr "Haga clic aquí para crear un nuevo tablero"
 
 #: public/partials/report/modals/dashboardListModal.html:10
 msgid "Click here to create a new dashboard and push this report in"
 msgstr ""
+"Haga clic aquí para crear un nuevo panel de control e inserte este informe en"
 
 #: public/js/dashboards/dashboards-list.controller.js:100
 msgid "Click here to create a new dashboard."
-msgstr ""
+msgstr "Haga clic aquí para crear un nuevo tablero."
 
 #: public/partials/data-sources/list.html:11
 msgid "Click here to create a new data source"
-msgstr ""
+msgstr "Haga clic aquí para crear una nueva fuente de datos"
 
 #: public/js/data-sources/data-sources-list.controller.js:53
 msgid "Click here to create a new datasource."
-msgstr ""
+msgstr "Haga clic aquí para crear una nueva fuente de datos."
 
 #: public/js/spaces/controller.js:44
 msgid "Click here to create a new folder in the root of the shared space."
 msgstr ""
+"Haga clic aquí para crear una nueva carpeta en la raíz del espacio "
+"compartido."
 
 #: public/js/spaces/controller.js:86
 msgid "Click here to create a new folder inside the actual folder."
-msgstr ""
+msgstr "Haga clic aquí para crear una nueva carpeta dentro de la carpeta real."
 
 #: public/js/layers/layers-list.controller.js:125
 msgid "Click here to create a new layer."
-msgstr ""
+msgstr "Haga clic aquí para crear una nueva capa."
 
 #: public/js/reports/reports-list.controller.js:58
 msgid "Click here to create a new report."
-msgstr ""
+msgstr "Haga clic aquí para crear un nuevo informe."
 
-#: public/partials/layers/list.html:11
-#: public/partials/reports/list.html:11
+#: public/partials/layers/list.html:11 public/partials/reports/list.html:11
 msgid "Click here to create a new single query report"
-msgstr ""
+msgstr "Haga clic aquí para crear un nuevo informe de consulta única"
 
 #: public/js/dashboards/dashboards-list.controller.js:128
 msgid "Click here to delete the dashboard."
-msgstr ""
+msgstr "Haga clic aquí para eliminar el panel de control."
 
 #: public/js/layers/layers-list.controller.js:155
 msgid "Click here to delete the layer."
-msgstr ""
+msgstr "Haga clic aquí para eliminar la capa."
 
 #: public/js/reports/reports-list.controller.js:86
 msgid "Click here to delete the report."
-msgstr ""
+msgstr "Haga clic aquí para eliminar el informe."
 
 #: public/partials/dashboards/edit.html:111
 msgid "Click here to delete this report"
-msgstr ""
+msgstr "Haga clic aquí para eliminar este informe"
 
 #: public/js/reports/reports-list.controller.js:98
 msgid "Click here to duplicate the report."
-msgstr ""
+msgstr "Haga clic aquí para duplicar el informe."
 
 #: public/partials/dashboards/edit.html:114
 msgid "Click here to edit this report"
-msgstr ""
+msgstr "Haga clic aquí para editar este informe"
 
 #: public/js/dashboards/dashboards-list.controller.js:120
 msgid "Click here to modify the dashboard."
-msgstr ""
+msgstr "Haga clic aquí para modificar el panel."
 
 #: public/js/reports/reports-list.controller.js:78
 msgid "Click here to modify the report."
-msgstr ""
+msgstr "Haga clic aquí para modificar el informe."
 
 #: public/partials/report/modals/dashboardListModal.html:15
 msgid "Click here to modify this dashboard"
-msgstr ""
+msgstr "Haga clic aquí para modificar este tablero"
 
 #: public/partials/reports/report-dropzone.component.html:16
 msgid "Click here to order ascendent using this field"
-msgstr ""
+msgstr "Haga clic aquí para ordenar ascendente usando este campo"
 
 #: public/partials/reports/report-dropzone.component.html:14
 msgid "Click here to order descendent using this field"
-msgstr ""
+msgstr "Haga clic aquí para ordenar descendente usando este campo"
 
 #: public/js/spaces/controller.js:76
 msgid "Click here to remove the folder."
-msgstr ""
+msgstr "Haga clic aquí para eliminar la carpeta."
 
 #: public/partials/spaces/shared.html:22
 msgid "Click here to remove this folder (will remove all children folders)"
 msgstr ""
+"Haga clic aquí para eliminar esta carpeta (eliminará todas las subcarpetas)"
 
 #: public/partials/spaces/shared.html:42
 msgid "Click here to save changes to the shared space"
-msgstr ""
+msgstr "Haga clic aquí para guardar los cambios en el espacio compartido"
 
 #: public/partials/dashboards/edit.html:13
 msgid "Click here to save the dashboard changes"
-msgstr ""
+msgstr "Haga clic aquí para guardar los cambios del panel"
 
 #: public/partials/spaces/shared.html:14
-msgid "Click here to save the name of the folder and to get out of the edit mode"
+msgid ""
+"Click here to save the name of the folder and to get out of the edit mode"
 msgstr ""
+"Haga clic aquí para guardar el nombre de la carpeta y salir del modo de "
+"edición"
 
 #: public/partials/report/edit.html:15
 msgid "Click here to save the report changes"
-msgstr ""
+msgstr "Haga clic aquí para guardar los cambios del informe"
 
 #: public/partials/data-sources/list.html:18
 msgid "Click here to see or set data source details"
 msgstr ""
+"Haga clic aquí para ver o establecer los detalles de la fuente de datos"
 
 #: public/partials/report/modals/dashboardListModal.html:19
 msgid "Click here to select this dashboard"
-msgstr ""
+msgstr "Haga clic aquí para seleccionar este panel"
 
 #: public/js/dashboards/dashboards-list.controller.js:110
 msgid "Click over a dashboard's name to execute it."
-msgstr ""
+msgstr "Haga clic sobre el nombre de un panel para ejecutarlo."
 
 #: public/js/reports/reports-list.controller.js:68
 msgid "Click over a report's name to execute it."
-msgstr ""
+msgstr "Haga clic sobre el nombre de un informe para ejecutarlo."
 
 #: public/js/report/controller.js:686
-msgid "Click over one of the different report types to change the visualization of the data you choose"
+msgid ""
+"Click over one of the different report types to change the visualization of "
+"the data you choose"
 msgstr ""
+"Haga clic sobre uno de los diferentes tipos de informes para cambiar la "
+"visualización de los datos que elija"
 
 #: public/partials/report/modals/filter-prompt-modal.html:47
 #: public/partials/users/users-edit-modal.html:92
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 #: public/js/report/controller.js:710
 msgid "Columns / results drop zone"
-msgstr ""
+msgstr "Columnas / zona de caída de resultados"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:52
 #: public/partials/layer/addAllModal.html:7
 #: public/partials/layer/sqlModal.html:86
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmar"
 
 #: public/partials/data-sources/edit.html:15
 msgid "Connection type"
-msgstr ""
+msgstr "Tipo de Conexion"
 
 #: public/js/spaces/controller.js:105
 msgid "Continue tour"
-msgstr ""
+msgstr "Continuar recorrido"
 
 #: public/js/core/share-popover.component.js:40
 msgid "Copied"
-msgstr ""
+msgstr "Copiado"
 
 #: public/js/core/duplicate-modal.component.js:25
 msgid "Copy of {{name}}"
-msgstr ""
+msgstr "Copia de {{name}}"
 
 #: public/js/dashboards/dashboard-edit.controller.js:143
 msgid "Could not load dashboard : missing id"
-msgstr ""
+msgstr "No se pudo cargar el panel : falta id"
 
 #: public/js/reports/reports.service.js:15
 msgid "Count"
-msgstr ""
+msgstr "Contar"
 
 #: public/js/reports/reports.service.js:16
 msgid "Count distinct"
-msgstr ""
+msgstr "Contar distintos"
 
 #: public/partials/layer/view.html:67
 msgid "Create"
-msgstr ""
+msgstr "Crear"
 
 #: public/js/data-sources/data-sources-list.controller.js:43
-msgid "Create and manage here the connections to databases that holds the data you want to be able to create reports using Urungi."
+msgid ""
+"Create and manage here the connections to databases that holds the data you "
+"want to be able to create reports using Urungi."
 msgstr ""
+"Cree y administre aquí las conexiones a bases de datos que contienen los "
+"datos que desea poder crear informes mediante Urungi."
 
 #: public/partials/roles/role-edit-modal.component.html:58
 msgid "Create dashboards"
-msgstr ""
+msgstr "Crear paneles"
 
 #: public/js/spaces/controller.js:36
 msgid "Create folders and drag and drop them across to structure it."
-msgstr ""
+msgstr "Cree carpetas y arrástrelas y suéltelas para estructurarlas."
 
 #: public/partials/dashboards/list.html:11
 msgid "Create new dashboard"
-msgstr ""
+msgstr "Crear un nuevo panel"
 
 #: public/partials/reports/list.html:11
 msgid "Create new report"
-msgstr ""
+msgstr "Crear nuevo informe"
 
 #: public/partials/roles/role-edit-modal.component.html:54
 msgid "Create reports"
-msgstr ""
+msgstr "Crear informes"
 
 #: public/partials/dashboards/list.html:35
 #: public/partials/reports/reports-table.component.html:24
 msgid "Created on"
-msgstr ""
+msgstr "Creado en"
 
 #: public/js/spaces/controller.js:103
 msgid "Creating a new data source"
-msgstr ""
+msgstr "Creación de un nuevo origen de datos"
 
 #: public/partials/layer/elementModal.html:197
 msgid "Cyclic definition :"
-msgstr ""
+msgstr "Definición cíclica :"
 
 #: public/partials/dashboards/edit.html:247
 msgid "Dashboard Name"
-msgstr ""
+msgstr "Nombre del tablero"
 
 #: public/js/io/import.controller.js:434
 msgid "Dashboard created successfully"
-msgstr ""
+msgstr "Panel creado exitosamente"
 
 #: public/js/dashboards/dashboards-list.controller.js:126
 msgid "Dashboard delete"
-msgstr ""
+msgstr "Borrar panel"
 
 #: public/js/dashboards/dashboards-list.controller.js:118
 msgid "Dashboard edit"
-msgstr ""
+msgstr "Editar panel"
 
 #: public/js/dashboards/dashboards-list.controller.js:138
 msgid "Dashboard published"
-msgstr ""
+msgstr "Panel publicado"
 
 #: public/js/io/import.controller.js:422
 msgid "Dashboard updated successfully:"
-msgstr ""
+msgstr "Panel actualizado correctamente:"
 
 #: public/js/dashboards/dashboards-list.controller.js:86
-#: public/js/home/controller.js:189
-#: public/partials/dashboards/list.html:9
-#: public/partials/io/export.html:57
-#: public/partials/io/import.html:112
+#: public/js/home/controller.js:189 public/partials/dashboards/list.html:9
+#: public/partials/io/export.html:57 public/partials/io/import.html:112
 #: public/partials/users/view.html:101
 msgid "Dashboards"
-msgstr ""
+msgstr "Paneles"
 
 #: public/js/home/controller.js:78
-msgid "Dashboards allows you to create (if granted) and manage dashboards using your previous defined single query reports."
+msgid ""
+"Dashboards allows you to create (if granted) and manage dashboards using "
+"your previous defined single query reports."
 msgstr ""
+"Los paneles le permiten crear (si se otorga) y administrar paneles "
+"utilizando sus informes de consulta única definidos previamente."
 
 #: public/js/dashboards/dashboards-list.controller.js:106
 msgid "Dashboards list"
-msgstr ""
+msgstr "Lista de paneles"
 
 #: public/js/data-sources/data-sources-list.controller.js:69
 #: public/partials/layers/layers-new-modal.html:22
 msgid "Data source"
-msgstr ""
+msgstr "Fuente de datos"
 
 #: public/js/data-sources/data-sources-list.controller.js:89
 msgid "Data source connection details"
-msgstr ""
+msgstr "Detalles de conexión de fuente de datos"
 
 #: public/partials/layers/layers-new-modal.html:26
 msgid "Data source is required"
-msgstr ""
+msgstr "Se requiere fuente de datos"
 
 #: public/js/data-sources/data-sources-list.controller.js:78
 msgid "Data source name & type"
-msgstr ""
+msgstr "Nombre y tipo de fuente de datos"
 
 #: public/js/data-sources/data-sources-list.controller.js:39
-#: public/js/home/controller.js:118
-#: public/partials/data-sources/list.html:9
-#: public/partials/io/import.html:32
-#: public/partials/sidebar/sidebar.html:42
+#: public/js/home/controller.js:118 public/partials/data-sources/list.html:9
+#: public/partials/io/import.html:32 public/partials/sidebar/sidebar.html:42
 msgid "Data sources"
-msgstr ""
+msgstr "Fuentes de datos"
 
 #: public/js/data-sources/data-sources-list.controller.js:41
-msgid "Data sources are connections to the databases you are going to generate reports for."
+msgid ""
+"Data sources are connections to the databases you are going to generate "
+"reports for."
 msgstr ""
+"Las fuentes de datos son conexiones a las bases de datos para las que va a "
+"generar informes."
 
 #: public/partials/data-sources/edit.html:40
 msgid "Database"
-msgstr ""
+msgstr "Base de datos"
 
 #: public/js/data-sources/data-sources-edit.controller.js:54
 msgid "Database connection failed."
-msgstr ""
+msgstr "La conexión de la base de datos falló."
 
 #: public/partials/layer/objectProperties.html:5
 msgid "Dataset"
-msgstr ""
+msgstr "Conjunto de datos"
 
 #: public/js/data-sources/data-sources-edit.controller.js:38
 msgid "Datasource created successfully"
-msgstr ""
+msgstr "Fuente de datos creada con éxito"
 
 #: public/partials/io/import.html:35
 msgid "Datasource matching {{ds.doc.name}}"
-msgstr ""
+msgstr "Coincidencia de fuente de datos {{ds.doc.name}}"
 
 #: public/js/layer/controller.js:1233
 msgid "Datasource must be the same for all entities"
-msgstr ""
+msgstr "El origen de datos debe ser el mismo para todas las entidades"
 
 #: public/js/data-sources/data-sources-edit.controller.js:43
 msgid "Datasource updated successfully"
-msgstr ""
+msgstr "Fuente de datos actualizada con éxito"
 
 #: public/partials/report/modals/filter-prompt-modal.html:48
 msgid "Deactivate Filter"
-msgstr ""
+msgstr "Desactivar filtro"
 
 #: public/partials/layer/objectProperties.html:101
 #: public/partials/layer/objectProperties.html:94
 msgid "Default Aggregation"
-msgstr ""
+msgstr "Agregación predeterminada"
 
 #: public/partials/layer/elementModal.html:65
 #: public/partials/layer/elementModal.html:79
 msgid "Default aggregation"
-msgstr ""
+msgstr "Agregación predeterminada"
 
 #: public/js/home/controller.js:146
 msgid "Define here the folder structure for the shared area"
-msgstr ""
+msgstr "Defina aquí la estructura de carpetas para el área compartida"
 
 #: public/js/dashboards/dashboards-list.controller.js:90
-msgid "Define several reports using filters and dragging and dropping from different layers."
+msgid ""
+"Define several reports using filters and dragging and dropping from "
+"different layers."
 msgstr ""
+"Defina varios informes usando filtros y arrastrando y soltando desde "
+"diferentes capas."
 
 #: public/partials/core/delete-modal.html:16
 #: public/partials/layer/objectProperties.html:7
 #: public/partials/layer/view.html:109
 msgid "Delete"
-msgstr ""
+msgstr "Eliminar"
 
 #: public/partials/widgets/inspector.html:99
 msgid "Delete background"
-msgstr ""
+msgstr "Eliminar fondo"
 
 #: public/js/reports/reports-list.controller.js:84
 msgid "Delete report"
-msgstr ""
+msgstr "Eliminar informe"
 
 #: public/partials/dashboards/dashboards-list-buttons.html:21
 msgid "Delete this dashboard"
-msgstr ""
+msgstr "Eliminar este panel"
 
 #: public/partials/layers/layers-list-buttons.html:6
 msgid "Delete this layer"
-msgstr ""
+msgstr "Eliminar esta capa"
 
 #: public/partials/reports/reports-list-buttons.html:21
 msgid "Delete this report"
-msgstr ""
+msgstr "Eliminar este informe"
 
 #: public/js/dashboards/dashboards-list-buttons.component.js:32
 #: public/js/layers/layers-list-buttons.component.js:25
 #: public/js/reports/reports-list-buttons.component.js:32
 msgid "Delete {{name}} ?"
-msgstr ""
+msgstr "Eliminar {{name}} ?"
 
 #: public/partials/users/users-edit-modal.html:67
 msgid "Department"
-msgstr ""
+msgstr "Departamento"
 
 #: public/js/home/controller.js:34
-msgid "Depending on your permissions you will be able to access different folders and/or elements"
+msgid ""
+"Depending on your permissions you will be able to access different folders "
+"and/or elements"
 msgstr ""
+"Dependiendo de sus permisos, podrá acceder a diferentes carpetas y/o "
+"elementos"
 
 #: public/partials/layer/elementModal.html:90
 #: public/partials/layer/objectProperties.html:168
 #: public/partials/layer/objectProperties.html:46
 #: public/partials/roles/role-edit-modal.component.html:41
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #: public/js/layers/layers-list.controller.js:166
 msgid "Design your company public space"
-msgstr ""
+msgstr "Diseña el espacio público de tu empresa"
 
 #: public/partials/home/main.html:12
 msgid "Do not show this block again"
-msgstr ""
+msgstr "No mostrar este bloque nuevamente"
 
 #: public/js/dashboards/dashboards-list.controller.js:80
 #: public/js/data-sources/data-sources-list.controller.js:33
@@ -731,286 +796,300 @@ msgstr ""
 #: public/js/reports/reports-list.controller.js:33
 #: public/js/spaces/controller.js:14
 msgid "Done"
-msgstr ""
+msgstr "Hecho"
 
 #: public/js/report/services/c3Charts.js:323
 #: public/partials/reports/report-settings-modal.component.html:22
 msgid "Donut"
-msgstr ""
+msgstr "Donut"
 
 #: public/partials/widgets/inspector.html:15
 msgid "Down"
-msgstr ""
+msgstr "Abajo"
 
 #: public/js/spaces/controller.js:58
 msgid "Drag if from left to right to move it inside another existing folder."
 msgstr ""
+"Arrástrelo de izquierda a derecha para moverlo dentro de una carpeta "
+"existente."
 
 #: public/partials/report/partials/drop-area.html:17
 msgid "Drop here the dimension field"
-msgstr ""
+msgstr "Suelta aquí el campo de dimensión"
 
 #: public/js/report/controller.js:732
-msgid "Drop here the elements that you want to use to filter the results of the query"
+msgid ""
+"Drop here the elements that you want to use to filter the results of the "
+"query"
 msgstr ""
+"Suelte aquí los elementos que desea usar para filtrar los resultados de la "
+"consulta"
 
 #: public/js/report/controller.js:722
-msgid "Drop here the elements that you want to use to order the results of the query"
+msgid ""
+"Drop here the elements that you want to use to order the results of the query"
 msgstr ""
+"Suelte aquí los elementos que desea utilizar para ordenar los resultados de "
+"la consulta"
 
 #: public/js/report/controller.js:712
 msgid "Drop here the elements you want to have in the results of the query"
 msgstr ""
+"Suelte aquí los elementos que desea tener en los resultados de la consulta"
 
 #: public/partials/report/partials/drop-area.html:11
 msgid "Drop here the table columns"
-msgstr ""
+msgstr "Suelta aquí las columnas de la tabla"
 
 #: public/partials/report/partials/drop-area.html:13
 msgid "Drop here the table rows"
-msgstr ""
+msgstr "Suelta aquí las filas de la tabla"
 
 #: public/partials/report/partials/drop-area.html:7
 msgid "Drop here your columns"
-msgstr ""
+msgstr "Suelta aquí tus columnas"
 
 #: public/partials/report/partials/drop-area.html:22
 msgid "Drop here your filters"
-msgstr ""
+msgstr "Suelta aquí tus filtros"
 
 #: public/partials/report/partials/drop-area.html:3
 msgid "Drop here your metrics"
-msgstr ""
+msgstr "Deja aquí tus métricas"
 
 #: public/partials/report/partials/drop-area.html:28
 msgid "Drop here your order keys"
-msgstr ""
+msgstr "Deja aquí tus llaves de pedido"
 
 #: public/partials/core/duplicate-modal.html:13
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplicar"
 
 #: public/partials/core/duplicate-modal.html:3
 msgid "Duplicate '{{vm.resolve.name}}' ?"
-msgstr ""
+msgstr "Duplicar '{{vm.resolve.name}}' ?"
 
 #: public/js/report/controller.js:14
 #: public/js/reports/reports-list.controller.js:96
 msgid "Duplicate report"
-msgstr ""
+msgstr "Duplicar informe"
 
 #: public/partials/dashboards/dashboards-list-buttons.html:17
 msgid "Duplicate this dashboard"
-msgstr ""
+msgstr "Duplicar este panel"
 
 #: public/partials/reports/reports-list-buttons.html:17
 msgid "Duplicate this report"
-msgstr ""
+msgstr "Duplicar este informe"
 
 #: public/partials/layer/objectProperties.html:8
-#: public/partials/layer/view.html:110
-#: public/partials/layer/view.html:97
+#: public/partials/layer/view.html:110 public/partials/layer/view.html:97
 #: public/partials/users/view.html:11
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: public/partials/dashboards/view.html:21
 msgid "Edit Dashboard"
-msgstr ""
+msgstr "Editar panel"
 
 #: public/partials/reports/view.html:25
 msgid "Edit Report"
-msgstr ""
+msgstr "Editar informe"
 
 #: public/partials/users/users-edit-modal.html:4
 msgid "Edit User"
-msgstr ""
+msgstr "Editar usuario"
 
 #: public/partials/data-sources/edit.html:9
 msgid "Edit datasource"
-msgstr ""
+msgstr "Editar fuente de datos"
 
 #: public/js/spaces/controller.js:64
 msgid "Edit folder"
-msgstr ""
+msgstr "Editar carpeta"
 
 #: public/js/reports/reports-list.controller.js:76
 msgid "Edit report"
-msgstr ""
+msgstr "Editar informe"
 
 #: public/partials/dashboards/dashboards-list-buttons.html:13
 msgid "Edit this dashboard"
-msgstr ""
+msgstr "Editar este panel"
 
 #: public/partials/layers/layers-list-buttons.html:2
 msgid "Edit this layer"
-msgstr ""
+msgstr "Editar esta capa"
 
 #: public/partials/reports/reports-list-buttons.html:13
 msgid "Edit this report"
-msgstr ""
+msgstr "Editar este reporte"
 
 #: public/partials/layer/objectProperties.html:6
 msgid "Element"
-msgstr ""
+msgstr "Elemento"
 
 #: public/partials/report/edit.html:30
 msgid "Elements"
-msgstr ""
+msgstr "Elementos"
 
 #: public/partials/report/partials/report-edit.html:35
 msgid "Enter a max value for gauge"
-msgstr ""
+msgstr "Ingrese un valor máximo para el medidor"
 
 #: public/js/dashboards/dashboard-edit.controller.js:91
 msgid "Error : failed to import report"
-msgstr ""
+msgstr "Error: no se pudo importar el informe"
 
 #: public/partials/io/import.html:23
 msgid "Error:"
-msgstr ""
+msgstr "Error:"
 
 #: public/partials/core/share-popover.html:1
 msgid "Everyone"
-msgstr ""
+msgstr "Todos"
 
 #: public/partials/roles/role-edit-modal.component.html:79
 msgid "Execute dashboards"
-msgstr ""
+msgstr "Ejecutar paneles"
 
 #: public/partials/roles/role-edit-modal.component.html:78
 msgid "Execute reports"
-msgstr ""
+msgstr "Ejecutar informes"
 
-#: public/js/home/controller.js:56
-#: public/partials/sidebar/sidebar.html:29
+#: public/js/home/controller.js:56 public/partials/sidebar/sidebar.html:29
 msgid "Explore"
-msgstr ""
+msgstr "Explorar"
 
 #: public/js/home/controller.js:58
-msgid "Explore allows you to surf across the data without creating a report for that."
+msgid ""
+"Explore allows you to surf across the data without creating a report for "
+"that."
 msgstr ""
+"Explore le permite navegar a través de los datos sin crear un informe para "
+"eso."
 
 #: public/js/home/controller.js:165
 #: public/partials/roles/role-edit-modal.component.html:62
 msgid "Explore data"
-msgstr ""
+msgstr "Explorar datos"
 
 #: public/partials/report/edit.html:9
 msgid "Explorer"
-msgstr ""
+msgstr "Explorador"
 
-#: public/partials/dashboards/view.html:9
-#: public/partials/io/export.html:85
-#: public/partials/reports/view.html:11
-#: public/partials/sidebar/sidebar.html:61
+#: public/partials/dashboards/view.html:9 public/partials/io/export.html:85
+#: public/partials/reports/view.html:11 public/partials/sidebar/sidebar.html:61
 msgid "Export"
-msgstr ""
+msgstr "Exportar"
 
 #: public/partials/io/export.html:9
 msgid "Export layers, reports and dashboards"
-msgstr ""
+msgstr "Exportar capas, informes y paneles"
 
 #: public/partials/layer/elementModal.html:10
 msgid "Expression"
-msgstr ""
+msgstr "Expresión"
 
 #: public/js/io/import.controller.js:439
 msgid "Failed to create dashboard"
-msgstr ""
+msgstr "Error al crear el tablero"
 
 #: public/js/io/import.controller.js:330
 msgid "Failed to create layer"
-msgstr ""
+msgstr "Error al crear capa"
 
 #: public/js/io/import.controller.js:377
 msgid "Failed to create report"
-msgstr ""
+msgstr "Error al crear el informe"
 
 #: public/js/layer/controller.js:514
 msgid "Failed to parse expression for element"
-msgstr ""
+msgstr "Error al analizar la expresión para el elemento"
 
 #: public/js/roles/role-edit-modal.component.js:63
 msgid "Failed to save role"
-msgstr ""
+msgstr "Error al guardar el rol"
 
 #: public/js/io/import.controller.js:427
 msgid "Failed to update dashboard"
-msgstr ""
+msgstr "Error al actualizar el tablero"
 
 #: public/js/io/import.controller.js:317
 msgid "Failed to update layer"
-msgstr ""
+msgstr "Error al actualizar la capa"
 
 #: public/js/io/import.controller.js:365
 msgid "Failed to update report"
-msgstr ""
+msgstr "Error al actualizar el informe"
 
 #: public/js/report/controller.js:266
 #: public/js/report/directives/reportView.js:40
 msgid "Fetching data ..."
-msgstr ""
+msgstr "Obteniendo datos ..."
 
 #: public/js/io/import.controller.js:50
-msgid "File must contain the following properties: datasources, layers, reports and dashboards"
+msgid ""
+"File must contain the following properties: datasources, layers, reports and "
+"dashboards"
 msgstr ""
+"El archivo debe contener las siguientes propiedades: fuentes de datos, "
+"capas, informes y paneles"
 
 #: public/partials/report/partials/report-edit.html:32
 msgid "Filter"
-msgstr ""
+msgstr "Filtro"
 
 #: public/partials/report/modals/filter-prompt-modal.html:38
 msgid "Filter Instructions"
-msgstr ""
+msgstr "Filtrar instrucciones"
 
 #: public/js/report/controller.js:730
 msgid "Filters drop zone"
-msgstr ""
+msgstr "Área de depósito de filtro"
 
 #: public/partials/core/pager.html:4
 msgid "First"
-msgstr ""
+msgstr "Primero"
 
 #: public/partials/users/users-edit-modal.html:20
 msgid "First Name"
-msgstr ""
+msgstr "Nombre"
 
 #: public/partials/users/users-edit-modal.html:22
 msgid "First Name is required"
-msgstr ""
+msgstr "Nombre requerido"
 
 #: public/js/reports/filter-prompt.component.js:204
 msgid "First quarter"
-msgstr ""
+msgstr "Primer cuarto"
 
 #: public/js/reports/filter-prompt.component.js:208
 msgid "First semester"
-msgstr ""
+msgstr "Primer semestre"
 
 #: public/js/spaces/controller.js:52
 msgid "Folder"
-msgstr ""
+msgstr "Carpeta"
 
 #: public/partials/dashboards/list.html:12
 msgid "Follow the guided tour for dashboards"
-msgstr ""
+msgstr "Siga la visita guiada para paneles"
 
 #: public/partials/layers/list.html:12
 msgid "Follow the guided tour for data sources"
-msgstr ""
+msgstr "Siga la visita guiada para obtener fuentes de datos"
 
 #: public/partials/reports/list.html:12
 msgid "Follow the guided tour for reports"
-msgstr ""
+msgstr "Siga la visita guiada para obtener informes"
 
 #: public/partials/widgets/inspector.html:147
 msgid "Font"
-msgstr ""
+msgstr "Fuente"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:25
 msgid "Footer template"
-msgstr ""
+msgstr "Plantilla de pie de página"
 
 #: public/partials/layer/elementModal.html:136
 #: public/partials/layer/elementModal.html:139
@@ -1020,481 +1099,532 @@ msgstr ""
 #: public/partials/reports/report-column-settings-modal.component.html:88
 #: public/partials/reports/report-column-settings-modal.component.html:97
 msgid "Format"
-msgstr ""
+msgstr "Formato"
 
 #: public/partials/layer/elementModal.html:143
 #: public/partials/layer/elementModal.html:171
 msgid "Format examples"
-msgstr ""
+msgstr "Ejemplos de formato"
 
 #: public/js/reports/filter-prompt.component.js:207
 msgid "Fourth quarter"
-msgstr ""
+msgstr "Cuarto trimestre"
 
 #: public/partials/layer/elementModal.html:39
 #: public/partials/roles/role-edit-modal.component.html:27
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: public/partials/home/main.html:7
 msgid "Getting started with Urungi?"
-msgstr ""
+msgstr "¿Comenzando con Urungi?"
 
 #: public/js/home/controller.js:193
 msgid "Go to dashboards and continue tour"
-msgstr ""
+msgstr "Ir a los paneles y continuar el recorrido"
 
 #: public/js/home/controller.js:169
 msgid "Go to data explorer and continue tour"
-msgstr ""
+msgstr "Ir al explorador de datos y continuar el recorrido"
 
 #: public/js/home/controller.js:155
 msgid "Go to data sources and continue tour"
-msgstr ""
+msgstr "Ir a las fuentes de datos y continuar el recorrido"
 
 #: public/js/data-sources/data-sources-list.controller.js:104
 msgid "Go to layers and continue tour"
-msgstr ""
+msgstr "Ir a capas y continuar gira"
 
 #: public/js/home/controller.js:181
 msgid "Go to single query report designer and continue tour"
-msgstr ""
+msgstr "Ir al diseñador de informes de consulta única y continuar el recorrido"
 
 #: public/js/layers/layers-list.controller.js:170
 msgid "Go to the public space definition and continue tour"
-msgstr ""
+msgstr "Ir a la definición del espacio público y continuar el recorrido"
 
 #: public/partials/sidebar/sidebar.html:65
 msgid "Guided tour"
-msgstr ""
+msgstr "Visita guiada"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:27
+#, fuzzy
 msgid ""
 "HTML template for the print footer. The default is to show the\n"
 "                page number and the total number of pages on the right."
 msgstr ""
+"Plantilla HTML para el pie de página de impresión. El valor predeterminado "
+"es mostrar el\r\n"
+"                número de página y el número total de páginas a la derecha."
 
 #: public/partials/core/pdf-export-settings-modal.component.html:20
+#, fuzzy
 msgid ""
 "HTML template for the print header. The default is to show the\n"
 "                date on the right."
 msgstr ""
+"Plantilla HTML para el encabezado de impresión. El valor predeterminado es "
+"mostrar el\r\n"
+"                fecha a la derecha."
 
 #: public/partials/core/pdf-export-settings-modal.component.html:33
+#, fuzzy
 msgid ""
 "Header and footer templates should be valid HTML markup\n"
-"                    with following classes used to inject printing values into\n"
+"                    with following classes used to inject printing values "
+"into\n"
 "                    them:"
 msgstr ""
+"Las plantillas de encabezado y pie de página deben ser marcas HTML válidas"
+"\r\n"
+"                    con las siguientes clases utilizadas para inyectar "
+"valores de impresión en\r\n"
+"                    ellos:"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:18
 msgid "Header template"
-msgstr ""
+msgstr "Plantilla de encabezado"
 
 #: public/partials/reports/report-settings-modal.component.html:48
 msgid "Height"
-msgstr ""
+msgstr "Altura"
 
 #: public/js/widgets/htmlWidgets.js:4
 msgid "Hello, world!"
-msgstr ""
+msgstr "Hola Mundo!"
 
 #: public/js/data-sources/data-sources-list.controller.js:61
 msgid "Here all the data sources (database connections) will be listed."
 msgstr ""
+"Aquí se enumerarán todas las fuentes de datos (conexiones de base de datos)."
 
 #: public/js/layers/layers-list.controller.js:133
 msgid "Here all the layers are listed."
-msgstr ""
+msgstr "Aquí se enumeran todas las capas."
 
 #: public/js/home/controller.js:32
-msgid "Here all the shared shared elements (reports, dashboards) that you can execute"
+msgid ""
+"Here all the shared shared elements (reports, dashboards) that you can "
+"execute"
 msgstr ""
+"Aquí todos los elementos compartidos (informes, paneles) que puede ejecutar"
 
 #: public/js/dashboards/dashboards-list.controller.js:108
 msgid "Here all your dashboards are listed."
-msgstr ""
+msgstr "Aquí se enumeran todos sus paneles."
 
 #: public/js/reports/reports-list.controller.js:66
 msgid "Here all your reports are listed."
-msgstr ""
+msgstr "Aquí se enumeran todos sus informes."
 
 #: public/js/home/controller.js:42
-msgid "Here are displayed your 10 latest element executions, along with the last execution time"
+msgid ""
+"Here are displayed your 10 latest element executions, along with the last "
+"execution time"
 msgstr ""
+"Aquí se muestran sus 10 últimas ejecuciones de elementos, junto con el "
+"último tiempo de ejecución"
 
 #: public/js/home/controller.js:24
 msgid "Here you can access the basic operations in urungi"
-msgstr ""
+msgstr "Aquí puedes acceder a las operaciones básicas en urungi"
 
 #: public/js/reports/reports-list.controller.js:41
 msgid "Here you can create and execute reports."
-msgstr ""
+msgstr "Aquí puede crear y ejecutar informes."
 
 #: public/js/layers/layers-list.controller.js:115
-msgid "Here you can create and manage the layers that later will be used by your users to create reports or explore data."
+msgid ""
+"Here you can create and manage the layers that later will be used by your "
+"users to create reports or explore data."
 msgstr ""
+"Aquí puede crear y administrar las capas que luego serán utilizadas por sus "
+"usuarios para crear informes o explorar datos."
 
 #: public/js/home/controller.js:134
-msgid "Here you can define the semantic layer used by your users to access the data in the different data sources."
+msgid ""
+"Here you can define the semantic layer used by your users to access the data "
+"in the different data sources."
 msgstr ""
+"Aquí puede definir la capa semántica utilizada por sus usuarios para acceder "
+"a los datos en las diferentes fuentes de datos."
 
 #: public/js/spaces/controller.js:24
 msgid "Here you can define the structure in folders of the shared space."
-msgstr ""
+msgstr "Aquí puede definir la estructura en carpetas del espacio compartido."
 
-#: public/js/home/controller.js:86
-#: public/partials/home/main.html:2
+#: public/js/home/controller.js:86 public/partials/home/main.html:2
 #: public/partials/sidebar/sidebar.html:15
 msgid "Home"
-msgstr ""
+msgstr "Inicio"
 
 #: public/partials/data-sources/edit.html:30
 msgid "Host"
-msgstr ""
+msgstr "Anfitrión"
 
 #: public/partials/dashboards/dashboard-image-modal.component.html:33
 msgid "Icon set"
-msgstr ""
+msgstr "Conjunto de íconos"
 
 #: public/js/dashboards/dashboards-list.controller.js:142
-msgid "If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard."
+msgid ""
+"If you drop or modify a published dashboard, it will have and impact on "
+"other users, think about it before making any updates on the dashboard."
 msgstr ""
+"Si suelta o modifica un panel publicado, tendrá un impacto en otros "
+"usuarios, piense en ello antes de realizar actualizaciones en el panel."
 
 #: public/js/reports/reports-list.controller.js:108
-msgid "If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report."
+msgid ""
+"If you drop or modify a published report, it will have and impact on other "
+"users, think about it before making any updates on the report."
 msgstr ""
+"Si descarta o modifica un informe publicado, tendrá un impacto en otros "
+"usuarios, piense antes de realizar actualizaciones en el informe."
 
 #: public/js/dashboards/dashboard-image-modal.component.js:79
 msgid "Image upload failed"
-msgstr ""
+msgstr "La carga de la imagen falló"
 
 #: public/partials/sidebar/sidebar.html:57
 msgid "Import"
-msgstr ""
+msgstr "Importar"
 
 #: public/partials/dashboards/edit.html:97
 msgid "Import Report"
-msgstr ""
+msgstr "Importar un informe"
 
 #: public/js/io/import.controller.js:289
 msgid "Import completed"
-msgstr ""
+msgstr "Importación terminada"
 
 #: public/partials/io/import.html:9
 msgid "Import layers, reports and dashboards"
-msgstr ""
+msgstr "Importar capas, informes y paneles"
 
 #: public/js/dashboards/dashboards-list.controller.js:88
 msgid "In here you can create and execute dashboards like web pages."
-msgstr ""
+msgstr "Aquí puede crear y ejecutar paneles como páginas web."
 
 #: public/partials/layer/objectProperties.html:140
 msgid "Inner"
-msgstr ""
+msgstr "Interno"
 
 #: public/partials/data-sources/edit.html:26
 msgid "Insert here the name for this connection"
-msgstr ""
+msgstr "Inserte aquí el nombre de esta conexión"
 
 #: public/partials/data-sources/edit.html:36
 msgid "Insert here the port to access the SQL instance"
-msgstr ""
+msgstr "Inserte aquí el puerto para acceder a la instancia de SQL"
 
 #: public/partials/data-sources/edit.html:31
 msgid "Insert here your Host address or IP"
-msgstr ""
+msgstr "Inserte aquí su dirección de host o IP"
 
 #: public/partials/users/users-edit-modal.html:46
 msgid "Introduce password"
-msgstr ""
+msgstr "Introducir contraseña"
 
 #: public/partials/layer/objectProperties.html:4
 msgid "Join"
-msgstr ""
+msgstr "Unión"
 
 #: public/partials/layer/elementModal.html:121
 msgid "Join Dataset"
-msgstr ""
+msgstr "Unir conjunto de datos"
 
 #: public/partials/layer/elementModal.html:125
 msgid "Join Field"
-msgstr ""
+msgstr "Unir campo"
 
 #: public/partials/layer/objectProperties.html:136
 msgid "Join type"
-msgstr ""
+msgstr "Unir tipo"
 
 #: public/partials/layer/elementModal.html:44
 #: public/partials/layer/objectProperties.html:37
 #: public/partials/layer/objectProperties.html:78
 #: public/partials/reports/report-column-settings-modal.component.html:9
 msgid "Label"
-msgstr ""
+msgstr "Etiqueta"
 
 #: public/partials/core/pager.html:16
 msgid "Last"
-msgstr ""
+msgstr "Ultimo"
 
 #: public/partials/users/users-edit-modal.html:25
 msgid "Last Name"
-msgstr ""
+msgstr "Apellido"
 
 #: public/partials/users/users-edit-modal.html:27
 msgid "Last Name is required"
-msgstr ""
+msgstr "Apellido es requerido"
 
 #: public/js/reports/filter-prompt.component.js:212
 msgid "Last month"
-msgstr ""
+msgstr "Mes pasado"
 
 #: public/js/reports/filter-prompt.component.js:211
 msgid "Last week"
-msgstr ""
+msgstr "Semana pasada"
 
 #: public/js/reports/filter-prompt.component.js:213
 msgid "Last year"
-msgstr ""
+msgstr "Año pasado"
 
 #: public/js/reports/filter-prompt.component.js:214
 msgid "Last year first quarter"
-msgstr ""
+msgstr "Año pasado primer trimestre"
 
 #: public/js/reports/filter-prompt.component.js:218
 msgid "Last year first semester"
-msgstr ""
+msgstr "Año pasado primer semestre"
 
 #: public/js/reports/filter-prompt.component.js:217
 msgid "Last year fourth quarter"
-msgstr ""
+msgstr "Año pasado cuarto trimestre"
 
 #: public/js/reports/filter-prompt.component.js:215
 msgid "Last year second quarter"
-msgstr ""
+msgstr "Año pasado segundo trimestre"
 
 #: public/js/reports/filter-prompt.component.js:219
 msgid "Last year second semester"
-msgstr ""
+msgstr "Año pasado segundo semestre"
 
 #: public/js/reports/filter-prompt.component.js:216
 msgid "Last year third quarter"
-msgstr ""
+msgstr "Año pasado tercer trimestre"
 
 #: public/js/spaces/controller.js:26
-msgid "Later using roles you can grant or deny access to the different folders of the shared space to users that have the appropriate role to execute or share reports along the shared space."
+msgid ""
+"Later using roles you can grant or deny access to the different folders of "
+"the shared space to users that have the appropriate role to execute or share "
+"reports along the shared space."
 msgstr ""
+"Posteriormente, utilizando roles, puede otorgar o denegar el acceso a las "
+"diferentes carpetas del espacio compartido a los usuarios que tienen el rol "
+"apropiado para ejecutar o compartir informes a lo largo del espacio "
+"compartido."
 
-#: public/js/home/controller.js:40
-#: public/partials/home/main.html:42
+#: public/js/home/controller.js:40 public/partials/home/main.html:42
 msgid "Latest executions"
-msgstr ""
+msgstr "Últimas ejecuciones"
 
 #: public/partials/reports/reports-table.component.html:16
 msgid "Layer"
-msgstr ""
+msgstr "Capa"
 
 #: public/partials/layer/folderModal.html:13
 #: public/partials/layer/objectProperties.html:158
 msgid "Layer Name"
-msgstr ""
+msgstr "Nombre de capa"
 
 #: public/partials/layer/folderModal.html:4
 #: public/partials/layers/layers-new-modal.html:3
 msgid "Layer Properties"
-msgstr ""
+msgstr "Propiedades de la capa"
 
 #: public/js/io/import.controller.js:325
 msgid "Layer created successfully:"
-msgstr ""
+msgstr "Capa creada con éxito:"
 
 #: public/js/layers/layers-list.controller.js:153
 msgid "Layer delete"
-msgstr ""
+msgstr "Eliminar capa"
 
 #: public/partials/layer/folderModal.html:28
 #: public/partials/layers/layers-new-modal.html:17
 msgid "Layer description"
-msgstr ""
+msgstr "Descripción de la capa"
 
 #: public/partials/layer/view.html:34
 msgid "Layer elements"
-msgstr ""
+msgstr "Elementos de la capa"
 
 #: public/partials/layers/layers-new-modal.html:11
 msgid "Layer name"
-msgstr ""
+msgstr "Nombre de la capa"
 
 #: public/js/layers/layers-list.controller.js:143
 msgid "Layer status"
-msgstr ""
+msgstr "Estado de la capa"
 
 #: public/js/io/import.controller.js:312
 msgid "Layer updated successfully:"
-msgstr ""
+msgstr "Capa actualizada con éxito:"
 
 #: public/js/data-sources/data-sources-list.controller.js:100
 #: public/js/data-sources/data-sources-list.controller.js:98
 #: public/js/home/controller.js:130
 #: public/js/layers/layers-list.controller.js:109
-#: public/partials/io/export.html:16
-#: public/partials/io/import.html:44
-#: public/partials/layers/list.html:9
-#: public/partials/sidebar/sidebar.html:37
+#: public/partials/io/export.html:16 public/partials/io/import.html:44
+#: public/partials/layers/list.html:9 public/partials/sidebar/sidebar.html:37
 msgid "Layers"
-msgstr ""
+msgstr "Capas"
 
 #: public/js/layers/layers-list.controller.js:113
-msgid "Layers allow your users to create reports dragging and dropping familiar elements that points in the background to the fields contained in tables in your data sources."
+msgid ""
+"Layers allow your users to create reports dragging and dropping familiar "
+"elements that points in the background to the fields contained in tables in "
+"your data sources."
 msgstr ""
+"Las capas permiten a sus usuarios crear informes arrastrando y soltando "
+"elementos familiares que apuntan en segundo plano a los campos contenidos en "
+"las tablas en sus fuentes de datos."
 
 #: public/js/layers/layers-list.controller.js:111
 msgid "Layers define the interface for your users to access the data."
 msgstr ""
+"Las capas definen la interfaz para que sus usuarios accedan a los datos."
 
 #: public/js/layers/layers-list.controller.js:131
 msgid "Layers list"
-msgstr ""
+msgstr "Lista de capas"
 
 #: public/partials/dashboards/edit.html:52
 msgid "Layouts"
-msgstr ""
+msgstr "Diseños"
 
 #: public/partials/layer/objectProperties.html:138
 msgid "Left"
-msgstr ""
+msgstr "Izquierda"
 
 #: public/partials/reports/report-settings-modal.component.html:36
 msgid "Legend position"
-msgstr ""
+msgstr "Posición de la leyenda"
 
 #: public/partials/home/about.html:35
 msgid "License"
-msgstr ""
+msgstr "Licencia"
 
 #: public/js/report/services/c3Charts.js:300
 #: public/partials/reports/report-column-settings-modal.component.html:50
 msgid "Line"
-msgstr ""
+msgstr "Linea"
 
 #: public/js/data-sources/data-sources-list.controller.js:59
 msgid "List of data sources"
-msgstr ""
+msgstr "Lista de fuentes de datos"
 
 #: views/login.ejs:54
 msgid "Log In"
-msgstr ""
+msgstr "Iniciar sesión"
 
 #: public/partials/layer/elementModal.html:119
 msgid "Lookup setup"
-msgstr ""
+msgstr "Configuración de búsqueda"
 
 #: public/js/reports/filter-prompt.component.js:160
 msgid "Make this filter appear in the report interface."
-msgstr ""
+msgstr "Haga que este filtro aparezca en la interfaz del informe."
 
 #: public/js/reports/reports.service.js:14
 msgid "Max"
-msgstr ""
+msgstr "Máximo"
 
 #: public/js/reports/reports.service.js:13
 msgid "Min"
-msgstr ""
+msgstr "Mínimo"
 
 #: public/partials/layer/objectProperties.html:112
 msgid "More Info"
-msgstr ""
+msgstr "Más información"
 
 #: public/js/home/controller.js:48
 msgid "Most Executed"
-msgstr ""
+msgstr "Más ejecutada"
 
 #: public/partials/home/main.html:62
 msgid "Most executed"
-msgstr ""
+msgstr "Más ejecutada"
 
 #: public/partials/report/partials/report-edit.html:32
-msgid "Move the limit to the filter area, will be used during runtime, not only during report building"
+msgid ""
+"Move the limit to the filter area, will be used during runtime, not only "
+"during report building"
 msgstr ""
+"Mueva el límite al área del filtro, se usará durante el tiempo de ejecución, "
+"no solo durante la creación del informe"
 
 #: public/partials/core/share-popover.html:34
 msgid "Move to another folder"
-msgstr ""
+msgstr "Moverse a otra carpeta"
 
 #: public/partials/sidebar/sidebar.html:19
 msgid "My Dashboards"
-msgstr ""
+msgstr "Mis paneles"
 
 #: public/partials/dashboards/dashboard-image-modal.component.html:8
 msgid "My Images"
-msgstr ""
+msgstr "Mis imagenes"
 
 #: public/partials/sidebar/sidebar.html:24
 msgid "My Reports"
-msgstr ""
+msgstr "Mis informes"
 
 #: public/partials/dashboards/list.html:27
-#: public/partials/data-sources/edit.html:25
-#: public/partials/io/import.html:118
-#: public/partials/io/import.html:50
-#: public/partials/io/import.html:84
+#: public/partials/data-sources/edit.html:25 public/partials/io/import.html:118
+#: public/partials/io/import.html:50 public/partials/io/import.html:84
 #: public/partials/layer/objectProperties.html:30
 #: public/partials/layer/objectProperties.html:69
 #: public/partials/layers/list.html:24
 #: public/partials/reports/reports-table.component.html:12
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: public/partials/layers/layers-new-modal.html:13
 msgid "Name is required"
-msgstr ""
+msgstr "Nombre es requerido"
 
 #: public/js/dashboards/dashboard-edit.controller.js:123
 #: public/js/dashboards/dashboards-list.controller.js:98
 #: public/partials/report/modals/dashboardListModal.html:10
 msgid "New Dashboard"
-msgstr ""
+msgstr "Nuevo tablero"
 
 #: public/partials/data-sources/list.html:11
 msgid "New Data Source"
-msgstr ""
+msgstr "Nueva fuente de datos"
 
 #: public/partials/layer/view.html:72
 msgid "New Element"
-msgstr ""
+msgstr "Nuevo elemento"
 
 #: public/partials/layer/view.html:71
 msgid "New Folder"
-msgstr ""
+msgstr "Nueva carpeta"
 
 #: public/js/layers/layers-list.controller.js:123
 msgid "New Layer"
-msgstr ""
+msgstr "Nueva capa"
 
 #: public/js/reports/reports-list.controller.js:56
 #: public/partials/dashboards/edit.html:96
 msgid "New Report"
-msgstr ""
+msgstr "Nuevo reporte"
 
 #: public/partials/roles/list.html:10
 msgid "New Role"
-msgstr ""
+msgstr "Nuevo rol"
 
 #: public/partials/users/list.html:10
 #: public/partials/users/users-edit-modal.html:3
 msgid "New User"
-msgstr ""
+msgstr "Nuevo usuario"
 
 #: public/js/data-sources/data-sources-list.controller.js:51
 msgid "New datasource"
-msgstr ""
+msgstr "Nueva fuente de datos"
 
 #: public/js/spaces/controller.js:42
 msgid "New folder"
-msgstr ""
+msgstr "Nueva carpeta"
 
 #: public/partials/layers/list.html:11
 msgid "New layer"
-msgstr ""
+msgstr "Nueva capa"
 
 #: public/js/dashboards/dashboards-list.controller.js:77
 #: public/js/data-sources/data-sources-list.controller.js:30
@@ -1502,333 +1632,350 @@ msgstr ""
 #: public/js/layers/layers-list.controller.js:100
 #: public/js/report/controller.js:654
 #: public/js/reports/reports-list.controller.js:30
-#: public/js/spaces/controller.js:11
-#: public/partials/core/pager.html:13
+#: public/js/spaces/controller.js:11 public/partials/core/pager.html:13
 #: public/partials/layer/elementModal.html:208
 msgid "Next"
-msgstr ""
+msgstr "Próximo"
 
 #: public/js/data-sources/data-sources-list.controller.js:96
-#: public/js/home/controller.js:151
-#: public/js/home/controller.js:163
-#: public/js/home/controller.js:175
-#: public/js/home/controller.js:187
+#: public/js/home/controller.js:151 public/js/home/controller.js:163
+#: public/js/home/controller.js:175 public/js/home/controller.js:187
 #: public/js/layers/layers-list.controller.js:164
 #: public/js/spaces/controller.js:101
 msgid "Next Step"
-msgstr ""
+msgstr "Próximo paso"
 
 #: public/partials/reports/report-column-settings-modal.component.html:112
 #: public/partials/reports/report-column-settings-modal.component.html:82
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: public/partials/layer/objectProperties.html:22
 msgid "No Selection"
-msgstr ""
+msgstr "Sin selección"
 
 #: public/js/report/directives/reportView.js:88
 msgid "No data for this report"
-msgstr ""
+msgstr "No hay datos para este informe"
 
 #: public/js/io/import.controller.js:146
 msgid "No datasourceID"
-msgstr ""
+msgstr "No datasourceID"
 
 #: public/js/io/import.controller.js:181
 msgid "No selectedLayerID"
-msgstr ""
+msgstr "No selectedLayerID"
 
 #: public/partials/layer/elementModal.html:149
 msgid "Number"
-msgstr ""
+msgstr "Número"
 
-#: public/partials/io/import.html:101
-#: public/partials/io/import.html:135
+#: public/partials/io/import.html:101 public/partials/io/import.html:135
 #: public/partials/io/import.html:67
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
-#: public/js/widgets/htmlWidgets.js:72
-#: public/js/widgets/htmlWidgets.js:84
+#: public/js/widgets/htmlWidgets.js:72 public/js/widgets/htmlWidgets.js:84
 msgid "Oh yeah, it is that good."
-msgstr ""
+msgstr "Oh sí, es así de bueno."
 
 #: public/js/dashboards/dashboards-list.controller.js:130
 msgid "Once deleted the dashboard will not be recoverable again."
-msgstr ""
+msgstr "Una vez eliminado, el tablero no podrá recuperarse nuevamente."
 
 #: public/js/layers/layers-list.controller.js:157
 msgid "Once deleted the layer will not be recoverable again."
-msgstr ""
+msgstr "Una vez eliminada, la capa no será recuperable nuevamente."
 
 #: public/js/reports/reports-list.controller.js:88
 msgid "Once deleted the report will not be recoverable again."
-msgstr ""
+msgstr "Una vez eliminado, el informe no será recuperable nuevamente."
 
 #: public/js/spaces/controller.js:96
-msgid "Once you get the structure you want save it to make it available for your users."
+msgid ""
+"Once you get the structure you want save it to make it available for your "
+"users."
 msgstr ""
+"Una vez que obtenga la estructura que desea, guárdela para que esté "
+"disponible para sus usuarios."
 
 #: public/js/layer/controller.js:507
-msgid "One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched"
+msgid ""
+"One of the custom elements uses elements from tables which are not joined. "
+"This custom element cannot be fetched"
 msgstr ""
+"Uno de los elementos personalizados usa elementos de tablas que no están "
+"unidos. Este elemento personalizado no se puede recuperar"
 
 #: public/js/report/controller.js:678
-msgid "One query can only be based on one layer, you can not mix elements from different layers in the same query"
+msgid ""
+"One query can only be based on one layer, you can not mix elements from "
+"different layers in the same query"
 msgstr ""
+"Una consulta solo puede basarse en una capa, no puede mezclar elementos de "
+"diferentes capas en la misma consulta"
 
 #: public/partials/report/partials/filter.html:12
+#, fuzzy
 msgid ""
 "Only show the first\n"
-"            <input type=\"number\" ng-model=\"selectedReport.properties.recordLimit\" size=\"8\">\n"
+"            <input type=\"number\" ng-model=\"selectedReport.properties."
+"recordLimit\" size=\"8\">\n"
 "            elements"
 msgstr ""
+"Mostrar solo los primeros\r\n"
+"            <input type=\"number\" ng-model=\"selectedReport.properties."
+"recordLimit\" size=\"8\">\r\n"
+"            elementos"
 
 #: public/js/report/controller.js:720
 msgid "Order By drop zone"
-msgstr ""
+msgstr "Ordenar por zona de depósito"
 
 #: public/partials/data-sources/edit.html:50
-#: public/partials/users/users-edit-modal.html:42
-#: views/login.ejs:48
+#: public/partials/users/users-edit-modal.html:42 views/login.ejs:48
 msgid "Password"
-msgstr ""
+msgstr "Contraseña"
 
 #: public/js/users/users-edit-modal.component.js:46
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Las contraseñas no coinciden"
 
 #: public/partials/roles/role-edit-modal.component.html:50
 msgid "Permissions"
-msgstr ""
+msgstr "Permisos"
 
 #: public/js/report/services/c3Charts.js:318
 #: public/partials/reports/report-settings-modal.component.html:29
 msgid "Pie"
-msgstr ""
+msgstr "Pie"
 
 #: public/partials/layer/sqlModal.html:46
 msgid "Please confirm your modification"
-msgstr ""
+msgstr "Por favor confirme su modificación"
 
 #: public/partials/core/delete-modal.html:8
 msgid "Please type DELETE to confirm"
-msgstr ""
+msgstr "Por favor escriba DELETE para confirmar"
 
 #: public/partials/data-sources/edit.html:35
 msgid "Port"
-msgstr ""
+msgstr "Puerto"
 
 #: public/partials/dashboards/edit.html:70
 msgid "Preview size"
-msgstr ""
+msgstr "Tamaño de vista previa"
 
 #: public/partials/core/pager.html:7
 msgid "Previous"
-msgstr ""
+msgstr "Previo"
 
 #: public/partials/dashboards/dashboard-image-modal.component.html:23
 msgid "Public Images"
-msgstr ""
+msgstr "Imágenes públicas"
 
 #: public/partials/core/share-popover.html:8
 msgid "Public URL"
-msgstr ""
+msgstr "URL pública"
 
 #: public/partials/core/share-popover.html:4
 msgid "Publish"
-msgstr ""
+msgstr "Publicar"
 
 #: public/partials/report/partials/report-edit.html:49
 msgid "Push it to a Dashboard"
-msgstr ""
+msgstr "Agregar a un panel"
 
 #: public/partials/core/share-popover.html:24
 msgid "Put in shared space"
-msgstr ""
+msgstr "Poner en espacio compartido"
 
 #: public/partials/layer/view.html:46
 msgid "Queries"
-msgstr ""
+msgstr "Consultas"
 
 #: public/js/report/controller.js:700
 msgid "Query refresh"
-msgstr ""
+msgstr "Actualización de consulta"
 
 #: public/partials/report/partials/report-edit.html:29
 msgid "Quick display with"
-msgstr ""
+msgstr "Pantalla rápida con"
 
 #: public/partials/dashboards/edit.html:76
 #: public/partials/report/partials/report-edit.html:39
 msgid "Redraw"
-msgstr ""
+msgstr "Redibujar"
 
 #: public/js/io/import.controller.js:152
 msgid "Related datasource is not in import file"
-msgstr ""
+msgstr "El origen de datos relacionado no está en el archivo de importación"
 
 #: public/js/io/import.controller.js:187
 msgid "Related layer is not in import file"
-msgstr ""
+msgstr "La capa relacionada no está en el archivo de importación"
 
 #: public/js/io/import.controller.js:193
 msgid "Related layer is not valid"
-msgstr ""
+msgstr "La capa relacionada no es válida"
 
 #: public/partials/layer/view.html:96
 msgid "Remove"
-msgstr ""
+msgstr "Eliminar"
 
 #: public/js/spaces/controller.js:74
 msgid "Remove Folder"
-msgstr ""
+msgstr "Eliminar carpeta"
 
 #: public/partials/layer/objectProperties.html:10
 msgid "Remove from layer elements"
-msgstr ""
+msgstr "Eliminar de elementos de capa"
 
 #: public/partials/core/share-popover.html:28
 #: public/partials/core/share-popover.html:33
 msgid "Remove from shared space"
-msgstr ""
+msgstr "Eliminar del espacio compartido"
 
 #: public/js/users/users-view.controller.js:127
 msgid "Remove role {{name}} ?"
-msgstr ""
+msgstr "¿Eliminar el rol {{nombre}}?"
 
 #: public/partials/reports/report-dropzone.component.html:19
 msgid "Remove this item from this dimension"
-msgstr ""
+msgstr "Eliminar este elemento de esta dimensión"
 
 #: public/js/report/directives/reportView.js:49
 msgid "Repainting report ..."
-msgstr ""
+msgstr "Repintar informe ..."
 
 #: public/partials/users/users-edit-modal.html:49
 msgid "Repeat password"
-msgstr ""
+msgstr "Repetir la contraseña"
 
 #: public/partials/report/modals/reportNameModal.html:7
 msgid "Report Name"
-msgstr ""
+msgstr "Nombre del informe"
 
 #: public/js/report/controller.js:684
 msgid "Report Type selector"
-msgstr ""
+msgstr "Selector de tipo de informe"
 
 #: public/js/io/import.controller.js:372
 msgid "Report created successfully:"
-msgstr ""
+msgstr "Informe creado con éxito:"
 
 #: public/js/reports/reports-list.controller.js:104
 msgid "Report published"
-msgstr ""
+msgstr "Informe publicado"
 
 #: public/partials/report/partials/report-edit.html:17
 #: public/partials/reports/report-settings-modal.component.html:3
 msgid "Report settings"
-msgstr ""
+msgstr "Configuración de informes"
 
 #: public/partials/reports/report-settings-modal.component.html:16
 msgid "Report type"
-msgstr ""
+msgstr "Tipo de informe"
 
 #: public/js/io/import.controller.js:360
 msgid "Report updated successfully:"
-msgstr ""
+msgstr "Informe actualizado con éxito:"
 
 #: public/js/reports/reports-list.controller.js:39
 #: public/js/reports/reports-list.controller.js:46
-#: public/partials/dashboards/edit.html:40
-#: public/partials/io/export.html:38
-#: public/partials/io/import.html:78
-#: public/partials/reports/list.html:9
+#: public/partials/dashboards/edit.html:40 public/partials/io/export.html:38
+#: public/partials/io/import.html:78 public/partials/reports/list.html:9
 #: public/partials/users/view.html:85
 msgid "Reports"
-msgstr ""
+msgstr "Informes"
 
 #: public/js/home/controller.js:68
-msgid "Reports allows you to create (if granted) and manage your single query reports."
+msgid ""
+"Reports allows you to create (if granted) and manage your single query "
+"reports."
 msgstr ""
+"Los informes le permiten crear (si se otorga) y administrar informes con una "
+"sola consulta."
 
 #: public/js/reports/reports-list.controller.js:64
 msgid "Reports list"
-msgstr ""
+msgstr "Lista de informes"
 
 #: public/partials/io/export.html:25
-msgid "Required layers for chosen reports and dashboards will be included automatically, there is no need to include them manually."
+msgid ""
+"Required layers for chosen reports and dashboards will be included "
+"automatically, there is no need to include them manually."
 msgstr ""
+"Las capas requeridas para los informes y paneles seleccionados se incluirán "
+"automáticamente, no es necesario incluirlas manualmente."
 
 #: public/js/dashboards/dashboards-list.controller.js:132
 #: public/js/layers/layers-list.controller.js:159
 #: public/js/reports/reports-list.controller.js:90
 msgid "Requires 2 step confirmation."
-msgstr ""
+msgstr "Requiere confirmación de 2 pasos."
 
 #: public/partials/users/users-edit-modal.html:56
 msgid "Reset user password"
-msgstr ""
+msgstr "Restablecer contraseña de usuario"
 
 #: public/partials/layer/elementModal.html:179
 msgid "Result"
-msgstr ""
+msgstr "Resultado"
 
 #: public/js/report/controller.js:692
 msgid "Results area"
-msgstr ""
+msgstr "Área de resultados"
 
 #: public/partials/layer/objectProperties.html:142
 msgid "Right"
-msgstr ""
+msgstr "Derecha"
 
 #: public/partials/roles/role-edit-modal.component.html:22
 msgid "Role"
-msgstr ""
+msgstr "Rol"
 
 #: public/js/roles/roles-list.controller.js:26
 msgid "Role created successfully"
-msgstr ""
+msgstr "Rol creado con éxito"
 
 #: public/partials/roles/role-edit-modal.component.html:32
 msgid "Role name"
-msgstr ""
+msgstr "Nombre de rol"
 
 #: public/js/roles/roles-list.controller.js:33
 msgid "Role updated successfully"
-msgstr ""
+msgstr "Rol actualizado con éxito"
 
-#: public/js/home/controller.js:108
-#: public/partials/roles/list.html:9
+#: public/js/home/controller.js:108 public/partials/roles/list.html:9
 #: public/partials/sidebar/sidebar.html:47
 msgid "Roles"
-msgstr ""
+msgstr "Roles"
 
 #: public/partials/reports/criteria-input.html:98
 msgid "Run"
-msgstr ""
+msgstr "Ejecutar"
 
 #: public/partials/dashboards/edit.html:46
 msgid "Run time filters"
-msgstr ""
+msgstr "Filtros de tiempo de ejecución"
 
 #: public/partials/reports/filter-prompt.html:9
 msgid "Runtime Filter"
-msgstr ""
+msgstr "Filtro de tiempo de ejecución"
 
 #: public/partials/report/modals/filter-prompt-modal.html:12
 msgid "Runtime Filter Label"
-msgstr ""
+msgstr "Etiqueta de filtro de tiempo de ejecución"
 
 #: public/partials/report/modals/filter-prompt-modal.html:4
 msgid "Runtime Filter properties"
-msgstr ""
+msgstr "Propiedades del filtro de tiempo de ejecución"
 
 #: public/partials/layer/sqlModal.html:20
 #: public/partials/report/partials/report-edit.html:59
 msgid "SQL query"
-msgstr ""
+msgstr "Consulta SQL"
 
 #: public/partials/dashboards/edit.html:13
 #: public/partials/dashboards/edit.html:254
@@ -1840,179 +1987,204 @@ msgstr ""
 #: public/partials/spaces/shared.html:42
 #: public/partials/users/users-edit-modal.html:91
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: public/partials/data-sources/edit.html:10
 msgid "Save Datasource"
-msgstr ""
+msgstr "Guardar fuente de datos"
 
 #: public/partials/report/partials/report-edit.html:48
 msgid "Save as a report"
-msgstr ""
+msgstr "Guardar como informe"
 
 #: public/partials/layer/sqlModal.html:36
 msgid "Save changes"
-msgstr ""
+msgstr "Guardar cambios"
 
 #: public/partials/layer/view.html:113
 msgid "Save folder label"
-msgstr ""
+msgstr "Guardar etiqueta de carpeta"
 
-#: public/partials/layer/folderModal.html:44
-#: public/partials/layer/view.html:13
+#: public/partials/layer/folderModal.html:44 public/partials/layer/view.html:13
 #: public/partials/layers/layers-new-modal.html:35
 msgid "Save layer"
-msgstr ""
+msgstr "Guardar capa"
 
 #: public/partials/reports/report-column-settings-modal.component.html:129
 #: public/partials/reports/report-settings-modal.component.html:58
 msgid "Save settings"
-msgstr ""
+msgstr "Guardar ajustes"
 
 #: public/js/spaces/controller.js:94
 msgid "Save shared space"
-msgstr ""
+msgstr "Ahorra espacio compartido"
 
 #: public/js/report/services/c3Charts.js:310
 #: public/partials/reports/report-column-settings-modal.component.html:64
 msgid "Scatter"
-msgstr ""
+msgstr "Dispersión"
 
 #: public/js/reports/filter-prompt.component.js:205
 msgid "Second quarter"
-msgstr ""
+msgstr "Segundo cuarto"
 
 #: public/js/reports/filter-prompt.component.js:209
 msgid "Second semester"
-msgstr ""
+msgstr "Segundo semestre"
 
 #: public/partials/reports/report-column-settings-modal.component.html:100
 #: public/partials/reports/report-column-settings-modal.component.html:91
-msgid "See <a ng-href=\"{{ url }}\" target=\"_blank\" rel=\"noreferrer\">documentation</a> for examples"
+msgid ""
+"See <a ng-href=\"{{ url }}\" target=\"_blank\" rel=\"noreferrer"
+"\">documentation</a> for examples"
 msgstr ""
+"Consulte la <a ng-href=\"{{ url }}\" target=\"_blank\" rel=\"noreferrer\"> "
+"documentación </a> para ver ejemplos"
 
 #: public/partials/roles/role-edit-modal.component.html:66
 msgid "See SQL"
-msgstr ""
+msgstr "Ver SQL"
 
 #: public/js/home/controller.js:191
-msgid "See how to create dashboards composed with a set of single query reports"
+msgid ""
+"See how to create dashboards composed with a set of single query reports"
 msgstr ""
+"Vea cómo crear paneles compuestos con un conjunto de informes de consulta "
+"única"
 
 #: public/js/home/controller.js:179
-msgid "See how you can create single query reports that shows your data using charts and data grids"
+msgid ""
+"See how you can create single query reports that shows your data using "
+"charts and data grids"
 msgstr ""
+"Vea cómo puede crear informes de consultas individuales que muestren sus "
+"datos utilizando gráficos y cuadrículas de datos"
 
 #: public/js/home/controller.js:167
-msgid "See how you can explore data creating queries easily without any technical knowledge"
+msgid ""
+"See how you can explore data creating queries easily without any technical "
+"knowledge"
 msgstr ""
+"Vea cómo puede explorar datos creando consultas fácilmente sin ningún "
+"conocimiento técnico"
 
 #: public/partials/data-sources/edit.html:16
 msgid "Select a datasource type..."
-msgstr ""
+msgstr "Seleccione un tipo de fuente de datos ..."
 
 #: public/partials/dashboards/dashboard-image-modal.component.html:3
 msgid "Select an image"
-msgstr ""
+msgstr "Selecciona una imagen"
 
 #: public/js/report/controller.js:668
-msgid "Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)"
+msgid ""
+"Select elements and drag and drop them over the query design zone, depending "
+"if the element is going to be used as a column result (columns area), as a "
+"filter (filters area) or as an element to order by the results of the query "
+"(order by area)"
 msgstr ""
+"Seleccione elementos y arrástrelos y suéltelos sobre la zona de diseño de la "
+"consulta, dependiendo de si el elemento se usará como resultado de columna "
+"(área de columnas), como filtro (área de filtros) o como elemento para "
+"ordenar por los resultados de la consulta (ordenar por área)"
 
 #: public/partials/io/import.html:13
 msgid "Select file..."
-msgstr ""
+msgstr "Seleccione archivo..."
 
 #: public/js/report/controller.js:676
 msgid "Select here the layer where your query will be based on."
-msgstr ""
+msgstr "Seleccione aquí la capa en la que se basará su consulta."
 
 #: public/partials/report/modals/filter-prompt-modal.html:20
-msgid "Select if you want the user to enter an answer before executing the report."
+msgid ""
+"Select if you want the user to enter an answer before executing the report."
 msgstr ""
+"Seleccione si desea que el usuario ingrese una respuesta antes de ejecutar "
+"el informe."
 
 #: public/partials/report/modals/dashboardListModal.html:9
 msgid "Select the dashboard to push this report to"
-msgstr ""
+msgstr "Seleccione el panel para enviar este informe a"
 
 #: public/js/reports/filter-prompt.component.js:158
 msgid "Select to deactivate the runtime"
-msgstr ""
+msgstr "Seleccione para desactivar el tiempo de ejecución"
 
 #: public/partials/users/users-edit-modal.html:37
 msgid "Send password through email"
-msgstr ""
+msgstr "Enviar contraseña por correo electrónico"
 
 #: public/partials/data-sources/edit.html:41
 msgid "Set here the name of the SQL Database to connect"
-msgstr ""
+msgstr "Establezca aquí el nombre de la base de datos SQL para conectarse"
 
 #: public/partials/data-sources/edit.html:51
 msgid "Set here the username password to access the database"
 msgstr ""
+"Establezca aquí la contraseña del nombre de usuario para acceder a la base "
+"de datos"
 
 #: public/partials/data-sources/edit.html:46
 msgid "Set here the username to access the database"
-msgstr ""
+msgstr "Establezca aquí el nombre de usuario para acceder a la base de datos"
 
 #: public/partials/reports/report-column-settings-modal.component.html:3
 msgid "Settings for '{{ vm.column.elementLabel }}'"
-msgstr ""
+msgstr "Configuración para '{{vm.column.elementLabel}}'"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:3
 msgid "Settings for PDF export"
-msgstr ""
+msgstr "Configuraciones para exportar PDF"
 
 #: public/js/home/controller.js:153
 msgid "Setup a data source"
-msgstr ""
+msgstr "Configurar una fuente de datos"
 
 #: public/partials/core/share-modal.html:3
 #: public/partials/dashboards/dashboards-list-buttons.html:3
 #: public/partials/reports/reports-list-buttons.html:3
 msgid "Share"
-msgstr ""
+msgstr "Compartir"
 
 #: public/partials/roles/role-edit-modal.component.html:80
 msgid "Share reports"
-msgstr ""
+msgstr "Compartir informes"
 
 #: public/partials/dashboards/dashboards-list-buttons.html:5
 #: public/partials/reports/reports-list-buttons.html:5
 msgid "Share to..."
-msgstr ""
+msgstr "Compartir a..."
 
 #: public/partials/home/main.html:22
 msgid "Shared Area"
-msgstr ""
+msgstr "Area compartida"
 
-#: public/js/home/controller.js:142
-#: public/js/spaces/controller.js:20
+#: public/js/home/controller.js:142 public/js/spaces/controller.js:20
 #: public/partials/sidebar/sidebar.html:33
 #: public/partials/spaces/shared.html:36
 msgid "Shared space"
-msgstr ""
+msgstr "Espacio compartido"
 
 #: public/partials/roles/role-edit-modal.component.html:76
 msgid "Shared space permissions"
-msgstr ""
+msgstr "Permisos de espacio compartido"
 
 #: public/js/spaces/controller.js:32
 msgid "Shared space structure area"
-msgstr ""
+msgstr "Area de estructura de espacio compartido"
 
 #: public/partials/layer/elementModal.html:129
 msgid "Shown Field"
-msgstr ""
+msgstr "Campo mostrado"
 
 #: public/js/home/controller.js:76
 msgid "Single query dashboards"
-msgstr ""
+msgstr "Tableros de consulta individuales"
 
-#: public/js/home/controller.js:177
-#: public/js/home/controller.js:66
+#: public/js/home/controller.js:177 public/js/home/controller.js:66
 msgid "Single query reports"
-msgstr ""
+msgstr "Informes de consultas individuales"
 
 #: public/js/dashboards/dashboards-list.controller.js:79
 #: public/js/data-sources/data-sources-list.controller.js:32
@@ -2022,97 +2194,107 @@ msgstr ""
 #: public/js/reports/reports-list.controller.js:32
 #: public/js/spaces/controller.js:13
 msgid "Skip"
-msgstr ""
+msgstr "Omitir"
 
 #: public/partials/layer/objectProperties.html:123
 msgid "Source"
-msgstr ""
+msgstr "Fuente"
 
 #: public/partials/layer/view.html:40
 msgid "Sources"
-msgstr ""
+msgstr "Fuentes"
 
 #: public/js/report/services/c3Charts.js:285
 #: public/partials/reports/report-column-settings-modal.component.html:29
 msgid "Spline"
-msgstr ""
+msgstr "Curva"
 
 #: public/partials/logout/index.html:10
 msgid "Star biblibre/urungi on GitHub"
-msgstr ""
+msgstr "Marca biblibre/urungi con una estrella en GitHub"
 
 #: public/partials/home/main.html:13
 msgid "Start guided tour"
-msgstr ""
+msgstr "Iniciar visita guiada"
 
 #: public/partials/io/import.html:146
 msgid "Start import"
-msgstr ""
+msgstr "Iniciar importación"
 
-#: public/partials/io/import.html:119
-#: public/partials/io/import.html:51
-#: public/partials/io/import.html:85
-#: public/partials/layers/list.html:28
+#: public/partials/io/import.html:119 public/partials/io/import.html:51
+#: public/partials/io/import.html:85 public/partials/layers/list.html:28
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: public/js/layers/layers-list.controller.js:92
 #: public/js/users/users-list.controller.js:34
 #: public/js/users/users-view.controller.js:72
 msgid "Status updated"
-msgstr ""
+msgstr "Estado actualizado"
 
 #: public/partials/io/import.html:12
 msgid "Step 1 - Choose file to import"
-msgstr ""
+msgstr "Paso 1 - Elija el archivo para importar"
 
 #: public/partials/io/import.html:28
 msgid "Step 2 - Confirm import"
-msgstr ""
+msgstr "Paso 2 - Confirma la importación"
 
 #: public/partials/io/import.html:152
 msgid "Step 3 - Import"
-msgstr ""
+msgstr "Paso 3 - Importar"
 
 #: public/partials/layer/elementModal.html:151
 msgid "String"
-msgstr ""
+msgstr "Cadena"
 
 #: public/js/data-sources/data-sources-edit.controller.js:52
 msgid "Successful database connection."
-msgstr ""
+msgstr "Conexión exitosa de la base de datos."
 
 #: public/js/reports/reports.service.js:11
 msgid "Sum"
-msgstr ""
+msgstr "Suma"
 
 #: public/partials/home/main.html:8
 msgid "Take our guided tour to familiarize yourself..."
-msgstr ""
+msgstr "Realice nuestra visita guiada para familiarizarse ..."
 
 #: public/partials/layer/objectProperties.html:129
 msgid "Target"
-msgstr ""
+msgstr "Objetivo"
 
 #: public/partials/data-sources/edit.html:58
 msgid "Test Connection"
-msgstr ""
+msgstr "Prueba de conexión"
 
 #: public/partials/logout/index.html:3
 msgid "Thanks for using Urungi"
-msgstr ""
+msgstr "Gracias por usar Urungi"
 
 #: public/partials/dashboards/edit.html:249
 msgid "The dashboard name is required"
-msgstr ""
+msgstr "Se requiere el nombre del panel"
 
 #: public/js/report/controller.js:734
-msgid "The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results"
+msgid ""
+"The elements you drop in here do not necessarily have to be in the columns/"
+"results area, a query can be filtered by elements that do not appear in the "
+"results"
 msgstr ""
+"Los elementos que coloca aquí no necesariamente tienen que estar en el área "
+"de columnas/resultados, una consulta se puede filtrar por elementos que no "
+"aparecen en los resultados"
 
 #: public/js/report/controller.js:724
-msgid "The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results"
+msgid ""
+"The elements you drop in here do not necessarily have to be in the columns/"
+"results area, a query can be ordered by elements that do not appear in the "
+"results"
 msgstr ""
+"Los elementos que coloca aquí no necesariamente tienen que estar en el área "
+"de columnas/resultados, una consulta se puede ordenar por elementos que no "
+"aparecen en los resultados"
 
 #: public/js/dashboards/dashboards-view.controller.js:136
 #: public/js/dashboards/dashboards-view.controller.js:145
@@ -2120,834 +2302,955 @@ msgstr ""
 #: public/js/reports/reports-view.controller.js:98
 msgid "The export failed. Please contact the system administrator."
 msgstr ""
+"La exportación falló. Por favor, póngase en contacto con el administrador "
+"del sistema."
 
 #: public/partials/layer/sqlModal.html:61
 msgid "The following columns will be added :"
-msgstr ""
+msgstr "Se agregarán las siguientes columnas :"
 
 #: public/partials/layer/sqlModal.html:51
 msgid "The following columns will be kept :"
-msgstr ""
+msgstr "Se mantendrán las siguientes columnas :"
 
 #: public/partials/layer/sqlModal.html:71
 msgid "The following columns will be removed :"
-msgstr ""
+msgstr "Se eliminarán las siguientes columnas :"
 
 #: public/js/report/controller.js:664
 msgid "The layer catalog"
-msgstr ""
+msgstr "El catálogo de capas"
 
 #: public/js/report/controller.js:674
 msgid "The layer selector"
-msgstr ""
+msgstr "El selector de capas"
 
 #: public/js/data-sources/data-sources-list.controller.js:91
 msgid "The main connection details for the data source."
-msgstr ""
+msgstr "Los detalles de la conexión principal para la fuente de datos."
 
 #: public/js/home/controller.js:22
 msgid "The main menu"
-msgstr ""
+msgstr "El menú principal"
 
 #: public/js/data-sources/data-sources-list.controller.js:80
 msgid "The name for the data source and the type of connection (end database)."
 msgstr ""
+"El nombre de la fuente de datos y el tipo de conexión (base de datos final)."
 
 #: public/partials/layer/sqlModal.html:17
 msgid "The name is required"
-msgstr ""
+msgstr "El nombre es obligatorio"
 
 #: public/js/layers/layers-list.controller.js:168
-msgid "The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space"
+msgid ""
+"The public space is the place where your users can publish reports to be "
+"shared across the company, in this place you will define the folder "
+"strucuture for the company&quot;s public space"
 msgstr ""
+"El espacio público es el lugar donde sus usuarios pueden publicar informes "
+"para compartirlos en la empresa, en este lugar definirá la estructura de "
+"carpetas para el espacio público de la empresa"
 
 #: public/partials/report/modals/reportNameModal.html:9
 msgid "The report name is required"
-msgstr ""
+msgstr "El nombre del informe es obligatorio"
 
 #: public/js/users/users-view.controller.js:122
-msgid "The role 'Urungi Administrator' can't be removed from the user administrator"
+msgid ""
+"The role 'Urungi Administrator' can't be removed from the user administrator"
 msgstr ""
+"El rol 'Administrador de Urungi' no se puede eliminar del administrador del "
+"usuario"
 
 #: public/js/home/controller.js:30
 msgid "The shared area"
-msgstr ""
+msgstr "El area compartida"
 
 #: public/js/spaces/controller.js:22
-msgid "The shared space is the place where you or your users will publish reports to be available for other users or the hole company."
+msgid ""
+"The shared space is the place where you or your users will publish reports "
+"to be available for other users or the hole company."
 msgstr ""
+"El espacio compartido es el lugar donde usted o sus usuarios publicarán "
+"informes para que estén disponibles para otros usuarios o para la empresa "
+"especializada."
 
 #: public/js/layers/layers-list.controller.js:145
-msgid "The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data."
+msgid ""
+"The status of the layer defines if the layer is visible or not for your "
+"users when creating or editing a report or exploring data."
 msgstr ""
+"El estado de la capa define si la capa es visible o no para sus usuarios "
+"cuando crean o editan un informe o exploran datos."
 
 #: public/partials/dashboards/edit.html:66
 #: public/partials/reports/report-settings-modal.component.html:9
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #: public/js/reports/filter-prompt.component.js:206
 msgid "Third quarter"
-msgstr ""
+msgstr "Tercer cuarto"
 
 #: public/js/home/controller.js:50
-msgid "This area display your 10 most executed elements and the number of executions per element"
+msgid ""
+"This area display your 10 most executed elements and the number of "
+"executions per element"
 msgstr ""
+"Esta área muestra los 10 elementos más ejecutados y el número de ejecuciones "
+"por elemento"
 
 #: public/js/spaces/controller.js:54
 msgid "This area represents a folder in the shared space"
-msgstr ""
+msgstr "Esta área representa una carpeta en el espacio compartido"
 
 #: public/partials/widgets/inspector.html:28
 msgid "This block and its sub-blocks"
-msgstr ""
+msgstr "Este bloque y sus subbloques"
 
 #: public/partials/widgets/inspector.html:27
 msgid "This block only"
-msgstr ""
+msgstr "Solo este bloque"
 
 #: public/partials/dashboards/edit.html:216
 msgid "This divider defines a page-break for printing"
-msgstr ""
+msgstr "Este divisor define un salto de página para imprimir"
 
-#: public/partials/core/delete-modal.html:10
-#: public/partials/io/import.html:39
+#: public/partials/core/delete-modal.html:10 public/partials/io/import.html:39
 msgid "This field is required"
-msgstr ""
+msgstr "Este campo es requerido"
 
-#: public/js/widgets/htmlWidgets.js:13
-#: public/js/widgets/htmlWidgets.js:18
-#: public/js/widgets/htmlWidgets.js:23
-#: public/js/widgets/htmlWidgets.js:28
-#: public/js/widgets/htmlWidgets.js:38
-#: public/js/widgets/htmlWidgets.js:43
-#: public/js/widgets/htmlWidgets.js:48
-#: public/js/widgets/htmlWidgets.js:5
-#: public/js/widgets/htmlWidgets.js:58
-#: public/js/widgets/htmlWidgets.js:63
+#: public/js/widgets/htmlWidgets.js:13 public/js/widgets/htmlWidgets.js:18
+#: public/js/widgets/htmlWidgets.js:23 public/js/widgets/htmlWidgets.js:28
+#: public/js/widgets/htmlWidgets.js:38 public/js/widgets/htmlWidgets.js:43
+#: public/js/widgets/htmlWidgets.js:48 public/js/widgets/htmlWidgets.js:5
+#: public/js/widgets/htmlWidgets.js:58 public/js/widgets/htmlWidgets.js:63
 msgid "This is a simple text paragraph select to edit content."
 msgstr ""
+"Este es un párrafo de texto simple que se selecciona para editar contenido."
 
 #: public/js/data-sources/data-sources-list.controller.js:71
 msgid "This is one data source."
-msgstr ""
+msgstr "Esta es una fuente de datos."
 
 #: public/js/spaces/controller.js:34
-msgid "This is the area where you can define the structure for the shared space."
+msgid ""
+"This is the area where you can define the structure for the shared space."
 msgstr ""
+"Este es el área donde puede definir la estructura para el espacio compartido."
 
 #: public/js/dashboards/dashboards-list.controller.js:140
 msgid "This label indicates that this dashboard is public."
-msgstr ""
+msgstr "Esta etiqueta indica que este panel es público."
 
 #: public/js/reports/reports-list.controller.js:106
 msgid "This label indicates that this report is public."
-msgstr ""
+msgstr "Esta etiqueta indica que este informe es público."
 
 #: public/partials/dashboards/edit.html:72
-msgid "This limits the number of rows fetched in order to get a preview quickly. Set to 0 to disable."
+msgid ""
+"This limits the number of rows fetched in order to get a preview quickly. "
+"Set to 0 to disable."
 msgstr ""
+"Esto limita el número de filas recuperadas para obtener una vista previa "
+"rápidamente. Establecer en 0 para deshabilitar."
 
-#: public/js/home/controller.js:100
-#: public/js/home/controller.js:110
-#: public/js/home/controller.js:120
-#: public/js/home/controller.js:132
+#: public/js/home/controller.js:100 public/js/home/controller.js:110
+#: public/js/home/controller.js:120 public/js/home/controller.js:132
 #: public/js/home/controller.js:144
 msgid "This link is only available for urungi administrators."
-msgstr ""
+msgstr "Este enlace solo está disponible para los administradores de urungi."
 
 #: public/js/reports/filter-prompt.component.js:202
 msgid "This month"
-msgstr ""
+msgstr "Este mes"
 
 #: public/js/reports/filter-prompt.component.js:201
 msgid "This week"
-msgstr ""
+msgstr "Esta semana"
 
 #: public/js/spaces/controller.js:78
 msgid "This will remove all child nodes as well."
-msgstr ""
+msgstr "Esto eliminará todos los nodos secundarios también."
 
 #: public/js/reports/filter-prompt.component.js:203
 msgid "This year"
-msgstr ""
+msgstr "Este año"
 
 #: public/partials/users/users-edit-modal.html:62
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: public/js/report/controller.js:186
 msgid "To Lower"
-msgstr ""
+msgstr "En minúsculas"
 
 #: public/js/report/controller.js:185
 msgid "To Upper"
-msgstr ""
+msgstr "En mayúsculas"
 
 #: public/js/reports/filter-prompt.component.js:200
 msgid "Today"
-msgstr ""
+msgstr "Hoy"
 
 #: public/js/reports/pivot.service.js:94
 msgid "Totals"
-msgstr ""
+msgstr "Totales"
 
 #: public/partials/layer/elementModal.html:50
 #: public/partials/layer/objectProperties.html:87
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: public/partials/layer/sqlModal.html:15
 msgid "Type a name for this dataset"
-msgstr ""
+msgstr "Escriba un nombre para este conjunto de datos"
 
 #: public/partials/spaces/shared.html:13
 msgid "Type here the new name of the folder"
-msgstr ""
+msgstr "Escriba aquí el nuevo nombre de la carpeta"
 
 #: public/partials/users/users-edit-modal.html:77
 msgid "Unit"
-msgstr ""
+msgstr "Unidad"
 
 #: public/partials/core/share-popover.html:5
 msgid "Unpublish"
-msgstr ""
+msgstr "Anular publicación"
 
 #: public/partials/widgets/inspector.html:12
 msgid "Up"
-msgstr ""
+msgstr "Arriba"
 
 #: public/partials/widgets/inspector.html:98
 msgid "Upload image"
-msgstr ""
+msgstr "Subir imagen"
 
 #: public/js/users/users-view.controller.js:115
 msgid "Urungi Administrator"
-msgstr ""
+msgstr "Administrador de Urungi"
 
 #: public/partials/home/about.html:36
-msgid "Urungi is Open Source, feel free to join us on github, submit issues and pull requests: <a href=\"https://github.com/biblibre/urungi\">https://github.com/biblibre/urungi</a>"
+msgid ""
+"Urungi is Open Source, feel free to join us on github, submit issues and "
+"pull requests: <a href=\"https://github.com/biblibre/urungi\">https://github."
+"com/biblibre/urungi</a>"
 msgstr ""
+"Urungi es de código abierto, no dude en unirse a nosotros en github, envíe "
+"informes de errores y solicitudes de integración: <a href=\"https://github."
+"com/biblibre/urungi\"> https://github.com/biblibre/urungi</ a>"
 
 #: public/partials/home/about.html:31
-msgid "Urungi is a Maori word meaning rudder, steering paddle, driver, navigator"
+msgid ""
+"Urungi is a Maori word meaning rudder, steering paddle, driver, navigator"
 msgstr ""
+"Urungi es una palabra maorí que significa timón, paleta de dirección, "
+"conductor, navegador"
 
 #: public/partials/home/about.html:28
 msgid "Urungi is a fork of <a href=\"http://widestage.com\">widestage</a>"
 msgstr ""
+"Urungi es una bifurcación de <a href=\"http://widestage.com\"> widestage </a>"
 
 #: public/partials/home/about.html:18
+#, fuzzy
 msgid ""
 "Urungi is a self-service dashboard and reporting tool.\n"
 "                It has been written with the following ideas in mind:"
 msgstr ""
+"Urungi es un panel de autoservicio y una herramienta de informes.\r\n"
+"                Se ha escrito con las siguientes ideas en mente:"
 
 #: public/partials/home/about.html:38
-msgid "Urungi is licensed under <a href=\"https://opensource.org/licenses/GPL-3.0\">GPL 3.0</a>"
+msgid ""
+"Urungi is licensed under <a href=\"https://opensource.org/licenses/"
+"GPL-3.0\">GPL 3.0</a>"
 msgstr ""
+"Urungi tiene licencia bajo <a href=\"https://opensource.org/licenses/"
+"GPL-3.0\"> GPL 3.0 </a>"
 
 #: public/partials/home/about.html:13
 msgid "Urungi version: {{ vm.version }}"
-msgstr ""
+msgstr "Versión de Urungi: {{vm.version}}"
 
 #: public/js/report/controller.js:702
 msgid "Use this button to refresh the results"
-msgstr ""
+msgstr "Use este botón para actualizar los resultados"
 
 #: public/js/home/controller.js:60
-msgid "Use this if you want to query your data but is not necessary for you to save it for a later use"
+msgid ""
+"Use this if you want to query your data but is not necessary for you to save "
+"it for a later use"
 msgstr ""
+"Use esto si desea consultar sus datos pero no es necesario que los guarde "
+"para un uso posterior"
 
 #: public/js/home/controller.js:88
 msgid "Use this link to back to this page"
-msgstr ""
+msgstr "Use este enlace para regresar a esta página"
 
 #: public/partials/users/view.html:9
 msgid "User"
-msgstr ""
+msgstr "Usuario"
 
 #: public/partials/users/users-edit-modal.html:14
 msgid "User Nick"
-msgstr ""
+msgstr "Apodo del usuario"
 
 #: public/partials/users/users-edit-modal.html:16
 msgid "User Nick is required"
-msgstr ""
+msgstr "Se requiere apodo del usuario"
 
-#: public/partials/data-sources/edit.html:45
-#: views/login.ejs:44
+#: public/partials/data-sources/edit.html:45 views/login.ejs:44
 msgid "User name"
-msgstr ""
+msgstr "Nombre del usuario"
 
 #: public/partials/users/view.html:9
 msgid "User profile and permissions"
-msgstr ""
+msgstr "Perfil de usuario y permisos"
 
-#: public/js/home/controller.js:98
-#: public/partials/sidebar/sidebar.html:52
+#: public/js/home/controller.js:98 public/partials/sidebar/sidebar.html:52
 #: public/partials/users/list.html:9
 msgid "Users"
-msgstr ""
+msgstr "Usuarios"
 
 #: public/js/home/controller.js:80
-msgid "Using single query dashboards you can group several single query reports in just one interface, you can define the area, size and position of every single query report into the dashboard"
+msgid ""
+"Using single query dashboards you can group several single query reports in "
+"just one interface, you can define the area, size and position of every "
+"single query report into the dashboard"
 msgstr ""
+"Con el uso de paneles de consulta única, puede agrupar varios informes de "
+"consulta única en una sola interfaz, puede definir el área, el tamaño y la "
+"posición de cada informe de consulta en el panel"
 
 #: public/js/home/controller.js:70
-msgid "Using single query reports you can configure a query against the data and get the results using different charts or a simple data grid."
+msgid ""
+"Using single query reports you can configure a query against the data and "
+"get the results using different charts or a simple data grid."
 msgstr ""
+"Mediante informes de consulta única, puede configurar una consulta con los "
+"datos y obtener los resultados utilizando diferentes gráficos o una "
+"cuadrícula de datos simple."
 
 #: public/partials/report/partials/report-edit.html:34
 msgid "View SQL"
-msgstr ""
+msgstr "Ver SQL"
 
 #: public/partials/home/about.html:30
 msgid "What does Urungi mean ?"
-msgstr ""
+msgstr "¿Qué significa Urungi?"
 
 #: public/partials/home/about.html:17
 msgid "What is Urungi"
-msgstr ""
+msgstr "Qué es Urungi"
 
 #: public/partials/reports/report-column-settings-modal.component.html:119
 #: public/partials/reports/report-column-settings-modal.component.html:75
 msgid "Yes"
-msgstr ""
+msgstr "Si"
 
 #: public/js/reports/filter-prompt.component.js:210
 msgid "Yesterday"
-msgstr ""
+msgstr "Ayer"
 
 #: public/js/layers/layers-list.controller.js:137
 msgid "You can also activate or deactivate layers."
-msgstr ""
+msgstr "También puede activar o desactivar capas."
 
 #: public/js/reports/reports-list.controller.js:50
 msgid "You can also add runtime filters to split your data in real time."
 msgstr ""
+"También puede agregar filtros de tiempo de ejecución para dividir sus datos "
+"en tiempo real."
 
 #: public/js/dashboards/dashboards-list.controller.js:112
-msgid "You can also modify or drop the dashboard, clicking into the modify or delete buttons."
+msgid ""
+"You can also modify or drop the dashboard, clicking into the modify or "
+"delete buttons."
 msgstr ""
+"También puede modificar o soltar el tablero, haciendo clic en los botones "
+"modificar o eliminar."
 
 #: public/js/reports/reports-list.controller.js:70
-msgid "You can also modify or drop the report, clicking into the modify or delete buttons."
+msgid ""
+"You can also modify or drop the report, clicking into the modify or delete "
+"buttons."
 msgstr ""
+"También puede modificar o soltar el informe, haciendo clic en los botones "
+"modificar o eliminar."
 
 #: public/js/layers/layers-list.controller.js:147
 msgid "You can change the status of the layer simply clicking over this label"
 msgstr ""
+"Puede cambiar el estado de la capa simplemente haciendo clic sobre esta "
+"etiqueta"
 
 #: public/js/layers/layers-list.controller.js:117
-msgid "You can create several layers depending on your necessities, but you have to define one at least."
+msgid ""
+"You can create several layers depending on your necessities, but you have to "
+"define one at least."
 msgstr ""
+"Puede crear varias capas según sus necesidades, pero debe definir una al "
+"menos."
 
 #: public/js/spaces/controller.js:56
-msgid "You can drag it down or up across the structure to move the folder at the same level."
+msgid ""
+"You can drag it down or up across the structure to move the folder at the "
+"same level."
 msgstr ""
+"Puede arrastrarlo hacia abajo o hacia arriba a través de la estructura para "
+"mover la carpeta al mismo nivel."
 
 #: public/js/data-sources/data-sources-list.controller.js:63
-msgid "You can edit the connection details for every data source, delete a data source or activate/deactivate a datasource."
+msgid ""
+"You can edit the connection details for every data source, delete a data "
+"source or activate/deactivate a datasource."
 msgstr ""
+"Puede editar los detalles de conexión para cada fuente de datos, eliminar "
+"una fuente de datos o activar/desactivar una fuente de datos."
 
 #: public/js/layers/layers-list.controller.js:135
-msgid "You can edit the layer to configure the tables, elements and joins between tables."
+msgid ""
+"You can edit the layer to configure the tables, elements and joins between "
+"tables."
 msgstr ""
+"Puede editar la capa para configurar las tablas, elementos y uniones entre "
+"tablas."
 
 #: public/js/data-sources/data-sources-list.controller.js:82
 msgid "You can setup the name you want for data sources."
-msgstr ""
+msgstr "Puede configurar el nombre que desee para las fuentes de datos."
 
 #: public/partials/layer/sqlModal.html:23
 msgid "You have to enter an SQL query"
-msgstr ""
+msgstr "Tienes que ingresar una consulta SQL"
 
 #: public/js/users/users-edit-modal.component.js:42
 msgid "You have to introduce a password"
-msgstr ""
+msgstr "Tienes que introducir una contraseña"
 
 #: public/js/users/users-edit-modal.component.js:52
-msgid "You have to introduce a valid email to send the generated password to the user"
+msgid ""
+"You have to introduce a valid email to send the generated password to the "
+"user"
 msgstr ""
+"Debe introducir un correo electrónico válido para enviar la contraseña "
+"generada al usuario"
 
 #: public/js/users/users-edit-modal.component.js:36
 msgid "You have to introduce the user nick for the new user"
-msgstr ""
+msgstr "Tienes que introducir un apodo para el nuevo usuario"
 
 #: public/js/layer/controller.js:918
-msgid "You have to setup a valid \"FROM\" position number to extract the day from the string"
+msgid ""
+"You have to setup a valid \"FROM\" position number to extract the day from "
+"the string"
 msgstr ""
+"Debe configurar un número de posición válido \"FROM\" para extraer el día de "
+"la cadena"
 
 #: public/js/layer/controller.js:908
-msgid "You have to setup a valid \"FROM\" position number to extract the month from the string"
+msgid ""
+"You have to setup a valid \"FROM\" position number to extract the month from "
+"the string"
 msgstr ""
+"Debe configurar un número de posición válido \"FROM\" para extraer el mes de "
+"la cadena"
 
-#: public/js/layer/controller.js:893
-#: public/js/layer/controller.js:898
-msgid "You have to setup a valid \"FROM\" position number to extract the year from the string"
+#: public/js/layer/controller.js:893 public/js/layer/controller.js:898
+msgid ""
+"You have to setup a valid \"FROM\" position number to extract the year from "
+"the string"
 msgstr ""
+"Debe configurar un número de posición válido \"FROM\" para extraer el año de "
+"la cadena"
 
 #: public/js/layer/controller.js:923
-msgid "You have to setup a valid \"TO\" position number to extract the day from the string"
+msgid ""
+"You have to setup a valid \"TO\" position number to extract the day from the "
+"string"
 msgstr ""
+"Debe configurar un número de posición \"TO\" válido para extraer el día de "
+"la cadena"
 
 #: public/js/layer/controller.js:913
-msgid "You have to setup a valid \"TO\" position number to extract the month from the string"
+msgid ""
+"You have to setup a valid \"TO\" position number to extract the month from "
+"the string"
 msgstr ""
+"Debe configurar un número de posición válido \"TO\" para extraer el mes de "
+"la cadena"
 
 #: public/js/layer/controller.js:903
-msgid "You have to setup a valid \"TO\" position number to extract the year from the string"
+msgid ""
+"You have to setup a valid \"TO\" position number to extract the year from "
+"the string"
 msgstr ""
+"Debe configurar un número de posición \"TO\" válido para extraer el año de "
+"la cadena"
 
 #: public/js/dashboards/dashboard-image-modal.component.js:64
 msgid "You may only upload images"
-msgstr ""
+msgstr "Solo puedes subir imágenes"
 
 #: public/js/home/controller.js:136
-msgid "You will define here the labels to use for every field, the joins between the different entities (tables), etc... All the necessary stuff to allow your users to create a report without any knowledge of the structure of your data"
+msgid ""
+"You will define here the labels to use for every field, the joins between "
+"the different entities (tables), etc... All the necessary stuff to allow "
+"your users to create a report without any knowledge of the structure of your "
+"data"
 msgstr ""
+"Definirá aquí las etiquetas que se utilizarán para cada campo, las uniones "
+"entre las diferentes entidades (tablas), etc. Todo lo necesario para "
+"permitir a sus usuarios crear un informe sin ningún conocimiento de la "
+"estructura de sus datos"
 
 #: public/js/home/controller.js:124
-msgid "You will define here your database connections to get the data used in the reports that will be created by the users"
+msgid ""
+"You will define here your database connections to get the data used in the "
+"reports that will be created by the users"
 msgstr ""
+"Definirá aquí las conexiones de su base de datos para obtener los datos "
+"utilizados en los informes que serán creados por los usuarios"
 
-#: public/partials/layers/list.html:55
-#: public/partials/users/list.html:16
+#: public/partials/layers/list.html:55 public/partials/users/list.html:16
 #: public/partials/users/view.html:20
 msgid "active"
-msgstr ""
+msgstr "activo"
 
 #: public/partials/widgets/inspector.html:121
 msgid "alignment"
-msgstr ""
+msgstr "alineación"
 
 #: public/partials/widgets/inspector.html:117
 msgid "all"
-msgstr ""
+msgstr "todos"
 
 #: public/js/data-sources/data-sources-list.controller.js:102
-msgid "allow your users to access and understand your data without any knowledge of SQL or how the database is structured in tables and fields..."
+msgid ""
+"allow your users to access and understand your data without any knowledge of "
+"SQL or how the database is structured in tables and fields..."
 msgstr ""
+"permita a sus usuarios acceder y comprender sus datos sin ningún "
+"conocimiento de SQL o cómo se estructura la base de datos en tablas y "
+"campos ..."
 
 #: public/partials/reports/criteria-input.html:44
 msgid "and"
-msgstr ""
+msgstr "y"
 
 #: public/partials/widgets/inspector.html:34
 msgid "attributes"
-msgstr ""
+msgstr "atributos"
 
 #: public/partials/widgets/inspector.html:82
 msgid "backgroundColor"
-msgstr ""
+msgstr "color de fondo"
 
 #: public/partials/widgets/inspector.html:94
 msgid "backgroundImage"
-msgstr ""
+msgstr "imagen de fondo"
 
 #: public/partials/widgets/inspector.html:220
 msgid "border"
-msgstr ""
+msgstr "borde"
 
 #: public/partials/widgets/inspector.html:224
 msgid "borderColor"
-msgstr ""
+msgstr "color del borde"
 
 #: public/partials/widgets/inspector.html:244
 msgid "borderRoundness"
-msgstr ""
+msgstr "bordes redondeados"
 
 #: public/partials/reports/report-settings-modal.component.html:41
 msgid "bottom"
-msgstr ""
+msgstr "parte inferior"
 
 #: public/partials/widgets/inspector.html:152
 msgid "color"
-msgstr ""
+msgstr "color"
 
 #: public/js/reports/filter-prompt.component.js:182
 msgid "contains"
-msgstr ""
+msgstr "contiene"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:42
 msgid "current page number"
-msgstr ""
+msgstr "número de página actual"
 
 #: public/partials/widgets/inspector.html:229
 msgid "dashed"
-msgstr ""
+msgstr "rayado"
 
 #: public/partials/data-sources/list.html:23
 msgid "database:"
-msgstr ""
+msgstr "base de datos:"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:41
 msgid "document location"
-msgstr ""
+msgstr "ubicación del documento"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:40
 msgid "document title"
-msgstr ""
+msgstr "título del documento"
 
 #: public/js/reports/filter-prompt.component.js:183
 msgid "does not contain"
-msgstr ""
+msgstr "no contiene"
 
 #: public/js/reports/filter-prompt.component.js:187
 msgid "does not end with"
-msgstr ""
+msgstr "no termina con"
 
 #: public/js/reports/filter-prompt.component.js:185
 msgid "does not start with"
-msgstr ""
+msgstr "no comienza con"
 
 #: public/partials/widgets/inspector.html:230
 msgid "dotted"
-msgstr ""
+msgstr "punteado"
 
 #: public/partials/widgets/inspector.html:231
 msgid "double"
-msgstr ""
+msgstr "doble"
 
 #: public/partials/home/about.html:23
 msgid "easy to use for end-users"
-msgstr ""
+msgstr "fácil de usar para los usuarios finales"
 
 #: public/partials/home/about.html:24
 msgid "easy to use for reports creators"
-msgstr ""
+msgstr "fácil de usar para creadores de informes"
 
 #: public/partials/users/users-edit-modal.html:30
 msgid "email"
-msgstr ""
+msgstr "email"
 
 #: public/partials/users/users-edit-modal.html:32
 msgid "email is required"
-msgstr ""
+msgstr "se requiere un email"
 
 #: public/js/reports/filter-prompt.component.js:186
 msgid "ends with"
-msgstr ""
+msgstr "termina con"
 
 #: public/partials/layer/elementModal.html:110
 msgid "enter new label"
-msgstr ""
+msgstr "ingrese una nueva etiqueta"
 
 #: public/partials/layer/elementModal.html:109
 msgid "enter new value"
-msgstr ""
+msgstr "ingrese un nuevo valor"
 
 #: public/partials/files/gallery.html:17
 msgid "error"
-msgstr ""
+msgstr "error"
 
 #: public/partials/home/about.html:42
 msgid "first version of widestage"
-msgstr ""
+msgstr "primera versión de widestage"
 
 #: public/partials/layer/elementModal.html:140
 #: public/partials/layer/objectProperties.html:111
 msgid "format..."
-msgstr ""
+msgstr "formato..."
 
 #: public/partials/core/pdf-export-settings-modal.component.html:39
 msgid "formatted print date"
-msgstr ""
+msgstr "fecha de impresión formateada"
 
 #: public/partials/widgets/inspector.html:128
 msgid "gradients"
-msgstr ""
+msgstr "gradientes"
 
 #: public/partials/widgets/inspector.html:232
 msgid "groove"
-msgstr ""
+msgstr "ranura"
 
 #: public/partials/widgets/inspector.html:59
 msgid "heading"
-msgstr ""
+msgstr "encabeza"
 
 #: public/partials/widgets/inspector.html:49
 msgid "height"
-msgstr ""
+msgstr "altura"
 
 #: public/partials/widgets/inspector.html:115
 msgid "horizontal"
-msgstr ""
+msgstr "horizontal"
 
 #: public/partials/data-sources/list.html:21
 msgid "host:"
-msgstr ""
+msgstr "anfitrión:"
 
 #: public/partials/widgets/inspector.html:109
 msgid "imageProperties"
-msgstr ""
+msgstr "propiedades de imagen"
 
 #: public/partials/widgets/inspector.html:234
 msgid "inset"
-msgstr ""
+msgstr "recuadro"
 
-#: public/partials/home/about.html:49
-#: public/partials/home/about.html:50
+#: public/partials/home/about.html:49 public/partials/home/about.html:50
 msgid "internship in summer 2018"
-msgstr ""
+msgstr "pasantía en verano 2018"
 
 #: public/js/report/controller.js:136
 msgid "invalid report"
-msgstr ""
+msgstr "informe inválido"
 
 #: public/js/reports/filter-prompt.component.js:180
 msgid "is between"
-msgstr ""
+msgstr "está entre"
 
 #: public/js/reports/filter-prompt.component.js:174
 msgid "is bigger or equal than"
-msgstr ""
+msgstr "es más grande o igual que"
 
 #: public/js/reports/filter-prompt.component.js:175
 msgid "is bigger or equal than (pattern)"
-msgstr ""
+msgstr "es más grande o igual que (patrón)"
 
 #: public/js/reports/filter-prompt.component.js:172
 msgid "is bigger than"
-msgstr ""
+msgstr "es mayor que"
 
 #: public/js/reports/filter-prompt.component.js:173
 msgid "is bigger than (pattern)"
-msgstr ""
+msgstr "es más grande que (patrón)"
 
 #: public/js/reports/filter-prompt.component.js:168
 msgid "is different than"
-msgstr ""
+msgstr "es diferente a"
 
 #: public/js/reports/filter-prompt.component.js:169
 msgid "is different than (pattern)"
-msgstr ""
+msgstr "es diferente de (patrón)"
 
 #: public/js/reports/filter-prompt.component.js:166
 msgid "is equal to"
-msgstr ""
+msgstr "es igual a"
 
 #: public/js/reports/filter-prompt.component.js:167
 msgid "is equal to (pattern)"
-msgstr ""
+msgstr "es igual a (patrón)"
 
 #: public/js/reports/filter-prompt.component.js:170
 msgid "is in"
-msgstr ""
+msgstr "es en"
 
 #: public/js/reports/filter-prompt.component.js:178
 msgid "is less or equal than"
-msgstr ""
+msgstr "es menor o igual que"
 
 #: public/js/reports/filter-prompt.component.js:179
 msgid "is less or equal than (pattern)"
-msgstr ""
+msgstr "es menor o igual que (patrón)"
 
 #: public/js/reports/filter-prompt.component.js:176
 msgid "is less than"
-msgstr ""
+msgstr "es menos que"
 
 #: public/js/reports/filter-prompt.component.js:177
 msgid "is less than (pattern)"
-msgstr ""
+msgstr "es menor que (patrón)"
 
 #: public/js/reports/filter-prompt.component.js:188
 msgid "is like"
-msgstr ""
+msgstr "es como"
 
 #: public/js/reports/filter-prompt.component.js:181
 msgid "is not between"
-msgstr ""
+msgstr "no está entre"
 
 #: public/js/reports/filter-prompt.component.js:171
 msgid "is not in"
-msgstr ""
+msgstr "no está dentro"
 
 #: public/js/reports/filter-prompt.component.js:189
 msgid "is not like"
-msgstr ""
+msgstr "no es como"
 
 #: public/js/reports/filter-prompt.component.js:191
 msgid "is not null"
-msgstr ""
+msgstr "no es nulo"
 
 #: public/js/reports/filter-prompt.component.js:190
 msgid "is null"
-msgstr ""
+msgstr "es nulo"
 
 #: public/partials/layer/elementModal.html:104
 #: public/partials/layer/elementModal.html:122
 #: public/partials/layer/elementModal.html:126
 #: public/partials/layer/elementModal.html:130
 msgid "label"
-msgstr ""
+msgstr "etiqueta"
 
 #: public/js/layer/controller.js:556
 msgid "left"
-msgstr ""
+msgstr "izquierda"
 
 #: public/partials/sidebar/sidebar.html:8
 msgid "logout"
-msgstr ""
+msgstr "cerrar sesión"
 
 #: public/partials/widgets/inspector.html:204
 msgid "margin"
-msgstr ""
+msgstr "margen"
 
 #: public/partials/layer/elementModal.html:144
 #: public/partials/layer/elementModal.html:172
 msgid "more examples..."
-msgstr ""
+msgstr "más ejemplos..."
 
-#: public/js/layer/controller.js:992
-#: public/js/spaces/controller.js:117
+#: public/js/layer/controller.js:992 public/js/spaces/controller.js:117
 msgid "my folder"
-msgstr ""
+msgstr "mi carpeta"
 
 #: public/js/report/services/c3Charts.js:21
 msgid "no data to display"
-msgstr ""
+msgstr "no hay información para mostrar"
 
 #: public/partials/reports/report-settings-modal.component.html:42
 #: public/partials/widgets/inspector.html:114
 #: public/partials/widgets/inspector.html:227
 msgid "none"
-msgstr ""
+msgstr "ninguno"
 
-#: public/partials/layers/list.html:56
-#: public/partials/users/list.html:17
+#: public/partials/layers/list.html:56 public/partials/users/list.html:17
 #: public/partials/users/view.html:21
 msgid "not active"
-msgstr ""
+msgstr "no activo"
 
 #: public/partials/widgets/inspector.html:235
 msgid "outset"
-msgstr ""
+msgstr "principio"
 
 #: public/partials/widgets/inspector.html:195
 msgid "padding"
-msgstr ""
+msgstr "margen interno"
 
 #: public/partials/data-sources/list.html:22
 msgid "port:"
-msgstr ""
+msgstr "puerto:"
 
 #: public/partials/home/about.html:25
 msgid "powerful for power-users"
-msgstr ""
+msgstr "potente para usuarios avanzados"
 
 #: public/partials/users/view.html:75
 msgid "private dashboards"
-msgstr ""
+msgstr "tableros privados"
 
 #: public/partials/users/view.html:71
 msgid "private reports"
-msgstr ""
+msgstr "informes privados"
 
 #: public/partials/dashboards/list.html:55
 #: public/partials/reports/reports-table.component.html:48
 msgid "public"
-msgstr ""
+msgstr "público"
 
 #: public/partials/report/modals/dashboardListModal.html:15
 msgid "push"
-msgstr ""
+msgstr "enviar a"
 
 #: public/partials/widgets/inspector.html:112
 msgid "repeat"
-msgstr ""
+msgstr "repetir"
 
 #: public/js/report/controller.js:517
 msgid "report type does not exist"
-msgstr ""
+msgstr "tipo de informe no existe"
 
 #: public/partials/report/partials/report-edit.html:31
 msgid "results."
-msgstr ""
+msgstr "resultados."
 
 #: public/partials/widgets/inspector.html:233
 msgid "ridge"
-msgstr ""
+msgstr "cresta"
 
 #: public/js/layer/controller.js:549
 #: public/partials/reports/report-settings-modal.component.html:40
 msgid "right"
-msgstr ""
+msgstr "derecha"
 
 #: public/partials/core/share-modal.html:8
 msgid "root folder"
-msgstr ""
+msgstr "carpeta raíz"
 
 #: public/partials/core/share-modal.html:28
 #: public/partials/core/share-modal.html:9
 msgid "select"
-msgstr ""
+msgstr "seleccionar"
 
 #: public/partials/core/share-modal.html:10
 #: public/partials/core/share-modal.html:29
 msgid "selected"
-msgstr ""
+msgstr "seleccionado"
 
 #: public/partials/dashboards/list.html:56
 #: public/partials/reports/reports-table.component.html:49
-#: public/partials/users/view.html:108
-#: public/partials/users/view.html:91
+#: public/partials/users/view.html:108 public/partials/users/view.html:91
 msgid "shared"
-msgstr ""
+msgstr "compartido"
 
 #: public/partials/users/view.html:67
 msgid "shared dashboards"
-msgstr ""
+msgstr "panel compartido"
 
 #: public/partials/users/view.html:63
 msgid "shared reports"
-msgstr ""
+msgstr "informe compartido"
 
 #: public/partials/widgets/inspector.html:228
 msgid "solid"
-msgstr ""
+msgstr "sólido"
 
 #: public/partials/widgets/inspector.html:54
 msgid "source"
-msgstr ""
+msgstr "fuente"
 
 #: public/js/reports/filter-prompt.component.js:184
 msgid "starts with"
-msgstr ""
+msgstr "comienza con"
 
 #: public/partials/files/gallery.html:18
 msgid "success"
-msgstr ""
+msgstr "éxito"
 
 #: public/partials/widgets/inspector.html:141
 msgid "textStyle"
-msgstr ""
+msgstr "estilo del texto"
 
 #: public/partials/widgets/inspector.html:102
 msgid "textures"
-msgstr ""
+msgstr "texturas"
 
 #: public/partials/reports/report-settings-modal.component.html:39
 msgid "top"
-msgstr ""
+msgstr "parte superior"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:43
 msgid "total pages in the document"
-msgstr ""
+msgstr "total de páginas en el documento"
 
 #: public/partials/layer/sqlModal.html:16
 msgid "type a name for the dataset"
-msgstr ""
+msgstr "escriba un nombre para el conjunto de datos"
 
 #: public/partials/widgets/inspector.html:71
 msgid "uploadImage"
-msgstr ""
+msgstr "subir imagen"
 
 #: public/partials/widgets/inspector.html:116
 msgid "vertical"
-msgstr ""
+msgstr "vertical"
 
 #: public/partials/logout/index.html:2
 msgid "you have logout!!!"
-msgstr ""
+msgstr "has cerrado la sesión!!!"

@@ -26,7 +26,7 @@ describe('language', () => {
         it('should return all languages', () => {
             const languages = language.getAvailableLanguages();
 
-            expect(languages).toEqual(['en', 'fr']);
+            expect(languages).toEqual(['en', 'es', 'fr']);
         });
     });
 

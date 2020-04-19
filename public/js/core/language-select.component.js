@@ -19,6 +19,7 @@
 
         const languageLabels = {
             en: 'English',
+            es: 'Español',
             fr: 'Français',
         };
 

@@ -64,11 +64,11 @@ msgstr ""
 msgid "Activate Filter"
 msgstr "Activer le filtre"
 
-#: public/partials/layer/view.html:176
+#: public/partials/layer/view.html:175
 msgid "Add"
 msgstr "Ajouter"
 
-#: public/partials/layer/view.html:215
+#: public/partials/layer/view.html:197
 msgid "Add SQL"
 msgstr "Ajouter requête SQL"
 
@@ -76,7 +76,7 @@ msgstr "Ajouter requête SQL"
 msgid "Add a new role..."
 msgstr "Ajouter un nouveau rôle..."
 
-#: public/partials/layer/view.html:246
+#: public/partials/layer/view.html:228
 msgid "Add all"
 msgstr "Ajouter tout"
 
@@ -108,7 +108,7 @@ msgstr "Ajouter un rôle"
 msgid "Add subfolder"
 msgstr "Ajouter un sous-dossier"
 
-#: public/partials/layer/sqlModal.html:35
+#: public/partials/layer/sqlModal.html:34
 msgid "Add to layer"
 msgstr "Ajouter au calque"
 
@@ -195,7 +195,7 @@ msgstr ""
 "Pendant que vous définissez la requête en déposant des éléments dans les "
 "zones ci-dessus, les résultats de la requête apparaîtront ici"
 
-#: public/js/data-sources/data-sources-list.controller.js:43
+#: public/js/data-sources/data-sources-list.controller.js:45
 msgid ""
 "At least one data source must be defined, unless you do not define some data "
 "source you and your users will not be able to create reports."
@@ -239,9 +239,9 @@ msgid "Avg"
 msgstr "Moyenne"
 
 #: public/js/dashboards/dashboards-list.controller.js:78
-#: public/js/data-sources/data-sources-list.controller.js:29
+#: public/js/data-sources/data-sources-list.controller.js:31
 #: public/js/home/controller.js:13
-#: public/js/layers/layers-list.controller.js:99
+#: public/js/layers/layers-list.controller.js:101
 #: public/js/report/controller.js:655
 #: public/js/reports/reports-list.controller.js:31
 #: public/js/spaces/controller.js:12
@@ -276,12 +276,12 @@ msgstr "Calculer le total"
 #: public/partials/dashboards/edit.html:15
 #: public/partials/dashboards/edit.html:255
 #: public/partials/dashboards/view.html:20
-#: public/partials/data-sources/edit.html:3
+#: public/partials/data-sources/edit.html:11
 #: public/partials/layer/addAllModal.html:8
 #: public/partials/layer/elementModal.html:207
 #: public/partials/layer/folderModal.html:43
-#: public/partials/layer/sqlModal.html:34
-#: public/partials/layer/sqlModal.html:86 public/partials/layer/view.html:14
+#: public/partials/layer/sqlModal.html:33
+#: public/partials/layer/sqlModal.html:85 public/partials/layer/view.html:14
 #: public/partials/layers/layers-new-modal.html:34
 #: public/partials/report/edit.html:17 public/partials/report/edit.html:18
 #: public/partials/report/modals/reportNameModal.html:15
@@ -293,7 +293,7 @@ msgstr "Calculer le total"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: public/js/layer/controller.js:270
+#: public/js/layer/controller.js:249
 msgid "Cannot modify sql of an object which is not an sql request"
 msgstr "Impossible de modifier le SQL d'un objet qui n'est pas une requête SQL"
 
@@ -391,7 +391,7 @@ msgstr "Créer une nouvelle source de données."
 msgid "Click here to create a new data source"
 msgstr "Créer une nouvelle source de données"
 
-#: public/js/data-sources/data-sources-list.controller.js:51
+#: public/js/data-sources/data-sources-list.controller.js:53
 msgid "Click here to create a new datasource."
 msgstr "Créer une nouvelle source de données."
 
@@ -405,7 +405,7 @@ msgid "Click here to create a new folder inside the actual folder."
 msgstr ""
 "Cliquez ici pour créer un nouveau dossier à l'intérieur du dossier actuel."
 
-#: public/js/layers/layers-list.controller.js:123
+#: public/js/layers/layers-list.controller.js:125
 msgid "Click here to create a new layer."
 msgstr "Cliquez ici pour créer un nouveau calque."
 
@@ -421,7 +421,7 @@ msgstr "Cliquez ici pour créer un nouveau rapport"
 msgid "Click here to delete the dashboard."
 msgstr "Cliquez ici pour supprimer ce tableau de bord."
 
-#: public/js/layers/layers-list.controller.js:153
+#: public/js/layers/layers-list.controller.js:155
 msgid "Click here to delete the layer."
 msgstr "Cliquez ici pour supprimer ce calque."
 
@@ -522,12 +522,13 @@ msgstr "Colonnes / zone de dépôt des résultats"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:52
 #: public/partials/layer/addAllModal.html:7
-#: public/partials/layer/sqlModal.html:87
+#: public/partials/layer/sqlModal.html:86
 msgid "Confirm"
 msgstr "Confirmer"
 
-#: public/partials/data-sources/edit.html:12
-msgid "Connection Type II"
+#: public/partials/data-sources/edit.html:15
+#, fuzzy
+msgid "Connection type"
 msgstr "Connexion de type II"
 
 #: public/js/spaces/controller.js:105
@@ -558,7 +559,7 @@ msgstr "Count distinct"
 msgid "Create"
 msgstr "Créer"
 
-#: public/js/data-sources/data-sources-list.controller.js:41
+#: public/js/data-sources/data-sources-list.controller.js:43
 msgid ""
 "Create and manage here the connections to databases that holds the data you "
 "want to be able to create reports using Urungi."
@@ -642,12 +643,12 @@ msgstr ""
 msgid "Dashboards list"
 msgstr "Tableaux de bord"
 
-#: public/js/data-sources/data-sources-list.controller.js:67
+#: public/js/data-sources/data-sources-list.controller.js:69
 #: public/partials/layers/layers-new-modal.html:22
 msgid "Data source"
 msgstr "Source de donnée"
 
-#: public/js/data-sources/data-sources-list.controller.js:87
+#: public/js/data-sources/data-sources-list.controller.js:89
 msgid "Data source connection details"
 msgstr "Détails de connexion de la source de données"
 
@@ -655,17 +656,17 @@ msgstr "Détails de connexion de la source de données"
 msgid "Data source is required"
 msgstr "La source de données est requise"
 
-#: public/js/data-sources/data-sources-list.controller.js:76
+#: public/js/data-sources/data-sources-list.controller.js:78
 msgid "Data source name & type"
 msgstr "Nom et type de la source de données"
 
-#: public/js/data-sources/data-sources-list.controller.js:37
+#: public/js/data-sources/data-sources-list.controller.js:39
 #: public/js/home/controller.js:118 public/partials/data-sources/list.html:9
 #: public/partials/io/import.html:32 public/partials/sidebar/sidebar.html:42
 msgid "Data sources"
 msgstr "Sources de données"
 
-#: public/js/data-sources/data-sources-list.controller.js:39
+#: public/js/data-sources/data-sources-list.controller.js:41
 msgid ""
 "Data sources are connections to the databases you are going to generate "
 "reports for."
@@ -673,11 +674,11 @@ msgstr ""
 "Les sources de données sont des connections à la base de données pour "
 "lesquelles vous générez des rapports."
 
-#: public/partials/data-sources/edit.html:44
+#: public/partials/data-sources/edit.html:40
 msgid "Database"
 msgstr "Base de données"
 
-#: public/js/data-sources/data-sources-edit.controller.js:66
+#: public/js/data-sources/data-sources-edit.controller.js:54
 msgid "Database connection failed."
 msgstr "La connexion à la base de données a échouée."
 
@@ -685,13 +686,23 @@ msgstr "La connexion à la base de données a échouée."
 msgid "Dataset"
 msgstr "Jeu de données"
 
+#: public/js/data-sources/data-sources-edit.controller.js:38
+#, fuzzy
+msgid "Datasource created successfully"
+msgstr "Tableau de bord créé avec succès"
+
 #: public/partials/io/import.html:35
 msgid "Datasource matching {{ds.doc.name}}"
 msgstr "Source de données correspondant à {{ds.doc.name}}"
 
-#: public/js/layer/controller.js:1297
+#: public/js/layer/controller.js:1233
 msgid "Datasource must be the same for all entities"
 msgstr "La source de données doit être la même pour toutes les entités"
+
+#: public/js/data-sources/data-sources-edit.controller.js:43
+#, fuzzy
+msgid "Datasource updated successfully"
+msgstr "Tableau de bord mis à jour avec succès:"
 
 #: public/partials/report/modals/filter-prompt-modal.html:48
 msgid "Deactivate Filter"
@@ -769,7 +780,7 @@ msgstr ""
 msgid "Description"
 msgstr "Description"
 
-#: public/js/layers/layers-list.controller.js:164
+#: public/js/layers/layers-list.controller.js:166
 msgid "Design your company public space"
 msgstr "Concevez l'espace public de votre société"
 
@@ -778,9 +789,9 @@ msgid "Do not show this block again"
 msgstr "Ne pas montrer ce bloc à nouveau"
 
 #: public/js/dashboards/dashboards-list.controller.js:80
-#: public/js/data-sources/data-sources-list.controller.js:31
+#: public/js/data-sources/data-sources-list.controller.js:33
 #: public/js/home/controller.js:15
-#: public/js/layers/layers-list.controller.js:101
+#: public/js/layers/layers-list.controller.js:103
 #: public/js/report/controller.js:657
 #: public/js/reports/reports-list.controller.js:33
 #: public/js/spaces/controller.js:14
@@ -890,6 +901,11 @@ msgstr "Modifier le rapport"
 msgid "Edit User"
 msgstr "Modifier l'utilisateur"
 
+#: public/partials/data-sources/edit.html:9
+#, fuzzy
+msgid "Edit datasource"
+msgstr "Nouvelle source de données"
+
 #: public/js/spaces/controller.js:64
 msgid "Edit folder"
 msgstr "Modifier le dossier"
@@ -987,7 +1003,7 @@ msgstr "La création du calque a échoué"
 msgid "Failed to create report"
 msgstr "La création du rapport a échoué"
 
-#: public/js/layer/controller.js:544
+#: public/js/layer/controller.js:514
 msgid "Failed to parse expression for element"
 msgstr "L'analyse de l'expression a échoué pour l'élément"
 
@@ -1116,7 +1132,7 @@ msgstr "Passez à l'explorateur de données et continuez la visite"
 msgid "Go to data sources and continue tour"
 msgstr "Passez aux sources de données et continuez la visite"
 
-#: public/js/data-sources/data-sources-list.controller.js:102
+#: public/js/data-sources/data-sources-list.controller.js:104
 msgid "Go to layers and continue tour"
 msgstr "Aller voir les calques et continuer la visite"
 
@@ -1124,7 +1140,7 @@ msgstr "Aller voir les calques et continuer la visite"
 msgid "Go to single query report designer and continue tour"
 msgstr "Passez aux créateur de calques et continuez la visite"
 
-#: public/js/layers/layers-list.controller.js:168
+#: public/js/layers/layers-list.controller.js:170
 msgid "Go to the public space definition and continue tour"
 msgstr "Passez à la définition de l'espace public et continuez la visite"
 
@@ -1170,13 +1186,13 @@ msgstr "Hauteur"
 msgid "Hello, world!"
 msgstr "Bonjour, le monde!"
 
-#: public/js/data-sources/data-sources-list.controller.js:59
+#: public/js/data-sources/data-sources-list.controller.js:61
 msgid "Here all the data sources (database connections) will be listed."
 msgstr ""
 "Ici toutes les sources de données (connections aux bases de données) sont "
 "listées."
 
-#: public/js/layers/layers-list.controller.js:131
+#: public/js/layers/layers-list.controller.js:133
 msgid "Here all the layers are listed."
 msgstr "Tous vos calques sont listés ici."
 
@@ -1212,7 +1228,7 @@ msgstr "Vous pouvez accéder ici aux opérations de base d'Urungi"
 msgid "Here you can create and execute reports."
 msgstr "Ici vous pouvez créer et exécuter des rapports."
 
-#: public/js/layers/layers-list.controller.js:113
+#: public/js/layers/layers-list.controller.js:115
 msgid ""
 "Here you can create and manage the layers that later will be used by your "
 "users to create reports or explore data."
@@ -1291,11 +1307,11 @@ msgstr ""
 msgid "Inner"
 msgstr "Inner"
 
-#: public/partials/data-sources/edit.html:24
+#: public/partials/data-sources/edit.html:26
 msgid "Insert here the name for this connection"
 msgstr "Saisissez ici le nom pour cette connection"
 
-#: public/partials/data-sources/edit.html:38
+#: public/partials/data-sources/edit.html:36
 msgid "Insert here the port to access the SQL instance"
 msgstr "Saisissez ici le port d'accès à l'instance SQL"
 
@@ -1410,7 +1426,7 @@ msgstr "Propriétés du calque"
 msgid "Layer created successfully:"
 msgstr "Calque créé avec succès:"
 
-#: public/js/layers/layers-list.controller.js:151
+#: public/js/layers/layers-list.controller.js:153
 msgid "Layer delete"
 msgstr "Suppression du calque"
 
@@ -1427,7 +1443,7 @@ msgstr "Éléments du calque"
 msgid "Layer name"
 msgstr "Nom du calque"
 
-#: public/js/layers/layers-list.controller.js:141
+#: public/js/layers/layers-list.controller.js:143
 msgid "Layer status"
 msgstr "Statut du calque"
 
@@ -1435,16 +1451,16 @@ msgstr "Statut du calque"
 msgid "Layer updated successfully:"
 msgstr "Calque mis à jour avec succès:"
 
-#: public/js/data-sources/data-sources-list.controller.js:96
+#: public/js/data-sources/data-sources-list.controller.js:100
 #: public/js/data-sources/data-sources-list.controller.js:98
 #: public/js/home/controller.js:130
-#: public/js/layers/layers-list.controller.js:107
+#: public/js/layers/layers-list.controller.js:109
 #: public/partials/io/export.html:16 public/partials/io/import.html:44
 #: public/partials/layers/list.html:9 public/partials/sidebar/sidebar.html:37
 msgid "Layers"
 msgstr "Calques"
 
-#: public/js/layers/layers-list.controller.js:111
+#: public/js/layers/layers-list.controller.js:113
 msgid ""
 "Layers allow your users to create reports dragging and dropping familiar "
 "elements that points in the background to the fields contained in tables in "
@@ -1454,13 +1470,13 @@ msgstr ""
 "et déposant des éléments familiers qui pointent en arrière plan sur les "
 "champs contenus dans les tables de vos sources de données."
 
-#: public/js/layers/layers-list.controller.js:109
+#: public/js/layers/layers-list.controller.js:111
 msgid "Layers define the interface for your users to access the data."
 msgstr ""
 "Les calques définissent l'interface pour que vos utilisateurs puissent "
 "accéder aux données."
 
-#: public/js/layers/layers-list.controller.js:129
+#: public/js/layers/layers-list.controller.js:131
 msgid "Layers list"
 msgstr "Liste des calques"
 
@@ -1485,11 +1501,11 @@ msgstr "Licence"
 msgid "Line"
 msgstr "Ligne"
 
-#: public/js/data-sources/data-sources-list.controller.js:57
+#: public/js/data-sources/data-sources-list.controller.js:59
 msgid "List of data sources"
 msgstr "Liste des sources de données"
 
-#: views/login.ejs:61
+#: views/login.ejs:54
 msgid "Log In"
 msgstr "Se connecter"
 
@@ -1546,7 +1562,7 @@ msgid "My Reports"
 msgstr "Mes rapports"
 
 #: public/partials/dashboards/list.html:27
-#: public/partials/data-sources/edit.html:23 public/partials/io/import.html:118
+#: public/partials/data-sources/edit.html:25 public/partials/io/import.html:118
 #: public/partials/io/import.html:50 public/partials/io/import.html:84
 #: public/partials/layer/objectProperties.html:30
 #: public/partials/layer/objectProperties.html:69
@@ -1577,7 +1593,7 @@ msgstr "Nouvel élément"
 msgid "New Folder"
 msgstr "Nouveau dossier"
 
-#: public/js/layers/layers-list.controller.js:121
+#: public/js/layers/layers-list.controller.js:123
 msgid "New Layer"
 msgstr "Nouveau calque"
 
@@ -1595,7 +1611,7 @@ msgstr "Nouveau rôle"
 msgid "New User"
 msgstr "Nouvel utilisateur"
 
-#: public/js/data-sources/data-sources-list.controller.js:49
+#: public/js/data-sources/data-sources-list.controller.js:51
 msgid "New datasource"
 msgstr "Nouvelle source de données"
 
@@ -1608,9 +1624,9 @@ msgid "New layer"
 msgstr "Nouveau calque"
 
 #: public/js/dashboards/dashboards-list.controller.js:77
-#: public/js/data-sources/data-sources-list.controller.js:28
+#: public/js/data-sources/data-sources-list.controller.js:30
 #: public/js/home/controller.js:12
-#: public/js/layers/layers-list.controller.js:98
+#: public/js/layers/layers-list.controller.js:100
 #: public/js/report/controller.js:654
 #: public/js/reports/reports-list.controller.js:30
 #: public/js/spaces/controller.js:11 public/partials/core/pager.html:13
@@ -1618,10 +1634,10 @@ msgstr "Nouveau calque"
 msgid "Next"
 msgstr "Suivant"
 
-#: public/js/data-sources/data-sources-list.controller.js:94
+#: public/js/data-sources/data-sources-list.controller.js:96
 #: public/js/home/controller.js:151 public/js/home/controller.js:163
 #: public/js/home/controller.js:175 public/js/home/controller.js:187
-#: public/js/layers/layers-list.controller.js:162
+#: public/js/layers/layers-list.controller.js:164
 #: public/js/spaces/controller.js:101
 msgid "Next Step"
 msgstr "Étape suivante"
@@ -1664,7 +1680,7 @@ msgstr "Oh oui, c'est si bon."
 msgid "Once deleted the dashboard will not be recoverable again."
 msgstr "Un tableau de bord supprimé ne sera plus récupérable ensuite."
 
-#: public/js/layers/layers-list.controller.js:155
+#: public/js/layers/layers-list.controller.js:157
 msgid "Once deleted the layer will not be recoverable again."
 msgstr "Une fois supprimé, un calque n'est plus récupérable."
 
@@ -1680,7 +1696,7 @@ msgstr ""
 "Une fois que vous avez la structure que vous souhaitez, enregistrez-la pour "
 "la rendre accessible à vos utilisateurs."
 
-#: public/js/layer/controller.js:537
+#: public/js/layer/controller.js:507
 msgid ""
 "One of the custom elements uses elements from tables which are not joined. "
 "This custom element cannot be fetched"
@@ -1710,7 +1726,7 @@ msgstr ""
 msgid "Order By drop zone"
 msgstr "Zone de dépôt des tris"
 
-#: public/partials/data-sources/edit.html:58
+#: public/partials/data-sources/edit.html:50
 #: public/partials/users/users-edit-modal.html:42 views/login.ejs:48
 msgid "Password"
 msgstr "Mot de passe"
@@ -1728,7 +1744,7 @@ msgstr "Permissions"
 msgid "Pie"
 msgstr "Camembert"
 
-#: public/partials/layer/sqlModal.html:47
+#: public/partials/layer/sqlModal.html:46
 msgid "Please confirm your modification"
 msgstr "Confirmez votre changement"
 
@@ -1736,7 +1752,7 @@ msgstr "Confirmez votre changement"
 msgid "Please type DELETE to confirm"
 msgstr "Veuillez écrire DELETE pour confirmer"
 
-#: public/partials/data-sources/edit.html:37
+#: public/partials/data-sources/edit.html:35
 msgid "Port"
 msgstr "Port"
 
@@ -1796,10 +1812,6 @@ msgstr "Le calque lié n'est pas dans le fichier d'import"
 #: public/js/io/import.controller.js:193
 msgid "Related layer is not valid"
 msgstr "Le calque lié n'est pas valide"
-
-#: views/login.ejs:54
-msgid "Remember Me"
-msgstr "Mémorise moi"
 
 #: public/partials/layer/view.html:96
 msgid "Remove"
@@ -1892,7 +1904,7 @@ msgstr ""
 "inclus automatiquement, il n'y a pas besoin de les inclure manuellement."
 
 #: public/js/dashboards/dashboards-list.controller.js:132
-#: public/js/layers/layers-list.controller.js:157
+#: public/js/layers/layers-list.controller.js:159
 #: public/js/reports/reports-list.controller.js:90
 msgid "Requires 2 step confirmation."
 msgstr "Nécessite 2 étapes de confirmations."
@@ -1971,7 +1983,7 @@ msgstr "Requête SQL"
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: public/partials/data-sources/edit.html:2
+#: public/partials/data-sources/edit.html:10
 msgid "Save Datasource"
 msgstr "Enregistrer la source de données"
 
@@ -1979,7 +1991,7 @@ msgstr "Enregistrer la source de données"
 msgid "Save as a report"
 msgstr "Sauvegarder comme rapport"
 
-#: public/partials/layer/sqlModal.html:37
+#: public/partials/layer/sqlModal.html:36
 msgid "Save changes"
 msgstr "Sauvegarder les changements"
 
@@ -2050,7 +2062,7 @@ msgstr ""
 "Découvrez comment vous pouvez créer des requêtes facilement sans aucun "
 "savoir faire technique"
 
-#: public/partials/data-sources/edit.html:13
+#: public/partials/data-sources/edit.html:16
 msgid "Select a datasource type..."
 msgstr "Sélectionnez un type de source de données..."
 
@@ -2097,17 +2109,17 @@ msgstr "Sélectionnez pour désactiver le filtre à l'exécution"
 msgid "Send password through email"
 msgstr "Envoyer le mot de passe par mail"
 
-#: public/partials/data-sources/edit.html:45
+#: public/partials/data-sources/edit.html:41
 msgid "Set here the name of the SQL Database to connect"
 msgstr "Saisissez ici le nom de la base de données SQL à laquelle se connecter"
 
-#: public/partials/data-sources/edit.html:59
+#: public/partials/data-sources/edit.html:51
 msgid "Set here the username password to access the database"
 msgstr ""
 "Saisissez ici le nom d'utilisateur mot de passe pour accéder à la base de "
 "données"
 
-#: public/partials/data-sources/edit.html:52
+#: public/partials/data-sources/edit.html:46
 msgid "Set here the username to access the database"
 msgstr "Saisissez ici le nom d'utilisateur pour accéder à la base de données"
 
@@ -2169,9 +2181,9 @@ msgid "Single query reports"
 msgstr "Rapports avec une seule requête"
 
 #: public/js/dashboards/dashboards-list.controller.js:79
-#: public/js/data-sources/data-sources-list.controller.js:30
+#: public/js/data-sources/data-sources-list.controller.js:32
 #: public/js/home/controller.js:14
-#: public/js/layers/layers-list.controller.js:100
+#: public/js/layers/layers-list.controller.js:102
 #: public/js/report/controller.js:656
 #: public/js/reports/reports-list.controller.js:32
 #: public/js/spaces/controller.js:13
@@ -2208,7 +2220,7 @@ msgstr "Démarrer l'import"
 msgid "Status"
 msgstr "Statut"
 
-#: public/js/layers/layers-list.controller.js:90
+#: public/js/layers/layers-list.controller.js:92
 #: public/js/users/users-list.controller.js:34
 #: public/js/users/users-view.controller.js:72
 msgid "Status updated"
@@ -2230,7 +2242,7 @@ msgstr "Étape 3 - Import"
 msgid "String"
 msgstr "Chaîne"
 
-#: public/js/data-sources/data-sources-edit.controller.js:64
+#: public/js/data-sources/data-sources-edit.controller.js:52
 msgid "Successful database connection."
 msgstr "Connexion à la base de données réussie."
 
@@ -2246,7 +2258,7 @@ msgstr "Suivez notre visite guidée pour vous familiariser..."
 msgid "Target"
 msgstr "Cible"
 
-#: public/partials/data-sources/edit.html:64
+#: public/partials/data-sources/edit.html:58
 msgid "Test Connection"
 msgstr "Tester la connection"
 
@@ -2285,15 +2297,15 @@ msgstr ""
 msgid "The export failed. Please contact the system administrator."
 msgstr "L'export a échoué. Veuillez contacter l'administrateur système."
 
-#: public/partials/layer/sqlModal.html:62
+#: public/partials/layer/sqlModal.html:61
 msgid "The following columns will be added :"
 msgstr "Les colonnes suivantes seront ajoutées :"
 
-#: public/partials/layer/sqlModal.html:52
+#: public/partials/layer/sqlModal.html:51
 msgid "The following columns will be kept :"
 msgstr "Les colonnes suivantes seront conservées :"
 
-#: public/partials/layer/sqlModal.html:72
+#: public/partials/layer/sqlModal.html:71
 msgid "The following columns will be removed :"
 msgstr "Les colonnes suivantes seront supprimées :"
 
@@ -2305,7 +2317,7 @@ msgstr "Le catalogue de calques"
 msgid "The layer selector"
 msgstr "Le sélecteur de calques"
 
-#: public/js/data-sources/data-sources-list.controller.js:89
+#: public/js/data-sources/data-sources-list.controller.js:91
 msgid "The main connection details for the data source."
 msgstr ""
 "Les informations importantes sur la connexion avec la source de données."
@@ -2314,7 +2326,7 @@ msgstr ""
 msgid "The main menu"
 msgstr "Menu principal"
 
-#: public/js/data-sources/data-sources-list.controller.js:78
+#: public/js/data-sources/data-sources-list.controller.js:80
 msgid "The name for the data source and the type of connection (end database)."
 msgstr "Le nom de la source de donnée et le type de connexion."
 
@@ -2322,7 +2334,7 @@ msgstr "Le nom de la source de donnée et le type de connexion."
 msgid "The name is required"
 msgstr "Le nom est requis"
 
-#: public/js/layers/layers-list.controller.js:166
+#: public/js/layers/layers-list.controller.js:168
 msgid ""
 "The public space is the place where your users can publish reports to be "
 "shared across the company, in this place you will define the folder "
@@ -2356,7 +2368,7 @@ msgstr ""
 "rapports afin qu'ils soient accessibles à d'autres utilisateurs ou à toute "
 "la société."
 
-#: public/js/layers/layers-list.controller.js:143
+#: public/js/layers/layers-list.controller.js:145
 msgid ""
 "The status of the layer defines if the layer is visible or not for your "
 "users when creating or editing a report or exploring data."
@@ -2368,10 +2380,6 @@ msgstr ""
 #: public/partials/reports/report-settings-modal.component.html:9
 msgid "Theme"
 msgstr "Thème"
-
-#: public/partials/layer/sqlModal.html:27
-msgid "There is an error in your sql syntax."
-msgstr "Il y a une erreur dans la syntaxe SQL."
 
 #: public/js/reports/filter-prompt.component.js:206
 msgid "Third quarter"
@@ -2413,7 +2421,7 @@ msgstr "Ce champ est nécéssaire"
 msgid "This is a simple text paragraph select to edit content."
 msgstr "Ceci est un simple paragraphe. Sélectionnez pour modifier le contenu."
 
-#: public/js/data-sources/data-sources-list.controller.js:69
+#: public/js/data-sources/data-sources-list.controller.js:71
 msgid "This is one data source."
 msgstr "Ceci est une source de données."
 
@@ -2583,7 +2591,7 @@ msgstr "Surnom de l'utilisateur"
 msgid "User Nick is required"
 msgstr "Le surnom est nécéssaire"
 
-#: public/partials/data-sources/edit.html:51 views/login.ejs:44
+#: public/partials/data-sources/edit.html:45 views/login.ejs:44
 msgid "User name"
 msgstr "Nom d'utilisateur"
 
@@ -2636,7 +2644,7 @@ msgstr "Oui"
 msgid "Yesterday"
 msgstr "Hier"
 
-#: public/js/layers/layers-list.controller.js:135
+#: public/js/layers/layers-list.controller.js:137
 msgid "You can also activate or deactivate layers."
 msgstr "Vous pouvez aussi activer ou désactiver des calques."
 
@@ -2661,13 +2669,13 @@ msgstr ""
 "Vous pouvez aussi modifier ou supprimer le rapport en cliquant sur les "
 "boutons modifier ou supprimer."
 
-#: public/js/layers/layers-list.controller.js:145
+#: public/js/layers/layers-list.controller.js:147
 msgid "You can change the status of the layer simply clicking over this label"
 msgstr ""
 "Vous pouvez changer le statut du calque simplement en cliquant sur cette "
 "étiquette"
 
-#: public/js/layers/layers-list.controller.js:115
+#: public/js/layers/layers-list.controller.js:117
 msgid ""
 "You can create several layers depending on your necessities, but you have to "
 "define one at least."
@@ -2683,7 +2691,7 @@ msgstr ""
 "Vous pouvez le faire glisser vers le haut ou vers le bas à travers la "
 "structure pour déplacer le dossier au même niveau."
 
-#: public/js/data-sources/data-sources-list.controller.js:61
+#: public/js/data-sources/data-sources-list.controller.js:63
 msgid ""
 "You can edit the connection details for every data source, delete a data "
 "source or activate/deactivate a datasource."
@@ -2691,7 +2699,7 @@ msgstr ""
 "Vous pouvez éditer les détails de la connexion pour chaque source de "
 "données, supprimer une source de données ou en activer/désactiver une."
 
-#: public/js/layers/layers-list.controller.js:133
+#: public/js/layers/layers-list.controller.js:135
 msgid ""
 "You can edit the layer to configure the tables, elements and joins between "
 "tables."
@@ -2699,12 +2707,12 @@ msgstr ""
 "Vous pouvez modifier le calque pour configurer les tables, éléments et "
 "jointures entre les tables."
 
-#: public/js/data-sources/data-sources-list.controller.js:80
+#: public/js/data-sources/data-sources-list.controller.js:82
 msgid "You can setup the name you want for data sources."
 msgstr ""
 "Vous pouvez configurer le nom que vous voulez pour les sources de données."
 
-#: public/partials/layer/sqlModal.html:22
+#: public/partials/layer/sqlModal.html:23
 msgid "You have to enter an SQL query"
 msgstr "Vous devez saisir une requête SQL"
 
@@ -2724,7 +2732,7 @@ msgstr ""
 msgid "You have to introduce the user nick for the new user"
 msgstr "Vous devez saisir le pseudo pour le nouvel utilisateur"
 
-#: public/js/layer/controller.js:948
+#: public/js/layer/controller.js:918
 msgid ""
 "You have to setup a valid \"FROM\" position number to extract the day from "
 "the string"
@@ -2732,7 +2740,7 @@ msgstr ""
 "Vous devez configurer une position valide \"FROM\" pour extraire le jour de "
 "la chaîne"
 
-#: public/js/layer/controller.js:938
+#: public/js/layer/controller.js:908
 msgid ""
 "You have to setup a valid \"FROM\" position number to extract the month from "
 "the string"
@@ -2740,7 +2748,7 @@ msgstr ""
 "Vous devez configurer une position valide \"FROM\" pour extraire  le mois de "
 "la chaîne"
 
-#: public/js/layer/controller.js:923 public/js/layer/controller.js:928
+#: public/js/layer/controller.js:893 public/js/layer/controller.js:898
 msgid ""
 "You have to setup a valid \"FROM\" position number to extract the year from "
 "the string"
@@ -2748,7 +2756,7 @@ msgstr ""
 "Vous devez configurer une position valide \"FROM\" pour extraire l'année  de "
 "la chaîne"
 
-#: public/js/layer/controller.js:953
+#: public/js/layer/controller.js:923
 msgid ""
 "You have to setup a valid \"TO\" position number to extract the day from the "
 "string"
@@ -2756,7 +2764,7 @@ msgstr ""
 "Vous devez configurer une position valide \"TO\" pour extraire le jour de la "
 "chaîne"
 
-#: public/js/layer/controller.js:943
+#: public/js/layer/controller.js:913
 msgid ""
 "You have to setup a valid \"TO\" position number to extract the month from "
 "the string"
@@ -2764,7 +2772,7 @@ msgstr ""
 "Vous devez configurer une position valide \"TO\" pour extraire le mois de la "
 "chaîne"
 
-#: public/js/layer/controller.js:933
+#: public/js/layer/controller.js:903
 msgid ""
 "You have to setup a valid \"TO\" position number to extract the year from "
 "the string"
@@ -2810,7 +2818,7 @@ msgstr "alignement"
 msgid "all"
 msgstr "tout"
 
-#: public/js/data-sources/data-sources-list.controller.js:100
+#: public/js/data-sources/data-sources-list.controller.js:102
 msgid ""
 "allow your users to access and understand your data without any knowledge of "
 "SQL or how the database is structured in tables and fields..."
@@ -3070,7 +3078,7 @@ msgstr "est NULL"
 msgid "label"
 msgstr "libellé"
 
-#: public/js/layer/controller.js:586
+#: public/js/layer/controller.js:556
 msgid "left"
 msgstr "gauche"
 
@@ -3087,7 +3095,7 @@ msgstr "marge"
 msgid "more examples..."
 msgstr "plus d'exemples..."
 
-#: public/js/layer/controller.js:1022 public/js/spaces/controller.js:117
+#: public/js/layer/controller.js:992 public/js/spaces/controller.js:117
 msgid "my folder"
 msgstr "mon dossier"
 
@@ -3155,7 +3163,7 @@ msgstr "résultats."
 msgid "ridge"
 msgstr "arête"
 
-#: public/js/layer/controller.js:579
+#: public/js/layer/controller.js:549
 #: public/partials/reports/report-settings-modal.component.html:40
 msgid "right"
 msgstr "droite"
