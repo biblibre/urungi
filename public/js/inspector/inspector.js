@@ -157,7 +157,6 @@
                             theElement.css({ 'background-size': 'contain' });
                             theElement.css({ 'background-repeat': 'no-repeat' });
                             theElement.css({ 'background-position': 'center' });
-
                         } else {
                             theElement.css({ 'background-image': 'none' });
                         }
