@@ -622,6 +622,7 @@ section {
     margin-bottom: 10px;
 }
 
+
 .Block500 {
     width: 100%;
     background-color: #fff;
@@ -631,7 +632,6 @@ section {
     margin-bottom: 20px;
     overflow-y: auto;
 }
-
 /******   */
 
 #photoGallery li {

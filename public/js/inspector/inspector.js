@@ -151,10 +151,13 @@
 
                         if (url) {
                             theElement.css({ 'background-image': "url('" + url + "')" });
-                            theElement.css({ '-webkit-background-size': 'cover' });
-                            theElement.css({ '-moz-background-size': 'cover' });
-                            theElement.css({ '-o-background-size': 'cover' });
-                            theElement.css({ 'background-size': 'cover' });
+                            theElement.css({ '-webkit-background-size': 'contain' });
+                            theElement.css({ '-moz-background-size': 'contain' });
+                            theElement.css({ '-o-background-size': 'contain' });
+                            theElement.css({ 'background-size': 'contain' });
+                            theElement.css({ 'background-repeat': 'no-repeat' });
+                            theElement.css({ 'background-position': 'center' });
+
                         } else {
                             theElement.css({ 'background-image': 'none' });
                         }
