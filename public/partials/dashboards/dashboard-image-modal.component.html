@@ -39,15 +39,17 @@
                 </li>
             </ul>
         </uib-tab>
-	
-	<uib-tab heading="{{ 'Image url' | translate }}">
-           <ul class="files-modal-list">
-               <label> URL </label>
-		<input type="text" ng-model="vm.url" name="url" placeholder="Image Url" size="40">
-		<input type="submit" name="submit" value="submit" ng-click="vm.submit()">     
-                 <img ng-src="{{ vm.url }}" />
-            </ul>
+
+        <uib-tab heading="{{ 'Image URL' | translate }}">
+            <div class="form-group">
+                <label> URL </label>
+                <input type="text" class="form-control" ng-model="vm.url" name="URL" placeholder="Image URL" size="40">
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="vm.submit()"> Submit </button>
+            <img ng-src="{{ vm.url }}" />
+        
         </uib-tab>
+
     </uib-tabset>
 </div>
      
