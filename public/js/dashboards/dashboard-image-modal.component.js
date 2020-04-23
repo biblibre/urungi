@@ -21,7 +21,7 @@
         vm.catalogIcons = [];
         vm.catalogImages = [];
         vm.files = [];
-        vm.url = "";
+        vm.url = '';
         vm.submit = submit;
         vm.onFileSelected = onFileSelected;
         vm.upload = upload;
