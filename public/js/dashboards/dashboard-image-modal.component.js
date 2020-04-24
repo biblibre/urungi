@@ -21,6 +21,8 @@
         vm.catalogIcons = [];
         vm.catalogImages = [];
         vm.files = [];
+        vm.url = '';
+        vm.submit = submit;
         vm.onFileSelected = onFileSelected;
         vm.upload = upload;
 
@@ -51,6 +53,14 @@
         }
 
         function onFileSelected (file) {
+            vm.close({ $value: file });
+        }
+
+        function submit () {
+            var file = {
+                url: vm.url,
+            };
+
             vm.close({ $value: file });
         }
 
