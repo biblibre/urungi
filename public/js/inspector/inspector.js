@@ -150,7 +150,7 @@
                         var theElement = $scope.selectedElement;
 
                         if (url) {
-                            if (document.getElementById('type_contain').checked) {
+                            if ($scope.properties.type === 'contain') {
                                 theElement.css({ 'background-image': "url('" + url + "')" });
                                 theElement.css({ '-webkit-background-size': 'contain' });
                                 theElement.css({ '-moz-background-size': 'contain' });
