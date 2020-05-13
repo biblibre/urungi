@@ -257,22 +257,23 @@
             const html = reportModel.getReportContainerHTML(report.id);
             const json = angular.toJson(report);
 
-            ev.dataTransfer.setData('text/html', html);
-            ev.dataTransfer.setData('application/vnd.urungi.report+json', json);
+            let dragObject = { 'type' : 'application/vnd.urungi.report+json', 'content' : html };
+            localStorage.setItem("dragObject", JSON.stringify(dragObject));
         };
 
         function onFilterPromptDragStart (ev, filterPrompt) {
             const html = getPromptHTML(filterPrompt);
             const json = angular.toJson(filterPrompt);
 
-            ev.dataTransfer.setData('text/html', html);
-            ev.dataTransfer.setData('application/vnd.urungi.filter-prompt+json', json);
+            let dragObject = { 'type' : 'application/vnd.urungi.filter-prompt+json', 'content' : html };
+            localStorage.setItem("dragObject", JSON.stringify(dragObject));
         };
 
         function onLayoutDragStart (ev, type) {
             const html = getLayoutHtml(type);
 
-            ev.dataTransfer.setData('text/html', html);
+            let dragObject = { 'type' : 'text/html', 'content' : html };
+            localStorage.setItem("dragObject", JSON.stringify(dragObject));
         };
 
         $scope.promptChanged = function (elementID, values) {
@@ -507,17 +508,19 @@
         }
 
         function onDrop (ev, dropTarget) {
-            const html = ev.dataTransfer.getData('text/html');
-            const element = $compile(html)($scope);
+            let dragObject = JSON.parse(localStorage.getItem('dragObject'));
+            const element = $compile(dragObject.content)($scope);
             dropTarget.appendChild(element[0]);
+
 
             // FIXME Repaint only the added report, either by creating a child
             // scope and broadcasting the 'repaint' event on it, or by
             // rewriting the reportView directive so that it can paint itself
             // immediately after insertion
-            if (ev.dataTransfer.types.includes('application/vnd.urungi.report+json')) {
+            if (dragObject.type == 'application/vnd.urungi.report+json') {
                 repaintReports();
             }
+            localStorage.removeItem('dragObject');
         }
     }
 })();
