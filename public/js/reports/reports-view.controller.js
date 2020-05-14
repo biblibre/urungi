@@ -18,6 +18,7 @@
         vm.repaintWithPrompts = repaintWithPrompts;
         vm.saveAsXLSX = saveAsXLSX;
         vm.isAdmin = false;
+        vm.mandatoryPrompts = false;
 
         activate();
 
@@ -35,7 +36,7 @@
             vm.prompts = initPrompts();
 
             $timeout(function () {
-                $scope.$broadcast('repaint', { fetchData: true });
+                $scope.$broadcast('repaint', { fetchData: (vm.mandatoryPrompts)?false:true });
             }, 0);
         }
 
@@ -49,6 +50,9 @@
                     }
                     p.criterion = {};
                     prompts[p.id + p.filterType] = p;
+                    if (filter.promptMandatory === true){
+                        vm.mandatoryPrompts = true;
+                    }
                 }
             }
 
