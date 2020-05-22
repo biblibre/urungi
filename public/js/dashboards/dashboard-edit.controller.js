@@ -11,7 +11,6 @@
         vm.onDrop = onDrop;
         vm.onFilterPromptDragStart = onFilterPromptDragStart;
         vm.onLayoutDragStart = onLayoutDragStart;
-        vm.onLayoutDragOver = onLayoutDragOver;
         vm.onReportDragStart = onReportDragStart;
 
         $scope.reportModal = 'partials/report/edit.html';
@@ -273,18 +272,7 @@
         function onLayoutDragStart (ev, type) {
             const html = getLayoutHtml(type);
 
-console.log("start "+type);
-            ev.dataTransfer.setData('text', html);
-            console.log(ev.dataTransfer.getData('text'));
-        };
-
-        function onLayoutDragOver (ev, type) {
-            const html = getLayoutHtml(type);
-            ev.preventDefault();
-            ev.stopPropagation();
-            ev.dataTransfer.dropEffect = 'copy';
-            console.log("over "+type);
-            return false;
+            ev.dataTransfer.setData('text/html', html);
         };
 
         $scope.promptChanged = function (elementID, values) {
