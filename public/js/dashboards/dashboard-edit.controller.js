@@ -11,6 +11,7 @@
         vm.onDrop = onDrop;
         vm.onFilterPromptDragStart = onFilterPromptDragStart;
         vm.onLayoutDragStart = onLayoutDragStart;
+        vm.onLayoutDragOver = onLayoutDragOver;
         vm.onReportDragStart = onReportDragStart;
 
         $scope.reportModal = 'partials/report/edit.html';
@@ -257,23 +258,33 @@
             const html = reportModel.getReportContainerHTML(report.id);
             const json = angular.toJson(report);
 
-            let dragObject = { 'type' : 'application/vnd.urungi.report+json', 'content' : html };
-            localStorage.setItem("dragObject", JSON.stringify(dragObject));
+            ev.dataTransfer.setData('text/html', html);
+            ev.dataTransfer.setData('application/vnd.urungi.report+json', json);
         };
 
         function onFilterPromptDragStart (ev, filterPrompt) {
             const html = getPromptHTML(filterPrompt);
             const json = angular.toJson(filterPrompt);
 
-            let dragObject = { 'type' : 'application/vnd.urungi.filter-prompt+json', 'content' : html };
-            localStorage.setItem("dragObject", JSON.stringify(dragObject));
+            ev.dataTransfer.setData('text/html', html);
+            ev.dataTransfer.setData('application/vnd.urungi.filter-prompt+json', json);
         };
 
         function onLayoutDragStart (ev, type) {
             const html = getLayoutHtml(type);
 
-            let dragObject = { 'type' : 'text/html', 'content' : html };
-            localStorage.setItem("dragObject", JSON.stringify(dragObject));
+console.log("start "+type);
+            ev.dataTransfer.setData('text', html);
+            console.log(ev.dataTransfer.getData('text'));
+        };
+
+        function onLayoutDragOver (ev, type) {
+            const html = getLayoutHtml(type);
+            ev.preventDefault();
+            ev.stopPropagation();
+            ev.dataTransfer.dropEffect = 'copy';
+            console.log("over "+type);
+            return false;
         };
 
         $scope.promptChanged = function (elementID, values) {
@@ -508,19 +519,17 @@
         }
 
         function onDrop (ev, dropTarget) {
-            let dragObject = JSON.parse(localStorage.getItem('dragObject'));
-            const element = $compile(dragObject.content)($scope);
+            const html = ev.dataTransfer.getData('text/html');
+            const element = $compile(html)($scope);
             dropTarget.appendChild(element[0]);
-
 
             // FIXME Repaint only the added report, either by creating a child
             // scope and broadcasting the 'repaint' event on it, or by
             // rewriting the reportView directive so that it can paint itself
             // immediately after insertion
-            if (dragObject.type == 'application/vnd.urungi.report+json') {
+            if (ev.dataTransfer.types.includes('application/vnd.urungi.report+json')) {
                 repaintReports();
             }
-            localStorage.removeItem('dragObject');
         }
     }
 })();
