@@ -125,12 +125,12 @@
                 </div>
 
                 <div id="image-background-type">
-                    <h5>{{ 'imageType' | translate }}</h5>
-                    <div id="img-type" class="clearfix">
+                    <h5>{{ 'imageSize' | translate }}</h5>
+                    <div id="img-size" class="clearfix">
                         <div class="pull-left">
                             <ul class="list-unstyled">
-                                <li><div class="radio"><label><input id="type_contain" value="contain" ng-checked="properties.type == 'contain'" ng-model="properties.type" type="radio">{{ 'contain' | translate }}</label></div></li>
-                                <li><div class="radio"><label><input id="type_cover" value="cover" ng-checked="properties.type == 'cover'" ng-model="properties.type" type="radio">{{ 'cover' | translate }}</label></div></li>
+                                <li><div class="radio"><label><input value="contain" ng-checked="properties.size == 'contain'" ng-model="properties.size" type="radio">{{ 'contain' | translate }}</label></div></li>
+                                <li><div class="radio"><label><input value="cover" ng-checked="properties.size == 'cover'" ng-model="properties.size" type="radio">{{ 'cover' | translate }}</label></div></li>
                                 
                             </ul>
                         </div>

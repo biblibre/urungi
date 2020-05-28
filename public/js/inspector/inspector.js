@@ -150,7 +150,7 @@
                         var theElement = $scope.selectedElement;
 
                         if (url) {
-                            if ($scope.properties.type === 'contain') {
+                            if ($scope.properties.size === 'contain') {
                                 theElement.css({ 'background-image': "url('" + url + "')" });
                                 theElement.css({ '-webkit-background-size': 'contain' });
                                 theElement.css({ '-moz-background-size': 'contain' });
@@ -158,7 +158,7 @@
                                 theElement.css({ 'background-size': 'contain' });
                                 theElement.css({ 'background-repeat': 'no-repeat' });
                                 theElement.css({ 'background-position': 'center' });
-                            } else {
+                            } else if ($scope.properties.size === 'cover') {
                                 theElement.css({ 'background-image': "url('" + url + "')" });
                                 theElement.css({ '-webkit-background-size': 'cover' });
                                 theElement.css({ '-moz-background-size': 'cover' });
@@ -318,9 +318,14 @@
                         for (var prop in newProps) {
                             if (newProps[prop] && newProps[prop] !== oldProps[prop]) {
                                 // handle previews in inspector - image
+
+                                console.log(prop);
+
                                 if (newProps[prop].indexOf('url') > -1) {
-                                    $scope.previews.image.css('background-image', newProps[prop]);
+                                    var test = $scope.previews.image.css('background-image', newProps[prop]);
                                     // gradient
+
+                                    console.log(test);
                                 } else if (newProps[prop].indexOf('gradient') > -1) {
                                     $scope.previews.gradient.css('background-image', newProps[prop]);
                                     // fill color
@@ -328,7 +333,9 @@
                                     if (newProps[prop] && newProps[prop] !== 'transparent' && newProps[prop] !== 'rgba(0, 0, 0, 0)') {
                                         $scope.previews.color.css('background', newProps[prop]);
                                     } else {
-                                        $scope.previews.color.css('background', 'url("' + $scope.baseUrl + 'images/transparent.png")');
+                                        var test2 = $scope.previews.color.css('background', 'url("' + $scope.baseUrl + 'images/transparent.png")');
+
+                                        console.log(test2);
                                     }
                                 }
 
