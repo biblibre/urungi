@@ -9,7 +9,6 @@ async function run (argv) {
         'user-set-password',
         'version',
         'user-list',
-
     ];
 
     const args = arg({
