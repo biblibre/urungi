@@ -3,6 +3,7 @@ const log = require('./log.js');
 
 async function run (argv) {
     const commands = [
+        'config-dump',
         'database-init',
         'datasource-list',
         'import',
