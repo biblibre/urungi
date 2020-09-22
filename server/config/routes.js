@@ -7,7 +7,7 @@ const User = mongoose.model('User');
 
 module.exports = function (app, passport) {
     app.get('/login', function (req, res, next) {
-        res.cookie('XSRF-TOKEN', req.csrfToken());
+        res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: true });
         res.render('login', { base: config.get('base') });
     });
 

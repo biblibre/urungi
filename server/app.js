@@ -83,7 +83,7 @@ for (const routesModule of routesModules) {
 
 // Catch-all route, it should always be defined last
 app.get('*', function (req, res) {
-    res.cookie('XSRF-TOKEN', req.csrfToken());
+    res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: true });
     res.render('index', { base: config.get('base') });
 });
 
