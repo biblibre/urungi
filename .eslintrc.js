@@ -2,10 +2,10 @@ module.exports = {
     extends: 'standard',
     rules: {
         'no-console': 'off',
-        'camelcase': 'off',
-        'indent': ['error', 4],
+        camelcase: 'off',
+        indent: ['error', 4],
         'linebreak-style': ['error', 'unix'],
-        'semi': ['error', 'always'],
+        semi: ['error', 'always'],
         'comma-dangle': ['error', 'only-multiline'],
     }
 };

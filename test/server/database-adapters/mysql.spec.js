@@ -35,7 +35,7 @@ describe('MySQL database adapter', function () {
             const adapter = new MysqlAdapter(params);
             const tableData = require('./__data__/table-data.js');
 
-            beforeAll(function (done) {
+            beforeAll(function () {
                 const connection = adapter.getConnection();
 
                 // DROP all tables
@@ -64,7 +64,9 @@ describe('MySQL database adapter', function () {
                     connection.query('INSERT INTO song (song_id, album_id, title) VALUES (?, ?, ?)', song);
                 }
 
-                connection.end(done);
+                return new Promise((resolve, reject) => {
+                    connection.end(resolve);
+                });
             });
 
             describe('testConnection', function () {

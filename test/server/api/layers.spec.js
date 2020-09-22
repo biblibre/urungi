@@ -92,7 +92,7 @@ describe('Layers API', function () {
     });
 
     describe('PUT /api/layers/:layerId', function () {
-        it('should update one layer ', async function () {
+        it('should update one layer', async function () {
             const layer = await Layer.create({
                 name: 'layer',
                 status: 'active',

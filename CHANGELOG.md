@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated cookie-parser to 1.4.5
 - Updated csurf to 1.11.0
 - Updated ejs to 2.7.4
+- Updated eslint to 7.9.0
+- Updated eslint-config-standard to 14.1.1
+- Updated eslint-config-import to 2.22.0
+- Updated eslint-config-jest to 24.0.2
+- Updated eslint-config-node to 11.1.0
 - Updated express-session to 1.17.1
 - Updated htmlhint to 0.14.1
 - Updated jquery to 3.5.1

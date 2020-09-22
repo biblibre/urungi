@@ -54,7 +54,7 @@ describe('User API', function () {
 
     describe('GET /api/user', function () {
         describe('when authenticated as a normal user', function () {
-            it('should return authenticated user data ', async function () {
+            it('should return authenticated user data', async function () {
                 await User.findOne({ userName: 'administrator' });
                 const res = await request(app).get('/api/user')
                     .set(userHeaders);
@@ -74,7 +74,7 @@ describe('User API', function () {
         });
 
         describe('when authenticated as admin', function () {
-            it('should return authenticated user data ', async function () {
+            it('should return authenticated user data', async function () {
                 await User.findOne({ userName: 'administrator' });
                 const res = await request(app).get('/api/user')
                     .set(adminHeaders);

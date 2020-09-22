@@ -7,4 +7,4 @@ module.exports = {
         angular: false,
         layerUtils: false,
     },
-}
+};
