@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated arg to 4.1.3
 - Updated c3 to 0.7.20
 - Updated clipboard to 2.0.6
+- Updated config to 3.3.1
 
 ## [2.2.0] - 2020-04-01
 
