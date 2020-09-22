@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated jquery to 3.5.1
 - Updated jquery-validation to 1.19.2
 - Updated jsplumb to 2.14.6
+- Updated knex to 0.21.5
 
 ## [2.2.0] - 2020-04-01
 

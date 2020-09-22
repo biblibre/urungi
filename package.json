@@ -38,7 +38,7 @@
     "jquery-validation": "^1.19.2",
     "js-xlsx": "^0.8.22",
     "jsplumb": "^2.14.6",
-    "knex": "^0.19.5",
+    "knex": "^0.21.5",
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "migrate-mongo": "^7.0.1",
     "moment": "^2.24.0",
