@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated clipboard to 2.0.6
 - Updated config to 3.3.1
 - Updated connect-mongo to 3.2.0
+- Updated cookie-parser to 1.4.5
 
 ## [2.2.0] - 2020-04-01
 
