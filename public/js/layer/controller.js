@@ -182,29 +182,6 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                     $scope._Layer.params = {};
                     $scope._Layer.params.schema = [];
                 }
-
-                var currentZoom = 1.0;
-                var onZoom = false;
-
-                $(document).ready(function () {
-                    $('#collections').bind('mousewheel DOMMouseScroll', function (e) {
-                        e.preventDefault();
-
-                        if (onZoom) return;
-
-                        onZoom = true;
-
-                        if (e.originalEvent.wheelDelta / 120 > 0) {
-                            $('#canvas').animate({ zoom: currentZoom += 0.1 }, 250, function () {
-                                onZoom = false;
-                            });
-                        } else {
-                            $('#canvas').animate({ zoom: currentZoom -= 0.1 }, 250, function () {
-                                onZoom = false;
-                            });
-                        }
-                    });
-                });
             });
         };
     };

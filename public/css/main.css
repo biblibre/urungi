@@ -729,14 +729,6 @@ img.img-cirlce {
     background-color: #dddddb;
 }
 
-.powerwidget,
-.powerwidget > div,
-.inner-spacer::after,
-.powerwidget-editbox,
-.clearfix {
-    zoom: 1;
-}
-
 .breadcrumb ul {
     list-style: none outside none;
     padding: 0;
@@ -2062,7 +2054,6 @@ html .chosen-container {
     margin: 0;
     position: relative;
     display: inline-block;
-    zoom: 1;
     vertical-align: middle;
     width: 100%;
 }
