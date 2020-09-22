@@ -13,6 +13,7 @@ class MssqlAdapter extends BaseAdapter {
             password: this.params.password,
             options: {
                 useUTC: false,
+                enableArithAbort: true,
             },
         });
 
