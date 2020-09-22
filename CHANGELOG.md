@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 
 - Updated arg to 4.1.3
+- Updated c3 to 0.7.20
 
 ## [2.2.0] - 2020-04-01
 
