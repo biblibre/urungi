@@ -58,7 +58,7 @@
     "password-generator": "^2.3.2",
     "pg": "^8.3.3",
     "pivottable": "^2.23.0",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "subtotal": "^1.11.0-alpha.0",
     "ui-select": "^0.19.8"
   },
