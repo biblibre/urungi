@@ -78,7 +78,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-decomment": "^0.2.0",
     "gulp-less": "^4.0.1",
-    "htmlhint": "^0.11.0",
+    "htmlhint": "^0.14.1",
     "jest": "^25.1.0",
     "merge-stream": "^2.0.0",
     "mongodb-memory-server": "^6.8.0",
