@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated jsplumb to 2.14.6
 - Updated knex to 0.21.5
 - Updated migrate-mongo to 8.1.2
+- Updated moment to 2.29.0
 
 ## [2.2.0] - 2020-04-01
 
