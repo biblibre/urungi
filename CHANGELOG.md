@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated connect-mongo to 3.2.0
 - Updated cookie-parser to 1.4.5
 - Updated csurf to 1.11.0
+- Updated ejs to 2.7.4
 
 ## [2.2.0] - 2020-04-01
 
