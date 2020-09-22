@@ -47,34 +47,70 @@ workflows:
           e:
             name: node
             node: '10'
-            mongodb: '3.6.16'
+            mongodb: '3.6.20'
       - test:
           name: node:10 mongodb:4.0
           e:
             name: node
             node: '10'
-            mongodb: '4.0.14'
+            mongodb: '4.0.20'
       - test:
           name: node:10 mongodb:4.2
           e:
             name: node
             node: '10'
-            mongodb: '4.2.2'
+            mongodb: '4.2.9'
+      - test:
+          name: node:10 mongodb:4.4
+          e:
+            name: node
+            node: '10'
+            mongodb: '4.4.1'
       - test:
           name: node:12 mongodb:3.6
           e:
             name: node
             node: '12'
-            mongodb: '3.6.16'
+            mongodb: '3.6.20'
       - test:
           name: node:12 mongodb:4.0
           e:
             name: node
             node: '12'
-            mongodb: '4.0.14'
+            mongodb: '4.0.20'
       - test:
           name: node:12 mongodb:4.2
           e:
             name: node
             node: '12'
-            mongodb: '4.2.2'
+            mongodb: '4.2.9'
+      - test:
+          name: node:12 mongodb:4.4
+          e:
+            name: node
+            node: '12'
+            mongodb: '4.4.1'
+      - test:
+          name: node:14 mongodb:3.6
+          e:
+            name: node
+            node: '14'
+            mongodb: '3.6.20'
+      - test:
+          name: node:14 mongodb:4.0
+          e:
+            name: node
+            node: '14'
+            mongodb: '4.0.20'
+      - test:
+          name: node:14 mongodb:4.2
+          e:
+            name: node
+            node: '14'
+            mongodb: '4.2.9'
+      - test:
+          name: node:14 mongodb:4.4
+          e:
+            name: node
+            node: '14'
+            mongodb: '4.4.1'
