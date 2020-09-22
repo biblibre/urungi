@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated mssql to 6.2.2
 - Updated mysql to 2.18.1
 - Updated nodemailer to 6.4.11
+- Updated oracledb to 5.0.0
 
 ## [2.2.0] - 2020-04-01
 
