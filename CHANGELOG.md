@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated mysql to 2.18.1
 - Updated nodemailer to 6.4.11
 - Updated oracledb to 5.0.0
+- Updated passport to 0.4.1
 
 ## [2.2.0] - 2020-04-01
 
