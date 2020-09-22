@@ -493,7 +493,6 @@ section {
     font-size: 14px;
     text-align: left;
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.333);
-    -webkit-animation: appearingElement 0.1s;
     animation: appearingElement 0.1s;
 }
 

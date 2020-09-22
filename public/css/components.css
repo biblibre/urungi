@@ -602,12 +602,7 @@
     display: block;
     position: absolute;
     background: linear-gradient(to bottom, #fff 0%, #7c38bc 100%);
-    zoom: 1;
-    -webkit-opacity: 0;
-    -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
-    filter: alpha(opacity=0);
     left: 8px;
     right: 8px;
     top: 8px;
@@ -643,12 +638,7 @@
 }
 
 .mailbox-env .mail-single .mail-single-attachments ul li .thumb:hover::before {
-    zoom: 1;
-    -webkit-opacity: 0.4;
-    -moz-opacity: 0.4;
     opacity: 0.4;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=40);
-    filter: alpha(opacity=40);
 }
 
 .mailbox-env .mail-single .mail-single-attachments ul li .thumb:hover::after {
@@ -1155,12 +1145,7 @@
 }
 
 .gallery-env .album-images .album-image .thumb:hover ~ .image-checkbox .cbr-replaced {
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .gallery-env .album-images .album-image .name {
@@ -1215,31 +1200,18 @@
 }
 
 .gallery-env .album-images .album-image .image-checkbox .cbr-replaced {
-    zoom: 1;
-    -webkit-opacity: 0.5;
-    -moz-opacity: 0.5;
     opacity: 0.5;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=50);
-    filter: alpha(opacity=50);
 }
 
 .gallery-env .album-images .album-image .image-checkbox .cbr-replaced:hover,
 .gallery-env .album-images .album-image .image-checkbox .cbr-replaced.cbr-checked {
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .gallery-env .album-images .ui-sortable-handle .album-image {
     -webkit-box-shadow: 0 0 0 1px rgba(104, 184, 40, 0.2);
     -moz-box-shadow: 0 0 0 1px rgba(104, 184, 40, 0.2);
     box-shadow: 0 0 0 1px rgba(104, 184, 40, 0.2);
-    -webkit-animation: glowAnimation 1s ease-in-out alternate infinite;
-    -moz-animation: glowAnimation 1s ease-in-out alternate infinite;
-    -o-animation: glowAnimation 1s ease-in-out alternate infinite;
     animation: glowAnimation 1s ease-in-out alternate infinite;
     margin-bottom: 0;
 }
@@ -1484,12 +1456,7 @@
 }
 
 .calendar-env .calendar-sidebar .calendar-list li.ui-draggable-dragging .badge {
-    zoom: 1;
-    -webkit-opacity: 0.6;
-    -moz-opacity: 0.6;
     opacity: 0.6;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=60);
-    filter: alpha(opacity=60);
 }
 
 .calendar-env .calendar-sidebar .calendar-list li.ui-draggable-handle .badge {
@@ -1789,12 +1756,7 @@
 
 .page-body .main-content .cbp_tmtimeline > li .cbp_tmtime > span:last-child {
     color: #979898;
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
     font-size: 12px;
 }
 
@@ -1893,12 +1855,7 @@
 }
 
 .page-body .main-content .cbp_tmtimeline > li .cbp_tmlabel h2 span {
-    zoom: 1;
-    -webkit-opacity: 0.6;
-    -moz-opacity: 0.6;
     opacity: 0.6;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=60);
-    filter: alpha(opacity=60);
 }
 
 .page-body .main-content .cbp_tmtimeline > li .cbp_tmlabel blockquote {
@@ -2159,12 +2116,7 @@
 }
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label h2 span {
-    zoom: 1;
-    -webkit-opacity: 0.6;
-    -moz-opacity: 0.6;
     opacity: 0.6;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=60);
-    filter: alpha(opacity=60);
 }
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label blockquote {
@@ -2259,12 +2211,7 @@
     -o-transform: scale(0.97);
     -ms-transform: scale(0.97);
     transform: scale(0.97);
-    zoom: 1;
-    -webkit-opacity: 0.5;
-    -moz-opacity: 0.5;
     opacity: 0.5;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=50);
-    filter: alpha(opacity=50);
 }
 
 .draggable-portlets.dragging .sorted > .panel.ui-sortable-helper {
@@ -2273,12 +2220,7 @@
     -o-transform: scale(1.03);
     -ms-transform: scale(1.03);
     transform: scale(1.03);
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .notes-env {
@@ -2383,21 +2325,11 @@
     border: 1px solid #e0e0e0;
     border-top: 0;
     border-right: 0;
-    zoom: 1;
-    -webkit-opacity: 0;
-    -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
-    filter: alpha(opacity=0);
 }
 
 .notes-env .notes-list .list-of-notes li:hover .note-close {
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .notes-env .notes-list .list-of-notes li .content {
@@ -2718,12 +2650,7 @@
     background: rgba(44, 46, 47, 0.3);
     height: 3px;
     z-index: 10000;
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
     -webkit-transition: all 220ms ease-in-out;
     -moz-transition: all 220ms ease-in-out;
     -o-transition: all 220ms ease-in-out;
@@ -2742,12 +2669,7 @@
 
 .xenon-loading-bar.progress-is-hidden {
     top: -3px;
-    zoom: 1;
-    -webkit-opacity: 0.5;
-    -moz-opacity: 0.5;
     opacity: 0.5;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=50);
-    filter: alpha(opacity=50);
     visibility: hidden;
 }
 
@@ -2779,24 +2701,14 @@
     font-size: 20px;
     font-weight: bold;
     color: #fff;
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .toast-close-button:hover,
 .toast-close-button:focus {
     text-decoration: none;
     cursor: pointer;
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 /* Additional properties for button version
@@ -2871,12 +2783,7 @@ button.toast-close-button {
     background-position: 15px center;
     background-repeat: no-repeat;
     color: #fff;
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 #toast-container > div i {
@@ -2884,12 +2791,7 @@ button.toast-close-button {
 }
 
 #toast-container > :hover {
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
     cursor: pointer;
 }
 
@@ -2999,12 +2901,7 @@ button.toast-close-button {
 }
 
 .login-page .login-form.fade-in-effect {
-    zoom: 1;
-    -webkit-opacity: 0;
-    -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
-    filter: alpha(opacity=0);
     -webkit-transition: all 800ms cubic-bezier(0.39, 0.575, 0.565, 1);
     -moz-transition: all 800ms cubic-bezier(0.39, 0.575, 0.565, 1);
     -o-transition: all 800ms cubic-bezier(0.39, 0.575, 0.565, 1);
@@ -3019,12 +2916,7 @@ button.toast-close-button {
 
 .login-page .login-form.fade-in-effect .form-group {
     position: relative;
-    zoom: 1;
-    -webkit-opacity: 0;
-    -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
-    filter: alpha(opacity=0);
     -webkit-transition: all 500ms ease-out;
     -moz-transition: all 500ms ease-out;
     -o-transition: all 500ms ease-out;
@@ -3036,12 +2928,7 @@ button.toast-close-button {
 }
 
 .login-page .login-form.fade-in-effect + .external-login {
-    zoom: 1;
-    -webkit-opacity: 0;
-    -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
-    filter: alpha(opacity=0);
     -webkit-transition: all 500ms cubic-bezier(0.39, 0.575, 0.565, 1);
     -moz-transition: all 500ms cubic-bezier(0.39, 0.575, 0.565, 1);
     -o-transition: all 500ms cubic-bezier(0.39, 0.575, 0.565, 1);
@@ -3054,31 +2941,16 @@ button.toast-close-button {
 
 .login-page .login-form.fade-in-effect.in {
     left: 0;
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .login-page .login-form.fade-in-effect.in .form-group {
     top: 0;
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .login-page .login-form.fade-in-effect.in + .external-login {
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .login-page .login-form .login-header {
@@ -3200,12 +3072,7 @@ button.toast-close-button {
 }
 
 .login-page .login-form .form-group.is-focused .control-label {
-    zoom: 1;
-    -webkit-opacity: 0;
-    -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
-    filter: alpha(opacity=0);
     visibility: hidden;
 }
 
@@ -3458,12 +3325,7 @@ button.toast-close-button {
 
 .lockscreen-page .lockcreen-form.fade-in-effect .user-thumb {
     position: relative;
-    zoom: 1;
-    -webkit-opacity: 0;
-    -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
-    filter: alpha(opacity=0);
     -webkit-transition: all 800ms ease-in-out;
     -moz-transition: all 800ms ease-in-out;
     -o-transition: all 800ms ease-in-out;
@@ -3471,12 +3333,7 @@ button.toast-close-button {
 }
 
 .lockscreen-page .lockcreen-form.fade-in-effect .form-group {
-    zoom: 1;
-    -webkit-opacity: 0;
-    -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
-    filter: alpha(opacity=0);
     -webkit-transition: all 500ms ease-in-out;
     -moz-transition: all 500ms ease-in-out;
     -o-transition: all 500ms ease-in-out;
@@ -3484,12 +3341,7 @@ button.toast-close-button {
 }
 
 .lockscreen-page .lockcreen-form.fade-in-effect .form-group .input-group {
-    zoom: 1;
-    -webkit-opacity: 0.5;
-    -moz-opacity: 0.5;
     opacity: 0.5;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=50);
-    filter: alpha(opacity=50);
     -webkit-transition: all 800ms ease-in-out;
     -moz-transition: all 800ms ease-in-out;
     -o-transition: all 800ms ease-in-out;
@@ -3502,33 +3354,18 @@ button.toast-close-button {
     -o-transform: rotate(0deg);
     -ms-transform: rotate(0deg);
     transform: rotate(0deg);
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
     left: 0;
 }
 
 .lockscreen-page .lockcreen-form.fade-in-effect.in .form-group {
     top: 0;
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .lockscreen-page .lockcreen-form.fade-in-effect.in .form-group .input-group {
     top: 0;
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 @media screen and (max-width: 768px) {
@@ -4394,12 +4231,7 @@ button.toast-close-button {
     bottom: -10%;
     color: #fff;
     font-size: 150px;
-    zoom: 1;
-    -webkit-opacity: 0.1;
-    -moz-opacity: 0.1;
     opacity: 0.1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=10);
-    filter: alpha(opacity=10);
 }
 
 .xe-widget.xe-progress-counter .xe-background i {
@@ -4776,12 +4608,7 @@ button.toast-close-button {
 
 .xe-widget.xe-todo-list .xe-header .xe-label span {
     font-size: 12px;
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list .xe-header .xe-label strong {
@@ -4811,12 +4638,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.5;
-    -moz-opacity: 0.5;
     opacity: 0.5;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=50);
-    filter: alpha(opacity=50);
 }
 
 .xe-widget.xe-todo-list .xe-body li.done label > span::after {
@@ -4848,12 +4670,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-primary .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-primary .xe-body li.done label > span::after {
@@ -4901,12 +4718,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-success .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-success .xe-body li.done label > span::after {
@@ -4954,12 +4766,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-warning .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-warning .xe-body li.done label > span::after {
@@ -5007,12 +4814,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-danger .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-danger .xe-body li.done label > span::after {
@@ -5060,12 +4862,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-info .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-info .xe-body li.done label > span::after {
@@ -5113,12 +4910,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-secondary .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-secondary .xe-body li.done label > span::after {
@@ -5166,12 +4958,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-turquoise .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-turquoise .xe-body li.done label > span::after {
@@ -5219,12 +5006,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-pink .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-pink .xe-body li.done label > span::after {
@@ -5272,12 +5054,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-red .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-red .xe-body li.done label > span::after {
@@ -5325,12 +5102,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-blue .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-blue .xe-body li.done label > span::after {
@@ -5378,12 +5150,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-purple .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-purple .xe-body li.done label > span::after {
@@ -5431,12 +5198,7 @@ button.toast-close-button {
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-yellow .xe-body li.done label > span {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-todo-list.xe-todo-list-yellow .xe-body li.done label > span::after {
@@ -5520,24 +5282,14 @@ button.toast-close-button {
 .xe-widget.xe-status-update .xe-body li .status-date {
     display: block;
     font-size: 16px;
-    zoom: 1;
-    -webkit-opacity: 0.5;
-    -moz-opacity: 0.5;
     opacity: 0.5;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=50);
-    filter: alpha(opacity=50);
     padding-bottom: 10px;
 }
 
 .xe-widget.xe-status-update .xe-body li p {
     font-size: 14px;
     color: #fff;
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-status-update .xe-body li.active {
@@ -5552,21 +5304,11 @@ button.toast-close-button {
 
 .xe-widget.xe-status-update .xe-footer a {
     color: #fff;
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-status-update .xe-footer a:hover {
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .xe-widget.xe-status-update.xe-status-update-facebook {
@@ -5616,21 +5358,11 @@ button.toast-close-button {
 
 .xe-widget.xe-single-news .xe-details .category a {
     color: #fff;
-    zoom: 1;
-    -webkit-opacity: 0.5;
-    -moz-opacity: 0.5;
     opacity: 0.5;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=50);
-    filter: alpha(opacity=50);
 }
 
 .xe-widget.xe-single-news .xe-details .category a:hover {
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .xe-widget.xe-single-news .xe-details h3 {
@@ -5642,21 +5374,11 @@ button.toast-close-button {
 
 .xe-widget.xe-single-news .xe-details h3 a {
     color: #fff;
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .xe-widget.xe-single-news .xe-details h3 a:hover {
-    zoom: 1;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
     opacity: 1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=100);
-    filter: alpha(opacity=100);
 }
 
 .xe-widget.xe-single-news .xe-details time {
@@ -5669,22 +5391,12 @@ button.toast-close-button {
     -moz-transition: all 350ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
     -o-transition: all 350ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transition: all 350ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    zoom: 1;
-    -webkit-opacity: 0;
-    -moz-opacity: 0;
     opacity: 0;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=0);
-    filter: alpha(opacity=0);
 }
 
 .xe-widget.xe-single-news:hover .xe-details time {
     margin-bottom: 0;
-    zoom: 1;
-    -webkit-opacity: 0.7;
-    -moz-opacity: 0.7;
     opacity: 0.7;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=70);
-    filter: alpha(opacity=70);
 }
 
 .xe-widget.xe-conversations {
@@ -5704,12 +5416,7 @@ button.toast-close-button {
     font-size: 80px;
     display: block;
     line-height: 1;
-    zoom: 1;
-    -webkit-opacity: 0.1;
-    -moz-opacity: 0.1;
     opacity: 0.1;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=10);
-    filter: alpha(opacity=10);
 }
 
 .xe-widget.xe-conversations .xe-header {
@@ -5749,12 +5456,7 @@ button.toast-close-button {
     padding-top: 5px;
     font-size: 13px;
     display: block;
-    zoom: 1;
-    -webkit-opacity: 0.5;
-    -moz-opacity: 0.5;
     opacity: 0.5;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=50);
-    filter: alpha(opacity=50);
 }
 
 .xe-widget.xe-conversations .xe-body {
@@ -5854,9 +5556,9 @@ button.toast-close-button {
 
 .xe-widget.xe-weather .xe-background.xe-background-animated img {
     width: 120%;
-    -webkit-animation: weatherBgMove 10s infinite linear;
-    -moz-animation: weatherBgMove 10s infinite linear;
-    -o-animation: weatherBgMove 10s infinite linear;
+    -webkit-animation: weatherbgmove 10s infinite linear;
+    -moz-animation: weatherbgmove 10s infinite linear;
+    -o-animation: weatherbgmove 10s infinite linear;
     animation: weatherBgMove 10s infinite linear;
     -webkit-animation-direction: alternate;
     -moz-animation-direction: alternate;
@@ -6456,12 +6158,7 @@ button.toast-close-button {
 }
 
 .members-table tbody tr td.action-links a:hover {
-    zoom: 1;
-    -webkit-opacity: 0.8;
-    -moz-opacity: 0.8;
     opacity: 0.8;
-    -ms-filter: progid:dximagetransform.microsoft.alpha(Opacity=80);
-    filter: alpha(opacity=80);
 }
 
 .members-table tbody tr td.action-links a.edit {

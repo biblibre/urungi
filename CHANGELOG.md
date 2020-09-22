@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated request to 2.88.2
 - Updated set-cookie-parser to 2.4.6
 - Updated stylelint to 13.7.1
+- Updated stylelint-config-standard to 20.0.0
 
 ## [2.2.0] - 2020-04-01
 
