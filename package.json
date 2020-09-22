@@ -55,7 +55,7 @@
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "~1.0.0",
-    "password-generator": "^2.2.0",
+    "password-generator": "^2.3.2",
     "pg": "^7.12.1",
     "pivottable": "^2.23.0",
     "request": "^2.88.0",
