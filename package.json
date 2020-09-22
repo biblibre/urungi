@@ -63,7 +63,7 @@
     "ui-select": "^0.19.8"
   },
   "devDependencies": {
-    "angular-mocks": "^1.7.9",
+    "angular-mocks": "^1.8.0",
     "del": "^5.1.0",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
