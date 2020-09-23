@@ -6,8 +6,11 @@
     timeFromNow.$inject = ['moment'];
 
     function timeFromNow (moment) {
-        return function (input) {
+        function filter (input) {
             return moment(input).fromNow();
-        };
+        }
+        filter.$stateful = true;
+
+        return filter;
     }
 })();
