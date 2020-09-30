@@ -75,7 +75,7 @@
             const filterCriteria = {};
             for (const i in vm.prompts) {
                 const criterion = vm.prompts[i].criterion;
-                if(Object.keys(criterion).length != 0) {
+                if (Object.keys(criterion).length !== 0) {
                     filterCriteria[i] = criterion;
                 }
             }
