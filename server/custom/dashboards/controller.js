@@ -13,7 +13,6 @@ class DashboardsController extends Controller {
 var controller = new DashboardsController();
 
 exports.DashboardsFindAll = function (req, res) {
-    req.query.trash = true;
     req.query.companyid = true;
     req.user = {};
     req.user.companyID = 'COMPID';
@@ -25,7 +24,6 @@ exports.DashboardsFindAll = function (req, res) {
 exports.DashboardsFindOne = function (req, res) {
     // TODO: Are you granted to execute this Dashboard???
 
-    req.query.trash = true;
     req.query.companyid = true;
 
     controller.findOne(req).then(function (result) {
@@ -38,7 +36,6 @@ exports.DashboardsCreate = function (req, res) {
         if (!permissions.dashboardsCreate && !req.user.isAdmin()) {
             res.status(401).json({ result: 0, msg: 'You do not have permissions to create dashboards' });
         } else {
-            req.query.trash = true;
             req.query.companyid = true;
             req.query.userid = true;
 
@@ -56,7 +53,6 @@ exports.DashboardsCreate = function (req, res) {
 };
 
 exports.DashboardsUpdate = function (req, res) {
-    req.query.trash = true;
     req.query.companyid = true;
 
     var data = req.body;
@@ -82,10 +78,7 @@ exports.DashboardsUpdate = function (req, res) {
 exports.DashboardsDelete = async function (req, res) {
     const dashboard = await getDashboardFromRequest(req);
     if (dashboard) {
-        dashboard.nd_trash_deleted = true;
-        dashboard.nd_trash_deleted_date = new Date();
-
-        dashboard.save().then(() => {
+        dashboard.remove().then(() => {
             res.status(200).json({ result: 1, msg: 'Dashboard deleted' });
         }, err => {
             console.error(err);

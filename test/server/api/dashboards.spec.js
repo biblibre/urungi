@@ -32,7 +32,6 @@ describe('Dashboards API', function () {
         dashboard = await Dashboard.create({
             companyID: 'COMPID',
             dashboardName: 'Dashboard',
-            nd_trash_deleted: false,
         });
     });
     afterEach(async function removeDashboard () {
@@ -67,7 +66,7 @@ describe('Dashboards API', function () {
             expect(res.body.item).toHaveProperty('history');
             expect(res.body.item).toHaveProperty('items');
             expect(res.body.item).toHaveProperty('reports');
-            expect(res.body.item).toHaveProperty('nd_trash_deleted', false); ;
+            expect(res.body.item).not.toHaveProperty('nd_trash_deleted', false); ;
         });
     });
     describe('POST /api/dashboards/create', function () {
@@ -92,7 +91,7 @@ describe('Dashboards API', function () {
             expect(res.body.item).toHaveProperty('history');
             expect(res.body.item).toHaveProperty('items');
             expect(res.body.item).toHaveProperty('reports');
-            expect(res.body.item).toHaveProperty('nd_trash_deleted', false); ;
+            expect(res.body.item).not.toHaveProperty('nd_trash_deleted', false); ;
             await Dashboard.deleteOne({ dashboardName: 'Dashboard' });
         });
     });
@@ -131,7 +130,7 @@ describe('Dashboards API', function () {
             expect(res.body.item).toHaveProperty('_id');
             expect(res.body.item).toHaveProperty('companyID', 'COMPID');
             expect(res.body.item).toHaveProperty('dashboardName', 'Dashboard');
-            expect(res.body.item).toHaveProperty('nd_trash_deleted', false);
+            expect(res.body.item).not.toHaveProperty('nd_trash_deleted', false);
             expect(res.body.item).toHaveProperty('history');
             expect(res.body.item).toHaveProperty('items');
             expect(res.body.item).toHaveProperty('reports');

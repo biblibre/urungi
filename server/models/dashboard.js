@@ -32,8 +32,6 @@ const dashboardSchema = new mongoose.Schema({
     isPublic: { type: Boolean },
     isShared: { type: Boolean },
     items: [],
-    nd_trash_deleted: { type: Boolean },
-    nd_trash_deleted_date: { type: Date },
     owner: { type: String },
     parentFolder: { type: String },
     properties: { type: Object },
