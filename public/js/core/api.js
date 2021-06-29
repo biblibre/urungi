@@ -3,9 +3,9 @@
 
     angular.module('app.core').factory('api', api);
 
-    api.$inject = ['$http', 'connection'];
+    api.$inject = ['$http', 'connection', 'Noty'];
 
-    function api ($http, connection) {
+    function api ($http, connection, Noty) {
         const service = {
             getVersion: getVersion,
 
@@ -599,6 +599,7 @@
                 return res.data;
             }, res => {
                 if (typeof res.data === 'object' && res.data.error) {
+                    new Noty({ text: (res.data.error), type: 'error' }).show();
                     throw new Error(res.data.error);
                 }
 
