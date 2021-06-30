@@ -9,6 +9,7 @@
             <input type="text" class="form-control" ng-model="vm.deleteString" ng-required="true">
             <span ng-show="vm.deleteString !== 'DELETE'" class="help-inline" translate>This field is required</span>
         </div>
+        <div ng-if="vm.errorMessage">{{ vm.errorMessage }}</div>
     </form>
 </div>
 <div class="modal-footer">

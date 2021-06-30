@@ -28,6 +28,8 @@
             if (vm.deleteString === 'DELETE') {
                 vm.resolve.delete().then(function () {
                     vm.close();
+                }, function (err) {
+                    vm.errorMessage = err;
                 });
             }
         }
