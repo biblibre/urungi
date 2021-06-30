@@ -12,14 +12,26 @@
 
     SidebarController.$inject = ['userService', '$scope', '$rootScope'];
 
-    function SidebarController (userService, $scope, $rootScope) {
+    function SidebarController (userService, $scope) {
         const vm = this;
 
         vm.counts = {};
         vm.userData = {};
 
-        $scope.$on('deleteDashboard', function (evt) {
+        $scope.$on('delete-dashboard', function () {
             vm.counts.dashboards--;
+        });
+
+        $scope.$on('duplicate-dashboard', function () {
+            vm.counts.dashboards++;
+        });
+
+        $scope.$on('delete-report', function () {
+            vm.counts.reports--;
+        });
+
+        $scope.$on('delete-layer', function () {
+            vm.counts.layers--;
         });
 
         activate();

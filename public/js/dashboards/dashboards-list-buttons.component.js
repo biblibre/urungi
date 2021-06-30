@@ -31,7 +31,7 @@
                 resolve: {
                     title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.dashboard.dashboardName }),
                     delete: () => function () {
-                        $rootScope.$broadcast('deleteDashboard');
+                        $rootScope.$broadcast('delete-dashboard');
                         return api.deleteDashboard(vm.dashboard._id);
                     },
                 },
@@ -96,6 +96,7 @@
         }
 
         function duplicateDashboard (duplicateOptions) {
+            $rootScope.$broadcast('duplicate-dashboard');
             return api.getDashboard(duplicateOptions.dashboard._id).then(function (dashboard) {
                 delete dashboard._id;
                 delete dashboard.createdOn;
