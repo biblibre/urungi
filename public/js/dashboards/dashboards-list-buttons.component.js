@@ -12,9 +12,9 @@
         },
     });
 
-    DashboardsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'gettextCatalog'];
+    DashboardsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'gettextCatalog', '$rootScope'];
 
-    function DashboardsListButtonsController ($uibModal, api, base, gettextCatalog) {
+    function DashboardsListButtonsController ($uibModal, api, base, gettextCatalog, $rootScope) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -31,6 +31,7 @@
                 resolve: {
                     title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.dashboard.dashboardName }),
                     delete: () => function () {
+                        $rootScope.$broadcast('deleteDashboard');
                         return api.deleteDashboard(vm.dashboard._id);
                     },
                 },

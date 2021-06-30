@@ -10,13 +10,17 @@
         },
     });
 
-    SidebarController.$inject = ['userService'];
+    SidebarController.$inject = ['userService', '$scope', '$rootScope'];
 
-    function SidebarController (userService) {
+    function SidebarController (userService, $scope, $rootScope) {
         const vm = this;
 
         vm.counts = {};
         vm.userData = {};
+
+        $scope.$on('deleteDashboard', function (evt) {
+            vm.counts.dashboards--;
+        });
 
         activate();
 
