@@ -31,8 +31,7 @@
                 resolve: {
                     title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.report.reportName }),
                     delete: () => function () {
-                        $rootScope.$broadcast('delete-report');
-                        return api.deleteReport(vm.report._id);
+                        return api.deleteReport(vm.report._id).then(function () { $rootScope.$broadcast('counts-changes'); }); ;
                     },
                 },
             });

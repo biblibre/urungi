@@ -10,29 +10,13 @@
         },
     });
 
-    SidebarController.$inject = ['userService', '$scope'];
+    SidebarController.$inject = ['userService', '$scope', 'api'];
 
-    function SidebarController (userService, $scope) {
+    function SidebarController (userService, $scope, api) {
         const vm = this;
 
         vm.counts = {};
         vm.userData = {};
-
-        $scope.$on('delete-dashboard', function (evt) {
-            vm.counts.dashboards--;
-        });
-
-        $scope.$on('duplicate-dashboard', function (evt) {
-            vm.counts.dashboards++;
-        });
-
-        $scope.$on('delete-report', function (evt) {
-            vm.counts.reports--;
-        });
-
-        $scope.$on('delete-layer', function (evt) {
-            vm.counts.layers--;
-        });
 
         activate();
 
@@ -44,5 +28,12 @@
                 vm.user = user;
             }, () => {});
         }
+
+        $scope.$on('counts-changes', function (evt) {
+            api.getCounts().then(data => {
+                vm.counts = data;
+                console.log('vm.counts: ', vm.counts);
+            });
+        });
     }
 })();

@@ -24,8 +24,7 @@
                 resolve: {
                     title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.layer.name }),
                     delete: () => function () {
-                        $rootScope.$broadcast('delete-layer');
-                        return api.deleteLayer(vm.layer._id);
+                        return api.deleteLayer(vm.layer._id).then(function () { $rootScope.$broadcast('counts-changes'); }); ;
                     },
                 },
             });

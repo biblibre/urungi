@@ -31,11 +31,13 @@
                 resolve: {
                     title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.dashboard.dashboardName }),
                     delete: () => function () {
-                        $rootScope.$broadcast('delete-dashboard');
-                        return api.deleteDashboard(vm.dashboard._id);
+                        return api.deleteDashboard(vm.dashboard._id).then(function () { $rootScope.$broadcast('counts-changes'); });
+                        ;
                     },
                 },
+
             });
+
             modal.result.then(function () {
                 vm.onDelete();
             });
@@ -96,13 +98,12 @@
         }
 
         function duplicateDashboard (duplicateOptions) {
-            $rootScope.$broadcast('duplicate-dashboard');
             return api.getDashboard(duplicateOptions.dashboard._id).then(function (dashboard) {
                 delete dashboard._id;
                 delete dashboard.createdOn;
                 dashboard.dashboardName = duplicateOptions.newName;
 
-                return api.createDashboard(dashboard);
+                return api.createDashboard(dashboard).then(function () { $rootScope.$broadcast('counts-changes'); });
             });
         }
     }
