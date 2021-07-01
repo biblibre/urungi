@@ -120,5 +120,9 @@
         }, () => {});
 
         language.setLanguageFromLocalStorage();
+
+        $rootScope.$on('counts-changes', function () {
+            userService.clearCountsCache();
+        });
     }
 })();

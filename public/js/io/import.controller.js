@@ -3,9 +3,9 @@
 
     angular.module('app.io').controller('ImportController', ImportController);
 
-    ImportController.$inject = ['$scope', '$q', 'gettextCatalog', 'api'];
+    ImportController.$inject = ['$scope', '$q', 'gettextCatalog', 'api', '$rootScope'];
 
-    function ImportController ($scope, $q, gettextCatalog, api) {
+    function ImportController ($scope, $q, gettextCatalog, api, $rootScope) {
         const vm = this;
 
         vm.checkError = undefined;
@@ -289,7 +289,7 @@
                         text: gettextCatalog.getString('Import completed'),
                         type: 'info',
                     });
-                });
+                }).then(() => { $rootScope.$broadcast('counts-changes'); });
             }
         }
 

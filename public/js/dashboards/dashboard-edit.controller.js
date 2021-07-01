@@ -3,9 +3,9 @@
 
     angular.module('app.dashboards').controller('DashboardEditController', DashboardEditController);
 
-    DashboardEditController.$inject = ['$scope', '$location', '$q', '$compile', 'reportsService', 'connection', '$routeParams', 'reportModel', 'uuid', 'htmlWidgets', 'gettextCatalog', '$uibModal', 'Noty'];
+    DashboardEditController.$inject = ['$scope', '$location', '$q', '$compile', 'reportsService', 'connection', '$routeParams', 'reportModel', 'uuid', 'htmlWidgets', 'gettextCatalog', '$uibModal', 'Noty', '$rootScope'];
 
-    function DashboardEditController ($scope, $location, $q, $compile, reportsService, connection, $routeParams, reportModel, uuid, htmlWidgets, gettextCatalog, $uibModal, Noty) {
+    function DashboardEditController ($scope, $location, $q, $compile, reportsService, connection, $routeParams, reportModel, uuid, htmlWidgets, gettextCatalog, $uibModal, Noty, $rootScope) {
         const vm = this;
 
         vm.onDrop = onDrop;
@@ -326,9 +326,9 @@
         $scope.dashboardNameSave = function () {
             $('#dashboardNameModal').modal('hide');
             $('.modal-backdrop').hide();
-            saveDashboard();
-            // $scope.mode = 'edit';
-            $scope.goBack();
+            saveDashboard().then(function () {
+                $scope.goBack();
+            });
         };
 
         function cleanAll (theContainer) {
@@ -399,13 +399,13 @@
             $scope.selectedDashboard.html = previewContainer.html();
 
             if ($scope.mode === 'add') {
-                connection.post('/api/dashboards/create', dashboard).then(function (data) {
+                return connection.post('/api/dashboards/create', dashboard).then(function (data) {
                     if (data.result === 1) {
 
                     }
-                });
+                }).then(function () { $rootScope.$broadcast('counts-changes'); });
             } else {
-                connection.post('/api/dashboards/update/' + dashboard._id, dashboard).then(function (result) {
+                return connection.post('/api/dashboards/update/' + dashboard._id, dashboard).then(function (result) {
                     if (result.result === 1) {
 
                     }

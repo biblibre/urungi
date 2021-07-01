@@ -12,9 +12,9 @@
         },
     });
 
-    UsersEditModalController.$inject = ['gettextCatalog', 'api'];
+    UsersEditModalController.$inject = ['gettextCatalog', 'api', '$rootScope'];
 
-    function UsersEditModalController (gettextCatalog, api) {
+    function UsersEditModalController (gettextCatalog, api, $rootScope) {
         const vm = this;
 
         vm.mode = 'new';
@@ -58,7 +58,7 @@
 
             let p;
             if (vm.mode === 'new') {
-                p = api.createUser(vm.user);
+                p = api.createUser(vm.user).then(() => { $rootScope.$broadcast('counts-changes'); });
             } else {
                 p = api.updateUser(vm.user._id, vm.user);
             }
