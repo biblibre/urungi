@@ -17,6 +17,7 @@
 
         vm.title = '';
         vm.deleteString = '';
+        vm.errorMessage = '';
         vm.$onInit = $onInit;
         vm.onDelete = onDelete;
 
@@ -28,6 +29,8 @@
             if (vm.deleteString === 'DELETE') {
                 vm.resolve.delete().then(function () {
                     vm.close();
+                }, function (err) {
+                    vm.errorMessage = err;
                 });
             }
         }
