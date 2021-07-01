@@ -10,13 +10,29 @@
         },
     });
 
-    SidebarController.$inject = ['userService'];
+    SidebarController.$inject = ['userService', '$scope'];
 
-    function SidebarController (userService) {
+    function SidebarController (userService, $scope) {
         const vm = this;
 
         vm.counts = {};
         vm.userData = {};
+
+        $scope.$on('delete-dashboard', function (evt) {
+            vm.counts.dashboards--;
+        });
+
+        $scope.$on('duplicate-dashboard', function (evt) {
+            vm.counts.dashboards++;
+        });
+
+        $scope.$on('delete-report', function (evt) {
+            vm.counts.reports--;
+        });
+
+        $scope.$on('delete-layer', function (evt) {
+            vm.counts.layers--;
+        });
 
         activate();
 
