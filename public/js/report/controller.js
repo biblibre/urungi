@@ -1,5 +1,5 @@
 angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportsService, $routeParams, $timeout, c3Charts, $uibModal,
-    reportModel, widgetsCommon, $location, gettextCatalog, $q, Noty, layerService, api) {
+    reportModel, widgetsCommon, $location, gettextCatalog, $q, Noty, layerService, api, $rootScope, userService) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dropArea = 'partials/report/partials/drop-area.html';
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
@@ -222,6 +222,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         return reportModel.saveAsReport($scope.selectedReport, $scope.mode).then(function () {
             $('#theReportNameModal').modal('hide');
             $('.modal-backdrop').hide();
+            $rootScope.$broadcast('counts-changes');
             $scope.goBack();
         });
     };

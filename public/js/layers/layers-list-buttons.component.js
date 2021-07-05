@@ -11,9 +11,9 @@
         },
     });
 
-    LayersListButtonsController.$inject = ['$uibModal', 'Noty', 'api', 'userService', 'gettextCatalog'];
+    LayersListButtonsController.$inject = ['$uibModal', 'Noty', 'api', 'userService', 'gettextCatalog', '$rootScope'];
 
-    function LayersListButtonsController ($uibModal, Noty, api, userService, gettextCatalog) {
+    function LayersListButtonsController ($uibModal, Noty, api, userService, gettextCatalog, $rootScope) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -24,7 +24,7 @@
                 resolve: {
                     title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.layer.name }),
                     delete: () => function () {
-                        return api.deleteLayer(vm.layer._id);
+                        return api.deleteLayer(vm.layer._id).then(function () { $rootScope.$broadcast('counts-changes'); }); ;
                     },
                 },
             });

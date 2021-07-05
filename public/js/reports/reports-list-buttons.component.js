@@ -12,9 +12,9 @@
         },
     });
 
-    ReportsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'reportModel', 'gettextCatalog'];
+    ReportsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'reportModel', 'gettextCatalog', '$rootScope'];
 
-    function ReportsListButtonsController ($uibModal, api, base, reportModel, gettextCatalog) {
+    function ReportsListButtonsController ($uibModal, api, base, reportModel, gettextCatalog, $rootScope) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -31,7 +31,7 @@
                 resolve: {
                     title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.report.reportName }),
                     delete: () => function () {
-                        return api.deleteReport(vm.report._id);
+                        return api.deleteReport(vm.report._id).then(function () { $rootScope.$broadcast('counts-changes'); }); ;
                     },
                 },
             });
@@ -51,7 +51,7 @@
                             newName: newName,
                         };
 
-                        return reportModel.duplicateReport(params);
+                        return reportModel.duplicateReport(params).then(function () { $rootScope.$broadcast('counts-changes'); });
                     },
                 },
             });

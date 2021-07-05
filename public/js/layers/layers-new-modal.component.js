@@ -12,9 +12,9 @@
         },
     });
 
-    LayersNewModalController.$inject = ['$scope', 'api'];
+    LayersNewModalController.$inject = ['$scope', 'api', '$rootScope'];
 
-    function LayersNewModalController ($scope, api) {
+    function LayersNewModalController ($scope, api, $rootScope) {
         const vm = this;
 
         vm.newLayer = {};
@@ -35,7 +35,7 @@
         function createLayer () {
             if ($scope.newLayerForm.$valid) {
                 vm.newLayer.datasourceID = vm.datasource._id;
-                return api.createLayer(vm.newLayer).then(() => {
+                return api.createLayer(vm.newLayer).then(function () { $rootScope.$broadcast('counts-changes'); }).then(() => {
                     vm.close();
                 });
             }

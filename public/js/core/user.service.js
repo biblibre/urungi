@@ -12,6 +12,7 @@
         const service = {
             getCurrentUser: getCurrentUser,
             getCounts: getCounts,
+            clearCountsCache: clearCountsCache,
         };
 
         return service;
@@ -36,6 +37,10 @@
             }
 
             return getCountsPromise;
+        }
+
+        function clearCountsCache () {
+            getCountsPromise = null;
         }
     }
 })();

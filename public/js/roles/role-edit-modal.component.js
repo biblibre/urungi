@@ -12,9 +12,9 @@
         },
     });
 
-    RoleEditModalController.$inject = ['gettextCatalog', 'Noty', 'api', 'userService'];
+    RoleEditModalController.$inject = ['gettextCatalog', 'Noty', 'api', 'userService', '$rootScope'];
 
-    function RoleEditModalController (gettextCatalog, Noty, api, userService) {
+    function RoleEditModalController (gettextCatalog, Noty, api, userService, $rootScope) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -54,7 +54,7 @@
             if (vm.role._id) {
                 p = api.updateRole(vm.role);
             } else {
-                p = api.createRole(vm.role);
+                p = api.createRole(vm.role).then(function () { $rootScope.$broadcast('counts-changes'); }); ;
             }
 
             return p.then(function (role) {
