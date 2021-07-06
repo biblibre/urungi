@@ -115,6 +115,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $scope.selectedReport.reportType = 'grid';
 
         $scope.selectedReport.properties.height = 300;
+        $scope.selectedReport.properties.range = '';
 
         $scope.selectedReport.properties.legendPosition = 'bottom';
 
@@ -146,6 +147,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         if (!report.properties.pivotKeys.columns) { report.properties.pivotKeys.columns = []; }
         if (!report.properties.pivotKeys.rows) { report.properties.pivotKeys.rows = []; }
         if (!report.properties.order) { report.properties.order = []; }
+        if (!report.properties.range) { report.properties.range = ''; }
     };
 
     /*
@@ -514,6 +516,14 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             if (!report.properties.maxValue) { report.properties.maxValue = 100; }
             break;
 
+        case 'pyramid':
+            moveContent(report.properties.columns, movedColumns);
+            moveContent(report.properties.xkeys, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
+            report.reportType = 'pyramid';
+            break;
+
         default:
             new Noty({ text: gettextCatalog.getString('report type does not exist'), type: 'error' }).show();
             break;
@@ -626,6 +636,9 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         case 'indicator':
         case 'gauge':
             available = report.properties.ykeys.length > 0;
+            break;
+        case 'pyramid':
+            available = report.properties.xkeys.length > 0 && report.properties.ykeys.length > 0;
             break;
         }
 
@@ -755,6 +768,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             $scope.selectedReport.properties.legendPosition = settings.legendPosition;
             $scope.selectedReport.properties.height = settings.height;
             $scope.selectedReport.theme = settings.theme;
+            $scope.selectedReport.properties.range = settings.range;
         }, () => {});
     };
 

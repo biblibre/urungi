@@ -1,6 +1,6 @@
 /* global c3:false */
 
-angular.module('app').service('c3Charts', function (Noty, gettextCatalog, reportsService) {
+angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog, reportsService) {
     this.rebuildChart = function (report, id, data, chart) {
         var theValues = [];
         var theStackValues = {};
@@ -240,6 +240,10 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
             }
 
             break;
+
+        case 'pyramid':
+            this.getC3ConfigForPyramid(c3Config, data, chart);
+            break;
         }
 
         chart.chartCanvas = c3.generate(c3Config);
@@ -255,6 +259,100 @@ angular.module('app').service('c3Charts', function (Noty, gettextCatalog, report
             });
         });
     }
+
+    this.getCategoryForPyramid = function (metric, limits) {
+        let previousLimit = Number.NEGATIVE_INFINITY;
+        for (const limit of limits) {
+            if ((metric < limit && metric >= previousLimit)) {
+                if (previousLimit === Number.NEGATIVE_INFINITY) {
+                    return `< ${limit}`;
+                }
+                return `${previousLimit} - ${limit}`;
+            }
+            previousLimit = limit;
+        }
+        return `> ${previousLimit}`;
+    };
+
+    this.getC3ConfigForPyramid = function (c3Config, data, chart) {
+        const population = {};
+        const populationKeys = {};
+        const limits = chart.range
+            ? chart.range.split('/').map((e) => parseInt(e), 10).sort((a, b) => a - b)
+            : [20, 30, 40, 50, 60];
+
+        const categories = limits.map(n => this.getCategoryForPyramid(n - 1, limits));
+        categories.push(this.getCategoryForPyramid(limits[limits.length - 1] + 1, limits));
+
+        for (const result of data) {
+            const dimension = result[chart.dataAxis.id];
+            const metric = result[chart.dataColumns[0].id];
+            const category = this.getCategoryForPyramid(metric, limits);
+
+            if (!dimension || !metric) {
+                continue;
+            }
+            if (!population[dimension]) {
+                population[dimension] = {};
+            };
+            if (!population[dimension][category]) {
+                population[dimension][category] = 0;
+            }
+
+            population[dimension][category]++;
+            populationKeys[category] = 1;
+        }
+
+        const columns = [];
+        let maxValue = 1;
+
+        for (const dimension in population) {
+            const column = [];
+            column.push(dimension);
+
+            for (const key of categories) {
+                column.push(population[dimension][key] || 0);
+                if (population[dimension][key] > maxValue) {
+                    maxValue = population[dimension][key];
+                }
+            }
+            columns.push(column);
+        }
+
+        for (let i = 1; columns[0].length > i; i++) {
+            columns[0][i] = -columns[0][i];
+        }
+
+        c3Config.data = {
+            columns,
+            type: 'bar',
+            groups: [columns.map(result => result[0])],
+        };
+        c3Config.axis = {
+            rotated: true,
+            x: {
+                type: 'categories',
+                categories: categories
+            },
+            y: {
+                tick: {
+                    format: function (d) {
+                        return (parseInt(d) === d) ? Math.abs(d) : null;
+                    },
+                },
+                min: -maxValue,
+                max: maxValue
+            }
+
+        };
+        c3Config.grid = {
+            y: {
+                lines: [{ value: 0 }]
+            }
+        };
+
+        return c3Config;
+    };
 
     this.changeStack = function (chart) {
         var theGroups = [];
