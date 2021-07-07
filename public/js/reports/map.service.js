@@ -13,7 +13,10 @@
         return service;
 
         function createMap (report, data) {
-            const map = L.map('map');
+            L.Icon.Default.prototype.options.imagePath = 'images/';
+            const map = L.map('map', {
+                maxZoom: 10,
+            });
             const mapBounds = [];
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);

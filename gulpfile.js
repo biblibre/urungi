@@ -12,6 +12,7 @@ const dist_css = gulp.series(dist_css_clean, dist_css_build);
 const dist_fonts = gulp.series(dist_fonts_clean, dist_fonts_build);
 const dist_translations = gulp.series(dist_translations_clean, dist_translations_build);
 const dist_templates = gulp.series(dist_templates_clean, dist_templates_build);
+const dist_images = gulp.series(dist_images_clean, dist_images_build);
 
 const dist = gulp.parallel(
     dist_js,
@@ -19,6 +20,7 @@ const dist = gulp.parallel(
     dist_fonts,
     dist_translations,
     dist_templates,
+    dist_images,
 );
 
 module.exports = {
@@ -54,6 +56,10 @@ function dist_translations_clean () {
 
 function dist_templates_clean () {
     return del('dist/templates/*');
+}
+
+function dist_images_clean () {
+    return del('dist/images/*');
 }
 
 function dist_js_build () {
@@ -190,6 +196,15 @@ function dist_templates_build () {
             moduleSystem: 'IIFE',
         }))
         .pipe(gulp.dest('dist/templates'));
+}
+
+function dist_images_build () {
+    const paths = [
+        'node_modules/leaflet/dist/images/*',
+    ];
+
+    return gulp.src(paths)
+        .pipe(gulp.dest('dist/images'));
 }
 
 function pot () {
