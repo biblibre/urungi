@@ -357,6 +357,21 @@ function generateQuery (report) {
     if (report.properties.pivotKeys && Array.isArray(report.properties.pivotKeys.rows)) {
         columns.push.apply(columns, report.properties.pivotKeys.rows);
     }
+    if (report.properties.map && Array.isArray(report.properties.map.geojson)) {
+        columns.push.apply(columns, report.properties.map.geojson);
+    }
+    if (report.properties.map && Array.isArray(report.properties.map.value)) {
+        columns.push.apply(columns, report.properties.map.value);
+    }
+    if (report.properties.map && Array.isArray(report.properties.map.label)) {
+        columns.push.apply(columns, report.properties.map.label);
+    }
+    if (report.properties.map && Array.isArray(report.properties.map.group)) {
+        columns.push.apply(columns, report.properties.map.group);
+    }
+    if (report.properties.map && Array.isArray(report.properties.map.type)) {
+        columns.push.apply(columns, report.properties.map.type);
+    }
     query.columns = columns;
 
     query.order = report.properties.order ? report.properties.order.slice() : [];

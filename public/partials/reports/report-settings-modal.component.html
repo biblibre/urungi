@@ -64,7 +64,14 @@
                 <input class="form-control" ng-model="vm.settings.range" type="text">
                 <span class="help-block" translate>List your limits separated by a slash symbol <br>(Example : 20/30/40/50/60)</span> 
             </div>
-           
+        </div>
+
+        <div class="form-group" ng-show="vm.report.reportType === 'map'">
+            <label class="col-sm-3 control-label" translate>Map Layer</label>
+            <div class="col-sm-9">
+                <input class="form-control" ng-model="vm.settings.mapLayerUrl" type="string">
+                <span class="help-block" translate="">Default : <i>'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'</i></span>
+            </div>
         </div>
     </form>
 </div>

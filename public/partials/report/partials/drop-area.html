@@ -16,6 +16,14 @@
 
     <app-report-dropzone ng-if="['chart-line', 'chart-donut', 'chart-pie', 'pyramid'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.xkeys" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the dimension field' | translate"></app-report-dropzone>
 
+    <!-- Map -->
+
+    <app-report-dropzone ng-if="'map' === selectedReport.reportType" report="selectedReport" elements="selectedReport.properties.map.geojson" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your GeoJSON column' | translate" max-elements="1"></app-report-dropzone>
+    <app-report-dropzone ng-if="'map' === selectedReport.reportType" report="selectedReport" elements="selectedReport.properties.map.label" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your label column' | translate" max-elements="1"></app-report-dropzone>
+    <app-report-dropzone ng-if="'map' === selectedReport.reportType" report="selectedReport" elements="selectedReport.properties.map.value" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your value column' | translate" max-elements="1"></app-report-dropzone>
+    <app-report-dropzone ng-if="'map' === selectedReport.reportType" report="selectedReport" elements="selectedReport.properties.map.group" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your group column' | translate" max-elements="1"></app-report-dropzone>
+    <app-report-dropzone ng-if="'map' === selectedReport.reportType" report="selectedReport" elements="selectedReport.properties.map.type" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your type column' | translate" max-elements="1"></app-report-dropzone>
+
     <!-- Filters -->
 
     <div id="filtersDropzone"  class="container-fluid column-zone no-padding" app-drop-target on-drop="onDropOnFilter($event)" drop-accept="application/vnd.urungi.layer-element+json">
@@ -25,4 +33,4 @@
 
     <!-- Order keys -->
 
-    <app-report-dropzone id="orderByDropzone" ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge' && selectedReport.reportType != 'pyramid'" report="selectedReport" elements="selectedReport.properties.order" set-sort-type="setSortType(item, direction)" on-drop="onDropField(elements, item, 'order')" on-remove="onRemoveField(elements, item, 'order')" zone-info="'Drop here your order keys' | translate"></app-report-dropzone>
+    <app-report-dropzone id="orderByDropzone" ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge' && selectedReport.reportType != 'pyramid' && selectedReport.reportType != 'map'" report="selectedReport" elements="selectedReport.properties.order" set-sort-type="setSortType(item, direction)" on-drop="onDropField(elements, item, 'order')" on-remove="onRemoveField(elements, item, 'order')" zone-info="'Drop here your order keys' | translate"></app-report-dropzone>
