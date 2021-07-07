@@ -88,6 +88,7 @@ function dist_js_build () {
         'node_modules/numeral/min/numeral.min.js',
         'node_modules/pivottable/dist/pivot.min.js',
         'node_modules/subtotal/dist/subtotal.min.js',
+        'node_modules/leaflet/dist/leaflet.js',
     ];
 
     const bundle = gulp.src(paths)
@@ -129,6 +130,7 @@ function dist_css_build () {
         'node_modules/noty/lib/themes/bootstrap-v4.css',
         'node_modules/pivottable/dist/pivot.min.css',
         'node_modules/subtotal/dist/subtotal.min.css',
+        'node_modules/leaflet/dist/leaflet.css',
     ]);
 
     return merge(bootstrap, modulesCss)

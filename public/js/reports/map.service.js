@@ -29,6 +29,8 @@
             }
 
             map.fitBounds(mapBounds);
+
+            return map;
         }
     }
 })();
