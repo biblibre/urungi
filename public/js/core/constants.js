@@ -1,4 +1,4 @@
-/* global Noty: false, moment: false, numeral: false */
+/* global Noty: false, moment: false, numeral: false, L : false */
 (function () {
     'use strict';
 
@@ -9,5 +9,6 @@
         .constant('Noty', Noty)
         .constant('moment', moment)
         .constant('numeral', numeral)
-        .constant('base', base);
+        .constant('base', base)
+        .constant('L', L);
 })();

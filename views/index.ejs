@@ -17,6 +17,11 @@
         <link rel="stylesheet" type="text/css" href="css/ndDesigner.css"/>
 
         <link rel="stylesheet" type="text/css" href="css/inspector.css"/>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+
     </head>
 
 <body>
@@ -28,6 +33,11 @@
 </body>
 
 <script src="js/bundle.min.js"></script>
+<script 
+    src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin="">
+</script>
 <script src="templates/templates.js"></script>
 
 <!-- angular app -->
@@ -73,6 +83,7 @@
 <script type="text/javascript" src="js/reports/reports.service.js"></script>
 <script type="text/javascript" src="js/reports/grid.service.js"></script>
 <script type="text/javascript" src="js/reports/pivot.service.js"></script>
+<script type="text/javascript" src="js/reports/map.service.js"></script>
 <script type="text/javascript" src="js/reports/xlsx.service.js"></script>
 <script type="text/javascript" src="js/reports/filter-prompt.component.js"></script>
 <script type="text/javascript" src="js/reports/reports-table.component.js"></script>
@@ -127,6 +138,8 @@
 <script type="text/javascript" src="js/io/export.controller.js"></script>
 
 <script type="text/javascript" src="layerUtils.js"></script>
+
+
 
 <script>
     $(document).ready(function(){

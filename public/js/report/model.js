@@ -55,6 +55,9 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
         case 'gauge':
             chart.type = 'gauge';
             break;
+        case 'map':
+            chart.type = 'map';
+            break;
         }
 
         if (['chart-line', 'chart-donut', 'chart-pie'].indexOf(report.reportType) >= 0 &&

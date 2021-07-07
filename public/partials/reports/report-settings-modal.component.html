@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div class="form-group" ng-show="vm.report.reportType.startsWith('chart')">
+        <div class="form-group" ng-show="vm.report.reportType.startsWith('chart') || vm.report.reportType === 'map'">
             <label class="col-sm-3 control-label" translate>Height</label>
             <div class="col-sm-9">
                 <input class="form-control" ng-model="vm.settings.height" type="number">

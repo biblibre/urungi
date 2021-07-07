@@ -419,6 +419,12 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
                 role: 'column'
             };
             break;
+        case 'map':
+            choice = {
+                propertyBind: $scope.selectedReport.properties.ykeys,
+                role: 'column'
+            };
+            break;
         }
 
         return choice;
@@ -512,6 +518,14 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             report.reportType = 'gauge';
 
             if (!report.properties.maxValue) { report.properties.maxValue = 100; }
+            break;
+
+        case 'map':
+            moveContent(report.properties.columns, movedColumns);
+            moveContent(report.properties.xkeys, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
+            report.reportType = 'map';
             break;
 
         default:
@@ -625,6 +639,10 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
         case 'indicator':
         case 'gauge':
+            available = report.properties.ykeys.length > 0;
+            break;
+
+        case 'map':
             available = report.properties.ykeys.length > 0;
             break;
         }
