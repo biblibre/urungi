@@ -53,6 +53,13 @@ const ReportPropertiesSchema = new mongoose.Schema({
     height: Number,
     mapLayerUrl: String,
     legendPosition: String,
+    map: {
+        geojson: [reportColumnSchema],
+        label: [reportColumnSchema],
+        value: [reportColumnSchema],
+        group: [reportColumnSchema],
+        type: { type: [reportColumnSchema] },
+    },
     maxValue: Number,
     order: [reportColumnSchema],
     pivotKeys: {

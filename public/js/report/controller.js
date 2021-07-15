@@ -110,6 +110,13 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $scope.selectedReport.properties.pivotKeys = {};
         $scope.selectedReport.properties.pivotKeys.columns = [];
         $scope.selectedReport.properties.pivotKeys.rows = [];
+        $scope.selectedReport.properties.map = {
+            geojson: [],
+            value: [],
+            label: [],
+            group: [],
+            type: [],
+        };
         $scope.selectedReport.properties.order = [];
         $scope.selectedReport.properties.filters = [];
         $scope.selectedReport.reportType = 'grid';
@@ -147,6 +154,12 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         if (!report.properties.pivotKeys) { report.properties.pivotKeys = {}; }
         if (!report.properties.pivotKeys.columns) { report.properties.pivotKeys.columns = []; }
         if (!report.properties.pivotKeys.rows) { report.properties.pivotKeys.rows = []; }
+        if (!report.properties.map) { report.properties.map = {}; }
+        if (!report.properties.map.geojson) { report.properties.map.geojson = []; }
+        if (!report.properties.map.value) { report.properties.map.value = []; }
+        if (!report.properties.map.label) { report.properties.map.label = []; }
+        if (!report.properties.map.group) { report.properties.map.group = []; }
+        if (!report.properties.map.type) { report.properties.map.type = []; }
         if (!report.properties.mapLayerUrl) { report.properties.mapLayerUrl = ''; }
     };
 
@@ -645,7 +658,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             break;
 
         case 'map':
-            available = report.properties.ykeys.length > 0;
+            available = report.properties.map.geojson.length === 1;
             break;
         }
 
