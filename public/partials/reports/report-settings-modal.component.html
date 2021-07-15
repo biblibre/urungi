@@ -50,6 +50,14 @@
                 <input class="form-control" ng-model="vm.settings.height" type="number">
             </div>
         </div>
+
+        <div class="form-group" ng-show="vm.report.reportType === 'map'">
+            <label class="col-sm-3 control-label" translate>Map Layer</label>
+            <div class="col-sm-9">
+                <input class="form-control" ng-model="vm.settings.mapLayerUrl" type="string">
+                <span class="help-block" translate="">Default : <i>'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'</i></span>
+            </div>
+        </div>
     </form>
 </div>
 

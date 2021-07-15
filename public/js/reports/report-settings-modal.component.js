@@ -33,6 +33,7 @@
             vm.settings.reportType = report.reportType;
             vm.settings.legendPosition = report.properties.legendPosition;
             vm.settings.height = report.properties.height;
+            vm.settings.mapLayerUrl = report.properties.mapLayerUrl;
             vm.settings.theme = report.theme;
         }
     }

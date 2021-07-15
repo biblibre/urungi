@@ -3181,3 +3181,9 @@ a.list-group-item:hover {
     border-color: #999;
     color: white;
 }
+
+.leaflet-tooltip {
+    background: none;
+    border: none;
+    box-shadow: none;
+}

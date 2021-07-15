@@ -51,6 +51,7 @@ const ReportPropertiesSchema = new mongoose.Schema({
     columns: [reportColumnSchema],
     filters: [reportFilterSchema],
     height: Number,
+    mapLayerUrl: String,
     legendPosition: String,
     maxValue: Number,
     order: [reportColumnSchema],

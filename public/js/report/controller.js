@@ -115,6 +115,8 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $scope.selectedReport.reportType = 'grid';
 
         $scope.selectedReport.properties.height = 300;
+        $scope.selectedReport.properties.mapLayerUrl = '';
+
 
         $scope.selectedReport.properties.legendPosition = 'bottom';
 
@@ -145,7 +147,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         if (!report.properties.pivotKeys) { report.properties.pivotKeys = {}; }
         if (!report.properties.pivotKeys.columns) { report.properties.pivotKeys.columns = []; }
         if (!report.properties.pivotKeys.rows) { report.properties.pivotKeys.rows = []; }
-        if (!report.properties.order) { report.properties.order = []; }
+        if (!report.properties.mapLayerUrl) { report.properties.mapLayerUrl = ''; }
     };
 
     /*
@@ -772,6 +774,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             $scope.selectedReport.reportType = settings.reportType;
             $scope.selectedReport.properties.legendPosition = settings.legendPosition;
             $scope.selectedReport.properties.height = settings.height;
+            $scope.selectedReport.properties.mapLayerUrl = settings.mapLayerUrl;
             $scope.selectedReport.theme = settings.theme;
         }, () => {});
     };
