@@ -40,6 +40,7 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
             datax: {},
             height: report.properties.height,
             legendPosition: report.properties.legendPosition,
+            range: report.properties.range
         };
 
         switch (report.reportType) {
@@ -55,9 +56,12 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
         case 'gauge':
             chart.type = 'gauge';
             break;
+        case 'pyramid':
+            chart.type = 'pyramid';
+            break;
         }
 
-        if (['chart-line', 'chart-donut', 'chart-pie'].indexOf(report.reportType) >= 0 &&
+        if (['chart-line', 'chart-donut', 'chart-pie', 'pyramid'].indexOf(report.reportType) >= 0 &&
             report.properties.xkeys.length > 0 && report.properties.ykeys.length > 0) {
             chart.dataColumns = report.properties.ykeys;
 

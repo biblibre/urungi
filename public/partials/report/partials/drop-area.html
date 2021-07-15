@@ -1,6 +1,6 @@
     <!-- Metrics for charts and pivot tables -->
 
-    <app-report-dropzone ng-if="['pivot', 'chart-line', 'chart-donut', 'chart-pie', 'indicator', 'gauge'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.ykeys" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your metrics' | translate"></app-report-dropzone>
+    <app-report-dropzone ng-if="['pivot', 'chart-line', 'chart-donut', 'chart-pie', 'indicator', 'gauge', 'pyramid'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.ykeys" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your metrics' | translate"></app-report-dropzone>
 
     <!-- Column entries -->
 
@@ -14,7 +14,7 @@
 
     <!--dimensions for charts -->
 
-    <app-report-dropzone ng-if="['chart-line', 'chart-donut', 'chart-pie'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.xkeys" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the dimension field' | translate"></app-report-dropzone>
+    <app-report-dropzone ng-if="['chart-line', 'chart-donut', 'chart-pie', 'pyramid'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.xkeys" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the dimension field' | translate"></app-report-dropzone>
 
     <!-- Filters -->
 
@@ -25,4 +25,4 @@
 
     <!-- Order keys -->
 
-    <app-report-dropzone id="orderByDropzone" ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge'" report="selectedReport" elements="selectedReport.properties.order" set-sort-type="setSortType(item, direction)" on-drop="onDropField(elements, item, 'order')" on-remove="onRemoveField(elements, item, 'order')" zone-info="'Drop here your order keys' | translate"></app-report-dropzone>
+    <app-report-dropzone id="orderByDropzone" ng-if="selectedReport.reportType != 'pivot' && selectedReport.reportType != 'indicator' && selectedReport.reportType != 'gauge' && selectedReport.reportType != 'pyramid'" report="selectedReport" elements="selectedReport.properties.order" set-sort-type="setSortType(item, direction)" on-drop="onDropField(elements, item, 'order')" on-remove="onRemoveField(elements, item, 'order')" zone-info="'Drop here your order keys' | translate"></app-report-dropzone>

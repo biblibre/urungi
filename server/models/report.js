@@ -58,6 +58,7 @@ const ReportPropertiesSchema = new mongoose.Schema({
         columns: [reportColumnSchema],
         rows: [reportColumnSchema],
     },
+    range: String,
     recordLimit: Number,
     xkeys: [reportColumnSchema],
     ykeys: [reportColumnSchema],
