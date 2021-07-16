@@ -271,7 +271,6 @@ exports.dataQuery = async function (req, res) {
 
 exports.filterValuesQuery = async function (req, res) {
     const filter = req.body.filter;
-    console.log('filter: ', filter);
     const options = req.body.options || {};
 
     var result;
