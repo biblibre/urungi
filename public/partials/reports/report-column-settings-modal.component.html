@@ -121,6 +121,14 @@
                 </div>
             </div>
         </div>
+
+        <div class="form-group" ng-if="vm.report.reportType === 'map' && vm.column.elementName === 'type'" ng-repeat="category in vm.categories">
+            <label class="col-sm-3 control-label" translate>Icon for {{category}}</label>
+                <div class="col-sm-9">
+                    <input type="text" ng-model="vm.settings.icon[category]">
+                    <span class="help-block" translate>Type the name of an awesome icon <a href="https://fontawesome.com/v5.15/icons?d=gallery&p=2" target="_blank" rel="noreferrer"><u>(See the list)</u></a></span>
+                </div>
+        </div>
     </form>
 </div>
 

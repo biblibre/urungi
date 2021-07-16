@@ -40,6 +40,7 @@
     "jsplumb": "^2.14.6",
     "knex": "^0.21.5",
     "leaflet": "^1.7.1",
+    "leaflet.awesome-markers": "^2.0.5",
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "migrate-mongo": "^8.1.2",
     "moment": "^2.29.0",

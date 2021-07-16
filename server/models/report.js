@@ -19,6 +19,7 @@ const reportColumnSchema = new mongoose.Schema({
     layerID: mongoose.Schema.Types.ObjectId,
     sortType: Number,
     type: { type: String },
+    icon: {},
 });
 
 reportColumnSchema.virtual('layerObject').get(function () {

@@ -95,6 +95,7 @@ function dist_js_build () {
         'node_modules/pivottable/dist/pivot.min.js',
         'node_modules/subtotal/dist/subtotal.min.js',
         'node_modules/leaflet/dist/leaflet.js',
+        'node_modules/leaflet.awesome-markers/dist/leaflet.awesome-markers.js',
     ];
 
     const bundle = gulp.src(paths)

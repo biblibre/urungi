@@ -67,6 +67,7 @@
                 column.type = settings.type;
                 column.format = settings.format;
                 column.calculateTotal = settings.calculateTotal;
+                column.icon = settings.icon;
             }, () => {});
 
             return modal;
