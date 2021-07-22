@@ -1,3 +1,5 @@
+const parse = require('set-cookie-parser');
+
 require('../../../public/js/core/core.module.js');
 require('../../../public/js/core/constants.js');
 require('../../../public/js/core/api.js');
@@ -146,72 +148,195 @@ describe('map', function () {
     });
     describe('getStyle', function () {
         it('should apply color style into a value range', function () {
-            const minValue = 20;
-            const maxValue = 100;
-            const value = 70;
+            const mapProperties = {
+                geojson: [{
+                    id: 'eaiufraw',
+                    elementID: 'aiuf',
+                    elementLabel: 'geojson',
+                    elementName: 'comp',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                group: [{
+                    id: 'eagmeraw',
+                    elementID: 'agme',
+                    elementLabel: 'gid',
+                    elementName: 'gid',
+                    elementRole: 'dimension',
+                    elementType: 'number'
+                }],
+                label: [{
+                    id: 'eafrsraw',
+                    elementID: 'afrs',
+                    elementLabel: 'label',
+                    elementName: 'label',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                type: [{
+                    id: 'eahaoraw',
+                    elementID: 'ahao',
+                    elementLabel: 'type',
+                    elementName: 'type',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                value: [{
+                    id: 'eaexaraw',
+                    elementID: 'aexa',
+                    elementLabel: 'value',
+                    elementName: 'value',
+                    elementRole: 'dimension',
+                    elementType: 'number'
+                }],
 
-            const getStyle = function (value) {
-                const saturation = ((value - minValue) * 100) / (maxValue - minValue);
-                return saturation;
             };
-
-            expect(value).toBeGreaterThanOrEqual(minValue);
-            expect(value).toBeLessThanOrEqual(maxValue);
-            expect(getStyle(70)).toStrictEqual(62.5);
-            expect(getStyle(50)).toStrictEqual(37.5);
-            expect(getStyle(25)).toStrictEqual(6.25);
-        });
-    });
-    describe('getValuesBounds', function () {
-        it('should get min & max value for apply color instensity', function () {
-            const colorIntensity = [];
-            const boundsValues = {};
-
-            const getValuesBounds = function (datas) {
-                datas.forEach((e) => colorIntensity.push(e.value));
-                boundsValues.minValue = Math.min(...colorIntensity);
-                boundsValues.maxValue = Math.max(...colorIntensity);
-
-                return boundsValues;
-            };
-
             const dataRows = [{
-                value: 900,
+                eaexaraw: 900,
                 eafrsraw: 'Gap',
                 eagmeraw: 2,
                 eahaoraw: 'client',
                 eaiufraw: '{"type": "Point", "coordinates": [1.3291015625, 28.90083790234091]}'
             },
             {
-                value: 100,
+                eaexaraw: 100,
                 eafrsraw: 'Marseille',
                 eagmeraw: 2,
                 eahaoraw: 'client',
                 eaiufraw: '{"type": "Point", "coordinates": [4.3291015625, 28.90083790234091]}'
             },
             {
-                value: 500,
+                eaexaraw: 500,
                 eafrsraw: 'Paris',
                 eagmeraw: 2,
                 eahaoraw: 'library',
                 eaiufraw: '{"type": "Point", "coordinates": [9.3291015625, 28.90083790234091]}'
             },
             {
-                value: 350,
+                eaexaraw: 350,
                 eafrsraw: 'Lyon',
                 eagmeraw: 1,
                 eahaoraw: 'client',
                 eaiufraw: '{"type": "Point", "coordinates": [0.3291015625, 28.90083790234091]}'
             },
             {
-                value: 350,
+                eaexaraw: 350,
                 eafrsraw: 'Aix',
                 eagmeraw: 1,
                 eahaoraw: 'library',
                 eaiufraw: '{"type": "Point", "coordinates": [10.3291015625, 28.90083790234091]}'
             },
             {
-                value: 350,
+                eaexaraw: 350,
+                eafrsraw: 'Aix',
+                eagmeraw: 3,
+                eahaoraw: 'library',
+                eaiufraw: '{"type": "Point", "coordinates": [10.3291015625, 28.90083790234091]}'
+            },
+            ];
+            const values = [];
+            let minValue = 0;
+            let maxValue = 0;
+
+            dataRows.forEach((e) => {
+                values.push(e.eaexaraw);
+            });
+
+            minValue = Math.min(...values);
+            maxValue = Math.max(...values);
+
+            dataRows.forEach((e) => {
+                expect(e.eaexaraw).toBeGreaterThanOrEqual(minValue);
+                expect(e.eaexaraw).toBeLessThanOrEqual(maxValue);
+            });
+            const receivedObject = map.getStyle(mapProperties, minValue, maxValue, dataRows[0].eaexaraw);
+            const entries = Object.values(receivedObject);
+            expect(entries.length).toStrictEqual(3);
+            expect('hsl(').toEqual(expect.arrayContaining(entries));
+        });
+    });
+    describe('getValuesBounds', function () {
+        it('should get min & max value for apply color instensity', function () {
+            const mapProperties = {
+                geojson: [{
+                    id: 'eaiufraw',
+                    elementID: 'aiuf',
+                    elementLabel: 'geojson',
+                    elementName: 'comp',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                group: [{
+                    id: 'eagmeraw',
+                    elementID: 'agme',
+                    elementLabel: 'gid',
+                    elementName: 'gid',
+                    elementRole: 'dimension',
+                    elementType: 'number'
+                }],
+                label: [{
+                    id: 'eafrsraw',
+                    elementID: 'afrs',
+                    elementLabel: 'label',
+                    elementName: 'label',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                type: [{
+                    id: 'eahaoraw',
+                    elementID: 'ahao',
+                    elementLabel: 'type',
+                    elementName: 'type',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                value: [{
+                    id: 'eaexaraw',
+                    elementID: 'aexa',
+                    elementLabel: 'value',
+                    elementName: 'value',
+                    elementRole: 'dimension',
+                    elementType: 'number'
+                }],
+
+            };
+            const dataRows = [{
+                eaexaraw: 900,
+                eafrsraw: 'Gap',
+                eagmeraw: 2,
+                eahaoraw: 'client',
+                eaiufraw: '{"type": "Point", "coordinates": [1.3291015625, 28.90083790234091]}'
+            },
+            {
+                eaexaraw: 100,
+                eafrsraw: 'Marseille',
+                eagmeraw: 2,
+                eahaoraw: 'client',
+                eaiufraw: '{"type": "Point", "coordinates": [4.3291015625, 28.90083790234091]}'
+            },
+            {
+                eaexaraw: 500,
+                eafrsraw: 'Paris',
+                eagmeraw: 2,
+                eahaoraw: 'library',
+                eaiufraw: '{"type": "Point", "coordinates": [9.3291015625, 28.90083790234091]}'
+            },
+            {
+                eaexaraw: 350,
+                eafrsraw: 'Lyon',
+                eagmeraw: 1,
+                eahaoraw: 'client',
+                eaiufraw: '{"type": "Point", "coordinates": [0.3291015625, 28.90083790234091]}'
+            },
+            {
+                eaexaraw: 350,
+                eafrsraw: 'Aix',
+                eagmeraw: 1,
+                eahaoraw: 'library',
+                eaiufraw: '{"type": "Point", "coordinates": [10.3291015625, 28.90083790234091]}'
+            },
+            {
+                eaexaraw: 350,
                 eafrsraw: 'Aix',
                 eagmeraw: 3,
                 eahaoraw: 'library',
@@ -219,7 +344,7 @@ describe('map', function () {
             },
             ];
 
-            const result = getValuesBounds(dataRows);
+            const result = map.getValuesBounds(mapProperties, dataRows);
             expect(result.maxValue).toStrictEqual(900);
             expect(result.minValue).toStrictEqual(100);
         });
