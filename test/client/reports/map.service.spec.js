@@ -1,5 +1,3 @@
-const parse = require('set-cookie-parser');
-
 require('../../../public/js/core/core.module.js');
 require('../../../public/js/core/constants.js');
 require('../../../public/js/core/api.js');
@@ -25,7 +23,49 @@ describe('map', function () {
 
     describe('getGroups', function () {
         it('should add group to groups', function () {
-            const groups = new Set();
+            const mapProperties = {
+                geojson: [{
+                    id: 'eaiufraw',
+                    elementID: 'aiuf',
+                    elementLabel: 'geojson',
+                    elementName: 'comp',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                group: [{
+                    id: 'eagmeraw',
+                    elementID: 'agme',
+                    elementLabel: 'gid',
+                    elementName: 'gid',
+                    elementRole: 'dimension',
+                    elementType: 'number'
+                }],
+                label: [{
+                    id: 'eafrsraw',
+                    elementID: 'afrs',
+                    elementLabel: 'label',
+                    elementName: 'label',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                type: [{
+                    id: 'eahaoraw',
+                    elementID: 'ahao',
+                    elementLabel: 'type',
+                    elementName: 'type',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                value: [{
+                    id: 'eaexaraw',
+                    elementID: 'aexa',
+                    elementLabel: 'value',
+                    elementName: 'value',
+                    elementRole: 'dimension',
+                    elementType: 'number'
+                }],
+
+            };
 
             const dataRows = [{
                 eaexaraw: 900,
@@ -64,21 +104,58 @@ describe('map', function () {
             },
             ];
 
-            for (const row of dataRows) {
-                const group = row.eagmeraw;
-                groups.add(group);
-            }
-
-            expect(groups.size).toStrictEqual(2);
-            expect(groups.has(2)).toStrictEqual(true);
-            expect(groups.has(1)).toStrictEqual(true);
+            const result = map.getGroups(mapProperties, dataRows);
+            expect(result.size).toStrictEqual(2);
+            expect(result.has(2)).toStrictEqual(true);
+            expect(result.has(1)).toStrictEqual(true);
         });
     });
 
     describe('getGroupColor', function () {
         it('should attribuate groups color', function () {
-            const groups = new Set();
+            const mapProperties = {
+                geojson: [{
+                    id: 'eaiufraw',
+                    elementID: 'aiuf',
+                    elementLabel: 'geojson',
+                    elementName: 'comp',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                group: [{
+                    id: 'eagmeraw',
+                    elementID: 'agme',
+                    elementLabel: 'gid',
+                    elementName: 'gid',
+                    elementRole: 'dimension',
+                    elementType: 'number'
+                }],
+                label: [{
+                    id: 'eafrsraw',
+                    elementID: 'afrs',
+                    elementLabel: 'label',
+                    elementName: 'label',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                type: [{
+                    id: 'eahaoraw',
+                    elementID: 'ahao',
+                    elementLabel: 'type',
+                    elementName: 'type',
+                    elementRole: 'dimension',
+                    elementType: 'string'
+                }],
+                value: [{
+                    id: 'eaexaraw',
+                    elementID: 'aexa',
+                    elementLabel: 'value',
+                    elementName: 'value',
+                    elementRole: 'dimension',
+                    elementType: 'number'
+                }],
 
+            };
             const dataRows = [{
                 eaexaraw: 900,
                 eafrsraw: 'Gap',
@@ -123,27 +200,11 @@ describe('map', function () {
             },
             ];
 
-            for (const row of dataRows) {
-                const group = row.eagmeraw;
-                groups.add(group);
-            }
-
-            const groupHue = new Map();
-
-            let hueIndex = 0;
-
-            const groupCount = groups.size;
-
-            for (const group of groups) {
-                const hue = hueIndex * (360 / groupCount);
-                hueIndex++;
-                groupHue.set(group, hue);
-            }
-
-            expect(groupHue.size).toStrictEqual(3);
-            expect(groupHue.has(1)).toStrictEqual(true);
-            expect(groupHue.has(2)).toStrictEqual(true);
-            expect(groupHue.has(3)).toStrictEqual(true);
+            const result = map.getGroupColor(mapProperties, dataRows);
+            expect(result.size).toStrictEqual(3);
+            expect(result.has(2)).toStrictEqual(true);
+            expect(result.has(1)).toStrictEqual(true);
+            expect(result.has(3)).toStrictEqual(true);
         });
     });
     describe('getStyle', function () {
@@ -249,10 +310,10 @@ describe('map', function () {
                 expect(e.eaexaraw).toBeGreaterThanOrEqual(minValue);
                 expect(e.eaexaraw).toBeLessThanOrEqual(maxValue);
             });
+
             const receivedObject = map.getStyle(mapProperties, minValue, maxValue, dataRows[0].eaexaraw);
-            const entries = Object.values(receivedObject);
-            expect(entries.length).toStrictEqual(3);
-            expect('hsl(').toEqual(expect.arrayContaining(entries));
+            expect(Object.keys(receivedObject).length).toStrictEqual(3);
+            expect(Object.keys(receivedObject)).toStrictEqual(['stroke', 'fillOpacity', 'fillColor']);
         });
     });
     describe('getValuesBounds', function () {
