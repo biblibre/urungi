@@ -114,12 +114,13 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $scope.selectedReport.properties.filters = [];
         $scope.selectedReport.reportType = 'grid';
 
+        $scope.selectedReport.properties.maxValue = 100;
+
         $scope.selectedReport.properties.height = 300;
         $scope.selectedReport.properties.range = '';
 
         $scope.selectedReport.properties.legendPosition = 'bottom';
 
-        $scope.selectedReport.reportType = 'grid';
         $scope.mode = 'add';
     };
 
@@ -512,8 +513,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             moveContent(report.properties.pivotKeys.columns, movedColumns);
             moveContent(report.properties.pivotKeys.rows, movedColumns);
             report.reportType = 'gauge';
-
-            if (!report.properties.maxValue) { report.properties.maxValue = 100; }
             break;
 
         case 'pyramid':
@@ -767,11 +766,11 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             $scope.selectedReport.reportType = settings.reportType;
             $scope.selectedReport.properties.legendPosition = settings.legendPosition;
             $scope.selectedReport.properties.height = settings.height;
+            $scope.selectedReport.properties.maxValue = settings.maxValue;
             $scope.selectedReport.theme = settings.theme;
             $scope.selectedReport.properties.range = settings.range;
         }, () => {});
     };
-
     $scope.isReportSettingsModalAvailable = isReportSettingsModalAvailable;
 
     function isReportSettingsModalAvailable () {

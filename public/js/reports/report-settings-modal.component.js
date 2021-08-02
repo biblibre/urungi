@@ -33,6 +33,7 @@
             vm.settings.reportType = report.reportType;
             vm.settings.legendPosition = report.properties.legendPosition;
             vm.settings.height = report.properties.height;
+            vm.settings.maxValue = report.properties.maxValue;
             vm.settings.range = report.properties.range;
             vm.settings.theme = report.theme;
         }

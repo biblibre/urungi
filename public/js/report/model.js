@@ -42,7 +42,6 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
             legendPosition: report.properties.legendPosition,
             range: report.properties.range
         };
-
         switch (report.reportType) {
         case 'chart-line':
             chart.type = 'line';
