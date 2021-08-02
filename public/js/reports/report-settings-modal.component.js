@@ -34,6 +34,7 @@
             vm.settings.legendPosition = report.properties.legendPosition;
             vm.settings.height = report.properties.height;
             vm.settings.mapLayerUrl = report.properties.mapLayerUrl;
+            vm.settings.maxValue = report.properties.maxValue;
             vm.settings.theme = report.theme;
         }
     }

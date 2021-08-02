@@ -44,6 +44,13 @@
             </div>
         </div>
 
+        <div class="form-group" ng-show="vm.report.reportType === 'gauge'">
+            <label class="col-sm-3 control-label" translate>Gauge max value</label>
+            <div class="col-sm-9">
+                <input class="form-control" ng-model="vm.settings.maxValue" type="number">
+            </div>
+        </div>
+
         <div class="form-group" ng-show="vm.report.reportType.startsWith('chart') || vm.report.reportType === 'map'">
             <label class="col-sm-3 control-label" translate>Height</label>
             <div class="col-sm-9">

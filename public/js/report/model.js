@@ -40,6 +40,7 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
             datax: {},
             height: report.properties.height,
             legendPosition: report.properties.legendPosition,
+            maxValue: report.properties.maxValue,
         };
 
         switch (report.reportType) {

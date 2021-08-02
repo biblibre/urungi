@@ -34,7 +34,6 @@
             <button id="setLimit" class="btn btn-default" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" uib-tooltip="{{ 'Move the limit to the filter area, will be used during runtime, not only during report building' | translate }}" translate>Filter</button>
         </span>
         <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
-        <span id="gauge-max" ng-if="selectedReport.reportType === 'gauge'" translate>Enter a max value for gauge</span><input ng-if="selectedReport.reportType === 'gauge'" ng-model="selectedReport.properties.maxValue" type="number" name="maxGauge">
         <span class="pull-right">
             <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" ng-click="refresh();" style="padding: 3px 10px;">
                 <i class="fa fa-refresh hand-cursor"></i>

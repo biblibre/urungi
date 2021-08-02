@@ -121,9 +121,10 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $scope.selectedReport.properties.filters = [];
         $scope.selectedReport.reportType = 'grid';
 
+        $scope.selectedReport.properties.maxValue = 100;
+
         $scope.selectedReport.properties.height = 300;
         $scope.selectedReport.properties.mapLayerUrl = '';
-
 
         $scope.selectedReport.properties.legendPosition = 'bottom';
 
@@ -531,8 +532,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             moveContent(report.properties.pivotKeys.columns, movedColumns);
             moveContent(report.properties.pivotKeys.rows, movedColumns);
             report.reportType = 'gauge';
-
-            if (!report.properties.maxValue) { report.properties.maxValue = 100; }
             break;
 
         case 'map':
@@ -787,6 +786,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             $scope.selectedReport.reportType = settings.reportType;
             $scope.selectedReport.properties.legendPosition = settings.legendPosition;
             $scope.selectedReport.properties.height = settings.height;
+            $scope.selectedReport.properties.maxValue = settings.maxValue;
             $scope.selectedReport.properties.mapLayerUrl = settings.mapLayerUrl;
             $scope.selectedReport.theme = settings.theme;
         }, () => {});
