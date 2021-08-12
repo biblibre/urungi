@@ -93,12 +93,15 @@
             $rootScope.user = user;
         }, () => {});
 
-        // Redirect to /login if next route is not public and user is not authenticated
+        // Redirect to /login if next route is not public, user is not authenticated and has no active session
         $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
             if (next.$$route && !next.$$route.redirectTo && !next.$$route.isPublic) {
                 userService.getCurrentUser().then(user => {
                     if (!user) {
                         window.location.href = base + '/login';
+                    }
+                    if (user.status === 'Not active') {
+                        window.location.href = base + '/logout';
                     }
                 }, () => {
                     window.location.href = base + '/login';
