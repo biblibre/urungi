@@ -13,9 +13,13 @@ class DashboardsController extends Controller {
 const controller = new DashboardsController();
 
 exports.DashboardsFindAll = function (req, res) {
-    req.query.companyid = true;
-    req.user = {};
-    req.user.companyID = 'COMPID';
+    if (!req.user.isAdmin()) {
+        if (!req.query.find) {
+            req.query.find = [];
+        }
+        req.query.find.push({ owner: req.user._id });
+    }
+
     controller.findAll(req).then(function (result) {
         res.status(200).json(result);
     });

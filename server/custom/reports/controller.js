@@ -18,7 +18,6 @@ const controller = new ReportsController();
 exports.ReportsFindAll = async function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
-    req.user = {};
     req.user.companyID = 'COMPID';
     const perPage = config.get('pagination.itemsPerPage');
     const page = (req.query.page) ? req.query.page : 1;
@@ -43,7 +42,12 @@ exports.ReportsFindAll = async function (req, res) {
             {
                 $match: result.find,
             },
+
         ];
+
+        if (!req.user.isAdmin()) {
+            commonPipeline.push({ $match: { owner: `${req.user._id}` } });
+        }
 
         const pipeline = commonPipeline.slice();
 
@@ -80,9 +84,15 @@ exports.ReportsFindAll = async function (req, res) {
             items: reports,
         };
     } else {
+        if (!req.user.isAdmin()) {
+            if (!req.query.find) {
+                req.query.find = [];
+            }
+            req.query.find.push({ owner: req.user._id });
+        }
+
         response = await controller.findAll(req);
     }
-
     res.status(200).json(response);
 };
 

@@ -82,18 +82,104 @@ describe('Reports API', function () {
         await datasource.remove();
     });
 
-    describe('GET /api/reports/find-all', function () {
-        it('should find all reports and their data', async function () {
-            const res = await request(app).get('/api/reports/find-all')
-                .set(headers)
+    describe('GET /api/reports/find-all on user "non-admin" session', function () {
+        let report2;
+        let user2;
+        let user2Headers;
+        beforeEach(async function () {
+            user2 = await User.create({
+                userName: 'johndoe',
+                password: 'password',
+                companyID: 'COMPID',
+                roles: ['GUEST'],
+                status: 'active',
+                nd_trash_deleted: false,
+            });
+            user2Headers = await helpers.login(app, 'johndoe', 'password');
+            report2 = await Report.create({
+                companyID: 'COMPID',
+                reportName: 'Report2',
+                nd_trash_deleted: false,
+                owner: user2._id,
+                isPublic: false,
+                createdBy: user2._id,
+                createdOn: new Date(),
+                selectedLayerID: layer._id,
+                author: user2._id,
+                reportType: 'grid',
+            });
+        });
+        afterEach(async function () {
+            await report2.remove();
+            await user2.remove();
+        });
+        it('should find all reports and their data for user connected if not an admin', async function () {
+            const res = await request(app).get('/api/reports/find-all?populate=layer')
+                .set(user2Headers)
+                .query({ owner: `${user2.id}` })
                 .expect(200);
-
             expect(res.body).toHaveProperty('result', 1);
             expect(res.body).toHaveProperty('page', 1);
             expect(res.body).toHaveProperty('pages', 1);
             expect(res.body).toHaveProperty('items');
             expect(res.body.items).toHaveLength(1);
+            expect(res.body.items[0]).toHaveProperty('reportName', 'Report2');
+
+            res.body.items.forEach(e => expect(e.owner).toStrictEqual(user2.id));
+        });
+
+        it('should send layer name', async function () {
+            const res = await request(app).get('/api/reports/find-all?populate=layer')
+                .set(headers)
+                .expect(200);
+
+            expect(res.body).toHaveProperty('result', 1);
+            expect(res.body.items[0]).toHaveProperty('layerName', 'Layer');
+        });
+    });
+
+    describe('GET /api/reports/find-all on admin session', function () {
+        let report2;
+        let user2;
+        beforeEach(async function () {
+            user2 = await User.create({
+                userName: 'johndoe',
+                password: 'password',
+                companyID: 'COMPID',
+                roles: ['GUEST'],
+                status: 'active',
+                nd_trash_deleted: false,
+            });
+            report2 = await Report.create({
+                companyID: 'COMPID',
+                reportName: 'Report2',
+                nd_trash_deleted: false,
+                owner: user2._id,
+                isPublic: false,
+                createdBy: user2._id,
+                createdOn: new Date(),
+                selectedLayerID: layer._id,
+                author: user2._id,
+                reportType: 'grid',
+            });
+        });
+        afterEach(async function () {
+            await report2.remove();
+            await user2.remove();
+        });
+        it('should find all reports and their data for all users', async function () {
+            const res = await request(app).get('/api/reports/find-all?populate=layer')
+                .set(headers)
+                .expect(200);
+            expect(res.body).toHaveProperty('result', 1);
+            expect(res.body).toHaveProperty('page', 1);
+            expect(res.body).toHaveProperty('pages', 1);
+            expect(res.body).toHaveProperty('items');
+            expect(res.body.items).toHaveLength(2);
             expect(res.body.items[0]).toHaveProperty('reportName', 'Report');
+            expect(res.body.items[1]).toHaveProperty('reportName', 'Report2');
+            expect(res.body.items[0].owner).toStrictEqual(user.id);
+            expect(res.body.items[1].owner).toStrictEqual(user2.id);
         });
 
         it('should send layer name', async function () {
@@ -107,33 +193,33 @@ describe('Reports API', function () {
     });
 
     describe('GET /api/reports/find-all?populate=layer', function () {
-        let layer2;
-        let report2;
+        let layer3;
+        let report3;
 
         beforeAll(async function () {
-            layer2 = await Layer.create({
-                name: 'Layer2',
+            layer3 = await Layer.create({
+                name: 'Layer3',
                 status: 'active',
                 datasourceID: datasource._id,
             });
 
-            report2 = await Report.create({
+            report3 = await Report.create({
                 companyID: 'COMPID',
-                reportName: 'Report2',
+                reportName: 'Report3',
                 nd_trash_deleted: false,
                 owner: user.id,
                 isPublic: false,
                 createdBy: user.id,
                 createdOn: new Date(),
-                selectedLayerID: layer2._id,
+                selectedLayerID: layer3._id,
                 author: user.id,
                 reportType: 'grid',
             });
         });
 
         afterAll(async function () {
-            await layer2.remove();
-            await report2.remove();
+            await layer3.remove();
+            await report3.remove();
         });
 
         it('should find all reports and their data', async function () {
@@ -156,7 +242,7 @@ describe('Reports API', function () {
             expect(res.body.items[0]).toHaveProperty('owner');
             expect(res.body.items[0]).toHaveProperty('reportType');
             expect(res.body.items[0]).toHaveProperty('_id');
-            expect(res.body.items[1]).toHaveProperty('reportName', 'Report2');
+            expect(res.body.items[1]).toHaveProperty('reportName', 'Report3');
             expect(res.body.items[1]).toHaveProperty('nd_trash_deleted', false);
             expect(res.body.items[1]).toHaveProperty('owner', user.id);
             expect(res.body.items[1]).toHaveProperty('isPublic', false);
@@ -166,7 +252,7 @@ describe('Reports API', function () {
             expect(res.body.items[1]).toHaveProperty('owner');
             expect(res.body.items[1]).toHaveProperty('reportType');
             expect(res.body.items[1]).toHaveProperty('_id');
-            expect(res.body.items[1]).toHaveProperty('layerName', 'Layer2');
+            expect(res.body.items[1]).toHaveProperty('layerName', 'Layer3');
         });
     });
 
