@@ -86,12 +86,30 @@
 
     angular.module('app').run(runBlock);
 
-    runBlock.$inject = ['$rootScope', '$location', 'base', 'connection', 'userService', 'language'];
+    runBlock.$inject = ['$rootScope', '$location', 'base', 'connection', 'userService', 'language', 'api', 'Noty'];
 
-    function runBlock ($rootScope, $location, base, connection, userService, language) {
+    function runBlock ($rootScope, $location, base, connection, userService, language, api, Noty) {
+        let userId;
         userService.getCurrentUser().then(user => {
             $rootScope.user = user;
+            userId = user._id;
+            return userId;
         }, () => {});
+
+        $rootScope.$on('$locationChangeStart', function (angularEvent, newVal, oldVal) {
+            if ($rootScope.user) {
+                api.getUser(userId).then(function (user) {
+                    const userFromApi = user;
+                    if (userFromApi.status === 'Not active') {
+                        new Noty({ text: 'Status Inactive, redirect to logout', type: 'error' }).show();
+                        setTimeout(function () {
+                            window.location.href = base + '/logout';
+                        }, 1500);
+                    }
+                }
+                );
+            }
+        });
 
         // Redirect to /login if next route is not public, user is not authenticated and has no active session
         $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
@@ -99,9 +117,6 @@
                 userService.getCurrentUser().then(user => {
                     if (!user) {
                         window.location.href = base + '/login';
-                    }
-                    if (user.status === 'Not active') {
-                        window.location.href = base + '/logout';
                     }
                 }, () => {
                     window.location.href = base + '/login';
