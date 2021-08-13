@@ -32,8 +32,6 @@
                 gettextCatalog.loadRemote('/translations/' + code + '.json');
             }
 
-            localStorage.setItem('currentLanguage', code);
-
             moment.locale(code);
         }
 

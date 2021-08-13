@@ -40,7 +40,8 @@
         }
 
         function languageChanged (choice) {
-            language.setCurrentLanguage(choice.code);
+            localStorage.setItem('currentLanguage', choice.code);
+            language.setCurrentLanguage(localStorage.getItem('currentLanguage'));
         };
     }
 })();
