@@ -40,8 +40,7 @@
         }
 
         function languageChanged (choice) {
-            localStorage.setItem('currentLanguage', choice.code);
-            language.setCurrentLanguage(localStorage.getItem('currentLanguage'));
+            language.setCurrentLanguage(choice.code, { save: true });
         };
     }
 })();

@@ -18,7 +18,7 @@
     runBlock.$inject = ['language'];
 
     function runBlock (language) {
-        language.setLanguageFromLocalStorage();
+        language.initLanguage();
     }
 
     angular.module('app-login').controller('PublicCtrl', PublicCtrl);

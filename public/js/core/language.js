@@ -3,9 +3,9 @@
 
     angular.module('app.core').factory('language', language);
 
-    language.$inject = ['gettextCatalog', 'moment', 'base'];
+    language.$inject = ['$window', 'gettextCatalog', 'moment', 'base'];
 
-    function language (gettextCatalog, moment, base) {
+    function language ($window, gettextCatalog, moment, base) {
         const defaultLanguage = 'en';
         const availableLanguages = ['en', 'es', 'fr'];
 
@@ -13,7 +13,7 @@
             getAvailableLanguages: getAvailableLanguages,
             setCurrentLanguage: setCurrentLanguage,
             getCurrentLanguage: getCurrentLanguage,
-            setLanguageFromLocalStorage: setLanguageFromLocalStorage,
+            initLanguage: initLanguage,
         };
 
         return service;
@@ -22,7 +22,7 @@
             return availableLanguages;
         }
 
-        function setCurrentLanguage (code) {
+        function setCurrentLanguage (code, options = {}) {
             if (!availableLanguages.includes(code)) {
                 code = defaultLanguage;
             }
@@ -32,6 +32,10 @@
                 gettextCatalog.loadRemote('/translations/' + code + '.json');
             }
 
+            if (options.save) {
+                localStorage.setItem('currentLanguage', code);
+            }
+
             moment.locale(code);
         }
 
@@ -39,9 +43,15 @@
             return gettextCatalog.getCurrentLanguage();
         }
 
-        function setLanguageFromLocalStorage () {
+        function initLanguage () {
             const currentLanguage = localStorage.getItem('currentLanguage');
-            setCurrentLanguage(currentLanguage);
+            if (currentLanguage) {
+                setCurrentLanguage(currentLanguage);
+            } else {
+                const navigator = $window.navigator;
+                const navigatorLanguage = navigator.language.substr(0, 2);
+                setCurrentLanguage(navigatorLanguage);
+            }
         }
     }
 })();

@@ -44,8 +44,8 @@ describe('language', () => {
             expect(gettextCatalog.getString('foo')).toBe('bar');
         });
 
-        it('should set localStorage item currentLanguage', () => {
-            language.setCurrentLanguage('fr');
+        it('should set localStorage item currentLanguage if option given', () => {
+            language.setCurrentLanguage('fr', { save: true });
 
             $httpBackend.flush();
 
@@ -74,13 +74,13 @@ describe('language', () => {
         });
     });
 
-    describe('setLanguageFromLocalStorage', () => {
+    describe('initLanguage', () => {
         it('should set language from localStorage', () => {
             localStorage.setItem('currentLanguage', 'fr');
 
             $httpBackend.expect('GET', '/translations/fr.json')
                 .respond({ fr: { foo: 'bar' } });
-            language.setLanguageFromLocalStorage();
+            language.initLanguage();
             $httpBackend.flush();
 
             expect(language.getCurrentLanguage()).toBe('fr');
