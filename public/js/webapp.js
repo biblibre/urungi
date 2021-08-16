@@ -119,7 +119,7 @@
             $rootScope.userContextHelp = user.contextHelp;
         }, () => {});
 
-        language.setLanguageFromLocalStorage();
+        language.initLanguage();
 
         $rootScope.$on('counts-changes', function () {
             userService.clearCountsCache();
