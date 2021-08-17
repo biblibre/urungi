@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Spanish translation
 - Added report type pyramid
 
+### Changed
+
+- If no language is selected, use the language defined in browser preferences (#76)
+
+### Fixed
+
+- XLSX export now takes into account dynamic filters (#252)
+
 ### Dependencies
 
 - Updated angular to 1.8.0
