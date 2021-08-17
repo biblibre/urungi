@@ -95,6 +95,22 @@ describe('User API', function () {
                 expect(res.body).toHaveProperty('viewSQL', true);
             });
         });
+
+        describe('when authenticated as an inactive user', function () {
+            beforeAll(async () => {
+                await User.updateOne({ userName: 'user' }, { $set: { status: 'Not active' } });
+            });
+            afterAll(async () => {
+                await User.updateOne({ userName: 'user' }, { $set: { status: 'active' } });
+            });
+
+            it('should return 403', async function () {
+                const res = await request(app).get('/api/user')
+                    .set(userHeaders);
+
+                expect(res.status).toBe(403);
+            });
+        });
     });
 
     describe('GET /api/user/counts', function () {

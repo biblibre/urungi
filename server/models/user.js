@@ -156,6 +156,10 @@ userSchema.methods.isAdmin = function () {
     return this.roles.includes('ADMIN');
 };
 
+userSchema.methods.isActive = function () {
+    return this.status === 'active';
+};
+
 userSchema.methods.getReports = function () {
     return this.model('Report').find({ owner: this._id });
 };

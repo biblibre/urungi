@@ -86,40 +86,27 @@
 
     angular.module('app').run(runBlock);
 
-    runBlock.$inject = ['$rootScope', '$location', 'base', 'connection', 'userService', 'language', 'api', 'Noty'];
+    runBlock.$inject = ['$rootScope', '$window', '$location', '$timeout', 'gettextCatalog', 'base', 'userService', 'language', 'api', 'Noty'];
 
-    function runBlock ($rootScope, $location, base, connection, userService, language, api, Noty) {
-        let userId;
+    function runBlock ($rootScope, $window, $location, $timeout, gettextCatalog, base, userService, language, api, Noty) {
         userService.getCurrentUser().then(user => {
             $rootScope.user = user;
-            userId = user._id;
-            return userId;
         }, () => {});
-
-        $rootScope.$on('$locationChangeStart', function (angularEvent, newVal, oldVal) {
-            if ($rootScope.user) {
-                api.getUser(userId).then(function (user) {
-                    const userFromApi = user;
-                    if (userFromApi.status === 'Not active') {
-                        new Noty({ text: 'Status Inactive, redirect to logout', type: 'error' }).show();
-                        setTimeout(function () {
-                            window.location.href = base + '/logout';
-                        }, 1500);
-                    }
-                }
-                );
-            }
-        });
 
         // Redirect to /login if next route is not public, user is not authenticated and has no active session
         $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
             if (next.$$route && !next.$$route.redirectTo && !next.$$route.isPublic) {
-                userService.getCurrentUser().then(user => {
+                api.getUserData().then(user => {
                     if (!user) {
-                        window.location.href = base + '/login';
+                        throw new Error();
                     }
-                }, () => {
-                    window.location.href = base + '/login';
+                }).catch(() => {
+                    const text = gettextCatalog.getString('You have been logged out. You will be redirected to the login page.');
+                    new Noty({ text, type: 'error', timeout: false }).show();
+
+                    $timeout(() => {
+                        $window.location.href = base + '/login';
+                    }, 2000);
                 });
             }
         });
