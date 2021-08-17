@@ -34,9 +34,12 @@
 
             vm.prompts = initPrompts();
 
-            $timeout(function () {
-                $scope.$broadcast('repaint', { fetchData: true });
-            }, 0);
+            const hasMandatoryPrompts = Object.values(vm.prompts).some(p => p.promptMandatory);
+            if (!hasMandatoryPrompts) {
+                $timeout(function () {
+                    $scope.$broadcast('repaint', { fetchData: true });
+                }, 0);
+            }
         }
 
         function initPrompts () {
