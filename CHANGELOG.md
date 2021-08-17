@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - XLSX export now takes into account dynamic filters (#252)
 - Logged in users that become inactive are no longer able to use the app and
   are redirected to the login page (#203)
+- Report data is no longer displayed automatically if there is a mandatory filter
 
 ### Dependencies
 
