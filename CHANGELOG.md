@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated csurf to 1.11.0
 - Updated debug to 4.3.2
 - Updated del to 6.0.0
-- Updated ejs to 2.7.4
+- Updated ejs to 3.1.6
 - Updated eslint to 7.32.0
 - Updated eslint-config-standard to 16.0.3
 - Updated eslint-plugin-import to 2.24.0
