@@ -49,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated jquery to 3.6.0
 - Updated jquery-validation to 1.19.3
 - Updated jsplumb to 2.15.6
-- Updated knex to 0.21.5
+- Updated knex to 0.21.21
 - Updated migrate-mongo to 8.1.2
 - Updated moment to 2.29.0
 - Updated mongodb-memory-server to 6.8.0
