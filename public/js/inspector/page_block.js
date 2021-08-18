@@ -1,4 +1,4 @@
-var module = angular.module('page.block', []);
+const module = angular.module('page.block', []);
 
 module.directive('pageBlock', ['$rootScope', '$compile', '$parse', function ($rootScope, $compile, $parse) {
     return {

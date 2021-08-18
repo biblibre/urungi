@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var statisticSchema = new mongoose.Schema({
+const statisticSchema = new mongoose.Schema({
     type: String,
     userID: String,
     userName: String,
@@ -14,9 +14,9 @@ var statisticSchema = new mongoose.Schema({
 });
 
 statisticSchema.statics.saveStat = function (req, data) {
-    var companyID = req.isAuthenticated() ? req.user.companyID : null;
+    const companyID = req.isAuthenticated() ? req.user.companyID : null;
 
-    var statistic = {
+    const statistic = {
         type: data.type,
         relationedID: data.relationedID,
         relationedName: data.relationedName,

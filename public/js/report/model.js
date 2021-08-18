@@ -18,9 +18,9 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
         };
 
         return api.getLayers(params).then(function (res) {
-            var layers = res.data;
+            const layers = res.data;
 
-            for (var layer of layers) {
+            for (const layer of layers) {
                 layer.rootItem = {
                     elementLabel: '',
                     elementRole: 'root',
@@ -34,7 +34,7 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
     };
 
     this.initChart = function (report) {
-        var chart = {
+        const chart = {
             id: 'Chart' + uuid.v4(),
             dataColumns: [],
             datax: {},
@@ -87,7 +87,7 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
     };
 
     function calculateIdForAllElements (elements) {
-        for (var element of elements) {
+        for (const element of elements) {
             if (element.elementRole === 'dimension') {
                 element.id = reportsService.getColumnId(element);
             }
@@ -96,19 +96,19 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
         }
     };
 
-    var selectedColumn;
+    let selectedColumn;
 
     this.selectedColumn = function () {
         return selectedColumn;
     };
 
-    var selectedColumnHashedID;
+    let selectedColumnHashedID;
 
     this.selectedColumnHashedID = function () {
         return selectedColumnHashedID;
     };
 
-    var selectedColumnIndex;
+    let selectedColumnIndex;
 
     this.selectedColumnIndex = function () {
         return selectedColumnIndex;
@@ -144,9 +144,9 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
 
     // returns a container for the report, to be inserted in the dashboard html
     this.getReportContainerHTML = function (reportID) {
-        var containerID = 'REPORT_CONTAINER_' + reportID;
+        const containerID = 'REPORT_CONTAINER_' + reportID;
 
-        var html = '<div page-block class="container-fluid featurette ndContainer" ndType="container" style="height:100%;padding:0px;">' +
+        const html = '<div page-block class="container-fluid featurette ndContainer" ndType="container" style="height:100%;padding:0px;">' +
                         '<div class="col-md-12 ndContainer" style="height:100%;padding:0px;">' +
                             '<div class="container-fluid" id="' + containerID +
                              '" report-view report="getReport(\'' + reportID + '\')" style="padding:0px;position: relative;height: 100%;"></div>' +

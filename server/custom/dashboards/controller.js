@@ -10,7 +10,7 @@ class DashboardsController extends Controller {
     }
 }
 
-var controller = new DashboardsController();
+const controller = new DashboardsController();
 
 exports.DashboardsFindAll = function (req, res) {
     req.query.companyid = true;
@@ -55,7 +55,7 @@ exports.DashboardsCreate = function (req, res) {
 exports.DashboardsUpdate = function (req, res) {
     req.query.companyid = true;
 
-    var data = req.body;
+    const data = req.body;
 
     if (!req.user.isAdmin()) {
         Dashboard.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
@@ -100,7 +100,7 @@ exports.getDashboard = function (req, res) {
 
         // Annotate the execution in statistics
         const Statistic = mongoose.model('Statistic');
-        var stat = {};
+        const stat = {};
         stat.type = 'dashboard';
         stat.relationedID = dashboard._id;
         stat.relationedName = dashboard.dashboardName;

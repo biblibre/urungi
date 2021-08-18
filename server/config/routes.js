@@ -26,14 +26,14 @@ module.exports = function (app, passport) {
 
             if (c === 0) {
                 debug('no records in the users model, this is the initial setup!');
-                var theCompany = {};
+                const theCompany = {};
                 theCompany.companyID = 'COMPID';
                 theCompany.createdBy = 'urungi setup';
                 theCompany.nd_trash_deleted = false;
                 Company.create(theCompany, function (result) {
                 });
 
-                var adminUser = new User();
+                const adminUser = new User();
                 adminUser.userName = 'administrator';
                 adminUser.password = 'urungi';
                 adminUser.companyID = 'COMPID';
@@ -62,7 +62,7 @@ function authenticate (passport, User, req, res, next) {
             }
             res.status(401).send(info.message);
         } else {
-            var loginData = {
+            const loginData = {
                 last_login_date: new Date(),
                 last_login_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress
             };

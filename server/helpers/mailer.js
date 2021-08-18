@@ -7,8 +7,8 @@ const nodemailer = require('nodemailer');
 module.exports.sendEmailTemplate = sendEmailTemplate;
 
 function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
-    var templatesDir = path.resolve(__dirname, '../', 'email_templates');
-    var transport = nodemailer.createTransport(config.get('mailer.options'), config.get('mailer.defaults'));
+    const templatesDir = path.resolve(__dirname, '../', 'email_templates');
+    const transport = nodemailer.createTransport(config.get('mailer.options'), config.get('mailer.defaults'));
 
     const promises = [];
     for (const item of recipients) {

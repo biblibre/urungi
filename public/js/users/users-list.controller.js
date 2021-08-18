@@ -38,7 +38,7 @@
         };
 
         function getUsers (page) {
-            var params = {
+            const params = {
                 page: page || 1,
                 fields: 'userName,lastName,status',
             };

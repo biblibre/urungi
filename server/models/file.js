@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var fileSchema = new mongoose.Schema({
+const fileSchema = new mongoose.Schema({
     companyID: { type: String, required: false },
     filename: { type: String, required: true }, // The name under which the file is stored in the system
     name: { type: String, required: false }, // The name seen by the user

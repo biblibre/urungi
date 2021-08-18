@@ -13,16 +13,16 @@ class ReportsController extends Controller {
     }
 }
 
-var controller = new ReportsController();
+const controller = new ReportsController();
 
 exports.ReportsFindAll = async function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
     req.user = {};
     req.user.companyID = 'COMPID';
-    var perPage = config.get('pagination.itemsPerPage');
-    var page = (req.query.page) ? req.query.page : 1;
-    var result = controller.findAllParams(req);
+    const perPage = config.get('pagination.itemsPerPage');
+    const page = (req.query.page) ? req.query.page : 1;
+    const result = controller.findAllParams(req);
     let response;
 
     if (req.query.populate === 'layer') {
@@ -98,8 +98,8 @@ exports.GetReport = function (req, res) {
 
         if ((req.query.mode === 'execute' || req.query.mode === 'preview')) {
             // Note the execution in statistics
-            var Statistic = mongoose.model('Statistic');
-            var stat = {};
+            const Statistic = mongoose.model('Statistic');
+            const stat = {};
             stat.type = 'report';
             stat.relationedID = report._id;
             stat.relationedName = report.reportName;
@@ -150,7 +150,7 @@ exports.ReportsCreate = function (req, res) {
 exports.ReportsUpdate = function (req, res) {
     req.query.trash = true;
     req.query.companyid = true;
-    var data = req.body;
+    const data = req.body;
 
     if (!req.user.isAdmin()) {
         Report.findOne({ _id: data._id, owner: req.user._id, companyID: req.user.companyID }, { _id: 1 }, {}, function (err, item) {
@@ -245,7 +245,7 @@ exports.dataQuery = async function (req, res) {
     const limit = req.body.limit;
     const filters = req.body.filters;
 
-    var result;
+    let result;
     try {
         const query = generateQuery(report);
 
@@ -273,7 +273,7 @@ exports.filterValuesQuery = async function (req, res) {
     const filter = req.body.filter;
     const options = req.body.options || {};
 
-    var result;
+    let result;
     try {
         const query = {
             layerID: filter.layerID,

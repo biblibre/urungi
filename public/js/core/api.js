@@ -444,7 +444,7 @@
         }
 
         function changeLayerStatus (layerID, newStatus) {
-            var data = {
+            const data = {
                 status: newStatus,
             };
 

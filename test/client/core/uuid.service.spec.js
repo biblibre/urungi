@@ -9,7 +9,7 @@ describe('uuid', function () {
     // https://github.com/jsdom/jsdom/issues/1612
     window.crypto = {
         getRandomValues: function (buffer) {
-            for (var i = 0, r; i < buffer.length; i++) {
+            for (let i = 0, r; i < buffer.length; i++) {
                 if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
                 buffer[i] = r >>> ((i & 0x03) << 3) & 0xff;
             }

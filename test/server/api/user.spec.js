@@ -134,7 +134,7 @@ describe('User API', function () {
         });
 
         it('should count report, dashboards, layers and users', async function () {
-            var res = await request(app).get('/api/user/counts')
+            const res = await request(app).get('/api/user/counts')
                 .set(adminHeaders)
                 .expect(200);
 
@@ -309,7 +309,7 @@ describe('User API', function () {
 
     describe('PUT /api/user/context-help/:name', function () {
         it('should add :name to user.contextHelp', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
+            let user = await User.findOne({ userName: 'administrator' });
             expect(user).toHaveProperty('contextHelp');
             expect(user.contextHelp).toHaveLength(0);
             const res = await request(app).put('/api/user/context-help/homeIndex')

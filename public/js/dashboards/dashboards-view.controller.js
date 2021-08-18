@@ -60,10 +60,10 @@
             $compile(pageViewer)($scope);
 
             $timeout(function () {
-                var mandatoryCount = 0;
-                for (var report of vm.dashboard.reports) {
+                let mandatoryCount = 0;
+                for (const report of vm.dashboard.reports) {
                     if (report.properties.filters.length !== 0) {
-                        for (var filter of report.properties.filters) {
+                        for (const filter of report.properties.filters) {
                             if (filter.promptMandatory === true) {
                                 ++mandatoryCount;
                             }
@@ -77,8 +77,8 @@
         }
 
         function initPrompts () {
-            for (var report of vm.dashboard.reports) {
-                for (var filter of report.properties.filters) {
+            for (const report of vm.dashboard.reports) {
+                for (const filter of report.properties.filters) {
                     if (filter.filterPrompt) {
                         const p = {};
                         for (const i in filter) {

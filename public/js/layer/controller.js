@@ -54,26 +54,26 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         ]
     };
 
-    var connectorPaintStyle = {
+    const connectorPaintStyle = {
         strokeWidth: 4,
         stroke: '#61B7CF',
         joinstyle: 'round',
         outlineStroke: 'white',
         outlineWidth: 2
     };
-    var connectorHoverStyle = {
+    const connectorHoverStyle = {
         strokeWidth: 4,
         stroke: '#216477',
         outlineWidth: 2,
         outlineStroke: 'white'
     };
-    var endpointHoverStyle = {
+    const endpointHoverStyle = {
         fill: '#000000',
         stroke: '#000000' // stroke: "#216477"
     };
 
     // the definition of source endpoints (the small blue ones)
-    var sourceEndpoint = {
+    const sourceEndpoint = {
         endpoint: 'Dot',
         paintStyle: {
             stroke: '#7AB02C',
@@ -98,7 +98,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     // the definition of target endpoints (will appear when the user drags a connection)
-    var targetEndpoint = {
+    const targetEndpoint = {
         endpoint: 'Dot',
         paintStyle: { fill: '#7AB02C', radius: 6 },
         hoverPaintStyle: endpointHoverStyle,
@@ -110,18 +110,18 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         ]
     };
 
-    var _addEndpoints = function (toId, sourceAnchors, targetAnchors) {
-        var newEndpoints = [];
-        for (var i = 0; i < sourceAnchors.length; i++) {
-            var sourceUUID = toId + sourceAnchors[i];
+    const _addEndpoints = function (toId, sourceAnchors, targetAnchors) {
+        const newEndpoints = [];
+        for (let i = 0; i < sourceAnchors.length; i++) {
+            const sourceUUID = toId + sourceAnchors[i];
 
             const nedp = instance.addEndpoint(toId, sourceEndpoint, {
                 anchor: sourceAnchors[i], uuid: sourceUUID
             });
             newEndpoints.push(nedp.getUuid());
         }
-        for (var j = 0; j < targetAnchors.length; j++) {
-            var targetUUID = toId + targetAnchors[j];
+        for (let j = 0; j < targetAnchors.length; j++) {
+            const targetUUID = toId + targetAnchors[j];
 
             const nedp = instance.addEndpoint(toId, targetEndpoint, {
                 anchor: targetAnchors[j], uuid: targetUUID
@@ -140,18 +140,18 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             },
             stop: function (event, ui) {
                 if (typeof ui.position !== 'undefined') {
-                    var pos_x = ui.position.left;
-                    var pos_y = ui.position.top;
+                    let pos_x = ui.position.left;
+                    let pos_y = ui.position.top;
 
                     if (pos_x < 0) { pos_x = 0; }
 
                     if (pos_y < 0) { pos_y = 0; }
 
-                    var parentId = $(this).attr('id');
+                    const parentId = $(this).attr('id');
 
-                    var id = parentId.replace('-parent', '');
+                    const id = parentId.replace('-parent', '');
 
-                    for (var c in $scope._Layer.params.schema) {
+                    for (const c in $scope._Layer.params.schema) {
                         if ($scope._Layer.params.schema[c].collectionID === id) {
                             $scope._Layer.params.schema[c].left = pos_x;
                             $scope._Layer.params.schema[c].top = pos_y;
@@ -187,19 +187,19 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     $scope.save = function () {
-        var theLayer = $scope._Layer;
+        const theLayer = $scope._Layer;
 
         $scope.calculateComponents();
 
         // clean up
 
-        for (var collection in theLayer.params.schema) {
-            for (var element in theLayer.params.schema[collection].elements) {
+        for (const collection in theLayer.params.schema) {
+            for (const element in theLayer.params.schema[collection].elements) {
                 if (theLayer.params.schema[collection].elements[element].painted) { theLayer.params.schema[collection].elements[element].painted = false; }
             }
         }
 
-        for (var join in theLayer.params.joins) {
+        for (const join in theLayer.params.joins) {
             theLayer.params.joins[join].connection = undefined;
         }
 
@@ -221,7 +221,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     $scope.editSQL = function () {
-        var selectedCollection = $scope.theSelectedElement;
+        const selectedCollection = $scope.theSelectedElement;
         if (!selectedCollection.isSQL) {
             new Noty({ text: gettextCatalog.getString('Cannot modify sql of an object which is not an sql request'), type: 'error' }).show();
             return;
@@ -242,7 +242,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         if ($scope.selectedEntities.indexOf(entity) === -1) {
             $scope.selectedEntities.push(entity);
         } else {
-            var index = $scope.selectedEntities.indexOf(entity);
+            const index = $scope.selectedEntities.indexOf(entity);
             $scope.selectedEntities.splice(index, 1);
         }
     };
@@ -265,7 +265,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             $scope._Layer.params.schema.push(collection);
 
             setTimeout(function () {
-                for (var element in collection.elements) {
+                for (const element in collection.elements) {
                     if (!collection.elements[element].painted) {
                         _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
                     }
@@ -284,7 +284,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         delete $scope.temporarySQLCollection.error;
 
         api.getSqlQueryCollection($scope._Layer.datasourceID, $scope.temporarySQLCollection).then(function (newCol) {
-            var currentCol = $scope.theSelectedElement;
+            const currentCol = $scope.theSelectedElement;
 
             for (const e in newCol.elements) {
                 newCol.elements[e].collectionID = currentCol.collectionID;
@@ -336,9 +336,9 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             }
         }
 
-        var deletedIndexes = [];
+        const deletedIndexes = [];
 
-        for (var i in $scope._Layer.objects) {
+        for (const i in $scope._Layer.objects) {
             const e1 = $scope._Layer.objects[i];
             if (e1.collectionID === $scope.theSelectedElement.collectionID) {
                 for (const e2 of $scope.lostElements) {
@@ -350,7 +350,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             }
         }
 
-        for (var k = deletedIndexes.length - 1; k >= 0; k--) {
+        for (let k = deletedIndexes.length - 1; k >= 0; k--) {
             // Iterate backwards so the indexes to be removed don't change as we remove the ones before
             $scope._Layer.objects.splice(deletedIndexes[k], 1);
         }
@@ -364,20 +364,20 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     function makeJoin (sourceID, targetID) {
         if (!$scope._Layer.params.joins) { $scope._Layer.params.joins = []; }
 
-        var found = false;
+        let found = false;
         // First verify that the join does not exists
-        for (var j in $scope._Layer.params.joins) {
+        for (const j in $scope._Layer.params.joins) {
             if ($scope._Layer.params.joins[j].sourceElementID === sourceID && $scope._Layer.params.joins[j].targetElementID === targetID) {
                 found = true;
             }
         }
 
         if (!found) {
-            var join = {};
+            const join = {};
             join.joinID = 'J' + $scope.newID();
 
-            for (var collection in $scope._Layer.params.schema) {
-                for (var element in $scope._Layer.params.schema[collection].elements) {
+            for (const collection in $scope._Layer.params.schema) {
+                for (const element in $scope._Layer.params.schema[collection].elements) {
                     if ($scope._Layer.params.schema[collection].elements[element].elementID === sourceID) {
                         join.sourceElementID = $scope._Layer.params.schema[collection].elements[element].elementID;
                         join.sourceElementName = $scope._Layer.params.schema[collection].elements[element].elementName;
@@ -405,14 +405,14 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         if (!$scope._Layer.params.joins) { $scope._Layer.params.joins = []; }
 
         // First verify that the join does not exists
-        for (var j in $scope._Layer.params.joins) {
+        for (const j in $scope._Layer.params.joins) {
             if (($scope._Layer.params.joins[j].sourceElementID === sourceID && $scope._Layer.params.joins[j].targetElementID === targetID) ||
                 ($scope._Layer.params.joins[j].sourceElementID === targetID && $scope._Layer.params.joins[j].targetElementID === sourceID)) {
-                var connections = instance.getAllConnections();
+                const connections = instance.getAllConnections();
 
-                for (var c in connections) {
-                    var source = connections[c].endpoints[0].getElement().id;
-                    var target = connections[c].endpoints[1].getElement().id;
+                for (const c in connections) {
+                    const source = connections[c].endpoints[0].getElement().id;
+                    const target = connections[c].endpoints[1].getElement().id;
 
                     if ((target === sourceID && source === targetID) ||
                             (target === targetID && source === sourceID)) {
@@ -496,7 +496,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         });
     };
 
-    var instance;
+    let instance;
 
     $scope.erDiagramInit = function () {
         if (!$scope.initiated) {
@@ -521,14 +521,14 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                     Container: 'canvas'
                 });
 
-                var rightJoinType = {
+                const rightJoinType = {
                     overlays: [
                         ['Label', { location: 0.88, label: '[' + gettextCatalog.getString('right') + ']', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
                     ]
 
                 };
 
-                var leftJoinType = {
+                const leftJoinType = {
                     overlays: [
                         ['Label', { location: 0.10, label: '[' + gettextCatalog.getString('left') + ']', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
                     ]
@@ -537,16 +537,16 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                 instance.registerConnectionType('right', rightJoinType);
                 instance.registerConnectionType('left', leftJoinType);
 
-                var endpointHoverStyle = {
+                const endpointHoverStyle = {
                     fill: '#000000',
                     stroke: '#000000' // stroke: "#216477"
                 };
 
-                var init = function (connection) {
+                const init = function (connection) {
                 // connection.getOverlay("label").setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
                 };
                 /*****************/
-                var jtkField = jsPlumb.getSelector('.jtk-field');
+                const jtkField = jsPlumb.getSelector('.jtk-field');
                 /*****************/
                 // suspend drawing and initialise.
                 instance.batch(function () {
@@ -574,18 +574,18 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                         },
                         stop: function (event) {
                             if (typeof event.pos !== 'undefined') {
-                                var pos_x = event.pos[0];
-                                var pos_y = event.pos[1];
+                                let pos_x = event.pos[0];
+                                let pos_y = event.pos[1];
 
                                 if (pos_x < 0) { pos_x = 0; }
 
                                 if (pos_y < 0) { pos_y = 0; }
 
-                                var parentId = event.el.getAttribute('id');
+                                const parentId = event.el.getAttribute('id');
 
-                                var id = parentId.replace('-parent', '');
+                                const id = parentId.replace('-parent', '');
 
-                                for (var c in $scope._Layer.params.schema) {
+                                for (const c in $scope._Layer.params.schema) {
                                     if ($scope._Layer.params.schema[c].collectionID === id) {
                                         $scope._Layer.params.schema[c].left = pos_x;
                                         $scope._Layer.params.schema[c].top = pos_y;
@@ -595,8 +595,8 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                         }
                     });
 
-                    for (var j in $scope._Layer.params.joins) {
-                        var c = instance.connect({ source: $scope._Layer.params.joins[j].targetElementID, target: $scope._Layer.params.joins[j].sourceElementID, id: $scope._Layer.params.joins[j].joinID });
+                    for (const j in $scope._Layer.params.joins) {
+                        const c = instance.connect({ source: $scope._Layer.params.joins[j].targetElementID, target: $scope._Layer.params.joins[j].sourceElementID, id: $scope._Layer.params.joins[j].joinID });
 
                         if ($scope._Layer.params.joins[j].joinType === 'left') { c.setType('left'); }
                         if ($scope._Layer.params.joins[j].joinType === 'right') { c.setType('right'); }
@@ -607,7 +607,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                     // listen for clicks on connections, and offer to delete connections on click.
                     //
                     instance.bind('click', function (conn, originalEvent) {
-                        for (var j in $scope._Layer.params.joins) {
+                        for (const j in $scope._Layer.params.joins) {
                             if (($scope._Layer.params.joins[j].sourceElementID === conn.sourceId && $scope._Layer.params.joins[j].targetElementID === conn.targetId) ||
                              ($scope._Layer.params.joins[j].sourceElementID === conn.targetId && $scope._Layer.params.joins[j].targetElementID === conn.sourceId)) {
                                 $scope._Layer.params.joins[j].connection = conn;
@@ -685,7 +685,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     $scope.toggleFolded = function (collection) {
         collection.folded = !collection.folded;
         setTimeout(function () {
-            var collectionObject = $('#' + collection.collectionID + '-parent')[0];
+            const collectionObject = $('#' + collection.collectionID + '-parent')[0];
             instance.recalculateOffsets(collectionObject);
             instance.repaintEverything();
         }, 100);
@@ -694,7 +694,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     $scope.createComposedElement = function () {
         $scope.calculateComponents();
 
-        var element = {};
+        const element = {};
 
         element.isCustom = true;
         element.elementID = $scope.newID();
@@ -845,9 +845,9 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     function saveEditElement () {
-        var element = $scope.modalElement;
+        const element = $scope.modalElement;
 
-        var result = checkElementOk(element);
+        const result = checkElementOk(element);
         if (!result.result) {
             $scope.elementEditingWarning = result.message;
             return;
@@ -860,8 +860,8 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     }
 
     function checkElementOk (element) {
-        var isOk = true;
-        var message = '';
+        let isOk = true;
+        let message = '';
 
         if (element.elementType === 'date') {
             if (element.extractFromString) {
@@ -902,7 +902,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             }
         }
 
-        var theResult = {};
+        const theResult = {};
         if (isOk) { theResult.result = 1; } else { theResult.result = 0; }
 
         theResult.message = message;
@@ -911,9 +911,9 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     $scope.zoom = function (ratio) {
-        var theWidth = 200 * ratio + 'px';
-        var theFontSize = '10px';
-        var theIconSize = '12px';
+        const theWidth = 200 * ratio + 'px';
+        let theFontSize = '10px';
+        let theIconSize = '12px';
 
         if (ratio === 0.5) {
             theFontSize = '8px';
@@ -937,20 +937,20 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         $('.jtk-field-icon').css('font-size', theIconSize);
         $('.jtk-field-selected').css('font-size', theIconSize);
 
-        var leftCorrection = (200 * ratio);
+        const leftCorrection = (200 * ratio);
 
         for (const collection in $scope._Layer.params.schema) {
-            var theID = $scope._Layer.params.schema[collection].collectionID;
+            const theID = $scope._Layer.params.schema[collection].collectionID;
 
-            var p = $(theID);
-            var position = p.parent().position();
-            var theLeft = position.left;
+            const p = $(theID);
+            const position = p.parent().position();
+            const theLeft = position.left;
 
             $($scope._Layer.params.schema[collection].collectionID).css('left', theLeft + leftCorrection + 'px');
         }
 
         for (const collection in $scope._Layer.params.schema) {
-            for (var element in $scope._Layer.params.schema[collection].elements) {
+            for (const element in $scope._Layer.params.schema[collection].elements) {
                 instance.revalidate($scope._Layer.params.schema[collection].elements[element].elementID);
             }
         }
@@ -963,9 +963,9 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     $scope.addFolder = function () {
-        var elementID = 'F' + $scope.newID();
+        const elementID = 'F' + $scope.newID();
 
-        var element = {};
+        const element = {};
         element.elementLabel = gettextCatalog.getString('my folder');
         element.elementRole = 'folder';
         element.elementID = elementID;
@@ -975,10 +975,10 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     $scope.deleteSchemaElement = function (element) {
-        var elementID = element.elementID;
+        const elementID = element.elementID;
 
-        for (var s in $scope._Layer.params.schema) {
-            for (var e in $scope._Layer.params.schema[s].elements) {
+        for (const s in $scope._Layer.params.schema) {
+            for (const e in $scope._Layer.params.schema[s].elements) {
                 if ($scope._Layer.params.schema[s].elements[e].elementID === elementID) {
                     delete $scope._Layer.params.schema[s].elements[e].elementRole;
                 }
@@ -997,7 +997,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     function checkfordelete (elements, elementID) {
-        for (var i in elements) {
+        for (const i in elements) {
             if (elements[i].elementID === elementID) {
                 unassingElementRole(elements[i]);
                 elements.splice(i, 1);
@@ -1011,10 +1011,10 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     }
 
     function unassingElementRole (element) {
-        var elementID = element.elementID;
+        const elementID = element.elementID;
 
-        for (var s in $scope._Layer.params.schema) {
-            for (var e in $scope._Layer.params.schema[s].elements) {
+        for (const s in $scope._Layer.params.schema) {
+            for (const e in $scope._Layer.params.schema[s].elements) {
                 if ($scope._Layer.params.schema[s].elements[e].elementID === elementID) {
                     delete $scope._Layer.params.schema[s].elements[e].elementRole;
                 }
@@ -1023,7 +1023,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
 
         if (element.elements) {
             if (element.elements.length > 0) {
-                for (var i in element.elements) {
+                for (const i in element.elements) {
                     unassingElementRole(element.elements[i]);
                 }
             }
@@ -1050,7 +1050,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     $scope.deleteCollection = function (collection) {
-        var theCollectionID = collection.collectionID;
+        const theCollectionID = collection.collectionID;
 
         deleteAllCollectionJoins(theCollectionID);
 
@@ -1072,12 +1072,12 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     function deleteAllCollectionJoins (collectionID) {
-        var joinsToDelete = [];
+        const joinsToDelete = [];
 
-        for (var o in $scope._Layer.params.schema) {
+        for (const o in $scope._Layer.params.schema) {
             if ($scope._Layer.params.schema[o].collectionID === collectionID) {
-                for (var e in $scope._Layer.params.schema[o].elements) {
-                    for (var j in $scope._Layer.params.joins) {
+                for (const e in $scope._Layer.params.schema[o].elements) {
+                    for (const j in $scope._Layer.params.joins) {
                         if (($scope._Layer.params.joins[j].sourceElementID === $scope._Layer.params.schema[o].elements[e].elementID) ||
                                             ($scope._Layer.params.joins[j].targetElementID === $scope._Layer.params.schema[o].elements[e].elementID)) {
                             joinsToDelete.push({ sourceElementID: $scope._Layer.params.joins[j].sourceElementID, targetElementID: $scope._Layer.params.joins[j].targetElementID });
@@ -1087,13 +1087,13 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             }
         }
 
-        for (var jtd in joinsToDelete) {
+        for (const jtd in joinsToDelete) {
             deleteJoin(joinsToDelete[jtd].sourceElementID, joinsToDelete[jtd].targetElementID);
         }
     }
 
     function deleteAllCollectionElements (elements, collectionID) {
-        for (var e = elements.length - 1; e >= 0; e--) {
+        for (let e = elements.length - 1; e >= 0; e--) {
             if (elements[e].elements) { deleteAllCollectionElements(elements[e].elements, collectionID); }
 
             if (elements[e].collectionID === collectionID) {
@@ -1120,12 +1120,12 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     function unSelect () {
-        for (var s in $scope.selectedElements) {
+        for (const s in $scope.selectedElements) {
             $('#' + $scope.selectedElements[s]).removeClass('selectedElement');
         }
-        var connections = instance.getAllConnections();
+        const connections = instance.getAllConnections();
 
-        for (var c in connections) {
+        for (const c in connections) {
             // connections[c].setType("default"); esto cambia el tipo left right, es solo el color lo que queremos cambiar
             connections[c].setPaintStyle({ stroke: '#61B7CF', strokeWidth: 4 });
             connections[c].selected = false;
@@ -1173,7 +1173,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     function setSelectedElements () {
-        for (var s in $scope.selectedElements) {
+        for (const s in $scope.selectedElements) {
             $('#' + $scope.selectedElements[s]).addClass('selectedElement');
         }
         $scope.tabs.selected = 'properties';
@@ -1235,7 +1235,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
         }
         counter = (counter + 1) % 676; // 676 === 26**2
         $scope._Layer.idCounter = counter;
-        var uid = 'abcdefghijklmnopqrstuvwxyz'.charAt(Math.floor(counter / 26)) +
+        let uid = 'abcdefghijklmnopqrstuvwxyz'.charAt(Math.floor(counter / 26)) +
             'abcdefghijklmnopqrstuvwxyz'.charAt(counter % 26);
         const rand = Math.floor(Math.random() * 676);
         uid += 'abcdefghijklmnopqrstuvwxyz'.charAt(Math.floor(rand / 26)) +
@@ -1284,7 +1284,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     };
 
     $scope.removeFromArray = function (array, item) {
-        var index = array.indexOf(item);
+        const index = array.indexOf(item);
 
         if (index > -1) array.splice(index, 1);
     };

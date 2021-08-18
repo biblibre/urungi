@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var datasourceSchema = new mongoose.Schema({
+const datasourceSchema = new mongoose.Schema({
     companyID: { type: String, required: false, default: 'COMPID' },
     connection: {
         database: String,

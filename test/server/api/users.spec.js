@@ -306,8 +306,8 @@ describe('Users API', function () {
             });
 
             it('should return user data if asking for its own account data', async function () {
-                var user = await User.findOne({ userName: 'user' });
-                var report = await Report.create({
+                const user = await User.findOne({ userName: 'user' });
+                const report = await Report.create({
                     companyID: 'COMPID',
                     reportName: 'Report',
                     owner: user.id,
@@ -329,8 +329,8 @@ describe('Users API', function () {
 
         describe('when authenticated as admin', function () {
             it('should return user data', async function () {
-                var user = await User.findOne({ userName: 'user' });
-                var report = await Report.create({
+                const user = await User.findOne({ userName: 'user' });
+                const report = await Report.create({
                     companyID: 'COMPID',
                     reportName: 'Report',
                     owner: user.id,
@@ -371,8 +371,8 @@ describe('Users API', function () {
             });
 
             it('should return user data if asking for its own account data', async function () {
-                var user = await User.findOne({ userName: 'user' });
-                var dashboard = await Dashboard.create({
+                const user = await User.findOne({ userName: 'user' });
+                const dashboard = await Dashboard.create({
                     companyID: 'COMPID',
                     dashboardName: 'Dashboard',
                     owner: user.id,
@@ -393,8 +393,8 @@ describe('Users API', function () {
 
         describe('when authenticated as admin', function () {
             it('should return user data', async function () {
-                var user = await User.findOne({ userName: 'user' });
-                var dashboard = await Dashboard.create({
+                const user = await User.findOne({ userName: 'user' });
+                const dashboard = await Dashboard.create({
                     companyID: 'COMPID',
                     dashboardName: 'Dashboard',
                     owner: user.id,

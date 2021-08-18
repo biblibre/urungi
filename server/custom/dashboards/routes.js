@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const Dashboard = mongoose.model('Dashboard');
 
 module.exports = function (app) {
-    var Dashboards = require('./controller.js');
+    const Dashboards = require('./controller.js');
 
     app.get('/api/dashboards/find-all', restrict, Dashboards.DashboardsFindAll);
     app.get('/api/dashboards/find-one', restrict, Dashboards.DashboardsFindOne);

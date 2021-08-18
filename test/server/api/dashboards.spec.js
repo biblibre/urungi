@@ -71,7 +71,7 @@ describe('Dashboards API', function () {
     });
     describe('POST /api/dashboards/create', function () {
         it('should create a dashboard', async function () {
-            var user = await User.findOne({ userName: 'administrator' });
+            const user = await User.findOne({ userName: 'administrator' });
             const res = await request(app).post('/api/dashboards/create')
                 .set(headers)
                 .send({ companyID: 'COMPID', dashboardName: 'Dashboard' })

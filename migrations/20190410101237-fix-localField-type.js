@@ -1,11 +1,11 @@
 const ObjectID = require('mongodb').ObjectID;
 module.exports = {
     async up (db) {
-        var operations = [];
+        const operations = [];
 
         const reports = await db.collection('wst_Reports').find().toArray();
         reports.forEach(report => {
-            var layerID = report.selectedLayerID;
+            const layerID = report.selectedLayerID;
             operations.push({
                 updateOne: {
                     filter: { _id: report._id },
@@ -22,11 +22,11 @@ module.exports = {
     },
 
     async down (db) {
-        var operations = [];
+        const operations = [];
 
         const reports = await db.collection('wst_Reports').find().toArray();
         reports.forEach(report => {
-            var layerID = report.selectedLayerID;
+            const layerID = report.selectedLayerID;
             operations.push({
                 updateOne: {
                     filter: { _id: report._id },

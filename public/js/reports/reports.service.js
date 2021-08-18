@@ -54,9 +54,9 @@
          * aggregations
          */
         function getColumnId (element) {
-            var columnId;
+            let columnId;
 
-            var aggregation = element.aggregation || element.defaultAggregation;
+            const aggregation = element.aggregation || element.defaultAggregation;
 
             if (!aggregation) {
                 columnId = 'e' + element.elementID.toLowerCase() + 'raw';

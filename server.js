@@ -5,7 +5,7 @@ if (cluster.isMaster) {
     const workers = config.get('workers');
 
     // Fork workers.
-    for (var i = 0; i < workers; i++) {
+    for (let i = 0; i < workers; i++) {
         cluster.fork();
     }
 

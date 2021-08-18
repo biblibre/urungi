@@ -69,7 +69,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     });
 
     $scope.$on('loadReportStrucutureForDash', function (event, args) {
-        var report = args.report;
+        const report = args.report;
 
         $scope.selectedReport = report;
         $scope.mode = 'edit';
@@ -127,7 +127,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.initForm = function () {
         $scope.mode = 'edit';
         $scope.cleanForm();
-        var layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
+        const layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
         $scope.rootItem = layer.rootItem;
     };
 
@@ -156,7 +156,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     */
 
     $scope.repaintWithPrompts = function () {
-        var filterCriteria = {};
+        const filterCriteria = {};
         for (const i in $scope.prompts) {
             filterCriteria[i] = $scope.prompts[i].criterion;
         }
@@ -176,7 +176,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.removeItem = function (item, collection) {
-        var id = collection.indexOf(item);
+        const id = collection.indexOf(item);
         collection.splice(id, 1);
     };
 
@@ -197,7 +197,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
     $scope.changeLayer = function (selectedLayerID) {
         $scope.selectedReport.selectedLayerID = selectedLayerID;
-        var layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
+        const layer = $scope.layers.find(l => l._id === $scope.selectedReport.selectedLayerID);
         $scope.rootItem = layer.rootItem;
     };
 
@@ -231,7 +231,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.pushToDash = function () {
-        var params = {};
+        const params = {};
 
         return connection.get('/api/dashboards/find-all', params).then(function (data) {
             $scope.dashboards = data;
@@ -328,7 +328,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.toReportItem = function (ngModelItem) {
-        var agg;
+        let agg;
 
         if (ngModelItem.aggregation) {
             agg = ngModelItem.aggregation;
@@ -358,7 +358,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.autoChooseArea = function (item, chooseColumn) {
-        var choice;
+        let choice;
 
         switch ($scope.selectedReport.reportType) {
         case 'grid':
@@ -428,7 +428,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.autoFill = function (layerObject) {
-        var choice = $scope.autoChooseArea(layerObject);
+        const choice = $scope.autoChooseArea(layerObject);
 
         const found = choice.propertyBind.find(item => item.elementID === layerObject.elementID);
         if (!found) {
@@ -456,7 +456,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
         $scope.$broadcast('clearReport');
 
-        var movedColumns = [];
+        const movedColumns = [];
 
         function moveContent (a, b) {
             b.push.apply(b, a.splice(0));

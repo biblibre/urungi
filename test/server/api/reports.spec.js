@@ -107,8 +107,8 @@ describe('Reports API', function () {
     });
 
     describe('GET /api/reports/find-all?populate=layer', function () {
-        var layer2;
-        var report2;
+        let layer2;
+        let report2;
 
         beforeAll(async function () {
             layer2 = await Layer.create({

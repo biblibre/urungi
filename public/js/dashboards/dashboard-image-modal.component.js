@@ -57,7 +57,7 @@
         }
 
         function submit () {
-            var file = {
+            const file = {
                 url: vm.url,
             };
 
@@ -75,9 +75,9 @@
                 return;
             }
 
-            var uploadPromise = api.uploadFile(file);
+            const uploadPromise = api.uploadFile(file);
 
-            var newFile = {
+            const newFile = {
                 loading: true
             };
             vm.files.push(newFile);

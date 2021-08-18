@@ -2,18 +2,18 @@
 
 angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog, reportsService) {
     this.rebuildChart = function (report, id, data, chart) {
-        var theValues = [];
-        var theStackValues = {};
-        var theTypes = {};
-        var theNames = {};
-        var theGroups = [];
-        var theData = [];
+        let theValues = [];
+        const theStackValues = {};
+        const theTypes = {};
+        const theNames = {};
+        let theGroups = [];
+        let theData = [];
 
-        var axisField = '';
+        let axisField = '';
         if (chart.dataAxis) { axisField = chart.dataAxis.id; }
         // var axisIsInQuery = false;
 
-        var stackField = '';
+        let stackField = '';
         if (chart.stackDimension) { stackField = chart.stackDimension.id; }
         // var stackIsInQuery = false;
 
@@ -38,15 +38,15 @@ angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog
 
             chart.stacked = true;
 
-            var mapOnAxis = {};
+            const mapOnAxis = {};
 
             for (const valueKey of theValues) {
                 theStackValues[valueKey] = [];
             }
 
-            var newData = [];
+            const newData = [];
 
-            data.map(function (item) {
+            data.forEach(function (item) {
                 if (!item[axisField]) {
                     return;
                 }
@@ -65,7 +65,7 @@ angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog
                     return accumulator;
                 }
 
-                var currentItem = accumulator;
+                let currentItem = accumulator;
 
                 for (const valueKey of theValues) {
                     if (oldItem[valueKey] !== undefined) {
@@ -85,7 +85,7 @@ angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog
 
                         if (currentItem[combinedKey]) {
                             newData.push(currentItem);
-                            var newItem = {};
+                            const newItem = {};
                             newItem[axisField] = currentItem[axisField];
                             currentItem = newItem;
                         }
@@ -106,7 +106,7 @@ angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog
             theValues = [];
             theGroups = [];
             for (const valueKey in theStackValues) {
-                var col = chart.dataColumns.find(c => c.id === valueKey);
+                const col = chart.dataColumns.find(c => c.id === valueKey);
                 if (!col.doNotStack) {
                     theGroups.push(theStackValues[valueKey]);
                 }
@@ -122,7 +122,7 @@ angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog
             chart.stacked = false;
         }
 
-        var theChartCode = '#' + id;
+        const theChartCode = '#' + id;
 
         if (!chart.height) { chart.height = 300; }
 
@@ -166,19 +166,21 @@ angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog
         switch (chart.type) {
         case 'pie':
         case 'donut':
-            var theColumns = [];
-            if (axisField && theValues) {
-                for (const i in data) {
-                    const groupField = data[i][axisField] !== null ? data[i][axisField] : 'NULL';
-                    const valueField = data[i][theValues[0]];
-                    theColumns.push([groupField, valueField]);
+            {
+                const theColumns = [];
+                if (axisField && theValues) {
+                    for (const i in data) {
+                        const groupField = data[i][axisField] !== null ? data[i][axisField] : 'NULL';
+                        const valueField = data[i][theValues[0]];
+                        theColumns.push([groupField, valueField]);
+                    }
                 }
-            }
 
-            c3Config.data = {
-                columns: theColumns,
-                type: chart.type
-            };
+                c3Config.data = {
+                    columns: theColumns,
+                    type: chart.type
+                };
+            }
             break;
 
         case 'gauge':
@@ -355,9 +357,9 @@ angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog
     };
 
     this.changeStack = function (chart) {
-        var theGroups = [];
+        const theGroups = [];
         for (const valueKey in chart.stackKeys) {
-            var col = chart.dataColumns.find(c => c.id === valueKey);
+            const col = chart.dataColumns.find(c => c.id === valueKey);
             if (!col.doNotStack) {
                 theGroups.push(chart.stackKeys[valueKey]);
             }
@@ -366,7 +368,7 @@ angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog
     };
 
     this.getChartHTML = function (report, mode, id) {
-        var html = '';
+        let html = '';
 
         if (mode === 'edit') {
             html = '<div page-block ndType="c3Chart" id="' + id + '" >';

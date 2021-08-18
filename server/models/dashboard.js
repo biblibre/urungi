@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const Report = require('./report');
 
 const dashboardReportSchema = new mongoose.Schema({

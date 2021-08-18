@@ -15,20 +15,20 @@
         return service;
 
         function saveReportAsXLSX (report, data) {
-            var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
-            var ws_name = report.reportName;
+            const wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
+            const ws_name = report.reportName;
 
-            var wb = new Workbook();
-            var ws = sheet_from_array_of_arrays(report, data);
+            const wb = new Workbook();
+            const ws = sheet_from_array_of_arrays(report, data);
 
             wb.SheetNames.push(ws_name);
             wb.Sheets[ws_name] = ws;
 
-            var wbout = XLSX.write(wb, wopts);
+            const wbout = XLSX.write(wb, wopts);
 
             function s2ab (s) {
-                var buf = new ArrayBuffer(s.length);
-                var view = new Uint8Array(buf);
+                const buf = new ArrayBuffer(s.length);
+                const view = new Uint8Array(buf);
                 for (let i = 0; i !== s.length; ++i) {
                     view[i] = s.charCodeAt(i) & 0xFF;
                 }
@@ -45,16 +45,16 @@
         }
 
         function sheet_from_array_of_arrays (report, data) {
-            var ws = {};
-            var range = { s: { c: 10000000, r: 10000000 }, e: { c: 0, r: 0 } };
-            for (var i = 0; i < report.properties.columns.length; i++) {
+            const ws = {};
+            const range = { s: { c: 10000000, r: 10000000 }, e: { c: 0, r: 0 } };
+            for (let i = 0; i < report.properties.columns.length; i++) {
                 if (range.s.r > 0) range.s.r = 0;
                 if (range.s.c > i) range.s.c = i;
                 if (range.e.r < 0) range.e.r = 0;
                 if (range.e.c < i) range.e.c = i;
 
-                var cell = { v: reportsService.getColumnDescription(report.properties.columns[i]) };
-                var cell_ref = XLSX.utils.encode_cell({ c: i, r: 0 });
+                const cell = { v: reportsService.getColumnDescription(report.properties.columns[i]) };
+                const cell_ref = XLSX.utils.encode_cell({ c: i, r: 0 });
                 if (typeof cell.v === 'number') cell.t = 'n';
                 else if (typeof cell.v === 'boolean') cell.t = 'b';
                 else if (cell.v instanceof Date) {
@@ -68,8 +68,8 @@
             for (let R = 0; R !== data.length; ++R) {
                 for (let i = 0; i < report.properties.columns.length; i++) {
                     // var elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName;
-                    var elementID = 'e' + report.properties.columns[i].elementID.toLowerCase();
-                    var elementName = elementID.replace(/[^a-zA-Z ]/g, '');
+                    let elementID = 'e' + report.properties.columns[i].elementID.toLowerCase();
+                    let elementName = elementID.replace(/[^a-zA-Z ]/g, '');
 
                     if (report.properties.columns[i].aggregation) {
                         elementID = 'e' + report.properties.columns[i].elementID.toLowerCase() + report.properties.columns[i].aggregation.substring(0, 3);
@@ -89,7 +89,7 @@
                     } else {
                         cell = { v: data[R][elementName] };
                     }
-                    cell_ref = XLSX.utils.encode_cell({ c: i, r: R + 1 });
+                    const cell_ref = XLSX.utils.encode_cell({ c: i, r: R + 1 });
                     if (typeof cell.v === 'number') cell.t = 'n';
                     else if (typeof cell.v === 'boolean') cell.t = 'b';
                     else if (cell.v instanceof Date) {

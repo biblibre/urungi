@@ -23,7 +23,8 @@ const logSchema = new mongoose.Schema({
 // 400 SQL
 
 logSchema.statics.saveToLog = function (req, data, otherInfo, done) {
-    if (req.user) { var companyID = req.user.companyID; }
+    let companyID;
+    if (req.user) { companyID = req.user.companyID; }
 
     let log;
     if (req) {

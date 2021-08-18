@@ -6,15 +6,15 @@ class Controller {
     }
 
     findAll (req, done) {
-        var Model = this.model;
-        var perPage = config.get('pagination.itemsPerPage');
-        var page = (req.query.page) ? req.query.page : 1;
+        const Model = this.model;
+        const perPage = config.get('pagination.itemsPerPage');
+        const page = (req.query.page) ? req.query.page : 1;
 
-        var component = this.findAllParams(req);
+        const component = this.findAllParams(req);
 
-        var find = component.find;
-        var fields = component.fields;
-        var params = component.params;
+        const find = component.find;
+        const fields = component.fields;
+        const params = component.params;
 
         const p = Model.find(find, fields, params).exec().then(function (items) {
             return Model.countDocuments(find).exec().then(function (count) {
@@ -33,18 +33,18 @@ class Controller {
     }
 
     findAllParams (req) {
-        var perPage = config.get('pagination.itemsPerPage');
-        var page = (req.query.page) ? req.query.page : 1;
-        var find = {};
-        var searchText = (req.query.search) ? req.query.search : false;
-        var filters = (req.query.filters) ? JSON.parse(req.query.filters) : false;
-        var fields = {};
-        var fieldsToGet = (req.query.fields) ? req.query.fields : false;
-        var params = {};
+        const perPage = config.get('pagination.itemsPerPage');
+        const page = (req.query.page) ? req.query.page : 1;
+        let find = {};
+        const searchText = (req.query.search) ? req.query.search : false;
+        const filters = (req.query.filters) ? JSON.parse(req.query.filters) : false;
+        let fields = {};
+        const fieldsToGet = (req.query.fields) ? req.query.fields : false;
+        let params = {};
         if (req.query.page > 0) { params = (req.query.page) ? { skip: (page - 1) * perPage, limit: perPage } : {}; }
 
         if (req.query.sort) {
-            var sortField = {};
+            const sortField = {};
 
             sortField[req.query.sort] = (req.query.sortType) ? req.query.sortType : 1;
 
@@ -63,24 +63,24 @@ class Controller {
             }
         }
 
-        var mandatoryFilters = [];
+        const mandatoryFilters = [];
 
         if (req.query.trash) {
-            var trashField = {};
+            const trashField = {};
             trashField.nd_trash_deleted = false;
 
             mandatoryFilters.push(trashField);
         }
 
         if (req.query.userid) {
-            var userField = {};
+            const userField = {};
             userField.user_id = req.user._id;
 
             mandatoryFilters.push(userField);
         }
 
         if (req.query.companyid) {
-            var companyField = {};
+            const companyField = {};
             companyField.companyID = req.user.companyID;
 
             mandatoryFilters.push(companyField);
@@ -92,19 +92,19 @@ class Controller {
                 find = JSON.parse(find);
             }
 
-            for (var f of find) {
+            for (const f of find) {
                 mandatoryFilters.push(f);
             }
         }
 
-        var searchFind = {};
+        let searchFind = {};
 
         if (searchText) {
-            var findFields = [];
-            var searchFields = this.searchFields;
+            const findFields = [];
+            const searchFields = this.searchFields;
 
             for (const i in searchFields) {
-                var thisField = {};
+                const thisField = {};
 
                 // thisField[searchFields[i]] = {$regex : searchText};
                 thisField[searchFields[i]] = new RegExp(searchText, 'i'); // "i" is for case-insensitive
@@ -115,7 +115,7 @@ class Controller {
         }
 
         if (filters) {
-            var filterObject = {};
+            const filterObject = {};
             for (const f in filters) {
                 filterObject[f] = new RegExp(filters[f], 'i');
             }
@@ -141,7 +141,7 @@ class Controller {
             return p;
         }
 
-        var find = generateFindFields(req, req.query.id);
+        const find = generateFindFields(req, req.query.id);
 
         const p = this.model.findOne(find, {}).exec().then(function (item) {
             if (!item) {
@@ -162,7 +162,7 @@ class Controller {
     }
 
     create (req, done) {
-        var data = req.body;
+        const data = req.body;
 
         if (req.query.userid) {
             data.createdBy = (req.isAuthenticated()) ? req.user._id : null;
@@ -177,7 +177,7 @@ class Controller {
             data.nd_trash_deleted = false;
         }
 
-        var user = (req.isAuthenticated()) ? req.user.username : 'unsigned user';
+        const user = (req.isAuthenticated()) ? req.user.username : 'unsigned user';
         if (!data.nd_history) data.nd_history = [];
 
         data.nd_history.push({
@@ -215,10 +215,10 @@ class Controller {
     }
 
     update (req, done) {
-        var data = req.body;
-        var id = data._id;
+        const data = req.body;
+        const id = data._id;
 
-        var find = generateFindFields(req, id);
+        const find = generateFindFields(req, id);
 
         delete (data.id);
         delete (data._id);
@@ -260,7 +260,7 @@ class Controller {
             return p;
         }
 
-        var find = generateFindFields(req, req.params.id);
+        const find = generateFindFields(req, req.params.id);
         const p = this.model.deleteOne(find).exec().then(function (result) {
             if (result.n > 0) {
                 return { result: 1, msg: result.n + ' item deleted.' };
@@ -281,28 +281,28 @@ class Controller {
 }
 
 function generateFindFields (req, id) {
-    var mandatoryFilters = [];
-    var idField = {};
+    const mandatoryFilters = [];
+    const idField = {};
     idField._id = id;
 
     mandatoryFilters.push(idField);
 
     if (req.query.trash) {
-        var trashField = {};
+        const trashField = {};
         trashField.nd_trash_deleted = false;
 
         mandatoryFilters.push(trashField);
     }
 
     if (req.query.userid) {
-        var userField = {};
+        const userField = {};
         userField.user_id = req.user._id;
 
         mandatoryFilters.push(userField);
     }
 
     if (req.query.companyid) {
-        var companyField = {};
+        const companyField = {};
         companyField.companyID = req.user.companyID;
 
         mandatoryFilters.push(companyField);

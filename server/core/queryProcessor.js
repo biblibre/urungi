@@ -55,7 +55,7 @@ function processQuery (query, queryLayer, warnings) {
     processedQuery.order = [];
     processedQuery.filters = [];
 
-    var groupKeys = new Set();
+    const groupKeys = new Set();
 
     processedQuery.joinTree = {};
 
@@ -141,7 +141,7 @@ function buildJoinTree (query, queryLayer, warnings) {
     * The algorithm then constructs a tree, starting from an arbitrary collection and joining it with the others.
     */
 
-    var collectionRef = {}; // a reference of which collections need to be added to the join
+    const collectionRef = {}; // a reference of which collections need to be added to the join
 
     for (const column of query.columns.concat(query.filters, query.order)) {
         if (column.isCustom) {
@@ -173,12 +173,12 @@ function joinCollections (collectionRef, layer, currentID, previousID, safetyCou
         throw new Error('Too many joins while building join tree ( > 100). Make sure the join schema has no cycle.');
     }
 
-    var shouldJoin = false;
+    let shouldJoin = false;
     if (collectionRef[currentID]) {
         shouldJoin = true;
     }
 
-    var node = {};
+    const node = {};
     node.collection = layer.params.schema.find(c => c.collectionID === currentID);
 
     if (!node.collection) {
@@ -189,8 +189,8 @@ function joinCollections (collectionRef, layer, currentID, previousID, safetyCou
     node.joins = [];
 
     for (const join of layer.params.joins) {
-        var joinedID = null;
-        var joinElementID;
+        let joinedID = null;
+        let joinElementID;
 
         if (join.sourceCollectionID === currentID) {
             joinedID = join.targetCollectionID;
@@ -203,7 +203,7 @@ function joinCollections (collectionRef, layer, currentID, previousID, safetyCou
         }
 
         if (joinedID && joinedID !== previousID) {
-            var result = joinCollections(collectionRef, layer, joinedID, currentID, (safetyCount + 1), warnings);
+            const result = joinCollections(collectionRef, layer, joinedID, currentID, (safetyCount + 1), warnings);
 
             if (result.shouldJoin) {
                 shouldJoin = true;
@@ -260,9 +260,7 @@ function validateOrder (order, element, warnings) {
 }
 
 function validateFilter (filter, element, escape, warnings) {
-    if (element.elementType === 'date') {
-
-    } else {
+    if (element.elementType !== 'date') {
         switch (filter.filterType) {
         case 'null':
         case 'notNull':
@@ -303,7 +301,7 @@ function validateFilter (filter, element, escape, warnings) {
     }
 
     if (filter.criterion.textList) {
-        var validTextList = [];
+        const validTextList = [];
         for (const item of filter.criterion.textList) {
             validTextList.push(String(item));
         }
@@ -314,7 +312,7 @@ function validateFilter (filter, element, escape, warnings) {
 }
 
 function plainText (text, warnings) {
-    var secureText;
+    let secureText;
     try {
         secureText = String(text).replace(/[^a-zA-Z0-9_]/g, '');
     } catch (err) {
@@ -330,14 +328,14 @@ function plainText (text, warnings) {
 }
 
 function validateLimit (limit) {
-    var lim = Math.floor(limit);
+    const lim = Math.floor(limit);
     if (lim && lim > 0) {
         return lim;
     }
 }
 
 function validatePage (page) {
-    var validPage = Math.floor(page);
+    const validPage = Math.floor(page);
     if (validPage && validPage > 0) {
         return validPage;
     } else {

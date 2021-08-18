@@ -86,7 +86,7 @@ userSchema.virtual('password').set(function (password) {
 });
 
 userSchema.statics.createTheUser = function (req, res, userData, done) {
-    var User = this;
+    const User = this;
     if (!userData.userName) {
         done({ result: 0, msg: "'Username' is required." });
         return;
@@ -127,7 +127,7 @@ userSchema.statics.isValidUserPassword = function (username, password, done) {
 };
 
 userSchema.statics.findOrCreateGoogleUser = function (profile, done) {
-    var User = this;
+    const User = this;
     this.findOne({ 'google.email': profile.emails[0].value }, function (err, user) {
         if (err) throw err;
         // if (err) return done(err);

@@ -4,19 +4,19 @@
  * Module dependencies.
  */
 
-var crypto = require('crypto');
+const crypto = require('crypto');
 
 /**
  * Bytesize.
  */
 
-var len = 128;
+const len = 128;
 
 /**
  * Iterations. ~300ms
  */
 
-var iterations = 12000;
+const iterations = 12000;
 
 /**
  * Hashes a password with optional `salt`, otherwise

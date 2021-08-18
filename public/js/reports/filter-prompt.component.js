@@ -71,10 +71,10 @@
 
         function onDateListChange (newDate) {
             if (angular.isDate(newDate)) {
-                var year = newDate.getFullYear();
-                var month = pad(newDate.getMonth() + 1, 2);
-                var day = pad(newDate.getDate(), 2);
-                var theDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
+                const year = newDate.getFullYear();
+                const month = pad(newDate.getMonth() + 1, 2);
+                const day = pad(newDate.getDate(), 2);
+                const theDate = new Date(year + '-' + month + '-' + day + 'T00:00:00.000Z');
                 vm.criterion.text2 = theDate;
             }
             vm.onChange();
@@ -106,7 +106,7 @@
         }
 
         function selectListValue (selectedValue) {
-            var i = vm.criterion.textList.indexOf(selectedValue);
+            const i = vm.criterion.textList.indexOf(selectedValue);
             if (i >= 0) {
                 vm.criterion.textList.splice(i, 1);
             } else {
@@ -147,7 +147,7 @@
         }
 
         function pad (num, size) {
-            var s = num + '';
+            let s = num + '';
             while (s.length < size) s = '0' + s;
             while (s.length < size) s = '0' + s;
             return s;

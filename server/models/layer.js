@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 const layerElementSchema = new mongoose.Schema({
     collectionID: String,

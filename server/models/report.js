@@ -64,7 +64,7 @@ const ReportPropertiesSchema = new mongoose.Schema({
     ykeys: [reportColumnSchema],
 });
 
-var reportSchema = new mongoose.Schema({
+const reportSchema = new mongoose.Schema({
     author: { type: String }, // Creator's user name
     companyID: { type: String },
     createdBy: { type: String }, // Creator's id

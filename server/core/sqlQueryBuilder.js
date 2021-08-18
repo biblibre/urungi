@@ -152,7 +152,7 @@ class SqlQueryBuilder {
     }
 
     applyFilter (qb, filter, first) {
-        var field = this.getRef(filter);
+        const field = this.getRef(filter);
 
         function applyWhere (condition, negate, value) {
             if (!value) {
@@ -190,7 +190,7 @@ class SqlQueryBuilder {
                     return qb.whereBetween(field, [filter.criterion.text1, filter.criterion.text2]);
                 }
             } else {
-                var ct = filter.conditionType || 'and';
+                let ct = filter.conditionType || 'and';
                 if (negate) {
                     ct = (ct === 'and' || ct === 'andNot') ? ((ct === 'and') ? 'andNot' : 'and') : ((ct === 'or') ? 'orNot' : 'or');
                 }
@@ -215,7 +215,7 @@ class SqlQueryBuilder {
                     return qb.whereIn(field, filter.criterion.textList);
                 }
             } else {
-                var ct = filter.conditionType || 'and';
+                let ct = filter.conditionType || 'and';
                 if (negate) {
                     ct = (ct === 'and' || ct === 'andNot') ? ((ct === 'and') ? 'andNot' : 'and') : ((ct === 'or') ? 'orNot' : 'or');
                 }
@@ -240,7 +240,7 @@ class SqlQueryBuilder {
                     return qb.whereNull(field);
                 }
             } else {
-                var ct = filter.conditionType || 'and';
+                let ct = filter.conditionType || 'and';
                 if (negate) {
                     ct = (ct === 'and' || ct === 'andNot') ? ((ct === 'and') ? 'andNot' : 'and') : ((ct === 'or') ? 'orNot' : 'or');
                 }
@@ -354,10 +354,10 @@ class SqlQueryBuilder {
             return String(value).padStart(2, '0');
         }
 
-        var today = new Date();
-        var year = today.getFullYear();
-        var month = pad(today.getMonth() + 1);
-        var day = pad(today.getDate());
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = pad(today.getMonth() + 1);
+        const day = pad(today.getDate());
 
         let firstDate;
         let lastDate;

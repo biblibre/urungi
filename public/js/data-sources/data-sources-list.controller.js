@@ -109,7 +109,7 @@
         }
 
         function getDatasources (page) {
-            var params = {
+            const params = {
                 page: page || 1,
                 fields: 'name,type,connection.host,connection.port,connection.database',
             };

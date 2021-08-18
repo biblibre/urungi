@@ -95,7 +95,7 @@
                 ];
 
                 $scope.canEdit = function (block) {
-                    var result = true;
+                    const result = true;
                     return result;
                 };
 
@@ -135,7 +135,7 @@
                         component: 'appDashboardImageModal',
                     });
                     modal.result.then(function (file) {
-                        var url = file.url;
+                        let url = file.url;
                         if (file.source1400) {
                             url = file.source1400;
                         } else if (file.source700) {
@@ -147,7 +147,7 @@
 
                 $scope.setBackgroundImage = function (url) {
                     if ($scope.selectedElement) {
-                        var theElement = $scope.selectedElement;
+                        const theElement = $scope.selectedElement;
 
                         if (url) {
                             theElement.css({ 'background-image': "url('" + url + "')" });
@@ -165,12 +165,12 @@
                     $scope.selecting = true;
                     $scope.selectedElement = node;
 
-                    var pos = node[0].getBoundingClientRect();
+                    const pos = node[0].getBoundingClientRect();
 
-                    var elementTop = pos.top - 2;// pos.top-57;
-                    var elementLeft = pos.left - 2;
-                    var elementWidth = pos.width + 4;
-                    var elementHeight = pos.height + 4;
+                    const elementTop = pos.top - 2;// pos.top-57;
+                    const elementLeft = pos.left - 2;
+                    const elementWidth = pos.width + 4;
+                    const elementHeight = pos.height + 4;
 
                     $('#select-box').css('top', elementTop);
                     $('#select-box').css('left', elementLeft);
@@ -250,7 +250,7 @@
                 });
 
                 $scope.applyBigInputBoxValue = function (name, value, append) {
-                    var val = value.replace(/[A-Za-z]/g, '') + 'px';
+                    const val = value.replace(/[A-Za-z]/g, '') + 'px';
                     $scope.inspector.styles[name] = { top: val, left: val, right: val, bottom: val };
                 };
 
@@ -267,8 +267,8 @@
                 });
                 $scope.$watchCollection('inspector.styles.headingType', function (newProps, oldProps) {
                     if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
-                        var html = '<' + newProps + ' page-block ndtype="heading" class="editable">' + $scope.selectedElement[0].innerHTML + '</' + newProps + '>';
-                        var $div = $(html);
+                        const html = '<' + newProps + ' page-block ndtype="heading" class="editable">' + $scope.selectedElement[0].innerHTML + '</' + newProps + '>';
+                        const $div = $(html);
 
                         angular.element(document).injector().invoke(function ($compile) {
                             $compile($div)($scope);
@@ -280,22 +280,22 @@
                 });
 
                 $scope.moveElementUp = function () {
-                    var theElement = $scope.selectedElement;
+                    const theElement = $scope.selectedElement;
 
-                    var selected = $(theElement).index();
+                    const selected = $(theElement).index();
 
-                    var parent = $(theElement).parent();
+                    const parent = $(theElement).parent();
 
                     $(parent).children().eq(selected - 1).before($(parent).children().eq(selected));
                     repositionSelectBox();
                 };
 
                 $scope.moveElementDown = function () {
-                    var theElement = $scope.selectedElement;
+                    const theElement = $scope.selectedElement;
 
-                    var selected = $(theElement).index();
+                    const selected = $(theElement).index();
 
-                    var parent = $(theElement).parent();
+                    const parent = $(theElement).parent();
 
                     $(parent).children().eq(selected + 1).after($(parent).children().eq(selected));
                     repositionSelectBox();
@@ -303,7 +303,7 @@
 
                 $scope.$watchCollection('properties', function (newProps, oldProps) {
                     if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
-                        for (var prop in newProps) {
+                        for (const prop in newProps) {
                             if (newProps[prop] && newProps[prop] !== oldProps[prop]) {
                                 // handle previews in inspector - image
                                 if (newProps[prop].indexOf('url') > -1) {
@@ -321,7 +321,7 @@
                                 }
 
                                 // use background instead of background-color so background image will get overwritten
-                                var style = prop === 'color' ? 'background' : 'background-' + prop;
+                                const style = prop === 'color' ? 'background' : 'background-' + prop;
                                 $scope.selectedElement.css(style, newProps[prop]);
                                 // MENE inspector.applyCss(style, newProps[prop], oldProps[prop]);
                             }
@@ -331,7 +331,7 @@
 
                 $scope.$watchCollection('inspector.styles.text', function (newProps, oldProps) {
                     if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
-                        for (var prop in newProps) {
+                        for (const prop in newProps) {
                             if (newProps[prop] && newProps[prop] !== oldProps[prop]) {
                                 $scope.selectedElement.css(prop, newProps[prop]);
                                 repositionSelectBox();
@@ -349,11 +349,11 @@
 
                 $scope.$watchCollection('inspector.styles.padding', function (newProps, oldProps) {
                     if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
-                        var top = '0px';
-                        var right = '0px';
-                        var bottom = '0px';
-                        var left = '0px';
-                        for (var prop in newProps) {
+                        let top = '0px';
+                        let right = '0px';
+                        let bottom = '0px';
+                        let left = '0px';
+                        for (const prop in newProps) {
                             if (newProps[prop]) {
                                 if (prop === 'top') { top = newProps[prop]; }
                                 if (prop === 'right') { right = newProps[prop]; }
@@ -362,7 +362,7 @@
                             }
                         }
 
-                        var styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
+                        const styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
                         $scope.selectedElement.css('padding', styleVal);
 
                         repositionSelectBox();
@@ -371,11 +371,11 @@
 
                 $scope.$watchCollection('inspector.styles.margin', function (newProps, oldProps) {
                     if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
-                        var top = '0px';
-                        var right = '0px';
-                        var bottom = '0px';
-                        var left = '0px';
-                        for (var prop in newProps) {
+                        let top = '0px';
+                        let right = '0px';
+                        let bottom = '0px';
+                        let left = '0px';
+                        for (const prop in newProps) {
                             if (newProps[prop]) {
                                 if (prop === 'top') { top = newProps[prop]; }
                                 if (prop === 'right') { right = newProps[prop]; }
@@ -385,7 +385,7 @@
                         }
 
                         //  top right  bottom  left
-                        var styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
+                        const styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
                         $scope.selectedElement.css('margin', styleVal);
 
                         repositionSelectBox();
@@ -394,13 +394,13 @@
 
                 $scope.$watchCollection('inspector.styles.border', function (newProps, oldProps) {
                     if ($scope.selectedElement) {
-                        if (!$scope.selecting && !$scope.dragging) {
-                            var top = '0px';
-                            var right = '0px';
-                            var bottom = '0px';
-                            var left = '0px';
+                        let top = '0px';
+                        let right = '0px';
+                        let bottom = '0px';
+                        let left = '0px';
 
-                            for (var prop in newProps) {
+                        if (!$scope.selecting && !$scope.dragging) {
+                            for (const prop in newProps) {
                                 if (newProps[prop]) {
                                     if (prop === 'top') { top = newProps[prop]; }
                                     if (prop === 'right') { right = newProps[prop]; }
@@ -412,7 +412,7 @@
                             }
                         }
 
-                        var styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
+                        const styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
                         $scope.selectedElement.css('border-width', styleVal);
                         repositionSelectBox();
                     }
@@ -489,12 +489,12 @@
 
                 function repositionSelectBox () {
                     if ($scope.selectedElement) {
-                        var pos = $scope.selectedElement[0].getBoundingClientRect();
+                        const pos = $scope.selectedElement[0].getBoundingClientRect();
 
-                        var elementTop = pos.top - 2;
-                        var elementLeft = pos.left - 2;
-                        var elementWidth = pos.width + 4;
-                        var elementHeight = pos.height + 4;
+                        const elementTop = pos.top - 2;
+                        const elementLeft = pos.left - 2;
+                        const elementWidth = pos.width + 4;
+                        const elementHeight = pos.height + 4;
 
                         $('#select-box').css('top', elementTop);
                         $('#select-box').css('left', elementLeft);
@@ -561,7 +561,7 @@
             restrict: 'A',
             link: function ($scope, el) {
                 el.on('click', '.accordion-heading', function (e) {
-                    var item = $(e.target).closest('.accordion-item');
+                    const item = $(e.target).closest('.accordion-item');
 
                     if (item.hasClass('open')) {
                         el.find('.accordion-item').removeClass('open');
@@ -584,9 +584,9 @@
         return {
             restrict: 'A',
             link: function ($scope, el, attrs) {
-                var p = attrs.blInputBoxes;
+                const p = attrs.blInputBoxes;
 
-                var html = '<div class="big-box col-sm-6">' +
+                const html = '<div class="big-box col-sm-6">' +
                 '<input ng-model="' + p + 'All" ng-model-options="{ debounce: 300 }" ng-change="applyBigInputBoxValue(\'' + p + '\', ' + p + 'All)">' +
             '</div>' +
             '<div class="small-boxes col-sm-6">' +
@@ -624,8 +624,8 @@
             restrict: 'A',
             link: function ($scope, el, attrs) {
                 el.on('click', function (e) {
-                    var deco = attrs.blToggleTextDecoration;
-                    var scopeDeco = $scope.inspector.styles.text.textDecoration.trim();
+                    const deco = attrs.blToggleTextDecoration;
+                    const scopeDeco = $scope.inspector.styles.text.textDecoration.trim();
 
                     $scope.$apply(function () {
                     // element has no text decoration currently so we'll just apply it now
@@ -658,7 +658,7 @@
             restrict: 'A',
             link: function ($scope, el, attrs) {
                 el.on('click', function (e) {
-                    var split = attrs.blToggleTextStyle.split('|');
+                    const split = attrs.blToggleTextStyle.split('|');
 
                     $scope.$apply(function () {
                         if (el.hasClass('active')) {

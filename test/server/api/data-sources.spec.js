@@ -27,7 +27,7 @@ afterAll(async () => {
 });
 
 async function seed () {
-    var Datasource = mongoose.model('Datasource');
+    const Datasource = mongoose.model('Datasource');
 
     const entries = [
         new Datasource(
@@ -57,7 +57,7 @@ async function seed () {
         )
     ];
 
-    for (var entry of entries) {
+    for (const entry of entries) {
         await entry.save();
     }
 
@@ -97,7 +97,7 @@ describe('Datasources API', function () {
         }],
     ];
 
-    var Datasource;
+    let Datasource;
 
     let headers;
     let entries;
@@ -122,7 +122,7 @@ describe('Datasources API', function () {
         });
 
         it('should return all data sources', async function () {
-            var res = await request(app).get('/api/datasources')
+            const res = await request(app).get('/api/datasources')
                 .set(headers);
 
             expect(res.status).toBe(200);
@@ -155,7 +155,7 @@ describe('Datasources API', function () {
         it('should find a single valid item', async function () {
             const datasource = await Datasource.findOne();
 
-            var res = await request(app).get('/api/datasources/' + datasource.id)
+            const res = await request(app).get('/api/datasources/' + datasource.id)
                 .set(headers);
 
             expect(res.status).toBe(200);
@@ -166,7 +166,7 @@ describe('Datasources API', function () {
 
     describe('POST /api/datasources', function () {
         it('should create a datasource', async function () {
-            var res = await request(app).post('/api/datasources')
+            const res = await request(app).post('/api/datasources')
                 .set(headers)
                 .send({
                     name: 'non existent db',

@@ -1,21 +1,21 @@
 angular.module('app').service('dataElements', function () {
     this.getElementValue = function (element, dataColumnClass) {
-        var htmlCode = '';
-        var columnDefaultStyle = '';
+        let htmlCode = '';
+        const columnDefaultStyle = '';
 
-        var theValue = '<div style="overflow:hidden;height:100%;">{{item.' + element.id + '}}</div>';
+        let theValue = '<div style="overflow:hidden;height:100%;">{{item.' + element.id + '}}</div>';
         if (element.elementType === 'number') { theValue = '<div style="overflow:hidden;height:100%;">{{item.' + element.id + '}}</div>'; }
 
         if (element.signals) {
-            var theStyle = '<style>';
-            var theClass = '';
+            let theStyle = '<style>';
+            let theClass = '';
             const columnIndex = '';
-            for (var s in element.signals) {
+            for (const s in element.signals) {
                 theStyle += ' .customStyle' + s + '_' + columnIndex + '{color:' + element.signals[s].color + ';background-color:' + element.signals[s]['background-color'] + ';font-size:' + element.signals[s]['font-size'] + ';font-weight:' + element.signals[s]['font-weight'] + ';font-style:' + element.signals[s]['font-style'] + ';}';
-                var theComma = '';
+                let theComma = '';
                 if (s > 0) { theComma = ' , '; }
 
-                var operator = '>';
+                let operator = '>';
 
                 switch (element.signals[s].filter) {
                 case 'equal':
@@ -60,20 +60,20 @@ angular.module('app').service('dataElements', function () {
             }
         }
 
-        var columnStyle = '';
+        let columnStyle = '';
         if (element.columnStyle) {
             columnStyle = 'color:' + element.columnStyle.color + ';';
 
-            for (var key in element.columnStyle) {
+            for (const key in element.columnStyle) {
                 columnStyle += key + ':' + element.columnStyle[key] + ';';
             }
         }
 
-        var defaultAligment = '';
+        let defaultAligment = '';
 
-        var colWidth = '';
+        const colWidth = '';
 
-        var colClass = '';
+        const colClass = '';
 
         if (element.elementType === 'number') {
             defaultAligment = 'text-align: right;';

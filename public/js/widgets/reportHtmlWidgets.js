@@ -2,15 +2,15 @@ angular.module('app').service('reportHtmlWidgets', function () {
     this.generateIndicator = generateIndicator;
 
     function generateIndicator (report, data) {
-        var htmlCode = '';
+        let htmlCode = '';
 
-        var theData = data;
+        const theData = data;
         if (theData) {
-            var theYKey = report.properties.ykeys[0].id;
+            let theYKey = report.properties.ykeys[0].id;
 
             theYKey = theYKey.replace(/[^a-zA-Z ]/g, '');
 
-            var theValue = theData[0][theYKey];
+            let theValue = theData[0][theYKey];
 
             if (report.properties.valueType === 'percentage') {
                 theValue = theData[0].value;
@@ -20,7 +20,7 @@ angular.module('app').service('reportHtmlWidgets', function () {
                 theValue = theData[0].value + ' ' + report.properties.currencySymbol;
             }
 
-            var theValueText = '';
+            let theValueText = '';
 
             if (typeof report.properties.valueText !== 'undefined') {
                 theValueText = report.properties.valueText;

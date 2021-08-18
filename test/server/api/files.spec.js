@@ -88,7 +88,7 @@ describe('Files API', function () {
 
                 const file = res.body;
                 expect(file).toHaveProperty('upload_user_id');
-                expect(file.filename).toMatch(new RegExp('-foo.png$'));
+                expect(file.filename).toMatch(/-foo.png$/);
                 expect(file).toHaveProperty('name', 'foo.png');
                 expect(file).toHaveProperty('type', 'image/png');
                 expect(file).toHaveProperty('url', 'uploads/' + file.filename);

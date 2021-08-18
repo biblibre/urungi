@@ -47,7 +47,7 @@ function dist_templates_clean () {
 }
 
 function dist_css_build () {
-    var less = require('gulp-less');
+    const less = require('gulp-less');
 
     return gulp.src('public/less/bootstrap.less')
         .pipe(less({

@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
     const Datasource = require('../server/models/datasource');
     let datasource = await Datasource.findOne({ name: 'Heroku PostgreSQL' });
     if (!datasource) {
-        const re = new RegExp('^postgres://(.*):(.*)@(.*):(.*)/(.*)$');
+        const re = /^postgres:\/\/(.*):(.*)@(.*):(.*)\/(.*)$/;
         const found = process.env.DATABASE_URL.match(re);
         const [, user, password, host, port, database] = found;
 

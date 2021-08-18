@@ -109,7 +109,7 @@ angular.module('app').controller('spacesCtrl', function ($scope, $location, api,
     };
 
     $scope.newSubItem = function (scope) {
-        var nodeData = scope.$modelValue;
+        const nodeData = scope.$modelValue;
 
         if (typeof nodeData === 'undefined') {
             $scope.data.push({

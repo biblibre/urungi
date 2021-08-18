@@ -76,7 +76,7 @@
         }
 
         function getRoleName (roleID) {
-            for (var r in vm.roles) {
+            for (const r in vm.roles) {
                 if (vm.roles[r]._id === roleID) {
                     return vm.roles[r].name;
                 }
@@ -84,8 +84,8 @@
         }
 
         function getRolesNotInUser () {
-            var theRoles = [];
-            for (var r in vm.roles) {
+            const theRoles = [];
+            for (const r in vm.roles) {
                 if (vm.user && vm.user.roles && vm.user.roles.indexOf(vm.roles[r]._id) === -1) {
                     theRoles.push(vm.roles[r]);
                 }
@@ -112,7 +112,7 @@
             api.getRoles({ fields: 'name' }).then(function (res) {
                 vm.roles = res.data;
 
-                var adminRole = { _id: 'ADMIN', name: gettextCatalog.getString('Urungi Administrator') };
+                const adminRole = { _id: 'ADMIN', name: gettextCatalog.getString('Urungi Administrator') };
                 vm.roles.push(adminRole);
             });
         }

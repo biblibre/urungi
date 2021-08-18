@@ -7,7 +7,7 @@ const Report = mongoose.model('Report');
 const pikitia = require('../../helpers/pikitia');
 
 module.exports = function (app) {
-    var Reports = require('./controller.js');
+    const Reports = require('./controller.js');
 
     /* Reports */
     app.get('/api/reports/find-all', restrict, Reports.ReportsFindAll);

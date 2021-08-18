@@ -99,7 +99,7 @@ angular.module('app').service('htmlWidgets', function (gettextCatalog) {
     };
 
     this.getVideo = function () {
-        var url = 'https://www.youtube.com/embed/OTsmsIeybQo';
+        const url = 'https://www.youtube.com/embed/OTsmsIeybQo';
 
         return '<div page-block ndtype="container" class="embed-responsive embed-responsive-16by9" >' +
             '<iframe page-block ndtype="video" class="embed-responsive-item" src="' + url + '" style="padding: 5px;"></iframe>' +

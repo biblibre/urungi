@@ -26,8 +26,8 @@ router.get('/', restrict, getFiles);
 router.post('/', restrict, upload.single('content'), uploadFile);
 
 function getFiles (req, res, next) {
-    var filter = {
-        type: new RegExp('image', 'i'),
+    const filter = {
+        type: /image/i,
         upload_user_id: req.user._id,
     };
 

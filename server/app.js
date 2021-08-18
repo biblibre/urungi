@@ -3,17 +3,17 @@ const config = require('config');
 const express = require('express');
 const path = require('path');
 
-var passport = require('passport');
-var session = require('express-session');
+const passport = require('passport');
+const session = require('express-session');
 
 const MongoStore = require('connect-mongo')(session);
 
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const csurf = require('csurf');
 
 const restrict = require('./middlewares/restrict.js');
 
-var app = express();
+const app = express();
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -100,7 +100,7 @@ app.use(function (req, res, next) {
 
 app.use(csurf());
 
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' })); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -32,7 +32,7 @@ module.exports = {
 };
 
 function generateQuery (report) {
-    var query = {};
+    const query = {};
 
     const columns = [];
     if (Array.isArray(report.properties.columns)) {
