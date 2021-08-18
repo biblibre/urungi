@@ -6,7 +6,7 @@ const path = require('path');
 const passport = require('passport');
 const session = require('express-session');
 
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 
 const cookieParser = require('cookie-parser');
 const csurf = require('csurf');
@@ -72,9 +72,9 @@ app.use('/s', staticRouter);
 
 const connection = require('./config/mongoose')();
 
-const mongoStore = new MongoStore({
-    mongooseConnection: connection,
-    collection: 'sessions',
+const mongoStore = MongoStore.create({
+    client: connection.getClient(),
+    collectionName: 'sessions',
     ttl: 60 * 60 * 24, // 24 hours
 });
 app.use(cookieParser());
