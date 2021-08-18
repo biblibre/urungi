@@ -1,8 +1,6 @@
 const gulp = require('gulp');
-const concat = require('gulp-concat');
 const gettext = require('gulp-angular-gettext');
 const templatecache = require('gulp-angular-templatecache');
-const merge = require('merge-stream');
 const del = require('del');
 const path = require('path');
 
