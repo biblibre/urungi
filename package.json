@@ -18,7 +18,7 @@
     "angular-ui-sortable": "^0.19.0",
     "angular-ui-tree": "^2.22.6",
     "angularjs-bootstrap-datetimepicker": "^1.1.4",
-    "arg": "^4.1.3",
+    "arg": "^5.0.1",
     "body-parser": "^1.19.0",
     "bootstrap": "^3.4.1",
     "c3": "^0.7.20",
