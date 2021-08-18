@@ -4,10 +4,10 @@ executors:
     parameters:
       node:
         type: string
-        default: '10'
+        default: '12'
       mongodb:
         type: string
-        default: '3.6.15'
+        default: '4.0.26'
     docker:
       - image: circleci/node:<< parameters.node >>
       - image: circleci/mariadb:10.3
@@ -43,74 +43,74 @@ workflows:
   test:
     jobs:
       - test:
-          name: node:10 mongodb:3.6
-          e:
-            name: node
-            node: '10'
-            mongodb: '3.6.20'
-      - test:
-          name: node:10 mongodb:4.0
-          e:
-            name: node
-            node: '10'
-            mongodb: '4.0.20'
-      - test:
-          name: node:10 mongodb:4.2
-          e:
-            name: node
-            node: '10'
-            mongodb: '4.2.9'
-      - test:
-          name: node:10 mongodb:4.4
-          e:
-            name: node
-            node: '10'
-            mongodb: '4.4.1'
-      - test:
-          name: node:12 mongodb:3.6
-          e:
-            name: node
-            node: '12'
-            mongodb: '3.6.20'
-      - test:
           name: node:12 mongodb:4.0
           e:
             name: node
             node: '12'
-            mongodb: '4.0.20'
+            mongodb: '4.0.26'
       - test:
           name: node:12 mongodb:4.2
           e:
             name: node
             node: '12'
-            mongodb: '4.2.9'
+            mongodb: '4.2.15'
       - test:
           name: node:12 mongodb:4.4
           e:
             name: node
             node: '12'
-            mongodb: '4.4.1'
+            mongodb: '4.4.8'
       - test:
-          name: node:14 mongodb:3.6
+          name: node:12 mongodb:5.0
           e:
             name: node
-            node: '14'
-            mongodb: '3.6.20'
+            node: '12'
+            mongodb: '5.0.2'
       - test:
           name: node:14 mongodb:4.0
           e:
             name: node
             node: '14'
-            mongodb: '4.0.20'
+            mongodb: '4.0.26'
       - test:
           name: node:14 mongodb:4.2
           e:
             name: node
             node: '14'
-            mongodb: '4.2.9'
+            mongodb: '4.2.15'
       - test:
           name: node:14 mongodb:4.4
           e:
             name: node
             node: '14'
-            mongodb: '4.4.1'
+            mongodb: '4.4.8'
+      - test:
+          name: node:14 mongodb:5.0
+          e:
+            name: node
+            node: '14'
+            mongodb: '5.0.2'
+      - test:
+          name: node:16 mongodb:4.0
+          e:
+            name: node
+            node: '16'
+            mongodb: '4.0.26'
+      - test:
+          name: node:16 mongodb:4.2
+          e:
+            name: node
+            node: '16'
+            mongodb: '4.2.15'
+      - test:
+          name: node:16 mongodb:4.4
+          e:
+            name: node
+            node: '16'
+            mongodb: '4.4.8'
+      - test:
+          name: node:16 mongodb:5.0
+          e:
+            name: node
+            node: '16'
+            mongodb: '5.0.2'

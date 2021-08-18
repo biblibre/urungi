@@ -17,9 +17,9 @@ Lightweight open source software that allows you to create statistics and dashbo
 
 ## Requirements
 
-- [nodejs](https://nodejs.org) (>= 10.x)
+- [nodejs](https://nodejs.org) (>= 12.x)
 - [npm](https://www.npmjs.com)
-- [MongoDB](https://www.mongodb.org) (>= 3.6)
+- [MongoDB](https://www.mongodb.org) (>= 4.0)
 
 
 ## Installation
