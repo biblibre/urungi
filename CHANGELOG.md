@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated eslint-plugin-node to 11.1.0
 - Updated eslint-plugin-promise to 5.1.0
 - Updated express-session to 1.17.2
+- Updated gulp-less to 5.0.0
 - Updated htmlhint to 0.15.1
 - Updated jest to 26.6.3
 - Updated jquery to 3.6.0

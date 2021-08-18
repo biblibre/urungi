@@ -74,7 +74,7 @@
     "gulp": "^4.0.2",
     "gulp-angular-gettext": "^2.3.0",
     "gulp-angular-templatecache": "^3.0.0",
-    "gulp-less": "^4.0.1",
+    "gulp-less": "^5.0.0",
     "htmlhint": "^0.15.1",
     "jest": "^26.6.3",
     "mongodb-memory-server": "^6.9.6",
