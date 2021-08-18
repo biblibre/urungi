@@ -31,7 +31,7 @@
     "debug": "^4.3.2",
     "ejs": "^2.7.4",
     "express": "^4.17.1",
-    "express-session": "^1.17.1",
+    "express-session": "^1.17.2",
     "font-awesome": "^4.7.0",
     "intro.js": "^2.9.3",
     "jquery": "^3.5.1",
