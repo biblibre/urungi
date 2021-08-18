@@ -53,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated migrate-mongo to 8.2.3
 - Updated moment to 2.29.1
 - Updated mongodb-memory-server to 6.9.6
-- Updated mongoose to 5.10.6
+- Updated mongoose to 5.13.7
 - Updated mssql to 6.2.2
 - Updated mysql to 2.18.1
 - Updated nodemailer to 6.4.11
