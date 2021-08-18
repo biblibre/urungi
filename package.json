@@ -43,7 +43,7 @@
     "migrate-mongo": "^8.2.3",
     "moment": "^2.29.1",
     "mongoose": "^5.13.7",
-    "mssql": "^6.2.2",
+    "mssql": "^6.3.2",
     "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "ng-file-upload": "^12.2.13",
