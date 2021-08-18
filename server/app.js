@@ -22,6 +22,54 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.static(path.join(__dirname, '..', 'shared')));
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 
+const staticRouter = express.Router({
+    caseSensitive: true,
+    strict: true,
+});
+
+const staticPaths = [
+    { p: '/jquery', root: 'jquery/dist' },
+    { p: '/jquery-validation', root: 'jquery-validation/dist' },
+    { p: '/jquery-ui', root: 'components-jqueryui' },
+    { p: '/bootstrap', root: 'bootstrap/dist' },
+    { p: '/angular', root: 'angular' },
+    { p: '/angular-sanitize', root: 'angular-sanitize' },
+    { p: '/angular-route', root: 'angular-route' },
+    { p: '/noty', root: 'noty/lib' },
+    { p: '/moment', root: 'moment/min' },
+    { p: '/angularjs-bootstrap-datetimepicker', root: 'angularjs-bootstrap-datetimepicker/src' },
+    { p: '/angular-ui-tree', root: 'angular-ui-tree/dist' },
+    { p: '/angular-file-saver', root: 'angular-file-saver/dist' },
+    { p: '/angular-ui-bootstrap', root: 'angular-ui-bootstrap/dist' },
+    { p: '/angular-ui-sortable', root: 'angular-ui-sortable/dist' },
+    { p: '/ui-select', root: 'ui-select/dist' },
+    { p: '/d3', root: 'd3/dist' },
+    { p: '/c3', root: 'c3' },
+    { p: '/ng-file-upload', root: 'ng-file-upload/dist' },
+    { p: '/clipboard', root: 'clipboard/dist' },
+    { p: '/ngclipboard', root: 'ngclipboard/dist' },
+    { p: '/angular-bootstrap-colorpicker', root: 'angular-bootstrap-colorpicker' },
+    { p: '/malihu-custom-scrollbar-plugin', root: 'malihu-custom-scrollbar-plugin' },
+    { p: '/angular-gettext', root: 'angular-gettext/dist' },
+    { p: '/intro.js', root: 'intro.js/minified' },
+    { p: '/angular-intro.js', root: 'angular-intro.js/build' },
+    { p: '/numeral', root: 'numeral/min' },
+    { p: '/pivottable', root: 'pivottable/dist' },
+    { p: '/subtotal', root: 'subtotal/dist' },
+    { p: '/js-xlsx', root: 'js-xlsx/dist' },
+    { p: '/jsplumb', root: 'jsplumb' },
+    { p: '/font-awesome', root: 'font-awesome' },
+];
+for (const { p, root } of staticPaths) {
+    staticRouter.use(p, express.static(path.join(__dirname, '..', 'node_modules', root)));
+}
+
+staticRouter.all('*', function (req, res) {
+    res.sendStatus(404);
+});
+
+app.use('/s', staticRouter);
+
 const connection = require('./config/mongoose')();
 
 const mongoStore = new MongoStore({

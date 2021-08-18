@@ -1,20 +1,17 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
-const decomment = require('gulp-decomment');
 const gettext = require('gulp-angular-gettext');
 const templatecache = require('gulp-angular-templatecache');
 const merge = require('merge-stream');
 const del = require('del');
 const path = require('path');
 
-const dist_js = gulp.series(dist_js_clean, dist_js_build);
 const dist_css = gulp.series(dist_css_clean, dist_css_build);
 const dist_fonts = gulp.series(dist_fonts_clean, dist_fonts_build);
 const dist_translations = gulp.series(dist_translations_clean, dist_translations_build);
 const dist_templates = gulp.series(dist_templates_clean, dist_templates_build);
 
 const dist = gulp.parallel(
-    dist_js,
     dist_css,
     dist_fonts,
     dist_translations,
@@ -24,7 +21,6 @@ const dist = gulp.parallel(
 module.exports = {
     default: dist,
     dist: dist,
-    'dist:js': dist_js,
     'dist:css': dist_css,
     'dist:fonts': dist_fonts,
     'dist:translations': dist_translations,
@@ -35,10 +31,6 @@ module.exports = {
     'watch:less': watch_less,
     watch: gulp.parallel(watch_templates, watch_less),
 };
-
-function dist_js_clean () {
-    return del('dist/js/*');
-}
 
 function dist_css_clean () {
     return del('dist/css/*');
@@ -56,83 +48,15 @@ function dist_templates_clean () {
     return del('dist/templates/*');
 }
 
-function dist_js_build () {
-    const paths = [
-        'node_modules/jquery/dist/jquery.min.js',
-        'node_modules/jquery-validation/dist/jquery.validate.min.js',
-        'node_modules/components-jqueryui/jquery-ui.min.js',
-        'node_modules/bootstrap/dist/js/bootstrap.min.js',
-        'node_modules/angular/angular.min.js',
-        'node_modules/angular-sanitize/angular-sanitize.min.js',
-        'node_modules/angular-route/angular-route.min.js',
-        'node_modules/noty/lib/noty.min.js',
-        'node_modules/moment/min/moment-with-locales.min.js',
-        'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js',
-        'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js',
-        'node_modules/angular-ui-tree/dist/angular-ui-tree.min.js',
-        'node_modules/angular-file-saver/dist/angular-file-saver.bundle.min.js',
-        'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
-        'node_modules/angular-ui-sortable/dist/sortable.min.js',
-        'node_modules/ui-select/dist/select.min.js',
-        'node_modules/d3/dist/d3.min.js',
-        'node_modules/c3/c3.min.js',
-        'node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js',
-        'node_modules/clipboard/dist/clipboard.min.js',
-        'node_modules/ngclipboard/dist/ngclipboard.min.js',
-        'node_modules/ng-file-upload/dist/ng-file-upload.min.js',
-        'node_modules/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js',
-        'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js',
-        'node_modules/angular-gettext/dist/angular-gettext.min.js',
-        'node_modules/intro.js/minified/intro.min.js',
-        'node_modules/angular-intro.js/build/angular-intro.min.js',
-        'node_modules/numeral/min/numeral.min.js',
-        'node_modules/pivottable/dist/pivot.min.js',
-        'node_modules/subtotal/dist/subtotal.min.js',
-    ];
-
-    const bundle = gulp.src(paths)
-        .pipe(decomment())
-        .pipe(concat('bundle.min.js'))
-        .pipe(gulp.dest('dist/js'));
-
-    const copy = gulp.src([
-        'node_modules/js-xlsx/dist/xlsx.core.min.js',
-        'node_modules/jsplumb/dist/js/jsplumb.min.js',
-    ])
-        .pipe(decomment())
-        .pipe(gulp.dest('dist/js'));
-
-    return merge(bundle, copy);
-}
-
 function dist_css_build () {
     var less = require('gulp-less');
 
-    const bootstrap = gulp.src('public/less/bootstrap.less')
+    return gulp.src('public/less/bootstrap.less')
         .pipe(less({
             paths: [
                 path.join(__dirname, 'node_modules', 'bootstrap', 'less'),
             ],
-        }));
-
-    const modulesCss = gulp.src([
-        'node_modules/ui-select/dist/select.min.css',
-        'node_modules/angularjs-bootstrap-datetimepicker/src/css/datetimepicker.css',
-        'node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
-        'node_modules/c3/c3.min.css',
-        'node_modules/angular-bootstrap-colorpicker/css/colorpicker.min.css',
-        'node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
-        'node_modules/font-awesome/css/font-awesome.min.css',
-        'node_modules/jsplumb/css/jsplumbtoolkit-defaults.css',
-        'node_modules/intro.js/minified/introjs.min.css',
-        'node_modules/noty/lib/noty.css',
-        'node_modules/noty/lib/themes/bootstrap-v4.css',
-        'node_modules/pivottable/dist/pivot.min.css',
-        'node_modules/subtotal/dist/subtotal.min.css',
-    ]);
-
-    return merge(bootstrap, modulesCss)
-        .pipe(concat('bundle.min.css'))
+        }))
         .pipe(gulp.dest('dist/css'));
 }
 
