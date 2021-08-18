@@ -66,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated stylelint to 13.7.1
 - Updated stylelint-config-standard to 20.0.0
 - Removed gulp-concat
+- Removed gulp-decomment
 - Removed merge-stream
 
 
