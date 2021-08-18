@@ -29,6 +29,7 @@
         'app.io',
         'app.themes',
         'app.templates',
+        'toastr'
     ]);
 
     angular.module('app').config(configure);

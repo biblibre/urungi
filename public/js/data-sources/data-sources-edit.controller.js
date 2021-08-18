@@ -3,9 +3,9 @@
 
     angular.module('app.data-sources').controller('DataSourcesEditController', DataSourcesEditController);
 
-    DataSourcesEditController.$inject = ['$routeParams', '$location', 'gettextCatalog', 'Noty', 'api', '$rootScope'];
+    DataSourcesEditController.$inject = ['$routeParams', '$location', 'gettextCatalog', 'Noty', 'api', '$rootScope', 'toastr'];
 
-    function DataSourcesEditController ($routeParams, $location, gettextCatalog, Noty, api, $rootScope) {
+    function DataSourcesEditController ($routeParams, $location, gettextCatalog, Noty, api, $rootScope, toastr) {
         const vm = this;
 
         vm._dataSource = null;
@@ -35,7 +35,8 @@
         function save () {
             if (vm.mode === 'add') {
                 api.createDatasource(vm._dataSource).then(data => {
-                    new Noty({ text: gettextCatalog.getString('Datasource created successfully'), type: 'success' }).show();
+                    // toastr.success(gettextCatalog.getString('Datasource created successfully'));
+                    new Noty({ text: gettextCatalog.getString('Datasource updated successfully'), type: 'success' }).show();
                     $location.url('/data-sources');
                 }).then(function () { $rootScope.$broadcast('counts-changes'); });
             } else {
