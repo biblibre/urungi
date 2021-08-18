@@ -7,25 +7,25 @@ describe('Oracle database adapter', function () {
         describe('testConnection', function () {
             it('should throw', function () {
                 return expect(adapter.testConnection()).rejects.toThrow();
-            });
+            }, 20000);
         });
 
         describe('getCollectionNames', function () {
             it('should throw', function () {
                 return expect(adapter.getCollectionNames()).rejects.toThrow();
-            });
+            }, 20000);
         });
 
         describe('getCollectionSchema', function () {
             it('should throw', function () {
                 return expect(adapter.getCollectionSchema('foo')).rejects.toThrow();
-            });
+            }, 20000);
         });
 
         describe('getSqlQuerySchema', function () {
             it('should throw', function () {
                 return expect(adapter.getSqlQuerySchema('SELECT * FROM foo')).rejects.toThrow();
-            });
+            }, 20000);
         });
     });
 

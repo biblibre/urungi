@@ -58,7 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated multer to 1.4.3
 - Updated mysql to 2.18.1
 - Updated nodemailer to 6.6.3
-- Updated oracledb to 5.0.0
+- Updated oracledb to 5.2.0
 - Updated passport to 0.4.1
 - Updated password-generator to 2.3.2
 - Updated pg to 8.3.3
