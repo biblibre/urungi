@@ -3,9 +3,9 @@
 
     angular.module('app.layers').controller('LayersListController', LayersListController);
 
-    LayersListController.$inject = ['$scope', '$location', '$timeout', '$uibModal', 'Noty', 'connection', 'api', 'gettext', 'gettextCatalog', 'userService'];
+    LayersListController.$inject = ['$scope', '$location', '$timeout', '$uibModal', 'toastr', 'connection', 'api', 'gettext', 'gettextCatalog', 'userService'];
 
-    function LayersListController ($scope, $location, $timeout, $uibModal, Noty, connection, api, gettext, gettextCatalog, userService) {
+    function LayersListController ($scope, $location, $timeout, $uibModal, toastr, connection, api, gettext, gettextCatalog, userService) {
         const vm = this;
 
         vm.currentPage = 1;
@@ -89,7 +89,7 @@
 
                     api.changeLayerStatus(layer._id, newStatus).then(() => {
                         layer.status = newStatus;
-                        new Noty({ text: gettextCatalog.getString('Status updated'), type: 'success' }).show();
+                        toastr.success(gettextCatalog.getString('Status updated'));
                     });
                 }
             });

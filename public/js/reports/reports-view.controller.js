@@ -3,9 +3,9 @@
 
     angular.module('app.reports').controller('ReportsViewController', ReportsViewController);
 
-    ReportsViewController.$inject = ['$scope', '$timeout', '$uibModal', 'Noty', 'gettextCatalog', 'api', 'xlsxService', 'userService', 'report'];
+    ReportsViewController.$inject = ['$scope', '$timeout', '$uibModal', 'toastr', 'gettextCatalog', 'api', 'xlsxService', 'userService', 'report'];
 
-    function ReportsViewController ($scope, $timeout, $uibModal, Noty, gettextCatalog, api, xlsxService, userService, report) {
+    function ReportsViewController ($scope, $timeout, $uibModal, toastr, gettextCatalog, api, xlsxService, userService, report) {
         const vm = this;
 
         vm.downloadAsPDF = downloadAsPDF;
@@ -96,7 +96,7 @@
                 return api.getReportAsPDF(vm.report._id, settings).then(res => {
                     download(res.data, 'application/pdf', vm.report.reportName + '.pdf');
                 }, () => {
-                    new Noty({ text: gettextCatalog.getString('The export failed. Please contact the system administrator.'), type: 'error' }).show();
+                    toastr.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
                 });
             }, () => {});
         }
@@ -105,7 +105,7 @@
             api.getReportAsPNG(vm.report._id).then(res => {
                 download(res.data, 'image/png', vm.report.reportName + '.png');
             }, () => {
-                new Noty({ text: gettextCatalog.getString('The export failed. Please contact the system administrator.'), type: 'error' }).show();
+                toastr.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
             });
         }
 

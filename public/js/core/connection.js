@@ -3,9 +3,9 @@
 
     angular.module('app.core').factory('connection', connection);
 
-    connection.$inject = ['$http', 'Noty'];
+    connection.$inject = ['$http', 'toastr'];
 
-    function connection ($http, Noty) {
+    function connection ($http, toastr) {
         const service = {
             get: get,
             post: post,
@@ -25,9 +25,9 @@
                     if (typeof data === 'string') window.location.href = '/';
 
                     if (data.result === 1 && data.msg && options.showMsg) {
-                        new Noty({ text: data.msg, type: 'success' }).show();
+                        toastr.success(data.msg);
                     } else if (data.result === 0 && data.msg && options.showMsg) {
-                        new Noty({ text: data.msg, type: 'error' }).show();
+                        toastr.error(data.msg);
                     }
 
                     return data;
@@ -44,9 +44,9 @@
                     if (typeof data === 'string') window.location.href = '/';
 
                     if (data.result === 1 && data.msg) {
-                        new Noty({ text: data.msg, type: 'success' }).show();
+                        toastr.success(data.msg);
                     } else if (data.result === 0 && data.msg) {
-                        new Noty({ text: data.msg, type: 'error' }).show();
+                        toastr.error(data.msg);
                     }
 
                     return data;

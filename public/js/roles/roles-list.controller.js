@@ -3,9 +3,9 @@
 
     angular.module('app.roles').controller('RolesListController', RolesListController);
 
-    RolesListController.$inject = ['$uibModal', 'Noty', 'gettextCatalog', 'api'];
+    RolesListController.$inject = ['$uibModal', 'toastr', 'gettextCatalog', 'api'];
 
-    function RolesListController ($uibModal, Noty, gettextCatalog, api) {
+    function RolesListController ($uibModal, toastr, gettextCatalog, api) {
         const vm = this;
 
         vm.items = [];
@@ -23,14 +23,14 @@
 
         function newRole () {
             return openRoleModal({}).then(function () {
-                new Noty({ text: gettextCatalog.getString('Role created successfully'), type: 'success' }).show();
+                toastr.success(gettextCatalog.getString('Role created successfully'));
             }, () => {});
         };
 
         function view (roleID) {
             return api.getRole(roleID).then(function (role) {
                 return openRoleModal(role).then(function () {
-                    new Noty({ text: gettextCatalog.getString('Role updated successfully'), type: 'success' }).show();
+                    toastr.success(gettextCatalog.getString('Role updated successfully'));
                 }, () => {});
             });
         };

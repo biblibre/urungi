@@ -3,9 +3,9 @@
 
     angular.module('app.users').controller('UsersListController', UsersListController);
 
-    UsersListController.$inject = ['$uibModal', 'Noty', 'gettextCatalog', 'api', 'userService'];
+    UsersListController.$inject = ['$uibModal', 'toastr', 'gettextCatalog', 'api', 'userService'];
 
-    function UsersListController ($uibModal, Noty, gettextCatalog, api, userService) {
+    function UsersListController ($uibModal, toastr, gettextCatalog, api, userService) {
         const vm = this;
 
         vm.page = 1;
@@ -31,7 +31,7 @@
 
                     api.updateUser(user._id, { status: newStatus }).then(function (result) {
                         user.status = newStatus;
-                        new Noty({ text: gettextCatalog.getString('Status updated'), type: 'success' }).show();
+                        toastr.success(gettextCatalog.getString('Status updated'));
                     });
                 }
             });

@@ -11,9 +11,9 @@
         },
     });
 
-    LayersListButtonsController.$inject = ['$uibModal', 'Noty', 'api', 'userService', 'gettextCatalog', '$rootScope'];
+    LayersListButtonsController.$inject = ['$uibModal', 'toastr', 'api', 'userService', 'gettextCatalog', '$rootScope'];
 
-    function LayersListButtonsController ($uibModal, Noty, api, userService, gettextCatalog, $rootScope) {
+    function LayersListButtonsController ($uibModal, toastr, api, userService, gettextCatalog, $rootScope) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;

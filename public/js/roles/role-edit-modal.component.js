@@ -12,9 +12,9 @@
         },
     });
 
-    RoleEditModalController.$inject = ['gettextCatalog', 'Noty', 'api', 'userService', '$rootScope'];
+    RoleEditModalController.$inject = ['gettextCatalog', 'toastr', 'api', 'userService', '$rootScope'];
 
-    function RoleEditModalController (gettextCatalog, Noty, api, userService, $rootScope) {
+    function RoleEditModalController (gettextCatalog, toastr, api, userService, $rootScope) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -60,7 +60,7 @@
             return p.then(function (role) {
                 vm.close({ $value: role });
             }, function () {
-                new Noty({ text: gettextCatalog.getString('Failed to save role'), type: 'error' }).show();
+                toastr.error(gettextCatalog.getString('Failed to save role'));
             });
         }
 

@@ -3,9 +3,9 @@
 
     angular.module('app.dashboards').controller('DashboardEditController', DashboardEditController);
 
-    DashboardEditController.$inject = ['$scope', '$location', '$q', '$compile', 'reportsService', 'connection', '$routeParams', 'reportModel', 'uuid', 'htmlWidgets', 'gettextCatalog', '$uibModal', 'Noty', '$rootScope'];
+    DashboardEditController.$inject = ['$scope', '$location', '$q', '$compile', 'reportsService', 'connection', '$routeParams', 'reportModel', 'uuid', 'htmlWidgets', 'gettextCatalog', '$uibModal', 'toastr', '$rootScope'];
 
-    function DashboardEditController ($scope, $location, $q, $compile, reportsService, connection, $routeParams, reportModel, uuid, htmlWidgets, gettextCatalog, $uibModal, Noty, $rootScope) {
+    function DashboardEditController ($scope, $location, $q, $compile, reportsService, connection, $routeParams, reportModel, uuid, htmlWidgets, gettextCatalog, $uibModal, toastr, $rootScope) {
         const vm = this;
 
         vm.onDrop = onDrop;
@@ -88,7 +88,7 @@
                         report.id = report._id;
                         $scope.selectedDashboard.reports.push(report);
                     } else {
-                        new Noty({ text: gettextCatalog.getString('Error : failed to import report'), type: 'error' }).show();
+                        toastr.error(gettextCatalog.getString('Error : failed to import report'));
                     }
                 });
             });
@@ -140,7 +140,7 @@
                 $scope.selectedDashboardLimit = { value: 500 };
 
                 if (!$scope.dashboardID) {
-                    new Noty({ text: gettextCatalog.getString('Could not load dashboard : missing id'), type: 'error' }).show();
+                    toastr.error(gettextCatalog.getString('Could not load dashboard : missing id'));
                 }
 
                 return connection.get('/api/dashboards/get/' + $scope.dashboardID, { id: $scope.dashboardID }).then(function (data) {

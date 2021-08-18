@@ -34,9 +34,9 @@
 
     angular.module('app').config(configure);
 
-    configure.$inject = ['$routeProvider', '$locationProvider', '$httpProvider', '$uibTooltipProvider', 'Noty', 'base'];
+    configure.$inject = ['$routeProvider', '$locationProvider', '$httpProvider', '$uibTooltipProvider', 'base'];
 
-    function configure ($routeProvider, $locationProvider, $httpProvider, $uibTooltipProvider, Noty, base) {
+    function configure ($routeProvider, $locationProvider, $httpProvider, $uibTooltipProvider, base) {
         $locationProvider.html5Mode(true);
 
         $httpProvider.interceptors.push('httpInterceptor');
@@ -77,19 +77,13 @@
             templateUrl: 'partials/report/edit.html',
             controller: 'reportCtrl'
         });
-
-        Noty.overrideDefaults({
-            layout: 'topRight',
-            theme: 'bootstrap-v4',
-            timeout: 5000,
-        });
     }
 
     angular.module('app').run(runBlock);
 
-    runBlock.$inject = ['$rootScope', '$window', '$location', '$timeout', 'gettextCatalog', 'base', 'userService', 'language', 'api', 'Noty'];
+    runBlock.$inject = ['$rootScope', '$window', '$location', '$timeout', 'gettextCatalog', 'base', 'userService', 'language', 'api'];
 
-    function runBlock ($rootScope, $window, $location, $timeout, gettextCatalog, base, userService, language, api, Noty) {
+    function runBlock ($rootScope, $window, $location, $timeout, gettextCatalog, base, userService, language, api, toastr) {
         userService.getCurrentUser().then(user => {
             $rootScope.user = user;
         }, () => {});
@@ -103,7 +97,7 @@
                     }
                 }).catch(() => {
                     const text = gettextCatalog.getString('You have been logged out. You will be redirected to the login page.');
-                    new Noty({ text, type: 'error', timeout: false }).show();
+                    toastr.error(text, 'Error', { timeOut: false });
 
                     $timeout(() => {
                         $window.location.href = base + '/login';

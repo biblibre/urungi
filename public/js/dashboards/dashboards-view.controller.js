@@ -3,9 +3,9 @@
 
     angular.module('app.dashboards').controller('DashboardsViewController', DashboardsViewController);
 
-    DashboardsViewController.$inject = ['$scope', '$timeout', '$compile', '$uibModal', 'Noty', 'gettextCatalog', 'api', 'userService', 'dashboard'];
+    DashboardsViewController.$inject = ['$scope', '$timeout', '$compile', '$uibModal', 'toastr', 'gettextCatalog', 'api', 'userService', 'dashboard'];
 
-    function DashboardsViewController ($scope, $timeout, $compile, $uibModal, Noty, gettextCatalog, api, userService, dashboard) {
+    function DashboardsViewController ($scope, $timeout, $compile, $uibModal, toastr, gettextCatalog, api, userService, dashboard) {
         const vm = this;
 
         vm.downloadAsPDF = downloadAsPDF;
@@ -133,7 +133,7 @@
                 return api.getDashboardAsPDF(vm.dashboard._id, settings).then(res => {
                     download(res.data, 'application/pdf', vm.dashboard.dashboardName + '.pdf');
                 }, () => {
-                    new Noty({ text: gettextCatalog.getString('The export failed. Please contact the system administrator.'), type: 'error' }).show();
+                    toastr.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
                 });
             }, () => {});
         }
@@ -142,7 +142,7 @@
             api.getDashboardAsPNG(vm.dashboard._id).then(res => {
                 download(res.data, 'image/png', vm.dashboard.dashboardName + '.png');
             }, () => {
-                new Noty({ text: gettextCatalog.getString('The export failed. Please contact the system administrator.'), type: 'error' }).show();
+                toastr.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
             });
         }
 

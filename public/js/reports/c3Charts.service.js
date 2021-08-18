@@ -1,6 +1,6 @@
 /* global c3:false */
 
-angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog, reportsService) {
+angular.module('app.reports').service('c3Charts', function (toastr, gettextCatalog, reportsService) {
     this.rebuildChart = function (report, id, data, chart) {
         var theValues = [];
         var theStackValues = {};
@@ -18,7 +18,7 @@ angular.module('app.reports').service('c3Charts', function (Noty, gettextCatalog
         // var stackIsInQuery = false;
 
         if (!data) {
-            new Noty({ text: gettextCatalog.getString('no data to display'), type: 'warning' }).show();
+            toastr.warning(gettextCatalog.getString('no data to display'));
             return;
         }
 
