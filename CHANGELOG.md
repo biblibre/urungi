@@ -51,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated jsplumb to 2.15.6
 - Updated knex to 0.21.21
 - Updated migrate-mongo to 8.2.3
-- Updated moment to 2.29.0
+- Updated moment to 2.29.1
 - Updated mongodb-memory-server to 6.8.0
 - Updated mongoose to 5.10.6
 - Updated mssql to 6.2.2
