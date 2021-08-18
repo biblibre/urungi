@@ -7,7 +7,7 @@ let app;
 let mongod;
 beforeAll(async () => {
     mongod = new MongoMemoryServer();
-    process.env.MONGODB_URI = await mongod.getConnectionString();
+    process.env.MONGODB_URI = await mongod.getUri();
     app = require('../../../server/app');
 });
 afterAll(async () => {

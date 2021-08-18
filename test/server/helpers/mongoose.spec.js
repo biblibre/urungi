@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 let mongod;
 beforeAll(async () => {
     mongod = new MongoMemoryServer();
-    process.env.MONGODB_URI = await mongod.getConnectionString();
+    process.env.MONGODB_URI = await mongod.getUri();
     require('../../../server/app');
 });
 afterAll(async () => {

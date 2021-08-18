@@ -5,7 +5,7 @@ const cli = require('../../../src/cli');
 let mongod;
 beforeAll(async () => {
     mongod = new MongoMemoryServer();
-    process.env.MONGODB_URI = await mongod.getConnectionString();
+    process.env.MONGODB_URI = await mongod.getUri();
 });
 afterAll(async () => {
     await mongod.stop();
