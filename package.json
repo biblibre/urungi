@@ -34,7 +34,7 @@
     "express-session": "^1.17.2",
     "font-awesome": "^4.7.0",
     "intro.js": "^2.9.3",
-    "jquery": "^3.5.1",
+    "jquery": "^3.6.0",
     "jquery-validation": "^1.19.2",
     "js-xlsx": "^0.8.22",
     "jsplumb": "^2.14.6",
