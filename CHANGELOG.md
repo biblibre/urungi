@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated cookie-parser to 1.4.5
 - Updated csurf to 1.11.0
 - Updated debug to 4.3.2
+- Updated del to 6.0.0
 - Updated ejs to 2.7.4
 - Updated eslint to 7.32.0
 - Updated eslint-config-standard to 16.0.3
