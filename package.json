@@ -82,7 +82,7 @@
     "set-cookie-parser": "^2.4.8",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
-    "supertest": "^4.0.2"
+    "supertest": "^6.1.6"
   },
   "scripts": {
     "start": "node server.js",

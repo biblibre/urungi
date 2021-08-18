@@ -67,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated set-cookie-parser to 2.4.8
 - Updated stylelint to 13.13.1
 - Updated stylelint-config-standard to 22.0.0
+- Updated supertest to 6.1.6
 - Removed eslint-plugin-standard
 - Removed gulp-concat
 - Removed gulp-decomment
