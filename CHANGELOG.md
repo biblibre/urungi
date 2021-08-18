@@ -36,11 +36,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated csurf to 1.11.0
 - Updated debug to 4.3.2
 - Updated ejs to 2.7.4
-- Updated eslint to 7.9.0
+- Updated eslint to 7.32.0
 - Updated eslint-config-standard to 14.1.1
-- Updated eslint-config-import to 2.22.0
-- Updated eslint-config-jest to 24.0.2
-- Updated eslint-config-node to 11.1.0
+- Updated eslint-plugin-import to 2.24.0
+- Updated eslint-plugin-jest to 24.4.0
+- Updated eslint-plugin-node to 11.1.0
+- Updated eslint-plugin-promise to 4.3.1
+- Updated eslint-plugin-standard to 4.1.0
 - Updated express-session to 1.17.1
 - Updated htmlhint to 0.14.1
 - Updated jest to 26.4.2
