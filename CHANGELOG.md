@@ -61,7 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated oracledb to 5.2.0
 - Updated passport to 0.4.1
 - Updated password-generator to 2.3.2
-- Updated pg to 8.3.3
+- Updated pg to 8.7.1
 - Updated request to 2.88.2
 - Updated set-cookie-parser to 2.4.6
 - Updated stylelint to 13.7.1
