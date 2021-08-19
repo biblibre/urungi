@@ -91,12 +91,6 @@ workflows:
             node: '14'
             mongodb: '5.0.2'
       - test:
-          name: node:16 mongodb:4.0
-          e:
-            name: node
-            node: '16'
-            mongodb: '4.0.26'
-      - test:
           name: node:16 mongodb:4.2
           e:
             name: node
