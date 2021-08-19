@@ -5,6 +5,7 @@ require('../../../public/js/core/connection.js');
 require('../../../public/js/layers/layers.module.js');
 require('../../../public/js/layers/layer.service.js');
 require('../../../public/js/reports/reports.module.js');
+require('../../../public/js/reports/constants.js');
 require('../../../public/js/reports/reports.service.js');
 require('../../../public/js/reports/map.service.js');
 
