@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const gettext = require('gulp-angular-gettext');
+const nodemon = require('gulp-nodemon');
 const templatecache = require('gulp-angular-templatecache');
 const del = require('del');
 const path = require('path');
@@ -8,6 +9,7 @@ const dist_css = gulp.series(dist_css_clean, dist_css_build);
 const dist_fonts = gulp.series(dist_fonts_clean, dist_fonts_build);
 const dist_translations = gulp.series(dist_translations_clean, dist_translations_build);
 const dist_templates = gulp.series(dist_templates_clean, dist_templates_build);
+const watch = gulp.parallel(watch_less, watch_templates);
 
 const dist = gulp.parallel(
     dist_css,
@@ -18,6 +20,7 @@ const dist = gulp.parallel(
 
 module.exports = {
     default: dist,
+    dev: gulp.parallel(watch, nodemon_start),
     dist: dist,
     'dist:css': dist_css,
     'dist:fonts': dist_fonts,
@@ -110,6 +113,18 @@ function dist_templates_build () {
             moduleSystem: 'IIFE',
         }))
         .pipe(gulp.dest('dist/templates'));
+}
+
+function nodemon_start (done) {
+    nodemon({
+        script: 'bin/www',
+        ext: 'js',
+        env: { NODE_ENV: 'development' },
+        watch: [
+            'server/',
+        ],
+        done
+    });
 }
 
 function pot () {
