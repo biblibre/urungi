@@ -1,5 +1,5 @@
 angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportsService, $routeParams, $timeout, c3Charts, $uibModal,
-    reportModel, widgetsCommon, $location, gettextCatalog, $q, Noty, layerService, api, $rootScope, userService) {
+    reportModel, widgetsCommon, $location, gettextCatalog, $q, notify, layerService, api, $rootScope, userService) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
     $scope.dropArea = 'partials/report/partials/drop-area.html';
     $scope.reportNameModal = 'partials/report/modals/reportNameModal.html';
@@ -135,7 +135,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         const report = $scope.selectedReport;
 
         if (!report.properties) {
-            new Noty({ text: gettextCatalog.getString('invalid report'), type: 'error' }).show();
+            notify.error(gettextCatalog.getString('invalid report'));
             return;
         }
 
@@ -524,7 +524,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             break;
 
         default:
-            new Noty({ text: gettextCatalog.getString('report type does not exist'), type: 'error' }).show();
+            notify.error(gettextCatalog.getString('report type does not exist'));
             break;
         }
 

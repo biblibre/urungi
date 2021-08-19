@@ -1,4 +1,4 @@
-angular.module('app').service('reportModel', function ($q, api, connection, uuid, FileSaver, Noty, reportsService) {
+angular.module('app').service('reportModel', function ($q, api, connection, uuid, FileSaver, notify, reportsService) {
     this.getReportDefinition = function (id, isLinked) {
         const url = '/api/reports/get-report/' + id;
         const params = { id: id, mode: 'preview', linked: isLinked };

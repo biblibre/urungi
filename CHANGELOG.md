@@ -9,12 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a service for notifications called "notify" (based actually on PNotify)
 - Added Spanish translation
 - Added report type pyramid
 - Added gulp task `dev` that combine `watch` and `nodemon`
 
 ### Changed
 
+- Replace Noty by custom notification service
 - If no language is selected, use the language defined in browser preferences (#76)
 
 ### Fixed
@@ -74,7 +76,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed gulp-concat
 - Removed gulp-decomment
 - Removed merge-stream
-
 
 ## [2.2.0] - 2020-04-01
 

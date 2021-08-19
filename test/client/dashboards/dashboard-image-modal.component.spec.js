@@ -1,6 +1,7 @@
 require('../../../public/js/core/core.module.js');
 require('../../../public/js/core/constants.js');
 require('../../../public/js/core/connection.js');
+require('../../../public/js/core/notification.service');
 require('../../../public/js/core/api.js');
 require('../../../public/js/dashboards/dashboards.module.js');
 require('../../../public/js/dashboards/dashboard-image-modal.component.js');
@@ -20,15 +21,15 @@ describe('appDashboardImageModal', function () {
     describe('DashboardImageModalController', function () {
         let closeSpy;
         let dismissSpy;
-        let NotySpy;
-        let notyShowSpy;
+        let notifyErrorSpy;
         let vm;
 
         beforeEach(function () {
-            notyShowSpy = jest.fn();
-            NotySpy = jest.fn(function () { this.show = notyShowSpy; });
+            notifyErrorSpy = jest.fn(function () { this.error = notifyErrorSpy; });
             const locals = {
-                Noty: NotySpy,
+                notify: {
+                    error: notifyErrorSpy,
+                }
             };
 
             closeSpy = jest.fn();
@@ -90,11 +91,10 @@ describe('appDashboardImageModal', function () {
                 expect(vm.upload()).toBeUndefined();
             });
 
-            it('should call Noty if file is not an image', function () {
+            it('should call notificationService if file is not an image', function () {
                 const file = new File([], 'foo', { type: 'text/plain' });
                 vm.upload(file);
-                expect(NotySpy).toHaveBeenCalledWith({ text: 'You may only upload images', type: 'error' });
-                expect(notyShowSpy).toHaveBeenCalledWith();
+                expect(notifyErrorSpy).toHaveBeenCalledWith('You may only upload images');
             });
 
             it('should call POST /api/files', function () {

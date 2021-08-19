@@ -2,6 +2,7 @@ require('../../../public/js/core/core.module.js');
 require('../../../public/js/core/api.js');
 require('../../../public/js/core/constants.js');
 require('../../../public/js/core/connection.js');
+require('../../../public/js/core/notification.service');
 require('../../../public/js/io/io.module.js');
 require('../../../public/js/io/import.controller.js');
 

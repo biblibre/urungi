@@ -12,9 +12,9 @@
         templateUrl: 'partials/dashboards/dashboard-image-modal.component.html',
     });
 
-    DashboardImageModalController.$inject = ['gettextCatalog', 'Noty', 'api'];
+    DashboardImageModalController.$inject = ['gettextCatalog', 'notify', 'api'];
 
-    function DashboardImageModalController (gettextCatalog, Noty, api) {
+    function DashboardImageModalController (gettextCatalog, notify, api) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -71,7 +71,7 @@
 
             const type = file.type.split('/')[0];
             if (type !== 'image') {
-                new Noty({ text: gettextCatalog.getString('You may only upload images'), type: 'error' }).show();
+                notify.error(gettextCatalog.getString('You may only upload images'));
                 return;
             }
 
@@ -86,8 +86,7 @@
                 $.extend(newFile, file);
                 newFile.loading = false;
             }, err => {
-                new Noty({ text: gettextCatalog.getString('Image upload failed') + ' : ' + err.message, type: 'error' }).show();
-                vm.files.pop();
+                notify.error(gettextCatalog.getString('Image upload failed') + ' : ' + err.message);
             });
         }
     }
