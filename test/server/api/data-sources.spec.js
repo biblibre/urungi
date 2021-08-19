@@ -16,8 +16,8 @@ jest.mock('../../../server/database-adapters/oracle.js');
 let app;
 let mongod;
 beforeAll(async () => {
-    mongod = new MongoMemoryServer();
-    process.env.MONGODB_URI = await mongod.getUri();
+    mongod = await MongoMemoryServer.create();
+    process.env.MONGODB_URI = mongod.getUri();
     mongoose = require('mongoose');
     app = require('../../../server/app');
 });
