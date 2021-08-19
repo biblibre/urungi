@@ -20,15 +20,15 @@ describe('appDashboardImageModal', function () {
     describe('DashboardImageModalController', function () {
         let closeSpy;
         let dismissSpy;
-        let NotySpy;
-        let notyShowSpy;
+        let toastrSpy;
+        let toastrShowSpy;
         let vm;
 
         beforeEach(function () {
-            notyShowSpy = jest.fn();
-            NotySpy = jest.fn(function () { this.show = notyShowSpy; });
+            toastrShowSpy = jest.fn();
+            toastrSpy = jest.fn(function () { this.show = toastrShowSpy; });
             const locals = {
-                Noty: NotySpy,
+                toastr: toastrSpy,
             };
 
             closeSpy = jest.fn();
@@ -90,11 +90,11 @@ describe('appDashboardImageModal', function () {
                 expect(vm.upload()).toBeUndefined();
             });
 
-            it('should call Noty if file is not an image', function () {
+            it('should call toastr if file is not an image', function () {
                 const file = new File([], 'foo', { type: 'text/plain' });
                 vm.upload(file);
-                expect(NotySpy).toHaveBeenCalledWith({ text: 'You may only upload images', type: 'error' });
-                expect(notyShowSpy).toHaveBeenCalledWith();
+                expect(toastrSpy).toHaveBeenCalledWith({ text: 'You may only upload images', type: 'error' });
+                expect(toastrShowSpy).toHaveBeenCalledWith();
             });
 
             it('should call POST /api/files', function () {

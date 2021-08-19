@@ -66,7 +66,6 @@ function dist_js_build () {
         'node_modules/angular-sanitize/angular-sanitize.min.js',
         'node_modules/angular-route/angular-route.min.js',
         'node_modules/angular-toastr/dist/angular-toastr.tpls.min.js',
-        'node_modules/noty/lib/noty.min.js',
         'node_modules/moment/min/moment-with-locales.min.js',
         'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js',
         'node_modules/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js',
@@ -127,8 +126,6 @@ function dist_css_build () {
         'node_modules/jsplumb/css/jsplumbtoolkit-defaults.css',
         'node_modules/intro.js/minified/introjs.min.css',
         'node_modules/angular-toastr/dist/angular-toastr.min.css',
-        'node_modules/noty/lib/noty.css',
-        'node_modules/noty/lib/themes/bootstrap-v4.css',
         'node_modules/pivottable/dist/pivot.min.css',
         'node_modules/subtotal/dist/subtotal.min.css',
     ]);

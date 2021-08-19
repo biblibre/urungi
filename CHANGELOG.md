@@ -62,7 +62,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated stylelint to 13.7.1
 - Updated stylelint-config-standard to 20.0.0
 
-
 ## [2.2.0] - 2020-04-01
 
 ### Added
@@ -327,6 +326,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace mocha and karma by jest for running tests
 - Tables are now ordered alphabetically in the layer modification page
 - Make import tool more picky and informative
+- Replace Noty (became deprecated) by angular-toastr
 
 ### Fixed
 
