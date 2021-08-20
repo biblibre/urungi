@@ -13,6 +13,7 @@ module.exports = {
         {
             displayName: 'client',
             testEnvironment: 'jsdom',
+            testRunner: 'jest-jasmine2',
             testMatch: [
                 '<rootDir>/test/client/**/*.spec.js',
             ],
