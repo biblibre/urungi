@@ -15,43 +15,6 @@
             addMarkersToMap: addMarkersToMap,
         };
 
-        const MapIcon = L.Icon.extend({
-            options: {
-                icon: 'home',
-                iconColor: 'black'
-            },
-
-            initialize: function (options) {
-                options = L.Util.setOptions(this, options);
-            },
-
-            createIcon: function () {
-                const div = document.createElement('div');
-                const options = this.options;
-
-                div.classList.add('leaflet-marker-icon');
-
-                if (options.icon) {
-                    div.innerHTML = this._createInner();
-                }
-
-                return div;
-            },
-
-            _createInner: function () {
-                const options = this.options;
-
-                const iconClass = 'fa fa-' + options.icon;
-                const iconStyle = `style="color: ${options.iconColor}; font-size: 16px;"`;
-
-                return '<i ' + iconStyle + 'class="' + iconClass + '"></i>';
-            },
-
-            createShadow: function () {
-                return null;
-            }
-        });
-
         return service;
 
         function createMap (report, dataRows) {

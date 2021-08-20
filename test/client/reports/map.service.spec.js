@@ -15,11 +15,9 @@ describe('map', function () {
     beforeEach(angular.mock.module('app.layers'));
 
     let map;
-    let L;
 
     beforeEach(inject(function (_map_, _L_) {
         map = _map_;
-        L = _L_;
     }));
 
     describe('getGroups', function () {
