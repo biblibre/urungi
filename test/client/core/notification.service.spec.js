@@ -15,8 +15,7 @@ describe('notify', function () {
     }));
 
     beforeEach(function () {
-        PNotifySuccessSpy = jest.fn();
-        PNotify.success = PNotifySuccessSpy;
+        PNotifySuccessSpy = jest.spyOn(PNotify, 'success');
     });
 
     it('should be defined', function () {
@@ -28,7 +27,7 @@ describe('notify', function () {
     it('should be an object', function () {
         expect(typeof (notify)).toBe('object');
     });
-    it('PNotify must receive text that we send', function () {
+    it('PNotify must be call with correct args', function () {
         notify.success('Hello World');
         expect(PNotifySuccessSpy).toHaveBeenCalledWith(expect.objectContaining({
             text: 'Hello World',

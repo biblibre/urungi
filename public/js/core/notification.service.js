@@ -3,14 +3,14 @@
 
     angular.module('app.core').factory('notify', notify);
 
-    notify.$inject = ['PNotify', 'PNotifyBootstrap4'];
+    notify.$inject = ['PNotify', 'PNotifyBootstrap3'];
 
-    function notify (PNotify, PNotifyBootstrap4) {
+    function notify (PNotify, PNotifyBootstrap3) {
         const settings = {
             delay: 3500,
         };
 
-        PNotify.defaultModules.set(PNotifyBootstrap4, {});
+        PNotify.defaultModules.set(PNotifyBootstrap3, {});
 
         // define the maxOpen stack display for notifications
         const maxOpenWait = new PNotify.Stack({
@@ -25,6 +25,7 @@
         });
 
         const service = {
+            getNotify: getNotify,
             success: success,
             error: error,
             notice: notice,
@@ -38,24 +39,22 @@
             });
         };
 
-        function success (content) {
-            const context = settings;
+        function getNotify (text, type) {
+            const context = angular.copy(settings);
             context.stack = maxOpenWait;
-            context.text = content;
-            PNotify.success(context);
+            context.text = text;
+            clickToClose(PNotify[type](context));
         }
 
-        function error (content) {
-            const context = settings;
-            context.stack = maxOpenWait;
-            context.text = content;
-            clickToClose(PNotify.error(context));
+        function success (text) {
+            getNotify(text, 'success');
         }
-        function notice (content) {
-            const context = settings;
-            context.stack = maxOpenWait;
-            context.text = content;
-            clickToClose(PNotify.notice(context));
+
+        function error (text) {
+            getNotify(text, 'error');
+        }
+        function notice (text) {
+            getNotify(text, 'notice');
         }
     }
 })();
