@@ -1,4 +1,4 @@
-/* global Noty: false, moment: false, numeral: false */
+/* global PNotify: false, PNotifyBootstrap3: false, PNotifyFontAwesome4: false, moment: false, numeral: false */
 (function () {
     'use strict';
 
@@ -6,7 +6,9 @@
     const base = baseURI.pathname.substring(0, baseURI.pathname.lastIndexOf('/'));
 
     angular.module('app.core')
-        .constant('Noty', Noty)
+        .constant('PNotify', PNotify)
+        .constant('PNotifyBootstrap3', PNotifyBootstrap3)
+        .constant('PNotifyFontAwesome4', PNotifyFontAwesome4)
         .constant('moment', moment)
         .constant('numeral', numeral)
         .constant('base', base);

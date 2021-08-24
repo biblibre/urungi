@@ -2,6 +2,7 @@ require('../../../public/js/core/core.module.js');
 require('../../../public/js/core/constants.js');
 require('../../../public/js/core/api.js');
 require('../../../public/js/core/connection.js');
+require('../../../public/js/core/notify.service.js');
 require('../../../public/js/layers/layers.module.js');
 require('../../../public/js/layers/layer.service.js');
 require('../../../public/js/reports/reports.module.js');

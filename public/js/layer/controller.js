@@ -1,5 +1,5 @@
 /* global jsPlumb: false */
-angular.module('app').controller('layerCtrl', function ($scope, $location, api, $routeParams, $timeout, $window, gettextCatalog, Noty) {
+angular.module('app').controller('layerCtrl', function ($scope, $location, api, $routeParams, $timeout, $window, gettextCatalog, notify) {
     $scope.layerModal = 'partials/layer/layerModal.html';
     $scope.sqlModal = 'partials/layer/sqlModal.html';
     $scope.elementModal = 'partials/layer/elementModal.html';
@@ -223,7 +223,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
     $scope.editSQL = function () {
         const selectedCollection = $scope.theSelectedElement;
         if (!selectedCollection.isSQL) {
-            new Noty({ text: gettextCatalog.getString('Cannot modify sql of an object which is not an sql request'), type: 'error' }).show();
+            notify.error(gettextCatalog.getString('Cannot modify sql of an object which is not an sql request'));
             return;
         }
 
@@ -482,7 +482,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                         if (element.component !== undefined && element.component !== comp) {
                             element.component = -1;
                             const msg = gettextCatalog.getString('One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched');
-                            new Noty({ text: msg, type: 'warning' }).show();
+                            notify.notice(msg);
                             return;
                         }
                         element.component = comp;
@@ -490,7 +490,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                 } catch (error) {
                     const message = gettextCatalog.getString('Failed to parse expression for element') + ' ' +
                         element.elementLabel + ' : ' + error.message;
-                    new Noty({ type: 'warning', text: message }).show();
+                    notify.notice(message);
                 }
             }
         });
@@ -1131,8 +1131,8 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
             connections[c].selected = false;
         }
 
-        $('#' + $scope.selectedTargetId).css({ backgroundColor: '#D5D5D5' });
-        $('#' + $scope.selectedSourceId).css({ backgroundColor: '#D5D5D5' });
+        $('#' + $scope.selectedTargetId).css({ backgroundColor: '#d5d5d5' });
+        $('#' + $scope.selectedSourceId).css({ backgroundColor: '#d5d5d5' });
         $scope.selectedTargetId = undefined;
         $scope.selectedSourceId = undefined;
         $scope.selectedConnection = undefined;
@@ -1207,7 +1207,7 @@ angular.module('app').controller('layerCtrl', function ($scope, $location, api, 
                 $scope.erDiagramInit();
             });
         } else {
-            new Noty({ text: gettextCatalog.getString('Datasource must be the same for all entities'), type: 'error' }).show();
+            notify.error(gettextCatalog.getString('Datasource must be the same for all entities'));
         }
     };
 

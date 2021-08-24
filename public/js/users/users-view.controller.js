@@ -3,9 +3,9 @@
 
     angular.module('app.users').controller('UsersViewController', UsersViewController);
 
-    UsersViewController.$inject = ['$routeParams', '$uibModal', 'Noty', 'api', 'connection', 'userService', 'gettextCatalog'];
+    UsersViewController.$inject = ['$routeParams', '$uibModal', 'api', 'connection', 'userService', 'gettextCatalog', 'notify'];
 
-    function UsersViewController ($routeParams, $uibModal, Noty, api, connection, userService, gettextCatalog) {
+    function UsersViewController ($routeParams, $uibModal, api, connection, userService, gettextCatalog, notify) {
         const vm = this;
 
         vm.addRole = addRole;
@@ -69,7 +69,7 @@
 
                     api.updateUser(user._id, { status: newStatus }).then(function (result) {
                         user.status = newStatus;
-                        new Noty({ text: gettextCatalog.getString('Status updated'), type: 'success' }).show();
+                        notify.success(gettextCatalog.getString('Status updated'));
                     });
                 }
             });
@@ -119,7 +119,7 @@
 
         function deleteRole (roleID) {
             if (vm.user.userName === 'administrator' && roleID === 'ADMIN') {
-                new Noty({ text: gettextCatalog.getString("The role 'Urungi Administrator' can't be removed from the user administrator"), type: 'warning' }).show();
+                notify.notice(gettextCatalog.getString("The role 'Urungi Administrator' can't be removed from the user administrator"));
             } else {
                 $uibModal.open({
                     component: 'appDeleteModal',
