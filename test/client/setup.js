@@ -3,9 +3,11 @@ Object.defineProperty(window, 'jQuery', { value: jQuery });
 Object.defineProperty(window, '$', { value: jQuery });
 
 const PNotify = require('@pnotify/core');
-const PNotifyBootstrap3 = require('@pnotify/bootstrap3');
 Object.defineProperty(window, 'PNotify', { value: PNotify });
+const PNotifyBootstrap3 = require('@pnotify/bootstrap3');
 Object.defineProperty(window, 'PNotifyBootstrap3', { value: PNotifyBootstrap3 });
+const PNotifyFontAwesome4 = require('@pnotify/font-awesome4');
+Object.defineProperty(window, 'PNotifyFontAwesome4', { value: PNotifyFontAwesome4 });
 
 const moment = require('moment');
 Object.defineProperty(window, 'moment', { value: moment });

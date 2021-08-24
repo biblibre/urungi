@@ -37,6 +37,7 @@ const staticPaths = [
     { p: '/angular-route', root: 'angular-route' },
     { p: '/pnotify-core', root: '@pnotify/core/dist' },
     { p: '/pnotify-bootstrap3', root: '@pnotify/bootstrap3/dist' },
+    { p: '/pnotify-fontawesome4', root: '@pnotify/font-awesome4/dist' },
     { p: '/moment', root: 'moment/min' },
     { p: '/angularjs-bootstrap-datetimepicker', root: 'angularjs-bootstrap-datetimepicker/src' },
     { p: '/angular-ui-tree', root: 'angular-ui-tree/dist' },

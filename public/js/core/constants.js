@@ -1,4 +1,4 @@
-/* global PNotify: false, PNotifyBootstrap3: false, moment: false, numeral: false */
+/* global PNotify: false, PNotifyBootstrap3: false, PNotifyFontAwesome4: false, moment: false, numeral: false */
 (function () {
     'use strict';
 
@@ -8,6 +8,7 @@
     angular.module('app.core')
         .constant('PNotify', PNotify)
         .constant('PNotifyBootstrap3', PNotifyBootstrap3)
+        .constant('PNotifyFontAwesome4', PNotifyFontAwesome4)
         .constant('moment', moment)
         .constant('numeral', numeral)
         .constant('base', base);

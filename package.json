@@ -9,6 +9,7 @@
   "dependencies": {
     "@pnotify/bootstrap3": "^5.2.0",
     "@pnotify/core": "^5.2.0",
+    "@pnotify/font-awesome4": "^5.2.0",
     "angular": "^1.8.2",
     "angular-bootstrap-colorpicker": "^3.0.32",
     "angular-file-saver": "^1.1.3",
