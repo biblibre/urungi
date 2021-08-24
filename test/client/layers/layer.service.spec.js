@@ -51,4 +51,13 @@ describe('layerService', function () {
             expect(flat).toEqual(expected);
         });
     });
+
+    describe('newID', function () {
+        it('should return a random id of 4 alphabetic characters', function () {
+            const layer = {};
+            const id = layerService.newID(layer);
+
+            expect(id).toMatch(/^[a-z]{4}$/);
+        });
+    });
 });

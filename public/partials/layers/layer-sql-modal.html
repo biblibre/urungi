@@ -1,0 +1,61 @@
+<div class="modal-header ng-scope">
+    <button type="button" class="close" ng-click="vm.dismiss()" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" translate>Add new SQL</h4>
+</div>
+
+<div class="modal-body ng-scope">
+    <div class="container-fluid" ng-if="!vm.newSQLCollection">
+        <form name="vm.form">
+            <div class="form-group" ng-class="{ 'has-error': vm.form.name.$invalid }">
+                <label class="control-label" for="field-name" translate>Type a name for this dataset</label>
+                <input type="text" class="form-control" id="field-name" name="name" ng-model="vm.name" placeholder="{{ 'type a name for the dataset' | translate }}" ng-required="true" required>
+                <span ng-show="vm.form.name.$invalid" class="help-inline" translate>The name is required</span>
+            </div>
+
+            <div class="form-group" ng-class="{ 'has-error': vm.form.sql.$invalid || vm.error }">
+                <label class="control-label" for="field-sql" translate>SQL query</label>
+                <textarea class="form-control autogrow" cols="20" id="field-sql" name="sql" ng-model="vm.sqlQuery" ng-required="true" required></textarea>
+
+                <div ng-show="vm.form.sql.$invalid" class="help-block" translate>You have to enter an SQL query</div>
+
+                <div class="help-block" ng-show="vm.error">
+                    {{ vm.error }}
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container-fluid" ng-if="vm.newSQLCollection">
+        <h4 translate>Please confirm your modification</h4>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h6 translate>The following columns will be kept :</h6>
+                <ul>
+                    <li ng-repeat="el in vm.matchedElements">{{el.elementName}}</li>
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+                <h6 translate>The following columns will be added :</h6>
+                <ul>
+                    <li ng-repeat="el in vm.newElements">{{el.elementName}}</li>
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+                <h6 translate>The following columns will be removed :</h6>
+                <ul>
+                    <li ng-repeat="el in vm.lostElements">{{el.elementName}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer ng-scope">
+    <button type="button" class="btn" ng-click="vm.dismiss()" translate>Cancel</button>
+    <button type="button" class="btn btn-info" ng-disabled="vm.form.$invalid  || vm.form.$pristine" ng-if="!vm.newSQLCollection && vm.mode === 'add'" ng-click="vm.addSqlToLayer()" translate>Add to layer</button>
+    <button type="button" class="btn btn-info" ng-disabled="vm.form.$invalid" ng-if="!vm.newSQLCollection && vm.mode === 'edit'" ng-click="vm.saveSQLChanges()" translate>Save changes</button>
+    <button type="button" class="btn btn-info" ng-if="vm.newSQLCollection" ng-click="vm.confirmSQLChanges()" translate>Confirm</button>
+</div>
