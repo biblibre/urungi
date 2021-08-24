@@ -1,4 +1,4 @@
-/* global PNotify: false, PNotifyBootstrap3: false, PNotifyFontAwesome4: false, moment: false, numeral: false */
+/* global PNotify: false, PNotifyBootstrap3: false, PNotifyFontAwesome4: false, moment: false, numeral: false, L : false */
 (function () {
     'use strict';
 
@@ -11,5 +11,6 @@
         .constant('PNotifyFontAwesome4', PNotifyFontAwesome4)
         .constant('moment', moment)
         .constant('numeral', numeral)
+        .constant('L', L)
         .constant('base', base);
 })();

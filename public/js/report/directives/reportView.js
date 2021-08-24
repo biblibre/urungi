@@ -1,4 +1,4 @@
-angular.module('app').directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, pivot, uuid, gettextCatalog, api) {
+angular.module('app').directive('reportView', function ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, pivot, map, uuid, gettextCatalog, api) {
     return {
 
         scope: {
@@ -84,6 +84,10 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
                         case 'indicator':
                             $scope.changeContent(reportHtmlWidgets.generateIndicator($scope.report, $scope.data));
                             break;
+
+                        case 'map':
+                            $scope.changeContent(`<div id="map" style="height:${$scope.report.properties.height}px"></div>`);
+                            return map.createMap($scope.report, $scope.data);
                         }
                     } else {
                         $scope.changeContent('<div style="width: 100%; height: 100%; display: flex; align-items: center;"><span style="color: darkgray; font-size: initial; width:100%; text-align: center;"><img src="images/empty.png">' + gettextCatalog.getString('No data for this report') + '</span></div>');

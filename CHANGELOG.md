@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a service for notifications called "notify" (based actually on PNotify)
 - Added Spanish translation
 - Added report type pyramid
+- Added report type map
 - Added gulp task `dev` that combine `watch` and `nodemon`
 
 ### Changed
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Dependencies
 
+- Added leaflet 1.7.1
 - Updated angular to 1.8.2
 - Updated angular-gettext to 2.4.2
 - Updated arg to 5.0.1

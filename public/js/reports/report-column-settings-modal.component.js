@@ -12,9 +12,9 @@
         },
     });
 
-    ReportColumnSettingsModalController.$inject = ['reportsService'];
+    ReportColumnSettingsModalController.$inject = ['reportsService', 'api'];
 
-    function ReportColumnSettingsModalController (reportsService) {
+    function ReportColumnSettingsModalController (reportsService, api) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -24,6 +24,7 @@
         vm.isAggregatable = isAggregatable;
         vm.report = {};
         vm.settings = {};
+        vm.categories = [];
 
         function $onInit () {
             const column = vm.resolve.column;
@@ -38,6 +39,11 @@
             vm.settings.type = column.type || 'bar';
             vm.settings.format = column.format || '';
             vm.settings.calculateTotal = column.calculateTotal || false;
+
+            api.getReportFilterValues({ ...column, layerID: vm.report.selectedLayerID }).then((data) => {
+                vm.categories = data.data.map((e) => e.f);
+            });
+            vm.settings.icon = column.icon || {};
 
             const aggregations = [];
 

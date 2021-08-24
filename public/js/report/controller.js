@@ -110,6 +110,13 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         $scope.selectedReport.properties.pivotKeys = {};
         $scope.selectedReport.properties.pivotKeys.columns = [];
         $scope.selectedReport.properties.pivotKeys.rows = [];
+        $scope.selectedReport.properties.map = {
+            geojson: [],
+            value: [],
+            label: [],
+            group: [],
+            type: [],
+        };
         $scope.selectedReport.properties.order = [];
         $scope.selectedReport.properties.filters = [];
         $scope.selectedReport.reportType = 'grid';
@@ -118,6 +125,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
         $scope.selectedReport.properties.height = 300;
         $scope.selectedReport.properties.range = '';
+        $scope.selectedReport.properties.mapLayerUrl = '';
 
         $scope.selectedReport.properties.legendPosition = 'bottom';
 
@@ -149,6 +157,13 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         if (!report.properties.pivotKeys.rows) { report.properties.pivotKeys.rows = []; }
         if (!report.properties.order) { report.properties.order = []; }
         if (!report.properties.range) { report.properties.range = ''; }
+        if (!report.properties.map) { report.properties.map = {}; }
+        if (!report.properties.map.geojson) { report.properties.map.geojson = []; }
+        if (!report.properties.map.value) { report.properties.map.value = []; }
+        if (!report.properties.map.label) { report.properties.map.label = []; }
+        if (!report.properties.map.group) { report.properties.map.group = []; }
+        if (!report.properties.map.type) { report.properties.map.type = []; }
+        if (!report.properties.mapLayerUrl) { report.properties.mapLayerUrl = ''; }
     };
 
     /*
@@ -422,6 +437,12 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
                 role: 'column'
             };
             break;
+        case 'map':
+            choice = {
+                propertyBind: $scope.selectedReport.properties.ykeys,
+                role: 'column'
+            };
+            break;
         }
 
         return choice;
@@ -521,6 +542,14 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             moveContent(report.properties.pivotKeys.columns, movedColumns);
             moveContent(report.properties.pivotKeys.rows, movedColumns);
             report.reportType = 'pyramid';
+            break;
+
+        case 'map':
+            moveContent(report.properties.columns, movedColumns);
+            moveContent(report.properties.xkeys, movedColumns);
+            moveContent(report.properties.pivotKeys.columns, movedColumns);
+            moveContent(report.properties.pivotKeys.rows, movedColumns);
+            report.reportType = 'map';
             break;
 
         default:
@@ -638,6 +667,10 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             break;
         case 'pyramid':
             available = report.properties.xkeys.length > 0 && report.properties.ykeys.length > 0;
+            break;
+
+        case 'map':
+            available = report.properties.map.geojson.length === 1;
             break;
         }
 
@@ -767,6 +800,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             $scope.selectedReport.properties.legendPosition = settings.legendPosition;
             $scope.selectedReport.properties.height = settings.height;
             $scope.selectedReport.properties.maxValue = settings.maxValue;
+            $scope.selectedReport.properties.mapLayerUrl = settings.mapLayerUrl;
             $scope.selectedReport.theme = settings.theme;
             $scope.selectedReport.properties.range = settings.range;
         }, () => {});

@@ -14,6 +14,8 @@
             <a id="reportTypeChartDonut" class="btn report-type-button" ng-class="{'report-selected-btn': ['chart-donut', 'chart-pie'].includes(selectedReport.reportType), 'report-unselected-btn': !['chart-donut', 'chart-pie'].includes(selectedReport.reportType)}" ng-click="changeReportType('chart-donut')"><img src="images/chart_donut.png"></a>
             <a id="reportTypeIndicator" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'indicator', 'report-unselected-btn': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="images/indicator.png"></a>
             <a id="reportTypeGauge" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'gauge', 'report-unselected-btn': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="images/gauge.png"></a>
+            <a id="reportTypeMap" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'map', 'report-unselected-btn': selectedReport.reportType != 'map'}" ng-click="changeReportType('map')"><img src="images/gps-pin.png"></a>
+
 
             <button ng-show="isReportSettingsModalAvailable()" type="button" class="btn btn-default btn-sm pull-right" title="{{ 'Report settings' | translate }}" ng-click="openReportSettingsModal()">
                 <i class="fa fa-gear"></i>

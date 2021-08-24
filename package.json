@@ -42,6 +42,7 @@
     "js-xlsx": "^0.8.22",
     "jsplumb": "^2.15.6",
     "knex": "^0.21.21",
+    "leaflet": "^1.7.1",
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "migrate-mongo": "^8.2.3",
     "moment": "^2.29.1",

@@ -19,6 +19,7 @@ const reportColumnSchema = new mongoose.Schema({
     layerID: mongoose.Schema.Types.ObjectId,
     sortType: Number,
     type: { type: String },
+    icon: {},
 });
 
 reportColumnSchema.virtual('layerObject').get(function () {
@@ -51,7 +52,15 @@ const ReportPropertiesSchema = new mongoose.Schema({
     columns: [reportColumnSchema],
     filters: [reportFilterSchema],
     height: Number,
+    mapLayerUrl: String,
     legendPosition: String,
+    map: {
+        geojson: [reportColumnSchema],
+        label: [reportColumnSchema],
+        value: [reportColumnSchema],
+        group: [reportColumnSchema],
+        type: { type: [reportColumnSchema] },
+    },
     maxValue: Number,
     order: [reportColumnSchema],
     pivotKeys: {

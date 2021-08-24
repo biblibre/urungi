@@ -9,6 +9,7 @@
             report: '<',
             settingsAvailable: '<',
             elements: '<',
+            maxElements: '<',
             zoneInfo: '<',
             onDrop: '&',
             onRemove: '&',
@@ -27,6 +28,10 @@
         vm.getColumnDescription = reportsService.getColumnDescription;
 
         function onDropItem (ev) {
+            if (vm.elements.length >= vm.maxElements) {
+                return;
+            }
+
             const type = 'application/vnd.urungi.layer-element+json';
             const data = ev.dataTransfer.getData(type);
             const layerElement = JSON.parse(data);
@@ -62,6 +67,7 @@
                 column.type = settings.type;
                 column.format = settings.format;
                 column.calculateTotal = settings.calculateTotal;
+                column.icon = settings.icon;
             }, () => {});
 
             return modal;

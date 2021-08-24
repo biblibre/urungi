@@ -61,6 +61,7 @@ const staticPaths = [
     { p: '/js-xlsx', root: 'js-xlsx/dist' },
     { p: '/jsplumb', root: 'jsplumb' },
     { p: '/font-awesome', root: 'font-awesome' },
+    { p: '/leaflet', root: 'leaflet/dist' },
 ];
 for (const { p, root } of staticPaths) {
     staticRouter.use(p, express.static(path.join(__dirname, '..', 'node_modules', root)));

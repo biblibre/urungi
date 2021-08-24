@@ -1,4 +1,7 @@
 require('../../../public/js/core/core.module.js');
+require('../../../public/js/core/constants.js');
+require('../../../public/js/core/connection.js');
+require('../../../public/js/core/api.js');
 require('../../../public/js/reports/reports.module.js');
 require('../../../public/js/reports/reports.service.js');
 require('../../../public/js/reports/report-column-settings-modal.component.js');
