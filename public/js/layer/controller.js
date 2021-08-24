@@ -7,10 +7,8 @@
     LayerController.$inject = ['$location', '$routeParams', '$scope', '$timeout', '$window', '$uibModal', 'gettextCatalog', 'api', 'notify'];
 
     function LayerController ($location, $routeParams, $scope, $timeout, $window, $uibModal, gettextCatalog, api, notify) {
-        $scope.layerModal = 'partials/layer/layerModal.html';
         $scope.sqlModal = 'partials/layer/sqlModal.html';
         $scope.elementModal = 'partials/layer/elementModal.html';
-        $scope.setupModal = 'partials/layer/setupModal.html';
         $scope.ReadOnlyDataSourceSelector = false;
         $scope.items = [];
         $scope.datasources = [];
