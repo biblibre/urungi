@@ -672,52 +672,6 @@
             }, function () {});
         };
 
-        $scope.zoom = function (ratio) {
-            const theWidth = 200 * ratio + 'px';
-            let theFontSize = '10px';
-            let theIconSize = '12px';
-
-            if (ratio === 0.5) {
-                theFontSize = '8px';
-                theIconSize = '12px';
-            }
-            if (ratio === 2) {
-                theFontSize = '12px';
-                theIconSize = '14px';
-            }
-
-            $('.jtk-field').css('width', theWidth);
-            $('.jtk-header').css('width', theWidth);
-            $('.window').css('width', theWidth);
-            $('.jtk-node').css('width', theWidth);
-
-            $('.jtk-field-label').css('font-size', theFontSize);
-            $('.jtk-header').css('font-size', theFontSize);
-            $('.window').css('font-size', theFontSize);
-            $('.jtk-node').css('font-size', theFontSize);
-
-            $('.jtk-field-icon').css('font-size', theIconSize);
-            $('.jtk-field-selected').css('font-size', theIconSize);
-
-            const leftCorrection = (200 * ratio);
-
-            for (const collection in $scope._Layer.params.schema) {
-                const theID = $scope._Layer.params.schema[collection].collectionID;
-
-                const p = $(theID);
-                const position = p.parent().position();
-                const theLeft = position.left;
-
-                $($scope._Layer.params.schema[collection].collectionID).css('left', theLeft + leftCorrection + 'px');
-            }
-
-            for (const collection in $scope._Layer.params.schema) {
-                for (const element in $scope._Layer.params.schema[collection].elements) {
-                    instance.revalidate($scope._Layer.params.schema[collection].elements[element].elementID);
-                }
-            }
-        };
-
         $scope.addFolder = function () {
             const elementID = 'F' + layerService.newID($scope._Layer);
 
@@ -974,21 +928,6 @@
             if ($scope.selectedItem === 'collection' && $scope.theSelectedElement.isSQL) {
                 $scope.editSQL();
             }
-        };
-
-        $scope.findElement = function (elID) {
-            function explore (elementList) {
-                for (const el of elementList) {
-                    if (el.elementID === elID) {
-                        return el;
-                    }
-                    if (el.elements) {
-                        explore(el.elements);
-                    }
-                }
-            }
-
-            explore($scope._Layer.objects);
         };
 
         $scope.forAllElements = function (f) {
