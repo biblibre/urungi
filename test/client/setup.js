@@ -18,6 +18,9 @@ Object.defineProperty(window, 'numeral', { value: numeral });
 const angular = require('angular');
 Object.defineProperty(window, 'angular', { value: angular });
 
+const layerUtils = require('../../shared/layerUtils.js');
+Object.defineProperty(window, 'layerUtils', { value: layerUtils });
+
 require('angular-route');
 require('angular-gettext');
 require('angular-mocks');
