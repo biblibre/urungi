@@ -7,7 +7,7 @@
 
         <div class="explorer-header">
             <div class="explorer-header-title">
-                <h3 app-editable-text="_Layer.name">{{ _Layer.name }}</h3>
+                <h3 app-editable-text="vm._Layer.name">{{ vm._Layer.name }}</h3>
             </div>
             <div class="explorer-header-buttons">
                 <a ng-click="save()" class="btn btn-success pull-right" style="margin-left: 5px; margin-right: 5px;" translate>Save layer</a>
@@ -16,7 +16,7 @@
         </div>
 
 
-        <div class="explorer-body" ng-init="view()" style="background-position: -25px -1px; background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDguNSBMIDM0IDguNSBNIDguNSAwIEwgOC41IDM0IE0gMCAxNyBMIDM0IDE3IE0gMTcgMCBMIDE3IDM0IE0gMCAyNS41IEwgMzQgMjUuNSBNIDI1LjUgMCBMIDI1LjUgMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDM0IDAgTCAwIDAgMCAzNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=&quot;);">
+        <div class="explorer-body" style="background-position: -25px -1px; background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDguNSBMIDM0IDguNSBNIDguNSAwIEwgOC41IDM0IE0gMCAxNyBMIDM0IDE3IE0gMTcgMCBMIDE3IDM0IE0gMCAyNS41IEwgMzQgMjUuNSBNIDI1LjUgMCBMIDI1LjUgMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDM0IDAgTCAwIDAgMCAzNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=&quot;);">
 
 
 
@@ -54,7 +54,7 @@
                             <!--<h5 class="pull-right">Properties</h5>-->
 
                         <layer-object-properties object-type="selectedItem" object="theSelectedElement" on-delete="deleteObject()" on-edit="editObject"
-                        layer="_Layer" on-delete-element="deleteSchemaElement" on-publish-element="elementAdd"></layer-object-properties>
+                        layer="vm._Layer" on-delete-element="deleteSchemaElement" on-publish-element="elementAdd"></layer-object-properties>
 
                     </section>
 
@@ -194,7 +194,7 @@
             </section>
             <section id="queriesTab" class="results infinite ng-hide" ng-show="tabs.selected == 'queries'" style="padding: 5px;">
                     <a ng-click="addSQL()" class="btn btn-info pull-right" style="margin-left: 5px; margin-right: 5px;" translate>Add SQL</a>
-                <div ng-if="collection.sql" ng-repeat="collection in _Layer.params.schema">{{collection.collectionName}}</div>
+                <div ng-if="collection.sql" ng-repeat="collection in vm._Layer.params.schema">{{collection.collectionName}}</div>
             </section>
                 </section>
             </section>
@@ -206,7 +206,7 @@
             <div  class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan canvas-er" id="canvas" style="cursor: default;">
 
                 <div id="{{collection.collectionID}}-parent"  class="window jtk-node  jsplumb-draggable" ng-style="{'left': collection.left, 'top': collection.top}"
-                ng-repeat="collection in _Layer.params.schema">
+                ng-repeat="collection in vm._Layer.params.schema">
 
 
                     <div id="{{collection.collectionID}}" class=" jtk-header " style="overflow: hidden; padding-left: 2px;">

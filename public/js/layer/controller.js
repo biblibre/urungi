@@ -2,30 +2,61 @@
 (function () {
     'use strict';
 
-    angular.module('app').controller('layerCtrl', LayerController);
+    angular.module('app.layers').controller('LayerViewController', LayerViewController);
 
-    LayerController.$inject = ['$location', '$routeParams', '$scope', '$timeout', '$window', '$uibModal', 'gettextCatalog', 'api', 'notify', 'layerService'];
+    LayerViewController.$inject = ['$location', '$routeParams', '$scope', '$timeout', '$window', '$uibModal', 'gettextCatalog', 'api', 'notify', 'layerService'];
 
-    function LayerController ($location, $routeParams, $scope, $timeout, $window, $uibModal, gettextCatalog, api, notify, layerService) {
-        $scope.items = [];
-        $scope.datasources = [];
+    function LayerViewController ($location, $routeParams, $scope, $timeout, $window, $uibModal, gettextCatalog, api, notify, layerService) {
+        const vm = Object.assign(this, {
+            items: [],
+            datasources: [],
+            initiated: false,
+            rootItem: { elementLabel: '', elementRole: 'root', elements: [] },
+            deletingJoin: false,
+            save,
+            addSQL,
+            editSQL,
+            setSelectedEntity,
+            calculateComponents,
+            erDiagramInit,
+            editObject,
+            deleteObject,
+            addDatasetToLayer,
+            selectElement,
+            selectCollection,
+            selectedCanvas,
+            getDatasetsForThisDts,
+            deleteCollection,
+            deleteSchemaElement,
+            addFolder,
+            editElement,
+            allElementsAdded,
+            promptAddAll,
+            elementAdd,
+            createComposedElement,
+            toggleFolded,
+            isInAJoin,
+        });
 
-        $scope.initiated = false;
+        activate();
 
-        $scope.rootItem = { elementLabel: '', elementRole: 'root', elements: [] };
+        function activate () {
+            if ($routeParams.layerID) {
+                api.getLayer($routeParams.layerID).then(function (layer) {
+                    vm._Layer = layer;
+                    vm.rootItem.elements = vm._Layer.objects;
 
-        $scope.deletingJoin = false;
+                    getDatasources();
 
-        if ($location.hash() === 'intro') {
-            $timeout(function () { $scope.showIntro(); }, 1000);
+                    if (vm._Layer.params) {
+                        vm.erDiagramInit();
+                    } else {
+                        vm._Layer.params = {};
+                        vm._Layer.params.schema = [];
+                    }
+                });
+            };
         }
-
-        $scope.IntroOptions = {
-            // IF width > 300 then you will face problems with mobile devices in responsive mode
-            steps: [
-
-            ]
-        };
 
         const connectorPaintStyle = {
             strokeWidth: 4,
@@ -55,7 +86,12 @@
                 strokeWidth: 3
             },
             isSource: true,
-            connector: ['Flowchart', { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true }],
+            connector: ['Flowchart', {
+                stub: [40, 60],
+                gap: 10,
+                cornerRadius: 5,
+                alwaysRespectStubs: true,
+            }],
             connectorStyle: connectorPaintStyle,
             hoverPaintStyle: endpointHoverStyle,
             connectorHoverStyle: connectorHoverStyle,
@@ -83,7 +119,7 @@
             ]
         };
 
-        const _addEndpoints = function (toId, sourceAnchors, targetAnchors) {
+        function _addEndpoints (toId, sourceAnchors, targetAnchors) {
             const newEndpoints = [];
             for (let i = 0; i < sourceAnchors.length; i++) {
                 const sourceUUID = toId + sourceAnchors[i];
@@ -124,10 +160,10 @@
 
                         const id = parentId.replace('-parent', '');
 
-                        for (const c in $scope._Layer.params.schema) {
-                            if ($scope._Layer.params.schema[c].collectionID === id) {
-                                $scope._Layer.params.schema[c].left = pos_x;
-                                $scope._Layer.params.schema[c].top = pos_y;
+                        for (const c in vm._Layer.params.schema) {
+                            if (vm._Layer.params.schema[c].collectionID === id) {
+                                vm._Layer.params.schema[c].left = pos_x;
+                                vm._Layer.params.schema[c].top = pos_y;
                             }
                         }
                     }
@@ -135,28 +171,10 @@
             });
         }
 
-        $scope.view = function () {
-            if ($routeParams.layerID) {
-                api.getLayer($routeParams.layerID).then(function (layer) {
-                    $scope._Layer = layer;
-                    $scope.rootItem.elements = $scope._Layer.objects;
+        function save () {
+            const theLayer = vm._Layer;
 
-                    getDatasources();
-
-                    if ($scope._Layer.params) {
-                        $scope.erDiagramInit();
-                    } else {
-                        $scope._Layer.params = {};
-                        $scope._Layer.params.schema = [];
-                    }
-                });
-            };
-        };
-
-        $scope.save = function () {
-            const theLayer = $scope._Layer;
-
-            $scope.calculateComponents();
+            vm.calculateComponents();
 
             // clean up
 
@@ -176,25 +194,25 @@
         };
 
         function getDatasources () {
-            api.getDatasource($scope._Layer.datasourceID).then(function (datasource) {
-                $scope.datasources = [datasource];
+            api.getDatasource(vm._Layer.datasourceID).then(function (datasource) {
+                vm.datasources = [datasource];
             });
         };
 
-        $scope.addSQL = function () {
+        function addSQL () {
             const modal = $uibModal.open({
                 component: 'appLayerSqlModal',
                 resolve: {
-                    layer: () => $scope._Layer,
+                    layer: () => vm._Layer,
                     mode: () => 'add',
                 },
             });
 
             modal.result.then(function (collection) {
-                if (!$scope._Layer.params) { $scope._Layer.params = {}; }
-                if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
+                if (!vm._Layer.params) { vm._Layer.params = {}; }
+                if (!vm._Layer.params.schema) { vm._Layer.params.schema = []; }
 
-                $scope._Layer.params.schema.push(collection);
+                vm._Layer.params.schema.push(collection);
 
                 setTimeout(function () {
                     for (const element in collection.elements) {
@@ -205,12 +223,12 @@
                     setDraggable('#' + collection.collectionID + '-parent');
                 }, 100);
 
-                $scope.erDiagramInit();
+                vm.erDiagramInit();
             }, function () {});
         };
 
-        $scope.editSQL = function () {
-            const selectedCollection = $scope.theSelectedElement;
+        function editSQL () {
+            const selectedCollection = vm.theSelectedElement;
             if (!selectedCollection.isSQL) {
                 notify.error(gettextCatalog.getString('Cannot modify sql of an object which is not an sql request'));
                 return;
@@ -219,7 +237,7 @@
             const modal = $uibModal.open({
                 component: 'appLayerSqlModal',
                 resolve: {
-                    layer: () => $scope._Layer,
+                    layer: () => vm._Layer,
                     mode: () => 'edit',
                     collection: () => selectedCollection,
                     sqlQuery: () => selectedCollection.sqlQuery,
@@ -230,7 +248,7 @@
             modal.result.then(function (collection) {
                 selectedCollection.sqlQuery = collection.sqlQuery;
 
-                $scope._Layer.objects = $scope._Layer.objects.filter(function f (object) {
+                vm._Layer.objects = vm._Layer.objects.filter(function f (object) {
                     if (object.collectionID === selectedCollection.collectionID) {
                         return collection.elements.some(e => e.elementID === object.elementID);
                     }
@@ -241,68 +259,68 @@
 
                     return true;
                 });
-                $scope.rootItem.elements = $scope._Layer.objects;
+                vm.rootItem.elements = vm._Layer.objects;
 
                 selectedCollection.elements = collection.elements;
             }, function () {});
         };
 
-        $scope.setSelectedEntity = function (entity) {
-            if ($scope.selectedEntities.indexOf(entity) === -1) {
-                $scope.selectedEntities.push(entity);
+        function setSelectedEntity (entity) {
+            if (vm.selectedEntities.indexOf(entity) === -1) {
+                vm.selectedEntities.push(entity);
             } else {
-                const index = $scope.selectedEntities.indexOf(entity);
-                $scope.selectedEntities.splice(index, 1);
+                const index = vm.selectedEntities.indexOf(entity);
+                vm.selectedEntities.splice(index, 1);
             }
         };
 
         function makeJoin (sourceID, targetID) {
-            if (!$scope._Layer.params.joins) { $scope._Layer.params.joins = []; }
+            if (!vm._Layer.params.joins) { vm._Layer.params.joins = []; }
 
             let found = false;
             // First verify that the join does not exists
-            for (const j in $scope._Layer.params.joins) {
-                if ($scope._Layer.params.joins[j].sourceElementID === sourceID && $scope._Layer.params.joins[j].targetElementID === targetID) {
+            for (const j in vm._Layer.params.joins) {
+                if (vm._Layer.params.joins[j].sourceElementID === sourceID && vm._Layer.params.joins[j].targetElementID === targetID) {
                     found = true;
                 }
             }
 
             if (!found) {
                 const join = {};
-                join.joinID = 'J' + layerService.newID($scope._Layer);
+                join.joinID = 'J' + layerService.newID(vm._Layer);
 
-                for (const collection in $scope._Layer.params.schema) {
-                    for (const element in $scope._Layer.params.schema[collection].elements) {
-                        if ($scope._Layer.params.schema[collection].elements[element].elementID === sourceID) {
-                            join.sourceElementID = $scope._Layer.params.schema[collection].elements[element].elementID;
-                            join.sourceElementName = $scope._Layer.params.schema[collection].elements[element].elementName;
-                            join.sourceCollectionID = $scope._Layer.params.schema[collection].collectionID;
-                            join.sourceCollectionName = $scope._Layer.params.schema[collection].collectionName;
+                for (const collection in vm._Layer.params.schema) {
+                    for (const element in vm._Layer.params.schema[collection].elements) {
+                        if (vm._Layer.params.schema[collection].elements[element].elementID === sourceID) {
+                            join.sourceElementID = vm._Layer.params.schema[collection].elements[element].elementID;
+                            join.sourceElementName = vm._Layer.params.schema[collection].elements[element].elementName;
+                            join.sourceCollectionID = vm._Layer.params.schema[collection].collectionID;
+                            join.sourceCollectionName = vm._Layer.params.schema[collection].collectionName;
                         }
 
-                        if ($scope._Layer.params.schema[collection].elements[element].elementID === targetID) {
-                            join.targetElementID = $scope._Layer.params.schema[collection].elements[element].elementID;
-                            join.targetElementName = $scope._Layer.params.schema[collection].elements[element].elementName;
-                            join.targetCollectionID = $scope._Layer.params.schema[collection].collectionID;
-                            join.targetCollectionName = $scope._Layer.params.schema[collection].collectionName;
+                        if (vm._Layer.params.schema[collection].elements[element].elementID === targetID) {
+                            join.targetElementID = vm._Layer.params.schema[collection].elements[element].elementID;
+                            join.targetElementName = vm._Layer.params.schema[collection].elements[element].elementName;
+                            join.targetCollectionID = vm._Layer.params.schema[collection].collectionID;
+                            join.targetCollectionName = vm._Layer.params.schema[collection].collectionName;
                         }
                     }
                 }
 
                 if (join.sourceElementID && join.sourceCollectionID && join.targetElementID && join.targetCollectionID) {
                     join.joinType = 'default';
-                    $scope._Layer.params.joins.push(join);
+                    vm._Layer.params.joins.push(join);
                 }
             }
         }
 
         function deleteJoin (sourceID, targetID) {
-            if (!$scope._Layer.params.joins) { $scope._Layer.params.joins = []; }
+            if (!vm._Layer.params.joins) { vm._Layer.params.joins = []; }
 
             // First verify that the join does not exists
-            for (const j in $scope._Layer.params.joins) {
-                if (($scope._Layer.params.joins[j].sourceElementID === sourceID && $scope._Layer.params.joins[j].targetElementID === targetID) ||
-                    ($scope._Layer.params.joins[j].sourceElementID === targetID && $scope._Layer.params.joins[j].targetElementID === sourceID)) {
+            for (const j in vm._Layer.params.joins) {
+                if ((vm._Layer.params.joins[j].sourceElementID === sourceID && vm._Layer.params.joins[j].targetElementID === targetID) ||
+                    (vm._Layer.params.joins[j].sourceElementID === targetID && vm._Layer.params.joins[j].targetElementID === sourceID)) {
                     const connections = instance.getAllConnections();
 
                     for (const c in connections) {
@@ -311,12 +329,12 @@
 
                         if ((target === sourceID && source === targetID) ||
                                 (target === targetID && source === sourceID)) {
-                            $scope._Layer.params.joins[j].connection = undefined;
-                            $scope.instance.deleteConnection(connections[c]);
+                            vm._Layer.params.joins[j].connection = undefined;
+                            vm.instance.deleteConnection(connections[c]);
                         }
                     }
 
-                    $scope._Layer.params.joins.splice(j, 1);
+                    vm._Layer.params.joins.splice(j, 1);
                 }
             }
         }
@@ -326,18 +344,18 @@
          * A query can only contain elements from a single connected component,
          * otherwise it is impossible to join the collections
          */
-        $scope.calculateComponents = function () {
-            if (!$scope._Layer.params.joins) {
-                $scope._Layer.params.joins = [];
+        function calculateComponents () {
+            if (!vm._Layer.params.joins) {
+                vm._Layer.params.joins = [];
             }
 
-            const collections = new Map($scope._Layer.params.schema.map(c => [c.collectionID, c]));
+            const collections = new Map(vm._Layer.params.schema.map(c => [c.collectionID, c]));
 
             // Assign componentIdx to collection given in parameters and all
             // connected collections
             function visitComponent (collection, componentIdx) {
                 collection.component = componentIdx;
-                for (const join of $scope._Layer.params.joins) {
+                for (const join of vm._Layer.params.joins) {
                     let c;
                     if (join.sourceCollectionID === collection.collectionID) {
                         c = collections.get(join.targetCollectionID);
@@ -360,7 +378,7 @@
                 }
             });
 
-            $scope.forAllElements(function (element) {
+            forAllElements(function (element) {
                 if (!element.isCustom) {
                     const collection = collections.get(element.collectionID);
                     element.component = collection.component;
@@ -368,7 +386,7 @@
                     element.component = undefined;
 
                     try {
-                        for (const el of layerUtils.getElementsUsedInCustomExpression(element.viewExpression, $scope._Layer)) {
+                        for (const el of layerUtils.getElementsUsedInCustomExpression(element.viewExpression, vm._Layer)) {
                             if (el.isCustom) {
                                 continue;
                             }
@@ -393,8 +411,8 @@
 
         let instance;
 
-        $scope.erDiagramInit = function () {
-            if (!$scope.initiated) {
+        function erDiagramInit () {
+            if (!vm.initiated) {
             // this timeout is here to give time to angular to create the element's divs'
                 setTimeout(function () {
                     instance = jsPlumb.getInstance({
@@ -480,21 +498,21 @@
 
                                     const id = parentId.replace('-parent', '');
 
-                                    for (const c in $scope._Layer.params.schema) {
-                                        if ($scope._Layer.params.schema[c].collectionID === id) {
-                                            $scope._Layer.params.schema[c].left = pos_x;
-                                            $scope._Layer.params.schema[c].top = pos_y;
+                                    for (const c in vm._Layer.params.schema) {
+                                        if (vm._Layer.params.schema[c].collectionID === id) {
+                                            vm._Layer.params.schema[c].left = pos_x;
+                                            vm._Layer.params.schema[c].top = pos_y;
                                         }
                                     }
                                 }
                             }
                         });
 
-                        for (const j in $scope._Layer.params.joins) {
-                            const c = instance.connect({ source: $scope._Layer.params.joins[j].targetElementID, target: $scope._Layer.params.joins[j].sourceElementID, id: $scope._Layer.params.joins[j].joinID });
+                        for (const j in vm._Layer.params.joins) {
+                            const c = instance.connect({ source: vm._Layer.params.joins[j].targetElementID, target: vm._Layer.params.joins[j].sourceElementID, id: vm._Layer.params.joins[j].joinID });
 
-                            if ($scope._Layer.params.joins[j].joinType === 'left') { c.setType('left'); }
-                            if ($scope._Layer.params.joins[j].joinType === 'right') { c.setType('right'); }
+                            if (vm._Layer.params.joins[j].joinType === 'left') { c.setType('left'); }
+                            if (vm._Layer.params.joins[j].joinType === 'right') { c.setType('right'); }
                         }
                         /*****************/
 
@@ -502,11 +520,11 @@
                         // listen for clicks on connections, and offer to delete connections on click.
                         //
                         instance.bind('click', function (conn, originalEvent) {
-                            for (const j in $scope._Layer.params.joins) {
-                                if (($scope._Layer.params.joins[j].sourceElementID === conn.sourceId && $scope._Layer.params.joins[j].targetElementID === conn.targetId) ||
-                                 ($scope._Layer.params.joins[j].sourceElementID === conn.targetId && $scope._Layer.params.joins[j].targetElementID === conn.sourceId)) {
-                                    $scope._Layer.params.joins[j].connection = conn;
-                                    selectJoin($scope._Layer.params.joins[j]);
+                            for (const j in vm._Layer.params.joins) {
+                                if ((vm._Layer.params.joins[j].sourceElementID === conn.sourceId && vm._Layer.params.joins[j].targetElementID === conn.targetId) ||
+                                 (vm._Layer.params.joins[j].sourceElementID === conn.targetId && vm._Layer.params.joins[j].targetElementID === conn.sourceId)) {
+                                    vm._Layer.params.joins[j].connection = conn;
+                                    selectJoin(vm._Layer.params.joins[j]);
                                 }
                             }
 
@@ -547,26 +565,26 @@
 
                     jsPlumb.fire('jsPlumbDemoLoaded', instance);
 
-                    $scope.instance = instance;
+                    vm.instance = instance;
                 }, 100);
 
-                $scope.initiated = true;
+                vm.initiated = true;
             }
         };
 
         function selectJoin (join) {
             unSelect();
-            $scope.selectedItem = 'join';
-            $scope.tabs.selected = 'properties';
-            $scope.theSelectedElement = join;
+            vm.selectedItem = 'join';
+            vm.tabs.selected = 'properties';
+            vm.theSelectedElement = join;
             $scope.$apply();
         }
 
-        $scope.isInAJoin = function (element) {
-            if (!$scope._Layer.params.joins) {
+        function isInAJoin (element) {
+            if (!vm._Layer.params.joins) {
                 return false;
             }
-            for (const j of $scope._Layer.params.joins) {
+            for (const j of vm._Layer.params.joins) {
                 if (j.sourceCollectionID === element.collectionID && j.sourceElementID === element.elementID) {
                     return true;
                 }
@@ -577,7 +595,7 @@
             return false;
         };
 
-        $scope.toggleFolded = function (collection) {
+        function toggleFolded (collection) {
             collection.folded = !collection.folded;
             setTimeout(function () {
                 const collectionObject = $('#' + collection.collectionID + '-parent')[0];
@@ -586,12 +604,12 @@
             }, 100);
         };
 
-        $scope.createComposedElement = function () {
-            $scope.calculateComponents();
+        function createComposedElement () {
+            vm.calculateComponents();
 
             const element = {
                 isCustom: true,
-                elementID: layerService.newID($scope._Layer),
+                elementID: layerService.newID(vm._Layer),
                 viewExpression: '',
                 elementName: 'comp',
             };
@@ -600,38 +618,38 @@
                 component: 'appLayerElementModal',
                 resolve: {
                     element: () => element,
-                    layer: () => $scope._Layer,
+                    layer: () => vm._Layer,
                 },
             });
 
             modal.result.then(function (modifiedElement) {
                 angular.copy(modifiedElement, element);
-                if (!$scope._Layer.objects) {
-                    $scope._Layer.objects = [];
+                if (!vm._Layer.objects) {
+                    vm._Layer.objects = [];
                 }
-                $scope._Layer.objects.push(element);
+                vm._Layer.objects.push(element);
             }, function () {});
         };
 
-        $scope.elementAdd = function (element) {
+        function elementAdd (element) {
             const modal = $uibModal.open({
                 component: 'appLayerElementModal',
                 resolve: {
                     element: () => element,
-                    layer: () => $scope._Layer,
+                    layer: () => vm._Layer,
                 },
             });
 
             modal.result.then(function (modifiedElement) {
                 angular.copy(modifiedElement, element);
-                if (!$scope._Layer.objects) {
-                    $scope._Layer.objects = [];
+                if (!vm._Layer.objects) {
+                    vm._Layer.objects = [];
                 }
-                $scope._Layer.objects.push(element);
+                vm._Layer.objects.push(element);
             }, function () {});
         };
 
-        $scope.promptAddAll = function (collection) {
+        function promptAddAll (collection) {
             const modal = $uibModal.open({
                 component: 'appLayerAddAllModal',
                 resolve: {
@@ -643,13 +661,13 @@
                 for (const el of collection.elements) {
                     if (!el.elementRole) {
                         el.elementRole = 'dimension';
-                        $scope._Layer.objects.push(el);
+                        vm._Layer.objects.push(el);
                     }
                 }
             }, function () {});
         };
 
-        $scope.allElementsAdded = function (collection) {
+        function allElementsAdded (collection) {
             for (const el of collection.elements) {
                 if (!el.elementRole) {
                     return false;
@@ -658,12 +676,12 @@
             return true;
         };
 
-        $scope.editElement = function (element) {
+        function editElement (element) {
             const modal = $uibModal.open({
                 component: 'appLayerElementModal',
                 resolve: {
                     element: () => element,
-                    layer: () => $scope._Layer,
+                    layer: () => vm._Layer,
                 },
             });
 
@@ -672,8 +690,8 @@
             }, function () {});
         };
 
-        $scope.addFolder = function () {
-            const elementID = 'F' + layerService.newID($scope._Layer);
+        function addFolder () {
+            const elementID = 'F' + layerService.newID(vm._Layer);
 
             const element = {};
             element.elementLabel = gettextCatalog.getString('my folder');
@@ -681,21 +699,21 @@
             element.elementID = elementID;
             element.editing = true;
             element.elements = [];
-            $scope._Layer.objects.push(element);
+            vm._Layer.objects.push(element);
         };
 
-        $scope.deleteSchemaElement = function (element) {
+        function deleteSchemaElement (element) {
             const elementID = element.elementID;
 
-            for (const s in $scope._Layer.params.schema) {
-                for (const e in $scope._Layer.params.schema[s].elements) {
-                    if ($scope._Layer.params.schema[s].elements[e].elementID === elementID) {
-                        delete $scope._Layer.params.schema[s].elements[e].elementRole;
+            for (const s in vm._Layer.params.schema) {
+                for (const e in vm._Layer.params.schema[s].elements) {
+                    if (vm._Layer.params.schema[s].elements[e].elementID === elementID) {
+                        delete vm._Layer.params.schema[s].elements[e].elementRole;
                     }
                 }
             }
 
-            checkfordelete($scope.rootItem.elements, elementID);
+            checkfordelete(vm.rootItem.elements, elementID);
         };
 
         function checkfordelete (elements, elementID) {
@@ -715,10 +733,10 @@
         function unassingElementRole (element) {
             const elementID = element.elementID;
 
-            for (const s in $scope._Layer.params.schema) {
-                for (const e in $scope._Layer.params.schema[s].elements) {
-                    if ($scope._Layer.params.schema[s].elements[e].elementID === elementID) {
-                        delete $scope._Layer.params.schema[s].elements[e].elementRole;
+            for (const s in vm._Layer.params.schema) {
+                for (const e in vm._Layer.params.schema[s].elements) {
+                    if (vm._Layer.params.schema[s].elements[e].elementID === elementID) {
+                        delete vm._Layer.params.schema[s].elements[e].elementRole;
                     }
                 }
             }
@@ -733,56 +751,56 @@
         }
 
         // Drag & drop elements
-        $scope.onDrag = false;
-        $scope.sortableOptions = {
+        vm.onDrag = false;
+        vm.sortableOptions = {
             connectWith: '.schema-container',
             update: function (e, ui) {
 
             },
             start: function (e, ui) {
                 $scope.$apply(function () {
-                    $scope.onDrag = true;
+                    vm.onDrag = true;
                 });
             },
             stop: function (e, ui) {
                 $scope.$apply(function () {
-                    $scope.onDrag = false;
+                    vm.onDrag = false;
                 });
             }
         };
 
-        $scope.deleteCollection = function (collection) {
+        function deleteCollection (collection) {
             const theCollectionID = collection.collectionID;
 
             deleteAllCollectionJoins(theCollectionID);
 
-            deleteAllCollectionElements($scope.rootItem.elements, theCollectionID);
+            deleteAllCollectionElements(vm.rootItem.elements, theCollectionID);
 
             // delete all joins related to this collection
 
-            for (const c in $scope._Layer.params.schema) {
-                if ($scope._Layer.params.schema[c].collectionID === theCollectionID) {
-                    for (const element in $scope._Layer.params.schema[c].elements) {
-                        instance.deleteEndpoint($scope._Layer.params.schema[c].elements[element].elementID);
-                        instance.deleteEndpoint($scope._Layer.params.schema[c].elements[element].elementID);
+            for (const c in vm._Layer.params.schema) {
+                if (vm._Layer.params.schema[c].collectionID === theCollectionID) {
+                    for (const element in vm._Layer.params.schema[c].elements) {
+                        instance.deleteEndpoint(vm._Layer.params.schema[c].elements[element].elementID);
+                        instance.deleteEndpoint(vm._Layer.params.schema[c].elements[element].elementID);
                     }
-                    $scope._Layer.params.schema.splice(c, 1);
+                    vm._Layer.params.schema.splice(c, 1);
                 }
             }
 
-            $scope.selectedCollection = undefined;
+            vm.selectedCollection = undefined;
         };
 
         function deleteAllCollectionJoins (collectionID) {
             const joinsToDelete = [];
 
-            for (const o in $scope._Layer.params.schema) {
-                if ($scope._Layer.params.schema[o].collectionID === collectionID) {
-                    for (const e in $scope._Layer.params.schema[o].elements) {
-                        for (const j in $scope._Layer.params.joins) {
-                            if (($scope._Layer.params.joins[j].sourceElementID === $scope._Layer.params.schema[o].elements[e].elementID) ||
-                                                ($scope._Layer.params.joins[j].targetElementID === $scope._Layer.params.schema[o].elements[e].elementID)) {
-                                joinsToDelete.push({ sourceElementID: $scope._Layer.params.joins[j].sourceElementID, targetElementID: $scope._Layer.params.joins[j].targetElementID });
+            for (const o in vm._Layer.params.schema) {
+                if (vm._Layer.params.schema[o].collectionID === collectionID) {
+                    for (const e in vm._Layer.params.schema[o].elements) {
+                        for (const j in vm._Layer.params.joins) {
+                            if ((vm._Layer.params.joins[j].sourceElementID === vm._Layer.params.schema[o].elements[e].elementID) ||
+                                                (vm._Layer.params.joins[j].targetElementID === vm._Layer.params.schema[o].elements[e].elementID)) {
+                                joinsToDelete.push({ sourceElementID: vm._Layer.params.joins[j].sourceElementID, targetElementID: vm._Layer.params.joins[j].targetElementID });
                             }
                         }
                     }
@@ -804,7 +822,7 @@
             }
         }
 
-        $scope.getDatasetsForThisDts = function (_id, theDataSource) {
+        function getDatasetsForThisDts (_id, theDataSource) {
             if (!theDataSource.loading) {
                 theDataSource.loading = true;
                 api.getDatasourceCollections(_id).then(function (data) {
@@ -814,16 +832,16 @@
             }
         };
 
-        $scope.selectedCanvas = function (event) {
+        function selectedCanvas (event) {
             unSelect();
-            $scope.selectedItem = 'layer';
-            $scope.theSelectedElement = $scope._Layer;
-            $scope.tabs.selected = 'properties';
+            vm.selectedItem = 'layer';
+            vm.theSelectedElement = vm._Layer;
+            vm.tabs.selected = 'properties';
         };
 
         function unSelect () {
-            for (const s in $scope.selectedElements) {
-                $('#' + $scope.selectedElements[s]).removeClass('selectedElement');
+            for (const s in vm.selectedElements) {
+                $('#' + vm.selectedElements[s]).removeClass('selectedElement');
             }
             const connections = instance.getAllConnections();
 
@@ -833,69 +851,69 @@
                 connections[c].selected = false;
             }
 
-            $('#' + $scope.selectedTargetId).css({ backgroundColor: '#d5d5d5' });
-            $('#' + $scope.selectedSourceId).css({ backgroundColor: '#d5d5d5' });
-            $scope.selectedTargetId = undefined;
-            $scope.selectedSourceId = undefined;
-            $scope.selectedConnection = undefined;
-            $scope.selectedElements = [];
-            $scope.selectedItem = '';
+            $('#' + vm.selectedTargetId).css({ backgroundColor: '#d5d5d5' });
+            $('#' + vm.selectedSourceId).css({ backgroundColor: '#d5d5d5' });
+            vm.selectedTargetId = undefined;
+            vm.selectedSourceId = undefined;
+            vm.selectedConnection = undefined;
+            vm.selectedElements = [];
+            vm.selectedItem = '';
         }
 
-        $scope.selectCollection = function (theCollection, event) {
+        function selectCollection (theCollection, event) {
             event.stopPropagation();
-            if (!event.shiftKey || $scope.selectedItem !== 'collection') {
+            if (!event.shiftKey || vm.selectedItem !== 'collection') {
                 unSelect();
             }
 
-            $scope.selectedItem = 'collection';
-            $scope.theSelectedElement = theCollection;
-            // if ($scope.joinMode)
+            vm.selectedItem = 'collection';
+            vm.theSelectedElement = theCollection;
+            // if (vm.joinMode)
             //  collectionHighliter(theCollection.collectionID);
 
-            if ($scope.selectedElements) {
-                if ($scope.selectedElements.indexOf(theCollection.collectionID) === -1) { $scope.selectedElements.push(theCollection.collectionID); }
+            if (vm.selectedElements) {
+                if (vm.selectedElements.indexOf(theCollection.collectionID) === -1) { vm.selectedElements.push(theCollection.collectionID); }
             }
 
             setSelectedElements();
-        };
+        }
 
-        $scope.selectElement = function (theElement, event) {
+        function selectElement (theElement, event) {
             event.stopPropagation();
             unSelect();
-            $scope.selectedItem = 'element';
-            $scope.theSelectedElement = theElement;
-            if (theElement.isPK) { $scope.selected_primary_key = true; } else { $scope.selected_primary_key = false; }
+            vm.selectedItem = 'element';
+            vm.theSelectedElement = theElement;
+            if (theElement.isPK) { vm.selected_primary_key = true; } else { vm.selected_primary_key = false; }
 
-            if ($scope.selectedElements) {
-                if ($scope.selectedElements.indexOf(theElement.elementID) === -1) { $scope.selectedElements.push(theElement.elementID); }
+            if (vm.selectedElements) {
+                if (vm.selectedElements.indexOf(theElement.elementID) === -1) { vm.selectedElements.push(theElement.elementID); }
             }
 
             setSelectedElements();
         };
 
         function setSelectedElements () {
-            for (const s in $scope.selectedElements) {
-                $('#' + $scope.selectedElements[s]).addClass('selectedElement');
+            for (const s in vm.selectedElements) {
+                $('#' + vm.selectedElements[s]).addClass('selectedElement');
             }
-            $scope.tabs.selected = 'properties';
+            vm.tabs.selected = 'properties';
         }
 
-        $scope.addDatasetToLayer = function (datasourceID, collectionName) {
-            if ($scope._Layer.datasourceID === datasourceID) {
+        function addDatasetToLayer (datasourceID, collectionName) {
+            if (vm._Layer.datasourceID === datasourceID) {
                 api.getDatasourceCollection(datasourceID, collectionName).then(function (collection) {
-                    collection.collectionID = 'C' + layerService.newID($scope._Layer);
+                    collection.collectionID = 'C' + layerService.newID(vm._Layer);
 
                     for (const element of collection.elements) {
-                        element.elementID = layerService.newID($scope._Layer);
+                        element.elementID = layerService.newID(vm._Layer);
                         element.collectionID = collection.collectionID;
                         element.collectionName = collection.collectionName;
                     }
 
-                    if (!$scope._Layer.params) { $scope._Layer.params = {}; }
-                    if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
+                    if (!vm._Layer.params) { vm._Layer.params = {}; }
+                    if (!vm._Layer.params.schema) { vm._Layer.params.schema = []; }
 
-                    $scope._Layer.params.schema.push(collection);
+                    vm._Layer.params.schema.push(collection);
 
                     setTimeout(function () {
                         for (const element in collection.elements) {
@@ -906,31 +924,31 @@
                         setDraggable('#' + collection.collectionID + '-parent');
                     }, 100);
 
-                    $scope.erDiagramInit();
+                    vm.erDiagramInit();
                 });
             } else {
                 notify.error(gettextCatalog.getString('Datasource must be the same for all entities'));
             }
         };
 
-        $scope.deleteObject = function (object, objectType) {
-            if ($scope.selectedItem === 'join') {
-                deleteJoin($scope.theSelectedElement.sourceElementID, $scope.theSelectedElement.targetElementID);
+        function deleteObject (object, objectType) {
+            if (vm.selectedItem === 'join') {
+                deleteJoin(vm.theSelectedElement.sourceElementID, vm.theSelectedElement.targetElementID);
                 unSelect();
             }
-            if ($scope.selectedItem === 'collection') {
-                $scope.deleteCollection($scope.theSelectedElement);
+            if (vm.selectedItem === 'collection') {
+                vm.deleteCollection(vm.theSelectedElement);
                 unSelect();
             }
         };
 
-        $scope.editObject = function () {
-            if ($scope.selectedItem === 'collection' && $scope.theSelectedElement.isSQL) {
-                $scope.editSQL();
+        function editObject () {
+            if (vm.selectedItem === 'collection' && vm.theSelectedElement.isSQL) {
+                vm.editSQL();
             }
         };
 
-        $scope.forAllElements = function (f) {
+        function forAllElements (f) {
             function explore (elementList) {
                 for (const el of elementList) {
                     if (el.elements) {
@@ -941,7 +959,7 @@
                 }
             }
 
-            explore($scope._Layer.objects);
+            explore(vm._Layer.objects);
         };
     }
 })();

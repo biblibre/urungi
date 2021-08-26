@@ -14,7 +14,7 @@
 
         $routeProvider.when('/layers/:layerID', {
             templateUrl: 'partials/layer/view.html',
-            controller: 'layerCtrl',
+            controller: 'LayerViewController',
             controllerAs: 'vm',
         });
     }
