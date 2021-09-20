@@ -36,6 +36,7 @@ describe('grid', function () {
                             calculateTotal: true,
                             layerObject: {
                                 elementType: 'number',
+                                elementLabel: 'Foo',
                                 format: '0.00',
                             },
                         },
@@ -80,6 +81,7 @@ describe('grid', function () {
                             calculateTotal: true,
                             layerObject: {
                                 elementType: 'number',
+                                elementLabel: 'Foo',
                                 format: '0.00',
                             },
                         },

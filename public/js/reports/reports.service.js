@@ -70,7 +70,7 @@
         function getColumnDescription (column) {
             let columnDescription = column.label;
             if (!columnDescription) {
-                columnDescription = column.elementLabel;
+                columnDescription = column.layerObject.elementLabel;
                 if (column.aggregation) {
                     const aggregationDescription = getAggregationDescription(column.aggregation);
                     columnDescription += ' (' + aggregationDescription + ')';
