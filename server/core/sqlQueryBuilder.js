@@ -52,7 +52,7 @@ class SqlQueryBuilder {
 
         for (const order of query.order) {
             const direction = order.sortDesc ? 'desc' : 'asc';
-            qb.orderBy(order.id, direction);
+            qb.orderBy(order.elementID, direction);
 
             // If there is a GROUP BY clause, it should contain all columns
             // used in the ORDER BY clause.
