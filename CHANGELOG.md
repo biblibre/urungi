@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Report data is no longer displayed automatically if there is a mandatory filter
 - Columns descriptions in report will automatically update when the
   corresponding layer object is renamed (#254)
+- All results appears if no date condition is chosen in query filters
 
 ### Dependencies
 

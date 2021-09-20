@@ -564,44 +564,68 @@ class SqlQueryBuilder {
             switch (filter.filterType) {
             case 'equal':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '>=', formattedDate1);
-                    builder.where(this.getRef(filter), '<', formattedNextDay);
+                    if (formattedDate1) {
+                        builder.where(this.getRef(filter), '>=', formattedDate1);
+                        builder.where(this.getRef(filter), '<', formattedNextDay);
+                    }
                 });
 
             case 'diferentThan':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '<', formattedDate1);
-                    builder.orWhere(this.getRef(filter), '>=', formattedNextDay);
+                    if (formattedDate1) {
+                        builder.where(this.getRef(filter), '<', formattedDate1);
+                        builder.orWhere(this.getRef(filter), '>=', formattedNextDay);
+                    }
                 });
 
             case 'biggerThan':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '>', formattedDate1);
+                    if (formattedDate1) {
+                        builder.where(this.getRef(filter), '>', formattedDate1);
+                    }
                 });
 
             case 'biggerOrEqualThan':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '>=', formattedDate1);
+                    if (formattedDate1) {
+                        builder.where(this.getRef(filter), '>=', formattedDate1);
+                    }
                 });
 
             case 'lessThan':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '<', formattedDate1);
+                    if (formattedDate1) {
+                        builder.where(this.getRef(filter), '<', formattedDate1);
+                    }
                 });
 
             case 'lessOrEqualThan':
                 return applyWhereBuilder(builder => {
-                    builder.where(this.getRef(filter), '<=', formattedDate1);
+                    if (formattedDate1) {
+                        builder.where(this.getRef(filter), '<=', formattedDate1);
+                    }
                 });
 
             case 'between':
                 return applyWhereBuilder(builder => {
-                    builder.whereBetween(this.getRef(filter), [formattedDate1, formattedDate2]);
+                    if (formattedDate1 || formattedDate2) {
+                        if (!formattedDate1) {
+                            builder.where(this.getRef(filter), '<=', formattedDate2);
+                        }
+                        if (!formattedDate2) {
+                            builder.where(this.getRef(filter), '>=', formattedDate1);
+                        }
+                    }
+                    if (formattedDate1 && formattedDate2) {
+                        builder.whereBetween(this.getRef(filter), [formattedDate1, formattedDate2]);
+                    }
                 });
 
             case 'notBetween':
                 return applyWhereBuilder(builder => {
-                    builder.whereNotBetween(this.getRef(filter), [formattedDate1, formattedDate2]);
+                    if (formattedDate1 && formattedDate2) {
+                        builder.whereNotBetween(this.getRef(filter), [formattedDate1, formattedDate2]);
+                    }
                 });
 
             case 'null':

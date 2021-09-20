@@ -37,6 +37,7 @@ describe('SqlQueryBuilder', function () {
                         collectionID: 'A',
                         filterType: 'equal-pattern',
                         criterion: {
+                            date1: Date.now(),
                             datePattern: '#WST-THISMONTH#',
                         }
                     },
@@ -94,6 +95,7 @@ describe('SqlQueryBuilder', function () {
                         collectionID: 'A',
                         filterType: 'equal-pattern',
                         criterion: {
+                            date1: Date.now(),
                             datePattern: '#WST-LASTMONTH#',
                         }
                     },
