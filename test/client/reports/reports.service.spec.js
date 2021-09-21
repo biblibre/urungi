@@ -87,75 +87,100 @@ describe('reportsService', function () {
         it('should return correct description for columns without aggregation', function () {
             const column = {
                 elementLabel: 'Quux',
+                layerObject: {
+                    elementLabel: 'Foo',
+                }
             };
             const description = reportsService.getColumnDescription(column);
 
-            expect(description).toBe('Quux');
+            expect(description).toBe('Foo');
         });
 
         it('should return correct description for columns with aggregation sum', function () {
             const column = {
                 elementLabel: 'Quux',
+                layerObject: {
+                    elementLabel: 'Foo',
+                },
                 aggregation: 'sum',
             };
             const description = reportsService.getColumnDescription(column);
 
-            expect(description).toBe('Quux (Sum)');
+            expect(description).toBe('Foo (Sum)');
         });
 
         it('should return correct description for columns with aggregation avg', function () {
             const column = {
                 elementLabel: 'Quux',
+                layerObject: {
+                    elementLabel: 'Foo',
+                },
                 aggregation: 'avg',
             };
             const description = reportsService.getColumnDescription(column);
 
-            expect(description).toBe('Quux (Avg)');
+            expect(description).toBe('Foo (Avg)');
         });
 
         it('should return correct description for columns with aggregation min', function () {
             const column = {
                 elementLabel: 'Quux',
+                layerObject: {
+                    elementLabel: 'Foo',
+                },
                 aggregation: 'min',
             };
             const description = reportsService.getColumnDescription(column);
 
-            expect(description).toBe('Quux (Min)');
+            expect(description).toBe('Foo (Min)');
         });
 
         it('should return correct description for columns with aggregation max', function () {
             const column = {
                 elementLabel: 'Quux',
+                layerObject: {
+                    elementLabel: 'Foo',
+                },
                 aggregation: 'max',
             };
             const description = reportsService.getColumnDescription(column);
 
-            expect(description).toBe('Quux (Max)');
+            expect(description).toBe('Foo (Max)');
         });
 
         it('should return correct description for columns with aggregation count', function () {
             const column = {
                 elementLabel: 'Quux',
+                layerObject: {
+                    elementLabel: 'Foo',
+                },
                 aggregation: 'count',
             };
             const description = reportsService.getColumnDescription(column);
 
-            expect(description).toBe('Quux (Count)');
+            expect(description).toBe('Foo (Count)');
         });
 
         it('should return correct description for columns with aggregation countDistinct', function () {
             const column = {
                 elementLabel: 'Quux',
+                layerObject: {
+                    elementLabel: 'Foo',
+                },
                 aggregation: 'countDistinct',
+
             };
             const description = reportsService.getColumnDescription(column);
 
-            expect(description).toBe('Quux (Count distinct)');
+            expect(description).toBe('Foo (Count distinct)');
         });
 
         it('should return correct description for columns with custom label', function () {
             const column = {
                 elementLabel: 'Quux',
+                layerObject: {
+                    elementLabel: 'Foo',
+                },
                 aggregation: 'max',
                 label: 'Maximum Quux',
             };
