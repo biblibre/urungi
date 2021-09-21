@@ -23,6 +23,8 @@ GeoJSON column
    `ST_AsGeoJSON <https://dev.mysql.com/doc/refman/5.7/en/spatial-geojson-functions.html#function_st-asgeojson>`_
    (you may need to modify the layer to use those functions).
 
+   Note that icons rendering works only for GeoJSON 'point' type and maybe for a 'multipoint' object (not tested).
+
 Label column
    If you drop a column here, its text content will be shown next to the map marker.
 
@@ -34,8 +36,8 @@ Value column
 Group column
    If you drop a column here, its content will be used to group markers
    together. If two rows have the same value in this column, they belong to the
-   same group. Each group is then assigned a unique color hue for the map
-   marker.
+   same group. Each group is then assigned a unique color hue (automatically
+   chosen by Urungi) for the map marker.
 
 Type column
    If you drop a column here, its content will be used to assign a type to a
