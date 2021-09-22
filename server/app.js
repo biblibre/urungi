@@ -72,6 +72,8 @@ staticRouter.all('*', function (req, res) {
 
 app.use('/s', staticRouter);
 
+app.use('/doc', require('./routes/doc.js'));
+
 const connection = require('./config/mongoose')();
 
 const mongoStore = MongoStore.create({
