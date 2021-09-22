@@ -35,6 +35,7 @@
             vm.settings.height = report.properties.height;
             vm.settings.maxValue = report.properties.maxValue;
             vm.settings.range = report.properties.range;
+            vm.settings.mapLayerUrl = report.properties.mapLayerUrl;
             vm.settings.theme = report.theme;
         }
     }

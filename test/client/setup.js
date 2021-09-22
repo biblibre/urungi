@@ -15,6 +15,9 @@ Object.defineProperty(window, 'moment', { value: moment });
 const numeral = require('numeral');
 Object.defineProperty(window, 'numeral', { value: numeral });
 
+const L = require('leaflet');
+Object.defineProperty(window, 'L', { value: L });
+
 const angular = require('angular');
 Object.defineProperty(window, 'angular', { value: angular });
 
