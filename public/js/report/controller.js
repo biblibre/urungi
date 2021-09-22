@@ -278,6 +278,9 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
             $scope.time = result.time;
 
             $scope.$broadcast('repaint', { fetchData: false, data: result.data });
+        }).catch(err => {
+            $scope.$broadcast('stopLoading');
+            notify.error(`Error 504: ${err.message}`);
         });
     };
 

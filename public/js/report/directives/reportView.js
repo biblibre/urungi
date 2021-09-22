@@ -102,6 +102,10 @@ angular.module('app').directive('reportView', function ($q, $timeout, reportMode
                 $scope.loading = true;
                 $scope.loadingMessage = loadingMessage;
             });
+
+            $scope.$on('stopLoading', function () {
+                $scope.loading = false;
+            });
         },
 
         template: '<div class="container-fluid"  ng-show="loading" ><h3><img src="images/loader.gif" width="32px" height="32px"/>{{loadingMessage}}</h3></div>'
