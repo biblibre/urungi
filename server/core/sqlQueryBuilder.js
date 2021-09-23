@@ -608,16 +608,12 @@ class SqlQueryBuilder {
 
             case 'between':
                 return applyWhereBuilder(builder => {
-                    if (formattedDate1 || formattedDate2) {
-                        if (!formattedDate1) {
-                            builder.where(this.getRef(filter), '<=', formattedDate2);
-                        }
-                        if (!formattedDate2) {
-                            builder.where(this.getRef(filter), '>=', formattedDate1);
-                        }
-                    }
                     if (formattedDate1 && formattedDate2) {
                         builder.whereBetween(this.getRef(filter), [formattedDate1, formattedDate2]);
+                    } else if (formattedDate1) {
+                        builder.where(this.getRef(filter), '>=', formattedDate1);
+                    } else if (formattedDate2) {
+                        builder.where(this.getRef(filter), '<=', formattedDate2);
                     }
                 });
 
@@ -625,6 +621,10 @@ class SqlQueryBuilder {
                 return applyWhereBuilder(builder => {
                     if (formattedDate1 && formattedDate2) {
                         builder.whereNotBetween(this.getRef(filter), [formattedDate1, formattedDate2]);
+                    } else if (formattedDate1) {
+                        builder.where(this.getRef(filter), '<', formattedDate1);
+                    } else if (formattedDate2) {
+                        builder.where(this.getRef(filter), '>', formattedDate2);
                     }
                 });
 
