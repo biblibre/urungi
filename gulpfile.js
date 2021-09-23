@@ -4,12 +4,12 @@ const nodemon = require('gulp-nodemon');
 const templatecache = require('gulp-angular-templatecache');
 const del = require('del');
 const path = require('path');
+const child_process = require('child_process');
 
 const dist_css = gulp.series(dist_css_clean, dist_css_build);
 const dist_fonts = gulp.series(dist_fonts_clean, dist_fonts_build);
 const dist_translations = gulp.series(dist_translations_clean, dist_translations_build);
 const dist_templates = gulp.series(dist_templates_clean, dist_templates_build);
-const watch = gulp.parallel(watch_less, watch_templates);
 
 const dist = gulp.parallel(
     dist_css,
@@ -20,17 +20,19 @@ const dist = gulp.parallel(
 
 module.exports = {
     default: dist,
-    dev: gulp.parallel(watch, nodemon_start),
+    dev: gulp.parallel(watch_less, watch_templates, nodemon_start),
     dist: dist,
     'dist:css': dist_css,
     'dist:fonts': dist_fonts,
     'dist:translations': dist_translations,
     'dist:templates': dist_templates,
+    doc: doc,
     pot: pot,
     'po:update': gulp.series(pot, po_update),
-    'watch:templates': watch_templates,
+    'watch:doc': watch_doc,
     'watch:less': watch_less,
-    watch: gulp.parallel(watch_templates, watch_less),
+    'watch:templates': watch_templates,
+    watch: gulp.parallel(watch_doc, watch_less, watch_templates),
 };
 
 function dist_css_clean () {
@@ -136,7 +138,6 @@ function pot () {
 function po_update () {
     const fs = require('fs');
     const util = require('util');
-    const child_process = require('child_process');
 
     const exec = util.promisify(child_process.exec);
     const readdir = util.promisify(fs.readdir);
@@ -156,4 +157,26 @@ function watch_templates () {
 
 function watch_less () {
     gulp.watch('public/less/*.less', dist_css);
+}
+
+function watch_doc () {
+    gulp.watch(['doc/user/**', '!doc/user/_build/**'], doc);
+}
+
+function doc (done) {
+    const options = {
+        env: Object.assign({
+            SPHINXOPTS: '-q --color',
+        }, process.env),
+    };
+
+    child_process.exec('make -C doc/user clean html', options, function (err, stdout, stderr) {
+        if (err) {
+            done(err);
+            return;
+        }
+
+        process.stderr.write(stderr);
+        done();
+    });
 }

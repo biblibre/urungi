@@ -12,3 +12,9 @@ Once it is done, you can build the documentation:
     make -C doc/user clean html
 
 Documentation will be generated in doc/user/_build/html
+
+Alternatively, you can use the gulp tasks:
+
+* `doc` to build the documentation once, or
+* `watch:doc` to build the documentation every time a documentation source file
+  is changed
