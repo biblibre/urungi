@@ -1,5 +1,5 @@
 const config = require('config');
-const request = require('request');
+const fetch = require('node-fetch');
 
 module.exports = {
     isConfigured,
@@ -39,22 +39,21 @@ function toPNG (url, options) {
 
 async function render (url, endpoint, options) {
     const pikitiaUrl = config.get('pikitia.url');
+    const clientId = config.get('pikitia.client_id');
+    const clientSecret = config.get('pikitia.client_secret');
 
+    const tokenUrl = pikitiaUrl + '/oauth/token';
     const tokenRequestOptions = {
-        baseUrl: pikitiaUrl,
-        url: '/oauth/token',
         method: 'POST',
-        form: {
-            grant_type: 'client_credentials',
+        headers: {
+            Authorization: 'Basic ' + Buffer.from(`${clientId}:${clientSecret}`).toString('base64'),
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
-        auth: {
-            user: config.get('pikitia.client_id'),
-            pass: config.get('pikitia.client_secret'),
-        },
+        body: 'grant_type=client_credentials',
     };
 
-    const tokenBody = await requestPromise(tokenRequestOptions);
-    const token = JSON.parse(tokenBody);
+    const tokenResponse = await fetch(tokenUrl, tokenRequestOptions);
+    const token = await tokenResponse.json();
 
     const requestBody = {
         url: url,
@@ -63,33 +62,16 @@ async function render (url, endpoint, options) {
         requestBody[key] = options[key];
     }
 
+    const requestUrl = pikitiaUrl + endpoint;
     const requestOptions = {
-        baseUrl: pikitiaUrl,
-        url: endpoint,
         method: 'POST',
-        auth: {
-            bearer: token.access_token,
+        headers: {
+            Authorization: 'Bearer ' + token.access_token,
+            'Content-Type': 'application/json',
         },
-        body: requestBody,
-        json: true,
-        encoding: null,
+        body: JSON.stringify(requestBody),
     };
 
-    return requestPromise(requestOptions);
-}
-
-function requestPromise (options) {
-    return new Promise(function (resolve, reject) {
-        request(options, function (err, res, body) {
-            if (err) {
-                return reject(err);
-            }
-
-            if (res.statusCode !== 200) {
-                return reject(new Error(res.statusMessage));
-            }
-
-            resolve(body);
-        });
-    });
+    const response = await fetch(requestUrl, requestOptions);
+    return response.buffer();
 }
