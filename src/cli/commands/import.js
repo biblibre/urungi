@@ -34,6 +34,7 @@ async function run (args) {
 
     const file = args._.length > 0 ? args._[0] : '-';
     const connection = require('../../../server/config/mongoose.js')();
+    await connection.asPromise();
     try {
         await importFile(file, ctx);
     } catch (err) {

@@ -3,11 +3,7 @@ const mongoose = require('mongoose');
 
 (async function () {
     const db = config.get('db');
-    await mongoose.connect(db, {
-        useNewUrlParser: true,
-        useFindAndModify: false,
-        useUnifiedTopology: true,
-    });
+    await mongoose.connect(db);
     const Datasource = require('../server/models/datasource');
     let datasource = await Datasource.findOne({ name: 'Heroku PostgreSQL' });
     if (!datasource) {

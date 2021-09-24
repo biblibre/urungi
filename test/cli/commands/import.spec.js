@@ -57,6 +57,7 @@ describe('import', function () {
     describe('with correct arguments', function () {
         beforeAll(async function () {
             const connection = require('../../../server/config/mongoose.js')();
+            await connection.asPromise();
             const Datasource = connection.model('Datasource');
             await Datasource.create({ _id: 'dd0000000000000000000002', name: 'Datasource 2', type: 'MySQL', status: 1 });
             await connection.close();
@@ -91,6 +92,7 @@ describe('import', function () {
             expect(stdout).toBe('');
 
             const connection = require('../../../server/config/mongoose.js')();
+            await connection.asPromise();
             const Layer = connection.model('Layer');
             const Report = connection.model('Report');
             const Dashboard = connection.model('Dashboard');

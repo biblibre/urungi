@@ -5,11 +5,7 @@ module.exports = function () {
     const debug = require('debug')('urungi:server');
 
     const db = config.get('db');
-    mongoose.connect(db, {
-        useNewUrlParser: true,
-        useFindAndModify: false,
-        useUnifiedTopology: true,
-    });
+    mongoose.connect(db);
 
     const connection = mongoose.connection;
 

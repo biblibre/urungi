@@ -46,6 +46,7 @@ Usage:
     describe('without arguments', function () {
         beforeAll(async function () {
             const connection = require('../../../server/config/mongoose.js')();
+            await connection.asPromise();
             const User = connection.model('User');
             await User.create({ _id: 'aaaaaaaaaaaaaaaaaaaaaaaa', userName: 'A', status: 0 });
             await User.create({ _id: 'bbbbbbbbbbbbbbbbbbbbbbbb', userName: 'B', status: 1 });

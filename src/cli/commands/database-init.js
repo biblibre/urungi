@@ -17,6 +17,7 @@ async function run (args) {
     const password = args._[0];
 
     const connection = require('../../../server/config/mongoose.js')();
+    await connection.asPromise();
     try {
         const Company = connection.model('Company');
         const User = connection.model('User');

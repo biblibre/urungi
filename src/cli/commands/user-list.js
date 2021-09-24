@@ -8,6 +8,7 @@ const command = {
 
 async function run (args) {
     const connection = require('../../../server/config/mongoose.js')();
+    await connection.asPromise();
     const User = connection.model('User');
     const users = await User.find({});
     for (const user of users) {

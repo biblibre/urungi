@@ -8,10 +8,6 @@ const migrateMongoConfig = {
     mongodb: {
         url: db,
         databaseName: databaseName,
-        options: {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        }
     },
     migrationsDir: 'migrations',
     changelogCollectionName: 'changelog'

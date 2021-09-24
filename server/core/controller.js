@@ -231,8 +231,8 @@ class Controller {
         }
 
         const p = this.model.updateOne(find, { $set: data }).exec().then(function (result) {
-            if (result.n > 0) {
-                return { result: 1, msg: result.n + ' record updated.' };
+            if (result.matchedCount > 0) {
+                return { result: 1, msg: result.matchedCount + ' record updated.' };
             } else {
                 return { result: 0, msg: 'Error updating record, no record have been updated' };
             }
@@ -262,8 +262,8 @@ class Controller {
 
         const find = generateFindFields(req, req.params.id);
         const p = this.model.deleteOne(find).exec().then(function (result) {
-            if (result.n > 0) {
-                return { result: 1, msg: result.n + ' item deleted.' };
+            if (result.deletedCount > 0) {
+                return { result: 1, msg: result.deletedCount + ' item deleted.' };
             } else {
                 return { result: 0, msg: 'Error deleting items, no item have been deleted' };
             }

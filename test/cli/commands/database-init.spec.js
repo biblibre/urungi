@@ -69,6 +69,7 @@ If database has already been initialized, this command does nothing.
             expect(exitCode).toBe(0);
 
             const connection = require('../../../server/config/mongoose.js')();
+            await connection.asPromise();
             const User = connection.model('User');
             const user = await new Promise((resolve, reject) => {
                 User.isValidUserPassword('administrator', 'l0ngpassw0rd', (err, user) => {
