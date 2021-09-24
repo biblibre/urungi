@@ -7,17 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking changes
+
+- Node.js 10 is no longer supported. Supported versions are: 12, 14 and 16
+- MongoDB 3.6 is no longer supported. Supported versions are: 4.0, 4.2, 4.4 and 5.0
+
 ### Added
 
 - Added a service for notifications called "notify" (based actually on PNotify)
 - Added Spanish translation
 - Added report type pyramid
 - Added gulp task `dev` that combine `watch` and `nodemon`
+- Added ability to load an image into a dashboard using an URL
+- Added CLI command to list users: `user-list`
+- Added CLI command to print config: `config-dump`
+- Added ability to configure `search_path` for PostgreSQL data sources
 
 ### Changed
 
-- Replace Noty by custom notification service
+- Replaced Noty (unmaintainted) by PNotify
 - If no language is selected, use the language defined in browser preferences (#76)
+- Set SameSite=Strict for XSRF-TOKEN cookie
+- Removed the properties `nd_trash_deleted` and `nd_trash_deleted_date`.
+  Deleted dashboards are now permanently removed from the database
+- Moved documentation to `doc/user`. It can now be built with Sphinx and is
+  automatically built on https://urungi.readthedocs.io/
 
 ### Fixed
 
@@ -27,7 +41,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Report data is no longer displayed automatically if there is a mandatory filter
 - Columns descriptions in report will automatically update when the
   corresponding layer object is renamed (#254)
-- All results appears if no date condition is chosen in query filters
+- If no date is selected in a date filter, the filter is now ignored instead of
+  making the whole query fail.
+- Removed usage of non-standard CSS property `zoom`
+- Sidebar numbers are now updated automatically
+- Show only owned reports and dashboards if not admin
+- Fixed usage of an order column when that column wasn't appearing in the
+  SELECT clause
 
 ### Dependencies
 
