@@ -57,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated c3 to 0.7.20
 - Updated clipboard to 2.0.8
 - Updated config to 3.3.6
-- Updated connect-mongo to 4.5.0
+- Updated connect-mongo to 4.6.0
 - Updated cookie-parser to 1.4.5
 - Updated csurf to 1.11.0
 - Updated debug to 4.3.2
