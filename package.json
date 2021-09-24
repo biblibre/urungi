@@ -78,7 +78,7 @@
     "gulp-angular-templatecache": "^3.0.0",
     "gulp-less": "^5.0.0",
     "gulp-nodemon": "^2.5.0",
-    "htmlhint": "^0.15.1",
+    "htmlhint": "^0.15.2",
     "jest": "^27.0.6",
     "mongodb-memory-server": "^7.3.6",
     "npm-run-all": "^4.1.5",
