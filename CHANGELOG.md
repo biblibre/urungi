@@ -80,7 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated knex to 0.21.21
 - Updated migrate-mongo to 8.2.3
 - Updated moment to 2.29.1
-- Updated mongodb-memory-server to 7.3.6
+- Updated mongodb-memory-server to 7.4.1
 - Updated mongoose to 6.0.7
 - Updated mssql to 6.3.2
 - Updated multer to 1.4.3
