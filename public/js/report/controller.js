@@ -1,3 +1,4 @@
+
 angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportsService, $routeParams, $timeout, c3Charts, $uibModal,
     reportModel, widgetsCommon, $location, gettextCatalog, $q, notify, layerService, api, $rootScope, userService) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
@@ -276,8 +277,11 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
             $scope.sql = result.sql;
             $scope.time = result.time;
-
             $scope.$broadcast('repaint', { fetchData: false, data: result.data });
+        }).catch(err => {
+            $scope.$broadcast('stopLoading');
+            notify.error('Something went wrong, check the server logs');
+            console.error(err);
         });
     };
 
