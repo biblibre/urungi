@@ -1,6 +1,6 @@
 /* global c3:false */
 
-angular.module('app.reports').service('c3Charts', function (notify, gettextCatalog, reportsService) {
+angular.module('app.reports').service('c3Charts', function (notify, gettextCatalog, reportsService, numeral) {
     this.rebuildChart = function (report, id, data, chart) {
         let theValues = [];
         const theStackValues = {};
@@ -8,7 +8,6 @@ angular.module('app.reports').service('c3Charts', function (notify, gettextCatal
         const theNames = {};
         let theGroups = [];
         let theData = [];
-
         let axisField = '';
         if (chart.dataAxis) { axisField = chart.dataAxis.id; }
         // var axisIsInQuery = false;
@@ -126,6 +125,12 @@ angular.module('app.reports').service('c3Charts', function (notify, gettextCatal
 
         if (!chart.height) { chart.height = 300; }
 
+        const dataFormat = {};
+
+        for (const column of report.properties.ykeys) {
+            dataFormat[column.id] = column.format;
+        };
+
         const c3Config = {
             bindto: theChartCode,
             size: {
@@ -134,6 +139,16 @@ angular.module('app.reports').service('c3Charts', function (notify, gettextCatal
             tooltip: {
                 order: function (t1, t2) {
                     return t1.id > t2.id;
+                },
+                format: {
+                    value: function (value, ratio, id, index) {
+                        if (chart.type === 'donut' || chart.type === 'pie') {
+                            value = numeral(value).format(report.properties.ykeys[0].format);
+                        } else if (dataFormat[id]) {
+                            value = numeral(value).format(dataFormat[id]);
+                        }
+                        return value;
+                    }
                 }
             }
         };
@@ -228,7 +243,7 @@ angular.module('app.reports').service('c3Charts', function (notify, gettextCatal
                         multiline: false,
                         rotate: 45
                     }
-                }
+                },
             };
 
             if (hasNegativeValues(theData, theValues)) {
