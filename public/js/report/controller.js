@@ -276,8 +276,11 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
             $scope.sql = result.sql;
             $scope.time = result.time;
-
             $scope.$broadcast('repaint', { fetchData: false, data: result.data });
+        }).catch(err => {
+            $scope.$broadcast('stopLoading');
+            notify.error('Something went wrong, check the server logs');
+            console.error(err);
         });
     };
 
