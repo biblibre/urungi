@@ -1,4 +1,3 @@
-
 angular.module('app').controller('reportCtrl', function ($scope, connection, $compile, reportsService, $routeParams, $timeout, c3Charts, $uibModal,
     reportModel, widgetsCommon, $location, gettextCatalog, $q, notify, layerService, api, $rootScope, userService) {
     $scope.promptsBlock = 'partials/report/partials/promptsBlock.html';
