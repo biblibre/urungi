@@ -96,10 +96,25 @@ exports.ReportsFindAll = async function (req, res) {
     res.status(200).json(response);
 };
 
-exports.GetReport = function (req, res) {
-    Report.findById(req.params.id).populate('selectedLayerID').then(function (report) {
+exports.GetReport = async function (req, res) {
+    try {
+        const report = await Report.findById(req.params.id).populate('selectedLayerID');
+
         if (!report || (!report.isPublic && !req.isAuthenticated())) {
-            return res.status(403).send('Forbidden');
+            return res.sendStatus(403);
+        }
+
+        if (!report.isPublic) {
+            if (!req.user.isAdmin() && !(req.user.id === report.owner)) {
+                if (report.parentFolder) {
+                    const roles = await req.user.getRoles();
+                    if (!roles.some(role => role.canExecuteReportsInFolder(report.parentFolder))) {
+                        return res.sendStatus(403);
+                    }
+                } else {
+                    return res.sendStatus(403);
+                }
+            }
         }
 
         const reportObject = report.toObject({ getters: true, depopulate: true });
@@ -121,9 +136,9 @@ exports.GetReport = function (req, res) {
             }
             Statistic.saveStat(req, stat);
         }
-    }, err => {
+    } catch (err) {
         res.status(200).json({ result: 0, msg: 'A database error has occured : ' + String(err), error: err });
-    });
+    };
 };
 
 exports.ReportsFindOne = function (req, res) {

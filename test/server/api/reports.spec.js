@@ -20,6 +20,7 @@ describe('Reports API', function () {
     let Layer;
     let User;
     let Datasource;
+    let Role;
 
     let user;
     let report;
@@ -32,6 +33,7 @@ describe('Reports API', function () {
         Layer = mongoose.model('Layer');
         User = mongoose.model('User');
         Datasource = mongoose.model('Datasource');
+        Role = mongoose.model('Role');
         headers = await helpers.login(app);
         user = await User.findOne({ userName: 'administrator' });
     });
@@ -333,10 +335,138 @@ describe('Reports API', function () {
     });
 
     describe('POST /api/reports/get-report/:id', function () {
-        it('should get report', async function () {
-            const res = await request(app).get('/api/reports/get-report/' + report.id)
-                .query({ id: report.id })
-                .set(headers)
+        let userAdmin;
+        let userGuest;
+        let userAdminHeaders;
+        let userGuestHeaders;
+        let reportAdmin;
+        let reportAdminShared;
+        let reportAdminPublic;
+        let reportGuest;
+        let roleGuest;
+        beforeEach(async function () {
+            roleGuest = await Role.create({
+                name: 'GUEST',
+                permissions: [],
+                grants: [
+                    {
+                        folderID: 'fooAdminFolder',
+                        executeReports: true,
+                        executeDashboards: false,
+                        shareReports: false
+                    },
+                ],
+                companyID: 'COMPID',
+                reportsCreate: true
+            });
+            userAdmin = await User.create({
+                userName: 'superjohn',
+                password: 'password',
+                companyID: 'COMPID',
+                roles: ['ADMIN'],
+                status: 'active',
+                nd_trash_deleted: false,
+            });
+            userGuest = await User.create({
+                userName: 'johndoe',
+                password: 'password',
+                companyID: 'COMPID',
+                roles: [roleGuest.id],
+                status: 'active',
+                nd_trash_deleted: false,
+            });
+            userAdminHeaders = await helpers.login(app, 'superjohn', 'password');
+            userGuestHeaders = await helpers.login(app, 'johndoe', 'password');
+            reportAdmin = await Report.create({
+                companyID: 'COMPID',
+                reportName: 'ReportAdmin',
+                nd_trash_deleted: false,
+                owner: userAdmin._id,
+                isPublic: false,
+                createdBy: userAdmin._id,
+                createdOn: new Date(),
+                selectedLayerID: layer._id,
+                author: userAdmin._id,
+                reportType: 'grid',
+                properties: {
+                    columns: [
+                        {
+                            elementID: 'abcd',
+                        },
+                    ],
+                },
+            });
+            reportAdminShared = await Report.create({
+                companyID: 'COMPID',
+                reportName: 'ReportAdminShared',
+                nd_trash_deleted: false,
+                owner: userAdmin._id,
+                isPublic: false,
+                createdBy: userAdmin._id,
+                createdOn: new Date(),
+                selectedLayerID: layer._id,
+                author: userAdmin._id,
+                reportType: 'grid',
+                parentFolder: 'fooAdminFolder',
+                properties: {
+                    columns: [
+                        {
+                            elementID: 'abcd',
+                        },
+                    ],
+                },
+            });
+            reportAdminPublic = await Report.create({
+                companyID: 'COMPID',
+                reportName: 'ReportAdminPublic',
+                nd_trash_deleted: false,
+                owner: userAdmin._id,
+                isPublic: true,
+                createdBy: userAdmin._id,
+                createdOn: new Date(),
+                selectedLayerID: layer._id,
+                author: userAdmin._id,
+                reportType: 'grid',
+                properties: {
+                    columns: [
+                        {
+                            elementID: 'abcd',
+                        },
+                    ],
+                },
+            });
+            reportGuest = await Report.create({
+                companyID: 'COMPID',
+                reportName: 'ReportGuest',
+                nd_trash_deleted: false,
+                owner: userGuest._id,
+                isPublic: false,
+                createdBy: userGuest._id,
+                createdOn: new Date(),
+                selectedLayerID: layer._id,
+                author: userGuest._id,
+                reportType: 'grid',
+                properties: {
+                    columns: [
+                        {
+                            elementID: 'abcd',
+                        },
+                    ],
+                },
+            });
+        });
+        afterEach(async function () {
+            await userAdmin.remove();
+            await userGuest.remove();
+            await reportAdmin.remove();
+            await reportAdminShared.remove();
+            await reportAdminPublic.remove();
+            await reportGuest.remove();
+        });
+        it('should get report with Admin Role on Admin Report', async function () {
+            const res = await request(app).get('/api/reports/get-report/' + reportAdmin.id)
+                .query({ id: reportAdmin.id })
+                .set(userAdminHeaders)
                 .expect(200);
 
             expect(res.body).toHaveProperty('result', 1);
@@ -345,11 +475,11 @@ describe('Reports API', function () {
             const r = res.body.item;
             expect(r).toHaveProperty('_id');
             expect(r).toHaveProperty('companyID', 'COMPID');
-            expect(r).toHaveProperty('reportName', 'Report');
+            expect(r).toHaveProperty('reportName', 'ReportAdmin');
             expect(r).toHaveProperty('nd_trash_deleted', false);
-            expect(r).toHaveProperty('owner', user.id);
+            expect(r).toHaveProperty('owner', userAdmin.id);
             expect(r).toHaveProperty('isPublic', false);
-            expect(r).toHaveProperty('createdBy', user.id);
+            expect(r).toHaveProperty('createdBy', userAdmin.id);
             expect(r).toHaveProperty('createdOn');
             expect(r).toHaveProperty('__v');
             expect(r).toHaveProperty('history');
@@ -360,8 +490,89 @@ describe('Reports API', function () {
             expect(r.properties.columns[0]).toHaveProperty('layerObject');
             expect(r.properties.columns[0].layerObject).toHaveProperty('elementLabel', 'Foo');
         });
-    });
+        it('should get Guest report with Admin Role', async function () {
+            const res = await request(app).get('/api/reports/get-report/' + reportGuest.id)
+                .query({ id: reportAdmin.id })
+                .set(userAdminHeaders)
+                .expect(200);
 
+            expect(res.body).toHaveProperty('result', 1);
+            expect(res.body).toHaveProperty('item');
+
+            const r = res.body.item;
+            expect(r).toHaveProperty('_id');
+            expect(r).toHaveProperty('companyID', 'COMPID');
+            expect(r).toHaveProperty('reportName', 'ReportGuest');
+            expect(r).toHaveProperty('owner', userGuest.id);
+        });
+        it('should get Guest report with Admin Role even is not shared', async function () {
+            const res = await request(app).get('/api/reports/get-report/' + reportGuest.id)
+                .query({ id: reportAdmin.id })
+                .set(userAdminHeaders)
+                .expect(200);
+
+            expect(res.body).toHaveProperty('result', 1);
+            expect(res.body).toHaveProperty('item');
+
+            const r = res.body.item;
+            expect(r).toHaveProperty('_id');
+            expect(r).toHaveProperty('companyID', 'COMPID');
+            expect(r).toHaveProperty('reportName', 'ReportGuest');
+            expect(r).toHaveProperty('owner', userGuest.id);
+        });
+        it('should get Guest report with Guest Role', async function () {
+            const res = await request(app).get('/api/reports/get-report/' + reportGuest.id)
+                .query({ id: reportGuest.id })
+                .set(userGuestHeaders)
+                .expect(200);
+
+            expect(res.body).toHaveProperty('result', 1);
+            expect(res.body).toHaveProperty('item');
+
+            const r = res.body.item;
+            expect(r).toHaveProperty('_id');
+            expect(r).toHaveProperty('companyID', 'COMPID');
+            expect(r).toHaveProperty('reportName', 'ReportGuest');
+            expect(r).toHaveProperty('owner', userGuest.id);
+        });
+        it('should don\'t get Admin report with Guest Role', async function () {
+            const res = await request(app).get('/api/reports/get-report/' + reportAdmin.id)
+                .query({ id: reportGuest.id })
+                .set(userGuestHeaders)
+                .expect(403);
+
+            expect(Object.entries(res.body).length).toBe(0);
+        });
+        it('should get Admin report with Guest Role only if is shared', async function () {
+            const res = await request(app).get('/api/reports/get-report/' + reportAdminShared.id)
+                .query({ id: reportAdminShared.id })
+                .set(userGuestHeaders)
+                .expect(200);
+
+            expect(res.body).toHaveProperty('result', 1);
+            expect(res.body).toHaveProperty('item');
+
+            const r = res.body.item;
+            expect(r).toHaveProperty('_id');
+            expect(r).toHaveProperty('companyID', 'COMPID');
+            expect(r).toHaveProperty('reportName', 'ReportAdminShared');
+            expect(r).toHaveProperty('owner', userAdmin.id);
+        });
+        it('should get public report if user is not connected', async function () {
+            const res = await request(app).get('/api/reports/get-report/' + reportAdminPublic.id)
+                .query({ id: reportAdminPublic.id })
+                .expect(200);
+
+            expect(res.body).toHaveProperty('result', 1);
+            expect(res.body).toHaveProperty('item');
+
+            const r = res.body.item;
+            expect(r).toHaveProperty('_id');
+            expect(r).toHaveProperty('companyID', 'COMPID');
+            expect(r).toHaveProperty('reportName', 'ReportAdminPublic');
+            expect(r).toHaveProperty('owner', userAdmin.id);
+        });
+    });
     describe('POST /api/reports/share-report', function () {
         it('should publish a report', async function () {
             const res = await request(app).post('/api/reports/share-report')
