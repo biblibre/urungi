@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed usage of an order column when that column wasn't appearing in the
   SELECT clause
 - Error handler sent by server to be displayed on the client-side
+- Fixed format support on line graph and similar
 
 ### Dependencies
 
