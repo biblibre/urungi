@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   SELECT clause
 - Error handler sent by server to be displayed on the client-side
 - Fixed format support on line graph and similar
+- Using '?' in a custom field does not cause errors anymore (#22)
 
 ### Dependencies
 
@@ -80,7 +81,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated jquery to 3.6.0
 - Updated jquery-validation to 1.19.3
 - Updated jsplumb to 2.15.6
-- Updated knex to 0.21.21
 - Updated migrate-mongo to 8.2.3
 - Updated moment to 2.29.1
 - Updated mongodb-memory-server to 7.4.1
@@ -101,6 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed eslint-plugin-standard
 - Removed gulp-concat
 - Removed gulp-decomment
+- Removed knex
 - Removed merge-stream
 - Removed request
 

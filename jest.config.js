@@ -28,6 +28,9 @@ module.exports = {
                 '<rootDir>/test/server/**/*.spec.js',
             ],
             globalSetup: '<rootDir>/test/server/setup.js',
+            setupFilesAfterEnv: [
+                '<rootDir>/test/server/jest-custom-matchers.js',
+            ],
         },
         {
             displayName: 'cli',

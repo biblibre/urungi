@@ -44,7 +44,7 @@ function processQuery (query, queryLayer, warnings) {
     *   - the queryLayer object was created by an administrator, and should be trusted
     *   - the processQuery object is built by using the layer as an interface. the report does not have direct access to the database
     *
-    * This function does not need to protect against sql injections : Knex.js will do that
+    * This function does not need to protect against sql injections : SqlQueryBuilder will do that
     *   - Strings coming from the user are still validated as an extra precaution, and to prevent invalid input
     *
     */

@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const debug = require('debug')('urungi:sql');
 const { BaseAdapter } = require('./base.js');
-const SqlQueryBuilder = require('../core/sqlQueryBuilder.js');
+const MysqlQueryBuilder = require('../core/MysqlQueryBuilder.js');
 
 class MysqlAdapter extends BaseAdapter {
     getConnection () {
@@ -92,21 +92,21 @@ class MysqlAdapter extends BaseAdapter {
     }
 
     async getQueryResults (query) {
-        const knex = require('knex')({
-            client: 'mysql',
-        });
-        const sqlQueryBuilder = new SqlQueryBuilder(knex);
-        const q = sqlQueryBuilder.build(query);
-        const { sql, bindings } = q.toSQL().toNative();
+        const qb = new MysqlQueryBuilder();
+        const sql = qb.build(query);
 
         const start = Date.now();
-        const res = await this.query(sql, bindings);
+        let res;
+        try {
+            res = await this.query(sql);
+        } catch (err) {
+            throw new Error(`Error: ${sql} : ${err.message}`);
+        }
         const end = Date.now();
 
         return {
             data: res,
             sql: sql,
-            bindings: bindings,
             time: end - start,
         };
     }
@@ -124,7 +124,7 @@ class MysqlAdapter extends BaseAdapter {
                     }
 
                     return connection.end(function () {
-                        reject(err);
+                        reject(new Error(`Error: ${sql} : ${err.message}`));
                     });
                 }
 

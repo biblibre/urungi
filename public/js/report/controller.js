@@ -297,10 +297,6 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         filter.filterPrompt = false;
         filter.layerID = $scope.selectedReport.selectedLayerID;
 
-        if ($scope.selectedReport.properties.filters.length > 0) {
-            filter.conditionType = 'and';
-        }
-
         $scope.onDropField($scope.selectedReport.properties.filters, filter, 'filter');
     };
 
