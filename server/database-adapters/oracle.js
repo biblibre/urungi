@@ -1,7 +1,7 @@
 const oracledb = require('oracledb');
 const debug = require('debug')('urungi:sql');
 const { BaseAdapter } = require('./base.js');
-const SqlQueryBuilder = require('../core/sqlQueryBuilder.js');
+const OracleQueryBuilder = require('../core/OracleQueryBuilder.js');
 
 class OracleAdapter extends BaseAdapter {
     async getConnection () {
@@ -77,21 +77,16 @@ class OracleAdapter extends BaseAdapter {
     }
 
     async getQueryResults (query) {
-        const knex = require('knex')({
-            client: 'oracledb',
-        });
-        const sqlQueryBuilder = new SqlQueryBuilder(knex);
-        const q = sqlQueryBuilder.build(query);
-        const { sql, bindings } = q.toSQL().toNative();
+        const qb = new OracleQueryBuilder();
+        const sql = qb.build(query);
 
         const start = Date.now();
-        const res = await this.query(sql, bindings);
+        const res = await this.query(sql);
         const end = Date.now();
 
         return {
             data: res.rows,
             sql: sql,
-            bindings: bindings,
             time: end - start,
         };
     }
@@ -100,9 +95,14 @@ class OracleAdapter extends BaseAdapter {
         const connection = await this.getConnection();
 
         debug('Running query: %o', { sql: sql, params: params });
-        const res = await connection.execute(sql, params);
-
-        await connection.close();
+        let res;
+        try {
+            res = await connection.execute(sql, params);
+        } catch (err) {
+            throw new Error(`Error: ${sql} : ${err.message}`);
+        } finally {
+            await connection.close();
+        }
 
         return res;
     }

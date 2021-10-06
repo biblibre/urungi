@@ -1,7 +1,7 @@
 const mssql = require('mssql');
 const debug = require('debug')('urungi:sql');
 const { BaseAdapter } = require('./base.js');
-const SqlQueryBuilder = require('../core/sqlQueryBuilder.js');
+const MssqlQueryBuilder = require('../core/MssqlQueryBuilder.js');
 
 class MssqlAdapter extends BaseAdapter {
     getPool () {
@@ -84,25 +84,16 @@ class MssqlAdapter extends BaseAdapter {
     }
 
     async getQueryResults (query) {
-        const knex = require('knex')({
-            client: 'mssql',
-        });
-        const sqlQueryBuilder = new SqlQueryBuilder(knex);
-        const q = sqlQueryBuilder.build(query);
-        const { sql, bindings } = q.toSQL().toNative();
-        const params = {};
-        for (const [i, value] of bindings.entries()) {
-            params[`p${i}`] = value;
-        }
+        const qb = new MssqlQueryBuilder();
+        const sql = qb.build(query);
 
         const start = Date.now();
-        const res = await this.query(sql, params);
+        const res = await this.query(sql);
         const end = Date.now();
 
         return {
             data: res.recordset,
             sql: sql,
-            bindings: bindings,
             time: end - start,
         };
     }
@@ -116,12 +107,17 @@ class MssqlAdapter extends BaseAdapter {
         }
 
         debug('Running query: %o', { sql: sql, params: params });
+
+        let res;
         try {
-            const res = await request.query(sql);
-            return res;
+            res = await request.query(sql);
+        } catch (err) {
+            throw new Error(`Error: ${sql} : ${err.message}`);
         } finally {
             await pool.close();
         }
+
+        return res;
     }
 }
 

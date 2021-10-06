@@ -38,7 +38,6 @@
         vm.selectSecondValue = selectSecondValue;
         vm.setDatePatternFilterType = setDatePatternFilterType;
         vm.setFilterType = setFilterType;
-        vm.updateCondition = updateCondition;
         vm.values = [];
 
         function $onInit () {
@@ -116,10 +115,6 @@
 
         function inputChanged (filter) {
             vm.onChange();
-        }
-
-        function updateCondition (filter, condition) {
-            filter.conditionType = condition.conditionType;
         }
 
         function getElementFilterOptions () {

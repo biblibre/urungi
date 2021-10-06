@@ -137,6 +137,12 @@ describe('MySQL database adapter', function () {
                     expect(results.data).toEqual(expected);
                 });
             });
+
+            describe('query', function () {
+                it('should throw on malformed query', async function () {
+                    await expect(adapter.query('SLECT 1')).rejects.toThrow('Error: SLECT 1');
+                });
+            });
         });
     }
 });

@@ -30,7 +30,6 @@ reportColumnSchema.virtual('layerObject').get(function () {
 
 const reportFilterSchema = reportColumnSchema.clone();
 reportFilterSchema.add({
-    conditionType: String,
     criterion: {
         date1: String,
         date2: String,
