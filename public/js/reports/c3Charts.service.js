@@ -193,7 +193,9 @@ angular.module('app.reports').service('c3Charts', function (notify, gettextCatal
 
                 c3Config.data = {
                     columns: theColumns,
-                    type: chart.type
+                    type: chart.type,
+                    order: null
+
                 };
             }
             break;
@@ -216,11 +218,12 @@ angular.module('app.reports').service('c3Charts', function (notify, gettextCatal
                 json: theData,
                 keys: {
                     x: axisField,
-                    value: theValues
+                    value: theValues.sort()
                 },
                 types: theTypes,
                 names: theNames,
-                groups: theGroups
+                groups: theGroups,
+                order: null
             };
             c3Config.axis = {
                 x: {
