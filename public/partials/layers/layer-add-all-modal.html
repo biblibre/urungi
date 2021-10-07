@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="vm.dismiss()" aria-hidden="true">&times;</button>
+    <h3 class="modal-title" translate>Add all collection elements to the layer</h3>
+</div>
+
+<div class="modal-body ng-scope">
+    <span>Please confirm that you want to add to the layer all elements of the collection <strong>{{ vm.collection.collectionName }}</strong></span>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn" ng-click="vm.dismiss()" translate>Cancel</button>
+    <button ng-click="vm.close();" class="btn btn-danger" translate>Confirm</button>
+</div>
