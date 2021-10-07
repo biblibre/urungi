@@ -4,12 +4,10 @@
 
     angular.module('app').controller('layerCtrl', LayerController);
 
-    LayerController.$inject = ['$location', '$routeParams', '$scope', '$timeout', '$window', '$uibModal', 'gettextCatalog', 'api', 'notify'];
+    LayerController.$inject = ['$location', '$routeParams', '$scope', '$timeout', '$window', '$uibModal', 'gettextCatalog', 'api', 'notify', 'layerService'];
 
-    function LayerController ($location, $routeParams, $scope, $timeout, $window, $uibModal, gettextCatalog, api, notify) {
-        $scope.sqlModal = 'partials/layer/sqlModal.html';
+    function LayerController ($location, $routeParams, $scope, $timeout, $window, $uibModal, gettextCatalog, api, notify, layerService) {
         $scope.elementModal = 'partials/layer/elementModal.html';
-        $scope.ReadOnlyDataSourceSelector = false;
         $scope.items = [];
         $scope.datasources = [];
         $scope.tab = { active: 1 };
@@ -219,50 +217,15 @@
         };
 
         $scope.addSQL = function () {
-            $scope.temporarySQLCollection = {};
-            $scope.temporarySQLCollection.mode = 'add';
-            $('#sqlModal').modal('show');
-        };
+            const modal = $uibModal.open({
+                component: 'appLayerSqlModal',
+                resolve: {
+                    layer: () => $scope._Layer,
+                    mode: () => 'add',
+                },
+            });
 
-        $scope.editSQL = function () {
-            const selectedCollection = $scope.theSelectedElement;
-            if (!selectedCollection.isSQL) {
-                notify.error(gettextCatalog.getString('Cannot modify sql of an object which is not an sql request'));
-                return;
-            }
-
-            $scope.temporarySQLCollection = {};
-            $scope.temporarySQLCollection.mode = 'edit';
-            $scope.temporarySQLCollection.sqlQuery = selectedCollection.sqlQuery;
-            $scope.temporarySQLCollection.name = selectedCollection.collectionName;
-
-            $scope.ReadOnlyDataSourceSelector = true;
-
-            $scope.newSQLCollection = undefined;
-            $('#sqlModal').modal('show');
-        };
-
-        $scope.setSelectedEntity = function (entity) {
-            if ($scope.selectedEntities.indexOf(entity) === -1) {
-                $scope.selectedEntities.push(entity);
-            } else {
-                const index = $scope.selectedEntities.indexOf(entity);
-                $scope.selectedEntities.splice(index, 1);
-            }
-        };
-
-        $scope.addSqlToLayer = function () {
-            delete $scope.temporarySQLCollection.error;
-
-            api.getSqlQueryCollection($scope._Layer.datasourceID, $scope.temporarySQLCollection).then(function (collection) {
-                collection.collectionID = 'C' + $scope.newID();
-
-                for (const element of collection.elements) {
-                    element.elementID = $scope.newID();
-                    element.collectionID = collection.collectionID;
-                    element.collectionName = collection.collectionName;
-                }
-
+            modal.result.then(function (collection) {
                 if (!$scope._Layer.params) { $scope._Layer.params = {}; }
                 if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
 
@@ -277,92 +240,55 @@
                     setDraggable('#' + collection.collectionID + '-parent');
                 }, 100);
 
-                $('#sqlModal').modal('hide');
                 $scope.erDiagramInit();
-            }, function (err) {
-                $scope.temporarySQLCollection.error = err.message;
-            });
+            }, function () {});
         };
 
-        $scope.saveSQLChanges = function () {
-            delete $scope.temporarySQLCollection.error;
+        $scope.editSQL = function () {
+            const selectedCollection = $scope.theSelectedElement;
+            if (!selectedCollection.isSQL) {
+                notify.error(gettextCatalog.getString('Cannot modify sql of an object which is not an sql request'));
+                return;
+            }
 
-            api.getSqlQueryCollection($scope._Layer.datasourceID, $scope.temporarySQLCollection).then(function (newCol) {
-                const currentCol = $scope.theSelectedElement;
-
-                for (const e in newCol.elements) {
-                    newCol.elements[e].collectionID = currentCol.collectionID;
-                    newCol.elements[e].collectionName = currentCol.collectionName;
-                }
-
-                $scope.elementMatch = {};
-                $scope.lostElements = [];
-                $scope.newElements = [];
-                $scope.matchedElements = [];
-
-                for (const e1 of newCol.elements) {
-                    $scope.elementMatch[e1.elementID] = null;
-                    for (const e2 of currentCol.elements) {
-                        if (e1.elementName === e2.elementName) {
-                            $scope.elementMatch[e1.elementID] = e2;
-                            $scope.matchedElements.push(e2);
-                        }
-                    }
-                }
-
-                for (const el of currentCol.elements) {
-                    if ($scope.matchedElements.indexOf(el) < 0) {
-                        $scope.lostElements.push(el);
-                    }
-                }
-
-                for (const el of newCol.elements) {
-                    if (!$scope.elementMatch[el.elementID]) {
-                        $scope.newElements.push(el);
-                    }
-                }
-
-                $scope.newSQLCollection = newCol;
-            }, function (err) {
-                $scope.temporarySQLCollection.error = err.message;
+            const modal = $uibModal.open({
+                component: 'appLayerSqlModal',
+                resolve: {
+                    layer: () => $scope._Layer,
+                    mode: () => 'edit',
+                    collection: () => selectedCollection,
+                    sqlQuery: () => selectedCollection.sqlQuery,
+                    name: () => selectedCollection.collectionName,
+                },
             });
+
+            modal.result.then(function (collection) {
+                selectedCollection.sqlQuery = collection.sqlQuery;
+
+                $scope._Layer.objects = $scope._Layer.objects.filter(function f (object) {
+                    if (object.collectionID === selectedCollection.collectionID) {
+                        return collection.elements.some(e => e.elementID === object.elementID);
+                    }
+
+                    if (Array.isArray(object.elements)) {
+                        object.elements = object.elements.filter(f);
+                    }
+
+                    return true;
+                });
+                $scope.rootItem.elements = $scope._Layer.objects;
+
+                selectedCollection.elements = collection.elements;
+            }, function () {});
         };
 
-        $scope.confirmSQLChanges = function () {
-            $scope.theSelectedElement.sqlQuery = $scope.newSQLCollection.sqlQuery;
-
-            for (const el of $scope.newSQLCollection.elements) {
-                if ($scope.elementMatch[el.elementID]) {
-                    const oldElement = $scope.elementMatch[el.elementID];
-                    el.elementID = oldElement.elementID;
-                    el.elementRole = oldElement.elementRole;
-                    el.elementLabel = oldElement.elementLabel;
-                }
+        $scope.setSelectedEntity = function (entity) {
+            if ($scope.selectedEntities.indexOf(entity) === -1) {
+                $scope.selectedEntities.push(entity);
+            } else {
+                const index = $scope.selectedEntities.indexOf(entity);
+                $scope.selectedEntities.splice(index, 1);
             }
-
-            const deletedIndexes = [];
-
-            for (const i in $scope._Layer.objects) {
-                const e1 = $scope._Layer.objects[i];
-                if (e1.collectionID === $scope.theSelectedElement.collectionID) {
-                    for (const e2 of $scope.lostElements) {
-                        if (e2.elementID === e1.elementID) {
-                            deletedIndexes.push(i);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            for (let k = deletedIndexes.length - 1; k >= 0; k--) {
-                // Iterate backwards so the indexes to be removed don't change as we remove the ones before
-                $scope._Layer.objects.splice(deletedIndexes[k], 1);
-            }
-
-            $scope.theSelectedElement.elements = $scope.newSQLCollection.elements;
-
-            $scope.newSQLElements = undefined;
-            $('#sqlModal').modal('hide');
         };
 
         function makeJoin (sourceID, targetID) {
@@ -378,7 +304,7 @@
 
             if (!found) {
                 const join = {};
-                join.joinID = 'J' + $scope.newID();
+                join.joinID = 'J' + layerService.newID($scope._Layer);
 
                 for (const collection in $scope._Layer.params.schema) {
                     for (const element in $scope._Layer.params.schema[collection].elements) {
@@ -701,7 +627,7 @@
             const element = {};
 
             element.isCustom = true;
-            element.elementID = $scope.newID();
+            element.elementID = layerService.newID($scope._Layer);
 
             element.viewExpression = '';
 
@@ -970,7 +896,7 @@
         };
 
         $scope.addFolder = function () {
-            const elementID = 'F' + $scope.newID();
+            const elementID = 'F' + layerService.newID($scope._Layer);
 
             const element = {};
             element.elementLabel = gettextCatalog.getString('my folder');
@@ -1189,10 +1115,10 @@
         $scope.addDatasetToLayer = function (datasourceID, collectionName) {
             if ($scope._Layer.datasourceID === datasourceID) {
                 api.getDatasourceCollection(datasourceID, collectionName).then(function (collection) {
-                    collection.collectionID = 'C' + $scope.newID();
+                    collection.collectionID = 'C' + layerService.newID($scope._Layer);
 
                     for (const element of collection.elements) {
-                        element.elementID = $scope.newID();
+                        element.elementID = layerService.newID($scope._Layer);
                         element.collectionID = collection.collectionID;
                         element.collectionName = collection.collectionName;
                     }
@@ -1233,24 +1159,6 @@
             if ($scope.selectedItem === 'collection' && $scope.theSelectedElement.isSQL) {
                 $scope.editSQL();
             }
-        };
-
-        $scope.newID = function () {
-            let counter = $scope._Layer.idCounter;
-            if (counter === undefined) {
-                counter = 0;
-            }
-            counter = (counter + 1) % 676; // 676 === 26**2
-            $scope._Layer.idCounter = counter;
-            let uid = 'abcdefghijklmnopqrstuvwxyz'.charAt(Math.floor(counter / 26)) +
-                'abcdefghijklmnopqrstuvwxyz'.charAt(counter % 26);
-            const rand = Math.floor(Math.random() * 676);
-            uid += 'abcdefghijklmnopqrstuvwxyz'.charAt(Math.floor(rand / 26)) +
-            'abcdefghijklmnopqrstuvwxyz'.charAt(rand % 26);
-            // I couldn't decide between using a counter to guarantee unique ids in theory,
-            // or using random characters to be certain the ids are very different from each other in practice
-            // so I ended up doing both.
-            return uid;
         };
 
         $scope.findElement = function (elID) {
