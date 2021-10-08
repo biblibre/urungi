@@ -464,8 +464,6 @@
                 let targetPrompt = document.getElementById('PROMPT_' + thePrompt.promptID);
 
                 if (targetPrompt) {
-                    const html = getPromptHTML(thePrompt);
-                    $(targetPrompt).replaceWith(html);
                     targetPrompt = document.getElementById('PROMPT_' + thePrompt.promptID);
                     if ($scope.mode === 'preview') {
                         targetPrompt.removeAttribute('page-block');
@@ -491,7 +489,6 @@
 
         function getPromptHTML (prompt) {
             const html = '<div id="PROMPT_' + prompt.promptID + '" page-block class="ndContainer" ndType="ndPrompt"><app-filter-prompt is-prompt="true" filter="prompts[\'' + prompt.promptID + '\']" on-change="promptChanged()"></app-filter-prompt></div>';
-
             return html;
         }
 
