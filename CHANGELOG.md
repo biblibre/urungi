@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added CLI command to list users: `user-list`
 - Added CLI command to print config: `config-dump`
 - Added ability to configure `search_path` for PostgreSQL data sources
+- Added ability to remove an user
 
 ### Changed
 

@@ -3,9 +3,9 @@
 
     angular.module('app.users').controller('UsersViewController', UsersViewController);
 
-    UsersViewController.$inject = ['$routeParams', '$uibModal', 'api', 'connection', 'userService', 'gettextCatalog', 'notify'];
+    UsersViewController.$inject = ['$routeParams', '$uibModal', 'api', 'connection', 'userService', 'gettextCatalog', 'notify', '$rootScope', '$location'];
 
-    function UsersViewController ($routeParams, $uibModal, api, connection, userService, gettextCatalog, notify) {
+    function UsersViewController ($routeParams, $uibModal, api, connection, userService, gettextCatalog, notify, $rootScope, $location) {
         const vm = this;
 
         vm.addRole = addRole;
@@ -23,6 +23,7 @@
         vm.deleteRole = deleteRole;
         vm.getRoleName = getRoleName;
         vm.getRolesNotInUser = getRolesNotInUser;
+        vm.deleteUser = deleteUser;
 
         activate();
 
@@ -132,6 +133,28 @@
                         },
                     },
                 });
+            }
+        }
+        function deleteUser (targetUser) {
+            if (targetUser._id === vm.currentUser._id) {
+                notify.notice(gettextCatalog.getString("You can't remove yourself from your own user session "));
+            } else {
+                const modal = $uibModal.open({
+                    component: 'appDeleteModal',
+                    resolve: {
+                        title: () => gettextCatalog.getString('Remove user {{name}} ?', { name: targetUser.userName }),
+                        delete: () => function () {
+                            return api.deleteUser(targetUser._id);
+                        },
+                    },
+                });
+
+                modal.result.then(function () {
+                    $rootScope.$broadcast('counts-changes');
+                    $location.url('/users');
+                    notify.success(gettextCatalog.getString('User deleted successfully'));
+                }
+                );
             }
         }
     }

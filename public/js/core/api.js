@@ -84,6 +84,7 @@
             getUserReports: getUserReports,
             getUserDashboards: getUserDashboards,
             getUserCounts: getUserCounts,
+            deleteUser: deleteUser,
         };
 
         return service;
@@ -547,6 +548,10 @@
 
         function getUserCounts (userId) {
             return httpGet('/api/users/' + userId + '/counts');
+        }
+
+        function deleteUser (userId) {
+            return httpDelete('/api/users/' + userId);
         }
 
         /**
