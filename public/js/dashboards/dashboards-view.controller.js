@@ -99,7 +99,7 @@
                 const targetPrompt = document.getElementById('PROMPT_' + promptID);
 
                 if (targetPrompt) {
-                    targetPrompt.outerHTML = getPromptHTML(promptID);
+                    targetPrompt.innerHTML = '<app-filter-prompt is-prompt="true" filter="vm.prompts[\'' + promptID + '\']" on-change="vm.promptChanged()"></app-filter-prompt>';
                 }
             }
         }
@@ -114,14 +114,6 @@
                 fetchData: true,
                 filters: filterCriteria
             });
-        }
-
-        function getPromptHTML (promptID) {
-            const html = '<div id="PROMPT_' + promptID + '" class="ndContainer" ndType="ndPrompt">' +
-                '<app-filter-prompt is-prompt="true" filter="vm.prompts[\'' + promptID + '\']" on-change="vm.promptChanged()"></app-filter-prompt>' +
-                '</div>';
-
-            return html;
         }
 
         function downloadAsPDF () {
