@@ -7,9 +7,9 @@ async function run (argv) {
         'database-init',
         'datasource-list',
         'import',
+        'user-list',
         'user-set-password',
         'version',
-        'user-list',
     ];
 
     const args = arg({
@@ -100,10 +100,12 @@ must be placed after the command.
 For instance, \`cli -vv import file.json\` is the same as \`cli import file.json -vv\`
 
 Commands:
+    config-dump         print config
     database-init       initialize database
     datasource-list     list datasources
     import              import layers, reports, dashboards
     user-set-password   change user password
+    user-list           list users
     version             show Urungi version
 
 To get help for a specific command, run \`cli <command> --help\`
