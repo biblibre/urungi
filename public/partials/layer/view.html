@@ -54,7 +54,6 @@
                             <!--<h5 class="pull-right">Properties</h5>-->
 
                         <layer-object-properties object-type="selectedItem" object="theSelectedElement" on-delete="deleteObject()" on-edit="editObject"
-                        element-types="elementTypes" string-default-aggregation="stringDefaultAggregation" number-default-aggregation="numberDefaultAggregation"
                         layer="_Layer" on-delete-element="deleteSchemaElement" on-publish-element="elementAdd"></layer-object-properties>
 
                     </section>
@@ -107,7 +106,7 @@
 
                                             <div ng-if="!rootItem.editing == true" class="schema-element-btn">
                                                 <div class="btn btn-danger btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(rootItem)" translate>Delete</div>
-                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="rootItem.editing = true; elementEditing = true;" translate>Edit</div>
+                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="rootItem.editing = true" translate>Edit</div>
                                             </div>
 
                                             <div ng-if="rootItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="rootItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o save-folder-element-btn-icon" uib-tooltip="{{'Save folder label' | translate}}"></i></div>
@@ -258,4 +257,3 @@
         </div>
     </div>
 </div>
-<div ng-include src="elementModal"></div>

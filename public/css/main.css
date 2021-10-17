@@ -2512,18 +2512,6 @@ label[for] {
     padding: 5px;
 }
 
-#legend-field-3 {
-    max-height: 200px;
-    font-size: 14px;
-    margin-top: 30px;
-    overflow: auto;
-    color: black;
-}
-
-#field-3 {
-    margin-top: 30px;
-}
-
 #objectPanel {
     position: absolute;
     top: 50px;

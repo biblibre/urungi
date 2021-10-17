@@ -7,39 +7,10 @@
     LayerController.$inject = ['$location', '$routeParams', '$scope', '$timeout', '$window', '$uibModal', 'gettextCatalog', 'api', 'notify', 'layerService'];
 
     function LayerController ($location, $routeParams, $scope, $timeout, $window, $uibModal, gettextCatalog, api, notify, layerService) {
-        $scope.elementModal = 'partials/layer/elementModal.html';
         $scope.items = [];
         $scope.datasources = [];
-        $scope.tab = { active: 1 };
-
-        $scope.customElements = {
-            elements: [],
-            collectionLabel: 'Custom elements',
-        };
 
         $scope.initiated = false;
-
-        $scope.elementTypes = [
-            { name: 'object', value: 'object' },
-            { name: 'string', value: 'string' },
-            { name: 'number', value: 'number' },
-            { name: 'boolean', value: 'boolean' },
-            { name: 'date', value: 'date' },
-            { name: 'array', value: 'array' }
-        ];
-
-        $scope.numberDefaultAggregation = [
-            { name: 'raw', value: 'value' },
-            { name: 'SUM', value: 'sum' },
-            { name: 'AVG', value: 'avg' },
-            { name: 'MIN', value: 'min' },
-            { name: 'MAX', value: 'max' },
-            { name: 'COUNT', value: 'count' }
-        ];
-        $scope.stringDefaultAggregation = [
-            { name: 'raw', value: 'value' },
-            { name: 'COUNT', value: 'count' }
-        ];
 
         $scope.rootItem = { elementLabel: '', elementRole: 'root', elements: [] };
 
@@ -169,12 +140,6 @@
                 api.getLayer($routeParams.layerID).then(function (layer) {
                     $scope._Layer = layer;
                     $scope.rootItem.elements = $scope._Layer.objects;
-
-                    $scope.forAllElements((element) => {
-                        if (element.isCustom) {
-                            $scope.customElements.elements.push(element);
-                        }
-                    });
 
                     getDatasources();
 
@@ -624,100 +589,46 @@
         $scope.createComposedElement = function () {
             $scope.calculateComponents();
 
-            const element = {};
+            const element = {
+                isCustom: true,
+                elementID: layerService.newID($scope._Layer),
+                viewExpression: '',
+                elementName: 'comp',
+            };
 
-            element.isCustom = true;
-            element.elementID = layerService.newID($scope._Layer);
+            const modal = $uibModal.open({
+                component: 'appLayerElementModal',
+                resolve: {
+                    element: () => element,
+                    layer: () => $scope._Layer,
+                },
+            });
 
-            element.viewExpression = '';
-
-            element.elementName = 'comp';
-
-            $scope.selectedCollection = undefined;
-
-            $scope.modalElement = element;
-            $scope.modalCycle = false;
-            $scope.elementEditing = false;
-            $scope.tab.active = 0;
-            $('#elementModal').modal('show');
-        };
-
-        $scope.selectModalCollection = function (collection) {
-            $scope.selectedModalCollection = collection;
-        };
-
-        $scope.addElementToExpression = function (element) {
-            if (!$scope.modalElement.viewExpression) {
-                $scope.modalElement.viewExpression = '';
-            }
-            $scope.modalElement.viewExpression += ('#' + element.elementID);
-            $scope.modalElement.component = element.component;
-        };
-
-        $scope.validateCustomElement = function () {
-            if ($scope.compileExpression()) {
-                $scope.tab.active = 1;
-            }
-        };
-
-        $scope.getElementsUsedInCustomExpression = function () {
-            if (!$scope.modalElement) {
-                return [];
-            }
-            return layerUtils.getElementsUsedInCustomExpression($scope.modalElement.viewExpression, $scope._Layer);
-        };
-
-        $scope.compileExpression = function () {
-            const elements = layerUtils.getElementsUsedInCustomExpression($scope.modalElement.viewExpression, $scope._Layer);
-
-            if (elements.length === 0) {
-                // custom elements without arguments will break the GROUP BY clause.
-                // They're disabled for now.  To enable them, we need to modify
-                // queryProcessor so it doesn't add them to group Keys
-                $scope.modalElement.expression = $scope.modalElement.viewExpression;
-                return false;
-            }
-
-            if (!$scope.modalElement.component) {
-                $scope.modalElement.component = elements[0].component;
-            }
-
-            for (const element of elements) {
-                if (element.isCustom) {
-                    const cycle = testForCycle($scope.modalElement, element);
-                    if (cycle) {
-                        $scope.modalCycle = cycle;
-                        return false;
-                    }
+            modal.result.then(function (modifiedElement) {
+                angular.copy(modifiedElement, element);
+                if (!$scope._Layer.objects) {
+                    $scope._Layer.objects = [];
                 }
-            }
-
-            return true;
+                $scope._Layer.objects.push(element);
+            }, function () {});
         };
-
-        function testForCycle (startElement, currentElement) {
-            if (currentElement.elementID === startElement.elementID) {
-                return [currentElement];
-            }
-
-            if (currentElement.isCustom) {
-                const elements = layerUtils.getElementsUsedInCustomExpression(currentElement.viewExpression, $scope._Layer);
-                for (const element of elements) {
-                    const cycle = testForCycle(startElement, element);
-                    if (cycle) {
-                        return [currentElement].concat(cycle);
-                    }
-                }
-            }
-
-            return false;
-        }
 
         $scope.elementAdd = function (element) {
-            $scope.modalElement = element;
-            $scope.elementEditing = false;
-            $scope.tab.active = 1;
-            $('#elementModal').modal('show');
+            const modal = $uibModal.open({
+                component: 'appLayerElementModal',
+                resolve: {
+                    element: () => element,
+                    layer: () => $scope._Layer,
+                },
+            });
+
+            modal.result.then(function (modifiedElement) {
+                angular.copy(modifiedElement, element);
+                if (!$scope._Layer.objects) {
+                    $scope._Layer.objects = [];
+                }
+                $scope._Layer.objects.push(element);
+            }, function () {});
         };
 
         $scope.promptAddAll = function (collection) {
@@ -748,99 +659,17 @@
         };
 
         $scope.editElement = function (element) {
-            $scope.selectedElement = element;
-            $scope.modalElement = Object.create(element);
+            const modal = $uibModal.open({
+                component: 'appLayerElementModal',
+                resolve: {
+                    element: () => element,
+                    layer: () => $scope._Layer,
+                },
+            });
 
-            $scope.elementEditing = true;
-            $scope.tab.active = 1;
-            $('#elementModal').modal('show');
-        };
-
-        $scope.saveElement = function () {
-            if ($scope.modalElement.isCustom && !$scope.compileExpression()) {
-                console.error('cannot compile');
-                return;
-            }
-            if (!$scope.elementEditing) {
-                if (!$scope._Layer.objects) { $scope._Layer.objects = []; }
-
-                $scope.modalElement.elementRole = 'dimension';
-                $scope._Layer.objects.push($scope.modalElement);
-
-                if ($scope.modalElement.isCustom) {
-                    $scope.customElements.elements.push($scope.modalElement);
-                }
-
-                $('#elementModal').modal('hide');
-            } else {
-                saveEditElement();
-            }
-        };
-
-        function saveEditElement () {
-            const element = $scope.modalElement;
-
-            const result = checkElementOk(element);
-            if (!result.result) {
-                $scope.elementEditingWarning = result.message;
-                return;
-            }
-
-            $.extend($scope.selectedElement, element);
-
-            $scope.elementEditing = false;
-            $('#elementModal').modal('hide');
-        }
-
-        function checkElementOk (element) {
-            let isOk = true;
-            let message = '';
-
-            if (element.elementType === 'date') {
-                if (element.extractFromString) {
-                    if (!element.yearPositionFrom) {
-                        isOk = false;
-                        message = gettextCatalog.getString('You have to setup a valid "FROM" position number to extract the year from the string');
-                    }
-
-                    if (angular.isNumber(element.yearPositionFrom)) {
-                        isOk = false;
-                        message = gettextCatalog.getString('You have to setup a valid "FROM" position number to extract the year from the string');
-                    }
-
-                    if (!element.yearPositionTo || angular.isNumber(element.yearPositionTo)) {
-                        isOk = false;
-                        message = gettextCatalog.getString('You have to setup a valid "TO" position number to extract the year from the string');
-                    }
-
-                    if (!element.monthPositionFrom || angular.isNumber(element.monthPositionFrom)) {
-                        isOk = false;
-                        message = gettextCatalog.getString('You have to setup a valid "FROM" position number to extract the month from the string');
-                    }
-
-                    if (!element.monthPositionTo || angular.isNumber(element.monthPositionTo)) {
-                        isOk = false;
-                        message = gettextCatalog.getString('You have to setup a valid "TO" position number to extract the month from the string');
-                    }
-
-                    if (!element.dayPositionFrom || angular.isNumber(element.dayPositionFrom)) {
-                        isOk = false;
-                        message = gettextCatalog.getString('You have to setup a valid "FROM" position number to extract the day from the string');
-                    }
-
-                    if (!element.dayPositionTo || angular.isNumber(element.dayPositionTo)) {
-                        isOk = false;
-                        message = gettextCatalog.getString('You have to setup a valid "TO" position number to extract the day from the string');
-                    }
-                }
-            }
-
-            const theResult = {};
-            if (isOk) { theResult.result = 1; } else { theResult.result = 0; }
-
-            theResult.message = message;
-
-            return theResult;
+            modal.result.then(function (modifiedElement) {
+                angular.copy(modifiedElement, element);
+            }, function () {});
         };
 
         $scope.zoom = function (ratio) {
@@ -889,12 +718,6 @@
             }
         };
 
-        $scope.addValueToElement = function (element, value, label) {
-            if (!element.values) element.values = [];
-
-            element.values.push({ value: value, label: label });
-        };
-
         $scope.addFolder = function () {
             const elementID = 'F' + layerService.newID($scope._Layer);
 
@@ -914,14 +737,6 @@
                 for (const e in $scope._Layer.params.schema[s].elements) {
                     if ($scope._Layer.params.schema[s].elements[e].elementID === elementID) {
                         delete $scope._Layer.params.schema[s].elements[e].elementRole;
-                    }
-                }
-            }
-
-            if (element.isCustom) {
-                for (const i in $scope.customElements.elements) {
-                    if ($scope.customElements.elements[i].elementID === elementID) {
-                        $scope.customElements.elements.splice(i, 1);
                     }
                 }
             }
@@ -1188,20 +1003,6 @@
             }
 
             explore($scope._Layer.objects);
-        };
-
-        $scope.customExpressionCollections = function () {
-            if (!$scope._Layer) {
-                return [];
-            }
-
-            return $scope._Layer.params.schema.concat($scope.customElements);
-        };
-
-        $scope.removeFromArray = function (array, item) {
-            const index = array.indexOf(item);
-
-            if (index > -1) array.splice(index, 1);
         };
     }
 })();

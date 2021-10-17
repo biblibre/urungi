@@ -1,4 +1,4 @@
-angular.module('app').directive('layerObjectProperties', function ($compile, c3Charts) {
+angular.module('app').directive('layerObjectProperties', function ($compile, c3Charts, layerElementTypes, layerNumberDefaultAggregation, layerStringDefaultAggregation) {
     return {
         transclude: true,
         scope: {
@@ -7,9 +7,6 @@ angular.module('app').directive('layerObjectProperties', function ($compile, c3C
             onEdit: '=',
             objectType: '=',
             object: '=',
-            elementTypes: '=',
-            stringDefaultAggregation: '=',
-            numberDefaultAggregation: '=',
             layer: '=',
             onDeleteElement: '=',
             onPublishElement: '='
@@ -38,6 +35,10 @@ angular.module('app').directive('layerObjectProperties', function ($compile, c3C
             $scope.removeElement = function () {
                 $scope.onDeleteElement($scope.object);
             };
+
+            $scope.elementTypes = layerElementTypes;
+            $scope.numberDefaultAggregation = layerNumberDefaultAggregation;
+            $scope.stringDefaultAggregation = layerStringDefaultAggregation;
         }
 
     };
