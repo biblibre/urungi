@@ -44,7 +44,7 @@
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "migrate-mongo": "^8.2.3",
     "moment": "^2.29.1",
-    "mongoose": "^6.0.7",
+    "mongoose": "^6.0.11",
     "mssql": "^6.3.2",
     "multer": "^1.4.3",
     "mysql": "^2.18.1",
