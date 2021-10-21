@@ -137,7 +137,7 @@
         }
         function deleteUser (targetUser) {
             if (targetUser._id === vm.currentUser._id) {
-                notify.notice(gettextCatalog.getString("You can't remove yourself from your own user session "));
+                notify.notice(gettextCatalog.getString("You can't remove yourself from your own user session"));
             } else {
                 const modal = $uibModal.open({
                     component: 'appDeleteModal',
