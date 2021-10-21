@@ -37,20 +37,22 @@
                 return;
             }
 
-            if (!vm.user.sendPassword) {
-                if (!vm.user.pwd1) {
-                    vm.alertMessage = gettextCatalog.getString('You have to introduce a password');
-                    return;
+            if (vm.mode === 'new') {
+                if (!vm.user.sendPassword) {
+                    if (!vm.user.pwd1) {
+                        vm.alertMessage = gettextCatalog.getString('You have to introduce a password');
+                        return;
+                    } else {
+                        if (vm.user.pwd1 !== vm.user.pwd2) {
+                            vm.alertMessage = gettextCatalog.getString('Passwords do not match');
+                            return;
+                        }
+                    }
                 } else {
-                    if (vm.user.pwd1 !== vm.user.pwd2) {
-                        vm.alertMessage = gettextCatalog.getString('Passwords do not match');
+                    if (!vm.user.email) {
+                        vm.alertMessage = gettextCatalog.getString('You have to introduce a valid email to send the generated password to the user');
                         return;
                     }
-                }
-            } else {
-                if (!vm.user.email) {
-                    vm.alertMessage = gettextCatalog.getString('You have to introduce a valid email to send the generated password to the user');
-                    return;
                 }
             }
 
