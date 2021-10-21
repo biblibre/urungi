@@ -199,4 +199,19 @@ userSchema.methods.getPermissions = function () {
     });
 };
 
+userSchema.post('remove', async function (user, next) {
+    const Report = user.model('Report');
+    await Report.updateMany({ owner: user._id }, { $unset: { owner: '' } });
+    await Report.updateMany({ createdBy: user._id }, { $unset: { createdBy: '' } });
+
+    const Dashboard = user.model('Dashboard');
+    await Dashboard.updateMany({ owner: user._id }, { $unset: { owner: '' } });
+    await Dashboard.updateMany({ createdBy: user._id }, { $unset: { createdBy: '' } });
+
+    const User = user.model('User');
+    await User.updateMany({ createdBy: user._id }, { $unset: { createdBy: '' } });
+
+    next();
+});
+
 module.exports = mongoose.model('User', userSchema);
