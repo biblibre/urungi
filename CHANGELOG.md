@@ -69,7 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated ejs to 3.1.6
 - Updated eslint to 7.32.0
 - Updated eslint-config-standard to 16.0.3
-- Updated eslint-plugin-import to 2.24.2
+- Updated eslint-plugin-import to 2.25.2
 - Updated eslint-plugin-jest to 24.4.2
 - Updated eslint-plugin-node to 11.1.0
 - Updated eslint-plugin-promise to 5.1.0
