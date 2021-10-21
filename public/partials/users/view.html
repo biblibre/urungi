@@ -7,9 +7,9 @@
         <div class="col-md-9">
             <div class="page-header">
                 <span class="h3"><span translate>User</span> <small translate>User profile and permissions</small></span>
-                <div class="btn-group pull-right">
+                <div class="pull-right">
                     <button ng-click="vm.editUser()" ng-if="vm.isAdmin" class="btn btn-success" translate>Edit</button>
-                    <button ng-click="vm.deleteUser(vm.user, user)" ng-if="vm.isAdmin" class="btn btn-success" style="color: rgb(255, 0, 0);" ><i class="fa fa-trash-o"></i></button>
+                    <button ng-click="vm.deleteUser(vm.user, user)" ng-if="vm.isAdmin" class="btn btn-danger"><i class="fa fa-trash-o"></i> <span translate>Delete</span></button>
                 </div>
             </div>
             <div class="row">
