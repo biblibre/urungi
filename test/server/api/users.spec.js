@@ -18,7 +18,7 @@ afterAll(async () => {
 describe('Users API', function () {
     let Report, Dashboard, User, Role;
 
-    let adminHeaders, userHeaders;
+    let adminHeaders, userHeaders, user2Headers;
 
     beforeAll(async () => {
         Report = mongoose.model('Report');
@@ -30,6 +30,9 @@ describe('Users API', function () {
 
         await User.create({ userName: 'user', password: 'password', companyID: 'COMPID' });
         userHeaders = await helpers.login(app, 'user', 'password');
+
+        await User.create({ userName: 'johndoe', password: 'password', companyID: 'COMPID' });
+        user2Headers = await helpers.login(app, 'johndoe', 'password');
     });
 
     describe('GET /api/users', function () {
@@ -197,6 +200,48 @@ describe('Users API', function () {
                 user = await User.findOne({ userName: 'user' });
                 expect(user.firstName).toBe('update');
                 expect(user.email).toBe('user@example.com');
+            });
+        });
+    });
+    describe('DELETE /api/users/:userId', function () {
+        describe('when not authenticated', function () {
+            it('should return status 403', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).delete('/api/users/' + admin.id);
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as a normal user', function () {
+            it('should return status 403', async function () {
+                const admin = await User.findOne({ userName: 'administrator' });
+                const res = await request(app).delete('/api/users/' + admin.id)
+                    .set(userHeaders);
+
+                expect(res.status).toBe(403);
+            });
+        });
+        describe('when user would remove himself', function () {
+            it('should return status 403', async function () {
+                const user = await User.findOne({ userName: 'johndoe' });
+                const res = await request(app).delete('/api/users/' + user.id)
+                    .set(user2Headers);
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as admin', function () {
+            it('should delete user', async function () {
+                let user = await User.findOne({ userName: 'johndoe' });
+                const res = await request(app).delete('/api/users/' + user.id)
+                    .set(adminHeaders);
+
+                expect(res.status).toBe(204);
+
+                user = await User.findOne({ userName: 'johndoe' });
+                expect(user).toBe(null);
             });
         });
     });

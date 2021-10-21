@@ -30,6 +30,7 @@ router.get('/:userId/dashboards', canViewUser, getUserDashboards);
 router.get('/:userId/counts', canViewUser, getUserCounts);
 router.put('/:userId/roles/:roleId', restrictAdmin, setUserRole);
 router.delete('/:userId/roles/:roleId', restrictAdmin, unsetUserRole);
+router.delete('/:userId', restrictAdmin, deleteUser);
 
 function canViewUser (req, res, next) {
     if (req.isAuthenticated() && (req.user.isAdmin() || req.user.id === req.$user.id)) {
@@ -143,6 +144,15 @@ function unsetUserRole (req, res) {
     }, err => {
         res.status(500).json({ error: err.message });
     });
+}
+
+async function deleteUser (req, res, next) {
+    try {
+        await req.$user.remove();
+        res.sendStatus(204);
+    } catch (err) {
+        next(err);
+    }
 }
 
 module.exports = router;

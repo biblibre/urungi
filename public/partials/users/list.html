@@ -12,14 +12,25 @@
 
             <div class="list-group">
                 <div class="list-group-item" ng-repeat="user in vm.users">
-                    <a class="badge pull-right" ng-class="{'badge-success': user.status == 'active', 'badge-danger': user.status == 'Not active'}" ng-click="vm.changeUserStatus(user)">
-                        <span translate ng-if="user.status == 'active'">active</span>
-                        <span translate ng-if="user.status == 'Not active'">not active</span>
-                    </a>
+                    <div class = "pull-right">
+                        <a class="badge" ng-class="{'badge-success': user.status == 'active', 'badge-danger': user.status == 'Not active'}" ng-click="vm.changeUserStatus(user)">
+                            <span translate ng-if="user.status == 'active'">active</span>
+                            <span translate ng-if="user.status == 'Not active'">not active</span>
+                        </a>
+                    <div class="btn-group btn-group-sm">
+                        <a ng-if="vm.isAdmin" class="btn btn-silver" ng-click="vm.editUser(user)" uib-tooltip="{{ 'Edit this user' | translate }}" tooltip-placement="bottom">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <button ng-if="vm.isAdmin" class="btn btn-danger" ng-click="vm.deleteUser(user, vm.currentUser)" uib-tooltip="{{ 'Delete this user' | translate}}" tooltip-placement="bottom">
+                            <i class="fa fa-trash-o"></i>
+                        </button>
+                    </div>
+                </div>
                     <a ng-href="users/{{user._id}}">
                         <h4 class="list-group-item-heading" ng-bind="user.userName"></h4>
                         <span class="list-group-item-text" ng-bind="user.firstName"></span>  <span class="list-group-item-text" ng-bind="user.lastName"></span>
                     </a>
+                                           
                 </div>
             </div>
 

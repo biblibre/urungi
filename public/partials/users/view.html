@@ -9,13 +9,13 @@
                 <span class="h3"><span translate>User</span> <small translate>User profile and permissions</small></span>
                 <div class="pull-right">
                     <button ng-click="vm.editUser()" ng-if="vm.isAdmin" class="btn btn-success" translate>Edit</button>
+                    <button ng-click="vm.deleteUser(vm.user, user)" ng-if="vm.isAdmin" class="btn btn-danger"><i class="fa fa-trash-o"></i> <span translate>Delete</span></button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-3">
                     <h4 class="text-center">
                         {{ vm.user.userName }}
-
                         <a class="badge" ng-class="{'badge-success': vm.user.status == 'active', 'badge-danger': vm.user.status == 'Not active'}" ng-click="vm.changeUserStatus(vm.user)">
                             <span translate ng-if="vm.user.status == 'active'">active</span>
                             <span translate ng-if="vm.user.status == 'Not active'">not active</span>
