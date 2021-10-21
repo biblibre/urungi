@@ -78,7 +78,7 @@
     "gulp-less": "^5.0.0",
     "gulp-nodemon": "^2.5.0",
     "htmlhint": "^0.15.2",
-    "jest": "^27.2.1",
+    "jest": "^27.3.1",
     "mongodb-memory-server": "^7.5.1",
     "npm-run-all": "^4.1.5",
     "set-cookie-parser": "^2.4.8",

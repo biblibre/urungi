@@ -77,7 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated gulp-less to 5.0.0
 - Updated htmlhint to 0.15.2
 - Updated intro.js to 4.2.2
-- Updated jest to 27.2.1
+- Updated jest to 27.3.1
 - Updated jquery to 3.6.0
 - Updated jquery-validation to 1.19.3
 - Updated jsplumb to 2.15.6
