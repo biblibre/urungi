@@ -51,6 +51,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error handler sent by server to be displayed on the client-side
 - Fixed format support on line graph and similar
 - Using '?' in a custom field does not cause errors anymore (#22)
+- Grants permissions are really effective in the shared space
+- Dynamic filters on dashboards can now be styled
+- No longer necessary to enter password when editing an existing user 
 
 ### Dependencies
 
