@@ -78,9 +78,8 @@ msgid "Add all"
 msgstr "Agregar todo"
 
 #: public/partials/layers/layer-add-all-modal.html:3
-#, fuzzy
 msgid "Add all collection elements to the layer"
-msgstr "¿Agregar todos los elementos de esta colección a la capa?"
+msgstr "Agregar todos los elementos de esta colección a la capa"
 
 #: public/partials/layers/layer-element-modal.html:3
 msgid "Add element to schema"
@@ -751,9 +750,8 @@ msgid "Delete this report"
 msgstr "Eliminar este informe"
 
 #: public/partials/users/list.html:24
-#, fuzzy
 msgid "Delete this user"
-msgstr "Eliminar esta capa"
+msgstr "Eliminar este usuario"
 
 #: public/js/dashboards/dashboards-list-buttons.component.js:32
 #: public/js/layers/layers-list-buttons.component.js:25
@@ -925,9 +923,8 @@ msgid "Edit this report"
 msgstr "Editar este reporte"
 
 #: public/partials/users/list.html:21
-#, fuzzy
 msgid "Edit this user"
-msgstr "Editar esta capa"
+msgstr "Editar este usuario"
 
 #: public/partials/layer/objectProperties.html:6
 msgid "Element"
@@ -1157,27 +1154,23 @@ msgid "Guided tour"
 msgstr "Visita guiada"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:27
-#, fuzzy
 msgid ""
 "HTML template for the print footer. The default is to show the\n"
 "                page number and the total number of pages on the right."
 msgstr ""
-"Plantilla HTML para el pie de página de impresión. El valor predeterminado "
-"es mostrar el\r\n"
-"                número de página y el número total de páginas a la derecha."
+"Plantilla HTML para el pie de página de impresión. Por defecto se muestra\r\n"
+"                el número de página y el número total de páginas a la "
+"derecha."
 
 #: public/partials/core/pdf-export-settings-modal.component.html:20
-#, fuzzy
 msgid ""
 "HTML template for the print header. The default is to show the\n"
 "                date on the right."
 msgstr ""
-"Plantilla HTML para el encabezado de impresión. El valor predeterminado es "
-"mostrar el\r\n"
-"                fecha a la derecha."
+"Plantilla HTML para el encabezado de impresión. Por defecto\r\n"
+"                se muestra la fecha a la derecha."
 
 #: public/partials/core/pdf-export-settings-modal.component.html:33
-#, fuzzy
 msgid ""
 "Header and footer templates should be valid HTML markup\n"
 "                    with following classes used to inject printing values "
@@ -1187,8 +1180,8 @@ msgstr ""
 "Las plantillas de encabezado y pie de página deben ser marcas HTML válidas"
 "\r\n"
 "                    con las siguientes clases utilizadas para inyectar "
-"valores de impresión en\r\n"
-"                    ellos:"
+"valores de impresión\r\n"
+"                    en ellos:"
 
 #: public/partials/core/pdf-export-settings-modal.component.html:18
 msgid "Header template"
@@ -1724,7 +1717,6 @@ msgstr ""
 "diferentes capas en la misma consulta"
 
 #: public/partials/report/partials/filter.html:12
-#, fuzzy
 msgid ""
 "Only show the first\n"
 "            <input type=\"number\" ng-model=\"selectedReport.properties."
@@ -1858,9 +1850,8 @@ msgstr "Eliminar este elemento de esta dimensión"
 
 #: public/js/users/users-list.controller.js:105
 #: public/js/users/users-view.controller.js:145
-#, fuzzy
 msgid "Remove user {{name}} ?"
-msgstr "¿Eliminar el rol {{nombre}}?"
+msgstr "¿Eliminar el usario {{name}}?"
 
 #: public/js/report/directives/reportView.js:49
 msgid "Repainting report ..."
@@ -2621,9 +2612,8 @@ msgstr "Se requiere apodo del usuario"
 
 #: public/js/users/users-list.controller.js:114
 #: public/js/users/users-view.controller.js:155
-#, fuzzy
 msgid "User deleted successfully"
-msgstr "Capa creada con éxito:"
+msgstr "Usuario creado con éxito"
 
 #: public/partials/data-sources/edit.html:45 views/login.ejs:58
 msgid "User name"
