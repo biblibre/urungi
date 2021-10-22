@@ -76,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated eslint-plugin-import to 2.25.2
 - Updated eslint-plugin-jest to 24.7.0
 - Updated eslint-plugin-node to 11.1.0
-- Updated eslint-plugin-promise to 5.1.0
+- Updated eslint-plugin-promise to 5.1.1
 - Updated express-session to 1.17.2
 - Updated gulp-less to 5.0.0
 - Updated htmlhint to 0.15.2
