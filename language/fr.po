@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: public/js/widgets/htmlWidgets.js:12 public/js/widgets/htmlWidgets.js:17
@@ -81,9 +81,8 @@ msgid "Add all"
 msgstr "Ajouter tout"
 
 #: public/partials/layers/layer-add-all-modal.html:3
-#, fuzzy
 msgid "Add all collection elements to the layer"
-msgstr "Ajouter tous les éléments de cette collection au calque ?"
+msgstr "Ajouter tous les éléments de cette collection au calque"
 
 #: public/partials/layers/layer-element-modal.html:3
 msgid "Add element to schema"
@@ -526,9 +525,8 @@ msgid "Confirm"
 msgstr "Confirmer"
 
 #: public/partials/data-sources/edit.html:15
-#, fuzzy
 msgid "Connection type"
-msgstr "Connexion de type II"
+msgstr "Type de connexion"
 
 #: public/js/spaces/controller.js:105
 msgid "Continue tour"
@@ -682,9 +680,8 @@ msgid "Dataset"
 msgstr "Jeu de données"
 
 #: public/js/data-sources/data-sources-edit.controller.js:38
-#, fuzzy
 msgid "Datasource created successfully"
-msgstr "Tableau de bord créé avec succès"
+msgstr "Source de données créée avec succès"
 
 #: public/partials/io/import.html:35
 msgid "Datasource matching {{ds.doc.name}}"
@@ -695,9 +692,8 @@ msgid "Datasource must be the same for all entities"
 msgstr "La source de données doit être la même pour toutes les entités"
 
 #: public/js/data-sources/data-sources-edit.controller.js:43
-#, fuzzy
 msgid "Datasource updated successfully"
-msgstr "Tableau de bord mis à jour avec succès:"
+msgstr "Source de données mise à jour avec succès"
 
 #: public/partials/report/modals/filter-prompt-modal.html:48
 msgid "Deactivate Filter"
@@ -752,9 +748,8 @@ msgid "Delete this report"
 msgstr "Supprimer ce rapport"
 
 #: public/partials/users/list.html:24
-#, fuzzy
 msgid "Delete this user"
-msgstr "Supprimer ce calque"
+msgstr "Supprimer cet utilisateur"
 
 #: public/js/dashboards/dashboards-list-buttons.component.js:32
 #: public/js/layers/layers-list-buttons.component.js:25
@@ -902,9 +897,8 @@ msgid "Edit User"
 msgstr "Modifier l'utilisateur"
 
 #: public/partials/data-sources/edit.html:9
-#, fuzzy
 msgid "Edit datasource"
-msgstr "Nouvelle source de données"
+msgstr "Modifier la source de données"
 
 #: public/js/spaces/controller.js:64
 msgid "Edit folder"
@@ -927,9 +921,8 @@ msgid "Edit this report"
 msgstr "Modifier ce rapport"
 
 #: public/partials/users/list.html:21
-#, fuzzy
 msgid "Edit this user"
-msgstr "Modifier ce calque"
+msgstr "Modifier cet utilisateur"
 
 #: public/partials/layer/objectProperties.html:6
 msgid "Element"
@@ -941,7 +934,7 @@ msgstr "Éléments"
 
 #: public/partials/layers/layer-element-modal.html:33
 msgid "Elements used in the expression:"
-msgstr "Éléments utilisés dans l'expression"
+msgstr "Éléments utilisés dans l'expression:"
 
 #: public/js/dashboards/dashboard-edit.controller.js:91
 msgid "Error : failed to import report"
@@ -1852,9 +1845,8 @@ msgstr "Retirer cet élément de cette dimension"
 
 #: public/js/users/users-list.controller.js:105
 #: public/js/users/users-view.controller.js:145
-#, fuzzy
 msgid "Remove user {{name}} ?"
-msgstr "Supprimer le role {{name}} ?"
+msgstr "Supprimer l'utilisateur {{name}} ?"
 
 #: public/js/report/directives/reportView.js:49
 msgid "Repainting report ..."
@@ -2611,9 +2603,8 @@ msgstr "Le surnom est nécéssaire"
 
 #: public/js/users/users-list.controller.js:114
 #: public/js/users/users-view.controller.js:155
-#, fuzzy
 msgid "User deleted successfully"
-msgstr "Calque créé avec succès:"
+msgstr "Utilisateur supprimé avec succès"
 
 #: public/partials/data-sources/edit.html:45 views/login.ejs:58
 msgid "User name"
