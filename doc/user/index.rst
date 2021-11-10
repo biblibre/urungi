@@ -30,3 +30,10 @@ Supported databases
    configuration
    start-the-server
    upgrade
+
+.. toctree::
+   :caption: Reports
+   :maxdepth: 2
+   :hidden:
+
+   report-types
