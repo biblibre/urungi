@@ -30,10 +30,18 @@
                             <li ng-repeat="option in vm.getElementFilterOptions()"><a ng-click="vm.setFilterType(option)">{{ vm.getFilterTypeLabel(option) }}</a></li>
                         </ul>
                     </span>
-
+                    
                     <!-- criterion -->
-
+                    
                     <span ng-include="vm.criteriaInput"></span>
+                    <div class="input-group input-group-sm">
+                        <input id="prefillLimit" type="number" class="form-control" placeholder="{{vm.prefillLimit}}" ng-model="vm.prefillLimit">
+                        <span class="input-group-btn" >
+                            <button type="button" class="btn btn-outline-info" uib-tooltip="{{ 'Set number of pre-fill entries' | translate }}" tooltip-placement="bottom">
+                                <i class="info">{{ 'Nb pre-fill entries' | translate }}</i>
+                            </button>
+                        </span>
+                    </div>
                 </form>
             </span>
         </div>

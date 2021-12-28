@@ -1058,11 +1058,11 @@ msgstr "Prénom"
 msgid "First Name is required"
 msgstr "Le prénom est nécéssaire"
 
-#: public/js/reports/filter-prompt.component.js:199
+#: public/js/reports/filter-prompt.component.js:200
 msgid "First quarter"
 msgstr "Premier trimestre"
 
-#: public/js/reports/filter-prompt.component.js:203
+#: public/js/reports/filter-prompt.component.js:204
 msgid "First semester"
 msgstr "Premier semestre"
 
@@ -1105,7 +1105,7 @@ msgstr "Format"
 msgid "Format examples"
 msgstr "Exemples de format"
 
-#: public/js/reports/filter-prompt.component.js:202
+#: public/js/reports/filter-prompt.component.js:203
 msgid "Fourth quarter"
 msgstr "Quatrième trimestre"
 
@@ -1356,39 +1356,39 @@ msgstr "Nom de famille"
 msgid "Last Name is required"
 msgstr "Le nom de famille est nécéssaire"
 
-#: public/js/reports/filter-prompt.component.js:207
+#: public/js/reports/filter-prompt.component.js:208
 msgid "Last month"
 msgstr "Mois dernier"
 
-#: public/js/reports/filter-prompt.component.js:206
+#: public/js/reports/filter-prompt.component.js:207
 msgid "Last week"
 msgstr "Semaine dernière"
 
-#: public/js/reports/filter-prompt.component.js:208
+#: public/js/reports/filter-prompt.component.js:209
 msgid "Last year"
 msgstr "Année dernière"
 
-#: public/js/reports/filter-prompt.component.js:209
+#: public/js/reports/filter-prompt.component.js:210
 msgid "Last year first quarter"
 msgstr "Premier trimestre de l'année dernière"
 
-#: public/js/reports/filter-prompt.component.js:213
+#: public/js/reports/filter-prompt.component.js:214
 msgid "Last year first semester"
 msgstr "Premier semestre de l'année dernière"
 
-#: public/js/reports/filter-prompt.component.js:212
+#: public/js/reports/filter-prompt.component.js:213
 msgid "Last year fourth quarter"
 msgstr "Quatrième trimestre de l'année dernière"
 
-#: public/js/reports/filter-prompt.component.js:210
+#: public/js/reports/filter-prompt.component.js:211
 msgid "Last year second quarter"
 msgstr "Deuxième trimestre de l'année dernière"
 
-#: public/js/reports/filter-prompt.component.js:214
+#: public/js/reports/filter-prompt.component.js:215
 msgid "Last year second semester"
 msgstr "Deuxième semestre de l'année dernière"
 
-#: public/js/reports/filter-prompt.component.js:211
+#: public/js/reports/filter-prompt.component.js:212
 msgid "Last year third quarter"
 msgstr "Troisième trimestre de l'année dernière"
 
@@ -1514,7 +1514,7 @@ msgstr ""
 msgid "Log In"
 msgstr "Se connecter"
 
-#: public/js/reports/filter-prompt.component.js:155
+#: public/js/reports/filter-prompt.component.js:156
 msgid "Make this filter appear in the report interface."
 msgstr "Faire apparaître ce filtre dans l'interface du rapport."
 
@@ -1575,6 +1575,11 @@ msgstr "Nom"
 #: public/partials/layers/layers-new-modal.html:13
 msgid "Name is required"
 msgstr "Le nom est requis"
+
+#: public/partials/reports/criteria-input.html:104
+#: public/partials/reports/filter-prompt.html:41
+msgid "pre-fill entries"
+msgstr "entrées pré-remplies"
 
 #: public/js/dashboards/dashboard-edit.controller.js:123
 #: public/js/dashboards/dashboards-list.controller.js:98
@@ -2032,11 +2037,11 @@ msgstr "Nuage de points"
 msgid "Search path"
 msgstr "Chemin de recherche"
 
-#: public/js/reports/filter-prompt.component.js:200
+#: public/js/reports/filter-prompt.component.js:201
 msgid "Second quarter"
 msgstr "Deuxième trimestre"
 
-#: public/js/reports/filter-prompt.component.js:204
+#: public/js/reports/filter-prompt.component.js:205
 msgid "Second semester"
 msgstr "Deuxième semestre"
 
@@ -2115,7 +2120,7 @@ msgstr ""
 msgid "Select the dashboard to push this report to"
 msgstr "Choisir un tableau de bord auquel ajouter ce rapport"
 
-#: public/js/reports/filter-prompt.component.js:153
+#: public/js/reports/filter-prompt.component.js:154
 msgid "Select to deactivate the runtime"
 msgstr "Sélectionnez pour désactiver le filtre à l'exécution"
 
@@ -2136,6 +2141,11 @@ msgstr ""
 #: public/partials/data-sources/edit.html:46
 msgid "Set here the username to access the database"
 msgstr "Saisissez ici le nom d'utilisateur pour accéder à la base de données"
+
+#: public/partials/reports/criteria-input.html:103
+#: public/partials/reports/filter-prompt.html:40
+msgid "Set number of pre-fill entries"
+msgstr "Régler le nombre d'entrées pré-remplies"
 
 #: public/partials/reports/report-column-settings-modal.component.html:3
 msgid "Settings for '{{ vm.column.elementLabel }}'"
@@ -2391,7 +2401,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Thème"
 
-#: public/js/reports/filter-prompt.component.js:201
+#: public/js/reports/filter-prompt.component.js:202
 msgid "Third quarter"
 msgstr "Troisième trimestre"
 
@@ -2463,11 +2473,11 @@ msgstr ""
 msgid "This link is only available for urungi administrators."
 msgstr "Ce lien est disponible uniquement pour les administrateurs d'Urungi."
 
-#: public/js/reports/filter-prompt.component.js:197
+#: public/js/reports/filter-prompt.component.js:198
 msgid "This month"
 msgstr "Ce mois"
 
-#: public/js/reports/filter-prompt.component.js:196
+#: public/js/reports/filter-prompt.component.js:197
 msgid "This week"
 msgstr "Cette semaine"
 
@@ -2475,7 +2485,7 @@ msgstr "Cette semaine"
 msgid "This will remove all child nodes as well."
 msgstr "Cela va également supprimer tous les nœuds enfants."
 
-#: public/js/reports/filter-prompt.component.js:198
+#: public/js/reports/filter-prompt.component.js:199
 msgid "This year"
 msgstr "Cette année"
 
@@ -2491,7 +2501,7 @@ msgstr "En minuscules"
 msgid "To Upper"
 msgstr "En majuscules"
 
-#: public/js/reports/filter-prompt.component.js:195
+#: public/js/reports/filter-prompt.component.js:196
 msgid "Today"
 msgstr "Aujourd'hui"
 
@@ -2655,7 +2665,7 @@ msgstr "Qu'est ce qu'Urungi"
 msgid "Yes"
 msgstr "Oui"
 
-#: public/js/reports/filter-prompt.component.js:205
+#: public/js/reports/filter-prompt.component.js:206
 msgid "Yesterday"
 msgstr "Hier"
 
@@ -2839,7 +2849,7 @@ msgstr "bas"
 msgid "color"
 msgstr "couleur"
 
-#: public/js/reports/filter-prompt.component.js:177
+#: public/js/reports/filter-prompt.component.js:178
 msgid "contains"
 msgstr "contient"
 
@@ -2863,15 +2873,15 @@ msgstr "emplacement du document"
 msgid "document title"
 msgstr "titre du document"
 
-#: public/js/reports/filter-prompt.component.js:178
+#: public/js/reports/filter-prompt.component.js:179
 msgid "does not contain"
 msgstr "ne contient pas"
 
-#: public/js/reports/filter-prompt.component.js:182
+#: public/js/reports/filter-prompt.component.js:183
 msgid "does not end with"
 msgstr "ne termine pas par"
 
-#: public/js/reports/filter-prompt.component.js:180
+#: public/js/reports/filter-prompt.component.js:181
 msgid "does not start with"
 msgstr "ne commence pas par"
 
@@ -2899,7 +2909,7 @@ msgstr "email"
 msgid "email is required"
 msgstr "l'email est obligatoire"
 
-#: public/js/reports/filter-prompt.component.js:181
+#: public/js/reports/filter-prompt.component.js:182
 msgid "ends with"
 msgstr "termine par"
 
@@ -2968,83 +2978,83 @@ msgstr "stage pendant l'été 2018"
 msgid "invalid report"
 msgstr "rapport invalide"
 
-#: public/js/reports/filter-prompt.component.js:175
+#: public/js/reports/filter-prompt.component.js:176
 msgid "is between"
 msgstr "est entre"
 
-#: public/js/reports/filter-prompt.component.js:169
+#: public/js/reports/filter-prompt.component.js:170
 msgid "is bigger or equal than"
 msgstr "est supérieur ou égal à"
 
-#: public/js/reports/filter-prompt.component.js:170
+#: public/js/reports/filter-prompt.component.js:171
 msgid "is bigger or equal than (pattern)"
 msgstr "est supérieur ou égal à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:167
+#: public/js/reports/filter-prompt.component.js:168
 msgid "is bigger than"
 msgstr "est supérieur à"
 
-#: public/js/reports/filter-prompt.component.js:168
+#: public/js/reports/filter-prompt.component.js:169
 msgid "is bigger than (pattern)"
 msgstr "est supérieur à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:163
+#: public/js/reports/filter-prompt.component.js:164
 msgid "is different than"
 msgstr "est différent de"
 
-#: public/js/reports/filter-prompt.component.js:164
+#: public/js/reports/filter-prompt.component.js:165
 msgid "is different than (pattern)"
 msgstr "est différent de (motif)"
 
-#: public/js/reports/filter-prompt.component.js:161
+#: public/js/reports/filter-prompt.component.js:162
 msgid "is equal to"
 msgstr "est égal à"
 
-#: public/js/reports/filter-prompt.component.js:162
+#: public/js/reports/filter-prompt.component.js:163
 msgid "is equal to (pattern)"
 msgstr "est égal à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:165
+#: public/js/reports/filter-prompt.component.js:166
 msgid "is in"
 msgstr "est dans"
 
-#: public/js/reports/filter-prompt.component.js:173
+#: public/js/reports/filter-prompt.component.js:174
 msgid "is less or equal than"
 msgstr "est inférieur ou égal à"
 
-#: public/js/reports/filter-prompt.component.js:174
+#: public/js/reports/filter-prompt.component.js:175
 msgid "is less or equal than (pattern)"
 msgstr "est inférieur ou égal à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:171
+#: public/js/reports/filter-prompt.component.js:172
 msgid "is less than"
 msgstr "est inférieur à"
 
-#: public/js/reports/filter-prompt.component.js:172
+#: public/js/reports/filter-prompt.component.js:173
 msgid "is less than (pattern)"
 msgstr "est inférieur à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:183
+#: public/js/reports/filter-prompt.component.js:184
 msgid "is like"
 msgstr "est semblable à"
 
-#: public/js/reports/filter-prompt.component.js:176
+#: public/js/reports/filter-prompt.component.js:177
 msgid "is not between"
 msgstr "n'est pas entre"
 
-#: public/js/reports/filter-prompt.component.js:166
+#: public/js/reports/filter-prompt.component.js:167
 msgid "is not in"
 msgstr "n'est pas dans"
 
-#: public/js/reports/filter-prompt.component.js:184
+#: public/js/reports/filter-prompt.component.js:185
 msgid "is not like"
 msgstr "n'est pas semblable à"
 
-#: public/js/reports/filter-prompt.component.js:186
+#: public/js/reports/filter-prompt.component.js:187
 msgid "is not null"
 msgstr "n'est pas NULL"
 
-#: public/js/reports/filter-prompt.component.js:185
+#: public/js/reports/filter-prompt.component.js:186
 msgid "is null"
 msgstr "est NULL"
 
@@ -3178,7 +3188,7 @@ msgstr "solide"
 msgid "source"
 msgstr "source"
 
-#: public/js/reports/filter-prompt.component.js:179
+#: public/js/reports/filter-prompt.component.js:180
 msgid "starts with"
 msgstr "commence par"
 

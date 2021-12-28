@@ -39,6 +39,7 @@
         vm.setDatePatternFilterType = setDatePatternFilterType;
         vm.setFilterType = setFilterType;
         vm.values = [];
+        vm.prefillLimit = 15;
 
         function $onInit () {
             vm.criterion = vm.filter.criterion;
@@ -82,7 +83,7 @@
         function getFilterValues (term) {
             const options = {
                 contains: term,
-                limit: 15,
+                limit: (vm.prefillLimit + 1),
             };
 
             return api.getReportFilterValues(vm.filter, options).then(function (result) {
