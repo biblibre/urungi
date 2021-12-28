@@ -60,9 +60,9 @@
         <!--equal, in, etc ...-->
         <span ng-if="vm.filter.elementType !== 'date'">
             <span ng-if="!(vm.filter.filterType == 'null' || vm.filter.filterType == 'notNull' || vm.filter.filterType == 'empty' || vm.filter.filterType == 'notEmpty') && ( vm.filter.elementType != 'array') && ( vm.filter.elementType != 'date') && (vm.filter.filterType != 'notIn') && (vm.filter.filterType != 'in')">
-                <div class="input-group input-group-sm">
+                <div class="input-group input-group-sm scrollable-dropdown-menu">
                     <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control" ng-model="vm.criterion.text1" ng-required="vm.filter.promptMandatory == true" uib-typeahead="value for value in vm.getFilterValues($viewValue)" typeahead-focus-first="false" typeahead-min-length="0">
-                    <span class="input-group-btn" >
+                    <span class="input-group-btn">
                         <button type="button" ng-if="!( vm.isPrompt && vm.filter.promptMandatory )" class="btn btn-default" ng-click="vm.clearFilter(vm.filter)" uib-tooltip="{{ 'Click here to clear the selected value' | translate }}" tooltip-placement="bottom">
                             <i class="fa fa-times"></i>
                         </button>

@@ -1478,6 +1478,11 @@ img.img-cirlce {
     border-radius: 6px 0 6px 6px;
 }
 
+.scrollable-dropdown-menu > .dropdown-menu {
+    max-height: 20rem;
+    overflow-y: auto;
+}
+
 .repeater-data-column {
     height: 20px;
     overflow: hidden;

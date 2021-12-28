@@ -42,6 +42,13 @@
 
         function $onInit () {
             vm.criterion = vm.filter.criterion;
+            if (!vm.filter.suggestions) {
+                vm.filter.suggestions = {
+                    show: true,
+                    limit: 15,
+                    unlimited: false
+                };
+            }
         }
 
         function removeFilter () {
@@ -82,15 +89,20 @@
         function getFilterValues (term) {
             const options = {
                 contains: term,
-                limit: 15,
             };
 
-            return api.getReportFilterValues(vm.filter, options).then(function (result) {
-                const values = result.data.map(row => row.f).filter(f => f !== null && f !== undefined && f.trim() !== '');
-                vm.values = values;
+            if (vm.filter.suggestions.show) {
+                const limit = parseInt(vm.filter.suggestions.limit, 10) || 15;
+                if (!vm.filter.suggestions.unlimited && limit > 0) {
+                    options.limit = limit;
+                }
 
-                return values;
-            });
+                return api.getReportFilterValues(vm.filter, options).then(function (result) {
+                    const values = result.data.map(row => row.f).filter(f => f !== null && f !== undefined && f.trim() !== '');
+                    vm.values = values;
+                    return values;
+                });
+            }
         }
 
         function selectFirstValue (selectedValue) {

@@ -20,7 +20,7 @@ msgstr ""
 msgid "A header text H3"
 msgstr "Un en-tête H3"
 
-#: public/js/report/controller.js:726
+#: public/js/report/controller.js:731
 msgid "A query must hold at least one element here to be executed"
 msgstr "Une requête doit contenir au moins un élément pour être exécutée"
 
@@ -32,7 +32,7 @@ msgstr "ET"
 msgid "About"
 msgstr "À propos"
 
-#: public/js/report/controller.js:678
+#: public/js/report/controller.js:683
 msgid ""
 "Access here the different data elements of every layer that you have access "
 "on"
@@ -60,7 +60,7 @@ msgstr ""
 "Accédez aux utilisateurs pour créer des nouveaux utilisateurs Urungi et les "
 "gérer"
 
-#: public/partials/report/modals/filter-prompt-modal.html:49
+#: public/partials/report/modals/filter-prompt-modal.html:79
 msgid "Activate Filter"
 msgstr "Activer le filtre"
 
@@ -116,7 +116,7 @@ msgstr "Ajouter au calque"
 msgid "Add to layer elements"
 msgstr "Ajouter aux éléments du calque"
 
-#: public/js/report/controller.js:716
+#: public/js/report/controller.js:721
 msgid "After building your query, refresh to view the report."
 msgstr ""
 "Après avoir construit votre requête, actualisez pour voir votre rapport."
@@ -187,7 +187,7 @@ msgstr "Valeurs du tableau"
 msgid "As XLSX"
 msgstr "En XLSX"
 
-#: public/js/report/controller.js:706
+#: public/js/report/controller.js:711
 msgid ""
 "As you define the query dragging and dropping in the areas above, the "
 "results of the query will appear here"
@@ -242,7 +242,7 @@ msgstr "Moyenne"
 #: public/js/data-sources/data-sources-list.controller.js:31
 #: public/js/home/controller.js:13
 #: public/js/layers/layers-list.controller.js:101
-#: public/js/report/controller.js:667
+#: public/js/report/controller.js:672
 #: public/js/reports/reports-list.controller.js:31
 #: public/js/spaces/controller.js:12
 msgid "Back"
@@ -294,6 +294,11 @@ msgstr "Annuler"
 #: public/js/layer/controller.js:215
 msgid "Cannot modify sql of an object which is not an sql request"
 msgstr "Impossible de modifier le SQL d'un objet qui n'est pas une requête SQL"
+
+#: public/partials/report/modals/filter-prompt-modal.html:60
+msgid ""
+"Check if you want all suggestions on filter (too much data can crash the app)"
+msgstr "Cocher si vous souhaitez toutes les suggestions (trop de données peut faire stopper l'application)"
 
 #: public/partials/io/import.html:17
 msgid "Checking file"
@@ -501,7 +506,7 @@ msgstr "Cliquez sur le nom du tableau de bord pour le lancer."
 msgid "Click over a report's name to execute it."
 msgstr "Cliquez sur le nom du rapport pour l'exécuter."
 
-#: public/js/report/controller.js:698
+#: public/js/report/controller.js:703
 msgid ""
 "Click over one of the different report types to change the visualization of "
 "the data you choose"
@@ -509,12 +514,12 @@ msgstr ""
 "Cliquez sur les différents types de rapport pour modifier la visualisation "
 "des données que vous choisissez"
 
-#: public/partials/report/modals/filter-prompt-modal.html:47
+#: public/partials/report/modals/filter-prompt-modal.html:77
 #: public/partials/users/users-edit-modal.html:92
 msgid "Close"
 msgstr "Fermer"
 
-#: public/js/report/controller.js:722
+#: public/js/report/controller.js:727
 msgid "Columns / results drop zone"
 msgstr "Colonnes / zone de dépôt des résultats"
 
@@ -695,7 +700,7 @@ msgstr "La source de données doit être la même pour toutes les entités"
 msgid "Datasource updated successfully"
 msgstr "Source de données mise à jour avec succès"
 
-#: public/partials/report/modals/filter-prompt-modal.html:48
+#: public/partials/report/modals/filter-prompt-modal.html:78
 msgid "Deactivate Filter"
 msgstr "Désactiver le filtre"
 
@@ -787,7 +792,7 @@ msgstr "Ne pas montrer ce bloc à nouveau"
 #: public/js/data-sources/data-sources-list.controller.js:33
 #: public/js/home/controller.js:15
 #: public/js/layers/layers-list.controller.js:103
-#: public/js/report/controller.js:669
+#: public/js/report/controller.js:674
 #: public/js/reports/reports-list.controller.js:33
 #: public/js/spaces/controller.js:14
 msgid "Done"
@@ -812,7 +817,7 @@ msgstr ""
 msgid "Drop here the dimension field"
 msgstr "Glissez ici la dimension"
 
-#: public/js/report/controller.js:744
+#: public/js/report/controller.js:749
 msgid ""
 "Drop here the elements that you want to use to filter the results of the "
 "query"
@@ -820,14 +825,14 @@ msgstr ""
 "Déposez ici les éléments que vous voulez utiliser pour filtrer les résultats "
 "de la requête"
 
-#: public/js/report/controller.js:734
+#: public/js/report/controller.js:739
 msgid ""
 "Drop here the elements that you want to use to order the results of the query"
 msgstr ""
 "Déposez ici les éléments que vous voulez utiliser pour ordonner les "
 "résultats de la requête"
 
-#: public/js/report/controller.js:724
+#: public/js/report/controller.js:729
 msgid "Drop here the elements you want to have in the results of the query"
 msgstr ""
 "Déposez ici les éléments que vous voulez avoir dans les résultats de la "
@@ -1038,11 +1043,11 @@ msgstr ""
 msgid "Filter"
 msgstr "Filtrer"
 
-#: public/partials/report/modals/filter-prompt-modal.html:38
+#: public/partials/report/modals/filter-prompt-modal.html:68
 msgid "Filter Instructions"
 msgstr "Instructions du filtre"
 
-#: public/js/report/controller.js:742
+#: public/js/report/controller.js:747
 msgid "Filters drop zone"
 msgstr "Zone de dépôt des filtres"
 
@@ -1514,7 +1519,7 @@ msgstr ""
 msgid "Log In"
 msgstr "Se connecter"
 
-#: public/js/reports/filter-prompt.component.js:155
+#: public/js/reports/filter-prompt.component.js:157
 msgid "Make this filter appear in the report interface."
 msgstr "Faire apparaître ce filtre dans l'interface du rapport."
 
@@ -1628,7 +1633,7 @@ msgstr "Nouveau calque"
 #: public/js/data-sources/data-sources-list.controller.js:30
 #: public/js/home/controller.js:12
 #: public/js/layers/layers-list.controller.js:100
-#: public/js/report/controller.js:666
+#: public/js/report/controller.js:671
 #: public/js/reports/reports-list.controller.js:30
 #: public/js/spaces/controller.js:11 public/partials/core/pager.html:13
 #: public/partials/layers/layer-element-modal.html:172
@@ -1668,6 +1673,10 @@ msgstr "Pas de selectedLayerID"
 msgid "Number"
 msgstr "Nombre"
 
+#: public/partials/report/modals/filter-prompt-modal.html:50
+msgid "Number of suggestions"
+msgstr "Nombre de suggestions"
+
 #: public/partials/io/import.html:101 public/partials/io/import.html:135
 #: public/partials/io/import.html:67
 msgid "OK"
@@ -1705,7 +1714,7 @@ msgstr ""
 "L'un des éléments personnalisé utilise des éléments provenant de tables qui "
 "ne sont pas jointes. Cet élément personnalisé ne peut pas être récupéré"
 
-#: public/js/report/controller.js:690
+#: public/js/report/controller.js:695
 msgid ""
 "One query can only be based on one layer, you can not mix elements from "
 "different layers in the same query"
@@ -1723,7 +1732,7 @@ msgstr ""
 "Afficher seulement les <input type=\"number\" ng-model=\"selectedReport."
 "properties.recordLimit\" size=\"8\"> premiers éléments"
 
-#: public/js/report/controller.js:732
+#: public/js/report/controller.js:737
 msgid "Order By drop zone"
 msgstr "Zone de dépôt des tris"
 
@@ -1793,7 +1802,7 @@ msgstr "Mettre dans l'espace partagé"
 msgid "Queries"
 msgstr "Requêtes"
 
-#: public/js/report/controller.js:712
+#: public/js/report/controller.js:717
 msgid "Query refresh"
 msgstr "Actualisation de la requête"
 
@@ -1860,7 +1869,7 @@ msgstr "Répéter le mot de passe"
 msgid "Report Name"
 msgstr "Nom du rapport"
 
-#: public/js/report/controller.js:696
+#: public/js/report/controller.js:701
 msgid "Report Type selector"
 msgstr "Sélecteur de type de rapport"
 
@@ -1927,7 +1936,7 @@ msgstr "Réinitialiser le mot de passe"
 msgid "Result"
 msgstr "Résultats"
 
-#: public/js/report/controller.js:704
+#: public/js/report/controller.js:709
 msgid "Results area"
 msgstr "Zone de résultats"
 
@@ -2084,7 +2093,7 @@ msgstr "Sélectionnez un type de source de données..."
 msgid "Select an image"
 msgstr "Sélectionnez une image"
 
-#: public/js/report/controller.js:680
+#: public/js/report/controller.js:685
 msgid ""
 "Select elements and drag and drop them over the query design zone, depending "
 "if the element is going to be used as a column result (columns area), as a "
@@ -2100,9 +2109,14 @@ msgstr ""
 msgid "Select file..."
 msgstr "Sélectionnez un fichier..."
 
-#: public/js/report/controller.js:688
+#: public/js/report/controller.js:693
 msgid "Select here the layer where your query will be based on."
 msgstr "Sélectionnez ici le calque sur lequel votre requête va s'appuyer."
+
+#: public/partials/report/modals/filter-prompt-modal.html:40
+msgid "Select if you want suggest values on filter"
+msgstr ""
+"Sélectionnez si vous souhaitez afficher les valeurs possibles du filtre"
 
 #: public/partials/report/modals/filter-prompt-modal.html:20
 msgid ""
@@ -2115,7 +2129,7 @@ msgstr ""
 msgid "Select the dashboard to push this report to"
 msgstr "Choisir un tableau de bord auquel ajouter ce rapport"
 
-#: public/js/reports/filter-prompt.component.js:153
+#: public/js/reports/filter-prompt.component.js:155
 msgid "Select to deactivate the runtime"
 msgstr "Sélectionnez pour désactiver le filtre à l'exécution"
 
@@ -2182,6 +2196,10 @@ msgstr "Permissions de l'espace partagé"
 msgid "Shared space structure area"
 msgstr "Zone de la structure de l'espace partagé"
 
+#: public/partials/report/modals/filter-prompt-modal.html:44
+msgid "Show suggestions"
+msgstr "Montrer suggestions"
+
 #: public/js/home/controller.js:76
 msgid "Single query dashboards"
 msgstr "Tableaux de bords à une seule requête"
@@ -2194,7 +2212,7 @@ msgstr "Rapports avec une seule requête"
 #: public/js/data-sources/data-sources-list.controller.js:32
 #: public/js/home/controller.js:14
 #: public/js/layers/layers-list.controller.js:102
-#: public/js/report/controller.js:668
+#: public/js/report/controller.js:673
 #: public/js/reports/reports-list.controller.js:32
 #: public/js/spaces/controller.js:13
 msgid "Skip"
@@ -2256,6 +2274,10 @@ msgstr "Chaîne"
 msgid "Successful database connection."
 msgstr "Connexion à la base de données réussie."
 
+#: public/partials/report/modals/filter-prompt-modal.html:39
+msgid "Suggestions"
+msgstr "Suggestions"
+
 #: public/js/reports/reports.service.js:11
 msgid "Sum"
 msgstr "Somme"
@@ -2280,7 +2302,7 @@ msgstr "Merci d'utiliser Urungi"
 msgid "The dashboard name is required"
 msgstr "Le nom de tableau de bord est nécéssaire"
 
-#: public/js/report/controller.js:746
+#: public/js/report/controller.js:751
 msgid ""
 "The elements you drop in here do not necessarily have to be in the columns/"
 "results area, a query can be filtered by elements that do not appear in the "
@@ -2290,7 +2312,7 @@ msgstr ""
 "zone des colonnes, une requête peut être filtrée par des éléments qui "
 "n'apparaissent pas dans les résultats"
 
-#: public/js/report/controller.js:736
+#: public/js/report/controller.js:741
 msgid ""
 "The elements you drop in here do not necessarily have to be in the columns/"
 "results area, a query can be ordered by elements that do not appear in the "
@@ -2319,11 +2341,11 @@ msgstr "Les colonnes suivantes seront conservées :"
 msgid "The following columns will be removed :"
 msgstr "Les colonnes suivantes seront supprimées :"
 
-#: public/js/report/controller.js:676
+#: public/js/report/controller.js:681
 msgid "The layer catalog"
 msgstr "Le catalogue de calques"
 
-#: public/js/report/controller.js:686
+#: public/js/report/controller.js:691
 msgid "The layer selector"
 msgstr "Le sélecteur de calques"
 
@@ -2573,7 +2595,7 @@ msgstr ""
 msgid "Urungi version: {{ vm.version }}"
 msgstr "Version d'Urungi: {{ vm.version }}"
 
-#: public/js/report/controller.js:714
+#: public/js/report/controller.js:719
 msgid "Use this button to refresh the results"
 msgstr "Utilisez ce bouton pour actualiser les résultats"
 
@@ -2839,7 +2861,7 @@ msgstr "bas"
 msgid "color"
 msgstr "couleur"
 
-#: public/js/reports/filter-prompt.component.js:177
+#: public/js/reports/filter-prompt.component.js:179
 msgid "contains"
 msgstr "contient"
 
@@ -2863,15 +2885,15 @@ msgstr "emplacement du document"
 msgid "document title"
 msgstr "titre du document"
 
-#: public/js/reports/filter-prompt.component.js:178
+#: public/js/reports/filter-prompt.component.js:180
 msgid "does not contain"
 msgstr "ne contient pas"
 
-#: public/js/reports/filter-prompt.component.js:182
+#: public/js/reports/filter-prompt.component.js:184
 msgid "does not end with"
 msgstr "ne termine pas par"
 
-#: public/js/reports/filter-prompt.component.js:180
+#: public/js/reports/filter-prompt.component.js:182
 msgid "does not start with"
 msgstr "ne commence pas par"
 
@@ -2899,7 +2921,7 @@ msgstr "email"
 msgid "email is required"
 msgstr "l'email est obligatoire"
 
-#: public/js/reports/filter-prompt.component.js:181
+#: public/js/reports/filter-prompt.component.js:183
 msgid "ends with"
 msgstr "termine par"
 
@@ -2968,31 +2990,31 @@ msgstr "stage pendant l'été 2018"
 msgid "invalid report"
 msgstr "rapport invalide"
 
-#: public/js/reports/filter-prompt.component.js:175
+#: public/js/reports/filter-prompt.component.js:177
 msgid "is between"
 msgstr "est entre"
 
-#: public/js/reports/filter-prompt.component.js:169
+#: public/js/reports/filter-prompt.component.js:171
 msgid "is bigger or equal than"
 msgstr "est supérieur ou égal à"
 
-#: public/js/reports/filter-prompt.component.js:170
+#: public/js/reports/filter-prompt.component.js:172
 msgid "is bigger or equal than (pattern)"
 msgstr "est supérieur ou égal à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:167
+#: public/js/reports/filter-prompt.component.js:169
 msgid "is bigger than"
 msgstr "est supérieur à"
 
-#: public/js/reports/filter-prompt.component.js:168
+#: public/js/reports/filter-prompt.component.js:170
 msgid "is bigger than (pattern)"
 msgstr "est supérieur à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:163
+#: public/js/reports/filter-prompt.component.js:165
 msgid "is different than"
 msgstr "est différent de"
 
-#: public/js/reports/filter-prompt.component.js:164
+#: public/js/reports/filter-prompt.component.js:166
 msgid "is different than (pattern)"
 msgstr "est différent de (motif)"
 
@@ -3000,39 +3022,39 @@ msgstr "est différent de (motif)"
 msgid "is empty"
 msgstr "est vide"
 
-#: public/js/reports/filter-prompt.component.js:161
+#: public/js/reports/filter-prompt.component.js:163
 msgid "is equal to"
 msgstr "est égal à"
 
-#: public/js/reports/filter-prompt.component.js:162
+#: public/js/reports/filter-prompt.component.js:164
 msgid "is equal to (pattern)"
 msgstr "est égal à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:165
+#: public/js/reports/filter-prompt.component.js:167
 msgid "is in"
 msgstr "est dans"
 
-#: public/js/reports/filter-prompt.component.js:173
+#: public/js/reports/filter-prompt.component.js:175
 msgid "is less or equal than"
 msgstr "est inférieur ou égal à"
 
-#: public/js/reports/filter-prompt.component.js:174
+#: public/js/reports/filter-prompt.component.js:176
 msgid "is less or equal than (pattern)"
 msgstr "est inférieur ou égal à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:171
+#: public/js/reports/filter-prompt.component.js:173
 msgid "is less than"
 msgstr "est inférieur à"
 
-#: public/js/reports/filter-prompt.component.js:172
+#: public/js/reports/filter-prompt.component.js:174
 msgid "is less than (pattern)"
 msgstr "est inférieur à (motif)"
 
-#: public/js/reports/filter-prompt.component.js:183
+#: public/js/reports/filter-prompt.component.js:185
 msgid "is like"
 msgstr "est semblable à"
 
-#: public/js/reports/filter-prompt.component.js:176
+#: public/js/reports/filter-prompt.component.js:178
 msgid "is not between"
 msgstr "n'est pas entre"
 
@@ -3040,19 +3062,19 @@ msgstr "n'est pas entre"
 msgid "is not empty"
 msgstr "n'est pas vide"
 
-#: public/js/reports/filter-prompt.component.js:166
+#: public/js/reports/filter-prompt.component.js:168
 msgid "is not in"
 msgstr "n'est pas dans"
 
-#: public/js/reports/filter-prompt.component.js:184
+#: public/js/reports/filter-prompt.component.js:186
 msgid "is not like"
 msgstr "n'est pas semblable à"
 
-#: public/js/reports/filter-prompt.component.js:186
+#: public/js/reports/filter-prompt.component.js:188
 msgid "is not null"
 msgstr "n'est pas NULL"
 
-#: public/js/reports/filter-prompt.component.js:185
+#: public/js/reports/filter-prompt.component.js:187
 msgid "is null"
 msgstr "est NULL"
 
@@ -3133,7 +3155,7 @@ msgstr "envoyer"
 msgid "repeat"
 msgstr "répéter"
 
-#: public/js/report/controller.js:526
+#: public/js/report/controller.js:531
 msgid "report type does not exist"
 msgstr "le type du rapport n'existe pas"
 
@@ -3186,7 +3208,7 @@ msgstr "solide"
 msgid "source"
 msgstr "source"
 
-#: public/js/reports/filter-prompt.component.js:179
+#: public/js/reports/filter-prompt.component.js:181
 msgid "starts with"
 msgstr "commence par"
 
@@ -3225,6 +3247,12 @@ msgstr "vertical"
 #: public/partials/logout/index.html:2
 msgid "you have logout!!!"
 msgstr "vous vous êtes déconnecté!!!"
+
+#~ msgid "Filter options"
+#~ msgstr "Options du filtre"
+
+#~ msgid "List of pre-fill values"
+#~ msgstr "Liste de valeurs pré-remplies"
 
 #~ msgid "Cyclic definition :"
 #~ msgstr "Définition cyclique :"
