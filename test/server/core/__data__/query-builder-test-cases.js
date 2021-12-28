@@ -617,6 +617,52 @@ const queryBuilderTestCases = [
         },
     },
     {
+        name: 'filter (text, empty)',
+        query: {
+            joinTree: { collection: songCollection },
+            columns: [songTitleColumn],
+            filters: [
+                {
+                    id: 'title_0_raw',
+                    elementID: 'title_0',
+                    elementName: 'title',
+                    collectionID: 'song_0',
+                    elementType: 'string',
+                    filterType: 'empty',
+                },
+            ],
+        },
+        expectedSql: {
+            mysql: "SELECT `title_0` AS `title_0_raw` FROM (SELECT `song_0`.`title` AS `title_0` FROM `song` `song_0` WHERE `song_0`.`title` = ' ') `sub`",
+            pg: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" = ' ') \"sub\"",
+            mssql: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" = ' ') \"sub\"",
+            oracle: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" = ' ') \"sub\"",
+        },
+    },
+    {
+        name: 'filter (text, notEmpty)',
+        query: {
+            joinTree: { collection: songCollection },
+            columns: [songTitleColumn],
+            filters: [
+                {
+                    id: 'title_0_raw',
+                    elementID: 'title_0',
+                    elementName: 'title',
+                    collectionID: 'song_0',
+                    elementType: 'string',
+                    filterType: 'notEmpty',
+                },
+            ],
+        },
+        expectedSql: {
+            mysql: "SELECT `title_0` AS `title_0_raw` FROM (SELECT `song_0`.`title` AS `title_0` FROM `song` `song_0` WHERE `song_0`.`title` != ' ') `sub`",
+            pg: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" != ' ') \"sub\"",
+            mssql: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" != ' ') \"sub\"",
+            oracle: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" != ' ') \"sub\"",
+        },
+    },
+    {
         name: 'filter (text, in)',
         query: {
             joinTree: { collection: songCollection },
