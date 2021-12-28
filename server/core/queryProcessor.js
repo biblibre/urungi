@@ -264,6 +264,8 @@ function validateFilter (filter, element, escape, warnings) {
         switch (filter.filterType) {
         case 'null':
         case 'notNull':
+        case 'empty':
+        case 'notEmpty':
             break;
         case 'in':
         case 'notIn':
