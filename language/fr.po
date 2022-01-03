@@ -2998,7 +2998,7 @@ msgstr "est différent de (motif)"
 
 #: public/js/reports/filter-prompt.component.js:187
 msgid "is empty"
-msgstr "est VIDE"
+msgstr "est vide"
 
 #: public/js/reports/filter-prompt.component.js:161
 msgid "is equal to"
@@ -3038,7 +3038,7 @@ msgstr "n'est pas entre"
 
 #: public/js/reports/filter-prompt.component.js:188
 msgid "is not empty"
-msgstr "n'est pas VIDE"
+msgstr "n'est pas vide"
 
 #: public/js/reports/filter-prompt.component.js:166
 msgid "is not in"

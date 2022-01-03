@@ -282,8 +282,6 @@
                 'notBetween',
                 'null',
                 'notNull',
-                'empty',
-                'notEmpty',
             ],
         };
 

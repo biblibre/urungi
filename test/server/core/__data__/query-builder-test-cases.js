@@ -633,10 +633,10 @@ const queryBuilderTestCases = [
             ],
         },
         expectedSql: {
-            mysql: "SELECT `title_0` AS `title_0_raw` FROM (SELECT `song_0`.`title` AS `title_0` FROM `song` `song_0` WHERE `song_0`.`title` = ' ') `sub`",
-            pg: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" = ' ') \"sub\"",
-            mssql: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" = ' ') \"sub\"",
-            oracle: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" = ' ') \"sub\"",
+            mysql: "SELECT `title_0` AS `title_0_raw` FROM (SELECT `song_0`.`title` AS `title_0` FROM `song` `song_0` WHERE TRIM(`song_0`.`title`) = '') `sub`",
+            pg: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE TRIM(\"song_0\".\"title\") = '') \"sub\"",
+            mssql: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE TRIM(\"song_0\".\"title\") = '') \"sub\"",
+            oracle: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE TRIM(\"song_0\".\"title\") = '') \"sub\"",
         },
     },
     {
@@ -656,10 +656,10 @@ const queryBuilderTestCases = [
             ],
         },
         expectedSql: {
-            mysql: "SELECT `title_0` AS `title_0_raw` FROM (SELECT `song_0`.`title` AS `title_0` FROM `song` `song_0` WHERE `song_0`.`title` != ' ') `sub`",
-            pg: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" != ' ') \"sub\"",
-            mssql: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" != ' ') \"sub\"",
-            oracle: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" != ' ') \"sub\"",
+            mysql: "SELECT `title_0` AS `title_0_raw` FROM (SELECT `song_0`.`title` AS `title_0` FROM `song` `song_0` WHERE TRIM(`song_0`.`title`) != '') `sub`",
+            pg: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE TRIM(\"song_0\".\"title\") != '') \"sub\"",
+            mssql: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE TRIM(\"song_0\".\"title\") != '') \"sub\"",
+            oracle: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE TRIM(\"song_0\".\"title\") != '') \"sub\"",
         },
     },
     {
@@ -898,52 +898,6 @@ const queryBuilderTestCases = [
             pg: 'SELECT "title_0" AS "title_0_raw" FROM (SELECT "song_0"."title" AS "title_0" FROM "song" "song_0" WHERE "song_0"."title" IS NOT NULL) "sub"',
             mssql: 'SELECT "title_0" AS "title_0_raw" FROM (SELECT "song_0"."title" AS "title_0" FROM "song" "song_0" WHERE "song_0"."title" IS NOT NULL) "sub"',
             oracle: 'SELECT "title_0" AS "title_0_raw" FROM (SELECT "song_0"."title" AS "title_0" FROM "song" "song_0" WHERE "song_0"."title" IS NOT NULL) "sub"',
-        },
-    },
-    {
-        name: 'filter (date, empty)',
-        query: {
-            joinTree: { collection: songCollection },
-            columns: [songTitleColumn],
-            filters: [
-                {
-                    id: 'title_0_raw',
-                    elementID: 'title_0',
-                    elementName: 'title',
-                    collectionID: 'song_0',
-                    elementType: 'date',
-                    filterType: 'empty',
-                },
-            ],
-        },
-        expectedSql: {
-            mysql: "SELECT `title_0` AS `title_0_raw` FROM (SELECT `song_0`.`title` AS `title_0` FROM `song` `song_0` WHERE `song_0`.`title` = ' ') `sub`",
-            pg: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" = ' ') \"sub\"",
-            mssql: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" = ' ') \"sub\"",
-            oracle: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" = ' ') \"sub\"",
-        },
-    },
-    {
-        name: 'filter (date, notEmpty)',
-        query: {
-            joinTree: { collection: songCollection },
-            columns: [songTitleColumn],
-            filters: [
-                {
-                    id: 'title_0_raw',
-                    elementID: 'title_0',
-                    elementName: 'title',
-                    collectionID: 'song_0',
-                    elementType: 'date',
-                    filterType: 'notEmpty',
-                },
-            ],
-        },
-        expectedSql: {
-            mysql: "SELECT `title_0` AS `title_0_raw` FROM (SELECT `song_0`.`title` AS `title_0` FROM `song` `song_0` WHERE `song_0`.`title` != ' ') `sub`",
-            pg: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" != ' ') \"sub\"",
-            mssql: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" != ' ') \"sub\"",
-            oracle: "SELECT \"title_0\" AS \"title_0_raw\" FROM (SELECT \"song_0\".\"title\" AS \"title_0\" FROM \"song\" \"song_0\" WHERE \"song_0\".\"title\" != ' ') \"sub\"",
         },
     },
     {

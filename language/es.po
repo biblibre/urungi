@@ -3006,7 +3006,7 @@ msgstr "es diferente de (patrón)"
 
 #: public/js/reports/filter-prompt.component.js:187
 msgid "is empty"
-msgstr "es VACÍO"
+msgstr "es vacío"
 
 #: public/js/reports/filter-prompt.component.js:161
 msgid "is equal to"
@@ -3046,7 +3046,7 @@ msgstr "no está entre"
 
 #: public/js/reports/filter-prompt.component.js:188
 msgid "is not empty"
-msgstr "no es VACÍO"
+msgstr "no es vacío"
 
 #: public/js/reports/filter-prompt.component.js:166
 msgid "is not in"
@@ -3058,11 +3058,11 @@ msgstr "no es como"
 
 #: public/js/reports/filter-prompt.component.js:186
 msgid "is not null"
-msgstr "no es NULL"
+msgstr "no es nulo"
 
 #: public/js/reports/filter-prompt.component.js:185
 msgid "is null"
-msgstr "es NULL"
+msgstr "es nulo"
 
 #: public/partials/layers/layer-element-modal.html:93
 msgid "label"
