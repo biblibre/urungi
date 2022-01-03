@@ -292,6 +292,12 @@ class SqlQueryBuilder {
         case 'notNull':
             return `${field} IS NOT NULL`;
 
+        case 'empty':
+            return `TRIM(${field}) = ''`;
+
+        case 'notEmpty':
+            return `TRIM(${field}) != ''`;
+
         case 'in':
             return this.getInCondition(field, filter.criterion.textList);
 

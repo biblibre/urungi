@@ -1061,11 +1061,11 @@ msgstr "Nombre"
 msgid "First Name is required"
 msgstr "Nombre requerido"
 
-#: public/js/reports/filter-prompt.component.js:199
+#: public/js/reports/filter-prompt.component.js:201
 msgid "First quarter"
 msgstr "Primer cuarto"
 
-#: public/js/reports/filter-prompt.component.js:203
+#: public/js/reports/filter-prompt.component.js:205
 msgid "First semester"
 msgstr "Primer semestre"
 
@@ -1108,7 +1108,7 @@ msgstr "Formato"
 msgid "Format examples"
 msgstr "Ejemplos de formato"
 
-#: public/js/reports/filter-prompt.component.js:202
+#: public/js/reports/filter-prompt.component.js:204
 msgid "Fourth quarter"
 msgstr "Cuarto trimestre"
 
@@ -1359,39 +1359,39 @@ msgstr "Apellido"
 msgid "Last Name is required"
 msgstr "Apellido es requerido"
 
-#: public/js/reports/filter-prompt.component.js:207
+#: public/js/reports/filter-prompt.component.js:209
 msgid "Last month"
 msgstr "Mes pasado"
 
-#: public/js/reports/filter-prompt.component.js:206
+#: public/js/reports/filter-prompt.component.js:208
 msgid "Last week"
 msgstr "Semana pasada"
 
-#: public/js/reports/filter-prompt.component.js:208
+#: public/js/reports/filter-prompt.component.js:210
 msgid "Last year"
 msgstr "Año pasado"
 
-#: public/js/reports/filter-prompt.component.js:209
+#: public/js/reports/filter-prompt.component.js:211
 msgid "Last year first quarter"
 msgstr "Año pasado primer trimestre"
 
-#: public/js/reports/filter-prompt.component.js:213
+#: public/js/reports/filter-prompt.component.js:215
 msgid "Last year first semester"
 msgstr "Año pasado primer semestre"
 
-#: public/js/reports/filter-prompt.component.js:212
+#: public/js/reports/filter-prompt.component.js:214
 msgid "Last year fourth quarter"
 msgstr "Año pasado cuarto trimestre"
 
-#: public/js/reports/filter-prompt.component.js:210
+#: public/js/reports/filter-prompt.component.js:212
 msgid "Last year second quarter"
 msgstr "Año pasado segundo trimestre"
 
-#: public/js/reports/filter-prompt.component.js:214
+#: public/js/reports/filter-prompt.component.js:216
 msgid "Last year second semester"
 msgstr "Año pasado segundo semestre"
 
-#: public/js/reports/filter-prompt.component.js:211
+#: public/js/reports/filter-prompt.component.js:213
 msgid "Last year third quarter"
 msgstr "Año pasado tercer trimestre"
 
@@ -2037,11 +2037,11 @@ msgstr "Dispersión"
 msgid "Search path"
 msgstr "Ruta de búsqueda"
 
-#: public/js/reports/filter-prompt.component.js:200
+#: public/js/reports/filter-prompt.component.js:202
 msgid "Second quarter"
 msgstr "Segundo cuarto"
 
-#: public/js/reports/filter-prompt.component.js:204
+#: public/js/reports/filter-prompt.component.js:206
 msgid "Second semester"
 msgstr "Segundo semestre"
 
@@ -2398,7 +2398,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Tema"
 
-#: public/js/reports/filter-prompt.component.js:201
+#: public/js/reports/filter-prompt.component.js:203
 msgid "Third quarter"
 msgstr "Tercer cuarto"
 
@@ -2471,11 +2471,11 @@ msgstr ""
 msgid "This link is only available for urungi administrators."
 msgstr "Este enlace solo está disponible para los administradores de urungi."
 
-#: public/js/reports/filter-prompt.component.js:197
+#: public/js/reports/filter-prompt.component.js:199
 msgid "This month"
 msgstr "Este mes"
 
-#: public/js/reports/filter-prompt.component.js:196
+#: public/js/reports/filter-prompt.component.js:198
 msgid "This week"
 msgstr "Esta semana"
 
@@ -2483,7 +2483,7 @@ msgstr "Esta semana"
 msgid "This will remove all child nodes as well."
 msgstr "Esto eliminará todos los nodos secundarios también."
 
-#: public/js/reports/filter-prompt.component.js:198
+#: public/js/reports/filter-prompt.component.js:200
 msgid "This year"
 msgstr "Este año"
 
@@ -2499,7 +2499,7 @@ msgstr "En minúsculas"
 msgid "To Upper"
 msgstr "En mayúsculas"
 
-#: public/js/reports/filter-prompt.component.js:195
+#: public/js/reports/filter-prompt.component.js:197
 msgid "Today"
 msgstr "Hoy"
 
@@ -2664,7 +2664,7 @@ msgstr "Qué es Urungi"
 msgid "Yes"
 msgstr "Si"
 
-#: public/js/reports/filter-prompt.component.js:205
+#: public/js/reports/filter-prompt.component.js:207
 msgid "Yesterday"
 msgstr "Ayer"
 
@@ -3004,6 +3004,10 @@ msgstr "es diferente a"
 msgid "is different than (pattern)"
 msgstr "es diferente de (patrón)"
 
+#: public/js/reports/filter-prompt.component.js:187
+msgid "is empty"
+msgstr "es vacío"
+
 #: public/js/reports/filter-prompt.component.js:161
 msgid "is equal to"
 msgstr "es igual a"
@@ -3039,6 +3043,10 @@ msgstr "es como"
 #: public/js/reports/filter-prompt.component.js:176
 msgid "is not between"
 msgstr "no está entre"
+
+#: public/js/reports/filter-prompt.component.js:188
+msgid "is not empty"
+msgstr "no es vacío"
 
 #: public/js/reports/filter-prompt.component.js:166
 msgid "is not in"

@@ -184,6 +184,8 @@
                 notLike: gettextCatalog.getString('is not like'),
                 null: gettextCatalog.getString('is null'),
                 notNull: gettextCatalog.getString('is not null'),
+                empty: gettextCatalog.getString('is empty'),
+                notEmpty: gettextCatalog.getString('is not empty'),
             };
 
             if (filterType in labels) {
@@ -236,6 +238,8 @@
                 'notLike',
                 'null',
                 'notNull',
+                'empty',
+                'notEmpty',
             ],
             array: [
                 'equal',
@@ -258,6 +262,8 @@
                 'notBetween',
                 'null',
                 'notNull',
+                'empty',
+                'notEmpty',
             ],
             date: [
                 'equal',
