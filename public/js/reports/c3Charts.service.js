@@ -352,7 +352,7 @@ angular.module('app.reports').service('c3Charts', function (notify, gettextCatal
             rotated: true,
             x: {
                 type: 'categories',
-                categories: categories
+                categories: categories.reverse()
             },
             y: {
                 tick: {

@@ -68,7 +68,7 @@ describe('c3Charts', function () {
                 axis: {
                     rotated: true,
                     x: {
-                        categories: ['< 20', '20 - 30', '> 30'],
+                        categories: ['> 30', '20 - 30', '< 20'],
                         type: 'categories',
                     },
                     y: {
