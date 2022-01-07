@@ -92,9 +92,9 @@
             };
 
             if (vm.filter.suggestions.show) {
-                const limit = parseInt(vm.filter.suggestions.limit, 10) || 15;
-                if (!vm.filter.suggestions.unlimited && limit > 0) {
-                    options.limit = limit;
+                if (!vm.filter.suggestions.unlimited) {
+                    const limit = parseInt(vm.filter.suggestions.limit, 10);
+                    options.limit = limit > 0 ? limit : 15;
                 }
 
                 return api.getReportFilterValues(vm.filter, options).then(function (result) {
