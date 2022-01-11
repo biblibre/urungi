@@ -296,6 +296,11 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         filter.filterType = 'equal';
         filter.filterPrompt = false;
         filter.layerID = $scope.selectedReport.selectedLayerID;
+        filter.suggestions = {
+            show: true,
+            limit: 15,
+            unlimited: false
+        };
 
         $scope.onDropField($scope.selectedReport.properties.filters, filter, 'filter');
     };

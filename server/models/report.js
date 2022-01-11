@@ -44,6 +44,11 @@ reportFilterSchema.add({
     promptInstructions: String,
     promptMandatory: Boolean,
     promptTitle: String,
+    suggestions: {
+        show: Boolean,
+        limit: Number,
+        unlimited: Boolean,
+    }
 });
 
 const ReportPropertiesSchema = new mongoose.Schema({

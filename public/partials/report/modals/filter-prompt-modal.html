@@ -32,6 +32,35 @@
                 </div>
             </div>
         </div>
+
+        <div class="row" ng-if="selectedFilter.elementType !== 'date'">
+
+            <div class="col-md-8">
+                <label class="control-label" translate>Suggestions</label>
+                <div class="ng-scope">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="selectedFilter.suggestions.show">
+                            <span translate>Show suggestions</span>
+                        </label>
+                    </div>
+                    <div class="checkbox" ng-if="selectedFilter.suggestions.show && !selectedFilter.suggestions.unlimited">
+                        <label>
+                            <span translate>Number of suggestions</span>
+                            <input type="number" ng-model="selectedFilter.suggestions.limit" placeholder="{{selectedFilter.suggestions.limit}}">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="selectedFilter.suggestions.show" class="alert alert-warning col-md-12 text-justify">
+                <label>
+                    <input type="checkbox" ng-model="selectedFilter.suggestions.unlimited">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <span translate>Check if you want all suggestions on filter (too much data can crash the app)</span>
+                </label>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-12">
                         <div class="form-group no-margin">
