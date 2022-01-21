@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Filter suggestions option on filter prompt modal to show or hide suggestions
 - Add CSS class "scrollable-dropdown-menu" for filter suggestions and filter type input
 
+### Fixed
+
+- Now filters on reports or dashboards can be exported as PNG or PDF and stay updated with results
+
 
 ### Fixed
 

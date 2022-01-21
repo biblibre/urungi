@@ -189,4 +189,120 @@ describe('reportsService', function () {
             expect(description).toBe('Maximum Quux');
         });
     });
+    describe('checkPrompt', function () {
+        it('should return a boolean to true if prompt with date filter type filled correctly', function () {
+            const prompt1 = {
+                elementType: 'date',
+                filterType: 'between',
+                criterion: {
+                    date1: '2020-01-01',
+                    date2: '2022-01-01'
+                }
+            };
+
+            const prompt2 = {
+                elementType: 'date',
+                filterType: 'equal-pattern',
+                criterion: {
+                    label: 'Today',
+                    datePattern: '#WST-TODAY#'
+                }
+            };
+
+            const prompt3 = {
+                elementType: 'date',
+                filterType: 'equal',
+                criterion: {
+                    date1: '2020-31-01',
+                }
+            };
+
+            const boolean1 = reportsService.checkPrompt(prompt1);
+            const boolean2 = reportsService.checkPrompt(prompt2);
+            const boolean3 = reportsService.checkPrompt(prompt3);
+
+            expect(boolean1).toBe(true);
+            expect(boolean2).toBe(true);
+            expect(boolean3).toBe(true);
+        });
+
+        it('should return a boolean to true if prompt with another filter type than date filled correctly', function () {
+            const prompt1 = {
+                elementType: 'number',
+                filterType: 'between',
+                criterion: {
+                    text1: '100',
+                    text2: '200'
+                }
+            };
+
+            const prompt2 = {
+                elementType: 'string',
+                filterType: 'equal',
+                criterion: {
+                    text1: 'foo',
+                }
+            };
+
+            const boolean1 = reportsService.checkPrompt(prompt1);
+            const boolean2 = reportsService.checkPrompt(prompt2);
+
+            expect(boolean1).toBe(true);
+            expect(boolean2).toBe(true);
+        });
+
+        it('should return a boolean to false if prompt with date filter type is not filled correctly', function () {
+            const prompt1 = {
+                elementType: 'date',
+                filterType: 'between',
+                criterion: {
+                    date1: '2020-01-01',
+                }
+            };
+
+            const prompt2 = {
+                elementType: 'date',
+                filterType: 'equal-pattern',
+                criterion: {
+                    label: '',
+                    datePattern: '#WST-TODAY#'
+                }
+            };
+
+            const prompt3 = {
+                elementType: 'date',
+                filterType: 'equal',
+                criterion: {}
+            };
+
+            const boolean1 = reportsService.checkPrompt(prompt1);
+            const boolean2 = reportsService.checkPrompt(prompt2);
+            const boolean3 = reportsService.checkPrompt(prompt3);
+
+            expect(boolean1).toBe(false);
+            expect(boolean2).toBe(false);
+            expect(boolean3).toBe(false);
+        });
+        it('should return a boolean to false if prompt with another filter type than date is not filled correctly', function () {
+            const prompt1 = {
+                elementType: 'number',
+                filterType: 'between',
+                criterion: {
+                    text1: '100',
+                }
+            };
+
+            const prompt2 = {
+                elementType: 'string',
+                filterType: 'equal',
+                criterion: {}
+            };
+
+            const boolean1 = reportsService.checkPrompt(prompt1);
+            const boolean2 = reportsService.checkPrompt(prompt2);
+
+            expect(boolean1).toBe(false);
+            expect(boolean2).toBe(false);
+        });
+    });
 });

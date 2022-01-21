@@ -3,9 +3,9 @@
 
     angular.module('app.dashboards').controller('DashboardsViewController', DashboardsViewController);
 
-    DashboardsViewController.$inject = ['$scope', '$timeout', '$compile', '$uibModal', 'notify', 'gettextCatalog', 'api', 'userService', 'dashboard'];
+    DashboardsViewController.$inject = ['$scope', '$timeout', '$compile', '$uibModal', '$location', 'notify', 'gettextCatalog', 'api', 'userService', 'dashboard', 'reportsService'];
 
-    function DashboardsViewController ($scope, $timeout, $compile, $uibModal, notify, gettextCatalog, api, userService, dashboard) {
+    function DashboardsViewController ($scope, $timeout, $compile, $uibModal, $location, notify, gettextCatalog, api, userService, dashboard, reportsService) {
         const vm = this;
 
         vm.downloadAsPDF = downloadAsPDF;
@@ -19,6 +19,8 @@
         vm.promptChanged = promptChanged;
         vm.isAdmin = false;
         vm.exportIsLoading = false;
+        vm.promptsFilters = {};
+        vm.mandatoryPrompts = [];
 
         activate();
 
@@ -60,24 +62,18 @@
 
             $compile(pageViewer)($scope);
 
-            $timeout(function () {
-                let mandatoryCount = 0;
-                for (const report of vm.dashboard.reports) {
-                    if (report.properties.filters.length !== 0) {
-                        for (const filter of report.properties.filters) {
-                            if (filter.promptMandatory === true) {
-                                ++mandatoryCount;
-                            }
-                        }
-                    }
-                }
-                if (mandatoryCount === 0) {
+            vm.mandatoryPrompts = Object.values(vm.prompts).filter(p => p.promptMandatory);
+
+            if (!vm.mandatoryPrompts.length || reportsService.checkPrompts(vm.mandatoryPrompts)) {
+                $timeout(function () {
                     repaintReports();
-                }
-            }, 0);
+                }, 0);
+            }
         }
 
         function initPrompts () {
+            const search = $location.search();
+            const filters = JSON.parse(search.filters || '{}');
             for (const report of vm.dashboard.reports) {
                 for (const filter of report.properties.filters) {
                     if (filter.filterPrompt) {
@@ -85,9 +81,13 @@
                         for (const i in filter) {
                             p[i] = filter[i];
                         }
-                        p.criterion = {};
-                        p.promptID = p.id + p.filterType;
-                        vm.prompts[p.promptID] = p;
+                        const ident = p.id + p.filterType;
+                        if (ident in filters) {
+                            p.criterion = filters[ident];
+                        } else {
+                            p.criterion = {};
+                        }
+                        vm.prompts[ident] = p;
                     }
                 }
             }
@@ -111,10 +111,14 @@
                 filterCriteria[promptID] = vm.prompts[promptID].criterion;
             }
 
-            $scope.$broadcast('repaint', {
-                fetchData: true,
-                filters: filterCriteria
-            });
+            vm.promptsFilters = JSON.parse(JSON.stringify(filterCriteria));
+
+            if (!vm.mandatoryPrompts.length || reportsService.checkPrompts(vm.mandatoryPrompts)) {
+                $scope.$broadcast('repaint', {
+                    fetchData: true,
+                    filters: filterCriteria
+                });
+            }
         }
 
         function downloadAsPDF () {
@@ -124,6 +128,8 @@
             vm.exportIsLoading = true;
 
             return modal.result.then(function (settings) {
+                settings.filters = vm.promptsFilters;
+
                 return api.getDashboardAsPDF(vm.dashboard._id, settings).then(res => {
                     download(res.data, 'application/pdf', vm.dashboard.dashboardName + '.pdf');
                 }, () => {
@@ -137,7 +143,10 @@
 
         function downloadAsPNG () {
             vm.exportIsLoading = true;
-            api.getDashboardAsPNG(vm.dashboard._id).then(res => {
+            const settings = {
+                filters: vm.promptsFilters
+            };
+            api.getDashboardAsPNG(vm.dashboard._id, settings).then(res => {
                 download(res.data, 'image/png', vm.dashboard.dashboardName + '.png');
             }, () => {
                 notify.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));

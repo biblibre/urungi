@@ -22,6 +22,8 @@
             getStoredReport: getStoredReport,
             getColumnId: getColumnId,
             getColumnDescription: getColumnDescription,
+            checkPrompts: checkPrompts,
+            checkPrompt: checkPrompt
         };
 
         return service;
@@ -79,5 +81,30 @@
 
             return columnDescription;
         };
+
+        // This function is used to check if a prompt is correctly filled (criteria by filterType)
+        function checkPrompt (prompt) {
+            let isValid;
+            if (prompt.elementType === 'date') {
+                if (prompt.filterType === 'between') {
+                    isValid = !!(prompt.criterion.date1 && prompt.criterion.date2);
+                } else if (prompt.filterType === 'equal-pattern') {
+                    isValid = !!(prompt.criterion.label && prompt.criterion.datePattern);
+                } else {
+                    isValid = !!(prompt.criterion.date1);
+                }
+            } else {
+                if (prompt.filterType === 'between') {
+                    isValid = 'text1' in prompt.criterion && 'text2' in prompt.criterion;
+                } else {
+                    isValid = 'text1' in prompt.criterion;
+                }
+            }
+            return isValid;
+        }
+
+        function checkPrompts (prompts) {
+            return prompts.every(checkPrompt);
+        }
     }
 })();
