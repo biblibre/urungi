@@ -81,10 +81,12 @@ describe('dateHelper', function () {
         test('#WST-THISMONTH#', function () {
             const bounds = dateHelper.getDatePatternBounds('#WST-THISMONTH#');
             const today = new Date();
+            const numberOfDaysInThisMonth = getNumberOfDaysInMonth(today.getFullYear(), today.getMonth());
+
             const oneMonthInTheFuture = new Date();
-            oneMonthInTheFuture.setMonth(today.getDate() + 31);
+            oneMonthInTheFuture.setMonth(today.getDate() + numberOfDaysInThisMonth);
             const oneMonthAgo = new Date();
-            oneMonthAgo.setDate(today.getDate() - 31);
+            oneMonthAgo.setDate(today.getDate() - numberOfDaysInThisMonth);
 
             expect(Array.isArray(bounds)).toBe(true);
             expect(bounds).toHaveLength(2);
@@ -101,14 +103,13 @@ describe('dateHelper', function () {
         test('#WST-LASTMONTH#', function () {
             const bounds = dateHelper.getDatePatternBounds('#WST-LASTMONTH#');
             const today = new Date();
+            const numberOfDaysInThisMonth = getNumberOfDaysInMonth(today.getFullYear(), today.getMonth());
+            const numberOfDaysInLastMonth = getNumberOfDaysInMonth(today.getFullYear(), today.getMonth() - 1);
 
-            // 28 is the minimum number of days in a month
             const oneMonthAgo = new Date();
-            oneMonthAgo.setDate(today.getDate() - 28);
-
-            // 62 is the maximum number of days in two consecutive months
+            oneMonthAgo.setDate(today.getDate() - numberOfDaysInThisMonth);
             const twoMonthsAgo = new Date();
-            twoMonthsAgo.setDate(today.getDate() - 62);
+            twoMonthsAgo.setDate(today.getDate() - numberOfDaysInThisMonth - numberOfDaysInLastMonth);
 
             expect(Array.isArray(bounds)).toBe(true);
             expect(bounds).toHaveLength(2);
@@ -448,4 +449,9 @@ describe('dateHelper', function () {
             }).toThrow('unknown pattern');
         });
     });
+
+    function getNumberOfDaysInMonth (year, month) {
+        const d = new Date(year, month + 1, 0);
+        return d.getDate();
+    }
 });
