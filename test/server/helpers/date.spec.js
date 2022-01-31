@@ -81,40 +81,44 @@ describe('dateHelper', function () {
         test('#WST-THISMONTH#', function () {
             const bounds = dateHelper.getDatePatternBounds('#WST-THISMONTH#');
             const today = new Date();
-            const sameDayNextMonth = new Date();
-            sameDayNextMonth.setMonth(today.getMonth() + 1);
-            const sameDayLastMonth = new Date();
-            sameDayLastMonth.setMonth(today.getMonth() - 1);
+            const oneMonthInTheFuture = new Date();
+            oneMonthInTheFuture.setMonth(today.getDate() + 31);
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setDate(today.getDate() - 31);
 
             expect(Array.isArray(bounds)).toBe(true);
             expect(bounds).toHaveLength(2);
 
             expect(bounds[0]).toBeBeforeOrEqual(today);
-            expect(bounds[0]).toBeAfter(sameDayLastMonth);
+            expect(bounds[0]).toBeAfter(oneMonthAgo);
             expect(bounds[0].getDate()).toBe(1);
 
             expect(bounds[1]).toBeAfter(today);
-            expect(bounds[1]).toBeBefore(sameDayNextMonth);
+            expect(bounds[1]).toBeBefore(oneMonthInTheFuture);
             expect(bounds[1].getDate()).toBe(1);
         });
 
         test('#WST-LASTMONTH#', function () {
             const bounds = dateHelper.getDatePatternBounds('#WST-LASTMONTH#');
             const today = new Date();
-            const sameDayLastMonth = new Date();
-            sameDayLastMonth.setMonth(today.getMonth() - 1);
-            const sameDayTwoMonthsAgo = new Date();
-            sameDayTwoMonthsAgo.setMonth(today.getMonth() - 2);
+
+            // 28 is the minimum number of days in a month
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setDate(today.getDate() - 28);
+
+            // 62 is the maximum number of days in two consecutive months
+            const twoMonthsAgo = new Date();
+            twoMonthsAgo.setDate(today.getDate() - 62);
 
             expect(Array.isArray(bounds)).toBe(true);
             expect(bounds).toHaveLength(2);
 
-            expect(bounds[0]).toBeAfter(sameDayTwoMonthsAgo);
-            expect(bounds[0]).toBeBeforeOrEqual(sameDayLastMonth);
+            expect(bounds[0]).toBeAfter(twoMonthsAgo);
+            expect(bounds[0]).toBeBeforeOrEqual(oneMonthAgo);
             expect(bounds[0].getDate()).toBe(1);
 
             expect(bounds[1]).toBeBeforeOrEqual(today);
-            expect(bounds[1]).toBeAfter(sameDayLastMonth);
+            expect(bounds[1]).toBeAfter(oneMonthAgo);
             expect(bounds[1].getDate()).toBe(1);
         });
 
