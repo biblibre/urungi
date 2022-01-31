@@ -81,40 +81,45 @@ describe('dateHelper', function () {
         test('#WST-THISMONTH#', function () {
             const bounds = dateHelper.getDatePatternBounds('#WST-THISMONTH#');
             const today = new Date();
-            const sameDayNextMonth = new Date();
-            sameDayNextMonth.setMonth(today.getMonth() + 1);
-            const sameDayLastMonth = new Date();
-            sameDayLastMonth.setMonth(today.getMonth() - 1);
+            const numberOfDaysInThisMonth = getNumberOfDaysInMonth(today.getFullYear(), today.getMonth());
+
+            const oneMonthInTheFuture = new Date();
+            oneMonthInTheFuture.setMonth(today.getDate() + numberOfDaysInThisMonth);
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setDate(today.getDate() - numberOfDaysInThisMonth);
 
             expect(Array.isArray(bounds)).toBe(true);
             expect(bounds).toHaveLength(2);
 
             expect(bounds[0]).toBeBeforeOrEqual(today);
-            expect(bounds[0]).toBeAfter(sameDayLastMonth);
+            expect(bounds[0]).toBeAfter(oneMonthAgo);
             expect(bounds[0].getDate()).toBe(1);
 
             expect(bounds[1]).toBeAfter(today);
-            expect(bounds[1]).toBeBefore(sameDayNextMonth);
+            expect(bounds[1]).toBeBefore(oneMonthInTheFuture);
             expect(bounds[1].getDate()).toBe(1);
         });
 
         test('#WST-LASTMONTH#', function () {
             const bounds = dateHelper.getDatePatternBounds('#WST-LASTMONTH#');
             const today = new Date();
-            const sameDayLastMonth = new Date();
-            sameDayLastMonth.setMonth(today.getMonth() - 1);
-            const sameDayTwoMonthsAgo = new Date();
-            sameDayTwoMonthsAgo.setMonth(today.getMonth() - 2);
+            const numberOfDaysInThisMonth = getNumberOfDaysInMonth(today.getFullYear(), today.getMonth());
+            const numberOfDaysInLastMonth = getNumberOfDaysInMonth(today.getFullYear(), today.getMonth() - 1);
+
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setDate(today.getDate() - numberOfDaysInThisMonth);
+            const twoMonthsAgo = new Date();
+            twoMonthsAgo.setDate(today.getDate() - numberOfDaysInThisMonth - numberOfDaysInLastMonth);
 
             expect(Array.isArray(bounds)).toBe(true);
             expect(bounds).toHaveLength(2);
 
-            expect(bounds[0]).toBeAfter(sameDayTwoMonthsAgo);
-            expect(bounds[0]).toBeBeforeOrEqual(sameDayLastMonth);
+            expect(bounds[0]).toBeAfter(twoMonthsAgo);
+            expect(bounds[0]).toBeBeforeOrEqual(oneMonthAgo);
             expect(bounds[0].getDate()).toBe(1);
 
             expect(bounds[1]).toBeBeforeOrEqual(today);
-            expect(bounds[1]).toBeAfter(sameDayLastMonth);
+            expect(bounds[1]).toBeAfter(oneMonthAgo);
             expect(bounds[1].getDate()).toBe(1);
         });
 
@@ -444,4 +449,9 @@ describe('dateHelper', function () {
             }).toThrow('unknown pattern');
         });
     });
+
+    function getNumberOfDaysInMonth (year, month) {
+        const d = new Date(year, month + 1, 0);
+        return d.getDate();
+    }
 });
