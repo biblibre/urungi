@@ -18,6 +18,7 @@
         vm.repaintWithPrompts = repaintWithPrompts;
         vm.saveAsXLSX = saveAsXLSX;
         vm.isAdmin = false;
+        vm.exportIsLoading = false;
 
         activate();
 
@@ -75,6 +76,7 @@
         }
 
         function saveAsXLSX () {
+            vm.exportIsLoading = true;
             const filterCriteria = {};
             for (const i in vm.prompts) {
                 const criterion = vm.prompts[i].criterion;
@@ -84,6 +86,7 @@
             }
             api.getReportData(vm.report, { filters: filterCriteria }).then(function (res) {
                 xlsxService.saveReportAsXLSX(vm.report, res.data);
+                vm.exportIsLoading = false;
             });
         }
 
@@ -91,6 +94,7 @@
             const modal = $uibModal.open({
                 component: 'appPdfExportSettingsModal',
             });
+            vm.exportIsLoading = true;
 
             return modal.result.then(function (settings) {
                 return api.getReportAsPDF(vm.report._id, settings).then(res => {
@@ -98,14 +102,20 @@
                 }, () => {
                     notify.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
                 });
-            }, () => {});
+            }, () => {
+            }).finally(() => {
+                vm.exportIsLoading = false;
+            });
         }
 
         function downloadAsPNG () {
+            vm.exportIsLoading = true;
             api.getReportAsPNG(vm.report._id).then(res => {
                 download(res.data, 'image/png', vm.report.reportName + '.png');
             }, () => {
                 notify.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
+            }).finally(() => {
+                vm.exportIsLoading = false;
             });
         }
 
