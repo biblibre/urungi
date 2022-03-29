@@ -89,7 +89,7 @@
                                            <i class="fa fa-cube wst-main-color" ng-show="rootItem.elementType != 'date' && rootItem.elementType != 'number' && rootItem.elementType != 'count' && (!rootItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Dimmension)"></i>
                                                         <i class="fa fa-reorder wst-main-color" ng-show="rootItem.elementType == 'number' || rootItem.elementType == 'count' || (rootItem.elementType == 'string' && rootItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Metric)"></i>
                                                         <i class="fa fa-calendar-o wst-main-color" ng-show="rootItem.elementType == 'date'" data-toggle="tooltip" data-placement="top"></i>
-                                           <span ng-if="!rootItem.editing == true">{{rootItem.elementLabel}}</span>
+                                           <span ng-if="!rootItem.editing == true" data-toggle="tooltip" data-placement="top" title="{{rootItem.description}}">{{rootItem.elementLabel}}</span>
                                            <i class="fa fa-wrench" style="color:#999999" ng-show="rootItem.isCustom"></i>
                                            <div ng-if="!rootItem.editing == true" class="schema-element-btn">
                                                 <div class="btn btn-warning btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(rootItem)" translate>Remove</div>

@@ -13,7 +13,8 @@
             <div class="schema-element-report schema-item-report"  
             ng-if="(rootItem.elementRole == 'dimension' || rootItem.elementRole == 'measure')">
 
-                <a id="ELEMENT_{{rootItem.elementID}}" class="list-group-item data-source-element schema-item-report" 
+                <a id="ELEMENT_{{rootItem.elementID}}" class="list-group-item data-source-element schema-item-report"
+                data-toggle="tooltip" data-placement="top" title="{{rootItem.description}}" 
                 ng-if="isUsable(rootItem)"
                 ng-click="autoFill(rootItem)" draggable="true" app-dragstart="onElementDragStart($event, rootItem)">
                             <i class="fa fa-cube wst-main-color" 
