@@ -18,6 +18,7 @@
         vm.getReport = getReport;
         vm.promptChanged = promptChanged;
         vm.isAdmin = false;
+        vm.exportIsLoading = false;
 
         activate();
 
@@ -120,6 +121,7 @@
             const modal = $uibModal.open({
                 component: 'appPdfExportSettingsModal',
             });
+            vm.exportIsLoading = true;
 
             return modal.result.then(function (settings) {
                 return api.getDashboardAsPDF(vm.dashboard._id, settings).then(res => {
@@ -127,14 +129,20 @@
                 }, () => {
                     notify.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
                 });
-            }, () => {});
+            }, () => {
+            }).finally(() => {
+                vm.exportIsLoading = false;
+            });
         }
 
         function downloadAsPNG () {
+            vm.exportIsLoading = true;
             api.getDashboardAsPNG(vm.dashboard._id).then(res => {
                 download(res.data, 'image/png', vm.dashboard.dashboardName + '.png');
             }, () => {
                 notify.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
+            }).finally(() => {
+                vm.exportIsLoading = false;
             });
         }
 

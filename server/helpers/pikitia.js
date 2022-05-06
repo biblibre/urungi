@@ -73,5 +73,8 @@ async function render (url, endpoint, options) {
     };
 
     const response = await fetch(requestUrl, requestOptions);
+    if (!(response.ok)) {
+        throw new Error('Export failed');
+    }
     return response.buffer();
 }

@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed XLSX export miscalculation of column id which caused some columns to
   be filled with 'undefined'
 - Removed the red background of each cell in XLSX export
+- Throw error when export failed with Pikitia
 
 ## [3.0.0] - 2021-10-22
 
