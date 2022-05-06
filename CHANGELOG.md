@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Filter suggestions option on filter prompt modal to show or hide suggestions
 - Add CSS class "scrollable-dropdown-menu" for filter suggestions and filter type input
 
+
+### Fixed
+
+- Fixed XLSX export miscalculation of column id which caused some columns to
+  be filled with 'undefined'
+- Removed the red background of each cell in XLSX export
+
 ## [3.0.0] - 2021-10-22
 
 ### Breaking changes

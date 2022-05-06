@@ -67,27 +67,17 @@
 
             for (let R = 0; R !== data.length; ++R) {
                 for (let i = 0; i < report.properties.columns.length; i++) {
-                    // var elementName = report.properties.columns[i].collectionID.toLowerCase()+'_'+report.properties.columns[i].elementName;
-                    let elementID = 'e' + report.properties.columns[i].elementID.toLowerCase();
-                    let elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-
-                    if (report.properties.columns[i].aggregation) {
-                        elementID = 'e' + report.properties.columns[i].elementID.toLowerCase() + report.properties.columns[i].aggregation.substring(0, 3);
-                        elementName = elementID.replace(/[^a-zA-Z ]/g, '');
-                    } else {
-                        elementName = elementName + 'raw';
-                    }
                     if (range.s.r > R + 1) range.s.r = R + 1;
                     if (range.s.c > i) range.s.c = i;
                     if (range.e.r < R + 1) range.e.r = R + 1;
                     if (range.e.c < i) range.e.c = i;
 
                     let cell;
-                    console.log(elementName);
-                    if (report.properties.columns[i].elementType === 'number' && data[R][elementName]) {
-                        cell = { v: Number(data[R][elementName]) };
+                    const columnId = reportsService.getColumnId(report.properties.columns[i]);
+                    if (report.properties.columns[i].elementType === 'number' && data[R][columnId]) {
+                        cell = { v: Number(data[R][columnId]) };
                     } else {
-                        cell = { v: data[R][elementName] };
+                        cell = { v: data[R][columnId] };
                     }
                     const cell_ref = XLSX.utils.encode_cell({ c: i, r: R + 1 });
                     if (typeof cell.v === 'number') cell.t = 'n';
@@ -96,8 +86,6 @@
                         cell.t = 'n'; cell.z = XLSX.SSF._table[14];
                         cell.v = datenum(cell.v);
                     } else cell.t = 's';
-
-                    cell.s = { fill: { fgColor: { rgb: 'FFFF0000' } } };
 
                     ws[cell_ref] = cell;
                 }
