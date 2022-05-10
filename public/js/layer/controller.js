@@ -15,6 +15,7 @@
         $scope.rootItem = { elementLabel: '', elementRole: 'root', elements: [] };
 
         $scope.deletingJoin = false;
+        $scope.quitAfterSave = false;
 
         if ($location.hash() === 'intro') {
             $timeout(function () { $scope.showIntro(); }, 1000);
@@ -171,8 +172,24 @@
             }
 
             api.replaceLayer(theLayer).then(function () {
-                $location.url('/layers');
+                if ($scope.quitAfterSave) {
+                    $location.url('/layers');
+                }
+            }).then(() => {
+                notify.success(gettextCatalog.getString('Layer saved successfully'));
+            }).catch(() => {
+                notify.error(gettextCatalog.getString('Something went wrong, check the server logs'));
             });
+        };
+
+        $scope.saveLayerAndStay = function () {
+            $scope.quitAfterSave = false;
+            $scope.save();
+        };
+
+        $scope.saveLayerAndQuit = function () {
+            $scope.quitAfterSave = true;
+            $scope.save();
         };
 
         function getDatasources () {

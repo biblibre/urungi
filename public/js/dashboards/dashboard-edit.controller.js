@@ -3,9 +3,9 @@
 
     angular.module('app.dashboards').controller('DashboardEditController', DashboardEditController);
 
-    DashboardEditController.$inject = ['$scope', '$location', '$q', '$compile', 'reportsService', 'connection', '$routeParams', 'reportModel', 'uuid', 'htmlWidgets', 'gettextCatalog', '$uibModal', 'notify', '$rootScope'];
+    DashboardEditController.$inject = ['$scope', '$location', '$q', '$compile', 'reportsService', 'connection', '$routeParams', 'reportModel', 'uuid', 'htmlWidgets', 'gettextCatalog', '$uibModal', 'notify', '$rootScope', 'api'];
 
-    function DashboardEditController ($scope, $location, $q, $compile, reportsService, connection, $routeParams, reportModel, uuid, htmlWidgets, gettextCatalog, $uibModal, notify, $rootScope) {
+    function DashboardEditController ($scope, $location, $q, $compile, reportsService, connection, $routeParams, reportModel, uuid, htmlWidgets, gettextCatalog, $uibModal, notify, $rootScope, api) {
         const vm = this;
 
         vm.onDrop = onDrop;
@@ -32,6 +32,8 @@
         // $scope.imageFilters.opacity = 10;
         $scope.theData = [];
         $scope.mode = 'preview';
+        $scope.quitAfterSave = false;
+        $scope.previewAfterSave = false;
 
         $scope.textAlign = [
             { name: 'left', value: 'left' },
@@ -315,7 +317,24 @@
         $scope.elementDblClick = function (theElement) {
         };
 
-        $scope.dashboardName = function () {
+        $scope.dashboardNameSave = function () {
+            $('#dashboardNameModal').modal('hide');
+            $('.modal-backdrop').hide();
+            saveDashboard().then(function (data) {
+                if ($scope.quitAfterSave) {
+                    $location.url('/dashboards/list');
+                }
+                if ($scope.previewAfterSave) {
+                    $location.url('dashboards/view/' + data.item._id);
+                }
+                if (!$scope.quitAfterSave && !$scope.previewAfterSave && $scope.mode === 'add') {
+                    $location.url('/dashboards/edit/' + data.item._id);
+                }
+            });
+        };
+
+        $scope.saveDashboardAndStay = function () {
+            $scope.quitAfterSave = false;
             if ($scope.mode === 'add') {
                 $('#dashboardNameModal').modal('show');
             } else {
@@ -323,12 +342,26 @@
             }
         };
 
-        $scope.dashboardNameSave = function () {
-            $('#dashboardNameModal').modal('hide');
-            $('.modal-backdrop').hide();
-            saveDashboard().then(function () {
-                $scope.goBack();
-            });
+        $scope.saveDashboardAndQuit = function () {
+            $scope.quitAfterSave = true;
+            if ($scope.mode === 'add') {
+                $('#dashboardNameModal').modal('show');
+            } else {
+                saveDashboard().then(function () {
+                    $location.url('/dashboards/list');
+                });
+            }
+        };
+
+        $scope.saveDashboardAndPreview = function () {
+            $scope.previewAfterSave = true;
+            if ($scope.mode === 'add') {
+                $('#dashboardNameModal').modal('show');
+            } else {
+                saveDashboard().then(function (data) {
+                    $location.url('dashboards/view/' + $scope.selectedDashboard._id);
+                });
+            }
         };
 
         function cleanAll (theContainer) {
@@ -399,8 +432,9 @@
             $scope.selectedDashboard.html = previewContainer.html();
 
             if ($scope.mode === 'add') {
-                return connection.post('/api/dashboards/create', dashboard).then(function () {
+                return connection.post('/api/dashboards/create', dashboard).then(function (data) {
                     $rootScope.$broadcast('counts-changes');
+                    return data;
                 });
             } else {
                 return connection.post('/api/dashboards/update/' + dashboard._id, dashboard);
