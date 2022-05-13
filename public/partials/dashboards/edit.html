@@ -4,7 +4,9 @@
     <app-theme-link theme="selectedDashboard.theme"></app-theme-link>
 
     <div class="explorer-header" ng-init="initForm()">
-
+        <a href="home" class="btn-home">
+            <i class="fa fa-home"></i>
+        </a>
         <div class="explorer-header-title">
             <h3 app-editable-text="selectedDashboard.dashboardName">{{ selectedDashboard.dashboardName }}</h3>
         </div>

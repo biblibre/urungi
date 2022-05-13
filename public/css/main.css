@@ -416,6 +416,13 @@ img.img-cirlce {
     border: 1px solid #de87aa;
 }
 
+.btn-home {
+    margin: 10px;
+    font-size: 24px;
+    color: #de87aa;
+    border: none;
+}
+
 /* INDICATORS */
 
 .xe-counter,
