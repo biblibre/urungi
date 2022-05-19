@@ -19,6 +19,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.layers = [];
     $scope.mode = 'preview';
     $scope.isForDash = false;
+    $scope.results = [];
 
     $scope.selectedRecordLimit = { value: 500 };
 
@@ -276,6 +277,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
 
             $scope.sql = result.sql;
             $scope.time = result.time;
+            $scope.results = result.data;
             $scope.$broadcast('repaint', { fetchData: false, data: result.data });
         }).catch(err => {
             $scope.$broadcast('stopLoading');
