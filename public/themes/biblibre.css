@@ -1,0 +1,379 @@
+/***********************
+ * the whole dashboard *
+ ***********************/
+ .dashboard-container {
+    background-color: #f8f8f8;
+}
+
+/***********************
+ * font-family *
+ ***********************/
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/**************************************************************
+ * Jumbotron : the 1st layout of the list, with "Hello World" *
+ **************************************************************/
+.jumbotron {
+    padding: 4px 0;
+    background-color: #ffffff;
+    border-radius: 5px;
+    margin: 15px 5px;
+    border: solid 1px #efefef !important;
+}
+
+.jumbotron h1 {
+    /* jumbotron heading */
+    text-align: center;
+    color: #212121;
+    background: none;
+    font-weight: 600;
+    font-size: 45px;
+    font-family: Poppins;
+    line-height: 1.2;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.jumbotron p {
+    /* jumbotron paragraph */
+    font-size: 20px;
+    color: #212121;
+}
+
+/***************************
+ *         headers         *
+ ***************************/
+
+/* used for layouts "H" and Lorem Ipsum */
+h1 {
+    color: #ffffff;
+    background: #2b5b91 none repeat scroll 0% 0%;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    border-radius: 4px 4px 0 0;
+}
+
+h2 {
+    color: #ff8513;
+    background: #2a4461 none repeat scroll 0% 0%;
+    border-radius: 5px;
+    padding: 5px 5px 5px 10px;
+    margin: 0 0 0 30px;
+}
+
+h3 {
+    color: #ff8513;
+    background: #2a4461 none repeat scroll 0% 0%;
+    border-radius: 5px 5px 0 0;
+    padding: 5px 5px 5px 10px;
+    margin: 0 0 0 30px;
+}
+
+h4 {
+    color: #ff8513;
+    background: #2a4461 none repeat scroll 0% 0%;
+    border-radius: 5px;
+    padding: 5px 5px 5px 10px;
+    margin: 0 0 0 30px;
+}
+
+h5 {
+    color: #ff8513;
+    background: #2a4461 none repeat scroll 0% 0%;
+    border-radius: 5px;
+    padding: 5px 5px 5px 10px;
+    margin: 0 0 0 30px;
+}
+
+h6 {
+    color: #ff8513;
+    background: #2a4461 none repeat scroll 0% 0%;
+    border-radius: 5px;
+    padding: 5px 5px 5px 10px;
+    margin: 0 0 0 30px;
+}
+
+p {
+    letter-spacing: -0.5px;
+}
+
+
+/**************** Custom Headers **********/
+.page-header h1.editable {
+    /**Title - Lorem ipsum paragraph - calques*/
+    margin: 0 auto;
+    padding: 7px 15px;
+    width: 99%;
+    font-size: 2.1rem;
+    color: #000000;
+    background-color: white;
+    border-left: 1px solid #efefef;
+    border-top: 1px solid #efefef;
+    border-right: 1px solid #efefef;
+    font-weight: 700;
+}
+
+.page-header p.editable {
+    /**Text - Lorem ipsum paragraph - calques*/
+    font-size: 16px;
+    background-color: white;
+    background-size: auto;
+    padding: 20px;
+    width: 99%;
+    margin: 0 auto;
+    border-left: 1px solid #efefef;
+    border-bottom: 1px solid #efefef;
+    border-right: 1px solid #efefef;
+    border-radius: 0 0 5px 5px;
+    max-height: 120px;
+    overflow: hidden;
+}
+
+/**************** Custom Featurette **********/
+div.ndContainer h2.editable {
+    /** "I Feel good" paragraph - calques*/
+    margin: 0 auto;
+    padding: 10px 0 5px 10px;
+    font-size: 2.2rem;
+    color: #000000;
+    background-color: white;
+    border-left: 1px solid #efefef;
+    border-top: 1px solid #efefef;
+    border-right: 1px solid #efefef;
+    font-weight: bold;
+}
+
+/********************************
+ *         reports              *
+ ********************************/
+.report-view {
+    /* the whole report */
+}
+
+.Block500 {
+    /* block containing report */
+    width: 100%;
+    border: 0;
+    min-height: 50px;
+    padding: 5px 5px 0 5px;
+    margin: 15px 0px;
+    height: 422px;
+    background: #ffffff none repeat scroll 0% 0%;
+    border-radius: 0 0 5px 5px;
+    margin: 0 0 0 0;
+}
+
+.Block500 .ndContainer {
+    margin-top: 0;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.container-fluid.ndContainer {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/****************************************
+ *         2/3/4 columns layout         *
+ ****************************************/
+.ndContainer {
+    margin-top: 8px;
+}
+
+.col-md-3 .ndContainer {
+    border-radius: 3px;
+    padding: 0;
+    margin: 0 5px;
+    border: 17px solid #df0000;
+}
+
+.ndContainer > h3 {
+    /* title of 2/3/4 columns layout */
+    color: #120901;
+    text-align: left;
+    background: #fefeff none repeat scroll 0% 0%;
+    padding: 10px 15px;
+    margin: 0;
+}
+
+.ndContainer > h2 {
+    /* title of 1text+1block 2-columns layout */
+    text-align: left;
+    background: #2a4461 none repeat scroll 0% 0%;
+    margin: 0;
+    border-radius: 5px 5px 0 0;
+    padding: 10px 5px 5px 10px;
+}
+
+.text-muted {
+    /* muted-color, used on the right of the title for 1text+1block 2 columns layout. */
+    color: #444;
+}
+
+.ndContainer > p {
+    /* paragraph inside 2/3/4 columns layout and text+block 2-columns layout */
+    background: #ffffff none repeat scroll 0% 0%;
+    padding: 18px 10px;
+    margin: 0;
+    max-height: 150px;
+    overflow: hidden;
+    color: #212121;
+    border: none;
+    font-size: 15px;
+
+}
+
+/*************************************
+ *         table reports             *
+ *************************************/
+.report-grid {
+    min-width: 90%;
+    border: 1px solid #dae2e6;
+    margin: 0 10px;
+}
+
+.report-grid > table > thead > tr > th {
+    background-color: #aaa;
+    color: black;
+    font-size: 10pt bold;
+    font-weight: 500;
+    padding: 5px 0 3px 5px;
+}
+
+.report-grid tbody tr:nth-child(even) td {
+    /* even lines, values */
+    color: #444;
+    font-weight: 500;
+    background-color: #ddd;
+    padding: 5px 0 0 5px;
+}
+
+.report-grid tbody tr:nth-child(odd) td {
+    /* even lines, values */
+    color: #444;
+    font-weight: 500;
+    padding: 5px 0 0 5px;
+}
+
+/************************
+ *   graph reports      *
+ ************************/
+.c3 svg {
+    margin: 0;
+}
+
+.c3 text {
+    /* text in report generated by c3.js */
+    fill: #120901;
+
+    /* use 'fill' property to change text color */
+}
+
+.c3-tooltip {
+    /* c3.js tooltip */
+    fill: #120901;
+}
+
+.c3-legend-item {
+    fill: #fff;
+}
+
+.c3 path {
+    fill: none;
+    stroke: #fff;
+}
+
+.c3 line {
+    fill: none;
+    stroke: #fff;
+}
+
+.c3-arc-jane {
+    background-color: red;
+}
+
+.c3-chart-arc {
+    background-color: red;
+}
+
+.c3-target-john {
+    background-color: red;
+}
+
+.c3-target-jane {
+    background-color: red;
+}
+/************************
+ *     pivot reports    *
+ ************************/
+table.pvtTable {
+    min-width: 100%;
+    border: 1px solid #dae2e6;
+}
+
+table.pvtTable thead tr th {
+    /* columns headers */
+    background-color: #2a4461;
+    color: #fff;
+    font-size: 8pt;
+    padding: 5px;
+}
+
+table.pvtTable tbody tr:nth-child(even) th {
+    /* even lines, 1st column */
+    color: #fff;
+    background-color: #2a4461 !important;
+}
+
+.pvtTable tbody tr:nth-child(even) td {
+    /* even lines, values */
+    color: #fff;
+    font-weight: 500;
+    background-color: #2a4461;
+}
+
+.pvtTable tbody tr:nth-child(odd) th {
+    /* odd lines, 1st column */
+    color: #2a4461;
+}
+
+.pvtTable tbody tr:nth-child(odd) td {
+    /* odd lines, values */
+    background-color: #dae2e6;
+    font-weight: 500;
+}
+
+.colTotal tbody tr td {
+    font-weight: 600;
+    color: red !important;
+}
+
+/*************************************
+ * label of run time selected values *
+ *************************************/
+.form-group {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 0;
+    font-weight: 400;
+    color: #2a4461;
+}
+
+/*************************************
+ *   the hr layout (horizontal bar)  *
+ *************************************/
+.featurette-divider {
+    border-top: 2px solid #2a4461;
+}
+
+.lead {
+    border-radius: 0 0 5px 5px;
+}
+
