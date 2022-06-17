@@ -1,17 +1,23 @@
 /***********************
+ * the left Scroll-panel *
+ ***********************/
+#settingsTab label {
+    color: #ffffff;
+}
+
+/***********************
  * the whole dashboard *
  ***********************/
- .dashboard-container {
+.dashboard-container {
     background-color: #f8f8f8;
 }
 
 /***********************
  * font-family *
  ***********************/
-body {
+#designArea {
     font-family: 'Poppins', sans-serif;
 }
-
 
 /**************************************************************
  * Jumbotron : the 1st layout of the list, with "Hello World" *
@@ -26,15 +32,11 @@ body {
 
 .jumbotron h1 {
     /* jumbotron heading */
-    text-align: center;
     color: #212121;
     background: none;
     font-weight: 600;
     font-size: 45px;
-    font-family: Poppins;
     line-height: 1.2;
-    margin-left: 5px;
-    font-weight: bold;
 }
 
 .jumbotron p {
@@ -50,51 +52,10 @@ body {
 /* used for layouts "H" and Lorem Ipsum */
 h1 {
     color: #ffffff;
-    background: #2b5b91 none repeat scroll 0% 0%;
-    border-radius: 4px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 30px;
-    border-radius: 4px 4px 0 0;
-}
-
-h2 {
-    color: #ff8513;
-    background: #2a4461 none repeat scroll 0% 0%;
-    border-radius: 5px;
-    padding: 5px 5px 5px 10px;
-    margin: 0 0 0 30px;
 }
 
 h3 {
-    color: #ff8513;
-    background: #2a4461 none repeat scroll 0% 0%;
-    border-radius: 5px 5px 0 0;
-    padding: 5px 5px 5px 10px;
-    margin: 0 0 0 30px;
-}
-
-h4 {
-    color: #ff8513;
-    background: #2a4461 none repeat scroll 0% 0%;
-    border-radius: 5px;
-    padding: 5px 5px 5px 10px;
-    margin: 0 0 0 30px;
-}
-
-h5 {
-    color: #ff8513;
-    background: #2a4461 none repeat scroll 0% 0%;
-    border-radius: 5px;
-    padding: 5px 5px 5px 10px;
-    margin: 0 0 0 30px;
-}
-
-h6 {
-    color: #ff8513;
-    background: #2a4461 none repeat scroll 0% 0%;
-    border-radius: 5px;
-    padding: 5px 5px 5px 10px;
-    margin: 0 0 0 30px;
+    color: #2b5b91 !important;
 }
 
 p {
@@ -103,12 +64,12 @@ p {
 
 
 /**************** Custom Headers **********/
-.page-header h1.editable {
+div.page-header h1.editable {
     /**Title - Lorem ipsum paragraph - calques*/
     margin: 0 auto;
     padding: 7px 15px;
     width: 99%;
-    font-size: 2.1rem;
+    font-size: 2.6rem;
     color: #000000;
     background-color: white;
     border-left: 1px solid #efefef;
@@ -117,7 +78,7 @@ p {
     font-weight: 700;
 }
 
-.page-header p.editable {
+div.page-header p.editable {
     /**Text - Lorem ipsum paragraph - calques*/
     font-size: 16px;
     background-color: white;
@@ -196,7 +157,7 @@ div.ndContainer h2.editable {
 
 .ndContainer > h3 {
     /* title of 2/3/4 columns layout */
-    color: #120901;
+    color: #120901 !important;
     text-align: left;
     background: #fefeff none repeat scroll 0% 0%;
     padding: 10px 15px;
@@ -234,9 +195,9 @@ div.ndContainer h2.editable {
  *         table reports             *
  *************************************/
 .report-grid {
-    min-width: 90%;
+    min-width: 100%;
     border: 1px solid #dae2e6;
-    margin: 0 10px;
+    padding: 0;
 }
 
 .report-grid > table > thead > tr > th {
@@ -252,14 +213,14 @@ div.ndContainer h2.editable {
     color: #444;
     font-weight: 500;
     background-color: #ddd;
-    padding: 5px 0 0 5px;
+    padding: 0 0 0 5px;
 }
 
 .report-grid tbody tr:nth-child(odd) td {
     /* even lines, values */
     color: #444;
     font-weight: 500;
-    padding: 5px 0 0 5px;
+    padding: 0 0 0 5px;
 }
 
 /************************
