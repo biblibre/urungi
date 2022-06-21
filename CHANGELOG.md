@@ -15,15 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Now filters on reports or dashboards can be exported as PNG or PDF and stay updated with results
-
-
-### Fixed
-
 - Fixed XLSX export miscalculation of column id which caused some columns to
   be filled with 'undefined'
 - Removed the red background of each cell in XLSX export
 - Throw error when export failed with Pikitia
+- Now filters on reports or dashboards can be exported as PNG or PDF and stay
+  updated with results
 
 ## [3.0.0] - 2021-10-22
 
