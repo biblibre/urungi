@@ -61,17 +61,12 @@ function updateRole (req, res) {
 
 async function deleteRole (req, res, next) {
     try {
-        const targetRole = await Role.findById(req.params.roleId);
-        if (targetRole) {
-            await User.updateMany(
-                { },
-                { $pull: { roles: targetRole.id } }
-            );
-            await req.$role.remove();
-            res.sendStatus(204);
-        } else {
-            res.sendStatus(404);
-        }
+        await User.updateMany(
+            { },
+            { $pull: { roles: req.$role.id } }
+        );
+        await req.$role.remove();
+        res.sendStatus(204);
     } catch (err) {
         next(err);
     }
