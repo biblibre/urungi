@@ -36,7 +36,8 @@ module.exports = function (app) {
     reportRouter.post('/png', async function (req, res, next) {
         try {
             const report = res.locals.report;
-            const url = config.get('url') + config.get('base') + `/reports/view/${report.id}`;
+            const filters = JSON.stringify(req.body.filters); ;
+            const url = config.get('url') + config.get('base') + `/reports/view/${report.id}?filters=${filters}`;
             const buffer = await pikitia.toPNG(url, {
                 cookies: req.cookies,
                 viewport: {
@@ -58,8 +59,8 @@ module.exports = function (app) {
     reportRouter.post('/pdf', async function (req, res, next) {
         try {
             const report = res.locals.report;
-
-            const url = config.get('url') + config.get('base') + `/reports/view/${report.id}`;
+            const filters = JSON.stringify(req.body.filters);
+            const url = config.get('url') + config.get('base') + `/reports/view/${report.id}?filters=${filters}`;
             const options = {
                 cookies: req.cookies,
                 displayHeaderFooter: req.body.displayHeaderFooter || false,

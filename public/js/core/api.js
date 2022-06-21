@@ -289,8 +289,8 @@
             return httpPost(`/api/reports/${id}/pdf`, params);
         }
 
-        function getReportAsPNG (id) {
-            return httpPost(`/api/reports/${id}/png`);
+        function getReportAsPNG (id, params) {
+            return httpPost(`/api/reports/${id}/png`, params);
         }
 
         function isReportAsPDFAvailable (id) {
@@ -409,8 +409,8 @@
             return httpPost(`/api/dashboards/${id}/pdf`, params);
         }
 
-        function getDashboardAsPNG (id) {
-            return httpPost(`/api/dashboards/${id}/png`);
+        function getDashboardAsPNG (id, params) {
+            return httpPost(`/api/dashboards/${id}/png`, params);
         }
 
         function isDashboardAsPDFAvailable (id) {

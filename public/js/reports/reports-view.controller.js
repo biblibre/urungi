@@ -3,9 +3,9 @@
 
     angular.module('app.reports').controller('ReportsViewController', ReportsViewController);
 
-    ReportsViewController.$inject = ['$scope', '$timeout', '$uibModal', 'notify', 'gettextCatalog', 'api', 'xlsxService', 'userService', 'report'];
+    ReportsViewController.$inject = ['$scope', '$timeout', '$uibModal', '$location', 'notify', 'gettextCatalog', 'api', 'xlsxService', 'userService', 'report', 'reportsService'];
 
-    function ReportsViewController ($scope, $timeout, $uibModal, notify, gettextCatalog, api, xlsxService, userService, report) {
+    function ReportsViewController ($scope, $timeout, $uibModal, $location, notify, gettextCatalog, api, xlsxService, userService, report, reportsService) {
         const vm = this;
 
         vm.downloadAsPDF = downloadAsPDF;
@@ -19,6 +19,8 @@
         vm.saveAsXLSX = saveAsXLSX;
         vm.isAdmin = false;
         vm.exportIsLoading = false;
+        vm.promptsFilters = {};
+        vm.mandatoryPrompts = [];
 
         activate();
 
@@ -35,24 +37,32 @@
 
             vm.prompts = initPrompts();
 
-            const hasMandatoryPrompts = Object.values(vm.prompts).some(p => p.promptMandatory);
-            if (!hasMandatoryPrompts) {
+            vm.mandatoryPrompts = Object.values(vm.prompts).filter(p => p.promptMandatory);
+
+            if (!vm.mandatoryPrompts.length || reportsService.checkPrompts(vm.mandatoryPrompts)) {
                 $timeout(function () {
-                    $scope.$broadcast('repaint', { fetchData: true });
+                    repaintWithPrompts();
                 }, 0);
             }
         }
 
         function initPrompts () {
             const prompts = {};
+            const search = $location.search();
+            const filters = JSON.parse(search.filters || '{}');
             for (const filter of vm.report.properties.filters) {
                 if (filter.filterPrompt) {
                     const p = {};
                     for (const key in filter) {
                         p[key] = filter[key];
                     }
-                    p.criterion = {};
-                    prompts[p.id + p.filterType] = p;
+                    const ident = p.id + p.filterType;
+                    if (ident in filters) {
+                        p.criterion = filters[ident];
+                    } else {
+                        p.criterion = {};
+                    }
+                    prompts[ident] = p;
                 }
             }
 
@@ -68,11 +78,14 @@
             for (const i in vm.prompts) {
                 filterCriteria[i] = vm.prompts[i].criterion;
             }
+            vm.promptsFilters = JSON.parse(JSON.stringify(filterCriteria));
 
-            $scope.$broadcast('repaint', {
-                fetchData: true,
-                filters: filterCriteria
-            });
+            if (!vm.mandatoryPrompts.length || reportsService.checkPrompts(vm.mandatoryPrompts)) {
+                $scope.$broadcast('repaint', {
+                    fetchData: true,
+                    filters: filterCriteria
+                });
+            }
         }
 
         function saveAsXLSX () {
@@ -97,6 +110,7 @@
             vm.exportIsLoading = true;
 
             return modal.result.then(function (settings) {
+                settings.filters = vm.promptsFilters;
                 return api.getReportAsPDF(vm.report._id, settings).then(res => {
                     download(res.data, 'application/pdf', vm.report.reportName + '.pdf');
                 }, () => {
@@ -110,7 +124,10 @@
 
         function downloadAsPNG () {
             vm.exportIsLoading = true;
-            api.getReportAsPNG(vm.report._id).then(res => {
+            const settings = {
+                filters: vm.promptsFilters
+            };
+            api.getReportAsPNG(vm.report._id, settings).then(res => {
                 download(res.data, 'image/png', vm.report.reportName + '.png');
             }, () => {
                 notify.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
