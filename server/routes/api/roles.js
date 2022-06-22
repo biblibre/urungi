@@ -6,6 +6,7 @@ const mongooseHelper = require('../../helpers/mongoose.js');
 
 const router = express.Router();
 const Role = mongoose.model('Role');
+const User = mongoose.model('User');
 
 router.param('roleId', function (req, res, next, roleId) {
     Role.findById(roleId).then(role => {
@@ -25,6 +26,7 @@ router.get('/', restrict, listRoles);
 router.post('/', restrictAdmin, createRole);
 router.get('/:roleId', restrict, getRole);
 router.patch('/:roleId', restrictAdmin, updateRole);
+router.delete('/:roleId', restrictAdmin, deleteRole);
 
 function listRoles (req, res, next) {
     const pipeline = mongooseHelper.getAggregationPipelineFromQuery(req.query);
@@ -55,6 +57,19 @@ function updateRole (req, res) {
     }, err => {
         res.status(500).json({ error: err.message });
     });
+}
+
+async function deleteRole (req, res, next) {
+    try {
+        await User.updateMany(
+            { },
+            { $pull: { roles: req.$role.id } }
+        );
+        await req.$role.remove();
+        res.sendStatus(204);
+    } catch (err) {
+        next(err);
+    }
 }
 
 module.exports = router;

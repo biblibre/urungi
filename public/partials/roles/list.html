@@ -11,10 +11,19 @@
             </div>
 
             <div class="list-group">
-                <a ng-click="vm.view(role._id)" class="list-group-item" ng-repeat="role in vm.items">
-                    <h4 class="list-group-item-heading" ng-bind="role.name"></h4>
+                <div class="list-group-item" ng-repeat="role in vm.items">
+                    <div class = "pull-right">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-danger" ng-click="vm.deleteRole(role)" uib-tooltip="{{ 'Delete this role' | translate}}" tooltip-placement="bottom">
+                                <i class="fa fa-trash-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <a ng-click="vm.view(role._id)">
+                        <h4 class="list-group-item-heading" ng-bind="role.name"></h4>
+                    </a>
                     <p class="list-group-item-text" ng-bind="role.description"></p>
-                </a>
+                </div>
             </div>
 
             <app-pager current-page="vm.page" total-pages="vm.pages" on-page-change="vm.goToPage(page)"></app-pager>

@@ -157,4 +157,43 @@ describe('Roles API', function () {
             });
         });
     });
+    describe('DELETE /api/roles/:roleId', function () {
+        describe('when not authenticated', function () {
+            it('should return status 403', async function () {
+                const role = await Role.findOne({ name: 'Role 1' });
+                const res = await request(app).delete('/api/roles/' + role.id);
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as a normal user', function () {
+            it('should return status 403', async function () {
+                const role = await Role.findOne({ name: 'Role 1' });
+                const res = await request(app).delete('/api/roles/' + role.id)
+                    .set(userHeaders);
+
+                expect(res.status).toBe(403);
+            });
+        });
+
+        describe('when authenticated as admin', function () {
+            it('should delete role', async function () {
+                const role = await Role.findOne({ name: 'Role 1' });
+                const res = await request(app).delete('/api/roles/' + role.id)
+                    .set(adminHeaders);
+
+                expect(res.status).toBe(204);
+            });
+        });
+
+        describe('when role does not exist', function () {
+            it('should return 404', async function () {
+                const res = await request(app).delete('/api/roles/1234567890abcdef12345678')
+                    .set(adminHeaders);
+
+                expect(res.status).toBe(404);
+            });
+        });
+    });
 });

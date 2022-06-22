@@ -21,6 +21,7 @@
             getRoles: getRoles,
             createRole: createRole,
             updateRole: updateRole,
+            deleteRole: deleteRole,
 
             getDatasource: getDatasource,
             getDatasources: getDatasources,
@@ -131,6 +132,10 @@
 
         function updateRole (role) {
             return httpPatch('/api/roles/' + role._id, role);
+        }
+
+        function deleteRole (id) {
+            return httpDelete('/api/roles/' + id);
         }
 
         function getDatasource (id) {

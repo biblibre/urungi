@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add 'IS EMPTY' and 'IS NOT EMPTY' filter type for reports
 - Filter suggestions option on filter prompt modal to show or hide suggestions
 - Add CSS class "scrollable-dropdown-menu" for filter suggestions and filter type input
+- Now it's possible to delete a role, even if it contains users (with mention on modal)
 
 ### Fixed
 

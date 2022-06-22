@@ -3,9 +3,9 @@
 
     angular.module('app.roles').controller('RolesListController', RolesListController);
 
-    RolesListController.$inject = ['$uibModal', 'notify', 'gettextCatalog', 'api'];
+    RolesListController.$inject = ['$uibModal', 'notify', 'gettextCatalog', 'api', '$rootScope'];
 
-    function RolesListController ($uibModal, notify, gettextCatalog, api) {
+    function RolesListController ($uibModal, notify, gettextCatalog, api, $rootScope) {
         const vm = this;
 
         vm.items = [];
@@ -14,6 +14,7 @@
         vm.newRole = newRole;
         vm.page = 1;
         vm.view = view;
+        vm.deleteRole = deleteRole;
 
         activate();
 
@@ -62,6 +63,28 @@
 
             return modal.result.then(function (role) {
                 vm.getRoles(vm.page);
+            });
+        }
+
+        function deleteRole (role) {
+            api.getUsers({ fields: 'roles', filters: { roles: role._id } }).then(function (res) {
+                const usersCount = res.data.length;
+                const modal = $uibModal.open({
+                    component: 'appDeleteModal',
+                    resolve: {
+                        title: () => gettextCatalog.getString('Remove role {{name}} ?', { name: role.name }),
+                        bodyTemplate: () => 'partials/roles/role-delete-modal-body.html',
+                        usersCount: () => usersCount,
+                        delete: () => function () {
+                            return api.deleteRole(role._id);
+                        },
+                    },
+                });
+                modal.result.then(function () {
+                    $rootScope.$broadcast('counts-changes');
+                    notify.success(gettextCatalog.getString('Role deleted successfully'));
+                    vm.getRoles(1);
+                }).catch(() => {});
             });
         }
     }
