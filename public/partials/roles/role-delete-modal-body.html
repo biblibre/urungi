@@ -1,0 +1,6 @@
+<p ng-if="vm.resolve.usersCount > 0" class="alert alert-warning" translate translate-n="vm.resolve.usersCount" translate-plural="Warning: This role is assigned to {{$count}} users">
+    Warning: This role is assigned to {{$count}} user
+</p>
+<p ng-if="vm.resolve.usersCount === 0" class="alert alert-info" translate>
+    This role is not assigned to any user
+</p>

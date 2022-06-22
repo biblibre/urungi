@@ -72,7 +72,8 @@
                 const modal = $uibModal.open({
                     component: 'appDeleteModal',
                     resolve: {
-                        title: () => gettextCatalog.getString('Remove role {{name}} ? - {{usersCount}} user(s) affected', { name: role.name, usersCount: usersCount }),
+                        title: () => gettextCatalog.getString('Remove role {{name}} ?', { name: role.name }),
+                        bodyTemplate: () => 'partials/roles/role-delete-modal-body.html',
                         usersCount: () => usersCount,
                         delete: () => function () {
                             return api.deleteRole(role._id);

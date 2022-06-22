@@ -23,6 +23,7 @@
 
         function $onInit () {
             vm.title = vm.resolve.title;
+            vm.bodyTemplate = vm.resolve.bodyTemplate;
         }
 
         function onDelete () {

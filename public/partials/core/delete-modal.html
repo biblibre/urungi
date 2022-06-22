@@ -3,6 +3,7 @@
     <h3 class="modal-title">{{ vm.title }}</h3>
 </div>
 <div class="modal-body">
+    <div ng-include="vm.bodyTemplate"></div>
     <form ng-submit="vm.onDelete()">
         <div class="form-group">
             <label translate>Please type DELETE to confirm</label>
