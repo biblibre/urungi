@@ -83,9 +83,7 @@
                     $rootScope.$broadcast('counts-changes');
                     notify.success(gettextCatalog.getString('Role deleted successfully'));
                     vm.getRoles(1);
-                }).catch(() => {
-                    notify.notice(gettextCatalog.getString('Action cancelled'));
-                });
+                }).catch(() => {});
             });
         }
     }
