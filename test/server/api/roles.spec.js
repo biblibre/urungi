@@ -189,7 +189,7 @@ describe('Roles API', function () {
 
         describe('when role does not exist', function () {
             it('should return 404', async function () {
-                const res = await request(app).delete('/api/roles/notexisting')
+                const res = await request(app).delete('/api/roles/1234567890abcdef12345678')
                     .set(adminHeaders);
 
                 expect(res.status).toBe(404);
