@@ -66,17 +66,16 @@
             });
         }
 
-        function deleteRole (roleId) {
-            api.getUsers({ fields: 'roles' }).then(function (res) {
-                const usersHasRole = res.data.filter(e => e.roles.includes(roleId));
-                const targetRole = vm.items.find(e => { return e._id === roleId; });
-
+        function deleteRole (role) {
+            api.getUsers({ fields: 'roles', filters: { roles: role._id } }).then(function (res) {
+                const usersCount = res.data.length;
                 const modal = $uibModal.open({
                     component: 'appDeleteModal',
                     resolve: {
-                        title: () => gettextCatalog.getString('Remove role {{name}} ? - {{usersCount}} user(s) affected', { name: targetRole.name, usersCount: usersHasRole.length }),
+                        title: () => gettextCatalog.getString('Remove role {{name}} ? - {{usersCount}} user(s) affected', { name: role.name, usersCount: usersCount }),
+                        usersCount: () => usersCount,
                         delete: () => function () {
-                            return api.deleteRole(roleId);
+                            return api.deleteRole(role._id);
                         },
                     },
                 });
