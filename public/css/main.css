@@ -3181,3 +3181,7 @@ a.list-group-item:hover {
     border-color: #999;
     color: white;
 }
+
+.label-lg {
+    font-size: 1em;
+}
