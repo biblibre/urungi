@@ -40,7 +40,9 @@
             </button>
         </span>
     </div>
-    <span ng-if="time !== undefined" class="label label-primary">{{results.length}} rows ({{time}}ms)</span>
+    <span ng-if="time !== undefined">
+        <span ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid' || selectedReport.reportType == 'pivot'" class="label label-primary label-lg">{{results.length}} rows ({{time}}ms)</span>
+    </span>
 </div>
 
 <div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width: 100%;">
