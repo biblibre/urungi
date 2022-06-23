@@ -24,7 +24,7 @@
 
 <div id="dropArea" class="container-fluid" style="width: 100%;" ng-include src="dropArea"></div>
 
-<div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width: 100%;"> 
+<div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width: 100%;">
     <div>
         <span ng-show="selectedReport.properties.recordLimit == undefined">
             <span translate>Quick display with</span>
@@ -37,11 +37,10 @@
             <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" ng-click="refresh();" style="padding: 3px 10px;">
                 <i class="fa fa-refresh hand-cursor"></i>
                 <span translate>Redraw</span>
-                <span ng-if="time !== undefined">({{time}}ms)</span>
             </button>
         </span>
     </div>
-    <span class="alert alert-info" style="padding: 5px;" translate><strong>{{results.length}} rows</strong></span>
+    <span ng-if="time !== undefined" class="label label-primary">{{results.length}} rows ({{time}}ms)</span>
 </div>
 
 <div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width: 100%;">
