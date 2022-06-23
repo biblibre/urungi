@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add CSS class "scrollable-dropdown-menu" for filter suggestions and filter type input
 - Now it's possible to delete a role, even if it contains users (with mention on modal)
 
+### Changed
+
+- Moved notifications from top-right corner to bottom-right corner because they
+  were hiding action buttons
+
 ### Fixed
 
 - Fixed XLSX export miscalculation of column id which caused some columns to

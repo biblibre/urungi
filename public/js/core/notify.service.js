@@ -10,7 +10,7 @@
 
         // define the default stack display for notifications
         PNotify.defaults.stack = new PNotify.Stack({
-            dir1: 'down',
+            dir1: 'up',
             dir2: 'left',
             firstpos1: 25,
             firstpos2: 25,
