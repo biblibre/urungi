@@ -37,10 +37,10 @@
             <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" ng-click="refresh();" style="padding: 3px 10px;">
                 <i class="fa fa-refresh hand-cursor"></i>
                 <span translate>Redraw</span>
-                <span ng-if="time !== undefined">({{time}}ms)</span>
             </button>
         </span>
     </div>
+    <span ng-if="time !== undefined" class="label label-primary">{{results.length}} rows ({{time}}ms)</span>
 </div>
 
 <div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width: 100%;">
