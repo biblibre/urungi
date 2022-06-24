@@ -43,16 +43,6 @@
         <span ng-if="time !== undefined" class="label label-primary label-lg">{{results.length}} rows ({{time}}ms)</span>
 </div>
 
-<div class="container-fluid" ng-show="sql && mode =='add' && !isForDash" style="width: 100%;">
-
-    <button class="btn btn-success pull-right" ng-if="user.reportsCreate" ng-click="reportName()" style="margin-left: 5px;" translate>Save as a report</button>
-    <button class="btn btn-success pull-right" ng-if="user.dashboardsCreate" ng-click="pushToDash()" style="margin-left: 5px;" translate>Push it to a Dashboard</button>
-</div>
-<div class="container-fluid" ng-show="sql && isForDash" style="width: 100%;">
-    <button class="btn btn-success pull-right"  style="margin-left: 5px;" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();" translate>Save</button>
-</div>
-
-
 <div ng-show="showSQL" class="panel" style="z-index: 100;">
     <div class="panel-heading">
         <div class="panel-title">

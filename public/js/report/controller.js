@@ -20,6 +20,8 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     $scope.mode = 'preview';
     $scope.isForDash = false;
     $scope.results = [];
+    $scope.quitAfterSave = false;
+    $scope.previewAfterSave = false;
 
     $scope.selectedRecordLimit = { value: 500 };
 
@@ -214,7 +216,26 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     *   Modals and navigation buttons
     */
 
-    $scope.reportName = function () {
+    $scope.saveReportAndStay = function () {
+        $scope.quitAfterSave = false;
+        if ($scope.mode === 'add') {
+            $('#theReportNameModal').modal('show');
+        } else {
+            $scope.reportNameSave();
+        }
+    };
+
+    $scope.saveReportAndQuit = function () {
+        $scope.quitAfterSave = true;
+        if ($scope.mode === 'add') {
+            $('#theReportNameModal').modal('show');
+        } else {
+            $scope.reportNameSave();
+        }
+    };
+
+    $scope.saveReportAndPreview = function () {
+        $scope.previewAfterSave = true;
         if ($scope.mode === 'add') {
             $('#theReportNameModal').modal('show');
         } else {
@@ -223,11 +244,21 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
     };
 
     $scope.reportNameSave = function () {
-        return reportModel.saveAsReport($scope.selectedReport, $scope.mode).then(function () {
+        return reportModel.saveAsReport($scope.selectedReport, $scope.mode).then(function (data) {
             $('#theReportNameModal').modal('hide');
             $('.modal-backdrop').hide();
             $rootScope.$broadcast('counts-changes');
-            $scope.goBack();
+            const reportId = $scope.mode === 'add' ? data.item._id : $scope.selectedReport._id;
+
+            if ($scope.previewAfterSave) {
+                $location.url('reports/view/' + reportId);
+            }
+            if ($scope.quitAfterSave) {
+                $location.url('/reports');
+            }
+            if (!$scope.previewAfterSave & !$scope.quitAfterSave && $scope.mode === 'add') {
+                $location.url('reports/edit/' + reportId);
+            }
         });
     };
 
