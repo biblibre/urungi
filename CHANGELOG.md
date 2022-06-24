@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Moved notifications from top-right corner to bottom-right corner because they
   were hiding action buttons
+- The default behaviour after saving a layer/report/dashboard has changed: now
+  we stay on the same page so we can continue editing.
+  Other options have been added in a dropdown button
 
 ### Fixed
 
