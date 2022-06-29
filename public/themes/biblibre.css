@@ -15,9 +15,15 @@
 /***********************
  * font-family *
  ***********************/
-#designArea {
+@font-face {
     font-family: 'Poppins', sans-serif;
+    src: url('../resources/fonts/Poppins-Regular.ttf');
 }
+
+#designArea {
+    font-family: Poppins, sans-serif;
+}
+
 
 /**************************************************************
  * Jumbotron : the 1st layout of the list, with "Hello World" *
@@ -27,8 +33,21 @@
     background-color: #ffffff;
     border-radius: 5px;
     margin: 15px 5px;
-    border: solid 1px #efefef !important;
+    /* border: solid 1px #efefef !important; */
 }
+
+
+
+/**!!!!!!!!!!!!!! ATTENTION, le css ne s'affiche pas sur le jumbotron à cause du style bootstrap qui prend le dessus !!!!!!!!!!!!!!!
+
+section:where(#designArea) .jumbotron.ng-scope {
+    border-width: 0px;
+}
+section div .jumbotron {
+    border: solid 3px #ff0000;
+}
+voir le site https://developer.mozilla.org/fr/docs/Web/CSS/Specificity
+*/
 
 .jumbotron h1 {
     /* jumbotron heading */
