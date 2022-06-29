@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Filter suggestions option on filter prompt modal to show or hide suggestions
 - Add CSS class "scrollable-dropdown-menu" for filter suggestions and filter type input
 - Now it's possible to delete a role, even if it contains users (with mention on modal)
+- Added tooltip on layer elements to show their description
+- Added a 'return to home' button on pages where the sidebar is not visible
+- Show the number of rows returned by a query in report editor
 
 ### Changed
 
@@ -30,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Throw error when export failed with Pikitia
 - Now filters on reports or dashboards can be exported as PNG or PDF and stay
   updated with results
+- Fixed filter suggestions not being shown entirely in dashboard
 
 ## [3.0.0] - 2021-10-22
 
