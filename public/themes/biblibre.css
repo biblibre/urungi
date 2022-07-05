@@ -9,7 +9,7 @@
  * the whole dashboard *
  ***********************/
 .dashboard-container {
-    background-color: #f8f8f8;
+    background-color: #dddd;
 }
 
 /***********************
@@ -20,10 +20,12 @@
     src: url('../resources/fonts/Poppins-Regular.ttf');
 }
 
-#designArea {
-    font-family: Poppins, sans-serif;
+/***********************
+ * font for /view/ and /edit/ pages *
+ ***********************/
+section#designArea, div#pageViewer {
+    font-family: 'Poppins', sans-serif;
 }
-
 
 /**************************************************************
  * Jumbotron : the 1st layout of the list, with "Hello World" *
@@ -32,29 +34,16 @@
     padding: 4px 0;
     background-color: #ffffff;
     border-radius: 5px;
-    margin: 15px 5px;
-    /* border: solid 1px #efefef !important; */
+    margin: 15px auto;
+    width: 98%;
 }
-
-
-
-/**!!!!!!!!!!!!!! ATTENTION, le css ne s'affiche pas sur le jumbotron à cause du style bootstrap qui prend le dessus !!!!!!!!!!!!!!!
-
-section:where(#designArea) .jumbotron.ng-scope {
-    border-width: 0px;
-}
-section div .jumbotron {
-    border: solid 3px #ff0000;
-}
-voir le site https://developer.mozilla.org/fr/docs/Web/CSS/Specificity
-*/
 
 .jumbotron h1 {
     /* jumbotron heading */
     color: #212121;
     background: none;
     font-weight: 600;
-    font-size: 45px;
+    font-size: 55px;
     line-height: 1.2;
 }
 
@@ -64,17 +53,13 @@ voir le site https://developer.mozilla.org/fr/docs/Web/CSS/Specificity
     color: #212121;
 }
 
+
 /***************************
  *         headers         *
  ***************************/
-
 /* used for layouts "H" and Lorem Ipsum */
 h1 {
     color: #ffffff;
-}
-
-h3 {
-    color: #2b5b91 !important;
 }
 
 p {
@@ -83,49 +68,49 @@ p {
 
 
 /**************** Custom Headers **********/
-div.page-header h1.editable {
-    /**Title - Lorem ipsum paragraph - calques*/
+div.page-header {
+    border: none;
+}
+
+div.page-header.ng-scope {
+    border-radius: 5px;
     margin: 0 auto;
-    padding: 7px 15px;
-    width: 99%;
-    font-size: 2.6rem;
+    padding: 3px 15px;
+    width: 98%;
+    background-color: white;
+}
+
+div.page-header h1.editable,
+div.page-header > h1 {
+    /**Title - Lorem ipsum paragraph - calques*/
+    font-size: 3rem;
     color: #000000;
     background-color: white;
-    border-left: 1px solid #efefef;
-    border-top: 1px solid #efefef;
-    border-right: 1px solid #efefef;
     font-weight: 700;
 }
 
-div.page-header p.editable {
+div.page-header p.editable,
+div.page-header > p {
     /**Text - Lorem ipsum paragraph - calques*/
     font-size: 16px;
-    background-color: white;
-    background-size: auto;
-    padding: 20px;
-    width: 99%;
-    margin: 0 auto;
-    border-left: 1px solid #efefef;
-    border-bottom: 1px solid #efefef;
-    border-right: 1px solid #efefef;
-    border-radius: 0 0 5px 5px;
+    padding: 10px;
     max-height: 120px;
-    overflow: hidden;
 }
 
+
 /**************** Custom Featurette **********/
-div.ndContainer h2.editable {
+div.ndContainer h2.editable +
+div.ndContainer h2.featurette-heading {
     /** "I Feel good" paragraph - calques*/
     margin: 0 auto;
-    padding: 10px 0 5px 10px;
     font-size: 2.2rem;
     color: #000000;
     background-color: white;
-    border-left: 1px solid #efefef;
-    border-top: 1px solid #efefef;
-    border-right: 1px solid #efefef;
     font-weight: bold;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
+
 
 /********************************
  *         reports              *
@@ -143,7 +128,7 @@ div.ndContainer h2.editable {
     margin: 15px 0px;
     height: 422px;
     background: #ffffff none repeat scroll 0% 0%;
-    border-radius: 0 0 5px 5px;
+    border-radius: 5px;
     margin: 0 0 0 0;
 }
 
@@ -167,29 +152,28 @@ div.ndContainer h2.editable {
     margin-top: 8px;
 }
 
-.col-md-3 .ndContainer {
-    border-radius: 3px;
-    padding: 0;
-    margin: 0 5px;
-    border: 17px solid #df0000;
-}
-
 .ndContainer > h3 {
     /* title of 2/3/4 columns layout */
-    color: #120901 !important;
+    color: #120901;
     text-align: left;
     background: #fefeff none repeat scroll 0% 0%;
-    padding: 10px 15px;
-    margin: 0;
+    padding: 15px;
+    margin: 0 auto;
+    font-weight: bold;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .ndContainer > h2 {
     /* title of 1text+1block 2-columns layout */
-    text-align: left;
-    background: #2a4461 none repeat scroll 0% 0%;
-    margin: 0;
-    border-radius: 5px 5px 0 0;
-    padding: 10px 5px 5px 10px;
+    margin: 0 auto;
+    padding: 15px 0 5px 15px;
+    background: #fefeff none repeat scroll 0% 0%;
+    font-size: 2.6rem;
+    color: #000000;
+    font-weight: bold;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .text-muted {
@@ -200,14 +184,12 @@ div.ndContainer h2.editable {
 .ndContainer > p {
     /* paragraph inside 2/3/4 columns layout and text+block 2-columns layout */
     background: #ffffff none repeat scroll 0% 0%;
-    padding: 18px 10px;
+    padding: 15px 10px;
     margin: 0;
     max-height: 150px;
     overflow: hidden;
     color: #212121;
-    border: none;
     font-size: 15px;
-
 }
 
 /*************************************
@@ -290,6 +272,8 @@ div.ndContainer h2.editable {
 .c3-target-jane {
     background-color: red;
 }
+
+
 /************************
  *     pivot reports    *
  ************************/
@@ -300,7 +284,7 @@ table.pvtTable {
 
 table.pvtTable thead tr th {
     /* columns headers */
-    background-color: #2a4461;
+    background-color: #aaaaaa;
     color: #fff;
     font-size: 8pt;
     padding: 5px;
@@ -309,19 +293,19 @@ table.pvtTable thead tr th {
 table.pvtTable tbody tr:nth-child(even) th {
     /* even lines, 1st column */
     color: #fff;
-    background-color: #2a4461 !important;
+    background-color: #aaaaaa !important;
 }
 
 .pvtTable tbody tr:nth-child(even) td {
     /* even lines, values */
     color: #fff;
     font-weight: 500;
-    background-color: #2a4461;
+    background-color: #aaaaaa;
 }
 
 .pvtTable tbody tr:nth-child(odd) th {
     /* odd lines, 1st column */
-    color: #2a4461;
+    color: #aaaaaa;
 }
 
 .pvtTable tbody tr:nth-child(odd) td {
@@ -335,6 +319,7 @@ table.pvtTable tbody tr:nth-child(even) th {
     color: red !important;
 }
 
+
 /*************************************
  * label of run time selected values *
  *************************************/
@@ -343,14 +328,15 @@ table.pvtTable tbody tr:nth-child(even) th {
     max-width: 100%;
     margin-bottom: 0;
     font-weight: 400;
-    color: #2a4461;
+    color: #aaaaaa;
 }
+
 
 /*************************************
  *   the hr layout (horizontal bar)  *
  *************************************/
 .featurette-divider {
-    border-top: 2px solid #2a4461;
+    border-top: 2px solid #aaaaaa;
 }
 
 .lead {
