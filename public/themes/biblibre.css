@@ -16,7 +16,7 @@
  * font-family *
  ***********************/
 @font-face {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins';
     src: url('../resources/fonts/Poppins-Regular.ttf');
 }
 
