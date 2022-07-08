@@ -23,7 +23,7 @@
 /***********************
  * font for /view/ and /edit/ pages *
  ***********************/
-section#designArea, div#pageViewer {
+section#designArea, div#pageViewer, div.report-grid, table.pvtTable {
     font-family: 'Poppins', sans-serif;
 }
 
@@ -285,7 +285,7 @@ table.pvtTable {
 table.pvtTable thead tr th {
     /* columns headers */
     background-color: #aaaaaa;
-    color: #fff;
+    color: black;
     font-size: 8pt;
     padding: 5px;
 }
