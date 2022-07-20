@@ -82,25 +82,31 @@
             return columnDescription;
         };
 
-        // This function is used to check if a prompt is correctly filled (criteria by filterType)
+        // Checks if a prompt is correctly filled (criteria by filterType)
         function checkPrompt (prompt) {
-            let isValid;
-            if (prompt.elementType === 'date') {
-                if (prompt.filterType === 'between') {
-                    isValid = !!(prompt.criterion.date1 && prompt.criterion.date2);
-                } else if (prompt.filterType === 'equal-pattern') {
-                    isValid = !!(prompt.criterion.label && prompt.criterion.datePattern);
-                } else {
-                    isValid = !!(prompt.criterion.date1);
-                }
-            } else {
-                if (prompt.filterType === 'between') {
-                    isValid = 'text1' in prompt.criterion && 'text2' in prompt.criterion;
-                } else {
-                    isValid = 'text1' in prompt.criterion;
-                }
+            if (!prompt.criterion) {
+                return false;
             }
-            return isValid;
+
+            if (prompt.elementType === 'date') {
+                if (prompt.filterType === 'between' || prompt.filterType === 'notBetween') {
+                    return !!(prompt.criterion.date1 && prompt.criterion.date2);
+                }
+                if (prompt.filterType.endsWith('-pattern')) {
+                    return !!prompt.criterion.datePattern;
+                }
+
+                return !!prompt.criterion.date1;
+            }
+
+            if (prompt.filterType === 'between' || prompt.filterType === 'notBetween') {
+                return !!(prompt.criterion.text1 && prompt.criterion.text2);
+            }
+            if (prompt.filterType === 'in' || prompt.filterType === 'not in') {
+                return Array.isArray(prompt.criterion.textList) && prompt.criterion.textList.length > 0;
+            }
+
+            return !!prompt.criterion.text1;
         }
 
         function checkPrompts (prompts) {
