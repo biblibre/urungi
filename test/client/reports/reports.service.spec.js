@@ -189,8 +189,9 @@ describe('reportsService', function () {
             expect(description).toBe('Maximum Quux');
         });
     });
+
     describe('checkPrompt', function () {
-        it('should return a boolean to true if prompt with date filter type filled correctly', function () {
+        it('should return true if prompt with date filter type filled correctly', function () {
             const prompt1 = {
                 elementType: 'date',
                 filterType: 'between',
@@ -204,7 +205,6 @@ describe('reportsService', function () {
                 elementType: 'date',
                 filterType: 'equal-pattern',
                 criterion: {
-                    label: 'Today',
                     datePattern: '#WST-TODAY#'
                 }
             };
@@ -226,7 +226,7 @@ describe('reportsService', function () {
             expect(boolean3).toBe(true);
         });
 
-        it('should return a boolean to true if prompt with another filter type than date filled correctly', function () {
+        it('should return true if prompt with another filter type than date filled correctly', function () {
             const prompt1 = {
                 elementType: 'number',
                 filterType: 'between',
@@ -251,7 +251,7 @@ describe('reportsService', function () {
             expect(boolean2).toBe(true);
         });
 
-        it('should return a boolean to false if prompt with date filter type is not filled correctly', function () {
+        it('should return false if prompt with date filter type is not filled correctly', function () {
             const prompt1 = {
                 elementType: 'date',
                 filterType: 'between',
@@ -265,7 +265,7 @@ describe('reportsService', function () {
                 filterType: 'equal-pattern',
                 criterion: {
                     label: '',
-                    datePattern: '#WST-TODAY#'
+                    datePattern: ''
                 }
             };
 
@@ -283,7 +283,8 @@ describe('reportsService', function () {
             expect(boolean2).toBe(false);
             expect(boolean3).toBe(false);
         });
-        it('should return a boolean to false if prompt with another filter type than date is not filled correctly', function () {
+
+        it('should return false if prompt with another filter type than date is not filled correctly', function () {
             const prompt1 = {
                 elementType: 'number',
                 filterType: 'between',
@@ -303,6 +304,50 @@ describe('reportsService', function () {
 
             expect(boolean1).toBe(false);
             expect(boolean2).toBe(false);
+        });
+
+        it('should return true if filterType == "in" and textList is not empty', function () {
+            const isValid = reportsService.checkPrompt({
+                elementType: 'string',
+                filterType: 'in',
+                criterion: {
+                    textList: ['foo'],
+                },
+            });
+            expect(isValid).toBe(true);
+        });
+
+        it('should return false if filterType == "in" and textList is empty', function () {
+            const isValid = reportsService.checkPrompt({
+                elementType: 'string',
+                filterType: 'in',
+                criterion: {
+                    textList: [],
+                },
+            });
+            expect(isValid).toBe(false);
+        });
+
+        it('should return true if filterType == "not in" and textList is not empty', function () {
+            const isValid = reportsService.checkPrompt({
+                elementType: 'string',
+                filterType: 'not in',
+                criterion: {
+                    textList: ['foo'],
+                },
+            });
+            expect(isValid).toBe(true);
+        });
+
+        it('should return false if filterType == "not in" and textList is empty', function () {
+            const isValid = reportsService.checkPrompt({
+                elementType: 'string',
+                filterType: 'not in',
+                criterion: {
+                    textList: [],
+                },
+            });
+            expect(isValid).toBe(false);
         });
     });
 });
