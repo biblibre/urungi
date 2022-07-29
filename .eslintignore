@@ -1,3 +1,4 @@
-dist/
+public/s/
+public/templates/
 doc/user/_build
 !/.heroku

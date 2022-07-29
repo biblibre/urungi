@@ -6,26 +6,21 @@ const del = require('del');
 const path = require('path');
 const child_process = require('child_process');
 
-const dist_css = gulp.series(dist_css_clean, dist_css_build);
-const dist_fonts = gulp.series(dist_fonts_clean, dist_fonts_build);
-const dist_translations = gulp.series(dist_translations_clean, dist_translations_build);
-const dist_templates = gulp.series(dist_templates_clean, dist_templates_build);
+const translations = gulp.series(translations_clean, translations_build);
+const templates = gulp.series(templates_clean, templates_build);
 
-const dist = gulp.parallel(
-    dist_css,
-    dist_fonts,
-    dist_translations,
-    dist_templates,
+const defaultTask = gulp.parallel(
+    css,
+    translations,
+    templates,
 );
 
 module.exports = {
-    default: dist,
+    default: defaultTask,
     dev: gulp.parallel(watch_less, watch_templates, nodemon_start),
-    dist: dist,
-    'dist:css': dist_css,
-    'dist:fonts': dist_fonts,
-    'dist:translations': dist_translations,
-    'dist:templates': dist_templates,
+    css: css,
+    translations: translations,
+    templates: templates,
     doc: doc,
     pot: pot,
     'po:update': gulp.series(pot, po_update),
@@ -35,23 +30,15 @@ module.exports = {
     watch: gulp.parallel(watch_doc, watch_less, watch_templates),
 };
 
-function dist_css_clean () {
-    return del('dist/css/*');
+function translations_clean () {
+    return del('public/translations/*');
 }
 
-function dist_fonts_clean () {
-    return del('dist/fonts/*');
+function templates_clean () {
+    return del('public/templates/*');
 }
 
-function dist_translations_clean () {
-    return del('dist/translations/*');
-}
-
-function dist_templates_clean () {
-    return del('dist/templates/*');
-}
-
-function dist_css_build () {
+function css () {
     const less = require('gulp-less');
 
     return gulp.src('public/less/bootstrap.less')
@@ -60,26 +47,16 @@ function dist_css_build () {
                 path.join(__dirname, 'node_modules', 'bootstrap', 'less'),
             ],
         }))
-        .pipe(gulp.dest('dist/css'));
+        .pipe(gulp.dest('public/css'));
 }
 
-function dist_fonts_build () {
-    const paths = [
-        'node_modules/font-awesome/fonts/*',
-        'node_modules/bootstrap/fonts/*',
-    ];
-
-    return gulp.src(paths)
-        .pipe(gulp.dest('dist/fonts'));
-}
-
-function dist_translations_build () {
+function translations_build () {
     return gulp.src(['language/*.po'])
         .pipe(gettext.compile({ format: 'json' }))
-        .pipe(gulp.dest('dist/translations'));
+        .pipe(gulp.dest('public/translations'));
 }
 
-function dist_templates_build () {
+function templates_build () {
     // Using a single glob `public/partials/**/*.html` breaks the file order
     // and produce a different file even if no templates have changed.
     // By listing explicitely all directories we ensure that it does not happen.
@@ -114,7 +91,7 @@ function dist_templates_build () {
             standalone: true,
             moduleSystem: 'IIFE',
         }))
-        .pipe(gulp.dest('dist/templates'));
+        .pipe(gulp.dest('public/templates'));
 }
 
 function nodemon_start (done) {
@@ -152,11 +129,11 @@ function po_update () {
 }
 
 function watch_templates () {
-    gulp.watch('public/partials/**/*.html', dist_templates);
+    gulp.watch('public/partials/**/*.html', templates);
 }
 
 function watch_less () {
-    gulp.watch('public/less/*.less', dist_css);
+    gulp.watch('public/less/*.less', css);
 }
 
 function watch_doc () {

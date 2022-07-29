@@ -26,4 +26,4 @@ require('angular-gettext');
 require('angular-mocks');
 require('angular-ui-bootstrap');
 
-require('../../dist/templates/templates.js');
+require('../../public/templates/templates.js');
