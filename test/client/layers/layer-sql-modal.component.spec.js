@@ -7,7 +7,7 @@ require('../../../public/js/core/user.service.js');
 require('../../../public/js/layers/layers.module.js');
 require('../../../public/js/layers/layer.service.js');
 require('../../../public/js/layers/layer-sql-modal.component.js');
-require('../../../dist/templates/templates.js');
+require('../../../public/templates/templates.js');
 
 describe('appLayerSqlModal', function () {
     beforeEach(angular.mock.module('app.templates'));

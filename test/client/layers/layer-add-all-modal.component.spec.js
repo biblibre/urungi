@@ -6,7 +6,7 @@ require('../../../public/js/core/notify.service.js');
 require('../../../public/js/core/user.service.js');
 require('../../../public/js/layers/layers.module.js');
 require('../../../public/js/layers/layer-add-all-modal.component.js');
-require('../../../dist/templates/templates.js');
+require('../../../public/templates/templates.js');
 
 describe('appLayerAddAllModal', function () {
     beforeEach(angular.mock.module('app.templates'));
