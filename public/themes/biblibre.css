@@ -185,7 +185,7 @@ div.ndContainer h2.editable {
 .ndContainer > h2 {
     /* title of 1text+1block 2-columns layout */
     text-align: left;
-    background: #2a4461 none repeat scroll 0% 0%;
+    background: #eee none repeat scroll 0% 0%;
     margin: 0;
     border-radius: 5px 5px 0 0;
     padding: 10px 5px 5px 10px;
@@ -350,6 +350,10 @@ table.pvtTable tbody tr:nth-child(even) th {
  *************************************/
 .featurette-divider {
     border-top: 2px solid #2a4461;
+}
+
+.featurette-heading {
+    color: #000;
 }
 
 .lead {
