@@ -12,9 +12,9 @@
         },
     });
 
-    ReportsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'reportModel', 'gettextCatalog', '$rootScope'];
+    ReportsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'reportModel', 'gettextCatalog', '$rootScope', 'userService'];
 
-    function ReportsListButtonsController ($uibModal, api, base, reportModel, gettextCatalog, $rootScope) {
+    function ReportsListButtonsController ($uibModal, api, base, reportModel, gettextCatalog, $rootScope, userService) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -24,6 +24,14 @@
         vm.share = share;
         vm.unshare = unshare;
         vm.getCopyLink = getCopyLink;
+
+        activate();
+
+        function activate () {
+            userService.getCurrentUser().then(user => {
+                vm.creationAuthorised = user.reportsCreate;
+            });
+        }
 
         function openDeleteModal () {
             const modal = $uibModal.open({

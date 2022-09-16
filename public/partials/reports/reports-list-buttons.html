@@ -1,4 +1,4 @@
-<div class="btn-group btn-group-sm pull-right">
+<div ng-if="vm.creationAuthorised" class="btn-group btn-group-sm pull-right">
     <button class="btn btn-silver"
         uib-tooltip="{{ 'Share' | translate }}"
         uib-popover-template="'share-popover.html'"
