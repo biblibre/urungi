@@ -311,6 +311,37 @@ describe('Reports API', function () {
     });
 
     describe('POST /api/reports/update/:id', function () {
+        let role2;
+        let user2;
+        let user2Headers;
+        beforeAll(async function () {
+            role2 = await Role.create({
+                companyID: 'COMPID',
+                name: 'GUEST',
+                description: 'Role to test',
+                permissions: [],
+                grants: [],
+                reportsCreate: false,
+                reportsShare: false,
+                dashboardsCreate: false,
+                exploreData: true,
+                viewSQL: true,
+                dashboardsShare: false,
+                nd_trash_deleted: false,
+            });
+            user2 = await User.create({
+                userName: 'johndoe',
+                password: 'password',
+                companyID: 'COMPID',
+                roles: role2._id,
+                status: 'active',
+                nd_trash_deleted: false,
+            });
+            user2Headers = await helpers.login(app, 'johndoe', 'password');
+        });
+        afterAll(async function () {
+            await user2.remove();
+        });
         it('should update a report', async function () {
             const res = await request(app).post('/api/reports/update/' + report.id)
                 .set(headers)
@@ -319,6 +350,21 @@ describe('Reports API', function () {
 
             expect(res.body).toHaveProperty('result', 1);
             expect(res.body).toHaveProperty('msg', '1 record updated.');
+        });
+        it('should not authorized to update a report without permission even is the report owner', async function () {
+            const res = await request(app).post('/api/reports/update/' + report.id)
+                .set(user2Headers)
+                .send({
+                    companyID: 'COMPID',
+                    reportName: 'Report 2',
+                    nd_trash_deleted: false,
+                    owner: user2.id,
+                    isPublic: false,
+                    selectedLayerID: 'abcdef123456789012345678',
+                })
+                .expect(403);
+
+            expect(res.body).toHaveProperty('result', 0);
         });
     });
     describe('POST /api/reports/delete/:id', function () {
