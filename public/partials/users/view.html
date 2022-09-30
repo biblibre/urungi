@@ -21,7 +21,11 @@
                             <span translate ng-if="vm.user.status == 'Not active'">not active</span>
                         </a>
                     </h4>
-
+                    <div class="text-center">
+                        <button ng-click="vm.modifyPassword()" class="btn btn-success">
+                            <span translate>Change password</span>
+                        </button>
+                    </div>
                     <div class="text-center">
                         {{ vm.user.title }}
                     </div>

@@ -24,6 +24,7 @@
         vm.getRoleName = getRoleName;
         vm.getRolesNotInUser = getRolesNotInUser;
         vm.deleteUser = deleteUser;
+        vm.modifyPassword = modifyPassword;
 
         activate();
 
@@ -157,5 +158,18 @@
                 );
             }
         }
+
+        function modifyPassword () {
+            const modal = $uibModal.open({
+                component: 'appUsersModifyPasswordModal',
+                resolve: {
+                    user: () => vm.currentUser,
+                },
+            });
+
+            modal.result.then(function (user) {
+                vm.currentUser = user;
+            });
+        };
     }
 })();

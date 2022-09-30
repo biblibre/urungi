@@ -80,6 +80,7 @@
             getUser: getUser,
             createUser: createUser,
             updateUser: updateUser,
+            updateUserPassword: updateUserPassword,
             deleteUserRole: deleteUserRole,
             addUserRole: addUserRole,
             getUserReports: getUserReports,
@@ -108,6 +109,10 @@
 
         function getUserData () {
             return httpGet('/api/user');
+        }
+
+        function updateUserPassword (changes) {
+            return httpPut('/api/user/password', changes);
         }
 
         function getUserObjects () {
