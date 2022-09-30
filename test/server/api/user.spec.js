@@ -339,4 +339,39 @@ describe('User API', function () {
             expect(res).toHaveProperty('status', 204);
         });
     });
+
+    describe('PUT /api/user/password', function () {
+        let user;
+        beforeEach(async () => {
+            user = await User.create({
+                userName: 'user',
+                password: 'password',
+                companyID: 'COMPID',
+                roles: ['GUEST'],
+            });
+            userHeaders = await helpers.login(app, 'user', 'password');
+        });
+        afterEach(async function () {
+            await Promise.all([
+                user.remove(),
+            ]);
+        });
+
+        it('should return status 401 if the old password is false', async function () {
+            const res = await request(app).put('/api/user/password')
+                .set(userHeaders)
+                .send({ oldPassword: 'plop', newPassword: 'newAwesomePassword' });
+
+            expect(res).toHaveProperty('status', 401);
+            expect(res).toHaveProperty('text', '{"error":"Old password incorrect"}');
+        });
+
+        it('should return status 200 if password is updated', async function () {
+            const res = await request(app).put('/api/user/password')
+                .set(userHeaders)
+                .send({ oldPassword: 'password', newPassword: 'newAwesomePassword' });
+
+            expect(res).toHaveProperty('status', 200);
+        });
+    });
 });
