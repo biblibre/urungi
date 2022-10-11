@@ -3,6 +3,7 @@ const dateHelper = require('../helpers/date.js');
 class SqlQueryBuilder {
     build (query) {
         this.query = query;
+        const havingCount = this.getHavingCount(query);
 
         const select = this.getSelect(query);
         const from = this.getFrom(query);
@@ -17,6 +18,10 @@ class SqlQueryBuilder {
         const orderByAndLimit = this.getOrderByAndLimit(query);
         if (orderByAndLimit) {
             sql += ` ${orderByAndLimit}`;
+        }
+
+        if (havingCount) {
+            sql += `${havingCount}`;
         }
 
         return sql;
@@ -143,6 +148,7 @@ class SqlQueryBuilder {
         let sql = `SELECT ${select} FROM ${from}`;
 
         if (Array.isArray(query.filters)) {
+            query.filters = query.filters.filter(f => f.aggregation !== 'count');
             const sqlFragments = query.filters.map(f => this.getFilter(f));
             const where = sqlFragments.filter(f => f).join(' AND ');
             if (where) {
@@ -235,7 +241,12 @@ class SqlQueryBuilder {
     }
 
     getTextFilter (filter) {
-        const field = this.getColumn(filter);
+        let field;
+        if (filter.aggregation === 'count') {
+            field = `(${filter.elementID})`;
+        } else {
+            field = this.getColumn(filter);
+        }
 
         switch (filter.filterType) {
         case 'equal':
@@ -543,6 +554,14 @@ class SqlQueryBuilder {
         }
 
         return this.quoteString(String(value));
+    }
+
+    getHavingCount (query) {
+        const havingCount = query.filters.find(f => f.aggregation === 'count');
+        if (havingCount) {
+            const havingCountSql = ` HAVING COUNT${this.getFilter(havingCount)}`;
+            return havingCountSql;
+        }
     }
 }
 
