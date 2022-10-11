@@ -557,10 +557,12 @@ class SqlQueryBuilder {
     }
 
     getHavingCount (query) {
-        const havingCount = query.filters.find(f => f.aggregation === 'count');
-        if (havingCount) {
-            const havingCountSql = ` HAVING COUNT${this.getFilter(havingCount)}`;
-            return havingCountSql;
+        if (query.filters) {
+            const havingCount = query.filters.find(f => f.aggregation === 'count');
+            if (havingCount) {
+                const havingCountSql = ` HAVING COUNT${this.getFilter(havingCount)}`;
+                return havingCountSql;
+            }
         }
     }
 }
