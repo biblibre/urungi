@@ -85,7 +85,6 @@ function processQuery (query, queryLayer, warnings) {
 
         processedQuery.order.push(validateOrder(col, element, warnings));
     }
-
     for (const col of query.filters) {
         const element = findElement(queryLayer.objects, col.elementID);
         if (!element) {
@@ -296,7 +295,7 @@ function validateFilter (filter, element, escape, warnings) {
 
     validFilter.criterion = {};
 
-    for (const crit of ['date1', 'date2', 'datePattern', 'text1', 'text2']) {
+    for (const crit of ['datePattern', 'text1', 'text2']) {
         if (filter.criterion[crit]) {
             validFilter.criterion[crit] = String(filter.criterion[crit]);
         }

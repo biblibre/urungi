@@ -196,8 +196,8 @@ describe('reportsService', function () {
                 elementType: 'date',
                 filterType: 'between',
                 criterion: {
-                    date1: '2020-01-01',
-                    date2: '2022-01-01'
+                    text1: '2020-01-01',
+                    text2: '2022-01-01'
                 }
             };
 
@@ -213,7 +213,7 @@ describe('reportsService', function () {
                 elementType: 'date',
                 filterType: 'equal',
                 criterion: {
-                    date1: '2020-31-01',
+                    text1: '2020-31-01',
                 }
             };
 
@@ -256,7 +256,7 @@ describe('reportsService', function () {
                 elementType: 'date',
                 filterType: 'between',
                 criterion: {
-                    date1: '2020-01-01',
+                    text1: '2020-01-01',
                 }
             };
 

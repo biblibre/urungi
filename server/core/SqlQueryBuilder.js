@@ -3,7 +3,6 @@ const dateHelper = require('../helpers/date.js');
 class SqlQueryBuilder {
     build (query) {
         this.query = query;
-
         const select = this.getSelect(query);
         const from = this.getFrom(query);
 
@@ -313,8 +312,8 @@ class SqlQueryBuilder {
     // the equal always take the whole day without taking care about the time
     getDateFilter (filter) {
         const field = this.getColumn(filter);
-        const date1 = filter.criterion && filter.criterion.date1 ? new Date(filter.criterion.date1) : null;
-        const date2 = filter.criterion && filter.criterion.date2 ? new Date(filter.criterion.date2) : null;
+        const date1 = filter.criterion && filter.criterion.text1 ? new Date(filter.criterion.text1) : null;
+        const date2 = filter.criterion && filter.criterion.text2 ? new Date(filter.criterion.text2) : null;
 
         let sql;
         switch (filter.filterType) {
