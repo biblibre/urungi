@@ -25,7 +25,7 @@
         vm.$onInit = $onInit;
 
         function $onInit () {
-            vm.username = angular.copy(vm.resolve.username);
+            vm.username = vm.resolve.username;
         }
 
         function togglePasswordVisibility () {
@@ -52,7 +52,7 @@
             const p = api.updateUserPassword({ oldPassword: vm.user.pwdOld, newPassword: vm.user.pwdNew1 });
 
             p.then(function () {
-                vm.close({ $value: vm.user });
+                vm.close();
                 notify.success(gettextCatalog.getString('Password changed'));
             }).catch((error) => {
                 vm.alertMessage = gettextCatalog.getString(error);

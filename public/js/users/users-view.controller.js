@@ -167,7 +167,7 @@
                 },
             });
 
-            modal.result.then(() => {}).catch(() => {});
+            modal.result.catch(() => {});
         };
     }
 })();
