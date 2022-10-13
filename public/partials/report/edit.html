@@ -18,7 +18,7 @@
     <div class="explorer-header-buttons btn-group">
         <button type="button" class="btn btn-default" ng-if="sql && user.reportsCreate && !isForDash" data-ng-click="saveReportAndStay()" translate>Save</button>
         <button type="button" class="btn btn-default" ng-if="sql && user.reportsCreate && isForDash == true" data-ng-click="saveReportStructure(); saveReport4Dashboard(mode); initReport();" translate>Save</button>
-        <button ng-if="sql && !isForDash" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button ng-if="sql && !isForDash && user.reportsCreate" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
         </button>

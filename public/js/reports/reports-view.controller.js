@@ -27,6 +27,7 @@
         function activate () {
             userService.getCurrentUser().then(user => {
                 vm.isAdmin = user.isAdmin();
+                vm.creationAuthorised = user.reportsCreate;
             }, () => {});
             api.isReportAsPNGAvailable(report._id).then(available => {
                 vm.exportAsPNGAvailable = available;
