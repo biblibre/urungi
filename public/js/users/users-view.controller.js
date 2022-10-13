@@ -163,13 +163,11 @@
             const modal = $uibModal.open({
                 component: 'appUsersModifyPasswordModal',
                 resolve: {
-                    user: () => vm.currentUser,
+                    username: () => vm.currentUser.userName,
                 },
             });
 
-            modal.result.then(function (user) {
-                vm.currentUser = user;
-            });
+            modal.result.then(() => {}).catch(() => {});
         };
     }
 })();

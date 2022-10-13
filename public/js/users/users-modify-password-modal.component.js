@@ -16,25 +16,22 @@
 
     function UsersModifyPasswordModalController (gettextCatalog, api, notify) {
         const vm = this;
-        vm.user = {};
+        vm.username = '';
         vm.alertMessage = '';
         vm.submitNewPassword = submitNewPassword;
-        vm.showPasswords = showPasswords;
+        vm.togglePasswordVisibility = togglePasswordVisibility;
         vm.inputType = 'password';
 
         vm.$onInit = $onInit;
 
         function $onInit () {
-            vm.user = angular.copy(vm.resolve.user);
+            vm.username = angular.copy(vm.resolve.username);
         }
 
-        function showPasswords () {
-            const inputs = document.getElementsByClassName('input-passwd');
+        function togglePasswordVisibility () {
             if (vm.inputType === 'password') {
-                inputs.type = 'text';
                 vm.inputType = 'text';
             } else {
-                inputs.type = 'password';
                 vm.inputType = 'password';
             }
         }
@@ -58,7 +55,7 @@
                 vm.close({ $value: vm.user });
                 notify.success(gettextCatalog.getString('Password changed'));
             }).catch((error) => {
-                notify.error(gettextCatalog.getString(error));
+                vm.alertMessage = gettextCatalog.getString(error);
             });
         }
     }

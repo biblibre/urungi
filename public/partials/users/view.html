@@ -22,7 +22,7 @@
                         </a>
                     </h4>
                     <div class="text-center">
-                        <button ng-click="vm.modifyPassword()" class="btn btn-success">
+                        <button ng-if="vm.user._id == vm.currentUser._id" ng-click="vm.modifyPassword()" class="btn btn-success">
                             <span translate>Change password</span>
                         </button>
                     </div>

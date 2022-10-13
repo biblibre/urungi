@@ -372,6 +372,15 @@ describe('User API', function () {
                 .send({ oldPassword: 'password', newPassword: 'newAwesomePassword' });
 
             expect(res).toHaveProperty('status', 200);
+
+            await new Promise((resolve, reject) => {
+                User.isValidUserPassword('user', 'newAwesomePassword', (err, user) => {
+                    if (err) return reject(err);
+                    resolve(user);
+                });
+            });
+            expect(user).toBeTruthy();
+            expect(user).toHaveProperty('userName', 'user');
         });
     });
 });
