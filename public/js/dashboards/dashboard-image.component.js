@@ -8,7 +8,7 @@
         },
         controller: DashboardImageController,
         controllerAs: 'vm',
-        template: '<img class="img-responsive" ng-src="{{ vm.url }}">',
+        template: '<img class="img-responsive" draggable="false" ng-src="{{ vm.url }}">',
     });
 
     DashboardImageController.$inject = ['$element', '$uibModal'];
