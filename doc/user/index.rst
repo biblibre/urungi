@@ -32,6 +32,13 @@ Supported databases
    upgrade
 
 .. toctree::
+   :caption: Admin
+   :maxdepth: 2
+   :hidden:
+
+   admin/users
+
+.. toctree::
    :caption: Reports
    :maxdepth: 2
    :hidden:
