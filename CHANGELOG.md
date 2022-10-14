@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Added ability for users to change their own password
+
 ### Fixed
 
 - Fixed filter when layer column has date element type and switch to another type
 - Fix drag and drop issue with images within dashboards
+- Fix access control so that users without permission `reportsCreate` cannot
+  modify or delete reports, even their own reports
 
 ## [3.1.1] - 2022-07-20
 
