@@ -90,13 +90,13 @@
 
             if (prompt.elementType === 'date') {
                 if (prompt.filterType === 'between' || prompt.filterType === 'notBetween') {
-                    return !!(prompt.criterion.date1 && prompt.criterion.date2);
+                    return !!(prompt.criterion.text1 && prompt.criterion.text2);
                 }
                 if (prompt.filterType.endsWith('-pattern')) {
                     return !!prompt.criterion.datePattern;
                 }
 
-                return !!prompt.criterion.date1;
+                return !!prompt.criterion.text1;
             }
 
             if (prompt.filterType === 'between' || prompt.filterType === 'notBetween') {

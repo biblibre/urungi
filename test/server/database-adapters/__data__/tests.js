@@ -206,7 +206,7 @@ module.exports = function (client) {
                         elementType: 'date',
                         filterType: 'diferentThan',
                         criterion: {
-                            date1: new Date(1979, 10, 30),
+                            text1: new Date(1979, 10, 30),
                         },
                     }
                 ],
