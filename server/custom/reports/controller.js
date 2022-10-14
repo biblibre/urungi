@@ -173,26 +173,32 @@ exports.ReportsCreate = function (req, res) {
 };
 
 exports.ReportsUpdate = function (req, res) {
-    req.query.trash = true;
-    req.query.companyid = true;
-    const data = req.body;
+    req.user.getPermissions().then(permissions => {
+        if (!permissions.reportsCreate && !req.user.isAdmin()) {
+            res.status(403).json({ result: 0, msg: 'You do not have the necessary permissions' });
+        } else {
+            req.query.trash = true;
+            req.query.companyid = true;
+            const data = req.body;
 
-    if (!req.user.isAdmin()) {
-        Report.findOne({ _id: data._id, owner: req.user._id, companyID: req.user.companyID }, { _id: 1 }, {}, function (err, item) {
-            if (err) throw err;
-            if (item) {
+            if (!req.user.isAdmin()) {
+                Report.findOne({ _id: data._id, owner: req.user._id, companyID: req.user.companyID }, { _id: 1 }, {}, function (err, item) {
+                    if (err) throw err;
+                    if (item) {
+                        controller.update(req).then(function (result) {
+                            res.status(200).json(result);
+                        });
+                    } else {
+                        res.status(401).json({ result: 0, msg: 'You don´t have permissions to update this report, or this report do not exists' });
+                    }
+                });
+            } else {
                 controller.update(req).then(function (result) {
                     res.status(200).json(result);
                 });
-            } else {
-                res.status(401).json({ result: 0, msg: 'You don´t have permissions to update this report, or this report do not exists' });
             }
-        });
-    } else {
-        controller.update(req).then(function (result) {
-            res.status(200).json(result);
-        });
-    }
+        };
+    });
 };
 
 exports.PublishReport = async function (req, res) {
