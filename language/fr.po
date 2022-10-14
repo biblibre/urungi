@@ -72,7 +72,7 @@ msgstr "Ajouter"
 msgid "Add SQL"
 msgstr "Ajouter requête SQL"
 
-#: public/partials/users/view.html:51
+#: public/partials/users/view.html:55
 msgid "Add a new role..."
 msgstr "Ajouter un nouveau rôle..."
 
@@ -100,7 +100,7 @@ msgstr "Ajouter un en-tête et un pied de page"
 msgid "Add new SQL"
 msgstr "Ajouter SQL"
 
-#: public/partials/users/view.html:50
+#: public/partials/users/view.html:54
 msgid "Add role"
 msgstr "Ajouter un rôle"
 
@@ -242,6 +242,7 @@ msgstr "Moyenne"
 #: public/js/data-sources/data-sources-list.controller.js:31
 #: public/js/home/controller.js:13
 #: public/js/layers/layers-list.controller.js:101
+#: public/js/ng/report-list/report-list.component.js:38
 #: public/js/report/controller.js:705
 #: public/js/reports/reports-list.controller.js:31
 #: public/js/spaces/controller.js:12
@@ -295,6 +296,14 @@ msgstr "Annuler"
 msgid "Cannot modify sql of an object which is not an sql request"
 msgstr "Impossible de modifier le SQL d'un objet qui n'est pas une requête SQL"
 
+#: public/partials/users/view.html:26
+msgid "Change password"
+msgstr "Modifier le mot de passe"
+
+#: public/partials/users/users-modify-password-modal.html:3
+msgid "Change password for {{vm.username}}"
+msgstr "Modifier le mot de passe pour {{vm.username}}"
+
 #: public/partials/report/modals/filter-prompt-modal.html:59
 msgid ""
 "Check if you want all suggestions on filter (too much data can crash the app)"
@@ -318,6 +327,7 @@ msgstr "Choisissez un nouveau nom pour la copie :"
 msgid "Choose a report to add to the dashboard"
 msgstr "Choisissez un rapport à ajouter au tableau de bord"
 
+#: public/js/ng/report-list/report-list.component.js:55
 #: public/js/reports/reports-list.controller.js:48
 msgid ""
 "Choose a report type and drag and drop elements from the selected layer to "
@@ -414,11 +424,14 @@ msgstr ""
 msgid "Click here to create a new layer."
 msgstr "Cliquez ici pour créer un nouveau calque."
 
+#: public/js/ng/report-list/report-list.component.js:65
 #: public/js/reports/reports-list.controller.js:58
 msgid "Click here to create a new report."
 msgstr "Cliquez ici pour créer un nouveau rapport."
 
-#: public/partials/layers/list.html:11 public/partials/reports/list.html:11
+#: public/partials/layers/list.html:11
+#: public/partials/report-list/report-list.component.html:4
+#: public/partials/reports/list.html:11
 msgid "Click here to create a new single query report"
 msgstr "Cliquez ici pour créer un nouveau rapport"
 
@@ -430,6 +443,7 @@ msgstr "Cliquez ici pour supprimer ce tableau de bord."
 msgid "Click here to delete the layer."
 msgstr "Cliquez ici pour supprimer ce calque."
 
+#: public/js/ng/report-list/report-list.component.js:93
 #: public/js/reports/reports-list.controller.js:86
 msgid "Click here to delete the report."
 msgstr "Cliquez ici pour supprimer ce rapport."
@@ -438,6 +452,7 @@ msgstr "Cliquez ici pour supprimer ce rapport."
 msgid "Click here to delete this report"
 msgstr "Supprimer ce rapport"
 
+#: public/js/ng/report-list/report-list.component.js:105
 #: public/js/reports/reports-list.controller.js:98
 msgid "Click here to duplicate the report."
 msgstr "Cliquez ici pour dupliquer le rapport."
@@ -450,6 +465,7 @@ msgstr "Modifier le rapport"
 msgid "Click here to modify the dashboard."
 msgstr "Modifier le tableau de bord."
 
+#: public/js/ng/report-list/report-list.component.js:85
 #: public/js/reports/reports-list.controller.js:78
 msgid "Click here to modify the report."
 msgstr "Cliquez ici pour modifier le rapport."
@@ -496,6 +512,7 @@ msgstr "Sélectionner ce tableau de bord"
 msgid "Click over a dashboard's name to execute it."
 msgstr "Cliquez sur le nom du tableau de bord pour le lancer."
 
+#: public/js/ng/report-list/report-list.component.js:75
 #: public/js/reports/reports-list.controller.js:68
 msgid "Click over a report's name to execute it."
 msgstr "Cliquez sur le nom du rapport pour l'exécuter."
@@ -510,6 +527,7 @@ msgstr ""
 
 #: public/partials/report/modals/filter-prompt-modal.html:76
 #: public/partials/users/users-edit-modal.html:92
+#: public/partials/users/users-modify-password-modal.html:33
 msgid "Close"
 msgstr "Fermer"
 
@@ -575,6 +593,7 @@ msgstr "Créez des dossiers et déplacer les à travers l'espace public."
 msgid "Create new dashboard"
 msgstr "Créer un nouveau tableau de bord"
 
+#: public/partials/report-list/report-list.component.html:4
 #: public/partials/reports/list.html:11
 msgid "Create new report"
 msgstr "Créer un nouveau rapport"
@@ -619,7 +638,7 @@ msgstr "Tableau de bord mis à jour avec succès:"
 #: public/js/dashboards/dashboards-list.controller.js:86
 #: public/js/home/controller.js:189 public/partials/dashboards/list.html:9
 #: public/partials/io/export.html:57 public/partials/io/import.html:112
-#: public/partials/users/view.html:101
+#: public/partials/users/view.html:105
 msgid "Dashboards"
 msgstr "Tableaux de bord"
 
@@ -730,6 +749,7 @@ msgstr "Supprimer"
 msgid "Delete background"
 msgstr "Supprimer l'arrière-plan"
 
+#: public/js/ng/report-list/report-list.component.js:91
 #: public/js/reports/reports-list.controller.js:84
 msgid "Delete report"
 msgstr "Supprimer le rapport"
@@ -756,7 +776,7 @@ msgstr "Supprimer cet utilisateur"
 
 #: public/js/dashboards/dashboards-list-buttons.component.js:32
 #: public/js/layers/layers-list-buttons.component.js:25
-#: public/js/reports/reports-list-buttons.component.js:32
+#: public/js/reports/reports-list-buttons.component.js:40
 msgid "Delete {{name}} ?"
 msgstr "Supprimer {{name}} ?"
 
@@ -790,6 +810,7 @@ msgstr "Ne pas montrer ce bloc à nouveau"
 #: public/js/data-sources/data-sources-list.controller.js:33
 #: public/js/home/controller.js:15
 #: public/js/layers/layers-list.controller.js:103
+#: public/js/ng/report-list/report-list.component.js:40
 #: public/js/report/controller.js:707
 #: public/js/reports/reports-list.controller.js:33
 #: public/js/spaces/controller.js:14
@@ -868,6 +889,7 @@ msgstr "Dupliquer"
 msgid "Duplicate '{{vm.resolve.name}}' ?"
 msgstr "Dupliquer '{{vm.resolve.name}}' ?"
 
+#: public/js/ng/report-list/report-list.component.js:103
 #: public/js/report/controller.js:14
 #: public/js/reports/reports-list.controller.js:96
 msgid "Duplicate report"
@@ -907,6 +929,7 @@ msgstr "Modifier la source de données"
 msgid "Edit folder"
 msgstr "Modifier le dossier"
 
+#: public/js/ng/report-list/report-list.component.js:83
 #: public/js/reports/reports-list.controller.js:76
 msgid "Edit report"
 msgstr "Modifier le rapport"
@@ -1081,6 +1104,7 @@ msgstr "Suivre la visite guidée pour les tableaux de bord"
 msgid "Follow the guided tour for data sources"
 msgstr "Suivre une visite guidée pour les sources de données"
 
+#: public/partials/report-list/report-list.component.html:5
 #: public/partials/reports/list.html:12
 msgid "Follow the guided tour for reports"
 msgstr "Suivre la visite guidée pour les rapports"
@@ -1213,6 +1237,7 @@ msgstr ""
 msgid "Here all your dashboards are listed."
 msgstr "Tous les tableaux de bord sont listés ici."
 
+#: public/js/ng/report-list/report-list.component.js:73
 #: public/js/reports/reports-list.controller.js:66
 msgid "Here all your reports are listed."
 msgstr "Tous vos rapports sont listés ici."
@@ -1229,6 +1254,7 @@ msgstr ""
 msgid "Here you can access the basic operations in urungi"
 msgstr "Vous pouvez accéder ici aux opérations de base d'Urungi"
 
+#: public/js/ng/report-list/report-list.component.js:48
 #: public/js/reports/reports-list.controller.js:41
 msgid "Here you can create and execute reports."
 msgstr "Ici vous pouvez créer et exécuter des rapports."
@@ -1275,6 +1301,7 @@ msgstr ""
 "pour les autres utilisateurs, pensez ici avant de mettre à jour ces tableaux "
 "de bord."
 
+#: public/js/ng/report-list/report-list.component.js:115
 #: public/js/reports/reports-list.controller.js:108
 msgid ""
 "If you drop or modify a published report, it will have and impact on other "
@@ -1605,6 +1632,7 @@ msgstr "Nouveau dossier"
 msgid "New Layer"
 msgstr "Nouveau calque"
 
+#: public/js/ng/report-list/report-list.component.js:63
 #: public/js/reports/reports-list.controller.js:56
 #: public/partials/dashboards/edit.html:107
 msgid "New Report"
@@ -1631,10 +1659,16 @@ msgstr "Nouveau dossier"
 msgid "New layer"
 msgstr "Nouveau calque"
 
+#: public/partials/users/users-modify-password-modal.html:17
+#: public/partials/users/users-modify-password-modal.html:18
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
 #: public/js/dashboards/dashboards-list.controller.js:77
 #: public/js/data-sources/data-sources-list.controller.js:30
 #: public/js/home/controller.js:12
 #: public/js/layers/layers-list.controller.js:100
+#: public/js/ng/report-list/report-list.component.js:37
 #: public/js/report/controller.js:704
 #: public/js/reports/reports-list.controller.js:30
 #: public/js/spaces/controller.js:11 public/partials/core/pager.html:13
@@ -1688,6 +1722,11 @@ msgstr "OK"
 msgid "Oh yeah, it is that good."
 msgstr "Oh oui, c'est si bon."
 
+#: public/partials/users/users-modify-password-modal.html:13
+#: public/partials/users/users-modify-password-modal.html:14
+msgid "Old password"
+msgstr "Ancien mot de passe"
+
 #: public/js/dashboards/dashboards-list.controller.js:130
 msgid "Once deleted the dashboard will not be recoverable again."
 msgstr "Un tableau de bord supprimé ne sera plus récupérable ensuite."
@@ -1696,6 +1735,7 @@ msgstr "Un tableau de bord supprimé ne sera plus récupérable ensuite."
 msgid "Once deleted the layer will not be recoverable again."
 msgstr "Une fois supprimé, un calque n'est plus récupérable."
 
+#: public/js/ng/report-list/report-list.component.js:95
 #: public/js/reports/reports-list.controller.js:88
 msgid "Once deleted the report will not be recoverable again."
 msgstr "Une fois supprimé, un rapport n'est plus récupérable."
@@ -1743,7 +1783,12 @@ msgstr "Zone de dépôt des tris"
 msgid "Password"
 msgstr "Mot de passe"
 
+#: public/js/users/users-modify-password-modal.component.js:56
+msgid "Password changed"
+msgstr "Mot de passe modifié"
+
 #: public/js/users/users-edit-modal.component.js:47
+#: public/js/users/users-modify-password-modal.component.js:47
 msgid "Passwords do not match"
 msgstr "Les mots de passe ne correspondent pas"
 
@@ -1847,7 +1892,7 @@ msgid "Remove from shared space"
 msgstr "Retirer de l'espace partagé"
 
 #: public/js/roles/roles-list.controller.js:75
-#: public/js/users/users-view.controller.js:128
+#: public/js/users/users-view.controller.js:129
 msgid "Remove role {{name}} ?"
 msgstr "Supprimer le role {{name}} ?"
 
@@ -1856,13 +1901,18 @@ msgid "Remove this item from this dimension"
 msgstr "Retirer cet élément de cette dimension"
 
 #: public/js/users/users-list.controller.js:105
-#: public/js/users/users-view.controller.js:145
+#: public/js/users/users-view.controller.js:146
 msgid "Remove user {{name}} ?"
 msgstr "Supprimer l'utilisateur {{name}} ?"
 
 #: public/js/report/directives/reportView.js:49
 msgid "Repainting report ..."
 msgstr "Rapport en cours d'affichage ..."
+
+#: public/partials/users/users-modify-password-modal.html:21
+#: public/partials/users/users-modify-password-modal.html:22
+msgid "Repeat new password"
+msgstr "Répéter le nouveau mot de passe"
 
 #: public/partials/users/users-edit-modal.html:49
 msgid "Repeat password"
@@ -1880,6 +1930,7 @@ msgstr "Sélecteur de type de rapport"
 msgid "Report created successfully:"
 msgstr "Rapport créé avec succès:"
 
+#: public/js/ng/report-list/report-list.component.js:111
 #: public/js/reports/reports-list.controller.js:104
 msgid "Report published"
 msgstr "Rapport publié"
@@ -1897,11 +1948,14 @@ msgstr "Type de rapport"
 msgid "Report updated successfully:"
 msgstr "Rapport mis à jour avec succès:"
 
+#: public/js/ng/report-list/report-list.component.js:46
+#: public/js/ng/report-list/report-list.component.js:53
 #: public/js/reports/reports-list.controller.js:39
 #: public/js/reports/reports-list.controller.js:46
 #: public/partials/dashboards/edit.html:51 public/partials/io/export.html:38
-#: public/partials/io/import.html:78 public/partials/reports/list.html:9
-#: public/partials/users/view.html:85
+#: public/partials/io/import.html:78
+#: public/partials/report-list/report-list.component.html:2
+#: public/partials/reports/list.html:9 public/partials/users/view.html:89
 msgid "Reports"
 msgstr "Rapports"
 
@@ -1913,6 +1967,7 @@ msgstr ""
 "Les rapports vous permettent de créer et de gérer des rapports avec une "
 "seule requête."
 
+#: public/js/ng/report-list/report-list.component.js:71
 #: public/js/reports/reports-list.controller.js:64
 msgid "Reports list"
 msgstr "Liste des rapports"
@@ -1927,6 +1982,7 @@ msgstr ""
 
 #: public/js/dashboards/dashboards-list.controller.js:132
 #: public/js/layers/layers-list.controller.js:159
+#: public/js/ng/report-list/report-list.component.js:97
 #: public/js/reports/reports-list.controller.js:90
 msgid "Requires 2 step confirmation."
 msgstr "Nécessite 2 étapes de confirmations."
@@ -2005,6 +2061,7 @@ msgstr "Requête SQL"
 #: public/partials/roles/role-edit-modal.component.html:93
 #: public/partials/spaces/shared.html:42
 #: public/partials/users/users-edit-modal.html:91
+#: public/partials/users/users-modify-password-modal.html:32
 msgid "Save"
 msgstr "Sauvegarder"
 
@@ -2202,6 +2259,10 @@ msgstr "Permissions de l'espace partagé"
 msgid "Shared space structure area"
 msgstr "Zone de la structure de l'espace partagé"
 
+#: public/partials/users/users-modify-password-modal.html:28
+msgid "Show Passwords"
+msgstr "Afficher les mots de passe"
+
 #: public/partials/report/modals/filter-prompt-modal.html:44
 msgid "Show suggestions"
 msgstr "Montrer suggestions"
@@ -2260,7 +2321,7 @@ msgstr "Statut"
 
 #: public/js/layers/layers-list.controller.js:92
 #: public/js/users/users-list.controller.js:42
-#: public/js/users/users-view.controller.js:73
+#: public/js/users/users-view.controller.js:74
 msgid "Status updated"
 msgstr "Statut mis à jour"
 
@@ -2334,8 +2395,8 @@ msgstr ""
 
 #: public/js/dashboards/dashboards-view.controller.js:136
 #: public/js/dashboards/dashboards-view.controller.js:152
-#: public/js/reports/reports-view.controller.js:117
-#: public/js/reports/reports-view.controller.js:133
+#: public/js/reports/reports-view.controller.js:118
+#: public/js/reports/reports-view.controller.js:134
 msgid "The export failed. Please contact the system administrator."
 msgstr "L'export a échoué. Veuillez contacter l'administrateur système."
 
@@ -2390,7 +2451,7 @@ msgstr ""
 msgid "The report name is required"
 msgstr "Le nom de rapport est nécéssaire"
 
-#: public/js/users/users-view.controller.js:123
+#: public/js/users/users-view.controller.js:124
 msgid ""
 "The role 'Urungi Administrator' can't be removed from the user administrator"
 msgstr ""
@@ -2477,6 +2538,7 @@ msgstr ""
 msgid "This label indicates that this dashboard is public."
 msgstr "Cette étiquette indique que le tableau de bord est publique."
 
+#: public/js/ng/report-list/report-list.component.js:113
 #: public/js/reports/reports-list.controller.js:106
 msgid "This label indicates that this report is public."
 msgstr "Cette étiquette indique que le rapport est publique."
@@ -2564,7 +2626,7 @@ msgstr "Haut"
 msgid "Upload image"
 msgstr "Téléverser une image"
 
-#: public/js/users/users-view.controller.js:116
+#: public/js/users/users-view.controller.js:117
 msgid "Urungi Administrator"
 msgstr "Administrateur Urungi"
 
@@ -2638,7 +2700,7 @@ msgid "User Nick is required"
 msgstr "Le surnom est nécéssaire"
 
 #: public/js/users/users-list.controller.js:114
-#: public/js/users/users-view.controller.js:155
+#: public/js/users/users-view.controller.js:156
 msgid "User deleted successfully"
 msgstr "Utilisateur supprimé avec succès"
 
@@ -2705,6 +2767,7 @@ msgstr "Hier"
 msgid "You can also activate or deactivate layers."
 msgstr "Vous pouvez aussi activer ou désactiver des calques."
 
+#: public/js/ng/report-list/report-list.component.js:57
 #: public/js/reports/reports-list.controller.js:50
 msgid "You can also add runtime filters to split your data in real time."
 msgstr ""
@@ -2718,6 +2781,7 @@ msgid ""
 msgstr ""
 "Vous pouvez aussi modifier le tableau de bord en cliquant sur ces boutons."
 
+#: public/js/ng/report-list/report-list.component.js:77
 #: public/js/reports/reports-list.controller.js:70
 msgid ""
 "You can also modify or drop the report, clicking into the modify or delete "
@@ -2770,7 +2834,7 @@ msgstr ""
 "Vous pouvez configurer le nom que vous voulez pour les sources de données."
 
 #: public/js/users/users-list.controller.js:100
-#: public/js/users/users-view.controller.js:140
+#: public/js/users/users-view.controller.js:141
 msgid "You can't remove yourself from your own user session"
 msgstr "Vous ne pouvez pas vous supprimer durant votre session"
 
@@ -2798,6 +2862,10 @@ msgstr ""
 #: public/js/users/users-edit-modal.component.js:36
 msgid "You have to introduce the user nick for the new user"
 msgstr "Vous devez saisir le pseudo pour le nouvel utilisateur"
+
+#: public/js/users/users-modify-password-modal.component.js:43
+msgid "You have to introduce your password"
+msgstr "Vous devez saisir votre mot de passe"
 
 #: public/js/dashboards/dashboard-image-modal.component.js:74
 msgid "You may only upload images"
@@ -3154,11 +3222,11 @@ msgstr "port:"
 msgid "powerful for power-users"
 msgstr "puissant pour les utilisateurs avancés"
 
-#: public/partials/users/view.html:75
+#: public/partials/users/view.html:79
 msgid "private dashboards"
 msgstr "tableaux de bord privés"
 
-#: public/partials/users/view.html:71
+#: public/partials/users/view.html:75
 msgid "private reports"
 msgstr "rapports privés"
 
@@ -3208,15 +3276,15 @@ msgstr "sélectionné"
 
 #: public/partials/dashboards/list.html:56
 #: public/partials/reports/reports-table.component.html:49
-#: public/partials/users/view.html:108 public/partials/users/view.html:91
+#: public/partials/users/view.html:112 public/partials/users/view.html:95
 msgid "shared"
 msgstr "partagé"
 
-#: public/partials/users/view.html:67
+#: public/partials/users/view.html:71
 msgid "shared dashboards"
 msgstr "tableaux de bord partagés"
 
-#: public/partials/users/view.html:63
+#: public/partials/users/view.html:67
 msgid "shared reports"
 msgstr "rapports partagés"
 
