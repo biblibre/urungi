@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed filter when layer column has date element type and switch to another type
+- Fix drag and drop issue with images within dashboards
 
 ## [3.1.1] - 2022-07-20
 
