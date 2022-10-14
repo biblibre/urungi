@@ -28,7 +28,7 @@ describe('UsersListController', function () {
         it('should call /api/users', function () {
             $httpBackend.expect('GET', '/api/user')
                 .respond({ roles: 'ADMIN' });
-            $httpBackend.expect('GET', '/api/users?fields=userName,lastName,status&page=1')
+            $httpBackend.expect('GET', '/api/users?fields=userName,firstName,lastName,status&page=1')
                 .respond(getUsersFindAllResponse());
 
             vm = $controller('UsersListController');
@@ -42,13 +42,13 @@ describe('UsersListController', function () {
         it('should call /api/users', function () {
             $httpBackend.expect('GET', '/api/user')
                 .respond({ roles: 'ADMIN' });
-            $httpBackend.expect('GET', '/api/users?fields=userName,lastName,status&page=1')
+            $httpBackend.expect('GET', '/api/users?fields=userName,firstName,lastName,status&page=1')
                 .respond(getUsersFindAllResponse());
 
             vm = $controller('UsersListController');
             $httpBackend.flush();
 
-            $httpBackend.expect('GET', '/api/users?fields=userName,lastName,status&page=2')
+            $httpBackend.expect('GET', '/api/users?fields=userName,firstName,lastName,status&page=2')
                 .respond(getUsersFindAllResponse(2));
 
             vm.goToPage(2);
@@ -79,7 +79,7 @@ describe('UsersListController', function () {
         it('should change status of specific user on admin session', function () {
             $httpBackend.expect('GET', '/api/user')
                 .respond({ roles: admin.roles });
-            $httpBackend.expect('GET', '/api/users?fields=userName,lastName,status&page=1')
+            $httpBackend.expect('GET', '/api/users?fields=userName,firstName,lastName,status&page=1')
                 .respond(getUsersFindAllResponse());
 
             vm = $controller('UsersListController');
@@ -126,7 +126,7 @@ describe('UsersListController', function () {
         it('should edit specific user on admin session', function () {
             $httpBackend.expect('GET', '/api/user')
                 .respond({ roles: 'ADMIN' });
-            $httpBackend.expect('GET', '/api/users?fields=userName,lastName,status&page=1')
+            $httpBackend.expect('GET', '/api/users?fields=userName,firstName,lastName,status&page=1')
                 .respond(getUsersFindAllResponse());
 
             vm = $controller('UsersListController', { $uibModal: $uibModalMock, notify: notifyMock });
@@ -136,7 +136,7 @@ describe('UsersListController', function () {
 
             $httpBackend.expect('GET', '/api/users/bar')
                 .respond(getUsersFindAllResponse());
-            $httpBackend.expect('GET', '/api/users?fields=userName,lastName,status&page=1')
+            $httpBackend.expect('GET', '/api/users?fields=userName,firstName,lastName,status&page=1')
                 .respond(getUsersFindAllResponse());
             $httpBackend.flush();
 
@@ -172,14 +172,14 @@ describe('UsersListController', function () {
         it('should delete specific user on admin session', function () {
             $httpBackend.expect('GET', '/api/user')
                 .respond({ roles: 'ADMIN' });
-            $httpBackend.expect('GET', '/api/users?fields=userName,lastName,status&page=1')
+            $httpBackend.expect('GET', '/api/users?fields=userName,firstName,lastName,status&page=1')
                 .respond(getUsersFindAllResponse());
 
             vm = $controller('UsersListController', { $uibModal: $uibModalMock, notify: notifyMock });
             $httpBackend.flush();
 
             vm.deleteUser(user, admin);
-            $httpBackend.expect('GET', '/api/users?fields=userName,lastName,status&page=1')
+            $httpBackend.expect('GET', '/api/users?fields=userName,firstName,lastName,status&page=1')
                 .respond(getUsersFindAllResponse());
             $httpBackend.flush();
 
