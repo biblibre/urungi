@@ -1,0 +1,142 @@
+{% capture title %}{% t 'Home' %}{% endcapture %}
+{% layout 'layout/layout' %}
+
+{% block head %}
+<link rel="stylesheet" href="s/jstree/themes/default/style.min.css" />
+
+<script defer src="s/jstree/jstree.min.js"></script>
+<script defer src="js/home.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid root-container">
+        <div class="row">
+            <div class="col-md-3">
+                {% render 'sidebar.liquid', user: user %}
+            </div>
+
+            <div class="main col-md-9">
+                <div class="page-header">
+                    <span class="h3">{% t 'Home' | escape %}</span>
+                    <div class="dropdown pull-right" id="language-selector">
+                        <button class="btn btn-default dropdown-toggle" title="{% t 'Change language' | escape %}" type="button" id="language-selector-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            {% assign currentLanguage = availableLanguages | where: 'code', locale | first %}
+                            {{ currentLanguage.label }}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="language-selector-button">
+                            {% for language in availableLanguages %}
+                                {% if locale == language.code %}
+                                    <li class="disabled"><a href="#"><strong>{{ language.label }}</strong></a></li>
+                                {% else %}
+                                    <li><a href="#" data-code="{{ language.code }}">{{ language.label }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                {% if showGettingStarted %}
+                    <div class="alert alert-info">
+                        <h3>{% t 'Getting started with Urungi?' | escape %}</h3>
+                        <span>{% t 'Take our guided tour to familiarize yourself...' | escape %}</span>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <span style="color: #000;">
+                            <span>{% t 'Do not show this block again' | escape %}</span>
+                            <input type="checkbox" ng-click="setUserContextHelpViewed('homeIndex')">
+                        </span>
+                        <a class="btn btn-white pull-right" ng-click="showIntro()">{% t 'Start guided tour' | escape %}</a>
+                    </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="sharedArea" class="panel panel-silver">
+
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <span>{% t 'Shared Area' | escape %}</span>
+                                    <a id="refresh-shared-area-button" href="#" class="pull-right"><i class="fa fa-refresh"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="user-objects">
+                                    <div id="tree-root">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div id="latestExecutions" class="panel panel-silver">
+                            <div class="panel-heading">
+                                <div class="panel-title">{% t 'Latest executions' | escape %}</div>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="last-executions-objects">
+                                    <ol>
+                                        {% for execution in lastExecutions %}
+                                            <li>
+                                                <div class="last-executed-item">
+                                                    {% if execution.type == 'report' %}
+                                                        <a href="reports/view/{{execution.relationedID}}">
+                                                            <i class="fa fa-bar-chart"></i>
+                                                            {{ execution.relationedName | escape }}
+                                                        </a>
+                                                    {% elsif execution.type == 'dashboard' %}
+                                                        <a href="dashboards/view/{{execution.relationedID}}">
+                                                            <i class="fa fa-dashboard"></i>
+                                                            {{ execution.relationedName | escape }}
+                                                        </a>
+                                                    {% endif %}
+                                                    <span class="pull-right">{{ execution.lastDate | timeFromNow }}</span>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="mostExecuted" class="panel panel-silver">
+                            <div class="panel-heading">
+                                <div class="panel-title">{% t 'Most executed' %}</div>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="most-executions-objects">
+                                    <ol>
+                                        {% for execution in mostExecutions %}
+                                            <li>
+                                                <div class="most-executed-item">
+                                                    {% if execution.type == 'report' %}
+                                                        <a href="reports/view/{{ execution.relationedID }}">
+                                                            <i class="fa fa-bar-chart"></i>
+                                                            {{ execution.relationedName | escape }}
+                                                        </a>
+                                                    {% elsif execution.type == 'dashboard' %}
+                                                        <a href="dashboards/view/{{ execution.relationedID }}">
+                                                            <i class="fa fa-dashboard"></i>
+                                                            {{ execution.relationedName | escape }}
+                                                        </a>
+                                                    {% endif %}
+
+                                                    <span class="badge pull-right">{{ execution.count }}</span>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

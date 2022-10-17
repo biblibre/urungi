@@ -1,0 +1,93 @@
+{% capture title %}{% t 'Export' %}{% endcapture %}
+{% layout 'layout/layout' title: title %}
+
+{% block content %}
+    <div class="container-fluid root-container">
+        <div class="row">
+            <div class="col-md-3">
+                {% render 'sidebar.liquid', user: user %}
+            </div>
+
+            <div class="main col-md-9">
+                <div class="page-header">
+                    <h3>{% t 'Export layers, reports and dashboards' %}</h3>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <form method="post">
+                            <div class="form-group">
+                                <details class="details" open>
+                                    <summary>{% t 'Layers' %}</summary>
+
+                                    <div class="dropdownExport">
+                                        {% for layer in layers %}
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="layer_ids[]" value="{{ layer.id }}">
+                                                    {{ layer.name }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+
+                                        <p class="help-block">
+                                            {% t 'Required layers for chosen reports and dashboards will be included automatically, there is no need to include them manually.' %}
+                                        </p>
+                                    </div>
+                                </details>
+                            </div>
+
+                            <div class="form-group">
+                                <details class="details" open>
+                                    <summary>{% t 'Reports' %}</summary>
+
+                                    <div class="dropdownExport">
+                                        {% for report in reports %}
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="report_ids[]" value="{{ report.id }}">
+                                                    {{ report.reportName }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </details>
+                            </div>
+
+                            <div class="form-group">
+                                <details class="details" open>
+                                    <summary>{% t 'Dashboards' %}</summary>
+
+                                    <div class="dropdownExport">
+                                        {% for dashboard in dashboards %}
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="dashboard_ids[]" value="{{ dashboard.id }}">
+                                                    {{ dashboard.dashboardName }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </details>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="exportName" value="export">
+                                            <span class="input-group-addon">.json</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="_csrf" value="{{ csrf }}">
+                            <button type="submit" class="btn btn-success">{% t 'Export' %}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

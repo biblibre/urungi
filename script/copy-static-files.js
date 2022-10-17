@@ -15,7 +15,6 @@ const files = [
     { src: 'bootstrap/fonts/glyphicons-halflings-regular.woff2', dest: 'bootstrap/fonts/glyphicons-halflings-regular.woff2' },
     { src: 'angular/angular.min.js', dest: 'angular/angular.min.js' },
     { src: 'angular-sanitize/angular-sanitize.min.js', dest: 'angular-sanitize/angular-sanitize.min.js' },
-    { src: 'angular-route/angular-route.min.js', dest: 'angular-route/angular-route.min.js' },
     { src: '@pnotify/core/dist/PNotify.js', dest: 'pnotify-core/PNotify.js' },
     { src: '@pnotify/core/dist/PNotify.css', dest: 'pnotify-core/PNotify.css' },
     { src: '@pnotify/bootstrap3/dist/PNotifyBootstrap3.js', dest: 'pnotify-bootstrap3/PNotifyBootstrap3.js' },
@@ -46,7 +45,6 @@ const files = [
     { src: 'angular-gettext/dist/angular-gettext.min.js', dest: 'angular-gettext/angular-gettext.min.js' },
     { src: 'intro.js/minified/intro.min.js', dest: 'intro.js/intro.min.js' },
     { src: 'intro.js/minified/introjs.min.css', dest: 'intro.js/introjs.min.css' },
-    { src: 'angular-intro.js/build/angular-intro.min.js', dest: 'angular-intro.js/angular-intro.min.js' },
     { src: 'numeral/min/numeral.min.js', dest: 'numeral/numeral.min.js' },
     { src: 'pivottable/dist/pivot.min.js', dest: 'pivottable/pivot.min.js' },
     { src: 'pivottable/dist/pivot.min.css', dest: 'pivottable/pivot.min.css' },
@@ -62,6 +60,12 @@ const files = [
     { src: 'font-awesome/fonts/fontawesome-webfont.ttf', dest: 'font-awesome/fonts/fontawesome-webfont.ttf' },
     { src: 'font-awesome/fonts/fontawesome-webfont.woff', dest: 'font-awesome/fonts/fontawesome-webfont.woff' },
     { src: 'font-awesome/fonts/fontawesome-webfont.woff2', dest: 'font-awesome/fonts/fontawesome-webfont.woff2' },
+    { src: 'jstree/dist/jstree.min.js', dest: 'jstree/jstree.min.js' },
+    { src: 'jstree/dist/themes/default/style.min.css', dest: 'jstree/themes/default/style.min.css' },
+    { src: 'jstree/dist/themes/default/32px.png', dest: 'jstree/themes/default/32px.png' },
+    { src: 'jstree/dist/themes/default/40px.png', dest: 'jstree/themes/default/40px.png' },
+    { src: 'jstree/dist/themes/default/throbber.gif', dest: 'jstree/themes/default/throbber.gif' },
+    { src: 'gettext.js/dist/gettext.iife.min.js', dest: 'gettext.js/gettext.iife.min.js' },
 ];
 
 fs.rmSync(destRoot, { recursive: true, force: true });

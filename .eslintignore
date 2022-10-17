@@ -1,4 +1,5 @@
 public/s/
-public/templates/
+public/js/ng/*/*.templates.js
+public/translations/
 doc/user/_build
 !/.heroku

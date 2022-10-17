@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed user's first name not being shown in users list
 
+### Dependencies
+
+- Added gettext.js 1.2.0
+- Added gettext-parser 5.1.2 (dev)
+- Added jstree 3.3.12
+- Added liquidjs 9.39.2
+- Added merge-stream 2.0.0 (dev)
+- Added negotiator 0.6.3
+- Added vinyl 2.2.1 (dev)
+- Removed angular-intro.js
+- Removed angular-route
+- Removed ejs
+
 ## [3.2.0] - 2022-10-14
 
 ### Added
