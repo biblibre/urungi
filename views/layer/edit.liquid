@@ -1,0 +1,27 @@
+{% capture title %}{{ layer.name }} &middot; {% t 'Layers' %}{% endcapture %}
+{% layout 'layout/layout' title: title %}
+
+{% block head %}
+    <link rel="stylesheet" href="s/angular-ui-tree/angular-ui-tree.min.css">
+    <link rel="stylesheet" href="s/jsplumb/jsplumbtoolkit-defaults.css">
+    <link rel="stylesheet" href="css/jsPlumb.css"/>
+    <link rel="stylesheet" href="css/ndDesigner.css"/>
+    {% render 'partials/notify' %}
+    <script defer src="s/jquery-ui/jquery-ui.min.js"></script>
+    <script defer src="s/angular/angular.min.js"></script>
+    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
+    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script defer src="s/angular-ui-sortable/sortable.min.js"></script>
+    <script defer src="s/angular-ui-tree/angular-ui-tree.min.js"></script>
+    <script defer src="s/jsplumb/jsplumb.min.js"></script>
+    <script defer src="layerUtils.js"></script>
+    {% render 'partials/ng/core' %}
+    {% render 'partials/ng/ui-bootstrap' %}
+    {% render 'partials/ng/layer-edit' %}
+{% endblock %}
+
+{% block content %}
+    <ng-app ng-app="app.layer-edit">
+        <app-layer-edit layer-id="{{ layer.id }}"></app-layer-edit>
+    </ng-app>
+{% endblock %}

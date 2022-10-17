@@ -31,4 +31,60 @@ statisticSchema.statics.saveStat = function (req, data) {
     return this.create(statistic);
 };
 
+statisticSchema.statics.getLastExecutions = function (conditions = {}) {
+    conditions.action = 'execute';
+
+    const pipeline = [
+        { $match: conditions },
+        {
+            $group: {
+                _id: {
+                    relationedID: '$relationedID',
+                    relationedName: '$relationedName',
+                    type: '$type',
+                    action: '$action'
+                },
+                lastDate: { $max: '$createdOn' }
+            }
+        },
+        { $sort: { lastDate: -1 } },
+        { $limit: 10 },
+    ];
+
+    return this.aggregate(pipeline).then(docs => {
+        const items = docs.map(doc => Object.assign({}, doc._id, {
+            lastDate: doc.lastDate,
+        }));
+        return items;
+    });
+};
+
+statisticSchema.statics.getMostExecutions = function (conditions = {}) {
+    conditions.action = 'execute';
+
+    const pipeline = [
+        { $match: conditions },
+        {
+            $group: {
+                _id: {
+                    relationedID: '$relationedID',
+                    relationedName: '$relationedName',
+                    type: '$type',
+                    action: '$action'
+                },
+                count: { $sum: 1 }
+            }
+        },
+        { $sort: { count: -1 } },
+        { $limit: 10 },
+    ];
+
+    return this.aggregate(pipeline).then(docs => {
+        const items = docs.map(doc => Object.assign({}, doc._id, {
+            count: doc.count,
+        }));
+        return items;
+    });
+};
+
 module.exports = mongoose.model('Statistic', statisticSchema);

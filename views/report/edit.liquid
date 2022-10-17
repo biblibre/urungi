@@ -1,0 +1,38 @@
+{% capture title %}{% if report %}{{ report.reportName }}{% else %}{% t 'New report' %}{% endif %} &middot; {% t 'Reports' %}{% endcapture %}
+{% layout 'layout/layout' title: title %}
+
+{% block head %}
+    <link rel="stylesheet" href="s/c3/c3.min.css">
+    <link rel="stylesheet" href="s/pivottable/pivot.min.css">
+    <link rel="stylesheet" href="s/subtotal/subtotal.min.css">
+    <link rel="stylesheet" href="s/ui-select/select.min.css">
+
+    {% render 'partials/notify' %}
+    {% render 'partials/introjs' %}
+    <script defer src="s/jquery-ui/jquery-ui.min.js"></script>
+    <script defer src="s/angular/angular.min.js"></script>
+    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
+    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script defer src="s/angular-ui-sortable/sortable.min.js"></script>
+    <script defer src="s/ui-select/select.min.js"></script>
+    <script defer src="s/moment/moment-with-locales.min.js"></script>
+    <script defer src="s/numeral/numeral.min.js"></script>
+    <script defer src="s/d3/d3.min.js"></script>
+    <script defer src="s/c3/c3.min.js"></script>
+    <script defer src="s/pivottable/pivot.min.js"></script>
+    <script defer src="s/subtotal/subtotal.min.js"></script>
+    <script defer src="js/uuid.js"></script>
+    {% render 'partials/ng/core' %}
+    {% render 'partials/ng/ui-bootstrap' %}
+    {% render 'partials/ng/modal' %}
+    {% render 'partials/ng/drag-and-drop' %}
+    {% render 'partials/ng/report' %}
+    {% render 'partials/ng/theme' %}
+    {% render 'partials/ng/report-edit' %}
+{% endblock %}
+
+{% block content %}
+    <ng-app ng-app="app.report-edit">
+        <app-report-edit report-id="{{ report.id }}"></app-report-edit>
+    </ng-app>
+{% endblock %}

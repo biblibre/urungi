@@ -1,0 +1,24 @@
+{% capture title %}{{ datasource.name | default: 'new' | escape }} &middot; {% t 'Data sources' %}{% endcapture %}
+{% layout 'layout/layout' title: title %}
+
+{% block head %}
+    {% render 'partials/notify' %}
+    <script defer src="s/angular/angular.min.js"></script>
+    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
+    {% render 'partials/ng/core' %}
+    {% render 'partials/ng/datasource-edit' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid root-container">
+        <div class="row">
+            <div class="col-md-3">
+                {% render 'sidebar', user: user %}
+            </div>
+
+            <div class="main col-md-9" ng-app="app.datasource-edit">
+                <app-datasource-edit datasource-id="{{ datasource.id | default: 'new' }}"></app-datasource-edit>
+            </div>
+        </div>
+    </div>
+{% endblock %}

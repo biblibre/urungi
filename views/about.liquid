@@ -1,0 +1,61 @@
+{% capture title %}{% t 'About' %}{% endcapture %}
+{% layout 'layout/layout' %}
+{% block content %}
+    <div class="container-fluid root-container">
+        <div class="row">
+            <div class="col-md-3">
+                {% render 'sidebar.liquid', user: user %}
+            </div>
+
+            <div class="main col-md-9 about-page">
+                <div class="page-header">
+                    <h3>{% t 'About' | escape %}</h3>
+                </div>
+
+                {% if version %}
+                    <p>
+                        <span>{% t 'Urungi version: {{version}}' | escape | expand: version: version %}</span>
+                        {% if gitVersion %}
+                            <span>(git: {{ gitVersion }})</span>
+                        {% endif %}
+                    </p>
+                {% endif %}
+
+                <h4>{% t 'What is Urungi' | escape %}</h4>
+                <p>{% t 'Urungi is a self-service dashboard and reporting tool. It has been written with the following ideas in mind:' | escape %}</p>
+                <ul>
+                    <li>{% t 'easy to use for end-users' | escape %}</li>
+                    <li>{% t 'easy to use for reports creators' | escape %}</li>
+                    <li>{% t 'powerful for power-users' | escape %}</li>
+                </ul>
+
+                <p>{% t 'Urungi is a fork of {{widestage_link}}' | escape | expand: widestage_link: '<a href="http://widestage.com">widestage</a>' %}</p>
+
+                <h4>{% t 'What does Urungi mean ?' %}</h4>
+                <p>{% t 'Urungi is a Maori word meaning rudder, steering paddle, driver, navigator' %}</p>
+
+                <a href="http://maoridictionary.co.nz/word/8920">http://maoridictionary.co.nz/word/8920</a>
+
+                <h4>{% t 'License' | escape %}</h4>
+                <p>{% t 'Urungi is Open Source, feel free to join us on github, submit issues and pull requests:' | escape %} <a href="https://github.com/biblibre/urungi">https://github.com/biblibre/urungi</a></p>
+
+                <p>{% t 'Urungi is licensed under {{gpl_link}}' | escape | expand: gpl_link: '<a href="https://opensource.org/licenses/GPL-3.0">GPL 3.0</a>' %}</p>
+
+                <h4>{% t 'Authors' | escape %}</h4>
+                <ul>
+                    <li>Hermes Romero (<a href="https://github.com/beevou">https://github.com/beevou</a>) <span>{% t 'first version of widestage' | escape %}</span></li>
+                    <li>Alexander Chumakov (<a href="https://github.com/delfer">https://github.com/delfer</a>)</li>
+                    <li>{% t 'BibLibre staff:' | escape %}
+                        <ul>
+                            <li>Paul Poulain (<a href="https://github.com/PaulPoulain">https://github.com/PaulPoulain</a>), {% t 'Product Owner' | escape %}</li>
+                            <li>Julian Maurice (<a href="https://github.com/jajm">https://github.com/jajm</a>)</li>
+                            <li>Claire Hernandez (<a href="https://github.com/clrh">https://github.com/clrh</a>)</li>
+                            <li>Loïc Vanbesien (<a href="https://github.com/lvanbesien">https://github.com/lvanbesien</a>), {% t 'internship in summer 2018' | escape %}</li>
+                            <li>Anatole Romon (<a href="https://github.com/akka-vodol">https://github.com/akka-vodol</a>), {% t 'internship in summer 2018' | escape %}</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -18,12 +18,25 @@ Object.defineProperty(window, 'numeral', { value: numeral });
 const angular = require('angular');
 Object.defineProperty(window, 'angular', { value: angular });
 
+const ClipboardJS = require('clipboard');
+Object.defineProperty(window, 'ClipboardJS', { value: ClipboardJS });
+
+const i18n = require('gettext.js');
+Object.defineProperty(window, 'i18n', { value: i18n });
+
 const layerUtils = require('../../shared/layerUtils.js');
 Object.defineProperty(window, 'layerUtils', { value: layerUtils });
 
-require('angular-route');
-require('angular-gettext');
+Object.defineProperty(window, 'Urungi', {
+    value: {
+        notify: require('../../public/js/notify.js'),
+    }
+});
+window.Urungi.i18n = require('../../public/js/i18n.js');
+
+require('angular-sanitize');
+require('angular-file-saver');
 require('angular-mocks');
 require('angular-ui-bootstrap');
-
-require('../../public/templates/templates.js');
+require('ui-select');
+require('ngclipboard');

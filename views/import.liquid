@@ -1,0 +1,27 @@
+{% capture title %}{% t 'Import' %}{% endcapture %}
+{% layout 'layout/layout' title: title %}
+
+{% block head %}
+    <script defer src="s/angular/angular.min.js"></script>
+    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
+    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script defer src="s/ng-file-upload/ng-file-upload-shim.min.js"></script>
+    <script defer src="s/ng-file-upload/ng-file-upload.min.js"></script>
+    {% render 'partials/ng/core' %}
+    {% render 'partials/ng/ui-bootstrap' %}
+    {% render 'partials/ng/import' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid root-container">
+        <div class="row">
+            <div class="col-md-3">
+                {% render 'sidebar', user: user %}
+            </div>
+
+            <div class="main col-md-9" ng-app="app.import">
+                <app-import></app-import>
+            </div>
+        </div>
+    </div>
+{% endblock %}

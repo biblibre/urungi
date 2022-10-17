@@ -1,0 +1,49 @@
+{% capture title %}{% t 'Shared space' %}{% endcapture %}
+{% layout 'layout/layout' title: title %}
+
+{% block head %}
+    {% render 'partials/api' %}
+    {% render 'partials/i18n', locale: locale %}
+    {% render 'partials/introjs' %}
+    {% render 'partials/notify' %}
+
+    <link rel="stylesheet" href="s/jstree/themes/default/style.min.css" />
+
+    <script defer src="s/jstree/jstree.min.js"></script>
+    <script defer src="js/uuid.js"></script>
+    <script defer src="js/shared-space.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid root-container">
+        <div class="row">
+            <div class="col-md-3">
+                {% render 'sidebar.liquid', user: user %}
+            </div>
+
+            <div class="main col-md-9">
+                <div class="page-header">
+                    <span class="h3">{% t 'Shared space' | escape %} <a id="showIntroButton" class="btn btn-link"><i class="fa fa-question-circle-o"></i></a></span>
+                    <a id="sharedSpaceSaveBtn" class="btn btn-success pull-right" title="{% t 'Click here to save changes to the shared space' | escape %}">{% t 'Save' | escape %}</a>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-info" role="alert">
+                            <i class="fa fa-info-circle"></i>
+                            {% t 'Right-click on a folder to show available options' | escape %}
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="well well-sm" id="sharedSpaceArea">
+                        </div>
+
+                        <button id="sharedSpaceNewFolderBtn" class="btn btn-success btn-sm" title="{% t 'Click here to add a new folder to the shared space' | escape %}"><i class="fa fa-plus"></i> {% t 'Add folder' | escape %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% capture title %}{% if dashboard %}{{ dashboard.dashboardName }}{% else %}{% t 'New dashboard' %}{% endif %} &middot; {% t 'Dashboards' %}{% endcapture %}
+{% layout 'layout/layout' title: title %}
+
+{% block head %}
+    <link rel="stylesheet" href="s/c3/c3.min.css">
+    <link rel="stylesheet" href="s/pivottable/pivot.min.css">
+    <link rel="stylesheet" href="s/subtotal/subtotal.min.css">
+    <link rel="stylesheet" href="s/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="s/angular-bootstrap-colorpicker/colorpicker.min.css">
+    <link rel="stylesheet" href="css/ndDesigner.css">
+    <link rel="stylesheet" href="css/inspector.css">
+
+    {% render 'partials/notify' %}
+    {% render 'partials/introjs' %}
+    <script defer src="s/jquery-ui/jquery-ui.min.js"></script>
+    <script defer src="s/angular/angular.min.js"></script>
+    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
+    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+    <link rel="stylesheet" href="s/angular-ui-tree/angular-ui-tree.min.css">
+    <script defer src="s/angular-ui-tree/angular-ui-tree.min.js"></script>
+    <script defer src="s/angular-ui-sortable/sortable.min.js"></script>
+    <script defer src="s/ui-select/select.min.js"></script>
+    <script defer src="s/moment/moment-with-locales.min.js"></script>
+    <script defer src="s/numeral/numeral.min.js"></script>
+    <script defer src="s/d3/d3.min.js"></script>
+    <script defer src="s/c3/c3.min.js"></script>
+    <script defer src="s/pivottable/pivot.min.js"></script>
+    <script defer src="s/subtotal/subtotal.min.js"></script>
+    <script defer src="s/ng-file-upload/ng-file-upload-shim.min.js"></script>
+    <script defer src="s/ng-file-upload/ng-file-upload.min.js"></script>
+    <script defer src="s/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script defer src="s/angular-bootstrap-colorpicker/bootstrap-colorpicker-module.min.js"></script>
+    <script defer src="s/clipboard/clipboard.min.js"></script>
+    <script defer src="s/ngclipboard/ngclipboard.min.js"></script>
+    <script defer src="js/uuid.js"></script>
+    {% render 'partials/ng/core' %}
+    {% render 'partials/ng/ui-bootstrap' %}
+    {% render 'partials/ng/table' %}
+    {% render 'partials/ng/modal' %}
+    {% render 'partials/ng/drag-and-drop' %}
+    {% render 'partials/ng/report' %}
+    {% render 'partials/ng/theme' %}
+    {% render 'partials/ng/share' %}
+    {% render 'partials/ng/report-list' %}
+    {% render 'partials/ng/report-edit' %}
+    {% render 'partials/ng/inspector' %}
+    {% render 'partials/ng/dashboard-edit' %}
+{% endblock %}
+
+{% block content %}
+    <ng-app ng-app="app.dashboard-edit">
+        <app-dashboard-edit dashboard-id="{{ dashboard.id }}"></app-dashboard-edit>
+    </ng-app>
+{% endblock %}

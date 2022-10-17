@@ -1,0 +1,8 @@
+<div class="page-header">
+    <span class="h3" translate>Reports</span>
+
+    <a id="newReportButton" ng-if="vm.creationAuthorised" href="reports/new/" class="btn btn-success pull-right" uib-tooltip="{{ 'Click here to create a new single query report' | translate }}" tooltip-placement="bottom" translate>Create new report</a>
+    <a class="btn btn-info pull-right" ng-click="vm.showIntro()" style="margin-right: 3px;" uib-tooltip="{{ 'Follow the guided tour for reports' | translate }}" tooltip-placement="bottom"><i class="fa fa-question-circle"></i></a>
+</div>
+
+<app-reports-table></app-reports-table>

@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+This version is the first step to move away from AngularJS. The single
+AngularJS application is split into several smaller applications. This will
+make it easier to remove AngularJS piece by piece.
+
+Several pages already work without any AngularJS code:
+- Authentication pages (/login and /logout)
+- Home page
+- Shared space
+- Export
+
+### Dependencies
+
+- Added gettext.js 2.0.3
+- Added gettext-parser 7.0.1 (dev)
+- Added jstree 3.3.12
+- Added liquidjs 10.16.3
+- Added merge-stream 2.0.0 (dev)
+- Added negotiator 0.6.3
+- Added vinyl 2.2.1 (dev)
+- Removed angular-intro.js
+- Removed angular-gettext
+- Removed angular-route
+- Removed angularjs-bootstrap-datetimepicker
+- Removed ejs
+
 ## [3.2.4] - 2024-07-09
 
 - Upgrade passport to 0.7.0 (fixes

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% if title %}
+            <title>{{ title | append: ' &middot; Urungi' }}</title>
+        {% else %}
+            <title>Urungi</title>
+        {% endif %}
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="{{ base }}/">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="s/font-awesome/css/font-awesome.min.css">
+
+        <script src="s/jquery/jquery.min.js"></script>
+        <script src="s/bootstrap/js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();
+                $(document).on('shown.bs.dropdown', '.dropdown', function (e) {
+                    const dropdownMenu = $(e.target).find('.dropdown-menu');
+                    const pos = dropdownMenu.offset();
+                    var widthMenu = dropdownMenu.width();
+                    const window_width = $(window).width();
+                    if (pos.left < 0) {
+                        dropdownMenu.offset({ top: pos.top, left: 5 })
+                        dropdownMenu.css('right', 'auto');
+                    }
+
+                    if ((pos.left + widthMenu) > window_width) {
+                        dropdownMenu.offset({ top: pos.top, left: window_width - widthMenu })
+                    }
+                });
+            });
+        </script>
+
+        <script>window.Urungi = {}</script>
+        {% render 'partials/i18n' locale: locale %}
+
+        {% block head %}{% endblock %}
+
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" media="print" href="css/print.css">
+    </head>
+
+    <body>
+        {% block content %}{% endblock %}
+    </body>
+</html>

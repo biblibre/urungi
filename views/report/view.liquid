@@ -1,0 +1,34 @@
+{% capture title %}{{ report.reportName }} &middot; {% t 'Reports' %}{% endcapture %}
+{% layout 'layout/layout' title: title %}
+
+{% block head %}
+    <link rel="stylesheet" href="s/c3/c3.min.css">
+    <link rel="stylesheet" href="s/pivottable/pivot.min.css">
+    <link rel="stylesheet" href="s/subtotal/subtotal.min.css">
+
+    {% render 'partials/notify' %}
+    <script defer src="s/angular/angular.min.js"></script>
+    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
+    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script defer src="s/angular-file-saver/angular-file-saver.bundle.min.js"></script>
+    <script defer src="s/ui-select/select.min.js"></script>
+    <script defer src="s/moment/moment-with-locales.min.js"></script>
+    <script defer src="s/numeral/numeral.min.js"></script>
+    <script defer src="s/d3/d3.min.js"></script>
+    <script defer src="s/c3/c3.min.js"></script>
+    <script defer src="s/pivottable/pivot.min.js"></script>
+    <script defer src="s/subtotal/subtotal.min.js"></script>
+    <script defer src="js/uuid.js"></script>
+    {% render 'partials/ng/core' %}
+    {% render 'partials/ng/ui-bootstrap' %}
+    {% render 'partials/ng/pdf-export' %}
+    {% render 'partials/ng/report' %}
+    {% render 'partials/ng/theme' %}
+    {% render 'partials/ng/report-view' %}
+{% endblock %}
+
+{% block content %}
+    <ng-app ng-app="app.report-view">
+        <app-report-view report-id="{{ report.id }}"></app-report-view>
+    </ng-app>
+{% endblock %}

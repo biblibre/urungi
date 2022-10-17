@@ -4,19 +4,26 @@ const request = require('supertest');
 async function login (app, username = 'administrator', password = 'urungi') {
     let res = await request(app).get('/login');
 
-    let cookies = getCookiesFromResponse(res);
-    const xsrfToken = cookies['XSRF-TOKEN'].value;
-    const headers = {
-        'X-XSRF-TOKEN': xsrfToken,
-        Cookie: Object.values(cookies).map(c => c.name + '=' + c.value).join('; '),
-    };
+    // Retrieve session id and CSRF token that are necessary for login
+    let responseCookies = getCookiesFromResponse(res);
+    let sid = responseCookies['connect.sid'].value;
+    const headers = { Cookie: `connect.sid=${sid}` };
+    const _csrf = res.text.match('name="_csrf" value="(.*?)"')[1];
 
-    res = await request(app).post('/api/login')
+    // Log in
+    res = await request(app).post('/login')
         .set(headers)
-        .send({ userName: username, password: password });
+        .send(`username=${username}&password=${password}&_csrf=${_csrf}`);
 
-    cookies = getCookiesFromResponse(res);
-    headers.Cookie = Object.values(cookies).map(c => c.name + '=' + c.value).join('; ');
+    // Retrieve the new session id
+    responseCookies = getCookiesFromResponse(res);
+    sid = responseCookies['connect.sid'].value;
+    headers.Cookie = `connect.sid=${sid}`;
+
+    // Retrieve a valid CSRF token
+    res = await request(app).get('/').set(headers);
+    responseCookies = getCookiesFromResponse(res);
+    headers['X-XSRF-TOKEN'] = responseCookies['XSRF-TOKEN'].value;
 
     return headers;
 }

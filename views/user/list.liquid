@@ -1,0 +1,28 @@
+{% capture title %}{% t 'Users' %}{% endcapture %}
+{% layout 'layout/layout' title: title %}
+
+{% block head %}
+    {% render 'partials/notify' %}
+    <script defer src="s/angular/angular.min.js"></script>
+    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
+    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+    {% render 'partials/ng/core' %}
+    {% render 'partials/ng/ui-bootstrap' %}
+    {% render 'partials/ng/table' %}
+    {% render 'partials/ng/user' %}
+    {% render 'partials/ng/user-list' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid root-container">
+        <div class="row">
+            <div class="col-md-3">
+                {% render 'sidebar', user: user %}
+            </div>
+
+            <div class="main col-md-9" ng-app="app.user-list">
+                <app-user-list></app-user-list>
+            </div>
+        </div>
+    </div>
+{% endblock %}

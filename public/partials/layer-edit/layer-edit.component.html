@@ -1,0 +1,270 @@
+<div class="explorer-main-container">
+
+    <div class="explorer-container">
+
+        <div class="explorer-header">
+            <a href="./" class="btn-home">
+                <i class="fa fa-home"></i>
+            </a>
+            <div class="explorer-header-title">
+                <h3 app-editable-text="_Layer.name">{{ _Layer.name }}</h3>
+            </div>
+            <div class="explorer-header-buttons btn-group">
+                <div>
+                    <button type="button" class="btn btn-default" ng-click="saveLayerAndStay()" translate>Save layer</button>
+                </div>
+                <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a ng-click="saveLayerAndQuit()" translate>Save and quit</a>
+                    </li>
+                </ul>
+                <a href="layers" class="btn btn-default pull-right" translate>Cancel</a>
+            </div>
+        </div>
+
+
+        <div class="explorer-body" ng-init="view()" style="background-position: -25px -1px; background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQiIGhlaWdodD0iMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDguNSBMIDM0IDguNSBNIDguNSAwIEwgOC41IDM0IE0gMCAxNyBMIDM0IDE3IE0gMTcgMCBMIDE3IDM0IE0gMCAyNS41IEwgMzQgMjUuNSBNIDI1LjUgMCBMIDI1LjUgMzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDM0IDAgTCAwIDAgMCAzNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=&quot;);">
+
+
+
+
+
+            <section id="objectPanel" ng-init="tabs.selected = 'elements'" class="catalogSidebar">
+                <menu>
+                    <li class="search hand-cursor" ng-class="{'on': tabs.selected === 'properties'}">
+                        <a ng-click="tabs.selected = 'properties'">
+                            <i class="fa fa-gear"></i>
+                        </a>
+                    </li>
+                    <li id="searchTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'elements'}">
+                        <a  ng-click="tabs.selected = 'elements'">
+                            <span class="objectPanel-menu-label" translate>Layer elements</span>
+                            <i class="fa fa-newspaper-o fa-2" aria-hidden="true"></i><!--<br/>Layer<br/>Elements-->
+                        </a>
+                    </li>
+                    <li id="sourcesTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'sources'}">
+                        <a  ng-click="tabs.selected = 'sources'">
+                            <span class="objectPanel-menu-label" translate>Sources</span>
+                            <i class="fa fa-plug fa-2" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li id="queriesTabButton" class="search hand-cursor" ng-class="{'on': tabs.selected == 'queries'}">
+                        <a  ng-click="tabs.selected = 'queries'">
+                            <span class="objectPanel-menu-label" translate>Queries</span>
+                            <i class="fa fa-map fa-2" aria-hidden="true"></i> <!--<br/>SQL<br/> Queries-->
+                        </a>
+                    </li>
+                </menu>
+
+                <section class="content" >
+                    <section id="propertiesTab" class="results infinite ng-hide" ng-show="tabs.selected == 'properties'" style="padding: 5px;">
+                            <!--<h5 class="pull-right">Properties</h5>-->
+
+                        <layer-edit-object-properties object-type="selectedItem" object="theSelectedElement" on-delete="deleteObject()" on-edit="editObject"
+                        layer="_Layer" on-delete-element="deleteSchemaElement" on-publish-element="elementAdd"></layer-edit-object-properties>
+
+                    </section>
+
+                    <section id="elementsTab" class="results infinite layer-elements ng-hide " ng-show="tabs.selected == 'elements'">
+
+                        <div class="container-fluid">
+                            <div id="layerButtonGroup" class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span translate>Create</span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu layerNewButtonDropdown">
+                                    <li><a href="" ng-click="addFolder()" translate>New Folder</a></li>
+                                    <li><a href="" ng-click="createComposedElement()" translate>New Element</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <section class="layer scrollPane">
+
+                            <div    class="layer-elements-tree">
+                                <ng-include src="'nestable_item.html'"></ng-include>
+
+                                <script type="text/ng-template" id="nestable_item.html">
+                                    <!--<layer-element element="rootItem" on-element-edit-click="editElement" on-element-delete-click="deleteSchemaElement"></layer-element>-->
+                                <div>
+
+
+
+                                       <div class="schema-element"  ng-if="rootItem.elementRole == 'dimension' || rootItem.elementRole == 'measure'" >
+                                           <i class="fa fa-cube wst-main-color" ng-show="rootItem.elementType != 'date' && rootItem.elementType != 'number' && rootItem.elementType != 'count' && (!rootItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Dimmension)"></i>
+                                                        <i class="fa fa-reorder wst-main-color" ng-show="rootItem.elementType == 'number' || rootItem.elementType == 'count' || (rootItem.elementType == 'string' && rootItem.defaultAggregation)" data-toggle="tooltip" data-placement="top" title="{{rootItem.elementLabel}} (Metric)"></i>
+                                                        <i class="fa fa-calendar-o wst-main-color" ng-show="rootItem.elementType == 'date'" data-toggle="tooltip" data-placement="top"></i>
+                                           <span ng-if="!rootItem.editing == true" title="{{rootItem.description}}">{{rootItem.elementLabel}}</span>
+                                           <i class="fa fa-wrench" style="color:#999999" ng-show="rootItem.isCustom"></i>
+                                           <div ng-if="!rootItem.editing == true" class="schema-element-btn">
+                                                <div class="btn btn-warning btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(rootItem)" translate>Remove</div>
+                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="editElement(rootItem)" translate>Edit</div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="schema-folder"  ng-if="rootItem.elementRole == 'folder'" >
+                                           <i class="fa fa-caret-down"></i>
+                                            <span ng-if="!rootItem.editing == true" class="" >{{rootItem.elementLabel}}</span>
+                                            <span ng-if="rootItem.editing == true" class=""><input type="text" ng-model="rootItem.elementLabel" style="width:100px"></span>
+
+                                            <div ng-if="!rootItem.editing == true" class="schema-element-btn">
+                                                <div class="btn btn-danger btn-xs delete-schema-element-btn" ng-click="deleteSchemaElement(rootItem)" translate>Delete</div>
+                                                <div class="btn btn-info btn-xs edit-schema-element-btn" ng-click="rootItem.editing = true" translate>Edit</div>
+                                            </div>
+
+                                            <div ng-if="rootItem.editing == true" class="edit-schema-element-btn pull-right" ng-click="rootItem.editing = false" style="cursor:hand"><i class="fa fa-floppy-o save-folder-element-btn-icon" uib-tooltip="{{'Save folder label' | translate}}"></i></div>
+                                        </div>
+                                        <ul ng-if="rootItem.elementRole == 'folder' || rootItem.elementRole == 'root'" class="schema-container list-group" ui-sortable="sortableOptions" ng-model="rootItem.elements"
+                                            ng-class="{'schema-element-container-placeholder': onDrag, 'schema-element-container-default': !onDrag}">
+                                            <li class="innerCont list-group-item hand-cursor" ng-repeat="rootItem in rootItem.elements" >
+                                                <ng-include src="'nestable_item.html'"></ng-include>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </script>
+                             </div>
+
+                        </section>
+                        <div class="scrollTrack vScrollTrack">
+                            <div class="scrollThumb" style="height: 72px; transform: translateY(0);"></div>
+                        </div>
+                        <div class="scrollTrack hScrollTrack">
+                            <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0);"></div>
+                        </div>
+                    </section>
+
+            <section id="sourcesTab" class="results infinite ng-hide" ng-show="tabs.selected == 'sources'">
+                <section class="layer scrollPane">
+
+                    <div class="container-fluid" style="min-height: 100%;">
+                        <div ui-tree data-nodrop-enabled="true" data-drag-enabled="false">
+                          <ol ui-tree-nodes="" ng-model="datasources">
+                            <li  ng-repeat="item in datasources" ui-tree-node>
+                              <div ui-tree-handle class="layer-tree-datasource selected-datasource" style="cursor: pointer;">
+                                    <i ng-if="!item.isCollapsed" ng-click="getDatasetsForThisDts(item._id,item)" class="fa fa-plus-square"></i>
+                                    <i ng-if="item.isCollapsed" class="fa fa-minus-square" ng-click="item.isCollapsed = !item.isCollapsed" ></i>
+
+
+                                  <span ng-disabled="item.loading || item.status == -1" ng-click="getDatasetsForThisDts(item._id,item)">{{item.name}}</span>
+
+                                    <i ng-if="(item.status == -1 || item.entities ) && !item.loading" class="fa fa-refresh" ng-click="getDatasetsForThisDts(item._id,item)" style="color: #eee; font-size: 16px;"></i>
+
+                                        <div id="fountainG" ng-if="item.loading">
+                                            <div id="fountainG_1" class="fountainG"></div>
+                                            <div id="fountainG_2" class="fountainG"></div>
+                                            <div id="fountainG_3" class="fountainG"></div>
+                                            <div id="fountainG_4" class="fountainG"></div>
+                                            <div id="fountainG_5" class="fountainG"></div>
+                                            <div id="fountainG_6" class="fountainG"></div>
+                                            <div id="fountainG_7" class="fountainG"></div>
+                                            <div id="fountainG_8" class="fountainG"></div>
+                                        </div>
+
+
+                              </div>
+                                      <ol  ui-tree-nodes="" ng-model="item.entities">
+                                        <li ng-repeat="collectionName in item.entities" ui-tree-node>
+                                          <div ui-tree-handle class="layer-tree-datasource-collection" style="font-weight: 100;">
+                                            <table style="width: 100%; cursor: default;">
+                                                <tr style="width: 100%;">
+                                                    <td>
+                                                        <i class="fa fa-table" aria-hidden="true"></i>
+                                                    </td>
+                                                    <td class="layer-tree-td-name">
+                                                        {{ collectionName }}
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" ng-click="addDatasetToLayer(item._id, collectionName)" class="btn btn-info btn-xs add-to-layer-btn" translate>Add</button>
+                                                    </td>
+                                                </tr>
+                                              </table>
+                                          </div>
+                                        </li>
+                                      </ol>
+                            </li>
+                          </ol>
+                        </div>
+
+                     </div>
+
+                </section>
+                <div class="scrollTrack vScrollTrack">
+                    <div class="scrollThumb" style="height: 72px; transform: translateY(0);"></div>
+                </div>
+                <div class="scrollTrack hScrollTrack">
+                    <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0);"></div>
+                </div>
+            </section>
+            <section id="queriesTab" class="results infinite ng-hide" ng-show="tabs.selected == 'queries'" style="padding: 5px;">
+                    <a ng-click="addSQL()" class="btn btn-info pull-right" style="margin-left: 5px; margin-right: 5px;" translate>Add SQL</a>
+                <div ng-if="collection.sql" ng-repeat="collection in _Layer.params.schema">{{collection.collectionName}}</div>
+            </section>
+                </section>
+            </section>
+
+
+
+
+            <div id="collections" class="canvas-parent" ng-click="selectedCanvas($event)" style="left: 300px;">
+            <div  class="canvas canvas-wide flowchart-demo jtk-surface jtk-surface-nopan canvas-er" id="canvas" style="cursor: default;">
+
+                <div id="{{collection.collectionID}}-parent"  class="window jtk-node  jsplumb-draggable" ng-style="{'left': collection.left, 'top': collection.top}"
+                ng-repeat="collection in _Layer.params.schema">
+
+
+                    <div id="{{collection.collectionID}}" class=" jtk-header " style="overflow: hidden; padding-left: 2px;">
+                        <div class="row">
+                            <span class="col-md-1 jtk-field-icon" style="color: white;"><i ng-show="!element.elementRole" class="fa fa-database"></i></span>
+
+                            <span class="col-md-6 jtk-header-label" style="overflow: hidden; text-align: left;" ng-click="selectCollection(collection,$event)">
+                                {{collection.collectionName}}
+                            </span>
+
+                            <span class="col-md-4">
+                                <span ng-click="toggleFolded(collection)" >
+                                    <i ng-hide="collection.folded" class="jtk-field-selected fa fa-minus-square"></i>
+                                    <i ng-show="collection.folded" class="jtk-field-selected fa fa-plus-square"></i>
+                                </span>
+
+                                <span>
+                                    <i ng-hide="allElementsAdded(collection)" class="jtk-field-icon fa fa-plus-square" ng-click="promptAddAll(collection)" uib-tooltip="{{ 'Add all' | translate }}" ></i>
+                                    <i ng-show="allElementsAdded(collection)" class="jtk-field-selected fa fa-check-square" ></i>
+                                </span>
+                            </span>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="jtk-field" id="{{element.elementID}}" 
+                    ng-repeat="element in collection.elements"  title="{{element.elementName}}" data-html="true" rel="tooltip" 
+                    ng-class="{'isPK': element.isPK}" ng-click="selectElement(element,$event)" ng-hide="collection.folded && !isInAJoin(element)">
+
+                        <table style="border: 0;">
+                            <tr>
+                                <td class="jtk-field-icon"><i ng-show="!element.elementRole" class="fa fa-plus-square" ng-click="elementAdd(element)" ></i></td>
+                                <td class="jtk-field-icon"><i ng-show="element.count" class="fa fa-superscript element-variable"  ></i></td>
+                                <td class="jtk-field-selected"><i ng-show="element.elementRole" class="fa fa-check-square"  ></i></td>
+
+                                <td class="jtk-field-label" ng-class="{'field-selected': element.elementRole}">{{element.elementName}}</td>
+                            </tr>
+
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

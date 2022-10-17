@@ -40,5 +40,12 @@ module.exports = {
             ],
             globalSetup: '<rootDir>/test/cli/setup.js',
         },
+        {
+            displayName: 'liquid-plugin',
+            testEnvironment: 'node',
+            testMatch: [
+                '<rootDir>/test/liquid-plugin/**/*.spec.js',
+            ],
+        },
     ],
 };

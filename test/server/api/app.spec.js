@@ -16,27 +16,17 @@ afterAll(async () => {
 
 describe('API', function () {
     describe('GET /', function () {
-        it('should return HTML and set xsrf cookie', async function () {
+        it('should redirect to /login', async function () {
             const res = await request(app).get('/')
-                .expect(200);
+                .expect(302);
 
-            expect(res.type).toBe('text/html');
-            const expected = [
-                expect.stringContaining('XSRF-TOKEN='),
-            ];
-            expect(res.headers['set-cookie']).toEqual(expect.arrayContaining(expected));
+            expect(res.headers.location).toBe('/login');
         });
     });
     describe('GET /any/route/that/is/not/declared', function () {
-        it('should return HTML and set xsrf cookie', async function () {
-            const res = await request(app).get('/any/route/that/is/note/declared')
-                .expect(200);
-
-            expect(res.type).toBe('text/html');
-            const expected = [
-                expect.stringContaining('XSRF-TOKEN='),
-            ];
-            expect(res.headers['set-cookie']).toEqual(expect.arrayContaining(expected));
+        it('should return 404', async function () {
+            const res = await request(app).get('/any/route/that/is/note/declared');
+            expect(res.status).toBe(404);
         });
     });
 });
