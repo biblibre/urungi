@@ -21,7 +21,7 @@
             </ul>
         </div>
         <a ng-click="goBack();" class="btn btn-default" uib-tooltip="{{ 'Click here to cancel and backtrack' | translate }}" tooltip-placement="bottom" translate>Cancel</a>
-        <a ng-if="vm.dashboard && ((vm.dashboard.owner == user._id) || vm.isAdmin)" ng-href="dashboards/edit/{{vm.dashboard._id}}" class="btn btn-success" style="margin-right: 5px;" translate>Edit Dashboard</a>
+        <a ng-if="vm.dashboard && ((vm.dashboard.owner == user._id) && vm.creationAuthorised || vm.isAdmin)" ng-href="dashboards/edit/{{vm.dashboard._id}}" class="btn btn-success" style="margin-right: 5px;" translate>Edit Dashboard</a>
     </div>
 </div>
 

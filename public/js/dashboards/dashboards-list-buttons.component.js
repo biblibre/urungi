@@ -12,9 +12,9 @@
         },
     });
 
-    DashboardsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'gettextCatalog', '$rootScope'];
+    DashboardsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'gettextCatalog', '$rootScope', 'userService'];
 
-    function DashboardsListButtonsController ($uibModal, api, base, gettextCatalog, $rootScope) {
+    function DashboardsListButtonsController ($uibModal, api, base, gettextCatalog, $rootScope, userService) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -24,6 +24,17 @@
         vm.share = share;
         vm.unshare = unshare;
         vm.getCopyLink = getCopyLink;
+        vm.isAdmin = false;
+        vm.creationAuthorised = false;
+
+        activate();
+
+        function activate () {
+            userService.getCurrentUser().then(user => {
+                vm.isAdmin = user.isAdmin();
+                vm.creationAuthorised = user.dashboardsCreate;
+            });
+        }
 
         function openDeleteModal () {
             const modal = $uibModal.open({
