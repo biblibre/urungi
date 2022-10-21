@@ -338,7 +338,9 @@
             if ($scope.mode === 'add') {
                 $('#dashboardNameModal').modal('show');
             } else {
-                saveDashboard();
+                saveDashboard().catch((error) => {
+                    notify.error(gettextCatalog.getString(error.data.msg));
+                });
             }
         };
 
@@ -349,6 +351,8 @@
             } else {
                 saveDashboard().then(function () {
                     $location.url('/dashboards/list');
+                }).catch((error) => {
+                    notify.error(gettextCatalog.getString(error.data.msg));
                 });
             }
         };
@@ -360,6 +364,8 @@
             } else {
                 saveDashboard().then(function (data) {
                     $location.url('dashboards/view/' + $scope.selectedDashboard._id);
+                }).catch((error) => {
+                    notify.error(gettextCatalog.getString(error.data.msg));
                 });
             }
         };
