@@ -123,7 +123,7 @@ router.use('/data-sources', require('./routes/data-sources.js'));
 router.use('/roles', require('./routes/roles.js'));
 router.use('/users', require('./routes/users.js'));
 
-router.get('/import', function (req, res) {
+router.get('/import', function (req, res, next) {
     if (!req.isAuthenticated() || !req.user.isActive() || !req.user.isAdmin()) {
         return res.redirect(url('/login'));
     }

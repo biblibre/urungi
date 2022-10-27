@@ -15,6 +15,7 @@ Several pages already work without any AngularJS code:
 - Authentication pages (/login and /logout)
 - Home page
 - Shared space
+- Import
 - Export
 
 ### Dependencies

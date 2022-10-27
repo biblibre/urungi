@@ -8,9 +8,77 @@
     'use strict';
 
     const api = {
+        getDatasources,
+        getDashboard,
+        createDashboard,
+        updateDashboard,
+        getLayer,
+        createLayer,
+        replaceLayer,
+        getReport,
+        createReport,
+        updateReport,
         getSharedSpace,
         setSharedSpace,
     };
+
+    function getDatasources () {
+        return httpGet('/api/datasources');
+    }
+
+    /**
+     * Fetch an existing dashboard
+     *
+     * @param {string} id - ID of dashboard to fetch
+     * @returns {Promise<Response>} Promise that resolves to a Response object
+     */
+    function getDashboard (id) {
+        return httpGet('/api/dashboards/find-one?id=' + id);
+    }
+
+    function createDashboard (dashboard) {
+        return httpPost('/api/dashboards/create', dashboard);
+    }
+
+    function updateDashboard (dashboard) {
+        return httpPost('/api/dashboards/update/' + dashboard._id, dashboard);
+    }
+
+    /**
+     * Fetch an existing layer
+     *
+     * @param {string} id - ID of layer to fetch
+     * @returns {Promise<Response>} Promise that resolves to a Response object
+     */
+    function getLayer (id) {
+        return httpGet('/api/layers/' + id);
+    }
+
+    function createLayer (layer) {
+        return httpPost('/api/layers', layer);
+    }
+
+    function replaceLayer (layer) {
+        return httpPut('/api/layers/' + layer._id, layer);
+    }
+
+    /**
+     * Fetch an existing report
+     *
+     * @param {string} id - ID of report to fetch
+     * @returns {Promise<Response>} Promise that resolves to a Response object
+     */
+    function getReport (id) {
+        return httpGet('/api/reports/find-one?id=' + id);
+    }
+
+    function createReport (report) {
+        return httpPost('/api/reports/create', report);
+    }
+
+    function updateReport (report) {
+        return httpPost('/api/reports/update/' + report._id, report);
+    }
 
     function getSharedSpace () {
         return httpGet('/api/shared-space');
@@ -22,6 +90,16 @@
 
     function httpGet (path) {
         return httpRequest(path, { method: 'GET' });
+    }
+
+    function httpPost (path, data) {
+        return httpRequest(path, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
     }
 
     function httpPut (path, data) {
@@ -49,7 +127,21 @@
         const relativePath = path.startsWith('/') ? path.substring(1) : path;
         const url = new URL(relativePath, document.baseURI);
 
-        return fetch(url, settings);
+        return fetch(url, settings).then(function (response) {
+            const contentType = response.headers.get('Content-Type').trim();
+            if (contentType.startsWith('application/json')) {
+                return response.json().then(function (data) {
+                    if ('error' in data) {
+                        throw new Error(data.error);
+                    }
+                    if ('result' in data && !data.result) {
+                        throw new Error(data.msg);
+                    }
+                    return { response, data };
+                });
+            }
+            return { response };
+        });
     }
 
     return api;

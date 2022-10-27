@@ -2,7 +2,9 @@
     if (typeof module === 'object' && module.exports) {
         module.exports = factory();
     } else {
-        root.Urungi.i18n = factory();
+        const i18n = factory();
+        root.Urungi.i18n = i18n;
+        root.Urungi.t = i18n.gettext.bind(i18n);
     }
 }(typeof self !== 'undefined' ? self : this, function () {
     'use strict';

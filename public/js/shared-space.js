@@ -11,13 +11,12 @@
                 check_callback: true,
                 data: function (node, cb) {
                     api.getSharedSpace()
-                        .then(response => {
+                        .then(({ response, data }) => {
                             if (!response.ok) {
                                 throw new Error('Failed to fetch user objects');
                             }
-                            return response.json();
+                            return data.items.map(jsTreeNodeFromSharedAreaNode);
                         })
-                        .then(data => data.items.map(jsTreeNodeFromSharedAreaNode))
                         .catch(err => {
                             console.error(err);
                             return false;
