@@ -4,8 +4,8 @@
 
     angular.module('app.report').service('c3Charts', c3Charts);
 
-    c3Charts.$inject = ['notify', 'gettextCatalog', 'reportsService', 'numeral'];
-    function c3Charts (notify, gettextCatalog, reportsService, numeral) {
+    c3Charts.$inject = ['notify', 'i18n', 'reportsService', 'numeral'];
+    function c3Charts (notify, i18n, reportsService, numeral) {
         this.rebuildChart = function (report, id, data, chart) {
             let theValues = [];
             const theStackValues = {};
@@ -22,7 +22,7 @@
             // var stackIsInQuery = false;
 
             if (!data) {
-                notify.notice(gettextCatalog.getString('no data to display'));
+                notify.notice(i18n.gettext('no data to display'));
                 return;
             }
 
@@ -405,32 +405,32 @@
         this.chartColumnTypeOptions = [
             {
                 id: 'spline',
-                name: gettextCatalog.getString('Spline'),
+                name: i18n.gettext('Spline'),
                 image: 'images/spline.png'
             },
             {
                 id: 'bar',
-                name: gettextCatalog.getString('Bar'),
+                name: i18n.gettext('Bar'),
                 icon: 'fa fa-bar-chart'
             },
             {
                 id: 'area',
-                name: gettextCatalog.getString('Area'),
+                name: i18n.gettext('Area'),
                 icon: 'fa fa-area-chart'
             },
             {
                 id: 'line',
-                name: gettextCatalog.getString('Line'),
+                name: i18n.gettext('Line'),
                 icon: 'fa fa-line-chart'
             },
             {
                 id: 'area-spline',
-                name: gettextCatalog.getString('Area spline'),
+                name: i18n.gettext('Area spline'),
                 image: 'images/area-spline.png'
             },
             {
                 id: 'scatter',
-                name: gettextCatalog.getString('Scatter'),
+                name: i18n.gettext('Scatter'),
                 image: 'images/scatter.png'
             }
         ];
@@ -438,12 +438,12 @@
         this.chartSectorTypeOptions = [
             {
                 id: 'pie',
-                name: gettextCatalog.getString('Pie'),
+                name: i18n.gettext('Pie'),
                 image: 'images/pie.png'
             },
             {
                 id: 'donut',
-                name: gettextCatalog.getString('Donut'),
+                name: i18n.gettext('Donut'),
                 image: 'images/donut.png'
             }
         ];

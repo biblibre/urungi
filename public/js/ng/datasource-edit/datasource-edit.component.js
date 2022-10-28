@@ -12,9 +12,9 @@
             },
         });
 
-    DatasourceEditController.$inject = ['$window', 'gettextCatalog', 'api'];
+    DatasourceEditController.$inject = ['$window', 'i18n', 'api'];
 
-    function DatasourceEditController ($window, gettextCatalog, api) {
+    function DatasourceEditController ($window, i18n, api) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -55,9 +55,9 @@
         function doTestConnection () {
             return api.testConnection(vm._dataSource).then(result => {
                 if (result.ok) {
-                    vm.testConnection = { result: 1, message: gettextCatalog.getString('Successful database connection.') };
+                    vm.testConnection = { result: 1, message: i18n.gettext('Successful database connection.') };
                 } else {
-                    vm.testConnection = { result: 0, message: gettextCatalog.getString('Database connection failed.') + ' ' + result.error };
+                    vm.testConnection = { result: 0, message: i18n.gettext('Database connection failed.') + ' ' + result.error };
                 }
             });
         };

@@ -10,9 +10,9 @@
         }
     });
 
-    DashboardEditController.$inject = ['$scope', '$window', '$q', '$compile', 'reportsService', 'connection', 'reportModel', 'uuid', 'htmlWidgets', 'gettextCatalog', '$uibModal', 'notify', 'api', 'base'];
+    DashboardEditController.$inject = ['$scope', '$window', '$q', '$compile', 'reportsService', 'connection', 'reportModel', 'uuid', 'htmlWidgets', 'i18n', '$uibModal', 'notify', 'api', 'base'];
 
-    function DashboardEditController ($scope, $window, $q, $compile, reportsService, connection, reportModel, uuid, htmlWidgets, gettextCatalog, $uibModal, notify, api, base) {
+    function DashboardEditController ($scope, $window, $q, $compile, reportsService, connection, reportModel, uuid, htmlWidgets, i18n, $uibModal, notify, api, base) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -99,7 +99,7 @@
                         report.id = report._id;
                         $scope.selectedDashboard.reports.push(report);
                     } else {
-                        notify.error(gettextCatalog.getString('Error : failed to import report'));
+                        notify.error(i18n.gettext('Error : failed to import report'));
                     }
                 });
             });
@@ -122,7 +122,7 @@
             if ($scope.mode === 'add') {
                 $scope.dashboardID = uuid.v4();
                 $scope.selectedDashboard = {
-                    dashboardName: gettextCatalog.getString('New Dashboard'),
+                    dashboardName: i18n.gettext('New Dashboard'),
                     backgroundColor: '#999999',
                     reports: [],
                     items: [],
@@ -142,7 +142,7 @@
                 $scope.selectedDashboardLimit = { value: 500 };
 
                 if (!$scope.dashboardID) {
-                    notify.error(gettextCatalog.getString('Could not load dashboard : missing id'));
+                    notify.error(i18n.gettext('Could not load dashboard : missing id'));
                 }
 
                 return connection.get('/api/dashboards/get/' + $scope.dashboardID, { id: $scope.dashboardID }).then(function (data) {

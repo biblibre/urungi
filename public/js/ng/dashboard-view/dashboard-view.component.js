@@ -10,9 +10,9 @@
         }
     });
 
-    DashboardViewController.$inject = ['$scope', '$timeout', '$compile', '$uibModal', '$location', '$window', 'notify', 'gettextCatalog', 'api', 'userService', 'reportsService'];
+    DashboardViewController.$inject = ['$scope', '$timeout', '$compile', '$uibModal', '$location', '$window', 'notify', 'i18n', 'api', 'userService', 'reportsService'];
 
-    function DashboardViewController ($scope, $timeout, $compile, $uibModal, $location, $window, notify, gettextCatalog, api, userService, reportsService) {
+    function DashboardViewController ($scope, $timeout, $compile, $uibModal, $location, $window, notify, i18n, api, userService, reportsService) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -148,7 +148,7 @@
                 return api.getDashboardAsPDF(vm.dashboard._id, settings).then(res => {
                     download(res.data, 'application/pdf', vm.dashboard.dashboardName + '.pdf');
                 }, () => {
-                    notify.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
+                    notify.error(i18n.gettext('The export failed. Please contact the system administrator.'));
                 });
             }, () => {
             }).finally(() => {
@@ -164,7 +164,7 @@
             api.getDashboardAsPNG(vm.dashboard._id, settings).then(res => {
                 download(res.data, 'image/png', vm.dashboard.dashboardName + '.png');
             }, () => {
-                notify.error(gettextCatalog.getString('The export failed. Please contact the system administrator.'));
+                notify.error(i18n.gettext('The export failed. Please contact the system administrator.'));
             }).finally(() => {
                 vm.exportIsLoading = false;
             });

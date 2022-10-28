@@ -12,9 +12,9 @@
         },
     });
 
-    ReportsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'gettextCatalog', 'userService'];
+    ReportsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'i18n', 'expand', 'userService'];
 
-    function ReportsListButtonsController ($uibModal, api, base, gettextCatalog, userService) {
+    function ReportsListButtonsController ($uibModal, api, base, i18n, expand, userService) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -37,7 +37,7 @@
             const modal = $uibModal.open({
                 component: 'appDeleteModal',
                 resolve: {
-                    title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.report.reportName }),
+                    title: () => expand(i18n.gettext('Delete {{name}} ?'), { name: vm.report.reportName }),
                     delete: () => function () {
                         return api.deleteReport(vm.report._id);
                     },

@@ -1389,9 +1389,8 @@ msgstr ""
 msgid "New datasource"
 msgstr ""
 
+#: public/js/shared-space.js:64 public/js/shared-space.js:80
 #: public/js/shared-space.js:144
-#: public/js/shared-space.js:64
-#: public/js/shared-space.js:80
 msgid "New folder"
 msgstr ""
 
@@ -1844,8 +1843,11 @@ msgid "Second semester"
 msgstr ""
 
 #: public/partials/report-edit/report-edit.report-column-settings-modal.component.html:100
+msgid "See <a href=\"http://numeraljs.com/#format\" target=\"_blank\" rel=\"noreferrer\">documentation</a> for examples"
+msgstr ""
+
 #: public/partials/report-edit/report-edit.report-column-settings-modal.component.html:91
-msgid "See <a ng-href=\"{{ url }}\" target=\"_blank\" rel=\"noreferrer\">documentation</a> for examples"
+msgid "See <a href=\"https://momentjs.com/docs/#/displaying/\" target=\"_blank\" rel=\"noreferrer\">documentation</a> for examples"
 msgstr ""
 
 #: public/partials/role-list/role-list.edit-modal.component.html:66

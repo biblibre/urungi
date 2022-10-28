@@ -12,9 +12,9 @@
         },
     });
 
-    UsersModifyPasswordModalController.$inject = ['gettextCatalog', 'api', 'notify'];
+    UsersModifyPasswordModalController.$inject = ['i18n', 'api', 'notify'];
 
-    function UsersModifyPasswordModalController (gettextCatalog, api, notify) {
+    function UsersModifyPasswordModalController (i18n, api, notify) {
         const vm = this;
         vm.username = '';
         vm.alertMessage = '';
@@ -40,11 +40,11 @@
             vm.alertMessage = '';
 
             if (!vm.user.pwdOld) {
-                vm.alertMessage = gettextCatalog.getString('You have to introduce your password');
+                vm.alertMessage = i18n.gettext('You have to introduce your password');
                 return;
             } else {
                 if (vm.user.pwdNew1 !== vm.user.pwdNew2) {
-                    vm.alertMessage = gettextCatalog.getString('Passwords do not match');
+                    vm.alertMessage = i18n.gettext('Passwords do not match');
                     return;
                 }
             }
@@ -53,9 +53,9 @@
 
             p.then(function () {
                 vm.close();
-                notify.success(gettextCatalog.getString('Password changed'));
+                notify.success(i18n.gettext('Password changed'));
             }).catch((error) => {
-                vm.alertMessage = gettextCatalog.getString(error);
+                vm.alertMessage = i18n.gettext(error);
             });
         }
     }

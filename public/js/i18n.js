@@ -17,7 +17,11 @@
         i18n.setLocale(language);
     }
     if (window.Urungi.messages) {
-        i18n.loadJSON(window.Urungi.messages);
+        // gettext.js removes the '' key from messages, but AngularJS code
+        // (core.module.js) needs it to set the correct locale
+        // So we clone the object first
+        const messages = Object.assign({}, window.Urungi.messages);
+        i18n.loadJSON(messages);
     }
 
     return i18n;

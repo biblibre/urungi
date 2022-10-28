@@ -15,9 +15,9 @@
         },
     });
 
-    FilterPromptController.$inject = ['$scope', 'gettextCatalog', 'api'];
+    FilterPromptController.$inject = ['$scope', 'i18n', 'api'];
 
-    function FilterPromptController ($scope, gettextCatalog, api) {
+    function FilterPromptController ($scope, i18n, api) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -162,42 +162,42 @@
 
         function getButtonFilterPromptMessage (filter) {
             if (filter.filterPrompt) {
-                return gettextCatalog.getString('Select to deactivate the runtime');
+                return i18n.gettext('Select to deactivate the runtime');
             } else {
-                return gettextCatalog.getString('Make this filter appear in the report interface.');
+                return i18n.gettext('Make this filter appear in the report interface.');
             }
         }
 
         function getFilterTypeLabel (filterType) {
             const labels = {
-                equal: gettextCatalog.getString('is equal to'),
-                'equal-pattern': gettextCatalog.getString('is equal to (pattern)'),
-                diferentThan: gettextCatalog.getString('is different than'),
-                'diferentThan-pattern': gettextCatalog.getString('is different than (pattern)'),
-                in: gettextCatalog.getString('is in'),
-                notIn: gettextCatalog.getString('is not in'),
-                biggerThan: gettextCatalog.getString('is bigger than'),
-                'biggerThan-pattern': gettextCatalog.getString('is bigger than (pattern)'),
-                biggerOrEqualThan: gettextCatalog.getString('is bigger or equal than'),
-                'biggerOrEqualThan-pattern': gettextCatalog.getString('is bigger or equal than (pattern)'),
-                lessThan: gettextCatalog.getString('is less than'),
-                'lessThan-pattern': gettextCatalog.getString('is less than (pattern)'),
-                lessOrEqualThan: gettextCatalog.getString('is less or equal than'),
-                'lessOrEqualThan-pattern': gettextCatalog.getString('is less or equal than (pattern)'),
-                between: gettextCatalog.getString('is between'),
-                notBetween: gettextCatalog.getString('is not between'),
-                contains: gettextCatalog.getString('contains'),
-                notContains: gettextCatalog.getString('does not contain'),
-                startWith: gettextCatalog.getString('starts with'),
-                notStartWith: gettextCatalog.getString('does not start with'),
-                endsWith: gettextCatalog.getString('ends with'),
-                notEndsWith: gettextCatalog.getString('does not end with'),
-                like: gettextCatalog.getString('is like'),
-                notLike: gettextCatalog.getString('is not like'),
-                null: gettextCatalog.getString('is null'),
-                notNull: gettextCatalog.getString('is not null'),
-                empty: gettextCatalog.getString('is empty'),
-                notEmpty: gettextCatalog.getString('is not empty'),
+                equal: i18n.gettext('is equal to'),
+                'equal-pattern': i18n.gettext('is equal to (pattern)'),
+                diferentThan: i18n.gettext('is different than'),
+                'diferentThan-pattern': i18n.gettext('is different than (pattern)'),
+                in: i18n.gettext('is in'),
+                notIn: i18n.gettext('is not in'),
+                biggerThan: i18n.gettext('is bigger than'),
+                'biggerThan-pattern': i18n.gettext('is bigger than (pattern)'),
+                biggerOrEqualThan: i18n.gettext('is bigger or equal than'),
+                'biggerOrEqualThan-pattern': i18n.gettext('is bigger or equal than (pattern)'),
+                lessThan: i18n.gettext('is less than'),
+                'lessThan-pattern': i18n.gettext('is less than (pattern)'),
+                lessOrEqualThan: i18n.gettext('is less or equal than'),
+                'lessOrEqualThan-pattern': i18n.gettext('is less or equal than (pattern)'),
+                between: i18n.gettext('is between'),
+                notBetween: i18n.gettext('is not between'),
+                contains: i18n.gettext('contains'),
+                notContains: i18n.gettext('does not contain'),
+                startWith: i18n.gettext('starts with'),
+                notStartWith: i18n.gettext('does not start with'),
+                endsWith: i18n.gettext('ends with'),
+                notEndsWith: i18n.gettext('does not end with'),
+                like: i18n.gettext('is like'),
+                notLike: i18n.gettext('is not like'),
+                null: i18n.gettext('is null'),
+                notNull: i18n.gettext('is not null'),
+                empty: i18n.gettext('is empty'),
+                notEmpty: i18n.gettext('is not empty'),
             };
 
             if (filterType in labels) {
@@ -206,26 +206,26 @@
         }
 
         const datePatternOptions = [
-            { value: '#WST-TODAY#', label: gettextCatalog.getString('Today') },
-            { value: '#WST-THISWEEK#', label: gettextCatalog.getString('This week') },
-            { value: '#WST-THISMONTH#', label: gettextCatalog.getString('This month') },
-            { value: '#WST-THISYEAR#', label: gettextCatalog.getString('This year') },
-            { value: '#WST-FIRSTQUARTER#', label: gettextCatalog.getString('First quarter') },
-            { value: '#WST-SECONDQUARTER#', label: gettextCatalog.getString('Second quarter') },
-            { value: '#WST-THIRDQUARTER#', label: gettextCatalog.getString('Third quarter') },
-            { value: '#WST-FOURTHQUARTER#', label: gettextCatalog.getString('Fourth quarter') },
-            { value: '#WST-FIRSTSEMESTER#', label: gettextCatalog.getString('First semester') },
-            { value: '#WST-SECONDSEMESTER#', label: gettextCatalog.getString('Second semester') },
-            { value: '#WST-YESTERDAY#', label: gettextCatalog.getString('Yesterday') },
-            { value: '#WST-LASTWEEK#', label: gettextCatalog.getString('Last week') },
-            { value: '#WST-LASTMONTH#', label: gettextCatalog.getString('Last month') },
-            { value: '#WST-LASTYEAR#', label: gettextCatalog.getString('Last year') },
-            { value: '#WST-LYFIRSTQUARTER#', label: gettextCatalog.getString('Last year first quarter') },
-            { value: '#WST-LYSECONDQUARTER#', label: gettextCatalog.getString('Last year second quarter') },
-            { value: '#WST-LYTHIRDQUARTER#', label: gettextCatalog.getString('Last year third quarter') },
-            { value: '#WST-LYFOURTHQUARTER#', label: gettextCatalog.getString('Last year fourth quarter') },
-            { value: '#WST-LYFIRSTSEMESTER#', label: gettextCatalog.getString('Last year first semester') },
-            { value: '#WST-LYSECONDSEMESTER#', label: gettextCatalog.getString('Last year second semester') }
+            { value: '#WST-TODAY#', label: i18n.gettext('Today') },
+            { value: '#WST-THISWEEK#', label: i18n.gettext('This week') },
+            { value: '#WST-THISMONTH#', label: i18n.gettext('This month') },
+            { value: '#WST-THISYEAR#', label: i18n.gettext('This year') },
+            { value: '#WST-FIRSTQUARTER#', label: i18n.gettext('First quarter') },
+            { value: '#WST-SECONDQUARTER#', label: i18n.gettext('Second quarter') },
+            { value: '#WST-THIRDQUARTER#', label: i18n.gettext('Third quarter') },
+            { value: '#WST-FOURTHQUARTER#', label: i18n.gettext('Fourth quarter') },
+            { value: '#WST-FIRSTSEMESTER#', label: i18n.gettext('First semester') },
+            { value: '#WST-SECONDSEMESTER#', label: i18n.gettext('Second semester') },
+            { value: '#WST-YESTERDAY#', label: i18n.gettext('Yesterday') },
+            { value: '#WST-LASTWEEK#', label: i18n.gettext('Last week') },
+            { value: '#WST-LASTMONTH#', label: i18n.gettext('Last month') },
+            { value: '#WST-LASTYEAR#', label: i18n.gettext('Last year') },
+            { value: '#WST-LYFIRSTQUARTER#', label: i18n.gettext('Last year first quarter') },
+            { value: '#WST-LYSECONDQUARTER#', label: i18n.gettext('Last year second quarter') },
+            { value: '#WST-LYTHIRDQUARTER#', label: i18n.gettext('Last year third quarter') },
+            { value: '#WST-LYFOURTHQUARTER#', label: i18n.gettext('Last year fourth quarter') },
+            { value: '#WST-LYFIRSTSEMESTER#', label: i18n.gettext('Last year first semester') },
+            { value: '#WST-LYSECONDSEMESTER#', label: i18n.gettext('Last year second semester') }
         ];
 
         const filterOptions = {

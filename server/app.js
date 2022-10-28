@@ -55,7 +55,7 @@ const mongoStore = MongoStore.create({
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
-    const availableLanguages = ['en', 'fr', 'es'];
+    const availableLanguages = req.app.locals.availableLanguages.map(l => l.code);
     let language;
 
     if (req.cookies.language && availableLanguages.includes(req.cookies.language)) {

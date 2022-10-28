@@ -9,9 +9,9 @@
             controllerAs: 'vm',
         });
 
-    UserListController.$inject = ['$uibModal', 'notify', 'gettextCatalog', 'api', 'userService'];
+    UserListController.$inject = ['$uibModal', 'notify', 'i18n', 'expand', 'api', 'userService'];
 
-    function UserListController ($uibModal, notify, gettextCatalog, api, userService) {
+    function UserListController ($uibModal, notify, i18n, expand, api, userService) {
         const vm = this;
 
         vm.page = 1;
@@ -45,7 +45,7 @@
 
                     api.updateUser(user._id, { status: newStatus }).then(function (result) {
                         user.status = newStatus;
-                        notify.success(gettextCatalog.getString('Status updated'));
+                        notify.success(i18n.gettext('Status updated'));
                     });
                 }
             });
@@ -103,12 +103,12 @@
 
         function deleteUser (targetUser) {
             if (targetUser._id === vm.currentUser._id) {
-                notify.notice(gettextCatalog.getString("You can't remove yourself from your own user session"));
+                notify.notice(i18n.gettext("You can't remove yourself from your own user session"));
             } else {
                 const modal = $uibModal.open({
                     component: 'appDeleteModal',
                     resolve: {
-                        title: () => gettextCatalog.getString('Remove user {{name}} ?', { name: targetUser.userName }),
+                        title: () => expand(i18n.gettext('Remove user {{name}} ?'), { name: targetUser.userName }),
                         delete: () => function () {
                             return api.deleteUser(targetUser._id);
                         },
@@ -116,7 +116,7 @@
                 });
 
                 modal.result.then(function () {
-                    notify.success(gettextCatalog.getString('User deleted successfully'));
+                    notify.success(i18n.gettext('User deleted successfully'));
                     vm.getUsers(1);
                 });
             }

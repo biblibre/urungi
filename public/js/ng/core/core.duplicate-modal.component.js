@@ -12,9 +12,9 @@
         },
     });
 
-    DuplicateModalController.$inject = ['gettextCatalog'];
+    DuplicateModalController.$inject = ['i18n', 'expand'];
 
-    function DuplicateModalController (gettextCatalog) {
+    function DuplicateModalController (i18n, expand) {
         const vm = this;
 
         vm.newName = '';
@@ -22,7 +22,7 @@
         vm.onDuplicate = onDuplicate;
 
         function $onInit () {
-            vm.newName = gettextCatalog.getString('Copy of {{name}}', { name: vm.resolve.name });
+            vm.newName = expand(i18n.gettext('Copy of {{name}}'), { name: vm.resolve.name });
         }
 
         function onDuplicate () {

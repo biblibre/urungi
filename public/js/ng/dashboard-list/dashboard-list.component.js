@@ -7,9 +7,9 @@
         controllerAs: 'vm',
     });
 
-    DashboardListController.$inject = ['$window', '$timeout', 'api', 'gettextCatalog', 'userService'];
+    DashboardListController.$inject = ['$window', '$timeout', 'api', 'i18n', 'userService'];
 
-    function DashboardListController ($window, $timeout, api, gettextCatalog, userService) {
+    function DashboardListController ($window, $timeout, api, i18n, userService) {
         const vm = this;
 
         vm.creationAuthorised = false;
@@ -82,72 +82,72 @@
 
         function getIntroOptions () {
             const introOptions = {
-                nextLabel: gettextCatalog.getString('Next'),
-                prevLabel: gettextCatalog.getString('Back'),
-                skipLabel: gettextCatalog.getString('Skip'),
-                doneLabel: gettextCatalog.getString('Done'),
+                nextLabel: i18n.gettext('Next'),
+                prevLabel: i18n.gettext('Back'),
+                skipLabel: i18n.gettext('Skip'),
+                doneLabel: i18n.gettext('Done'),
                 tooltipPosition: 'auto',
                 showStepNumbers: false,
                 steps: [
                     {
                         intro: '<h4>' +
-                            gettextCatalog.getString('Dashboards') +
+                            i18n.gettext('Dashboards') +
                             '</h4><p><strong>' +
-                            gettextCatalog.getString('In here you can create and execute dashboards like web pages.') +
+                            i18n.gettext('In here you can create and execute dashboards like web pages.') +
                             '</strong></p><p>' +
-                            gettextCatalog.getString('Define several reports using filters and dragging and dropping from different layers.') +
+                            i18n.gettext('Define several reports using filters and dragging and dropping from different layers.') +
                             '</p><p>' +
-                            gettextCatalog.getString('After you define the reports to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it.') +
+                            i18n.gettext('After you define the reports to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it.') +
                             '</p>',
                     },
                     {
                         element: '#newDashboardButton',
                         intro: '<h4>' +
-                            gettextCatalog.getString('New Dashboard') +
+                            i18n.gettext('New Dashboard') +
                             '</h4><p>' +
-                            gettextCatalog.getString('Click here to create a new dashboard.') +
+                            i18n.gettext('Click here to create a new dashboard.') +
                             '</p>',
                     },
                     {
                         element: '#dashboardList',
                         intro: '<h4>' +
-                            gettextCatalog.getString('Dashboards list') +
+                            i18n.gettext('Dashboards list') +
                             '</h4><p><strong>' +
-                            gettextCatalog.getString('Here all your dashboards are listed.') +
+                            i18n.gettext('Here all your dashboards are listed.') +
                             '</strong></p><p>' +
-                            gettextCatalog.getString('Click over a dashboard\'s name to execute it.') +
+                            i18n.gettext('Click over a dashboard\'s name to execute it.') +
                             '</p><p>' +
-                            gettextCatalog.getString('You can also modify or drop the dashboard, clicking into the modify or delete buttons.') +
+                            i18n.gettext('You can also modify or drop the dashboard, clicking into the modify or delete buttons.') +
                             '</p>',
                     },
                     {
                         element: '.btn-edit',
                         intro: '<h4>' +
-                            gettextCatalog.getString('Dashboard edit') +
+                            i18n.gettext('Dashboard edit') +
                             '</h4><p>' +
-                            gettextCatalog.getString('Click here to modify the dashboard.') +
+                            i18n.gettext('Click here to modify the dashboard.') +
                             '</p>',
                     },
                     {
                         element: '.btn-delete',
                         intro: '<h4>' +
-                            gettextCatalog.getString('Dashboard delete') +
+                            i18n.gettext('Dashboard delete') +
                             '</h4><p><strong>' +
-                            gettextCatalog.getString('Click here to delete the dashboard.') +
+                            i18n.gettext('Click here to delete the dashboard.') +
                             '</strong></p><p>' +
-                            gettextCatalog.getString('Once deleted the dashboard will not be recoverable again.') +
+                            i18n.gettext('Once deleted the dashboard will not be recoverable again.') +
                             '</p><p>' +
-                            gettextCatalog.getString('Requires 2 step confirmation.') +
+                            i18n.gettext('Requires 2 step confirmation.') +
                             '</p>',
                     },
                     {
                         element: '.published-tag',
                         intro: '<h4>' +
-                            gettextCatalog.getString('Dashboard published') +
+                            i18n.gettext('Dashboard published') +
                             '</h4><p><strong>' +
-                            gettextCatalog.getString('This label indicates that this dashboard is public.') +
+                            i18n.gettext('This label indicates that this dashboard is public.') +
                             '</strong></p><p>' +
-                            gettextCatalog.getString('If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard.') +
+                            i18n.gettext('If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard.') +
                             '</p>',
                     }
                 ]

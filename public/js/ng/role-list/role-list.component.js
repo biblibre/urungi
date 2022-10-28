@@ -9,9 +9,9 @@
             controllerAs: 'vm',
         });
 
-    RoleListController.$inject = ['$uibModal', 'notify', 'gettextCatalog', 'api'];
+    RoleListController.$inject = ['$uibModal', 'notify', 'i18n', 'expand', 'api'];
 
-    function RoleListController ($uibModal, notify, gettextCatalog, api) {
+    function RoleListController ($uibModal, notify, i18n, expand, api) {
         const vm = this;
 
         vm.items = [];
@@ -30,14 +30,14 @@
 
         function newRole () {
             return openRoleModal({}).then(function () {
-                notify.success(gettextCatalog.getString('Role created successfully'));
+                notify.success(i18n.gettext('Role created successfully'));
             }, () => {});
         };
 
         function view (roleID) {
             return api.getRole(roleID).then(function (role) {
                 return openRoleModal(role).then(function () {
-                    notify.success(gettextCatalog.getString('Role updated successfully'));
+                    notify.success(i18n.gettext('Role updated successfully'));
                 }, () => {});
             });
         };
@@ -78,8 +78,9 @@
                 const modal = $uibModal.open({
                     component: 'appDeleteModal',
                     resolve: {
-                        title: () => gettextCatalog.getString('Remove role {{name}} ?', { name: role.name }),
+                        title: () => expand(i18n.gettext('Remove role {{name}} ?'), { name: role.name }),
                         bodyTemplate: () => 'partials/role-list/role-list.delete-modal-body.html',
+                        bodyMessage: () => expand(i18n.ngettext('Warning: This role is assigned to {{$count}} user', 'Warning: This role is assigned to {{$count}} users', usersCount), { $count: usersCount }),
                         usersCount: () => usersCount,
                         delete: () => function () {
                             return api.deleteRole(role._id);
@@ -87,7 +88,7 @@
                     },
                 });
                 modal.result.then(function () {
-                    notify.success(gettextCatalog.getString('Role deleted successfully'));
+                    notify.success(i18n.gettext('Role deleted successfully'));
                     vm.getRoles(1);
                 }).catch(() => {});
             });

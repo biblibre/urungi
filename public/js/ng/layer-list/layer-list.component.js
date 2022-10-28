@@ -8,9 +8,9 @@
             controllerAs: 'vm',
         });
 
-    LayerListController.$inject = ['$window', '$timeout', '$uibModal', 'notify', 'api', 'gettextCatalog', 'userService'];
+    LayerListController.$inject = ['$window', '$timeout', '$uibModal', 'notify', 'api', 'i18n', 'userService'];
 
-    function LayerListController ($window, $timeout, $uibModal, notify, api, gettextCatalog, userService) {
+    function LayerListController ($window, $timeout, $uibModal, notify, api, i18n, userService) {
         const vm = this;
 
         vm.currentPage = 1;
@@ -99,7 +99,7 @@
 
                     api.changeLayerStatus(layer._id, newStatus).then(() => {
                         layer.status = newStatus;
-                        notify.success(gettextCatalog.getString('Status updated'));
+                        notify.success(i18n.gettext('Status updated'));
                     });
                 }
             });
@@ -107,71 +107,71 @@
 
         function getIntroOptions () {
             const introOptions = {
-                nextLabel: gettextCatalog.getString('Next'),
-                prevLabel: gettextCatalog.getString('Back'),
+                nextLabel: i18n.gettext('Next'),
+                prevLabel: i18n.gettext('Back'),
                 skipLabel: '&times;',
-                doneLabel: gettextCatalog.getString('Done'),
+                doneLabel: i18n.gettext('Done'),
                 tooltipPosition: 'auto',
                 showStepNumbers: false,
                 steps: [
                     {
-                        title: gettextCatalog.getString('Layers'),
+                        title: i18n.gettext('Layers'),
                         intro: '<p>' +
-                            gettextCatalog.getString('Layers define the interface for your users to access the data.') +
+                            i18n.gettext('Layers define the interface for your users to access the data.') +
                             '</p><p>' +
-                            gettextCatalog.getString('Layers allow your users to create reports dragging and dropping familiar elements that points in the background to the fields contained in tables in your data sources.') +
+                            i18n.gettext('Layers allow your users to create reports dragging and dropping familiar elements that points in the background to the fields contained in tables in your data sources.') +
                             '</p><p>' +
-                            gettextCatalog.getString('Here you can create and manage the layers that later will be used by your users to create reports or explore data.') +
+                            i18n.gettext('Here you can create and manage the layers that later will be used by your users to create reports or explore data.') +
                             '</p><p>' +
-                            gettextCatalog.getString('You can create several layers depending on your necessities, but you have to define one at least.') +
+                            i18n.gettext('You can create several layers depending on your necessities, but you have to define one at least.') +
                             '</p>',
                     },
                     {
                         element: '#newLayerButton',
-                        title: gettextCatalog.getString('New Layer'),
+                        title: i18n.gettext('New Layer'),
                         intro: '<p>' +
-                            gettextCatalog.getString('Click here to create a new layer.') +
+                            i18n.gettext('Click here to create a new layer.') +
                             '</p>',
                     },
                     {
                         element: '#layerList',
-                        title: gettextCatalog.getString('Layers list'),
+                        title: i18n.gettext('Layers list'),
                         intro: '<p>' +
-                            gettextCatalog.getString('Here all the layers are listed.') +
+                            i18n.gettext('Here all the layers are listed.') +
                             '</p><p>' +
-                            gettextCatalog.getString('You can edit the layer to configure the tables, elements and joins between tables.') +
+                            i18n.gettext('You can edit the layer to configure the tables, elements and joins between tables.') +
                             '</p><p>' +
-                            gettextCatalog.getString('You can also activate or deactivate layers.') +
+                            i18n.gettext('You can also activate or deactivate layers.') +
                             '</p>',
                     },
                     {
                         element: '#layerList .badge',
-                        title: gettextCatalog.getString('Layer status'),
+                        title: i18n.gettext('Layer status'),
                         intro: '<p>' +
-                            gettextCatalog.getString('The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data.') +
+                            i18n.gettext('The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data.') +
                             '</p><p>' +
-                            gettextCatalog.getString('You can change the status of the layer simply clicking over this label') +
+                            i18n.gettext('You can change the status of the layer simply clicking over this label') +
                             '</p>',
                     },
                     {
                         element: '.btn-delete',
-                        title: gettextCatalog.getString('Layer delete'),
+                        title: i18n.gettext('Layer delete'),
                         intro: '<p>' +
-                            gettextCatalog.getString('Click here to delete the layer.') +
+                            i18n.gettext('Click here to delete the layer.') +
                             '</p><p>' +
-                            gettextCatalog.getString('Once deleted the layer will not be recoverable again.') +
+                            i18n.gettext('Once deleted the layer will not be recoverable again.') +
                             '</p><p>' +
-                            gettextCatalog.getString('Requires 2 step confirmation.') +
+                            i18n.gettext('Requires 2 step confirmation.') +
                             '</p>',
                     },
                     {
-                        title: gettextCatalog.getString('Next Step'),
+                        title: i18n.gettext('Next Step'),
                         intro: '<p>' +
-                            gettextCatalog.getString('Design your company public space') +
+                            i18n.gettext('Design your company public space') +
                             '</p><p>' +
-                            gettextCatalog.getString('The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space') +
+                            i18n.gettext('The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space') +
                             '</p><a class="btn btn-info btn-xs" href="shared-space#intro">' +
-                            gettextCatalog.getString('Go to the public space definition and continue tour') +
+                            i18n.gettext('Go to the public space definition and continue tour') +
                             '</a>',
                     }
                 ]

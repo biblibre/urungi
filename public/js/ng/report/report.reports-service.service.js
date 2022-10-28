@@ -3,16 +3,16 @@
 
     angular.module('app.report').factory('reportsService', reportsService);
 
-    reportsService.$inject = ['$window', 'gettext', 'gettextCatalog'];
+    reportsService.$inject = ['$window', 'i18n'];
 
-    function reportsService ($window, gettext, gettextCatalog) {
+    function reportsService ($window, i18n) {
         const aggregations = {
-            sum: gettext('Sum'),
-            avg: gettext('Avg'),
-            min: gettext('Min'),
-            max: gettext('Max'),
-            count: gettext('Count'),
-            countDistinct: gettext('Count distinct'),
+            sum: i18n.gettext('Sum'),
+            avg: i18n.gettext('Avg'),
+            min: i18n.gettext('Min'),
+            max: i18n.gettext('Max'),
+            count: i18n.gettext('Count'),
+            countDistinct: i18n.gettext('Count distinct'),
         };
 
         const service = {
@@ -36,7 +36,7 @@
          */
         function getAggregationDescription (aggregation) {
             if (aggregation in aggregations) {
-                return gettextCatalog.getString(aggregations[aggregation]);
+                return i18n.gettext(aggregations[aggregation]);
             }
         }
 

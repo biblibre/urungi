@@ -42,7 +42,6 @@ const files = [
     { src: 'angular-bootstrap-colorpicker/css/colorpicker.min.css', dest: 'angular-bootstrap-colorpicker/colorpicker.min.css' },
     { src: 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js', dest: 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js' },
     { src: 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css', dest: 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css' },
-    { src: 'angular-gettext/dist/angular-gettext.min.js', dest: 'angular-gettext/angular-gettext.min.js' },
     { src: 'intro.js/minified/intro.min.js', dest: 'intro.js/intro.min.js' },
     { src: 'intro.js/minified/introjs.min.css', dest: 'intro.js/introjs.min.css' },
     { src: 'numeral/min/numeral.min.js', dest: 'numeral/numeral.min.js' },

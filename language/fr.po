@@ -1489,8 +1489,8 @@ msgstr "Nouveau tableau de bord"
 msgid "New datasource"
 msgstr "Nouvelle source de données"
 
-#: public/js/shared-space.js:144 public/js/shared-space.js:64
-#: public/js/shared-space.js:80
+#: public/js/shared-space.js:64 public/js/shared-space.js:80
+#: public/js/shared-space.js:144
 msgid "New folder"
 msgstr "Nouveau dossier"
 
@@ -1959,12 +1959,19 @@ msgid "Second semester"
 msgstr "Deuxième semestre"
 
 #: public/partials/report-edit/report-edit.report-column-settings-modal.component.html:100
+msgid ""
+"See <a href=\"http://numeraljs.com/#format\" target=\"_blank\" rel="
+"\"noreferrer\">documentation</a> for examples"
+msgstr ""
+"Voir <a href=\"http://numeraljs.com/#format\" target=\"_blank\" rel="
+"\"noreferrer\">la documentation</a> pour des examples"
+
 #: public/partials/report-edit/report-edit.report-column-settings-modal.component.html:91
 msgid ""
-"See <a ng-href=\"{{ url }}\" target=\"_blank\" rel=\"noreferrer"
-"\">documentation</a> for examples"
+"See <a href=\"https://momentjs.com/docs/#/displaying/\" target=\"_blank\" "
+"rel=\"noreferrer\">documentation</a> for examples"
 msgstr ""
-"Voir <a ng-href=\"{{ url }}\" target=\"_blank\" rel=\"noreferrer\">la "
+"Voir <a href=\"https://momentjs.com/docs/#/displaying/\" target=\"_blank\" rel=\"noreferrer\">la "
 "documentation</a> pour des examples"
 
 #: public/partials/role-list/role-list.edit-modal.component.html:66

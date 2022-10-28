@@ -15,9 +15,9 @@
         },
     });
 
-    SharePopoverController.$inject = ['$uibModal', 'gettextCatalog', 'api'];
+    SharePopoverController.$inject = ['$uibModal', 'i18n', 'api'];
 
-    function SharePopoverController ($uibModal, gettextCatalog, api) {
+    function SharePopoverController ($uibModal, i18n, api) {
         const vm = this;
 
         vm.openShareModal = openShareModal;
@@ -37,7 +37,7 @@
         }
 
         function onCopySuccess (e) {
-            const tooltipTitle = gettextCatalog.getString('Copied');
+            const tooltipTitle = i18n.gettext('Copied');
             $(e.trigger).tooltip({ title: tooltipTitle, trigger: 'manual' })
                 .on('shown.bs.tooltip', function () {
                     setTimeout(() => {

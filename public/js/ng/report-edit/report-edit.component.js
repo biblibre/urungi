@@ -12,8 +12,8 @@
             },
         });
 
-    ReportEditController.$inject = ['$scope', 'connection', 'reportsService', '$timeout', 'c3Charts', '$uibModal', 'reportModel', 'widgetsCommon', 'gettextCatalog', 'notify', 'api', 'base', 'userService', '$window'];
-    function ReportEditController ($scope, connection, reportsService, $timeout, c3Charts, $uibModal, reportModel, widgetsCommon, gettextCatalog, notify, api, base, userService, $window) {
+    ReportEditController.$inject = ['$scope', 'connection', 'reportsService', '$timeout', 'c3Charts', '$uibModal', 'reportModel', 'widgetsCommon', 'i18n', 'notify', 'api', 'base', 'userService', '$window'];
+    function ReportEditController ($scope, connection, reportsService, $timeout, c3Charts, $uibModal, reportModel, widgetsCommon, i18n, notify, api, base, userService, $window) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -157,7 +157,7 @@
             const report = $scope.selectedReport;
 
             if (!report.properties) {
-                notify.error(gettextCatalog.getString('invalid report'));
+                notify.error(i18n.gettext('invalid report'));
                 return;
             }
 
@@ -207,8 +207,8 @@
         };
 
         $scope.stringVariables = [
-            { value: 'toUpper', label: gettextCatalog.getString('To Upper') },
-            { value: 'toLower', label: gettextCatalog.getString('To Lower') }
+            { value: 'toUpper', label: i18n.gettext('To Upper') },
+            { value: 'toLower', label: i18n.gettext('To Lower') }
         ];
 
         if (location.hash === 'intro') {
@@ -319,7 +319,7 @@
                 limit: $scope.selectedRecordLimit.value
             };
 
-            $scope.$broadcast('showLoadingMessage', gettextCatalog.getString('Fetching data ...'));
+            $scope.$broadcast('showLoadingMessage', i18n.gettext('Fetching data ...'));
 
             return api.getReportData($scope.selectedReport, params).then(function (result) {
                 if (result.errorToken) {
@@ -581,7 +581,7 @@
                 break;
 
             default:
-                notify.error(gettextCatalog.getString('report type does not exist'));
+                notify.error(i18n.gettext('report type does not exist'));
                 break;
             }
 
@@ -731,87 +731,87 @@
         };
 
         $scope.IntroOptions = {
-            nextLabel: gettextCatalog.getString('Next'),
-            prevLabel: gettextCatalog.getString('Back'),
-            skipLabel: gettextCatalog.getString('Skip'),
-            doneLabel: gettextCatalog.getString('Done'),
+            nextLabel: i18n.gettext('Next'),
+            prevLabel: i18n.gettext('Back'),
+            skipLabel: i18n.gettext('Skip'),
+            doneLabel: i18n.gettext('Done'),
             tooltipPosition: 'auto',
             showStepNumbers: false,
             steps: [
                 {
                     element: '#elementsTab',
                     intro: '<h4>' +
-                        gettextCatalog.getString('The layer catalog') +
+                        i18n.gettext('The layer catalog') +
                         '</h4><p><strong>' +
-                        gettextCatalog.getString('Access here the different data elements of every layer that you have access on') +
+                        i18n.gettext('Access here the different data elements of every layer that you have access on') +
                         '</strong></p><p>' +
-                        gettextCatalog.getString('Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)') +
+                        i18n.gettext('Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)') +
                         '</p>',
                 },
                 {
                     element: '#selectLayer',
                     intro: '<h4>' +
-                        gettextCatalog.getString('The layer selector') +
+                        i18n.gettext('The layer selector') +
                         '</h4><p><strong>' +
-                        gettextCatalog.getString('Select here the layer where your query will be based on.') +
+                        i18n.gettext('Select here the layer where your query will be based on.') +
                         '</strong></p><p>' +
-                        gettextCatalog.getString('One query can only be based on one layer, you can not mix elements from different layers in the same query') +
+                        i18n.gettext('One query can only be based on one layer, you can not mix elements from different layers in the same query') +
                         '</p>',
                 },
                 {
                     element: '#reportType',
                     intro: '<h4>' +
-                        gettextCatalog.getString('Report Type selector') +
+                        i18n.gettext('Report Type selector') +
                         '</h4><p>' +
-                        gettextCatalog.getString('Click over one of the different report types to change the visualization of the data you choose') +
+                        i18n.gettext('Click over one of the different report types to change the visualization of the data you choose') +
                         '</p>',
                 },
                 {
                     element: '#dropArea',
                     intro: '<h4>' +
-                        gettextCatalog.getString('Results area') +
+                        i18n.gettext('Results area') +
                         '</h4><p>' +
-                        gettextCatalog.getString('As you define the query dragging and dropping in the areas above, the results of the query will appear here') +
+                        i18n.gettext('As you define the query dragging and dropping in the areas above, the results of the query will appear here') +
                         '</p>',
                 },
                 {
                     element: '#queryRefresh',
                     intro: '<h4>' +
-                        gettextCatalog.getString('Query refresh') +
+                        i18n.gettext('Query refresh') +
                         '</h4><p><strong>' +
-                        gettextCatalog.getString('Use this button to refresh the results') +
+                        i18n.gettext('Use this button to refresh the results') +
                         '</strong></p><p>' +
-                        gettextCatalog.getString('After building your query, refresh to view the report.') +
+                        i18n.gettext('After building your query, refresh to view the report.') +
                         '</p>',
                 },
                 {
                     element: '#columnsDropzone',
                     intro: '<h4>' +
-                        gettextCatalog.getString('Columns / results drop zone') +
+                        i18n.gettext('Columns / results drop zone') +
                         '</h4><p><strong>' +
-                        gettextCatalog.getString('Drop here the elements you want to have in the results of the query') +
+                        i18n.gettext('Drop here the elements you want to have in the results of the query') +
                         '</strong></p><p>' +
-                        gettextCatalog.getString('A query must hold at least one element here to be executed') +
+                        i18n.gettext('A query must hold at least one element here to be executed') +
                         '</p>',
                 },
                 {
                     element: '#orderByDropzone',
                     intro: '<h4>' +
-                        gettextCatalog.getString('Order By drop zone') +
+                        i18n.gettext('Order By drop zone') +
                         '</h4><p><strong>' +
-                        gettextCatalog.getString('Drop here the elements that you want to use to order the results of the query') +
+                        i18n.gettext('Drop here the elements that you want to use to order the results of the query') +
                         '</strong></p><p>' +
-                        gettextCatalog.getString('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results') +
+                        i18n.gettext('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results') +
                         '</p>',
                 },
                 {
                     element: '#filtersDropzone',
                     intro: '<h4>' +
-                        gettextCatalog.getString('Filters drop zone') +
+                        i18n.gettext('Filters drop zone') +
                         '</h4><p><strong>' +
-                        gettextCatalog.getString('Drop here the elements that you want to use to filter the results of the query') +
+                        i18n.gettext('Drop here the elements that you want to use to filter the results of the query') +
                         '</strong></p><p>' +
-                        gettextCatalog.getString('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results') +
+                        i18n.gettext('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results') +
                         '</p>',
                 }
 

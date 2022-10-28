@@ -13,9 +13,9 @@
             }
         });
 
-    LayerEditController.$inject = ['$scope', '$timeout', '$window', '$uibModal', 'gettextCatalog', 'api', 'notify', 'layerEditService'];
+    LayerEditController.$inject = ['$scope', '$timeout', '$window', '$uibModal', 'i18n', 'api', 'notify', 'layerEditService'];
 
-    function LayerEditController ($scope, $timeout, $window, $uibModal, gettextCatalog, api, notify, layerEditService) {
+    function LayerEditController ($scope, $timeout, $window, $uibModal, i18n, api, notify, layerEditService) {
         const vm = this;
         $scope.items = [];
         $scope.datasources = [];
@@ -186,9 +186,9 @@
                     $window.location.href = 'layers';
                 }
             }).then(() => {
-                notify.success(gettextCatalog.getString('Layer saved successfully'));
+                notify.success(i18n.gettext('Layer saved successfully'));
             }).catch(() => {
-                notify.error(gettextCatalog.getString('Something went wrong, check the server logs'));
+                notify.error(i18n.gettext('Something went wrong, check the server logs'));
             });
         };
 
@@ -239,7 +239,7 @@
         $scope.editSQL = function () {
             const selectedCollection = $scope.theSelectedElement;
             if (!selectedCollection.isSQL) {
-                notify.error(gettextCatalog.getString('Cannot modify sql of an object which is not an sql request'));
+                notify.error(i18n.gettext('Cannot modify sql of an object which is not an sql request'));
                 return;
             }
 
@@ -403,14 +403,14 @@
                             const comp = collection.component;
                             if (element.component !== undefined && element.component !== comp) {
                                 element.component = -1;
-                                const msg = gettextCatalog.getString('One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched');
+                                const msg = i18n.gettext('One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched');
                                 notify.notice(msg);
                                 return;
                             }
                             element.component = comp;
                         }
                     } catch (error) {
-                        const message = gettextCatalog.getString('Failed to parse expression for element') + ' ' +
+                        const message = i18n.gettext('Failed to parse expression for element') + ' ' +
                             element.elementLabel + ' : ' + error.message;
                         notify.notice(message);
                     }
@@ -445,14 +445,14 @@
 
                     const rightJoinType = {
                         overlays: [
-                            ['Label', { location: 0.88, label: '[' + gettextCatalog.getString('right') + ']', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
+                            ['Label', { location: 0.88, label: '[' + i18n.gettext('right') + ']', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
                         ]
 
                     };
 
                     const leftJoinType = {
                         overlays: [
-                            ['Label', { location: 0.10, label: '[' + gettextCatalog.getString('left') + ']', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
+                            ['Label', { location: 0.10, label: '[' + i18n.gettext('left') + ']', labelStyle: { cssClass: 'leftJoinType', color: '#000', font: 'bold 14px ER', fill: ' #fff no-repeat fixed center' } }]
                         ]
                     };
 
@@ -703,7 +703,7 @@
             const elementID = 'F' + layerEditService.newID($scope._Layer);
 
             const element = {};
-            element.elementLabel = gettextCatalog.getString('my folder');
+            element.elementLabel = i18n.gettext('my folder');
             element.elementRole = 'folder';
             element.elementID = elementID;
             element.editing = true;
@@ -936,7 +936,7 @@
                     $scope.erDiagramInit();
                 });
             } else {
-                notify.error(gettextCatalog.getString('Datasource must be the same for all entities'));
+                notify.error(i18n.gettext('Datasource must be the same for all entities'));
             }
         };
 

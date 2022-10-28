@@ -12,9 +12,9 @@
             }
         });
 
-    UserShowController.$inject = ['$window', '$uibModal', 'api', 'connection', 'userService', 'gettextCatalog', 'notify'];
+    UserShowController.$inject = ['$window', '$uibModal', 'api', 'connection', 'userService', 'i18n', 'expand', 'notify'];
 
-    function UserShowController ($window, $uibModal, api, connection, userService, gettextCatalog, notify) {
+    function UserShowController ($window, $uibModal, api, connection, userService, i18n, expand, notify) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -79,7 +79,7 @@
 
                     api.updateUser(user._id, { status: newStatus }).then(function (result) {
                         user.status = newStatus;
-                        notify.success(gettextCatalog.getString('Status updated'));
+                        notify.success(i18n.gettext('Status updated'));
                     });
                 }
             });
@@ -122,19 +122,19 @@
             api.getRoles({ fields: 'name' }).then(function (res) {
                 vm.roles = res.data;
 
-                const adminRole = { _id: 'ADMIN', name: gettextCatalog.getString('Urungi Administrator') };
+                const adminRole = { _id: 'ADMIN', name: i18n.gettext('Urungi Administrator') };
                 vm.roles.push(adminRole);
             });
         }
 
         function deleteRole (roleID) {
             if (vm.user.userName === 'administrator' && roleID === 'ADMIN') {
-                notify.notice(gettextCatalog.getString("The role 'Urungi Administrator' can't be removed from the user administrator"));
+                notify.notice(i18n.gettext("The role 'Urungi Administrator' can't be removed from the user administrator"));
             } else {
                 $uibModal.open({
                     component: 'appDeleteModal',
                     resolve: {
-                        title: () => gettextCatalog.getString('Remove role {{name}} ?', { name: vm.getRoleName(roleID) }),
+                        title: () => expand(i18n.gettext('Remove role {{name}} ?'), { name: vm.getRoleName(roleID) }),
                         delete: () => function () {
                             return api.deleteUserRole(vm.user._id, roleID).then(() => {
                                 vm.user.roles = vm.user.roles.filter(r => r !== roleID);
@@ -146,12 +146,12 @@
         }
         function deleteUser (targetUser) {
             if (targetUser._id === vm.currentUser._id) {
-                notify.notice(gettextCatalog.getString("You can't remove yourself from your own user session"));
+                notify.notice(i18n.gettext("You can't remove yourself from your own user session"));
             } else {
                 const modal = $uibModal.open({
                     component: 'appDeleteModal',
                     resolve: {
-                        title: () => gettextCatalog.getString('Remove user {{name}} ?', { name: targetUser.userName }),
+                        title: () => expand(i18n.gettext('Remove user {{name}} ?'), { name: targetUser.userName }),
                         delete: () => function () {
                             return api.deleteUser(targetUser._id);
                         },
@@ -160,7 +160,7 @@
 
                 modal.result.then(function () {
                     $window.location.href = 'users';
-                    notify.success(gettextCatalog.getString('User deleted successfully'));
+                    notify.success(i18n.gettext('User deleted successfully'));
                 }
                 );
             }

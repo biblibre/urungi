@@ -12,9 +12,9 @@
         },
     });
 
-    RoleListEditModalController.$inject = ['gettextCatalog', 'notify', 'api', 'userService'];
+    RoleListEditModalController.$inject = ['i18n', 'notify', 'api', 'userService'];
 
-    function RoleListEditModalController (gettextCatalog, notify, api, userService) {
+    function RoleListEditModalController (i18n, notify, api, userService) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -60,7 +60,7 @@
             return p.then(function (role) {
                 vm.close({ $value: role });
             }, function () {
-                notify.error(gettextCatalog.getString('Failed to save role'));
+                notify.error(i18n.gettext('Failed to save role'));
             });
         }
 

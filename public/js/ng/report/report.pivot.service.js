@@ -3,9 +3,9 @@
 
     angular.module('app.report').factory('pivot', pivot);
 
-    pivot.$inject = ['numeral', 'moment', 'gettextCatalog'];
+    pivot.$inject = ['numeral', 'moment', 'i18n'];
 
-    function pivot (numeral, moment, gettextCatalog) {
+    function pivot (numeral, moment, i18n) {
         const service = {
             createPivotTable: createPivotTable,
         };
@@ -91,7 +91,7 @@
                     collapseColsAt: 0,
                     collapseRowsAt: 0,
                     localeStrings: {
-                        totals: gettextCatalog.getString('Totals'),
+                        totals: i18n.gettext('Totals'),
                     },
                 },
             };

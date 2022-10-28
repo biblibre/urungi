@@ -11,9 +11,9 @@
         },
     });
 
-    LayersListButtonsController.$inject = ['$uibModal', 'api', 'gettextCatalog'];
+    LayersListButtonsController.$inject = ['$uibModal', 'api', 'i18n', 'expand'];
 
-    function LayersListButtonsController ($uibModal, api, gettextCatalog) {
+    function LayersListButtonsController ($uibModal, api, i18n, expand) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -22,7 +22,7 @@
             const modal = $uibModal.open({
                 component: 'appDeleteModal',
                 resolve: {
-                    title: () => gettextCatalog.getString('Delete {{name}} ?', { name: vm.layer.name }),
+                    title: () => expand(i18n.gettext('Delete {{name}} ?'), { name: vm.layer.name }),
                     delete: () => function () {
                         return api.deleteLayer(vm.layer._id);
                     },

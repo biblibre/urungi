@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added negotiator 0.6.3
 - Added vinyl 2.2.1 (dev)
 - Removed angular-intro.js
+- Removed angular-gettext
 - Removed angular-route
 - Removed ejs
 

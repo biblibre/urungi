@@ -111,10 +111,12 @@ function nodemon_start (done) {
 }
 
 function pot () {
-    const stream1 = gulp.src(['public/js/**/*.js', 'public/partials/**/*.html'], { base: '.' })
+    const streamJs = gulp.src(['public/js/**/*.js'], { base: '.' })
+        .pipe(xgettextJs());
+    const streamHtml = gulp.src(['public/partials/**/*.html'], { base: '.' })
         .pipe(angularGettext.extract('template.pot'));
-    const stream2 = gulp.src(['views/**/*.liquid'], { base: '.' })
-        .pipe(xgettext());
+    const streamLiquid = gulp.src(['views/**/*.liquid'], { base: '.' })
+        .pipe(xgettextLiquid());
 
     const headers = {
         'project-id-version': 'Urungi',
@@ -122,7 +124,7 @@ function pot () {
         'content-transfer-encoding': '8bit',
     };
 
-    return mergeStream(stream1, stream2)
+    return mergeStream(streamJs, streamHtml, streamLiquid)
         .pipe(concatPo('template.pot', { headers }))
         .pipe(gulp.dest('language'));
 }
@@ -173,7 +175,7 @@ function doc (done) {
     });
 }
 
-function xgettext () {
+function xgettextLiquid () {
     function addToTranslationObject (translationObject, { msgid, msgid_plural, token }) {
         if (!translationObject.translations[''][msgid]) {
             translationObject.translations[''][msgid] = {
@@ -237,6 +239,19 @@ function xgettext () {
                 }
             }
             file.contents = po.compile(data);
+            callback(null, file);
+        },
+    });
+}
+
+function xgettextJs () {
+    return new Transform({
+        objectMode: true,
+        transform (file, encoding, callback) {
+            const relativePath = path.relative(__dirname, file.path);
+            const cmd = 'xgettext -o - --from-code=UTF-8 --omit-header -L JavaScript -kt ' + relativePath;
+            const po = child_process.execSync(cmd);
+            file.contents = po;
             callback(null, file);
         },
     });

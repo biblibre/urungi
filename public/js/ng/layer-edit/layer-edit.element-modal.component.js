@@ -12,9 +12,9 @@
         },
     });
 
-    LayerEditElementModalController.$inject = ['gettextCatalog', 'layerUtils', 'layerElementTypes', 'layerNumberDefaultAggregation', 'layerStringDefaultAggregation'];
+    LayerEditElementModalController.$inject = ['i18n', 'layerUtils', 'layerElementTypes', 'layerNumberDefaultAggregation', 'layerStringDefaultAggregation'];
 
-    function LayerEditElementModalController (gettextCatalog, layerUtils, layerElementTypes, layerNumberDefaultAggregation, layerStringDefaultAggregation) {
+    function LayerEditElementModalController (i18n, layerUtils, layerElementTypes, layerNumberDefaultAggregation, layerStringDefaultAggregation) {
         const vm = Object.assign(this, {
             $onInit,
             activeTab: 'general',

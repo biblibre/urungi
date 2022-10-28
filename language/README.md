@@ -6,10 +6,8 @@ There are three ways to have a string be translated :
  * The "translate" tag can be added in any html element to translate the content
    of that element
  * the "translate" filter can be used in any expression evaluated by angularJS
- * the "gettext" function can be used to translate strings stored in a
+ * the "i18n.gettext" function can be used to translate strings stored in a
    javascript file
-
-For more information, see https://angular-gettext.rocketeer.be/dev-guide/
 
 # 2 - Extract the strings to translate
 
@@ -37,10 +35,9 @@ To add new strings in po files, you can use this command:
 
 The command is
 
-    gulp dist:translations
+    gulp translations
 
 This will update urungi with the new translations.
 
-If you add a new language, add the language option to the language service
-(public/js/services/language.js) and languageSelect directive
-(public/js/directives/wst-directives.js)
+If you add a new language, add the language option in `server/app.js` and
+`server/config/gettext.js`

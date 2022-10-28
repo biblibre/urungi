@@ -3,8 +3,8 @@
 
     angular.module('app.report').directive('reportView', reportView);
 
-    reportView.$inject = ['$q', '$timeout', 'reportModel', '$compile', 'c3Charts', 'reportHtmlWidgets', 'grid', 'pivot', 'uuid', 'gettextCatalog', 'api'];
-    function reportView ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, pivot, uuid, gettextCatalog, api) {
+    reportView.$inject = ['$q', '$timeout', 'reportModel', '$compile', 'c3Charts', 'reportHtmlWidgets', 'grid', 'pivot', 'uuid', 'i18n', 'api'];
+    function reportView ($q, $timeout, reportModel, $compile, c3Charts, reportHtmlWidgets, grid, pivot, uuid, i18n, api) {
         return {
 
             scope: {
@@ -43,7 +43,7 @@
                     let promise = $q.resolve(0);
 
                     if (args.fetchData && $scope.report) {
-                        $scope.loadingMessage = gettextCatalog.getString('Fetching data ...');
+                        $scope.loadingMessage = i18n.gettext('Fetching data ...');
                         promise = api.getReportData($scope.report, args).then(function (result) {
                             $scope.data = result.data;
                         });
@@ -52,7 +52,7 @@
                     }
 
                     return promise.then(function () {
-                        $scope.loadingMessage = gettextCatalog.getString('Repainting report ...');
+                        $scope.loadingMessage = i18n.gettext('Repainting report ...');
 
                         if ($scope.data && $scope.data.length > 0) {
                             switch ($scope.report.reportType) {
@@ -92,7 +92,7 @@
                                 break;
                             }
                         } else {
-                            $scope.changeContent('<div style="width: 100%; height: 100%; display: flex; align-items: center;"><span style="color: darkgray; font-size: initial; width:100%; text-align: center;"><img src="images/empty.png">' + gettextCatalog.getString('No data for this report') + '</span></div>');
+                            $scope.changeContent('<div style="width: 100%; height: 100%; display: flex; align-items: center;"><span style="color: darkgray; font-size: initial; width:100%; text-align: center;"><img src="images/empty.png">' + i18n.gettext('No data for this report') + '</span></div>');
                         }
                     }).then(function () {
                         $scope.loading = false;

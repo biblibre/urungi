@@ -9,9 +9,9 @@
             controllerAs: 'vm',
         });
 
-    ReportListController.$inject = ['$window', '$timeout', 'gettextCatalog', 'userService'];
+    ReportListController.$inject = ['$window', '$timeout', 'i18n', 'userService'];
 
-    function ReportListController ($window, $timeout, gettextCatalog, userService) {
+    function ReportListController ($window, $timeout, i18n, userService) {
         const vm = this;
 
         vm.introOptions = {};
@@ -34,85 +34,85 @@
 
         function getIntroOptions () {
             const introOptions = {
-                nextLabel: gettextCatalog.getString('Next'),
-                prevLabel: gettextCatalog.getString('Back'),
+                nextLabel: i18n.gettext('Next'),
+                prevLabel: i18n.gettext('Back'),
                 skipLabel: '&times;',
-                doneLabel: gettextCatalog.getString('Done'),
+                doneLabel: i18n.gettext('Done'),
                 tooltipPosition: 'auto',
                 showStepNumbers: false,
                 steps: [
                     {
                         intro: '<h4>' +
-                            gettextCatalog.getString('Reports') +
+                            i18n.gettext('Reports') +
                             '</h4><p><strong>' +
-                            gettextCatalog.getString('Here you can create and execute reports.') +
+                            i18n.gettext('Here you can create and execute reports.') +
                             '</strong></p>',
                     },
                     {
                         intro: '<h4>' +
-                            gettextCatalog.getString('Reports') +
+                            i18n.gettext('Reports') +
                             '</h4><p>' +
-                            gettextCatalog.getString('Choose a report type and drag and drop elements from the selected layer to compose your report.') +
+                            i18n.gettext('Choose a report type and drag and drop elements from the selected layer to compose your report.') +
                             '</p><p>' +
-                            gettextCatalog.getString('You can also add runtime filters to split your data in real time.') +
+                            i18n.gettext('You can also add runtime filters to split your data in real time.') +
                             '</p>',
                     },
                     {
                         element: '#newReportButton',
                         intro: '<h4>' +
-                            gettextCatalog.getString('New Report') +
+                            i18n.gettext('New Report') +
                             '</h4><p>' +
-                            gettextCatalog.getString('Click here to create a new report.') +
+                            i18n.gettext('Click here to create a new report.') +
                             '</p>',
                     },
                     {
                         element: '#reportList',
                         intro: '<h4>' +
-                            gettextCatalog.getString('Reports list') +
+                            i18n.gettext('Reports list') +
                             '</h4><p><strong>' +
-                            gettextCatalog.getString('Here all your reports are listed.') +
+                            i18n.gettext('Here all your reports are listed.') +
                             '</strong></p><p>' +
-                            gettextCatalog.getString('Click over a report\'s name to execute it.') +
+                            i18n.gettext('Click over a report\'s name to execute it.') +
                             '</p><p>' +
-                            gettextCatalog.getString('You can also modify or drop the report, clicking into the modify or delete buttons.') +
+                            i18n.gettext('You can also modify or drop the report, clicking into the modify or delete buttons.') +
                             '</p>',
                     },
                     {
                         element: '.btn-edit',
                         intro: '<h4>' +
-                            gettextCatalog.getString('Edit report') +
+                            i18n.gettext('Edit report') +
                             '</h4><p>' +
-                            gettextCatalog.getString('Click here to modify the report.') +
+                            i18n.gettext('Click here to modify the report.') +
                             '</p>',
                     },
                     {
                         element: '.btn-delete',
                         intro: '<h4>' +
-                            gettextCatalog.getString('Delete report') +
+                            i18n.gettext('Delete report') +
                             '</h4><p><strong>' +
-                            gettextCatalog.getString('Click here to delete the report.') +
+                            i18n.gettext('Click here to delete the report.') +
                             '</strong></p><p>' +
-                            gettextCatalog.getString('Once deleted the report will not be recoverable again.') +
+                            i18n.gettext('Once deleted the report will not be recoverable again.') +
                             '</p><p>' +
-                            gettextCatalog.getString('Requires 2 step confirmation.') +
+                            i18n.gettext('Requires 2 step confirmation.') +
                             '</p>',
                     },
                     {
                         element: '.btn-duplicate',
                         intro: '<h4>' +
-                            gettextCatalog.getString('Duplicate report') +
+                            i18n.gettext('Duplicate report') +
                             '</h4><p>' +
-                            gettextCatalog.getString('Click here to duplicate the report.') +
+                            i18n.gettext('Click here to duplicate the report.') +
                             '</p>',
                     },
                     {
                         element: '.published-tag',
                         intro: '<h4>' +
-                            gettextCatalog.getString('Report published') +
+                            i18n.gettext('Report published') +
                             '</h4><p><strong>' +
-                            gettextCatalog.getString('This label indicates that this report is public.') +
+                            i18n.gettext('This label indicates that this report is public.') +
                             '</strong></p><p>' +
-                            gettextCatalog.getString('If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report.') +
+                            i18n.gettext('If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report.') +
                             '</p>',
                     }
                 ]

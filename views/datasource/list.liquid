@@ -3,11 +3,9 @@
 
 {% block head %}
     {% render 'partials/notify' %}
-    {% render 'partials/messages', locale: locale %}
     {% render 'partials/introjs'  %}
     <script defer src="s/angular/angular.min.js"></script>
     <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
-    <script defer src="s/angular-gettext/angular-gettext.min.js"></script>
     {% render 'partials/ng/core' %}
     {% render 'partials/ng/table' %}
     {% render 'partials/ng/datasource-list' %}
