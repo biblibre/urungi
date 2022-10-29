@@ -26,6 +26,7 @@
         vm.getFilterTypeLabel = getFilterTypeLabel;
         vm.getButtonFilterPromptMessage = getButtonFilterPromptMessage;
         vm.getDatePatternFilters = getDatePatternFilters;
+        vm.getDateString = getDateString;
         vm.getElementFilterOptions = getElementFilterOptions;
         vm.getFilterValues = getFilterValues;
         vm.inputChanged = inputChanged;
@@ -48,6 +49,20 @@
                     limit: 15,
                     unlimited: false
                 };
+            }
+
+            if (vm.filter.elementType === 'date') {
+                const re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/;
+                const text1Result = re.exec(vm.criterion.text1);
+                if (text1Result) {
+                    const { year, month, day } = text1Result.groups;
+                    vm.date1 = new Date(year, parseInt(month) - 1, day);
+                }
+                const text2Result = re.exec(vm.criterion.text2);
+                if (text2Result) {
+                    const { year, month, day } = text2Result.groups;
+                    vm.date2 = new Date(year, parseInt(month) - 1, day);
+                }
             }
         }
 
@@ -127,6 +142,14 @@
 
         function inputChanged (filter) {
             vm.onChange();
+        }
+
+        function getDateString (date) {
+            return [
+                date.getFullYear(),
+                (date.getMonth() + 1).toString().padStart(2, '0'),
+                date.getDate().toString().padStart(2, '0'),
+            ].join('-');
         }
 
         function getElementFilterOptions () {

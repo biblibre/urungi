@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed angular-intro.js
 - Removed angular-gettext
 - Removed angular-route
+- Removed angularjs-bootstrap-datetimepicker
 - Removed ejs
 
 ## [3.2.0] - 2022-10-14
