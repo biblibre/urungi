@@ -53,4 +53,7 @@ local Pipeline(name, nodeVersion, mongoVersion) = {
     Pipeline('node:16 mongo:4.2', '16', '4.2.17'),
     Pipeline('node:16 mongo:4.4', '16', '4.4.9'),
     Pipeline('node:16 mongo:5.0', '16', '5.0.3'),
+    Pipeline('node:18 mongo:4.2', '18', '4.2.17'),
+    Pipeline('node:18 mongo:4.4', '18', '4.4.9'),
+    Pipeline('node:18 mongo:5.0', '18', '5.0.3'),
 ]
