@@ -22,6 +22,11 @@ module.exports = {
     // eg. if Urungi is accessible on https://example.com/urungi/ base is '/urungi'
     base: '',
 
+    liquid: {
+        // See https://liquidjs.com/tutorials/options.html#cache
+        cache: false,
+    },
+
     mailer: {
         // See https://nodemailer.com/transports/sendmail/
         // or https://nodemailer.com/smtp/
@@ -38,11 +43,6 @@ module.exports = {
         path: path.join(__dirname, '..', 'uploads'),
     },
 
-    google: {
-        clientID: 'your client id',
-        clientSecret: 'your client secret',
-        callbackURL: 'http://127.0.0.1:8080/auth/google/callback',
-    },
     pagination: {
         itemsPerPage: 10,
     },

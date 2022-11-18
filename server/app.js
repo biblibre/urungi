@@ -5,6 +5,7 @@ const path = require('path');
 
 const passport = require('passport');
 const session = require('express-session');
+const Negotiator = require('negotiator');
 
 const MongoStore = require('connect-mongo');
 
@@ -13,64 +14,34 @@ const csurf = require('csurf');
 
 const restrict = require('./middlewares/restrict.js');
 
+const gettext = require('./config/gettext.js');
+const liquid = require('./config/liquid.js');
+
 const app = express();
 
-// set the view engine to ejs
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '..', 'views'));
-app.use(express.static(path.join(__dirname, '..', 'public')));
-app.use(express.static(path.join(__dirname, '..', 'shared')));
-app.use(express.static(path.join(__dirname, '..', 'dist')));
+const urungiRoot = path.join(__dirname, '..');
 
-const staticRouter = express.Router({
-    caseSensitive: true,
-    strict: true,
-});
-
-const staticPaths = [
-    { p: '/jquery', root: 'jquery/dist' },
-    { p: '/jquery-validation', root: 'jquery-validation/dist' },
-    { p: '/jquery-ui', root: 'components-jqueryui' },
-    { p: '/bootstrap', root: 'bootstrap/dist' },
-    { p: '/angular', root: 'angular' },
-    { p: '/angular-sanitize', root: 'angular-sanitize' },
-    { p: '/angular-route', root: 'angular-route' },
-    { p: '/pnotify-core', root: '@pnotify/core/dist' },
-    { p: '/pnotify-bootstrap3', root: '@pnotify/bootstrap3/dist' },
-    { p: '/pnotify-fontawesome4', root: '@pnotify/font-awesome4/dist' },
-    { p: '/moment', root: 'moment/min' },
-    { p: '/angularjs-bootstrap-datetimepicker', root: 'angularjs-bootstrap-datetimepicker/src' },
-    { p: '/angular-ui-tree', root: 'angular-ui-tree/dist' },
-    { p: '/angular-file-saver', root: 'angular-file-saver/dist' },
-    { p: '/angular-ui-bootstrap', root: 'angular-ui-bootstrap/dist' },
-    { p: '/angular-ui-sortable', root: 'angular-ui-sortable/dist' },
-    { p: '/ui-select', root: 'ui-select/dist' },
-    { p: '/d3', root: 'd3/dist' },
-    { p: '/c3', root: 'c3' },
-    { p: '/ng-file-upload', root: 'ng-file-upload/dist' },
-    { p: '/clipboard', root: 'clipboard/dist' },
-    { p: '/ngclipboard', root: 'ngclipboard/dist' },
-    { p: '/angular-bootstrap-colorpicker', root: 'angular-bootstrap-colorpicker' },
-    { p: '/malihu-custom-scrollbar-plugin', root: 'malihu-custom-scrollbar-plugin' },
-    { p: '/angular-gettext', root: 'angular-gettext/dist' },
-    { p: '/intro.js', root: 'intro.js/minified' },
-    { p: '/angular-intro.js', root: 'angular-intro.js/build' },
-    { p: '/numeral', root: 'numeral/min' },
-    { p: '/pivottable', root: 'pivottable/dist' },
-    { p: '/subtotal', root: 'subtotal/dist' },
-    { p: '/js-xlsx', root: 'js-xlsx/dist' },
-    { p: '/jsplumb', root: 'jsplumb' },
-    { p: '/font-awesome', root: 'font-awesome' },
+// set the view engine to liquid
+app.engine('liquid', liquid.express());
+app.set('view engine', 'liquid');
+app.set('views', path.join(urungiRoot, 'views'));
+app.locals.base = config.get('base');
+app.locals.availableLanguages = [
+    { code: 'en', label: 'English' },
+    { code: 'es', label: 'Español' },
+    { code: 'fr', label: 'Français' },
 ];
-for (const { p, root } of staticPaths) {
-    staticRouter.use(p, express.static(path.join(__dirname, '..', 'node_modules', root)));
+
+for (const dir of ['css', 'images', 'js', 'partials', 'resources', 's', 'themes', 'translations']) {
+    const router = express.Router();
+    router.use(express.static(path.join(urungiRoot, 'public', dir), { maxAge: '1d' }));
+    router.all('*', function (req, res) {
+        res.sendStatus(404);
+    });
+    app.use(`/${dir}`, router);
 }
-
-staticRouter.all('*', function (req, res) {
-    res.sendStatus(404);
-});
-
-app.use('/s', staticRouter);
+app.use(express.static(path.join(urungiRoot, 'public'), { maxAge: '1d' }));
+app.use(express.static(path.join(urungiRoot, 'shared'), { maxAge: '1d' }));
 
 app.use('/doc', require('./routes/doc.js'));
 
@@ -82,6 +53,26 @@ const mongoStore = MongoStore.create({
     ttl: 60 * 60 * 24, // 24 hours
 });
 app.use(cookieParser());
+
+app.use(function (req, res, next) {
+    const availableLanguages = req.app.locals.availableLanguages.map(l => l.code);
+    let language;
+
+    if (req.cookies.language && availableLanguages.includes(req.cookies.language)) {
+        language = req.cookies.language;
+    } else {
+        const negotiator = new Negotiator(req);
+        language = negotiator.language(availableLanguages);
+    }
+
+    language = language || 'en';
+    gettext.setLocale(language);
+    require('moment').locale(language);
+    res.locals.locale = language;
+    res.cookie('language', language, { sameSite: 'Strict', path: app.locals.base || '/' });
+
+    next();
+});
 
 app.use(session({
     secret: config.get('session.secret'),
@@ -102,11 +93,11 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(csurf());
-
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' })); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(csurf());
 
 global.logFailLogin = true;
 global.logSuccessLogin = true;
@@ -114,9 +105,12 @@ global.logSuccessLogin = true;
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./config/passport')(passport);
+app.use(function (req, res, next) {
+    res.locals.user = req.user;
+    next();
+});
 
-require('./config/routes')(app, passport);
+require('./config/passport')(passport);
 
 app.use('/uploads', restrict, express.static(path.join(__dirname, '..', 'uploads')));
 
@@ -133,10 +127,6 @@ for (const routesModule of routesModules) {
     require(routesModule)(app);
 }
 
-// Catch-all route, it should always be defined last
-app.get('*', function (req, res) {
-    res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: true });
-    res.render('index', { base: config.get('base') });
-});
+app.use('/', require('./routes.js'));
 
 module.exports = app;

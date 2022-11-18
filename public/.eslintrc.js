@@ -7,4 +7,12 @@ module.exports = {
         angular: false,
         layerUtils: false,
     },
+    overrides: [
+        {
+            files: ['*.js'],
+            rules: {
+                'node/no-callback-literal': 'off',
+            }
+        }
+    ],
 };

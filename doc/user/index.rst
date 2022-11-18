@@ -44,3 +44,9 @@ Supported databases
    :hidden:
 
    report-types
+
+.. toctree::
+   :caption: Miscellaneous
+   :hidden:
+
+   misc/reverse-proxy

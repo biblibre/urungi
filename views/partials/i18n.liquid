@@ -1,0 +1,7 @@
+<script defer src="s/gettext.js/gettext.iife.min.js"></script>
+
+{% if locale != 'en' %}
+    <script defer src="translations/{{ locale }}.js"></script>
+{% endif %}
+<script defer src="js/i18n.js"></script>
+<script defer src="js/expand.js"></script>

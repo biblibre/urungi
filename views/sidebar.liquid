@@ -1,0 +1,69 @@
+<div class="list-group">
+    <div class="list-group-item active">
+        <a href="users/{{user._id}}/" style="color: #fff;">
+            <i class="fa fa-fw fa-user"></i>
+            {{user.userName}}
+        </a>
+        <a href="logout" class="badge">
+            <span>{% t 'logout' | escape %}</span>
+            <i class="fa fa-sign-out" style="color: #f00;"></i>
+        </a>
+    </div>
+
+    <a id="homeMainMenu" href="./" class="list-group-item ">
+        <i class="fa fa-fw fa-home"></i>
+        <span>{% t 'Home' | escape %}</span>
+    </a>
+    <a id="dashboardsMainMenu" href="dashboards/list" class="list-group-item ">
+       <i class="fa fa-fw fa-dashboard"></i>
+       <span>{% t 'My Dashboards' | escape %}</span>
+    </a>
+    <a id="reportsMainMenu" href="reports" class="list-group-item">
+       <i class="fa fa-fw fa-bar-chart"></i>
+       <span>{% t 'My Reports' | escape %}</span>
+    </a>
+    <a id="exploreMainMenu" href="explore" class="list-group-item">
+        <i class="fa fa-fw fa-sun-o"></i>
+        <span>{% t 'Explore' | escape %}</span>
+    </a>
+
+    {% if user.isAdmin %}
+        <a id="sharedSpaceMainMenu" href="shared-space" class="list-group-item">
+            <i class="fa fa-fw fa-sitemap"></i>
+            <span>{% t 'Shared space' %}</span>
+        </a>
+        <a id="layersMainMenu" href="layers" class="list-group-item">
+            <i class="fa fa-fw fa-map-o"></i>
+            <span>{% t 'Layers' | escape %}</span>
+        </a>
+        <a id="datasourcesMainMenu" href="data-sources" class="list-group-item">
+            <i class="fa fa-fw fa-database"></i>
+            <span>{% t 'Data sources' | escape %}</span>
+        </a>
+        <a id="rolesMainMenu" href="roles" class="list-group-item">
+            <i class="fa fa-fw fa-users"></i>
+            <span>{% t 'Roles' | escape %}</span>
+        </a>
+        <a id="usersMainMenu" href="users" class="list-group-item">
+            <i class="fa fa-fw fa-user"></i>
+            <span>{% t 'Users' | escape %}</span>
+        </a>
+        <a id="usersImport" href="import" class="list-group-item">
+            <i class="fa fa-fw fa-upload"></i>
+            <span>{% t 'Import' | escape %}</span>
+        </a>
+        <a id="usersExport" href="export" class="list-group-item">
+            <i class="fa fa-fw fa-download"></i>
+            <span>{% t 'Export' | escape %}</span>
+        </a>
+    {% endif %}
+
+    <a id="aboutMenu" href="about" class="list-group-item">
+        <i class="fa fa-fw fa-question-circle"></i>
+        <span>{% t 'About' | escape %}</span>
+    </a>
+
+    <span class="list-group-item main-menu-logo" >
+        <img src="images/urungi.png" class="img-responsive">
+    </span>
+</div>

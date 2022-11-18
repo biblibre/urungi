@@ -325,21 +325,6 @@ describe('User API', function () {
         });
     });
 
-    describe('POST /api/user/logout', function () {
-        it('should return status 403 if not authenticated', async function () {
-            const res = await request(app).post('/api/user/logout');
-
-            expect(res).toHaveProperty('status', 403);
-        });
-
-        it('should return status 204 if authenticated', async function () {
-            const res = await request(app).post('/api/user/logout')
-                .set(adminHeaders);
-
-            expect(res).toHaveProperty('status', 204);
-        });
-    });
-
     describe('PUT /api/user/password', function () {
         let user;
         beforeEach(async () => {

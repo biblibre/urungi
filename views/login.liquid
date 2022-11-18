@@ -1,0 +1,41 @@
+{% capture title %}{% t 'Login' %}{% endcapture %}
+{% layout 'layout/layout', title: title %}
+{% block head %}
+    <link rel="stylesheet" href="css/login.css">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div id="logo">
+                    <img src="images/urungi.png" class="logo img-responsive center-block" alt="Urungi">
+                </div>
+
+                {% if messages.length %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" role="form">
+                    <input type="hidden" name="_csrf" value="{{ csrf }}">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" name="username" placeholder="{% t 'User name' %}" id="username" autocomplete="off" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" class="form-control input-lg" name="password" id="password" placeholder="{% t 'Password' %}" autocomplete="off" required>
+                    </div>
+
+                    <div class="form-group">
+                        <button id="login-btn" type="submit" class="btn btn-block btn-lg">
+                            <i class="fa fa-lock"></i>
+                            <span>{% t 'Log In' %}</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
