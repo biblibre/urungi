@@ -3,6 +3,7 @@ require('../../../public/js/core/constants.js');
 require('../../../public/js/core/connection.js');
 require('../../../public/js/core/notify.service.js');
 require('../../../public/js/core/api.js');
+require('../../../public/js/core/user.service.js');
 require('../../../public/js/dashboards/dashboards.module.js');
 require('../../../public/js/dashboards/dashboards-list-buttons.component.js');
 
@@ -29,8 +30,14 @@ describe('appDashboardsListButtons', function () {
         let onDeleteSpy;
         let onDuplicateSpy;
         let vm;
-
-        beforeEach(function () {
+        function apiGetUserDataResponse () {
+            return {
+                userName: 'foo',
+                status: 'active',
+                roles: ['ADMIN'],
+            };
+        }
+        beforeEach(async function () {
             onDeleteSpy = jest.fn();
             onDuplicateSpy = jest.fn();
             const dashboard = {
@@ -49,6 +56,10 @@ describe('appDashboardsListButtons', function () {
 
         describe('getCopyLink', function () {
             it('should return an absolute URL', function () {
+                $httpBackend.expect('GET', '/api/user')
+                    .respond(apiGetUserDataResponse());
+                $httpBackend.flush();
+
                 const link = vm.getCopyLink();
                 expect(link).toBe('http://localhost/dashboards/view/foo');
             });
@@ -56,6 +67,10 @@ describe('appDashboardsListButtons', function () {
 
         describe('openDuplicateModal', function () {
             it('should open modal and call onDuplicate on close', async function () {
+                $httpBackend.expect('GET', '/api/user')
+                    .respond(apiGetUserDataResponse());
+                $httpBackend.flush();
+
                 const modal = vm.openDuplicateModal();
                 $flushPendingTasks();
                 modal.close();
@@ -66,6 +81,10 @@ describe('appDashboardsListButtons', function () {
 
         describe('publish', function () {
             it('should call /api/dashboards/publish-page', function () {
+                $httpBackend.expect('GET', '/api/user')
+                    .respond(apiGetUserDataResponse());
+                $httpBackend.flush();
+
                 $httpBackend.expect('POST', '/api/dashboards/publish-page').respond({});
                 vm.publish();
                 $httpBackend.flush();
@@ -75,6 +94,10 @@ describe('appDashboardsListButtons', function () {
 
         describe('unpublish', function () {
             it('should call /api/dashboards/unpublish', function () {
+                $httpBackend.expect('GET', '/api/user')
+                    .respond(apiGetUserDataResponse());
+                $httpBackend.flush();
+
                 $httpBackend.expect('POST', '/api/dashboards/unpublish').respond({});
                 vm.unpublish();
                 $httpBackend.flush();
@@ -84,6 +107,10 @@ describe('appDashboardsListButtons', function () {
 
         describe('share', function () {
             it('should call /api/dashboards/share-page', function () {
+                $httpBackend.expect('GET', '/api/user')
+                    .respond(apiGetUserDataResponse());
+                $httpBackend.flush();
+
                 $httpBackend.expect('POST', '/api/dashboards/share-page').respond({});
                 vm.share();
                 $httpBackend.flush();
@@ -93,6 +120,10 @@ describe('appDashboardsListButtons', function () {
 
         describe('unshare', function () {
             it('should call /api/dashboards/unshare', function () {
+                $httpBackend.expect('GET', '/api/user')
+                    .respond(apiGetUserDataResponse());
+                $httpBackend.flush();
+
                 $httpBackend.expect('POST', '/api/dashboards/unshare').respond({});
                 vm.unshare();
                 $httpBackend.flush();
