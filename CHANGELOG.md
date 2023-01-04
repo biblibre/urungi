@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed user's first name not being shown in users list
+- Fix control access on dashboards according to role permission.
 
 ## [3.2.0] - 2022-10-14
 
@@ -88,7 +89,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed the properties `nd_trash_deleted` and `nd_trash_deleted_date`.
   Deleted dashboards are now permanently removed from the database
 - Moved documentation to `doc/user`. It can now be built with Sphinx and is
-  automatically built on https://urungi.readthedocs.io/
+  automatically built on <https://urungi.readthedocs.io/>
 
 ### Fixed
 
@@ -110,7 +111,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Using '?' in a custom field does not cause errors anymore (#22)
 - Grants permissions are really effective in the shared space
 - Dynamic filters on dashboards can now be styled
-- No longer necessary to enter password when editing an existing user 
+- No longer necessary to enter password when editing an existing user
 
 ### Dependencies
 

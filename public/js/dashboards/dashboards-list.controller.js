@@ -20,6 +20,7 @@
         vm.pages = 1;
         vm.refresh = refresh;
         vm.sortDir = {};
+        vm.isAdmin = false;
 
         activate();
 
@@ -28,6 +29,7 @@
             vm.sortDir.dashboardName = 1;
 
             userService.getCurrentUser().then(user => {
+                vm.isAdmin = user.isAdmin();
                 vm.creationAuthorised = user.dashboardsCreate;
             });
 

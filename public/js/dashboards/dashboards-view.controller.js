@@ -21,12 +21,14 @@
         vm.exportIsLoading = false;
         vm.promptsFilters = {};
         vm.mandatoryPrompts = [];
+        vm.creationAuthorised = false;
 
         activate();
 
         function activate () {
             userService.getCurrentUser().then(user => {
                 vm.isAdmin = user.isAdmin();
+                vm.creationAuthorised = user.dashboardsCreate;
             }, () => {});
             api.isDashboardAsPDFAvailable(dashboard._id).then(available => {
                 vm.exportAsPDFAvailable = available;

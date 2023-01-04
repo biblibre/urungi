@@ -57,26 +57,30 @@ exports.DashboardsCreate = function (req, res) {
 };
 
 exports.DashboardsUpdate = function (req, res) {
-    req.query.companyid = true;
+    req.user.getPermissions().then(permissions => {
+        if (!permissions.dashboardsCreate && !req.user.isAdmin()) {
+            res.status(403).json({ result: 0, msg: 'You do not have permissions to update this dashboard' });
+        } else {
+            req.query.companyid = true;
 
-    const data = req.body;
+            const data = req.body;
 
-    if (!req.user.isAdmin()) {
-        Dashboard.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
-            if (err) throw err;
-            if (item) {
+            if (!req.user.isAdmin()) {
+                Dashboard.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
+                    if (err) throw err;
+                    if (item) {
+                        controller.update(req).then(function (result) {
+                            res.status(200).json(result);
+                        });
+                    }
+                });
+            } else {
                 controller.update(req).then(function (result) {
                     res.status(200).json(result);
                 });
-            } else {
-                res.status(401).json({ result: 0, msg: 'You do not have permissions to update this dashboard' });
             }
-        });
-    } else {
-        controller.update(req).then(function (result) {
-            res.status(200).json(result);
-        });
-    }
+        };
+    });
 };
 
 exports.DashboardsDelete = async function (req, res) {
