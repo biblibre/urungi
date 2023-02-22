@@ -26,7 +26,6 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
                     elementRole: 'root',
                     elements: layer.objects
                 };
-                calculateIdForAllElements(layer.rootItem.elements);
             }
 
             return layers;
@@ -84,16 +83,6 @@ angular.module('app').service('reportModel', function ($q, api, connection, uuid
 
     this.changeColumnId = function (oldId, newAggregation) {
         return oldId.substring(0, oldId.length - 3) + newAggregation.substring(0, 3);
-    };
-
-    function calculateIdForAllElements (elements) {
-        for (const element of elements) {
-            if (element.elementRole === 'dimension') {
-                element.id = reportsService.getColumnId(element);
-            }
-
-            if (element.elements) { calculateIdForAllElements(element.elements); }
-        }
     };
 
     let selectedColumn;

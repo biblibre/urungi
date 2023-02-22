@@ -81,6 +81,16 @@ describe('reportsService', function () {
 
             expect(id).toBe('equuxcou');
         });
+
+        it('should not take defaultAggregation into account', function () {
+            const column = {
+                elementID: 'quux',
+                defaultAggregation: 'count',
+            };
+            const id = reportsService.getColumnId(column);
+
+            expect(id).toBe('equuxraw');
+        });
     });
 
     describe('getColumnDescription', function () {

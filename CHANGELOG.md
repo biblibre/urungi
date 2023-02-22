@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed user's first name not being shown in users list
 - Fix control access on dashboards according to role permission.
+- Fixed report column internal ID generation, which could cause problems like
+  data not being exported for some columns in XLSX
 
 ## [3.2.0] - 2022-10-14
 

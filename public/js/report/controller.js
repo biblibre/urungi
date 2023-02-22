@@ -344,6 +344,7 @@ angular.module('app').controller('reportCtrl', function ($scope, connection, $co
         if (layerObject.defaultAggregation) {
             element.aggregation = layerObject.defaultAggregation;
         }
+        element.id = reportsService.getColumnId(element);
         elements.push(element);
 
         $scope.sql = undefined;
