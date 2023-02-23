@@ -58,7 +58,7 @@
         function getColumnId (element) {
             let columnId;
 
-            const aggregation = element.aggregation || element.defaultAggregation;
+            const aggregation = element.aggregation;
 
             if (!aggregation) {
                 columnId = 'e' + element.elementID.toLowerCase() + 'raw';
