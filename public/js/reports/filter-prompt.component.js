@@ -24,7 +24,6 @@
         vm.clearFilter = clearFilter;
         vm.criteriaInput = 'partials/reports/criteria-input.html';
         vm.getFilterTypeLabel = getFilterTypeLabel;
-        vm.getButtonFilterPromptMessage = getButtonFilterPromptMessage;
         vm.getDatePatternFilters = getDatePatternFilters;
         vm.getElementFilterOptions = getElementFilterOptions;
         vm.getFilterValues = getFilterValues;
@@ -158,14 +157,6 @@
             while (s.length < size) s = '0' + s;
             while (s.length < size) s = '0' + s;
             return s;
-        }
-
-        function getButtonFilterPromptMessage (filter) {
-            if (filter.filterPrompt) {
-                return gettextCatalog.getString('Select to deactivate the runtime');
-            } else {
-                return gettextCatalog.getString('Make this filter appear in the report interface.');
-            }
         }
 
         function getFilterTypeLabel (filterType) {
