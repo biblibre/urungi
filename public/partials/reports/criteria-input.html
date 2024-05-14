@@ -1,6 +1,6 @@
 <span class="form-inline">
     <div class="form-group" uib-tooltip="{{ vm.filter.promptInstructions }}" tooltip-enable="vm.isPrompt">
-        <label ng-if="vm.isPrompt" class="control-label">{{vm.filter.promptTitle}} {{ vm.getFilterTypeLabel(vm.filter.filterType) }}</label>
+        <label ng-if="vm.isPrompt" class="control-label">{{vm.filter.promptTitle || vm.filter.elementLabel}} {{ vm.getFilterTypeLabel(vm.filter.filterType) }}</label>
 
         <!-- Date -->
         <span ng-if="(vm.filter.elementType == 'date' && (vm.filter.filterType != 'null' && vm.filter.filterType != 'notNull'))">
