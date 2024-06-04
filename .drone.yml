@@ -38,8 +38,7 @@
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
          },
          "image": "node:16",
-         "name": "test",
-         "user": "node"
+         "name": "test"
       }
    ],
    "type": "docker"
@@ -84,8 +83,7 @@
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
          },
          "image": "node:18",
-         "name": "test",
-         "user": "node"
+         "name": "test"
       }
    ],
    "type": "docker"
@@ -130,8 +128,7 @@
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
          },
          "image": "node:18",
-         "name": "test",
-         "user": "node"
+         "name": "test"
       }
    ],
    "type": "docker"
@@ -176,14 +173,13 @@
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
          },
          "image": "node:18",
-         "name": "test",
-         "user": "node"
+         "name": "test"
       }
    ],
    "type": "docker"
 }
 ---
 kind: signature
-hmac: 71a1d69f9391a191fbbde3818a8761548bb55d3257819b82b122aa31e322727e
+hmac: 5c4cbf47021a4b50b778db8ee4c4c1a4b6eb7f2484f5144d229fb34501ff82b0
 
 ...

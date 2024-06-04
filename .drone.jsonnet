@@ -6,7 +6,6 @@ local Pipeline(name, nodeVersion, mongoVersion) = {
         {
             name: 'test',
             image: 'node:' + nodeVersion,
-            user: 'node',
             environment: {
                 URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi", "password": "urungi" }',
                 URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi", "password": "urungi" }',
