@@ -31,7 +31,6 @@
             "npx jest --coverage"
          ],
          "environment": {
-            "MONGOMS_DEBUG": 1,
             "MONGOMS_VERSION": "5.0.26",
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
@@ -75,7 +74,6 @@
             "npx jest --coverage"
          ],
          "environment": {
-            "MONGOMS_DEBUG": 1,
             "MONGOMS_VERSION": "5.0.26",
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
@@ -119,7 +117,6 @@
             "npx jest --coverage"
          ],
          "environment": {
-            "MONGOMS_DEBUG": 1,
             "MONGOMS_VERSION": "6.0.15",
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
@@ -163,7 +160,6 @@
             "npx jest --coverage"
          ],
          "environment": {
-            "MONGOMS_DEBUG": 1,
             "MONGOMS_VERSION": "7.0.2",
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
@@ -176,6 +172,6 @@
 }
 ---
 kind: signature
-hmac: 241fcd4988cc19762c453cd3097969585e8dc3fd9de0c5979de3d57ecea3f2cf
+hmac: 96c2a6a13d7bd8156804624721da477a3948afa9bcff911ade74fa6a4f6d3be1
 
 ...

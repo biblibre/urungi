@@ -10,7 +10,6 @@ local Pipeline(name, nodeVersion, mongoVersion) = {
                 URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi", "password": "urungi" }',
                 URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi", "password": "urungi" }',
                 MONGOMS_VERSION: mongoVersion,
-                MONGOMS_DEBUG: 1
             },
             commands: [
                 'cat /etc/os-release',
