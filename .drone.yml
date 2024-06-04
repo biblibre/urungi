@@ -26,6 +26,7 @@
    "steps": [
       {
          "commands": [
+            "chown -R root:root .",
             "npm ci",
             "npx jest --coverage"
          ],
@@ -69,6 +70,7 @@
    "steps": [
       {
          "commands": [
+            "chown -R root:root .",
             "npm ci",
             "npx jest --coverage"
          ],
@@ -112,6 +114,7 @@
    "steps": [
       {
          "commands": [
+            "chown -R root:root .",
             "npm ci",
             "npx jest --coverage"
          ],
@@ -155,6 +158,7 @@
    "steps": [
       {
          "commands": [
+            "chown -R root:root .",
             "npm ci",
             "npx jest --coverage"
          ],
@@ -172,6 +176,6 @@
 }
 ---
 kind: signature
-hmac: 6e975fae984472b66ce06a43172a1f06ea388e8496dc40823f2bb8655a0b3f7c
+hmac: 7cb226aa705534dbbef1a454a25fcd133796aa03ab2f9f0e41e56cec19b43498
 
 ...
