@@ -12,7 +12,6 @@ local Pipeline(name, nodeVersion, mongoVersion) = {
                 MONGOMS_VERSION: mongoVersion,
             },
             commands: [
-                'cat /etc/os-release',
                 'npm ci',
                 'npx jest --coverage',
             ],
