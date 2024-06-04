@@ -156,11 +156,11 @@
             "npx jest --coverage"
          ],
          "environment": {
-            "MONGOMS_VERSION": "7.0.2",
+            "MONGOMS_VERSION": "7.0.11",
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
          },
-         "image": "node:18-bullseye",
+         "image": "node:18",
          "name": "test"
       }
    ],
@@ -168,6 +168,6 @@
 }
 ---
 kind: signature
-hmac: 97c7ec5f575705d3e7119f5efded03e701bf10efaa67f74ac940b84d758f7408
+hmac: c47a6bf52d4bd3affc1a09f403eabcf7ecb16e7f85745030b98fa12e796b5ccb
 
 ...
