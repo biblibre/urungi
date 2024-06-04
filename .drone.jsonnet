@@ -42,15 +42,8 @@ local Pipeline(name, nodeVersion, mongoVersion) = {
 };
 
 [
-    Pipeline('node:12 mongo:4.0', '12', '4.0.27'),
-    Pipeline('node:12 mongo:4.2', '12', '4.2.17'),
-    Pipeline('node:12 mongo:4.4', '12', '4.4.9'),
-    Pipeline('node:12 mongo:5.0', '12', '5.0.3'),
-    Pipeline('node:14 mongo:4.0', '14', '4.0.27'),
-    Pipeline('node:14 mongo:4.2', '14', '4.2.17'),
-    Pipeline('node:14 mongo:4.4', '14', '4.4.9'),
-    Pipeline('node:14 mongo:5.0', '14', '5.0.3'),
-    Pipeline('node:16 mongo:4.2', '16', '4.2.17'),
-    Pipeline('node:16 mongo:4.4', '16', '4.4.9'),
-    Pipeline('node:16 mongo:5.0', '16', '5.0.3'),
+    Pipeline('node:16 mongo:5.0', '16', '5.0.26'),
+    Pipeline('node:18 mongo:5.0', '18', '5.0.26'),
+    Pipeline('node:18 mongo:6.0', '18', '6.0.15'),
+    Pipeline('node:18 mongo:7.0', '18', '7.0.2'),
 ]
