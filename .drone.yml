@@ -1,346 +1,215 @@
 ---
-kind: pipeline
-name: node:12 mongo:4.0
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 4.0.27
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:12
-  name: test
-  user: node
-type: docker
+{
+   "kind": "pipeline",
+   "name": "node:16 mongo:5.0",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_DATABASE": "urungi_tests",
+            "MYSQL_PASSWORD": "urungi",
+            "MYSQL_RANDOM_ROOT_PASSWORD": "yes",
+            "MYSQL_USER": "urungi"
+         },
+         "image": "mariadb:10.3",
+         "name": "mariadb"
+      },
+      {
+         "environment": {
+            "POSTGRES_DB": "urungi_tests",
+            "POSTGRES_PASSWORD": "urungi",
+            "POSTGRES_USER": "urungi"
+         },
+         "image": "postgres:9.6",
+         "name": "postgres"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "npm ci",
+            "npx jest --coverage"
+         ],
+         "environment": {
+            "MONGOMS_VERSION": "5.0.26",
+            "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
+            "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
+         },
+         "image": "node:16",
+         "name": "test"
+      }
+   ],
+   "type": "docker"
+}
 ---
-kind: pipeline
-name: node:12 mongo:4.2
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 4.2.17
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:12
-  name: test
-  user: node
-type: docker
+{
+   "kind": "pipeline",
+   "name": "node:18 mongo:5.0",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_DATABASE": "urungi_tests",
+            "MYSQL_PASSWORD": "urungi",
+            "MYSQL_RANDOM_ROOT_PASSWORD": "yes",
+            "MYSQL_USER": "urungi"
+         },
+         "image": "mariadb:10.3",
+         "name": "mariadb"
+      },
+      {
+         "environment": {
+            "POSTGRES_DB": "urungi_tests",
+            "POSTGRES_PASSWORD": "urungi",
+            "POSTGRES_USER": "urungi"
+         },
+         "image": "postgres:9.6",
+         "name": "postgres"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "npm ci",
+            "npx jest --coverage"
+         ],
+         "environment": {
+            "MONGOMS_VERSION": "5.0.26",
+            "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
+            "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
+         },
+         "image": "node:18-bullseye",
+         "name": "test"
+      }
+   ],
+   "type": "docker"
+}
 ---
-kind: pipeline
-name: node:12 mongo:4.4
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 4.4.9
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:12
-  name: test
-  user: node
-type: docker
+{
+   "kind": "pipeline",
+   "name": "node:18 mongo:6.0",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_DATABASE": "urungi_tests",
+            "MYSQL_PASSWORD": "urungi",
+            "MYSQL_RANDOM_ROOT_PASSWORD": "yes",
+            "MYSQL_USER": "urungi"
+         },
+         "image": "mariadb:10.3",
+         "name": "mariadb"
+      },
+      {
+         "environment": {
+            "POSTGRES_DB": "urungi_tests",
+            "POSTGRES_PASSWORD": "urungi",
+            "POSTGRES_USER": "urungi"
+         },
+         "image": "postgres:9.6",
+         "name": "postgres"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "npm ci",
+            "npx jest --coverage"
+         ],
+         "environment": {
+            "MONGOMS_VERSION": "6.0.15",
+            "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
+            "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
+         },
+         "image": "node:18-bullseye",
+         "name": "test"
+      }
+   ],
+   "type": "docker"
+}
 ---
-kind: pipeline
-name: node:12 mongo:5.0
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 5.0.3
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:12
-  name: test
-  user: node
-type: docker
+{
+   "kind": "pipeline",
+   "name": "node:20 mongo:5.0",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_DATABASE": "urungi_tests",
+            "MYSQL_PASSWORD": "urungi",
+            "MYSQL_RANDOM_ROOT_PASSWORD": "yes",
+            "MYSQL_USER": "urungi"
+         },
+         "image": "mariadb:10.3",
+         "name": "mariadb"
+      },
+      {
+         "environment": {
+            "POSTGRES_DB": "urungi_tests",
+            "POSTGRES_PASSWORD": "urungi",
+            "POSTGRES_USER": "urungi"
+         },
+         "image": "postgres:9.6",
+         "name": "postgres"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "npm ci",
+            "npx jest --coverage"
+         ],
+         "environment": {
+            "MONGOMS_VERSION": "5.0.26",
+            "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
+            "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
+         },
+         "image": "node:20-bullseye",
+         "name": "test"
+      }
+   ],
+   "type": "docker"
+}
 ---
-kind: pipeline
-name: node:14 mongo:4.0
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 4.0.27
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:14
-  name: test
-  user: node
-type: docker
----
-kind: pipeline
-name: node:14 mongo:4.2
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 4.2.17
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:14
-  name: test
-  user: node
-type: docker
----
-kind: pipeline
-name: node:14 mongo:4.4
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 4.4.9
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:14
-  name: test
-  user: node
-type: docker
----
-kind: pipeline
-name: node:14 mongo:5.0
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 5.0.3
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:14
-  name: test
-  user: node
-type: docker
----
-kind: pipeline
-name: node:16 mongo:4.2
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 4.2.17
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:16
-  name: test
-  user: node
-type: docker
----
-kind: pipeline
-name: node:16 mongo:4.4
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 4.4.9
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:16
-  name: test
-  user: node
-type: docker
----
-kind: pipeline
-name: node:16 mongo:5.0
-services:
-- environment:
-    MYSQL_DATABASE: urungi_tests
-    MYSQL_PASSWORD: urungi
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_USER: urungi
-  image: mariadb:10.3
-  name: mariadb
-- environment:
-    POSTGRES_DB: urungi_tests
-    POSTGRES_PASSWORD: urungi
-    POSTGRES_USER: urungi
-  image: postgres:9.6
-  name: postgres
-steps:
-- commands:
-  - npm ci
-  - npx jest --coverage
-  environment:
-    MONGOMS_VERSION: 5.0.3
-    URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-    URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi",
-      "password": "urungi" }'
-  image: node:16
-  name: test
-  user: node
-type: docker
+{
+   "kind": "pipeline",
+   "name": "node:20 mongo:6.0",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_DATABASE": "urungi_tests",
+            "MYSQL_PASSWORD": "urungi",
+            "MYSQL_RANDOM_ROOT_PASSWORD": "yes",
+            "MYSQL_USER": "urungi"
+         },
+         "image": "mariadb:10.3",
+         "name": "mariadb"
+      },
+      {
+         "environment": {
+            "POSTGRES_DB": "urungi_tests",
+            "POSTGRES_PASSWORD": "urungi",
+            "POSTGRES_USER": "urungi"
+         },
+         "image": "postgres:9.6",
+         "name": "postgres"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "npm ci",
+            "npx jest --coverage"
+         ],
+         "environment": {
+            "MONGOMS_VERSION": "6.0.15",
+            "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
+            "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
+         },
+         "image": "node:20-bullseye",
+         "name": "test"
+      }
+   ],
+   "type": "docker"
+}
 ---
 kind: signature
-hmac: 46cf0323f20ecc2800012c4e5807a701b9da5eabfada4f3919ccc200061cea87
+hmac: ace7dcbd17eba2b8c5ea06ed1fac2eddaac0a2d6b6b7b12df544468f3516b9d9
 
 ...

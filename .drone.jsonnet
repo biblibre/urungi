@@ -6,11 +6,10 @@ local Pipeline(name, nodeVersion, mongoVersion) = {
         {
             name: 'test',
             image: 'node:' + nodeVersion,
-            user: 'node',
             environment: {
                 URUNGI_TEST_MYSQL: '{ "host": "mariadb", "database": "urungi_tests", "user": "urungi", "password": "urungi" }',
                 URUNGI_TEST_PG: '{ "host": "postgres", "database": "urungi_tests", "user": "urungi", "password": "urungi" }',
-                MONGOMS_VERSION: mongoVersion
+                MONGOMS_VERSION: mongoVersion,
             },
             commands: [
                 'npm ci',
@@ -42,15 +41,9 @@ local Pipeline(name, nodeVersion, mongoVersion) = {
 };
 
 [
-    Pipeline('node:12 mongo:4.0', '12', '4.0.27'),
-    Pipeline('node:12 mongo:4.2', '12', '4.2.17'),
-    Pipeline('node:12 mongo:4.4', '12', '4.4.9'),
-    Pipeline('node:12 mongo:5.0', '12', '5.0.3'),
-    Pipeline('node:14 mongo:4.0', '14', '4.0.27'),
-    Pipeline('node:14 mongo:4.2', '14', '4.2.17'),
-    Pipeline('node:14 mongo:4.4', '14', '4.4.9'),
-    Pipeline('node:14 mongo:5.0', '14', '5.0.3'),
-    Pipeline('node:16 mongo:4.2', '16', '4.2.17'),
-    Pipeline('node:16 mongo:4.4', '16', '4.4.9'),
-    Pipeline('node:16 mongo:5.0', '16', '5.0.3'),
+    Pipeline('node:16 mongo:5.0', '16', '5.0.26'),
+    Pipeline('node:18 mongo:5.0', '18-bullseye', '5.0.26'),
+    Pipeline('node:18 mongo:6.0', '18-bullseye', '6.0.15'),
+    Pipeline('node:20 mongo:5.0', '20-bullseye', '5.0.26'),
+    Pipeline('node:20 mongo:6.0', '20-bullseye', '6.0.15'),
 ]
