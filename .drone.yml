@@ -80,7 +80,7 @@
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
          },
-         "image": "node:18",
+         "image": "node:18-bullseye",
          "name": "test"
       }
    ],
@@ -124,7 +124,7 @@
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
          },
-         "image": "node:18",
+         "image": "node:18-bullseye",
          "name": "test"
       }
    ],
@@ -168,7 +168,7 @@
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
          },
-         "image": "node:18",
+         "image": "node:18-bullseye",
          "name": "test"
       }
    ],
@@ -176,6 +176,6 @@
 }
 ---
 kind: signature
-hmac: 6fa4842bc997a9beef18063a1e7da839abcaf4be9908c3c519022ebf9655014c
+hmac: 241fcd4988cc19762c453cd3097969585e8dc3fd9de0c5979de3d57ecea3f2cf
 
 ...
