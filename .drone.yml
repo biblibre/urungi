@@ -26,13 +26,11 @@
    "steps": [
       {
          "commands": [
-            "whoami",
-            "ls -ld .",
-            "ls -l",
             "npm ci",
             "npx jest --coverage"
          ],
          "environment": {
+            "MONGOMS_DEBUG": 1,
             "MONGOMS_VERSION": "5.0.26",
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
@@ -71,13 +69,11 @@
    "steps": [
       {
          "commands": [
-            "whoami",
-            "ls -ld .",
-            "ls -l",
             "npm ci",
             "npx jest --coverage"
          ],
          "environment": {
+            "MONGOMS_DEBUG": 1,
             "MONGOMS_VERSION": "5.0.26",
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
@@ -116,13 +112,11 @@
    "steps": [
       {
          "commands": [
-            "whoami",
-            "ls -ld .",
-            "ls -l",
             "npm ci",
             "npx jest --coverage"
          ],
          "environment": {
+            "MONGOMS_DEBUG": 1,
             "MONGOMS_VERSION": "6.0.15",
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
@@ -161,13 +155,11 @@
    "steps": [
       {
          "commands": [
-            "whoami",
-            "ls -ld .",
-            "ls -l",
             "npm ci",
             "npx jest --coverage"
          ],
          "environment": {
+            "MONGOMS_DEBUG": 1,
             "MONGOMS_VERSION": "7.0.2",
             "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
             "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
@@ -180,6 +172,6 @@
 }
 ---
 kind: signature
-hmac: 5c4cbf47021a4b50b778db8ee4c4c1a4b6eb7f2484f5144d229fb34501ff82b0
+hmac: fe1e172ed4269abdaaddf49b70f9eb910543c7329e169f8d6739cfa9153bb1f9
 
 ...
