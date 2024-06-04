@@ -13,6 +13,7 @@ local Pipeline(name, nodeVersion, mongoVersion) = {
                 MONGOMS_VERSION: mongoVersion
             },
             commands: [
+                'chown -R root:root .'
                 'npm ci',
                 'npx jest --coverage',
             ],
