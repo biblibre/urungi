@@ -26,6 +26,7 @@
    "steps": [
       {
          "commands": [
+            "cat /etc/os-release",
             "npm ci",
             "npx jest --coverage"
          ],
@@ -69,6 +70,7 @@
    "steps": [
       {
          "commands": [
+            "cat /etc/os-release",
             "npm ci",
             "npx jest --coverage"
          ],
@@ -112,6 +114,7 @@
    "steps": [
       {
          "commands": [
+            "cat /etc/os-release",
             "npm ci",
             "npx jest --coverage"
          ],
@@ -155,6 +158,7 @@
    "steps": [
       {
          "commands": [
+            "cat /etc/os-release",
             "npm ci",
             "npx jest --coverage"
          ],
@@ -172,6 +176,6 @@
 }
 ---
 kind: signature
-hmac: fe1e172ed4269abdaaddf49b70f9eb910543c7329e169f8d6739cfa9153bb1f9
+hmac: 6fa4842bc997a9beef18063a1e7da839abcaf4be9908c3c519022ebf9655014c
 
 ...
