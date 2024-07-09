@@ -84,7 +84,7 @@ function authenticate (passport, User, req, res, next) {
                         $set: loginData
                     }, function (err) {
                         if (err) throw err;
-                        req.logIn(user, function (err) {
+                        req.logIn(user, { keepSessionInfo: true }, function (err) {
                             if (err) { return next(err); }
                             res.json({ user: user.toObject() });
 

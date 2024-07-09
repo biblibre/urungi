@@ -152,8 +152,9 @@ function setContextHelp (req, res) {
 }
 
 function logout (req, res) {
-    req.logOut();
-    res.sendStatus(204);
+    req.logOut(() => {
+        res.sendStatus(204);
+    });
 }
 
 module.exports = router;

@@ -54,7 +54,7 @@
     "nodemailer": "^6.7.0",
     "numeral": "^2.0.6",
     "oracledb": "^5.2.0",
-    "passport": "^0.4.1",
+    "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "~1.0.0",
     "password-generator": "^2.3.2",
