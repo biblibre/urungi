@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   https://github.com/biblibre/urungi/security/dependabot/36)
 - Upgrade multer to 1.4.5-lts1 (fixes
   https://github.com/biblibre/urungi/security/dependabot/28)
+- Switch from unmaintained js-xlsx to xlsx (fixes
+  https://github.com/biblibre/urungi/security/dependabot/42 and
+  https://github.com/biblibre/urungi/security/dependabot/57)
 
 ## [3.2.3] - 2024-07-08
 

@@ -39,7 +39,6 @@
     "intro.js": "^4.2.2",
     "jquery": "^3.6.0",
     "jquery-validation": "^1.19.3",
-    "js-xlsx": "^0.8.22",
     "jsplumb": "^2.15.6",
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "migrate-mongo": "^8.2.3",
@@ -61,7 +60,8 @@
     "pg": "^8.7.1",
     "pivottable": "^2.23.0",
     "subtotal": "^1.11.0-alpha.0",
-    "ui-select": "^0.19.8"
+    "ui-select": "^0.19.8",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
   "devDependencies": {
     "angular-mocks": "^1.8.2",

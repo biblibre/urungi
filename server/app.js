@@ -58,7 +58,7 @@ const staticPaths = [
     { p: '/numeral', root: 'numeral/min' },
     { p: '/pivottable', root: 'pivottable/dist' },
     { p: '/subtotal', root: 'subtotal/dist' },
-    { p: '/js-xlsx', root: 'js-xlsx/dist' },
+    { p: '/xlsx', root: 'xlsx/dist' },
     { p: '/jsplumb', root: 'jsplumb' },
     { p: '/font-awesome', root: 'font-awesome' },
 ];
