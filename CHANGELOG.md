@@ -54,7 +54,7 @@ Several pages already work without any AngularJS code:
 - Updated jquery-validation to 1.21.0
 - Updated mongoose to 7.8.1
 - Updated mongodb-memory-server to 10.0.0 (dev)
-- Updated mssql to 6.4.1
+- Updated mssql to 11.0.1
 - Updated oracledb to 5.5.0
 - Updated pg to 8.12.0
 - Updated set-cookie-parser to 2.7.0 (dev)

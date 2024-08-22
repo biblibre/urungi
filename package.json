@@ -42,7 +42,7 @@
     "migrate-mongo": "^8.2.3",
     "moment": "^2.29.1",
     "mongoose": "^7.8.1",
-    "mssql": "^6.4.1",
+    "mssql": "^11.0.1",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "negotiator": "^0.6.3",

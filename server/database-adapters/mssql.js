@@ -14,6 +14,7 @@ class MssqlAdapter extends BaseAdapter {
             options: {
                 useUTC: false,
                 enableArithAbort: true,
+                trustServerCertificate: true, // FIXME Make this configurable
             },
         });
 
