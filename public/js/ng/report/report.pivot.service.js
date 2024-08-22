@@ -7,7 +7,7 @@
 
     function pivot (numeral, moment, i18n) {
         const service = {
-            createPivotTable: createPivotTable,
+            createPivotTable,
         };
 
         return service;
@@ -77,8 +77,8 @@
 
             const options = {
                 dataClass: $.pivotUtilities.SubtotalPivotData,
-                cols: cols,
-                rows: rows,
+                cols,
+                rows,
                 aggregator: aggregator([layerObject.elementLabel]),
                 renderer: $.pivotUtilities.subtotal_renderers['Table With Subtotal'],
                 rendererOptions: {

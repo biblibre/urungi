@@ -49,11 +49,11 @@ const defaultTask = gulp.parallel(
 module.exports = {
     default: defaultTask,
     dev: gulp.parallel(watch_less, watch_templates, nodemon_start),
-    css: css,
-    translations: translations,
-    templates: templates,
-    doc: doc,
-    pot: pot,
+    css,
+    translations,
+    templates,
+    doc,
+    pot,
     'po:update': gulp.series(pot, po_update),
     'watch:doc': watch_doc,
     'watch:less': watch_less,
@@ -86,7 +86,7 @@ function translations_build () {
 function templates_compile (name) {
     const f = function () {
         const base = path.join(__dirname, 'public', 'partials');
-        return gulp.src(`public/partials/${name}/*.html`, { base: base })
+        return gulp.src(`public/partials/${name}/*.html`, { base })
             .pipe(templatecache(name + '.templates.js', {
                 root: 'partials',
                 module: 'app.' + name,

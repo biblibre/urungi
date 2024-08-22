@@ -5,7 +5,7 @@
 
     function layerEditService () {
         const service = {
-            newID: newID,
+            newID,
         };
 
         function newID (layer) {

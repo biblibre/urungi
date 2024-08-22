@@ -21,7 +21,7 @@ describe('DatasourceListController', function () {
             .respond(getDataSourcesFindAllResponse());
 
         const $scope = {};
-        vm = $controller('DatasourceListController', { $scope: $scope });
+        vm = $controller('DatasourceListController', { $scope });
         $httpBackend.flush();
     }));
 

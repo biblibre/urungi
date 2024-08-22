@@ -41,7 +41,7 @@ describe('appLayerEditSqlModal', function () {
                 const bindings = {
                     resolve: {
                         collection: {},
-                        layer: layer,
+                        layer,
                         mode: 'add',
                         name: 'Sql Collection',
                         sqlQuery: '',
@@ -137,7 +137,7 @@ describe('appLayerEditSqlModal', function () {
                                 },
                             ],
                         },
-                        layer: layer,
+                        layer,
                         mode: 'edit',
                         name: 'Sql Collection',
                         sqlQuery: 'SELECT a, b FROM t',

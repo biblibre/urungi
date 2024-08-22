@@ -7,86 +7,86 @@
 
     function api ($http, connection) {
         const service = {
-            getVersion: getVersion,
+            getVersion,
 
-            getSharedSpace: getSharedSpace,
+            getSharedSpace,
 
-            getCounts: getCounts,
-            getUserData: getUserData,
-            getUserObjects: getUserObjects,
-            setViewedContextHelp: setViewedContextHelp,
+            getCounts,
+            getUserData,
+            getUserObjects,
+            setViewedContextHelp,
 
-            getRole: getRole,
-            getRoles: getRoles,
-            createRole: createRole,
-            updateRole: updateRole,
-            deleteRole: deleteRole,
+            getRole,
+            getRoles,
+            createRole,
+            updateRole,
+            deleteRole,
 
-            getDatasource: getDatasource,
-            getDatasources: getDatasources,
-            createDatasource: createDatasource,
-            updateDatasource: updateDatasource,
-            getDatasourceCollections: getDatasourceCollections,
-            getDatasourceCollection: getDatasourceCollection,
-            getSqlQueryCollection: getSqlQueryCollection,
+            getDatasource,
+            getDatasources,
+            createDatasource,
+            updateDatasource,
+            getDatasourceCollections,
+            getDatasourceCollection,
+            getSqlQueryCollection,
 
-            testConnection: testConnection,
+            testConnection,
 
-            getReports: getReports,
-            deleteReport: deleteReport,
-            publishReport: publishReport,
-            unpublishReport: unpublishReport,
-            shareReport: shareReport,
-            unshareReport: unshareReport,
-            getReport: getReport,
-            createReport: createReport,
-            updateReport: updateReport,
-            duplicateReport: duplicateReport,
-            getReportData: getReportData,
-            getReportFilterValues: getReportFilterValues,
-            getReportAsPDF: getReportAsPDF,
-            getReportAsPNG: getReportAsPNG,
-            isReportAsPDFAvailable: isReportAsPDFAvailable,
-            isReportAsPNGAvailable: isReportAsPNGAvailable,
+            getReports,
+            deleteReport,
+            publishReport,
+            unpublishReport,
+            shareReport,
+            unshareReport,
+            getReport,
+            createReport,
+            updateReport,
+            duplicateReport,
+            getReportData,
+            getReportFilterValues,
+            getReportAsPDF,
+            getReportAsPNG,
+            isReportAsPDFAvailable,
+            isReportAsPNGAvailable,
 
-            getDashboards: getDashboards,
-            deleteDashboard: deleteDashboard,
-            getDashboard: getDashboard,
-            getDashboardForView: getDashboardForView,
-            publishDashboard: publishDashboard,
-            unpublishDashboard: unpublishDashboard,
-            shareDashboard: shareDashboard,
-            unshareDashboard: unshareDashboard,
-            createDashboard: createDashboard,
-            updateDashboard: updateDashboard,
-            getDashboardAsPDF: getDashboardAsPDF,
-            getDashboardAsPNG: getDashboardAsPNG,
-            isDashboardAsPDFAvailable: isDashboardAsPDFAvailable,
-            isDashboardAsPNGAvailable: isDashboardAsPNGAvailable,
+            getDashboards,
+            deleteDashboard,
+            getDashboard,
+            getDashboardForView,
+            publishDashboard,
+            unpublishDashboard,
+            shareDashboard,
+            unshareDashboard,
+            createDashboard,
+            updateDashboard,
+            getDashboardAsPDF,
+            getDashboardAsPNG,
+            isDashboardAsPDFAvailable,
+            isDashboardAsPNGAvailable,
 
-            getLayers: getLayers,
-            changeLayerStatus: changeLayerStatus,
-            createLayer: createLayer,
-            deleteLayer: deleteLayer,
-            getLayer: getLayer,
-            replaceLayer: replaceLayer,
+            getLayers,
+            changeLayerStatus,
+            createLayer,
+            deleteLayer,
+            getLayer,
+            replaceLayer,
 
-            getFiles: getFiles,
-            uploadFile: uploadFile,
+            getFiles,
+            uploadFile,
 
-            getThemes: getThemes,
+            getThemes,
 
-            getUsers: getUsers,
-            getUser: getUser,
-            createUser: createUser,
-            updateUser: updateUser,
-            updateUserPassword: updateUserPassword,
-            deleteUserRole: deleteUserRole,
-            addUserRole: addUserRole,
-            getUserReports: getUserReports,
-            getUserDashboards: getUserDashboards,
-            getUserCounts: getUserCounts,
-            deleteUser: deleteUser,
+            getUsers,
+            getUser,
+            createUser,
+            updateUser,
+            updateUserPassword,
+            deleteUserRole,
+            addUserRole,
+            getUserReports,
+            getUserDashboards,
+            getUserCounts,
+            deleteUser,
         };
 
         return service;
@@ -187,12 +187,12 @@
         }
 
         function deleteReport (id) {
-            return connection.post('/api/reports/delete/' + id, { id: id });
+            return connection.post('/api/reports/delete/' + id, { id });
         }
 
         function publishReport (id) {
             const data = {
-                id: id,
+                id,
             };
 
             return connection.post('/api/reports/publish-report', data);
@@ -200,7 +200,7 @@
 
         function unpublishReport (id) {
             const data = {
-                id: id,
+                id,
             };
 
             return connection.post('/api/reports/unpublish', data);
@@ -208,7 +208,7 @@
 
         function shareReport (id, folderID) {
             const data = {
-                id: id,
+                id,
                 parentFolder: folderID,
             };
 
@@ -217,7 +217,7 @@
 
         function unshareReport (id) {
             const data = {
-                id: id,
+                id,
             };
 
             return connection.post('/api/reports/unshare', data);
@@ -230,7 +230,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the report object
          */
         function getReport (id) {
-            return httpGet('/api/reports/find-one', { id: id }).then(data => data.item);
+            return httpGet('/api/reports/find-one', { id }).then(data => data.item);
         }
 
         /**
@@ -274,7 +274,7 @@
          */
         function getReportData (report, options = {}) {
             const params = {
-                report: report,
+                report,
             };
 
             if (options.limit && !report.properties.recordLimit) {
@@ -289,7 +289,7 @@
         }
 
         function getReportFilterValues (filter, options) {
-            return httpPost('/api/reports/filter-values-query', { filter: filter, options: options });
+            return httpPost('/api/reports/filter-values-query', { filter, options });
         }
 
         /**
@@ -341,7 +341,7 @@
         }
 
         function deleteDashboard (id) {
-            return connection.post('/api/dashboards/delete/' + id, { id: id });
+            return connection.post('/api/dashboards/delete/' + id, { id });
         }
 
         /**
@@ -351,7 +351,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to the dashboard object
          */
         function getDashboard (id) {
-            return httpGet('/api/dashboards/find-one', { id: id }).then(data => data.item);
+            return httpGet('/api/dashboards/find-one', { id }).then(data => data.item);
         }
 
         function getDashboardForView (id) {
@@ -360,7 +360,7 @@
 
         function publishDashboard (id) {
             const data = {
-                id: id,
+                id,
             };
 
             return connection.post('/api/dashboards/publish-page', data);
@@ -368,7 +368,7 @@
 
         function unpublishDashboard (id) {
             const data = {
-                id: id,
+                id,
             };
 
             return connection.post('/api/dashboards/unpublish', data);
@@ -376,7 +376,7 @@
 
         function shareDashboard (id, folderID) {
             const data = {
-                id: id,
+                id,
                 parentFolder: folderID,
             };
 
@@ -385,7 +385,7 @@
 
         function unshareDashboard (id) {
             const data = {
-                id: id,
+                id,
             };
 
             return connection.post('/api/dashboards/unshare', data);
@@ -578,7 +578,7 @@
          * @returns {Promise<object, Error>} Promise that resolves to an object (can be undefined if not found)
          */
         function httpGet (url, params) {
-            return httpRequest({ method: 'GET', url: url, params: params });
+            return httpRequest({ method: 'GET', url, params });
         }
 
         /**
@@ -589,7 +589,7 @@
          * @returns {Promise<object, Error>}
          */
         function httpPost (url, data) {
-            return httpRequest({ method: 'POST', url: url, data: data });
+            return httpRequest({ method: 'POST', url, data });
         }
 
         /**
@@ -600,15 +600,15 @@
          * @returns {Promise<object>}
          */
         function httpPatch (url, data) {
-            return httpRequest({ method: 'PATCH', url: url, data: data });
+            return httpRequest({ method: 'PATCH', url, data });
         }
 
         function httpPut (url, data) {
-            return httpRequest({ method: 'PUT', url: url, data: data });
+            return httpRequest({ method: 'PUT', url, data });
         }
 
         function httpDelete (url) {
-            return httpRequest({ method: 'DELETE', url: url });
+            return httpRequest({ method: 'DELETE', url });
         }
 
         function httpRequest (config) {

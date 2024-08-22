@@ -2,7 +2,7 @@ const version = require('../../../package.json').version;
 
 const command = {
     description: 'Show Urungi version',
-    usage: usage,
+    usage,
     argSpec: {},
     run,
 };

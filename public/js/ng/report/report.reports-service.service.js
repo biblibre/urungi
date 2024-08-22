@@ -16,13 +16,13 @@
         };
 
         const service = {
-            getAggregationDescription: getAggregationDescription,
-            storeReport: storeReport,
-            getStoredReport: getStoredReport,
-            getColumnId: getColumnId,
-            getColumnDescription: getColumnDescription,
-            checkPrompts: checkPrompts,
-            checkPrompt: checkPrompt
+            getAggregationDescription,
+            storeReport,
+            getStoredReport,
+            getColumnId,
+            getColumnDescription,
+            checkPrompts,
+            checkPrompt
         };
 
         return service;

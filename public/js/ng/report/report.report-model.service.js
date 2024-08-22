@@ -8,7 +8,7 @@
     function reportModel (api, connection, uuid, reportsService) {
         this.getReportDefinition = function (id, isLinked) {
             const url = '/api/reports/get-report/' + id;
-            const params = { id: id, mode: 'preview', linked: isLinked };
+            const params = { id, mode: 'preview', linked: isLinked };
 
             return connection.get(url, params).then(function (data) {
                 return data.item;

@@ -63,7 +63,7 @@
             const modal = $uibModal.open({
                 component: 'appRoleListEditModal',
                 resolve: {
-                    role: role,
+                    role,
                 },
             });
 

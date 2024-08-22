@@ -42,8 +42,11 @@ Several pages already work without any AngularJS code:
 - Updated clipboard to 2.0.11
 - Updated config to 3.3.12
 - Updated cookie-parser to 1.4.6
+- Updated eslint to 8.57.0 (dev)
+- Updated eslint-config-standard to 17.1.0 (dev)
 - Updated eslint-plugin-import to 2.29.1 (dev)
-- Updated eslint-plugin-promise to 5.2.0 (dev)
+- Updated eslint-plugin-jest to 28.8.0 (dev)
+- Updated eslint-plugin-promise to 6.6.0 (dev)
 - Updated express-session to 1.18.0
 - Updated htmlhint to 1.1.4 (dev)
 - Updated jest to 29.7.0 (dev)

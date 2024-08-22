@@ -50,7 +50,7 @@ describe('appDashboardsListButtons', function () {
                 bar: 'baz',
             };
             const bindings = {
-                dashboard: dashboard,
+                dashboard,
                 onDelete: onDeleteSpy,
                 onDuplicate: onDuplicateSpy,
             };

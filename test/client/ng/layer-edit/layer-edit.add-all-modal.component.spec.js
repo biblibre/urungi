@@ -36,7 +36,7 @@ describe('appLayerEditAddAllModal', function () {
 
             const bindings = {
                 resolve: {
-                    collection: collection,
+                    collection,
                 },
                 close: closeSpy,
                 dismiss: dismissSpy,

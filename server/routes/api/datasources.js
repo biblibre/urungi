@@ -70,7 +70,7 @@ function getDatasourceCollection (req, res, next) {
 
     dbClient.getCollectionSchema(req.params.collectionName).then(schema => {
         const collection = {
-            collectionName: collectionName,
+            collectionName,
             collectionLabel: collectionName,
             elements: schema.columns.map(column => ({
                 elementName: column.name,
@@ -90,7 +90,7 @@ function getSqlQueryCollection (req, res, next) {
     dbClient.getSqlQuerySchema(req.query.sqlQuery).then(schema => {
         const collection = {
             collectionLabel: collectionName,
-            collectionName: collectionName,
+            collectionName,
             isSQL: true,
             sqlQuery: req.query.sqlQuery,
             elements: schema.columns.map(column => ({

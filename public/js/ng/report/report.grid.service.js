@@ -7,7 +7,7 @@
 
     function grid (moment, numeral, api, reportsService) {
         const service = {
-            createGrid: createGrid,
+            createGrid,
         };
 
         return service;

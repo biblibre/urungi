@@ -99,7 +99,7 @@
                 dropTarget.classList.remove('dragover');
 
                 $scope.$apply(function () {
-                    vm.onDrop({ $event: ev, dropTarget: dropTarget });
+                    vm.onDrop({ $event: ev, dropTarget });
                 });
             });
         }

@@ -16,8 +16,8 @@ router.get('/', getVersion);
 function getVersion (req, res) {
     const response = {
         data: {
-            version: version,
-            gitVersion: gitVersion,
+            version,
+            gitVersion,
         },
     };
 

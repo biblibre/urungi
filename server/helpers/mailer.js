@@ -22,9 +22,9 @@ function sendEmailTemplate (theEmailTemplate, recipients, emailField, subject) {
         ]).then(function ([html, text]) {
             return transport.sendMail({
                 to: item[emailField],
-                subject: subject,
-                html: html,
-                text: text,
+                subject,
+                html,
+                text,
             });
         }).catch(function (err) {
             console.error(err);

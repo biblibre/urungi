@@ -36,8 +36,8 @@ describe('appReportColumnSettingsModal', function () {
 
             const bindings = {
                 resolve: {
-                    report: report,
-                    column: column,
+                    report,
+                    column,
                 },
                 close: closeSpy,
                 dismiss: dismissSpy,

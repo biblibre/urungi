@@ -8,7 +8,7 @@
         return {
             restrict: 'AE',
             scope: false,
-            link: link,
+            link,
         };
 
         function link (scope, element, attrs, controller, transcludeFn) {

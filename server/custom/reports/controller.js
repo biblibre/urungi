@@ -79,7 +79,7 @@ exports.ReportsFindAll = async function (req, res) {
 
         response = {
             result: 1,
-            page: page,
+            page,
             pages: req.query.page ? Math.ceil(count / perPage) : 1,
             items: reports,
         };

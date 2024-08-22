@@ -21,7 +21,7 @@ statisticSchema.statics.saveStat = function (req, data) {
         relationedID: data.relationedID,
         relationedName: data.relationedName,
         action: data.action,
-        companyID: companyID,
+        companyID,
         userID: (req.isAuthenticated()) ? req.user._id : null,
         userName: (req.isAuthenticated()) ? req.user.userName : null,
         ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,

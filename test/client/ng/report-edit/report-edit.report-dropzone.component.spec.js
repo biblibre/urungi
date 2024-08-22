@@ -63,7 +63,7 @@ describe('appReportDropzone', function () {
 
                 const dataTransfer = new DataTransfer();
                 dataTransfer.setData('application/vnd.urungi.layer-element+json', JSON.stringify(element));
-                const dropEvent = new DragEvent('drop', { dataTransfer: dataTransfer });
+                const dropEvent = new DragEvent('drop', { dataTransfer });
                 vm.onDropItem(dropEvent);
                 expect(onDropSpy).toHaveBeenCalledWith({ elements: [], item: element });
             });

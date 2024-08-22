@@ -32,7 +32,7 @@ function getFiles (req, res, next) {
     };
 
     File.find(filter).then(files => {
-        res.status(200).json({ files: files });
+        res.status(200).json({ files });
     }).catch(next);
 };
 

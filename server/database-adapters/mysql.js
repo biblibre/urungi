@@ -58,7 +58,7 @@ class MysqlAdapter extends BaseAdapter {
 
             return {
                 name: row.column_name,
-                type: type,
+                type,
             };
         });
 
@@ -106,7 +106,7 @@ class MysqlAdapter extends BaseAdapter {
 
         return {
             data: res,
-            sql: sql,
+            sql,
             time: end - start,
         };
     }
@@ -115,7 +115,7 @@ class MysqlAdapter extends BaseAdapter {
         const connection = this.getConnection();
 
         return new Promise(function (resolve, reject) {
-            debug('Running query: %o', { sql: sql, params: params });
+            debug('Running query: %o', { sql, params });
 
             connection.query(sql, params, function (err, results) {
                 if (err) {

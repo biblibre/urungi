@@ -25,7 +25,7 @@
             layer: null,
             element: null,
             numberDefaultAggregation: layerNumberDefaultAggregation,
-            onExpressionChange: onExpressionChange,
+            onExpressionChange,
             removeFromArray,
             saveElement,
             selectedCollection: null,
@@ -54,7 +54,7 @@
         function addValueToElement (element, value, label) {
             if (!element.values) element.values = [];
 
-            element.values.push({ value: value, label: label });
+            element.values.push({ value, label });
         }
 
         function compileExpression () {

@@ -7,8 +7,8 @@
 
     function connection ($http, notify) {
         const service = {
-            get: get,
-            post: post,
+            get,
+            post,
         };
 
         return service;
@@ -18,7 +18,7 @@
                 showMsg: (options && typeof options.showMsg !== 'undefined') ? options.showMsg : true
             };
 
-            return $http.get(url, { params: params })
+            return $http.get(url, { params })
                 .then(response => {
                     const data = response.data;
 

@@ -56,7 +56,7 @@ class MssqlAdapter extends BaseAdapter {
 
             return {
                 name: row.column_name,
-                type: type,
+                type,
             };
         });
 
@@ -93,7 +93,7 @@ class MssqlAdapter extends BaseAdapter {
 
         return {
             data: res.recordset,
-            sql: sql,
+            sql,
             time: end - start,
         };
     }
@@ -106,7 +106,7 @@ class MssqlAdapter extends BaseAdapter {
             request.input(name, params[name]);
         }
 
-        debug('Running query: %o', { sql: sql, params: params });
+        debug('Running query: %o', { sql, params });
 
         let res;
         try {

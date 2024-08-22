@@ -69,7 +69,7 @@
             connector: ['Flowchart', { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true }],
             connectorStyle: connectorPaintStyle,
             hoverPaintStyle: endpointHoverStyle,
-            connectorHoverStyle: connectorHoverStyle,
+            connectorHoverStyle,
             maxConnections: -1,
             dragOptions: {},
             overlays: [

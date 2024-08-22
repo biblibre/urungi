@@ -2,7 +2,7 @@ const config = require('config');
 
 const command = {
     description: 'Dump configuration',
-    usage: usage,
+    usage,
     argSpec: {},
     run,
 };

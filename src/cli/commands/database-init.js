@@ -40,7 +40,7 @@ async function run (args) {
 
         await User.create({
             userName: 'administrator',
-            password: password,
+            password,
             companyID: 'COMPID',
             roles: ['ADMIN'],
             status: 'active',

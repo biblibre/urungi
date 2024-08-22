@@ -38,7 +38,7 @@
         }
 
         function onRemoveItem (item) {
-            vm.onRemove({ elements: vm.elements, item: item });
+            vm.onRemove({ elements: vm.elements, item });
         };
 
         function openColumnSettingsModal (column) {

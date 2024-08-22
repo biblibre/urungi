@@ -10,9 +10,9 @@
         let getCountsPromise;
 
         const service = {
-            getCurrentUser: getCurrentUser,
-            getCounts: getCounts,
-            clearCountsCache: clearCountsCache,
+            getCurrentUser,
+            getCounts,
+            clearCountsCache,
         };
 
         return service;

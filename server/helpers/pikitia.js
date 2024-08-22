@@ -56,7 +56,7 @@ async function render (url, endpoint, options) {
     const token = await tokenResponse.json();
 
     const requestBody = {
-        url: url,
+        url,
     };
     for (const key of Object.keys(options)) {
         requestBody[key] = options[key];

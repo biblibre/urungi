@@ -18,7 +18,7 @@ class Controller {
 
         const p = Model.find(find, fields, params).exec().then(function (items) {
             return Model.countDocuments(find).exec().then(function (count) {
-                return { result: 1, page: page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items: items };
+                return { result: 1, page, pages: ((req.query.page) ? Math.ceil(count / perPage) : 1), items };
             });
         }).catch(function (err) {
             return { result: 0, msg: 'A database error has occurred : ' + String(err), error: err };
@@ -126,7 +126,7 @@ class Controller {
 
         if (mandatoryFilters.length > 0) { find = { $and: mandatoryFilters }; }
 
-        return { find: find, fields: fields, params: params };
+        return { find, fields, params };
     }
 
     findOne (req, done) {

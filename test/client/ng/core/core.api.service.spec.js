@@ -248,7 +248,7 @@ describe('api', () => {
                 properties: {},
             };
             const data = {
-                report: report,
+                report,
                 limit: 500,
                 filters: {
                     name: 'value',
@@ -286,7 +286,7 @@ describe('api', () => {
                 id: 'foo',
             };
             const data = {
-                filter: filter,
+                filter,
             };
             const response = {
                 result: 1,

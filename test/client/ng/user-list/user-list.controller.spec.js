@@ -193,7 +193,7 @@ describe('UserListController', function () {
 
     function getUsersFindAllResponse (page = 1) {
         return {
-            page: page,
+            page,
             pages: page,
             data: [
                 {

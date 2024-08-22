@@ -30,9 +30,9 @@ logSchema.statics.saveToLog = function (req, data, otherInfo, done) {
     if (req) {
         log = {
             text: data.text,
-            otherInfo: otherInfo,
+            otherInfo,
             type: data.type,
-            companyID: companyID,
+            companyID,
             associatedID: data.associatedID,
             userID: (req.isAuthenticated()) ? req.user.id : null,
             ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,

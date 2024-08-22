@@ -58,7 +58,7 @@ describe('RoleListController', function () {
 
     function getRolesFindAllResponse (page = 1) {
         return {
-            page: page,
+            page,
             pages: page,
             data: [
                 {

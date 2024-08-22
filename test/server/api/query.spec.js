@@ -101,7 +101,7 @@ describe('Query API', function () {
 
                 const res = await request(app).post('/api/reports/data-query')
                     .set(headers)
-                    .send({ report: report })
+                    .send({ report })
                     .expect(200);
 
                 const expectedQuery = {
@@ -192,7 +192,7 @@ describe('Query API', function () {
 
                 const res = await request(app).post('/api/reports/filter-values-query')
                     .set(headers)
-                    .send({ filter: filter })
+                    .send({ filter })
                     .expect(200);
 
                 const expectedQuery = expect.objectContaining({

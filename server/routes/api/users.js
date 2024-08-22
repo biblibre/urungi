@@ -68,7 +68,7 @@ async function createUser (req, res) {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                userPassword: userPassword,
+                userPassword,
             };
 
             await sendEmailTemplate('newUserAndPassword', [recipient], 'email', 'Welcome to Urungi');

@@ -9,7 +9,7 @@
 
     function xlsxService (FileSaver, reportsService) {
         const service = {
-            saveReportAsXLSX: saveReportAsXLSX,
+            saveReportAsXLSX,
         };
 
         return service;

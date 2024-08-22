@@ -15,7 +15,7 @@ class OracleAdapter extends BaseAdapter {
         connectString += '/' + this.params.database;
 
         return oracledb.getConnection({
-            connectString: connectString,
+            connectString,
             user: this.params.user,
             password: this.params.password,
         });
@@ -49,7 +49,7 @@ class OracleAdapter extends BaseAdapter {
 
             return {
                 name: row.COLUMN_NAME,
-                type: type,
+                type,
             };
         });
 
@@ -86,7 +86,7 @@ class OracleAdapter extends BaseAdapter {
 
         return {
             data: res.rows,
-            sql: sql,
+            sql,
             time: end - start,
         };
     }
@@ -94,7 +94,7 @@ class OracleAdapter extends BaseAdapter {
     async query (sql, params = []) {
         const connection = await this.getConnection();
 
-        debug('Running query: %o', { sql: sql, params: params });
+        debug('Running query: %o', { sql, params });
         let res;
         try {
             res = await connection.execute(sql, params);

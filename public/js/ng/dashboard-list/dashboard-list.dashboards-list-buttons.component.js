@@ -62,7 +62,7 @@
                     duplicate: () => function (newName) {
                         const params = {
                             dashboard: { _id: vm.dashboard._id },
-                            newName: newName,
+                            newName,
                         };
 
                         return duplicateDashboard(params);

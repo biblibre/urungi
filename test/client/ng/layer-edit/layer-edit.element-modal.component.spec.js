@@ -52,8 +52,8 @@ describe('appLayerEditElementModal', function () {
                 };
                 const bindings = {
                     resolve: {
-                        element: element,
-                        layer: layer,
+                        element,
+                        layer,
                     },
                     close: closeSpy,
                     dismiss: dismissSpy,
@@ -74,8 +74,8 @@ describe('appLayerEditElementModal', function () {
 
                 const bindings = {
                     resolve: {
-                        element: element,
-                        layer: layer,
+                        element,
+                        layer,
                     },
                     close: closeSpy,
                     dismiss: dismissSpy,
@@ -100,8 +100,8 @@ describe('appLayerEditElementModal', function () {
 
                 const bindings = {
                     resolve: {
-                        element: element,
-                        layer: layer,
+                        element,
+                        layer,
                     },
                     close: closeSpy,
                     dismiss: dismissSpy,
@@ -133,8 +133,8 @@ describe('appLayerEditElementModal', function () {
 
                 const bindings = {
                     resolve: {
-                        element: element,
-                        layer: layer,
+                        element,
+                        layer,
                     },
                     close: closeSpy,
                     dismiss: dismissSpy,
@@ -159,7 +159,7 @@ describe('appLayerEditElementModal', function () {
                     isCustom: true,
                     viewExpression: '#aaaa',
                 };
-                expect(closeSpy).toBeCalledWith({ $value: expectedElement });
+                expect(closeSpy).toHaveBeenCalledWith({ $value: expectedElement });
             });
 
             test('a bad expression should prevent call to close and set errorMessage', function () {
@@ -168,9 +168,9 @@ describe('appLayerEditElementModal', function () {
                 vm.saveElement();
 
                 const expectedErrorMessage = 'Error in custom expression, element not found: #zzzz';
-                expect(consoleErrorSpy).toBeCalledWith(new Error(expectedErrorMessage));
+                expect(consoleErrorSpy).toHaveBeenCalledWith(new Error(expectedErrorMessage));
                 expect(vm.errorMessage).toBe(expectedErrorMessage);
-                expect(closeSpy).not.toBeCalled();
+                expect(closeSpy).not.toHaveBeenCalled();
             });
         });
     });

@@ -26,7 +26,7 @@ describe('appDropTarget', function () {
             const dataTransfer = new DataTransfer();
             dataTransfer.setData('text/html', 'foo');
 
-            const dragEvent = new DragEvent('dragover', { dataTransfer: dataTransfer });
+            const dragEvent = new DragEvent('dragover', { dataTransfer });
             element[0].dispatchEvent(dragEvent);
             expect(element[0].classList).toContain('dragover');
         });
@@ -36,7 +36,7 @@ describe('appDropTarget', function () {
             dataTransfer.setData('text/html', 'foo');
 
             element[0].classList.add('dragover');
-            const dragEvent = new DragEvent('dragleave', { dataTransfer: dataTransfer });
+            const dragEvent = new DragEvent('dragleave', { dataTransfer });
             element[0].dispatchEvent(dragEvent);
             expect(element[0].classList).not.toContain('dragover');
         });
@@ -46,7 +46,7 @@ describe('appDropTarget', function () {
             dataTransfer.setData('text/html', 'foo');
 
             element[0].classList.add('dragover');
-            const dragEvent = new DragEvent('drop', { dataTransfer: dataTransfer });
+            const dragEvent = new DragEvent('drop', { dataTransfer });
             element[0].dispatchEvent(dragEvent);
             expect(element[0].classList).not.toContain('dragover');
             expect(onDropSpy).toHaveBeenCalledWith(dragEvent);

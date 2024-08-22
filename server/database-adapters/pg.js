@@ -64,7 +64,7 @@ class PgAdapter extends BaseAdapter {
 
                 return {
                     name: row.column_name,
-                    type: type,
+                    type,
                 };
             });
 
@@ -102,7 +102,7 @@ class PgAdapter extends BaseAdapter {
 
         return {
             data: res.rows,
-            sql: sql,
+            sql,
             time: end - start,
         };
     }
@@ -115,7 +115,7 @@ class PgAdapter extends BaseAdapter {
             await client.query(`SET search_path TO ${this.params.search_path}`);
         }
 
-        debug('Running query: %o', { sql: sql, params: params });
+        debug('Running query: %o', { sql, params });
 
         let res;
         try {

@@ -7,7 +7,7 @@ const databaseName = db.substring(lastSlashIndex + 1);
 const migrateMongoConfig = {
     mongodb: {
         url: db,
-        databaseName: databaseName,
+        databaseName,
     },
     migrationsDir: 'migrations',
     changelogCollectionName: 'changelog'

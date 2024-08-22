@@ -39,5 +39,5 @@ function getCookiesFromResponse (res) {
 }
 
 module.exports = {
-    login: login,
+    login,
 };

@@ -1,7 +1,6 @@
-
 const command = {
     description: 'List Urungi users',
-    usage: usage,
+    usage,
     argSpec: {},
     run,
 };

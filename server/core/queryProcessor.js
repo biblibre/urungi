@@ -218,8 +218,8 @@ function joinCollections (collectionRef, layer, currentID, previousID, safetyCou
     }
 
     return {
-        shouldJoin: shouldJoin,
-        node: node
+        shouldJoin,
+        node
     };
 }
 
@@ -322,7 +322,7 @@ function plainText (text, warnings) {
     if (secureText !== String(text)) {
         warnings.push({
             msg: 'A text fields has been modified to prevent sql injections',
-            text: text
+            text
         });
     }
     return secureText;

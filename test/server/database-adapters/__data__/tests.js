@@ -5,7 +5,7 @@ module.exports = function (client) {
         [
             '1 column',
             {
-                layer: layer,
+                layer,
                 columns: [
                     {
                         collectionID: 'artist_1',
@@ -33,7 +33,7 @@ module.exports = function (client) {
         [
             '1 date column',
             {
-                layer: layer,
+                layer,
                 columns: [
                     {
                         collectionID: 'album_1',
@@ -62,7 +62,7 @@ module.exports = function (client) {
         [
             'join, filter and order',
             {
-                layer: layer,
+                layer,
                 columns: [
                     {
                         collectionID: 'song_1',
@@ -119,7 +119,7 @@ module.exports = function (client) {
         [
             'aggregation (count)',
             {
-                layer: layer,
+                layer,
                 columns: [
                     {
                         collectionID: 'album_1',
@@ -173,7 +173,7 @@ module.exports = function (client) {
         [
             'filter by date (!=)',
             {
-                layer: layer,
+                layer,
                 columns: [
                     {
                         collectionID: 'album_1',
@@ -220,7 +220,7 @@ module.exports = function (client) {
         [
             'recordLimit',
             {
-                layer: layer,
+                layer,
                 columns: [
                     {
                         collectionID: 'song_1',
@@ -257,7 +257,7 @@ module.exports = function (client) {
         [
             'sql collection',
             {
-                layer: layer,
+                layer,
                 columns: [
                     {
                         collectionID: 'artist_album_song_1',
@@ -366,7 +366,7 @@ module.exports = function (client) {
         [
             'custom element',
             {
-                layer: layer,
+                layer,
                 columns: [
                     Object.assign({}, layer.objects[8], {
                         id: 'custom_artist_album_raw',

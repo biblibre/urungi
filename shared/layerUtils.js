@@ -37,6 +37,6 @@
     };
 
     return {
-        getElementsUsedInCustomExpression: getElementsUsedInCustomExpression,
+        getElementsUsedInCustomExpression,
     };
 }));

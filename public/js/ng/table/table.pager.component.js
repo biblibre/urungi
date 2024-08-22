@@ -28,7 +28,7 @@
 
         function goToPage (page) {
             page = Math.max(1, Math.min(vm.totalPages, page));
-            vm.onPageChange({ page: page });
+            vm.onPageChange({ page });
         }
 
         function getPages (currentPage, totalPages) {

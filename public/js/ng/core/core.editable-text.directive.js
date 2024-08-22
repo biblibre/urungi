@@ -8,7 +8,7 @@
     function appEditableText ($compile, $timeout) {
         const directive = {
             restrict: 'A',
-            link: link,
+            link,
         };
 
         return directive;
