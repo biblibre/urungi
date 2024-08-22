@@ -5,10 +5,6 @@ dashboards freely regardless of your data source.
 
 https://urungi.org
 
-[![CircleCI](https://img.shields.io/circleci/build/github/biblibre/urungi?logo=circleci)](https://circleci.com/gh/biblibre/urungi)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/biblibre/urungi?logo=lgtm)](https://lgtm.com/projects/g/biblibre/urungi/context:javascript)
-[![Codecov](https://img.shields.io/codecov/c/github/biblibre/urungi?logo=codecov)](https://codecov.io/gh/biblibre/urungi)
-
 ## Introduction
 
 * Centralize:  Connect Urungi with any SQL data source. All your stats will end
@@ -44,6 +40,8 @@ See [Upgrade](https://urungi.readthedocs.io/en/latest/upgrade.html)
 ## Tests
 
 See [testing](doc/development/testing.md)
+
+[![Build Status](https://drone.biblibre.com/api/badges/biblibre/urungi/status.svg)](https://drone.biblibre.com/biblibre/urungi)
 
 ## License
 
