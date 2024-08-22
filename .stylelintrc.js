@@ -1,7 +1,6 @@
 module.exports = {
-    "extends": "stylelint-config-standard",
+    "extends": "stylelint-config-recommended",
     "rules": {
-        "indentation": 4,
         "no-descending-specificity": null,
     },
 };

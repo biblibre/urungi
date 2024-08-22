@@ -286,7 +286,13 @@
 .sp-container button,
 .sp-container input,
 .sp-hue {
-    font: 400 12px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+    font:
+        400 12px "Lucida Grande",
+        "Lucida Sans Unicode",
+        "Lucida Sans",
+        Geneva,
+        Verdana,
+        sans-serif;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -484,7 +490,7 @@ ul {
     display: inline-block;
 }
 
-.pretty-checkbox > input[type=checkbox] {
+.pretty-checkbox > input[type="checkbox"] {
     display: none;
 }
 
@@ -585,7 +591,11 @@ ul {
     touch-action: none;
     outline: 0;
     background: #fff;
-    transition: height 0.18s ease, width 0.18s ease, background-color 0.28s ease, border 0.18s ease;
+    transition:
+        height 0.18s ease,
+        width 0.18s ease,
+        background-color 0.28s ease,
+        border 0.18s ease;
 }
 
 .ui-slider-horizontal .ui-slider-handle {

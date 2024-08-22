@@ -84,9 +84,10 @@
     "merge-stream": "^2.0.0",
     "mongodb-memory-server": "^10.0.0",
     "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.3",
     "set-cookie-parser": "^2.7.0",
-    "stylelint": "^13.13.1",
-    "stylelint-config-standard": "^22.0.0",
+    "stylelint": "^16.8.2",
+    "stylelint-config-recommended": "^14.0.1",
     "supertest": "^6.3.4",
     "vinyl": "^2.2.1"
   },
@@ -96,7 +97,7 @@
     "posttest": "run-s -s -c lint:*",
     "postinstall": "node script/copy-static-files.js",
     "lint:js": "eslint .",
-    "lint:css": "stylelint public/css public/themes",
+    "lint:css": "stylelint public/css/*.css public/themes/*.css && prettier -c public/css/*.css public/themes/*.css",
     "lint:html": "htmlhint public/partials"
   },
   "config": {

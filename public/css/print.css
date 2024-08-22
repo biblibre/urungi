@@ -1,6 +1,8 @@
 @media print {
     /** Setting margins */
-    @page { margin: 10mm 5mm; }
+    @page {
+        margin: 10mm 5mm;
+    }
 
     *::before,
     *::after,

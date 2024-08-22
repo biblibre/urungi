@@ -180,7 +180,12 @@ pre strong {
     outline: none;
     padding: 11px 15px;
     font-size: 90%;
-    font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family:
+        Open Sans,
+        Helvetica Neue,
+        Helvetica,
+        Arial,
+        sans-serif;
     box-shadow: 0 0 10px 2px rgba(63, 70, 82, 0.67);
 }
 
@@ -243,7 +248,8 @@ section {
     display: none;
     z-index: 11;
     color: #fff;
-    background: url(https://static.canva.com/static/images/icon_tabs_trashcan.png) 50% 50% no-repeat;
+    background: url(https://static.canva.com/static/images/icon_tabs_trashcan.png)
+        50% 50% no-repeat;
     text-align: center;
     line-height: 12px;
     font-size: 0.7em;
@@ -293,8 +299,12 @@ section {
     text-decoration: none;
     line-height: 26px;
     text-align: center;
-    transition: background-color 0.15s linear, -webkit-transform 0.05s linear;
-    transition: background-color 0.15s linear, transform 0.05s linear;
+    transition:
+        background-color 0.15s linear,
+        -webkit-transform 0.05s linear;
+    transition:
+        background-color 0.15s linear,
+        transform 0.05s linear;
 }
 
 .results {
@@ -375,8 +385,14 @@ section {
 .infoPanelGallery.laidOut li {
     position: absolute;
     z-index: 3;
-    transition: opacity 0.3s linear, -webkit-transform 0.3s linear, top 0.3s ease-out;
-    transition: opacity 0.3s linear, transform 0.3s linear, top 0.3s ease-out;
+    transition:
+        opacity 0.3s linear,
+        -webkit-transform 0.3s linear,
+        top 0.3s ease-out;
+    transition:
+        opacity 0.3s linear,
+        transform 0.3s linear,
+        top 0.3s ease-out;
 }
 
 .gallery li:first-child {
@@ -416,8 +432,12 @@ section {
     opacity: 1;
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
-    transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
-    transition: transform 0.5s ease, opacity 0.5s ease;
+    transition:
+        -webkit-transform 0.5s ease,
+        opacity 0.5s ease;
+    transition:
+        transform 0.5s ease,
+        opacity 0.5s ease;
 }
 
 .gallery a {
@@ -431,7 +451,9 @@ section {
 .templateGallery a {
     border: 2px solid transparent;
     outline: 2px solid rgba(0, 184, 217, 0);
-    transition: box-shadow 0.3s linear, outline 0.3s linear;
+    transition:
+        box-shadow 0.3s linear,
+        outline 0.3s linear;
 }
 
 .gallery img {
@@ -442,8 +464,12 @@ section {
     z-index: 4;
     width: 100%;
     height: auto;
-    transition: opacity 0.15s linear, -webkit-transform 0.15s linear;
-    transition: opacity 0.15s linear, transform 0.15s linear;
+    transition:
+        opacity 0.15s linear,
+        -webkit-transform 0.15s linear;
+    transition:
+        opacity 0.15s linear,
+        transform 0.15s linear;
 }
 
 .infoPanelGallery .price {
@@ -535,7 +561,12 @@ section {
     color: #fff;
     cursor: pointer;
     display: inline-block;
-    font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-family:
+        Open Sans,
+        Helvetica Neue,
+        Helvetica,
+        Arial,
+        sans-serif;
     font-size: 14px;
     font-weight: 400;
     margin: 0;
@@ -546,7 +577,10 @@ section {
     position: relative;
     text-align: center;
     text-decoration: none;
-    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    transition:
+        background-color 0.15s,
+        border-color 0.15s,
+        color 0.15s;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -562,8 +596,12 @@ section {
     margin: 0 0 0.5em;
 }
 
-.button:focus { border-color: #83a82b; }
-.button:hover { background-color: #a5d92b; }
+.button:focus {
+    border-color: #83a82b;
+}
+.button:hover {
+    background-color: #a5d92b;
+}
 
 .button::-moz-focus-inner {
     border: 0;

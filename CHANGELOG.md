@@ -33,6 +33,8 @@ Several pages already work without any AngularJS code:
 - Added liquidjs 10.16.3
 - Added merge-stream 2.0.0 (dev)
 - Added negotiator 0.6.3
+- Added prettier 3.3.3 (dev)
+- Added stylelint-config-recommended 14.0.1 (dev)
 - Added vinyl 2.2.1 (dev)
 - Updated angular-mocks to 1.8.3 (dev)
 - Updated angular-sanitize to 1.8.3
@@ -53,12 +55,14 @@ Several pages already work without any AngularJS code:
 - Updated oracledb to 5.5.0
 - Updated pg to 8.12.0
 - Updated set-cookie-parser to 2.7.0 (dev)
+- Updated stylelint to 16.8.2 (dev)
 - Updated supertest to 6.3.4 (dev)
 - Removed angular-intro.js
 - Removed angular-gettext
 - Removed angular-route
 - Removed angularjs-bootstrap-datetimepicker
 - Removed ejs
+- Removed stylelint-config-standard
 
 ## [3.2.4] - 2024-07-09
 
