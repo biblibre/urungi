@@ -28,8 +28,9 @@ router.get('/:datasourceId', async function (req, res) {
             if (!datasource) {
                 return res.sendStatus(404);
             }
+            datasource = datasource.toObject({ getters: true });
         }
-        res.render('datasource/edit', { datasource: datasource.toObject({ getters: true }) });
+        res.render('datasource/edit', { datasource });
     } catch (err) {
         console.error(err.message);
         return res.sendStatus(404);
