@@ -40,6 +40,7 @@ Several pages already work without any AngularJS code:
 - Updated angular-sanitize to 1.8.3
 - Updated arg to 5.0.2
 - Updated clipboard to 2.0.11
+- Updated connect-mongo to 5.1.0
 - Updated config to 3.3.12
 - Updated cookie-parser to 1.4.6
 - Updated eslint to 8.57.0 (dev)
@@ -53,7 +54,8 @@ Several pages already work without any AngularJS code:
 - Updated jest to 29.7.0 (dev)
 - Updated jquery to 3.7.1
 - Updated jquery-validation to 1.21.0
-- Updated mongoose to 7.8.1
+- Updated migrate-mongo to 11.0.0
+- Updated mongoose to 8.5.3
 - Updated mongodb-memory-server to 10.0.0 (dev)
 - Updated mssql to 11.0.1
 - Updated oracledb to 6.6.0

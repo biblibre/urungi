@@ -306,7 +306,7 @@ describe('Reports API', function () {
             expect(res.body.item).toHaveProperty('_id');
             expect(res.body.item).toHaveProperty('history');
 
-            await Report.findByIdAndRemove(res.body.item._id);
+            await Report.findByIdAndDelete(res.body.item._id);
         });
     });
 
