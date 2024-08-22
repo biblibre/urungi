@@ -43,6 +43,7 @@ Several pages already work without any AngularJS code:
 - Updated eslint-plugin-import to 2.29.1 (dev)
 - Updated eslint-plugin-promise to 5.2.0 (dev)
 - Updated express-session to 1.18.0
+- Updated htmlhint to 1.1.4 (dev)
 - Updated jest to 29.7.0 (dev)
 - Updated jquery to 3.7.1
 - Updated jquery-validation to 1.21.0

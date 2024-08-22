@@ -77,7 +77,7 @@
     "gulp-angular-templatecache": "^3.0.0",
     "gulp-less": "^5.0.0",
     "gulp-nodemon": "^2.5.0",
-    "htmlhint": "^0.15.2",
+    "htmlhint": "^1.1.4",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-jasmine2": "^29.7.0",
