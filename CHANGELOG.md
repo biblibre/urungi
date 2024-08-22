@@ -65,6 +65,7 @@ Several pages already work without any AngularJS code:
 - Removed angular-route
 - Removed angularjs-bootstrap-datetimepicker
 - Removed ejs
+- Removed node-fetch
 - Removed stylelint-config-standard
 
 ## [3.2.4] - 2024-07-09

@@ -1,5 +1,4 @@
 const config = require('config');
-const fetch = require('node-fetch');
 
 module.exports = {
     isConfigured,
@@ -76,5 +75,9 @@ async function render (url, endpoint, options) {
     if (!(response.ok)) {
         throw new Error('Export failed');
     }
-    return response.buffer();
+
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    return buffer;
 }
