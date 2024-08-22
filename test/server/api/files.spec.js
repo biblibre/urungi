@@ -17,7 +17,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { mongoose.connection.close(resolve); });
+    await mongoose.connection.close();
     await mongod.stop();
 });
 
@@ -41,7 +41,7 @@ describe('Files API', function () {
         });
 
         afterAll(async function () {
-            files.forEach(async file => { await file.remove(); });
+            files.forEach(async file => { await file.deleteOne(); });
         });
 
         describe('when not authenticated', function () {

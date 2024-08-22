@@ -76,7 +76,7 @@ async function deleteLayer (req, res, next) {
             return res.status(403).json({ error: 'This layer cannot be deleted because at least one dashboard is using it (' + dashboards.map(dashboard => dashboard.dashboardName).join(', ') + ')' });
         }
 
-        await req.$layer.remove();
+        await req.$layer.deleteOne();
         res.sendStatus(204);
     } catch (err) {
         next(err);

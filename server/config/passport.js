@@ -9,7 +9,7 @@ module.exports = function (passport) {
     });
 
     passport.deserializeUser(function (id, done) {
-        User.findById(id, done);
+        User.findById(id).then(user => { done(null, user); });
     });
 
     passport.use(new LocalStrategy({

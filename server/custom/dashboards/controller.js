@@ -86,7 +86,7 @@ exports.DashboardsUpdate = function (req, res) {
 exports.DashboardsDelete = async function (req, res) {
     const dashboard = await getDashboardFromRequest(req);
     if (dashboard) {
-        dashboard.remove().then(() => {
+        dashboard.deleteOne().then(() => {
             res.status(200).json({ result: 1, msg: 'Dashboard deleted' });
         }, err => {
             console.error(err);

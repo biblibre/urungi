@@ -41,7 +41,7 @@
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "migrate-mongo": "^8.2.3",
     "moment": "^2.29.1",
-    "mongoose": "^6.0.11",
+    "mongoose": "^7.8.1",
     "mssql": "^6.3.2",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
@@ -80,7 +80,7 @@
     "htmlhint": "^0.15.2",
     "jest": "^27.3.1",
     "merge-stream": "^2.0.0",
-    "mongodb-memory-server": "^7.5.1",
+    "mongodb-memory-server": "^10.0.0",
     "npm-run-all": "^4.1.5",
     "set-cookie-parser": "^2.4.8",
     "stylelint": "^13.13.1",
@@ -103,7 +103,7 @@
     }
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=18.0.0"
   },
   "repository": {
     "type": "git",

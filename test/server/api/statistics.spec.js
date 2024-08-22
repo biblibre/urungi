@@ -11,7 +11,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { mongoose.connection.close(resolve); });
+    await mongoose.connection.close();
     await mongod.stop();
 });
 
@@ -35,9 +35,9 @@ describe('Statistics API', function () {
 
     afterEach(async function () {
         await Promise.all([
-            statistic1.remove(),
-            statistic2.remove(),
-            statistic3.remove(),
+            statistic1.deleteOne(),
+            statistic2.deleteOne(),
+            statistic3.deleteOne(),
         ]);
     });
 

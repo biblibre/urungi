@@ -22,7 +22,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { mongoose.connection.close(resolve); });
+    await mongoose.connection.close();
     await mongod.stop();
 });
 
@@ -110,7 +110,7 @@ describe('Datasources API', function () {
 
     afterAll(async function () {
         for (const entry of entries) {
-            await entry.remove();
+            await entry.deleteOne();
         }
     });
 
@@ -217,7 +217,7 @@ describe('Datasources API', function () {
                 d = await Datasource.create(datasource);
             });
             afterAll(async function () {
-                await d.remove();
+                await d.deleteOne();
             });
 
             describe('when connection is ok', function () {
@@ -262,7 +262,7 @@ describe('Datasources API', function () {
                 d = await Datasource.create(datasource);
             });
             afterAll(async function () {
-                await d.remove();
+                await d.deleteOne();
             });
 
             describe('when connection is ok', function () {
@@ -316,7 +316,7 @@ describe('Datasources API', function () {
                 d = await Datasource.create(datasource);
             });
             afterAll(async function () {
-                await d.remove();
+                await d.deleteOne();
             });
 
             describe('when connection is ok', function () {

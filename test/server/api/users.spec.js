@@ -11,7 +11,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { mongoose.connection.close(resolve); });
+    await mongoose.connection.close();
     await mongod.stop();
 });
 
@@ -292,8 +292,8 @@ describe('Users API', function () {
                     privateDashboards: 0,
                 });
 
-                await report.remove();
-                await dashboard.remove();
+                await report.deleteOne();
+                await dashboard.deleteOne();
             });
         });
 
@@ -325,8 +325,8 @@ describe('Users API', function () {
                     privateDashboards: 0,
                 });
 
-                await report.remove();
-                await dashboard.remove();
+                await report.deleteOne();
+                await dashboard.deleteOne();
             });
         });
     });
@@ -368,7 +368,7 @@ describe('Users API', function () {
                 expect(res.body.items).toHaveLength(1);
                 expect(res.body.items[0]).toHaveProperty('reportName', 'Report');
 
-                await report.remove();
+                await report.deleteOne();
             });
         });
 
@@ -391,7 +391,7 @@ describe('Users API', function () {
                 expect(res.body.items).toHaveLength(1);
                 expect(res.body.items[0]).toHaveProperty('reportName', 'Report');
 
-                await report.remove();
+                await report.deleteOne();
             });
         });
     });
@@ -432,7 +432,7 @@ describe('Users API', function () {
                 expect(res.body.items).toHaveLength(1);
                 expect(res.body.items[0]).toHaveProperty('dashboardName', 'Dashboard');
 
-                await dashboard.remove();
+                await dashboard.deleteOne();
             });
         });
 
@@ -454,7 +454,7 @@ describe('Users API', function () {
                 expect(res.body.items).toHaveLength(1);
                 expect(res.body.items[0]).toHaveProperty('dashboardName', 'Dashboard');
 
-                await dashboard.remove();
+                await dashboard.deleteOne();
             });
         });
     });
@@ -468,8 +468,8 @@ describe('Users API', function () {
         });
 
         afterAll(async function () {
-            await role.remove();
-            await user1.remove();
+            await role.deleteOne();
+            await user1.deleteOne();
         });
 
         describe('when not authenticated', function () {
@@ -511,8 +511,8 @@ describe('Users API', function () {
         });
 
         afterAll(async function () {
-            await role.remove();
-            await user1.remove();
+            await role.deleteOne();
+            await user1.deleteOne();
         });
 
         describe('when not authenticated', function () {

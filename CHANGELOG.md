@@ -18,6 +18,11 @@ Several pages already work without any AngularJS code:
 - Import
 - Export
 
+### Breaking changes
+
+- Node.js 12, 14 and 16 are no longer supported. Supported versions are 18 and 20
+- MongoDB 4.0, 4.2 and 4.4 are no longer supported. Supported versions are 5.0, 6.0 and 7.0
+
 ### Dependencies
 
 - Added gettext.js 2.0.3
@@ -27,6 +32,8 @@ Several pages already work without any AngularJS code:
 - Added merge-stream 2.0.0 (dev)
 - Added negotiator 0.6.3
 - Added vinyl 2.2.1 (dev)
+- Updated mongoose to 7.8.1
+- Updated mongodb-memory-server to 10.0.0 (dev)
 - Removed angular-intro.js
 - Removed angular-gettext
 - Removed angular-route

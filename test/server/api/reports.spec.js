@@ -11,7 +11,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { mongoose.connection.close(resolve); });
+    await mongoose.connection.close();
     await mongod.stop();
 });
 
@@ -79,9 +79,9 @@ describe('Reports API', function () {
     });
 
     afterEach(async function () {
-        await report.remove();
-        await layer.remove();
-        await datasource.remove();
+        await report.deleteOne();
+        await layer.deleteOne();
+        await datasource.deleteOne();
     });
 
     describe('GET /api/reports/find-all on user "non-admin" session', function () {
@@ -112,8 +112,8 @@ describe('Reports API', function () {
             });
         });
         afterEach(async function () {
-            await report2.remove();
-            await user2.remove();
+            await report2.deleteOne();
+            await user2.deleteOne();
         });
         it('should find all reports and their data for user connected if not an admin', async function () {
             const res = await request(app).get('/api/reports/find-all?populate=layer')
@@ -166,8 +166,8 @@ describe('Reports API', function () {
             });
         });
         afterEach(async function () {
-            await report2.remove();
-            await user2.remove();
+            await report2.deleteOne();
+            await user2.deleteOne();
         });
         it('should find all reports and their data for all users', async function () {
             const res = await request(app).get('/api/reports/find-all?populate=layer')
@@ -220,8 +220,8 @@ describe('Reports API', function () {
         });
 
         afterAll(async function () {
-            await layer3.remove();
-            await report3.remove();
+            await layer3.deleteOne();
+            await report3.deleteOne();
         });
 
         it('should find all reports and their data', async function () {
@@ -340,7 +340,7 @@ describe('Reports API', function () {
             user2Headers = await helpers.login(app, 'johndoe', 'password');
         });
         afterAll(async function () {
-            await user2.remove();
+            await user2.deleteOne();
         });
         it('should update a report', async function () {
             const res = await request(app).post('/api/reports/update/' + report.id)
@@ -502,12 +502,12 @@ describe('Reports API', function () {
             });
         });
         afterEach(async function () {
-            await userAdmin.remove();
-            await userGuest.remove();
-            await reportAdmin.remove();
-            await reportAdminShared.remove();
-            await reportAdminPublic.remove();
-            await reportGuest.remove();
+            await userAdmin.deleteOne();
+            await userGuest.deleteOne();
+            await reportAdmin.deleteOne();
+            await reportAdminShared.deleteOne();
+            await reportAdminPublic.deleteOne();
+            await reportGuest.deleteOne();
         });
         it('should get report with Admin Role on Admin Report', async function () {
             const res = await request(app).get('/api/reports/get-report/' + reportAdmin.id)

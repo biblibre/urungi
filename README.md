@@ -22,8 +22,8 @@ https://urungi.org
 
 ## Requirements
 
-- [nodejs](https://nodejs.org) (>= 12.x) and [npm](https://www.npmjs.com)
-- [MongoDB](https://www.mongodb.org) (>= 4.0)
+- [nodejs](https://nodejs.org) (18.x or 20.x) and [npm](https://www.npmjs.com)
+- [MongoDB](https://www.mongodb.org) (5.0, 6.0 or 7.0)
 
 ## Installation
 

@@ -11,7 +11,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { mongoose.connection.close(resolve); });
+    await mongoose.connection.close();
     await mongod.stop();
 });
 
@@ -40,7 +40,7 @@ describe('Layers API', function () {
     });
 
     afterAll(async function () {
-        await datasource.remove();
+        await datasource.deleteOne();
     });
 
     describe('GET /api/layers', function () {
@@ -70,7 +70,7 @@ describe('Layers API', function () {
             expect(res.body).toHaveProperty('_id');
             expect(res.body).toHaveProperty('objects');
 
-            await layer.remove();
+            await layer.deleteOne();
         });
     });
 
@@ -125,7 +125,7 @@ describe('Layers API', function () {
             expect(res.body.objects).toHaveLength(1);
             expect(res.body.objects[0]).toHaveProperty('component', 2);
 
-            await layer.remove();
+            await layer.deleteOne();
         });
     });
 
@@ -152,8 +152,8 @@ describe('Layers API', function () {
             expect(res.status).toBe(403);
             expect(res.body).toHaveProperty('error', 'This layer cannot be deleted because at least one dashboard is using it (Dashboard)');
 
-            await dashboard.remove();
-            await layer.remove();
+            await dashboard.deleteOne();
+            await layer.deleteOne();
         });
 
         it('should not delete a layer with reports', async function () {
@@ -167,8 +167,8 @@ describe('Layers API', function () {
 
             expect(res.body).toHaveProperty('error', 'This layer cannot be deleted because at least one report is using it (Report)');
 
-            await report.remove();
-            await layer.remove();
+            await report.deleteOne();
+            await layer.deleteOne();
         });
     });
 
@@ -184,7 +184,7 @@ describe('Layers API', function () {
 
             expect(res.body).toHaveProperty('status', 'active');
 
-            await layer.remove();
+            await layer.deleteOne();
         });
     });
 });

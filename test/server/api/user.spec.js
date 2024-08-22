@@ -11,7 +11,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { mongoose.connection.close(resolve); });
+    await mongoose.connection.close();
     await mongod.stop();
 });
 
@@ -126,10 +126,10 @@ describe('User API', function () {
 
         afterEach(async function () {
             await Promise.all([
-                dashboard.remove(),
-                report.remove(),
-                layer.remove(),
-                datasource.remove(),
+                dashboard.deleteOne(),
+                report.deleteOne(),
+                layer.deleteOne(),
+                datasource.deleteOne(),
             ]);
         });
 
@@ -169,7 +169,7 @@ describe('User API', function () {
             expect(res.body).not.toHaveProperty('users');
             expect(res.body).not.toHaveProperty('roles');
 
-            await user.remove();
+            await user.deleteOne();
         });
     });
 
@@ -213,8 +213,8 @@ describe('User API', function () {
         });
 
         afterEach(async function () {
-            await report.remove();
-            await dashboard.remove();
+            await report.deleteOne();
+            await dashboard.deleteOne();
         });
 
         describe('when authenticated as a normal user', function () {
@@ -338,7 +338,7 @@ describe('User API', function () {
         });
         afterEach(async function () {
             await Promise.all([
-                user.remove(),
+                user.deleteOne(),
             ]);
         });
 

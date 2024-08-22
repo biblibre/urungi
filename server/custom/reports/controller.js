@@ -260,7 +260,7 @@ exports.UnshareReport = async function (req, res) {
 exports.ReportsDelete = async function (req, res) {
     const report = await getReportFromRequest(req);
     if (report) {
-        report.remove().then(() => {
+        report.deleteOne().then(() => {
             res.status(200).json({ result: 1, msg: 'Report deleted' });
         }, err => {
             console.error(err);

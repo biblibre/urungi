@@ -148,7 +148,7 @@ function unsetUserRole (req, res) {
 
 async function deleteUser (req, res, next) {
     try {
-        await req.$user.remove();
+        await req.$user.deleteOne();
         res.sendStatus(204);
     } catch (err) {
         next(err);

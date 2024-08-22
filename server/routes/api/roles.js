@@ -65,7 +65,7 @@ async function deleteRole (req, res, next) {
             { },
             { $pull: { roles: req.$role.id } }
         );
-        await req.$role.remove();
+        await req.$role.deleteOne();
         res.sendStatus(204);
     } catch (err) {
         next(err);

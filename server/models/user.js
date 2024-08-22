@@ -86,8 +86,7 @@ userSchema.virtual('password').set(function (password) {
 });
 
 userSchema.statics.isValidUserPassword = function (username, password, done) {
-    this.findOne({ $or: [{ userName: username }, { email: username }], status: 'active' }, function (err, user) {
-        if (err) return done(err);
+    this.findOne({ $or: [{ userName: username }, { email: username }], status: 'active' }).then(function (user) {
         if (!user) return done(null, false, { message: 'Username or password incorrect' });
 
         const hash = hashPassword(password, user.salt);
@@ -96,6 +95,8 @@ userSchema.statics.isValidUserPassword = function (username, password, done) {
         } else {
             done(null, false, { message: 'Username or password incorrect' });
         }
+    }, function (err) {
+        done(err);
     });
 };
 
@@ -213,7 +214,7 @@ userSchema.methods.getObjects = async function () {
     return folders;
 };
 
-userSchema.post('remove', async function (user, next) {
+userSchema.post('deleteOne', { document: true, query: false }, async function (user, next) {
     const Report = user.model('Report');
     await Report.updateMany({ owner: user._id }, { $unset: { owner: '' } });
     await Report.updateMany({ createdBy: user._id }, { $unset: { createdBy: '' } });

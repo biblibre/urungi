@@ -21,7 +21,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { mongoose.connection.close(resolve); });
+    await mongoose.connection.close();
     await mongod.stop();
 });
 
@@ -78,8 +78,8 @@ describe('Query API', function () {
                 }));
             });
             afterEach(async function () {
-                await layer.remove();
-                await ds.remove();
+                await layer.deleteOne();
+                await ds.deleteOne();
             });
 
             it('should call getQueryResults with correct parameters', async function () {
@@ -177,8 +177,8 @@ describe('Query API', function () {
                 }));
             });
             afterEach(async function () {
-                await layer.remove();
-                await ds.remove();
+                await layer.deleteOne();
+                await ds.deleteOne();
             });
 
             it('should call getQueryResults with correct parameters', async function () {

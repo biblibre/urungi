@@ -11,7 +11,7 @@ beforeAll(async () => {
     app = require('../../../server/app');
 });
 afterAll(async () => {
-    await new Promise(resolve => { mongoose.connection.close(resolve); });
+    await mongoose.connection.close();
     await mongod.stop();
 });
 
@@ -50,7 +50,7 @@ describe('Dashboards API', function () {
     });
     afterEach(async function removeDashboard () {
         for (const dashboard of dashboards) {
-            await dashboard.remove();
+            await dashboard.deleteOne();
         }
     });
 
@@ -158,7 +158,7 @@ describe('Dashboards API', function () {
             user2Headers = await helpers.login(app, 'johndoe', 'password');
         });
         afterAll(async function () {
-            await user2.remove();
+            await user2.deleteOne();
         });
         it('should update a dashboard', async function () {
             const res = await request(app).post('/api/dashboards/update/' + adminDashboard.id)
