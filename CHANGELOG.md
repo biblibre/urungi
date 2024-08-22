@@ -34,9 +34,25 @@ Several pages already work without any AngularJS code:
 - Added merge-stream 2.0.0 (dev)
 - Added negotiator 0.6.3
 - Added vinyl 2.2.1 (dev)
+- Updated angular-mocks to 1.8.3 (dev)
+- Updated angular-sanitize to 1.8.3
+- Updated arg to 5.0.2
+- Updated clipboard to 2.0.11
+- Updated config to 3.3.12
+- Updated cookie-parser to 1.4.6
+- Updated eslint-plugin-import to 2.29.1 (dev)
+- Updated eslint-plugin-promise to 5.2.0 (dev)
+- Updated express-session to 1.18.0
 - Updated jest to 29.7.0 (dev)
+- Updated jquery to 3.7.1
+- Updated jquery-validation to 1.21.0
 - Updated mongoose to 7.8.1
 - Updated mongodb-memory-server to 10.0.0 (dev)
+- Updated mssql to 6.4.1
+- Updated oracledb to 5.5.0
+- Updated pg to 8.12.0
+- Updated set-cookie-parser to 2.7.0 (dev)
+- Updated supertest to 6.3.4 (dev)
 - Removed angular-intro.js
 - Removed angular-gettext
 - Removed angular-route
