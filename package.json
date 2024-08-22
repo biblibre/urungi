@@ -51,7 +51,7 @@
     "node-fetch": "^2.6.5",
     "nodemailer": "^6.7.0",
     "numeral": "^2.0.6",
-    "oracledb": "^5.5.0",
+    "oracledb": "^6.6.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "~1.0.0",
