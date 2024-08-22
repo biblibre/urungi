@@ -34,7 +34,7 @@ Available options:
 
 Examples:
 
-    cli import --datasource-map=5e18537d852fdfb9f0f9a777:5e18538872b444e87d0053d1 \\\\
+    cli import --datasource-map=5e18537d852fdfb9f0f9a777:5e18538872b444e87d0053d1 \\
         --datasource-map=*:5e1853a1aa2814a2b33a9080 export.json
 
     This will replace all \`datasourceID\` in layers by:

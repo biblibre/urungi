@@ -27,11 +27,14 @@ Several pages already work without any AngularJS code:
 
 - Added gettext.js 2.0.3
 - Added gettext-parser 7.0.1 (dev)
+- Added jest-environment-jsdom 29.7.0 (dev)
+- Added jest-jasmine2 29.7.0 (dev)
 - Added jstree 3.3.12
 - Added liquidjs 10.16.3
 - Added merge-stream 2.0.0 (dev)
 - Added negotiator 0.6.3
 - Added vinyl 2.2.1 (dev)
+- Updated jest to 29.7.0 (dev)
 - Updated mongoose to 7.8.1
 - Updated mongodb-memory-server to 10.0.0 (dev)
 - Removed angular-intro.js
