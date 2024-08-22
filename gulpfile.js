@@ -21,7 +21,6 @@ const templatesModules = [
     'datasource-edit',
     'datasource-list',
     'inspector',
-    'import',
     'layer-edit',
     'layer-list',
     'modal',

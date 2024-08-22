@@ -48,6 +48,7 @@ Several pages already work without any AngularJS code:
 - Updated eslint-plugin-jest to 28.8.0 (dev)
 - Updated eslint-plugin-promise to 6.6.0 (dev)
 - Updated express-session to 1.18.0
+- Updated gulp to 5.0.0 (dev)
 - Updated htmlhint to 1.1.4 (dev)
 - Updated jest to 29.7.0 (dev)
 - Updated jquery to 3.7.1
@@ -60,6 +61,7 @@ Several pages already work without any AngularJS code:
 - Updated set-cookie-parser to 2.7.0 (dev)
 - Updated stylelint to 16.8.2 (dev)
 - Updated supertest to 7.0.0 (dev)
+- Updated vinyl to 3.0.0 (dev)
 - Removed angular-intro.js
 - Removed angular-gettext
 - Removed angular-route
