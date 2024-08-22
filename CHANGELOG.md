@@ -59,7 +59,7 @@ Several pages already work without any AngularJS code:
 - Updated pg to 8.12.0
 - Updated set-cookie-parser to 2.7.0 (dev)
 - Updated stylelint to 16.8.2 (dev)
-- Updated supertest to 6.3.4 (dev)
+- Updated supertest to 7.0.0 (dev)
 - Removed angular-intro.js
 - Removed angular-gettext
 - Removed angular-route
