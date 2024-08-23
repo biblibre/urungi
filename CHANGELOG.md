@@ -51,6 +51,7 @@ Several pages already work without any AngularJS code:
 - Updated express-session to 1.18.0
 - Updated gulp to 5.0.0 (dev)
 - Updated htmlhint to 1.1.4 (dev)
+- Updated intro.js to 7.2.0
 - Updated jest to 29.7.0 (dev)
 - Updated jquery to 3.7.1
 - Updated jquery-validation to 1.21.0

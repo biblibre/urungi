@@ -36,22 +36,15 @@
             const introOptions = {
                 nextLabel: i18n.gettext('Next'),
                 prevLabel: i18n.gettext('Back'),
-                skipLabel: '&times;',
                 doneLabel: i18n.gettext('Done'),
-                tooltipPosition: 'auto',
-                showStepNumbers: false,
                 steps: [
                     {
-                        intro: '<h4>' +
-                            i18n.gettext('Reports') +
-                            '</h4><p><strong>' +
-                            i18n.gettext('Here you can create and execute reports.') +
-                            '</strong></p>',
+                        title: i18n.gettext('Reports'),
+                        intro: i18n.gettext('Here you can create and execute reports.'),
                     },
                     {
-                        intro: '<h4>' +
-                            i18n.gettext('Reports') +
-                            '</h4><p>' +
+                        title: i18n.gettext('Reports'),
+                        intro: '<p>' +
                             i18n.gettext('Choose a report type and drag and drop elements from the selected layer to compose your report.') +
                             '</p><p>' +
                             i18n.gettext('You can also add runtime filters to split your data in real time.') +
@@ -59,17 +52,13 @@
                     },
                     {
                         element: '#newReportButton',
-                        intro: '<h4>' +
-                            i18n.gettext('New Report') +
-                            '</h4><p>' +
-                            i18n.gettext('Click here to create a new report.') +
-                            '</p>',
+                        title: i18n.gettext('New Report'),
+                        intro: i18n.gettext('Click here to create a new report.'),
                     },
                     {
-                        element: '#reportList',
-                        intro: '<h4>' +
-                            i18n.gettext('Reports list') +
-                            '</h4><p><strong>' +
+                        element: 'app-reports-table',
+                        title: i18n.gettext('Reports list'),
+                        intro: '<p><strong>' +
                             i18n.gettext('Here all your reports are listed.') +
                             '</strong></p><p>' +
                             i18n.gettext('Click over a report\'s name to execute it.') +
@@ -79,17 +68,14 @@
                     },
                     {
                         element: '.btn-edit',
-                        intro: '<h4>' +
-                            i18n.gettext('Edit report') +
-                            '</h4><p>' +
-                            i18n.gettext('Click here to modify the report.') +
-                            '</p>',
+                        title: i18n.gettext('Edit report'),
+                        intro: i18n.gettext('Click here to modify the report.'),
                     },
                     {
                         element: '.btn-delete',
-                        intro: '<h4>' +
-                            i18n.gettext('Delete report') +
-                            '</h4><p><strong>' +
+                        title: i18n.gettext('Delete report'),
+                        intro:
+                            '<p><strong>' +
                             i18n.gettext('Click here to delete the report.') +
                             '</strong></p><p>' +
                             i18n.gettext('Once deleted the report will not be recoverable again.') +
@@ -99,17 +85,13 @@
                     },
                     {
                         element: '.btn-duplicate',
-                        intro: '<h4>' +
-                            i18n.gettext('Duplicate report') +
-                            '</h4><p>' +
-                            i18n.gettext('Click here to duplicate the report.') +
-                            '</p>',
+                        title: i18n.gettext('Duplicate report'),
+                        intro: i18n.gettext('Click here to duplicate the report.'),
                     },
                     {
                         element: '.published-tag',
-                        intro: '<h4>' +
-                            i18n.gettext('Report published') +
-                            '</h4><p><strong>' +
+                        title: i18n.gettext('Report published'),
+                        intro: '<p><strong>' +
                             i18n.gettext('This label indicates that this report is public.') +
                             '</strong></p><p>' +
                             i18n.gettext('If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report.') +

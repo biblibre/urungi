@@ -734,16 +734,12 @@
         $scope.IntroOptions = {
             nextLabel: i18n.gettext('Next'),
             prevLabel: i18n.gettext('Back'),
-            skipLabel: i18n.gettext('Skip'),
             doneLabel: i18n.gettext('Done'),
-            tooltipPosition: 'auto',
-            showStepNumbers: false,
             steps: [
                 {
                     element: '#elementsTab',
-                    intro: '<h4>' +
-                        i18n.gettext('The layer catalog') +
-                        '</h4><p><strong>' +
+                    title: i18n.gettext('The layer catalog'),
+                    intro: '<p><strong>' +
                         i18n.gettext('Access here the different data elements of every layer that you have access on') +
                         '</strong></p><p>' +
                         i18n.gettext('Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)') +
@@ -751,9 +747,8 @@
                 },
                 {
                     element: '#selectLayer',
-                    intro: '<h4>' +
-                        i18n.gettext('The layer selector') +
-                        '</h4><p><strong>' +
+                    title: i18n.gettext('The layer selector'),
+                    intro: '<p><strong>' +
                         i18n.gettext('Select here the layer where your query will be based on.') +
                         '</strong></p><p>' +
                         i18n.gettext('One query can only be based on one layer, you can not mix elements from different layers in the same query') +
@@ -761,25 +756,18 @@
                 },
                 {
                     element: '#reportType',
-                    intro: '<h4>' +
-                        i18n.gettext('Report Type selector') +
-                        '</h4><p>' +
-                        i18n.gettext('Click over one of the different report types to change the visualization of the data you choose') +
-                        '</p>',
+                    title: i18n.gettext('Report Type selector'),
+                    intro: i18n.gettext('Click over one of the different report types to change the visualization of the data you choose'),
                 },
                 {
                     element: '#dropArea',
-                    intro: '<h4>' +
-                        i18n.gettext('Results area') +
-                        '</h4><p>' +
-                        i18n.gettext('As you define the query dragging and dropping in the areas above, the results of the query will appear here') +
-                        '</p>',
+                    title: i18n.gettext('Results area'),
+                    intro: i18n.gettext('As you define the query dragging and dropping in the areas above, the results of the query will appear here'),
                 },
                 {
                     element: '#queryRefresh',
-                    intro: '<h4>' +
-                        i18n.gettext('Query refresh') +
-                        '</h4><p><strong>' +
+                    title: i18n.gettext('Query refresh'),
+                    intro: '<p><strong>' +
                         i18n.gettext('Use this button to refresh the results') +
                         '</strong></p><p>' +
                         i18n.gettext('After building your query, refresh to view the report.') +
@@ -787,9 +775,8 @@
                 },
                 {
                     element: '#columnsDropzone',
-                    intro: '<h4>' +
-                        i18n.gettext('Columns / results drop zone') +
-                        '</h4><p><strong>' +
+                    title: i18n.gettext('Columns / results drop zone'),
+                    intro: '<p><strong>' +
                         i18n.gettext('Drop here the elements you want to have in the results of the query') +
                         '</strong></p><p>' +
                         i18n.gettext('A query must hold at least one element here to be executed') +
@@ -797,9 +784,8 @@
                 },
                 {
                     element: '#orderByDropzone',
-                    intro: '<h4>' +
-                        i18n.gettext('Order By drop zone') +
-                        '</h4><p><strong>' +
+                    title: i18n.gettext('Order By drop zone'),
+                    intro: '<p><strong>' +
                         i18n.gettext('Drop here the elements that you want to use to order the results of the query') +
                         '</strong></p><p>' +
                         i18n.gettext('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results') +
@@ -807,15 +793,13 @@
                 },
                 {
                     element: '#filtersDropzone',
-                    intro: '<h4>' +
-                        i18n.gettext('Filters drop zone') +
-                        '</h4><p><strong>' +
+                    title: i18n.gettext('Filters drop zone'),
+                    intro: '<p><strong>' +
                         i18n.gettext('Drop here the elements that you want to use to filter the results of the query') +
                         '</strong></p><p>' +
                         i18n.gettext('The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results') +
                         '</p>',
                 }
-
             ]
         };
 

@@ -109,10 +109,7 @@
             const introOptions = {
                 nextLabel: i18n.gettext('Next'),
                 prevLabel: i18n.gettext('Back'),
-                skipLabel: '&times;',
                 doneLabel: i18n.gettext('Done'),
-                tooltipPosition: 'auto',
-                showStepNumbers: false,
                 steps: [
                     {
                         title: i18n.gettext('Layers'),
@@ -134,7 +131,7 @@
                             '</p>',
                     },
                     {
-                        element: '#layerList',
+                        element: 'app-layer-list table',
                         title: i18n.gettext('Layers list'),
                         intro: '<p>' +
                             i18n.gettext('Here all the layers are listed.') +
@@ -145,7 +142,7 @@
                             '</p>',
                     },
                     {
-                        element: '#layerList .badge',
+                        element: 'app-layer-list table .badge',
                         title: i18n.gettext('Layer status'),
                         intro: '<p>' +
                             i18n.gettext('The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data.') +
@@ -154,7 +151,7 @@
                             '</p>',
                     },
                     {
-                        element: '.btn-delete',
+                        element: 'app-layer-list table .btn-danger',
                         title: i18n.gettext('Layer delete'),
                         intro: '<p>' +
                             i18n.gettext('Click here to delete the layer.') +
@@ -170,7 +167,7 @@
                             i18n.gettext('Design your company public space') +
                             '</p><p>' +
                             i18n.gettext('The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space') +
-                            '</p><a class="btn btn-info btn-xs" href="shared-space#intro">' +
+                            '</p><a href="shared-space#intro">' +
                             i18n.gettext('Go to the public space definition and continue tour') +
                             '</a>',
                     }

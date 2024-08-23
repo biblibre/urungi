@@ -36,15 +36,11 @@
             return {
                 nextLabel: i18n.gettext('Next'),
                 prevLabel: i18n.gettext('Back'),
-                skipLabel: i18n.gettext('Skip'),
                 doneLabel: i18n.gettext('Done'),
-                tooltipPosition: 'auto',
-                showStepNumbers: false,
                 steps: [
                     {
-                        intro: '<h4>' +
-                            i18n.gettext('Data sources') +
-                            '</h4><p>' +
+                        title: i18n.gettext('Data sources'),
+                        intro: '<p>' +
                             i18n.gettext('Data sources are connections to the databases you are going to generate reports for.') +
                             '</p><p>' +
                             i18n.gettext('Create and manage here the connections to databases that holds the data you want to be able to create reports using Urungi.') +
@@ -54,17 +50,13 @@
                     },
                     {
                         element: '#newDataSourceBtn',
-                        intro: '<h4>' +
-                            i18n.gettext('New datasource') +
-                            '</h4><p>' +
-                            i18n.gettext('Click here to create a new datasource.') +
-                            '</p>',
+                        title: i18n.gettext('New datasource'),
+                        intro: i18n.gettext('Click here to create a new datasource.'),
                     },
                     {
                         element: '#datasourceList',
-                        intro: '<h4>' +
-                            i18n.gettext('List of data sources') +
-                            '</h4><p>' +
+                        title: i18n.gettext('List of data sources'),
+                        intro: '<p>' +
                             i18n.gettext('Here all the data sources (database connections) will be listed.') +
                             '</p><p>' +
                             i18n.gettext('You can edit the connection details for every data source, delete a data source or activate/deactivate a datasource.') +
@@ -72,18 +64,13 @@
                     },
                     {
                         element: '#datasourceListItem',
-                        intro: '<h4>' +
-                            i18n.gettext('Data source') +
-                            '</h4><p>' +
-                            i18n.gettext('This is one data source.') +
-                            '</p>',
-
+                        title: i18n.gettext('Data source'),
+                        intro: i18n.gettext('This is one data source.'),
                     },
                     {
                         element: '#datasourceListItemName',
-                        intro: '<h4>' +
-                            i18n.gettext('Data source name & type') +
-                            '</h4><p>' +
+                        title: i18n.gettext('Data source name & type'),
+                        intro: '<p>' +
                             i18n.gettext('The name for the data source and the type of connection (end database).') +
                             '</p><p>' +
                             i18n.gettext('You can setup the name you want for data sources.') +
@@ -92,22 +79,15 @@
                     },
                     {
                         element: '#datasourceListItemDetails',
-                        intro: '<h4>' +
-                            i18n.gettext('Data source connection details') +
-                            '</h4><p>' +
-                            i18n.gettext('The main connection details for the data source.') +
-                            '</p>',
+                        title: i18n.gettext('Data source connection details'),
+                        intro: i18n.gettext('The main connection details for the data source.'),
                     },
                     {
-                        intro: '<div><h4>' +
-                            i18n.gettext('Next Step') +
-                            '</h4><p>' +
-                            i18n.gettext('Layers') +
-                            '</p>' +
-                            i18n.gettext('Layers') +
+                        title: i18n.gettext('Next Step'),
+                        intro: i18n.gettext('Layers') +
                             ' (<a href="https://en.wikipedia.org/wiki/Semantic_layer" target="_blank">semantic layers</a>) ' +
                             i18n.gettext('allow your users to access and understand your data without any knowledge of SQL or how the database is structured in tables and fields...') +
-                            '</p><a class="btn btn-info btn-xs" href="layers#intro" target="_self">' +
+                            '</p><a href="layers#intro" target="_self">' +
                             i18n.gettext('Go to layers and continue tour') +
                             '</a>',
                     }

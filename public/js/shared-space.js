@@ -55,6 +55,9 @@
             },
         });
 
+        if (location.hash === '#intro') {
+            showIntro();
+        }
         $('#showIntroButton').on('click', function () {
             showIntro();
         });
@@ -114,10 +117,7 @@
         introJs().setOptions({
             nextLabel: i18n.gettext('Next'),
             prevLabel: i18n.gettext('Back'),
-            skipLabel: '&times;',
             doneLabel: i18n.gettext('Done'),
-            tooltipPosition: 'auto',
-            showStepNumbers: false,
             steps: [
                 {
                     title: i18n.gettext('Shared space'),

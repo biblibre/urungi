@@ -86,15 +86,11 @@
             const introOptions = {
                 nextLabel: i18n.gettext('Next'),
                 prevLabel: i18n.gettext('Back'),
-                skipLabel: i18n.gettext('Skip'),
                 doneLabel: i18n.gettext('Done'),
-                tooltipPosition: 'auto',
-                showStepNumbers: false,
                 steps: [
                     {
-                        intro: '<h4>' +
-                            i18n.gettext('Dashboards') +
-                            '</h4><p><strong>' +
+                        title: i18n.gettext('Dashboards'),
+                        intro: '<p><strong>' +
                             i18n.gettext('In here you can create and execute dashboards like web pages.') +
                             '</strong></p><p>' +
                             i18n.gettext('Define several reports using filters and dragging and dropping from different layers.') +
@@ -104,17 +100,13 @@
                     },
                     {
                         element: '#newDashboardButton',
-                        intro: '<h4>' +
-                            i18n.gettext('New Dashboard') +
-                            '</h4><p>' +
-                            i18n.gettext('Click here to create a new dashboard.') +
-                            '</p>',
+                        title: i18n.gettext('New Dashboard'),
+                        intro: i18n.gettext('Click here to create a new dashboard.'),
                     },
                     {
                         element: '#dashboardList',
-                        intro: '<h4>' +
-                            i18n.gettext('Dashboards list') +
-                            '</h4><p><strong>' +
+                        title: i18n.gettext('Dashboards list'),
+                        intro: '<p><strong>' +
                             i18n.gettext('Here all your dashboards are listed.') +
                             '</strong></p><p>' +
                             i18n.gettext('Click over a dashboard\'s name to execute it.') +
@@ -124,17 +116,13 @@
                     },
                     {
                         element: '.btn-edit',
-                        intro: '<h4>' +
-                            i18n.gettext('Dashboard edit') +
-                            '</h4><p>' +
-                            i18n.gettext('Click here to modify the dashboard.') +
-                            '</p>',
+                        title: i18n.gettext('Dashboard edit'),
+                        intro: i18n.gettext('Click here to modify the dashboard.'),
                     },
                     {
                         element: '.btn-delete',
-                        intro: '<h4>' +
-                            i18n.gettext('Dashboard delete') +
-                            '</h4><p><strong>' +
+                        title: i18n.gettext('Dashboard delete'),
+                        intro: '<p><strong>' +
                             i18n.gettext('Click here to delete the dashboard.') +
                             '</strong></p><p>' +
                             i18n.gettext('Once deleted the dashboard will not be recoverable again.') +
@@ -144,9 +132,8 @@
                     },
                     {
                         element: '.published-tag',
-                        intro: '<h4>' +
-                            i18n.gettext('Dashboard published') +
-                            '</h4><p><strong>' +
+                        title: i18n.gettext('Dashboard published'),
+                        intro: '<p><strong>' +
                             i18n.gettext('This label indicates that this dashboard is public.') +
                             '</strong></p><p>' +
                             i18n.gettext('If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard.') +
