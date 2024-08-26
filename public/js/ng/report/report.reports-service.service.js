@@ -85,7 +85,7 @@
             }
 
             return columnDescription;
-        };
+        }
 
         // Checks if a prompt is correctly filled (criteria by filterType)
         function checkPrompt (prompt) {

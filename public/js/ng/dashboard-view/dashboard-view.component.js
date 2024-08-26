@@ -110,7 +110,7 @@
             }
 
             getPromptsWidget();
-        };
+        }
 
         function getPromptsWidget () {
             for (const promptID in vm.prompts) {

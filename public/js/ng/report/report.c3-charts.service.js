@@ -134,7 +134,7 @@
 
             for (const column of report.properties.ykeys) {
                 dataFormat[column.id] = column.format;
-            };
+            }
 
             const c3Config = {
                 bindto: theChartCode,
@@ -319,7 +319,7 @@
                 }
                 if (!population[dimension]) {
                     population[dimension] = {};
-                };
+                }
                 if (!population[dimension][category]) {
                     population[dimension][category] = 0;
                 }

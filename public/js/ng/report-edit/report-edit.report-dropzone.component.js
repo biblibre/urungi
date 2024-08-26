@@ -39,7 +39,7 @@
 
         function onRemoveItem (item) {
             vm.onRemove({ elements: vm.elements, item });
-        };
+        }
 
         function openColumnSettingsModal (column) {
             const modal = $uibModal.open({

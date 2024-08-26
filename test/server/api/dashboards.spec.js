@@ -98,7 +98,7 @@ describe('Dashboards API', function () {
             expect(res.body.item).toHaveProperty('history');
             expect(res.body.item).toHaveProperty('items');
             expect(res.body.item).toHaveProperty('reports');
-            expect(res.body.item).not.toHaveProperty('nd_trash_deleted', false); ;
+            expect(res.body.item).not.toHaveProperty('nd_trash_deleted', false);
         });
     });
     describe('POST /api/dashboards/create', function () {
@@ -123,7 +123,7 @@ describe('Dashboards API', function () {
             expect(res.body.item).toHaveProperty('history');
             expect(res.body.item).toHaveProperty('items');
             expect(res.body.item).toHaveProperty('reports');
-            expect(res.body.item).not.toHaveProperty('nd_trash_deleted', false); ;
+            expect(res.body.item).not.toHaveProperty('nd_trash_deleted', false);
             await Dashboard.deleteOne({ dashboardName: 'Dashboard' });
         });
     });

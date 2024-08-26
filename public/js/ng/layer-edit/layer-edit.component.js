@@ -161,7 +161,7 @@
                         $scope._Layer.params.schema = [];
                     }
                 });
-            };
+            }
         };
 
         $scope.save = function () {
@@ -206,7 +206,7 @@
             api.getDatasource($scope._Layer.datasourceID).then(function (datasource) {
                 $scope.datasources = [datasource];
             });
-        };
+        }
 
         $scope.addSQL = function () {
             const modal = $uibModal.open({

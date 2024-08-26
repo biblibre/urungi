@@ -36,7 +36,7 @@ module.exports = function (app) {
     reportRouter.post('/png', async function (req, res, next) {
         try {
             const report = res.locals.report;
-            const filters = JSON.stringify(req.body.filters); ;
+            const filters = JSON.stringify(req.body.filters);
             const url = config.get('url') + config.get('base') + `/reports/view/${report.id}?filters=${filters}`;
             const buffer = await pikitia.toPNG(url, {
                 cookies: req.cookies,

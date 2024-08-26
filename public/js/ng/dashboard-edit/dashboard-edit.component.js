@@ -136,7 +136,7 @@
                     pushedReport.id = uuid.v4();
                     $scope.selectedDashboard.reports.push(pushedReport);
                 }
-            };
+            }
 
             if ($scope.mode === 'edit') {
                 $scope.selectedDashboardLimit = { value: 500 };
@@ -174,7 +174,7 @@
                     repaintReports();
                 });
             }
-        };
+        }
 
         $scope.cancelReport = function (report) {
             $scope.reportInterface = false;
@@ -261,7 +261,7 @@
 
             ev.dataTransfer.setData('text/html', html);
             ev.dataTransfer.setData('application/vnd.urungi.report+json', json);
-        };
+        }
 
         function onFilterPromptDragStart (ev, filterPrompt) {
             const html = getPromptHTML(filterPrompt);
@@ -269,13 +269,13 @@
 
             ev.dataTransfer.setData('text/html', html);
             ev.dataTransfer.setData('application/vnd.urungi.filter-prompt+json', json);
-        };
+        }
 
         function onLayoutDragStart (ev, type) {
             const html = getLayoutHtml(type);
 
             ev.dataTransfer.setData('text/html', html);
-        };
+        }
 
         $scope.promptChanged = function (elementID, values) {
             repaintReports();

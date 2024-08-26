@@ -43,7 +43,6 @@
                     title: () => expand(i18n.gettext('Delete {{name}} ?'), { name: vm.dashboard.dashboardName }),
                     delete: () => function () {
                         return api.deleteDashboard(vm.dashboard._id);
-                        ;
                     },
                 },
 

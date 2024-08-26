@@ -37,7 +37,7 @@
             }
 
             FileSaver.saveAs(new Blob([s2ab(wbout)], { type: '' }), ws_name + '.xlsx');
-        };
+        }
         function Workbook () {
             if (!(this instanceof Workbook)) return new Workbook();
             this.SheetNames = [];

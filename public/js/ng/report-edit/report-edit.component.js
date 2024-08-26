@@ -74,7 +74,7 @@
                     $scope.newForm();
                 }
             });
-        };
+        }
 
         function goBack () {
             $window.history.back();
@@ -822,7 +822,7 @@
                 $scope.selectedReport.theme = settings.theme;
                 $scope.selectedReport.properties.range = settings.range;
             }, () => {});
-        };
+        }
         $scope.isReportSettingsModalAvailable = isReportSettingsModalAvailable;
 
         function isReportSettingsModalAvailable () {

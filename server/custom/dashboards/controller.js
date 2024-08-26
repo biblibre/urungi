@@ -69,6 +69,7 @@ exports.DashboardsUpdate = function (req, res) {
                 Dashboard.findOne({ _id: data._id, owner: req.user._id }, { _id: 1 }, {}, function (err, item) {
                     if (err) throw err;
                     if (item) {
+                        /* eslint-disable promise/no-promise-in-callback */
                         controller.update(req).then(function (result) {
                             res.status(200).json(result);
                         });
@@ -79,7 +80,7 @@ exports.DashboardsUpdate = function (req, res) {
                     res.status(200).json(result);
                 });
             }
-        };
+        }
     });
 };
 

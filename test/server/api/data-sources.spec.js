@@ -62,7 +62,7 @@ async function seed () {
     }
 
     return entries;
-};
+}
 
 function verifyItem (item) {
     expect(item).toHaveProperty('_id');
@@ -71,7 +71,7 @@ function verifyItem (item) {
     expect(item).toHaveProperty('type');
     expect(item).toHaveProperty('status');
     expect(item).toHaveProperty('connection');
-};
+}
 
 describe('Datasources API', function () {
     const datasources = [

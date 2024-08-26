@@ -44,7 +44,7 @@
 
         get max () {
             return this.getAttribute('max') || 100;
-        };
+        }
 
         _upgradeProperty (prop) {
             if (Object.prototype.hasOwnProperty.call(this, prop)) {

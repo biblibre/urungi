@@ -30,6 +30,7 @@ Several pages already work without any AngularJS code:
 
 - Added gettext.js 2.0.3
 - Added gettext-parser 7.0.1 (dev)
+- Added globals 15.9.0 (dev)
 - Added jest-environment-jsdom 29.7.0 (dev)
 - Added jest-jasmine2 29.7.0 (dev)
 - Added jstree 3.3.12
@@ -73,8 +74,11 @@ Several pages already work without any AngularJS code:
 - Removed angular-route
 - Removed angularjs-bootstrap-datetimepicker
 - Removed ejs
+- Removed eslint-config-standard (dev)
+- Removed eslint-plugin-import (dev)
+- Removed eslint-plugin-node (dev)
 - Removed node-fetch
-- Removed stylelint-config-standard
+- Removed stylelint-config-standard (dev)
 
 ## [3.2.4] - 2024-07-09
 

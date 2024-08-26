@@ -94,7 +94,7 @@ async function userNew (req, res) {
     if (req.method === 'POST') {
         formData = Object.assign({}, req.body);
         if (res.formErrors.length === 0) {
-            const { sendPassword, password2, ...userData } = formData;
+            const { sendPassword, ...userData } = formData;
             userData.createdBy = req.user._id;
             const user = await userHelper.createUser(userData, { sendPassword });
 

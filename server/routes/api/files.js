@@ -34,7 +34,7 @@ function getFiles (req, res, next) {
     File.find(filter).then(files => {
         res.status(200).json({ files });
     }).catch(next);
-};
+}
 
 function uploadFile (req, res, next) {
     if (!req.file) {
@@ -56,6 +56,6 @@ function uploadFile (req, res, next) {
     File.create(fileInfo).then(createdFile => {
         res.json(createdFile);
     }).catch(next);
-};
+}
 
 module.exports = router;

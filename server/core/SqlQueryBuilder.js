@@ -395,7 +395,7 @@ class SqlQueryBuilder {
 
         default:
             throw new Error('Invalid filter type: ' + filter.filterType);
-        };
+        }
 
         return sql;
     }

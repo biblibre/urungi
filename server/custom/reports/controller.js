@@ -138,7 +138,7 @@ exports.GetReport = async function (req, res) {
         }
     } catch (err) {
         res.status(200).json({ result: 0, msg: 'A database error has occured : ' + String(err), error: err });
-    };
+    }
 };
 
 exports.ReportsFindOne = function (req, res) {
@@ -185,6 +185,7 @@ exports.ReportsUpdate = function (req, res) {
                 Report.findOne({ _id: data._id, owner: req.user._id, companyID: req.user.companyID }, { _id: 1 }, {}, function (err, item) {
                     if (err) throw err;
                     if (item) {
+                        /* eslint-disable promise/no-promise-in-callback */
                         controller.update(req).then(function (result) {
                             res.status(200).json(result);
                         });
@@ -197,7 +198,7 @@ exports.ReportsUpdate = function (req, res) {
                     res.status(200).json(result);
                 });
             }
-        };
+        }
     });
 };
 
