@@ -43,7 +43,6 @@ local Pipeline(name, nodeVersion, mongoVersion) = {
 [
     Pipeline('node:18 mongo:5.0', '18-bullseye', '5.0.28'),
     Pipeline('node:18 mongo:6.0', '18-bullseye', '6.0.17'),
-    Pipeline('node:18 mongo:7.0', '18-bullseye', '7.0.12'),
     Pipeline('node:20 mongo:5.0', '20-bullseye', '5.0.28'),
     Pipeline('node:20 mongo:6.0', '20-bullseye', '6.0.17'),
     Pipeline('node:20 mongo:7.0', '20-bullseye', '7.0.12'),

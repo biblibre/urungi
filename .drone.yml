@@ -85,48 +85,6 @@
 ---
 {
    "kind": "pipeline",
-   "name": "node:18 mongo:7.0",
-   "services": [
-      {
-         "environment": {
-            "MYSQL_DATABASE": "urungi_tests",
-            "MYSQL_PASSWORD": "urungi",
-            "MYSQL_RANDOM_ROOT_PASSWORD": "yes",
-            "MYSQL_USER": "urungi"
-         },
-         "image": "mariadb:10.3",
-         "name": "mariadb"
-      },
-      {
-         "environment": {
-            "POSTGRES_DB": "urungi_tests",
-            "POSTGRES_PASSWORD": "urungi",
-            "POSTGRES_USER": "urungi"
-         },
-         "image": "postgres:9.6",
-         "name": "postgres"
-      }
-   ],
-   "steps": [
-      {
-         "commands": [
-            "npm ci",
-            "npx jest --coverage"
-         ],
-         "environment": {
-            "MONGOMS_VERSION": "7.0.12",
-            "URUNGI_TEST_MYSQL": "{ \"host\": \"mariadb\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }",
-            "URUNGI_TEST_PG": "{ \"host\": \"postgres\", \"database\": \"urungi_tests\", \"user\": \"urungi\", \"password\": \"urungi\" }"
-         },
-         "image": "node:18-bullseye",
-         "name": "test"
-      }
-   ],
-   "type": "docker"
-}
----
-{
-   "kind": "pipeline",
    "name": "node:20 mongo:5.0",
    "services": [
       {
@@ -252,6 +210,6 @@
 }
 ---
 kind: signature
-hmac: ff68221cd300a0c76c59f3fe81fdeaa0045aa20d5ae38d344533a209d531f3be
+hmac: d5bb26f20d92f569e36c9dcb40b48da81dc55ce201ce96c75a0b9f70f3406da3
 
 ...
