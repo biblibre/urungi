@@ -5,13 +5,15 @@
     <div class="container-fluid root-container">
         <div class="row">
             <div class="col-md-3">
-                {% render 'sidebar.liquid', user: user %}
+                {% include 'sidebar' %}
             </div>
 
             <div class="main col-md-9">
                 <div class="page-header">
                     <h3>{% t 'Export layers, reports and dashboards' %}</h3>
                 </div>
+
+                {% include 'flash' %}
 
                 <div class="row">
                     <div class="col-md-12">

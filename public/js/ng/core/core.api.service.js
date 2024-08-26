@@ -80,13 +80,6 @@
             getUser,
             createUser,
             updateUser,
-            updateUserPassword,
-            deleteUserRole,
-            addUserRole,
-            getUserReports,
-            getUserDashboards,
-            getUserCounts,
-            deleteUser,
         };
 
         return service;
@@ -105,10 +98,6 @@
 
         function getUserData () {
             return httpGet('/api/user');
-        }
-
-        function updateUserPassword (changes) {
-            return httpPut('/api/user/password', changes);
         }
 
         function getUserObjects () {
@@ -544,30 +533,6 @@
 
         function updateUser (id, changes) {
             return httpPatch('/api/users/' + id, changes);
-        }
-
-        function deleteUserRole (userId, roleId) {
-            return httpDelete('/api/users/' + userId + '/roles/' + roleId);
-        }
-
-        function addUserRole (userId, roleId) {
-            return httpPut('/api/users/' + userId + '/roles/' + roleId);
-        }
-
-        function getUserReports (userId) {
-            return httpGet('/api/users/' + userId + '/reports');
-        }
-
-        function getUserDashboards (userId) {
-            return httpGet('/api/users/' + userId + '/dashboards');
-        }
-
-        function getUserCounts (userId) {
-            return httpGet('/api/users/' + userId + '/counts');
-        }
-
-        function deleteUser (userId) {
-            return httpDelete('/api/users/' + userId);
         }
 
         /**

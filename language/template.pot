@@ -16,7 +16,7 @@ msgstr ""
 msgid "A header text H3"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:795
+#: public/js/ng/report-edit/report-edit.component.js:782
 msgid "A query must hold at least one element here to be executed"
 msgstr ""
 
@@ -30,7 +30,7 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:747
+#: public/js/ng/report-edit/report-edit.component.js:743
 msgid "Access here the different data elements of every layer that you have access on"
 msgstr ""
 
@@ -46,10 +46,6 @@ msgstr ""
 msgid "Add SQL"
 msgstr ""
 
-#: public/partials/user-show/user-show.component.html:49
-msgid "Add a new role..."
-msgstr ""
-
 #: public/partials/layer-edit/layer-edit.component.html:238
 msgid "Add all"
 msgstr ""
@@ -62,7 +58,7 @@ msgstr ""
 msgid "Add element to schema"
 msgstr ""
 
-#: views/shared-space.liquid:43
+#: views/shared-space.liquid:46
 msgid "Add folder"
 msgstr ""
 
@@ -74,10 +70,6 @@ msgstr ""
 msgid "Add new SQL"
 msgstr ""
 
-#: public/partials/user-show/user-show.component.html:48
-msgid "Add role"
-msgstr ""
-
 #: public/partials/layer-edit/layer-edit.sql-modal.component.html:58
 msgid "Add to layer"
 msgstr ""
@@ -86,15 +78,15 @@ msgstr ""
 msgid "Add to layer elements"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:785
+#: public/js/ng/report-edit/report-edit.component.js:773
 msgid "After building your query, refresh to view the report."
 msgstr ""
 
-#: public/js/shared-space.js:148
+#: public/js/shared-space.js:147
 msgid "After creating the folder you can drag and drop it across the shared space."
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:102
+#: public/js/ng/dashboard-list/dashboard-list.component.js:98
 msgid "After you define the reports to get and visualize your data, you can drag and drop different html layout elements, and put your report in, using different formats to show it."
 msgstr ""
 
@@ -102,9 +94,7 @@ msgstr ""
 msgid "Allow Multiple selection"
 msgstr ""
 
-#: public/partials/import/import.component.html:124
-#: public/partials/import/import.component.html:56
-#: public/partials/import/import.component.html:90
+#: public/js/custom-element/import-table.js:24
 msgid "Already exists. Overwrite ?"
 msgstr ""
 
@@ -114,6 +104,10 @@ msgstr ""
 
 #: public/partials/share/share.share-popover.component.html:2
 msgid "Anyone who has the link will be able to see it"
+msgstr ""
+
+#: views/user/delete.liquid:12
+msgid "Are you sure you want to delete user {{username}} ?"
 msgstr ""
 
 #: public/js/ng/report/report.c3-charts.service.js:418
@@ -134,24 +128,16 @@ msgstr ""
 msgid "As XLSX"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:775
+#: public/js/ng/report-edit/report-edit.component.js:765
 msgid "As you define the query dragging and dropping in the areas above, the results of the query will appear here"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:52
+#: public/js/ng/datasource-list/datasource-list.component.js:48
 msgid "At least one data source must be defined, unless you do not define some data source you and your users will not be able to create reports."
 msgstr ""
 
-#: public/js/ng/import/import.component.js:230
-msgid "At least one report has no selectedLayerID"
-msgstr ""
-
-#: public/js/ng/import/import.component.js:236
-msgid "At least one report is related to a layer that is not in import file"
-msgstr ""
-
-#: public/js/ng/import/import.component.js:242
-msgid "At least one report is related to a layer that is not valid"
+#: public/js/import.js:418
+msgid "At least one report has error:"
 msgstr ""
 
 #: public/partials/share/share.share-popover.component.html:20
@@ -167,7 +153,7 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: views/about.liquid:44
+#: views/about.liquid:46
 msgid "Authors"
 msgstr ""
 
@@ -180,7 +166,7 @@ msgstr ""
 #: public/js/ng/layer-list/layer-list.component.js:111
 #: public/js/ng/report-edit/report-edit.component.js:736
 #: public/js/ng/report-list/report-list.component.js:38
-#: public/js/shared-space.js:117
+#: public/js/shared-space.js:119
 msgid "Back"
 msgstr ""
 
@@ -189,15 +175,15 @@ msgstr ""
 msgid "Bar"
 msgstr ""
 
-#: views/about.liquid:48
+#: views/about.liquid:50
 msgid "BibLibre staff:"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:82
+#: views/partials/user/form.liquid:117
 msgid "Brand"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:72
+#: views/partials/user/form.liquid:107
 msgid "Business unit"
 msgstr ""
 
@@ -226,6 +212,9 @@ msgstr ""
 #: public/partials/report-view/report-view.component.html:27
 #: public/partials/role-list/role-list.edit-modal.component.html:92
 #: public/partials/share/share.share-modal.component.html:20
+#: views/user/change-password.liquid:28
+#: views/user/edit.liquid:8
+#: views/user/new.liquid:8
 msgid "Cancel"
 msgstr ""
 
@@ -237,19 +226,17 @@ msgstr ""
 msgid "Change language"
 msgstr ""
 
-#: public/partials/user-show/user-show.component.html:20
+#: views/user/change-password.liquid:1
+#: views/user/change-password.liquid:5
+#: views/user/show.liquid:19
 msgid "Change password"
-msgstr ""
-
-#: public/partials/user-show/user-show.users-modify-password-modal.component.html:3
-msgid "Change password for {{vm.username}}"
 msgstr ""
 
 #: public/partials/report-edit/report-edit.filter-prompt-modal.html:59
 msgid "Check if you want all suggestions on filter (too much data can crash the app)"
 msgstr ""
 
-#: public/partials/import/import.component.html:10
+#: public/js/import.js:81
 msgid "Checking file"
 msgstr ""
 
@@ -265,7 +252,7 @@ msgstr ""
 msgid "Choose a report to add to the dashboard"
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:55
+#: public/js/ng/report-list/report-list.component.js:48
 msgid "Choose a report type and drag and drop elements from the selected layer to compose your report."
 msgstr ""
 
@@ -277,7 +264,7 @@ msgstr ""
 msgid "Clear direct formatting"
 msgstr ""
 
-#: views/shared-space.liquid:43
+#: views/shared-space.liquid:46
 msgid "Click here to add a new folder to the shared space"
 msgstr ""
 
@@ -316,7 +303,7 @@ msgstr ""
 msgid "Click here to create a new dashboard and push this report in"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:110
+#: public/js/ng/dashboard-list/dashboard-list.component.js:104
 msgid "Click here to create a new dashboard."
 msgstr ""
 
@@ -324,19 +311,19 @@ msgstr ""
 msgid "Click here to create a new data source"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:60
+#: public/js/ng/datasource-list/datasource-list.component.js:54
 msgid "Click here to create a new datasource."
 msgstr ""
 
-#: public/js/shared-space.js:146
+#: public/js/shared-space.js:145
 msgid "Click here to create a new folder in the root of the shared space."
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:133
+#: public/js/ng/layer-list/layer-list.component.js:130
 msgid "Click here to create a new layer."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:65
+#: public/js/ng/report-list/report-list.component.js:56
 msgid "Click here to create a new report."
 msgstr ""
 
@@ -345,15 +332,15 @@ msgstr ""
 msgid "Click here to create a new single query report"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:138
+#: public/js/ng/dashboard-list/dashboard-list.component.js:126
 msgid "Click here to delete the dashboard."
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:160
+#: public/js/ng/layer-list/layer-list.component.js:157
 msgid "Click here to delete the layer."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:93
+#: public/js/ng/report-list/report-list.component.js:79
 msgid "Click here to delete the report."
 msgstr ""
 
@@ -361,7 +348,7 @@ msgstr ""
 msgid "Click here to delete this report"
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:105
+#: public/js/ng/report-list/report-list.component.js:89
 msgid "Click here to duplicate the report."
 msgstr ""
 
@@ -369,11 +356,11 @@ msgstr ""
 msgid "Click here to edit this report"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:130
+#: public/js/ng/dashboard-list/dashboard-list.component.js:120
 msgid "Click here to modify the dashboard."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:85
+#: public/js/ng/report-list/report-list.component.js:72
 msgid "Click here to modify the report."
 msgstr ""
 
@@ -401,31 +388,30 @@ msgstr ""
 msgid "Click here to select this dashboard"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:120
+#: public/js/ng/dashboard-list/dashboard-list.component.js:112
 msgid "Click over a dashboard's name to execute it."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:75
+#: public/js/ng/report-list/report-list.component.js:64
 msgid "Click over a report's name to execute it."
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:767
+#: public/js/ng/report-edit/report-edit.component.js:760
 msgid "Click over one of the different report types to change the visualization of the data you choose"
 msgstr ""
 
 #: public/partials/report-edit/report-edit.filter-prompt-modal.html:76
-#: public/partials/user-show/user-show.users-modify-password-modal.component.html:33
-#: public/partials/user/user.edit-modal.component.html:92
 msgid "Close"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:791
+#: public/js/ng/report-edit/report-edit.component.js:778
 msgid "Columns / results drop zone"
 msgstr ""
 
 #: public/partials/layer-edit/layer-edit.add-all-modal.component.html:12
 #: public/partials/layer-edit/layer-edit.sql-modal.component.html:60
 #: public/partials/pdf-export/pdf-export.pdf-export-settings-modal.component.html:52
+#: views/user/change-password.liquid:27
 msgid "Confirm"
 msgstr ""
 
@@ -457,7 +443,7 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:50
+#: public/js/ng/datasource-list/datasource-list.component.js:46
 msgid "Create and manage here the connections to databases that holds the data you want to be able to create reports using Urungi."
 msgstr ""
 
@@ -465,7 +451,7 @@ msgstr ""
 msgid "Create dashboards"
 msgstr ""
 
-#: public/js/shared-space.js:139
+#: public/js/shared-space.js:138
 msgid "Create folders and drag and drop them across to structure it."
 msgstr ""
 
@@ -481,8 +467,12 @@ msgstr ""
 msgid "Create reports"
 msgstr ""
 
-#: public/js/shared-space.js:35
+#: public/js/shared-space.js:34
 msgid "Create sub-folder"
+msgstr ""
+
+#: views/user/new.liquid:7
+msgid "Create user"
 msgstr ""
 
 #: public/partials/dashboard-list/dashboard-list.component.html:28
@@ -490,51 +480,59 @@ msgstr ""
 msgid "Created on"
 msgstr ""
 
+#: views/user/change-password.liquid:13
+msgid "Current password"
+msgstr ""
+
+#: server/routes/users.js:154
+msgid "Current password is incorrect"
+msgstr ""
+
 #: public/partials/dashboard-edit/dashboard-edit.component.html:258
 msgid "Dashboard Name"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:440
+#: public/js/import.js:320
 msgid "Dashboard created successfully"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:136
+#: public/js/ng/dashboard-list/dashboard-list.component.js:124
 msgid "Dashboard delete"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:128
+#: public/js/ng/dashboard-list/dashboard-list.component.js:119
 msgid "Dashboard edit"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:148
+#: public/js/ng/dashboard-list/dashboard-list.component.js:135
 msgid "Dashboard published"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:428
+#: public/js/import.js:314
 msgid "Dashboard updated successfully:"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:96
+#: public/js/import.js:165
+#: public/js/ng/dashboard-list/dashboard-list.component.js:92
 #: public/partials/dashboard-list/dashboard-list.component.html:2
-#: public/partials/import/import.component.html:105
-#: public/partials/user-show/user-show.component.html:99
 #: views/dashboard/edit.liquid:1
 #: views/dashboard/list.liquid:1
 #: views/dashboard/view.liquid:1
-#: views/export.liquid:59
+#: views/export.liquid:61
+#: views/user/show.liquid:98
 msgid "Dashboards"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:116
+#: public/js/ng/dashboard-list/dashboard-list.component.js:108
 msgid "Dashboards list"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:76
+#: public/js/ng/datasource-list/datasource-list.component.js:67
 #: public/partials/layer-list/layer-list.new-modal.component.html:22
 msgid "Data source"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:96
+#: public/js/ng/datasource-list/datasource-list.component.js:82
 msgid "Data source connection details"
 msgstr ""
 
@@ -542,20 +540,20 @@ msgstr ""
 msgid "Data source is required"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:85
+#: public/js/ng/datasource-list/datasource-list.component.js:72
 msgid "Data source name & type"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:46
+#: public/js/import.js:155
+#: public/js/ng/datasource-list/datasource-list.component.js:42
 #: public/partials/datasource-list/datasource-list.component.html:2
-#: public/partials/import/import.component.html:25
 #: views/datasource/edit.liquid:1
 #: views/datasource/list.liquid:1
 #: views/sidebar.liquid:41
 msgid "Data sources"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:48
+#: public/js/ng/datasource-list/datasource-list.component.js:44
 msgid "Data sources are connections to the databases you are going to generate reports for."
 msgstr ""
 
@@ -571,8 +569,8 @@ msgstr ""
 msgid "Dataset"
 msgstr ""
 
-#: public/partials/import/import.component.html:28
-msgid "Datasource matching {{ds.doc.name}}"
+#: public/js/import.js:371
+msgid "Datasource matching {{name}}"
 msgstr ""
 
 #: public/js/ng/layer-edit/layer-edit.component.js:939
@@ -593,14 +591,14 @@ msgstr ""
 msgid "Default aggregation"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:100
+#: public/js/ng/dashboard-list/dashboard-list.component.js:96
 msgid "Define several reports using filters and dragging and dropping from different layers."
 msgstr ""
 
 #: public/partials/core/core.delete-modal.component.html:18
 #: public/partials/layer-edit/layer-edit.component.html:119
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:7
-#: public/partials/user-show/user-show.component.html:5
+#: views/user/show.liquid:24
 msgid "Delete"
 msgstr ""
 
@@ -608,11 +606,11 @@ msgstr ""
 msgid "Delete background"
 msgstr ""
 
-#: public/js/shared-space.js:49
+#: public/js/shared-space.js:48
 msgid "Delete folder"
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:91
+#: public/js/ng/report-list/report-list.component.js:76
 msgid "Delete report"
 msgstr ""
 
@@ -632,8 +630,17 @@ msgstr ""
 msgid "Delete this role"
 msgstr ""
 
-#: public/partials/user-list/user-list.component.html:17
+#: public/js/user/list.js:34
 msgid "Delete this user"
+msgstr ""
+
+#: views/user/delete.liquid:1
+#: views/user/delete.liquid:5
+msgid "Delete user"
+msgstr ""
+
+#: views/user/delete.liquid:15
+msgid "Delete user {{username}}"
 msgstr ""
 
 #: public/js/ng/dashboard-list/dashboard-list.dashboards-list-buttons.component.js:43
@@ -642,7 +649,7 @@ msgstr ""
 msgid "Delete {{name}} ?"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:67
+#: views/partials/user/form.liquid:102
 msgid "Department"
 msgstr ""
 
@@ -653,20 +660,20 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:170
+#: public/js/ng/layer-list/layer-list.component.js:167
 msgid "Design your company public space"
 msgstr ""
 
-#: views/home.liquid:47
+#: views/home.liquid:49
 msgid "Do not show this block again"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:90
-#: public/js/ng/datasource-list/datasource-list.component.js:40
-#: public/js/ng/layer-list/layer-list.component.js:113
-#: public/js/ng/report-edit/report-edit.component.js:738
-#: public/js/ng/report-list/report-list.component.js:40
-#: public/js/shared-space.js:119
+#: public/js/ng/dashboard-list/dashboard-list.component.js:89
+#: public/js/ng/datasource-list/datasource-list.component.js:39
+#: public/js/ng/layer-list/layer-list.component.js:112
+#: public/js/ng/report-edit/report-edit.component.js:737
+#: public/js/ng/report-list/report-list.component.js:39
+#: public/js/shared-space.js:120
 msgid "Done"
 msgstr ""
 
@@ -683,15 +690,15 @@ msgstr ""
 msgid "Drop here the dimension field"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:813
+#: public/js/ng/report-edit/report-edit.component.js:798
 msgid "Drop here the elements that you want to use to filter the results of the query"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:803
+#: public/js/ng/report-edit/report-edit.component.js:789
 msgid "Drop here the elements that you want to use to order the results of the query"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:793
+#: public/js/ng/report-edit/report-edit.component.js:780
 msgid "Drop here the elements you want to have in the results of the query"
 msgstr ""
 
@@ -727,7 +734,7 @@ msgstr ""
 msgid "Duplicate '{{vm.resolve.name}}' ?"
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:103
+#: public/js/ng/report-list/report-list.component.js:88
 msgid "Duplicate report"
 msgstr ""
 
@@ -742,7 +749,7 @@ msgstr ""
 #: public/partials/layer-edit/layer-edit.component.html:107
 #: public/partials/layer-edit/layer-edit.component.html:120
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:8
-#: public/partials/user-show/user-show.component.html:4
+#: views/user/show.liquid:23
 msgid "Edit"
 msgstr ""
 
@@ -754,15 +761,11 @@ msgstr ""
 msgid "Edit Report"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:4
-msgid "Edit User"
-msgstr ""
-
 #: public/partials/datasource-edit/datasource-edit.component.html:2
 msgid "Edit datasource"
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:83
+#: public/js/ng/report-list/report-list.component.js:71
 msgid "Edit report"
 msgstr ""
 
@@ -778,8 +781,13 @@ msgstr ""
 msgid "Edit this report"
 msgstr ""
 
-#: public/partials/user-list/user-list.component.html:14
+#: public/js/user/list.js:27
 msgid "Edit this user"
+msgstr ""
+
+#: views/user/edit.liquid:1
+#: views/user/edit.liquid:5
+msgid "Edit user"
 msgstr ""
 
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:6
@@ -794,11 +802,15 @@ msgstr ""
 msgid "Elements used in the expression:"
 msgstr ""
 
+#: server/routes/users.js:72
+msgid "Email is required"
+msgstr ""
+
 #: public/js/ng/dashboard-edit/dashboard-edit.component.js:102
 msgid "Error : failed to import report"
 msgstr ""
 
-#: public/partials/import/import.component.html:16
+#: public/js/import.js:45
 msgid "Error:"
 msgstr ""
 
@@ -829,7 +841,7 @@ msgstr ""
 #: public/partials/dashboard-view/dashboard-view.component.html:12
 #: public/partials/report-view/report-view.component.html:14
 #: views/export.liquid:1
-#: views/export.liquid:86
+#: views/export.liquid:88
 #: views/sidebar.liquid:57
 msgid "Export"
 msgstr ""
@@ -842,15 +854,19 @@ msgstr ""
 msgid "Expression"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:445
+#: public/js/custom-element/user-status-badge.js:31
+msgid "Failed to change user status"
+msgstr ""
+
+#: public/js/import.js:322
 msgid "Failed to create dashboard"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:336
+#: public/js/import.js:247
 msgid "Failed to create layer"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:383
+#: public/js/import.js:283
 msgid "Failed to create report"
 msgstr ""
 
@@ -862,15 +878,15 @@ msgstr ""
 msgid "Failed to save role"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:433
+#: public/js/import.js:316
 msgid "Failed to update dashboard"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:323
+#: public/js/import.js:240
 msgid "Failed to update layer"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:371
+#: public/js/import.js:277
 msgid "Failed to update report"
 msgstr ""
 
@@ -879,8 +895,12 @@ msgstr ""
 msgid "Fetching data ..."
 msgstr ""
 
-#: public/js/ng/import/import.component.js:56
+#: public/js/import.js:59
 msgid "File must contain the following properties: datasources, layers, reports and dashboards"
+msgstr ""
+
+#: public/js/import.js:147
+msgid "File verified"
 msgstr ""
 
 #: public/partials/report-edit/report-edit.report-edit.html:33
@@ -891,20 +911,21 @@ msgstr ""
 msgid "Filter Instructions"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:811
+#: public/js/ng/report-edit/report-edit.component.js:796
 msgid "Filters drop zone"
 msgstr ""
 
+#: public/js/table.js:72
 #: public/partials/table/table.pager.component.html:4
 msgid "First"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:20
+#: views/partials/user/form.liquid:15
 msgid "First Name"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:22
-msgid "First Name is required"
+#: server/routes/users.js:66
+msgid "First name is required"
 msgstr ""
 
 #: public/js/ng/report/report.filter-prompt.component.js:227
@@ -963,15 +984,15 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: views/home.liquid:41
+#: views/home.liquid:43
 msgid "Getting started with Urungi?"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:111
+#: public/js/ng/datasource-list/datasource-list.component.js:91
 msgid "Go to layers and continue tour"
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:174
+#: public/js/ng/layer-list/layer-list.component.js:171
 msgid "Go to the public space definition and continue tour"
 msgstr ""
 
@@ -1006,31 +1027,31 @@ msgstr ""
 msgid "Hello, world!"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:68
+#: public/js/ng/datasource-list/datasource-list.component.js:60
 msgid "Here all the data sources (database connections) will be listed."
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:140
+#: public/js/ng/layer-list/layer-list.component.js:137
 msgid "Here all the layers are listed."
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:118
+#: public/js/ng/dashboard-list/dashboard-list.component.js:110
 msgid "Here all your dashboards are listed."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:73
+#: public/js/ng/report-list/report-list.component.js:62
 msgid "Here all your reports are listed."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:48
+#: public/js/ng/report-list/report-list.component.js:43
 msgid "Here you can create and execute reports."
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:124
+#: public/js/ng/layer-list/layer-list.component.js:121
 msgid "Here you can create and manage the layers that later will be used by your users to create reports or explore data."
 msgstr ""
 
-#: public/js/shared-space.js:128
+#: public/js/shared-space.js:127
 msgid "Here you can define the structure in folders of the shared space."
 msgstr ""
 
@@ -1048,11 +1069,11 @@ msgstr ""
 msgid "Icon set"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:152
+#: public/js/ng/dashboard-list/dashboard-list.component.js:139
 msgid "If you drop or modify a published dashboard, it will have and impact on other users, think about it before making any updates on the dashboard."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:115
+#: public/js/ng/report-list/report-list.component.js:97
 msgid "If you drop or modify a published report, it will have and impact on other users, think about it before making any updates on the report."
 msgstr ""
 
@@ -1073,15 +1094,15 @@ msgstr ""
 msgid "Import Report"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:295
+#: public/js/import.js:219
 msgid "Import completed"
 msgstr ""
 
-#: public/partials/import/import.component.html:2
+#: views/import.liquid:27
 msgid "Import layers, reports and dashboards"
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:98
+#: public/js/ng/dashboard-list/dashboard-list.component.js:94
 msgid "In here you can create and execute dashboards like web pages."
 msgstr ""
 
@@ -1101,7 +1122,7 @@ msgstr ""
 msgid "Insert here your Host address or IP"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:46
+#: views/partials/user/form.liquid:62
 msgid "Introduce password"
 msgstr ""
 
@@ -1120,20 +1141,21 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
+#: public/js/table.js:97
 #: public/partials/table/table.pager.component.html:16
 msgid "Last"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:25
+#: views/partials/user/form.liquid:20
 msgid "Last Name"
-msgstr ""
-
-#: public/partials/user/user.edit-modal.component.html:27
-msgid "Last Name is required"
 msgstr ""
 
 #: public/js/ng/report/report.filter-prompt.component.js:235
 msgid "Last month"
+msgstr ""
+
+#: server/routes/users.js:69
+msgid "Last name is required"
 msgstr ""
 
 #: public/js/ng/report/report.filter-prompt.component.js:234
@@ -1168,11 +1190,11 @@ msgstr ""
 msgid "Last year third quarter"
 msgstr ""
 
-#: public/js/shared-space.js:130
+#: public/js/shared-space.js:129
 msgid "Later using roles you can grant or deny access to the different folders of the shared space to users that have the appropriate role to execute or share reports along the shared space."
 msgstr ""
 
-#: views/home.liquid:77
+#: views/home.liquid:79
 msgid "Latest executions"
 msgstr ""
 
@@ -1188,11 +1210,11 @@ msgstr ""
 msgid "Layer Properties"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:331
+#: public/js/import.js:245
 msgid "Layer created successfully:"
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:158
+#: public/js/ng/layer-list/layer-list.component.js:155
 msgid "Layer delete"
 msgstr ""
 
@@ -1212,35 +1234,34 @@ msgstr ""
 msgid "Layer saved successfully"
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:149
+#: public/js/ng/layer-list/layer-list.component.js:146
 msgid "Layer status"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:318
+#: public/js/import.js:238
 msgid "Layer updated successfully:"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:105
-#: public/js/ng/datasource-list/datasource-list.component.js:107
-#: public/js/ng/layer-list/layer-list.component.js:118
-#: public/partials/import/import.component.html:37
+#: public/js/import.js:163
+#: public/js/ng/datasource-list/datasource-list.component.js:87
+#: public/js/ng/layer-list/layer-list.component.js:115
 #: public/partials/layer-list/layer-list.component.html:2
-#: views/export.liquid:21
+#: views/export.liquid:23
 #: views/layer/edit.liquid:1
 #: views/layer/list.liquid:1
 #: views/sidebar.liquid:37
 msgid "Layers"
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:122
+#: public/js/ng/layer-list/layer-list.component.js:119
 msgid "Layers allow your users to create reports dragging and dropping familiar elements that points in the background to the fields contained in tables in your data sources."
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:120
+#: public/js/ng/layer-list/layer-list.component.js:117
 msgid "Layers define the interface for your users to access the data."
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:138
+#: public/js/ng/layer-list/layer-list.component.js:135
 msgid "Layers list"
 msgstr ""
 
@@ -1256,7 +1277,7 @@ msgstr ""
 msgid "Legend position"
 msgstr ""
 
-#: views/about.liquid:39
+#: views/about.liquid:41
 msgid "License"
 msgstr ""
 
@@ -1269,7 +1290,7 @@ msgstr ""
 msgid "Line"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:66
+#: public/js/ng/datasource-list/datasource-list.component.js:58
 msgid "List of data sources"
 msgstr ""
 
@@ -1277,7 +1298,7 @@ msgstr ""
 msgid "List your limits separated by a slash symbol <br>(Example : 20/30/40/50/60)"
 msgstr ""
 
-#: views/login.liquid:34
+#: views/login.liquid:30
 msgid "Log In"
 msgstr ""
 
@@ -1297,7 +1318,7 @@ msgstr ""
 msgid "More Info"
 msgstr ""
 
-#: views/home.liquid:108
+#: views/home.liquid:110
 msgid "Most executed"
 msgstr ""
 
@@ -1321,11 +1342,10 @@ msgstr ""
 msgid "My Reports"
 msgstr ""
 
+#: public/js/custom-element/import-table.js:10
+#: public/js/user/list.js:15
 #: public/partials/dashboard-list/dashboard-list.component.html:20
 #: public/partials/datasource-edit/datasource-edit.component.html:18
-#: public/partials/import/import.component.html:111
-#: public/partials/import/import.component.html:43
-#: public/partials/import/import.component.html:77
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:30
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:69
 #: public/partials/layer-list/layer-list.component.html:17
@@ -1338,7 +1358,7 @@ msgid "Name is required"
 msgstr ""
 
 #: public/js/ng/dashboard-edit/dashboard-edit.component.js:125
-#: public/js/ng/dashboard-list/dashboard-list.component.js:108
+#: public/js/ng/dashboard-list/dashboard-list.component.js:103
 #: public/partials/report-edit/report-edit.dashboard-list-modal.html:10
 msgid "New Dashboard"
 msgstr ""
@@ -1355,11 +1375,11 @@ msgstr ""
 msgid "New Folder"
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:131
+#: public/js/ng/layer-list/layer-list.component.js:128
 msgid "New Layer"
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:63
+#: public/js/ng/report-list/report-list.component.js:55
 #: public/partials/dashboard-edit/dashboard-edit.component.html:107
 msgid "New Report"
 msgstr ""
@@ -1368,8 +1388,7 @@ msgstr ""
 msgid "New Role"
 msgstr ""
 
-#: public/partials/user-list/user-list.component.html:3
-#: public/partials/user/user.edit-modal.component.html:3
+#: views/user/list.liquid:15
 msgid "New User"
 msgstr ""
 
@@ -1377,12 +1396,13 @@ msgstr ""
 msgid "New dashboard"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:58
+#: public/js/ng/datasource-list/datasource-list.component.js:53
+#: server/routes/data-sources.js:25
 msgid "New datasource"
 msgstr ""
 
-#: public/js/shared-space.js:64 public/js/shared-space.js:80
-#: public/js/shared-space.js:144
+#: public/js/shared-space.js:66 public/js/shared-space.js:82
+#: public/js/shared-space.js:143
 msgid "New folder"
 msgstr ""
 
@@ -1390,8 +1410,7 @@ msgstr ""
 msgid "New layer"
 msgstr ""
 
-#: public/partials/user-show/user-show.users-modify-password-modal.component.html:17
-#: public/partials/user-show/user-show.users-modify-password-modal.component.html:18
+#: views/user/change-password.liquid:18
 msgid "New password"
 msgstr ""
 
@@ -1399,19 +1418,25 @@ msgstr ""
 msgid "New report"
 msgstr ""
 
+#: views/user/new.liquid:1
+#: views/user/new.liquid:5
+msgid "New user"
+msgstr ""
+
 #: public/js/ng/dashboard-list/dashboard-list.component.js:87
 #: public/js/ng/datasource-list/datasource-list.component.js:37
 #: public/js/ng/layer-list/layer-list.component.js:110
 #: public/js/ng/report-edit/report-edit.component.js:735
 #: public/js/ng/report-list/report-list.component.js:37
-#: public/js/shared-space.js:116
+#: public/js/shared-space.js:118
+#: public/js/table.js:96
 #: public/partials/layer-edit/layer-edit.element-modal.component.html:172
 #: public/partials/table/table.pager.component.html:13
 msgid "Next"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:103
-#: public/js/ng/layer-list/layer-list.component.js:168
+#: public/js/ng/datasource-list/datasource-list.component.js:86
+#: public/js/ng/layer-list/layer-list.component.js:165
 msgid "Next Step"
 msgstr ""
 
@@ -1428,11 +1453,11 @@ msgstr ""
 msgid "No data for this report"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:152
+#: public/js/import.js:387
 msgid "No datasourceID"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:187
+#: public/js/import.js:406
 msgid "No selectedLayerID"
 msgstr ""
 
@@ -1444,9 +1469,7 @@ msgstr ""
 msgid "Number of suggestions"
 msgstr ""
 
-#: public/partials/import/import.component.html:128
-#: public/partials/import/import.component.html:60
-#: public/partials/import/import.component.html:94
+#: public/js/custom-element/import-table.js:30
 msgid "OK"
 msgstr ""
 
@@ -1455,24 +1478,19 @@ msgstr ""
 msgid "Oh yeah, it is that good."
 msgstr ""
 
-#: public/partials/user-show/user-show.users-modify-password-modal.component.html:13
-#: public/partials/user-show/user-show.users-modify-password-modal.component.html:14
-msgid "Old password"
-msgstr ""
-
-#: public/js/ng/dashboard-list/dashboard-list.component.js:140
+#: public/js/ng/dashboard-list/dashboard-list.component.js:128
 msgid "Once deleted the dashboard will not be recoverable again."
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:162
+#: public/js/ng/layer-list/layer-list.component.js:159
 msgid "Once deleted the layer will not be recoverable again."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:95
+#: public/js/ng/report-list/report-list.component.js:81
 msgid "Once deleted the report will not be recoverable again."
 msgstr ""
 
-#: public/js/shared-space.js:155
+#: public/js/shared-space.js:154
 msgid "Once you get the structure you want save it to make it available for your users."
 msgstr ""
 
@@ -1480,7 +1498,7 @@ msgstr ""
 msgid "One of the custom elements uses elements from tables which are not joined. This custom element cannot be fetched"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:759
+#: public/js/ng/report-edit/report-edit.component.js:754
 msgid "One query can only be based on one layer, you can not mix elements from different layers in the same query"
 msgstr ""
 
@@ -1491,23 +1509,27 @@ msgid ""
 "            elements"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:801
+#: public/js/ng/report-edit/report-edit.component.js:787
 msgid "Order By drop zone"
 msgstr ""
 
 #: public/partials/datasource-edit/datasource-edit.component.html:43
-#: public/partials/user/user.edit-modal.component.html:42
-#: views/login.liquid:28
+#: views/login.liquid:24
+#: views/partials/user/form.liquid:59
 msgid "Password"
 msgstr ""
 
-#: public/js/ng/user-show/user-show.users-modify-password-modal.component.js:56
-msgid "Password changed"
+#: server/routes/users.js:175
+msgid "Password changed successfully"
 msgstr ""
 
-#: public/js/ng/user-show/user-show.users-modify-password-modal.component.js:47
-#: public/js/ng/user/user.edit-modal.component.js:47
-msgid "Passwords do not match"
+#: server/routes/users.js:80
+msgid "Password is required"
+msgstr ""
+
+#: server/routes/users.js:76 server/routes/users.js:83
+#: server/routes/users.js:158
+msgid "Passwords must match"
 msgstr ""
 
 #: public/partials/role-list/role-list.edit-modal.component.html:50
@@ -1539,11 +1561,12 @@ msgstr ""
 msgid "Preview size"
 msgstr ""
 
+#: public/js/table.js:73
 #: public/partials/table/table.pager.component.html:7
 msgid "Previous"
 msgstr ""
 
-#: views/about.liquid:50
+#: views/about.liquid:52
 msgid "Product Owner"
 msgstr ""
 
@@ -1571,7 +1594,7 @@ msgstr ""
 msgid "Queries"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:781
+#: public/js/ng/report-edit/report-edit.component.js:769
 msgid "Query refresh"
 msgstr ""
 
@@ -1584,15 +1607,15 @@ msgstr ""
 msgid "Redraw"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:158
+#: public/js/import.js:384
 msgid "Related datasource is not in import file"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:193
+#: public/js/import.js:403
 msgid "Related layer is not in import file"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:199
+#: public/js/import.js:400
 msgid "Related layer is not valid"
 msgstr ""
 
@@ -1610,7 +1633,6 @@ msgid "Remove from shared space"
 msgstr ""
 
 #: public/js/ng/role-list/role-list.component.js:81
-#: public/js/ng/user-show/user-show.component.js:137
 msgid "Remove role {{name}} ?"
 msgstr ""
 
@@ -1618,12 +1640,7 @@ msgstr ""
 msgid "Remove this item from this dimension"
 msgstr ""
 
-#: public/js/ng/user-list/user-list.component.js:111
-#: public/js/ng/user-show/user-show.component.js:154
-msgid "Remove user {{name}} ?"
-msgstr ""
-
-#: public/js/shared-space.js:42
+#: public/js/shared-space.js:41
 msgid "Rename folder"
 msgstr ""
 
@@ -1631,12 +1648,11 @@ msgstr ""
 msgid "Repainting report ..."
 msgstr ""
 
-#: public/partials/user-show/user-show.users-modify-password-modal.component.html:21
-#: public/partials/user-show/user-show.users-modify-password-modal.component.html:22
+#: views/user/change-password.liquid:23
 msgid "Repeat new password"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:49
+#: views/partials/user/form.liquid:65
 msgid "Repeat password"
 msgstr ""
 
@@ -1644,15 +1660,15 @@ msgstr ""
 msgid "Report Name"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:765
+#: public/js/ng/report-edit/report-edit.component.js:759
 msgid "Report Type selector"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:378
+#: public/js/import.js:281
 msgid "Report created successfully:"
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:111
+#: public/js/ng/report-list/report-list.component.js:93
 msgid "Report published"
 msgstr ""
 
@@ -1665,46 +1681,42 @@ msgstr ""
 msgid "Report type"
 msgstr ""
 
-#: public/js/ng/import/import.component.js:366
+#: public/js/import.js:275
 msgid "Report updated successfully:"
 msgstr ""
 
+#: public/js/import.js:164
+#: public/js/ng/report-list/report-list.component.js:42
 #: public/js/ng/report-list/report-list.component.js:46
-#: public/js/ng/report-list/report-list.component.js:53
 #: public/partials/dashboard-edit/dashboard-edit.component.html:51
-#: public/partials/import/import.component.html:71
 #: public/partials/report-list/report-list.component.html:2
-#: public/partials/user-show/user-show.component.html:83
-#: views/export.liquid:42
+#: views/export.liquid:44
 #: views/report/edit.liquid:1
 #: views/report/list.liquid:1
 #: views/report/view.liquid:1
+#: views/user/show.liquid:78
 msgid "Reports"
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:71
+#: public/js/ng/report-list/report-list.component.js:60
 msgid "Reports list"
 msgstr ""
 
-#: views/export.liquid:34
+#: views/export.liquid:36
 msgid "Required layers for chosen reports and dashboards will be included automatically, there is no need to include them manually."
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:142
-#: public/js/ng/layer-list/layer-list.component.js:164
-#: public/js/ng/report-list/report-list.component.js:97
+#: public/js/ng/dashboard-list/dashboard-list.component.js:130
+#: public/js/ng/layer-list/layer-list.component.js:161
+#: public/js/ng/report-list/report-list.component.js:83
 msgid "Requires 2 step confirmation."
-msgstr ""
-
-#: public/partials/user/user.edit-modal.component.html:56
-msgid "Reset user password"
 msgstr ""
 
 #: public/partials/layer-edit/layer-edit.element-modal.component.html:151
 msgid "Result"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:773
+#: public/js/ng/report-edit/report-edit.component.js:764
 msgid "Results area"
 msgstr ""
 
@@ -1712,7 +1724,7 @@ msgstr ""
 msgid "Right"
 msgstr ""
 
-#: views/shared-space.liquid:33
+#: views/shared-space.liquid:36
 msgid "Right-click on a folder to show available options"
 msgstr ""
 
@@ -1737,6 +1749,7 @@ msgid "Role updated successfully"
 msgstr ""
 
 #: public/partials/role-list/role-list.component.html:2
+#: views/partials/user/form.liquid:71
 #: views/role/list.liquid:1
 #: views/sidebar.liquid:45
 msgid "Roles"
@@ -1770,8 +1783,6 @@ msgstr ""
 #: public/partials/report-edit/report-edit.component.html:20
 #: public/partials/report-edit/report-edit.report-name-modal.html:14
 #: public/partials/role-list/role-list.edit-modal.component.html:93
-#: public/partials/user-show/user-show.users-modify-password-modal.component.html:32
-#: public/partials/user/user.edit-modal.component.html:91
 #: views/shared-space.liquid:27
 msgid "Save"
 msgstr ""
@@ -1809,8 +1820,12 @@ msgstr ""
 msgid "Save settings"
 msgstr ""
 
-#: public/js/shared-space.js:153
+#: public/js/shared-space.js:152
 msgid "Save shared space"
+msgstr ""
+
+#: views/user/edit.liquid:7
+msgid "Save user"
 msgstr ""
 
 #: public/js/ng/report/report.c3-charts.service.js:433
@@ -1850,15 +1865,15 @@ msgstr ""
 msgid "Select an image"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:749
+#: public/js/ng/report-edit/report-edit.component.js:745
 msgid "Select elements and drag and drop them over the query design zone, depending if the element is going to be used as a column result (columns area), as a filter (filters area) or as an element to order by the results of the query (order by area)"
 msgstr ""
 
-#: public/partials/import/import.component.html:6
+#: public/js/import.js:23
 msgid "Select file..."
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:757
+#: public/js/ng/report-edit/report-edit.component.js:752
 msgid "Select here the layer where your query will be based on."
 msgstr ""
 
@@ -1866,7 +1881,7 @@ msgstr ""
 msgid "Select the dashboard to push this report to"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:37
+#: views/partials/user/form.liquid:37
 msgid "Send password through email"
 msgstr ""
 
@@ -1905,11 +1920,11 @@ msgstr ""
 msgid "Share to..."
 msgstr ""
 
-#: views/home.liquid:60
+#: views/home.liquid:62
 msgid "Shared Area"
 msgstr ""
 
-#: public/js/shared-space.js:124
+#: public/js/shared-space.js:123
 #: views/shared-space.liquid:1
 #: views/shared-space.liquid:26
 #: views/sidebar.liquid:33
@@ -1920,22 +1935,12 @@ msgstr ""
 msgid "Shared space permissions"
 msgstr ""
 
-#: public/js/shared-space.js:72
+#: public/js/shared-space.js:74
 msgid "Shared space saved"
-msgstr ""
-
-#: public/partials/user-show/user-show.users-modify-password-modal.component.html:28
-msgid "Show Passwords"
 msgstr ""
 
 #: public/partials/report-edit/report-edit.filter-prompt-modal.html:44
 msgid "Show suggestions"
-msgstr ""
-
-#: public/js/ng/dashboard-list/dashboard-list.component.js:89
-#: public/js/ng/datasource-list/datasource-list.component.js:39
-#: public/js/ng/report-edit/report-edit.component.js:737
-msgid "Skip"
 msgstr ""
 
 #: public/js/ng/layer-edit/layer-edit.component.js:191
@@ -1955,44 +1960,37 @@ msgstr ""
 msgid "Spline"
 msgstr ""
 
-#: views/home.liquid:50
+#: views/home.liquid:52
 msgid "Start guided tour"
 msgstr ""
 
-#: public/partials/import/import.component.html:139
+#: public/js/import.js:167
 msgid "Start import"
 msgstr ""
 
-#: public/partials/import/import.component.html:112
-#: public/partials/import/import.component.html:44
-#: public/partials/import/import.component.html:78
+#: public/js/custom-element/import-table.js:10
 #: public/partials/layer-list/layer-list.component.html:21
 msgid "Status"
 msgstr ""
 
+#: public/js/custom-element/user-status-badge.js:34
 #: public/js/ng/layer-list/layer-list.component.js:102
-#: public/js/ng/user-list/user-list.component.js:48
-#: public/js/ng/user-show/user-show.component.js:82
 msgid "Status updated"
 msgstr ""
 
-#: public/partials/import/import.component.html:5
+#: public/js/import.js:21
 msgid "Step 1 - Choose file to import"
 msgstr ""
 
-#: public/partials/import/import.component.html:21
+#: public/js/import.js:161
 msgid "Step 2 - Confirm import"
-msgstr ""
-
-#: public/partials/import/import.component.html:145
-msgid "Step 3 - Import"
 msgstr ""
 
 #: public/partials/layer-edit/layer-edit.element-modal.component.html:125
 msgid "String"
 msgstr ""
 
-#: public/js/shared-space.js:135
+#: public/js/shared-space.js:134
 msgid "Structure area"
 msgstr ""
 
@@ -2008,7 +2006,7 @@ msgstr ""
 msgid "Sum"
 msgstr ""
 
-#: views/home.liquid:42
+#: views/home.liquid:44
 msgid "Take our guided tour to familiarize yourself..."
 msgstr ""
 
@@ -2024,11 +2022,11 @@ msgstr ""
 msgid "The dashboard name is required"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:815
+#: public/js/ng/report-edit/report-edit.component.js:800
 msgid "The elements you drop in here do not necessarily have to be in the columns/results area, a query can be filtered by elements that do not appear in the results"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:805
+#: public/js/ng/report-edit/report-edit.component.js:791
 msgid "The elements you drop in here do not necessarily have to be in the columns/results area, a query can be ordered by elements that do not appear in the results"
 msgstr ""
 
@@ -2051,19 +2049,19 @@ msgstr ""
 msgid "The following columns will be removed :"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:745
+#: public/js/ng/report-edit/report-edit.component.js:741
 msgid "The layer catalog"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:755
+#: public/js/ng/report-edit/report-edit.component.js:750
 msgid "The layer selector"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:98
+#: public/js/ng/datasource-list/datasource-list.component.js:83
 msgid "The main connection details for the data source."
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:87
+#: public/js/ng/datasource-list/datasource-list.component.js:74
 msgid "The name for the data source and the type of connection (end database)."
 msgstr ""
 
@@ -2071,7 +2069,7 @@ msgstr ""
 msgid "The name is required"
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:172
+#: public/js/ng/layer-list/layer-list.component.js:169
 msgid "The public space is the place where your users can publish reports to be shared across the company, in this place you will define the folder strucuture for the company&quot;s public space"
 msgstr ""
 
@@ -2079,15 +2077,11 @@ msgstr ""
 msgid "The report name is required"
 msgstr ""
 
-#: public/js/ng/user-show/user-show.component.js:132
-msgid "The role 'Urungi Administrator' can't be removed from the user administrator"
-msgstr ""
-
-#: public/js/shared-space.js:126
+#: public/js/shared-space.js:125
 msgid "The shared space is the place where you or your users will publish reports to be available for other users or the hole company."
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:151
+#: public/js/ng/layer-list/layer-list.component.js:148
 msgid "The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data."
 msgstr ""
 
@@ -2112,8 +2106,8 @@ msgstr ""
 msgid "This divider defines a page-break for printing"
 msgstr ""
 
+#: public/js/import.js:373
 #: public/partials/core/core.delete-modal.component.html:11
-#: public/partials/import/import.component.html:32
 msgid "This field is required"
 msgstr ""
 
@@ -2130,19 +2124,19 @@ msgstr ""
 msgid "This is a simple text paragraph select to edit content."
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:78
+#: public/js/ng/datasource-list/datasource-list.component.js:68
 msgid "This is one data source."
 msgstr ""
 
-#: public/js/shared-space.js:137
+#: public/js/shared-space.js:136
 msgid "This is the area where you can define the structure for the shared space."
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:150
+#: public/js/ng/dashboard-list/dashboard-list.component.js:137
 msgid "This label indicates that this dashboard is public."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:113
+#: public/js/ng/report-list/report-list.component.js:95
 msgid "This label indicates that this report is public."
 msgstr ""
 
@@ -2166,7 +2160,7 @@ msgstr ""
 msgid "This year"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:62
+#: views/partials/user/form.liquid:97
 msgid "Title"
 msgstr ""
 
@@ -2195,7 +2189,7 @@ msgstr ""
 msgid "Type a name for this dataset"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:77
+#: views/partials/user/form.liquid:112
 msgid "Unit"
 msgstr ""
 
@@ -2211,67 +2205,66 @@ msgstr ""
 msgid "Upload image"
 msgstr ""
 
-#: public/js/ng/user-show/user-show.component.js:125
+#: server/routes/users.js:224
 msgid "Urungi Administrator"
 msgstr ""
 
-#: views/about.liquid:40
+#: views/about.liquid:42
 msgid "Urungi is Open Source, feel free to join us on github, submit issues and pull requests:"
 msgstr ""
 
-#: views/about.liquid:35
+#: views/about.liquid:37
 msgid "Urungi is a Maori word meaning rudder, steering paddle, driver, navigator"
 msgstr ""
 
-#: views/about.liquid:32
+#: views/about.liquid:34
 msgid "Urungi is a fork of {{widestage_link}}"
 msgstr ""
 
-#: views/about.liquid:25
+#: views/about.liquid:27
 msgid "Urungi is a self-service dashboard and reporting tool. It has been written with the following ideas in mind:"
 msgstr ""
 
-#: views/about.liquid:42
+#: views/about.liquid:44
 msgid "Urungi is licensed under {{gpl_link}}"
 msgstr ""
 
-#: views/about.liquid:17
+#: views/about.liquid:19
 msgid "Urungi version: {{version}}"
 msgstr ""
 
-#: public/js/ng/report-edit/report-edit.component.js:783
+#: public/js/ng/report-edit/report-edit.component.js:771
 msgid "Use this button to refresh the results"
 msgstr ""
 
-#: public/partials/user-show/user-show.component.html:2
+#: views/user/show.liquid:13
 msgid "User"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:14
+#: views/partials/user/form.liquid:6
 msgid "User Nick"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:16
-msgid "User Nick is required"
-msgstr ""
-
-#: public/js/ng/user-list/user-list.component.js:119
-#: public/js/ng/user-show/user-show.component.js:163
+#: server/routes/users.js:217
 msgid "User deleted successfully"
 msgstr ""
 
 #: public/partials/datasource-edit/datasource-edit.component.html:38
-#: views/login.liquid:24
+#: views/login.liquid:20
 msgid "User name"
 msgstr ""
 
-#: public/partials/user-show/user-show.component.html:2
+#: views/user/show.liquid:14
 msgid "User profile and permissions"
 msgstr ""
 
-#: public/partials/user-list/user-list.component.html:2
+#: server/routes/users.js:63
+msgid "Username is required"
+msgstr ""
+
 #: views/sidebar.liquid:49
 #: views/user/list.liquid:1
+#: views/user/list.liquid:14
 #: views/user/show.liquid:1
 msgid "Users"
 msgstr ""
@@ -2286,11 +2279,11 @@ msgid_plural "Warning: This role is assigned to {{$count}} users"
 msgstr[0] ""
 msgstr[1] ""
 
-#: views/about.liquid:34
+#: views/about.liquid:36
 msgid "What does Urungi mean ?"
 msgstr ""
 
-#: views/about.liquid:24
+#: views/about.liquid:26
 msgid "What is Urungi"
 msgstr ""
 
@@ -2303,74 +2296,52 @@ msgstr ""
 msgid "Yesterday"
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:144
+#: public/js/ng/layer-list/layer-list.component.js:141
 msgid "You can also activate or deactivate layers."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:57
+#: public/js/ng/report-list/report-list.component.js:50
 msgid "You can also add runtime filters to split your data in real time."
 msgstr ""
 
-#: public/js/ng/dashboard-list/dashboard-list.component.js:122
+#: public/js/ng/dashboard-list/dashboard-list.component.js:114
 msgid "You can also modify or drop the dashboard, clicking into the modify or delete buttons."
 msgstr ""
 
-#: public/js/ng/report-list/report-list.component.js:77
+#: public/js/ng/report-list/report-list.component.js:66
 msgid "You can also modify or drop the report, clicking into the modify or delete buttons."
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:153
+#: public/js/ng/layer-list/layer-list.component.js:150
 msgid "You can change the status of the layer simply clicking over this label"
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:126
+#: public/js/ng/layer-list/layer-list.component.js:123
 msgid "You can create several layers depending on your necessities, but you have to define one at least."
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:70
+#: public/js/ng/datasource-list/datasource-list.component.js:62
 msgid "You can edit the connection details for every data source, delete a data source or activate/deactivate a datasource."
 msgstr ""
 
-#: public/js/ng/layer-list/layer-list.component.js:142
+#: public/js/ng/layer-list/layer-list.component.js:139
 msgid "You can edit the layer to configure the tables, elements and joins between tables."
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:89
+#: public/js/ng/datasource-list/datasource-list.component.js:76
 msgid "You can setup the name you want for data sources."
-msgstr ""
-
-#: public/js/ng/user-list/user-list.component.js:106
-#: public/js/ng/user-show/user-show.component.js:149
-msgid "You can't remove yourself from your own user session"
 msgstr ""
 
 #: public/partials/layer-edit/layer-edit.sql-modal.component.html:19
 msgid "You have to enter an SQL query"
 msgstr ""
 
-#: public/js/ng/user/user.edit-modal.component.js:43
-msgid "You have to introduce a password"
-msgstr ""
-
-#: public/js/ng/user/user.edit-modal.component.js:53
-msgid "You have to introduce a valid email to send the generated password to the user"
-msgstr ""
-
-#: public/js/ng/user/user.edit-modal.component.js:36
-msgid "You have to introduce the user nick for the new user"
-msgstr ""
-
-#: public/js/ng/user-show/user-show.users-modify-password-modal.component.js:43
-msgid "You have to introduce your password"
-msgstr ""
-
 #: public/js/ng/dashboard-edit/dashboard-edit.dashboard-image-modal.component.js:74
 msgid "You may only upload images"
 msgstr ""
 
+#: public/js/custom-element/user-status-badge.js:14
 #: public/partials/layer-list/layer-list.component.html:48
-#: public/partials/user-list/user-list.component.html:10
-#: public/partials/user-show/user-show.component.html:13
 msgid "active"
 msgstr ""
 
@@ -2382,7 +2353,7 @@ msgstr ""
 msgid "all"
 msgstr ""
 
-#: public/js/ng/datasource-list/datasource-list.component.js:109
+#: public/js/ng/datasource-list/datasource-list.component.js:89
 msgid "allow your users to access and understand your data without any knowledge of SQL or how the database is structured in tables and fields..."
 msgstr ""
 
@@ -2466,20 +2437,16 @@ msgstr ""
 msgid "double"
 msgstr ""
 
-#: views/about.liquid:27
+#: views/about.liquid:29
 msgid "easy to use for end-users"
 msgstr ""
 
-#: views/about.liquid:28
+#: views/about.liquid:30
 msgid "easy to use for reports creators"
 msgstr ""
 
-#: public/partials/user/user.edit-modal.component.html:30
+#: views/partials/user/form.liquid:25
 msgid "email"
-msgstr ""
-
-#: public/partials/user/user.edit-modal.component.html:32
-msgid "email is required"
 msgstr ""
 
 #: public/js/ng/report/report.filter-prompt.component.js:207
@@ -2494,7 +2461,7 @@ msgstr ""
 msgid "enter new value"
 msgstr ""
 
-#: views/about.liquid:46
+#: views/about.liquid:48
 msgid "first version of widestage"
 msgstr ""
 
@@ -2539,8 +2506,8 @@ msgstr ""
 msgid "inset"
 msgstr ""
 
-#: views/about.liquid:53
-#: views/about.liquid:54
+#: views/about.liquid:55
+#: views/about.liquid:56
 msgid "internship in summer 2018"
 msgstr ""
 
@@ -2671,9 +2638,8 @@ msgstr ""
 msgid "none"
 msgstr ""
 
+#: public/js/custom-element/user-status-badge.js:18
 #: public/partials/layer-list/layer-list.component.html:49
-#: public/partials/user-list/user-list.component.html:11
-#: public/partials/user-show/user-show.component.html:14
 msgid "not active"
 msgstr ""
 
@@ -2689,15 +2655,15 @@ msgstr ""
 msgid "port:"
 msgstr ""
 
-#: views/about.liquid:29
+#: views/about.liquid:31
 msgid "powerful for power-users"
 msgstr ""
 
-#: public/partials/user-show/user-show.component.html:73
+#: views/user/show.liquid:68
 msgid "private dashboards"
 msgstr ""
 
-#: public/partials/user-show/user-show.component.html:69
+#: views/user/show.liquid:64
 msgid "private reports"
 msgstr ""
 
@@ -2716,6 +2682,14 @@ msgstr ""
 
 #: public/js/ng/report-edit/report-edit.component.js:585
 msgid "report type does not exist"
+msgstr ""
+
+#: views/partials/user/form.liquid:6
+#: views/partials/user/form.liquid:15
+#: views/partials/user/form.liquid:20
+#: views/partials/user/form.liquid:25
+#: views/partials/user/form.liquid:59
+msgid "required"
 msgstr ""
 
 #: public/partials/report-edit/report-edit.report-edit.html:32
@@ -2747,16 +2721,16 @@ msgstr ""
 
 #: public/partials/dashboard-list/dashboard-list.component.html:49
 #: public/partials/report-list/report-list.reports-table.component.html:49
-#: public/partials/user-show/user-show.component.html:106
-#: public/partials/user-show/user-show.component.html:89
+#: views/user/show.liquid:107
+#: views/user/show.liquid:86
 msgid "shared"
 msgstr ""
 
-#: public/partials/user-show/user-show.component.html:65
+#: views/user/show.liquid:60
 msgid "shared dashboards"
 msgstr ""
 
-#: public/partials/user-show/user-show.component.html:61
+#: views/user/show.liquid:56
 msgid "shared reports"
 msgstr ""
 

@@ -4,13 +4,15 @@
     <div class="container-fluid root-container">
         <div class="row">
             <div class="col-md-3">
-                {% render 'sidebar.liquid', user: user %}
+                {% include 'sidebar' %}
             </div>
 
             <div class="main col-md-9 about-page">
                 <div class="page-header">
                     <h3>{% t 'About' | escape %}</h3>
                 </div>
+
+                {% include 'flash' %}
 
                 {% if version %}
                     <p>

@@ -32,9 +32,6 @@ const templatesModules = [
     'role-list',
     'share',
     'table',
-    'user',
-    'user-list',
-    'user-show',
 ];
 
 const templates = gulp.parallel(templatesModules.map(m => templates_compile(m)));
@@ -110,7 +107,7 @@ function nodemon_start (done) {
 }
 
 function pot () {
-    const streamJs = gulp.src(['public/js/**/*.js'], { base: '.' })
+    const streamJs = gulp.src(['public/js/**/*.js', 'server/**/*.js'], { base: '.' })
         .pipe(xgettextJs());
     const streamHtml = gulp.src(['public/partials/**/*.html'], { base: '.' })
         .pipe(angularGettext.extract('template.pot'));

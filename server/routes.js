@@ -37,8 +37,6 @@ router.get('/login', function (req, res) {
     }
 
     res.locals.csrf = req.csrfToken();
-    const messages = req.session.messages || [];
-    res.locals.messages = messages.splice(0, messages.length);
     res.render('login');
 });
 
@@ -68,7 +66,7 @@ const createFirstUser = async function (req, res, next) {
 };
 const authenticate = passport.authenticate('local', {
     failureRedirect: url('/login'),
-    failureMessage: true,
+    failureFlash: true,
 });
 router.post('/login', createFirstUser, authenticate, function (req, res) {
     req.user.last_login_date = new Date();

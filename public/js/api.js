@@ -20,6 +20,9 @@
         updateReport,
         getSharedSpace,
         setSharedSpace,
+
+        getUsers,
+        updateUser,
     };
 
     function getDatasources () {
@@ -88,6 +91,15 @@
         return httpPut('/api/shared-space', sharedSpace);
     }
 
+    function getUsers (params) {
+        const search = Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&');
+        return httpGet(`/api/users?${search}`);
+    }
+
+    function updateUser (id, changes) {
+        return httpPatch('/api/users/' + id, changes);
+    }
+
     function httpGet (path) {
         return httpRequest(path, { method: 'GET' });
     }
@@ -105,6 +117,16 @@
     function httpPut (path, data) {
         return httpRequest(path, {
             method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    }
+
+    function httpPatch (path, data) {
+        return httpRequest(path, {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },

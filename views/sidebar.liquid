@@ -1,8 +1,8 @@
 <div class="list-group">
     <div class="list-group-item active">
-        <a href="users/{{user._id}}/" style="color: #fff;">
+        <a href="users/{{ session.user.id | escape }}" style="color: #fff;">
             <i class="fa fa-fw fa-user"></i>
-            {{user.userName}}
+            {{ session.user.userName | escape }}
         </a>
         <a href="logout" class="badge">
             <span>{% t 'logout' | escape %}</span>
@@ -27,7 +27,7 @@
         <span>{% t 'Explore' | escape %}</span>
     </a>
 
-    {% if user.isAdmin %}
+    {% if session.user.isAdmin %}
         <a id="sharedSpaceMainMenu" href="shared-space" class="list-group-item">
             <i class="fa fa-fw fa-sitemap"></i>
             <span>{% t 'Shared space' %}</span>

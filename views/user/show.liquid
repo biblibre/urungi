@@ -1,26 +1,117 @@
-{% capture title %}{{ selectedUser.userName | escape }} &middot; {% t 'Users' | escape %}{% endcapture %}
-{% layout 'layout/layout' title: title %}
+{% capture title %}{{ user.userName | escape }} &middot; {% t 'Users' | escape %}{% endcapture %}
+{% layout 'layout/with-sidebar' title: title %}
 
 {% block head %}
     {% render 'partials/notify' %}
-    <script defer src="s/angular/angular.min.js"></script>
-    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
-    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
-    {% render 'partials/ng/core' %}
-    {% render 'partials/ng/ui-bootstrap' %}
-    {% render 'partials/ng/user' %}
-    {% render 'partials/ng/user-show' %}
+
+    <script defer src="js/api.js"></script>
+    <script defer src="js/custom-element/user-status-badge.js"></script>
 {% endblock %}
 
-{% block content %}
-    <div class="container-fluid root-container">
-        <div class="row">
-            <div class="col-md-3">
-                {% render 'sidebar', user: user %}
-            </div>
+{% block page-header %}
+    <span class="h3">
+        <span>{% t 'User' | escape %}</span>
+        <small>{% t 'User profile and permissions' | escape %}</small>
+    </span>
 
-            <div class="main col-md-9" ng-app="app.user-show">
-                <app-user-show user-id="{{ selectedUser.id }}"></app-user-show>
+    <div class="pull-right">
+        {% if session.user.id == user.id %}
+            <a href="users/{{ user.id }}/change-password" class="btn btn-success">{% t 'Change password' | escape %}</a>
+        {% endif %}
+
+        {% if session.user.isAdmin %}
+            <a href="users/{{ user.id }}/edit" class="btn btn-success">{% t 'Edit' | escape %}</a>
+            <a href="users/{{ user.id }}/delete" class="btn btn-danger"><i class="fa fa-trash-o"></i> <span>{% t 'Delete' | escape %}</span></a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-sm-3">
+            <h4 class="text-center">
+                {{ user.firstName | escape }} {{ user.lastName | escape }} ({{ user.userName | escape }})
+                <a is="app-user-status-badge" user-id="{{ user.id | escape }}" user-status="{{ user.status | escape }}"></a>
+            </h4>
+
+            <div class="text-center">{{ user.title | escape }}</div>
+            <div class="text-center">{{ user.department | escape }}</div>
+            <div class="text-center">{{ user.businessUnit | escape }}</div>
+            <div class="text-center">{{ user.unit | escape }}</div>
+            <div class="text-center">{{ user.brand | escape }}</div>
+
+            <hr>
+
+            <ul class="list-unstyled user-info-list">
+                {% for role in user.roles %}
+                    <li>{{ rolesMap[role] | escape }}</li>
+                {% endfor %}
+            </ul>
+
+            <hr>
+
+            <div class="row" style="font-size: 14px;">
+                <div class="col-sm-6">
+                    <span>{{ reports | where: 'isShared', true | size }}</span>
+                    <span>{% t 'shared reports' | escape %}</span>
+                </div>
+                <div class="col-sm-6">
+                    <span>{{ dashboards | where: 'isShared', true | size }}</span>
+                    <span>{% t 'shared dashboards' | escape %}</span>
+                </div>
+                <div class="col-sm-6">
+                    <span>{{ reports | where: 'isShared', false | size }}</span>
+                    <span>{% t 'private reports' | escape %}</span>
+                </div>
+                <div class="col-sm-6">
+                    <span>{{ dashboards | where: 'isShared', false | size }}</span>
+                    <span>{% t 'private dashboards' | escape %}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel">
+                        <div class="panel-heading hidden-print">
+                            <div class="panel-title">{% t 'Reports' | escape %}</div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="list-group">
+                                {% for report in reports %}
+                                    <a href="reports/view/{{report.id}}" class="list-group-item">
+                                        {{ report.reportName | escape }}
+                                        {% if report.isShared %}
+                                            <span class="badge badge-success pull-right">{% t 'shared' | escape %}</span>
+                                        {% endif %}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="panel">
+                        <div class="panel-heading hidden-print">
+                            <div class="panel-title">{% t 'Dashboards' | escape %}</div>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="list-group">
+                                {% for dashboard in dashboards %}
+                                    <a href="dashboards/view/{{ dashboard.id }}" class="list-group-item">
+                                        {{ dashboard.dashboardName | escape }}
+                                        {% if dashboard.isShared %}
+                                                <span class="badge badge-success pull-right">{% t 'shared' | escape %}</span>
+                                        {% endif %}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

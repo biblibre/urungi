@@ -1,0 +1,14 @@
+{% capture title %}{% t 'Edit user' %}{% endcapture %}
+{% layout 'layout/with-sidebar' title: title %}
+
+{% block page-header %}
+    <span class="h3">{% t 'Edit user' | escape %}</span>
+    <div class="pull-right">
+        <button class="btn btn-default" form="user-form">{% t 'Save user' | escape %}</button>
+        <a href="users/{{ user.id }}" class="btn btn-default">{% t 'Cancel' | escape %}</a>
+    </div>
+{% endblock %}
+
+{% block main %}
+    {% render 'partials/user/form', data: formData, csrf: csrf, roles: roles %}
+{% endblock %}

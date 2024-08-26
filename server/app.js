@@ -104,11 +104,17 @@ global.logSuccessLogin = true;
 
 app.use(passport.session());
 
+app.use(require('./middlewares/flash.js'));
+
 app.use(function (req, res, next) {
+    res.locals.session = {};
+
+    res.locals.session.flash = () => req.flash();
+
     if (req.user) {
-        const user = req.user.toObject();
+        const user = req.user.toObject({ getters: true });
         user.isAdmin = req.user.isAdmin();
-        res.locals.user = user;
+        res.locals.session.user = user;
     }
     next();
 });

@@ -1,0 +1,122 @@
+<form id="user-form" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrf | escape }}">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="username" class="control-label">{% t 'User Nick' | escape %} ({% t 'required' | escape %})</label>
+                {% if data._id %}
+                    <input id="username" name="userName" readonly class="form-control" value="{{ data.userName }}">
+                {% else %}
+                    <input id="username" name="userName" class="form-control" value="{{ data.userName }}" required>
+                {% endif %}
+
+            </div>
+            <div class="form-group">
+                <label for="fname" class="control-label">{% t 'First Name' | escape %} ({% t 'required' | escape %})</label>
+                <input id="fname" name="firstName" class="form-control" value="{{ data.firstName }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lname" class="control-label">{% t 'Last Name' | escape %} ({% t 'required' | escape %})</label>
+                <input id="lname" name="lastName" class="form-control" value="{{ data.lastName }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="control-label">{% t 'email' | escape %} ({% t 'required' | escape %})</label>
+                <input id="email" name="email" class="form-control" value="{{ data.email | escape }}" required>
+            </div>
+
+            {% if new %}
+                <div class="checkbox">
+                    <label>
+                        {% if data.sendPassword == "1" %}
+                            <input type="checkbox" id="sendPassword" name="sendPassword" value="1" checked>
+                        {% else %}
+                            <input type="checkbox" id="sendPassword" name="sendPassword" value="1">
+                        {% endif %}
+                        <p>{% t 'Send password through email' | escape %}</p>
+                    </label>
+                </div>
+                <script>
+                    const sendPassword = document.getElementById('sendPassword');
+                    sendPassword.addEventListener('change', function () {
+                        const passwordGroup = document.getElementById('password-group');
+                        if (this.checked) {
+                            passwordGroup.setAttribute('hidden', true);
+                            passwordGroup.querySelectorAll('input').forEach(i => i.setAttribute('disabled', true));
+                        } else {
+                            passwordGroup.removeAttribute('hidden');
+                            passwordGroup.querySelectorAll('input').forEach(i => i.removeAttribute('disabled'));
+                        }
+                    });
+                    document.addEventListener('DOMContentLoaded', () => {
+                        sendPassword.dispatchEvent(new Event('change'));
+                    });
+                </script>
+            {% endif %}
+
+            <div id="password-group" class="form-group">
+                <label for="pwd1" class="control-label">{% t 'Password' | escape %}{% if new %} ({% t 'required' | escape %}){% endif %}</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input id="pwd1" name="password" class="form-control" placeholder="{% t 'Introduce password' | escape %}" {% if new %}required{% endif %}>
+                    </div>
+                    <div class="col-md-6">
+                        <input id="pwd2" name="password2" class="form-control" placeholder="{% t 'Repeat password' | escape %}" {% if new %}required{% endif %}>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">{% t 'Roles' | escape %}</label>
+                {% for role in roles %}
+                    {% assign hasRole = false %}
+                    {% for userRoleId in data.roles %}
+                        {% if role.id == userRoleId %}
+                            {% assign hasRole = true %}
+                            {% break %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="checkbox">
+                        <label>
+                            {% if hasRole %}
+                                <input type="checkbox" name="roles" value="{{ role.id }}" checked>
+                            {% else %}
+                                <input type="checkbox" name="roles" value="{{ role.id }}">
+                            {% endif %}
+                            {{ role.name | escape }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="title" class="control-label">{% t 'Title' | escape %}</label>
+                <input id="title" name="title" class="form-control" value="{{ data.title }}">
+            </div>
+
+            <div class="form-group">
+                <label for="department" class="control-label">{% t 'Department' | escape %}</label>
+                <input id="department" name="department" class="form-control" value="{{ data.department }}" >
+            </div>
+
+            <div class="form-group">
+                <label for="businessUnit" class="control-label">{% t 'Business unit' | escape %}</label>
+                <input id="businessUnit" name="businessUnit" class="form-control" value="{{ data.businessUnit }}" >
+            </div>
+
+            <div class="form-group">
+                <label for="unit" class="control-label">{% t 'Unit' | escape %}</label>
+                <input id="unit" name="unit" class="form-control" value="{{ data.unit }}">
+            </div>
+
+            <div class="form-group">
+                <label for="brand" class="control-label">{% t 'Brand' | escape %}</label>
+                <input id="brand" name="brand" class="form-control" value="{{ data.brand }}" >
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,19 @@
+{% capture title %}{% t 'Delete user' %}{% endcapture %}
+{% layout 'layout/with-sidebar' title: title %}
+
+{% block page-header %}
+    <span class="h3">{% t 'Delete user' | escape %}</span>
+{% endblock %}
+
+{% block main %}
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrf | escape }}">
+
+        <p>{% t 'Are you sure you want to delete user {{username}} ?' | expand: username: user.userName | escape %}</p>
+
+        <button class="btn btn-danger">
+            {% t 'Delete user {{username}}' | expand: username: user.userName | escape %}
+        </button>
+        <a class="btn btn-link" href="users/{{ user.id }}">Cancel</a>
+    </form>
+{% endblock %}

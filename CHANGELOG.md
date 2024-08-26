@@ -17,6 +17,7 @@ Several pages already work without any AngularJS code:
 - Shared space
 - Import
 - Export
+- User pages
 
 ### Breaking changes
 

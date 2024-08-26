@@ -18,7 +18,7 @@
     <div class="container-fluid root-container">
         <div class="row">
             <div class="col-md-3">
-                {% render 'sidebar.liquid', user: user %}
+                {% include 'sidebar' %}
             </div>
 
             <div class="main col-md-9">
@@ -26,6 +26,9 @@
                     <span class="h3">{% t 'Shared space' | escape %} <a id="showIntroButton" class="btn btn-link"><i class="fa fa-question-circle-o"></i></a></span>
                     <a id="sharedSpaceSaveBtn" class="btn btn-success pull-right" title="{% t 'Click here to save changes to the shared space' | escape %}">{% t 'Save' | escape %}</a>
                 </div>
+
+                {% include 'flash' %}
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="alert alert-info" role="alert">

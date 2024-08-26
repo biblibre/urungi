@@ -11,11 +11,7 @@
                     <img src="images/urungi.png" class="logo img-responsive center-block" alt="Urungi">
                 </div>
 
-                {% if messages.length %}
-                    {% for message in messages %}
-                        <div class="alert alert-danger">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
+                {% include 'flash' %}
 
                 <form method="post" role="form">
                     <input type="hidden" name="_csrf" value="{{ csrf }}">

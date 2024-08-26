@@ -1,0 +1,14 @@
+{% capture title %}{% t 'New user' %}{% endcapture %}
+{% layout 'layout/with-sidebar' title: title %}
+
+{% block page-header %}
+    <span class="h3">{% t 'New user' | escape %}</span>
+    <div class="pull-right">
+        <button class="btn btn-default" form="user-form">{% t 'Create user' | escape %}</button>
+        <a href="users" class="btn btn-default">{% t 'Cancel' | escape %}</a>
+    </div>
+{% endblock %}
+
+{% block main %}
+    {% render 'partials/user/form', data: formData, csrf: csrf, roles: roles, new: true %}
+{% endblock %}

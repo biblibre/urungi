@@ -1,28 +1,20 @@
 {% capture title %}{% t 'Users' %}{% endcapture %}
-{% layout 'layout/layout' title: title %}
+{% layout 'layout/with-sidebar' title: title %}
 
 {% block head %}
     {% render 'partials/notify' %}
-    <script defer src="s/angular/angular.min.js"></script>
-    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
-    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
-    {% render 'partials/ng/core' %}
-    {% render 'partials/ng/ui-bootstrap' %}
-    {% render 'partials/ng/table' %}
-    {% render 'partials/ng/user' %}
-    {% render 'partials/ng/user-list' %}
+
+    <script defer src="js/table.js"></script>
+    <script defer src="js/api.js"></script>
+    <script defer src="js/custom-element/user-status-badge.js"></script>
+    <script defer src="js/user/list.js"></script>
 {% endblock %}
 
-{% block content %}
-    <div class="container-fluid root-container">
-        <div class="row">
-            <div class="col-md-3">
-                {% render 'sidebar', user: user %}
-            </div>
+{% block page-header %}
+    <span class="h3">{% t 'Users' | escape %}</span>
+    <a href="users/new" class="btn btn-success pull-right">{% t 'New User' | escape %}</a>
+{% endblock %}
 
-            <div class="main col-md-9" ng-app="app.user-list">
-                <app-user-list></app-user-list>
-            </div>
-        </div>
-    </div>
+{% block main %}
+    <div id="user-list-table-wrapper"></div>
 {% endblock %}

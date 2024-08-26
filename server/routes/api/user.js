@@ -12,7 +12,6 @@ const router = express.Router();
 router.use(restrict);
 
 router.get('/', getUser);
-router.put('/password', updateUserPassword);
 router.get('/counts', getCounts);
 router.get('/objects', getObjects);
 router.put('/context-help/:name', setContextHelp);
@@ -24,30 +23,6 @@ async function getUser (req, res) {
 
         res.json(user);
     });
-}
-
-async function updateUserPassword (req, res) {
-    const oldPassword = req.body.oldPassword;
-    const newPassword = req.body.newPassword;
-    const validUser = await new Promise((resolve, reject) => {
-        User.isValidUserPassword(req.user.userName, oldPassword, (err, user) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(user);
-            }
-        });
-    });
-    if (validUser) {
-        validUser.password = newPassword;
-        validUser.save().then(user => {
-            res.status(200).json(user.toObject());
-        }, err => {
-            res.status(500).json({ error: err.message });
-        });
-    } else {
-        res.status(401).json({ error: 'Old password incorrect' });
-    }
 }
 
 function getCounts (req, res) {
