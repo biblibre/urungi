@@ -1,0 +1,77 @@
+<form id="role-form" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrf | escape }}">
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="name" class="control-label">{% t 'Role name' | escape %}</label>
+                <input class="form-control" type="text" id="name" name="name" value="{{ data.name | escape }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="control-label">{% t 'Description' | escape %}</label>
+                <textarea id="description" name="description" class="form-control" rows="5" style="resize: vertical;">{{ data.description | escape }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">{% t 'Permissions' | escape %}</label>
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="reportsCreate" value="1" {% if data.reportsCreate %}checked{% endif %}>
+                        {% t 'Create reports' | escape %}
+                    </label>
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="dashboardsCreate" value="1" {% if data.dashboardsCreate %}checked{% endif %}>
+                        {% t 'Create dashboards' | escape %}
+                    </label>
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="exploreData" value="1" {% if data.exploreData %}checked{% endif %}>
+                        {% t 'Explore data' | escape %}
+                    </label>
+                </div>
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="viewSQL" value="1" {% if data.viewSQL %}checked{% endif %}>
+                        {% t 'See SQL' | escape %}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>{% t 'Shared space permissions' | escape %}</label>
+
+                <table class="table table-striped table-condensed table-hover">
+                    <colgroup>
+                        <col></col>
+                        <col style="width: 10%"></col>
+                        <col style="width: 10%"></col>
+                        <col style="width: 10%"></col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>{% t 'Folder' | escape %}</th>
+                            <th>{% t 'Share reports' | escape %}</th>
+                            <th>{% t 'Execute dashboards' | escape %}</th>
+                            <th>{% t 'Execute reports' | escape %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% render 'partials/role/form-shared-space-node' for sharedSpace as node, data: data %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script defer src="js/role/form.js"></script>

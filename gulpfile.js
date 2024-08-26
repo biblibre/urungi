@@ -29,7 +29,6 @@ const templatesModules = [
     'report-edit',
     'report-list',
     'report-view',
-    'role-list',
     'share',
     'table',
 ];

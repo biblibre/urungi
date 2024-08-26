@@ -18,6 +18,7 @@ Several pages already work without any AngularJS code:
 - Import
 - Export
 - User pages
+- Role pages
 
 ### Breaking changes
 

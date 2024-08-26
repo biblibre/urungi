@@ -1,0 +1,24 @@
+{% capture title %}{% t 'Delete role' %}{% endcapture %}
+{% layout 'layout/with-sidebar' title: title %}
+
+{% block page-header %}
+    <span class="h3">{% t 'Delete role' | escape %}</span>
+{% endblock %}
+
+{% block main %}
+    {% if usersCount > 0 %}
+        <div class="alert alert-warning">{% t ' Warning: This role is assigned to {{count}} users' | expand: count: usersCount | escape %}</div>
+    {% else %}
+        <div class="alert alert-info">{% t 'This role is not assigned to any user' | escape %}</div>
+    {% endif %}
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrf | escape }}">
+
+        <p>{% t 'Are you sure you want to delete role {{name}} ?' | expand: name: role.name | escape %}</p>
+
+        <button class="btn btn-danger">
+            {% t 'Delete role {{name}}' | expand: name: role.name | escape %}
+        </button>
+        <a class="btn btn-link" href="roles">Cancel</a>
+    </form>
+{% endblock %}

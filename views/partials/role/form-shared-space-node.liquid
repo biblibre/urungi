@@ -1,0 +1,33 @@
+{% capture depth %}{{ depth | default: 0 }}{% endcapture %}
+
+<tr data-folder-id="{{ node.id | escape }}" data-parent-folder-id="{{ parent.id | escape }}">
+    <td>
+        <div style="padding-left: {{ depth | escape }}em">
+            {{ node.title | escape }}
+        </div>
+    </td>
+    <td>
+        {% if data.grantsMap[node.id].shareReports %}
+            <input type="checkbox" name="grantsMap[{{ node.id | escape }}][shareReports]" checked>
+        {% else %}
+            <input type="checkbox" name="grantsMap[{{ node.id | escape }}][shareReports]">
+        {% endif %}
+    </td>
+    <td>
+        {% if data.grantsMap[node.id].executeDashboards %}
+            <input type="checkbox" name="grantsMap[{{ node.id | escape }}][executeDashboards]" checked>
+        {% else %}
+            <input type="checkbox" name="grantsMap[{{ node.id | escape }}][executeDashboards]">
+        {% endif %}
+    </td>
+    <td>
+        {% if data.grantsMap[node.id].executeReports %}
+            <input type="checkbox" name="grantsMap[{{ node.id | escape }}][executeReports]" checked>
+        {% else %}
+            <input type="checkbox" name="grantsMap[{{ node.id | escape }}][executeReports]">
+        {% endif %}
+    </td>
+</tr>
+
+{% capture newDepth %}{{ depth | plus: 1 }}{% endcapture %}
+{% render 'partials/role/form-shared-space-node' for node.nodes as node, data: data, parent: node, depth: newDepth %}

@@ -1,29 +1,19 @@
 {% capture title %}{% t 'Roles' %}{% endcapture %}
-{% layout 'layout/layout' title: title %}
+{% layout 'layout/with-sidebar' title: title %}
 
 {% block head %}
     {% render 'partials/notify' %}
-    <script defer src="s/angular/angular.min.js"></script>
-    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
-    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
-    <link rel="stylesheet" href="s/angular-ui-tree/angular-ui-tree.min.css">
-    <script defer src="s/angular-ui-tree/angular-ui-tree.min.js"></script>
-    {% render 'partials/ng/core' %}
-    {% render 'partials/ng/ui-bootstrap' %}
-    {% render 'partials/ng/table' %}
-    {% render 'partials/ng/role-list' %}
+
+    <script defer src="js/api.js"></script>
+    <script defer src="js/table.js"></script>
+    <script defer src="js/role/list.js"></script>
 {% endblock %}
 
-{% block content %}
-    <div class="container-fluid root-container">
-        <div class="row">
-            <div class="col-md-3">
-                {% include 'sidebar' %}
-            </div>
+{% block page-header %}
+    <span class="h3">{% t 'Roles' | escape %}</span>
+    <a href="roles/new" class="btn btn-success pull-right">{% t 'New role' | escape %}</a>
+{% endblock %}
 
-            <div class="main col-md-9" ng-app="app.role-list">
-                <app-role-list></app-role-list>
-            </div>
-        </div>
-    </div>
+{% block main %}
+    <div id="role-list-table-wrapper"></div>
 {% endblock %}

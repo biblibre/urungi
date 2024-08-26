@@ -1,0 +1,14 @@
+{% capture title %}{% t 'New role' %}{% endcapture %}
+{% layout 'layout/with-sidebar' title: title %}
+
+{% block page-header %}
+    <span class="h3">{% t 'New role' | escape %}</span>
+    <div class="pull-right">
+        <button class="btn btn-default" form="role-form">{% t 'Create role' | escape %}</button>
+        <a href="roles" class="btn btn-default">{% t 'Cancel' | escape %}</a>
+    </div>
+{% endblock %}
+
+{% block main %}
+    {% render 'partials/role/form', data: formData, csrf: csrf, sharedSpace: sharedSpace %}
+{% endblock %}

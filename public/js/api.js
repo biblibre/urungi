@@ -23,6 +23,8 @@
 
         getUsers,
         updateUser,
+
+        getRoles,
     };
 
     function getDatasources () {
@@ -100,7 +102,15 @@
         return httpPatch('/api/users/' + id, changes);
     }
 
-    function httpGet (path) {
+    function getRoles (params) {
+        return httpGet('/api/roles', params);
+    }
+
+    function httpGet (path, data) {
+        if (data) {
+            const search = Object.entries(data).map(([k, v]) => `${k}=${v}`).join('&');
+            path += `?${search}`;
+        }
         return httpRequest(path, { method: 'GET' });
     }
 
