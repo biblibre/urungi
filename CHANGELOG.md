@@ -19,6 +19,7 @@ Several pages already work without any AngularJS code:
 - Export
 - User pages
 - Role pages
+- Datasource pages
 
 ### Breaking changes
 

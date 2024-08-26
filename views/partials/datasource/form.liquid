@@ -1,0 +1,74 @@
+<script defer src="js/datasource/form.js"></script>
+
+<form id="datasource-form" method="post" class="form-horizontal">
+    <input type="hidden" name="_csrf" value="{{ csrf | escape }}">
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="type">{% t 'Connection type' | escape %}</label>
+        <div class="col-sm-10">
+            <select id="type" name="type" class="form-control" placeholder="{% t 'Select a datasource type...' | escape %}">
+                <option label="MySQL" value="MySQL" {% if data.type == 'MySQL' %}selected{% endif %}>MySQL</option>
+                <option label="PostgreSql" value="POSTGRE" {% if data.type == 'POSTGRE' %}selected{% endif %}>PostgreSQL</option>
+                <option label="MSSQL" value="MSSQL" {% if data.type == 'MSSQL' %}selected{% endif %}>MSSQL</option>
+                <option label="Oracle" value="ORACLE" {% if data.type == 'ORACLE' %}selected{% endif %}>Oracle</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="name">{% t 'Name' | escape %}</label>
+        <div class="col-sm-10">
+            <input class="form-control" name="name" id="name" placeholder="{% t 'Insert here the name for this connection' | escape %}" type="text" value="{{ data.name | escape }}" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="host">{% t 'Host' | escape %}</label>
+        <div class="col-sm-10">
+            <input class="form-control" name="connection[host]" id="host" placeholder="{% t 'Insert here your Host address or IP' | escape %}" type="text" value="{{ data.connection.host | escape }}" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="port">{% t 'Port' | escape %}</label>
+        <div class="col-sm-10">
+            <input class="form-control" name="connection[port]" id="port" placeholder="{% t 'Insert here the port to access the SQL instance' | escape %}" type="text" value="{{ data.connection.port | escape }}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="database" translate>Database</label>
+        <div class="col-sm-10">
+            <input class="form-control" name="connection[database]" id="database" placeholder="{% t 'Set here the name of the SQL Database to connect' | escape %}" type="text" value="{{ data.connection.database | escape }}" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="userName">{% t 'User name' | escape %}</label>
+        <div class="col-sm-10">
+            <input class="form-control" name="connection[userName]" id="userName" placeholder="{% t 'Set here the username to access the database' | escape %}" type="text" value="{{ data.connection.userName | escape }}" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="password">{% t 'Password' | escape %}</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="password" name="connection[password]" id="password" placeholder="{% t 'Set here the username password to access the database' | escape %}" value="{{ data.connection.password | escape }}" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="search_path">{% t 'Search path (only for PostgreSQL)' | escape %}</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" name="connection[search_path]" id="search_path" value="{{ data.connection.search_path | escape }}">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="control-label col-sm-2">
+            <button id="test-connection-button" type="button" class="btn btn-sm btn-default">{% t 'Test connection' | escape %}</button>
+        </div>
+
+        <div class="col-sm-10" id="test-connection-result"></div>
+        </div>
+    </div>
+</form>

@@ -12,6 +12,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
+#: views/role/delete.liquid:10
+msgid " Warning: This role is assigned to {{count}} users"
+msgstr ""
+
 #: public/js/ng/dashboard-edit/dashboard-edit.html-widgets.service.js:18
 #: public/js/ng/dashboard-edit/dashboard-edit.html-widgets.service.js:23
 #: public/js/ng/dashboard-edit/dashboard-edit.html-widgets.service.js:28
@@ -125,6 +129,10 @@ msgstr "Respuesta requerida (filtro obligatorio)"
 msgid "Anyone who has the link will be able to see it"
 msgstr "Cualquiera que tenga el enlace podrá verlo"
 
+#: views/role/delete.liquid:17
+msgid "Are you sure you want to delete role {{name}} ?"
+msgstr ""
+
 #: views/user/delete.liquid:12
 msgid "Are you sure you want to delete user {{username}} ?"
 msgstr ""
@@ -155,7 +163,7 @@ msgstr ""
 "A medida que defina la consulta arrastrando y soltando en las áreas "
 "anteriores, los resultados de la consulta aparecerán aquí"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:48
+#: public/js/datasource/list.js:70
 msgid ""
 "At least one data source must be defined, unless you do not define some data "
 "source you and your users will not be able to create reports."
@@ -189,8 +197,8 @@ msgstr "Autores"
 msgid "Avg"
 msgstr "Promedio"
 
+#: public/js/datasource/list.js:60
 #: public/js/ng/dashboard-list/dashboard-list.component.js:88
-#: public/js/ng/datasource-list/datasource-list.component.js:38
 #: public/js/ng/layer-list/layer-list.component.js:111
 #: public/js/ng/report-edit/report-edit.component.js:736
 #: public/js/ng/report-list/report-list.component.js:38
@@ -225,7 +233,6 @@ msgstr "Calcular total"
 #: public/partials/dashboard-edit/dashboard-edit.component.html:266
 #: public/partials/dashboard-edit/dashboard-edit.reports-import-modal.component.html:11
 #: public/partials/dashboard-view/dashboard-view.component.html:23
-#: public/partials/datasource-edit/datasource-edit.component.html:4
 #: public/partials/layer-edit/layer-edit.add-all-modal.component.html:11
 #: public/partials/layer-edit/layer-edit.component.html:25
 #: public/partials/layer-edit/layer-edit.element-modal.component.html:171
@@ -238,8 +245,9 @@ msgstr "Calcular total"
 #: public/partials/report-edit/report-edit.report-name-modal.html:15
 #: public/partials/report-edit/report-edit.report-settings-modal.component.html:73
 #: public/partials/report-view/report-view.component.html:27
-#: public/partials/role-list/role-list.edit-modal.component.html:92
 #: public/partials/share/share.share-modal.component.html:20
+#: views/datasource/edit.liquid:13 views/datasource/new.liquid:13
+#: views/role/edit.liquid:8 views/role/new.liquid:8
 #: views/user/change-password.liquid:28 views/user/edit.liquid:8
 #: views/user/new.liquid:8
 msgid "Cancel"
@@ -326,10 +334,6 @@ msgid "Click here to conduct the guided tour for data explorer"
 msgstr ""
 "Haga clic aquí para realizar la visita guiada para el explorador de datos"
 
-#: public/partials/datasource-list/datasource-list.component.html:5
-msgid "Click here to conduct the guided tour for data sources"
-msgstr "Haga clic aquí para realizar la visita guiada de fuentes de datos"
-
 #: public/partials/dashboard-list/dashboard-list.component.html:4
 msgid "Click here to create a new dashboard"
 msgstr "Haga clic aquí para crear un nuevo tablero"
@@ -343,11 +347,7 @@ msgstr ""
 msgid "Click here to create a new dashboard."
 msgstr "Haga clic aquí para crear un nuevo tablero."
 
-#: public/partials/datasource-list/datasource-list.component.html:4
-msgid "Click here to create a new data source"
-msgstr "Haga clic aquí para crear una nueva fuente de datos"
-
-#: public/js/ng/datasource-list/datasource-list.component.js:54
+#: public/js/datasource/list.js:76
 msgid "Click here to create a new datasource."
 msgstr "Haga clic aquí para crear una nueva fuente de datos."
 
@@ -418,14 +418,13 @@ msgstr "Haga clic aquí para ordenar descendente usando este campo"
 msgid "Click here to save changes to the shared space"
 msgstr "Haga clic aquí para guardar los cambios en el espacio compartido"
 
-#: public/partials/datasource-list/datasource-list.component.html:11
-msgid "Click here to see or set data source details"
-msgstr ""
-"Haga clic aquí para ver o establecer los detalles de la fuente de datos"
-
 #: public/partials/report-edit/report-edit.dashboard-list-modal.html:19
 msgid "Click here to select this dashboard"
 msgstr "Haga clic aquí para seleccionar este panel"
+
+#: public/js/datasource/list.js:93
+msgid "Click on its name to edit its details and test the connection"
+msgstr ""
 
 #: public/js/ng/dashboard-list/dashboard-list.component.js:112
 msgid "Click over a dashboard's name to execute it."
@@ -458,7 +457,7 @@ msgstr "Columnas / zona de caída de resultados"
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:8
+#: views/partials/datasource/form.liquid:7
 msgid "Connection type"
 msgstr "Tipo de Conexion"
 
@@ -486,7 +485,7 @@ msgstr "Contar distintos"
 msgid "Create"
 msgstr "Crear"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:46
+#: public/js/datasource/list.js:68
 msgid ""
 "Create and manage here the connections to databases that holds the data you "
 "want to be able to create reports using Urungi."
@@ -494,9 +493,14 @@ msgstr ""
 "Cree y administre aquí las conexiones a bases de datos que contienen los "
 "datos que desea poder crear informes mediante Urungi."
 
-#: public/partials/role-list/role-list.edit-modal.component.html:58
+#: views/partials/role/form.liquid:29
 msgid "Create dashboards"
 msgstr "Crear paneles"
+
+#: views/datasource/new.liquid:12
+#, fuzzy
+msgid "Create datasource"
+msgstr "Creación de un nuevo origen de datos"
 
 #: public/js/shared-space.js:138
 msgid "Create folders and drag and drop them across to structure it."
@@ -510,9 +514,14 @@ msgstr "Crear un nuevo panel"
 msgid "Create new report"
 msgstr "Crear nuevo informe"
 
-#: public/partials/role-list/role-list.edit-modal.component.html:54
+#: views/partials/role/form.liquid:22
 msgid "Create reports"
 msgstr "Crear informes"
+
+#: views/role/new.liquid:7
+#, fuzzy
+msgid "Create role"
+msgstr "Creado en"
 
 #: public/js/shared-space.js:34
 #, fuzzy
@@ -575,32 +584,23 @@ msgstr "Paneles"
 msgid "Dashboards list"
 msgstr "Lista de paneles"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:67
+#: public/js/datasource/list.js:89
 #: public/partials/layer-list/layer-list.new-modal.component.html:22
 msgid "Data source"
 msgstr "Fuente de datos"
-
-#: public/js/ng/datasource-list/datasource-list.component.js:82
-msgid "Data source connection details"
-msgstr "Detalles de conexión de fuente de datos"
 
 #: public/partials/layer-list/layer-list.new-modal.component.html:26
 msgid "Data source is required"
 msgstr "Se requiere fuente de datos"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:72
-msgid "Data source name & type"
-msgstr "Nombre y tipo de fuente de datos"
-
-#: public/js/import.js:155
-#: public/js/ng/datasource-list/datasource-list.component.js:42
-#: public/partials/datasource-list/datasource-list.component.html:2
+#: public/js/datasource/list.js:64 public/js/import.js:155
 #: views/datasource/edit.liquid:1 views/datasource/list.liquid:1
+#: views/datasource/list.liquid:15 views/datasource/new.liquid:1
 #: views/sidebar.liquid:41
 msgid "Data sources"
 msgstr "Fuentes de datos"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:44
+#: public/js/datasource/list.js:66
 msgid ""
 "Data sources are connections to the databases you are going to generate "
 "reports for."
@@ -608,17 +608,21 @@ msgstr ""
 "Las fuentes de datos son conexiones a las bases de datos para las que va a "
 "generar informes."
 
-#: public/partials/datasource-edit/datasource-edit.component.html:33
+#: public/js/datasource/list.js:39
 msgid "Database"
 msgstr "Base de datos"
 
-#: public/js/ng/datasource-edit/datasource-edit.component.js:60
+#: public/js/datasource/form.js:30
 msgid "Database connection failed."
 msgstr "La conexión de la base de datos falló."
 
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:5
 msgid "Dataset"
 msgstr "Conjunto de datos"
+
+#: server/routes/data-sources.js:41
+msgid "Datasource created successfully"
+msgstr "Fuente de datos creada con éxito"
 
 #: public/js/import.js:371
 #, fuzzy
@@ -628,6 +632,10 @@ msgstr "Coincidencia de fuente de datos {{ds.doc.name}}"
 #: public/js/ng/layer-edit/layer-edit.component.js:939
 msgid "Datasource must be the same for all entities"
 msgstr "El origen de datos debe ser el mismo para todas las entidades"
+
+#: server/routes/data-sources.js:66
+msgid "Datasource updated successfully"
+msgstr "Fuente de datos actualizada con éxito"
 
 #: public/partials/report-edit/report-edit.filter-prompt-modal.html:77
 msgid "Deactivate Filter"
@@ -671,6 +679,16 @@ msgstr "Nueva carpeta"
 msgid "Delete report"
 msgstr "Eliminar informe"
 
+#: views/role/delete.liquid:1 views/role/delete.liquid:5
+#, fuzzy
+msgid "Delete role"
+msgstr "Nueva carpeta"
+
+#: views/role/delete.liquid:20
+#, fuzzy
+msgid "Delete role {{name}}"
+msgstr "Eliminar {{name}} ?"
+
 #: public/partials/dashboard-list/dashboard-list.dashboards-list-buttons.component.html:21
 msgid "Delete this dashboard"
 msgstr "Eliminar este panel"
@@ -683,7 +701,7 @@ msgstr "Eliminar esta capa"
 msgid "Delete this report"
 msgstr "Eliminar este informe"
 
-#: public/partials/role-list/role-list.component.html:10
+#: public/js/role/list.js:30
 #, fuzzy
 msgid "Delete this role"
 msgstr "Eliminar esta capa"
@@ -712,10 +730,11 @@ msgstr "Eliminar {{name}} ?"
 msgid "Department"
 msgstr "Departamento"
 
+#: public/js/role/list.js:21
 #: public/partials/layer-edit/layer-edit.element-modal.component.html:81
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:168
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:46
-#: public/partials/role-list/role-list.edit-modal.component.html:41
+#: views/partials/role/form.liquid:12
 msgid "Description"
 msgstr "Descripción"
 
@@ -727,8 +746,8 @@ msgstr "Diseña el espacio público de tu empresa"
 msgid "Do not show this block again"
 msgstr "No mostrar este bloque nuevamente"
 
+#: public/js/datasource/list.js:61
 #: public/js/ng/dashboard-list/dashboard-list.component.js:89
-#: public/js/ng/datasource-list/datasource-list.component.js:39
 #: public/js/ng/layer-list/layer-list.component.js:112
 #: public/js/ng/report-edit/report-edit.component.js:737
 #: public/js/ng/report-list/report-list.component.js:39
@@ -828,13 +847,18 @@ msgstr "Editar panel"
 msgid "Edit Report"
 msgstr "Editar informe"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:2
+#: views/datasource/edit.liquid:10
 msgid "Edit datasource"
 msgstr "Editar fuente de datos"
 
 #: public/js/ng/report-list/report-list.component.js:71
 msgid "Edit report"
 msgstr "Editar informe"
+
+#: views/role/edit.liquid:1 views/role/edit.liquid:5
+#, fuzzy
+msgid "Edit role"
+msgstr "Editar carpeta"
 
 #: public/partials/dashboard-list/dashboard-list.dashboards-list-buttons.component.html:13
 msgid "Edit this dashboard"
@@ -886,11 +910,11 @@ msgstr "Error:"
 msgid "Everyone"
 msgstr "Todos"
 
-#: public/partials/role-list/role-list.edit-modal.component.html:79
+#: views/partials/role/form.liquid:64
 msgid "Execute dashboards"
 msgstr "Ejecutar paneles"
 
-#: public/partials/role-list/role-list.edit-modal.component.html:78
+#: views/partials/role/form.liquid:65
 msgid "Execute reports"
 msgstr "Ejecutar informes"
 
@@ -898,7 +922,7 @@ msgstr "Ejecutar informes"
 msgid "Explore"
 msgstr "Explorar"
 
-#: public/partials/role-list/role-list.edit-modal.component.html:62
+#: views/partials/role/form.liquid:36
 msgid "Explore data"
 msgstr "Explorar datos"
 
@@ -940,10 +964,6 @@ msgstr "Error al crear el informe"
 #: public/js/ng/layer-edit/layer-edit.component.js:413
 msgid "Failed to parse expression for element"
 msgstr "Error al analizar la expresión para el elemento"
-
-#: public/js/ng/role-list/role-list.edit-modal.component.js:63
-msgid "Failed to save role"
-msgstr "Error al guardar el rol"
 
 #: public/js/import.js:316
 msgid "Failed to update dashboard"
@@ -1007,6 +1027,10 @@ msgstr "Primer cuarto"
 msgid "First semester"
 msgstr "Primer semestre"
 
+#: views/partials/role/form.liquid:62
+msgid "Folder"
+msgstr "Carpeta"
+
 #: public/partials/dashboard-list/dashboard-list.component.html:5
 msgid "Follow the guided tour for dashboards"
 msgstr "Siga la visita guiada para paneles"
@@ -1051,7 +1075,6 @@ msgid "Gauge max value"
 msgstr "Valor máximo del manómetro"
 
 #: public/partials/layer-edit/layer-edit.element-modal.component.html:42
-#: public/partials/role-list/role-list.edit-modal.component.html:27
 msgid "General"
 msgstr "General"
 
@@ -1059,7 +1082,7 @@ msgstr "General"
 msgid "Getting started with Urungi?"
 msgstr "¿Comenzando con Urungi?"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:91
+#: public/js/datasource/list.js:101
 msgid "Go to layers and continue tour"
 msgstr "Ir a capas y continuar gira"
 
@@ -1109,7 +1132,7 @@ msgstr "Altura"
 msgid "Hello, world!"
 msgstr "Hola Mundo!"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:60
+#: public/js/datasource/list.js:82
 msgid "Here all the data sources (database connections) will be listed."
 msgstr ""
 "Aquí se enumerarán todas las fuentes de datos (conexiones de base de datos)."
@@ -1146,7 +1169,7 @@ msgstr "Aquí puede definir la estructura en carpetas del espacio compartido."
 msgid "Home"
 msgstr "Inicio"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:23
+#: public/js/datasource/list.js:27 views/partials/datasource/form.liquid:26
 msgid "Host"
 msgstr "Anfitrión"
 
@@ -1194,6 +1217,10 @@ msgstr "Importación terminada"
 msgid "Import layers, reports and dashboards"
 msgstr "Importar capas, informes y paneles"
 
+#: server/routes/api/users.js:64
+msgid "Impossible to modify own status"
+msgstr ""
+
 #: public/js/ng/dashboard-list/dashboard-list.component.js:94
 msgid "In here you can create and execute dashboards like web pages."
 msgstr "Aquí puede crear y ejecutar paneles como páginas web."
@@ -1202,15 +1229,15 @@ msgstr "Aquí puede crear y ejecutar paneles como páginas web."
 msgid "Inner"
 msgstr "Interno"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:19
+#: views/partials/datasource/form.liquid:21
 msgid "Insert here the name for this connection"
 msgstr "Inserte aquí el nombre de esta conexión"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:29
+#: views/partials/datasource/form.liquid:35
 msgid "Insert here the port to access the SQL instance"
 msgstr "Inserte aquí el puerto para acceder a la instancia de SQL"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:24
+#: views/partials/datasource/form.liquid:28
 msgid "Insert here your Host address or IP"
 msgstr "Inserte aquí su dirección de host o IP"
 
@@ -1342,8 +1369,7 @@ msgstr "Estado de la capa"
 msgid "Layer updated successfully:"
 msgstr "Capa actualizada con éxito:"
 
-#: public/js/import.js:163
-#: public/js/ng/datasource-list/datasource-list.component.js:87
+#: public/js/datasource/list.js:97 public/js/import.js:163
 #: public/js/ng/layer-list/layer-list.component.js:115
 #: public/partials/layer-list/layer-list.component.html:2
 #: views/export.liquid:23 views/layer/edit.liquid:1 views/layer/list.liquid:1
@@ -1395,7 +1421,7 @@ msgstr "Límites"
 msgid "Line"
 msgstr "Linea"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:58
+#: public/js/datasource/list.js:80
 msgid "List of data sources"
 msgstr "Lista de fuentes de datos"
 
@@ -1453,17 +1479,19 @@ msgstr "Mis imagenes"
 msgid "My Reports"
 msgstr "Mis informes"
 
-#: public/js/custom-element/import-table.js:10 public/js/user/list.js:15
+#: public/js/custom-element/import-table.js:10 public/js/datasource/list.js:15
+#: public/js/role/list.js:15 public/js/user/list.js:15
 #: public/partials/dashboard-list/dashboard-list.component.html:20
-#: public/partials/datasource-edit/datasource-edit.component.html:18
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:30
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:69
 #: public/partials/layer-list/layer-list.component.html:17
 #: public/partials/report-list/report-list.reports-table.component.html:12
+#: views/partials/datasource/form.liquid:19
 msgid "Name"
 msgstr "Nombre"
 
 #: public/partials/layer-list/layer-list.new-modal.component.html:13
+#: server/routes/data-sources.js:87 server/routes/roles.js:148
 msgid "Name is required"
 msgstr "Nombre es requerido"
 
@@ -1472,10 +1500,6 @@ msgstr "Nombre es requerido"
 #: public/partials/report-edit/report-edit.dashboard-list-modal.html:10
 msgid "New Dashboard"
 msgstr "Nuevo tablero"
-
-#: public/partials/datasource-list/datasource-list.component.html:4
-msgid "New Data Source"
-msgstr "Nueva fuente de datos"
 
 #: public/partials/layer-edit/layer-edit.component.html:82
 msgid "New Element"
@@ -1494,10 +1518,6 @@ msgstr "Nueva capa"
 msgid "New Report"
 msgstr "Nuevo reporte"
 
-#: public/partials/role-list/role-list.component.html:3
-msgid "New Role"
-msgstr "Nuevo rol"
-
 #: views/user/list.liquid:15
 msgid "New User"
 msgstr "Nuevo usuario"
@@ -1507,8 +1527,13 @@ msgstr "Nuevo usuario"
 msgid "New dashboard"
 msgstr "Nuevo tablero"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:53
-#: server/routes/data-sources.js:25
+#: views/datasource/list.liquid:20
+#, fuzzy
+msgid "New data source"
+msgstr "Nueva fuente de datos"
+
+#: public/js/datasource/list.js:75 views/datasource/new.liquid:1
+#: views/datasource/new.liquid:10
 msgid "New datasource"
 msgstr "Nueva fuente de datos"
 
@@ -1531,13 +1556,18 @@ msgstr "Repetir la contraseña"
 msgid "New report"
 msgstr "Nuevo reporte"
 
+#: views/role/list.liquid:14 views/role/new.liquid:1 views/role/new.liquid:5
+#, fuzzy
+msgid "New role"
+msgstr "Nuevo rol"
+
 #: views/user/new.liquid:1 views/user/new.liquid:5
 #, fuzzy
 msgid "New user"
 msgstr "Nuevo usuario"
 
+#: public/js/datasource/list.js:59
 #: public/js/ng/dashboard-list/dashboard-list.component.js:87
-#: public/js/ng/datasource-list/datasource-list.component.js:37
 #: public/js/ng/layer-list/layer-list.component.js:110
 #: public/js/ng/report-edit/report-edit.component.js:735
 #: public/js/ng/report-list/report-list.component.js:37
@@ -1547,7 +1577,7 @@ msgstr "Nuevo usuario"
 msgid "Next"
 msgstr "Próximo"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:86
+#: public/js/datasource/list.js:96
 #: public/js/ng/layer-list/layer-list.component.js:165
 msgid "Next Step"
 msgstr "Próximo paso"
@@ -1642,8 +1672,8 @@ msgstr ""
 msgid "Order By drop zone"
 msgstr "Ordenar por zona de depósito"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:43
-#: views/login.liquid:24 views/partials/user/form.liquid:59
+#: views/login.liquid:24 views/partials/datasource/form.liquid:54
+#: views/partials/user/form.liquid:59
 msgid "Password"
 msgstr "Contraseña"
 
@@ -1663,7 +1693,7 @@ msgstr "Se requiere fuente de datos"
 msgid "Passwords must match"
 msgstr "Las contraseñas no coinciden"
 
-#: public/partials/role-list/role-list.edit-modal.component.html:50
+#: views/partials/role/form.liquid:17
 msgid "Permissions"
 msgstr "Permisos"
 
@@ -1680,13 +1710,9 @@ msgstr "Por favor confirme su modificación"
 msgid "Please type DELETE to confirm"
 msgstr "Por favor escriba DELETE para confirmar"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:28
+#: public/js/datasource/list.js:33 views/partials/datasource/form.liquid:33
 msgid "Port"
 msgstr "Puerto"
-
-#: public/partials/datasource-edit/datasource-edit.component.html:49
-msgid "PostgreSQL Schema Search Path"
-msgstr "Ruta de esquemas de PostgreSQL"
 
 #: public/partials/dashboard-edit/dashboard-edit.component.html:81
 msgid "Preview size"
@@ -1761,10 +1787,6 @@ msgstr "Eliminar de elementos de capa"
 #: public/partials/share/share.share-popover.component.html:33
 msgid "Remove from shared space"
 msgstr "Eliminar del espacio compartido"
-
-#: public/js/ng/role-list/role-list.component.js:81
-msgid "Remove role {{name}} ?"
-msgstr "¿Eliminar el rol {{name}}?"
 
 #: public/partials/report-edit/report-edit.report-dropzone.component.html:19
 msgid "Remove this item from this dimension"
@@ -1860,30 +1882,25 @@ msgstr "Derecha"
 msgid "Right-click on a folder to show available options"
 msgstr ""
 
-#: public/partials/role-list/role-list.edit-modal.component.html:22
-msgid "Role"
-msgstr "Rol"
-
-#: public/js/ng/role-list/role-list.component.js:33
+#: server/routes/roles.js:88
 msgid "Role created successfully"
 msgstr "Rol creado con éxito"
 
-#: public/js/ng/role-list/role-list.component.js:91
+#: server/routes/roles.js:48
 #, fuzzy
 msgid "Role deleted successfully"
 msgstr "Usuario creado con éxito"
 
-#: public/partials/role-list/role-list.edit-modal.component.html:32
+#: views/partials/role/form.liquid:7
 msgid "Role name"
 msgstr "Nombre de rol"
 
-#: public/js/ng/role-list/role-list.component.js:40
+#: server/routes/roles.js:116
 msgid "Role updated successfully"
 msgstr "Rol actualizado con éxito"
 
-#: public/partials/role-list/role-list.component.html:2
 #: views/partials/user/form.liquid:71 views/role/list.liquid:1
-#: views/sidebar.liquid:45
+#: views/role/list.liquid:13 views/sidebar.liquid:45
 msgid "Roles"
 msgstr "Roles"
 
@@ -1914,14 +1931,9 @@ msgstr "Consulta SQL"
 #: public/partials/report-edit/report-edit.component.html:19
 #: public/partials/report-edit/report-edit.component.html:20
 #: public/partials/report-edit/report-edit.report-name-modal.html:14
-#: public/partials/role-list/role-list.edit-modal.component.html:93
 #: views/shared-space.liquid:27
 msgid "Save"
 msgstr "Guardar"
-
-#: public/partials/datasource-edit/datasource-edit.component.html:3
-msgid "Save Datasource"
-msgstr "Guardar fuente de datos"
 
 #: public/partials/dashboard-edit/dashboard-edit.component.html:22
 #: public/partials/report-edit/report-edit.component.html:27
@@ -1939,6 +1951,11 @@ msgstr ""
 msgid "Save changes"
 msgstr "Guardar cambios"
 
+#: views/datasource/edit.liquid:12
+#, fuzzy
+msgid "Save datasource"
+msgstr "Guardar fuente de datos"
+
 #: public/partials/layer-edit/layer-edit.component.html:123
 msgid "Save folder label"
 msgstr "Guardar etiqueta de carpeta"
@@ -1946,6 +1963,11 @@ msgstr "Guardar etiqueta de carpeta"
 #: public/partials/layer-edit/layer-edit.component.html:14
 #: public/partials/layer-list/layer-list.new-modal.component.html:35
 msgid "Save layer"
+msgstr "Guardar capa"
+
+#: views/role/edit.liquid:7
+#, fuzzy
+msgid "Save role"
 msgstr "Guardar capa"
 
 #: public/partials/report-edit/report-edit.report-column-settings-modal.component.html:129
@@ -1967,9 +1989,9 @@ msgstr "Guardar capa"
 msgid "Scatter"
 msgstr "Dispersión"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:48
-msgid "Search path"
-msgstr "Ruta de búsqueda"
+#: views/partials/datasource/form.liquid:61
+msgid "Search path (only for PostgreSQL)"
+msgstr ""
 
 #: public/js/ng/report/report.filter-prompt.component.js:228
 msgid "Second quarter"
@@ -1995,11 +2017,11 @@ msgstr ""
 "Consulte la <a href=\"https://momentjs.com/docs/#/displaying/\" target="
 "\"_blank\" rel=\"noreferrer\"> documentación </a> para ver ejemplos"
 
-#: public/partials/role-list/role-list.edit-modal.component.html:66
+#: views/partials/role/form.liquid:43
 msgid "See SQL"
 msgstr "Ver SQL"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:9
+#: views/partials/datasource/form.liquid:9
 msgid "Select a datasource type..."
 msgstr "Seleccione un tipo de fuente de datos ..."
 
@@ -2035,17 +2057,17 @@ msgstr "Seleccione el panel para enviar este informe a"
 msgid "Send password through email"
 msgstr "Enviar contraseña por correo electrónico"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:34
+#: views/partials/datasource/form.liquid:42
 msgid "Set here the name of the SQL Database to connect"
 msgstr "Establezca aquí el nombre de la base de datos SQL para conectarse"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:44
+#: views/partials/datasource/form.liquid:56
 msgid "Set here the username password to access the database"
 msgstr ""
 "Establezca aquí la contraseña del nombre de usuario para acceder a la base "
 "de datos"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:39
+#: views/partials/datasource/form.liquid:49
 msgid "Set here the username to access the database"
 msgstr "Establezca aquí el nombre de usuario para acceder a la base de datos"
 
@@ -2063,7 +2085,7 @@ msgstr "Configuraciones para exportar PDF"
 msgid "Share"
 msgstr "Compartir"
 
-#: public/partials/role-list/role-list.edit-modal.component.html:80
+#: views/partials/role/form.liquid:63
 msgid "Share reports"
 msgstr "Compartir informes"
 
@@ -2081,7 +2103,7 @@ msgstr "Area compartida"
 msgid "Shared space"
 msgstr "Espacio compartido"
 
-#: public/partials/role-list/role-list.edit-modal.component.html:76
+#: views/partials/role/form.liquid:51
 msgid "Shared space permissions"
 msgstr "Permisos de espacio compartido"
 
@@ -2146,8 +2168,9 @@ msgstr "Cadena"
 msgid "Structure area"
 msgstr "Area de estructura de espacio compartido"
 
-#: public/js/ng/datasource-edit/datasource-edit.component.js:58
-msgid "Successful database connection."
+#: public/js/datasource/form.js:28
+#, fuzzy
+msgid "Successful database connection"
 msgstr "Conexión exitosa de la base de datos."
 
 #: public/partials/report-edit/report-edit.filter-prompt-modal.html:39
@@ -2166,8 +2189,9 @@ msgstr "Realice nuestra visita guiada para familiarizarse ..."
 msgid "Target"
 msgstr "Objetivo"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:56
-msgid "Test Connection"
+#: views/partials/datasource/form.liquid:68
+#, fuzzy
+msgid "Test connection"
 msgstr "Prueba de conexión"
 
 #: public/partials/dashboard-edit/dashboard-edit.component.html:260
@@ -2222,15 +2246,6 @@ msgstr "El catálogo de capas"
 #: public/js/ng/report-edit/report-edit.component.js:750
 msgid "The layer selector"
 msgstr "El selector de capas"
-
-#: public/js/ng/datasource-list/datasource-list.component.js:83
-msgid "The main connection details for the data source."
-msgstr "Los detalles de la conexión principal para la fuente de datos."
-
-#: public/js/ng/datasource-list/datasource-list.component.js:74
-msgid "The name for the data source and the type of connection (end database)."
-msgstr ""
-"El nombre de la fuente de datos y el tipo de conexión (base de datos final)."
 
 #: public/partials/layer-edit/layer-edit.sql-modal.component.html:12
 msgid "The name is required"
@@ -2307,7 +2322,7 @@ msgid "This is a simple text paragraph select to edit content."
 msgstr ""
 "Este es un párrafo de texto simple que se selecciona para editar contenido."
 
-#: public/js/ng/datasource-list/datasource-list.component.js:68
+#: public/js/datasource/list.js:91
 msgid "This is one data source."
 msgstr "Esta es una fuente de datos."
 
@@ -2337,7 +2352,7 @@ msgstr ""
 msgid "This month"
 msgstr "Este mes"
 
-#: public/partials/role-list/role-list.delete-modal-body.html:2
+#: views/role/delete.liquid:12
 msgid "This role is not assigned to any user"
 msgstr ""
 
@@ -2369,6 +2384,7 @@ msgstr "Hoy"
 msgid "Totals"
 msgstr "Totales"
 
+#: public/js/datasource/list.js:21
 #: public/partials/layer-edit/layer-edit.element-modal.component.html:54
 #: public/partials/layer-edit/layer-edit.object-properties.directive.html:87
 msgid "Type"
@@ -2377,6 +2393,11 @@ msgstr "Tipo"
 #: public/partials/layer-edit/layer-edit.sql-modal.component.html:10
 msgid "Type a name for this dataset"
 msgstr "Escriba un nombre para este conjunto de datos"
+
+#: server/routes/data-sources.js:90
+#, fuzzy
+msgid "Type is required"
+msgstr "Nombre es requerido"
 
 #: views/partials/user/form.liquid:112
 msgid "Unit"
@@ -2394,7 +2415,7 @@ msgstr "Arriba"
 msgid "Upload image"
 msgstr "Subir imagen"
 
-#: server/routes/users.js:224
+#: server/routes/users.js:225
 msgid "Urungi Administrator"
 msgstr "Administrador de Urungi"
 
@@ -2446,12 +2467,11 @@ msgstr "Usuario"
 msgid "User Nick"
 msgstr "Apodo del usuario"
 
-#: server/routes/users.js:217
+#: server/routes/users.js:218
 msgid "User deleted successfully"
 msgstr "Usuario creado con éxito"
 
-#: public/partials/datasource-edit/datasource-edit.component.html:38
-#: views/login.liquid:20
+#: views/login.liquid:20 views/partials/datasource/form.liquid:47
 msgid "User name"
 msgstr "Nombre del usuario"
 
@@ -2472,12 +2492,6 @@ msgstr "Usuarios"
 #: public/partials/report-edit/report-edit.report-edit.html:35
 msgid "View SQL"
 msgstr "Ver SQL"
-
-#: public/js/ng/role-list/role-list.component.js:83
-msgid "Warning: This role is assigned to {{$count}} user"
-msgid_plural "Warning: This role is assigned to {{$count}} users"
-msgstr[0] ""
-msgstr[1] ""
 
 #: views/about.liquid:36
 msgid "What does Urungi mean ?"
@@ -2536,7 +2550,7 @@ msgstr ""
 "Puede crear varias capas según sus necesidades, pero debe definir una al "
 "menos."
 
-#: public/js/ng/datasource-list/datasource-list.component.js:62
+#: public/js/datasource/list.js:84
 msgid ""
 "You can edit the connection details for every data source, delete a data "
 "source or activate/deactivate a datasource."
@@ -2551,10 +2565,6 @@ msgid ""
 msgstr ""
 "Puede editar la capa para configurar las tablas, elementos y uniones entre "
 "tablas."
-
-#: public/js/ng/datasource-list/datasource-list.component.js:76
-msgid "You can setup the name you want for data sources."
-msgstr "Puede configurar el nombre que desee para las fuentes de datos."
 
 #: public/partials/layer-edit/layer-edit.sql-modal.component.html:19
 msgid "You have to enter an SQL query"
@@ -2577,7 +2587,7 @@ msgstr "alineación"
 msgid "all"
 msgstr "todos"
 
-#: public/js/ng/datasource-list/datasource-list.component.js:89
+#: public/js/datasource/list.js:99
 msgid ""
 "allow your users to access and understand your data without any knowledge of "
 "SQL or how the database is structured in tables and fields..."
@@ -2633,10 +2643,6 @@ msgstr "número de página actual"
 #: public/partials/inspector/inspector.directive.html:229
 msgid "dashed"
 msgstr "rayado"
-
-#: public/partials/datasource-list/datasource-list.component.html:16
-msgid "database:"
-msgstr "base de datos:"
 
 #: public/partials/pdf-export/pdf-export.pdf-export-settings-modal.component.html:41
 msgid "document location"
@@ -2722,10 +2728,6 @@ msgstr "altura"
 #: public/partials/inspector/inspector.directive.html:115
 msgid "horizontal"
 msgstr "horizontal"
-
-#: public/partials/datasource-list/datasource-list.component.html:14
-msgid "host:"
-msgstr "anfitrión:"
 
 #: public/partials/inspector/inspector.directive.html:109
 msgid "imageProperties"
@@ -2879,10 +2881,6 @@ msgstr "principio"
 msgid "padding"
 msgstr "margen interno"
 
-#: public/partials/datasource-list/datasource-list.component.html:15
-msgid "port:"
-msgstr "puerto:"
-
 #: views/about.liquid:31
 msgid "powerful for power-users"
 msgstr "potente para usuarios avanzados"
@@ -2999,6 +2997,61 @@ msgstr "subir imagen"
 #: public/partials/inspector/inspector.directive.html:116
 msgid "vertical"
 msgstr "vertical"
+
+#~ msgid "Click here to conduct the guided tour for data sources"
+#~ msgstr "Haga clic aquí para realizar la visita guiada de fuentes de datos"
+
+#~ msgid "Click here to create a new data source"
+#~ msgstr "Haga clic aquí para crear una nueva fuente de datos"
+
+#~ msgid "Click here to see or set data source details"
+#~ msgstr ""
+#~ "Haga clic aquí para ver o establecer los detalles de la fuente de datos"
+
+#~ msgid "Data source connection details"
+#~ msgstr "Detalles de conexión de fuente de datos"
+
+#~ msgid "Data source name & type"
+#~ msgstr "Nombre y tipo de fuente de datos"
+
+#~ msgid "Failed to save role"
+#~ msgstr "Error al guardar el rol"
+
+#~ msgid "New Data Source"
+#~ msgstr "Nueva fuente de datos"
+
+#~ msgid "PostgreSQL Schema Search Path"
+#~ msgstr "Ruta de esquemas de PostgreSQL"
+
+#~ msgid "Remove role {{name}} ?"
+#~ msgstr "¿Eliminar el rol {{name}}?"
+
+#~ msgid "Role"
+#~ msgstr "Rol"
+
+#~ msgid "Search path"
+#~ msgstr "Ruta de búsqueda"
+
+#~ msgid "The main connection details for the data source."
+#~ msgstr "Los detalles de la conexión principal para la fuente de datos."
+
+#~ msgid ""
+#~ "The name for the data source and the type of connection (end database)."
+#~ msgstr ""
+#~ "El nombre de la fuente de datos y el tipo de conexión (base de datos "
+#~ "final)."
+
+#~ msgid "You can setup the name you want for data sources."
+#~ msgstr "Puede configurar el nombre que desee para las fuentes de datos."
+
+#~ msgid "database:"
+#~ msgstr "base de datos:"
+
+#~ msgid "host:"
+#~ msgstr "anfitrión:"
+
+#~ msgid "port:"
+#~ msgstr "puerto:"
 
 #~ msgid "Add a new role..."
 #~ msgstr "Agregar un nuevo rol..."
@@ -3130,21 +3183,12 @@ msgstr "vertical"
 #~ msgid "Continue tour"
 #~ msgstr "Continuar recorrido"
 
-#~ msgid "Creating a new data source"
-#~ msgstr "Creación de un nuevo origen de datos"
-
 #~ msgid ""
 #~ "Dashboards allows you to create (if granted) and manage dashboards using "
 #~ "your previous defined single query reports."
 #~ msgstr ""
 #~ "Los paneles le permiten crear (si se otorga) y administrar paneles "
 #~ "utilizando sus informes de consulta única definidos previamente."
-
-#~ msgid "Datasource created successfully"
-#~ msgstr "Fuente de datos creada con éxito"
-
-#~ msgid "Datasource updated successfully"
-#~ msgstr "Fuente de datos actualizada con éxito"
 
 #~ msgid "Define here the folder structure for the shared area"
 #~ msgstr "Defina aquí la estructura de carpetas para el área compartida"
@@ -3162,18 +3206,12 @@ msgstr "vertical"
 #~ "Arrástrelo de izquierda a derecha para moverlo dentro de una carpeta "
 #~ "existente."
 
-#~ msgid "Edit folder"
-#~ msgstr "Editar carpeta"
-
 #~ msgid ""
 #~ "Explore allows you to surf across the data without creating a report for "
 #~ "that."
 #~ msgstr ""
 #~ "Explore le permite navegar a través de los datos sin crear un informe "
 #~ "para eso."
-
-#~ msgid "Folder"
-#~ msgstr "Carpeta"
 
 #~ msgid "Go to dashboards and continue tour"
 #~ msgstr "Ir a los paneles y continuar el recorrido"

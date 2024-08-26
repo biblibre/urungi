@@ -1,4 +1,4 @@
-{% capture title %}{{ datasource.name | escape }} &middot; {% t 'Data sources' %}{% endcapture %}
+{% capture title %}{% t 'New datasource' | escape %} &middot; {% t 'Data sources' %}{% endcapture %}
 {% layout 'layout/with-sidebar' title: title %}
 
 {% block head %}
@@ -7,9 +7,9 @@
 {% endblock %}
 
 {% block page-header %}
-    <span class="h3">{% t 'Edit datasource' | escape %}</span>
+    <span class="h3">{% t 'New datasource' | escape %}</span>
     <div class="pull-right">
-        <button class="btn btn-success" form="datasource-form">{% t 'Save datasource' | escape %}</button>
+        <button class="btn btn-success" form="datasource-form">{% t 'Create datasource' | escape %}</button>
         <a href="data-sources" class="btn btn-default">{% t 'Cancel' | escape %}</a>
     </div>
 {% endblock %}

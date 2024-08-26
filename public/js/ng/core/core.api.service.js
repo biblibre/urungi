@@ -30,8 +30,6 @@
             getDatasourceCollection,
             getSqlQueryCollection,
 
-            testConnection,
-
             getReports,
             deleteReport,
             publishReport,
@@ -154,10 +152,6 @@
 
         function getSqlQueryCollection (datasourceId, collection) {
             return httpGet('/api/datasources/' + datasourceId + '/sql-query-collection', { sqlQuery: collection.sqlQuery, collectionName: collection.name });
-        }
-
-        function testConnection (datasource) {
-            return httpPost('/api/connection-test', datasource);
         }
 
         /**

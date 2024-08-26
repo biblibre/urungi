@@ -18,8 +18,6 @@ const templatesModules = [
     'dashboard-edit',
     'dashboard-list',
     'dashboard-view',
-    'datasource-edit',
-    'datasource-list',
     'inspector',
     'layer-edit',
     'layer-list',

@@ -1,26 +1,26 @@
 {% capture title %}{% t 'Data sources' %}{% endcapture %}
-{% layout 'layout/layout' title: title %}
+{% layout 'layout/with-sidebar' title: title %}
 
 {% block head %}
     {% render 'partials/notify' %}
     {% render 'partials/introjs'  %}
-    <script defer src="s/angular/angular.min.js"></script>
-    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
-    {% render 'partials/ng/core' %}
-    {% render 'partials/ng/table' %}
-    {% render 'partials/ng/datasource-list' %}
+
+    <script defer src="js/api.js"></script>
+    <script defer src="js/table.js"></script>
+    <script defer src="js/datasource/list.js"></script>
 {% endblock %}
 
-{% block content %}
-    <div class="container-fluid root-container">
-        <div class="row">
-            <div class="col-md-3">
-                {% include 'sidebar' %}
-            </div>
+{% block page-header %}
+    <span class="h3">
+        {% t 'Data sources' | escape %}
+        <a id="showIntroButton" class="btn btn-link"><i class="fa fa-question-circle-o"></i></a>
+    </span>
 
-            <div class="main col-md-9" ng-app="app.datasource-list">
-                <app-datasource-list></app-datasource-list>
-            </div>
-        </div>
+    <div class="pull-right">
+        <a id="newDataSourceBtn" href="data-sources/new" class="btn btn-success">{% t 'New data source' | escape %}</a>
     </div>
+{% endblock %}
+
+{% block main %}
+    <div id="datasource-list-table-wrapper"></div>
 {% endblock %}

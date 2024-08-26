@@ -25,6 +25,8 @@
         updateUser,
 
         getRoles,
+
+        testConnection,
     };
 
     function getDatasources () {
@@ -104,6 +106,10 @@
 
     function getRoles (params) {
         return httpGet('/api/roles', params);
+    }
+
+    function testConnection (datasource) {
+        return httpPost('/api/connection-test', datasource);
     }
 
     function httpGet (path, data) {
