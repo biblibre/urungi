@@ -14,8 +14,9 @@
                 {
                     name: t('Name'),
                     render: user => {
-                        const a = el('a', { href: `users/${user._id}` },
-                            `${user.firstName} ${user.lastName} (${user.userName})`);
+                        const name = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+                        const text = name ? `${name} (${user.userName})` : user.userName;
+                        const a = el('a', { href: `users/${user._id}` }, text);
                         return a;
                     },
                 },
