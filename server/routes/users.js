@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const gettext = require('../config/gettext.js');
 const url = require('../helpers/url.js');
+const redirectToLogin = require('../middlewares/redirect-to-login.js');
 const userHelper = require('../helpers/user.js');
 
 const User = mongoose.model('User');
@@ -10,9 +11,6 @@ const Role = mongoose.model('Role');
 const router = express.Router();
 
 function onlyAdmin (req, res, next) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
     if (!req.user.isAdmin()) {
         return res.redirect(url('/'));
     }
@@ -20,9 +18,6 @@ function onlyAdmin (req, res, next) {
 }
 
 function onlyAdminOrSelf (req, res, next) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
     if (!req.user.isAdmin() && req.user.id !== req.$user.id) {
         return res.redirect(url('/'));
     }
@@ -30,9 +25,6 @@ function onlyAdminOrSelf (req, res, next) {
 }
 
 function onlySelf (req, res, next) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
     if (req.user.id !== req.$user.id) {
         return res.redirect(url('/'));
     }
@@ -53,7 +45,7 @@ router.param('userId', function (req, res, next, userId) {
     });
 });
 
-router.get('/', onlyAdmin, function (req, res) {
+router.get('/', redirectToLogin, onlyAdmin, function (req, res) {
     res.render('user/list');
 });
 
@@ -86,8 +78,8 @@ function validateForm (req, res, next) {
     next();
 }
 
-router.get('/new', onlyAdmin, userNew);
-router.post('/new', onlyAdmin, validateForm, userNew);
+router.get('/new', redirectToLogin, onlyAdmin, userNew);
+router.post('/new', redirectToLogin, onlyAdmin, validateForm, userNew);
 
 async function userNew (req, res) {
     let formData;
@@ -114,7 +106,7 @@ async function userNew (req, res) {
     res.render('user/new', scope);
 }
 
-router.get('/:userId', onlyAdminOrSelf, async function (req, res) {
+router.get('/:userId', redirectToLogin, onlyAdminOrSelf, async function (req, res) {
     const reportDocs = await req.$user.getReports();
     const dashboardDocs = await req.$user.getDashboards();
     const roles = await getRoles();
@@ -128,7 +120,7 @@ router.get('/:userId', onlyAdminOrSelf, async function (req, res) {
     res.render('user/show', scope);
 });
 
-router.get('/:userId/change-password', onlySelf, async function (req, res) {
+router.get('/:userId/change-password', redirectToLogin, onlySelf, async function (req, res) {
     const scope = {
         csrf: req.csrfToken(),
         user: req.$user.toObject({ getters: true }),
@@ -136,7 +128,7 @@ router.get('/:userId/change-password', onlySelf, async function (req, res) {
     res.render('user/change-password', scope);
 });
 
-router.post('/:userId/change-password', onlySelf, async function (req, res) {
+router.post('/:userId/change-password', redirectToLogin, onlySelf, async function (req, res) {
     const formErrors = [];
 
     const currentPassword = req.body.currentPassword;
@@ -176,8 +168,8 @@ router.post('/:userId/change-password', onlySelf, async function (req, res) {
     res.redirect(url(`/users/${req.$user.id}`));
 });
 
-router.get('/:userId/edit', onlyAdmin, userEdit);
-router.post('/:userId/edit', onlyAdmin, validateForm, userEdit);
+router.get('/:userId/edit', redirectToLogin, onlyAdmin, userEdit);
+router.post('/:userId/edit', redirectToLogin, onlyAdmin, validateForm, userEdit);
 
 async function userEdit (req, res) {
     let formData;
@@ -207,12 +199,12 @@ async function userEdit (req, res) {
     res.render('user/edit', scope);
 }
 
-router.get('/:userId/delete', onlyAdmin, function (req, res) {
+router.get('/:userId/delete', redirectToLogin, onlyAdmin, function (req, res) {
     res.locals.csrf = req.csrfToken();
     res.render('user/delete', { user: req.$user.toObject({ getters: true }) });
 });
 
-router.post('/:userId/delete', onlyAdmin, async function (req, res) {
+router.post('/:userId/delete', redirectToLogin, onlyAdmin, async function (req, res) {
     await req.$user.deleteOne();
 
     req.flash('success', gettext.gettext('User deleted successfully'));

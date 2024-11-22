@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const gettext = require('../config/gettext.js');
 const url = require('../helpers/url.js');
+const redirectToLogin = require('../middlewares/redirect-to-login.js');
 
 const Company = mongoose.model('Company');
 const Role = mongoose.model('Role');
@@ -23,16 +24,16 @@ router.param('roleId', function (req, res, next, roleId) {
     });
 });
 
-router.get('/', onlyAdmin, function (req, res) {
+router.get('/', redirectToLogin, onlyAdmin, function (req, res) {
     res.render('role/list');
 });
 
-router.get('/new', onlyAdmin, roleNew);
-router.post('/new', onlyAdmin, validateForm, roleNew);
-router.get('/:roleId/edit', onlyAdmin, roleEdit);
-router.post('/:roleId/edit', onlyAdmin, validateForm, roleEdit);
+router.get('/new', redirectToLogin, onlyAdmin, roleNew);
+router.post('/new', redirectToLogin, onlyAdmin, validateForm, roleNew);
+router.get('/:roleId/edit', redirectToLogin, onlyAdmin, roleEdit);
+router.post('/:roleId/edit', redirectToLogin, onlyAdmin, validateForm, roleEdit);
 
-router.get('/:roleId/delete', onlyAdmin, async function (req, res) {
+router.get('/:roleId/delete', redirectToLogin, onlyAdmin, async function (req, res) {
     const usersCount = await User.countDocuments({ roles: req.$role.id });
     const scope = {
         csrf: req.csrfToken(),
@@ -42,7 +43,7 @@ router.get('/:roleId/delete', onlyAdmin, async function (req, res) {
     res.render('role/delete', scope);
 });
 
-router.post('/:roleId/delete', onlyAdmin, async function (req, res) {
+router.post('/:roleId/delete', redirectToLogin, onlyAdmin, async function (req, res) {
     await req.$role.deleteOne();
 
     req.flash('success', gettext.gettext('Role deleted successfully'));
@@ -151,9 +152,6 @@ function validateForm (req, res, next) {
 }
 
 function onlyAdmin (req, res, next) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
     if (!req.user.isAdmin()) {
         return res.redirect(url('/'));
     }

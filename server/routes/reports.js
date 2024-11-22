@@ -1,28 +1,27 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const url = require('../helpers/url.js');
+const redirectToLogin = require('../middlewares/redirect-to-login.js');
 
 const Report = mongoose.model('Report');
 
 const router = express.Router();
-router.get('/', function (req, res) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
-
+router.get('/', redirectToLogin, function (req, res) {
     res.render('report/list');
 });
 
 router.get('/view/:reportId', async function (req, res) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
-
     try {
         const report = await Report.findById(req.params.reportId);
         if (!report) {
             return res.sendStatus(404);
         }
+
+        if (!report.isPublic && (!req.isAuthenticated() || !req.user.isActive())) {
+            req.session.redirect_url = req.originalUrl;
+            return res.redirect(url('/login'));
+        }
+
         res.render('report/view', { report: report.toObject({ getters: true }) });
     } catch (err) {
         console.error(err.message);
@@ -30,11 +29,7 @@ router.get('/view/:reportId', async function (req, res) {
     }
 });
 
-router.get('/edit/:reportId', async function (req, res) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
-
+router.get('/edit/:reportId', redirectToLogin, async function (req, res) {
     try {
         const report = await Report.findById(req.params.reportId);
         if (!report) {
@@ -47,11 +42,7 @@ router.get('/edit/:reportId', async function (req, res) {
     }
 });
 
-router.get('/new', async function (req, res) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
-
+router.get('/new', redirectToLogin, async function (req, res) {
     try {
         res.render('report/edit');
     } catch (err) {

@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const url = require('./helpers/url.js');
+const redirectToLogin = require('./middlewares/redirect-to-login.js');
 
 const Statistic = mongoose.model('Statistic');
 const Layer = mongoose.model('Layer');
@@ -17,11 +18,7 @@ router.use(function (req, res, next) {
     next();
 });
 
-router.get('/', async function (req, res) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
-
+router.get('/', redirectToLogin, async function (req, res) {
     const conditions = {};
     if (!req.user.isAdmin()) {
         conditions.userID = req.user.id;
@@ -64,11 +61,15 @@ const createFirstUser = async function (req, res, next) {
     }
     next();
 };
+const saveOldSession = function (req, res, next) {
+    req.oldSession = req.session;
+    next();
+}
 const authenticate = passport.authenticate('local', {
     failureRedirect: url('/login'),
     failureFlash: true,
 });
-router.post('/login', createFirstUser, authenticate, function (req, res) {
+router.post('/login', createFirstUser, saveOldSession, authenticate, async function (req, res) {
     req.user.last_login_date = new Date();
     req.user.last_login_ip =
         req.headers['x-forwarded-for'] ||
@@ -76,9 +77,14 @@ router.post('/login', createFirstUser, authenticate, function (req, res) {
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
 
-    req.user.save().then(function () {
+    await req.user.save();
+
+    const redirect_url = req.oldSession.redirect_url;
+    if (redirect_url && redirect_url.startsWith('/')) {
+        res.redirect(url(redirect_url));
+    } else {
         res.redirect(url('/'));
-    });
+    }
 });
 
 router.get('/logout', function (req, res) {
@@ -87,11 +93,7 @@ router.get('/logout', function (req, res) {
     });
 });
 
-router.get('/about', function (req, res) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
-
+router.get('/about', redirectToLogin, function (req, res) {
     const version = require('../package.json').version;
     const child_process = require('child_process');
 
@@ -104,10 +106,7 @@ router.get('/about', function (req, res) {
     res.render('about', { version, gitVersion });
 });
 
-router.get('/shared-space', function (req, res) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
+router.get('/shared-space', redirectToLogin, function (req, res) {
     res.render('shared-space');
 });
 
@@ -121,16 +120,16 @@ router.use('/data-sources', require('./routes/data-sources.js'));
 router.use('/roles', require('./routes/roles.js'));
 router.use('/users', require('./routes/users.js'));
 
-router.get('/import', function (req, res, next) {
-    if (!req.isAuthenticated() || !req.user.isActive() || !req.user.isAdmin()) {
-        return res.redirect(url('/login'));
+router.get('/import', redirectToLogin, function (req, res, next) {
+    if (!req.user.isAdmin()) {
+        return res.sendStatus(403);
     }
     res.render('import');
 });
 
-router.get('/export', function (req, res) {
-    if (!req.isAuthenticated() || !req.user.isActive() || !req.user.isAdmin()) {
-        return res.redirect(url('/login'));
+router.get('/export', redirectToLogin, function (req, res) {
+    if (!req.user.isAdmin()) {
+        return res.sendStatus(403);
     }
 
     Promise.all([Layer.find(), Report.find(), Dashboard.find()]).then(function (values) {
@@ -145,9 +144,9 @@ router.get('/export', function (req, res) {
     });
 });
 
-router.post('/export', async function (req, res, next) {
-    if (!req.isAuthenticated() || !req.user.isActive() || !req.user.isAdmin()) {
-        return res.redirect(url('/login'));
+router.post('/export', redirectToLogin, async function (req, res, next) {
+    if (!req.user.isAdmin()) {
+        return res.sendStatus(403);
     }
 
     try {

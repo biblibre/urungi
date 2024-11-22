@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const url = require('../helpers/url.js');
+const redirectToLogin = require('../middlewares/redirect-to-login.js');
 const gettext = require('../config/gettext.js');
 
 const Datasource = mongoose.model('Datasource');
@@ -21,14 +22,14 @@ router.param('datasourceId', function (req, res, next, datasourceId) {
     });
 });
 
-router.get('/', onlyAdmin, function (req, res) {
+router.get('/', redirectToLogin, onlyAdmin, function (req, res) {
     res.render('datasource/list');
 });
 
-router.get('/new', onlyAdmin, datasourceNew);
-router.post('/new', onlyAdmin, validateForm, datasourceNew);
-router.get('/:datasourceId/edit', onlyAdmin, datasourceEdit);
-router.post('/:datasourceId/edit', onlyAdmin, validateForm, datasourceEdit);
+router.get('/new', redirectToLogin, onlyAdmin, datasourceNew);
+router.post('/new', redirectToLogin, onlyAdmin, validateForm, datasourceNew);
+router.get('/:datasourceId/edit', redirectToLogin, onlyAdmin, datasourceEdit);
+router.post('/:datasourceId/edit', redirectToLogin, onlyAdmin, validateForm, datasourceEdit);
 
 async function datasourceNew (req, res) {
     let formData;
@@ -93,9 +94,6 @@ function validateForm (req, res, next) {
 }
 
 function onlyAdmin (req, res, next) {
-    if (!req.isAuthenticated() || !req.user.isActive()) {
-        return res.redirect(url('/login'));
-    }
     if (!req.user.isAdmin()) {
         return res.redirect(url('/'));
     }

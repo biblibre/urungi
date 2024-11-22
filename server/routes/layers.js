@@ -1,23 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const url = require('../helpers/url.js');
+const redirectToLogin = require('../middlewares/redirect-to-login.js');
 
 const Layer = mongoose.model('Layer');
 
 const router = express.Router();
-router.get('/', function (req, res) {
-    if (!req.isAuthenticated() || !req.user.isActive() || !req.user.isAdmin()) {
-        return res.redirect(url('/login'));
-    }
-
+router.get('/', redirectToLogin, onlyAdmin, function (req, res) {
     res.render('layer/list');
 });
 
-router.get('/:layerId', async function (req, res) {
-    if (!req.isAuthenticated() || !req.user.isActive() || !req.user.isAdmin()) {
-        return res.redirect(url('/login'));
-    }
-
+router.get('/:layerId', redirectToLogin, onlyAdmin, async function (req, res) {
     try {
         const layer = await Layer.findById(req.params.layerId);
         if (!layer) {
@@ -29,5 +22,12 @@ router.get('/:layerId', async function (req, res) {
         return res.sendStatus(404);
     }
 });
+
+function onlyAdmin (req, res, next) {
+    if (!req.user.isAdmin()) {
+        return res.redirect(url('/login'));
+    }
+    next();
+}
 
 module.exports = router;
