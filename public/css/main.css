@@ -3232,3 +3232,7 @@ a.list-group-item:hover {
 .label-lg {
     font-size: 1em;
 }
+
+[report-view].hovered {
+    outline: auto;
+}

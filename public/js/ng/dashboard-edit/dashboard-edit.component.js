@@ -21,6 +21,8 @@
         vm.onFilterPromptDragStart = onFilterPromptDragStart;
         vm.onLayoutDragStart = onLayoutDragStart;
         vm.onReportDragStart = onReportDragStart;
+        vm.onReportMouseEnter = onReportMouseEnter;
+        vm.onReportMouseLeave = onReportMouseLeave;
 
         $scope.reportModal = 'partials/report-edit/report-edit.component.html';
         $scope.settingsTemplate = 'partials/widgets/inspector.html';
@@ -552,6 +554,18 @@
             if (ev.dataTransfer.types.includes('application/vnd.urungi.report+json')) {
                 repaintReports();
             }
+        }
+
+        function onReportMouseEnter (ev) {
+            document.querySelectorAll('#REPORT_CONTAINER_' + ev.currentTarget.id).forEach(n => {
+                n.classList.add('hovered');
+            });
+        }
+
+        function onReportMouseLeave (ev) {
+            document.querySelectorAll('#REPORT_CONTAINER_' + ev.currentTarget.id).forEach(n => {
+                n.classList.remove('hovered');
+            });
         }
     }
 })();

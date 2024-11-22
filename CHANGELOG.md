@@ -30,6 +30,9 @@ Several pages already work without any AngularJS code:
 
 - After a successful login, redirect the user to where it was before being
   redirected to the login page
+- When the mouse hovers a report in the dashboard sidebar, the corresponding
+  report in the dashboard view is highlighted to help locate where a report
+  is used.
 
 ### Fixed
 
