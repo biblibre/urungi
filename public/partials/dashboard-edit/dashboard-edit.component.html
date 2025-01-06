@@ -65,179 +65,131 @@
                 </a>
             </li>
         </menu>
-    <section  class="content">
+    <section class="content">
 
-        <section id="settingsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'settings'">
+        <section id="settingsTab" ng-show="tabs.selected == 'settings'">
+                <form>
+                    <div class="form-group">
+                        <label translate>Theme</label>
+                        <app-theme-select theme="selectedDashboard.theme" on-change="selectedDashboard.theme = theme"></app-theme-select>
+                    </div>
+                    <div class="form-group">
+                        <label translate>Preview size</label>
+                        <input type="number" ng-model="selectedDashboardLimit.value" class="form-control">
+                        <div class="help-block" translate>This limits the number of rows fetched in order to get a preview quickly. Set to 0 to disable.</div>
+                    </div>
+                    <button ng-click="Redraw()" class="btn btn-sm btn-default">
+                      <i class="fa fa-refresh"></i>
+                      <span translate>Redraw</span>
+                    </button>
+                </form>
 
-            <section class="layer scrollPane">
-                <div class="layer-inner-reports">
+                <app-inspector element="selectedElement" dashboard="selectedDashboard" on-change="onChangeElementProperties"></app-inspector>
+        </section>
 
-                    <form>
-                        <div class="form-group">
-                            <label translate>Theme</label>
-                            <app-theme-select theme="selectedDashboard.theme" on-change="selectedDashboard.theme = theme"></app-theme-select>
-                        </div>
-                        <div class="form-group">
-                            <label translate>Preview size</label>
-                            <input type="number" ng-model="selectedDashboardLimit.value" class="form-control">
-                            <div class="help-block" translate>This limits the number of rows fetched in order to get a preview quickly. Set to 0 to disable.</div>
-                        </div>
-                        <button ng-click="Redraw()" class="btn btn-sm btn-default">
-                          <i class="fa fa-refresh"></i>
-                          <span translate>Redraw</span>
-                        </button>
-                    </form>
+        <section id="reportsTab" ng-show="tabs.selected == 'reports'">
+            <button class="btn btn-info btn-sm" ng-click="newReport()" translate>New Report</button>
+            <button class="btn btn-info btn-sm" ng-click="importReport()" translate>Import Report</button>
 
-                    <app-inspector element="selectedElement" dashboard="selectedDashboard" on-change="onChangeElementProperties"></app-inspector>
+            <div ng-repeat="item in selectedDashboard.reports" draggable="true" app-dragstart="vm.onReportDragStart($event, item)" style="margin-bottom: 5px; margin-top: 5px; display: flex; align-items: center; border: 1px white solid; border-radius: 5px;" id="{{item.id}}">
+                <span style="padding: 2px; border-right: 2px white solid; margin-right: 5px; background-color: white;">
+                    <img draggable="false" ng-if="item.reportType == 'grid'" src="images/grid.png" data-pin-nopin="true">
+                    <img draggable="false" ng-if="item.reportType == 'chart-line'" src="images/chart_line.png" data-pin-nopin="true">
+                    <img draggable="false" ng-if="item.reportType == 'chart-donut' || item.reportType == 'chart-pie'" src="images/chart_donut.png" data-pin-nopin="true">
+                    <img draggable="false" ng-if="item.reportType == 'indicator'" src="images/indicator.png" data-pin-nopin="true">
+                    <img draggable="false" ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
+                </span>
 
+                <div style="width: 100%;">
+                    <span app-editable-text="item.reportName" style="color: white;">{{ item.reportName }}</span>
+                    <br/>
+                    <a id="reportListItemDeleteBtn" href="" class="pull-right  list-button btn-delete" ng-click="deleteReport(item.id,item.reportName)"  uib-tooltip="{{ 'Click here to delete this report' | translate }}" tooltip-placement="bottom">
+                        <i class="fa fa-trash-o "  ></i>
+                    </a>
+                    <a id="reportListItemEditBtn" class="pull-right  list-button" ng-click="loadReport(item)"  uib-tooltip="{{ 'Click here to edit this report' | translate }}" tooltip-placement="bottom">
+                        <i class="fa fa-pencil" ></i>
+                    </a>
                 </div>
-            </section>
-            <div class="scrollTrack vScrollTrack">
-                <div class="scrollThumb" style="height: 72px; transform: translateY(0);"></div>
-            </div>
-            <div class="scrollTrack hScrollTrack">
-                <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0);"></div>
             </div>
         </section>
 
-        <section id="reportsTab" class="results infinite ng-hide" ng-show="tabs.selected == 'reports'">
-            <section class="layer scrollPane">
-                <div class="layer-inner-reports">
-                    <div class="container-fluid" >
-                        <button class="btn btn-info pull-right" ng-click="newReport()" translate>New Report</button>
-                        <button class="btn btn-info pull-right" ng-click="importReport()" translate>Import Report</button>
-                    </div>
-                    <div ng-repeat="item in selectedDashboard.reports" draggable="true" app-dragstart="vm.onReportDragStart($event, item)" style="margin-bottom: 5px; margin-top: 5px; display: flex; align-items: center; border: 1px white solid; border-radius: 5px;" id="{{item.id}}" class="">
+        <section id="promptsTab" ng-show="tabs.selected == 'prompts'">
+            <div ng-repeat="prompt in getPrompts()" draggable="true" app-dragstart="vm.onFilterPromptDragStart($event, prompt)" style="margin-bottom: 5px; margin-top: 5px; display: flex; align-items: center; border: 1px white solid; border-radius: 5px;" id="{{item.id}}" class="dashboard-filter-prompt-item">
+                <span>
+                    <i class="fa fa-filter"></i>
+                    <i class="fa fa-question"></i>
+                </span>
+                {{ getColumnDescription(prompt) }}
+            </div>
+        </section>
 
-                        <span style="padding: 2px; border-right: 2px white solid; margin-right: 5px; background-color: white;">
-                            <img draggable="false" ng-if="item.reportType == 'grid'" src="images/grid.png" data-pin-nopin="true">
-                            <img draggable="false" ng-if="item.reportType == 'chart-line'" src="images/chart_line.png" data-pin-nopin="true">
-                            <img draggable="false" ng-if="item.reportType == 'chart-donut' || item.reportType == 'chart-pie'" src="images/chart_donut.png" data-pin-nopin="true">
-                            <img draggable="false" ng-if="item.reportType == 'indicator'" src="images/indicator.png" data-pin-nopin="true">
-                            <img draggable="false" ng-if="item.reportType == 'gauge'" src="images/gauge.png" data-pin-nopin="true">
-                        </span>
-                        <div style="width: 100%;">
-                            <span app-editable-text="item.reportName" style="color: white;">{{ item.reportName }}</span>
-                            <br/>
-                            <a id="reportListItemDeleteBtn" href="" class="pull-right  list-button btn-delete" ng-click="deleteReport(item.id,item.reportName)"  uib-tooltip="{{ 'Click here to delete this report' | translate }}" tooltip-placement="bottom">
-                                <i class="fa fa-trash-o "  ></i>
-                            </a>
-                            <a id="reportListItemEditBtn" class="pull-right  list-button" ng-click="loadReport(item)"  uib-tooltip="{{ 'Click here to edit this report' | translate }}" tooltip-placement="bottom">
-                                <i class="fa fa-pencil" ></i>
-                            </a>
+        <section id="resultsLayout" ng-show="tabs.selected == 'layouts'">
+            <div class="searchLoaderHolder"></div>
+            <div class="searchGroup hasContent">
+                <div class="gallery infoPanelGallery templateGallery laidOut">
+
+                    <div>
+                        <div class="col-md-6" style="padding: 0; padding-right: 1px;">
+                            <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'paragraph')">
+                                <i class="fa fa-paragraph"></i>
                             </div>
+                        </div>
+                        <div class="col-md-6" style="padding: 0; padding-left: 1px;">
+                            <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'heading')">
+                                <i class="fa fa-header"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="col-md-6" style="padding: 0; padding-right: 1px;">
+                            <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'image')">
+                                <i class="fa fa-picture-o"></i>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="padding: 0; padding-left: 1px;">
+                            <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'video')">
+                                <i class="fa fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div data-color="jumbotron" effect-allowed="copy"  style="margin-bottom: 5px;" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'jumbotron')">
+                        <img draggable="false" src="images/layout_jumbotron.png" style="width: 100%">
+                    </div>
+
+                    <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, '4colscta')" style="margin-bottom: 5px;">
+                        <img draggable="false" src="images/layout_4cols_cta.png" style="width: 100%">
+                    </div>
+
+                    <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, '3colscta')" style="margin-bottom: 5px;">
+                        <img draggable="false" src="images/layout_3cols_cta.png" style="width: 100%">
+                    </div>
+
+                    <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, '2colscta')" style="margin-bottom: 5px;">
+                        <img draggable="false" src="images/layout_2cols_cta.png" style="width: 100%">
+                    </div>
+
+                    <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'imageTextLarge')" style="margin-bottom: 5px;">
+
+                        <img draggable="false" src="images/layout_block_image_text_large.png" style="width: 100%">
+                    </div>
+
+                    <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'textImageLarge')" style="margin-bottom: 5px;">
+                        <img draggable="false" src="images/layout_block_text_image_large.png" style="width: 100%">
+                    </div>
+
+                    <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'divider')" uib-tooltip="{{'This divider defines a page-break for printing'| translate}}" style="margin-bottom: 5px;">
+                        <img draggable="false" src="images/layout_featurete_divider.png" style="width: 100%">
+                    </div>
+
+                    <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'pageHeader')" style="margin-bottom: 5px;">
+                        <img draggable="false" src="images/layout-page-header.png" style="width: 100%">
                     </div>
                 </div>
-
-            </section>
-            <div class="scrollTrack vScrollTrack">
-                <div class="scrollThumb" style="height: 72px; transform: translateY(0);"></div>
-            </div>
-            <div class="scrollTrack hScrollTrack">
-                <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0);"></div>
             </div>
         </section>
-        <section id="promptsTab" class="results infinite twoCol" ng-show="tabs.selected == 'prompts'">
-            <section class="layoutsTabContainer tabContainer">
-                <section class="tab">
-                    <section class="layer scrollPane">
-                        <div class="layer-inner-reports">
-                            <div ng-repeat="prompt in getPrompts()" draggable="true" app-dragstart="vm.onFilterPromptDragStart($event, prompt)"
-                            style="margin-bottom: 5px; margin-top: 5px; display: flex; align-items: center; border: 1px white solid; border-radius: 5px;"
-                            id="{{item.id}}" class="dashboard-filter-prompt-item">
-                              <span>
-                                  <i class="fa fa-filter"></i>
-                                    <i class="fa fa-question"></i>
-                              </span>
-                                {{ getColumnDescription(prompt) }}
-                            </div>
-                        </div>
-
-                    </section>
-                    <div class="scrollTrack vScrollTrack">
-                        <div class="scrollThumb" style="height: 15px; transform: translateY(0);"></div>
-                    </div>
-                    <div class="scrollTrack hScrollTrack">
-                        <div class="scrollThumb disabled" style="width: 354px; transform: translateX(0);"></div>
-                    </div>
-                </section>
-            </section>
-        </section>
-        <section id="resultsLayout" class="results infinite twoCol" ng-show="tabs.selected == 'layouts'">
-        <section class="layoutsTabContainer tabContainer">
-            <section class="tab">
-                <section class="layer scrollPane">
-                    <div class="layer-inner">
-                        <div class="searchLoaderHolder"></div>
-                        <div class="searchGroup hasContent">
-                            <div class="row gallery infoPanelGallery templateGallery laidOut" style="padding-left: 25px;">
-
-                                <div  style="width: 200px;">
-                                    <div class="col-md-6" style="padding: 0; padding-right: 1px;">
-                                        <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'paragraph')">
-                                            <i class="fa fa-paragraph"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6" style="padding: 0; padding-left: 1px;">
-                                        <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'heading')">
-                                            <i class="fa fa-header"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div  style="width: 200px;">
-                                    <div class="col-md-6" style="padding: 0; padding-right: 1px;">
-                                        <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'image')">
-                                            <i class="fa fa-picture-o"></i>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6" style="padding: 0; padding-left: 1px;">
-                                        <div id="element-btn" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'video')">
-                                            <i class="fa fa-play"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div data-color="jumbotron" effect-allowed="copy"  style="margin-bottom: 5px;" draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'jumbotron')">
-                                    <img draggable="false" src="images/layout_jumbotron.png" width="200" height="50" style="height: 50px; width: 200px;">
-                                </div>
-
-                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, '4colscta')" style="margin-bottom: 5px;">
-                                    <img draggable="false" src="images/layout_4cols_cta.png" width="200" style="height: 50px; width: 200px;">
-                                </div>
-
-                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, '3colscta')" style="margin-bottom: 5px;">
-                                    <img draggable="false" src="images/layout_3cols_cta.png" width="200" style="height: 50px; width: 200px;">
-                                </div>
-
-                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, '2colscta')" style="margin-bottom: 5px;">
-                                    <img draggable="false" src="images/layout_2cols_cta.png" width="200" style="height: 50px; width: 200px;">
-                                </div>
-
-                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'imageTextLarge')" style="margin-bottom: 5px;">
-
-                                    <img draggable="false" src="images/layout_block_image_text_large.png" width="200" height="50" style="height: 50px; width: 200px;">
-                                </div>
-
-                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'textImageLarge')" style="margin-bottom: 5px;">
-                                    <img draggable="false" src="images/layout_block_text_image_large.png" width="200" height="50" style="height: 50px; width: 200px;">
-                                </div>
-
-                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'divider')" uib-tooltip="{{'This divider defines a page-break for printing'| translate}}" style="margin-bottom: 5px;">
-                                    <img draggable="false" src="images/layout_featurete_divider.png" width="200" height="15" style="height: 15px; width: 200px;">
-                                </div>
-
-                                <div draggable="true" app-dragstart="vm.onLayoutDragStart($event, 'pageHeader')" style="margin-bottom: 5px;">
-                                    <img draggable="false" src="images/layout-page-header.png" width="200" height="50" style="height: 50px; width: 200px;">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </section>
-        </section>
-    </section>
 
     </section>
 

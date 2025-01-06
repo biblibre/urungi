@@ -353,7 +353,6 @@ section {
 }
 
 .gallery {
-    width: calc(100% + 6px);
     list-style: none;
 }
 
