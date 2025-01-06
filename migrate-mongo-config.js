@@ -10,7 +10,8 @@ const migrateMongoConfig = {
         databaseName,
     },
     migrationsDir: 'migrations',
-    changelogCollectionName: 'changelog'
+    changelogCollectionName: 'changelog',
+    moduleSystem: 'commonjs',
 };
 
 module.exports = migrateMongoConfig;
