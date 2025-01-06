@@ -31,6 +31,12 @@ Several pages already work without any AngularJS code:
 - After a successful login, redirect the user to where it was before being
   redirected to the login page
 
+### Fixed
+
+- Fixed a bug that was preventing to import the same report multiple times in
+  the same dashboard.
+  Problematic reports need to be removed from dashboard then imported again
+
 ### Dependencies
 
 - Added gettext.js 2.0.3

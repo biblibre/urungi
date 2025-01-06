@@ -15,6 +15,9 @@ const dashboardReportSchema = new mongoose.Schema({
     reportSubType: { type: String },
     reportType: { type: String },
     selectedLayerID: { type: mongoose.Schema.Types.ObjectId, ref: 'Layer' },
+}, {
+    id: false,
+    _id: false,
 });
 
 const dashboardSchema = new mongoose.Schema({

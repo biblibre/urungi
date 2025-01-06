@@ -96,7 +96,7 @@
             modal.result.then(reportID => {
                 reportModel.getReportDefinition(reportID).then(function (report) {
                     if (report) {
-                        report.id = report._id;
+                        report.id = uuid.v4();
                         $scope.selectedDashboard.reports.push(report);
                     } else {
                         notify.error(i18n.gettext('Error : failed to import report'));
