@@ -33,12 +33,16 @@ Several pages already work without any AngularJS code:
 - When the mouse hovers a report in the dashboard sidebar, the corresponding
   report in the dashboard view is highlighted to help locate where a report
   is used.
+- Similarly, when the mouse hovers a report in the dashboard view, the
+  corresponding report in the dashboard sidebar is highlighted.
 
 ### Fixed
 
 - Fixed a bug that was preventing to import the same report multiple times in
   the same dashboard.
   Problematic reports need to be removed from dashboard then imported again
+- The "selection box" that appears around a dashboard block when selected now
+  correctly follows the selected block when the user scrolls
 
 ### Dependencies
 

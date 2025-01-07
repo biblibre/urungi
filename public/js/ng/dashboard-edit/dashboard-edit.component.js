@@ -23,6 +23,8 @@
         vm.onReportDragStart = onReportDragStart;
         vm.onReportMouseEnter = onReportMouseEnter;
         vm.onReportMouseLeave = onReportMouseLeave;
+        vm.onPageBlockMouseOver = onPageBlockMouseOver;
+        vm.hovered = {};
 
         $scope.reportModal = 'partials/report-edit/report-edit.component.html';
         $scope.settingsTemplate = 'partials/widgets/inspector.html';
@@ -169,8 +171,6 @@
 
                     $compile($div)($scope);
 
-                    cleanAllSelected();
-
                     $scope.initPrompts();
 
                     repaintReports();
@@ -316,9 +316,6 @@
             }
         };
 
-        $scope.elementDblClick = function (theElement) {
-        };
-
         $scope.dashboardNameSave = function () {
             $('#dashboardNameModal').modal('hide');
             $('.modal-backdrop').hide();
@@ -394,38 +391,17 @@
             }
         }
 
-        function cleanAllSelected () {
-            const root = document.getElementById('designArea');
-
-            if (typeof root !== 'undefined') {
-                cleanSelectedElement(root);
-            }
-        }
-
-        function cleanSelectedElement (theElement) {
-            for (let i = 0, len = theElement.childNodes.length; i < len; ++i) {
-                $(theElement.childNodes[i]).removeClass('selected');
-                if (theElement.childNodes[i].hasChildNodes()) { cleanSelectedElement(theElement.childNodes[i]); }
-            }
-        }
-
         function saveDashboard () {
             // Put all reports in loading mode...
-
-            cleanAllSelected();
-
             const dashboard = $scope.selectedDashboard;
 
-            const container = $('#designArea');
+            const container = document.getElementById('designArea').cloneNode(true);
+            container.querySelectorAll('.selected').forEach(n => { n.classList.remove('selected') });
 
-            clearPrompts();
-
-            let theHTML = container.html();
-
-            theHTML = theHTML.replace('vs-repeat', ' ');
+            let theHTML = container.innerHTML;
 
             $scope.selectedDashboard.properties.designerHTML = theHTML;
-            $scope.selectedDashboard.properties.rootStyle = container.attr('style');
+            $scope.selectedDashboard.properties.rootStyle = container.getAttribute('style');
 
             const previewContainer = $('#previewContainer');
 
@@ -484,14 +460,6 @@
 
             getPromptsWidget();
         };
-
-        function clearPrompts () {
-            for (const i in $scope.prompts) {
-                for (const c in $scope.prompts[i].criterion) {
-                    $scope.prompts[i].criterion[c] = undefined;
-                }
-            }
-        }
 
         $scope.getPrompts = function () {
             return $scope.prompts && Object.values($scope.prompts);
@@ -558,14 +526,24 @@
 
         function onReportMouseEnter (ev) {
             document.querySelectorAll('#REPORT_CONTAINER_' + ev.currentTarget.id).forEach(n => {
-                n.classList.add('hovered');
+                n.closest('[page-block]').classList.add('hovered');
             });
         }
 
         function onReportMouseLeave (ev) {
             document.querySelectorAll('#REPORT_CONTAINER_' + ev.currentTarget.id).forEach(n => {
-                n.classList.remove('hovered');
+                n.closest('[page-block]').classList.remove('hovered');
             });
+        }
+
+        function onPageBlockMouseOver (ev) {
+            const reportView = ev.target.closest('[report-view]');
+            if (reportView) {
+                const reportId = reportView.getAttribute('id').replace('REPORT_CONTAINER_', '');
+                vm.hovered = { [reportId]: true };
+            } else {
+                vm.hovered = {};
+            }
         }
     }
 })();

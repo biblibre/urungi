@@ -704,56 +704,6 @@ ul {
     padding: 0;
 }
 
-#select-box {
-    border: 2px solid #179ede;
-}
-
-#hover-box,
-#select-box {
-    border: 2px solid #179ede;
-    position: absolute;
-    padding: 5px;
-    pointer-events: none;
-    display: none;
-    z-index: 4;
-}
-
-#hover-box #hover-box-actions,
-#hover-box #select-box-actions,
-#select-box #hover-box-actions,
-#select-box #select-box-actions {
-    color: #fff;
-    background-color: #179ede;
-    padding: 1px 5px 2px;
-    font-size: 16px;
-    top: -27px;
-    left: 0;
-    position: absolute;
-    text-align: center;
-    overflow: hidden;
-    max-height: 30px;
-    pointer-events: all;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    white-space: nowrap;
-}
-
-#select-box-actions .element-tag {
-    font-size: 14px;
-    text-transform: uppercase;
-    overflow: hidden;
-    pointer-events: none;
-}
-
-#hover-box #hover-box-actions .icon:first-of-type,
-#hover-box #select-box-actions .icon:first-of-type,
-#select-box #hover-box-actions .icon:first-of-type,
-#select-box #select-box-actions .icon:first-of-type {
-    margin-left: 10px;
-}
-
 #inspector .container-fluid {
     background-color: #ccc;
     padding: 0;

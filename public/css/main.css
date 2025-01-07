@@ -166,10 +166,6 @@ a:focus {
     text-align: center;
 }
 
-.selected {
-    border: 1px dotted blue !important;
-}
-
 .panel-body.dashboard {
     padding: 0;
 
@@ -3233,6 +3229,42 @@ a.list-group-item:hover {
     font-size: 1em;
 }
 
-[report-view].hovered {
-    outline: auto;
+.dashboard-report-list-item {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    display: flex;
+    align-items: stretch;
+}
+
+.dashboard-report-list-item > * {
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px;
+}
+
+.dashboard-report-list-item > :first-child {
+    border-right-style: none;
+    border-radius: 5px 0 0 5px;
+    background-color: white;
+}
+
+.dashboard-report-list-item > :last-child {
+    border-left: none;
+    padding-left: 7px;
+    border-radius: 0 5px 5px 0;
+}
+
+.dashboard-report-list-item:hover > *,
+.dashboard-report-list-item.hovered > * {
+    border-color: hsl(200 80% 50%);
+}
+
+[page-block]:hover:not(:has([page-block]:hover)),
+[page-block].hovered {
+    outline: dotted 2px hsl(200 80% 50%);
+}
+[page-block]:hover:not(:has([page-block]:hover)).selected,
+[page-block].selected {
+    box-shadow: 0 0 1px 2px hsl(200 80% 70%);
 }

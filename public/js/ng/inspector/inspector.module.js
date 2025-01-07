@@ -162,22 +162,13 @@
                 };
 
                 $scope.$on('element.reselected', function (e, node) {
+                    if ($scope.selectedElement) {
+                        $scope.selectedElement[0].classList.remove('selected');
+                    }
+
                     $scope.selecting = true;
                     $scope.selectedElement = node;
-
-                    const pos = node[0].getBoundingClientRect();
-
-                    const elementTop = pos.top - 2;// pos.top-57;
-                    const elementLeft = pos.left - 2;
-                    const elementWidth = pos.width + 4;
-                    const elementHeight = pos.height + 4;
-
-                    $('#select-box').css('top', elementTop);
-                    $('#select-box').css('left', elementLeft);
-                    $('#select-box').css('width', elementWidth);
-                    $('#select-box').css('height', elementHeight);
-
-                    $('#select-box').show();
+                    $scope.selectedElement[0].classList.add('selected');
 
                     $scope.properties.image = node.css('background-image');
                     $('#image').css('background-image', $scope.properties.image);
@@ -270,12 +261,12 @@
                         const html = '<' + newProps + ' page-block ndtype="heading" class="editable">' + $scope.selectedElement[0].innerHTML + '</' + newProps + '>';
                         const $div = $(html);
 
-                        angular.element(document).injector().invoke(function ($compile) {
-                            $compile($div)($scope);
-                        });
+                        $compile($div)($scope);
 
                         $scope.selectedElement.replaceWith($div);
-                        repositionSelectBox();
+                        $timeout(function () {
+                            $scope.$broadcast('element.reselected', $div);
+                        }, 0);
                     }
                 });
 
@@ -287,7 +278,6 @@
                     const parent = $(theElement).parent();
 
                     $(parent).children().eq(selected - 1).before($(parent).children().eq(selected));
-                    repositionSelectBox();
                 };
 
                 $scope.moveElementDown = function () {
@@ -298,7 +288,6 @@
                     const parent = $(theElement).parent();
 
                     $(parent).children().eq(selected + 1).after($(parent).children().eq(selected));
-                    repositionSelectBox();
                 };
 
                 $scope.$watchCollection('properties', function (newProps, oldProps) {
@@ -334,7 +323,6 @@
                         for (const prop in newProps) {
                             if (newProps[prop] && newProps[prop] !== oldProps[prop]) {
                                 $scope.selectedElement.css(prop, newProps[prop]);
-                                repositionSelectBox();
                             }
                         }
                     }
@@ -343,7 +331,6 @@
                 $scope.$watchCollection('inspector.styles.height', function (newProps, oldProps) {
                     if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.css('height', newProps);
-                        repositionSelectBox();
                     }
                 });
 
@@ -364,8 +351,6 @@
 
                         const styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
                         $scope.selectedElement.css('padding', styleVal);
-
-                        repositionSelectBox();
                     }
                 });
 
@@ -387,8 +372,6 @@
                         //  top right  bottom  left
                         const styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
                         $scope.selectedElement.css('margin', styleVal);
-
-                        repositionSelectBox();
                     }
                 });
 
@@ -414,7 +397,6 @@
 
                         const styleVal = top + ' ' + right + ' ' + bottom + ' ' + left;
                         $scope.selectedElement.css('border-width', styleVal);
-                        repositionSelectBox();
                     }
                 });
 
@@ -430,78 +412,35 @@
                         $scope.inspector.styles.border.radiusBottomLeft = $scope.inspector.styles.border.radius;
                         $scope.inspector.styles.border.radiusBottomRight = $scope.inspector.styles.border.radius;
                     }
-
-                    repositionSelectBox();
                 });
 
                 $scope.$watchCollection('inspector.styles.border.radiusTopLeft', function (newProps, oldProps) {
                     if (!$scope.selectedElement && $scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.css('border-top-left-radius', newProps);
                     }
-
-                    repositionSelectBox();
                 });
 
                 $scope.$watchCollection('inspector.styles.border.radiusTopRight', function (newProps, oldProps) {
                     if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.css('border-top-right-radius', newProps);
                     }
-
-                    repositionSelectBox();
                 });
 
                 $scope.$watchCollection('inspector.styles.border.radiusBottomLeft', function (newProps, oldProps) {
                     if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.css('border-bottom-left-radius', newProps);
                     }
-
-                    repositionSelectBox();
                 });
 
                 $scope.$watchCollection('inspector.styles.border.radiusBottomRight', function (newProps, oldProps) {
                     if ($scope.selectedElement && !$scope.selecting && !$scope.dragging) {
                         $scope.selectedElement.css('border-bottom-right-radius', newProps);
                     }
-
-                    repositionSelectBox();
                 });
 
                 $scope.deleteSelected = function () {
                     $scope.selectedElement.remove();
-                    $('#select-box').hide();
                 };
-
-                angular.element($window).bind('resize', function () {
-                    repositionSelectBox();
-
-                    // manuall $digest required as resize event
-                    // is outside of angular
-                    $scope.$digest();
-                });
-
-                angular.element($window).bind('scroll', function () {
-                    repositionSelectBox();
-
-                    // manuall $digest required as resize event
-                    // is outside of angular
-                    $scope.$digest();
-                });
-
-                function repositionSelectBox () {
-                    if ($scope.selectedElement) {
-                        const pos = $scope.selectedElement[0].getBoundingClientRect();
-
-                        const elementTop = pos.top - 2;
-                        const elementLeft = pos.left - 2;
-                        const elementWidth = pos.width + 4;
-                        const elementHeight = pos.height + 4;
-
-                        $('#select-box').css('top', elementTop);
-                        $('#select-box').css('left', elementLeft);
-                        $('#select-box').css('width', elementWidth);
-                        $('#select-box').css('height', elementHeight);
-                    }
-                }
 
                 function clearInlineStyle (element) {
                     const cssProperties = [
