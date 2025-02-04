@@ -8,6 +8,10 @@ msgstr ""
 msgid " Warning: This role is assigned to {{count}} users"
 msgstr ""
 
+#: public/js/ng/dashboard-edit/dashboard-edit.component.js:554
+msgid "(copy)"
+msgstr ""
+
 #: public/js/ng/dashboard-edit/dashboard-edit.html-widgets.service.js:18
 #: public/js/ng/dashboard-edit/dashboard-edit.html-widgets.service.js:23
 #: public/js/ng/dashboard-edit/dashboard-edit.html-widgets.service.js:28
@@ -201,8 +205,8 @@ msgstr ""
 
 #: public/partials/core/core.delete-modal.component.html:17
 #: public/partials/core/core.duplicate-modal.component.html:12
+#: public/partials/dashboard-edit/dashboard-edit.component.html:219
 #: public/partials/dashboard-edit/dashboard-edit.component.html:26
-#: public/partials/dashboard-edit/dashboard-edit.component.html:266
 #: public/partials/dashboard-edit/dashboard-edit.reports-import-modal.component.html:11
 #: public/partials/dashboard-view/dashboard-view.component.html:23
 #: public/partials/layer-edit/layer-edit.add-all-modal.component.html:11
@@ -346,7 +350,7 @@ msgstr ""
 msgid "Click here to delete the report."
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:122
+#: public/partials/dashboard-edit/dashboard-edit.component.html:109
 msgid "Click here to delete this report"
 msgstr ""
 
@@ -354,7 +358,7 @@ msgstr ""
 msgid "Click here to duplicate the report."
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:125
+#: public/partials/dashboard-edit/dashboard-edit.component.html:103
 msgid "Click here to edit this report"
 msgstr ""
 
@@ -429,7 +433,7 @@ msgstr ""
 msgid "Copy of {{name}}"
 msgstr ""
 
-#: public/js/ng/dashboard-edit/dashboard-edit.component.js:145
+#: public/js/ng/dashboard-edit/dashboard-edit.component.js:150
 msgid "Could not load dashboard : missing id"
 msgstr ""
 
@@ -494,11 +498,11 @@ msgstr ""
 msgid "Current password"
 msgstr ""
 
-#: server/routes/users.js:154
+#: server/routes/users.js:146
 msgid "Current password is incorrect"
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:258
+#: public/partials/dashboard-edit/dashboard-edit.component.html:211
 msgid "Dashboard Name"
 msgstr ""
 
@@ -572,7 +576,7 @@ msgstr ""
 msgid "Dataset"
 msgstr ""
 
-#: server/routes/data-sources.js:41
+#: server/routes/data-sources.js:42
 msgid "Datasource created successfully"
 msgstr ""
 
@@ -584,7 +588,7 @@ msgstr ""
 msgid "Datasource must be the same for all entities"
 msgstr ""
 
-#: server/routes/data-sources.js:66
+#: server/routes/data-sources.js:67
 msgid "Datasource updated successfully"
 msgstr ""
 
@@ -650,7 +654,7 @@ msgstr ""
 msgid "Delete this role"
 msgstr ""
 
-#: public/js/user/list.js:34
+#: public/js/user/list.js:35
 msgid "Delete this user"
 msgstr ""
 
@@ -763,6 +767,7 @@ msgstr ""
 msgid "Duplicate this dashboard"
 msgstr ""
 
+#: public/partials/dashboard-edit/dashboard-edit.component.html:106
 #: public/partials/report-list/report-list.reports-list-buttons.html:17
 msgid "Duplicate this report"
 msgstr ""
@@ -807,7 +812,7 @@ msgstr ""
 msgid "Edit this report"
 msgstr ""
 
-#: public/js/user/list.js:27
+#: public/js/user/list.js:28
 msgid "Edit this user"
 msgstr ""
 
@@ -828,11 +833,11 @@ msgstr ""
 msgid "Elements used in the expression:"
 msgstr ""
 
-#: server/routes/users.js:72
+#: server/routes/users.js:64
 msgid "Email is required"
 msgstr ""
 
-#: public/js/ng/dashboard-edit/dashboard-edit.component.js:102
+#: public/js/ng/dashboard-edit/dashboard-edit.component.js:107
 msgid "Error : failed to import report"
 msgstr ""
 
@@ -946,7 +951,7 @@ msgstr ""
 msgid "First Name"
 msgstr ""
 
-#: server/routes/users.js:66
+#: server/routes/users.js:58
 msgid "First name is required"
 msgstr ""
 
@@ -1116,7 +1121,7 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:108
+#: public/partials/dashboard-edit/dashboard-edit.component.html:88
 msgid "Import Report"
 msgstr ""
 
@@ -1124,7 +1129,7 @@ msgstr ""
 msgid "Import completed"
 msgstr ""
 
-#: views/import.liquid:27
+#: views/import.liquid:20
 msgid "Import layers, reports and dashboards"
 msgstr ""
 
@@ -1184,7 +1189,7 @@ msgstr ""
 msgid "Last month"
 msgstr ""
 
-#: server/routes/users.js:69
+#: server/routes/users.js:61
 msgid "Last name is required"
 msgstr ""
 
@@ -1295,7 +1300,7 @@ msgstr ""
 msgid "Layers list"
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:63
+#: public/partials/dashboard-edit/dashboard-edit.component.html:59
 msgid "Layouts"
 msgstr ""
 
@@ -1386,12 +1391,12 @@ msgid "Name"
 msgstr ""
 
 #: public/partials/layer-list/layer-list.new-modal.component.html:13
-#: server/routes/data-sources.js:87
-#: server/routes/roles.js:148
+#: server/routes/data-sources.js:88
+#: server/routes/roles.js:149
 msgid "Name is required"
 msgstr ""
 
-#: public/js/ng/dashboard-edit/dashboard-edit.component.js:125
+#: public/js/ng/dashboard-edit/dashboard-edit.component.js:130
 #: public/js/ng/dashboard-list/dashboard-list.component.js:103
 #: public/partials/report-edit/report-edit.dashboard-list-modal.html:10
 msgid "New Dashboard"
@@ -1410,7 +1415,7 @@ msgid "New Layer"
 msgstr ""
 
 #: public/js/ng/report-list/report-list.component.js:55
-#: public/partials/dashboard-edit/dashboard-edit.component.html:107
+#: public/partials/dashboard-edit/dashboard-edit.component.html:87
 msgid "New Report"
 msgstr ""
 
@@ -1556,16 +1561,16 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: server/routes/users.js:175
+#: server/routes/users.js:167
 msgid "Password changed successfully"
 msgstr ""
 
-#: server/routes/users.js:80
+#: server/routes/users.js:72
 msgid "Password is required"
 msgstr ""
 
-#: server/routes/users.js:76 server/routes/users.js:83
-#: server/routes/users.js:158
+#: server/routes/users.js:68 server/routes/users.js:75
+#: server/routes/users.js:150
 msgid "Passwords must match"
 msgstr ""
 
@@ -1591,7 +1596,7 @@ msgstr ""
 msgid "Port"
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:81
+#: public/partials/dashboard-edit/dashboard-edit.component.html:73
 msgid "Preview size"
 msgstr ""
 
@@ -1636,7 +1641,7 @@ msgstr ""
 msgid "Quick display with"
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:87
+#: public/partials/dashboard-edit/dashboard-edit.component.html:79
 #: public/partials/report-edit/report-edit.report-edit.html:39
 msgid "Redraw"
 msgstr ""
@@ -1718,7 +1723,7 @@ msgstr ""
 #: public/js/import.js:164
 #: public/js/ng/report-list/report-list.component.js:42
 #: public/js/ng/report-list/report-list.component.js:46
-#: public/partials/dashboard-edit/dashboard-edit.component.html:51
+#: public/partials/dashboard-edit/dashboard-edit.component.html:47
 #: public/partials/report-list/report-list.component.html:2
 #: views/export.liquid:44
 #: views/report/edit.liquid:1
@@ -1758,11 +1763,11 @@ msgstr ""
 msgid "Right-click on a folder to show available options"
 msgstr ""
 
-#: server/routes/roles.js:88
+#: server/routes/roles.js:89
 msgid "Role created successfully"
 msgstr ""
 
-#: server/routes/roles.js:48
+#: server/routes/roles.js:49
 msgid "Role deleted successfully"
 msgstr ""
 
@@ -1770,7 +1775,7 @@ msgstr ""
 msgid "Role name"
 msgstr ""
 
-#: server/routes/roles.js:116
+#: server/routes/roles.js:117
 msgid "Role updated successfully"
 msgstr ""
 
@@ -1785,7 +1790,7 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:57
+#: public/partials/dashboard-edit/dashboard-edit.component.html:53
 msgid "Run time filters"
 msgstr ""
 
@@ -1803,7 +1808,7 @@ msgid "SQL query"
 msgstr ""
 
 #: public/partials/dashboard-edit/dashboard-edit.component.html:15
-#: public/partials/dashboard-edit/dashboard-edit.component.html:265
+#: public/partials/dashboard-edit/dashboard-edit.component.html:218
 #: public/partials/layer-edit/layer-edit.element-modal.component.html:173
 #: public/partials/report-edit/report-edit.component.html:19
 #: public/partials/report-edit/report-edit.component.html:20
@@ -2047,7 +2052,7 @@ msgstr ""
 msgid "Test connection"
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:260
+#: public/partials/dashboard-edit/dashboard-edit.component.html:213
 msgid "The dashboard name is required"
 msgstr ""
 
@@ -2106,7 +2111,7 @@ msgstr ""
 msgid "The status of the layer defines if the layer is visible or not for your users when creating or editing a report or exploring data."
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:77
+#: public/partials/dashboard-edit/dashboard-edit.component.html:69
 #: public/partials/report-edit/report-edit.report-settings-modal.component.html:9
 msgid "Theme"
 msgstr ""
@@ -2123,7 +2128,7 @@ msgstr ""
 msgid "This block only"
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:227
+#: public/partials/dashboard-edit/dashboard-edit.component.html:184
 msgid "This divider defines a page-break for printing"
 msgstr ""
 
@@ -2161,7 +2166,7 @@ msgstr ""
 msgid "This label indicates that this report is public."
 msgstr ""
 
-#: public/partials/dashboard-edit/dashboard-edit.component.html:83
+#: public/partials/dashboard-edit/dashboard-edit.component.html:75
 msgid "This limits the number of rows fetched in order to get a preview quickly. Set to 0 to disable."
 msgstr ""
 
@@ -2211,7 +2216,7 @@ msgstr ""
 msgid "Type a name for this dataset"
 msgstr ""
 
-#: server/routes/data-sources.js:90
+#: server/routes/data-sources.js:91
 msgid "Type is required"
 msgstr ""
 
@@ -2231,7 +2236,7 @@ msgstr ""
 msgid "Upload image"
 msgstr ""
 
-#: server/routes/users.js:225
+#: server/routes/users.js:217
 msgid "Urungi Administrator"
 msgstr ""
 
@@ -2271,7 +2276,7 @@ msgstr ""
 msgid "User Nick"
 msgstr ""
 
-#: server/routes/users.js:218
+#: server/routes/users.js:210
 msgid "User deleted successfully"
 msgstr ""
 
@@ -2284,7 +2289,7 @@ msgstr ""
 msgid "User profile and permissions"
 msgstr ""
 
-#: server/routes/users.js:63
+#: server/routes/users.js:55
 msgid "Username is required"
 msgstr ""
 
