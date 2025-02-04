@@ -98,13 +98,18 @@
 
                 <div style="width: 100%;">
                     <span app-editable-text="item.reportName" style="color: white;">{{ item.reportName }}</span>
-                    <br/>
-                    <a id="reportListItemDeleteBtn" href="" class="pull-right  list-button btn-delete" ng-click="deleteReport(item.id,item.reportName)"  uib-tooltip="{{ 'Click here to delete this report' | translate }}" tooltip-placement="bottom">
-                        <i class="fa fa-trash-o "  ></i>
-                    </a>
-                    <a id="reportListItemEditBtn" class="pull-right  list-button" ng-click="loadReport(item)"  uib-tooltip="{{ 'Click here to edit this report' | translate }}" tooltip-placement="bottom">
-                        <i class="fa fa-pencil" ></i>
-                    </a>
+                    <br>
+                    <div class="btn-group btn-group-sm pull-right">
+                        <button class="btn btn-silver" ng-click="loadReport(item)" uib-tooltip="{{ 'Click here to edit this report' | translate }}" tooltip-placement="bottom">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                        <button class="btn btn-silver" ng-click="vm.duplicateReport(item)" uib-tooltip="{{ 'Duplicate this report' | translate }}" tooltip-placement="bottom">
+                            <i class="fa fa-copy"></i>
+                        </button>
+                        <button class="btn btn-danger" ng-click="deleteReport(item.id,item.reportName)" uib-tooltip="{{ 'Click here to delete this report' | translate }}" tooltip-placement="bottom">
+                            <i class="fa fa-trash-o"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>

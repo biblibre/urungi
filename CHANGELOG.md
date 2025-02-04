@@ -26,6 +26,10 @@ Several pages already work without any AngularJS code:
 - Node.js 12, 14 and 16 are no longer supported. Supported versions are 18 and 20
 - MongoDB 4.0, 4.2 and 4.4 are no longer supported. Supported versions are 5.0, 6.0 and 7.0
 
+### Added
+
+- Added ability to duplicate reports within a dashboard
+
 ### Changed
 
 - After a successful login, redirect the user to where it was before being

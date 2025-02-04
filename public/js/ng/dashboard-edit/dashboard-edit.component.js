@@ -16,6 +16,7 @@
         const vm = this;
 
         vm.$onInit = $onInit;
+        vm.duplicateReport = duplicateReport;
         vm.goBack = goBack;
         vm.onDrop = onDrop;
         vm.onFilterPromptDragStart = onFilterPromptDragStart;
@@ -544,6 +545,15 @@
             } else {
                 vm.hovered = {};
             }
+        }
+
+        function duplicateReport (report) {
+            const newReport = angular.copy(report);
+
+            newReport.id = uuid.v4();
+            newReport.reportName += ' ' + i18n.gettext('(copy)');
+
+            $scope.selectedDashboard.reports.push(newReport);
         }
     }
 })();
