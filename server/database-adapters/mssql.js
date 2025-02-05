@@ -120,6 +120,13 @@ class MssqlAdapter extends BaseAdapter {
 
         return res;
     }
+
+    getSql (query) {
+        const qb = new MssqlQueryBuilder();
+        const sql = qb.build(query);
+
+        return sql;
+    }
 }
 
 module.exports = { MssqlAdapter };

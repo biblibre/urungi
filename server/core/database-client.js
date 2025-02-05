@@ -59,6 +59,10 @@ class DatabaseClient {
     getQueryResults (query) {
         return this.adapter.getQueryResults(query);
     }
+
+    getSql (query) {
+        return this.adapter.getSql(query);
+    }
 }
 
 module.exports = DatabaseClient;

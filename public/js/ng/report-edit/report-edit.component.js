@@ -18,6 +18,7 @@
 
         vm.$onInit = $onInit;
         vm.goBack = goBack;
+        vm.onChangeField = onChangeField;
 
         $scope.promptsBlock = 'partials/report-edit/report-edit.prompts-block.html';
         $scope.dropArea = 'partials/report-edit/report-edit.drop-area.html';
@@ -367,7 +368,7 @@
             element.id = reportsService.getColumnId(element);
             elements.push(element);
 
-            $scope.sql = undefined;
+            refreshSql();
 
             if (role === 'order') {
                 element.sortType = 1;
@@ -382,7 +383,7 @@
             const index = elements.indexOf(item);
             elements.splice(index, 1);
 
-            $scope.sql = undefined;
+            refreshSql();
         };
 
         $scope.toReportItem = function (ngModelItem) {
@@ -499,6 +500,7 @@
         };
 
         $scope.filterChanged = function (elementID, values) {
+            refreshSql();
         };
 
         $scope.setHeight = function (element, height, correction) {
@@ -710,6 +712,7 @@
 
         $scope.setSortType = function (field, type) {
             field.sortType = type;
+            refreshSql();
         };
 
         $scope.chooseRecordLimit = function () {
@@ -845,6 +848,23 @@
 
             ev.dataTransfer.effectAllowed = 'copy';
             ev.dataTransfer.setData('application/vnd.urungi.layer-element+json', json);
+        }
+
+        function refreshSql () {
+            if ($scope.user.viewSQL) {
+                const params = {
+                    limit: $scope.selectedRecordLimit.value
+                };
+                api.getReportSql($scope.selectedReport, params).then(function (res) {
+                    $scope.sql = res.sql;
+                });
+            } else {
+                $scope.sql = undefined;
+            }
+        }
+
+        function onChangeField () {
+            refreshSql();
         }
     }
 })();

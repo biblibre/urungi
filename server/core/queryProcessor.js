@@ -35,6 +35,37 @@ exports.execute = async function (query) {
     return result;
 };
 
+exports.getSql = async function (query) {
+    const warnings = [];
+
+    const Layer = mongoose.model('Layer');
+    const queryLayer = await Layer.findById(query.layerID);
+    if (!queryLayer) {
+        throw new Error('Layer not found');
+    }
+
+    const datasourceID = queryLayer.datasourceID;
+
+    const Datasource = mongoose.model('Datasource');
+    const dts = await Datasource.findById(datasourceID);
+    if (!dts) {
+        throw new Error('Data source not found');
+    }
+
+    const validTypes = ['MySQL', 'POSTGRE', 'ORACLE', 'MSSQL'];
+    if (!validTypes.includes(dts.type)) {
+        throw new Error('Invalid datasource type : ' + dts.type);
+    }
+
+    const processedQuery = processQuery(query, queryLayer, warnings);
+    buildJoinTree(processedQuery, queryLayer, warnings);
+
+    const dbClient = DatabaseClient.fromDatasource(dts);
+    const sql = await dbClient.getSql(processedQuery);
+
+    return sql;
+};
+
 function processQuery (query, queryLayer, warnings) {
     /*
     * Connects the query with the layer and creates a processedQuery object which can be used to build the sql query text

@@ -12,6 +12,7 @@
             zoneInfo: '<',
             onDrop: '&',
             onRemove: '&',
+            onChange: '&?',
             setSortType: '&?',
         },
     });
@@ -62,6 +63,10 @@
                 column.type = settings.type;
                 column.format = settings.format;
                 column.calculateTotal = settings.calculateTotal;
+
+                if (vm.onChange) {
+                    vm.onChange({ item: column });
+                }
             }, () => {});
 
             return modal;

@@ -41,6 +41,7 @@
             updateReport,
             duplicateReport,
             getReportData,
+            getReportSql,
             getReportFilterValues,
             getReportAsPDF,
             getReportAsPNG,
@@ -269,6 +270,22 @@
             }
 
             return httpPost('/api/reports/data-query', params);
+        }
+
+        function getReportSql (report, options = {}) {
+            const params = {
+                report,
+            };
+
+            if (options.limit && !report.properties.recordLimit) {
+                params.limit = options.limit;
+            }
+
+            if (options.filters) {
+                params.filters = options.filters;
+            }
+
+            return httpPost('/api/reports/sql-query', params);
         }
 
         function getReportFilterValues (filter, options) {

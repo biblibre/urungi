@@ -22,6 +22,7 @@ module.exports = function (app) {
     app.post('/api/reports/unshare', restrict, Reports.UnshareReport);
 
     app.post('/api/reports/data-query', Reports.dataQuery);
+    app.post('/api/reports/sql-query', Reports.sqlQuery);
     app.post('/api/reports/filter-values-query', Reports.filterValuesQuery);
 
     const reportRouter = express.Router();

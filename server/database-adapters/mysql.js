@@ -134,6 +134,13 @@ class MysqlAdapter extends BaseAdapter {
             });
         });
     }
+
+    getSql (query) {
+        const qb = new MysqlQueryBuilder();
+        const sql = qb.build(query);
+
+        return sql;
+    }
 }
 
 module.exports = { MysqlAdapter };

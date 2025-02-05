@@ -135,6 +135,13 @@ class PgAdapter extends BaseAdapter {
 
         return schemas;
     }
+
+    getSql (query) {
+        const qb = new PgQueryBuilder();
+        const sql = qb.build(query);
+
+        return sql;
+    }
 }
 
 module.exports = { PgAdapter };

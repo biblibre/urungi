@@ -279,19 +279,7 @@ exports.dataQuery = async function (req, res) {
 
     let result;
     try {
-        const query = generateQuery(report);
-
-        if (limit) {
-            query.quickResultLimit = limit;
-        }
-
-        if (filters) {
-            for (const filter of query.filters) {
-                if (filters[filter.id + filter.filterType]) {
-                    filter.criterion = filters[filter.id + filter.filterType];
-                }
-            }
-        }
+        const query = generateQuery(report, { limit, filters });
 
         result = await QueryProcessor.execute(query);
     } catch (err) {
@@ -299,6 +287,20 @@ exports.dataQuery = async function (req, res) {
         result = { result: 0, msg: (err.msg) ? err.msg : String(err), error: err };
     }
     res.status(200).json(result);
+};
+
+exports.sqlQuery = async function (req, res) {
+    const { report, limit, filters } = req.body;
+
+    try {
+        const query = generateQuery(report, { limit, filters });
+
+        const sql = await QueryProcessor.getSql(query);
+        res.status(200).json({ sql });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ result: 0, msg: (err.msg) ? err.msg : String(err), error: err });
+    }
 };
 
 exports.filterValuesQuery = async function (req, res) {
@@ -360,7 +362,7 @@ exports.filterValuesQuery = async function (req, res) {
     res.status(200).json(result);
 };
 
-function generateQuery (report) {
+function generateQuery (report, { limit, filters }) {
     const query = {};
 
     const columns = [];
@@ -397,6 +399,18 @@ function generateQuery (report) {
     }
 
     query.layerID = report.selectedLayerID;
+
+    if (limit) {
+        query.quickResultLimit = limit;
+    }
+
+    if (filters) {
+        for (const filter of query.filters) {
+            if (filters[filter.id + filter.filterType]) {
+                filter.criterion = filters[filter.id + filter.filterType];
+            }
+        }
+    }
 
     return query;
 }

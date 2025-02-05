@@ -29,14 +29,14 @@
 
             <!-- date input -->
             <div class="input-group" ng-if="(vm.filter.elementType == 'date' && (vm.filter.filterType == 'equal' || vm.filter.filterType == 'diferentThan' || vm.filter.filterType == 'biggerThan' || vm.filter.filterType == 'biggerOrEqualThan' || vm.filter.filterType == 'lessThan'  || vm.filter.filterType == 'lessOrEqualThan' || vm.filter.filterType == 'between'  || vm.filter.filterType == 'notBetween'))" style="width: 150px;">
-                <input type="date" class="form-control" ng-model="vm.date1" ng-change="vm.criterion.text1 = vm.getDateString(vm.date1)">
+                <input type="date" class="form-control" ng-model="vm.date1" ng-change="vm.criterion.text1 = vm.getDateString(vm.date1); vm.promptChanged()">
             </div>
 
             <!--between for date -->
             <span class="filter-label-value" ng-if="(vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween') && vm.filter.elementType == 'date'" style="color: #00f;" translate> and </span>
 
             <div class="input-group" ng-if="(vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween') && vm.filter.elementType == 'date'" style="width: 150px;">
-                <input type="date" class="form-control" ng-model="vm.date2" ng-change="vm.criterion.text2 = vm.getDateString(vm.date2)">
+                <input type="date" class="form-control" ng-model="vm.date2" ng-change="vm.criterion.text2 = vm.getDateString(vm.date2); vm.promptChanged()">
             </div>
         </span>
         <!-- END Date -->
@@ -45,7 +45,7 @@
         <span ng-if="vm.filter.elementType !== 'date'">
             <span ng-if="!(vm.filter.filterType == 'null' || vm.filter.filterType == 'notNull' || vm.filter.filterType == 'empty' || vm.filter.filterType == 'notEmpty') && ( vm.filter.elementType != 'array') && ( vm.filter.elementType != 'date') && (vm.filter.filterType != 'notIn') && (vm.filter.filterType != 'in')">
                 <div class="input-group input-group-sm scrollable-dropdown-menu">
-                    <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control" ng-model="vm.criterion.text1" ng-required="vm.filter.promptMandatory == true" uib-typeahead="value for value in vm.getFilterValues($viewValue)" typeahead-focus-first="false" typeahead-min-length="0" typeahead-append-to-body="true">
+                    <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control" ng-model="vm.criterion.text1" ng-required="vm.filter.promptMandatory == true" uib-typeahead="value for value in vm.getFilterValues($viewValue)" typeahead-focus-first="false" typeahead-min-length="0" typeahead-append-to-body="true" ng-change="vm.promptChanged()" typeahead-on-select="vm.promptChanged()">
                     <span class="input-group-btn">
                         <button type="button" ng-if="!( vm.isPrompt && vm.filter.promptMandatory )" class="btn btn-default" ng-click="vm.clearFilter(vm.filter)" uib-tooltip="{{ 'Click here to clear the selected value' | translate }}" tooltip-placement="bottom">
                             <i class="fa fa-times"></i>
@@ -56,7 +56,7 @@
 
             <span ng-if="(vm.filter.filterType == 'notIn' || vm.filter.filterType == 'in')">
                 <div class="input-group">
-                    <ui-select multiple ng-model="vm.criterion.textList" theme="bootstrap" ng-disabled="disabled" class="input-in">
+                    <ui-select multiple ng-model="vm.criterion.textList" theme="bootstrap" ng-disabled="disabled" class="input-in" on-select="vm.promptChanged()" on-remove="vm.promptChanged()">
                         <ui-select-match placeholder="{{vm.filter.promptTitle}}">{{$item}}</ui-select-match>
                         <ui-select-choices repeat="value in vm.values track by $index" refresh="vm.getFilterValues($select.search)" refresh-delay="0">
                             <div ng-bind-html="value | highlight: $select.search"></div>
@@ -69,7 +69,7 @@
             <span ng-show="vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween'" translate>AND</span>
 
             <span class="input-group input-group-sm" ng-show="vm.filter.filterType == 'between' || vm.filter.filterType == 'notBetween'">
-                <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control" ng-model="vm.criterion.text2" ng-required="vm.filter.promptMandatory == true" uib-typeahead="value for value in vm.getFilterValues($viewValue)" typeahead-focus-first="false" typeahead-min-length="0">
+                <input placeholder="{{vm.filter.promptTitle}}" type="text" class="form-control" ng-model="vm.criterion.text2" ng-required="vm.filter.promptMandatory == true" uib-typeahead="value for value in vm.getFilterValues($viewValue)" typeahead-focus-first="false" typeahead-min-length="0" ng-change="vm.promptChanged()" typeahead-on-select="vm.promptChanged()">
 
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-if="!( vm.isPrompt && vm.filter.promptMandatory )" ng-click="vm.clearFilter(vm.filter)" uib-tooltip="{{ 'Click here to clear the selected value' | translate }}" tooltip-placement="bottom">

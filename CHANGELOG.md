@@ -39,6 +39,8 @@ Several pages already work without any AngularJS code:
   is used.
 - Similarly, when the mouse hovers a report in the dashboard view, the
   corresponding report in the dashboard sidebar is highlighted.
+- When modifying a report, the SQL query is now automatically updated when
+  the report is changed (no need to redraw the report)
 
 ### Fixed
 

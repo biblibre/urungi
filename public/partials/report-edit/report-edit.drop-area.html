@@ -1,20 +1,20 @@
     <!-- Metrics for charts and pivot tables -->
 
-    <app-report-dropzone ng-if="['pivot', 'chart-line', 'chart-donut', 'chart-pie', 'indicator', 'gauge', 'pyramid'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.ykeys" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your metrics' | translate"></app-report-dropzone>
+    <app-report-dropzone ng-if="['pivot', 'chart-line', 'chart-donut', 'chart-pie', 'indicator', 'gauge', 'pyramid'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.ykeys" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" on-change="vm.onChangeField()" zone-info="'Drop here your metrics' | translate"></app-report-dropzone>
 
     <!-- Column entries -->
 
-    <app-report-dropzone id="columnsDropzone" ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid'" report="selectedReport" elements="selectedReport.properties.columns" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here your columns' | translate"></app-report-dropzone>
+    <app-report-dropzone id="columnsDropzone" ng-if="selectedReport.reportType == 'grid' || selectedReport.reportType == 'vertical-grid'" report="selectedReport" elements="selectedReport.properties.columns" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" on-change="vm.onChangeField()" zone-info="'Drop here your columns' | translate"></app-report-dropzone>
 
     <!--dimensions for pivot tables -->
 
-    <app-report-dropzone ng-if="selectedReport.reportType == 'pivot'" report="selectedReport" elements="selectedReport.properties.pivotKeys.columns" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the table columns' | translate"></app-report-dropzone>
+    <app-report-dropzone ng-if="selectedReport.reportType == 'pivot'" report="selectedReport" elements="selectedReport.properties.pivotKeys.columns" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" on-change="vm.onChangeField()" zone-info="'Drop here the table columns' | translate"></app-report-dropzone>
 
-    <app-report-dropzone ng-if="selectedReport.reportType == 'pivot'" report="selectedReport" elements="selectedReport.properties.pivotKeys.rows" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the table rows' | translate"></app-report-dropzone>
+    <app-report-dropzone ng-if="selectedReport.reportType == 'pivot'" report="selectedReport" elements="selectedReport.properties.pivotKeys.rows" settings-available="true" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" on-change="vm.onChangeField()" zone-info="'Drop here the table rows' | translate"></app-report-dropzone>
 
     <!--dimensions for charts -->
 
-    <app-report-dropzone ng-if="['chart-line', 'chart-donut', 'chart-pie', 'pyramid'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.xkeys" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" zone-info="'Drop here the dimension field' | translate"></app-report-dropzone>
+    <app-report-dropzone ng-if="['chart-line', 'chart-donut', 'chart-pie', 'pyramid'].includes(selectedReport.reportType)" report="selectedReport" elements="selectedReport.properties.xkeys" on-drop="onDropField(elements, item, 'column')" on-remove="onRemoveField(elements, item, 'column')" on-change="vm.onChangeField()" zone-info="'Drop here the dimension field' | translate"></app-report-dropzone>
 
     <!-- Filters -->
 
