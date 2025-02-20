@@ -1,4 +1,7 @@
 export default {
+    getUsers,
+    updateUser,
+    getRoles,
     getDatasources,
     getSqlQueryCollection,
     createLayer,
@@ -6,8 +9,21 @@ export default {
     deleteLayer,
 };
 
-export function getDatasources () {
-    return httpGet('/api/datasources');
+export function getUsers (params) {
+    const search = Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&');
+    return httpGet(`/api/users?${search}`);
+}
+
+export function updateUser (id, changes) {
+    return httpPatch('/api/users/' + id, changes);
+}
+
+export function getRoles (params) {
+    return httpGet('/api/roles', params);
+}
+
+export function getDatasources (params = {}) {
+    return httpGet('/api/datasources', params);
 }
 
 export function createLayer (layer) {

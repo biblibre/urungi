@@ -25,13 +25,11 @@
         getUsers,
         updateUser,
 
-        getRoles,
-
         testConnection,
     };
 
-    function getDatasources () {
-        return httpGet('/api/datasources');
+    function getDatasources (params = {}) {
+        return httpGet('/api/datasources', params);
     }
 
     /**
@@ -111,10 +109,6 @@
 
     function updateUser (id, changes) {
         return httpPatch('/api/users/' + id, changes);
-    }
-
-    function getRoles (params) {
-        return httpGet('/api/roles', params);
     }
 
     function testConnection (datasource) {

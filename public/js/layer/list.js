@@ -3,8 +3,10 @@ import { t, expand } from '../i18n.esm.js';
 import { el } from '../dom.esm.js';
 import DeleteModal from '../modal/delete-modal.js';
 import LayerNewModal from '../modal/layer-new-modal.js';
+import Table from '../table.js';
+import '../custom-element/layer-status-badge.js';
 
-const table = new window.Urungi.Table({
+const table = new Table({
     fetch: params => {
         const apiParams = {
             page: params.page || 1,
