@@ -22,9 +22,7 @@
 
         $scope.promptsBlock = 'partials/report-edit/report-edit.prompts-block.html';
         $scope.dropArea = 'partials/report-edit/report-edit.drop-area.html';
-        $scope.reportNameModal = 'partials/report-edit/report-edit.report-name-modal.html';
         $scope.dashListModal = 'partials/report-edit/report-edit.dashboard-list-modal.html';
-        $scope.filterPromptModal = 'partials/report-edit/report-edit.filter-prompt-modal.html';
         $scope.tabs = { selected: 'elements' };
 
         $scope.selectedReport = null;
@@ -234,10 +232,20 @@
         *   Modals and navigation buttons
         */
 
+        function openNameModal() {
+            import('../../modal/name-modal.js').then(({ NameModal }) => {
+                const modal = new NameModal({ title: i18n.gettext('Set report name') });
+                modal.open().then(name => {
+                    $scope.selectedReport.reportName = name;
+                    $scope.reportNameSave();
+                }, () => {});
+            });
+        }
+
         $scope.saveReportAndStay = function () {
             $scope.quitAfterSave = false;
             if ($scope.mode === 'add') {
-                $('#theReportNameModal').modal('show');
+                openNameModal();
             } else {
                 $scope.reportNameSave();
             }
@@ -246,7 +254,7 @@
         $scope.saveReportAndQuit = function () {
             $scope.quitAfterSave = true;
             if ($scope.mode === 'add') {
-                $('#theReportNameModal').modal('show');
+                openNameModal();
             } else {
                 $scope.reportNameSave();
             }
@@ -255,7 +263,7 @@
         $scope.saveReportAndPreview = function () {
             $scope.previewAfterSave = true;
             if ($scope.mode === 'add') {
-                $('#theReportNameModal').modal('show');
+                openNameModal();
             } else {
                 $scope.reportNameSave();
             }
@@ -263,8 +271,6 @@
 
         $scope.reportNameSave = function () {
             return reportModel.saveAsReport($scope.selectedReport, $scope.mode).then(function (data) {
-                $('#theReportNameModal').modal('hide');
-                $('.modal-backdrop').hide();
                 const reportId = $scope.mode === 'add' ? data.item._id : $scope.selectedReport._id;
 
                 if ($scope.previewAfterSave) {
@@ -303,12 +309,17 @@
 
         $scope.showFilterModal = function (filter) {
             $scope.selectedFilter = filter;
-            $('#filterPromptsModal').modal('show');
-        };
-
-        $scope.confirmFilterModal = function () {
-            $('#filterPromptsModal').modal('hide');
-            $scope.selectedFilter.filterPrompt = !$scope.selectedFilter.filterPrompt;
+            import('../../modal/filter-prompt-modal.js').then(({ FilterPromptModal }) => {
+                const modal = new FilterPromptModal({
+                    filter: angular.copy(filter),
+                });
+                modal.open().then(json => {
+                    const data = JSON.parse(json);
+                    $scope.$apply(() => {
+                        angular.copy(data, filter);
+                    });
+                }, () => {});
+            });
         };
 
         /*

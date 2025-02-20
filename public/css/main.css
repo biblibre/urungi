@@ -22,6 +22,31 @@ body {
 
 summary {
     display: list-item;
+    cursor: pointer;
+}
+
+dialog:modal {
+    border: 0;
+    border-radius: 6px;
+    width: 600px;
+    margin: 30px auto;
+
+    &::backdrop {
+        background-color: rgb(0 0 0 / 50%);
+    }
+}
+
+dialog:modal[open] {
+  animation: fadein 0.2s ease-out forwards;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .root-container {
@@ -3267,4 +3292,10 @@ a.list-group-item:hover {
 [page-block]:hover:not(:has([page-block]:hover)).selected,
 [page-block].selected {
     box-shadow: 0 0 1px 2px hsl(200 80% 70%);
+}
+
+.notify-messages {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
 }

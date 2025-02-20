@@ -23,12 +23,10 @@
             deleteRole,
 
             getDatasource,
-            getDatasources,
             createDatasource,
             updateDatasource,
             getDatasourceCollections,
             getDatasourceCollection,
-            getSqlQueryCollection,
 
             getReports,
             deleteReport,
@@ -65,7 +63,6 @@
 
             getLayers,
             changeLayerStatus,
-            createLayer,
             deleteLayer,
             getLayer,
             replaceLayer,
@@ -131,10 +128,6 @@
             return httpGet('/api/datasources/' + id);
         }
 
-        function getDatasources (params) {
-            return httpGet('/api/datasources', params);
-        }
-
         function createDatasource (datasource) {
             return httpPost('/api/datasources', datasource);
         }
@@ -149,10 +142,6 @@
 
         function getDatasourceCollection (datasourceId, collectionName) {
             return connection.get('/api/datasources/' + datasourceId + '/collections/' + collectionName);
-        }
-
-        function getSqlQueryCollection (datasourceId, collection) {
-            return httpGet('/api/datasources/' + datasourceId + '/sql-query-collection', { sqlQuery: collection.sqlQuery, collectionName: collection.name });
         }
 
         /**
@@ -466,16 +455,6 @@
             };
 
             return httpPatch('/api/layers/' + layerID, data);
-        }
-
-        /**
-         * Create a new layer
-         *
-         * @param {object} layer - Layer to create
-         * @returns {Promise<object, Error>} Promise that resolves to the created layer
-         */
-        function createLayer (layer) {
-            return httpPost('/api/layers', layer);
         }
 
         function deleteLayer (id) {

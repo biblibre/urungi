@@ -33,6 +33,7 @@ Object.defineProperty(window, 'Urungi', {
     }
 });
 window.Urungi.i18n = require('../../public/js/i18n.js');
+window.Urungi.dom = require('../../public/js/dom.js');
 
 require('angular-sanitize');
 require('angular-file-saver');

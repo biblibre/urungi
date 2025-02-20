@@ -3,7 +3,6 @@ require('../../../../public/js/ng/core/core.constants.js');
 require('../../../../public/js/ng/core/core.http-interceptor.service.js');
 require('../../../../public/js/ng/core/core.connection.service.js');
 require('../../../../public/js/ng/core/core.api.service.js');
-require('../../../../public/js/ng/modal/modal.module.js');
 require('../../../../public/js/ng/theme/theme.module.js');
 require('../../../../public/js/ng/report/report.module.js');
 require('../../../../public/js/ng/report/report.filter-prompt.component.js');

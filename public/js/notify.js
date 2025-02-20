@@ -25,16 +25,39 @@
     PNotify.defaultModules.set(PNotifyBootstrap3, {});
     PNotify.defaultModules.set(PNotifyFontAwesome4, {});
 
-    function success (text) {
-        PNotify.success({ text });
+    function createArgs (text, options = {}) {
+        const args = { text };
+
+        if (options && options.appendTo) {
+            if (!options.appendTo.PNotifyStack) {
+                options.appendTo.PNotifyStack = new PNotify.Stack({
+                    modal: false,
+                    positioned: false,
+                    maxOpen: Infinity,
+                    context: options.appendTo,
+                });
+            }
+            args.stack = options.appendTo.PNotifyStack;
+            args.width = null;
+            args.shadow = false;
+        }
+
+        return args;
     }
 
-    function error (text) {
-        PNotify.error({ text });
+    function success (text, options = {}) {
+        const args = createArgs(text, options);
+        PNotify.success(args);
     }
 
-    function notice (text) {
-        PNotify.notice({ text });
+    function error (text, options = {}) {
+        const args = createArgs(text, options);
+        PNotify.error(args);
+    }
+
+    function notice (text, options = {}) {
+        const args = createArgs(text, options);
+        PNotify.notice(args);
     }
 
     return { success, error, notice };

@@ -318,8 +318,6 @@
         };
 
         $scope.dashboardNameSave = function () {
-            $('#dashboardNameModal').modal('hide');
-            $('.modal-backdrop').hide();
             saveDashboard().then(function (data) {
                 if ($scope.quitAfterSave) {
                     $window.location.href = base + '/dashboards/list';
@@ -333,10 +331,20 @@
             });
         };
 
+        function openNameModal () {
+            import('../../modal/name-modal.js').then(({ NameModal }) => {
+                const modal = new NameModal({ title: i18n.gettext('Set dashboard name') });
+                modal.open().then(name => {
+                    $scope.selectedDashboard.dashboardName = name;
+                    $scope.dashboardNameSave();
+                }, () => {});
+            });
+        }
+
         $scope.saveDashboardAndStay = function () {
             $scope.quitAfterSave = false;
             if ($scope.mode === 'add') {
-                $('#dashboardNameModal').modal('show');
+                openNameModal();
             } else {
                 saveDashboard().catch((error) => {
                     notify.error(i18n.gettext(error.data.msg));
@@ -347,7 +355,7 @@
         $scope.saveDashboardAndQuit = function () {
             $scope.quitAfterSave = true;
             if ($scope.mode === 'add') {
-                $('#dashboardNameModal').modal('show');
+                openNameModal();
             } else {
                 saveDashboard().then(function () {
                     $window.location.href = base + '/dashboards/list';
@@ -360,7 +368,7 @@
         $scope.saveDashboardAndPreview = function () {
             $scope.previewAfterSave = true;
             if ($scope.mode === 'add') {
-                $('#dashboardNameModal').modal('show');
+                openNameModal();
             } else {
                 saveDashboard().then(function (data) {
                     $window.location.href = base + '/dashboards/view/' + $scope.selectedDashboard._id;

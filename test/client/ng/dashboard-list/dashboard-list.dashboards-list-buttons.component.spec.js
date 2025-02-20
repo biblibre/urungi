@@ -16,12 +16,10 @@ describe('appDashboardsListButtons', function () {
     beforeEach(angular.mock.module('app.dashboard-list'));
 
     let $componentController, $httpBackend;
-    let $flushPendingTasks;
 
     beforeEach(inject(function (_$componentController_, _$httpBackend_, _$flushPendingTasks_) {
         $componentController = _$componentController_;
         $httpBackend = _$httpBackend_;
-        $flushPendingTasks = _$flushPendingTasks_;
     }));
 
     afterEach(() => {
@@ -65,20 +63,6 @@ describe('appDashboardsListButtons', function () {
 
                 const link = vm.getCopyLink();
                 expect(link).toBe('http://localhost/dashboards/view/foo');
-            });
-        });
-
-        describe('openDuplicateModal', function () {
-            it('should open modal and call onDuplicate on close', async function () {
-                $httpBackend.expect('GET', '/api/user')
-                    .respond(apiGetUserDataResponse());
-                $httpBackend.flush();
-
-                const modal = vm.openDuplicateModal();
-                $flushPendingTasks();
-                modal.close();
-                $flushPendingTasks();
-                expect(onDuplicateSpy).toHaveBeenCalledWith();
             });
         });
 

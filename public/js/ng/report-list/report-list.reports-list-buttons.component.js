@@ -12,9 +12,9 @@
         },
     });
 
-    ReportsListButtonsController.$inject = ['$uibModal', 'api', 'base', 'i18n', 'expand', 'userService'];
+    ReportsListButtonsController.$inject = ['api', 'base', 'i18n', 'expand', 'userService'];
 
-    function ReportsListButtonsController ($uibModal, api, base, i18n, expand, userService) {
+    function ReportsListButtonsController (api, base, i18n, expand, userService) {
         const vm = this;
 
         vm.openDeleteModal = openDeleteModal;
@@ -34,32 +34,26 @@
         }
 
         function openDeleteModal () {
-            const modal = $uibModal.open({
-                component: 'appDeleteModal',
-                resolve: {
-                    title: () => expand(i18n.gettext('Delete {{name}} ?'), { name: vm.report.reportName }),
-                    delete: () => function () {
+            import('../../modal/delete-modal.js').then(({ default: DeleteModal }) => {
+                const modal = new DeleteModal({
+                    title: expand(i18n.gettext('Delete {{name}} ?'), { name: vm.report.reportName }),
+                    delete: function () {
                         return api.deleteReport(vm.report._id);
                     },
-                },
-            });
-            modal.result.then(function () {
-                vm.onDelete();
+                });
+                modal.open().then(() => vm.onDelete(), () => {});
             });
         }
 
         function openDuplicateModal () {
-            const modal = $uibModal.open({
-                component: 'appDuplicateModal',
-                resolve: {
-                    name: () => vm.report.reportName,
-                    duplicate: () => function (newName) {
+            import('../../modal/duplicate-modal.js').then(({ default: DuplicateModal }) => {
+                const modal = new DuplicateModal({
+                    name: vm.report.reportName,
+                    duplicate: function (newName) {
                         return api.duplicateReport({ reportId: vm.report._id, newName });
                     },
-                },
-            });
-            modal.result.then(function () {
-                vm.onDuplicate();
+                });
+                modal.open().then(() => { vm.onDuplicate() }, () => {});
             });
         }
 

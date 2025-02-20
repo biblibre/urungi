@@ -10,9 +10,9 @@
         },
     });
 
-    ReportViewController.$inject = ['$scope', '$timeout', '$uibModal', '$location', '$window', 'notify', 'i18n', 'api', 'xlsxService', 'userService', 'reportsService', 'reportModel'];
+    ReportViewController.$inject = ['$scope', '$timeout', '$location', '$window', 'notify', 'i18n', 'api', 'xlsxService', 'userService', 'reportsService', 'reportModel'];
 
-    function ReportViewController ($scope, $timeout, $uibModal, $location, $window, notify, i18n, api, xlsxService, userService, reportsService, reportModel) {
+    function ReportViewController ($scope, $timeout, $location, $window, notify, i18n, api, xlsxService, userService, reportsService, reportModel) {
         const vm = this;
 
         vm.$onInit = $onInit;
@@ -120,21 +120,22 @@
         }
 
         function downloadAsPDF () {
-            const modal = $uibModal.open({
-                component: 'appPdfExportSettingsModal',
-            });
             vm.exportIsLoading = true;
-
-            return modal.result.then(function (settings) {
-                settings.filters = vm.promptsFilters;
-                return api.getReportAsPDF(vm.report._id, settings).then(res => {
-                    download(res.data, 'application/pdf', vm.report.reportName + '.pdf');
-                }, () => {
-                    notify.error(i18n.gettext('The export failed. Please contact the system administrator.'));
+            import('../../modal/pdf-export-settings-modal.js').then(({ PdfExportSettingsModal }) => {
+                const modal = new PdfExportSettingsModal();
+                modal.open().then(json => {
+                    const settings = JSON.parse(json);
+                    settings.filters = vm.promptsFilters;
+                    return api.getReportAsPDF(vm.report._id, settings).then(res => {
+                        download(res.data, 'application/pdf', vm.report.reportName + '.pdf');
+                    }, () => {
+                        notify.error(i18n.gettext('The export failed. Please contact the system administrator.'));
+                    });
+                }).finally(() => {
+                    $scope.$apply(() => {
+                        vm.exportIsLoading = false;
+                    });
                 });
-            }, () => {
-            }).finally(() => {
-                vm.exportIsLoading = false;
             });
         }
 

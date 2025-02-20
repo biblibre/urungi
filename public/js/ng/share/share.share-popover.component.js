@@ -15,24 +15,30 @@
         },
     });
 
-    SharePopoverController.$inject = ['$uibModal', 'i18n', 'api'];
+    SharePopoverController.$inject = ['i18n', 'api', 'userService'];
 
-    function SharePopoverController ($uibModal, i18n, api) {
+    function SharePopoverController (i18n, api, userService) {
         const vm = this;
 
         vm.openShareModal = openShareModal;
         vm.onCopySuccess = onCopySuccess;
 
         function openShareModal () {
-            const modal = $uibModal.open({
-                component: 'appShareModal',
-                resolve: {
-                    item: () => vm.item,
-                    userObjects: api.getUserObjects,
-                },
-            });
-            modal.result.then(function (folderID) {
-                vm.share(folderID);
+            import('../../modal/share-modal.js').then(async function ({ default: ShareModal }) {
+                const user = await userService.getCurrentUser();
+                const modal = new ShareModal({
+                    item: vm.item,
+                    userObjects: await api.getUserObjects(),
+                    isAdmin: user.isAdmin(),
+                });
+                modal.open().then(json => {
+                    const { folderId } = JSON.parse(json);
+                    if (folderId) {
+                        vm.share(folderId);
+                    } else {
+                        vm.unshare();
+                    }
+                }, () => {});
             });
         }
 

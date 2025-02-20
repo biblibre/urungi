@@ -37,28 +37,22 @@
         }
 
         function openDeleteModal () {
-            const modal = $uibModal.open({
-                component: 'appDeleteModal',
-                resolve: {
-                    title: () => expand(i18n.gettext('Delete {{name}} ?'), { name: vm.dashboard.dashboardName }),
-                    delete: () => function () {
+            import('../../modal/delete-modal.js').then(({ default: DeleteModal }) => {
+                const modal = new DeleteModal({
+                    title: expand(i18n.gettext('Delete {{name}} ?'), { name: vm.dashboard.dashboardName }),
+                    delete: function () {
                         return api.deleteDashboard(vm.dashboard._id);
                     },
-                },
-
-            });
-
-            modal.result.then(function () {
-                vm.onDelete();
+                });
+                modal.open().then(() => vm.onDelete(), () => {});
             });
         }
 
         function openDuplicateModal () {
-            const modal = $uibModal.open({
-                component: 'appDuplicateModal',
-                resolve: {
-                    name: () => vm.dashboard.dashboardName,
-                    duplicate: () => function (newName) {
+            import('../../modal/duplicate-modal.js').then(({ default: DuplicateModal }) => {
+                const modal = new DuplicateModal({
+                    name: vm.dashboard.dashboardName,
+                    duplicate: function (newName) {
                         const params = {
                             dashboard: { _id: vm.dashboard._id },
                             newName,
@@ -66,13 +60,9 @@
 
                         return duplicateDashboard(params);
                     },
-                },
+                });
+                modal.open().then(() => vm.onDuplicate(), () => {});
             });
-            modal.result.then(function () {
-                vm.onDuplicate();
-            });
-
-            return modal;
         }
 
         function publish () {

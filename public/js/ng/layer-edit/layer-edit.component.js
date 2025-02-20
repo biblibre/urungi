@@ -13,9 +13,9 @@
             }
         });
 
-    LayerEditController.$inject = ['$scope', '$timeout', '$window', '$uibModal', 'i18n', 'api', 'notify', 'layerEditService'];
+    LayerEditController.$inject = ['$scope', '$timeout', '$window', 'i18n', 'api', 'notify'];
 
-    function LayerEditController ($scope, $timeout, $window, $uibModal, i18n, api, notify, layerEditService) {
+    function LayerEditController ($scope, $timeout, $window, i18n, api, notify) {
         const vm = this;
         $scope.items = [];
         $scope.datasources = [];
@@ -209,69 +209,61 @@
         }
 
         $scope.addSQL = function () {
-            const modal = $uibModal.open({
-                component: 'appLayerEditSqlModal',
-                resolve: {
-                    layer: () => $scope._Layer,
-                    mode: () => 'add',
-                },
+            import('../../modal/layer-edit-sql-modal.js').then(async function ({ default: LayerEditSqlModal }) {
+                const modal = new LayerEditSqlModal({
+                    layer: angular.copy($scope._Layer),
+                });
+                modal.open().then(json => {
+                    const collection = JSON.parse(json);
+                    $scope.$apply(() => {
+                        $scope._Layer.params ??= {};
+                        $scope._Layer.params.schema ??= [];
+
+                        $scope._Layer.params.schema.push(collection);
+
+                        setTimeout(function () {
+                            for (const element in collection.elements) {
+                                if (!collection.elements[element].painted) {
+                                    _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
+                                }
+                            }
+                            setDraggable('#' + collection.collectionID + '-parent');
+                        }, 100);
+
+                        $scope.erDiagramInit();
+                    });
+                }, () => {});
             });
-
-            modal.result.then(function (collection) {
-                if (!$scope._Layer.params) { $scope._Layer.params = {}; }
-                if (!$scope._Layer.params.schema) { $scope._Layer.params.schema = []; }
-
-                $scope._Layer.params.schema.push(collection);
-
-                setTimeout(function () {
-                    for (const element in collection.elements) {
-                        if (!collection.elements[element].painted) {
-                            _addEndpoints(collection.elements[element].elementID, ['RightMiddle'], ['LeftMiddle']);
-                        }
-                    }
-                    setDraggable('#' + collection.collectionID + '-parent');
-                }, 100);
-
-                $scope.erDiagramInit();
-            }, function () {});
         };
 
         $scope.editSQL = function () {
             const selectedCollection = $scope.theSelectedElement;
-            if (!selectedCollection.isSQL) {
-                notify.error(i18n.gettext('Cannot modify sql of an object which is not an sql request'));
-                return;
-            }
-
-            const modal = $uibModal.open({
-                component: 'appLayerEditSqlModal',
-                resolve: {
-                    layer: () => $scope._Layer,
-                    mode: () => 'edit',
-                    collection: () => selectedCollection,
-                    sqlQuery: () => selectedCollection.sqlQuery,
-                    name: () => selectedCollection.collectionName,
-                },
-            });
-
-            modal.result.then(function (collection) {
-                selectedCollection.sqlQuery = collection.sqlQuery;
-
-                $scope._Layer.objects = $scope._Layer.objects.filter(function f (object) {
-                    if (object.collectionID === selectedCollection.collectionID) {
-                        return collection.elements.some(e => e.elementID === object.elementID);
-                    }
-
-                    if (Array.isArray(object.elements)) {
-                        object.elements = object.elements.filter(f);
-                    }
-
-                    return true;
+            import('../../modal/layer-edit-sql-modal.js').then(async function ({ default: LayerEditSqlModal }) {
+                const modal = new LayerEditSqlModal({
+                    collection: angular.copy(selectedCollection),
+                    layer: angular.copy($scope._Layer),
                 });
-                $scope.rootItem.elements = $scope._Layer.objects;
+                modal.open().then(json => {
+                    const collection = JSON.parse(json);
+                    $scope.$apply(() => {
+                        selectedCollection.sqlQuery = collection.sqlQuery;
+                        $scope._Layer.objects = $scope._Layer.objects.filter(function f (object) {
+                            if (object.collectionID === selectedCollection.collectionID) {
+                                return collection.elements.some(e => e.elementID === object.elementID);
+                            }
 
-                selectedCollection.elements = collection.elements;
-            }, function () {});
+                            if (Array.isArray(object.elements)) {
+                                object.elements = object.elements.filter(f);
+                            }
+
+                            return true;
+                        });
+                        $scope.rootItem.elements = $scope._Layer.objects;
+
+                        selectedCollection.elements = collection.elements;
+                    });
+                }, () => {});
+            });
         };
 
         $scope.setSelectedEntity = function (entity) {
@@ -296,7 +288,7 @@
 
             if (!found) {
                 const join = {};
-                join.joinID = 'J' + layerEditService.newID($scope._Layer);
+                join.joinID = 'J' + layerUtils.newID($scope._Layer);
 
                 for (const collection in $scope._Layer.params.schema) {
                     for (const element in $scope._Layer.params.schema[collection].elements) {
@@ -618,62 +610,60 @@
 
             const element = {
                 isCustom: true,
-                elementID: layerEditService.newID($scope._Layer),
+                elementID: layerUtils.newID($scope._Layer),
                 viewExpression: '',
                 elementName: 'comp',
             };
 
-            const modal = $uibModal.open({
-                component: 'appLayerEditElementModal',
-                resolve: {
-                    element: () => element,
-                    layer: () => $scope._Layer,
-                },
+            import('../../modal/layer-edit-element-modal.js').then(async function ({ default: LayerEditElementModal }) {
+                const modal = new LayerEditElementModal({
+                    element: angular.copy(element),
+                    layer: angular.copy($scope._Layer),
+                });
+                modal.open().then(json => {
+                    const el = JSON.parse(json);
+                    $scope.$apply(() => {
+                        angular.copy(el, element);
+                        $scope._Layer.objects ??= [];
+                        $scope._Layer.objects.push(element);
+                    });
+                }, () => {});
             });
-
-            modal.result.then(function (modifiedElement) {
-                angular.copy(modifiedElement, element);
-                if (!$scope._Layer.objects) {
-                    $scope._Layer.objects = [];
-                }
-                $scope._Layer.objects.push(element);
-            }, function () {});
         };
 
         $scope.elementAdd = function (element) {
-            const modal = $uibModal.open({
-                component: 'appLayerEditElementModal',
-                resolve: {
-                    element: () => element,
-                    layer: () => $scope._Layer,
-                },
+            import('../../modal/layer-edit-element-modal.js').then(async function ({ default: LayerEditElementModal }) {
+                const modal = new LayerEditElementModal({
+                    element: angular.copy(element),
+                    layer: angular.copy($scope._Layer),
+                });
+                modal.open().then(json => {
+                    const el = JSON.parse(json);
+                    $scope.$apply(() => {
+                        angular.copy(el, element);
+                        $scope._Layer.objects ??= [];
+                        $scope._Layer.objects.push(element);
+                    });
+                }, () => {});
             });
-
-            modal.result.then(function (modifiedElement) {
-                angular.copy(modifiedElement, element);
-                if (!$scope._Layer.objects) {
-                    $scope._Layer.objects = [];
-                }
-                $scope._Layer.objects.push(element);
-            }, function () {});
         };
 
         $scope.promptAddAll = function (collection) {
-            const modal = $uibModal.open({
-                component: 'appLayerEditAddAllModal',
-                resolve: {
-                    collection: () => collection,
-                },
+            import('../../modal/layer-edit-add-all-modal.js').then(async function ({ default: LayerEditAddAllModal }) {
+                const modal = new LayerEditAddAllModal({
+                    collection,
+                });
+                modal.open().then(() => {
+                    $scope.$apply(() => {
+                        for (const el of collection.elements) {
+                            if (!el.elementRole) {
+                                el.elementRole = 'dimension';
+                                $scope._Layer.objects.push(el);
+                            }
+                        }
+                    });
+                }, () => {});
             });
-
-            modal.result.then(function () {
-                for (const el of collection.elements) {
-                    if (!el.elementRole) {
-                        el.elementRole = 'dimension';
-                        $scope._Layer.objects.push(el);
-                    }
-                }
-            }, function () {});
         };
 
         $scope.allElementsAdded = function (collection) {
@@ -686,21 +676,22 @@
         };
 
         $scope.editElement = function (element) {
-            const modal = $uibModal.open({
-                component: 'appLayerEditElementModal',
-                resolve: {
-                    element: () => element,
-                    layer: () => $scope._Layer,
-                },
+            import('../../modal/layer-edit-element-modal.js').then(async function ({ default: LayerEditElementModal }) {
+                const modal = new LayerEditElementModal({
+                    element: angular.copy(element),
+                    layer: angular.copy($scope._Layer),
+                });
+                modal.open().then(json => {
+                    const el = JSON.parse(json);
+                    $scope.$apply(() => {
+                        angular.copy(el, element);
+                    });
+                }, () => {});
             });
-
-            modal.result.then(function (modifiedElement) {
-                angular.copy(modifiedElement, element);
-            }, function () {});
         };
 
         $scope.addFolder = function () {
-            const elementID = 'F' + layerEditService.newID($scope._Layer);
+            const elementID = 'F' + layerUtils.newID($scope._Layer);
 
             const element = {};
             element.elementLabel = i18n.gettext('my folder');
@@ -911,10 +902,10 @@
         $scope.addDatasetToLayer = function (datasourceID, collectionName) {
             if ($scope._Layer.datasourceID === datasourceID) {
                 api.getDatasourceCollection(datasourceID, collectionName).then(function (collection) {
-                    collection.collectionID = 'C' + layerEditService.newID($scope._Layer);
+                    collection.collectionID = 'C' + layerUtils.newID($scope._Layer);
 
                     for (const element of collection.elements) {
-                        element.elementID = layerEditService.newID($scope._Layer);
+                        element.elementID = layerUtils.newID($scope._Layer);
                         element.collectionID = collection.collectionID;
                         element.collectionName = collection.collectionName;
                     }

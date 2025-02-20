@@ -204,20 +204,4 @@
 
 <div ng-show="reportInterface" id="reportModal" ng-controller="ReportEditController" ng-include src="reportModal"></div>
 
-<nd-modal id="dashboardNameModal">
-    <div class="modal-body">
-        <form class="simple-form" role="form" name="dashboardForm">
-            <div class="form-group">
-                <label translate>Dashboard Name</label>
-                <input name="dashboardName" type="text" class="form-control" ng-model="selectedDashboard.dashboardName" ng-required="true" required >
-                <span ng-show="dashboardForm.dashboardName.$invalid" class="help-inline" translate>The dashboard name is required</span>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button ng-click="dashboardNameSave()" ng-disabled="reportForm.$invalid" class="btn btn-primary submit-btn pull-right" translate>Save</button>
-        <button type="button" class="btn pull-right" data-dismiss="modal" translate>Cancel</button>
-    </div>
-</nd-modal>
-
 <div id="previewContainer" ng-show="false"></div>

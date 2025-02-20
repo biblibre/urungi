@@ -10,7 +10,6 @@ require('../../../../public/js/ng/core/core.api.service.js');
 require('../../../../public/js/ng/ui-bootstrap/ui-bootstrap.module.js');
 require('../../../../public/js/ng/drag-and-drop/drag-and-drop.module.js');
 require('../../../../public/js/ng/table/table.module.js');
-require('../../../../public/js/ng/modal/modal.module.js');
 require('../../../../public/js/ng/theme/theme.module.js');
 require('../../../../public/js/ng/share/share.module.js');
 require('../../../../public/js/ng/report/report.module.js');

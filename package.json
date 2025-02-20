@@ -86,7 +86,8 @@
     "stylelint": "^16.8.2",
     "stylelint-config-recommended": "^14.0.1",
     "supertest": "^7.0.0",
-    "vinyl": "^3.0.0"
+    "vinyl": "^3.0.0",
+    "vitest": "^2.1.8"
   },
   "scripts": {
     "start": "node server.js",

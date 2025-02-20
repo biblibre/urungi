@@ -63,6 +63,14 @@ export default [
         },
     },
     {
+        files: ['test/front/**/*.js'],
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+            }
+        },
+    },
+    {
         ignores: [
             'public/s/*',
             'public/js/ng/**/*.templates.js',

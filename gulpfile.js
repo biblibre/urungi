@@ -11,18 +11,15 @@ const { Transform } = require('stream');
 const Vinyl = require('vinyl');
 const po2json = require('po2json');
 
-const translations = gulp.series(translations_clean, translations_build);
+const translations = gulp.series(translations_clean, translations_build, translations_esm_build);
 
 const templatesModules = [
-    'core',
     'dashboard-edit',
     'dashboard-list',
     'dashboard-view',
     'inspector',
     'layer-edit',
     'layer-list',
-    'modal',
-    'pdf-export',
     'report',
     'report-edit',
     'report-list',
@@ -73,6 +70,12 @@ function css () {
 function translations_build () {
     return gulp.src(['language/*.po'])
         .pipe(poToJs())
+        .pipe(gulp.dest('public/translations'));
+}
+
+function translations_esm_build () {
+    return gulp.src(['language/*.po'])
+        .pipe(poToJs({ esm: true }))
         .pipe(gulp.dest('public/translations'));
 }
 
@@ -309,7 +312,7 @@ function concatPo (filename, options) {
     });
 }
 
-function poToJs () {
+function poToJs (options = {}) {
     return new Transform({
         objectMode: true,
         transform (file, encoding, callback) {
@@ -330,10 +333,17 @@ function poToJs () {
             }
 
             // Make it work in the browser and in Node
-            const js = `(((r,f)=>{if(typeof module==="object"&&module.exports){module.exports=f();}else{r.Urungi.messages=f();}})(typeof self!=="undefined"?self:this,()=>(${JSON.stringify(json)})))`;
+            if (options.esm) {
+                const js = `export default ${JSON.stringify(json)}`;
 
-            file.contents = Buffer.from(js);
-            file.extname = '.js';
+                file.contents = Buffer.from(js);
+                file.extname = '.esm.js';
+            } else {
+                const js = `(((r,f)=>{if(typeof module==="object"&&module.exports){module.exports=f();}else{r.Urungi.messages=f();}})(typeof self!=="undefined"?self:this,()=>(${JSON.stringify(json)})))`;
+
+                file.contents = Buffer.from(js);
+                file.extname = '.js';
+            }
             callback(null, file);
         },
     });

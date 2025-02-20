@@ -8,9 +8,9 @@
             controllerAs: 'vm',
         });
 
-    LayerListController.$inject = ['$window', '$timeout', '$uibModal', 'notify', 'api', 'i18n', 'userService'];
+    LayerListController.$inject = ['$window', '$timeout', 'notify', 'api', 'i18n', 'userService'];
 
-    function LayerListController ($window, $timeout, $uibModal, notify, api, i18n, userService) {
+    function LayerListController ($window, $timeout, notify, api, i18n, userService) {
         const vm = this;
 
         vm.currentPage = 1;
@@ -66,11 +66,9 @@
         }
 
         function showNewLayerModal () {
-            const modal = $uibModal.open({
-                component: 'appLayerListNewModal',
-            });
-            modal.result.then(function () {
-                refresh();
+            import('../../modal/layer-new-modal.js').then(({ default: LayerNewModal }) => {
+                const modal = new LayerNewModal();
+                modal.open().then(() => { refresh() }, () => {});
             });
         }
 

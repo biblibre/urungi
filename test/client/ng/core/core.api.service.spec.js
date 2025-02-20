@@ -772,36 +772,6 @@ describe('api', () => {
         });
     });
 
-    describe('api.createLayer', () => {
-        it('should call POST /api/layers', () => {
-            const url = '/api/layers';
-            const layer = {
-                layerName: 'foo',
-            };
-            const response = {
-                item: layer,
-            };
-
-            $httpBackend.expect('POST', url, layer).respond(response);
-
-            const p = api.createLayer(layer);
-
-            setTimeout($httpBackend.flush);
-
-            return expect(p).resolves.toEqual(response);
-        });
-
-        it('should throw if request failed', () => {
-            const url = '/api/layers';
-
-            $httpBackend.expect('POST', url).respond(403, 'Forbidden');
-
-            setTimeout($httpBackend.flush);
-
-            return expect(api.createLayer()).rejects.toThrow('Forbidden');
-        });
-    });
-
     describe('api.replaceLayer', () => {
         it('should call PUT /api/layers/:layerId', () => {
             const url = '/api/layers/42';
