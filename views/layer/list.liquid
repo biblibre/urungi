@@ -1,28 +1,24 @@
 {% capture title %}{% t 'Layers' %}{% endcapture %}
-{% layout 'layout/layout' title: title %}
+{% layout 'layout/with-sidebar' title: title %}
 
 {% block head %}
     {% render 'partials/notify' %}
     {% render 'partials/introjs'  %}
-    <script defer src="s/angular/angular.min.js"></script>
-    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
-    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
-    {% render 'partials/ng/core' %}
-    {% render 'partials/ng/ui-bootstrap' %}
-    {% render 'partials/ng/table' %}
-    {% render 'partials/ng/layer-list' %}
+
+    <script defer src="js/api.js"></script>
+    <script defer src="js/table.js"></script>
+    <script defer src="js/custom-element/layer-status-badge.js"></script>
+    <script type="module" src="js/layer/list.js"></script>
 {% endblock %}
 
-{% block content %}
-    <div class="container-fluid root-container">
-        <div class="row">
-            <div class="col-md-3">
-                {% include 'sidebar' %}
-            </div>
+{% block page-header %}
+    <span class="h3">
+        {% t 'Layers' | escape %}
+        <a id="showIntroButton" class="btn btn-link"><i class="fa fa-question-circle-o"></i></a>
+    </span>
+    <a class="btn btn-success pull-right" id="layer-new-button">{% t 'New layer' | escape %}</a>
+{% endblock %}
 
-            <div class="main col-md-9" ng-app="app.layer-list">
-                <app-layer-list></app-layer-list>
-            </div>
-        </div>
-    </div>
+{% block main %}
+    <div id="layer-list-table-wrapper"></div>
 {% endblock %}

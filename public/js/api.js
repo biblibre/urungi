@@ -15,6 +15,7 @@
         getLayer,
         createLayer,
         replaceLayer,
+        changeLayerStatus,
         getReport,
         createReport,
         updateReport,
@@ -67,6 +68,14 @@
 
     function replaceLayer (layer) {
         return httpPut('/api/layers/' + layer._id, layer);
+    }
+
+    function changeLayerStatus (layerID, newStatus) {
+        const data = {
+            status: newStatus,
+        };
+
+        return httpPatch('/api/layers/' + layerID, data);
     }
 
     /**

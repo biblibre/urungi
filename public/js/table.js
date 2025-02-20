@@ -15,6 +15,8 @@
         constructor (options) {
             this.options = options;
             this.page = 1;
+            this.order = null;
+            this.filters = {};
         }
 
         render (element) {
@@ -28,6 +30,11 @@
             );
             element.append(this.t);
 
+            const hasFilterRow = this.options.columns.some(c => Object.hasOwn(c, 'filter'));
+            if (hasFilterRow) {
+                this.t.tHead.append(el('tr'));
+            }
+
             for (const column of this.options.columns) {
                 const col = el('col');
                 if (column.width) {
@@ -35,7 +42,42 @@
                 }
                 colgroup.append(col);
 
-                this.t.tHead.rows[0].append(el('th', column.name ?? ''));
+                const th = el('th', column.name ?? '');
+                if (column.order) {
+                    const sortButton = el('span.sort-button', el('i.fa.fa-sort'));
+                    sortButton.addEventListener('click', ev => {
+                        if (this.order === column.order) {
+                            this.order = `-${column.order}`;
+                            sortButton.replaceChildren(el('i.fa.fa-sort-desc'));
+                        } else {
+                            this.order = column.order;
+                            sortButton.replaceChildren(el('i.fa.fa-sort-asc'));
+                        }
+                        this.t.tHead.querySelectorAll('.sort-button').forEach(e => e.classList.remove('active'));
+                        sortButton.classList.add('active');
+                        this.draw();
+                    });
+                    th.append(' ', sortButton);
+                }
+
+                if (column.filter) {
+                    const filterInput = el('input.form-control.input-sm', { type: 'text' });
+
+                    let keydownTimeoutPromise;
+                    filterInput.addEventListener('input', ev => {
+                        clearTimeout(keydownTimeoutPromise);
+                        keydownTimeoutPromise = setTimeout(() => {
+                            this.filters[column.filter] = filterInput.value;
+                            this.draw();
+                        }, 250);
+                    });
+
+                    this.t.tHead.rows[1].append(el('th', filterInput));
+                } else if (hasFilterRow) {
+                    this.t.tHead.rows[1].append(el('th'));
+                }
+
+                this.t.tHead.rows[0].append(th);
             }
 
             this.pagination = el('ul.pagination');
@@ -47,7 +89,12 @@
         async draw () {
             const params = {
                 page: this.page,
+                filters: this.filters,
             };
+
+            if (this.order) {
+                params.sort = this.order;
+            }
 
             const { data, pages } = await this.options.fetch(params);
             this.pages = pages;

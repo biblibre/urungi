@@ -2,6 +2,8 @@ export default {
     getDatasources,
     getSqlQueryCollection,
     createLayer,
+    getLayers,
+    deleteLayer,
 };
 
 export function getDatasources () {
@@ -10,6 +12,14 @@ export function getDatasources () {
 
 export function createLayer (layer) {
     return httpPost('/api/layers', layer);
+}
+
+export function getLayers (params) {
+    return httpGet('/api/layers', params);
+}
+
+export function deleteLayer (id) {
+    return httpDelete('/api/layers/' + id);
 }
 
 export function getSqlQueryCollection (datasourceId, collection) {
@@ -55,6 +65,16 @@ export function httpPatch (path, data) {
     });
 }
 
+export function httpDelete (path, data) {
+    return httpRequest(path, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+}
+
 const xsrfCookie = document.cookie
     .split('; ')
     .find(row => row.startsWith('XSRF-TOKEN='));
@@ -71,8 +91,8 @@ export function httpRequest (path, settings = {}) {
     const url = new URL(relativePath, document.baseURI);
 
     return fetch(url, settings).then(function (response) {
-        const contentType = response.headers.get('Content-Type').trim();
-        if (contentType.startsWith('application/json')) {
+        const contentType = response.headers.get('Content-Type')?.trim();
+        if (contentType && contentType.startsWith('application/json')) {
             return response.json().then(function (data) {
                 if ('error' in data) {
                     throw new Error(data.error);

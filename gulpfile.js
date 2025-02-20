@@ -19,7 +19,6 @@ const templatesModules = [
     'dashboard-view',
     'inspector',
     'layer-edit',
-    'layer-list',
     'report',
     'report-edit',
     'report-list',
