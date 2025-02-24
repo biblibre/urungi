@@ -1,5 +1,1 @@
-(function () {
-    'use strict';
-
-    angular.module('app.table', ['app.core']);
-})();
+angular.module('app.table', ['app.core']);

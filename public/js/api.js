@@ -1,130 +1,156 @@
-(function (root, factory) {
-    if (typeof module === 'object' && module.exports) {
-        module.exports = factory();
-    } else {
-        root.Urungi.api = factory();
-    }
-}(typeof self !== 'undefined' ? self : this, function () {
-    'use strict';
+export default class Api {
+    static getUserDataPromise;
+    static defaultHeaders;
 
-    const api = {
-        getDatasources,
-        getDashboard,
-        createDashboard,
-        updateDashboard,
-        getLayer,
-        createLayer,
-        replaceLayer,
-        changeLayerStatus,
-        getReport,
-        createReport,
-        updateReport,
-        getSharedSpace,
-        setSharedSpace,
-
-        getUsers,
-        updateUser,
-
-        testConnection,
-    };
-
-    function getDatasources (params = {}) {
-        return httpGet('/api/datasources', params);
-    }
-
-    /**
-     * Fetch an existing dashboard
-     *
-     * @param {string} id - ID of dashboard to fetch
-     * @returns {Promise<Response>} Promise that resolves to a Response object
-     */
-    function getDashboard (id) {
-        return httpGet('/api/dashboards/find-one?id=' + id);
-    }
-
-    function createDashboard (dashboard) {
-        return httpPost('/api/dashboards/create', dashboard);
-    }
-
-    function updateDashboard (dashboard) {
-        return httpPost('/api/dashboards/update/' + dashboard._id, dashboard);
-    }
-
-    /**
-     * Fetch an existing layer
-     *
-     * @param {string} id - ID of layer to fetch
-     * @returns {Promise<Response>} Promise that resolves to a Response object
-     */
-    function getLayer (id) {
-        return httpGet('/api/layers/' + id);
-    }
-
-    function createLayer (layer) {
-        return httpPost('/api/layers', layer);
-    }
-
-    function replaceLayer (layer) {
-        return httpPut('/api/layers/' + layer._id, layer);
-    }
-
-    function changeLayerStatus (layerID, newStatus) {
-        const data = {
-            status: newStatus,
+    static {
+        const xsrfCookie = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('XSRF-TOKEN='));
+        const xsrf = xsrfCookie ? xsrfCookie.split('=')[1] : null;
+        this.defaultHeaders = {
+            'X-XSRF-TOKEN': xsrf,
         };
-
-        return httpPatch('/api/layers/' + layerID, data);
     }
 
-    /**
-     * Fetch an existing report
-     *
-     * @param {string} id - ID of report to fetch
-     * @returns {Promise<Response>} Promise that resolves to a Response object
-     */
-    function getReport (id) {
-        return httpGet('/api/reports/find-one?id=' + id);
+    static getSharedSpace () {
+        return this.httpGet('/api/shared-space');
     }
 
-    function createReport (report) {
-        return httpPost('/api/reports/create', report);
+    static setSharedSpace (sharedSpace) {
+        return this.httpPut('/api/shared-space', sharedSpace);
     }
 
-    function updateReport (report) {
-        return httpPost('/api/reports/update/' + report._id, report);
+    static getCurrentUser () {
+        if (!Api.getUserDataPromise) {
+            Api.getUserDataPromise = this.httpGet('/api/user').then(({ data: user }) => {
+                user.isAdmin = () => {
+                    return user.roles.includes('ADMIN');
+                };
+
+                return user;
+            });
+        }
+
+        return Api.getUserDataPromise;
+    }
+    static getUserObjects () {
+        return this.httpGet('/api/user/objects');
     }
 
-    function getSharedSpace () {
-        return httpGet('/api/shared-space');
-    }
-
-    function setSharedSpace (sharedSpace) {
-        return httpPut('/api/shared-space', sharedSpace);
-    }
-
-    function getUsers (params) {
+    static getUsers (params) {
         const search = Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&');
-        return httpGet(`/api/users?${search}`);
+        return this.httpGet(`/api/users?${search}`);
     }
 
-    function updateUser (id, changes) {
-        return httpPatch('/api/users/' + id, changes);
+    static updateUser (id, changes) {
+        return this.httpPatch('/api/users/' + id, changes);
     }
 
-    function testConnection (datasource) {
-        return httpPost('/api/connection-test', datasource);
+    static getRoles (params) {
+        return this.httpGet('/api/roles', params);
     }
 
-    function httpGet (path, data) {
+    static getDatasources (params = {}) {
+        return this.httpGet('/api/datasources', params);
+    }
+
+    static createLayer (layer) {
+        return this.httpPost('/api/layers', layer);
+    }
+
+    static getLayers (params) {
+        return this.httpGet('/api/layers', params);
+    }
+
+    static getLayer (id) {
+        return this.httpGet('/api/layers/' + id);
+    }
+
+    static deleteLayer (id) {
+        return this.httpDelete('/api/layers/' + id);
+    }
+
+    static replaceLayer (layer) {
+        return this.httpPut('/api/layers/' + layer._id, layer);
+    }
+
+    static updateLayer (id, changes) {
+        return this.httpPatch(`/api/layers/${id}`, changes);
+    }
+
+    static getReports (params) {
+        return this.httpGet('/api/reports/find-all', params);
+    }
+
+    static updateReport (id, changes) {
+        return this.httpPatch(`/api/reports/${id}`, changes);
+    }
+
+    static replaceReport (report) {
+        return this.httpPut('/api/reports/' + report._id, report);
+    }
+
+    static getReport (id) {
+        return this.httpGet('/api/reports/find-one', { id });
+    }
+
+    static duplicateReport (params) {
+        return this.getReport(params.reportId).then(({ data }) => {
+            const report = data.item;
+            delete report._id;
+            delete report.createdOn;
+            report.reportName = params.newName;
+
+            return this.createReport(report);
+        });
+    }
+
+    static createReport (report) {
+        return this.httpPost('/api/reports/create', report).then(data => data.item);
+    }
+
+    static deleteReport (id) {
+        return this.httpPost('/api/reports/delete/' + id, { id });
+    }
+
+    static getDashboards (params) {
+        return this.httpGet('/api/dashboards/find-all', params);
+    }
+    static deleteDashboard (id) {
+        return this.httpPost('/api/dashboards/delete/' + id, { id });
+    }
+    static getDashboard (id) {
+        return this.httpGet('/api/dashboards/find-one', { id });
+    }
+    static createDashboard (dashboard) {
+        return this.httpPost('/api/dashboards/create', dashboard);
+    }
+    static updateDashboard (id, changes) {
+        return this.httpPatch('/api/dashboards/' + id, changes);
+    }
+    static replaceDashboard (dashboard) {
+        return this.httpPut('/api/dashboards/' + dashboard._id, dashboard);
+    }
+
+    static getSqlQueryCollection (datasourceId, collection) {
+        const { sqlQuery, collectionName } = collection;
+        return this.httpGet('/api/datasources/' + datasourceId + '/sql-query-collection', { sqlQuery, collectionName });
+    }
+
+    static testConnection (datasource) {
+        return this.httpPost('/api/connection-test', datasource);
+    }
+
+    static httpGet (path, data) {
         if (data) {
             const search = Object.entries(data).map(([k, v]) => `${k}=${v}`).join('&');
             path += `?${search}`;
         }
-        return httpRequest(path, { method: 'GET' });
+        return this.httpRequest(path, { method: 'GET' });
     }
 
-    function httpPost (path, data) {
-        return httpRequest(path, {
+    static httpPost (path, data) {
+        return this.httpRequest(path, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -133,8 +159,8 @@
         });
     }
 
-    function httpPut (path, data) {
-        return httpRequest(path, {
+    static httpPut (path, data) {
+        return this.httpRequest(path, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -143,8 +169,8 @@
         });
     }
 
-    function httpPatch (path, data) {
-        return httpRequest(path, {
+    static httpPatch (path, data) {
+        return this.httpRequest(path, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -153,24 +179,26 @@
         });
     }
 
-    const xsrfCookie = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('XSRF-TOKEN='));
-    const xsrf = xsrfCookie ? xsrfCookie.split('=')[1] : null;
-    const defaultHeaders = {
-        'X-XSRF-TOKEN': xsrf,
-    };
+    static httpDelete (path, data) {
+        return this.httpRequest(path, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    }
 
-    function httpRequest (path, settings = {}) {
-        const headers = Object.assign({}, defaultHeaders, settings.headers);
+    static httpRequest (path, settings = {}) {
+        const headers = Object.assign({}, this.defaultHeaders, settings.headers);
         settings = Object.assign({}, settings, { headers });
 
         const relativePath = path.startsWith('/') ? path.substring(1) : path;
         const url = new URL(relativePath, document.baseURI);
 
         return fetch(url, settings).then(function (response) {
-            const contentType = response.headers.get('Content-Type').trim();
-            if (contentType.startsWith('application/json')) {
+            const contentType = response.headers.get('Content-Type')?.trim();
+            if (contentType && contentType.startsWith('application/json')) {
                 return response.json().then(function (data) {
                     if ('error' in data) {
                         throw new Error(data.error);
@@ -184,6 +212,4 @@
             return { response };
         });
     }
-
-    return api;
-}));
+}

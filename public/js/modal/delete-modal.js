@@ -1,5 +1,5 @@
-import { t } from '../i18n.esm.js';
-import { el, escapeHtml } from '../dom.esm.js';
+import { t } from '../i18n.js';
+import { el, escapeHtml } from '../dom.js';
 import Modal from './modal.js';
 
 export default class DeleteModal extends Modal {

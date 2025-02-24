@@ -1,46 +1,42 @@
-(function () {
-    'use strict';
+angular.module('app.core').factory('userService', userService);
 
-    angular.module('app.core').factory('userService', userService);
+userService.$inject = ['api'];
 
-    userService.$inject = ['api'];
+function userService (api) {
+    let getUserDataPromise;
+    let getCountsPromise;
 
-    function userService (api) {
-        let getUserDataPromise;
-        let getCountsPromise;
+    const service = {
+        getCurrentUser,
+        getCounts,
+        clearCountsCache,
+    };
 
-        const service = {
-            getCurrentUser,
-            getCounts,
-            clearCountsCache,
-        };
+    return service;
 
-        return service;
+    function getCurrentUser () {
+        if (!getUserDataPromise) {
+            getUserDataPromise = api.getUserData().then(user => {
+                user.isAdmin = () => {
+                    return user.roles.includes('ADMIN');
+                };
 
-        function getCurrentUser () {
-            if (!getUserDataPromise) {
-                getUserDataPromise = api.getUserData().then(user => {
-                    user.isAdmin = () => {
-                        return user.roles.includes('ADMIN');
-                    };
-
-                    return user;
-                });
-            }
-
-            return getUserDataPromise;
+                return user;
+            });
         }
 
-        function getCounts () {
-            if (!getCountsPromise) {
-                getCountsPromise = api.getCounts();
-            }
-
-            return getCountsPromise;
-        }
-
-        function clearCountsCache () {
-            getCountsPromise = null;
-        }
+        return getUserDataPromise;
     }
-})();
+
+    function getCounts () {
+        if (!getCountsPromise) {
+            getCountsPromise = api.getCounts();
+        }
+
+        return getCountsPromise;
+    }
+
+    function clearCountsCache () {
+        getCountsPromise = null;
+    }
+}

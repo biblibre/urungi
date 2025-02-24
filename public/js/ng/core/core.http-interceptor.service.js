@@ -1,19 +1,15 @@
-(function () {
-    'use strict';
+angular.module('app.core').factory('httpInterceptor', httpInterceptor);
 
-    angular.module('app.core').factory('httpInterceptor', httpInterceptor);
+httpInterceptor.$inject = ['base'];
 
-    httpInterceptor.$inject = ['base'];
+function httpInterceptor (base) {
+    return {
+        request: function (config) {
+            if (config.url.startsWith('/')) {
+                config.url = base + config.url;
+            }
 
-    function httpInterceptor (base) {
-        return {
-            request: function (config) {
-                if (config.url.startsWith('/')) {
-                    config.url = base + config.url;
-                }
-
-                return config;
-            },
-        };
-    }
-})();
+            return config;
+        },
+    };
+}

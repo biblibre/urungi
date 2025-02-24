@@ -1,12 +1,10 @@
-(function () {
-    'use strict';
+import { t } from '../../i18n.js';
 
-    angular.module('app.core').filter('translate', translate);
+angular.module('app.core').filter('translate', translate);
 
-    translate.$inject = ['i18n'];
-    function translate (i18n) {
-        return function (text) {
-            return i18n.gettext(text);
-        };
-    }
-})();
+translate.$inject = [];
+function translate () {
+    return function (text) {
+        return t(text);
+    };
+}

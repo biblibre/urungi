@@ -1,7 +1,6 @@
-import { t } from '../i18n.esm.js';
-import api from '../api.esm.js';
-
-const { notify } = window.Urungi;
+import { t } from '../i18n.js';
+import api from '../api.js';
+import * as notify from '../notify.js';
 
 class UserStatusBadgeElement extends HTMLAnchorElement {
     static get observedAttributes () {

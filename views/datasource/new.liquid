@@ -1,11 +1,6 @@
 {% capture title %}{% t 'New datasource' | escape %} &middot; {% t 'Data sources' %}{% endcapture %}
 {% layout 'layout/with-sidebar' title: title %}
 
-{% block head %}
-    {% render 'partials/notify' %}
-    <script defer src="js/api.js"></script>
-{% endblock %}
-
 {% block page-header %}
     <span class="h3">{% t 'New datasource' | escape %}</span>
     <div class="pull-right">

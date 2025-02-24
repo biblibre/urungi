@@ -1,3 +1,0 @@
-This directory should only contain JS modules that can be used by both NodeJS
-and the browser.
-They should follow the UMD pattern : https://github.com/umdjs/umd

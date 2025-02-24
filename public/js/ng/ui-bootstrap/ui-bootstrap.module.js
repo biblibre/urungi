@@ -1,13 +1,9 @@
-(function () {
-    'use strict';
+angular.module('app.ui-bootstrap', ['ui.bootstrap'])
+    .config(config);
 
-    angular.module('app.ui-bootstrap', ['ui.bootstrap'])
-        .config(config);
-
-    config.$inject = ['$uibTooltipProvider'];
-    function config ($uibTooltipProvider) {
-        $uibTooltipProvider.options({
-            appendToBody: true,
-        });
-    }
-})();
+config.$inject = ['$uibTooltipProvider'];
+function config ($uibTooltipProvider) {
+    $uibTooltipProvider.options({
+        appendToBody: true,
+    });
+}

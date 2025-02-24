@@ -6,6 +6,7 @@ export default defineWorkspace([
             name: 'front',
             root: './test/front',
             environment: 'happy-dom',
+            setupFiles: ['setup.js'],
         },
     },
 ])

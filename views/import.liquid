@@ -2,10 +2,7 @@
 {% layout 'layout/layout' title: title %}
 
 {% block head %}
-    {% render 'partials/api' %}
-    <script defer src="js/progressbar.js"></script>
-    <script defer src="js/custom-element/import-table.js"></script>
-    <script defer src="js/import.js"></script>
+    <script type="module" src="js/import.js"></script>
 {% endblock %}
 
 {% block content %}

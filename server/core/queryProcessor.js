@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const layerUtils = require('../../shared/layerUtils.js');
 const DatabaseClient = require('../core/database-client.js');
 
 exports.execute = async function (query) {
@@ -175,7 +174,7 @@ function buildJoinTree (query, queryLayer, warnings) {
 
     for (const column of query.columns.concat(query.filters, query.order)) {
         if (column.isCustom) {
-            for (const element of layerUtils.getElementsUsedInCustomExpression(column.viewExpression, queryLayer)) {
+            for (const element of getElementsUsedInCustomExpression(column.viewExpression, queryLayer)) {
                 collectionRef[element.collectionID] = true;
             }
         } else {
@@ -373,4 +372,31 @@ function validatePage (page) {
     } else {
         return 1;
     }
+}
+
+function getElementsUsedInCustomExpression (expression, layer) {
+    const elements = [];
+    const re = /#([a-z0-9_]+)/g;
+    let found;
+
+    while ((found = re.exec(expression)) !== null) {
+        const elementID = found[1];
+        let element;
+        for (const collection of layer.params.schema) {
+            const el = collection.elements.find(e => e.elementID === elementID);
+            if (el !== undefined) {
+                element = el;
+                break;
+            }
+        }
+
+        if (element === undefined) {
+            throw new Error('Error in custom expression, element not found: #' + elementID);
+        }
+        if (!elements.find(e => e.elementID === elementID)) {
+            elements.push(element);
+        }
+    }
+
+    return elements;
 }

@@ -1,6 +1,6 @@
-import * as api from '../api.esm.js';
-import { t, expand } from '../i18n.esm.js';
-import { el } from '../dom.esm.js';
+import api from '../api.js';
+import { t, expand } from '../i18n.js';
+import { el } from '../dom.js';
 import DeleteModal from '../modal/delete-modal.js';
 import DuplicateModal from '../modal/duplicate-modal.js';
 import ShareModal from '../modal/share-modal.js';
@@ -69,8 +69,11 @@ const table = new Table({
             order: 'createdOn',
             width: '15%',
             render: report => {
-                const dateTimeFormat = new window.Intl.DateTimeFormat(undefined, { dateStyle: 'medium' });
-                return dateTimeFormat.format(Date.parse(report.createdOn));
+                if (report.createdOn) {
+                    const dateTimeFormat = new window.Intl.DateTimeFormat(undefined, { dateStyle: 'medium' });
+                    return dateTimeFormat.format(Date.parse(report.createdOn));
+                }
+                return '';
             },
         },
         {

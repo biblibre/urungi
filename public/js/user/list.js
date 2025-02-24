@@ -1,6 +1,6 @@
-import api from '../api.esm.js';
-import { t } from '../i18n.esm.js';
-import { el } from '../dom.esm.js';
+import api from '../api.js';
+import { t } from '../i18n.js';
+import { el } from '../dom.js';
 import Table from '../table.js';
 import '../custom-element/user-status-badge.js';
 

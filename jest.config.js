@@ -11,17 +11,6 @@ module.exports = {
     ],
     projects: [
         {
-            displayName: 'client',
-            testEnvironment: 'jsdom',
-            testRunner: 'jest-jasmine2',
-            testMatch: [
-                '<rootDir>/test/client/**/*.spec.js',
-            ],
-            setupFilesAfterEnv: [
-                '<rootDir>/test/client/setup.js',
-            ],
-        },
-        {
             displayName: 'server',
             testEnvironment: 'node',
             testMatch: [

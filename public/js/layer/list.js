@@ -1,6 +1,6 @@
-import api from '../api.esm.js';
-import { t, expand } from '../i18n.esm.js';
-import { el } from '../dom.esm.js';
+import api from '../api.js';
+import { t, expand } from '../i18n.js';
+import { el } from '../dom.js';
 import DeleteModal from '../modal/delete-modal.js';
 import LayerNewModal from '../modal/layer-new-modal.js';
 import Table from '../table.js';
@@ -12,8 +12,11 @@ const table = new Table({
             page: params.page || 1,
             fields: 'name,status',
         };
-        if (params.sort) {
-            apiParams.sort = params.sort;
+        if (params.sortBy) {
+            apiParams.sort = params.sortBy;
+            if (params.sortOrder === 'desc') {
+                apiParams.sort = '-' + apiParams.sort;
+            }
         }
         const filters = {};
         for (const name in params.filters) {

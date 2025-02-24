@@ -1,22 +1,20 @@
-(function () {
-    'use strict';
+import { t } from '../../i18n.js';
 
-    angular.module('app.core').directive('translate', translate);
+angular.module('app.core').directive('translate', translate);
 
-    translate.$inject = ['$compile', 'i18n'];
-    function translate ($compile, i18n) {
-        return {
-            restrict: 'AE',
-            scope: false,
-            link,
-        };
+translate.$inject = ['$compile'];
+function translate ($compile) {
+    return {
+        restrict: 'AE',
+        scope: false,
+        link,
+    };
 
-        function link (scope, element, attrs, controller, transcludeFn) {
-            const html = element.html().trim();
-            const translated = i18n.gettext(html);
-            const wrapper = angular.element('<span>' + translated + '</span>');
-            $compile(wrapper.contents())(scope);
-            element.html(wrapper.contents());
-        }
+    function link (scope, element, attrs, controller, transcludeFn) {
+        const html = element.html().trim();
+        const translated = t(html);
+        const wrapper = angular.element('<span>' + translated + '</span>');
+        $compile(wrapper.contents())(scope);
+        element.html(wrapper.contents());
     }
-})();
+}

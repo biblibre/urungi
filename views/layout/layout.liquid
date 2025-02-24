@@ -16,6 +16,8 @@
 
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="s/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="s/pnotify-core/PNotify.css">
+        <link rel="stylesheet" href="s/pnotify-bootstrap3/PNotifyBootstrap3.css">
 
         <script src="s/jquery/jquery.min.js"></script>
         <script src="s/bootstrap/js/bootstrap.min.js"></script>
@@ -38,10 +40,9 @@
                 });
             });
         </script>
-
-        <script>window.Urungi = {}</script>
-        {% render 'partials/i18n' locale: locale %}
-        <script src="js/dom.js"></script>
+        <script src="s/pnotify-core/PNotify.js"></script>
+        <script src="s/pnotify-bootstrap3/PNotifyBootstrap3.js"></script>
+        <script src="s/pnotify-fontawesome4/PNotifyFontAwesome4.js"></script>
 
         {% block head %}{% endblock %}
 

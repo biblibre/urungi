@@ -1,7 +1,7 @@
-import { t } from '../i18n.esm.js';
-import { escapeHtml } from '../dom.esm.js';
-import api from '../api.esm.js';
-
+import { t } from '../i18n.js';
+import { escapeHtml } from '../dom.js';
+import api from '../api.js';
+import * as notify from '../notify.js';
 import Modal from './modal.js';
 
 export default class LayerNewModal extends Modal {
@@ -66,7 +66,7 @@ export default class LayerNewModal extends Modal {
                 dialog.close('1');
             }, err => {
                 const messagesContainer = this.querySelector('.notify-messages');
-                window.Urungi.notify.error(err, { appendTo: messagesContainer });
+                notify.error(err, { appendTo: messagesContainer });
             });
         });
     }

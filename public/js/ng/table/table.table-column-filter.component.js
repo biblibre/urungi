@@ -1,28 +1,24 @@
-(function () {
-    'use strict';
+angular.module('app.table').component('appTableColumnFilter', {
+    bindings: {
+        onFilter: '&',
+    },
+    controller: TableColumnFilterController,
+    controllerAs: 'vm',
+    template: '<input type="text" class="form-control input-sm" ng-keydown="vm.onKeydown($event)">',
+});
 
-    angular.module('app.table').component('appTableColumnFilter', {
-        bindings: {
-            onFilter: '&',
-        },
-        controller: TableColumnFilterController,
-        controllerAs: 'vm',
-        template: '<input type="text" class="form-control input-sm" ng-keydown="vm.onKeydown($event)">',
-    });
+TableColumnFilterController.$inject = ['$timeout'];
 
-    TableColumnFilterController.$inject = ['$timeout'];
+function TableColumnFilterController ($timeout) {
+    const vm = this;
 
-    function TableColumnFilterController ($timeout) {
-        const vm = this;
+    vm.onKeydown = onKeydown;
 
-        vm.onKeydown = onKeydown;
-
-        let keydownTimeoutPromise;
-        function onKeydown (ev) {
-            $timeout.cancel(keydownTimeoutPromise);
-            keydownTimeoutPromise = $timeout(function () {
-                vm.onFilter({ $value: ev.target.value });
-            }, 250);
-        }
+    let keydownTimeoutPromise;
+    function onKeydown (ev) {
+        $timeout.cancel(keydownTimeoutPromise);
+        keydownTimeoutPromise = $timeout(function () {
+            vm.onFilter({ $value: ev.target.value });
+        }, 250);
     }
-})();
+}

@@ -86,6 +86,12 @@ module.exports = function (app) {
             res.json(report);
         }).catch(next);
     });
+    reportRouter.put('/', function (req, res, next) {
+        res.locals.report.overwrite(req.body);
+        res.locals.report.save().then(report => {
+            res.json(report);
+        }).catch(next);
+    });
 
     function findReport (req, res, next) {
         Report.findById(req.params.id).then(report => {

@@ -1,6 +1,7 @@
 const config = require('config');
 const express = require('express');
 const restrict = require('../../middlewares/restrict');
+const restrictAdmin = require('../../middlewares/restrict-admin');
 const assertPikitiaIsConfigured = require('../../middlewares/assert-pikitia-is-configured');
 const pikitia = require('../../helpers/pikitia');
 const mongoose = require('mongoose');
@@ -75,10 +76,16 @@ module.exports = function (app) {
             return next(e);
         }
     });
-    dashboardRouter.patch('/', function (req, res, next) {
+    dashboardRouter.patch('/', restrict, function (req, res, next) {
         res.locals.dashboard.set(req.body);
         res.locals.dashboard.save().then(report => {
             res.json(report);
+        }).catch(next);
+    });
+    dashboardRouter.put('/', restrictAdmin, function (req, res, next) {
+        res.locals.dashboard.overwrite(req.body);
+        res.locals.dashboard.save().then(dashboard => {
+            res.json(dashboard);
         }).catch(next);
     });
 

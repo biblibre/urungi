@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="s/subtotal/subtotal.min.css">
     <link rel="stylesheet" href="s/ui-select/select.min.css">
 
-    {% render 'partials/notify' %}
     <script defer src="s/angular/angular.min.js"></script>
     <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
     <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
@@ -19,16 +18,10 @@
     <script defer src="s/c3/c3.min.js"></script>
     <script defer src="s/pivottable/pivot.min.js"></script>
     <script defer src="s/subtotal/subtotal.min.js"></script>
-    <script defer src="js/uuid.js"></script>
-    {% render 'partials/ng/core' %}
-    {% render 'partials/ng/ui-bootstrap' %}
-    {% render 'partials/ng/report' %}
-    {% render 'partials/ng/theme' %}
-    {% render 'partials/ng/report-view' %}
+
+    <script type="module" src="js/report/view.js"></script>
 {% endblock %}
 
 {% block content %}
-    <ng-app ng-app="app.report-view">
-        <app-report-view report-id="{{ report.id }}"></app-report-view>
-    </ng-app>
+    <app-report-view report-id="{{ report.id }}"></app-report-view>
 {% endblock %}

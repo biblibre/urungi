@@ -1,6 +1,6 @@
-import * as api from '../api.esm.js';
-import { t, expand } from '../i18n.esm.js';
-import { el } from '../dom.esm.js';
+import api from '../api.js';
+import { t, expand } from '../i18n.js';
+import { el } from '../dom.js';
 import DeleteModal from '../modal/delete-modal.js';
 import DuplicateModal from '../modal/duplicate-modal.js';
 import ShareModal from '../modal/share-modal.js';

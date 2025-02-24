@@ -2,16 +2,12 @@
 {% layout 'layout/layout' title: title %}
 
 {% block head %}
-    {% render 'partials/api' %}
-    {% render 'partials/i18n', locale: locale %}
     {% render 'partials/introjs' %}
-    {% render 'partials/notify' %}
 
     <link rel="stylesheet" href="s/jstree/themes/default/style.min.css" />
 
     <script defer src="s/jstree/jstree.min.js"></script>
-    <script defer src="js/uuid.js"></script>
-    <script defer src="js/shared-space.js"></script>
+    <script type="module" src="js/shared-space.js"></script>
 {% endblock %}
 
 {% block content %}

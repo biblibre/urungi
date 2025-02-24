@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="s/jsplumb/jsplumbtoolkit-defaults.css">
     <link rel="stylesheet" href="css/jsPlumb.css"/>
     <link rel="stylesheet" href="css/ndDesigner.css"/>
-    {% render 'partials/notify' %}
     <script defer src="s/jquery-ui/jquery-ui.min.js"></script>
     <script defer src="s/angular/angular.min.js"></script>
     <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
@@ -17,13 +16,10 @@
     <link rel="stylesheet" href="s/jstree/themes/default/style.min.css" />
     <script defer src="s/jstree/jstree.min.js"></script>
     <script defer src="layerUtils.js"></script>
-    {% render 'partials/ng/core' %}
-    {% render 'partials/ng/ui-bootstrap' %}
-    {% render 'partials/ng/layer-edit' %}
+
+    <script type="module" src="js/layer/edit.js"></script>
 {% endblock %}
 
 {% block content %}
-    <ng-app ng-app="app.layer-edit">
-        <app-layer-edit layer-id="{{ layer.id }}"></app-layer-edit>
-    </ng-app>
+    <app-layer-edit layer-id="{{ layer.id }}"></app-layer-edit>
 {% endblock %}

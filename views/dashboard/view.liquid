@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/ndDesigner.css">
     <link rel="stylesheet" href="css/inspector.css">
 
-    {% render 'partials/notify' %}
     <script defer src="s/angular/angular.min.js"></script>
     <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
     <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
@@ -20,16 +19,10 @@
     <script defer src="s/c3/c3.min.js"></script>
     <script defer src="s/pivottable/pivot.min.js"></script>
     <script defer src="s/subtotal/subtotal.min.js"></script>
-    <script defer src="js/uuid.js"></script>
-    {% render 'partials/ng/core' %}
-    {% render 'partials/ng/ui-bootstrap' %}
-    {% render 'partials/ng/report' %}
-    {% render 'partials/ng/theme' %}
-    {% render 'partials/ng/dashboard-view' %}
+
+    <script type="module" src="js/dashboard/view.js"></script>
 {% endblock %}
 
 {% block content %}
-    <ng-app ng-app="app.dashboard-view">
-        <app-dashboard-view dashboard-id="{{ dashboard.id }}"></app-dashboard-view>
-    </ng-app>
+    <app-dashboard-view dashboard-id="{{ dashboard.id }}"></app-dashboard-view>
 {% endblock %}

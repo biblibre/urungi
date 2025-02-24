@@ -1,6 +1,6 @@
 /* global ClipboardJS: false */
-import { t } from '../i18n.esm.js';
-import { escapeHtml } from '../dom.esm.js';
+import { t } from '../i18n.js';
+import { escapeHtml } from '../dom.js';
 import Modal from './modal.js';
 
 export default class ShareModal extends Modal {
@@ -29,7 +29,7 @@ export default class ShareModal extends Modal {
                       <div class="input-group">
                         <input id="copy-link-${ this.args.item._id }" class="form-control" type="text" readonly value="${ escapeHtml(this.args.url) }">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ngclipboard ngclipboard-success="vm.onCopySuccess(e)" data-clipboard-target="#copy-link-${ this.args.item._id }">
+                            <button type="button" class="btn btn-default" data-clipboard-target="#copy-link-${ this.args.item._id }">
                                 <i class="fa fa-clipboard"></i>
                             </button>
                         </span>

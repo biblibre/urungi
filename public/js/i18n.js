@@ -1,30 +1,39 @@
-(function (root, factory) {
-    if (typeof module === 'object' && module.exports) {
-        module.exports = factory();
-    } else {
-        const i18n = factory();
-        root.Urungi.i18n = i18n;
-        root.Urungi.t = i18n.gettext.bind(i18n);
-    }
-}(typeof self !== 'undefined' ? self : this, function () {
-    'use strict';
+import gettext from '../s/gettext.js/gettext.esm.min.js';
 
-    const i18n = window.i18n();
+const i18n = gettext();
 
+if (typeof document !== 'undefined') {
     const languageCookie = document.cookie
         .split('; ')
         .find(row => row.startsWith('language='));
     const language = languageCookie ? languageCookie.split('=')[1] : null;
     if (language) {
         i18n.setLocale(language);
+        try {
+            const { default: messages } = await import(`../translations/${language}.esm.js`)
+            i18n.loadJSON(messages);
+        } catch (err) {
+            console.error(err);
+        }
     }
-    if (window.Urungi.messages) {
-        // gettext.js removes the '' key from messages, but AngularJS code
-        // (core.module.js) needs it to set the correct locale
-        // So we clone the object first
-        const messages = Object.assign({}, window.Urungi.messages);
-        i18n.loadJSON(messages);
-    }
+}
 
-    return i18n;
-}));
+export default i18n;
+
+export const t = i18n.gettext.bind(i18n);
+
+export function expand (s, scope) {
+    const pattern =
+        '\\{\\{(' +
+        Object.keys(scope).map(escapeRegExp).join('|') +
+        ')\\}\\}';
+    const re = new RegExp(pattern, 'g');
+    const replacer = function (match, key) {
+        return scope[key] !== null && scope[key] !== undefined ? scope[key] : '';
+    };
+    return s.replace(re, replacer);
+}
+
+function escapeRegExp (string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}

@@ -25,7 +25,7 @@ export default [
         ...pluginJest.configs['flat/recommended'],
     },
     {
-        files: ['{config,migrations,script,server,shared,src,test}/**/*.js', '*.js'],
+        files: ['{config,migrations,script,server,src,test}/**/*.js', '*.js'],
         languageOptions: {
             globals: {
                 ...globals.node,
@@ -33,7 +33,7 @@ export default [
         },
     },
     {
-        files: ['public/js/**/*.js', 'shared/**/*.js'],
+        files: ['public/js/**/*.js'],
         languageOptions: {
             globals: {
                 ...globals.browser,

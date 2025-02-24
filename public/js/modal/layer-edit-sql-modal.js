@@ -1,7 +1,7 @@
-import { el, escapeHtml } from '../dom.esm.js';
-import { t } from '../i18n.esm.js';
-import api from '../api.esm.js';
-import layerUtils from '../layerUtils.esm.js';
+import { el, escapeHtml } from '../dom.js';
+import { t } from '../i18n.js';
+import api from '../api.js';
+import { newID } from '../layerUtils.js';
 
 import Modal from './modal.js';
 
@@ -76,7 +76,7 @@ export default class DeleteModal extends Modal {
                         element.elementRole = elementInCurrentCollection.elementRole;
                         element.elementLabel = elementInCurrentCollection.elementLabel;
                     } else {
-                        element.elementID = layerUtils.newID(args.layer);
+                        element.elementID = newID(args.layer);
                     }
                 }
 
@@ -106,10 +106,10 @@ export default class DeleteModal extends Modal {
                     }
                 }
             } else {
-                collection.collectionID = 'C' + layerUtils.newID(args.layer);
+                collection.collectionID = 'C' + newID(args.layer);
 
                 for (const element of collection.elements) {
-                    element.elementID = layerUtils.newID(args.layer);
+                    element.elementID = newID(args.layer);
                     element.collectionID = collection.collectionID;
                     element.collectionName = collection.collectionName;
                 }

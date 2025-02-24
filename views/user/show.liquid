@@ -2,10 +2,7 @@
 {% layout 'layout/with-sidebar' title: title %}
 
 {% block head %}
-    {% render 'partials/notify' %}
-
-    <script defer src="js/api.js"></script>
-    <script defer src="js/custom-element/user-status-badge.js"></script>
+    <script type="module" src="js/custom-element/user-status-badge.js"></script>
 {% endblock %}
 
 {% block page-header %}

@@ -34,7 +34,6 @@ const files = [
     { src: 'ng-file-upload/dist/ng-file-upload-shim.min.js', dest: 'ng-file-upload/ng-file-upload-shim.min.js' },
     { src: 'ng-file-upload/dist/ng-file-upload.min.js', dest: 'ng-file-upload/ng-file-upload.min.js' },
     { src: 'clipboard/dist/clipboard.min.js', dest: 'clipboard/clipboard.min.js' },
-    { src: 'ngclipboard/dist/ngclipboard.min.js', dest: 'ngclipboard/ngclipboard.min.js' },
     { src: 'angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js', dest: 'angular-bootstrap-colorpicker/bootstrap-colorpicker-module.min.js' },
     { src: 'angular-bootstrap-colorpicker/css/colorpicker.min.css', dest: 'angular-bootstrap-colorpicker/colorpicker.min.css' },
     { src: 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js', dest: 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js' },

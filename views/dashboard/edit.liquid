@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="css/ndDesigner.css">
     <link rel="stylesheet" href="css/inspector.css">
 
-    {% render 'partials/notify' %}
     {% render 'partials/introjs' %}
     <script defer src="s/jquery-ui/jquery-ui.min.js"></script>
     <script defer src="s/angular/angular.min.js"></script>
@@ -32,23 +31,10 @@
     <script defer src="s/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
     <script defer src="s/angular-bootstrap-colorpicker/bootstrap-colorpicker-module.min.js"></script>
     <script defer src="s/clipboard/clipboard.min.js"></script>
-    <script defer src="s/ngclipboard/ngclipboard.min.js"></script>
-    <script defer src="js/uuid.js"></script>
-    {% render 'partials/ng/core' %}
-    {% render 'partials/ng/ui-bootstrap' %}
-    {% render 'partials/ng/table' %}
-    {% render 'partials/ng/drag-and-drop' %}
-    {% render 'partials/ng/report' %}
-    {% render 'partials/ng/theme' %}
-    {% render 'partials/ng/share' %}
-    {% render 'partials/ng/report-list' %}
-    {% render 'partials/ng/report-edit' %}
-    {% render 'partials/ng/inspector' %}
-    {% render 'partials/ng/dashboard-edit' %}
+
+    <script type="module" src="js/dashboard/edit.js"></script>
 {% endblock %}
 
 {% block content %}
-    <ng-app ng-app="app.dashboard-edit">
-        <app-dashboard-edit dashboard-id="{{ dashboard.id }}"></app-dashboard-edit>
-    </ng-app>
+    <app-dashboard-edit dashboard-id="{{ dashboard.id }}"></app-dashboard-edit>
 {% endblock %}

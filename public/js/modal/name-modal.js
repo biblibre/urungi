@@ -1,5 +1,5 @@
-import { t } from '../i18n.esm.js';
-import { el } from '../dom.esm.js';
+import { t } from '../i18n.js';
+import { el } from '../dom.js';
 import Modal from './modal.js';
 
 export class NameModal extends Modal {

@@ -1,5 +1,5 @@
-import { expand, t } from '../i18n.esm.js';
-import { escapeHtml } from '../dom.esm.js';
+import { expand, t } from '../i18n.js';
+import { escapeHtml } from '../dom.js';
 
 import Modal from './modal.js';
 

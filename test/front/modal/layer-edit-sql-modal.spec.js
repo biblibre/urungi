@@ -1,8 +1,8 @@
 import { expect, test, vi } from 'vitest'
-import api from '../../../public/js/api.esm.js';
+import api from '../../../public/js/api.js';
 import LayerEditSqlModal from '../../../public/js/modal/layer-edit-sql-modal.js';
 
-vi.mock('../../../public/js/api.esm.js');
+vi.mock('../../../public/js/api.js');
 
 test('basic test', async function () {
     const returnedCollection = {

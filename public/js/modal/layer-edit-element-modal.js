@@ -1,6 +1,8 @@
-import { t } from '../i18n.esm.js';
-import { escapeHtml } from '../dom.esm.js';
+import { t } from '../i18n.js';
+import { escapeHtml } from '../dom.js';
 import Modal from './modal.js';
+import * as notify from '../notify.js';
+import * as layerUtils from '../layerUtils.js';
 
 export default class LayerEditElementModal extends Modal {
     get content() {
@@ -247,14 +249,14 @@ export default class LayerEditElementModal extends Modal {
             element.elementRole = 'dimension';
             if (element.viewExpression) {
                 try {
-                    const elements = window.layerUtils.getElementsUsedInCustomExpression(element.viewExpression, args.layer);
+                    const elements = layerUtils.getElementsUsedInCustomExpression(element.viewExpression, args.layer);
                     if (elements.length === 0) {
                         throw new Error(t('Custom element need to use at least one element'));
                     }
                     element.component = this.getElementComponent(elements[0]);
                 } catch (err) {
                     const messagesContainer = dialog.querySelector('.notify-messages');
-                    window.Urungi.notify.error(err, { appendTo: messagesContainer });
+                    notify.error(err, { appendTo: messagesContainer });
                     return;
                 }
             }
@@ -277,10 +279,9 @@ export default class LayerEditElementModal extends Modal {
         const tree = form.viewExpression.parentElement.querySelector('.collection-tree');
 
         try {
-            const elements = window.layerUtils.getElementsUsedInCustomExpression(ev.target.value, this.args.layer);
+            const elements = layerUtils.getElementsUsedInCustomExpression(ev.target.value, this.args.layer);
             for (const collection of this.args.layer.params.schema) {
                 const component = elements.length > 0 ? this.getElementComponent(elements[0]) : null;
-                console.log(component);
                 if (component && collection.component !== component) {
                     $(tree).jstree(true).hide_node(collection.collectionID);
                 } else {
