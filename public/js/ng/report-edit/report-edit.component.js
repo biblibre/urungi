@@ -1,5 +1,6 @@
 import i18n from '../../i18n.js';
 import * as notify from '../../notify.js';
+import ReportSettingsModal from '../../modal/report-settings-modal.js';
 
 angular.module('app.report-edit')
     .controller('ReportEditController', ReportEditController)
@@ -820,15 +821,12 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
     $scope.openReportSettingsModal = openReportSettingsModal;
 
     function openReportSettingsModal () {
-        const modal = $uibModal.open({
-            component: 'appReportSettingsModal',
-            resolve: {
-                report: () => $scope.selectedReport,
-                isForDash: () => $scope.isForDash,
-            },
+        const modal = new ReportSettingsModal({
+            report: angular.copy($scope.selectedReport),
+            isForDash: $scope.isForDash,
         });
 
-        modal.result.then(settings => {
+        modal.open().then(json => JSON.parse(json)).then(settings => {
             $scope.selectedReport.reportType = settings.reportType;
             $scope.selectedReport.properties.legendPosition = settings.legendPosition;
             $scope.selectedReport.properties.height = settings.height;

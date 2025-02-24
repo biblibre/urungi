@@ -53,7 +53,11 @@ export function parse (html) {
 }
 
 export function escapeHtml(unsafe) {
-    const safe = unsafe
+    if (typeof unsafe === 'undefined' || unsafe === null) {
+        return '';
+    }
+
+    const safe = String(unsafe)
         .replaceAll('&', '&amp;')
         .replaceAll('<', '&lt;')
         .replaceAll('>', '&gt;')

@@ -141,6 +141,10 @@ export default class Api {
         return this.httpPost('/api/connection-test', datasource);
     }
 
+    static getThemes () {
+        return this.httpGet('/api/themes');
+    }
+
     static httpGet (path, data) {
         if (data) {
             const search = Object.entries(data).map(([k, v]) => `${k}=${v}`).join('&');

@@ -28,6 +28,7 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
     vm.onReportMouseLeave = onReportMouseLeave;
     vm.onPageBlockMouseOver = onPageBlockMouseOver;
     vm.hovered = {};
+    vm.themes = [];
 
     $scope.reportModal = 'partials/report-edit/report-edit.component.html';
     $scope.settingsTemplate = 'partials/widgets/inspector.html';
@@ -123,6 +124,10 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
             $scope.dashboardID = vm.dashboardId;
             $scope.mode = 'edit';
         }
+
+        api.getThemes().then(res => {
+            vm.themes.push(...res.data);
+        });
 
         if ($scope.mode === 'add') {
             $scope.dashboardID = uuid.v4();
