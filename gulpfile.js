@@ -15,7 +15,6 @@ const translations = gulp.series(translations_clean, translations_build, transla
 
 const templatesModules = [
     'dashboard-edit',
-    'dashboard-list',
     'dashboard-view',
     'inspector',
     'layer-edit',

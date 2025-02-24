@@ -80,6 +80,12 @@ module.exports = function (app) {
             return next(e);
         }
     });
+    reportRouter.patch('/', function (req, res, next) {
+        res.locals.report.set(req.body);
+        res.locals.report.save().then(report => {
+            res.json(report);
+        }).catch(next);
+    });
 
     function findReport (req, res, next) {
         Report.findById(req.params.id).then(report => {

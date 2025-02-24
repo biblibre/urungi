@@ -5,7 +5,10 @@ class Table {
     constructor (options) {
         this.options = options;
         this.page = 1;
-        this.order = null;
+        if (options.sortBy) {
+            this.sortBy = options.sortBy;
+            this.sortOrder = 'asc';
+        }
         this.filters = {};
     }
 
@@ -36,16 +39,7 @@ class Table {
             if (column.order) {
                 const sortButton = el('span.sort-button', el('i.fa.fa-sort'));
                 sortButton.addEventListener('click', ev => {
-                    if (this.order === column.order) {
-                        this.order = `-${column.order}`;
-                        sortButton.replaceChildren(el('i.fa.fa-sort-desc'));
-                    } else {
-                        this.order = column.order;
-                        sortButton.replaceChildren(el('i.fa.fa-sort-asc'));
-                    }
-                    this.t.tHead.querySelectorAll('.sort-button').forEach(e => e.classList.remove('active'));
-                    sortButton.classList.add('active');
-                    this.draw();
+                    this.toggleSort(column.order)
                 });
                 th.append(' ', sortButton);
             }
@@ -82,8 +76,9 @@ class Table {
             filters: this.filters,
         };
 
-        if (this.order) {
-            params.sort = this.order;
+        if (this.sortBy) {
+            params.sortBy = this.sortBy;
+            params.sortOrder = this.sortOrder ?? 'asc';
         }
 
         const { data, pages } = await this.options.fetch(params);
@@ -101,6 +96,24 @@ class Table {
         }
 
         this.t.tBodies[0].replaceChildren(...trs);
+
+        // Update sort buttons
+        this.t.tHead.querySelectorAll('.sort-button').forEach(e => {
+            e.classList.remove('active');
+            e.querySelector('i').className = 'fa fa-sort';
+        });
+        if (this.sortBy) {
+            const columnIndex = this.options.columns.findIndex(c => c.order === this.sortBy);
+            if (columnIndex !== -1) {
+                const sortButton = this.t.tHead.rows[0].cells[columnIndex].querySelector('.sort-button');
+                sortButton.classList.add('active');
+                if (this.sortOrder && this.sortOrder === 'desc') {
+                    sortButton.querySelector('i').className = 'fa fa-sort-desc';
+                } else {
+                    sortButton.querySelector('i').className = 'fa fa-sort-asc';
+                }
+            }
+        }
 
         this.drawPagination();
     }
@@ -146,6 +159,23 @@ class Table {
     setPage (page) {
         this.page = Math.max(1, Math.min(this.pages, page));
         return this.draw();
+    }
+
+    setSort (sortBy, sortOrder = 'asc') {
+        const column = this.options.columns.find(c => c.order === sortBy);
+        if (column) {
+            this.sortBy = column.order;
+            this.sortOrder = sortOrder;
+        }
+        return this.draw();
+    }
+
+    toggleSort (sortBy) {
+        let sortOrder = 'asc';
+        if (this.sortBy === sortBy && this.sortOrder === 'asc') {
+            sortOrder = 'desc';
+        }
+        return this.setSort(sortBy, sortOrder);
     }
 }
 

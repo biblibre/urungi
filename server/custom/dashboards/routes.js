@@ -75,6 +75,12 @@ module.exports = function (app) {
             return next(e);
         }
     });
+    dashboardRouter.patch('/', function (req, res, next) {
+        res.locals.dashboard.set(req.body);
+        res.locals.dashboard.save().then(report => {
+            res.json(report);
+        }).catch(next);
+    });
 
     function findDashboard (req, res, next) {
         Dashboard.findById(req.params.id).then(dashboard => {
