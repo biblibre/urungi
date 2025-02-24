@@ -2,7 +2,7 @@ import { t } from './i18n.js';
 import { el } from './dom.js';
 
 class Table {
-    constructor (options) {
+    constructor (options = {}) {
         this.options = options;
         this.page = 1;
         if (options.sortBy) {
@@ -23,12 +23,12 @@ class Table {
         );
         element.append(this.t);
 
-        const hasFilterRow = this.options.columns.some(c => Object.hasOwn(c, 'filter'));
+        const hasFilterRow = this.getColumns().some(c => Object.hasOwn(c, 'filter'));
         if (hasFilterRow) {
             this.t.tHead.append(el('tr'));
         }
 
-        for (const column of this.options.columns) {
+        for (const column of this.getColumns()) {
             const col = el('col');
             if (column.width) {
                 col.style.setProperty('width', column.width);
@@ -70,6 +70,14 @@ class Table {
         return this.draw();
     }
 
+    async fetch (params) {
+        return this.options.fetch(params);
+    }
+
+    getColumns () {
+        return this.options.columns;
+    }
+
     async draw () {
         const params = {
             page: this.page,
@@ -81,13 +89,13 @@ class Table {
             params.sortOrder = this.sortOrder ?? 'asc';
         }
 
-        const { data, pages } = await this.options.fetch(params);
+        const { data, pages } = await this.fetch(params);
         this.pages = pages;
 
         const trs = [];
         for (const row of data) {
             const tr = el('tr');
-            for (const column of this.options.columns) {
+            for (const column of this.getColumns()) {
                 const td = el('td');
                 td.append(column.render(row));
                 tr.append(td);
@@ -103,7 +111,7 @@ class Table {
             e.querySelector('i').className = 'fa fa-sort';
         });
         if (this.sortBy) {
-            const columnIndex = this.options.columns.findIndex(c => c.order === this.sortBy);
+            const columnIndex = this.getColumns().findIndex(c => c.order === this.sortBy);
             if (columnIndex !== -1) {
                 const sortButton = this.t.tHead.rows[0].cells[columnIndex].querySelector('.sort-button');
                 sortButton.classList.add('active');
@@ -162,7 +170,7 @@ class Table {
     }
 
     setSort (sortBy, sortOrder = 'asc') {
-        const column = this.options.columns.find(c => c.order === sortBy);
+        const column = this.getColumns().find(c => c.order === sortBy);
         if (column) {
             this.sortBy = column.order;
             this.sortOrder = sortOrder;

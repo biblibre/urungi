@@ -1,6 +1,7 @@
 import i18n from '../../i18n.js';
 import * as notify from '../../notify.js';
 import * as uuid from '../../uuid.js';
+import ReportImportModal from '../../modal/report-import-modal.js';
 
 angular.module('app.dashboard-edit').component('appDashboardEdit', {
     templateUrl: 'partials/dashboard-edit/dashboard-edit.component.html',
@@ -11,9 +12,9 @@ angular.module('app.dashboard-edit').component('appDashboardEdit', {
     }
 });
 
-DashboardEditController.$inject = ['$scope', '$window', '$q', '$compile', 'reportsService', 'connection', 'reportModel', 'htmlWidgets', '$uibModal', 'api', 'base'];
+DashboardEditController.$inject = ['$scope', '$window', '$q', '$compile', 'reportsService', 'connection', 'reportModel', 'htmlWidgets', 'api', 'base'];
 
-function DashboardEditController ($scope, $window, $q, $compile, reportsService, connection, reportModel, htmlWidgets, $uibModal, api, base) {
+function DashboardEditController ($scope, $window, $q, $compile, reportsService, connection, reportModel, htmlWidgets, api, base) {
     const vm = this;
 
     vm.$onInit = $onInit;
@@ -96,10 +97,8 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
     };
 
     $scope.importReport = function () {
-        const modal = $uibModal.open({
-            component: 'appReportsImportModal',
-        });
-        modal.result.then(reportID => {
+        const modal = new ReportImportModal();
+        modal.open().then(reportID => {
             reportModel.getReportDefinition(reportID).then(function (report) {
                 if (report) {
                     report.id = uuid.v4();
