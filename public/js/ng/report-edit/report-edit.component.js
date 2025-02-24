@@ -13,8 +13,8 @@ angular.module('app.report-edit')
         },
     });
 
-ReportEditController.$inject = ['$scope', 'connection', 'reportsService', '$timeout', 'c3Charts', '$uibModal', 'reportModel', 'widgetsCommon', 'api', 'base', 'userService', '$window'];
-function ReportEditController ($scope, connection, reportsService, $timeout, c3Charts, $uibModal, reportModel, widgetsCommon, api, base, userService, $window) {
+ReportEditController.$inject = ['$scope', 'connection', 'reportsService', '$timeout', 'c3Charts', 'reportModel', 'widgetsCommon', 'api', 'base', 'userService', '$window'];
+function ReportEditController ($scope, connection, reportsService, $timeout, c3Charts, reportModel, widgetsCommon, api, base, userService, $window) {
     const vm = this;
 
     vm.$onInit = $onInit;

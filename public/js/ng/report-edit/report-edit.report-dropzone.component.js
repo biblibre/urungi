@@ -1,3 +1,5 @@
+import ReportColumnSettingsModal from '../../modal/report-column-settings-modal.js';
+
 angular.module('app.report-edit').component('appReportDropzone', {
     templateUrl: 'partials/report-edit/report-edit.report-dropzone.component.html',
     controller: DropzoneController,
@@ -14,9 +16,9 @@ angular.module('app.report-edit').component('appReportDropzone', {
     },
 });
 
-DropzoneController.$inject = ['$uibModal', 'reportsService'];
+DropzoneController.$inject = ['reportsService'];
 
-function DropzoneController ($uibModal, reportsService) {
+function DropzoneController (reportsService) {
     const vm = this;
 
     vm.onDropItem = onDropItem;
@@ -40,14 +42,11 @@ function DropzoneController ($uibModal, reportsService) {
     }
 
     function openColumnSettingsModal (column) {
-        const modal = $uibModal.open({
-            component: 'appReportColumnSettingsModal',
-            resolve: {
-                column: () => column,
-                report: () => vm.report,
-            },
+        const modal = new ReportColumnSettingsModal({
+            column: column,
+            report: vm.report,
         });
-        modal.result.then(function (settings) {
+        modal.open().then(JSON.parse).then(function (settings) {
             if (settings.aggregation) {
                 column.aggregation = settings.aggregation;
             } else {
