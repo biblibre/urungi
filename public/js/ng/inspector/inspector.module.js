@@ -1,3 +1,5 @@
+import DashboardImageModal from '../../modal/dashboard-image-modal.js';
+
 angular.module('app.inspector', ['colorpicker.module']);
 
 angular.module('app.inspector').factory('textStyles', textStyles);
@@ -41,9 +43,9 @@ function blPrettyScrollbar () {
 
 angular.module('app.inspector').directive('appInspector', appInspector);
 
-appInspector.$inject = ['$compile', '$timeout', '$uibModal', 'c3Charts', 'textStyles', '$window'];
+appInspector.$inject = ['$compile', '$timeout', 'c3Charts', 'textStyles', '$window'];
 
-function appInspector ($compile, $timeout, $uibModal, c3Charts, textStyles, $window) {
+function appInspector ($compile, $timeout, c3Charts, textStyles, $window) {
     return {
         transclude: true,
         scope: {
@@ -128,10 +130,8 @@ function appInspector ($compile, $timeout, $uibModal, c3Charts, textStyles, $win
             };
 
             $scope.openImageGallery = function (target) {
-                const modal = $uibModal.open({
-                    component: 'appDashboardImageModal',
-                });
-                modal.result.then(function (file) {
+                const modal = new DashboardImageModal();
+                modal.open().then(JSON.parse).then(function (file) {
                     let url = file.url;
                     if (file.source1400) {
                         url = file.source1400;

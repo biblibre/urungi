@@ -145,6 +145,20 @@ export default class Api {
         return this.httpGet('/api/themes');
     }
 
+    static getFiles () {
+        return this.httpGet('/api/files');
+    }
+
+    static uploadFile (file) {
+        const data = new FormData();
+        data.set('content', file);
+
+        return this.httpRequest('/api/files', {
+            method: 'POST',
+            body: data,
+        });
+    }
+
     static httpGet (path, data) {
         if (data) {
             const search = Object.entries(data).map(([k, v]) => `${k}=${v}`).join('&');
