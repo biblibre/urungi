@@ -9,11 +9,14 @@ if (typeof document !== 'undefined') {
     const language = languageCookie ? languageCookie.split('=')[1] : null;
     if (language) {
         i18n.setLocale(language);
-        try {
-            const { default: messages } = await import(`../translations/${language}.esm.js`)
-            i18n.loadJSON(messages);
-        } catch (err) {
-            console.error(err);
+
+        if (language !== 'en') {
+            try {
+                const { default: messages } = await import(`../translations/${language}.esm.js`)
+                i18n.loadJSON(messages);
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 }
