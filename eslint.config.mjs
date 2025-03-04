@@ -47,19 +47,7 @@ export default [
         languageOptions: {
             globals: {
                 angular: 'readonly',
-                layerUtils: 'readonly',
             },
-        },
-    },
-    {
-        files: ['test/client/**/*.js'],
-        languageOptions: {
-            globals: {
-                ...globals.browser,
-                angular: 'readonly',
-                inject: 'readonly',
-                $: 'readonly',
-            }
         },
     },
     {
