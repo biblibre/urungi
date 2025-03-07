@@ -1,6 +1,9 @@
 import i18n from '../../i18n.js';
 import * as notify from '../../notify.js';
 import ReportSettingsModal from '../../modal/report-settings-modal.js';
+import { storeReport, getColumnId, getReportDefinition } from '../../report/util.js';
+import * as c3Charts from '../../report/c3-charts.js';
+import '../../custom-element/report-view.js';
 
 angular.module('app.report-edit')
     .controller('ReportEditController', ReportEditController)
@@ -13,15 +16,14 @@ angular.module('app.report-edit')
         },
     });
 
-ReportEditController.$inject = ['$scope', 'connection', 'reportsService', '$timeout', 'c3Charts', 'reportModel', 'widgetsCommon', 'api', 'base', 'userService', '$window'];
-function ReportEditController ($scope, connection, reportsService, $timeout, c3Charts, reportModel, widgetsCommon, api, base, userService, $window) {
+ReportEditController.$inject = ['$scope', 'connection', '$timeout', 'widgetsCommon', 'api', 'base', 'userService', '$window', '$element'];
+function ReportEditController ($scope, connection, $timeout, widgetsCommon, api, base, userService, $window, $element) {
     const vm = this;
 
     vm.$onInit = $onInit;
     vm.goBack = goBack;
     vm.onChangeField = onChangeField;
 
-    $scope.promptsBlock = 'partials/report-edit/report-edit.prompts-block.html';
     $scope.dropArea = 'partials/report-edit/report-edit.drop-area.html';
     $scope.dashListModal = 'partials/report-edit/report-edit.dashboard-list-modal.html';
     $scope.tabs = { selected: 'elements' };
@@ -49,6 +51,11 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
     $scope.colors = widgetsCommon.colors;
     $scope.signalOptions = widgetsCommon.signalOptions;
 
+    $scope.filterSortableOptions = {
+        handle: '.sortable-handle',
+        axis: 'y',
+    };
+
     /*
     *   Initialisation
     */
@@ -63,7 +70,7 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
         }
         return $scope.initLayers().then(function () {
             if (vm.reportId) {
-                return reportModel.getReportDefinition(vm.reportId, false).then(function (report) {
+                return getReportDefinition(vm.reportId, false).then(function (report) {
                     $scope.selectedReport = report;
                     $scope.initForm();
                     $scope.mode = 'edit';
@@ -78,6 +85,14 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
 
     function goBack () {
         $window.history.back();
+    }
+
+    function getReportView () {
+        if ($element[0].nodeName === '#comment') {
+            return $element[0].nextElementSibling.querySelector('app-reportview');
+        } else {
+            return $element[0].querySelector('app-reportview');
+        }
     }
 
     $scope.$on('newReportForDash', function (event, args) {
@@ -99,20 +114,44 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
 
         return $scope.initLayers().then(function () {
             $scope.initForm();
-            $scope.$broadcast('repaint', {
-                fetchData: true,
-            });
+            vm.reportView = getReportView();
+            vm.reportView.setReport($scope.selectedReport);
+            return vm.reportView.repaint({ fetchData: true });
         });
     });
 
     $scope.initLayers = function () {
-        return reportModel.getLayers().then(function (layers) {
+        return getLayers().then(function (layers) {
             layers.sort(function (a, b) { return a.name.localeCompare(b.name); });
 
             $scope.rootItem = layers[0].rootItem;
             $scope.layers = layers;
         });
     };
+
+    function getLayers () {
+        const params = {
+            fields: 'name,description,objects,params.joins',
+            sort: 'name',
+            filters: {
+                status: 'active',
+            },
+        };
+
+        return api.getLayers(params).then(function (res) {
+            const layers = res.data;
+
+            for (const layer of layers) {
+                layer.rootItem = {
+                    elementLabel: '',
+                    elementRole: 'root',
+                    elements: layer.objects
+                };
+            }
+
+            return layers;
+        });
+    }
 
     $scope.newForm = function () {
         $scope.selectedReport = {};
@@ -183,10 +222,9 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
             filterCriteria[i] = $scope.prompts[i].criterion;
         }
 
-        $scope.$broadcast('repaint', {
-            fetchData: true,
-            filters: filterCriteria
-        });
+        vm.reportView = getReportView();
+        vm.reportView.setReport($scope.selectedReport);
+        return vm.reportView.repaint({ fetchData: true, filters: filterCriteria });
     };
 
     $scope.getPrompts = function () {
@@ -203,7 +241,7 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
     };
 
     $scope.saveReportStructure = function () {
-        reportsService.storeReport($scope.selectedReport);
+        storeReport($scope.selectedReport);
     };
 
     $scope.stringVariables = [
@@ -271,7 +309,7 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
     };
 
     $scope.reportNameSave = function () {
-        return reportModel.saveAsReport($scope.selectedReport, $scope.mode).then(function (data) {
+        return saveAsReport($scope.selectedReport, $scope.mode).then(function (data) {
             const reportId = $scope.mode === 'add' ? data.item._id : $scope.selectedReport._id;
 
             if ($scope.previewAfterSave) {
@@ -286,6 +324,17 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
         });
     };
 
+    function saveAsReport (report, mode) {
+        let url;
+        if (mode === 'add') {
+            url = '/api/reports/create';
+        } else {
+            url = '/api/reports/update/' + report._id;
+        }
+
+        return connection.post(url, report);
+    }
+
     $scope.pushToDash = function () {
         const params = {};
 
@@ -299,7 +348,7 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
         $('modal-backdrop').visible = false;
         $('modal-backdrop').remove();
         $('#dashListModal').modal('hide');
-        reportsService.storeReport($scope.selectedReport);
+        storeReport($scope.selectedReport);
 
         if (dashboardID) {
             location.href = base + '/dashboards/edit/' + dashboardID;
@@ -335,14 +384,12 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
         $scope.$broadcast('showLoadingMessage', i18n.gettext('Fetching data ...'));
 
         return api.getReportData($scope.selectedReport, params).then(function (result) {
-            if (result.errorToken) {
-                $scope.errorToken = result.errorToken;
-            }
-
             $scope.sql = result.sql;
             $scope.time = result.time;
             $scope.results = result.data;
-            $scope.$broadcast('repaint', { fetchData: false, data: result.data });
+            vm.reportView = getReportView();
+            vm.reportView.setReport($scope.selectedReport);
+            return vm.reportView.repaint({ fetchData: false, data: result.data });
         }).catch(err => {
             $scope.$broadcast('stopLoading');
             notify.error('Something went wrong, check the server logs');
@@ -377,7 +424,7 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
         if (layerObject.defaultAggregation) {
             element.aggregation = layerObject.defaultAggregation;
         }
-        element.id = reportsService.getColumnId(element);
+        element.id = getColumnId(element);
         elements.push(element);
 
         refreshSql();
@@ -607,7 +654,7 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
             choice.propertyBind.push(col);
             if (choice.forbidAggregation) {
                 delete col.aggregation;
-                col.id = reportsService.getColumnId(col);
+                col.id = getColumnId(col);
             }
         }
     };
@@ -655,7 +702,9 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
     $scope.changeChartSectorType = function (column, type) {
         if (type === 'pie') { $scope.selectedReport.reportType = 'chart-pie'; }
         if (type === 'donut') { $scope.selectedReport.reportType = 'chart-donut'; }
-        $scope.$broadcast('repaint');
+        vm.reportView = getReportView();
+        vm.reportView.setReport($scope.selectedReport);
+        return vm.reportView.repaint();
     };
 
     $scope.changeColumnColor = function (color) {
@@ -667,11 +716,9 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
     };
 
     $scope.setColumnFormat = function () {
-        $scope.$broadcast('repaint');
-    };
-
-    $scope.saveToExcel = function (reportHash) {
-        reportModel.saveToExcel($scope, reportHash);
+        vm.reportView = getReportView();
+        vm.reportView.setReport($scope.selectedReport);
+        return vm.reportView.repaint();
     };
 
     $scope.setDatePatternFilterType = function (filter, option) {
@@ -823,7 +870,6 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
     function openReportSettingsModal () {
         const modal = new ReportSettingsModal({
             report: angular.copy($scope.selectedReport),
-            isForDash: $scope.isForDash,
         });
 
         modal.open().then(json => JSON.parse(json)).then(settings => {
@@ -834,21 +880,6 @@ function ReportEditController ($scope, connection, reportsService, $timeout, c3C
             $scope.selectedReport.theme = settings.theme;
             $scope.selectedReport.properties.range = settings.range;
         }, () => {});
-    }
-    $scope.isReportSettingsModalAvailable = isReportSettingsModalAvailable;
-
-    function isReportSettingsModalAvailable () {
-        // If not for a dashboard, there is at least the theme setting
-        if (!$scope.isForDash) {
-            return true;
-        }
-
-        const report = $scope.selectedReport;
-        if (['chart-line', 'chart-pie', 'chart-donut'].includes(report.reportType)) {
-            return true;
-        }
-
-        return false;
     }
 
     $scope.onElementDragStart = onElementDragStart;

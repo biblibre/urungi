@@ -1,0 +1,16 @@
+/* TODO move report-view specific CSS rules from main.css to this file */
+@import "./main.css";
+@import "../s/c3/c3.min.css";
+@import "../s/font-awesome/css/font-awesome.min.css";
+@import "../s/pivottable/pivot.min.css";
+@import "../s/subtotal/subtotal.min.css";
+
+.report-view-loading {
+    text-align: center;
+    font-size: 32px;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}

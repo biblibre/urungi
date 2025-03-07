@@ -1,4 +1,5 @@
 import ReportColumnSettingsModal from '../../modal/report-column-settings-modal.js';
+import { getColumnDescription, getColumnId } from '../../report/util.js';
 
 angular.module('app.report-edit').component('appReportDropzone', {
     templateUrl: 'partials/report-edit/report-edit.report-dropzone.component.html',
@@ -16,15 +17,15 @@ angular.module('app.report-edit').component('appReportDropzone', {
     },
 });
 
-DropzoneController.$inject = ['reportsService'];
+DropzoneController.$inject = [];
 
-function DropzoneController (reportsService) {
+function DropzoneController () {
     const vm = this;
 
     vm.onDropItem = onDropItem;
     vm.onRemoveItem = onRemoveItem;
     vm.openColumnSettingsModal = openColumnSettingsModal;
-    vm.getColumnDescription = reportsService.getColumnDescription;
+    vm.getColumnDescription = getColumnDescription;
 
     function onDropItem (ev) {
         const type = 'application/vnd.urungi.layer-element+json';
@@ -52,7 +53,7 @@ function DropzoneController (reportsService) {
             } else {
                 delete column.aggregation;
             }
-            column.id = reportsService.getColumnId(column);
+            column.id = getColumnId(column);
 
             column.doNotStack = settings.doNotStack;
             column.label = settings.label;

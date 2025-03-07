@@ -113,6 +113,51 @@ export default class Api {
         return this.httpPost('/api/reports/delete/' + id, { id });
     }
 
+    /**
+     * Fetch report data
+     *
+     * @param {object} report - Report definition
+     * @param {object} options - Options
+     * @param {number} options.limit - Limit the maximum number of rows used
+     * @param {object} options.filters - Filters values
+     */
+    static getReportData (report, options = {}) {
+        const params = {
+            report,
+        };
+
+        if (options.limit && !report.properties.recordLimit) {
+            params.limit = options.limit;
+        }
+
+        if (options.filters) {
+            params.filters = options.filters;
+        }
+
+        return this.httpPost('/api/reports/data-query', params);
+    }
+
+    /**
+     * Export a report as PDF
+     *
+     * @param {string} id - Report ID
+     * @param {object} params - Parameters
+     * @param {boolean} params.displayHeaderFooter - Display header and footer
+     * @param {string} params.headerTemplate - Header template
+     * @param {string} params.footerTemplate - Footer template
+     */
+    static getReportAsPDF (id, params) {
+        return this.httpPost(`/api/reports/${id}/pdf`, params);
+    }
+
+    static getReportAsPNG (id, params) {
+        return this.httpPost(`/api/reports/${id}/png`, params);
+    }
+
+    static getReportFilterValues (filter, options) {
+        return this.httpPost('/api/reports/filter-values-query', { filter, options });
+    }
+
     static getDashboards (params) {
         return this.httpGet('/api/dashboards/find-all', params);
     }
@@ -215,6 +260,10 @@ export default class Api {
         const url = new URL(relativePath, document.baseURI);
 
         return fetch(url, settings).then(function (response) {
+            if (!response.ok) {
+                throw new Error(`${response.url} responded with ${response.status} ${response.statusText}`);
+            }
+
             const contentType = response.headers.get('Content-Type')?.trim();
             if (contentType && contentType.startsWith('application/json')) {
                 return response.json().then(function (data) {

@@ -22,7 +22,10 @@ router.get('/view/:reportId', async function (req, res) {
             return res.redirect(url('/login'));
         }
 
-        res.render('report/view', { report: report.toObject({ getters: true }) });
+        const permissions = await req.user.getPermissions();
+        const canEdit = permissions.reportsCreate || req.user.id === report.owner;
+
+        res.render('report/view', { report: report.toObject({ getters: true }), canEdit });
     } catch (err) {
         console.error(err.message);
         return res.sendStatus(404);

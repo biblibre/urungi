@@ -111,7 +111,7 @@ function getDatePatternBounds (pattern) {
         break;
 
     default:
-        throw new Error('unknown pattern');
+        throw new Error('unknown pattern: ' + pattern);
     }
 
     return dates;

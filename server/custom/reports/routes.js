@@ -38,7 +38,7 @@ module.exports = function (app) {
         try {
             const report = res.locals.report;
             const filters = JSON.stringify(req.body.filters);
-            const url = config.get('url') + config.get('base') + `/reports/view/${report.id}?filters=${filters}`;
+            const url = config.get('url') + config.get('base') + `/reports/view/${report.id}?filters=${encodeURIComponent(filters)}`;
             const buffer = await pikitia.toPNG(url, {
                 cookies: req.cookies,
                 viewport: {
@@ -61,7 +61,7 @@ module.exports = function (app) {
         try {
             const report = res.locals.report;
             const filters = JSON.stringify(req.body.filters);
-            const url = config.get('url') + config.get('base') + `/reports/view/${report.id}?filters=${filters}`;
+            const url = config.get('url') + config.get('base') + `/reports/view/${report.id}?filters=${encodeURIComponent(filters)}`;
             const options = {
                 cookies: req.cookies,
                 displayHeaderFooter: req.body.displayHeaderFooter || false,

@@ -57,6 +57,7 @@
     "pg": "^8.12.0",
     "pivottable": "^2.23.0",
     "subtotal": "^1.11.0-alpha.0",
+    "tom-select": "^2.4.3",
     "ui-select": "^0.19.8",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
@@ -90,7 +91,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "jest",
+    "test": "jest && vitest run",
     "posttest": "run-s -s -c lint:*",
     "postinstall": "node script/copy-static-files.js",
     "lint:js": "eslint .",

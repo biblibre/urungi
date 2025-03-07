@@ -1,5 +1,6 @@
 import i18n from '../../i18n.js';
 import * as notify from '../../notify.js';
+import { checkPrompts } from '../../report/util.js';
 
 angular.module('app.dashboard-view').component('appDashboardView', {
     templateUrl: 'partials/dashboard-view/dashboard-view.component.html',
@@ -10,9 +11,9 @@ angular.module('app.dashboard-view').component('appDashboardView', {
     }
 });
 
-DashboardViewController.$inject = ['$scope', '$timeout', '$compile', '$location', '$window', 'api', 'userService', 'reportsService'];
+DashboardViewController.$inject = ['$scope', '$timeout', '$compile', '$location', '$window', 'api', 'userService'];
 
-function DashboardViewController ($scope, $timeout, $compile, $location, $window, api, userService, reportsService) {
+function DashboardViewController ($scope, $timeout, $compile, $location, $window, api, userService) {
     const vm = this;
 
     vm.$onInit = $onInit;
@@ -81,7 +82,7 @@ function DashboardViewController ($scope, $timeout, $compile, $location, $window
 
         vm.mandatoryPrompts = Object.values(vm.prompts).filter(p => p.promptMandatory);
 
-        if (!vm.mandatoryPrompts.length || reportsService.checkPrompts(vm.mandatoryPrompts)) {
+        if (!vm.mandatoryPrompts.length || checkPrompts(vm.mandatoryPrompts)) {
             $timeout(function () {
                 repaintReports();
             }, 0);
@@ -130,10 +131,12 @@ function DashboardViewController ($scope, $timeout, $compile, $location, $window
 
         vm.promptsFilters = JSON.parse(JSON.stringify(filterCriteria));
 
-        if (!vm.mandatoryPrompts.length || reportsService.checkPrompts(vm.mandatoryPrompts)) {
-            $scope.$broadcast('repaint', {
-                fetchData: true,
-                filters: filterCriteria
+        if (!vm.mandatoryPrompts.length || checkPrompts(vm.mandatoryPrompts)) {
+            document.getElementById('pageViewer').querySelectorAll('app-reportview').forEach(e => {
+                e.repaint({
+                    fetchData: true,
+                    filters: filterCriteria,
+                });
             });
         }
     }

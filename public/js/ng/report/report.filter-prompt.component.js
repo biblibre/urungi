@@ -1,4 +1,5 @@
 import i18n from '../../i18n.js';
+import '../../custom-element/report-filter-form.js';
 
 angular.module('app.report').component('appFilterPrompt', {
     templateUrl: 'partials/report/report.filter-prompt.component.html',
@@ -14,9 +15,9 @@ angular.module('app.report').component('appFilterPrompt', {
     },
 });
 
-FilterPromptController.$inject = ['$scope', 'api'];
+FilterPromptController.$inject = ['$scope', '$element', 'api'];
 
-function FilterPromptController ($scope, api) {
+function FilterPromptController ($scope, $element, api) {
     const vm = this;
 
     vm.$onInit = $onInit;
@@ -62,6 +63,15 @@ function FilterPromptController ($scope, api) {
                 vm.date2 = new Date(year, parseInt(month) - 1, day);
             }
         }
+
+        setTimeout(() => {
+            vm.reportFilterForm = $element[0].querySelector('app-report-filter-form');
+            vm.reportFilterForm.setFilter(vm.filter);
+            vm.reportFilterForm.addEventListener('change', ev => {
+                vm.filter.criterion = vm.reportFilterForm.getValue();
+                vm.onChange();
+            })
+        }, 0);
     }
 
     function removeFilter () {

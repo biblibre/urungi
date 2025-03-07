@@ -20,7 +20,6 @@ const templatesModules = [
     'layer-edit',
     'report',
     'report-edit',
-    'report-view',
 ];
 
 const templates = gulp.parallel(templatesModules.map(m => templates_compile(m)));

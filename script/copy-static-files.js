@@ -62,6 +62,8 @@ const files = [
     { src: 'jstree/dist/themes/default/throbber.gif', dest: 'jstree/themes/default/throbber.gif' },
     { src: 'gettext.js/dist/gettext.iife.min.js', dest: 'gettext.js/gettext.iife.min.js' },
     { src: 'gettext.js/dist/gettext.esm.min.js', dest: 'gettext.js/gettext.esm.min.js' },
+    { src: 'tom-select/dist/js/tom-select.complete.js', dest: 'tom-select/tom-select.js' },
+    { src: 'tom-select/dist/css/tom-select.bootstrap4.css', dest: 'tom-select/tom-select.bootstrap4.css' },
 ];
 
 fs.rmSync(destRoot, { recursive: true, force: true });

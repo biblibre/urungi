@@ -3299,3 +3299,37 @@ a.list-group-item:hover {
     flex-direction: column;
     row-gap: 1em;
 }
+
+app-report-filter-form {
+    display: block;
+}
+
+app-report-filter-form .form-inline .form-group {
+    display: flex;
+    align-items: center;
+    column-gap: 1em;
+    flex-wrap: nowrap;
+}
+
+app-report-filter-form .form-inline .form-group label {
+    flex-shrink: 0;
+    flex-basis: 20%;
+}
+
+app-report-filter-form .ts-wrapper.single .ts-control::after {
+    display: none;
+}
+
+app-report-filter-form .inputs {
+    flex-grow: 1;
+    display: flex;
+    column-gap: 1em;
+}
+
+app-report-filter-form .inputs > * {
+    flex-basis: 100%;
+}
+
+#prompts-form app-report-filter-form {
+    margin-bottom: 10px;
+}

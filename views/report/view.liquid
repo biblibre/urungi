@@ -2,26 +2,60 @@
 {% layout 'layout/layout' title: title %}
 
 {% block head %}
-    <link rel="stylesheet" href="s/c3/c3.min.css">
-    <link rel="stylesheet" href="s/pivottable/pivot.min.css">
-    <link rel="stylesheet" href="s/subtotal/subtotal.min.css">
-    <link rel="stylesheet" href="s/ui-select/select.min.css">
-
-    <script defer src="s/angular/angular.min.js"></script>
-    <script defer src="s/angular-sanitize/angular-sanitize.min.js"></script>
-    <script defer src="s/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script defer src="s/angular-file-saver/angular-file-saver.bundle.min.js"></script>
-    <script defer src="s/ui-select/select.min.js"></script>
     <script defer src="s/moment/moment-with-locales.min.js"></script>
     <script defer src="s/numeral/numeral.min.js"></script>
     <script defer src="s/d3/d3.min.js"></script>
     <script defer src="s/c3/c3.min.js"></script>
     <script defer src="s/pivottable/pivot.min.js"></script>
     <script defer src="s/subtotal/subtotal.min.js"></script>
+    <script defer src="s/xlsx/xlsx.core.min.js"></script>
 
     <script type="module" src="js/report/view.js"></script>
+    <script type="module" src="js/custom-element/report-view.js"></script>
 {% endblock %}
 
 {% block content %}
-    <app-report-view report-id="{{ report.id }}"></app-report-view>
+    <div class="container-fluid">
+        <div class="page-header">
+            <a href="./" class="btn-home">
+                <i class="fa fa-home"></i>
+            </a>
+            <span class="h3">{{ report.reportName }}</span>
+
+            <div class="pull-right">
+                <div id="export-button-group" class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>{% t 'Export' %}</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% if report.reportType == 'grid' or report.reportType == 'vertical-grid' %}
+                            <li><a href="#" class="js-export-as-xlsx">{% t 'As XLSX' | escape %}</a></li>
+                        {% endif %}
+
+                        <li><a href="#" class="js-export-as-png">{% t 'As PNG' | escape %}</a>
+                        <li><a href="#" class="js-export-as-pdf">{% t 'As PDF' | escape %}</a>
+                    </ul>
+                </div>
+
+                <a onclick="history.back()" class="btn btn-default">{% t 'Cancel' | escape %}</a>
+                {% if canEdit %}
+                    <a href="reports/edit/{{ report._id }}" class="btn btn-success" style="margin-right: 5px;">{% t 'Edit Report' %}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="prompts-form" style="position: relative; max-width: 800px; margin: auto;"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <app-reportview data-report-id="{{ report._id | escape }}"></app-reportview>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -3,43 +3,26 @@
         <span class="pull-right" style="padding: 7px 0;">
             <i class="fa fa-times hand-cursor" ng-click="vm.removeFilter()"></i>
         </span>
+        <span class="pull-left" style="padding: 7px 0;">
+            <i class="sortable-handle hand-cursor fa fa-arrows"></i>
+        </span>
 
-        <div class="container-fluid form-inline">
-            <span class="col-md-1">
-                <button class="btn" ng-class="{'btn-black': vm.filter.filterPrompt == true, 'btn-white': vm.filter.filterPrompt == false}" ng-click="vm.makePrompt()">
-                    <i class="fa fa-filter"></i><i class="fa fa-question"></i>
-                </button>
-            </span>
+        <div class="container-fluid">
+            <div class="row">
+                <span class="col-md-1">
+                    <button class="btn" ng-class="{'btn-black': vm.filter.filterPrompt == true, 'btn-white': vm.filter.filterPrompt == false}" ng-click="vm.makePrompt()">
+                        <i class="fa fa-filter"></i><i class="fa fa-question"></i>
+                    </button>
+                </span>
 
-            <span class="col-md-11">
-                <form role="form" class="form-inline" name="FORM_filter">
-                    <!-- Column label -->
-
-                    <div class="input-group" uib-dropdown>
-                        <input type="text" class="form-control" ng-model="vm.filter.elementLabel" readonly>
-                    </div>
-
-                    <!-- equal, not equal, bigger than, etc...-->
-
-                    <span class="btn-group scrollable-dropdown-menu" uib-dropdown>
-                        <button type="button" class="btn" ng-bind="vm.getFilterTypeLabel(vm.filter.filterType)"></button>
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li ng-repeat="option in vm.getElementFilterOptions()"><a ng-click="vm.setFilterType(option)">{{ vm.getFilterTypeLabel(option) }}</a></li>
-                        </ul>
-                    </span>
-
-                    <!-- criterion -->
-
-                    <span ng-include="vm.criteriaInput"></span>
-                </form>
-            </span>
+                <span class="col-md-11 col-lg-6">
+                    <app-report-filter-form mode="edit"></app-report-filter-form>
+                </span>
+            </div>
         </div>
     </span>
 
     <div ng-if="vm.isPrompt">
-        <span ng-include="vm.criteriaInput"></span>
+        <app-report-filter-form></app-report-filter-form>
     </div>
 </div>

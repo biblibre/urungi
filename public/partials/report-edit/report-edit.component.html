@@ -1,8 +1,6 @@
 <div id="parentIntroReports" class="explorer-main-container" ng-intro-method="showIntro"  ng-intro-options="IntroOptions" >
 
 <div class="explorer-container">
-    <app-theme-link theme="selectedReport.theme"></app-theme-link>
-
     <div class="explorer-header">
         <a href="./" class="btn-home">
             <i class="fa fa-home"></i>
@@ -61,7 +59,66 @@
         </section>
     </section>
 
-    <section id="dropZone" class="scrollPane multiPage rendered ng-scope" ng-include="'partials/report-edit/report-edit.report-edit.html'">
+    <section id="dropZone" class="scrollPane multiPage rendered">
+        <!--choose a widget to see your data-->
+        <div id="reportType" class="container-fluid" ng-hide="queryID" style="width: 100%;">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- TYPE OF REPORT SELECTION -->
+                    <a id="reportTypeGrid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'grid', 'report-unselected-btn': selectedReport.reportType != 'grid'}" ng-click="changeReportType('grid')"><img src="images/grid.png"></a>
+                    <a id="reportTypeVerticalGrid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'vertical-grid', 'report-unselected-btn': selectedReport.reportType != 'vertical-grid'}" ng-click="changeReportType('vertical-grid')"><img src="images/vertical_grid.png"></a>
+                    <a id="reportTypeCrossTable" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'pivot', 'report-unselected-btn': selectedReport.reportType != 'pivot'}" ng-click="changeReportType('pivot')"><img src="images/pivot_table.png"></a>
+                    <a id="reportTypeChartLine" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'chart-line', 'report-unselected-btn': selectedReport.reportType != 'chart-line'}" ng-click="changeReportType('chart-line')"><img src="images/chart_line.png"></a>
+                    <a id="reportTypePyramid" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'pyramid', 'report-unselected-btn': selectedReport.reportType != 'pyramid'}" ng-click="changeReportType('pyramid')"><img src="images/pyramid.png"></a>
+                    <a id="reportTypeChartDonut" class="btn report-type-button" ng-class="{'report-selected-btn': ['chart-donut', 'chart-pie'].includes(selectedReport.reportType), 'report-unselected-btn': !['chart-donut', 'chart-pie'].includes(selectedReport.reportType)}" ng-click="changeReportType('chart-donut')"><img src="images/chart_donut.png"></a>
+                    <a id="reportTypeIndicator" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'indicator', 'report-unselected-btn': selectedReport.reportType != 'indicator'}" ng-click="changeReportType('indicator')"><img src="images/indicator.png"></a>
+                    <a id="reportTypeGauge" class="btn report-type-button" ng-class="{'report-selected-btn': selectedReport.reportType == 'gauge', 'report-unselected-btn': selectedReport.reportType != 'gauge'}" ng-click="changeReportType('gauge')"><img src="images/gauge.png"></a>
+
+                    <button type="button" class="btn btn-default btn-sm pull-right" title="{{ 'Report settings' | translate }}" ng-click="openReportSettingsModal()">
+                        <i class="fa fa-gear"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="dropArea" class="container-fluid" style="width: 100%;" ng-include src="dropArea"></div>
+
+        <div ng-if="previewAvailable()" class="container-fluid branded-border-panel" style="width: 100%;">
+            <div>
+                <span ng-show="selectedReport.properties.recordLimit == undefined">
+                    <span translate>Quick display with</span>
+                    <input type="number" ng-model="selectedRecordLimit.value" size="8">
+                    <span translate>results.</span>
+                    <button id="setLimit" class="btn btn-default" ng-click="chooseRecordLimit();" style="padding: 3px 10px;" uib-tooltip="{{ 'Move the limit to the filter area, will be used during runtime, not only during report building' | translate }}" translate>Filter</button>
+                </span>
+                <button  id="viewSQL" class="btn btn-default" ng-show="user.viewSQL && sql" ng-click="getSQLPanel();"  style="padding: 3px 10px;"  translate>View SQL</button>
+                <span class="pull-right">
+                    <button id="queryRefresh" class="btn btn-success" ng-show="previewAvailable()" ng-click="refresh();" style="padding: 3px 10px;">
+                        <i class="fa fa-refresh hand-cursor"></i>
+                        <span translate>Redraw</span>
+                    </button>
+                </span>
+            </div>
+                <span ng-if="time !== undefined" class="label label-primary label-lg">{{results.length}} rows ({{time}}ms)</span>
+        </div>
+
+        <div ng-show="showSQL" class="panel" style="z-index: 100;">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <span translate>SQL query</span>
+                    <button type="button" class="close" ng-click="getSQLPanel();">&times;</button>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <p>{{sql}}</p>
+            </div>
+        </div>
+
+        <app-reportview style="position: relative; overflow: auto;"></app-reportview>
+
+
+        <div ng-include src="dashListModal"></div>
     </section>
 
     </div>

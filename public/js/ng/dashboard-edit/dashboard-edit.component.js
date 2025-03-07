@@ -2,6 +2,7 @@ import i18n from '../../i18n.js';
 import * as notify from '../../notify.js';
 import * as uuid from '../../uuid.js';
 import ReportImportModal from '../../modal/report-import-modal.js';
+import { getColumnDescription, getStoredReport, getReportDefinition } from '../../report/util.js';
 
 angular.module('app.dashboard-edit').component('appDashboardEdit', {
     templateUrl: 'partials/dashboard-edit/dashboard-edit.component.html',
@@ -12,9 +13,9 @@ angular.module('app.dashboard-edit').component('appDashboardEdit', {
     }
 });
 
-DashboardEditController.$inject = ['$scope', '$window', '$q', '$compile', 'reportsService', 'connection', 'reportModel', 'htmlWidgets', 'api', 'base'];
+DashboardEditController.$inject = ['$scope', '$window', '$q', '$compile', 'connection', 'htmlWidgets', 'api', 'base'];
 
-function DashboardEditController ($scope, $window, $q, $compile, reportsService, connection, reportModel, htmlWidgets, api, base) {
+function DashboardEditController ($scope, $window, $q, $compile, connection, htmlWidgets, api, base) {
     const vm = this;
 
     vm.$onInit = $onInit;
@@ -100,7 +101,7 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
     $scope.importReport = function () {
         const modal = new ReportImportModal();
         modal.open().then(reportID => {
-            reportModel.getReportDefinition(reportID).then(function (report) {
+            getReportDefinition(reportID).then(function (report) {
                 if (report) {
                     report.id = uuid.v4();
                     $scope.selectedDashboard.reports.push(report);
@@ -129,6 +130,12 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
             vm.themes.push(...res.data);
         });
 
+        $scope.$watch('selectedDashboard.theme', function (newVal) {
+            document.getElementById('designArea').querySelectorAll('app-reportview').forEach(e => {
+                e.setTheme($scope.selectedDashboard.theme);
+            });
+        });
+
         if ($scope.mode === 'add') {
             $scope.dashboardID = uuid.v4();
             $scope.selectedDashboard = {
@@ -140,7 +147,7 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
                 dashboardType: 'DEFAULT'
             };
 
-            const pushedReport = reportsService.getStoredReport();
+            const pushedReport = getStoredReport();
             if (pushedReport) {
                 pushedReport.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
                 pushedReport.id = uuid.v4();
@@ -158,7 +165,7 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
             return connection.get('/api/dashboards/get/' + $scope.dashboardID, { id: $scope.dashboardID }).then(function (data) {
                 $scope.selectedDashboard = data.item;
 
-                const pushedReport = reportsService.getStoredReport();
+                const pushedReport = getStoredReport();
                 if (pushedReport) {
                     pushedReport.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
                     pushedReport.id = uuid.v4();
@@ -193,7 +200,7 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
         const el = document.getElementById('reportLayout');
         angular.element(el).empty();
 
-        const qstructure = reportsService.getStoredReport();
+        const qstructure = getStoredReport();
 
         if ($scope.editingReport == null) {
             qstructure.reportName = 'report_' + ($scope.selectedDashboard.reports.length + 1);
@@ -202,10 +209,8 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
         } else {
             const updatedReport = angular.copy(qstructure);
             $scope.selectedDashboard.reports.splice($scope.editingReportIndex, 1, updatedReport);
-            // reportModel.getReport(updatedReport, 'REPORT_' + qstructure.id, $scope.mode, function (sql) {});
         }
         $scope.reportInterface = false;
-        // getAllPageColumns();
         $scope.initPrompts();
     };
 
@@ -264,11 +269,25 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
     }
 
     function onReportDragStart (ev, report) {
-        const html = reportModel.getReportContainerHTML(report.id);
+        const html = getReportContainerHTML(report.id);
         const json = angular.toJson(report);
 
         ev.dataTransfer.setData('text/html', html);
         ev.dataTransfer.setData('application/vnd.urungi.report+json', json);
+    }
+
+    // returns a container for the report, to be inserted in the dashboard html
+    function getReportContainerHTML (reportID) {
+        const containerID = 'REPORT_CONTAINER_' + reportID;
+
+        const html = '<div page-block class="container-fluid featurette ndContainer" ndType="container" style="height:100%;padding:0px;">' +
+                        '<div class="col-md-12 ndContainer" style="height:100%;padding:0px;">' +
+                            '<div class="container-fluid" id="' + containerID +
+                             '" report-view report="getReport(\'' + reportID + '\')" style="padding:0px;position: relative;height: 100%;"></div>' +
+                        '</div>' +
+                    '</div>';
+
+        return html;
     }
 
     function onFilterPromptDragStart (ev, filterPrompt) {
@@ -295,10 +314,13 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
             filterCriteria[i] = $scope.prompts[i].criterion;
         }
 
-        $scope.$broadcast('repaint', {
-            fetchData: true,
-            filters: filterCriteria,
-            limit: $scope.selectedDashboardLimit.value
+        document.getElementById('designArea').querySelectorAll('app-reportview').forEach(e => {
+
+            e.repaint({
+                fetchData: true,
+                filters: filterCriteria,
+                limit: $scope.selectedDashboardLimit.value
+            });
         });
     }
 
@@ -312,12 +334,6 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
 
     $scope.getRuntimeReport = function (reportID) {
         if ($scope.mode !== 'preview') {
-            // for (var i in $scope.selectedDashboard.reports) {
-            //     if ($scope.selectedDashboard.reports[i].id === reportID) {
-            //         reportModel.getReport($scope.selectedDashboard.reports[i], 'REPORT_CONTAINER_' + reportID, $scope.mode, function (sql) {
-            //         });
-            //     }
-            // }
             repaintReports();
         }
     };
@@ -516,9 +532,6 @@ function DashboardEditController ($scope, $window, $q, $compile, reportsService,
     }
 
     $scope.getColumnDescription = getColumnDescription;
-    function getColumnDescription (column) {
-        return reportsService.getColumnDescription(column);
-    }
 
     function goBack () {
         $window.history.back();

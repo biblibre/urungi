@@ -13,7 +13,7 @@ export default class ReportSettingsModal extends Modal {
                 </div>
 
                 <div class="modal-body">
-                    ${ this.args.isForDash ? '' : this.getThemeFormHtml() }
+                    ${ this.getThemeFormHtml() }
 
                     ${ ['chart-pie', 'chart-donut'].includes(this.args.report.reportType) ? this.getTypeFormHtml() : '' }
 
@@ -136,11 +136,13 @@ export default class ReportSettingsModal extends Modal {
         const { reportType, theme } = report;
         const settings = { reportType, theme, legendPosition, height, maxValue, range };
 
-        api.getThemes().then(res => {
-            for (const theme of res.data.data) {
-                form.elements.theme.add(new Option(theme, theme, false, this.args.report.theme === theme));
-            }
-        });
+        if (form.elements.theme) {
+            api.getThemes().then(res => {
+                for (const theme of res.data.data) {
+                    form.elements.theme.add(new Option(theme, theme, false, this.args.report.theme === theme));
+                }
+            });
+        }
 
         for (const el of form.elements) {
             if (el.name && Object.hasOwn(settings, el.name)) {

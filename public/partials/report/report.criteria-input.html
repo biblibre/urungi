@@ -56,12 +56,7 @@
 
             <span ng-if="(vm.filter.filterType == 'notIn' || vm.filter.filterType == 'in')">
                 <div class="input-group">
-                    <ui-select multiple ng-model="vm.criterion.textList" theme="bootstrap" ng-disabled="disabled" class="input-in" on-select="vm.promptChanged()" on-remove="vm.promptChanged()">
-                        <ui-select-match placeholder="{{vm.filter.promptTitle}}">{{$item}}</ui-select-match>
-                        <ui-select-choices repeat="value in vm.values track by $index" refresh="vm.getFilterValues($select.search)" refresh-delay="0">
-                            <div ng-bind-html="value | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                    <select multiple class="tom-select"></select>
                 </div>
             </span>
 

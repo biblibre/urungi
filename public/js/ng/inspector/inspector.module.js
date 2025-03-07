@@ -43,9 +43,9 @@ function blPrettyScrollbar () {
 
 angular.module('app.inspector').directive('appInspector', appInspector);
 
-appInspector.$inject = ['$compile', '$timeout', 'c3Charts', 'textStyles', '$window'];
+appInspector.$inject = ['$compile', '$timeout', 'textStyles', '$window'];
 
-function appInspector ($compile, $timeout, c3Charts, textStyles, $window) {
+function appInspector ($compile, $timeout, textStyles, $window) {
     return {
         transclude: true,
         scope: {

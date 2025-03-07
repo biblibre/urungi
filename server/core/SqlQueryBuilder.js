@@ -318,38 +318,50 @@ class SqlQueryBuilder {
         let sql;
         switch (filter.filterType) {
         case 'equal-pattern': {
-            const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
-            sql = `(${field} >= ${this.escape(dates[0])} AND ${field} < ${this.escape(dates[1])})`;
+            if (filter.criterion.datePattern) {
+                const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
+                sql = `(${field} >= ${this.escape(dates[0])} AND ${field} < ${this.escape(dates[1])})`;
+            }
             break;
         }
 
         case 'diferentThan-pattern': {
-            const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
-            sql = `(${field} < ${this.escape(dates[0])} OR ${field} >= ${this.escape(dates[1])})`;
+            if (filter.criterion.datePattern) {
+                const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
+                sql = `(${field} < ${this.escape(dates[0])} OR ${field} >= ${this.escape(dates[1])})`;
+            }
             break;
         }
 
         case 'biggerThan-pattern': {
-            const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
-            sql = `${field} > ${this.escape(dates[1])}`;
+            if (filter.criterion.datePattern) {
+                const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
+                sql = `${field} > ${this.escape(dates[1])}`;
+            }
             break;
         }
 
         case 'biggerOrEqualThan-pattern': {
-            const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
-            sql = `${field} >= ${this.escape(dates[0])}`;
+            if (filter.criterion.datePattern) {
+                const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
+                sql = `${field} >= ${this.escape(dates[0])}`;
+            }
             break;
         }
 
         case 'lessThan-pattern': {
-            const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
-            sql = `${field} < ${this.escape(dates[0])}`;
+            if (filter.criterion.datePattern) {
+                const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
+                sql = `${field} < ${this.escape(dates[0])}`;
+            }
             break;
         }
 
         case 'lessOrEqualThan-pattern': {
-            const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
-            sql = `${field} <= ${this.escape(dates[1])}`;
+            if (filter.criterion.datePattern) {
+                const dates = dateHelper.getDatePatternBounds(filter.criterion.datePattern);
+                sql = `${field} <= ${this.escape(dates[1])}`;
+            }
             break;
         }
 
