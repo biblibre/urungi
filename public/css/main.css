@@ -37,7 +37,7 @@ dialog:modal {
 }
 
 dialog:modal[open] {
-  animation: fadein 0.2s ease-out forwards;
+    animation: fadein 0.2s ease-out forwards;
 }
 
 @keyframes fadein {
