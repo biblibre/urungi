@@ -28,6 +28,7 @@ function api ($http, connection) {
 
         getLayers,
         getLayer,
+        replaceLayer,
 
         getFiles,
         uploadFile,
@@ -211,6 +212,10 @@ function api ($http, connection) {
         return httpGet('/api/layers/' + id);
     }
 
+    function replaceLayer (layer) {
+        return httpPut('/api/layers/' + layer._id, layer);
+    }
+
     function getFiles () {
         return httpGet('/api/files').then(function (res) {
             return res.files;
@@ -258,6 +263,10 @@ function api ($http, connection) {
      */
     function httpPost (url, data) {
         return httpRequest({ method: 'POST', url, data });
+    }
+
+    function httpPut (url, data) {
+        return httpRequest({ method: 'PUT', url, data });
     }
 
     function httpRequest (config) {
