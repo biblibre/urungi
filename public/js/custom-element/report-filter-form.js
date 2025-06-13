@@ -104,10 +104,12 @@ class ReportFilterForm extends HTMLElement {
                 valueField: 'f',
                 labelField: 'f',
                 searchField: ['f'],
-                preload: 'focus',
+                preload: true,
                 create: true,
                 persist: false,
                 dropdownParent: 'body',
+                loadThrottle: 0,
+                refreshThrottle: 0,
                 render: {
                     option_create: data => {
                         return el('.create', t('Add'), ' ', el('strong', data.input));
